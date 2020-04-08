@@ -108,9 +108,20 @@ Control.system-ca-bundle
 GitHub.sublime-settings 
 
 # Visual Studio Code # 
-.vscode/* 
+.vscode/*
+.vscode 
 !.vscode/settings.json 
 !.vscode/tasks.json 
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# Node
+node_modules
+package-lock.json
+
+# MacOS
+.DS_Store
+
+# Do not push the compiled js from the webapp
+static/webapp
