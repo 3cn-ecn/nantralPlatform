@@ -13,9 +13,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import environ
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+# Build paths inside the project like this: join(BASE_DIR, "directory")
+BASE_PATH = environ.Path(__file__) - 3
+BASE_DIR = str(BASE_PATH)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -51,7 +51,10 @@ THIRD_PARTY_APPS = [
 ]
 
 COMMON_APPS = [
-    'apps.club'
+    'apps.club',
+    'apps.account',
+    'apps.student',
+    'apps.home',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS
@@ -66,7 +69,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'apps.account.emailAuthBackend.EmailBackend',
+    "django.contrib.auth.backends.ModelBackend",
+    ]
+
+LOGIN_REDIRECT_URL = 'None'
+LOGIN_URL = '/account/login/'
+
 ROOT_URLCONF = 'config.urls'
+
+CRISPY_TEMPLATE_PACK =  'bootstrap4'
 
 TEMPLATES = [
     {
@@ -86,40 +99,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': secret('DB_USERNAME'),
-        'PASSWORD': secret('DB_PASSWORD'),
-        'HOST': secret('DB_HOSTNAME'),
-        'PORT': secret('DB_PORT'),
-        'CONN_MAX_AGE': 600,
-    },
-}
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
 
 
 # Internationalization
