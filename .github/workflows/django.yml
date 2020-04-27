@@ -15,7 +15,7 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8]
     env:
-      working-directory: /server 
+      working-directory: ./server 
 
     steps:
     - uses: actions/checkout@v2
