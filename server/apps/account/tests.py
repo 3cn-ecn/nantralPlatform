@@ -4,21 +4,23 @@ from django.contrib.auth.models import User
 from apps.student.models import Student
 from rest_framework import status
 
+from apps.utils.utest import TestMixin
+
 
 # Create your tests here.
 
-class Test_Account(TestCase):
+class Test_Account(TestCase, TestMixin):
     def setUp(self):
-        pass
+        self.user_setup()
     def tearDown(self):
         # Delete everything you created
-        Student.objects.all().delete()
+        self.user_teardown()
         User.objects.all().delete()
     
     def test_create_user_view(self):
         url = reverse('account:registration')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         payload = {
             'first_name': 'test_name',
             'last_name': 'test_last_name',
@@ -29,7 +31,7 @@ class Test_Account(TestCase):
         }
         url = reverse('account:registration')
         response = self.client.post(url, data=payload)
-        self.assertEquals(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
         user = User.objects.get(first_name='test_name')
         self.assertIsNotNone(user)
@@ -37,5 +39,4 @@ class Test_Account(TestCase):
     def test_login_view(self):
         url = reverse('account:login')
         response = self.client.get(url)
-        self.assertEquals(response.status_code, status.HTTP_200_OK)
-        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

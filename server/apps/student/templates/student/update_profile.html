@@ -1,0 +1,17 @@
+{% extends 'base.html'%}
+{% load crispy_forms_tags %}
+{% block  content%}
+<h1>{{object.first_name}} {{object.last_name}}</h1>
+<p>{{object.user.email}}</p>
+<form method='POST'>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-success">Modifier</button>
+</form>
+<h2>Changer le mot de passe</h2>
+<form method='POST' action='{% url "student:change_pass" object.id%}'>
+    {% csrf_token %}
+    {{ password_form|crispy }}
+    <button class="btn btn-success">Modifier</button>
+</form>
+{%endblock%}
