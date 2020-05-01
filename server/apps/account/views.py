@@ -19,6 +19,7 @@ from django.urls import reverse, reverse_lazy
 from urllib import parse
 from django.contrib.auth.forms import AuthenticationForm
 from .emailAuthBackend import EmailBackend
+from apps.student.models import Student
 
 class RegistrationView(FormView):
     template_name = 'account/registration.html'
@@ -149,3 +150,8 @@ class PasswordResetConfirmCustomView(PasswordResetConfirmView):
     form_class = SetPasswordForm
     token_generator = account_activation_token
     success_url = reverse_lazy('home:home')
+
+def redirect_to_student(request, user_id):
+    user = User.objects.get(id=user_id)
+    student  = Student.objects.get(user=user)
+    return redirect('student:update', student.pk)

@@ -77,6 +77,8 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_REDIRECT_URL = 'None'
 LOGIN_URL = '/account/login/'
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 ROOT_URLCONF = 'config.urls'
 
 CRISPY_TEMPLATE_PACK =  'bootstrap4'
