@@ -4,7 +4,7 @@ from django.views.decorators.http import require_http_methods
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, UpdateView
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
@@ -19,10 +19,13 @@ class StudentProfile(LoginRequiredMixin, DetailView):
     model = Student
     template_name = 'student/profile.html'
 
-class StudentProfileEdit(LoginRequiredMixin, UpdateView):
+class StudentProfileEdit(UserPassesTestMixin, UpdateView):
     model = Student
     fields = ['promo']
     template_name = 'student/update_profile.html'
+    def test_func(self):
+        self.object = self.get_object()
+        return self.object.user == self.request.user
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['password_form'] = ChangePassForm(self.object.user)
