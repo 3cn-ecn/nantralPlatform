@@ -1,26 +1,22 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.generic.edit import FormView
 from django.views.generic.base import TemplateView
-from django.contrib.sites.shortcuts import get_current_site
 from .forms import SignUpForm, LoginForm, ForgottenPassForm, ResetPassForm
 from .tokens import account_activation_token
 from django.template.loader import render_to_string
-from django.contrib.auth.models import User
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_text
 from django.views import View
 from django.urls import reverse, reverse_lazy
 from urllib import parse
-from django.contrib.auth.forms import AuthenticationForm
 from .emailAuthBackend import EmailBackend
 from apps.student.models import Student
-
+from django.contrib import messages
 class RegistrationView(FormView):
     template_name = 'account/registration.html'
     form_class = SignUpForm
@@ -51,9 +47,8 @@ class RegistrationView(FormView):
             'token': account_activation_token.make_token(user),
         })
         user.email_user(subject, message)
-        message = 'Un mail vous a été envoyé pour confirmer votre mail ecn.'
-        url = f"{reverse('home:home')}?message_type=success&message_text={parse.quote(message)}"
-        return redirect(url)
+        messages.success(self.request, 'Un mail vous a été envoyé pour confirmer votre mail ecn.')
+        return redirect(reverse('home:home'))
 
 
 class ConfirmUser(View):
@@ -69,9 +64,8 @@ class ConfirmUser(View):
             user.is_active = True
             user.save()
             login(self.request, user, backend='apps.account.emailAuthBackend.EmailBackend')
-            message = 'Votre compte est desormais actif !'
-            url = f"{reverse('home:home')}?message_type=success&message_text={parse.quote(message)}"
-            return redirect(url)
+            messages.success(request, 'Votre compte est desormais actif !')
+            return redirect(reverse('home:home'))
         else:
             return render(self.request, 'account/activation_invalid.html')
 
@@ -82,14 +76,14 @@ class AuthView(FormView):
         if request.user.is_authenticated:
             user = request.user
             message = f'Vous etes déjà connecté en tant que {user.first_name}'
-            url = f"{reverse('home:home')}?message_type=success&message_text={parse.quote(message)}"
-            return redirect(url)
+            messages.warning(request, message)
+            return redirect(reverse('home:home'))
         else:
             return super(AuthView, AuthView).get(self, request)
     def form_invalid(self, form):
         message = f'Veuillez vous connecter avec votre adresse centrale'
-        url = f"{reverse('account:login')}?message_type=danger&message_text={parse.quote(message)}"
-        return redirect(url)
+        messages.warning(self.request, message)
+        return redirect(reverse('account:login'))
 
     def form_valid(self, form):
         username = form.cleaned_data['email']
@@ -98,30 +92,18 @@ class AuthView(FormView):
         if user is not None:
             login(self.request, user, backend='apps.account.emailAuthBackend.EmailBackend')
             message = f'Bonjour {user.first_name}'
-            url = f"{reverse('home:home')}?message_type=success&message_text={parse.quote(message)}"
-            return redirect(url)
+            messages.success(self.request, message)
+            return redirect(reverse('home:home'))
         else:
-            message = f'Identifiant inconnu ou mot de passe invalide'
-            url = f"{reverse('account:login')}?message_type=danger&message_text={parse.quote(message)}"
-            return redirect(url)
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        if self.request.GET.get('message_type') is not None:
-            message = {
-                'type': self.request.GET.get('message_type'),
-                'text': parse.unquote(self.request.GET.get('message_text'))
-            }
-            context['message'] = message
-        return context
+            messages.error(self.request, 'Identifiant inconnu ou mot de passe invalide')
+            return redirect(reverse('account:login'))
 
 
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        message = f'Vous avez été déconnecté'
-        url = f"{reverse('account:login')}?message_type=success&message_text={parse.quote(message)}"
-        return redirect(url)
+        messages.success(request, 'Vous avez été déconnecté')
+        return redirect(reverse('account:login'))
 
 class ForgottenPassView(FormView):
     form_class = ForgottenPassForm
@@ -139,9 +121,8 @@ class ForgottenPassView(FormView):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject, message)
-        message = 'Un email de recuperation a ete envoyé si cette adresse existe.'
-        url = f"{reverse('account:login')}?message_type=success&message_text={parse.quote(message)}"
-        return redirect(url)
+        messages.success(self.request, 'Un email de recuperation a ete envoyé si cette adresse existe.')
+        return redirect(reverse('account:login'))
 
 class PasswordResetConfirmCustomView(PasswordResetConfirmView):
     template_name = 'account/reset_password.html'

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content%}
+<h1>{{object.name}}</h1>
+<p>{{object.description}}</p>
+<h2>Membres</h2>
+{% if request.user.is_authenticated %}
+{% for member in members %}
+    <a href='{% url "student:detail" member.user.student.id%}' class='card'>
+        {{member.user.first_name}} | {{member.user.last_name}}
+        {{member.function}} | {{member.year}}
+    </a>
+{% endfor %}
+{%else%}
+    Veuillez vous connecter pour visualiser les membres
+{%endif%}
+{% endblock %}

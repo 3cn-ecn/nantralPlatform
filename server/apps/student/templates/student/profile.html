@@ -2,4 +2,12 @@
 {% block  content%}
 <h1>{{object.first_name}} {{object.last_name}}</h1>
 <p>{{object.promo}}</p>
+
+<h2>Clubs</h2>
+{% for club in clubs %}
+    <a href='{% url "group:detail" club.group.id  %}' class='card'>
+        {{club.group.name}}
+        {{club.function}} | {{club.year}}
+    </a>
+{% endfor %}
 {%endblock%}

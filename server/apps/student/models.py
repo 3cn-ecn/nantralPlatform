@@ -13,6 +13,7 @@ class Student(models.Model):
 
 @receiver(post_save, sender=User)
 def update_student_signal(sender, instance, created, **kwargs):
-    if created:
-        Student.objects.create(user=instance)
-    instance.student.save()
+    if not instance.is_superuser:
+        if created:
+            Student.objects.create(user=instance)
+        instance.student.save()
