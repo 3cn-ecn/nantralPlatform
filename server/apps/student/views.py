@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth import login
 from django.views.decorators.http import require_http_methods
 from django.urls import reverse_lazy
@@ -7,6 +7,8 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+from apps.group.models import NamedMembership
 
 from .models import Student
 from .forms import ChangePassForm
@@ -18,6 +20,10 @@ class StudentList(LoginRequiredMixin, ListView):
 class StudentProfile(LoginRequiredMixin, DetailView):
     model = Student
     template_name = 'student/profile.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['clubs'] = NamedMembership.objects.filter(user=self.object.user)
+        return context
 
 class StudentProfileEdit(UserPassesTestMixin, UpdateView):
     model = Student

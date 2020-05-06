@@ -1,3 +1,23 @@
 {% extends 'base.html' %}
 {% block content%}
+<div class='text-center'>
+    <div class='row'>
+        <div class='col-1'></div>
+            <div class="col-3 mr-1 card" style="width: 18rem;">
+                <a class='nav-link' href="{% url 'group:list' %}">
+                    <div class="card-body">
+                        Clubs
+                    </div>
+                </a>
+            </div>
+        <div class="col-3 ml-1 card" style="width: 18rem;">
+            <a class='nav-link' href="{% url 'student:list' %}">
+                <div class="card-body">
+                    Etudiants
+                </div>
+            </a>
+        </div>
+        <div class='col-1'></div>
+    </div>
+    <br>
 {% endblock%}

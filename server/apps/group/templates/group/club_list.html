@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content%}
+{% for club in object_list%}
+    <li><a href='{% url "group:detail" club.id%}'>{{club.name | title}}</a></li>
+{% endfor %}
+{% endblock %}
