@@ -31,7 +31,7 @@ class StudentProfileEdit(UserPassesTestMixin, UpdateView):
     template_name = 'student/update_profile.html'
     def test_func(self):
         self.object = self.get_object()
-        return self.object.user == self.request.user
+        return self.request.user.is_superuser or self.object.user == self.request.user
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['password_form'] = ChangePassForm(self.object.user)

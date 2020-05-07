@@ -33,7 +33,7 @@ class TestStudent(TestCase, TestMixin):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
     
     def test_student_profile_update(self):
-        student = Student.objects.all().first()
+        student = Student.objects.get(id=self.u1.id)
         url = reverse('student:update', args=[student.pk])
         response = self.client.get(url)
         # Check that you have to be logged in
@@ -43,14 +43,14 @@ class TestStudent(TestCase, TestMixin):
         self.assertTrue(ok)
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
+        self.client.logout()
         ok = self.client.login(username=self.u1.username, password='pass')
         self.assertTrue(ok)
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # TO DO test that password change works
+        self.client.logout()
+        
     def test_password_change(self):
 
         password_change = {
@@ -62,6 +62,7 @@ class TestStudent(TestCase, TestMixin):
         url = reverse('student:change_pass', args=[student.pk])
         response = self.client.post(url, data=password_change)
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.client.logout()
 
         ok = self.client.login(username=self.u2.username, password='pass')
         self.assertTrue(ok)
