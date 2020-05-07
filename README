@@ -7,10 +7,8 @@
 1. Project structure
 
     Description
-        |-containers 
-            Contains dockerfiles for building containers
-        |-deployement_templates
-            Contains docker-compose files for launching containers
+        |-.github 
+            Contains the definitions for github actions
         |-frontend
             Contains source files to be compiled for the frontend
         |-server
