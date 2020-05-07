@@ -40,15 +40,9 @@
 2. Local dev
 
     Let's get you started:
-        Those instructions are for MacOs or Linux.
         Install
         - First install python 3.6 +
-        - Install docker and docker-compose
         - Install virtualenv for python with `pip3 install virtualenv`
-
-        Database
-        - Then go to deployement_templates/local to launch the DB
-        - Use `docker-compose up -d` to launch the database in the background
 
         Server
         - Go into the server folder
@@ -58,6 +52,9 @@
         - Launch the server with `python manage.py runserver`
         - The server runs on localhost:8000
         You are ready to go
+    
+    To test use pytest :
+        - pytest
     
     Regular start:
         - In deployement_templates/local launch DB with `docker-compose up -d`
