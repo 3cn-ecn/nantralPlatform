@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+{% block  content%}
+<h1>{{object.name}}</h1>
+<p>{{object.course_type}}</p>
+<h2>Personnes ayant suivi ce cours</h2>
+{% for promo, values in students.items %}
+    {{promo}}
+    {% for student in values%}
+        {{student.first_name}}
+    {% endfor %}
+{% endfor %}
+{%endblock%}

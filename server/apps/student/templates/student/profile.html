@@ -1,8 +1,13 @@
 {% extends 'base.html'%}
 {% block  content%}
 <h1>{{object.first_name}} {{object.last_name}}</h1>
+<p>{{object.faculty}} | {{object.double_degree}}</p>
 <p>{{object.promo}}</p>
 
+<h2>Parcours scolaire</h2>
+{% for course in courses%}
+    <p>{{course.when}} {{course.course.course_type}} {{course.course.name}}</p>
+{% endfor %}
 <h2>Clubs</h2>
 {% for club in clubs %}
     <a href='{% url "group:detail" club.group.id  %}' class='card'>

@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from apps.group.models import NamedMembership
+from apps.academic.models import FollowCourse
+from apps.academic.forms import TakeCourseFormSet
 
 from .models import Student
 from .forms import ChangePassForm
@@ -22,7 +24,8 @@ class StudentProfile(LoginRequiredMixin, DetailView):
     template_name = 'student/profile.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['clubs'] = NamedMembership.objects.filter(user=self.object.user)
+        context['clubs'] = NamedMembership.objects.filter(student=self.object)
+        context['courses'] = FollowCourse.objects.filter(student=self.object)
         return context
 
 class StudentProfileEdit(UserPassesTestMixin, UpdateView):
@@ -34,7 +37,9 @@ class StudentProfileEdit(UserPassesTestMixin, UpdateView):
         return self.object.user == self.request.user
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        follow_courses = FollowCourse.objects.filter(student=self.object)
         context['password_form'] = ChangePassForm(self.object.user)
+        context['courses_form'] = TakeCourseFormSet(queryset=follow_courses)
         return context
 
 @require_http_methods(['POST'])
