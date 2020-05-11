@@ -6,7 +6,7 @@
 
 <h2>Parcours scolaire</h2>
 {% for course in courses%}
-    <p>{{course.when}} {{course.course.course_type}} {{course.course.name}}</p>
+    <p>{{course.when}} {{course.course.course_type}} <a href="{% url 'academic:course' course.id%}">{{course.course.name}}</a></p>
 {% endfor %}
 <h2>Clubs</h2>
 {% for club in clubs %}

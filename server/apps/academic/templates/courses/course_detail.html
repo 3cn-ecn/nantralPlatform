@@ -4,9 +4,11 @@
 <p>{{object.course_type}}</p>
 <h2>Personnes ayant suivi ce cours</h2>
 {% for promo, values in students.items %}
-    {{promo}}
+    <h3>{{promo}}</h3>
     {% for student in values%}
-        {{student.first_name}}
+        <a class='card' href="{% url 'student:detail' student.id %}">
+            {{student.first_name}} {{student.last_name}}
+        </a>
     {% endfor %}
 {% endfor %}
 {%endblock%}
