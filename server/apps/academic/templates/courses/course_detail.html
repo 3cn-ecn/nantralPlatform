@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% block  content%}
+<h1>{{object.name}}</h1>
+<p>{{object.course_type}}</p>
+<h2>Personnes ayant suivi ce cours</h2>
+{% for promo, values in students.items %}
+    <h3>{{promo}}</h3>
+    {% for student in values%}
+        <a class='card' href="{% url 'student:detail' student.id %}">
+            {{student.first_name}} {{student.last_name}}
+        </a>
+    {% endfor %}
+{% endfor %}
+{%endblock%}

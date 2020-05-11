@@ -14,4 +14,10 @@
     {{ password_form|crispy }}
     <button class="btn btn-success">Modifier</button>
 </form>
+<h2>Mes cours</h2>
+<form method='POST' action='{% url "academic:student_courses" object.id%}'>
+    {% csrf_token %}
+    {{ courses_form|crispy }}
+    <button class="btn btn-success">Modifier</button>
+</form>
 {%endblock%}

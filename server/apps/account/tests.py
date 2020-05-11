@@ -5,13 +5,14 @@ from apps.student.models import Student
 from rest_framework import status
 
 from apps.utils.utest import TestMixin
+from apps.student.models import Student
 
 
 # Create your tests here.
 
 class Test_Account(TestCase, TestMixin):
     def setUp(self):
-        self.user_setup()
+        pass
     def tearDown(self):
         # Delete everything you created
         self.user_teardown()
@@ -27,14 +28,18 @@ class Test_Account(TestCase, TestMixin):
             'email': 'test@ec-nantes.fr',
             'password1': 'pass',
             'password2': 'pass',
-            'promo': 2020
+            'promo': 2020,
+            'faculty': 'Gen',
+            'double_degree': 'Cla'
         }
         url = reverse('account:registration')
         response = self.client.post(url, data=payload)
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(response.status_code, 302)
 
-        user = User.objects.get(first_name='test_name')
-        self.assertIsNotNone(user)
+        self.assertEqual(len(User.objects.all()), 1)
+
+        student = Student.objects.get(first_name='test_name')
+        self.assertEqual(student.user, User.objects.all().last())
 
     def test_login_view(self):
         url = reverse('account:login')

@@ -1,11 +1,12 @@
 from django.shortcuts import redirect
-from django.contrib.auth.models import User
 from django.views.generic import DetailView, UpdateView, ListView
 from .models import Club, Group, NamedMembership
 from .forms import NamedMembershipClubFormset
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
+
+from apps.student.models import Student
 
 class ListClubView(ListView):
     model = Club
@@ -33,13 +34,13 @@ class DetailClubView(DetailView):
         return context
 
 @login_required
-def add_member(request, group_slug, user_id):
+def add_member(request, group_slug, student_id):
     """Add a user to a club"""
     type_slug = group_slug.split('--')[0]
     if type_slug == 'club':
         club = Club.objects.get(slug=group_slug)
-        user = User.objects.get(id=user_id)
-        NamedMembership.objects.create(user=user, group=club)
+        student = Student.objects.get(id=student_id)
+        NamedMembership.objects.create(student=student, group=club)
 
 
 @require_http_methods(['POST'])
@@ -48,7 +49,6 @@ def edit_named_memberships(request, pk):
     club = Club.objects.get(pk=pk)
     form = NamedMembershipClubFormset(request.POST)
     if form.is_valid():
-        print('OK')
         members = form.save(commit=False)
         for member in members:
             member.group = club
@@ -56,6 +56,5 @@ def edit_named_memberships(request, pk):
         messages.success(request, 'Membres modifies')
         return redirect('group:update', pk)
     else:
-        print(form.erros)
         messages.warning(request, form.errors)
         return redirect('group:update', pk)

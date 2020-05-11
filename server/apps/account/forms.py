@@ -4,6 +4,8 @@ from ..student.models import Student
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
+from apps.student.models import FACULTIES, DOUBLE_DEGREES
+
 def check_ecn_mail(mail):
     if not 'ec-nantes.fr' in mail:
         raise ValidationError('Vous devez avoir une adresse de centrale nantes')
@@ -17,6 +19,8 @@ class SignUpForm(UserCreationForm):
     promo = forms.IntegerField(min_value=1919, required=True)
     first_name = forms.CharField(max_length=200, required=True)
     last_name = forms.CharField(max_length=200, required=True)
+    faculty = forms.ChoiceField(required=True, choices=FACULTIES)
+    double_degree = forms.ChoiceField(choices=DOUBLE_DEGREES, help_text='Vous pourrez modifier cela plus tard', required=False)
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
         self.fields['email'].label = "Adresse mail"
@@ -25,10 +29,12 @@ class SignUpForm(UserCreationForm):
         self.fields['password1'].label = "Mot de passe"
         self.fields['password2'].label = "Confirmation de mot de passe"
         self.fields['password2'].help_text = "Entrez le même mot de passe pour verification"
+        self.fields['faculty'].label = "Filliere"
+        self.fields['double_degree'].label = 'Double cursus'
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'password1', 'password2', 'promo')
+        fields = ('first_name', 'last_name', 'email', 'password1', 'password2', 'promo', 'faculty')
 
 class LoginForm(forms.Form):
     email = forms.EmailField(max_length=200, validators=[check_ecn_mail], required=True, help_text='Votre adresse mail ecn.')
