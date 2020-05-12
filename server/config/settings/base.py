@@ -55,7 +55,8 @@ COMMON_APPS = [
     'apps.student',
     'apps.home',
     'apps.group',
-    'apps.academic'
+    'apps.academic',
+    'apps.event'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS
