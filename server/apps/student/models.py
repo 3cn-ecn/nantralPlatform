@@ -21,7 +21,7 @@ DOUBLE_DEGREES = [
     ('O-I','Officier-Ingénieur')
 ]
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     promo = models.IntegerField(verbose_name='Année de promotion', null=True, blank=True)
     first_name = models.CharField(max_length=200, verbose_name='Prénom', null=True)
     last_name = models.CharField(max_length=200, verbose_name='Nom de famille', null=True)

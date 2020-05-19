@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{{object.name}}</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'group:update' object.id %}">General</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'group:update' object.id %}">Membres & Admins</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'group:update-events' object.slug %}">Events</a>
+            </li>
+          </ul>
+      </nav>
+    {% block page %}
+    {% endblock %}
+{% endblock %}

@@ -1,8 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 from apps.student.models import Student
 from model_utils.managers import InheritanceManager
+
 
 TYPE_BDX = [
     ('BDA', 'Bureau des arts'),
@@ -23,6 +25,20 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
+
+    def is_admin(self, user: User) -> bool:
+        """Indicates if a user is admin."""
+        student = Student.objects.filter(user=user).first()
+        return student in self.admins.all()
+    
+    @staticmethod
+    def get_group_by_slug(slug:  str):
+        """Get a group from a slug."""
+        type_slug = slug.split('--')[0]
+        if type_slug == 'club':
+            return Club.objects.get(slug=slug)
+        else:
+            return Group.objects.get(slug=slug)
 
 
 class Club(Group):
