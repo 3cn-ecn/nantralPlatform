@@ -1,7 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'group/group_base_update.html' %}
 {% load crispy_forms_tags %}
-{% block content%}
-<h1>{{object.name}}</h1>
+{% block page%}
 <form method='POST'>
     {% csrf_token %}
     {{ form|crispy }}
