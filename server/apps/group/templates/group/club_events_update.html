@@ -1,0 +1,31 @@
+{% extends 'group/club_base.html' %}
+{% block page %}
+<form method='POST' action="{% url 'group:update-events' object.slug %}">
+    {% csrf_token %}
+    {{ form.management_form }}
+    {% for event in form %}
+    <div class='card'>
+        <div class='card-body'>
+            {{event}}
+        </div>
+    </div>
+    {% endfor %}
+    <button class='btn btn-success'>Modifier les events</button>
+</form>
+{% for event in events %}
+        {{event.title}}
+        <button onclick='delete_event("{{event.id}}")' class='btn btn-danger'>X</button>
+    {% endfor %}
+{% endblock %}
+
+{% block script%}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+<script>
+    var delete_event = function (event_id){
+        $.ajax({
+            'method': 'DELETE',
+            'url': `{{object.group_slug}}/event/${event_id}`
+        })
+    }
+</script>
+{% endblock %}

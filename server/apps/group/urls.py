@@ -11,4 +11,5 @@ urlpatterns = [
     path('<slug:group_slug>/member/add/<slug:user_id>', add_member, name='add-member'),
     path('<slug:pk>/members/edit', edit_named_memberships, name='editNamedMemberships'),
     path('', ListClubView.as_view(), name='list'),
+    path('<slug:group_slug>/events/edit', UpdateClubEventsView.as_view(), name='update-events')
 ]
