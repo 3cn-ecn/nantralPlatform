@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
+from apps.student.models import Student
 
 User = get_user_model()
 

@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import environ
+env = environ.Env()
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: join(BASE_DIR, "directory")
 BASE_PATH = environ.Path(__file__) - 3
@@ -48,6 +51,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'crispy_forms',
+    'storages'
 ]
 
 COMMON_APPS = [
@@ -126,3 +130,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'

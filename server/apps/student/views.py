@@ -30,7 +30,7 @@ class StudentProfile(LoginRequiredMixin, DetailView):
 
 class StudentProfileEdit(UserPassesTestMixin, UpdateView):
     model = Student
-    fields = ['promo']
+    fields = ['promo', 'picture']
     template_name = 'student/update_profile.html'
     def test_func(self):
         self.object = self.get_object()
