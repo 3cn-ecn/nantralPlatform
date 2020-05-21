@@ -7,6 +7,7 @@
 1. Project structure
 
     Description
+    ```
         |-.github 
             Contains the definitions for github actions
         |-frontend
@@ -36,7 +37,7 @@
         |-templates (Genral template folder)
         |-manage.py (General script to launch and make migrations)
         |-requirements.txt (Contains python requirements)
-
+```
 2. Local dev
 
     Let's get you started:
