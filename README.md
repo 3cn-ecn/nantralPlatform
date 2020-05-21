@@ -36,8 +36,7 @@
             |-wsgi.py
         |-templates (Genral template folder)
         |-manage.py (General script to launch and make migrations)
-        |-requirements.txt (Contains python requirements)
-```
+        |-requirements.txt (Contains python requirements)```
 2. Local dev
 
     Let's get you started:
