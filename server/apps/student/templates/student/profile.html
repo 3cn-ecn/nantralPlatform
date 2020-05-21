@@ -1,6 +1,9 @@
 {% extends 'base.html'%}
 {% block  content%}
 <h1>{{object.first_name}} {{object.last_name}}</h1>
+{% if object.picture %}
+<img width="100" height="auto" src='{{object.picture.url}}'>
+{% endif %}
 <p>{{object.faculty}} | {{object.double_degree}}</p>
 <p>{{object.promo}}</p>
 

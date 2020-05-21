@@ -34,3 +34,5 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AWS_STORAGE_BUCKET_NAME = "nantral-platform-prod"
