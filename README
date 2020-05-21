@@ -1,4 +1,4 @@
-##This is the central repository for the Nantral Platform
+## Nantral Platform
 
 1. Project structure
 2. Local dev
@@ -49,6 +49,7 @@
         - Create a virtualenv with `python3 -m virtualenv env`
         - Activate your venv with `source env/bin/activate`
         - Install the python dependencies with `pip install -r requirements.txt`
+        - In the config/settings folder, create a .env file and fill it out with the sample
         - Launch the server with `python manage.py runserver`
         - The server runs on localhost:8000
         You are ready to go
