@@ -1,13 +1,10 @@
-import os
-from uuid import uuid4
-
 from django.db import models
-from django.utils.deconstruct import deconstructible
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
 
+from apps.utils.upload import PathAndRename
 
 FACULTIES = [
     ('Gen', 'Eleve ingenieur generaliste'),
@@ -26,22 +23,6 @@ DOUBLE_DEGREES = [
     ('O-I','Officier-Ingénieur')
 ]
 
-@deconstructible
-class PathAndRename(object):
-
-    def __init__(self, sub_path):
-        self.path = sub_path
-
-    def __call__(self, instance, filename):
-        ext = filename.split('.')[-1]
-        # get filename
-        if instance.pk:
-            filename = f'{instance.pk}.{ext}'
-        else:
-            # set filename as random string
-            filename = f'{uuid4().hex}.{ext}'
-        # return the whole path to the file
-        return os.path.join(self.path, filename)
 
 path_and_rename = PathAndRename("students/profile_pictures")
 

@@ -20,7 +20,7 @@ class ListClubView(ListView):
 class UpdateClubView(UpdateView):
     model = Club
     template_name = 'group/club_update.html'
-    fields = ['description', 'admins']
+    fields = ['description', 'admins', 'logo']
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         memberships = NamedMembership.objects.filter(group=self.object)

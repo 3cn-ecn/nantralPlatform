@@ -1,6 +1,7 @@
 {% extends 'group/club_base.html' %}
 {% block page %}
 <p>{{object.description}}</p>
+<img width="100" height="auto" src='{{object.logo.url}}'>
 <h2>Membres</h2>
 {% if request.user.is_authenticated %}
 {% for member in members %}

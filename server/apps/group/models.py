@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 
 from apps.student.models import Student
+from apps.utils.upload import PathAndRename
 from model_utils.managers import InheritanceManager
 
 
@@ -13,12 +14,14 @@ TYPE_BDX = [
     ('Asso', 'Association')
 ]
 
+path_and_rename = PathAndRename("groups/logo")
+
 class Group(models.Model):
     name = models.CharField(verbose_name='Nom du groupe', unique=True, max_length=200)
     description = models.TextField(verbose_name='Description du groupe', blank=True)
     admins = models.ManyToManyField(Student, verbose_name='Administrateurs du groupe', related_name='admins')
     members = models.ManyToManyField(Student, verbose_name='Membres du groupe', related_name='members')
-    logo = models.CharField(verbose_name='Lien vers le logo du groupe', max_length=400, blank=True)
+    logo = models.ImageField(verbose_name='Logo du groupe', blank=True, null=True, upload_to=path_and_rename)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     class Meta:
         abstract = True
