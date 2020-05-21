@@ -4,7 +4,7 @@
 2. Local dev
 3. Guidelines
 
-1. Project structure
+### Project structure
 
     Description
     ```
@@ -37,7 +37,7 @@
         |-templates (Genral template folder)
         |-manage.py (General script to launch and make migrations)
         |-requirements.txt (Contains python requirements)```
-2. Local dev
+### Local dev
 
     Let's get you started:
         Install
@@ -83,7 +83,7 @@
         In deployement_templates/local launch DB with `docker-compose down`
         Close your virtualenv with `deactivate` anywhere
 
-3. Guidelines
+### Guidelines
 
     Please keep applications as small as possible.
     Each application should have one unique purpose.
