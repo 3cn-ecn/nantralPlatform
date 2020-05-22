@@ -40,7 +40,6 @@ class UpdateGroupEventsView(UserPassesTestMixin, View):
     def post(self, request,  group_slug):
         return edit_events(request, group_slug)
 
-    def delete(self, request, group_slug, event_id):
 
 class UpdateGroupMembersView(UserPassesTestMixin, View):
     template_name = 'group/club_members_update.html'
