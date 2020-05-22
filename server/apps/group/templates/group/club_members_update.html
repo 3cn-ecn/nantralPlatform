@@ -1,0 +1,15 @@
+{% extends 'group/group_base_update.html' %}
+{% block page %}
+<form method='POST' action="{% url 'group:update-members' object.slug %}">
+    {% csrf_token %}
+    {{ members.management_form }}
+    {% for member in members %}
+    <div class='card'>
+        <div class='card-body'>
+            {{member}}
+        </div>
+    </div>
+    {% endfor %}
+    <button class='btn btn-success'>Modifier les membres</button>
+</form>
+{% endblock %}

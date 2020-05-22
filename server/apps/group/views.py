@@ -21,14 +21,8 @@ class UpdateClubView(UpdateView):
     model = Club
     template_name = 'group/club_update.html'
     fields = ['description', 'admins', 'logo']
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        memberships = NamedMembership.objects.filter(group=self.object)
-        membersForm = NamedMembershipClubFormset(queryset=memberships)
-        context['members'] = membersForm
-        return context
 
-class UpdateClubEventsView(UserPassesTestMixin, View):
+class UpdateGroupEventsView(UserPassesTestMixin, View):
     template_name = 'group/club_events_update.html'
     def test_func(self):
         group = Group.get_group_by_slug(self.kwargs['group_slug'])
@@ -46,10 +40,29 @@ class UpdateClubEventsView(UserPassesTestMixin, View):
     def post(self, request,  group_slug):
         return edit_events(request, group_slug)
 
-    def delete(self, request, group_slug, event_id):
-        print('Hello')
-        event = Event.objects.delete(group=group_slug, id=event_id)
-        return redirect('group:update-events')
+
+class UpdateGroupMembersView(UserPassesTestMixin, View):
+    template_name = 'group/club_members_update.html'
+    def test_func(self):
+        group = Group.get_group_by_slug(self.kwargs['group_slug'])
+        return group.is_admin(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
+        if isinstance(context['object'], Club):
+            memberships = NamedMembership.objects.filter(group=context['object'])
+            membersForm = NamedMembershipClubFormset(queryset=memberships)
+            context['members'] = membersForm
+        return context
+
+    def get(self, request, group_slug):
+        return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
+    
+    def post(self, request,  group_slug):
+        return edit_named_memberships(request, group_slug)
+
+
 
 class DetailClubView(DetailView):
     model = Club
@@ -71,8 +84,8 @@ def add_member(request, group_slug, student_id):
 
 @require_http_methods(['POST'])
 @login_required
-def edit_named_memberships(request, pk):
-    club = Club.objects.get(pk=pk)
+def edit_named_memberships(request, group_slug):
+    club = Club.objects.filter(slug=group_slug).first()
     form = NamedMembershipClubFormset(request.POST)
     if form.is_valid():
         members = form.save(commit=False)
@@ -82,10 +95,10 @@ def edit_named_memberships(request, pk):
         for  member in form.deleted_objects:
             member.delete()
         messages.success(request, 'Membres modifies')
-        return redirect('group:update', pk)
+        return redirect('group:update', club.id)
     else:
         messages.warning(request, form.errors)
-        return redirect('group:update', pk)
+        return redirect('group:update', club.id)
 
 
 @login_required
