@@ -6,17 +6,4 @@
     {{ form|crispy }}
     <button class="btn btn-success">Modifier</button>
 </form>
-<h2>Members</h2>
-<form method='POST' action="{% url 'group:editNamedMemberships' object.pk %}">
-    {% csrf_token %}
-    {{ members.management_form }}
-    {% for member in members %}
-    <div class='card'>
-        <div class='card-body'>
-            {{member}}
-        </div>
-    </div>
-    {% endfor %}
-    <button class='btn btn-success'>Modifier les membres</button>
-</form>
 {% endblock %}
