@@ -20,4 +20,25 @@
         <div class='col-1'></div>
     </div>
     <br>
+    <div>
+        <h2>Prochains evenements</h2>
+        <div class='row'>
+            {% for event in events %}
+                <div class='card'>
+                    <div class='card-title'>
+                        <h6>{{event.title}}</h6>
+                        <small class='text-muted'><i class="fas fa-calendar-day"></i> {{event.date|date:'Y-m-d H:i'}}</br><i class="far fa-compass"></i> {{event.location}}</small>
+                    </div>
+                    <div class='card-body'>
+                        <i class="fas fa-users"></i> <a href='{{event.get_group.get_absolute_url}}'>{{event.get_group.name}}</a>
+                    </br>
+                        {{event.description}}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+
+    </div>
+</div>
 {% endblock%}

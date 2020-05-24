@@ -1,4 +1,5 @@
 {% extends 'group/group_base_update.html' %}
+{% load crispy_forms_tags %}
 {% block page %}
 <form method='POST' action="{% url 'group:update-members' object.slug %}">
     {% csrf_token %}
@@ -6,7 +7,7 @@
     {% for member in members %}
     <div class='card'>
         <div class='card-body'>
-            {{member}}
+            {{member |crispy}}
         </div>
     </div>
     {% endfor %}

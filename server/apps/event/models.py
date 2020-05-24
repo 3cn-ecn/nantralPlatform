@@ -1,5 +1,5 @@
 from django.db import models
-
+from apps.group.models import Group
 
 VISIBILITY = [
     ('Pub', 'Public -- Visible par tous'),
@@ -14,3 +14,6 @@ class Event(models.Model):
     publicity = models.CharField(max_length=200, verbose_name='Visibilité de l\'evenement', choices=VISIBILITY)
     group = models.SlugField(verbose_name='Groupe organisateur')
 
+    @property
+    def get_group(self):
+        return Group.get_group_by_slug(self.group)

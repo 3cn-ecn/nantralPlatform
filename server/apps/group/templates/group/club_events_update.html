@@ -1,4 +1,5 @@
 {% extends 'group/group_base_update.html' %}
+{% load crispy_forms_tags %}
 {% block page %}
 <form method='POST' action="{% url 'group:update-events' object.slug %}">
     {% csrf_token %}
@@ -6,10 +7,34 @@
     {% for event in form %}
     <div class='card'>
         <div class='card-body'>
-            {{event}}
+            {{event | crispy}}
         </div>
     </div>
     {% endfor %}
     <button class='btn btn-success'>Modifier les events</button>
 </form>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script>
+    $(function() {
+  $('input.datepicker').daterangepicker({
+    singleDatePicker: true,
+    drops:'up',
+    showDropdowns:true,
+    autoApply:true,
+    timePicker: true,
+    timePicker24Hour:true,
+    timePickerIncrement:15,
+    locale: {
+      format: 'YYYY-MM-DD HH:mm'
+    },
+    minYear: 2020,
+    maxYear: parseInt(moment().format('YYYY'),10)
+  });
+});
+</script>
 {% endblock %}

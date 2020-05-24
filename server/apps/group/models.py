@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from django.urls.base import reverse
 
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
@@ -42,6 +43,10 @@ class Group(models.Model):
             return Club.objects.get(slug=slug)
         else:
             return Group.objects.get(slug=slug)
+    
+    @property
+    def get_absolute_url(self):
+        return reverse('group:detail', kwargs={'pk': self.pk})
 
 
 class Club(Group):

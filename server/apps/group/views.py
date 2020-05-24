@@ -10,7 +10,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from apps.student.models import Student
 from apps.event.models import Event
 
-from apps.event.forms import EventGroupFormSet
+from apps.event.forms import EventFormSet
 
 class ListClubView(ListView):
     model = Club
@@ -31,7 +31,7 @@ class UpdateGroupEventsView(UserPassesTestMixin, View):
         context = {}
         context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
         context['events'] = Event.objects.filter(group=kwargs['group_slug'])
-        context['form'] = EventGroupFormSet(queryset=context['events'])
+        context['form'] = EventFormSet(queryset=context['events'])
         return context
 
     def get(self, request, group_slug):
@@ -71,6 +71,8 @@ class DetailClubView(DetailView):
         context = super().get_context_data(**kwargs)
         members = NamedMembership.objects.filter(group=self.object)
         context['members'] = members
+        context['is_admin'] = self.object.is_admin(self.request.user)
+        context['events'] = Event.objects.filter(group=self.object.slug)
         return context
 
 @login_required
@@ -104,7 +106,7 @@ def edit_named_memberships(request, group_slug):
 @login_required
 def edit_events(request, group_slug):
     group = Group.get_group_by_slug(group_slug)
-    form = EventGroupFormSet(request.POST)
+    form = EventFormSet(request.POST)
     if form.is_valid():
         events = form.save(commit=False)
         # Link each event to the group
