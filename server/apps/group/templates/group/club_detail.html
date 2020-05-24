@@ -7,14 +7,19 @@
 <img width="100" height="auto" src='{{object.logo.url}}'>
 <h2>Evenements a venir</h2>
 {% if request.user.is_authenticated %}
+<div class="row">
     {% for event in events %}
     <div class='card'>
-        <h6>{{event.title}}</h6>
-        <small text='muted'>{{event.date}}</small>
-        {{event.location}}
-        {{event.description}}
+        <div class='card-title'>
+            <h6>{{event.title}}</h6>
+            <small class='text-muted'><i class="fas fa-calendar-day"></i> {{event.date|date:'Y-m-d H:i'}}</br><i class="far fa-compass"></i> {{event.location}}</small>
+        </div>
+        <div class='card-body'>
+            {{event.description}}
+        </div>
     </div>
     {% endfor %}
+</div>
 {%else%}
     Veuillez vous connecter pour visualiser les events
 {%endif%}
