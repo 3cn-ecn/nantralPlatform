@@ -1,7 +1,23 @@
 {% extends 'group/club_base.html' %}
 {% block page %}
+{% if is_admin %}
+    <a href='{% url "group:update" object.id %}'>Page admin</a>
+{%endif%}
 <p>{{object.description}}</p>
 <img width="100" height="auto" src='{{object.logo.url}}'>
+<h2>Evenements a venir</h2>
+{% if request.user.is_authenticated %}
+    {% for event in events %}
+    <div class='card'>
+        <h6>{{event.title}}</h6>
+        <small text='muted'>{{event.date}}</small>
+        {{event.location}}
+        {{event.description}}
+    </div>
+    {% endfor %}
+{%else%}
+    Veuillez vous connecter pour visualiser les events
+{%endif%}
 <h2>Membres</h2>
 {% if request.user.is_authenticated %}
 {% for member in members %}
