@@ -23,18 +23,14 @@ BASE_DIR = str(BASE_PATH)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 't+nxjro*=y#q-kut9+$78=#su4s!(mrlx2e#$spy!#g8ciy$va'
 
-
-ALLOWED_HOSTS = []
 
 secret = environ.Env(
     GOOGLE_API_KEY=(str, 'Changeme'),
-    DB_HOSTNAME=(str, 'localhost'),
+    DB_HOSTNAME=(str, 'database'),
     DB_PORT=(str, '5432'),
-    DB_USERNAME=(str, 'nantralien'),
-    DB_PASSWORD=(str, 'nantral')
+    POSTGRES_USER=(str, 'nantralien'),
+    POSTGRES_PASSWORD=(str, 'nantral')
 )
 
 
@@ -130,7 +126,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')

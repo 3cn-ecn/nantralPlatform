@@ -1,0 +1,49 @@
+version: "2.1"
+
+services:
+  database:
+    image: postgres:11.5
+    expose:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_PASSWORD
+      - POSTGRES_USER
+
+  server:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+    expose:
+    - 8000
+    command: sh run_server.sh
+    volumes:
+      - ../server:/var/app
+      - static_volume:/var/app/staticfiles/
+    depends_on:
+      - database
+    environment:
+      - DB_HOSTNAME
+      - DB_PORT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SES_ACCESS_KEY_ID
+      - AWS_SES_SECRET_ACCESS_KEY
+      - SECRET_KEY
+
+  nginx:
+    build: ./containers/nginx
+    ports:
+      - 80:80
+    volumes:
+      - ../server:/var/app
+      - static_volume:/var/app/staticfiles/
+    depends_on:
+      - server
+
+volumes:
+  postgres_data:
+  static_volume:
