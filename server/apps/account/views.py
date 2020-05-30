@@ -17,6 +17,7 @@ from urllib import parse
 from .emailAuthBackend import EmailBackend
 from apps.student.models import Student
 from django.contrib import messages
+from django.core.mail import send_mail
 class RegistrationView(FormView):
     template_name = 'account/registration.html'
     form_class = SignUpForm
@@ -48,7 +49,7 @@ class RegistrationView(FormView):
             # method will generate a hash value with user related data
             'token': account_activation_token.make_token(user),
         })
-        user.email_user(subject, message)
+        user.email_user(subject, message, 'robin.troesch@student-cs.fr', html_message=message)
         messages.success(self.request, 'Un mail vous a été envoyé pour confirmer votre mail ecn.')
         return redirect(reverse('home:home'))
 
