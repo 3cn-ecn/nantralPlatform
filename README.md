@@ -46,7 +46,7 @@
 
         Server
         - Go into the server folder
-        - Create a virtualenv with `python3 -m virtualenv env` or `python3 -m virtualenv env` if it doesn't work
+        - Create a virtualenv with `python3 -m virtualenv env` or `python -m virtualenv env` if it doesn't work
         - Activate your venv with `source env/bin/activate` or `env\Scripts\activate.bat` on Windows
         - Install the python dependencies with `pip install -r requirements.txt`
         - In the config/settings folder, create a .env file and fill it out with the sample
