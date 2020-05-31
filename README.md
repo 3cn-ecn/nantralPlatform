@@ -1,3 +1,4 @@
+![Testing](https://github.com/RobinetFox/nantralPlatform/workflows/Testing/badge.svg?branch=master)
 ## Nantral Platform
 
 1. Project structure
