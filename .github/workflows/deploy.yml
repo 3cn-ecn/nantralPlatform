@@ -31,5 +31,5 @@ jobs:
           cd nantralPlatform
           cd deployment
           docker-compose down
-          git pull master
+          git pull
           docker-compose up -d
