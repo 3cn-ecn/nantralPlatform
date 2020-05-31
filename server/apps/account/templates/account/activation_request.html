@@ -1,4 +1,7 @@
-<small>English version bellow</small>
-<h2>Bonjour {{user.first_name}}</h2>
-<p>Vous avez demandé la creation d'un compte sur la plateforme Nantralienne.</p>
-<p>Pour activer votre compte cliquez sur ce <a href='http://{{ domain }}{% url "account:confirm" uid token %}'>lien</a></p>
+<html>
+    <small>English version bellow</small>
+    <h2>Bonjour {{user.first_name}}</h2>
+    <p>Vous avez demandé la creation d'un compte sur la plateforme Nantralienne.</p>
+    <p>Pour activer votre compte cliquez sur ce <a href='http://{{ domain }}{% url "account:confirm" uid token %}'>lien</a></p>
+</html>
+

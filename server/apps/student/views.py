@@ -42,6 +42,7 @@ class StudentProfileEdit(UserPassesTestMixin, UpdateView):
         context['courses_form'] = TakeCourseFormSet(queryset=follow_courses)
         return context
 
+
 @require_http_methods(['POST'])
 @login_required
 def change_password(request, pk):
