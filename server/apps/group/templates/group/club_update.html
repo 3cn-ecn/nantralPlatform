@@ -1,7 +1,7 @@
 {% extends 'group/group_base_update.html' %}
 {% load crispy_forms_tags %}
 {% block page%}
-<form method='POST'>
+<form method='POST' enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}
     <button class="btn btn-success">Modifier</button>

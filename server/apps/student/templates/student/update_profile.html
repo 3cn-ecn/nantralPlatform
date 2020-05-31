@@ -3,7 +3,7 @@
 {% block  content%}
 <h1>{{object.first_name}} {{object.last_name}}</h1>
 <p>{{object.user.email}}</p>
-<form method='POST'>
+<form method='POST' enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}
     <button class="btn btn-success">Modifier</button>
