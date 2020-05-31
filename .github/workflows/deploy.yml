@@ -19,8 +19,6 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - name: 'test'
-      run: echo ${{ secrets.SSH_KEY_DEPLOY }}
 
     # Runs a set of commands using the runners shell
     - name: Deploy to a foreign instance
