@@ -7,8 +7,8 @@ from django.urls import reverse
 from apps.utils.upload import PathAndRename
 
 FACULTIES = [
-    ('Gen', 'Elève Ingenieur Généraliste'),
-    ('Iti', 'Elève Ingenieur de Specialité (ITII)'),
+    ('Gen', 'Elève Ingénieur Généraliste'),
+    ('Iti', 'Elève Ingénieur de Specialité (ITII)'),
     ('Mas', 'Elève en Master'),
     ('Doc', 'Doctorant')
 ]
