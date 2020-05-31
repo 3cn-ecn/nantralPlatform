@@ -23,6 +23,7 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Deploy to a foreign instance
       uses: appleboy/ssh-action@master
+      run: echo ${{ secrets.SSH_KEY_DEPLOY }}
       with:
         host: ${{ secrets.INSTANCE_ADDRESS }}
         username: "ec2-user"
