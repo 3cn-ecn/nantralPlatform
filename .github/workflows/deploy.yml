@@ -29,4 +29,9 @@ jobs:
         host: ${{ secrets.INSTANCE_ADDRESS }}
         username: "ec2-user"
         key: ${{ secrets.SSH_KEY_DEPLOY }}
-        script: ls
+        script: |
+          cd nantralPlatform
+          cd deployment
+          docker-compose down
+          git pull master
+          docker-compose up -d
