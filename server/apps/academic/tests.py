@@ -9,7 +9,7 @@ class TestCourses(TestCase, TestMixin):
         self.user_setup()
     
     def test_create_course(self):
-        Course.objects.create(name='testCourse', course_type='Option disciplinaire')
+        Course.objects.create(name='testCourse', course_type='Option Disciplinaire')
 
         self.assertEqual(len(Course.objects.all()), 1)
 

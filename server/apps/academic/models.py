@@ -4,9 +4,9 @@ from apps.student.models import Student
 
 
 TYPE = [
-    ('OD', 'Option disciplinaire'),
-    ('OP', 'Option professionnelle'),
-    ('ITII', 'Filliere de specialité'),
+    ('OD', 'Option Disciplinaire'),
+    ('OP', 'Option Professionnelle'),
+    ('ITII', 'Filière de Specialité'),
     ('Master', 'Master')
 ]
 

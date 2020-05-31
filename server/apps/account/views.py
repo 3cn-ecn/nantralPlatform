@@ -50,7 +50,7 @@ class RegistrationView(FormView):
             'token': account_activation_token.make_token(user),
         })
         user.email_user(subject, message, 'robin.troesch@student-cs.fr', html_message=message)
-        messages.success(self.request, 'Un mail vous a été envoyé pour confirmer votre mail ecn.')
+        messages.success(self.request, 'Un mail vous a été envoyé pour confirmer votre mail ECN.')
         return redirect(reverse('home:home'))
 
 
@@ -84,7 +84,7 @@ class AuthView(FormView):
         else:
             return super(AuthView, AuthView).get(self, request)
     def form_invalid(self, form):
-        message = f'Veuillez vous connecter avec votre adresse centrale'
+        message = f'Veuillez vous connecter avec votre adresse mail ECN'
         messages.warning(self.request, message)
         return redirect(reverse('account:login'))
 
@@ -124,7 +124,7 @@ class ForgottenPassView(FormView):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject, message)
-        messages.success(self.request, 'Un email de recuperation a ete envoyé si cette adresse existe.')
+        messages.success(self.request, 'Un email de récuperation a été envoyé si cette adresse existe.')
         return redirect(reverse('account:login'))
 
 class PasswordResetConfirmCustomView(PasswordResetConfirmView):
