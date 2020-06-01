@@ -1,6 +1,34 @@
 {% extends 'base.html'%}
 {% block content%}
-{% for student in object_list%}
-    <li><a href='{% url "student:detail" student.id%}'>{{student.first_name | title}} {{student.last_name | upper}}</a></li>
-{% endfor %}
+<table class="table table-hover table-sm">
+  <thead>
+    <tr>
+      <th scope="col">NOM</th>
+      <th scope="col">Prénom</th>
+      <th scope="col">Promotion entrante</th>
+      <th scope="col">Filière</th>
+      <th scope="col">Double Cursus</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in object_list%}
+    <tr class='clickable-row' data-href='{% url "student:detail" student.id%}' style="cursor: pointer">
+      <td>{{student.last_name | upper}}</a></td>
+      <td>{{student.first_name | title}}</td>
+      <td>{{student.promo}}</td>
+      <td>{{student.get_faculty_display}}</td>
+      <td>{{student.get_double_degree_display}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script> jQuery(document).ready(function($) {
+  $(".clickable-row").click(function() {
+      window.location = $(this).data("href");
+  });
+}); </script> 
+
 {% endblock %}
+
+
