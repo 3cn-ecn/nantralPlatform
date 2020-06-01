@@ -19,7 +19,22 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Testing
+      working-directory: ./server
+      env:
+        AWS_ACCESS_KEY_ID: test
+        AWS_SECRET_ACCESS_KEY: test  
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        python manage.py test
+  
     # Runs a set of commands using the runners shell
     - name: Deploy to a foreign instance
       uses: appleboy/ssh-action@master
