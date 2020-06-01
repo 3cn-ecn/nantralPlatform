@@ -1,5 +1,6 @@
 {% extends 'base.html'%}
 {% block  content%}
+<br \>
 <h1>{{object.first_name | title}} {{object.last_name | upper}}</h1>
 {% if object.picture %}
 <img width="100" height="auto" src='{{object.picture.url}}'>
