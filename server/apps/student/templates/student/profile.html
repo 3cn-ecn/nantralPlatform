@@ -1,11 +1,11 @@
 {% extends 'base.html'%}
 {% block  content%}
-<h1>{{object.first_name}} {{object.last_name}}</h1>
+<h1>{{object.first_name | title}} {{object.last_name | upper}}</h1>
 {% if object.picture %}
 <img width="100" height="auto" src='{{object.picture.url}}'>
 {% endif %}
-<p>{{object.faculty}} | {{object.double_degree}}</p>
-<p>{{object.promo}}</p>
+<p>{{object.get_faculty_display}} | {{object.get_double_degree_display}}</p>
+<p>Promotion entrante : {{object.promo}}</p>
 
 <h2>Parcours scolaire</h2>
 {% for course in courses%}
