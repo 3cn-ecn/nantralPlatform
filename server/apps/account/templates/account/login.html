@@ -1,12 +1,31 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block content%}
-    <form method='POST'>
-        {% csrf_token %}
-        {{ form|crispy }}
-        <a href="{% url 'account:forgotten_pass'%}"><small class='text-muted'>Mot de passe oublié ?</small></a>
-        <button class="btn btn-success">Se connecter</button>
-        <a href="{% url 'account:registration' %}" class="btn btn-light">Pas de compte ?</a>
-    </form>
+<style> body
+    {
+      background-image: url('{% static "/img/central_background.jpg" %}');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+</style>
+    <div class='row'>
+        <div class='col-3'></div>
+        <div class='card col-6 mt-5 p-2 bg-white text-center'>
+            <h2>Nantral Platform</h2>
+            <p>Veuillez vous connecter</p>
+            <form method='POST'>
+                {% csrf_token %}
+                {{ form|crispy }}
+            </br>
+            <div class='text-center'>
+                <button class="btn btn-success">Se connecter</button>  
+                <a href="{% url 'account:registration' %}" class="btn btn-light">Pas de compte ?</a>
+            </div>
+                
+            </form>
+        </div>
+        <div class='col-3'></div>
+    </div>
     
 {% endblock %}

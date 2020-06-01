@@ -42,6 +42,7 @@ class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['password'].label = "Mot de passe"
+        self.fields['password'].help_text = "<a class='text-muted' href='/account/forgotten'>Mot de passe oublié  ?</a>"
 
 class ForgottenPassForm(forms.Form):
     email = forms.EmailField(max_length=200, required=True, help_text='Entrez l\'adresse mail associée au compte')
