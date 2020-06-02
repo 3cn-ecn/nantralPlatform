@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block content%}
+<br \>
+<h2>Clubs Nantraliens</h2>
+<br \>
 {% for club in object_list%}
     <li><a href='{% url "group:detail" club.id%}'>{{club.name | title}}</a></li>
 {% endfor %}

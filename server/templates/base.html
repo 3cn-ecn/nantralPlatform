@@ -16,26 +16,43 @@
     }
   </style>
   <body>
-    <a class='btn btn-light' href ="{% url 'home:home' %}">Home</a>
-    {% if request.user.is_authenticated %}
-    <div class='container-fluid'>
-      <div class='row'>
-        <div class='col-8'></div>
-        <div class='col-2'>
-          <a href='{% url "account:redirect-student"  request.user.id%}'>
-            <span class='badge badge-light p-2'>
-              {{ request.user.first_name.0 | title}}.{{ request.user.last_name | upper}}
-            </span>
-          </a> 
-        </div>
-        <div class='col-2'>
-          <a class='btn btn-light' href="{% url 'account:logout' %}">
-            <i class="fas fa-sign-out-alt"></i>
-          </a>
-        </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'home:home' %}">Nantral Platform</a>
+      {% if request.user.is_authenticated %}
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home:home' %}">Accueil <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student:list' %}">Étudiants</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'group:list' %}">Clubs</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          {% if request.user.student.id %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student:detail' request.user.student.id %}">{{ request.user.first_name | title}} {{ request.user.last_name | upper}}</a>
+          </li>
+          {% endif  %}
+          <li class="nav-item dropdown pull-right">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-cog"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+              <li><a class="dropdown-item" href='{% url "account:redirect-student"  request.user.id%}'><i class="fas fa-user"></i>  Modifier mon profil</a></li>
+              <li class="divider"></li>
+              <li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
+            </ul>
+
+          </li>
+        </ul>
+        {% endif %}
       </div>
-    </div>
-    {% endif %}
+    </nav>
+    
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-8">
