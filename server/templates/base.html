@@ -32,9 +32,11 @@
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
+          {% if request.user.student.id %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'student:detail' request.user.student.id %}">{{ request.user.first_name | title}} {{ request.user.last_name | upper}}</a>
           </li>
+          {% endif  %}
           <li class="nav-item dropdown pull-right">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-cog"></i>
