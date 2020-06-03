@@ -11,18 +11,16 @@
 </style>
     <div class='row'>
         <div class='col-md-3'></div>
-        <div class='card col-md-6 col-12  my-3 p-2 bg-white text-center'>
+        <div class='card col-md-6 col-12  my-3 p-3 bg-light text-center'>
             <h2>Nantral Platform</h2>
-            <p>Veuillez vous connecter</p>
+            <small>Veuillez vous connecter</small>
             <form method='POST'>
                 {% csrf_token %}
                 {{ form|crispy }}
-            </br>
             <div class='text-center'>
-                <button class="btn btn-success">Se connecter</button>  
+                <button class="btn btn-dark">Se connecter</button>  
                 <a href="{% url 'account:registration' %}" class="btn btn-light">Pas de compte ?</a>
             </div>
-                
             </form>
         </div>
         <div class='col-md-3'></div>

@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="fr">
   <head>
@@ -26,13 +27,16 @@ body {
 }
   </style>
   <body>
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{% url 'home:home' %}">Nantral Platform</a>
+      <a class="navbar-brand" href="{% url 'home:home' %}">
+        <img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
+        Nantral Platform
+      </a>
+      {% if request.user.is_authenticated %}
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      {% if request.user.is_authenticated %}
-      
       <div class="collapse navbar-collapse text-center" id="navbarText">
         <ul class="navbar-nav">
           <li class="nav-item">
@@ -68,7 +72,7 @@ body {
 
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-8">
+        <div class="col-11">
           {% if messages %}
           {% for message in messages %}
             <div id="alertScore" class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
