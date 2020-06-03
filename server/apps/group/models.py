@@ -24,6 +24,7 @@ class Group(models.Model):
     members = models.ManyToManyField(Student, verbose_name='Membres du groupe', related_name='members')
     logo = models.ImageField(verbose_name='Logo du groupe', blank=True, null=True, upload_to=path_and_rename)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
+    parent = models.SlugField(max_length=40, blank=True, null=True)
     class Meta:
         abstract = True
 
@@ -33,8 +34,13 @@ class Group(models.Model):
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
         student = Student.objects.filter(user=user).first()
-        return student in self.admins.all()
+        return student in self.admins.all() or self.get_parent().is_admin(user)
     
+    @property
+    def get_parent(self):
+        """Get the parent group of this group."""
+        return Group.get_group_by_slug(self.parent)
+
     @staticmethod
     def get_group_by_slug(slug:  str):
         """Get a group from a slug."""

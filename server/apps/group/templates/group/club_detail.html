@@ -4,7 +4,7 @@
     <a href='{% url "group:update" object.id %}'>Page admin</a>
 {%endif%}
 <p>{{object.description}}</p>
-<img width="100" height="auto" src='{{object.logo.url}}'>
+{%if object.logo %}<img width="100" height="auto" src='{{object.logo.url}}'>{% endif %}
 <h2>Evenements a venir</h2>
 {% if request.user.is_authenticated %}
 <div class="row">

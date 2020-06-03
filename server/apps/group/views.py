@@ -25,8 +25,10 @@ class UpdateClubView(UpdateView):
 class UpdateGroupEventsView(UserPassesTestMixin, View):
     template_name = 'group/club_events_update.html'
     def test_func(self):
-        group = Group.get_group_by_slug(self.kwargs['group_slug'])
-        return group.is_admin(self.request.user)
+        if self.request.user.is_authenticated:
+            group = Group.get_group_by_slug(self.kwargs['group_slug'])
+            return group.is_admin(self.request.user)
+        return False
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
@@ -44,8 +46,10 @@ class UpdateGroupEventsView(UserPassesTestMixin, View):
 class UpdateGroupMembersView(UserPassesTestMixin, View):
     template_name = 'group/club_members_update.html'
     def test_func(self):
-        group = Group.get_group_by_slug(self.kwargs['group_slug'])
-        return group.is_admin(self.request.user)
+        if self.request.user.is_authenticated:
+            group = Group.get_group_by_slug(self.kwargs['group_slug'])
+            return group.is_admin(self.request.user)
+        return False
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -71,7 +75,7 @@ class DetailClubView(DetailView):
         context = super().get_context_data(**kwargs)
         members = NamedMembership.objects.filter(group=self.object)
         context['members'] = members
-        context['is_admin'] = self.object.is_admin(self.request.user)
+        context['is_admin'] = self.object.is_admin(self.request.user) if self.request.user.is_authenticated else False
         context['events'] = Event.objects.filter(group=self.object.slug)
         return context
 
