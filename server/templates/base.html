@@ -19,6 +19,10 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="{% url 'home:home' %}">Nantral Platform</a>
       {% if request.user.is_authenticated %}
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link" href="{% url 'home:home' %}">Accueil <span class="sr-only">(current)</span></a>
@@ -47,6 +51,7 @@
             </ul>
           </li>
         </ul>
+      </div>
       {% endif %}
     </nav>
 
