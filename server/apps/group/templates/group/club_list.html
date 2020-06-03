@@ -3,7 +3,29 @@
 <br \>
 <h2>Clubs Nantraliens</h2>
 <br \>
-{% for club in object_list%}
-    <li><a href='{% url "group:detail" club.id%}'>{{club.name | title}}</a></li>
-{% endfor %}
+
+<div class="table-responsive">
+    <table class="table table-hover table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Club</th>
+          <th scope="col">Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for club in object_list%}
+        <tr class='clickable-row' data-href='{% url "group:detail" club.id%}' style="cursor: pointer">
+          <td>{{club.name | title}}</a></td>
+          <td>{{club.bdx_type}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    
+    <script> jQuery(document).ready(function($) {
+      $(".clickable-row").click(function() {
+          window.location = $(this).data("href");
+      });
+    }); </script> 
 {% endblock %}
