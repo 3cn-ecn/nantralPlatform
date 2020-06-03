@@ -4,14 +4,15 @@
 <h2>Annuaire des Nantralien.ne.s</h2>
 <br \>
 <div class="table-responsive">
-<table class="table table-hover table-sm" content="width=device-width, initial-scale=1">
+<table class="table table-hover table-sm">
   <thead>
     <tr>
       <th scope="col">NOM</th>
       <th scope="col">Prénom</th>
-      <th scope="col">Promotion entrante</th>
-      <th scope="col">Filière</th>
-      <th scope="col">Double Cursus</th>
+      <th scope="col" class="d-none d-sm-table-cell">Promotion entrante</th>
+      <th scope="col" class="d-none d-sm-table-cell">Filière</th>
+      <th scope="col" class="d-none d-sm-table-cell">Double Cursus</th>
+
     </tr>
   </thead>
   <tbody>
@@ -19,9 +20,9 @@
     <tr class='clickable-row' data-href='{% url "student:detail" student.id%}' style="cursor: pointer">
       <td>{{student.last_name | upper}}</a></td>
       <td>{{student.first_name | title}}</td>
-      <td>{{student.promo}}</td>
-      <td>{{student.get_faculty_display}}</td>
-      <td>{{student.get_double_degree_display}}</td>
+      <td class="d-none d-sm-table-cell">{{student.promo}}</td>
+      <td class="d-none d-sm-table-cell">{{student.get_faculty_display}}</td>
+      <td class="d-none d-sm-table-cell">{{student.get_double_degree_display}}</td>
     </tr>
     {% endfor %}
   </tbody>
