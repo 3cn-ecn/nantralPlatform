@@ -33,7 +33,7 @@ class Group(models.Model):
 
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
-        if user.is_superuser() or user.is_staff():
+        if user.is_superuser or user.is_staff:
             return True
         student = Student.objects.filter(user=user).first()
         return student in self.admins.all() or self.get_parent().is_admin(user)
