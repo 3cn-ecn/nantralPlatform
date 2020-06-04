@@ -1,6 +1,7 @@
 {% extends 'group/group_base_update.html' %}
 {% load crispy_forms_tags %}
 {% block page %}
+</br>
 <form method='POST' action="{% url 'group:update-members' object.slug %}">
     {% csrf_token %}
     {{ members.management_form }}
@@ -11,6 +12,7 @@
         </div>
     </div>
     {% endfor %}
-    <button class='btn btn-success'>Modifier les membres</button>
+    </br>
+    <button class='btn btn-dark'>Modifier les membres</button>
 </form>
 {% endblock %}

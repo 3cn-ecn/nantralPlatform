@@ -1,6 +1,7 @@
 {% extends 'group/group_base_update.html' %}
 {% load crispy_forms_tags %}
 {% block page %}
+</br>
 <form method='POST' action="{% url 'group:update-events' object.slug %}">
     {% csrf_token %}
     {{ form.management_form }}
@@ -11,7 +12,8 @@
         </div>
     </div>
     {% endfor %}
-    <button class='btn btn-success'>Modifier les events</button>
+  </br>
+    <button class='btn btn-dark'>Ajouter l'événement</button>
 </form>
 {% endblock %}
 {% block script %}
