@@ -100,7 +100,7 @@ Finally add the app in config/settings/base.py:
 `
 Remember to do migrations if you add a model!
 ### Closing things:
-    Close your virtualenv with `deactivate` anywhere
+Close your virtualenv with `deactivate` anywhere
 
 ## Guidelines
 
