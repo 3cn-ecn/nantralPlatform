@@ -10,23 +10,22 @@ Bienvenue sur Nantral Platform !
 Nantral Platform regroupe des services dédiés aux étudiant.e.s de Centrale Nantes.
 </p>
 <div>
-    <h2>Evénements à venir</h2>
-    <div class='row'>
-        {% for event in events %}
-            <div class='card'>
-                <div class='card-title'>
-                    <h6>{{event.title}}</h6>
-                    <small class='text-muted'><i class="fas fa-calendar-day"></i> {{event.date|date:'Y-m-d H:i'}}</br><i class="far fa-compass"></i> {{event.location}}</small>
-                </div>
-                <div class='card-body'>
-                    <i class="fas fa-users"></i> <a href='{{event.get_group.get_absolute_url}}'>{{event.get_group.name}}</a>
-                </br>
-                    {{event.description}}
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-    
+    <h2>Événements à venir</h2>
 
+    <table class="table table-sm table-dark" >
+        <tbody>
+        {% for event in events %}
+          <tr>
+            <td>
+                <p style="text-align: right;"><span style="float: left;">{{event.title}}</span> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
+                <small><i class="fa fa-calendar-o"></i> {{event.date|date:'Y-m-d H:i'}} <i class="far fa-compass"></i> {{event.location}}</small>
+                <br/>
+                <small>{{event.description}}</small>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 </div>
+
 {% endblock%}
