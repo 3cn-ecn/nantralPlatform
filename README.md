@@ -7,39 +7,40 @@
 3. Guidelines
 
 ## Project structure
-Description
+### Description
 ```
-    |-.github 
-        Contains the definitions for github actions
-    |-frontend
-        Contains source files to be compiled for the frontend
-    |-server
-        Contains source files for the backend
-    |-static
-        Contains static files to be served by the server
+|-.github 
+    Contains the definitions for github actions
+|-frontend
+    Contains source files to be compiled for the frontend
+|-server
+    Contains source files for the backend
+|-static
+    Contains static files to be served by the server
  ```
 
-Frontend
-    The frontend is an npm application using react
-    source files are compiled using babel and webpack
-    when files from this folder are compiled they are sent
-    to static/webapp
+### Frontend
+The frontend is an npm application using react
+source files are compiled using babel and webpack
+when files from this folder are compiled they are sent
+to static/webapp
 
-Server
-    The server is a django application.
-    ```
-    |-apps (Contains all the applications)
-    |-config (General config folder)
-        |-settings
-            |-base.py (Base settings)
-            |-dev-local.py (Settings for local dev)
-            |-production.py (Settings for production)
-        |-asgi.py
-        |-urls.py (General url config)
-        |-wsgi.py
-    |-templates (Genral template folder)
-    |-manage.py (General script to launch and make migrations)
-    |-requirements.txt (Contains python requirements)```
+### Server
+The server is a django application.
+```
+|-apps (Contains all the applications)
+|-config (General config folder)
+    |-settings
+        |-base.py (Base settings)
+        |-dev-local.py (Settings for local dev)
+        |-production.py (Settings for production)
+    |-asgi.py
+    |-urls.py (General url config)
+    |-wsgi.py
+|-templates (Genral template folder)
+|-manage.py (General script to launch and make migrations)
+|-requirements.txt (Contains python requirements)
+```
 ## Local dev
 
 ### Let's get you started:
