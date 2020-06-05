@@ -1,12 +1,12 @@
 ![Testing](https://github.com/RobinetFox/nantralPlatform/workflows/Testing/badge.svg?branch=master)
 ![EC2 Deploy](https://github.com/RobinetFox/nantralPlatform/workflows/EC2%20Deploy/badge.svg)
-## Nantral Platform
+# Nantral Platform
 
 1. Project structure
 2. Local dev
 3. Guidelines
 
-### Project structure
+## Project structure
 
     Description
     ```
@@ -18,6 +18,7 @@
             Contains source files for the backend
         |-static
             Contains static files to be served by the server
+     ```
 
     Frontend
         The frontend is an npm application using react
@@ -27,6 +28,7 @@
     
     Server
         The server is a django application.
+        ```
         |-apps (Contains all the applications)
         |-config (General config folder)
             |-settings
@@ -39,7 +41,7 @@
         |-templates (Genral template folder)
         |-manage.py (General script to launch and make migrations)
         |-requirements.txt (Contains python requirements)```
-### Local dev
+## Local dev
 
     Let's get you started:
         Install
@@ -54,7 +56,9 @@
         - In the config/settings folder, create a .env file and fill it out with the sample
         - Launch the server with `python manage.py runserver`
         - The server runs on localhost:8000
-        You are ready to go
+        You are ready to go.
+    Create a superuser with:
+        `python manage.py createsuperuser`
     
     To test use pytest :
         - pytest
@@ -80,12 +84,9 @@
         This way you will see your webapp evolve in your browser
 
     Closing things:
-        Please don't be a bruteforce killer
-        Close your database when you are finished this way :
-        In deployement_templates/local launch DB with `docker-compose down`
         Close your virtualenv with `deactivate` anywhere
 
-### Guidelines
+## Guidelines
 
     Please keep applications as small as possible.
     Each application should have one unique purpose.
