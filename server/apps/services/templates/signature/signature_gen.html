@@ -1,0 +1,125 @@
+{% extends 'base.html'%}
+{% block content%}
+<div class='container row'>
+    <div class='col-md-6 col-sm-12'>
+    <form class='oxy form-group'>
+      <label for="nom">Nom/Last Name : </label>
+      <input class="form-control" type="text" name="nom" placeholder="Poitou">
+      <label for="prenom">Prénom/First Name : </label>
+      <input class="form-control" type="text" name="prenom" placeholder="Arnaud">
+      <label  for="annee">Année/Year : </label>
+      <input class="form-control" type="number" name="annee" placeholder="1,2,3,55...">
+      <small class="form-text text-muted">Entrez votre année à l'école en chiffre. Your school year in number format.</small>
+      <label for="option">Option : </label>
+      <input class="form-control" type="text" name="option" placeholder="Cassage de lyonnais">
+      <label for="misc">Autre/Other : </label>
+      <textarea class="form-control" name="misc" cols="20" rows="2" placeholder="Directeur d'Ecole Gardien de crèche"></textarea>
+      <small class="form-text text-muted">Ce qui vous distingue : associations, DD par exemple webmaster, J.E. ... What makes you unique : associations, international...</small>
+      <label for="tel">Tel : </label>
+      <input class="form-control" type="tel" name="tel" placeholder="+33 2...">
+      <label for="mail">Mail : </label>
+      <input class="form-control" type="email" name="mail" placeholder="arnaud.poitou@eleves.ec-nantes.fr">
+      </form>
+      <button class="btn btn-primary" id='generer'>Générer</button></br>
+    </div>
+    <div class='col-md-6 col-sm-12'>
+      <table id="signature">
+        <tr>
+          <td rowspan="7" width="200" valign="top"><a href="https://www.ec-nantes.fr/">
+            <img src="https://ci3.googleusercontent.com/proxy/b8YEcJJIZJwNiYngX3Hj1BnWgSGLl1-6wAhW5YCq31hcRbXjUXJceTwIrkhxQul0YaiXCHdsDe86-9GYb40NAmpojRJkk3ny55uE4IgrVmQj-T9zhoQ=s0-d-e1-ft#https://www.ec-nantes.fr/medias/photo/v_logo-sign_1492585942308-png"
+              alt="Logo CN" class="CToWUd" width="184"></a>
+          </td>
+          <td id="np" style="color:#102648;font-family:Titillium,times;font-size:medium;font-weight:900" valign="top">Arnaud POITOU</td>
+        </tr>
+        <tr>
+          <td style="color:#102648;font-family:Titillium,times;font-size:small;font-style:italic" valign="top">Elève Ingénieur en <span id="an">Xème</span> Année</td>
+        </tr>
+        </br>
+        <tr>
+          <td height="12">
+            <img src="https://ci5.googleusercontent.com/proxy/nyh4uQGLFFuxSIZGFJxvcDcBu5z-GFtT9h6SxuNLWYCv2k8H6LcsqeUIxKOQ4WkNST_qG6Rqv5OVx7JxWZDMpYIPHCXT2-vcUdH4HFtCj4YcUQvg9Qg5=s0-d-e1-ft#https://www.ec-nantes.fr/medias/photo/v_tiret-sign_1492585977585-png"
+              alt="----" class="CToWUd" width="30" height="12"></td>
+        </tr>
+        <tr>
+          <td style="color:#102648;font-family:Titillium,times;font-size:small" valign="top"><span id="op">Option Cassage de Lyonnais</br></br></span>
+            <span id="divers">
+              Directeur d'Ecole<br>
+              Gardien de crèche<br>
+            </span></td>
+        </tr>
+        <tr id="barre">
+          <td height="12">
+            <img src="https://ci5.googleusercontent.com/proxy/nyh4uQGLFFuxSIZGFJxvcDcBu5z-GFtT9h6SxuNLWYCv2k8H6LcsqeUIxKOQ4WkNST_qG6Rqv5OVx7JxWZDMpYIPHCXT2-vcUdH4HFtCj4YcUQvg9Qg5=s0-d-e1-ft#https://www.ec-nantes.fr/medias/photo/v_tiret-sign_1492585977585-png"
+              alt="----" class="CToWUd" width="30" height="12"></td>
+        </tr>
+        </br>
+        <tr>
+          <td id="tel" style="color:#102648;font-family:Titillium,times;font-size:small" valign="top">Tel: +33 2 40 37 16 00</td>
+        </tr>
+        <tr>
+          <td style="color:#102648;font-family:Titillium,times;font-size:small" valign="top">Mail: <a id="maillink" href="mailto: arnaud.poitou@eleves.ec-nantes.fr" target="_blank">
+              <span id="mail" class="il">arnaud.poitou@eleves.ec-nantes.fr</span></a></td>
+        </tr>
+      </table>
+    </div>
+    <div>
+    <p>Pour intégrer la signature :</p>
+    <ul>
+      <li>Selectionner la signature en entier (Image comprise)</li>
+      <li>Ctrl+C</li>
+      <li>Dans votre webmail "ajouter une nouvelle signature"</li>
+      <li>Passer en format html</li>
+      <li>Ctrl+V dans le cadre</li>
+      <li>Enregistrer</li>
+    </ul>
+    </div>
+    <div>
+    <p>To use it :</p>
+    <ul>
+      <li>Select all the generated signature (Image included)</li>
+      <li>Ctrl+C</li>
+      <li> In your webmail add a new signature</li>
+      <li>Select format html</li>
+      <li>then do Ctrl+V in the frame</li>
+      <li>Save</li>
+    </ul>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function() {
+      $('#generer').click(function() {
+        $('#np').text($('input[name="prenom"]').val() + " " + $('input[name="nom"]').val());
+        if ($('input[name="annee"]').val() == 1) {
+          $("#an").text("1ère");
+        } else {
+          $("#an").text($('input[name="annee"]').val() + "ème");
+        }
+        if ($('input[name="option"]').val() == "") {
+          $('#op').remove();
+        } else {
+          $('#op').text("Option " + $('input[name="option"]').val());
+          $('#op').append("</br></br>");
+        }
+        $('#tel').text("Tel: " + $('input[name="tel"]').val());
+        $('#mail').text($('input[name="mail"]').val());
+        $('#maillink').attr("href", "mailto: " + $('input[name="mail"]').val());
+        if ($('textarea[name="misc"]').val() != "") {
+        $('#divers').html("");
+          var divers = $('textarea[name="misc"]').val().split("\n");
+          for (i in divers) {
+            $('#divers').append(document.createTextNode(divers[i]));
+            if (i<divers.length-1){
+            $('#divers').append("<br>");
+            }
+          }
+               
+        } else {
+          $('#divers').html("");
+        }
+        if ($('input[name="option"]').val() == "" && $('textarea[name="misc"]').val() == "") {
+          $('#barre').html('');
+        }
+      });
+     });
+  </script>
+{% endblock %}

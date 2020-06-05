@@ -49,6 +49,14 @@ body {
           <li class="nav-item">
             <a class="nav-link" href="{% url 'group:list' %}">Clubs</a>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Services
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
+            </ul>
+          </li>
         </ul>
         <ul class="navbar-nav ml-auto">
           {% if request.user.student.id %}
