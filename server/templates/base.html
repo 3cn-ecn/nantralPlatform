@@ -29,7 +29,7 @@ body {
   </style>
   <body>
     
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" href="{% url 'home:home' %}">
         <img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
         Nantral Platform
@@ -48,6 +48,14 @@ body {
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'group:list' %}">Clubs</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Services
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
+            </ul>
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
