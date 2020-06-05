@@ -7,7 +7,6 @@
 3. Guidelines
 
 ## Project structure
-
     Description
     ```
         |-.github 
