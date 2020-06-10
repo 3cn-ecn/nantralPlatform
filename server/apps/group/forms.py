@@ -1,4 +1,5 @@
 from django.forms import forms, ModelForm, modelformset_factory
+from bootstrap_modal_forms.forms import BSModalForm
 from django import forms
 from .models import NamedMembership
 
@@ -13,6 +14,11 @@ class NamedMembershipStudentForm(ModelForm):
         model = NamedMembership
         fields = ['function', 'year', 'group']
 
+
+class NamedMembershipAdd(ModelForm):
+    class Meta:
+        model = NamedMembership
+        fields = ['function', 'year']
 
 
 NamedMembershipClubFormset = modelformset_factory(

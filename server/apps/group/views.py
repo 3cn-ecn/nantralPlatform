@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
-from django.views.generic import DetailView, UpdateView, ListView, View
+from django.views.generic import DetailView, UpdateView, ListView, View, FormView
 from .models import Club, Group, NamedMembership
-from .forms import NamedMembershipClubFormset
+from .forms import NamedMembershipClubFormset, NamedMembershipAdd
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
@@ -77,7 +77,19 @@ class DetailClubView(DetailView):
         context['members'] = members
         context['is_admin'] = self.object.is_admin(self.request.user) if self.request.user.is_authenticated else False
         context['events'] = Event.objects.filter(group=self.object.slug)
+        context['form'] = NamedMembershipAdd()
         return context
+
+
+class AddToClubView(FormView):
+    form_class = NamedMembershipAdd
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.student = self.request.user.student
+        self.object.group = Club.objects.get(id=self.kwargs['club_id'])
+        self.object.save()
+        return redirect('group:detail', self.kwargs['club_id'])
+
 
 @login_required
 def add_member(request, group_slug, student_id):
