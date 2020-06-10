@@ -36,7 +36,7 @@ class Group(models.Model):
         if user.is_superuser or user.is_staff:
             return True
         student = Student.objects.filter(user=user).first()
-        return student in self.admins.all() or self.get_parent().is_admin(user)
+        return student in self.admins.all() or self.get_parent() is not None and self.get_parent().is_admin(user)
     
     @property
     def get_parent(self):
