@@ -1,5 +1,4 @@
 from django.forms import forms, ModelForm, modelformset_factory
-from bootstrap_modal_forms.forms import BSModalForm
 from django import forms
 from .models import NamedMembership
 
