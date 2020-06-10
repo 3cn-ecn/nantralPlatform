@@ -71,3 +71,5 @@ class NamedMembership(models.Model):
     year = models.IntegerField(verbose_name='Année du poste', blank=True, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     group = models.ForeignKey(Club, on_delete=models.CASCADE)
+    class Meta:
+        unique_together = ('function', 'year','student', 'group')

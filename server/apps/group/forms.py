@@ -14,6 +14,11 @@ class NamedMembershipStudentForm(ModelForm):
         fields = ['function', 'year', 'group']
 
 
+class NamedMembershipAdd(ModelForm):
+    class Meta:
+        model = NamedMembership
+        fields = ['function', 'year']
+
 
 NamedMembershipClubFormset = modelformset_factory(
     NamedMembership,
