@@ -38,6 +38,13 @@ class Group(models.Model):
         student = Student.objects.filter(user=user).first()
         return student in self.admins.all() or self.get_parent() is not None and self.get_parent().is_admin(user)
     
+    def is_member(self, user: User) -> bool:
+        """Indicates if a user is member."""
+        if not user.student:
+            return False
+        student = Student.objects.filter(user=user).first()
+        return student in self.members.all()
+    
     @property
     def get_parent(self):
         """Get the parent group of this group."""
@@ -54,7 +61,7 @@ class Group(models.Model):
     
     @property
     def get_absolute_url(self):
-        return reverse('group:detail', kwargs={'pk': self.pk})
+        return reverse('group:detail', kwargs={'group_slug': self.slug})
 
 
 class Club(Group):
@@ -64,6 +71,15 @@ class Club(Group):
     def save(self, *args, **kwargs):
         self.slug = f'club--{slugify(self.name)}'
         super(Club, self).save(*args, **kwargs)
+
+    def is_member(self, user: User) -> bool:
+        """Indicates if a user is member."""
+        if user.is_anonymous or not user.is_authenticated:
+            return False
+        if not user.student:
+            return False
+        student = Student.objects.filter(user=user).first()
+        return NamedMembership.objects.filter(student=student).count() > 0
 
 
 class NamedMembership(models.Model):

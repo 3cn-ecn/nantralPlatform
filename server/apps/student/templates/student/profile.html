@@ -14,7 +14,7 @@
 {% endfor %}
 <h2>Clubs</h2>
 {% for club in clubs %}
-    <a href='{% url "group:detail" club.group.id  %}' class='card'>
+    <a href='{{ club.group.get_absolute_url }}' class='card'>
         {{club.group.name}}
         {{club.function}} | {{club.year}}
     </a>

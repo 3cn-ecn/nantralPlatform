@@ -17,13 +17,13 @@ class TestGroups(TestCase, TestMixin):
         Club.objects.create(name='TestClub')
         club = Club.objects.all().first()
         print(club)
-        url = reverse('group:detail', args=[club.pk])
+        url = reverse('group:detail', args=[club.slug])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-        url = reverse('group:update', args=[club.pk])
+        url = reverse('group:update', args=[club.slug])
         resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
     def test_add_member(self):
         pass
