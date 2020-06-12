@@ -1,34 +1,50 @@
 from django.shortcuts import redirect, render
-from django.views.generic import DetailView, UpdateView, ListView, View, FormView
+from django.views.generic import ListView, View, FormView, TemplateView
 from .models import Club, Group, NamedMembership
-from .forms import NamedMembershipClubFormset, NamedMembershipAdd
+from .forms import NamedMembershipClubFormset, NamedMembershipAdd, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.mixins import UserPassesTestMixin
 
 from apps.student.models import Student
 from apps.event.models import Event
 
 from apps.event.forms import EventFormSet
 
+from apps.utils.accessMixins import UserIsAdmin
+
 class ListClubView(ListView):
     model = Club
     template_name = 'group/club_list.html'
 
 
-class UpdateClubView(UpdateView):
-    model = Club
+class UpdateGroupView(UserIsAdmin, TemplateView):
     template_name = 'group/club_update.html'
-    fields = ['description', 'admins', 'logo']
 
-class UpdateGroupEventsView(UserPassesTestMixin, View):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = Group.get_group_by_slug(self.kwargs['group_slug'])
+        context['object'] = self.object
+        if  isinstance(context['object'], Club):
+            context['club'] = True
+            context['form'] = UpdateClubForm(instance=self.object)
+        else:
+            context['club'] = False
+        return context
+
+    def post(self, request, group_slug):
+        group = Group.get_group_by_slug(self.kwargs['group_slug'])
+        if  isinstance(group, Club):
+            form = UpdateClubForm(request.POST, instance=group)
+            form.save()
+        else:
+            pass
+        return redirect('group:update', group_slug)
+
+
+class UpdateGroupEventsView(UserIsAdmin, View):
     template_name = 'group/club_events_update.html'
-    def test_func(self):
-        if self.request.user.is_authenticated:
-            group = Group.get_group_by_slug(self.kwargs['group_slug'])
-            return group.is_admin(self.request.user)
-        return False
+
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
@@ -43,13 +59,8 @@ class UpdateGroupEventsView(UserPassesTestMixin, View):
         return edit_events(request, group_slug)
 
 
-class UpdateGroupMembersView(UserPassesTestMixin, View):
+class UpdateGroupMembersView(UserIsAdmin, View):
     template_name = 'group/club_members_update.html'
-    def test_func(self):
-        if self.request.user.is_authenticated:
-            group = Group.get_group_by_slug(self.kwargs['group_slug'])
-            return group.is_admin(self.request.user)
-        return False
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -66,18 +77,22 @@ class UpdateGroupMembersView(UserPassesTestMixin, View):
     def post(self, request,  group_slug):
         return edit_named_memberships(request, group_slug)
 
-
-
-class DetailClubView(DetailView):
-    model = Club
+class DetailGroupView(TemplateView):
     template_name = 'group/club_detail.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        members = NamedMembership.objects.filter(group=self.object)
+        self.object = Group.get_group_by_slug(self.kwargs['group_slug'])
+        context['object'] = self.object
+        if  isinstance(context['object'], Club):
+            members = NamedMembership.objects.filter(group=self.object)
+            context['form'] = NamedMembershipAdd()
+        else:
+            members = self.object.members
         context['members'] = members
+        context['is_member'] = self.object.is_member(self.request.user)
+        print(self.object.is_member(self.request.user))
         context['is_admin'] = self.object.is_admin(self.request.user) if self.request.user.is_authenticated else False
         context['events'] = Event.objects.filter(group=self.object.slug)
-        context['form'] = NamedMembershipAdd()
         return context
 
 
