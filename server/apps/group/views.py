@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, View, FormView, TemplateView
-from .models import Club, Group, NamedMembership
+from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
 from .forms import NamedMembershipClubFormset, NamedMembershipAdd, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,6 +16,11 @@ from apps.utils.accessMixins import UserIsAdmin
 class ListClubView(ListView):
     model = Club
     template_name = 'group/club_list.html'
+
+
+class ListeListView(ListView):
+    model = Liste
+    template_name = 'liste/list.html'
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
@@ -66,7 +71,7 @@ class UpdateGroupMembersView(UserIsAdmin, View):
         context = {}
         context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
         if isinstance(context['object'], Club):
-            memberships = NamedMembership.objects.filter(group=context['object'])
+            memberships = NamedMembershipClub.objects.filter(club=context['object'])
             membersForm = NamedMembershipClubFormset(queryset=memberships)
             context['members'] = membersForm
         return context
@@ -84,13 +89,14 @@ class DetailGroupView(TemplateView):
         self.object = Group.get_group_by_slug(self.kwargs['group_slug'])
         context['object'] = self.object
         if  isinstance(context['object'], Club):
-            members = NamedMembership.objects.filter(group=self.object)
+            members = NamedMembershipClub.objects.filter(club=self.object)
             context['form'] = NamedMembershipAdd()
+        elif isinstance(context['object'], Liste):
+            members = NamedMembershipList.objects.filter(liste=self.object)
         else:
             members = self.object.members
         context['members'] = members
         context['is_member'] = self.object.is_member(self.request.user)
-        print(self.object.is_member(self.request.user))
         context['is_admin'] = self.object.is_admin(self.request.user) if self.request.user.is_authenticated else False
         context['events'] = Event.objects.filter(group=self.object.slug)
         return context
@@ -109,10 +115,10 @@ class AddToClubView(FormView):
 @login_required
 def add_member(request, group_slug, student_id):
     """Add a user to a club"""
-    group = Group.get_group_by_slug(group_slug)
+    club = Group.get_group_by_slug(group_slug)
     student = Student.objects.get(id=student_id)
     if isinstance(Club, group):
-        NamedMembership.objects.create(student=student, group=group)
+        NamedMembershipClub.objects.create(student=student, club=group)
 
 
 @require_http_methods(['POST'])

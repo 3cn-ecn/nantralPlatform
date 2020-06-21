@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content%}
+<br \>
+<h2>Listes</h2>
+<br \>
+
+<div class="table-responsive">
+    <table class="table table-hover table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Nom de la liste</th>
+          <th scope="col">Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for liste in object_list%}
+        <tr class='clickable-row' data-href='{{liste.get_absolute_url}}' style="cursor: pointer">
+          <td>{{liste.name | title}}</a></td>
+          <td>{{liste.liste_type}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    
+    <script> jQuery(document).ready(function($) {
+      $(".clickable-row").click(function() {
+          window.location = $(this).data("href");
+      });
+    }); </script> 
+{% endblock %}
