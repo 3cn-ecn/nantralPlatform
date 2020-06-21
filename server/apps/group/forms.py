@@ -1,22 +1,22 @@
 from django.forms import forms, ModelForm, modelformset_factory
 from django import forms
-from .models import NamedMembership, Group, Club
+from .models import NamedMembershipClub, Group, Club
 
 class NamedMembershipClubForm(ModelForm):
     class Meta:
-        model = NamedMembership
+        model = NamedMembershipClub
         fields = ['function', 'year', 'student']
 
 
 class NamedMembershipStudentForm(ModelForm):
     class Meta:
-        model = NamedMembership
-        fields = ['function', 'year', 'group']
+        model = NamedMembershipClub
+        fields = ['function', 'year', 'club']
 
 
 class NamedMembershipAdd(ModelForm):
     class Meta:
-        model = NamedMembership
+        model = NamedMembershipClub
         fields = ['function', 'year']
 
 class UpdateClubForm(ModelForm):
@@ -26,7 +26,7 @@ class UpdateClubForm(ModelForm):
 
 
 NamedMembershipClubFormset = modelformset_factory(
-    NamedMembership,
+    NamedMembershipClub,
     fields=['function', 'year', 'student'],
     extra=1,
     can_delete=True
