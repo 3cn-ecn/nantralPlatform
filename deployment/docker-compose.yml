@@ -8,8 +8,24 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_PASSWORD
       - POSTGRES_USER
+      - POSTGRES_PASSWORD
+
+  dbbackup:
+    image: kartoza/pg-backup:9.4
+    hostname: db-backups
+    volumes:
+      - ./backups:/backups
+    links:
+      - database:database
+    environment:
+      - DUMPPREFIX=backup
+      - PGUSER=${POSTGRES_USER}
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=5432
+      - PGHOST=database
+      - PGDATABASE=${POSTGRES_DB}
+      - REMOVE_BEFORE=20
 
   server:
     build:
