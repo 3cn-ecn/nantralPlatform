@@ -125,3 +125,6 @@ package-lock.json
 
 # Do not push the compiled js from the webapp
 static/webapp
+
+# Do not push backups
+deployment/backups/*

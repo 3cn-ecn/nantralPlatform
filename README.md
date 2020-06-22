@@ -102,6 +102,25 @@ Remember to do migrations if you add a model!
 ### Closing things:
 Close your virtualenv with `deactivate` anywhere
 
+### Backups
+
+Backups of the database are made every day at 11:00 PM
+They are stored for 30 days.
+To make a backup manually 
+docker-compose exec dbbackup ./backups
+
+A simple restore script is provided. You need to specify some environment variables first:
+
+    TARGET_DB: the db name to restore
+    TARGET_ARCHIVE: the full path of the archive to restore
+
+The restore script will delete the TARGET_DB, so make sure you know what you are doing. Then it will create a new one and restore the content from TARGET_ARCHIVE
+
+If you specify these environment variable using docker-compose.yml file, then you can execute a restore process like this:
+
+docker-compose exec dbbackup ./restore.sh
+
+
 ## Guidelines
 
 Please keep applications as small as possible.
