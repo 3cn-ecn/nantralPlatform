@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h1>{{object.title}}</h1>
+{% if request.user.is_authenticated %}
+    {%if is_participating %}
+        Vous participez a cet event.
+    {% else %}
+    <form>
+        <button id='show-add-group' class='btn btn-dark' data-toggle="modal" data-target="#addModal">
+            Je participe
+        </button>
+    </form>
+    {% endif %}
+{% endif %}
+<p>{{object.description}}</p>
+{% endblock %}
