@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 
 from apps.student.models import Student
-from apps.event.models import Event
+from apps.event.models import BaseEvent
 
 from apps.event.forms import EventFormSet
 
@@ -53,7 +53,7 @@ class UpdateGroupEventsView(UserIsAdmin, View):
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
-        context['events'] = Event.objects.filter(group=kwargs['group_slug'])
+        context['events'] = BaseEvent.objects.filter(group=kwargs['group_slug'])
         context['form'] = EventFormSet(queryset=context['events'])
         return context
 
@@ -98,7 +98,7 @@ class DetailGroupView(TemplateView):
         context['members'] = members
         context['is_member'] = self.object.is_member(self.request.user)
         context['is_admin'] = self.object.is_admin(self.request.user) if self.request.user.is_authenticated else False
-        context['events'] = Event.objects.filter(group=self.object.slug)
+        context['events'] = BaseEvent.objects.filter(group=self.object.slug)
         return context
 
 
