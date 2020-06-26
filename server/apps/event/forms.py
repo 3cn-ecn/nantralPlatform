@@ -1,10 +1,10 @@
 from django import forms
 from django.forms import modelformset_factory
 
-from apps.event.models import Event
+from apps.event.models import BaseEvent
 
 class EventForm(forms.ModelForm):
-    model = Event
+    model = BaseEvent
     fields = ['title', 'description', 'location', 'date', 'publicity']
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
@@ -13,7 +13,7 @@ class EventForm(forms.ModelForm):
 
 
 EventFormSet = modelformset_factory(
-    Event,
+    BaseEvent,
     fields=['title', 'description', 'location', 'date', 'publicity'],
     extra=1,
     can_delete=True,

@@ -17,7 +17,7 @@ Nantral Platform regroupe des services dédiés aux étudiant.e.s de Centrale Na
           {% for event in events_today %}
           <tr>
             <td>
-                <p style="text-align: right;"><span style="float: left;">{{event.title}}</span> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
+                <p style="text-align: right;"><a href='{{event.get_absolute_url}}'><span style="float: left;">{{event.title}}</span></a> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
                 <small><i class="fa fa-calendar-o"></i> {{event.date|date:'Y-m-d H:i'}} <i class="far fa-compass"></i> {{event.location}}</small>
                 <br/>
                 <small>{{event.description}}</small>
@@ -32,7 +32,7 @@ Nantral Platform regroupe des services dédiés aux étudiant.e.s de Centrale Na
         {% for event in events_tomorrow %}
         <tr>
           <td>
-              <p style="text-align: right;"><span style="float: left;">{{event.title}}</span> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
+              <p style="text-align: right;"><a href='{{event.get_absolute_url}}'><span style="float: left;">{{event.title}}</span></a> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
               <small><i class="fa fa-calendar-o"></i> {{event.date|date:'Y-m-d H:i'}} <i class="far fa-compass"></i> {{event.location}}</small>
               <br/>
               <small>{{event.description}}</small>
@@ -47,7 +47,7 @@ Nantral Platform regroupe des services dédiés aux étudiant.e.s de Centrale Na
         {% for event in events_nextdays %}
         <tr>
           <td>
-              <p style="text-align: right;"><span style="float: left;">{{event.title}}</span> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
+              <p style="text-align: right;"><a href='{{event.get_absolute_url}}'><span style="float: left;">{{event.title}}</span></a> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
               <small><i class="fa fa-calendar-o"></i> {{event.date|date:'Y-m-d H:i'}} <i class="far fa-compass"></i> {{event.location}}</small>
               <br/>
               <small>{{event.description}}</small>

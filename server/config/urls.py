@@ -24,5 +24,6 @@ urlpatterns = [
     url('group/', include('apps.group.urls',  namespace='group')),
     url('academic/', include('apps.academic.urls', namespace='academic')),
     url('services/', include('apps.services.urls', namespace='services')),
+    url('event/', include('apps.event.urls', namespace='event')),
     url('', include('apps.home.urls', namespace='home')),
 ]

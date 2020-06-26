@@ -1,8 +1,12 @@
 from django.contrib import admin
 
-from .models import Event
+from .models import BaseEvent, EatingEvent
 
-class EventAdmin(admin.ModelAdmin):
+class BaseEventAdmin(admin.ModelAdmin):
     list_display = ['title', 'date', 'group']
 
-admin.site.register(Event, EventAdmin)
+class EatingEventAdmin(admin.ModelAdmin):
+    list_display = ['title', 'date', 'group', 'menu']
+
+admin.site.register(BaseEvent, BaseEventAdmin)
+admin.site.register(EatingEvent, EatingEventAdmin)
