@@ -49,7 +49,7 @@ class RegistrationView(FormView):
             # method will generate a hash value with user related data
             'token': account_activation_token.make_token(user),
         })
-        user.email_user(subject, message, 'robin.troesch@student-cs.fr', html_message=message)
+        user.email_user(subject, message, 'registration@nantral-platform.fr', html_message=message)
         messages.success(self.request, 'Un mail vous a été envoyé pour confirmer votre mail ECN.')
         return redirect(reverse('home:home'))
 
