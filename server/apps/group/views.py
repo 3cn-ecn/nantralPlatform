@@ -4,6 +4,7 @@ from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
 from .forms import NamedMembershipClubFormset, NamedMembershipAdd, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.http import require_http_methods
 
 from apps.student.models import Student
@@ -102,14 +103,15 @@ class DetailGroupView(TemplateView):
         return context
 
 
-class AddToClubView(FormView):
+class AddToClubView(LoginRequiredMixin, FormView):
     form_class = NamedMembershipAdd
+    raise_exception = True
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.student = self.request.user.student
-        self.object.group = Club.objects.get(id=self.kwargs['club_id'])
+        self.object.club = Club.objects.get(id=self.kwargs['club_id'])
         self.object.save()
-        return redirect('group:detail', self.kwargs['club_id'])
+        return redirect('group:detail', self.object.club.slug)
 
 
 @login_required
