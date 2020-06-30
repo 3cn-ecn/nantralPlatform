@@ -60,7 +60,7 @@ class Group(models.Model):
         elif type_slug == 'liste':
             return Liste.objects.get(slug=slug)
         else:
-            return Group.objects.get(slug=slug)
+            return None
     
     @property
     def get_absolute_url(self):

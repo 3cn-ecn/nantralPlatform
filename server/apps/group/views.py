@@ -107,9 +107,9 @@ class AddToClubView(FormView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.student = self.request.user.student
-        self.object.group = Club.objects.get(id=self.kwargs['club_id'])
+        self.object.club = Club.objects.get(id=self.kwargs['club_id'])
         self.object.save()
-        return redirect('group:detail', self.kwargs['club_id'])
+        return redirect('group:detail', self.object.club.slug)
 
 
 @login_required
