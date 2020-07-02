@@ -9,16 +9,16 @@
       <thead>
         <tr>
           <th scope="col">Nom de la liste</th>
-          <th scope="col">Type</th>
           <th scope="col">Année</th>
+          <th scope="col">Type</th>
         </tr>
       </thead>
       <tbody>
-        {% for liste in object_list%}
+        {% for liste in object_list %}
         <tr class='clickable-row' data-href='{{liste.get_absolute_url}}' style="cursor: pointer">
           <td>{{liste.name | title}}</a></td>
-          <td>{{liste.liste_type}}</td>
           <td>{{liste.year}}</td>
+          <td>{{liste.liste_type}}</td>
         </tr>
         {% endfor %}
       </tbody>
