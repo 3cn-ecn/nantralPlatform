@@ -17,11 +17,13 @@ from apps.utils.accessMixins import UserIsAdmin
 class ListClubView(ListView):
     model = Club
     template_name = 'group/club_list.html'
+    ordering =  ['bdx_type', 'name']
 
 
 class ListeListView(ListView):
     model = Liste
     template_name = 'liste/list.html'
+    ordering =  ['year', 'liste_type','name']
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
