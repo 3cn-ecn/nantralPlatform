@@ -10,6 +10,7 @@
         <tr>
           <th scope="col">Nom de la liste</th>
           <th scope="col">Type</th>
+          <th scope="col">Année</th>
         </tr>
       </thead>
       <tbody>
@@ -17,6 +18,7 @@
         <tr class='clickable-row' data-href='{{liste.get_absolute_url}}' style="cursor: pointer">
           <td>{{liste.name | title}}</a></td>
           <td>{{liste.liste_type}}</td>
+          <td>{{liste.year}}</td>
         </tr>
         {% endfor %}
       </tbody>
