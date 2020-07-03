@@ -12,23 +12,20 @@ class HomeView(LoginRequiredAccessMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        context['events'] = BaseEvent.objects.all()
-        context['events_today'] = event_sort(BaseEvent.objects.all())['today']
-        context['events_tomorrow'] = event_sort(BaseEvent.objects.all())['tomorrow']
-        context['events_nextdays'] = event_sort(BaseEvent.objects.all())['nextdays']
+        context['events'] = event_sort(BaseEvent.objects.all())
         return context
 
 
 def event_sort(events):
     tri = {}
-    tri['today'] = list()
-    tri['tomorrow'] = list()
-    tri['nextdays'] = list()
+    tri["Aujourd'hui"] = list()
+    tri["Demain"] = list()
+    tri["Jours suivants"] = list()
     for event in events:
         if event.date.date() == date.today():
-            tri['today'].append(event)
+            tri["Aujourd'hui"].append(event)
         elif event.date.date() == (date.today()+timedelta(days=1)):
-            tri['tomorrow'].append(event)
+            tri["Demain"].append(event)
         else:
-            tri['nextdays'].append(event)
+            tri["Jours suivants"].append(event)
     return tri
