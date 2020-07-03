@@ -39,8 +39,8 @@
 {% if request.user.is_authenticated %}
 {% for member in members %}
     <a href='{% url "student:detail" member.student.id%}' class='card'>
-        {{member.student.user.first_name}} | {{member.student.user.last_name}}
-        {{member.function}} | {{member.year}}
+        {{member.student.user.first_name}} {{member.student.user.last_name}} -
+        {{member.function}} - {{member.year}}
     </a>
 {% endfor %}
 {%else%}
@@ -54,7 +54,7 @@
             {% csrf_token %}
         
         <div class="modal-header">
-            <h5 class="modal-title">M'ajouter a {{object.name}}</h5>
+            <h5 class="modal-title">M'ajouter à {{object.name}}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -66,7 +66,7 @@
         
             <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-            <button type="submit" class="submit-btn btn btn-primary">Ajouter</button>
+            <button type="submit" class="submit-btn btn btn-dark">M'ajouter</button>
             </div>
         
         </form>
