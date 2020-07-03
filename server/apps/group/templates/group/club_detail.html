@@ -2,12 +2,9 @@
 {% load static %}
 {% block page %}
 <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-{% if is_admin %}
-    <a href='{% url "group:update" object.slug %}'class="btn btn-dark btn-sm"><i class="fa fa-cogs"></i> Page admin</a>
-{%endif%}
 {% if request.user.is_authenticated %}
     {%if is_member %}
-        Vous etes membre
+        Vous êtes membre.
     {% else %}
         <button id='show-add-group' class='btn btn-dark btn-sm' data-toggle="modal" data-target="#addModal">
             <i class="fa fa-user-plus"></i>
@@ -15,6 +12,9 @@
         </button>
     {% endif %}
 {% endif %}
+{% if is_admin %}
+    <a href='{% url "group:update" object.slug %}'class="btn btn-dark btn-sm"><i class="fa fa-cogs"></i> Page admin</a>
+{%endif%}
 <p>{{object.description}}</p>
 {%if object.logo %}<img width="100" height="auto" src='{{object.logo.url}}'>{% endif %}
 <h2>Événements à venir</h2>
@@ -39,8 +39,8 @@
 {% if request.user.is_authenticated %}
 {% for member in members %}
     <a href='{% url "student:detail" member.student.id%}' class='card'>
-        {{member.student.user.first_name}} | {{member.student.user.last_name}}
-        {{member.function}} | {{member.year}}
+        {{member.student.user.first_name}} {{member.student.user.last_name}} -
+        {{member.function}} - {{member.year}}
     </a>
 {% endfor %}
 {%else%}
@@ -54,7 +54,7 @@
             {% csrf_token %}
         
         <div class="modal-header">
-            <h5 class="modal-title">M'ajouter a {{object.name}}</h5>
+            <h5 class="modal-title">M'ajouter à {{object.name}}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -66,7 +66,7 @@
         
             <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-            <button type="submit" class="submit-btn btn btn-primary">Ajouter</button>
+            <button type="submit" class="submit-btn btn btn-dark">M'ajouter</button>
             </div>
         
         </form>
