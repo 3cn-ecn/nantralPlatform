@@ -46,6 +46,8 @@ services:
       - POSTGRES_PASSWORD
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
+      - GITHUB_USER
+      - GITHUB_TOKEN
       - DJANGO_ALLOWED_HOSTS
       - SECRET_KEY
 
