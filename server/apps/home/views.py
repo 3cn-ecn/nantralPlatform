@@ -1,10 +1,16 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from datetime import *
+import requests
+from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, FormView
 from urllib import parse
 from ..utils.accessMixins import LoginRequiredAccessMixin
+from django.contrib import messages
 
 from apps.event.models import BaseEvent
-from datetime import *
+
+from config.settings.base import GITHUB_TOKEN, GITHUB_USER
+
+from .forms import SuggestionForm
 
 # Create your views here.
 class HomeView(LoginRequiredAccessMixin, TemplateView):
@@ -15,6 +21,17 @@ class HomeView(LoginRequiredAccessMixin, TemplateView):
         context['events'] = event_sort(BaseEvent.objects.all())
         return context
 
+class SuggestionView(LoginRequiredAccessMixin, FormView):
+    template_name = 'home/suggestions.html'
+    form_class = SuggestionForm
+    def form_valid(self, form):
+        issue = {
+            'title': form.cleaned_data['title'],
+            'body': form.cleaned_data['description'] + f' <br/> Proposé par {self.request.user.email}'
+        }
+        requests.post('https://api.github.com/repos/RobinetFox/nantralPlatform/issues', json=issue, auth=(GITHUB_USER, GITHUB_TOKEN))
+        messages.success(self.request, 'Votre suggestion a ete enregistree merci')
+        return redirect('home:home')
 
 def event_sort(events):
     tri = {}
