@@ -1,7 +1,6 @@
 {% extends 'group/club_base.html' %}
 {% load static %}
 {% block page %}
-<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 {% if request.user.is_authenticated %}
     {%if is_member %}
         Vous êtes membre.
