@@ -11,10 +11,11 @@ Nantral Platform regroupe des services dédiés aux étudiant.e.s de Centrale Na
 </p>
 <div>
     <h2>Événements à venir</h2>
-    <h3>Aujourd'hui</h3>
+    {% for when, events in events.items %}
+    <h3>{{when}}</h3>
     <table class="table table-sm table-dark" >
         <tbody>
-          {% for event in events_today %}
+          {% for event in events %}
           <tr>
             <td>
                 <p style="text-align: right;"><a href='{{event.get_absolute_url}}'><span style="float: left;">{{event.title}}</span></a> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
@@ -26,36 +27,7 @@ Nantral Platform regroupe des services dédiés aux étudiant.e.s de Centrale Na
           {% endfor %}
         </tbody>
     </table>
-    <h3>Demain</h3>
-    <table class="table table-sm table-dark" >
-      <tbody>
-        {% for event in events_tomorrow %}
-        <tr>
-          <td>
-              <p style="text-align: right;"><a href='{{event.get_absolute_url}}'><span style="float: left;">{{event.title}}</span></a> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
-              <small><i class="fa fa-calendar-o"></i> {{event.date|date:'Y-m-d H:i'}} <i class="far fa-compass"></i> {{event.location}}</small>
-              <br/>
-              <small>{{event.description}}</small>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-  </table>
-    <h3>Prochains jours</h3>
-    <table class="table table-sm table-dark" >
-      <tbody>
-        {% for event in events_nextdays %}
-        <tr>
-          <td>
-              <p style="text-align: right;"><a href='{{event.get_absolute_url}}'><span style="float: left;">{{event.title}}</span></a> <a href='{{event.get_group.get_absolute_url}}' style="color: lightslategrey;">{{event.get_group.name}}</a></p>
-              <small><i class="fa fa-calendar-o"></i> {{event.date|date:'Y-m-d H:i'}} <i class="far fa-compass"></i> {{event.location}}</small>
-              <br/>
-              <small>{{event.description}}</small>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-  </table>
+    {% endfor %}
 </div>
 
 {% endblock%}
