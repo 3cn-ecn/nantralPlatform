@@ -128,3 +128,6 @@ static/webapp
 
 # Do not push backups
 deployment/backups/*
+
+# Do not push compiled static js from front because it will be compiled by the server
+server/static/js/*.js
