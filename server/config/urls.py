@@ -23,6 +23,7 @@ urlpatterns = [
     url('student/', include('apps.student.urls', namespace='student')),
     url('group/', include('apps.group.urls',  namespace='group')),
     url('academic/', include('apps.academic.urls', namespace='academic')),
+    url('api/academic/', include('apps.academic.api_urls', namespace='academic_api')),
     url('services/', include('apps.services.urls', namespace='services')),
     url('event/', include('apps.event.urls', namespace='event')),
     url('', include('apps.home.urls', namespace='home')),
