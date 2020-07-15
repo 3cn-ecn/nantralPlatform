@@ -47,7 +47,8 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'crispy_forms',
-    'storages'
+    'storages',
+    'rest_framework'
 ]
 
 COMMON_APPS = [
