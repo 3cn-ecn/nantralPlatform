@@ -123,7 +123,7 @@ class ForgottenPassView(FormView):
                 # method will generate a hash value with user related data
                 'token': account_activation_token.make_token(user),
             })
-            user.email_user(subject, message)
+            user.email_user(subject, message, 'accounts@nantral-platform.fr', html_message=message)
         messages.success(self.request, 'Un email de récuperation a été envoyé si cette adresse existe.')
         return redirect(reverse('account:login'))
 
