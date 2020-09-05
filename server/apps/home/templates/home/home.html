@@ -2,25 +2,28 @@
 {% load static %}
 {% block content%}
 <br \>
-<h2>Accueil</h2>
-<p style="text-align:center"><img src='{% static "/img/logo.svg" %}' style=" width:40%;max-width:150px;}">
+
+<div style="text-align:center;">
+<img src='{% static "/img/logo.svg" %}' style=" width:80%;max-width:150px;}">
+<h1>Nantral&nbsp;Platform.</h1> Annuaire, événements et services dédiés aux étudiant.e.s de Centrale Nantes.
+</div>
+
 <br \>
-Bienvenue sur Nantral Platform !
-<br \>
-Nantral Platform regroupe des services dédiés aux étudiant.e.s de Centrale Nantes.
-</p>
-<div>
+
+<div style="clear:left">
     <h2>Événements à venir</h2>
     {% for when, events in events.items %}
     <h3>{{when}}</h3>
       {% for event in events %}
-        <div  class="card pt-0">
+      <a href="{{event.get_absolute_url}}" style='color:white'>
+        <div class="card pt-0 bg-{{event.color}}">
           <div class="card-body">
-            <h5 class="card-title"><a href="{{event.get_absolute_url}}">{{event.title}}</a></h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{event.get_group.name}}</h6>
-            <p class="card-text">{{event.description}}</br> <small><i class="fa fa-calendar-o"></i> {{event.date|date:'Y-m-d H:i'}} <i class="far fa-compass"></i> {{event.location}}</small></p>
+            <h5 class="card-title" >{{event.title}} • {{event.date|date:'H:i'}} • {{event.location}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted" >{{event.get_group.name}}</h6>
+            <p class="card-text" >{{event.description}}</p>
           </div>
         </div>
+      </a>
       {% endfor %}
 
     {% endfor %}

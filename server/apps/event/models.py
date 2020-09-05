@@ -12,6 +12,15 @@ VISIBILITY = [
     ('Mem', 'Membres - Visible uniquement par les membres du groupe')
 ]
 
+COLORS = [
+    ('primary', 'Bleu'),
+    ('success', 'Vert'),
+    ('danger', 'Rouge'),
+    ('warning', 'Jaune'),
+    ('secondary', 'Gris'),
+    ('dark','Noir')
+]
+
 class BaseEvent(models.Model):
     """
     A basic event model for groups
@@ -25,6 +34,7 @@ class BaseEvent(models.Model):
     slug = models.SlugField(verbose_name='Slug de l\'événement', unique=True)
     participants = models.ManyToManyField(to=Student, verbose_name='Participants', blank=True)
     ticketing = models.CharField(verbose_name='Lien vers la billeterie', blank=True, max_length=200, null=True)
+    color = models.CharField(max_length=200,verbose_name='Couleur de fond', choices=COLORS, null=True, default='primary')
 
     @property
     def get_group(self):
