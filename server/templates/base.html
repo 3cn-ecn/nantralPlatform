@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href='{% static "/img/logo.svg" %}'>
     <title>Nantral Platform</title>
@@ -20,19 +22,30 @@
    width: 100%;
 }
 
-body {
-  font-family: 'Noto Sans JP', sans-serif;
+body{
+   font-family: 'Heebo', sans-serif;
    margin: 0px;
    min-height: 100%;
    width: 100%;
 }
+
+h1,h2,h5{
+  font-family: 'Heebo', sans-serif;
+  font-weight:900;
+}
+
+h3,h4,h6{
+  font-family: 'Heebo', sans-serif;
+  font-weight:500;
+}
+
   </style>
   <body>
     
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{% url 'home:home' %}">
+      <a class="navbar-brand" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;">
         <img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
-        Nantral Platform
+        Nantral Platform.
       </a>
       {% if request.user.is_authenticated %}
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
