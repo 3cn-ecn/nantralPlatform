@@ -39,13 +39,22 @@ def event_sort(events):
     mois = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
     for event in events:
         if event.date.date() == date.today():
-            tri["Aujourd'hui"] = list()
-            tri["Aujourd'hui"].append(event)
+            if "Aujourd'hui" in tri:
+                tri["Aujourd'hui"].append(event)
+            else:
+                tri["Aujourd'hui"] = list()
+                tri["Aujourd'hui"].append(event)
         elif event.date.date() == (date.today()+timedelta(days=1)):
-            tri["Demain"] = list()
-            tri["Demain"].append(event)
+            if "Demain" in tri:
+                tri["Demain"].append(event)
+            else:
+                tri["Demain"] = list()
+                tri["Demain"].append(event)
         else:
             written_date = jours[event.date.weekday()] + " " + str(event.date.day) + " " +mois[event.date.month-1]
-            tri[written_date]=list()
-            tri[written_date].append(event)
+            if written_date in tri:
+                tri[written_date].append(event)
+            else:
+                tri[written_date]=list()
+                tri[written_date].append(event)
     return tri
