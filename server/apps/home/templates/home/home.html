@@ -15,7 +15,7 @@
     {% for when, events in events.items %}
     <h3>{{when}}</h3>
       {% for event in events %}
-      <a href="{{event.get_absolute_url}}" style='color:white'>
+      <a href="{{event.get_absolute_url}}" style='color:white' class="mb-1">
         <div class="card pt-0 bg-{{event.color}}" style="box-shadow: 1px 1px 7px #999">
           <div class="card-body">
             <h5 class="card-title" >{{event.title}} • {{event.date|date:'H:i'}} • {{event.location}}</h5>
