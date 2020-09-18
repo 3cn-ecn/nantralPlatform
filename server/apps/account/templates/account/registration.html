@@ -10,15 +10,15 @@
     }
 </style>
 <div class='row'>
-    <div class='col-3'></div>
-    <div class='card col-6 mt-5 p-2 bg-white text-center'>
+    <div class='col-md-3'></div>
+    <div class='card col-md-6 col-12  my-3 p-3 bg-light text-center'>
         <h2>Inscription sur Nantral Platform</h2>
     <form method='POST'>
         {% csrf_token %}
         {{ form|crispy }}
         <button class="btn btn-success">Inscription</button>
     </form>
-</div>
-<div class='col-3'></div>
+    </div>
+    <div class='col-md-3'></div>
 </div>
 {% endblock %}
