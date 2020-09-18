@@ -94,7 +94,7 @@ class AuthView(FormView):
         user = EmailBackend.authenticate(username=username, password=password)
         if user is not None:
             login(self.request, user, backend='apps.account.emailAuthBackend.EmailBackend')
-            message = f'Bonjour {user.first_name}'
+            message = f'Bonjour {user.first_name} !'
             messages.success(self.request, message)
             return redirect(reverse('home:home'))
         else:
