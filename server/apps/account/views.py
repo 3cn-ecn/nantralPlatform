@@ -78,13 +78,13 @@ class AuthView(FormView):
     def get(self, request):
         if request.user.is_authenticated:
             user = request.user
-            message = f'Vous etes déjà connecté en tant que {user.first_name}'
+            message = f'Vous etes déjà connecté en tant que {user.first_name}.'
             messages.warning(request, message)
             return redirect(reverse('home:home'))
         else:
             return super(AuthView, AuthView).get(self, request)
     def form_invalid(self, form):
-        message = f'Veuillez vous connecter avec votre adresse mail ECN'
+        message = f'Veuillez vous connecter avec votre adresse mail ECN.'
         messages.warning(self.request, message)
         return redirect(reverse('account:login'))
 
@@ -98,14 +98,14 @@ class AuthView(FormView):
             messages.success(self.request, message)
             return redirect(reverse('home:home'))
         else:
-            messages.error(self.request, 'Identifiant inconnu ou mot de passe invalide')
+            messages.error(self.request, 'Identifiant inconnu ou mot de passe invalide.')
             return redirect(reverse('account:login'))
 
 
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        messages.success(request, 'Vous avez été déconnecté')
+        messages.success(request, 'Vous avez été déconnecté.')
         return redirect(reverse('account:login'))
 
 class ForgottenPassView(FormView):
