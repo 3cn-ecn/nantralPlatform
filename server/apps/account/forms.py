@@ -29,6 +29,7 @@ class SignUpForm(UserCreationForm):
         self.fields['password1'].label = "Mot de passe"
         self.fields['password2'].label = "Confirmation du mot de passe"
         self.fields['password2'].help_text = "Entrez le même mot de passe pour vérification"
+        self.fields['promo'].label = "Année de promotion entrante"
         self.fields['faculty'].label = "Filière"
         self.fields['double_degree'].label = 'Double cursus ?'
 
