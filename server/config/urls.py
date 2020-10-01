@@ -28,3 +28,6 @@ urlpatterns = [
     url('event/', include('apps.event.urls', namespace='event')),
     url('', include('apps.home.urls', namespace='home')),
 ]
+
+handler404 = 'apps.home.views.handler404'
+handler500 = 'apps.home.views.handler500'
