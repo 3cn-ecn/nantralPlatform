@@ -56,4 +56,5 @@ jobs:
           cd ../frontend
           npm install
           npm start
+          cd ../deployment
           docker-compose up -d
