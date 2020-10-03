@@ -18,13 +18,10 @@
     <button class="btn btn-success">Modifier</button>
 </form>
 <br />
-<h2>Mes cours</h2>
-<form method='POST' action='{% url "academic:student_courses" object.id%}'>
-    {% csrf_token %}
-    {{ courses_form|crispy }}
-    <button class="btn btn-success">Modifier</button>
-</form>
-<br />
 <div id='root'></div>
-<script src='{% static "js/StudentCourseSelector.js" %}'></script>
+<script>
+    var student_id = "{{object.id}}";
+</script>
+<script src='{% static "js/StudentCourseSelector.js" %}'>
+</script>
 {%endblock%}

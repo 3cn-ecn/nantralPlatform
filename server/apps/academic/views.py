@@ -17,12 +17,10 @@ class CourseView(DetailView):
         students_following = FollowCourse.objects.filter(course=self.object)
         groupped = {}
         for student in students_following:
-            print(student.student)
             if student.student.promo in groupped:
                 groupped[student.student.promo].append(student.student)
             else:
                 groupped[student.student.promo] = [student.student]
-        print(groupped)
         context['students'] = groupped
         return context
 

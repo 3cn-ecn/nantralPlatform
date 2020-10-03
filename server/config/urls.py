@@ -21,6 +21,7 @@ urlpatterns = [
     url('admin/', admin.site.urls),
     url('account/', include('apps.account.urls', namespace='account')),
     url('student/', include('apps.student.urls', namespace='student')),
+    url('api/student/', include('apps.student.api_urls', namespace='student_api')),
     url('group/', include('apps.group.urls',  namespace='group')),
     url('academic/', include('apps.academic.urls', namespace='academic')),
     url('api/academic/', include('apps.academic.api_urls', namespace='academic_api')),
