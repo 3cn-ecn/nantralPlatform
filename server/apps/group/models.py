@@ -21,7 +21,7 @@ path_and_rename_group = PathAndRename("groups/logo/group")
 class Group(models.Model):
     name = models.CharField(verbose_name='Nom du groupe', unique=True, max_length=200)
     description = models.TextField(verbose_name='Description du groupe', blank=True)
-    admins = models.ManyToManyField(Student, verbose_name='Administrateur.rice.s du groupe', related_name='%(class)s_admins', blank=True, null=True)
+    admins = models.ManyToManyField(Student, verbose_name='Administrateur.rice.s du groupe', related_name='%(class)s_admins', blank=True)
     members = models.ManyToManyField(Student, verbose_name='Membres du groupe', related_name='%(class)s_members')
     logo = models.ImageField(verbose_name='Logo du groupe', blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)

@@ -80,6 +80,7 @@ Try to merge migrations into one migration as much as possible
 ### Frontend Dev:
 To dev on the frontend webapp first start the django server.
 Then go to the frontend folder.
+On first time install all the required packages. Do this with `npm install`
 use `npm start -- --watch` to recompile the frontend each time you modify something
 This way you will see your webapp evolve in your browser
  

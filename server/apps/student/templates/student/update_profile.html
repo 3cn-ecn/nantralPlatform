@@ -1,5 +1,6 @@
 {% extends 'base.html'%}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block  content%}
 <br \>
 <h1>{{object.first_name | title}} {{object.last_name | upper}}</h1>
@@ -17,11 +18,10 @@
     <button class="btn btn-success">Modifier</button>
 </form>
 <br />
-<h2>Mes cours</h2>
-<form method='POST' action='{% url "academic:student_courses" object.id%}'>
-    {% csrf_token %}
-    {{ courses_form|crispy }}
-    <button class="btn btn-success">Modifier</button>
-</form>
-<br />
+<div id='root'></div>
+<script>
+    var student_id = "{{object.id}}";
+</script>
+<script src='{% static "js/StudentCourseSelector.js" %}'>
+</script>
 {%endblock%}

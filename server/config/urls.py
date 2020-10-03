@@ -21,9 +21,14 @@ urlpatterns = [
     url('admin/', admin.site.urls),
     url('account/', include('apps.account.urls', namespace='account')),
     url('student/', include('apps.student.urls', namespace='student')),
+    url('api/student/', include('apps.student.api_urls', namespace='student_api')),
     url('group/', include('apps.group.urls',  namespace='group')),
     url('academic/', include('apps.academic.urls', namespace='academic')),
+    url('api/academic/', include('apps.academic.api_urls', namespace='academic_api')),
     url('services/', include('apps.services.urls', namespace='services')),
     url('event/', include('apps.event.urls', namespace='event')),
     url('', include('apps.home.urls', namespace='home')),
 ]
+
+handler404 = 'apps.home.views.handler404'
+handler500 = 'apps.home.views.handler500'

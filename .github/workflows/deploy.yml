@@ -53,4 +53,7 @@ jobs:
           cd deployment
           docker-compose down
           git pull
+          cd ../frontend
+          npm install
+          npm start
           docker-compose up -d

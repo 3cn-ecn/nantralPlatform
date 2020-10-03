@@ -33,6 +33,18 @@ class SuggestionView(LoginRequiredAccessMixin, FormView):
         messages.success(self.request, 'Votre suggestion a ete enregistree merci')
         return redirect('home:home')
 
+
+def handler404(request, *args, **argv):
+    response = render(request, '404.html', context={},status=404)
+    return response
+
+
+def handler500(request, *args, **argv):
+    response = render(request, '500.html', context={},
+                                  status=500)
+    return response
+
+
 def event_sort(events):
     tri = {}
     jours = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"]

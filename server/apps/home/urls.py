@@ -6,6 +6,6 @@ from .views import *
 app_name = 'home'
 
 urlpatterns = [
-    url('sugestions', SuggestionView.as_view(), name='sugestions'),
-    url('', HomeView.as_view(), name='home'),
+    url('sugestions/', SuggestionView.as_view(), name='sugestions'),
+    path('', HomeView.as_view(), name='home'),
 ]
