@@ -4,7 +4,7 @@ var BundleTracker = require('webpack-bundle-tracker');
 module.exports = {
   entry:  {
     index: path.join(__dirname, 'src/index'),
-    studentCourseSelector: path.join(__dirname, 'src/containers/StudentCourseSelector')
+    studentCourseSelector: path.join(__dirname, 'src/containers/studentCourseSelector')
   },
   output: {
     path: path.join(__dirname, '../server/static/js'),
