@@ -10,7 +10,7 @@ class CourseODList(generics.ListAPIView):
 
 
 class CourseOPList(generics.ListAPIView):
-    queryset = Course.objects.filter(course_type='OD')
+    queryset = Course.objects.filter(course_type='OP')
     serializer_class = CourseSerializer
 
 
