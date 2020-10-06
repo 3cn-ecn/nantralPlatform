@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
 from django.utils.text import slugify
 from django.urls.base import reverse
+from django.template.loader import render_to_string
 
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
@@ -130,3 +133,23 @@ class NamedMembershipList(models.Model):
     liste = models.ForeignKey(Liste, on_delete=models.CASCADE)
     class Meta:
         unique_together = ('function','student', 'liste')
+
+@receiver(m2m_changed, sender=Group.admins.through)
+def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
+    print(action)
+    if action == "post_add":
+        for pk in pk_set:
+            user = User.objects.get(pk=pk)
+            mail = render_to_string('group/new_admin_mail.html', {
+                'group': instance,
+                'user': user
+            })
+            user.email_user(f'Vous êtes admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
+    elif action == "post_remove":
+        for pk in pk_set:
+            user = User.objects.get(pk=pk)
+            mail = render_to_string('group/remove_admin_mail.html', {
+                'group': instance,
+                'user': user
+            })
+            user.email_user(f'Vous n\'êtes plus admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
