@@ -18,6 +18,8 @@ from .emailAuthBackend import EmailBackend
 from apps.student.models import Student
 from django.contrib import messages
 from django.core.mail import send_mail
+
+
 class RegistrationView(FormView):
     template_name = 'account/registration.html'
     form_class = SignUpForm
