@@ -2,24 +2,12 @@
 {% load crispy_forms_tags %}
 {% block page %}
 </br>
-<a class='btn btn-dark' href="{% url 'group:create-event' object.slug%}">Ajouter un event</a>
-</br>
-</br>
-{% if events.count > 0 %}
-<form method='POST' action="{% url 'group:update-events' object.slug %}">
+<form method='POST'>
     {% csrf_token %}
-    {{ form.management_form }}
-    {% for event in form %}
-    <div class='card'>
-        <div class='card-body'>
-            {{event | crispy}}
-        </div>
-    </div>
-    {% endfor %}
+    {{form|crispy}}
   </br>
-    <button class='btn btn-dark'>Enregistrer les modifications</button>
+    <button class='btn btn-dark'>Ajouter l'événement</button>
 </form>
-{% endif %}
 {% endblock %}
 {% block script %}
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
