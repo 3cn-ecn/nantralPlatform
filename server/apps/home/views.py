@@ -18,8 +18,9 @@ class HomeView(LoginRequiredAccessMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        context['events'] = event_sort(BaseEvent.objects.all())
+        context['events'] = event_sort(BaseEvent.objects.filter(date__gte= date.today()))
         return context
+
 
 class SuggestionView(LoginRequiredAccessMixin, FormView):
     template_name = 'home/suggestions.html'
