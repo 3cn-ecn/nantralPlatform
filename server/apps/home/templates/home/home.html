@@ -14,12 +14,28 @@
     <h2>Événements à venir</h2>
     {% for when, events in events.items %}
     <h3>{{when}}</h3>
-      {% for event in events %}
+      {% for event, is_participating in events %}
       <a href="{{event.get_absolute_url}}" style='color:white' class="mb-1">
         <div class="card pt-0 bg-{{event.color}}" style="box-shadow: 1px 1px 7px #999">
           <div class="card-body">
             <h5 class="card-title" >{{event.title}} • {{event.date|date:'H:i'}} • {{event.location}}</h5>
             <h6 class="card-subtitle mb-2">{{event.get_group.name}}</h6>
+            <h6 class="card-subtitle mb-2">
+              <div class="btn-group" role="group">
+              <button type="button" class="btn btn-secondary disabled">{{event.get_number_participants}} <i class="fas fa-users"></i></button>
+              {% if request.user.is_authenticated %}
+                  {%if is_participating %}
+                      <a href='{% url "event:remove-participant" event.slug %}?redirect=home' class="btn btn-secondary" role="button">
+                          <i class="fa fa-times" aria-hidden="true"></i> Je ne participe plus
+                      </a>
+                  {% else %}
+                      <a href='{% url "event:add-participant" event.slug %}?redirect=home' class="btn btn-secondary" role="button">
+                        <i class="fas fa-user-plus"></i> Je participe
+                      </a>
+                  {% endif %}
+              {% endif %}
+          </div>
+        </h6>
             <p class="card-text" >{{event.description | truncatewords_html:20}}</p>
           </div>
         </div>
