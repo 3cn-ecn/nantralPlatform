@@ -6,17 +6,17 @@
 <h2>Liste des events archivés</h2>
 {% if events.count > 0 %}
 <form method='POST' action="{% url 'group:update-events' object.slug %}">
-    {% csrf_token %}
-    {{ form.management_form }}
-    {% for event in form %}
-    <div class='card'>
-        <div class='card-body'>
-            {{event | crispy}}
-        </div>
+  {% csrf_token %}
+  {{ form.management_form }}
+  {% for event in form %}
+  <div class='card'>
+    <div class='card-body'>
+      {{event | crispy}}
     </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
   </br>
-    <button class='btn btn-dark'>Enregistrer les modifications</button>
+  <button class='btn btn-dark'>Enregistrer les modifications</button>
 </form>
 {% else %}
 <p>Pour le moment il n'y a pas d'envents archivés.</p>
@@ -28,21 +28,21 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script>
-    $(function() {
-  $('input.datepicker').daterangepicker({
-    singleDatePicker: true,
-    drops:'up',
-    showDropdowns:true,
-    autoApply:true,
-    timePicker: true,
-    timePicker24Hour:true,
-    timePickerIncrement:15,
-    locale: {
-      format: 'YYYY-MM-DD HH:mm'
-    },
-    minYear: 2020,
-    maxYear: parseInt(moment().format('YYYY'),10)
+  $(function () {
+    $('input.datepicker').daterangepicker({
+      singleDatePicker: true,
+      drops: 'up',
+      showDropdowns: true,
+      autoApply: true,
+      timePicker: true,
+      timePicker24Hour: true,
+      timePickerIncrement: 15,
+      locale: {
+        format: 'YYYY-MM-DD HH:mm'
+      },
+      minYear: 2020,
+      maxYear: parseInt(moment().format('YYYY'), 10)
+    });
   });
-});
 </script>
 {% endblock %}
