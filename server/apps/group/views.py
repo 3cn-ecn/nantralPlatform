@@ -69,6 +69,23 @@ class UpdateGroupEventsView(UserIsAdmin, View):
         return edit_events(request, group_slug)
 
 
+class UpdateGroupArchivedEventsView(UserIsAdmin, View):
+    template_name = 'group/club_archived_events_update.html'
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
+        context['events'] = BaseEvent.objects.filter(group=kwargs['group_slug'], date__lt= date.today())
+        context['form'] = EventFormSet(queryset=context['events'])
+        return context
+
+    def get(self, request, group_slug):
+        return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
+
+    def post(self, request,  group_slug):
+        return edit_events(request, group_slug)
+
+
 class UpdateGroupCreateEventView(UserIsAdmin, FormView):
     template_name = 'group/create_event.html'
     form_class = EventForm
