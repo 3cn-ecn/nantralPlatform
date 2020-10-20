@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, View, FormView, TemplateView
 from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
@@ -56,7 +58,7 @@ class UpdateGroupEventsView(UserIsAdmin, View):
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
-        context['events'] = BaseEvent.objects.filter(group=kwargs['group_slug'])
+        context['events'] = BaseEvent.objects.filter(group=kwargs['group_slug'], date__gte= date.today())
         context['form'] = EventFormSet(queryset=context['events'])
         return context
 
@@ -117,7 +119,7 @@ class DetailGroupView(TemplateView):
         context['members'] = members
         context['is_member'] = self.object.is_member(self.request.user)
         context['is_admin'] = self.object.is_admin(self.request.user) if self.request.user.is_authenticated else False
-        context['events'] = BaseEvent.objects.filter(group=self.object.slug)
+        context['events'] = BaseEvent.objects.filter(group=self.object.slug, date__gte= date.today())
         return context
 
 
