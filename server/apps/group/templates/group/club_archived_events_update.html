@@ -2,12 +2,8 @@
 {% load crispy_forms_tags %}
 {% block page %}
 </br>
-<a class='btn btn-dark' href="{% url 'group:create-event' object.slug%}">Ajouter un event</a>
 </br>
-</br>
-<h2>Liste des events planifiés</h2>
-<a class='btn btn-dark' href="{% url 'group:archived-events' object.slug%}">Events archivés</a>
-</br>
+<h2>Liste des events archivés</h2>
 {% if events.count > 0 %}
 <form method='POST' action="{% url 'group:update-events' object.slug %}">
   {% csrf_token %}
@@ -23,7 +19,7 @@
   <button class='btn btn-dark'>Enregistrer les modifications</button>
 </form>
 {% else %}
-<p>C'est un peu mort par ici ... Ajoute vite un evenement, utilise les évenements archivés pour t'inspirer.</p>
+<p>Pour le moment il n'y a pas d'envents archivés.</p>
 {% endif %}
 {% endblock %}
 {% block script %}

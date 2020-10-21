@@ -26,7 +26,7 @@
             <small class='text-muted'><i class="fas fa-calendar-day"></i> {{event.date|date:'Y-m-d H:i'}}</br><i class="far fa-compass"></i> {{event.location}}</small>
         </div>
         <div class='card-body'>
-            {{event.description}}
+            {{event.description | truncatewords_html:35}}
         </div>
     </div>
     {% endfor %}

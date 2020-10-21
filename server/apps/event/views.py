@@ -19,6 +19,8 @@ def add_participant(request, event_slug):
     """Adds the user to the list of participants."""
     event = BaseEvent.get_event_by_slug(event_slug)
     event.participants.add(request.user.student)
+    if request.GET.get('redirect'):
+        return redirect('home:home')
     return redirect(event.get_absolute_url())
 
 
@@ -26,4 +28,6 @@ def remove_participant(request, event_slug):
     """Removes the user from the list of participants."""
     event = BaseEvent.get_event_by_slug(event_slug)
     event.participants.remove(request.user.student)
+    if request.GET.get('redirect'):
+        return redirect('home:home')
     return redirect(event.get_absolute_url())

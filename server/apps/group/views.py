@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, View, FormView, TemplateView
 from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
@@ -10,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from apps.student.models import Student
 from apps.event.models import BaseEvent
 
-from apps.event.forms import EventFormSet
+from apps.event.forms import EventFormSet, EventForm
 
 from apps.utils.accessMixins import UserIsAdmin
 
@@ -56,7 +58,7 @@ class UpdateGroupEventsView(UserIsAdmin, View):
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
-        context['events'] = BaseEvent.objects.filter(group=kwargs['group_slug'])
+        context['events'] = BaseEvent.objects.filter(group=kwargs['group_slug'], date__gte= date.today())
         context['form'] = EventFormSet(queryset=context['events'])
         return context
 
@@ -65,6 +67,39 @@ class UpdateGroupEventsView(UserIsAdmin, View):
 
     def post(self, request,  group_slug):
         return edit_events(request, group_slug)
+
+
+class UpdateGroupArchivedEventsView(UserIsAdmin, View):
+    template_name = 'group/club_archived_events_update.html'
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
+        context['events'] = BaseEvent.objects.filter(group=kwargs['group_slug'], date__lt= date.today())
+        context['form'] = EventFormSet(queryset=context['events'])
+        return context
+
+    def get(self, request, group_slug):
+        return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
+
+    def post(self, request,  group_slug):
+        return edit_events(request, group_slug)
+
+
+class UpdateGroupCreateEventView(UserIsAdmin, FormView):
+    template_name = 'group/create_event.html'
+    form_class = EventForm
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = Group.get_group_by_slug(self.kwargs['group_slug'])
+        return context
+
+    def form_valid(self, form, **kwargs):
+        event = form.save(commit=False)
+        event.group = Group.get_group_by_slug(slug=self.kwargs['group_slug']).slug
+        event.save()
+        return redirect('group:create-event', self.kwargs['group_slug'])
+
 
 
 class UpdateGroupMembersView(UserIsAdmin, View):
@@ -101,7 +136,7 @@ class DetailGroupView(TemplateView):
         context['members'] = members
         context['is_member'] = self.object.is_member(self.request.user)
         context['is_admin'] = self.object.is_admin(self.request.user) if self.request.user.is_authenticated else False
-        context['events'] = BaseEvent.objects.filter(group=self.object.slug)
+        context['events'] = BaseEvent.objects.filter(group=self.object.slug, date__gte= date.today())
         return context
 
 

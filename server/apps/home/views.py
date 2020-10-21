@@ -18,8 +18,9 @@ class HomeView(LoginRequiredAccessMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        context['events'] = event_sort(BaseEvent.objects.all())
+        context['events'] = event_sort(BaseEvent.objects.filter(date__gte= date.today()), self.request)
         return context
+
 
 class SuggestionView(LoginRequiredAccessMixin, FormView):
     template_name = 'home/suggestions.html'
@@ -45,28 +46,28 @@ def handler500(request, *args, **argv):
     return response
 
 
-def event_sort(events):
+def event_sort(events, request):
     tri = {}
     jours = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"]
     mois = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"]
     for event in events:
         if event.date.date() == date.today():
             if "Aujourd'hui" in tri:
-                tri["Aujourd'hui"].append(event)
+                tri["Aujourd'hui"].append((event, event.is_participating(request.user)))
             else:
                 tri["Aujourd'hui"] = list()
-                tri["Aujourd'hui"].append(event)
+                tri["Aujourd'hui"].append((event, event.is_participating(request.user)))
         elif event.date.date() == (date.today()+timedelta(days=1)):
             if "Demain" in tri:
-                tri["Demain"].append(event)
+                tri["Demain"].append((event, event.is_participating(request.user)))
             else:
                 tri["Demain"] = list()
-                tri["Demain"].append(event)
+                tri["Demain"].append((event, event.is_participating(request.user)))
         else:
             written_date = jours[event.date.weekday()] + " " + str(event.date.day) + " " +mois[event.date.month-1]
             if written_date in tri:
-                tri[written_date].append(event)
+                tri[written_date].append((event, event.is_participating(request.user)))
             else:
                 tri[written_date]=list()
-                tri[written_date].append(event)
+                tri[written_date].append((event, event.is_participating(request.user)))
     return tri
