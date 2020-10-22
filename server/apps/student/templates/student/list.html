@@ -11,7 +11,7 @@
       <th scope="col">Prénom</th>
       <th scope="col" class="d-none d-sm-table-cell">Promotion entrante</th>
       <th scope="col" class="d-none d-sm-table-cell">Filière</th>
-      <th scope="col" class="d-none d-sm-table-cell">Double Cursus</th>
+      <th scope="col" class="d-none d-sm-table-cell">Cursus</th>
 
     </tr>
   </thead>
@@ -22,7 +22,7 @@
       <td>{{student.first_name | title}}</td>
       <td class="d-none d-sm-table-cell">{{student.promo}}</td>
       <td class="d-none d-sm-table-cell">{{student.get_faculty_display}}</td>
-      <td class="d-none d-sm-table-cell">{{student.get_double_degree_display}}</td>
+      <td class="d-none d-sm-table-cell">{{student.get_path_display}}</td>
     </tr>
     {% endfor %}
   </tbody>

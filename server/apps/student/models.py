@@ -13,8 +13,9 @@ FACULTIES = [
     ('Doc', 'Doctorant')
 ]
 
-DOUBLE_DEGREES = [
+PATHS = [
     ('Cla',''),
+    ('Alt', 'Alternance'),
     ('I-A','Ingénieur-Architecte'),
     ('A-I','Architecte-Ingénieur'),
     ('I-M','Ingénieur-Manager'),
@@ -34,7 +35,7 @@ class Student(models.Model):
     first_name = models.CharField(max_length=200, verbose_name='Prénom', null=True)
     last_name = models.CharField(max_length=200, verbose_name='Nom de famille', null=True)
     faculty = models.CharField(max_length=200, verbose_name='Filière', choices=FACULTIES)
-    double_degree = models.CharField(max_length=200, verbose_name='Double cursus', choices=DOUBLE_DEGREES, null=True, blank=True)
+    path = models.CharField(max_length=200, verbose_name='Cursus', choices=PATHS, null=True, blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
