@@ -31,7 +31,7 @@ class RegistrationView(FormView):
         user.student.first_name = form.cleaned_data.get('first_name').lower()
         user.student.email = form.cleaned_data.get('email')
         user.student.faculty = form.cleaned_data.get('faculty')
-        user.student.double_degree = form.cleaned_data.get('double_degree')
+        user.student.path = form.cleaned_data.get('path')
         #create a unique user name
         first_name = ''.join(e.lower() for e in form.cleaned_data.get('first_name') if e.isalnum())
         last_name = ''.join(e.lower() for e in form.cleaned_data.get('last_name') if e.isalnum())
