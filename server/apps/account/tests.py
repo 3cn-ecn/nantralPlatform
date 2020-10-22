@@ -30,7 +30,7 @@ class Test_Account(TestCase, TestMixin):
             'password2': 'pass',
             'promo': 2020,
             'faculty': 'Gen',
-            'double_degree': 'Cla'
+            'path': 'Cla'
         }
         url = reverse('account:registration')
         response = self.client.post(url, data=payload)
