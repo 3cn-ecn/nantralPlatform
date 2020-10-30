@@ -60,7 +60,7 @@ class BaseEvent(models.Model):
         return student in self.participants.all()
 
     def save(self, *args, **kwargs):
-        self.slug = f'bevent--{slugify(self.title)}'
+        self.slug = f'bevent--{slugify(self.title)}-{self.date.year}-{self.pk}'
         super(BaseEvent, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
