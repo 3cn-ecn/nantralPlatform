@@ -35,7 +35,7 @@ class SuggestionView(LoginRequiredAccessMixin, FormView):
             'title': form.cleaned_data['title'],
             'body': form.cleaned_data['description'] + f' <br/> Proposé par {self.request.user.email}'
         }
-        requests.post('https://api.github.com/repos/RobinetFox/nantralPlatform/issues',
+        requests.post('https://api.github.com/repos/unitrium/nantralPlatform/issues',
                       json=issue, auth=(GITHUB_USER, GITHUB_TOKEN))
         messages.success(
             self.request, 'Votre suggestion a ete enregistree merci')
