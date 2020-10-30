@@ -145,7 +145,7 @@ class DetailGroupView(TemplateView):
         context['is_admin'] = self.object.is_admin(
             self.request.user) if self.request.user.is_authenticated else False
         context['events'] = BaseEvent.objects.filter(
-            group=self.object.slug, date__gte=date.today())
+            group=self.object.slug, date__gte=date.today()).order_by('date')
         return context
 
 
