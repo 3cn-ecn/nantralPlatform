@@ -7,4 +7,4 @@ class BaseEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = BaseEvent
         fields = ['title', 'description', 'location',
-                  'date', 'publicity', 'color', 'image']
+                  'date', 'publicity', 'color', 'image', 'slug']

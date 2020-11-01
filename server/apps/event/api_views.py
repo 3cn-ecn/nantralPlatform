@@ -21,5 +21,10 @@ class ListEventsGroupAPIView(generics.ListAPIView):
         return BaseEvent.objects.filter(group=self.kwargs['group'], date__gte=datetime.today())
 
 
-class UpdateEventAPIView(generics.RetrieveUpdateDestroyAPIView):
+class UpdateEventAPIView(generics.RetrieveDestroyAPIView):
     serializer_class = BaseEventSerializer
+    lookup_field = 'slug'
+    lookup_url_kwarg = 'event_slug'
+
+    def get_queryset(self):
+        return BaseEvent.objects.filter(slug=self.kwargs['event_slug'])
