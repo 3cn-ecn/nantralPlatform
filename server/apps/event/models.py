@@ -5,6 +5,7 @@ from django.shortcuts import reverse
 
 from apps.group.models import Group
 from apps.student.models import Student
+from apps.utils.upload import PathAndRename
 
 
 VISIBILITY = [
@@ -18,38 +19,48 @@ COLORS = [
     ('danger', 'Rouge'),
     ('warning', 'Jaune'),
     ('secondary', 'Gris'),
-    ('dark','Noir')
+    ('dark', 'Noir')
 ]
+
+path_and_rename = PathAndRename("events/pictures")
+
 
 class BaseEvent(models.Model):
     """
     A basic event model for groups
     """
     date = models.DateTimeField(verbose_name='Date de l\'événement')
-    title = models.CharField(max_length=200, verbose_name='Titre de l\'événement')
+    title = models.CharField(
+        max_length=200, verbose_name='Titre de l\'événement')
     description = models.TextField(verbose_name='Description de l\'événement')
     location = models.CharField(max_length=200, verbose_name='Lieu')
-    publicity = models.CharField(max_length=200, verbose_name='Visibilité de l\'événement', choices=VISIBILITY)
+    publicity = models.CharField(
+        max_length=200, verbose_name='Visibilité de l\'événement', choices=VISIBILITY)
     group = models.SlugField(verbose_name='Groupe organisateur')
     slug = models.SlugField(verbose_name='Slug de l\'événement', unique=True)
-    participants = models.ManyToManyField(to=Student, verbose_name='Participants', blank=True)
-    ticketing = models.CharField(verbose_name='Lien vers la billeterie', blank=True, max_length=200, null=True)
-    color = models.CharField(max_length=200,verbose_name='Couleur de fond', choices=COLORS, null=True, default='primary')
+    participants = models.ManyToManyField(
+        to=Student, verbose_name='Participants', blank=True)
+    ticketing = models.CharField(
+        verbose_name='Lien vers la billeterie', blank=True, max_length=200, null=True)
+    image = models.ImageField(verbose_name="Une image, une affiche en lien avec l'evenement ?",
+                              upload_to=path_and_rename, null=True, blank=True)
+    color = models.CharField(max_length=200, verbose_name='Couleur de fond',
+                             choices=COLORS, null=True, default='primary')
 
     @property
     def get_group(self):
         return Group.get_group_by_slug(self.group)
-    
+
     @property
     def get_number_participants(self) -> int:
         return self.participants.all().count()
-    
+
     def is_participating(self, user: User) -> bool:
         student = Student.objects.filter(user=user).first()
         return student in self.participants.all()
 
     def save(self, *args, **kwargs):
-        self.slug = f'bevent--{slugify(self.title)}'
+        self.slug = f'bevent--{slugify(self.title)}-{self.date.year}-{self.id}'
         super(BaseEvent, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
