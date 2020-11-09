@@ -59,7 +59,7 @@ class Group(models.Model):
     @property
     def get_parent(self):
         """Get the parent group of this group."""
-        if self.parent == self.slug:
+        if self.parent is None or self.parent == self.slug:
             return None
         return Group.get_group_by_slug(self.parent)
 
