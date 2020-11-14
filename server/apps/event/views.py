@@ -2,14 +2,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.views.generic.base import TemplateView
 from django.views.generic import UpdateView
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .forms import EventForm
 
-from apps.utils.accessMixins import UserIsAdmin
+from apps.utils.accessMixins import LoginRequiredAccessMixin, UserIsAdmin
 
 
-class EventDetailView(TemplateView):
+class EventDetailView(LoginRequiredAccessMixin, TemplateView):
     template_name = 'event/event_detail.html'
 
     def get_context_data(self, **kwargs):
@@ -45,6 +46,7 @@ class EventUpdateView(UserIsAdmin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
 
+@login_required
 def add_participant(request, event_slug):
     """Adds the user to the list of participants."""
     event = BaseEvent.get_event_by_slug(event_slug)
@@ -54,6 +56,7 @@ def add_participant(request, event_slug):
     return redirect(event.get_absolute_url())
 
 
+@login_required
 def remove_participant(request, event_slug):
     """Removes the user from the list of participants."""
     event = BaseEvent.get_event_by_slug(event_slug)
