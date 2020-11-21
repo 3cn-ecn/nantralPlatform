@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
@@ -9,9 +9,11 @@ from .forms import TakeCourseFormSet
 
 from apps.student.models import Student
 
+
 class CourseView(DetailView):
     model = Course
-    template_name = 'courses/course_detail.html'
+    template_name = 'courses/detail.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         students_following = FollowCourse.objects.filter(course=self.object)
@@ -23,6 +25,7 @@ class CourseView(DetailView):
                 groupped[student.student.promo] = [student.student]
         context['students'] = groupped
         return context
+
 
 @login_required
 @require_http_methods(['POST'])

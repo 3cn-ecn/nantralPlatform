@@ -5,6 +5,7 @@ from rest_framework import status
 
 from .models import Student
 
+
 class TestStudent(TestCase, TestMixin):
     def setUp(self):
         self.user_setup()
@@ -31,7 +32,7 @@ class TestStudent(TestCase, TestMixin):
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    
+
     def test_student_profile_update(self):
         student = Student.objects.get(id=self.u1.id)
         url = reverse('student:update', args=[student.pk])
@@ -50,7 +51,7 @@ class TestStudent(TestCase, TestMixin):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.logout()
-        
+
     def test_password_change(self):
 
         password_change = {
@@ -73,7 +74,8 @@ class TestStudent(TestCase, TestMixin):
             'new_password2': 'new'
         }
         url = reverse('student:change_pass', args=[student.pk])
-        response = self.client.post(url, data=password_change, follow_redirects=True)
+        response = self.client.post(
+            url, data=password_change, follow_redirects=True)
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
         ok = self.client.login(username=self.u2.username, password='new')

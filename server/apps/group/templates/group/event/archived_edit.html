@@ -1,4 +1,4 @@
-{% extends 'group/group_base_update.html' %}
+{% extends 'group/base_edit.html' %}
 {% load crispy_forms_tags %}
 {% block page %}
 </br>
@@ -19,7 +19,7 @@
   <button class='btn btn-dark'>Enregistrer les modifications</button>
 </form>
 {% else %}
-<p>Pour le moment il n'y a pas d'envents archivés.</p>
+<p>Pour le moment il n'y a pas d'events archivés.</p>
 {% endif %}
 {% endblock %}
 {% block script %}
