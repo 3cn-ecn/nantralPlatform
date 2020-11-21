@@ -19,7 +19,7 @@ from apps.utils.accessMixins import UserIsAdmin
 
 class ListClubView(ListView):
     model = Club
-    template_name = 'group/club_list.html'
+    template_name = 'club/list.html'
     ordering = ['bdx_type', 'name']
 
 
@@ -30,7 +30,7 @@ class ListeListView(ListView):
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
-    template_name = 'group/club_update.html'
+    template_name = 'group/update.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -54,7 +54,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
 
 
 class UpdateGroupEventsView(UserIsAdmin, View):
-    template_name = 'group/club_events_update.html'
+    template_name = 'group/event/planned_edit.html'
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -72,7 +72,7 @@ class UpdateGroupEventsView(UserIsAdmin, View):
 
 
 class UpdateGroupArchivedEventsView(UserIsAdmin, View):
-    template_name = 'group/club_archived_events_update.html'
+    template_name = 'group/archived_edit.html'
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -90,7 +90,7 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
 
 
 class UpdateGroupCreateEventView(UserIsAdmin, FormView):
-    template_name = 'group/create_event.html'
+    template_name = 'group/create.html'
     form_class = EventForm
 
     def get_context_data(self, **kwargs):
@@ -107,7 +107,7 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
 
 
 class UpdateGroupMembersView(UserIsAdmin, View):
-    template_name = 'group/club_members_update.html'
+    template_name = 'group/members_edit.html'
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -127,7 +127,7 @@ class UpdateGroupMembersView(UserIsAdmin, View):
 
 
 class DetailGroupView(TemplateView):
-    template_name = 'group/club_detail.html'
+    template_name = 'group/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

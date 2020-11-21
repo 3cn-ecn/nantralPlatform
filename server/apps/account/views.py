@@ -5,8 +5,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.generic.edit import FormView
-from django.views.generic.base import TemplateView
-from .forms import SignUpForm, LoginForm, ForgottenPassForm, ResetPassForm
+from .forms import SignUpForm, LoginForm, ForgottenPassForm
 from .tokens import account_activation_token
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -17,7 +16,6 @@ from urllib import parse
 from .emailAuthBackend import EmailBackend
 from apps.student.models import Student
 from django.contrib import messages
-from django.core.mail import send_mail
 
 
 class RegistrationView(FormView):
@@ -32,9 +30,11 @@ class RegistrationView(FormView):
         user.student.email = form.cleaned_data.get('email')
         user.student.faculty = form.cleaned_data.get('faculty')
         user.student.path = form.cleaned_data.get('path')
-        #create a unique user name
-        first_name = ''.join(e.lower() for e in form.cleaned_data.get('first_name') if e.isalnum())
-        last_name = ''.join(e.lower() for e in form.cleaned_data.get('last_name') if e.isalnum())
+        # create a unique user name
+        first_name = ''.join(e.lower() for e in form.cleaned_data.get(
+            'first_name') if e.isalnum())
+        last_name = ''.join(e.lower() for e in form.cleaned_data.get(
+            'last_name') if e.isalnum())
         promo = form.cleaned_data.get('promo')
         user.username = f'{first_name}.{last_name}{promo}-{user.id}'
         # user can't login until link confirmed
@@ -42,17 +42,19 @@ class RegistrationView(FormView):
         user.save()
         subject = 'Activation de votre compte Nantral Platform'
         current_site = get_current_site(self.request)
-        # load a template like get_template() 
+        # load a template like get_template()
         # and calls its render() method immediately.
-        message = render_to_string('account/activation_request.html', {
+        message = render_to_string('account/mail/activation_request.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             # method will generate a hash value with user related data
             'token': account_activation_token.make_token(user),
         })
-        user.email_user(subject, message, 'registration@nantral-platform.fr', html_message=message)
-        messages.success(self.request, 'Un mail vous a été envoyé pour confirmer votre mail ECN.')
+        user.email_user(
+            subject, message, 'registration@nantral-platform.fr', html_message=message)
+        messages.success(
+            self.request, 'Un mail vous a été envoyé pour confirmer votre mail ECN.')
         return redirect(reverse('home:home'))
 
 
@@ -65,18 +67,21 @@ class ConfirmUser(View):
             user = None
         # checking if the user exists, if the token is valid.
         if user is not None and account_activation_token.check_token(user, token):
-            # if valid set active true 
+            # if valid set active true
             user.is_active = True
             user.save()
-            login(self.request, user, backend='apps.account.emailAuthBackend.EmailBackend')
+            login(self.request, user,
+                  backend='apps.account.emailAuthBackend.EmailBackend')
             messages.success(request, 'Votre compte est desormais actif !')
             return redirect(reverse('home:home'))
         else:
             return render(self.request, 'account/activation_invalid.html')
 
+
 class AuthView(FormView):
-    template_name='account/login.html'
-    form_class= LoginForm
+    template_name = 'account/login.html'
+    form_class = LoginForm
+
     def get(self, request):
         if request.user.is_authenticated:
             user = request.user
@@ -85,6 +90,7 @@ class AuthView(FormView):
             return redirect(reverse('home:home'))
         else:
             return super(AuthView, AuthView).get(self, request)
+
     def form_invalid(self, form):
         message = f'Veuillez vous connecter avec votre adresse mail ECN.'
         messages.warning(self.request, message)
@@ -95,12 +101,14 @@ class AuthView(FormView):
         password = form.cleaned_data['password']
         user = EmailBackend.authenticate(username=username, password=password)
         if user is not None:
-            login(self.request, user, backend='apps.account.emailAuthBackend.EmailBackend')
+            login(self.request, user,
+                  backend='apps.account.emailAuthBackend.EmailBackend')
             message = f'Bonjour {user.first_name} !'
             messages.success(self.request, message)
             return redirect(reverse('home:home'))
         else:
-            messages.error(self.request, 'Identifiant inconnu ou mot de passe invalide.')
+            messages.error(
+                self.request, 'Identifiant inconnu ou mot de passe invalide.')
             return redirect(reverse('account:login'))
 
 
@@ -110,24 +118,29 @@ class LogoutView(View):
         messages.success(request, 'Vous avez été déconnecté.')
         return redirect(reverse('account:login'))
 
+
 class ForgottenPassView(FormView):
     form_class = ForgottenPassForm
     template_name = 'account/forgotten_pass.html'
+
     def form_valid(self, form):
         user = User.objects.get(email=form.cleaned_data['email'])
         if user is not None:
             subject = '[Nantral Platform] Reinitialisation de votre mot de passe'
             current_site = get_current_site(self.request)
-            message = render_to_string('account/password_request.html', {
+            message = render_to_string('account/mail/password_request.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
                 # method will generate a hash value with user related data
                 'token': account_activation_token.make_token(user),
             })
-            user.email_user(subject, message, 'accounts@nantral-platform.fr', html_message=message)
-        messages.success(self.request, 'Un email de récuperation a été envoyé si cette adresse existe.')
+            user.email_user(
+                subject, message, 'accounts@nantral-platform.fr', html_message=message)
+        messages.success(
+            self.request, 'Un email de récuperation a été envoyé si cette adresse existe.')
         return redirect(reverse('account:login'))
+
 
 class PasswordResetConfirmCustomView(PasswordResetConfirmView):
     template_name = 'account/reset_password.html'
@@ -137,7 +150,8 @@ class PasswordResetConfirmCustomView(PasswordResetConfirmView):
     token_generator = account_activation_token
     success_url = reverse_lazy('home:home')
 
+
 def redirect_to_student(request, user_id):
     user = User.objects.get(id=user_id)
-    student  = Student.objects.get(user=user)
+    student = Student.objects.get(user=user)
     return redirect('student:update', student.pk)

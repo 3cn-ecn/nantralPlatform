@@ -162,7 +162,7 @@ def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
     if action == "post_add":
         for pk in pk_set:
             user = User.objects.get(pk=pk)
-            mail = render_to_string('group/new_admin_mail.html', {
+            mail = render_to_string('group/mail/new_admin.html', {
                 'group': instance,
                 'user': user
             })
@@ -171,7 +171,7 @@ def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
     elif action == "post_remove":
         for pk in pk_set:
             user = User.objects.get(pk=pk)
-            mail = render_to_string('group/remove_admin_mail.html', {
+            mail = render_to_string('group/mail/remove_admin.html', {
                 'group': instance,
                 'user': user
             })
