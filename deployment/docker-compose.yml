@@ -29,6 +29,7 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - DB_NAME
+      - S3_BUCKET
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
       - GITHUB_USER
