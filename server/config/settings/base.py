@@ -24,13 +24,13 @@ BASE_DIR = str(BASE_PATH)
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 
-
 secret = environ.Env(
-    GOOGLE_API_KEY=(str, 'Changeme'),
-    DB_HOSTNAME=(str, 'database'),
-    DB_PORT=(str, '5432'),
-    POSTGRES_USER=(str, 'nantralien'),
-    POSTGRES_PASSWORD=(str, 'nantral')
+    GOOGLE_API_KEY=(str, ""),
+    DB_HOSTNAME=(str, ""),
+    DB_PORT=(str, ""),
+    POSTGRES_USER=(str, ""),
+    POSTGRES_PASSWORD=(str, ""),
+    DB_NAME=(str, "")
 )
 
 
@@ -76,7 +76,7 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = [
     'apps.account.emailAuthBackend.EmailBackend',
     "django.contrib.auth.backends.ModelBackend",
-    ]
+]
 
 LOGIN_REDIRECT_URL = 'None'
 LOGIN_URL = '/account/login/'
@@ -85,7 +85,7 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 ROOT_URLCONF = 'config.urls'
 
-CRISPY_TEMPLATE_PACK =  'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 TEMPLATES = [
     {
@@ -104,7 +104,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
 
 
 # Internationalization
@@ -134,5 +133,5 @@ AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-GITHUB_USER=env('GITHUB_USER')
-GITHUB_TOKEN=env('GITHUB_TOKEN')
+GITHUB_USER = env('GITHUB_USER')
+GITHUB_TOKEN = env('GITHUB_TOKEN')

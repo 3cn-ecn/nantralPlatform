@@ -26,9 +26,9 @@ services:
     environment:
       - DB_HOSTNAME
       - DB_PORT
+      - DB_NAME
       - POSTGRES_USER
       - POSTGRES_PASSWORD
-      - DB_NAME
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
       - GITHUB_USER
@@ -37,14 +37,13 @@ services:
       - SECRET_KEY
 
   nginx:
-    build: ./containers/nginx
+    build: ./containers/nginx_http
     ports:
       - 80:80
       - 443:443
     volumes:
       - ../server:/var/app
       - static_volume:/var/app/staticfiles/
-      - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - server
 
