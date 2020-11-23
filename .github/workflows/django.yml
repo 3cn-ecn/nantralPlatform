@@ -17,7 +17,8 @@ jobs:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       GITHUB_USER: RobinetFox
-      GITHUB_TOKEN: test 
+      GITHUB_TOKEN: test
+      S3_BUCKET: test 
 
     steps:
     - uses: actions/checkout@v2
