@@ -8,7 +8,7 @@ DEBUG = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
+        'NAME': secret('DB_NAME'),
         'USER': secret('POSTGRES_USER'),
         'PASSWORD': secret('POSTGRES_PASSWORD'),
         'HOST': secret('DB_HOSTNAME'),
@@ -32,7 +32,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AWS_STORAGE_BUCKET_NAME = "nantral-platform-prod"
+AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
