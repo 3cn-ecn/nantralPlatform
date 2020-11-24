@@ -28,7 +28,7 @@ class EventUpdateView(UserIsAdmin, UpdateView):
               'date', 'publicity', 'color', 'image']
 
     def test_func(self) -> bool:
-        self.kwargs['group_slug'] = self.object.get_group
+        self.kwargs['group_slug'] = self.object.get_group.slug
         return super().test_func()
 
     def get_context_data(self, **kwargs):
