@@ -90,7 +90,7 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
 
 
 class UpdateGroupCreateEventView(UserIsAdmin, FormView):
-    template_name = 'group/create.html'
+    template_name = 'group/event/create.html'
     form_class = EventForm
 
     def get_context_data(self, **kwargs):

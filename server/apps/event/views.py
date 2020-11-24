@@ -27,6 +27,10 @@ class EventUpdateView(UserIsAdmin, UpdateView):
     fields = ['title', 'description', 'location',
               'date', 'publicity', 'color', 'image']
 
+    def test_func(self) -> Optional[bool]:
+        self.kwargs['group_slug'] = self.object.get_group
+        return super().test_func()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = self.object.get_group
