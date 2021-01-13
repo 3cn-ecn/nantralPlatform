@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content%}
+<br \>
+
+<div style="clear:left">
+    <h2>Bourse aux options</h2>
+      {% for exchange in exchanges %}
+        <div class="card pt-0" style="box-shadow: 1px 1px 7px #999">
+          <div class="card-body">
+            <h5 class="card-title" >{{exchange.student}}</h5>
+            <h6 class="card-subtitle mb-2">Option proposée : {{exchange.got}}</h6>
+            <p class="card-text">Option(s) recherchée(s) : hello2
+              {% for option in event.wanted %}
+               {{option}}, hello 
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+        <br/>
+      {% endfor %}
+</div>
+
+{% endblock%}

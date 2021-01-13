@@ -28,6 +28,7 @@ urlpatterns = [
     url('services/', include('apps.services.urls', namespace='services')),
     url('event/', include('apps.event.urls', namespace='event')),
     url('api/event', include('apps.event.api_urls', namespace='event_api')),
+    url('exchange/', include('apps.exchange.urls', namespace='exchange')),
     url('', include('apps.home.urls', namespace='home')),
 ]
 
