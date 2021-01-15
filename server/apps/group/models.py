@@ -158,22 +158,24 @@ class NamedMembershipList(models.Model):
 
 @receiver(m2m_changed, sender=Group.admins.through)
 def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
-    print(action)
-    if action == "post_add":
-        for pk in pk_set:
-            user = User.objects.get(pk=pk)
-            mail = render_to_string('group/mail/new_admin.html', {
-                'group': instance,
-                'user': user
-            })
-            user.email_user(f'Vous êtes admin de {instance}', mail,
-                            'group-manager@nantral-platform.fr', html_message=mail)
-    elif action == "post_remove":
-        for pk in pk_set:
-            user = User.objects.get(pk=pk)
-            mail = render_to_string('group/mail/remove_admin.html', {
-                'group': instance,
-                'user': user
-            })
-            user.email_user(
-                f'Vous n\'êtes plus admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
+    if isinstance(instance, Group):
+        # FIXME temporary fix because this signal shotguns m2m_changed which other can't
+        # use. To avoid this we check the instance before to make sure it's a group.
+        if action == "post_add":
+            for pk in pk_set:
+                user = User.objects.get(pk=pk)
+                mail = render_to_string('group/mail/new_admin.html', {
+                    'group': instance,
+                    'user': user
+                })
+                user.email_user(f'Vous êtes admin de {instance}', mail,
+                                'group-manager@nantral-platform.fr', html_message=mail)
+        elif action == "post_remove":
+            for pk in pk_set:
+                user = User.objects.get(pk=pk)
+                mail = render_to_string('group/mail/remove_admin.html', {
+                    'group': instance,
+                    'user': user
+                })
+                user.email_user(
+                    f'Vous n\'êtes plus admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
