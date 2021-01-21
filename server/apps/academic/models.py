@@ -21,7 +21,7 @@ MOMENTS = [
 class Course(models.Model):
     name = models.CharField(verbose_name='Nom de la formation', max_length=200)
     course_type = models.CharField(verbose_name='Type de cours', max_length=200, choices=TYPE)
-    image = models.CharField(verbose_name="Image de l'option", max_length=200, null=True)
+    image = models.CharField(verbose_name="Image de l'option", max_length=200, blank=True, null=True)
     def __str__(self):
         return self.name
 
