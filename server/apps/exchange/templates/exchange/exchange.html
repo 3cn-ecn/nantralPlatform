@@ -4,20 +4,39 @@
 
 <div style="clear:left">
     <h2>Bourse aux options</h2>
+    <div class="card-columns">
+      <div class="card" style="width: 15rem; box-shadow: 1px 1px 7px #999">
+        <div class="card-body">
+          <h5 class="card-title">Ça m'intéresse !</h5>
+          <p class="card-text">Pas satisfait.e de l'option que vous avez obtenue ? Proposez un échange ! </p>
+          <a href="{% url 'exchange:add-exchange'%}" class="btn btn-dark">Je propose un échange</a>
+        </div>
+      </div>  
       {% for exchange in exchanges %}
-        <div class="card pt-0" style="box-shadow: 1px 1px 7px #999">
+        <div class="card" style="width: 15rem; box-shadow: 1px 1px 7px #999">
+          <img src={{exchange.got.image}} class="card-img-top" alt={{exchange.got}} style="height: 100px;">
           <div class="card-body">
-            <h5 class="card-title" >{{exchange.student}}</h5>
-            <h6 class="card-subtitle mb-2">Option proposée : {{exchange.got}}</h6>
-            <p class="card-text">Option(s) recherchée(s) : hello2
-              {% for option in event.wanted %}
-               {{option}}, hello 
-              {% endfor %}
-            </p>
+            <h5 class="card-title">{{exchange.student}}</h5>
+            <p class="card-text">Option proposée :</p>
+          </div>
+          <ul class="list-group list-group-flush" >
+            <li class="list-group-item" style="background-color: rgb(236, 236, 236);">{{exchange.got}}</li>
+          </ul>
+          <div class="card-body">
+            <p class="card-text">{% if exchange.wanted.all|length == 1 %}Option recherchée :{% else %}Options recherchées : {% endif %}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            {% for option in exchange.wanted.all %} 
+            <li class="list-group-item" style="background-color: rgb(236, 236, 236);">{{option}}</li>
+            {% endfor %}
+          </ul>
+          <div class="card-body">
+            <a href="{% url 'student:detail' exchange.student.id %}" class="btn btn-dark">Contacter</a>
           </div>
         </div>
-        <br/>
+      <br/>
       {% endfor %}
+    </div>
 </div>
 
 {% endblock%}

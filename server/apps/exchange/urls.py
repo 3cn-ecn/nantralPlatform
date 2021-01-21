@@ -7,4 +7,5 @@ app_name = 'exchange'
 
 urlpatterns = [
     path('', ExchangeView.as_view(), name='exchange'),
+    path('add-exchange/', AddExchangeView.as_view(), name='add-exchange')
 ]
