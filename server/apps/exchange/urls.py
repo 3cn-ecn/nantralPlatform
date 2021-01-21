@@ -1,0 +1,11 @@
+from django.conf.urls import url
+from django.urls import path
+
+from .views import *
+
+app_name = 'exchange'
+
+urlpatterns = [
+    path('', ExchangeView.as_view(), name='exchange'),
+    path('add-exchange/', AddExchangeView.as_view(), name='add-exchange')
+]

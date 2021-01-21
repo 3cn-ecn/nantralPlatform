@@ -29,6 +29,23 @@ body{
    width: 100%;
 }
 
+@import "bootstrap";
+
+.card-columns {
+  @include media-breakpoint-only(xl) {
+    column-count: 5;
+  }
+  @include media-breakpoint-only(lg) {
+    column-count: 4;
+  }
+  @include media-breakpoint-only(md) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(sm) {
+    column-count: 2;
+  }
+}
+
 h1,h2,h5{
   font-family: 'Heebo', sans-serif;
   font-weight:900;
@@ -57,9 +74,9 @@ a:hover{
       </button>
       <div class="collapse navbar-collapse text-center" id="navbarText">
         <ul class="navbar-nav">
-          <li class="nav-item">
+          <!--<li class="nav-item">
             <a class="nav-link" href="{% url 'home:home' %}">Accueil <span class="sr-only">(current)</span></a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="{% url 'student:list' %}">Étudiants</a>
           </li>
@@ -74,6 +91,7 @@ a:hover{
             Services
             </a>
             <ul class="dropdown-menu" role="menu">
+              <li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li>
               <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
             </ul>
           </li>
