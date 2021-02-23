@@ -78,7 +78,7 @@ a:hover{
             <a class="nav-link" href="{% url 'home:home' %}">Accueil <span class="sr-only">(current)</span></a>
           </li> -->
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'student:list' %}">Étudiants</a>
+            <a class="nav-link" href="{% url 'student:list' %}">Étudiant.e.s</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'group:club-list' %}">Clubs</a>
@@ -95,14 +95,6 @@ a:hover{
               <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
             </ul>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Autre
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a class="dropdown-item" href="{% url 'home:sugestions' %}">Faire une suggestion</a></li>
-            </ul>
-          </li>
         </ul>
         <ul class="navbar-nav ml-auto">
           {% if request.user.student.id %}
@@ -116,6 +108,8 @@ a:hover{
             </a>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
               <li><a class="dropdown-item" href='{% url "account:redirect-student"  request.user.id%}'><i class="fas fa-user"></i>  Modifier mon profil</a></li>
+              <li class="divider"></li>
+              <li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
               <li class="divider"></li>
               <li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
             </ul>
