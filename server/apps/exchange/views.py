@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, UpdateView, DeleteView
 from ..utils.accessMixins import LoginRequiredAccessMixin
 
 from apps.exchange.models import Exchange
@@ -24,3 +24,14 @@ class AddExchangeView(LoginRequiredAccessMixin, FormView):
         exchange.save()
         form.save_m2m()
         return redirect('exchange:exchange')
+
+class UpdateExchangeView(LoginRequiredAccessMixin, UpdateView):
+    model = Exchange
+    template_name = 'exchange/update_exchange.html'
+    form_class = ExchangeForm
+    success_url = "/exchange/"
+
+class DeleteExchangeView(LoginRequiredAccessMixin, DeleteView):
+    model = Exchange
+    template_name = 'exchange/delete_exchange.html'
+    success_url = "/exchange/"

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content%}
+<br \>
+<div style="clear:left">
+    <h2>Modifier un échange sur la Bourse aux options</h2>
+    </br>
+    <form method='POST' enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy}}
+        </br>
+        <button class='btn btn-dark'>Modifier</button>
+    </form>
+</div>
+{% endblock %}
