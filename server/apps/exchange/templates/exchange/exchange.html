@@ -6,13 +6,15 @@
     <h2>Bourse aux options</h2>
     <div>
     <div class="card-columns" style="width: 50rem; margin: 0 auto;">
+      {% if not request.user.student.exchanges %} 
       <div class="card bg-secondary" style="width: 15rem; box-shadow: 1px 1px 7px #999">
         <div class="card-body">
           <h5 class="card-title" style="color: white">Ça m'intéresse !</h5>
           <p class="card-text" style="color: white">Pas satisfait.e de l'option que vous avez obtenue ? Proposez un échange ! </p>
           <a href="{% url 'exchange:add-exchange'%}" class="btn btn-dark">Je propose un échange</a>
         </div>
-      </div>  
+      </div>
+      {% endif %}
       {% for exchange in exchanges %}
         <div class="card" style="width: 15rem; box-shadow: 1px 1px 7px #999">
           <img src={{exchange.got.image}} class="card-img-top" alt={{exchange.got}} style="height: 100px;">
