@@ -4,6 +4,6 @@ from apps.student.models import Student
 from apps.academic.models import Course
 
 class Exchange(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.OneToOneField(Student, related_name='exchanges', on_delete=models.CASCADE)
     got = models.ForeignKey(Course, related_name = 'got_by', on_delete=models.CASCADE, limit_choices_to={'course_type': 'OD'})
     wanted = models.ManyToManyField(Course, related_name = 'wanted_by', limit_choices_to={'course_type': 'OD'})

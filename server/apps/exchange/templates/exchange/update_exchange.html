@@ -5,7 +5,7 @@
 <div style="clear:left">
     <h2>Modifier un échange sur la Bourse aux options</h2>
     </br>
-    <form method='POST' enctype="multipart/form-data">
+    <form method='POST'>
         {% csrf_token %}
         {{form|crispy}}
         </br>
