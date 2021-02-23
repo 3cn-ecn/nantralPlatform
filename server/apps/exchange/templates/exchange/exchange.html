@@ -32,7 +32,12 @@
             {% endfor %}
           </ul>
           <div class="card-body py-3">
+            {% if exchange.student.id == request.user.student.id %}
+            <a href="{% url 'exchange:update-exchange' exchange.id %}" class="btn btn-dark">Modifier</a>
+            <a href="{% url 'exchange:delete-exchange' exchange.id %}" class="btn btn-dark">Supprimer</a>
+            {% else %}
             <a href="{% url 'student:detail' exchange.student.id %}" class="btn btn-dark">Contacter</a>
+            {% endif %}
           </div>
         </div>
       <br/>
