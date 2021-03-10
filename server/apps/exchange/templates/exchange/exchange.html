@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 {% block content%}
-<br \>
-
+<br/>
 <div style="clear:left">
     <h2>Bourse aux options</h2>
     <div>
     <div class="card-columns" style="width: 50rem; margin: 0 auto;">
-      {% if not request.user.student.exchanges %} 
+      {% if not request.user.student.exchange %} 
       <div class="card bg-secondary" style="width: 15rem; box-shadow: 1px 1px 7px #999">
         <div class="card-body">
           <h5 class="card-title" style="color: white">Ça m'intéresse !</h5>
