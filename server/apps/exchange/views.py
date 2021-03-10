@@ -5,6 +5,8 @@ from ..utils.accessMixins import LoginRequiredAccessMixin
 from apps.exchange.models import Exchange
 from .forms import ExchangeForm
 
+from django.contrib import messages
+
 class ExchangeView(LoginRequiredAccessMixin, TemplateView):
     template_name = 'exchange/exchange.html'
 
@@ -17,6 +19,15 @@ class ExchangeView(LoginRequiredAccessMixin, TemplateView):
 class AddExchangeView(LoginRequiredAccessMixin, FormView):
     template_name = 'exchange/add_exchange.html'
     form_class = ExchangeForm
+    
+    def dispatch(self,request, *args, **kwargs):
+        try:
+            self.request.user.student.exchange
+            message = f'Vous avez déjà un échange. Modifiez-le ou supprimez-le.'
+            messages.warning(self.request, message)
+            return  redirect('exchange:exchange')
+        except:
+            return super(AddExchangeView,self).dispatch(request, *args,**kwargs)
 
     def form_valid(self, form):
         exchange = form.save(commit=False)
