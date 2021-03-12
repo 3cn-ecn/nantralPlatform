@@ -1,11 +1,13 @@
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.views.generic.base import TemplateView
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, FormView
 from django.contrib.auth.decorators import login_required
 
 from .models import *
+from .forms import EventForm
 
+from apps.group.models import Group
 from apps.utils.accessMixins import LoginRequiredAccessMixin, UserIsAdmin
 
 
@@ -20,6 +22,24 @@ class EventDetailView(LoginRequiredAccessMixin, TemplateView):
         context['is_participating'] = self.object.is_participating(
             self.request.user)
         return context
+
+
+class UpdateGroupCreateEventView(UserIsAdmin, FormView):
+    """In the context of a group, create event view."""
+    template_name = 'group/event/create.html'
+    form_class = EventForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = Group.get_group_by_slug(self.kwargs['group_slug'])
+        return context
+
+    def form_valid(self, form, **kwargs):
+        event = form.save(commit=False)
+        event.group = Group.get_group_by_slug(
+            slug=self.kwargs['group_slug']).slug
+        event.save()
+        return redirect('group:create-event', self.kwargs['group_slug'])
 
 
 class EventUpdateView(UserIsAdmin, UpdateView):

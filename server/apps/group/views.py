@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from apps.student.models import Student
 from apps.event.models import BaseEvent
 
-from apps.event.forms import EventFormSet, EventForm
+from apps.event.forms import EventFormSet
 
 from apps.utils.accessMixins import UserIsAdmin
 
@@ -87,23 +87,6 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
 
     def post(self, request,  group_slug):
         return edit_events(request, group_slug)
-
-
-class UpdateGroupCreateEventView(UserIsAdmin, FormView):
-    template_name = 'group/event/create.html'
-    form_class = EventForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['object'] = Group.get_group_by_slug(self.kwargs['group_slug'])
-        return context
-
-    def form_valid(self, form, **kwargs):
-        event = form.save(commit=False)
-        event.group = Group.get_group_by_slug(
-            slug=self.kwargs['group_slug']).slug
-        event.save()
-        return redirect('group:create-event', self.kwargs['group_slug'])
 
 
 class UpdateGroupMembersView(UserIsAdmin, View):
