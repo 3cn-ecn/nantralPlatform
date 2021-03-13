@@ -4,7 +4,8 @@ from django.urls import reverse
 from rest_framework import status
 from datetime import datetime, timedelta
 
-from apps.event.models import BaseEvent, VISIBILITY
+from apps.event.models import BaseEvent
+from apps.post.models import VISIBILITY
 from apps.group.models import Club
 from apps.utils.utest import TestMixin
 

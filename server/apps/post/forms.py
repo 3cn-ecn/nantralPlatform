@@ -7,7 +7,7 @@ from .models import Post
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'description', 'location',
+        fields = ['title', 'description',
                   'publication_date', 'publicity', 'color', 'image']
 
     def __init__(self, *args, **kwargs):
@@ -17,7 +17,7 @@ class PostForm(forms.ModelForm):
 
 PostFormSet = modelformset_factory(
     Post,
-    fields=['title', 'description', 'location',
+    fields=['title', 'description',
             'publication_date', 'publicity', 'color', 'image'],
     extra=0,
     can_delete=True,
