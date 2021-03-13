@@ -23,6 +23,8 @@ urlpatterns = [
          UpdateGroupCreateEventView.as_view(), name='create-event'),
     path('club/<slug:group_slug>/posts/create',
          UpdateGroupCreatePostView, name='create-post'),
+    path('club/<slug:group_slug>/posts/edit',
+         UpdateGroupEventsView.as_view(), name='update-posts'),
     path('club/<slug:group_slug>/members/edit',
          UpdateGroupMembersView.as_view(), name='update-members'),
     path('liste/', ListeListView.as_view(), name='liste-list')
