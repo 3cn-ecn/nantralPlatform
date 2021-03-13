@@ -1,8 +1,8 @@
-from django.conf.urls import url
 from django.urls import path
 
 from .views import *
-from apps.event.views import UpdateGroupCreateEventView
+from apps.event.views import UpdateGroupCreateEventView, UpdateGroupArchivedEventsView, UpdateGroupEventsView
+from apps.post.views import UpdateGroupCreatePostView
 
 app_name = 'group'
 
@@ -21,6 +21,8 @@ urlpatterns = [
          UpdateGroupArchivedEventsView.as_view(), name='archived-events'),
     path('club/<slug:group_slug>/events/create',
          UpdateGroupCreateEventView.as_view(), name='create-event'),
+    path('club/<slug:group_slug>/posts/create',
+         UpdateGroupCreatePostView, name='create-post'),
     path('club/<slug:group_slug>/members/edit',
          UpdateGroupMembersView.as_view(), name='update-members'),
     path('liste/', ListeListView.as_view(), name='liste-list')

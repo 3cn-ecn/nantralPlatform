@@ -12,7 +12,6 @@ from django.views.decorators.http import require_http_methods
 from apps.student.models import Student
 from apps.event.models import BaseEvent
 
-from apps.event.forms import EventFormSet
 
 from apps.utils.accessMixins import UserIsAdmin
 
@@ -51,42 +50,6 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
         else:
             pass
         return redirect('group:update', group_slug)
-
-
-class UpdateGroupEventsView(UserIsAdmin, View):
-    template_name = 'group/event/planned_edit.html'
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
-        context['events'] = BaseEvent.objects.filter(
-            group=kwargs['group_slug'], date__gte=date.today())
-        context['form'] = EventFormSet(queryset=context['events'])
-        return context
-
-    def get(self, request, group_slug):
-        return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
-
-    def post(self, request,  group_slug):
-        return edit_events(request, group_slug)
-
-
-class UpdateGroupArchivedEventsView(UserIsAdmin, View):
-    template_name = 'group/archived_edit.html'
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
-        context['events'] = BaseEvent.objects.filter(
-            group=kwargs['group_slug'], date__lt=date.today())
-        context['form'] = EventFormSet(queryset=context['events'])
-        return context
-
-    def get(self, request, group_slug):
-        return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
-
-    def post(self, request,  group_slug):
-        return edit_events(request, group_slug)
 
 
 class UpdateGroupMembersView(UserIsAdmin, View):
@@ -170,23 +133,3 @@ def edit_named_memberships(request, group_slug):
     else:
         messages.warning(request, form.errors)
         return redirect('group:update', club.id)
-
-
-@login_required
-def edit_events(request, group_slug):
-    group = Group.get_group_by_slug(group_slug)
-    form = EventFormSet(request.POST)
-    if form.is_valid():
-        events = form.save(commit=False)
-        # Link each event to the group
-        for event in events:
-            event.group = group.slug
-            event.save()
-        # Delete  missing events
-        for event in form.deleted_objects:
-            event.delete()
-        messages.success(request, 'Events  modifies')
-        return redirect('group:update-events', group_slug)
-    else:
-        messages.warning(request, form.errors)
-        return redirect('group:update-events', group_slug)
