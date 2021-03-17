@@ -47,7 +47,7 @@ class PostUpdateView(UserIsAdmin, UpdateView):
 
 class UpdateGroupCreatePostView(UserIsAdmin, FormView):
     """In the context of a group, create a post view."""
-    template_name = 'group/event/create.html'
+    template_name = 'group/post/create.html'
     form_class = PostForm
 
     def get_context_data(self, **kwargs):
@@ -56,16 +56,16 @@ class UpdateGroupCreatePostView(UserIsAdmin, FormView):
         return context
 
     def form_valid(self, form, **kwargs):
-        event = form.save(commit=False)
-        event.group = Group.get_group_by_slug(
+        post = form.save(commit=False)
+        post.group = Group.get_group_by_slug(
             slug=self.kwargs['group_slug']).slug
-        event.save()
-        return redirect('group:create-event', self.kwargs['group_slug'])
+        post.save()
+        return redirect('group:create-post', self.kwargs['group_slug'])
 
 
 class UpdateGroupPostsView(UserIsAdmin, View):
     """In the context of a group, list and update the posts."""
-    template_name = 'group/event/planned_edit.html'
+    template_name = 'group/post/last_30_d.html'
 
     def get_context_data(self, **kwargs):
         context = {}

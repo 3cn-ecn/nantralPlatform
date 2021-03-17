@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import *
 from apps.event.views import UpdateGroupCreateEventView, UpdateGroupArchivedEventsView, UpdateGroupEventsView
-from apps.post.views import UpdateGroupCreatePostView
+from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
 
 app_name = 'group'
 
@@ -22,9 +22,9 @@ urlpatterns = [
     path('club/<slug:group_slug>/events/create',
          UpdateGroupCreateEventView.as_view(), name='create-event'),
     path('club/<slug:group_slug>/posts/create',
-         UpdateGroupCreatePostView, name='create-post'),
+         UpdateGroupCreatePostView.as_view(), name='create-post'),
     path('club/<slug:group_slug>/posts/edit',
-         UpdateGroupEventsView.as_view(), name='update-posts'),
+         UpdateGroupPostsView.as_view(), name='update-posts'),
     path('club/<slug:group_slug>/members/edit',
          UpdateGroupMembersView.as_view(), name='update-members'),
     path('liste/', ListeListView.as_view(), name='liste-list')
