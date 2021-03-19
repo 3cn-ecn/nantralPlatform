@@ -4,14 +4,14 @@
 <br \>
 
 <div style="text-align:center;">
-<img src='{% static "/img/logo.svg" %}' style=" width:80%;max-width:150px;}">
-<h1>Nantral&nbsp;Platform.</h1> Annuaire, événements et services dédiés aux étudiant.e.s de Centrale Nantes.
+<img src='{% static "/img/logo.svg" %}' style="width:80%;max-width:150px;">
+<h1>Nantral&nbsp;Platform.</h1> Annuaire, évènements et services dédiés aux étudiant·e·s de Centrale Nantes.
 </div>
 
 <br \>
 
 <div style="clear:left">
-    <h2>Événements à venir</h2>
+    <h2>Évènements à venir</h2>
     {% for when, events in events.items %}
     <h3>{{when}}</h3>
       {% for event, is_participating in events %}
@@ -40,6 +40,7 @@
           </div>
         </div>
       </a>
+      <br \>
       {% endfor %}
       <br \>
     {% endfor %}
