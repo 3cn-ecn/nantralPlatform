@@ -9,7 +9,7 @@ django-amazon-ses==3.0.2
 django-crispy-forms==1.9.1
 django-environ==0.4.5
 django-storages==1.9.1
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 docutils==0.15.2
 gunicorn==20.0.4
 idna==2.10
