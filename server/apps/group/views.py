@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, View, FormView, TemplateView
@@ -11,6 +11,7 @@ from django.views.decorators.http import require_http_methods
 
 from apps.student.models import Student
 from apps.event.models import BaseEvent
+from apps.post.models import Post
 
 
 from apps.utils.accessMixins import UserIsAdmin
@@ -92,6 +93,9 @@ class DetailGroupView(TemplateView):
             self.request.user) if self.request.user.is_authenticated else False
         context['events'] = BaseEvent.objects.filter(
             group=self.object.slug, date__gte=date.today()).order_by('date')
+        context['posts'] = Post.objects.filter(
+            group=self.object.slug, publication_date__gte=date.today()-timedelta(days=10)
+        ).order_by('publication_date')
         return context
 
 
@@ -107,7 +111,7 @@ class AddToClubView(LoginRequiredMixin, FormView):
         return redirect('group:detail', self.object.club.slug)
 
 
-@login_required
+@ login_required
 def add_member(request, group_slug, student_id):
     """Add a user to a club"""
     group = Group.get_group_by_slug(group_slug)
@@ -116,8 +120,8 @@ def add_member(request, group_slug, student_id):
         NamedMembershipClub.objects.create(student=student, club=group)
 
 
-@require_http_methods(['POST'])
-@login_required
+@ require_http_methods(['POST'])
+@ login_required
 def edit_named_memberships(request, group_slug):
     club = Club.objects.filter(slug=group_slug).first()
     form = NamedMembershipClubFormset(request.POST)
