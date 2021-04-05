@@ -12,7 +12,7 @@ class ListEventsGroupAPIView(generics.ListAPIView):
     serializer_class = BaseEventSerializer
 
     def get_queryset(self):
-        if self.request.GET:
+        if self.request.method == 'GET':
             if self.request.GET.get('view') == 'archives':
                 return BaseEvent.objects.filter(group=self.kwargs['group'], date__lt=datetime.today())
             elif self.request.get('view') == 'all':
