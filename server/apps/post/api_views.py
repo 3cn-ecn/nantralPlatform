@@ -10,9 +10,14 @@ class ListPostsGroupAPIView(generics.ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        if self.request.GET:
-            if self.request.GET.get('view') == 'archives':
-                return Post.objects.filter(group=self.kwargs['group'], date__lt=datetime.today())
-            elif self.request.get('view') == 'all':
-                return Post.objects.filter(group=self.kwargs['group'])
+        if self.request.method == 'GET':
             return Post.objects.filter(group=self.kwargs['group'])
+
+
+class UpdatePostAPIView(generics.RetrieveDestroyAPIView):
+    serializer_class = PostSerializer
+    lookup_field = 'slug'
+    lookup_url_kwarg = 'post_slug'
+
+    def get_queryset(self):
+        return Post.objects.filter(slug=self.kwargs['post_slug'])
