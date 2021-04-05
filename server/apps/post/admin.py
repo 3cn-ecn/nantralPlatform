@@ -4,7 +4,7 @@ from .models import Post
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ["title", "date", "group"]
+    list_display = ["title", "publication_date", "group"]
 
 
-admin.register(Post, PostAdmin)
+admin.site.register(Post, PostAdmin)
