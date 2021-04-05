@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.db.models.fields import DateTimeField
 from django.utils.text import slugify
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, reverse
 
 from apps.group.models import Group
 from apps.utils.upload import PathAndRename
@@ -55,6 +55,9 @@ class Post(AbstractPost):
     def save(self, *args, **kwargs):
         self.slug = f'post--{slugify(self.title)}-{self.publication_date.year}-{self.publication_date.month}-{self.publication_date.day}'
         super(Post, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('post:detail', args=[self.slug])
 
     @staticmethod
     def get_post_by_slug(slug:  str):

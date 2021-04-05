@@ -11,7 +11,7 @@ from apps.utils.accessMixins import UserIsAdmin, LoginRequiredAccessMixin
 
 
 class PostDetailView(LoginRequiredAccessMixin, TemplateView):
-    template_name = 'event/detail.html'
+    template_name = 'post/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
