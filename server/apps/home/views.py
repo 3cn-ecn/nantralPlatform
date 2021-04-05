@@ -2,17 +2,15 @@ from datetime import *
 import requests
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, FormView
-from urllib import parse
 from ..utils.accessMixins import LoginRequiredAccessMixin
 from django.contrib import messages
 
 from apps.event.models import BaseEvent
+from apps.post.models import Post
 
 from config.settings.base import GITHUB_TOKEN, GITHUB_USER
 
 from .forms import SuggestionForm
-
-# Create your views here.
 
 
 class HomeView(LoginRequiredAccessMixin, TemplateView):
@@ -23,6 +21,8 @@ class HomeView(LoginRequiredAccessMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['events'] = event_sort(BaseEvent.objects.filter(
             date__gte=date.today()).order_by('date'), self.request)
+        context['posts'] = Post.objects.filter(
+            publication_date__gte=date.today()-timedelta(days=10)).order_by('publication_date')
         return context
 
 
