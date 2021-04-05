@@ -60,6 +60,7 @@ COMMON_APPS = [
     'apps.event',
     'apps.services',
     'apps.exchange',
+    'apps.post'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS

@@ -5,7 +5,8 @@ module.exports = {
   entry:  {
     index: path.join(__dirname, 'src/index'),
     studentCourseSelector: path.join(__dirname, 'src/containers/studentCourseSelector'),
-    eventsGroupListUpdate: path.join(__dirname, 'src/containers/eventsGroupListUpdate')
+    eventsGroupListUpdate: path.join(__dirname, 'src/containers/eventsGroupListUpdate'),
+    postsGroupListUpdate: path.join(__dirname, 'src/containers/postsGroupListUpdate')
   },
   output: {
     path: path.join(__dirname, '../server/static/js'),

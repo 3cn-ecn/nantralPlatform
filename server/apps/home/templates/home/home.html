@@ -44,6 +44,20 @@
       {% endfor %}
       <br \>
     {% endfor %}
+    <h2>Dernières annonces</h2>
+      {% for post in posts %}
+      <a href="{{post.get_absolute_url}}" style='color:white' class="mb-1">
+        <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
+          <div class="card-body">
+            <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'d:m'}}</h5>
+            <h6 class="card-subtitle mb-2">{{post.get_group.name}}</h6>
+        </h6>
+            <p class="card-text" >{{post.description | truncatewords_html:20}}</p>
+          </div>
+        </div>
+      </a>
+      <br \>
+    {% endfor %}
 </div>
 
 {% endblock%}
