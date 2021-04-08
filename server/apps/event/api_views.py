@@ -15,7 +15,7 @@ class ListEventsGroupAPIView(generics.ListAPIView):
         if self.request.method == 'GET':
             if self.request.GET.get('view') == 'archives':
                 return BaseEvent.objects.filter(group=self.kwargs['group'], date__lt=datetime.today())
-            elif self.request.get('view') == 'all':
+            elif self.request.GET.get('view') == 'all':
                 return BaseEvent.objects.filter(group=self.kwargs['group'])
         return BaseEvent.objects.filter(group=self.kwargs['group'], date__gte=datetime.today())
 

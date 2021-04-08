@@ -91,13 +91,13 @@ class UpdateGroupEventsView(UserIsAdmin, View):
 
 
 class UpdateGroupArchivedEventsView(UserIsAdmin, View):
-    template_name = 'group/archived_edit.html'
+    template_name = 'group/event/archived_edit.html'
 
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
         context['events'] = BaseEvent.objects.filter(
-            group=kwargs['group_slug'], date__lt=date.today())
+            group=kwargs['group_slug'], date__lte=date.today())
         context['form'] = EventFormSet(queryset=context['events'])
         return context
 
