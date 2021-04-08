@@ -4,39 +4,23 @@ from django.contrib.auth.models import User
 from django.shortcuts import reverse, get_object_or_404
 
 
-from apps.group.models import Group
+from apps.post.models import AbstractPost
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 
 
-VISIBILITY = [
-    ('Pub', 'Public - Visible par tous'),
-    ('Mem', 'Membres - Visible uniquement par les membres du groupe')
-]
-
-COLORS = [
-    ('primary', 'Bleu'),
-    ('success', 'Vert'),
-    ('danger', 'Rouge'),
-    ('warning', 'Jaune'),
-    ('secondary', 'Gris'),
-    ('dark', 'Noir')
-]
-
 path_and_rename = PathAndRename("events/pictures")
 
 
-class BaseEvent(models.Model):
+class BaseEvent(AbstractPost):
     """
     A basic event model for groups
     """
-    date = models.DateTimeField(verbose_name='Date de l\'événement')
     title = models.CharField(
         max_length=200, verbose_name='Titre de l\'événement')
     description = models.TextField(verbose_name='Description de l\'événement')
+    date = models.DateTimeField(verbose_name='Date de l\'événement')
     location = models.CharField(max_length=200, verbose_name='Lieu')
-    publicity = models.CharField(
-        max_length=200, verbose_name='Visibilité de l\'événement', choices=VISIBILITY)
     group = models.SlugField(verbose_name='Groupe organisateur')
     slug = models.SlugField(
         verbose_name='Slug de l\'événement', unique=True, null=True)
@@ -44,14 +28,6 @@ class BaseEvent(models.Model):
         to=Student, verbose_name='Participants', blank=True)
     ticketing = models.CharField(
         verbose_name='Lien vers la billeterie', blank=True, max_length=200, null=True)
-    image = models.ImageField(verbose_name="Une image, une affiche en lien avec l'evenement ?",
-                              upload_to=path_and_rename, null=True, blank=True)
-    color = models.CharField(max_length=200, verbose_name='Couleur de fond',
-                             choices=COLORS, null=True, default='primary')
-
-    @property
-    def get_group(self):
-        return Group.get_group_by_slug(self.group)
 
     @property
     def get_number_participants(self) -> int:

@@ -1,7 +1,6 @@
 from datetime import datetime
 
-from rest_framework import generics, status
-from rest_framework.response import Response
+from rest_framework import generics
 
 from .models import BaseEvent
 from .serializers import BaseEventSerializer
@@ -13,10 +12,10 @@ class ListEventsGroupAPIView(generics.ListAPIView):
     serializer_class = BaseEventSerializer
 
     def get_queryset(self):
-        if self.request.GET:
+        if self.request.method == 'GET':
             if self.request.GET.get('view') == 'archives':
                 return BaseEvent.objects.filter(group=self.kwargs['group'], date__lt=datetime.today())
-            elif self.request.get('view') == 'all':
+            elif self.request.GET.get('view') == 'all':
                 return BaseEvent.objects.filter(group=self.kwargs['group'])
         return BaseEvent.objects.filter(group=self.kwargs['group'], date__gte=datetime.today())
 
