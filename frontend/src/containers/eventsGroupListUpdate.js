@@ -19,7 +19,7 @@ function EventsListUpdateDelete(props){
     };
     const handleShow = () => setShow(true);
     const getEvents = () => {
-        fetch(`/api/event/group/${props.group_slug}/`)
+        fetch(props.api_url)
             .then(resp => resp.json()
             .then(events => {updateEvents(events)}));
     };
@@ -78,7 +78,7 @@ function EventsListUpdateDelete(props){
     </div>
 }
 
-const element = <EventsListUpdateDelete group_slug={group_slug} />;
+const element = <EventsListUpdateDelete api_url={api_url}  />;
 ReactDOM.render(
     element,
     document.getElementById('root')
