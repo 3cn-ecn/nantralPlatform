@@ -1,18 +1,16 @@
 {% extends 'group/base_edit.html' %}
 {% load crispy_forms_tags %}
-{% load static %}
 {% block page %}
 </br>
-</br>
-<h2>Liste des events archivés</h2>
-<div id="root"></div>
+<form method='POST'>
+  {% csrf_token %}
+  {{form|crispy}}
+  </br>
+  <button class='btn btn-dark'>Poster l'annonce</button>
+  </br>
+</form>
 {% endblock %}
 {% block script %}
-<script>
-  var static_url_prefix = "{% static '' %}";
-  var api_url = "{% url 'event_api:list-group-events' object.slug %}?view=archives";
-</script>
-<script src='{% static "js/eventsGroupListUpdate.js" %}'></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
