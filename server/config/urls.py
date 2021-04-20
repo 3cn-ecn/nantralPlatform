@@ -31,7 +31,8 @@ urlpatterns = [
     url('post/', include('apps.post.urls', namespace='post')),
     url('api/post/', include('apps.post.api_urls', namespace='post_api')),
     url('exchange/', include('apps.exchange.urls', namespace='exchange')),
-    url('api/roommates/', include(('apps.roommates.api_urls'), namespace='roommates_api')),
+    url('roommates/', include('apps.roommates.urls', namespace='roommates')),
+    url('api/roommates/', include('apps.roommates.api_urls', namespace='roommates_api')),
     url('', include('apps.home.urls', namespace='home')),
 ]
 
