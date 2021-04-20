@@ -1,5 +1,5 @@
 from django.db import models
-from ..group.models import Group
+from apps.group.models import Group
 from django.utils.text import slugify
 
 class Housing(models.Model):
