@@ -3,5 +3,8 @@
 {% load static %}
 {% block  content%}
 <div id='root'></div>
+<script>
+    const MAPBOX_TOKEN = '{{MAPBOX_API_KEY}}';
+</script>
 <script src='{% static "js/housingMap.js" %}'></script>
 {% endblock content%}
