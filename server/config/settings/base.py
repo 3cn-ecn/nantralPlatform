@@ -138,3 +138,5 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 GITHUB_USER = env('GITHUB_USER')
 GITHUB_TOKEN = env('GITHUB_TOKEN')
+
+MAPBOX_API_KEY = env('MAPBOX_API_KEY')
