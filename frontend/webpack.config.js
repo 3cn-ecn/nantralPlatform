@@ -3,11 +3,11 @@ var webpack = require('webpack');
 var BundleTracker = require('webpack-bundle-tracker');
 module.exports = {
   entry:  {
-    index: path.join(__dirname, 'src/index'),
-    studentCourseSelector: path.join(__dirname, 'src/containers/studentCourseSelector'),
-    eventsGroupListUpdate: path.join(__dirname, 'src/containers/eventsGroupListUpdate'),
-    postsGroupListUpdate: path.join(__dirname, 'src/containers/postsGroupListUpdate'),
-    housingMap: path.join(__dirname, 'src/containers/housingMap')
+    index: path.join(__dirname, 'src/index.tsx'),
+    studentCourseSelector: path.join(__dirname, 'src/containers/studentCourseSelector.tsx'),
+    eventsGroupListUpdate: path.join(__dirname, 'src/containers/eventsGroupListUpdate.tsx'),
+    postsGroupListUpdate: path.join(__dirname, 'src/containers/postsGroupListUpdate.tsx'),
+    housingMap: path.join(__dirname, 'src/containers/housingMap.tsx')
   },
   output: {
     path: path.join(__dirname, '../server/static/js'),
@@ -21,8 +21,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
+        test: [/\.jsx?$/, /\.tsx?$/],
+        use: 'babel-loader',
         exclude: /node_modules/,
       },
     ],
