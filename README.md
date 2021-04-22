@@ -49,12 +49,12 @@ The server is a django application.
 - Install virtualenv for python with `pip3 install virtualenv`
 
 #### Server
-- Go into the server folder
-- Create a virtualenv with `python3 -m virtualenv env` or `python -m virtualenv env` if it doesn't work
-- Activate your venv with `source env/bin/activate` or `env\Scripts\activate.bat` on Windows
-- Install the python dependencies with `pip install -r requirements.txt`
-- In the config/settings folder, create a .env file and fill it out with the sample
-- Launch the server with `python manage.py runserver`
+- Go into the server folder.
+- Create a virtualenv with `python3 -m virtualenv env` or `python -m virtualenv env` or `py -m virtualenv env` if it doesn't work on Windows.
+- Activate your venv with `source env/bin/activate` or `env\Scripts\activate.bat` on Windows.
+- Install the python dependencies with `pip install -r requirements.txt`.
+- In the config/settings folder, create a .env file and fill it out with the sample, located at `server/config/settings/sample_env.txt`. Make sure that the encoding of the file is set to `utf-8` when you save it.
+- Launch the server with `python manage.py runserver` or `py manage.py runserver` if it doesn't work on Windows.
 - The server runs on localhost:8000
 You are ready to go.
 ### Create a superuser with:
