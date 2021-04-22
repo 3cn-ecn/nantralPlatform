@@ -3,7 +3,6 @@ var webpack = require('webpack');
 var BundleTracker = require('webpack-bundle-tracker');
 module.exports = {
   entry:  {
-    index: path.join(__dirname, 'src/index.tsx'),
     studentCourseSelector: path.join(__dirname, 'src/containers/studentCourseSelector.tsx'),
     eventsGroupListUpdate: path.join(__dirname, 'src/containers/eventsGroupListUpdate.tsx'),
     postsGroupListUpdate: path.join(__dirname, 'src/containers/postsGroupListUpdate.tsx'),
