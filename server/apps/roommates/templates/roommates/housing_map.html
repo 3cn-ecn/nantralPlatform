@@ -1,10 +1,28 @@
-﻿{% extends 'base.html'%}
-<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
-{% load static %}
-{% block  content%}
-<div id='root'></div>
+﻿{% extends 'base.html'%} {% load static %} {% block head %}
+<link
+  href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"
+  rel="stylesheet"
+/>
+<style>
+  .mapbox {
+    display: -ms-flex;
+    display: -webkit-flex;
+    display: flex;
+    max-width: 100% !important;
+    margin-top: 5rem !important;
+  }
+  .mapbox > div {
+    flex: 1;
+  }
+</style>
+
+{% endblock %} {% block content%}
+
+<div id="root" class="mapbox"></div>
+{% endblock content%} {% block script %}
 <script>
-    const MAPBOX_TOKEN = '{{MAPBOX_API_KEY}}';
+  const MAPBOX_TOKEN = "{{MAPBOX_API_KEY}}";
 </script>
 <script src='{% static "js/housingMap.js" %}'></script>
-{% endblock content%}
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+{% endblock %}

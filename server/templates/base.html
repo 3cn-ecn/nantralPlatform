@@ -13,6 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href='{% static "/img/logo.svg" %}'>
+    {% block head %}
+    {% endblock %}
     <title>Nantral Platform</title>
   </head>
   <style>
@@ -85,6 +87,9 @@ a:hover{
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'group:liste-list' %}">Listes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'roommates:housing-map' %}">Carte des colocs</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
