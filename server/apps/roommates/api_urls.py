@@ -7,4 +7,5 @@ app_name = 'roommates'
 
 urlpatterns = [
     path('housing/', HousingView.as_view(), name='housing'),
+    path('geocoding/', SearchGeocodingView.as_view(), name='geocoding')
 ]
