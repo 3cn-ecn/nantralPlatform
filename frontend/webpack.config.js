@@ -6,7 +6,8 @@ module.exports = {
     studentCourseSelector: path.join(__dirname, 'src/containers/studentCourseSelector.tsx'),
     eventsGroupListUpdate: path.join(__dirname, 'src/containers/eventsGroupListUpdate.tsx'),
     postsGroupListUpdate: path.join(__dirname, 'src/containers/postsGroupListUpdate.tsx'),
-    housingMap: path.join(__dirname, 'src/containers/housingMap.tsx')
+    housingMap: path.join(__dirname, 'src/containers/housingMap.tsx'),
+    createHousing: path.join(__dirname, 'src/containers/createHousing.tsx')
   },
   output: {
     path: path.join(__dirname, '../server/static/js'),
