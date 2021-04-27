@@ -7,6 +7,10 @@ class Housing(models.Model):
 	latitude = models.FloatField()
 	longitude = models.FloatField()
 
+	def __str__(self):
+			return self.adress if self.adress else ''
+	
+
 class Roommates(Group):
 	begin_date = models.DateField()
 	end_date = models.DateField()
@@ -18,4 +22,3 @@ class Roommates(Group):
 	def save(self, *args, **kwargs):
 		self.slug = f'coloc--{slugify(self.name)}'
 		super(Roommates, self).save(*args, **kwargs)
-
