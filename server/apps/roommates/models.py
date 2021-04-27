@@ -2,11 +2,20 @@ from django.db import models
 from apps.group.models import Group
 from django.utils.text import slugify
 
+from apps.utils.geocoding import geocode
+
 
 class Housing(models.Model):
-    adress = models.CharField(max_length=250)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    address = models.CharField(max_length=250)
+    details = models.CharField(max_length=100, null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        coordinates = geocode(self.address)[0]
+        self.latitude = coordinates['lat']
+        self.longitude = coordinates['long']
+        super(Housing, self).save(*args, **kwargs)
 
 
 class Roommates(Group):
