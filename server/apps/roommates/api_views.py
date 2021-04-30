@@ -16,6 +16,16 @@ class SearchGeocodingView(APIView):
         return Response(data=geocode(request.GET.get("search_string")))
 
 
+class CheckAddressView(APIView):
+    """An API view to wether wether a housing already exists at selected address.
+    Returns the pk if it does, None otherwise"""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        housing = Housing.objects.get(address=request.data.get("address"))
+        return Response(data=(None if housing is None else housing.pk))
+
+
 class HousingView(generics.ListCreateAPIView):
     serializer_class = HousingSerializer
     permission_classes = [permissions.IsAuthenticated]

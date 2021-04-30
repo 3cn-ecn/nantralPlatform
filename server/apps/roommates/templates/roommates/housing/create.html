@@ -27,7 +27,8 @@
 {% endblock content%}
 {% block script %}
 <script>
-  let api_url = '{% url "roommates_api:housing" %}'
+  let api_url = '{% url "roommates_api:housing" %}';
+  let check_url = '{% url "roommates_api:address-check" %}'
 </script>
 <script src='{% static "js/createHousing.js" %}'></script>
 {% endblock %}

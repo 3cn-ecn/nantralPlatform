@@ -10,6 +10,7 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 function CreateHousing(props) {
   const [currentHousing, updateCurrentHousing] = useState({});
+  const [alreadyExists, updateAlreadyExists] = useState(null);
   const [suggestions, updateSuggestions] = useState([]);
   function getSuggestions(search: string) {
     if (search.length > 5) {
@@ -24,6 +25,12 @@ function CreateHousing(props) {
       'address': address
     });
     updateSuggestions([]);
+    axios.post(props.check_url, {
+      'address': address
+    })
+    .then((resp) => {
+        updateAlreadyExists(resp.data);
+    });
   }
   function updateDetails(details: string){
     updateCurrentHousing({
@@ -52,6 +59,8 @@ function CreateHousing(props) {
           </Form>
           {currentHousing['address'] != null &&  
           <div>
+            {alreadyExists != null && <p>
+              Cette habitation semble déjà exister, vous pouvez la retrouver <a href="">ici</a>.</p>}
             <Form>
             <h1>{currentHousing['address']}</h1>
             <Form.Group controlId="details">
@@ -70,4 +79,4 @@ function CreateHousing(props) {
 }
 
 document.body.style.margin = "0";
-render(<CreateHousing api_url={api_url}/>, document.getElementById("root"));
+render(<CreateHousing api_url={api_url} check_url ={check_url}/>, document.getElementById("root"));
