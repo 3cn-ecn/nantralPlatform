@@ -25,7 +25,7 @@ function CityPin(props) {
   );
 }
 
-function Root(props) {
+function Root(props): JSX.Element {
   const [markers, setMarkers] = useState([]);
   const [viewport, setViewport] = useState({
     latitude: 47.21784689284845,
