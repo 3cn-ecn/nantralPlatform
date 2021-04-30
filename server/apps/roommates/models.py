@@ -21,7 +21,7 @@ class Housing(models.Model):
         super(Housing, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.adress if self.adress else ''
+        return self.address if self.address else ''
 
 
 class Roommates(Group):
