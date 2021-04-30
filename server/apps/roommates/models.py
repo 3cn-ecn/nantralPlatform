@@ -21,6 +21,10 @@ class Housing(models.Model):
         super(Housing, self).save(*args, **kwargs)
 
 
+	def __str__(self):
+			return self.adress if self.adress else ''
+	
+
 class Roommates(Group):
     begin_date = models.DateField()
     end_date = models.DateField()
@@ -35,7 +39,7 @@ class Roommates(Group):
         self.slug = f'coloc--{slugify(self.name)-self.pk}'
         super(Roommates, self).save(*args, **kwargs)
 
-
+        
 class NamedMembershipRoommates(models.Model):
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
     roommates = models.ForeignKey(to=Roommates, on_delete=models.CASCADE)
