@@ -2,8 +2,8 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.roommates.serializers import HousingSerializer
-from apps.roommates.models import Housing
+from apps.roommates.serializers import HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer
+from apps.roommates.models import Housing, NamedMembershipRoommates, Roommates
 
 from apps.utils.geocoding import geocode
 
@@ -35,3 +35,24 @@ class HousingView(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
+
+
+class RoommatesGroupView(generics.ListCreateAPIView):
+    """API View to get all the groups of roommates that lived in a house."""
+    serializer_class = RoommatesGroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Roommates.objects.filter(housing=self.kwargs['pk'])
+    
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+
+class RoommatesMembersView(generics.ListCreateAPIView):
+    """API View to list memebers of a roommates group."""
+    serializer_class = RoommatesMemberSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return NamedMembershipRoommates.objects.filter(roommates=self.kwargs['roommates'])
