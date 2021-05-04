@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import ReactDOM, { render } from "react-dom";
-import {Form,  Button, Accordion} from 'react-bootstrap';
+import {Form,  Button} from 'react-bootstrap';
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
