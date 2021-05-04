@@ -1,9 +1,11 @@
 from typing import Any, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
 
 from django.conf import settings
+
+from apps.roommates.models import Housing
 
 
 class HousingMap(LoginRequiredMixin, TemplateView):
@@ -17,3 +19,9 @@ class HousingMap(LoginRequiredMixin, TemplateView):
 
 class CreateHousingView(LoginRequiredMixin, TemplateView):
     template_name = 'roommates/housing/create.html'
+
+
+class EditHosuingView(LoginRequiredMixin, UpdateView):
+    template_name = 'roommates/housing/edit.html'
+    model = Housing
+    fields = ['details']
