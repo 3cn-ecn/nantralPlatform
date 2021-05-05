@@ -20,6 +20,8 @@
 </style>
 
 {% endblock %} {% block content%}
+<p>Tu ne trouve pas ta coloc ?</p></br>
+<a class='btn btn-success' href="{% url 'roommates:create-new' %}">Ajouter une coloc</a>
 
 <div id="root" class="mapbox"></div>
 {% endblock content%} {% block script %}
