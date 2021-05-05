@@ -6,7 +6,8 @@
   "mode": "development",
   "scripts": {
     "start": "./node_modules/.bin/webpack --config webpack.config.js",
-    "watch": "npm run start -- --watch",
+		"dev": "./node_modules/.bin/webpack --config webpack.config.js --mode=development",
+    "watch": "npm run dev -- --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Robin TROESCH",
