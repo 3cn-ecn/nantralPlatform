@@ -20,11 +20,14 @@
 </style>
 
 {% endblock %} {% block content%}
+<p>Tu ne trouve pas ta coloc ?</p></br>
+<a class='btn btn-success' href="{% url 'roommates:create-new' %}">Ajouter une coloc</a>
 
 <div id="root" class="mapbox"></div>
 {% endblock content%} {% block script %}
 <script>
   const MAPBOX_TOKEN = "{{MAPBOX_API_KEY}}";
+  const api_housing_url = "{% url 'roommates_api:housing' %}";
 </script>
 <script src='{% static "js/housingMap.js" %}'></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>

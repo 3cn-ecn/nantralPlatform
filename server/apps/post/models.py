@@ -1,7 +1,8 @@
 from datetime import datetime
 
 from django.db import models
-from django.db.models.fields import DateTimeField
+from django.utils import timezone
+
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404, reverse
 
@@ -28,7 +29,7 @@ COLORS = [
 
 class AbstractPost(models.Model):
     publication_date = models.DateTimeField(
-        verbose_name="Date de publication", default=datetime.now())
+        verbose_name="Date de publication", default=timezone.now)
     title = models.CharField(
         max_length=200, verbose_name='Titre de l\'annonce')
     description = models.TextField(verbose_name='Texte de l\'annonce')

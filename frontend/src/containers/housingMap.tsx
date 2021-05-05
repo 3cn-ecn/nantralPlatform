@@ -41,7 +41,7 @@ function Root(props): JSX.Element {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    fetch("/roommates/api/roommates/housing/", requestOptions)
+    fetch(props.api_housing_url, requestOptions)
       .then((response) => response.json())
       .then((data) => {
         // Only rerender markers if props.data has changed
@@ -83,4 +83,4 @@ function Root(props): JSX.Element {
 }
 
 document.body.style.margin = "0";
-render(<Root api_key={MAPBOX_TOKEN} />, document.getElementById("root"));
+render(<Root api_key={MAPBOX_TOKEN} api_housing_url={api_housing_url} />, document.getElementById("root"));

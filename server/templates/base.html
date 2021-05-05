@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -17,52 +18,7 @@
     {% endblock %}
     <title>Nantral Platform</title>
   </head>
-  <style>
-    html {
-   margin: 0px;
-   height: 100%;
-   width: 100%;
-}
-
-body{
-   font-family: 'Heebo', sans-serif;
-   margin: 0px;
-   min-height: 100%;
-   width: 100%;
-}
-
-@import "bootstrap";
-
-.card-columns {
-  @include media-breakpoint-only(xl) {
-    column-count: 5;
-  }
-  @include media-breakpoint-only(lg) {
-    column-count: 4;
-  }
-  @include media-breakpoint-only(md) {
-    column-count: 3;
-  }
-  @include media-breakpoint-only(sm) {
-    column-count: 2;
-  }
-}
-
-h1,h2,h5{
-  font-family: 'Heebo', sans-serif;
-  font-weight:900;
-}
-
-h3,h4,h6{
-  font-family: 'Heebo', sans-serif;
-  font-weight:500;
-}
-
-a:hover{
-  text-decoration: none;
-}
-
-  </style>
+  
   <body>
     
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
@@ -78,7 +34,7 @@ a:hover{
         <ul class="navbar-nav">
           <!--<li class="nav-item">
             <a class="nav-link" href="{% url 'home:home' %}">Accueil <span class="sr-only">(current)</span></a>
-          </li> -->
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'student:list' %}">Étudiant·e·s</a>
           </li>
@@ -98,6 +54,45 @@ a:hover{
             <ul class="dropdown-menu" role="menu">
               <li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li>
               <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
+            </ul>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home:home' %}">News</a>
+          </li>
+          <li class="nav-item d-none">
+            <a class="nav-link" href="#">Campagnes</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Clubs & Assos
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a class="dropdown-item disabled" href="#">Bureau des Éŀèves (BDE)</a></li>
+              <li><a class="dropdown-item disabled" href="#">Bureau des Arts (BDA)</a></li>
+              <li><a class="dropdown-item disabled" href="#">Bureau des Sports (BDS)</a></li>
+              <li><a class="dropdown-item" href="{% url 'group:club-list' %}">Tous les clubs & assos</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Annuaire
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
+              <li><a class="dropdown-item" href="{% url 'group:liste-list' %}">Listes BDX</a></li>
+              <li><a class="dropdown-item disabled" href="#">Options disciplinaires</a></li>
+              <li><a class="dropdown-item disabled" href="#">Contacts utiles</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Services
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <!--li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li-->
+              <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
+              <li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
+              <li><a class="dropdown-item disabled" href="#">Bourse aux Colocs</a></li>
             </ul>
           </li>
         </ul>

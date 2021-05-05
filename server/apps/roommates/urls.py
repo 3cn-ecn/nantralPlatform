@@ -7,5 +7,7 @@ app_name = 'roommates'
 
 urlpatterns = [
     path('housing/<int:pk>', HousingDetailView.as_view(), name='housing-view'),
-    path('housing/', HousingMap.as_view(), name='housing-map'),
+    path('housing/create', CreateHousingView.as_view(), name='create-new'),
+    path('housing/<int:pk>/edit', EditHosuingView.as_view(), name='edit-housing'),
+    path('housing/', HousingMap.as_view(), name='housing-map')
 ]

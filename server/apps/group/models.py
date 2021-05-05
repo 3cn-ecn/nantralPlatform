@@ -78,8 +78,6 @@ class Group(models.Model):
     def get_absolute_url(self):
         return reverse('group:detail', kwargs={'group_slug': self.slug})
 
-# Clubs
-
 
 class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
@@ -112,8 +110,6 @@ class NamedMembershipClub(models.Model):
 
     class Meta:
         unique_together = ('function', 'year', 'student', 'club')
-
-# Listes
 
 
 TYPE_LISTE = [
