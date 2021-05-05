@@ -9,8 +9,8 @@
 {%for roommate in Roommates%}
     <h2>{{roommate.name}}</h2>
     {{roommate.members.all | length}}
-        {%for member in roommate.members.all%}
-            <p>{{member.student.firs_name}}</p>
+        {%for member in roommate.members_set.all%}
+            <p>{{member.nickname}}</p>
         {%endfor%}
 {%endfor%}
 

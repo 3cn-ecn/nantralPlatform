@@ -28,6 +28,8 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
         context['Roommates'] = Roommates.objects.filter( housing = self.object.pk)
         
         return context
+
+        
 class CreateHousingView(LoginRequiredMixin, TemplateView):
     template_name = 'roommates/housing/create.html'
 
