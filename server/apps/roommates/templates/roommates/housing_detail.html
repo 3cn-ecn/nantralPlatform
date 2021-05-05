@@ -4,6 +4,15 @@
 
 <h1>Coucou, la page n'a pas d'erreur.</h1>
 
-<p>{{Housing.adress}}</p>
+<p>{{object.adress}}</p>
+
+{%for roommate in Roommates%}
+    <h2>{{roommate.name}}</h2>
+    {{roommate.members.all | length}}
+        {%for member in roommate.members.all%}
+            <p>{{member}}</p>
+        {%endfor%}
+{%endfor%}
+
 
 {% endblock %}

@@ -6,6 +6,6 @@ from .views import *
 app_name = 'roommates'
 
 urlpatterns = [
+    path('housing/<int:pk>', HousingDetailView.as_view(), name='housing-view'),
     path('housing/', HousingMap.as_view(), name='housing-map'),
-    path('detail/<int:housing_id>', HousingDetailView.as_view(), name='housing-view'), 
 ]
