@@ -28,6 +28,7 @@
 <script>
   const MAPBOX_TOKEN = "{{MAPBOX_API_KEY}}";
   const api_housing_url = "{% url 'roommates_api:housing' %}";
+	const api_housing_roommates_url = "{% url 'roommates_api:housing-roommates' pk=1 %}";
 </script>
 <script src='{% static "js/housingMap.js" %}'></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>

@@ -21,7 +21,7 @@ class CreateHousingView(LoginRequiredMixin, TemplateView):
     template_name = 'roommates/housing/create.html'
 
 
-class EditHosuingView(LoginRequiredMixin, UpdateView):
+class EditHousingView(LoginRequiredMixin, UpdateView):
     template_name = 'roommates/housing/edit.html'
     model = Housing
     fields = ['details']
