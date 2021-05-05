@@ -2,6 +2,7 @@
 import { Component, PureComponent, useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import MapGL, { Marker, GeolocateControl, Popup } from "react-map-gl";
+import { Button } from "react-bootstrap";
 
 const geolocateStyle = {
   top: 0,
@@ -15,24 +16,36 @@ const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,
   C20.1,15.8,20.2,15.8,20.2,15.7z`;
 
 function CityInfo(props): JSX.Element {
+  const roommates = props.roommates;
+  let roommatesList: string = "";
+  for (let roommate of roommates.admins.concat(roommates.members)) {
+    roommatesList += roommate + ", ";
+  }
+  roommatesList = roommatesList.replace(/(,\s*)$/, "");
   return (
     <div>
       <div>
         <p>
-					<strong>Nom de la coloc ici</strong>
+          <strong>{roommates.name}</strong>
           &nbsp;-&nbsp;
-          <a
-            target="_new"
-            href={`https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${props.housing.address}`}
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() =>
+              window.open(
+                `https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${roommates.housing.address}`
+              )
+            }
           >
             Y aller
-          </a>
-					<br/>
-					Membres ici
-					<br/>
-					{props.housing.address}
-					<br/>
-					<i>{props.housing.details}</i>
+          </Button>
+          <br />
+          {roommates.housing.address}
+          <br />
+          {roommatesList}
+          <br />
+          <br />
+          <i>{roommates.housing.details}</i>
         </p>
       </div>
     </div>
@@ -70,25 +83,28 @@ function Root(props): JSX.Element {
       .then((data) => {
         // Only rerender markers if props.data has changed
         setMarkers(
-          data.map((housing) => (
+          data.map((roommates) => (
             <Marker
-              key={housing.address}
-              longitude={housing.longitude}
-              latitude={housing.latitude}
+              key={roommates.housing.address}
+              longitude={roommates.housing.longitude}
+              latitude={roommates.housing.latitude}
             >
               <CityPin
                 size={20}
                 onClick={() =>
                   setPopUpinfo(
                     <Popup
-                      tipSize={20}
+                      tipSize={10}
                       anchor="bottom"
-                      longitude={housing.longitude}
-                      latitude={housing.latitude}
+                      longitude={roommates.housing.longitude}
+                      latitude={roommates.housing.latitude}
                       closeOnClick={false}
                       onClose={() => setPopUpinfo(null)}
+                      dynamicPosition={false}
+                      offsetTop={-10}
+                      offsetLeft={10}
                     >
-                      <CityInfo housing={housing} />
+                      <CityInfo roommates={roommates} />
                     </Popup>
                   )
                 }
