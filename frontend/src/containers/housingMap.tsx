@@ -1,22 +1,58 @@
 ﻿import * as React from "react";
 import { Component, PureComponent, useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import MapGL, { Marker, GeolocateControl} from "react-map-gl";
-
+import MapGL, { Marker, GeolocateControl, Popup } from "react-map-gl";
+import { Button } from "react-bootstrap";
 
 const geolocateStyle = {
   top: 0,
   left: 0,
-  margin: 10
+  margin: 10,
 };
-const positionOptions = {enableHighAccuracy: true};
-
+const positionOptions = { enableHighAccuracy: true };
 
 const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
   c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
   C20.1,15.8,20.2,15.8,20.2,15.7z`;
 
-function CityPin(props) {
+function CityInfo(props): JSX.Element {
+  const roommates = props.roommates;
+  let roommatesList: string = "";
+  for (let roommate of roommates.admins.concat(roommates.members)) {
+    roommatesList += roommate + ", ";
+  }
+  roommatesList = roommatesList.replace(/(,\s*)$/, "");
+  return (
+    <div>
+      <div>
+        <p>
+          <strong>{roommates.name}</strong>
+          &nbsp;-&nbsp;
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() =>
+              window.open(
+                `https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${roommates.housing.address}`
+              )
+            }
+          >
+            Y aller
+          </Button>
+          <br />
+          {roommates.housing.address}
+          <br />
+          {roommatesList}
+          <br />
+          <br />
+          <i>{roommates.housing.details}</i>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function CityPin(props): JSX.Element {
   const { size = 20, onClick } = props;
   return (
     <svg height={size} viewBox="0 0 24 24" fill="#c20000" onClick={onClick}>
@@ -27,16 +63,17 @@ function CityPin(props) {
 
 function Root(props): JSX.Element {
   const [markers, setMarkers] = useState([]);
-  const [viewport, setViewport] = useState({
+  // Add an object here
+  const [map, setMap] = useState({
     latitude: 47.21784689284845,
     longitude: -1.5586376015280996,
     zoom: 12,
     bearing: 0,
     pitch: 0,
   });
+  const [popupInfo, setPopUpinfo] = useState(null);
 
   useEffect(() => {
-    // Simple GET request with a JSON body using fetch
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -46,15 +83,31 @@ function Root(props): JSX.Element {
       .then((data) => {
         // Only rerender markers if props.data has changed
         setMarkers(
-          data.map((housing) => (
+          data.map((roommates) => (
             <Marker
-              key={housing.adress}
-              longitude={housing.longitude}
-              latitude={housing.latitude}
+              key={roommates.housing.address}
+              longitude={roommates.housing.longitude}
+              latitude={roommates.housing.latitude}
             >
               <CityPin
                 size={20}
-                //onClick={() => this.setState({ popupInfo: "test" })}
+                onClick={() =>
+                  setPopUpinfo(
+                    <Popup
+                      tipSize={10}
+                      anchor="bottom"
+                      longitude={roommates.housing.longitude}
+                      latitude={roommates.housing.latitude}
+                      closeOnClick={false}
+                      onClose={() => setPopUpinfo(null)}
+                      dynamicPosition={false}
+                      offsetTop={-10}
+                      offsetLeft={10}
+                    >
+                      <CityInfo roommates={roommates} />
+                    </Popup>
+                  )
+                }
               />
             </Marker>
           ))
@@ -64,14 +117,15 @@ function Root(props): JSX.Element {
 
   return (
     <MapGL
-      {...viewport}
+      {...map}
       width="70vw"
       height="60vh"
       mapStyle="mapbox://styles/mapbox/bright-v9"
-      onViewportChange={setViewport}
+      onViewportChange={setMap}
       mapboxApiAccessToken={props.api_key}
     >
       {markers}
+      {popupInfo}
       <GeolocateControl
         style={geolocateStyle}
         positionOptions={positionOptions}
@@ -83,4 +137,7 @@ function Root(props): JSX.Element {
 }
 
 document.body.style.margin = "0";
-render(<Root api_key={MAPBOX_TOKEN} api_housing_url={api_housing_url} />, document.getElementById("root"));
+render(
+  <Root api_key={MAPBOX_TOKEN} api_housing_url={api_housing_url} />,
+  document.getElementById("root")
+);

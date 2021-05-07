@@ -8,6 +8,14 @@ class HousingSerializer(serializers.ModelSerializer):
         model = Housing
         fields = '__all__'
 
+class RoommatesHousingSerializer(serializers.ModelSerializer):
+		housing = HousingSerializer(read_only=True)
+		admins = serializers.StringRelatedField(many=True)
+		members = serializers.StringRelatedField(many=True)
+
+		class Meta:
+				model = Roommates
+				fields = '__all__'
 
 class RoommatesMemberSerializer(serializers.ModelSerializer):
     class Meta:

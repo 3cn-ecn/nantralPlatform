@@ -11,5 +11,6 @@ urlpatterns = [
          RoommatesGroupView.as_view(), name='housing-roommates'),
     path('roommates/<int:pk>/members',
          RoommatesMembersView.as_view(), name='roommates-member'),
-    path('geocoding/', SearchGeocodingView.as_view(), name='geocoding')
+    path('geocoding/', SearchGeocodingView.as_view(), name='geocoding'),
+		path('housing/roommates', HousingRoommates.as_view(), name='housing-and-roommates')
 ]
