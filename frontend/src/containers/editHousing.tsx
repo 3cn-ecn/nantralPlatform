@@ -18,7 +18,11 @@ function EditHousing(props){
     function createRoommates(){
         axios.post(props.roommates_api_url,{
             'name': currentColocName,
-            'start': currentColocStart
+            'begin_date': currentColocStart
+        })
+        .then(() => {
+            getRoommates();
+            updateShowModal(!showModal);
         })
     }
     function getStudents(search: string){
@@ -50,7 +54,7 @@ function EditHousing(props){
                     </Card>
                 ))}
                 </div>}
-                <Button onClick={() =>updateShowModal(!showModal)}>Ajouter une nouvelle coloc ?</Button>
+                <Button onClick={() => updateShowModal(!showModal)}>Ajouter une nouvelle coloc ?</Button>
             <Modal show={showModal}>
                 <Form>
 
@@ -60,11 +64,11 @@ function EditHousing(props){
                     <Form>
                         <Form.Group controlId="name">
                             <Form.Label>Nom de votre coloc:</Form.Label>
-                            <Form.Control type="text" onInput={(event) => {updateCurrentColocName(event.target.value)}} placeholder="10 Rue de la Bléterie" />
+                            <Form.Control type="text" onInput={(event) => {updateCurrentColocName(event.target.value)}} placeholder="Le Terminal" />
                         </Form.Group>
                         <Form.Group controlId="name">
                             <Form.Label>Date d'emenagement:</Form.Label>
-                            <Form.Control type="date" onInput={(event) => {updateCurrentColocStart(event.target.value)}} placeholder="10 Rue de la Bléterie" />
+                            <Form.Control type="date" onInput={(event) => {updateCurrentColocStart(event.target.value)}} />
                         </Form.Group>
                     </Form>
                     <Button onClick={() => updateShowModal(!showModal)} variant="secondary">Fermer</Button>

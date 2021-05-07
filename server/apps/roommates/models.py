@@ -26,10 +26,10 @@ class Housing(models.Model):
 
 class Roommates(Group):
     begin_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
     housing = models.ForeignKey(to=Housing, on_delete=models.CASCADE)
     members = models.ManyToManyField(
-        to=Student, through='NamedMembershipRoommates')
+        to=Student, through='NamedMembershipRoommates', blank=True)
 
     class Meta:
         verbose_name_plural = "Roommates"
@@ -42,4 +42,5 @@ class Roommates(Group):
 class NamedMembershipRoommates(models.Model):
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
     roommates = models.ForeignKey(to=Roommates, on_delete=models.CASCADE)
-    nickname = models.CharField(max_length=100, verbose_name='Surnom')
+    nickname = models.CharField(
+        max_length=100, verbose_name='Surnom', blank=True, null=True)

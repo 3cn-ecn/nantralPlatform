@@ -44,8 +44,11 @@ class RoommatesGroupView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Roommates.objects.filter(housing=self.kwargs['pk'])
-    
+
     def create(self, request, *args, **kwargs):
+        housing = generics.get_object_or_404(Housing, pk=self.kwargs['pk'])
+        request.data['housing'] = housing.pk
+        print(request.data)
         return super().create(request, *args, **kwargs)
 
 
