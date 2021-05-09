@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import ReactDOM, { render } from "react-dom";
-import {Form,  Button} from 'react-bootstrap';
+import {Form,  Button, Modal} from 'react-bootstrap';
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -10,8 +10,9 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 function CreateHousing(props) {
   const [currentHousing, updateCurrentHousing] = useState({});
-  const [alreadyExists, updateAlreadyExists] = useState(null);
+  const [alreadyExists, updateAlreadyExists] = useState('');
   const [suggestions, updateSuggestions] = useState([]);
+  const [showModal, updateShowModal] = useState(false);
   function getSuggestions(search: string) {
     if (search.length > 5) {
       fetch(`/api/roommates/geocoding/?search_string=${encodeURI(search)}`)
@@ -40,7 +41,10 @@ function CreateHousing(props) {
   }
   function submitHousing(){
     axios.post(props.api_url, currentHousing)
-    .then()
+    .then((resp)=> {
+      updateAlreadyExists(resp.data['edit_url']);
+      updateShowModal(true);
+    });
   }
 
   return (
@@ -59,8 +63,8 @@ function CreateHousing(props) {
           </Form>
           {currentHousing['address'] != null &&  
           <div>
-            {alreadyExists != null && <p>
-              Cette habitation semble déjà exister, vous pouvez la retrouver <a href="">ici</a>.</p>}
+            {alreadyExists != '' && <p>
+              Cette habitation semble déjà exister, vous pouvez la retrouver <a href={alreadyExists}>ici</a>.</p>}
             <Form>
             <h1>{currentHousing['address']}</h1>
             <Form.Group controlId="details">
@@ -71,6 +75,15 @@ function CreateHousing(props) {
           <Button onClick={() => {submitHousing()}}>
             Créer le bâti
           </Button>
+          <Modal show={showModal}>
+            <Modal.Header>
+              <p>L'habitation a été enregistré!</p>
+            </Modal.Header>
+            <Modal.Footer>
+                    <Button href={props.map_url} variant="secondary">Voir sur la carte</Button>
+                    <Button href={alreadyExists} variant="success">Ajouter les habitants</Button>
+            </Modal.Footer>
+            </Modal>
           </div>
           }
       </div>
@@ -79,4 +92,4 @@ function CreateHousing(props) {
 }
 
 document.body.style.margin = "0";
-render(<CreateHousing api_url={api_url} check_url ={check_url}/>, document.getElementById("root"));
+render(<CreateHousing api_url={api_url} check_url ={check_url} map_url={map_url}/>, document.getElementById("root"));
