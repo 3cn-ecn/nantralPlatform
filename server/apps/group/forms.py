@@ -1,5 +1,5 @@
 from django.forms import ModelForm, modelformset_factory
-from .models import NamedMembershipClub, Group, Club
+from .models import NamedMembershipClub, Group, Club, NamedMembershipList
 
 
 class NamedMembershipClubForm(ModelForm):
@@ -18,7 +18,7 @@ class NamedMembershipAddClub(ModelForm):
 class NamedMembershipAddListe(ModelForm):
     """Form for a club page to add one self to a liste."""
     class Meta:
-        model = NamedMembershipClub
+        model = NamedMembershipList
         fields = ['function']
 
 

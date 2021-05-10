@@ -112,7 +112,7 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         elif self.form_class == NamedMembershipAddListe:
             self.object.liste = Liste.objects.get(slug=self.kwargs['slug'])
         self.object.save()
-        return redirect('group:detail', self.object.club.slug)
+        return redirect('group:detail', self.kwargs['slug'])
 
     def get_form_class(self):
         group = Group.get_group_by_slug(self.kwargs['slug'])
