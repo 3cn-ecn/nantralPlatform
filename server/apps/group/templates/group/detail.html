@@ -63,7 +63,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         {% load crispy_forms_tags %}
-        <form method="post" action="{% url 'group:add-membership' object.id %}">
+        <form method="post" action="{% url 'group:add-member' object.slug %}">
             {% csrf_token %}
         
         <div class="modal-header">

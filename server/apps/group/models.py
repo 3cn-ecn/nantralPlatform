@@ -51,6 +51,8 @@ class Group(models.Model):
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
+        if user.is_anonymous or not user.is_authenticated:
+            return False
         if not user.student:
             return False
         student = Student.objects.filter(user=user).first()
@@ -78,8 +80,6 @@ class Group(models.Model):
     def get_absolute_url(self):
         return reverse('group:detail', kwargs={'group_slug': self.slug})
 
-# Clubs
-
 
 class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
@@ -92,15 +92,6 @@ class Club(Group):
         self.slug = f'club--{slugify(self.name)}'
         super(Club, self).save(*args, **kwargs)
 
-    def is_member(self, user: User) -> bool:
-        """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated:
-            return False
-        if not user.student:
-            return False
-        student = Student.objects.filter(user=user).first()
-        return NamedMembershipClub.objects.filter(student=student).count() > 0
-
 
 class NamedMembershipClub(models.Model):
     function = models.CharField(
@@ -112,8 +103,6 @@ class NamedMembershipClub(models.Model):
 
     class Meta:
         unique_together = ('function', 'year', 'student', 'club')
-
-# Listes
 
 
 TYPE_LISTE = [
@@ -135,15 +124,6 @@ class Liste(Group):
     def save(self, *args, **kwargs):
         self.slug = f'liste--{slugify(self.name)}'
         super(Liste, self).save(*args, **kwargs)
-
-    def is_member(self, user: User) -> bool:
-        """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated:
-            return False
-        if not user.student:
-            return False
-        student = Student.objects.filter(user=user).first()
-        return NamedMembershipList.objects.filter(student=student).count() > 0
 
 
 class NamedMembershipList(models.Model):
