@@ -1,9 +1,10 @@
 from datetime import date, timedelta
+from django.http.request import HttpRequest
 
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, View, FormView, TemplateView
 from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
-from .forms import NamedMembershipClubFormset, NamedMembershipAdd, UpdateClubForm
+from .forms import NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -82,9 +83,10 @@ class DetailGroupView(TemplateView):
         context['object'] = self.object
         if isinstance(context['object'], Club):
             members = NamedMembershipClub.objects.filter(club=self.object)
-            context['form'] = NamedMembershipAdd()
+            context['form'] = NamedMembershipAddClub()
         elif isinstance(context['object'], Liste):
             members = NamedMembershipList.objects.filter(liste=self.object)
+            context['form'] = NamedMembershipAddListe()
         else:
             members = self.object.members
         context['members'] = members
@@ -99,25 +101,27 @@ class DetailGroupView(TemplateView):
         return context
 
 
-class AddToClubView(LoginRequiredMixin, FormView):
-    form_class = NamedMembershipAdd
+class AddToGroupView(LoginRequiredMixin, FormView):
     raise_exception = True
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.student = self.request.user.student
-        self.object.club = Club.objects.get(id=self.kwargs['club_id'])
+        if self.form_class == NamedMembershipAddClub:
+            self.object.club = Club.objects.get(slug=self.kwargs['slug'])
+        elif self.form_class == NamedMembershipAddListe:
+            self.object.liste = Liste.objects.get(slug=self.kwargs['slug'])
         self.object.save()
         return redirect('group:detail', self.object.club.slug)
 
-
-@ login_required
-def add_member(request, group_slug, student_id):
-    """Add a user to a club"""
-    group = Group.get_group_by_slug(group_slug)
-    student = Student.objects.get(id=student_id)
-    if isinstance(Club, group):
-        NamedMembershipClub.objects.create(student=student, club=group)
+    def get_form_class(self):
+        group = Group.get_group_by_slug(self.kwargs['slug'])
+        if isinstance(group, Club):
+            self.form_class = NamedMembershipAddClub
+            return NamedMembershipAddClub
+        if isinstance(group, Liste):
+            self.form_class = NamedMembershipAddListe
+            return NamedMembershipAddListe
 
 
 @ require_http_methods(['POST'])

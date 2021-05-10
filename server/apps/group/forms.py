@@ -1,6 +1,6 @@
-from django.forms import forms, ModelForm, modelformset_factory
-from django import forms
+from django.forms import ModelForm, modelformset_factory
 from .models import NamedMembershipClub, Group, Club
+
 
 class NamedMembershipClubForm(ModelForm):
     class Meta:
@@ -8,16 +8,19 @@ class NamedMembershipClubForm(ModelForm):
         fields = ['function', 'year', 'student']
 
 
-class NamedMembershipStudentForm(ModelForm):
-    class Meta:
-        model = NamedMembershipClub
-        fields = ['function', 'year', 'club']
-
-
-class NamedMembershipAdd(ModelForm):
+class NamedMembershipAddClub(ModelForm):
+    """Form for a club page to add one self to a club."""
     class Meta:
         model = NamedMembershipClub
         fields = ['function', 'year']
+
+
+class NamedMembershipAddListe(ModelForm):
+    """Form for a club page to add one self to a liste."""
+    class Meta:
+        model = NamedMembershipClub
+        fields = ['function']
+
 
 class UpdateClubForm(ModelForm):
     class Meta:
