@@ -27,7 +27,7 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context= super().get_context_data(**kwargs)
         context['Roommates'] = Roommates.objects.filter( housing = self.object.pk).order_by('-end_date')
-
+        
         #On met les dates en français et au bon format.
         locale.setlocale(locale.LC_TIME,'')
         for roommate in context['Roommates']:
