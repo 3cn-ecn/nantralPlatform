@@ -8,10 +8,14 @@
 
 {%for roommate in Roommates%}
     <h2>{{roommate.name}}</h2>
+    <p>{{roommate.description}}</p>
+    <p>Du {{roommate.begin_date}} au {{roommate.end_date}}</p>
     {{roommate.members.all | length}}
-        {%for member in roommate.members_set.all%}
-            <p>{{member.nickname}}</p>
-        {%endfor%}
+
+   {% for member in roommate.members.all %}
+        <p>Un membre</p>
+        <p>{{member.first_name}} {{member.last_name}} {{member.nickname}}</p>
+    {%endfor%}
 {%endfor%}
 
 
