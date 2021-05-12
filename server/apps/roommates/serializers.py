@@ -28,7 +28,7 @@ class RoommatesHousingSerializer(serializers.ModelSerializer):
 
 
 class RoommatesMemberSerializer(serializers.ModelSerializer):
-    student = StudentSerializer(read_only=True)
+    student = StudentSerializer()
 
     class Meta:
         model = NamedMembershipRoommates
@@ -36,12 +36,15 @@ class RoommatesMemberSerializer(serializers.ModelSerializer):
 
 
 class RoommatesGroupSerializer(serializers.ModelSerializer):
-    members = RoommatesMemberSerializer(
-        many=True, allow_null=True)
+    members = serializers.SerializerMethodField()
 
     class Meta:
         model = Roommates
         fields = '__all__'
+
+    def get_members(self, obj):
+        members = NamedMembershipRoommates.objects.filter(roommates=obj.id)
+        return RoommatesMemberSerializer(members, many=True).data
 
     def create(self, validated_data):
         roommates = Roommates(
@@ -50,10 +53,10 @@ class RoommatesGroupSerializer(serializers.ModelSerializer):
             begin_date=validated_data['begin_date']
         )
         roommates.save()
-        for index, member in enumerate(self.members):
+        for member in self.members:
             NamedMembershipRoommates.objects.create(
                 student=Student.objects.get(id=member['student']),
                 roommates=roommates,
-                nickname=validated_data['members'][index]['nickname']
+                nickname=member['nickname']
             )
         return roommates

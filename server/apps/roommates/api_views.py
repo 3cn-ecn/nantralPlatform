@@ -4,9 +4,6 @@ from rest_framework.views import APIView
 
 from apps.roommates.serializers import HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer, RoommatesHousingSerializer
 from apps.roommates.models import Housing, NamedMembershipRoommates, Roommates
-
-from apps.student.serializers import StudentSerializer
-
 from apps.utils.geocoding import geocode
 
 from django.utils import timezone
@@ -70,18 +67,13 @@ class RoommatesGroupView(generics.ListCreateAPIView):
         housing = generics.get_object_or_404(Housing, pk=self.kwargs['pk'])
         request.data['housing'] = housing.pk
         serializer = self.get_serializer(data=request.data)
-        request.data['members'] = [] if not request.data['add_me'] else [
-            {
-                'nickname': request.data['nickname'],
-                'roommates': ''
-            }
-        ]
         # Due to the fact that the student field in the NamedMembershipRoommates Serializer
         # has to be read_only, the student id is passed as an attribute of the serializer
         # otherwise it would be cleaned out in the validated data.
         serializer.members = [] if not request.data['add_me'] else [
             {
-                'student': request.user.student.id
+                'student': request.user.student.id,
+                'nickname': request.data['nickname'],
             }
         ]
         serializer.is_valid(raise_exception=True)
@@ -96,4 +88,7 @@ class RoommatesMembersView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return NamedMembershipRoommates.objects.filter(roommates=self.kwargs['roommates'])
+        print(self.kwargs['pk'])
+        print(NamedMembershipRoommates.objects.filter(
+            roommates=self.kwargs['pk']).first())
+        return NamedMembershipRoommates.objects.filter(roommates=self.kwargs['pk'])
