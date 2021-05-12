@@ -9,33 +9,13 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 function EditHousing(props) {
   const [searchedStudents, updateSearchedStuents] = useState([]);
   const [roommates, updateRoommates] = useState([]);
-  const [showModalRommatesGroupNew, updateshowModalRommatesGroupNew] = useState(
-    false
-  );
-  const [showModalRommatesMember, updateShowModalRommatesMember] = useState(
-    false
-  );
-  const [currentColocName, updateCurrentColocName] = useState(null);
-  const [currentColocStart, updateCurrentColocStart] = useState(null);
-  const [currentColocAddMe, updateCurrentColocAddMe] = useState(false);
-  const [currentColocNickName, updateCurrentColocNickName] = useState(null);
+  const [selectedRoommatesGroup, selectRoommatesGroup] = useState(null);
+  const [showModalRommatesMember, updateShowModalRommatesMember] =
+    useState(false);
   const [currentMembers, updateCurrentMembers] = useState([]);
   useEffect(() => {
     getRoommates();
   }, []);
-  function createRoommates() {
-    axios
-      .post(props.roommates_api_url, {
-        name: currentColocName,
-        begin_date: currentColocStart,
-        add_me: currentColocAddMe,
-        nickname: currentColocNickName,
-      })
-      .then(() => {
-        getRoommates();
-        updateshowModalRommatesGroupNew(!showModalRommatesGroupNew);
-      });
-  }
   function getStudents(search: string) {
     fetch(`${props.student_url}?search=${search}`).then((resp) =>
       resp.json().then((students) => {
@@ -43,17 +23,17 @@ function EditHousing(props) {
       })
     );
   }
-  function getRoommates() {
+  const getRoommates = () => {
     fetch(props.roommates_api_url).then((resp) =>
       resp.json().then((roommatesGroups) => {
         console.log(roommatesGroups);
         updateRoommates(roommatesGroups);
       })
     );
-  }
+  };
   return (
     <div>
-      <h2>Qui est passé par là:</h2>
+      <h2>Les colocs qui sont passées par là:</h2>
       {roommates.length > 0 && (
         <div>
           {roommates.map((roommateGroup) => (
@@ -72,6 +52,66 @@ function EditHousing(props) {
           ))}
         </div>
       )}
+      <AddRoommatesGroup
+        cb={getRoommates}
+        roommates_api_url={props.roommates_api_url}
+      ></AddRoommatesGroup>
+      <Modal show={showModalRommatesMember}>
+        <Modal.Header>{selectedRoommatesGroup}</Modal.Header>
+        <Modal.Body>
+          {currentMembers.length > 0 &&
+            currentMembers.map((member) => (
+              <p>{member["student"]["first_name"]}</p>
+            ))}
+          <Form>
+            <Form.Group controlId="name">
+              <Form.Label>Ajouter quelqu'un:</Form.Label>
+              <Form.Control
+                type="text"
+                onInput={(event) => {
+                  getStudents(event.target.value);
+                }}
+                placeholder="Jean"
+              />
+              {searchedStudents.length > 0 &&
+                searchedStudents.map((suggestion) => (
+                  <div>
+                    <Button onClick={() => selectStudent(suggestion)}>
+                      {suggestion.first_name} {suggestion.last_name}
+                    </Button>
+                    <br />
+                  </div>
+                ))}
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+      </Modal>
+    </div>
+  );
+}
+
+function AddRoommatesGroup(props) {
+  const [currentColocName, updateCurrentColocName] = useState(null);
+  const [currentColocStart, updateCurrentColocStart] = useState(null);
+  const [currentColocAddMe, updateCurrentColocAddMe] = useState(false);
+  const [currentColocNickName, updateCurrentColocNickName] = useState(null);
+  const [showModalRommatesGroupNew, updateshowModalRommatesGroupNew] =
+    useState(false);
+  function createRoommates() {
+    axios
+      .post(props.roommates_api_url, {
+        name: currentColocName,
+        begin_date: currentColocStart,
+        add_me: currentColocAddMe,
+        nickname: currentColocNickName,
+      })
+      .then(() => {
+        props.cb();
+        updateshowModalRommatesGroupNew(!showModalRommatesGroupNew);
+      });
+  }
+  return (
+    <div>
       <Button
         onClick={() =>
           updateshowModalRommatesGroupNew(!showModalRommatesGroupNew)
@@ -147,36 +187,6 @@ function EditHousing(props) {
             Enregistrer
           </Button>
         </Modal.Footer>
-      </Modal>
-      <Modal show={showModalRommatesMember}>
-        <Modal.Header>{currentColocName}</Modal.Header>
-        <Modal.Body>
-          {currentMembers.length > 0 &&
-            currentMembers.map((member) => (
-              <p>{member["student"]["first_name"]}</p>
-            ))}
-          <Form>
-            <Form.Group controlId="name">
-              <Form.Label>Ajouter quelqu'un:</Form.Label>
-              <Form.Control
-                type="text"
-                onInput={(event) => {
-                  getStudents(event.target.value);
-                }}
-                placeholder="Jean"
-              />
-              {searchedStudents.length > 0 &&
-                searchedStudents.map((suggestion) => (
-                  <div>
-                    <Button onClick={() => selectStudent(suggestion)}>
-                      {suggestion.first_name} {suggestion.last_name}
-                    </Button>
-                    <br />
-                  </div>
-                ))}
-            </Form.Group>
-          </Form>
-        </Modal.Body>
       </Modal>
     </div>
   );
