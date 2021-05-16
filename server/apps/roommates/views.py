@@ -1,7 +1,9 @@
 from typing import Any, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, UpdateView
+from apps.roommates.models import Housing, Roommates
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView, UpdateView, DetailView
 
 from django.conf import settings
 
@@ -17,6 +19,17 @@ class HousingMap(LoginRequiredMixin, TemplateView):
         return context
 
 
+class HousingDetailView(LoginRequiredMixin, DetailView):
+    template_name = 'roommates/housing_detail.html'
+    model = Housing
+
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        context['Roommates'] = Roommates.objects.filter( housing = self.object.pk)
+        
+        return context
+
+        
 class CreateHousingView(LoginRequiredMixin, TemplateView):
     template_name = 'roommates/housing/create.html'
 

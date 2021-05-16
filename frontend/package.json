@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Frontend of the nantral platform with react",
   "main": "index.js",
-  "mode": "development",
+  "mode": "production",
   "scripts": {
-    "start": "./node_modules/.bin/webpack --config webpack.config.js",
-		"dev": "./node_modules/.bin/webpack --config webpack.config.js --mode=development",
+    "start": "./node_modules/.bin/webpack --config webpack.config/webpack.prod.js",
+    "dev": "./node_modules/.bin/webpack --config webpack.config/webpack.dev.js",
     "watch": "npm run dev -- --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,7 +26,8 @@
     "babel-register": "^6.26.0",
     "webpack": "^4.41.5",
     "webpack-bundle-tracker": "^0.4.3",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-merge": "^5.7.3"
   },
   "dependencies": {
     "axios": "^0.21.1",

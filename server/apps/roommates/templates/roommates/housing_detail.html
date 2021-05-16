@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Coucou, la page n'a pas d'erreur.</h1>
+
+<p>{{object.address}}</p>
+
+{%for roommate in Roommates%}
+    <h2>{{roommate.name}}</h2>
+    {{roommate.members.all | length}}
+        {%for member in roommate.members_set.all%}
+            <p>{{member.nickname}}</p>
+        {%endfor%}
+{%endfor%}
+
+
+{% endblock %}
