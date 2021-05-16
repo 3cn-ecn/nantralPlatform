@@ -118,8 +118,8 @@ function Root(props): JSX.Element {
   return (
     <MapGL
       {...map}
-      width="70vw"
-      height="60vh"
+      width="100vw"
+      height="80vh"
       mapStyle="mapbox://styles/mapbox/bright-v9"
       onViewportChange={setMap}
       mapboxApiAccessToken={props.api_key}
