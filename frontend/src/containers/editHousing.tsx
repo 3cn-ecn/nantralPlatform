@@ -1,35 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReactDOM, { render } from "react-dom";
-import { Button, Card, Modal, Form } from "react-bootstrap";
+import { Button, Card, Modal, Form, Row, Col } from "react-bootstrap";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
 function EditHousing(props) {
-  const [searchedStudents, updateSearchedStuents] = useState([]);
   const [roommates, updateRoommates] = useState([]);
-  const [selectedRoommatesGroup, selectRoommatesGroup] = useState(null);
-  const [showModalRommatesMember, updateShowModalRommatesMember] =
-    useState(false);
-  const [currentMembers, updateCurrentMembers] = useState([]);
+  const [selectedGroup, updateSelectedGroup] = useState(null);
   useEffect(() => {
     getRoommates();
   }, []);
-  function getStudents(search: string) {
-    fetch(`${props.student_url}?search=${search}`).then((resp) =>
-      resp.json().then((students) => {
-        updateSearchedStuents(searchedStudents);
-      })
-    );
-  }
   const getRoommates = () => {
     fetch(props.roommates_api_url).then((resp) =>
       resp.json().then((roommatesGroups) => {
-        console.log(roommatesGroups);
         updateRoommates(roommatesGroups);
       })
     );
+  };
+  const selectGroup = (group) => {
+    console.log(group);
+    updateSelectedGroup(group);
+  };
+  const deleteGroup = (group) => {
+    axios.delete(group["edit_api_url"]).then((resp) => {
+      getRoommates();
+    });
   };
   return (
     <div>
@@ -40,52 +37,190 @@ function EditHousing(props) {
             <Card>
               <Card.Header>{roommateGroup["name"]}</Card.Header>
               <Card.Body>
-                {roommateGroup["members"].map((member) => (
-                  <p>
-                    {member["student"]["first_name"]}{" "}
-                    {member["student"]["last_name"]}{" "}
-                    {member["student"]["last_name"]} alias {member["nickname"]}
-                  </p>
-                ))}
+                <Row>
+                  <Col md="10" xs="12">
+                    {roommateGroup["members"].map((member) => (
+                      <p>
+                        {member["student"]["first_name"]}{" "}
+                        {member["student"]["last_name"]}
+                      </p>
+                    ))}
+                  </Col>
+                  <Col md="1" xs="12">
+                    <Button onClick={() => selectGroup(roommateGroup)}>
+                      Editer ce groupe
+                    </Button>
+                    <Button
+                      onClick={() => deleteGroup(roommateGroup)}
+                      variant="danger"
+                    >
+                      Del
+                    </Button>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           ))}
         </div>
       )}
+      <EditRoommatesGroup
+        cb={getRoommates}
+        selectedGroup={selectedGroup}
+        student_url={props.student_url}
+        close={() => {
+          selectGroup(null);
+        }}
+      ></EditRoommatesGroup>
       <AddRoommatesGroup
         cb={getRoommates}
         roommates_api_url={props.roommates_api_url}
       ></AddRoommatesGroup>
-      <Modal show={showModalRommatesMember}>
-        <Modal.Header>{selectedRoommatesGroup}</Modal.Header>
-        <Modal.Body>
-          {currentMembers.length > 0 &&
-            currentMembers.map((member) => (
-              <p>{member["student"]["first_name"]}</p>
-            ))}
-          <Form>
-            <Form.Group controlId="name">
-              <Form.Label>Ajouter quelqu'un:</Form.Label>
-              <Form.Control
-                type="text"
-                onInput={(event) => {
-                  getStudents(event.target.value);
-                }}
-                placeholder="Jean"
-              />
-              {searchedStudents.length > 0 &&
-                searchedStudents.map((suggestion) => (
-                  <div>
-                    <Button onClick={() => selectStudent(suggestion)}>
-                      {suggestion.first_name} {suggestion.last_name}
-                    </Button>
-                    <br />
-                  </div>
+    </div>
+  );
+}
+
+function EditRoommatesGroup(props) {
+  const [selectedRoommatesGroup, selectRoommatesGroup] = useState(null);
+  const [searchedStudents, updateSearchedStuents] = useState([]);
+  const [changedMemberNickname, updateChangedMemberNickname] = useState({});
+  function getStudents(search: string) {
+    if (search.length > 1) {
+      fetch(`${props.student_url}?search=${search}`).then((resp) =>
+        resp.json().then((students) => {
+          console.log(students);
+          updateSearchedStuents(students);
+        })
+      );
+    } else {
+      updateSearchedStuents([]);
+    }
+  }
+  function selectStudent(student) {
+    axios
+      .post(selectedRoommatesGroup["edit_members_api_url"], {
+        student: student["id"],
+      })
+      .then((resp) => {
+        props.cb();
+        selectRoommatesGroup(props.selectedGroup);
+        updateSearchedStuents([]);
+      });
+  }
+  function deleteMembership(url) {
+    axios.delete(url).then((resp) => {
+      props.cb();
+      selectRoommatesGroup(props.selectedGroup);
+    });
+  }
+
+  function editMembership(member) {
+    member["nickname"] = changedMemberNickname["nickname"];
+    axios.put(member["edit_api_url"], member).then(() => {
+      updateChangedMemberNickname({});
+    });
+  }
+  useEffect(() => {
+    console.log(props.selectedGroup);
+    selectRoommatesGroup(props.selectedGroup);
+  });
+
+  return (
+    <div>
+      {selectedRoommatesGroup != null && (
+        <Modal show={selectedRoommatesGroup != null}>
+          <Modal.Header>{selectedRoommatesGroup["name"]}</Modal.Header>
+          <Modal.Body>
+            {selectedRoommatesGroup.members.length > 0 && (
+              <div>
+                <Card.Header>
+                  <Row>
+                    <Col>Nom</Col>
+                    <Col>Prénom</Col>
+                    <Col>Surnom</Col>
+                    <Col></Col>
+                  </Row>
+                </Card.Header>
+                {selectedRoommatesGroup.members.map((member, index) => (
+                  <Card>
+                    <Row className="text-center">
+                      <Col>{member["student"]["first_name"]}</Col>
+                      <Col>{member["student"]["last_name"]}</Col>
+                      <Col>
+                        <Form>
+                          <Form.Group controlId="name">
+                            <Form.Control
+                              type="text"
+                              placeholder="Gordon"
+                              defaultValue={member["nickname"]}
+                              autoComplete="off"
+                              onChange={(event) => {
+                                updateChangedMemberNickname({
+                                  index: index,
+                                  nickname: event.target.value,
+                                });
+                              }}
+                            ></Form.Control>
+                            {changedMemberNickname != {} &&
+                              changedMemberNickname["index"] == index && (
+                                <Button
+                                  onClick={() => editMembership(member)}
+                                  variant="success"
+                                >
+                                  Ok
+                                </Button>
+                              )}
+                          </Form.Group>
+                        </Form>
+                      </Col>
+                      <Col>
+                        <Button
+                          variant="danger"
+                          onClick={() =>
+                            deleteMembership(member["edit_api_url"])
+                          }
+                        >
+                          Del
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card>
                 ))}
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-      </Modal>
+              </div>
+            )}
+            <Form>
+              <Form.Group controlId="name">
+                <Form.Label>Ajouter quelqu'un:</Form.Label>
+                <Form.Control
+                  type="text"
+                  onInput={(event) => {
+                    getStudents(event.target.value);
+                  }}
+                  placeholder="Jean"
+                  autoComplete="off"
+                />
+                {searchedStudents.length > 0 &&
+                  searchedStudents.map((suggestion) => (
+                    <div>
+                      <Button onClick={() => selectStudent(suggestion)}>
+                        {suggestion.first_name} {suggestion.last_name}
+                        {" P"}
+                        {suggestion.promo}
+                      </Button>
+                      <br />
+                    </div>
+                  ))}
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Button
+            onClick={() => {
+              props.close();
+            }}
+          >
+            Close
+          </Button>
+        </Modal>
+      )}
     </div>
   );
 }

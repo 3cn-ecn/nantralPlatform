@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 
 from apps.roommates.serializers import HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer, RoommatesHousingSerializer
 from apps.roommates.models import Housing, NamedMembershipRoommates, Roommates
+from apps.student.models import Student
 from apps.utils.geocoding import geocode
 
 from django.utils import timezone
@@ -66,7 +67,8 @@ class RoommatesGroupView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         housing = generics.get_object_or_404(Housing, pk=self.kwargs['pk'])
         request.data['housing'] = housing.pk
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(
+            data=request.data)
         # Due to the fact that the student field in the NamedMembershipRoommates Serializer
         # has to be read_only, the student id is passed as an attribute of the serializer
         # otherwise it would be cleaned out in the validated data.
@@ -88,7 +90,35 @@ class RoommatesMembersView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        print(self.kwargs['pk'])
-        print(NamedMembershipRoommates.objects.filter(
-            roommates=self.kwargs['pk']).first())
         return NamedMembershipRoommates.objects.filter(roommates=self.kwargs['pk'])
+
+    def create(self, request, *args, **kwargs):
+        group = generics.get_object_or_404(
+            Roommates, id=self.kwargs['pk'])
+        request.data['roommates'] = group.id
+        student = generics.get_object_or_404(
+            Student, id=request.data['student'])
+        serializer = self.get_serializer(data=request.data)
+        serializer.student = student
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class RoommatesGroupEditView(generics.RetrieveUpdateDestroyAPIView):
+    """API View to update or delete a roommates group."""
+    serializer_class = RoommatesGroupSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Roommates.objects.filter(id=self.kwargs['pk'])
+
+
+class RoommatesMemberView(generics.RetrieveUpdateDestroyAPIView):
+    """API View to get a specific membership and update or delete it."""
+    serializer_class = RoommatesMemberSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return NamedMembershipRoommates.objects.filter(id=self.kwargs['pk'])

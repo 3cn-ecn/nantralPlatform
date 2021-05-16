@@ -10,7 +10,12 @@ urlpatterns = [
     path('housing/<int:pk>/roommates',
          RoommatesGroupView.as_view(), name='housing-roommates'),
     path('roommates/<int:pk>/members',
-         RoommatesMembersView.as_view(), name='roommates-member'),
+         RoommatesMembersView.as_view(), name='roommates-members'),
+    path('roommates/<int:pk>',
+         RoommatesGroupEditView.as_view(), name='roommates-group-edit'),
+    path('roommates/membership/<int:pk>',
+         RoommatesMemberView.as_view(), name='roommates-member'),
     path('geocoding/', SearchGeocodingView.as_view(), name='geocoding'),
-		path('housing/roommates', HousingRoommates.as_view(), name='housing-and-roommates')
+    path('housing/roommates', HousingRoommates.as_view(),
+         name='housing-and-roommates')
 ]
