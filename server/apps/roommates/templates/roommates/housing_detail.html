@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<h1>Coucou, la page n'a pas d'erreur.</h1>
+<h1></h1>
 
 <p>Adresse: {{object.address}}</p>
     {%for roommate in Roommates%}
@@ -10,11 +10,10 @@
         <div style="text-align:center"><h2>{{roommate.name}}</h2></div>
         <p>{{roommate.description}}</p>
         <p>Du {{roommate.begin_date}} au {{roommate.end_date}}</p>
-        {{roommate.members.all | length}}
 
         <p>Liste des membres :</p>
-        {% for member in roommate.members.all %}    
-            <p>&emsp; {{member.first_name}} "{{member.nickname}}" {{member.last_name}} </p>
+        {% for member in roommates_groups[roommate.name]['members']%}    
+            <p>&emsp; {{member['first_name']}} "{{member['nickname']}}" {{member['last_name']}} </p>
         {%endfor%}
     </div>
     {%endfor%}
