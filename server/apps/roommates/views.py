@@ -28,24 +28,31 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
         context= super().get_context_data(**kwargs)
         context['Roommates'] = Roommates.objects.filter( housing = self.object.pk).order_by('-begin_date')
 
-        dict = {}
-        context['roommates_groups'] = Roommates.objects.filter(housing=self.object.pk)
-        for group in context['roommates_groups']:
-            dict[group.name] = {'name': group.name, 'begin': group.begin_date, 'end': group.end_date, 'members': []}
+        list_roommates = []
+        context['roommates_groups'] = Roommates.objects.filter(housing=self.object.pk).order_by('-begin_date')
+        for group in context['roommates_groups']: 
+            member_list=[]
             for member in NamedMembershipRoommates.objects.filter(roommates=group.id):
-                dict[group.name]['members'].append({
+                member_list.append({
                 'first_name': member.student.first_name,
                 'last_name' : member.student.last_name,
                 'nickname' : member.nickname,
                 })
-        context['roommates_groups'] = dict
+            list_roommates.append({'name': group.name, 'description' : group.description, 'begin_date': group.begin_date, 'end_date': group.end_date, 'members': member_list})
+        context['roommates_groups'] = list_roommates
+        
+        for roommate in context['roommates_groups']:
+            print(roommate['name'])
+            print(roommate['begin_date'])
+            for member in roommate['members']:
+                print(member['first_name'])
 
         #On met les dates en français et au bon format.
         locale.setlocale(locale.LC_TIME,'')
-        for roommate in context['Roommates']:
-            if roommate.end_date is not None:
-                roommate.end_date= roommate.end_date.strftime('%d/%m/%Y')
-            roommate.begin_date= roommate.begin_date.strftime('%d/%m/%Y')
+        for roommate in context['roommates_groups']:
+            if roommate['end_date'] is not None:
+                roommate['end_date']= roommate['end_date'].strftime('%d/%m/%Y')
+            roommate['begin_date']= roommate['begin_date'].strftime('%d/%m/%Y')
 
         return context
 
