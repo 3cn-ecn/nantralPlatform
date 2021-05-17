@@ -51,6 +51,8 @@ class Group(models.Model):
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
+        if user.is_anonymous or not user.is_authenticated:
+            return False
         if not user.student:
             return False
         student = Student.objects.filter(user=user).first()
@@ -90,15 +92,6 @@ class Club(Group):
         self.slug = f'club--{slugify(self.name)}'
         super(Club, self).save(*args, **kwargs)
 
-    def is_member(self, user: User) -> bool:
-        """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated:
-            return False
-        if not user.student:
-            return False
-        student = Student.objects.filter(user=user).first()
-        return NamedMembershipClub.objects.filter(student=student).count() > 0
-
 
 class NamedMembershipClub(models.Model):
     function = models.CharField(
@@ -131,15 +124,6 @@ class Liste(Group):
     def save(self, *args, **kwargs):
         self.slug = f'liste--{slugify(self.name)}'
         super(Liste, self).save(*args, **kwargs)
-
-    def is_member(self, user: User) -> bool:
-        """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated:
-            return False
-        if not user.student:
-            return False
-        student = Student.objects.filter(user=user).first()
-        return NamedMembershipList.objects.filter(student=student).count() > 0
 
 
 class NamedMembershipList(models.Model):

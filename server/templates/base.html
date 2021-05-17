@@ -30,19 +30,26 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse text-center" id="navbarText">
+      <div class="collapse navbar-collapse" id="navbarText">
         <ul class="navbar-nav">
-          <!--<li class="nav-item">
-            <a class="nav-link" href="{% url 'home:home' %}">Accueil <span class="sr-only">(current)</span></a>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home:home' %}">Actualités</a>
+          </li>
+          <li class="nav-item d-none">
+            <a class="nav-link" href="#">Campagnes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'student:list' %}">Étudiant·e·s</a>
+            <a class="nav-link" href="{% url 'group:club-list' %}">Clubs & Assos</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'group:club-list' %}">Clubs</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'group:liste-list' %}">Listes</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            BDX
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a class="dropdown-item" href="/group/group/club--bureau-des-eleves/">BDE</a></li>
+              <li><a class="dropdown-item" href="/group/group/club--bureau-des-arts/">BDA</a></li>
+              <li><a class="dropdown-item" href="/group/group/club--bureau-des-sports/">BDS</a></li>
+            </ul>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'roommates:housing-map' %}">Carte des colocs</a>
@@ -52,8 +59,21 @@
             Services
             </a>
             <ul class="dropdown-menu" role="menu">
-              <li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li>
+              <!--li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li-->
               <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
+              <li><a class="dropdown-item disabled" href="#">Carte des Colocs</a></li>
+              <li><a class="dropdown-item disabled" href="#">Bourse aux Colocs</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Annuaire
+            </a>
+            <ul class="dropdown-menu" role="menu">
+              <li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
+              <li><a class="dropdown-item" href="{% url 'group:liste-list' %}">Listes BDX</a></li>
+              <li><a class="dropdown-item disabled" href="#">Options disciplinaires</a></li>
+              <li><a class="dropdown-item disabled" href="#">Contacts & Liens</a></li>
             </ul>
           </li> -->
           <li class="nav-item">
