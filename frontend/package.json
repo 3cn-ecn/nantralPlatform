@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Frontend of the nantral platform with react",
   "main": "index.js",
-  "mode": "development",
+  "mode": "production",
   "scripts": {
-    "start": "./node_modules/.bin/webpack --config webpack.config.js",
-		"dev": "./node_modules/.bin/webpack --config webpack.config.js --mode=development",
+    "start": "./node_modules/.bin/webpack --config webpack.config/webpack.prod.js",
+    "dev": "./node_modules/.bin/webpack --config webpack.config/webpack.dev.js",
     "watch": "npm run dev -- --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +14,7 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.13.16",
+    "@babel/plugin-transform-runtime": "^7.14.2",
     "@babel/preset-env": "^7.13.15",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
@@ -26,9 +27,13 @@
     "babel-register": "^6.26.0",
     "webpack": "^4.41.5",
     "webpack-bundle-tracker": "^0.4.3",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-merge": "^5.7.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "axios": "^0.21.1",
     "bootstrap": "^4.5.0",
     "g": "^2.0.1",

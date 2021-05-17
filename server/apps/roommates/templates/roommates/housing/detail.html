@@ -2,9 +2,10 @@
 {% load static %}
 {% block content %}
 
-<h1></h1>
-
-<p>Adresse: {{object.address}}</p>
+<h1>Adresse: {{object.address}}</h1>
+    <a href="{% url 'roommates:edit-housing' object.id %}" class='btn-sm btn-success'>Modifier la coloc</a>
+</br>
+</br>
     {%for roommate in Roommates%}
     <div style="width: 300px; padding-top: 15px; padding-bottom: 15px; padding-left: 15px;border: 3px solid #000000; background: #ffffff;border-radius: 10px;">
         <div style="text-align:center"><h2>{{roommate.name}}</h2></div>

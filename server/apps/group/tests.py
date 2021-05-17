@@ -5,14 +5,15 @@ from rest_framework import status
 
 from .models import Club, NamedMembershipClub
 
+
 class TestGroups(TestCase, TestMixin):
     def setUp(self):
         self.user_setup()
 
     def test_create_club(self):
         Club.objects.create(name='TestClub')
-        self.assertEqual(len(Club.objects.all()),1)
-    
+        self.assertEqual(len(Club.objects.all()), 1)
+
     def test_club_views(self):
         Club.objects.create(name='TestClub')
         club = Club.objects.all().first()
@@ -30,7 +31,7 @@ class TestGroups(TestCase, TestMixin):
             'function': 'test',
             'year': 2020
         }
-        url = reverse('group:add-membership', args=[club.id])
+        url = reverse('group:add-member', args=[club.slug])
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -38,5 +39,5 @@ class TestGroups(TestCase, TestMixin):
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
-        self.assertEqual(NamedMembershipClub.objects.filter(club=club, student=self.u2.student).count(), 1)
-
+        self.assertEqual(NamedMembershipClub.objects.filter(
+            club=club, student=self.u2.student).count(), 1)

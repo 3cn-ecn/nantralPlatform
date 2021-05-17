@@ -12,7 +12,7 @@ from apps.roommates.models import Housing
 
 
 class HousingMap(LoginRequiredMixin, TemplateView):
-    template_name = 'roommates/housing_map.html'
+    template_name = 'roommates/housing/map.html'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -21,9 +21,9 @@ class HousingMap(LoginRequiredMixin, TemplateView):
 
 
 class HousingDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'roommates/housing_detail.html'
+    template_name = 'roommates/housing/detail.html'
     model = Housing
-#{% for member, nickname, group in roommate.members.all %}
+
     def get_context_data(self, **kwargs):
         context= super().get_context_data(**kwargs)
         context['Roommates'] = Roommates.objects.filter( housing = self.object.pk).order_by('-begin_date')
@@ -49,7 +49,7 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
 
         return context
 
-        
+
 class CreateHousingView(LoginRequiredMixin, TemplateView):
     template_name = 'roommates/housing/create.html'
 
