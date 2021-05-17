@@ -4,15 +4,19 @@
 
 <h1>Coucou, la page n'a pas d'erreur.</h1>
 
-<p>{{object.address}}</p>
+<p>Adresse: {{object.address}}</p>
+    {%for roommate in Roommates%}
+    <div style="width: 300px; padding-top: 15px; padding-bottom: 15px; padding-left: 15px;border: 3px solid #000000; background: #ffffff;border-radius: 10px;">
+        <div style="text-align:center"><h2>{{roommate.name}}</h2></div>
+        <p>{{roommate.description}}</p>
+        <p>Du {{roommate.begin_date}} au {{roommate.end_date}}</p>
+        {{roommate.members.all | length}}
 
-{%for roommate in Roommates%}
-    <h2>{{roommate.name}}</h2>
-    {{roommate.members.all | length}}
-        {%for member in roommate.members_set.all%}
-            <p>{{member.nickname}}</p>
+        <p>Liste des membres :</p>
+        {% for member in roommate.members.all %}    
+            <p>&emsp; {{member.first_name}} "{{member.nickname}}" {{member.last_name}} </p>
         {%endfor%}
-{%endfor%}
-
-
+    </div>
+    {%endfor%}
+    
 {% endblock %}
