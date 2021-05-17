@@ -17,12 +17,9 @@ const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,
 
 function CityInfo(props): JSX.Element {
   const roommates = props.roommates;
-	const housing_details_url = props.housing_details_url.replace("1", roommates.housing.id)
-	console.log(housing_details_url);
-  let roommatesList: string = "";
-  for (let roommate of roommates.admins.concat(roommates.members)) {
-    roommatesList += roommate + ", ";
-  }
+	const housing_details_url = props.housing_details_url.replace("1", roommates.id)
+	console.log(roommates);
+	let roommatesList = roommates.roommates.join(", ");
   roommatesList = roommatesList.replace(/(,\s*)$/, "");
   return (
     <div>
@@ -35,7 +32,7 @@ function CityInfo(props): JSX.Element {
             size="sm"
             onClick={() =>
               window.open(
-                `https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${roommates.housing.address}`
+                `https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${roommates.address}`
               )
             }
           >
@@ -54,12 +51,12 @@ function CityInfo(props): JSX.Element {
 						Détails
 					</Button>
           <br />
-          {roommates.housing.address}
+          {roommates.address}
           <br />
           {roommatesList}
           <br />
           <br />
-          <i>{roommates.housing.details}</i>
+          <i>{roommates.details}</i>
         </p>
       </div>
     </div>
@@ -99,9 +96,9 @@ function Root(props): JSX.Element {
         setMarkers(
           data.map((roommates) => (
             <Marker
-              key={roommates.housing.address}
-              longitude={roommates.housing.longitude}
-              latitude={roommates.housing.latitude}
+              key={roommates.address}
+              longitude={roommates.longitude}
+              latitude={roommates.latitude}
             >
               <CityPin
                 size={20}
@@ -110,8 +107,8 @@ function Root(props): JSX.Element {
                     <Popup
                       tipSize={10}
                       anchor="bottom"
-                      longitude={roommates.housing.longitude}
-                      latitude={roommates.housing.latitude}
+                      longitude={roommates.longitude}
+                      latitude={roommates.latitude}
                       closeOnClick={false}
                       onClose={() => setPopUpinfo(null)}
                       dynamicPosition={false}

@@ -2,7 +2,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.roommates.serializers import HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer, RoommatesHousingSerializer
+from apps.roommates.serializers import HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer
 from apps.roommates.models import Housing, NamedMembershipRoommates, Roommates
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
@@ -39,12 +39,13 @@ class HousingView(generics.ListCreateAPIView):
 
 class HousingRoommates(generics.ListCreateAPIView):
     """API View to get all the housing and their current roommates"""
-    serializer_class = RoommatesHousingSerializer
+    serializer_class = HousingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         now = timezone.now()
-        query = Roommates.objects.filter(Q(begin_date__lte=now), Q(end_date__gte=now) | Q(end_date=None))
+        query = Housing.objects.filter(
+					Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None)))|(Q(roommates__members=None) & Q(roommates__admins=None)))
         return query
 
 

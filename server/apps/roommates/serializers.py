@@ -11,21 +11,28 @@ class HousingSerializer(serializers.ModelSerializer):
         view_name='roommates:edit-housing', read_only=True)
     url = serializers.HyperlinkedIdentityField(
         view_name='roommates:housing-details', read_only=True)
+    roommates = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField()
 
     class Meta:
         model = Housing
         fields = '__all__'
 
-
-class RoommatesHousingSerializer(serializers.ModelSerializer):
-    housing = HousingSerializer(read_only=True)
-    admins = serializers.StringRelatedField(many=True)
-    members = serializers.StringRelatedField(many=True)
-
-    class Meta:
-        model = Roommates
-        fields = '__all__'
-
+    def get_roommates(self, obj):
+        query = Roommates.objects.filter(housing=obj)
+        Results = []
+        for result in query:
+          admins = result.admins.all()
+          for admin in admins:
+            Results.append(str(admin))
+          members = result.members.all()
+          for member in members:
+            Results.append(str(member))
+        return Results
+    
+    def get_name(self, obj):
+        query = Roommates.objects.filter(housing=obj).last()
+        return query.name if query else "Coloc sans nom"
 
 class RoommatesMemberSerializer(serializers.ModelSerializer):
     student = StudentSerializer(read_only=True)
