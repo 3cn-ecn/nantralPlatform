@@ -41,16 +41,11 @@ class HousingRoommates(generics.ListCreateAPIView):
     """API View to get all the housing and their current roommates"""
     serializer_class = RoommatesHousingSerializer
     permission_classes = [permissions.IsAuthenticated]
-    # TODO: Add a filter here
 
     def get_queryset(self):
         now = timezone.now()
-        query1 = Roommates.objects.filter(
-            Q(begin_date__lte=F('end_date')), Q(begin_date__lte=now), end_date__gte=now)
-        query2 = Roommates.objects.filter(Q(begin_date__gt=F('end_date')), Q(
-            begin_date__lte=now) | Q(end_date__gte=now))
-        concat_query = query1 | query2
-        return concat_query
+        query = Roommates.objects.filter(Q(begin_date__lte=now), Q(end_date__gte=now) | Q(end_date=None))
+        return query
 
 
 class RoommatesGroupView(generics.ListCreateAPIView):
