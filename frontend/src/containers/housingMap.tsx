@@ -17,6 +17,8 @@ const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,
 
 function CityInfo(props): JSX.Element {
   const roommates = props.roommates;
+	const housing_details_url = props.housing_details_url.replace("1", roommates.housing.id)
+	console.log(housing_details_url);
   let roommatesList: string = "";
   for (let roommate of roommates.admins.concat(roommates.members)) {
     roommatesList += roommate + ", ";
@@ -39,6 +41,18 @@ function CityInfo(props): JSX.Element {
           >
             Y aller
           </Button>
+					&nbsp;
+					<Button
+						variant="secondary"
+						size="sm"
+						onClick={() =>
+              window.open(
+                housing_details_url
+              )
+            }
+					>
+						Détails
+					</Button>
           <br />
           {roommates.housing.address}
           <br />
@@ -104,7 +118,7 @@ function Root(props): JSX.Element {
                       offsetTop={-10}
                       offsetLeft={10}
                     >
-                      <CityInfo roommates={roommates} />
+                      <CityInfo roommates={roommates} housing_details_url={housing_details_url}/>
                     </Popup>
                   )
                 }

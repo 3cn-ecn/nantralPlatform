@@ -8,7 +8,7 @@ from apps.student.models import Student
 from apps.utils.geocoding import geocode
 
 from django.utils import timezone
-from django.db.models import Q, F
+from django.db.models import Q
 
 
 class SearchGeocodingView(APIView):
