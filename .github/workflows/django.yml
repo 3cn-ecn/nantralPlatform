@@ -2,11 +2,10 @@ name: Testing
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -16,22 +15,23 @@ jobs:
       working-directory: ./server
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
-      GITHUB_USER: RobinetFox
+      GITHUB_USER: unitrium
       GITHUB_TOKEN: test
-      S3_BUCKET: test 
+      S3_BUCKET: test
+      MAPBOX_API_KEY: test
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      working-directory: ${{ env.working-directory }}
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run Tests
-      working-directory: ${{ env.working-directory }}
-      run: |
-        python manage.py test
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        working-directory: ${{ env.working-directory }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run Tests
+        working-directory: ${{ env.working-directory }}
+        run: |
+          python manage.py test
