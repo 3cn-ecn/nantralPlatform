@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReactDOM, { render } from "react-dom";
 import { Button, Card, Modal, Form, Row, Col } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt, faEdit, faCheck } from "@fortawesome/free-solid-svg-icons";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -46,16 +48,22 @@ function EditHousing(props) {
                       </p>
                     ))}
                   </Col>
-                  <Col md="1" xs="12">
-                    <Button onClick={() => selectGroup(roommateGroup)}>
-                      Editer ce groupe
-                    </Button>
-                    <Button
-                      onClick={() => deleteGroup(roommateGroup)}
-                      variant="danger"
-                    >
-                      Del
-                    </Button>
+                  <Col md="2" xs="12">
+                    <Row>
+                      <Col>
+                        <Button onClick={() => selectGroup(roommateGroup)}>
+                          <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon>
+                        </Button>
+                      </Col>
+                      <Col>
+                        <Button
+                          onClick={() => deleteGroup(roommateGroup)}
+                          variant="danger"
+                        >
+                          <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon>
+                        </Button>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
               </Card.Body>
@@ -166,7 +174,9 @@ function EditRoommatesGroup(props) {
                                   onClick={() => editMembership(member)}
                                   variant="success"
                                 >
-                                  Ok
+                                  <FontAwesomeIcon
+                                    icon={faCheck}
+                                  ></FontAwesomeIcon>
                                 </Button>
                               )}
                           </Form.Group>
@@ -179,7 +189,7 @@ function EditRoommatesGroup(props) {
                             deleteMembership(member["edit_api_url"])
                           }
                         >
-                          Del
+                          <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon>
                         </Button>
                       </Col>
                     </Row>

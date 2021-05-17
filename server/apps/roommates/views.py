@@ -12,7 +12,7 @@ from apps.roommates.models import Housing
 
 
 class HousingMap(LoginRequiredMixin, TemplateView):
-    template_name = 'roommates/housing_map.html'
+    template_name = 'roommates/housing/map.html'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -21,22 +21,24 @@ class HousingMap(LoginRequiredMixin, TemplateView):
 
 
 class HousingDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'roommates/housing_detail.html'
+    template_name = 'roommates/housing/detail.html'
     model = Housing
-#{% for member, nickname, group in roommate.members.all %}
+# {% for member, nickname, group in roommate.members.all %}
+
     def get_context_data(self, **kwargs):
-        context= super().get_context_data(**kwargs)
-        context['Roommates'] = Roommates.objects.filter( housing = self.object.pk).order_by('-end_date')
-        
-        #On met les dates en français et au bon format.
-        locale.setlocale(locale.LC_TIME,'')
+        context = super().get_context_data(**kwargs)
+        context['Roommates'] = Roommates.objects.filter(
+            housing=self.object.pk).order_by('-end_date')
+
+        # On met les dates en français et au bon format.
+        locale.setlocale(locale.LC_TIME, '')
         for roommate in context['Roommates']:
-            roommate.end_date= roommate.end_date.strftime('%d/%m/%Y')
-            roommate.begin_date= roommate.begin_date.strftime('%d/%m/%Y')
+            roommate.end_date = roommate.end_date.strftime('%d/%m/%Y')
+            roommate.begin_date = roommate.begin_date.strftime('%d/%m/%Y')
 
         return context
 
-        
+
 class CreateHousingView(LoginRequiredMixin, TemplateView):
     template_name = 'roommates/housing/create.html'
 
