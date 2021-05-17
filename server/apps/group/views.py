@@ -27,7 +27,7 @@ class ListClubView(ListView):
 class ListeListView(ListView):
     model = Liste
     template_name = 'liste/list.html'
-    ordering = ['year', 'liste_type', 'name']
+    ordering = ['-year', 'liste_type', 'name']
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
