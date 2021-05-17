@@ -10,7 +10,7 @@ class HousingSerializer(serializers.ModelSerializer):
     edit_url = serializers.HyperlinkedIdentityField(
         view_name='roommates:edit-housing', read_only=True)
     url = serializers.HyperlinkedIdentityField(
-        view_name='roommates:housing-view', read_only=True)
+        view_name='roommates:housing-detail', read_only=True)
 
     class Meta:
         model = Housing

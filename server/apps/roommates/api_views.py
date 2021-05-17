@@ -36,9 +36,6 @@ class HousingView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Housing.objects.all()
 
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
 
 class HousingRoommates(generics.ListCreateAPIView):
     """API View to get all the housing and their current roommates"""
@@ -66,9 +63,10 @@ class RoommatesGroupView(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         housing = generics.get_object_or_404(Housing, pk=self.kwargs['pk'])
-        request.data['housing'] = housing.pk
+        copy = request.data.copy()
+        copy['housing'] = housing.pk
         serializer = self.get_serializer(
-            data=request.data)
+            data=copy)
         # Due to the fact that the student field in the NamedMembershipRoommates Serializer
         # has to be read_only, the student id is passed as an attribute of the serializer
         # otherwise it would be cleaned out in the validated data.
@@ -95,10 +93,11 @@ class RoommatesMembersView(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         group = generics.get_object_or_404(
             Roommates, id=self.kwargs['pk'])
-        request.data['roommates'] = group.id
+        copy = request.data.copy()
+        copy['roommates'] = group.id
         student = generics.get_object_or_404(
             Student, id=request.data['student'])
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=copy)
         serializer.student = student
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)

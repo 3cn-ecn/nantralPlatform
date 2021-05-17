@@ -23,7 +23,7 @@ class Housing(models.Model):
 
     @property
     def get_absolute_url(self):
-        return reverse('roommates:housing-view', kwargs={'pk': self.id})
+        return reverse('roommates:housing-detail', kwargs={'pk': self.id})
 
     @property
     def get_absolute_edit_url(self):

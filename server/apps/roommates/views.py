@@ -23,7 +23,6 @@ class HousingMap(LoginRequiredMixin, TemplateView):
 class HousingDetailView(LoginRequiredMixin, DetailView):
     template_name = 'roommates/housing/detail.html'
     model = Housing
-# {% for member, nickname, group in roommate.members.all %}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
