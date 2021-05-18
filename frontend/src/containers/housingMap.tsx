@@ -11,9 +11,6 @@ const geolocateStyle = {
 };
 const positionOptions = { enableHighAccuracy: true };
 
-const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
-  c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
-  C20.1,15.8,20.2,15.8,20.2,15.7z`;
 
 function CityInfo(props): JSX.Element {
   const roommates = props.roommates;
@@ -64,11 +61,16 @@ function CityInfo(props): JSX.Element {
 }
 
 function CityPin(props): JSX.Element {
-  const { size = 20, onClick } = props;
+  const { size = 25, onClick } = props;
   return (
-    <svg height={size} viewBox="0 0 24 24" fill="#c20000" onClick={onClick}>
-      <path d={ICON} />
-    </svg>
+		<svg viewBox="0 0 512 512" width={size} height={size} onClick={onClick}>
+	<path
+		fill="#0079f2"
+		d="M256,0C153.755,0,70.573,83.182,70.573,185.426c0,126.888,165.939,313.167,173.004,321.035
+		c6.636,7.391,18.222,7.378,24.846,0c7.065-7.868,173.004-194.147,173.004-321.035C441.425,83.182,358.244,0,256,0z M256,278.719
+		c-51.442,0-93.292-41.851-93.292-93.293S204.559,92.134,256,92.134s93.291,41.851,93.291,93.293S307.441,278.719,256,278.719z"
+	/>
+</svg>
   );
 }
 
@@ -101,7 +103,7 @@ function Root(props): JSX.Element {
               latitude={roommates.latitude}
             >
               <CityPin
-                size={20}
+                size={25}
                 onClick={() =>
                   setPopUpinfo(
                     <Popup
