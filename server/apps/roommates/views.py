@@ -33,10 +33,16 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
         for group in context['roommates_groups']: 
             member_list=[]
             for member in NamedMembershipRoommates.objects.filter(roommates=group.id):
+                #On évite d'afficher un None si le coloc n'a pas de
+                if member.nickname is None:
+                    nicknm=[]
+                else:
+                    nicknm=member.nickname
+
                 member_list.append({
                 'first_name': member.student.first_name,
                 'last_name' : member.student.last_name,
-                'nickname' : member.nickname,
+                'nickname' : nicknm,
                 })
             list_roommates.append({'name': group.name, 'description' : group.description, 'begin_date': group.begin_date, 'end_date': group.end_date, 'members': member_list})
         context['roommates_groups'] = list_roommates
