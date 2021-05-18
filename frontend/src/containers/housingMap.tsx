@@ -1,29 +1,84 @@
 ﻿import * as React from "react";
-import { Component, PureComponent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import MapGL, { Marker, GeolocateControl, Popup } from "react-map-gl";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+
+export interface Housing {
+  id: number;
+  edit_url: string;
+  url: string;
+  roommates: Roommate[];
+  name: string;
+  address: string;
+  details: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface Roommate {
+  id: number;
+  members: Member[];
+  admins: Member[];
+  edit_members_api_url: string;
+  edit_api_url: string;
+  name: string;
+  description: string;
+  logo: any;
+  slug: string;
+  parent: any;
+  begin_date: string;
+  end_date: string;
+  housing: number;
+}
+
+export interface Member {
+  id: number;
+  student: Student;
+  edit_api_url: string;
+  nickname: string;
+  roommates: number;
+}
+
+export interface Student {
+  id: number;
+  promo: any;
+  picture: any;
+  first_name: string;
+  last_name: string;
+  faculty: string;
+  path: any;
+  user: number;
+}
+
+interface CityInfoProps {
+  housing: Housing;
+  housingDetailsUrl: string;
+}
 
 const geolocateStyle = {
   top: 0,
   left: 0,
   margin: 10,
 };
-const positionOptions = { enableHighAccuracy: true };
 
-function CityInfo(props): JSX.Element {
-  const roommates = props.roommates;
-  const housing_details_url = props.housing_details_url.replace(
+const positionOptions = {
+  enableHighAccuracy: true,
+};
+
+function CityInfo(props: CityInfoProps): JSX.Element {
+  const housing: Housing = props.housing;
+  const housing_details_url = props.housingDetailsUrl.replace(
     "1",
-    roommates.id
+    housing.id.toString()
   );
   let roommatesList: string = "";
   if (
-    typeof roommates.roommates[0] != "undefined" &&
-    typeof roommates.roommates[0].members != "undefined"
+    typeof housing.roommates[0] != "undefined" &&
+    typeof housing.roommates[0].members != "undefined"
   ) {
-    roommatesList = roommates.roommates[0].members
+    roommatesList = housing.roommates[0].members
       .map((e) => e.student.first_name + " " + e.student.last_name)
       .join(",");
     roommatesList = roommatesList.replace(/(,\s*)$/, "");
@@ -32,14 +87,14 @@ function CityInfo(props): JSX.Element {
     <div>
       <div>
         <p>
-          <strong>{roommates.name}</strong>
+          <strong>{housing.name}</strong>
           &nbsp;-&nbsp;
           <Button
             variant="primary"
             size="sm"
             onClick={() =>
               window.open(
-                `https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${roommates.address}`
+                `https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${housing.address}`
               )
             }
           >
@@ -54,22 +109,31 @@ function CityInfo(props): JSX.Element {
             Détails
           </Button>
           <br />
-          {roommates.address}
+          {housing.address}
           <br />
           {roommatesList}
           <br />
           <br />
-          <i>{roommates.details}</i>
+          <i>{housing.details}</i>
         </p>
       </div>
     </div>
   );
 }
 
-function CityPin(props): JSX.Element {
-  const { size = 25, onClick } = props;
+interface CityPinProps {
+  size: number;
+  onClick: any;
+}
+
+function CityPin(props: CityPinProps): JSX.Element {
   return (
-    <svg viewBox="0 0 512 512" width={size} height={size} onClick={onClick}>
+    <svg
+      viewBox="0 0 512 512"
+      width={props.size}
+      height={props.size}
+      onClick={props.onClick}
+    >
       <path
         fill="#0079f2"
         d="M256,0C153.755,0,70.573,83.182,70.573,185.426c0,126.888,165.939,313.167,173.004,321.035
@@ -93,7 +157,7 @@ function Root(props): JSX.Element {
   const [popupInfo, setPopUpinfo] = useState(null);
 
   useEffect(() => {
-    async function getRoommates() {
+    async function getRoommates(): Promise<void> {
       await axios
         .get(props.api_housing_url)
         .then((res) => {
@@ -120,8 +184,8 @@ function Root(props): JSX.Element {
                         offsetLeft={10}
                       >
                         <CityInfo
-                          roommates={roommates}
-                          housing_details_url={housing_details_url}
+                          housing={roommates}
+                          housingDetailsUrl={housing_details_url}
                         />
                       </Popup>
                     )
