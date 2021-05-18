@@ -3,6 +3,7 @@ import { Component, PureComponent, useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import MapGL, { Marker, GeolocateControl, Popup } from "react-map-gl";
 import { Button } from "react-bootstrap";
+import axios from "axios";
 
 const geolocateStyle = {
   top: 0,
@@ -17,11 +18,16 @@ function CityInfo(props): JSX.Element {
     "1",
     roommates.id
   );
-	let roommatesList:string = "";
-	if(typeof roommates.roommates[0] != "undefined" && typeof roommates.roommates[0].members != "undefined"){
-		roommatesList = roommates.roommates[0].members.map(e => e.student.first_name+" "+e.student.last_name).join(",");
-		roommatesList = roommatesList.replace(/(,\s*)$/, "");
-	}
+  let roommatesList: string = "";
+  if (
+    typeof roommates.roommates[0] != "undefined" &&
+    typeof roommates.roommates[0].members != "undefined"
+  ) {
+    roommatesList = roommates.roommates[0].members
+      .map((e) => e.student.first_name + " " + e.student.last_name)
+      .join(",");
+    roommatesList = roommatesList.replace(/(,\s*)$/, "");
+  }
   return (
     <div>
       <div>
@@ -87,48 +93,49 @@ function Root(props): JSX.Element {
   const [popupInfo, setPopUpinfo] = useState(null);
 
   useEffect(() => {
-    const requestOptions = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-    fetch(props.api_housing_url, requestOptions)
-      .then((response) => response.json())
-      .then((data) => {
-        // Only rerender markers if props.data has changed
-        setMarkers(
-          data.map((roommates) => (
-            <Marker
-              key={roommates.address}
-              longitude={roommates.longitude}
-              latitude={roommates.latitude}
-            >
-              <CityPin
-                size={25}
-                onClick={() =>
-                  setPopUpinfo(
-                    <Popup
-                      tipSize={10}
-                      anchor="bottom"
-                      longitude={roommates.longitude}
-                      latitude={roommates.latitude}
-                      closeOnClick={false}
-                      onClose={() => setPopUpinfo(null)}
-                      dynamicPosition={false}
-                      offsetTop={-10}
-                      offsetLeft={10}
-                    >
-                      <CityInfo
-                        roommates={roommates}
-                        housing_details_url={housing_details_url}
-                      />
-                    </Popup>
-                  )
-                }
-              />
-            </Marker>
-          ))
-        );
-      });
+    async function getRoommates() {
+      await axios
+        .get(props.api_housing_url)
+        .then((res) => {
+          setMarkers(
+            res.data.map((roommates) => (
+              <Marker
+                key={roommates.address}
+                longitude={roommates.longitude}
+                latitude={roommates.latitude}
+              >
+                <CityPin
+                  size={25}
+                  onClick={() =>
+                    setPopUpinfo(
+                      <Popup
+                        tipSize={10}
+                        anchor="bottom"
+                        longitude={roommates.longitude}
+                        latitude={roommates.latitude}
+                        closeOnClick={false}
+                        onClose={() => setPopUpinfo(null)}
+                        dynamicPosition={false}
+                        offsetTop={-10}
+                        offsetLeft={10}
+                      >
+                        <CityInfo
+                          roommates={roommates}
+                          housing_details_url={housing_details_url}
+                        />
+                      </Popup>
+                    )
+                  }
+                />
+              </Marker>
+            ))
+          );
+        })
+        .catch((err) => {
+          setMarkers([]);
+        });
+    }
+    getRoommates();
   }, []);
 
   return (
