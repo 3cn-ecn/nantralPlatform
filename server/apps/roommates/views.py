@@ -34,10 +34,7 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
             member_list=[]
             for member in NamedMembershipRoommates.objects.filter(roommates=group.id):
                 #On évite d'afficher un None si le coloc n'a pas de
-                if member.nickname is None:
-                    nicknm=[]
-                else:
-                    nicknm=member.nickname
+                nicknm="" if member.nickname is None else member.nickname
 
                 member_list.append({
                 'first_name': member.student.first_name,
