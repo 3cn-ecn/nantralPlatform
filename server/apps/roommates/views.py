@@ -36,7 +36,8 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
             member_list=[]
 
             #On met les dates en français et au bon format.
-            begin_date, end_date = str(group.begin_date.strftime('%d/%m/%Y')), str(group.end_date.strftime('%d/%m/%Y'))
+            begin_date = str(group.begin_date.strftime('%d/%m/%Y'))
+            end_date = str(group.end_date.strftime('%d/%m/%Y')) if group.end_date is not None else None
             
             #On évite d'afficher None si la date de fin n'est pas renseignée
             duration="Du " + begin_date + " au " + end_date if group.end_date is not None else "Depuis le " + begin_date + " (date de fin non renseignée)"
