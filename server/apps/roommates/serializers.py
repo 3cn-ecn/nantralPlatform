@@ -19,16 +19,8 @@ class HousingSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_roommates(self, obj):
-        query = Roommates.objects.filter(housing=obj)
-        Results = []
-        for result in query:
-          admins = result.admins.all()
-          for admin in admins:
-            Results.append(str(admin))
-          members = result.members.all()
-          for member in members:
-            Results.append(str(member))
-        return Results
+        roommates  = Roommates.objects.filter(housing=obj)
+        return RoommatesGroupSerializer(roommates, many=True, context=self._context).data
     
     def get_name(self, obj):
         query = Roommates.objects.filter(housing=obj).last()
@@ -53,6 +45,7 @@ class RoommatesMemberSerializer(serializers.ModelSerializer):
 class RoommatesGroupSerializer(serializers.ModelSerializer):
     """A serializer for the roommates group."""
     members = serializers.SerializerMethodField()
+    admins = serializers.SerializerMethodField("get_members")
     edit_members_api_url = serializers.HyperlinkedIdentityField(
         view_name='roommates_api:roommates-members', read_only=True)
     edit_api_url = serializers.HyperlinkedIdentityField(
