@@ -9,7 +9,7 @@
     {%for roommate in roommates_groups%}
         <h2>{{roommate.name}}</h2>
         <p>{{roommate.description}}</p>
-        <p>Du {{roommate.begin_date}} au {{roommate.end_date}}</p>
+        <p>{{roommate.duration}}</p>
 
         <p>Liste des membres :</p>
         {% for member in roommate.members%}    

@@ -30,8 +30,18 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
 
         list_roommates = []
         context['roommates_groups'] = Roommates.objects.filter(housing=self.object.pk).order_by('-begin_date')
+
+        locale.setlocale(locale.LC_TIME,'')
         for group in context['roommates_groups']: 
             member_list=[]
+
+            #On met les dates en français et au bon format.
+            begin_date, end_date = str(group.begin_date.strftime('%d/%m/%Y')), str(group.end_date.strftime('%d/%m/%Y'))
+
+            #On évite d'afficher None si la date de fin n'est pas renseignée
+            duration="Du " + begin_date + " au " + end_date if group.end_date is not None else "Depuis " + begin_date + " (date de fin non renseignée)"
+
+
             for member in NamedMembershipRoommates.objects.filter(roommates=group.id):
                 #On évite d'afficher un None si le coloc n'a pas de
                 nicknm="" if member.nickname is None else member.nickname
@@ -41,22 +51,9 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
                 'last_name' : member.student.last_name,
                 'nickname' : nicknm,
                 })
-            list_roommates.append({'name': group.name, 'description' : group.description, 'begin_date': group.begin_date, 'end_date': group.end_date, 'members': member_list})
+            list_roommates.append({'name': group.name, 'description' : group.description, 'begin_date': group.begin_date, 'end_date': group.end_date, 'duration' : duration,'members': member_list})
         context['roommates_groups'] = list_roommates
         
-        for roommate in context['roommates_groups']:
-            print(roommate['name'])
-            print(roommate['begin_date'])
-            for member in roommate['members']:
-                print(member['first_name'])
-
-        #On met les dates en français et au bon format.
-        locale.setlocale(locale.LC_TIME,'')
-        for roommate in context['roommates_groups']:
-            if roommate['end_date'] is not None:
-                roommate['end_date']= roommate['end_date'].strftime('%d/%m/%Y')
-            roommate['begin_date']= roommate['begin_date'].strftime('%d/%m/%Y')
-
         return context
 
 
