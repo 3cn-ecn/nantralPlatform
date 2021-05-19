@@ -6,6 +6,8 @@
     <a href="{% url 'roommates:edit-housing' object.id %}" class='btn-sm btn-success'>Modifier la coloc</a>
 </br>
 </br>
+<p>{{object.details}}</p>
+
     {%for roommate in roommates_groups%}
         <h2>{{roommate.name}}</h2>
         <p>{{roommate.description}}</p>
@@ -15,7 +17,7 @@
         {% for member in roommate.members%}    
             <p>&emsp; {{member.first_name}} {{member.nickname}} {{member.last_name}} </p>
         {%endfor%}
-
+    </br>
     {%endfor%}
     
 {% endblock %}
