@@ -47,7 +47,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
     def post(self, request, group_slug):
         group = Group.get_group_by_slug(self.kwargs['group_slug'])
         if isinstance(group, Club):
-            form = UpdateClubForm(request.POST, instance=group)
+            form = UpdateClubForm(request.POST, request.FILES, instance=group)
             form.save()
         else:
             pass
