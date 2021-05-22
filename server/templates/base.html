@@ -26,7 +26,7 @@
   <body>
     
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
-      <div class="container-fluid">
+      <div class="container-xxl">
       <a class="navbar-brand" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;">
         <img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
         Nantral Platform.
@@ -91,9 +91,9 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
               <li><a class="dropdown-item" href='{% url "account:redirect-student"  request.user.id%}'><i class="fas fa-user"></i>  Modifier mon profil</a></li>
-              <li class="divider"></li>
+              <li><hr class="divider"></li>
               <li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
-              <li class="divider"></li>
+              <li><hr class="divider"></li>
               <li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
             </ul>
           </li>
@@ -102,29 +102,24 @@
       {% endif %}
       </div>
     </nav>
+    
+    {% block content-large %}
+    {% endblock %}
+    
     <div class="container-xxl">
-      {% block content-xxl %}
-      {% endblock %}
-    </div>
-    <br>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-11">
-          {% if messages %}
-          {% for message in messages %}
+      {% if messages %}
+        {% for message in messages %}
           <br/>
-            <div id="alertScore" class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-              {{message}}
-            </div>
-            {%endfor%}
-          {% endif %}
-          {% block content %}
-          {% endblock %}
-        </div>
-      </div>
+          <div id="alertScore" class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            {{message}}
+          </div>
+        {%endfor%}
+      {% endif %}
+      {% block content %}
+      {% endblock %}
     </div>
   </body>
   {% block script %}

@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content-xxl %}
+{% block content %}
 <br \>
-<h2>Clubs Nantraliens</h2>
+<h1>Clubs Nantraliens</h1>
 <br \>
 
+<h5>Associations</h5>
 <div class="grille">
   {% for club in object_list%}
+  {% if club.bdx_type == "Asso" %}
   <div class="grille-icon text-center">
     <a href="{{ club.get_absolute_url }}">
       {% if club.logo %}
@@ -17,6 +19,61 @@
       </a>
     <h6>{{ club.name | title }}</h6>
   </div>
+  {% endif %}
+  {% endfor %}
+</div>
+
+<h5>Clubs BDE</h5>
+<div class="grille">
+  {% for club in object_list%}
+  {% if club.bdx_type == "BDE" %}
+  <div class="grille-icon text-center">
+    <a href="{{ club.get_absolute_url }}">
+      {% if club.logo %}
+        <img src={{ club.logo.url }}>
+      {% else %}
+        <img src="{% static 'img/logo.svg' %}" style="max-width:100px;">
+      {% endif %}
+      </a>
+    <h6>{{ club.name | title }}</h6>
+  </div>
+  {% endif %}
+  {% endfor %}
+</div>
+
+<h5>Clubs BDA</h5>
+<div class="grille">
+  {% for club in object_list%}
+  {% if club.bdx_type == "BDA" %}
+  <div class="grille-icon text-center">
+    <a href="{{ club.get_absolute_url }}">
+      {% if club.logo %}
+        <img src={{ club.logo.url }}>
+      {% else %}
+        <img src="{% static 'img/logo.svg' %}" style="max-width:100px;">
+      {% endif %}
+      </a>
+    <h6>{{ club.name | title }}</h6>
+  </div>
+  {% endif %}
+  {% endfor %}
+</div>
+
+<h5>Clubs BDS</h5>
+<div class="grille">
+  {% for club in object_list%}
+  {% if club.bdx_type == "BDS" %}
+  <div class="grille-icon text-center">
+    <a href="{{ club.get_absolute_url }}">
+      {% if club.logo %}
+        <img src={{ club.logo.url }}>
+      {% else %}
+        <img src="{% static 'img/logo.svg' %}" style="max-width:100px;">
+      {% endif %}
+      </a>
+    <h6>{{ club.name | title }}</h6>
+  </div>
+  {% endif %}
   {% endfor %}
 </div>
 
