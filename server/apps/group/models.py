@@ -6,6 +6,8 @@ from django.utils.text import slugify
 from django.urls.base import reverse
 from django.template.loader import render_to_string
 
+from django.conf import settings
+
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 
@@ -17,9 +19,14 @@ TYPE_BDX = [
     ('Asso', 'Association')
 ]
 
-path_and_rename_club = PathAndRename("groups/logo/club")
-path_and_rename_liste = PathAndRename("groups/logo/liste")
-path_and_rename_group = PathAndRename("groups/logo/group")
+if settings.DEBUG:
+    path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
+    path_and_rename_liste = PathAndRename("./static/upload/groups/logo/liste")
+    path_and_rename_group = PathAndRename("./static/upload/groups/logo/group")
+else:
+    path_and_rename_club = PathAndRename("groups/logo/club")
+    path_and_rename_liste = PathAndRename("groups/logo/liste")
+    path_and_rename_group = PathAndRename("groups/logo/group")
 
 
 class Group(models.Model):

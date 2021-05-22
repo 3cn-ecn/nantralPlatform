@@ -8,7 +8,7 @@ from django.contrib import messages
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 
-from config.settings.base import GITHUB_TOKEN, GITHUB_USER
+from django.conf import settings
 
 from .forms import SuggestionForm
 
@@ -36,7 +36,7 @@ class SuggestionView(LoginRequiredAccessMixin, FormView):
             'body': form.cleaned_data['description'] + f' <br/> Proposé par {self.request.user.email}'
         }
         requests.post('https://api.github.com/repos/unitrium/nantralPlatform/issues',
-                      json=issue, auth=(GITHUB_USER, GITHUB_TOKEN))
+                      json=issue, auth=(settings.GITHUB_USER, settings.GITHUB_TOKEN))
         messages.success(
             self.request, 'Votre suggestion a ete enregistree merci')
         return redirect('home:home')

@@ -20,14 +20,22 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET')
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'dev_key'
 
 
 ALLOWED_HOSTS = []
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+if 'MAPBOX_API_KEY' in env:
+    MAPBOX_API_KEY = env('MAPBOX_API_KEY')
+else:
+    MAPBOX_API_KEY = ''
+
+if 'GITHUB_USER' in env:
+    GITHUB_USER = env('GITHUB_USER')
+    GITHUB_TOKEN = env('GITHUB_TOKEN')
+else:
+    GITHUB_USER = ''
+    GITHUB_TOKEN = ''
