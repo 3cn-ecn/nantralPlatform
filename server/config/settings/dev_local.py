@@ -39,3 +39,7 @@ if 'GITHUB_USER' in env:
 else:
     GITHUB_USER = ''
     GITHUB_TOKEN = ''
+
+
+MEDIA_ROOT = 'media/'
+MEDIA_URL = '/media/'
