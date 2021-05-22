@@ -8,6 +8,7 @@ from apps.student.serializers import StudentSerializer
 
 
 class StudentCoursesView(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = FollowCourseSerializer
 
     def get_queryset(self):
@@ -23,6 +24,7 @@ class StudentCoursesView(generics.ListCreateAPIView):
 
 
 class StudentEditFollowCourse(generics.DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = FollowCourseSerializer
 
     def get_queryset(self):

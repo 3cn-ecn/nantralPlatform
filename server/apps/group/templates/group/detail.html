@@ -1,89 +1,98 @@
 {% extends 'group/base.html' %}
 {% load static %}
+
 {% block page %}
-{% if request.user.is_authenticated %}
-    {%if is_member %}
-        Vous êtes membre.
-    {% else %}
-        <button id='show-add-group' class='btn btn-dark btn-sm' data-toggle="modal" data-target="#addModal">
-            <i class="fa fa-user-plus"></i>
-            Je suis ou j'ai été membre de {{object.name}}
-        </button>
-    {% endif %}
-{% endif %}
-{% if is_admin %}
-    <a href='{% url "group:update" object.slug %}'class="btn btn-dark btn-sm"><i class="fa fa-cogs"></i> Page admin</a>
-{%endif%}
-<p>{{object.description}}</p>
-{%if object.logo %}<img width="100" height="auto" src='{{object.logo.url}}'>{% endif %}
-<h2>Événements à venir</h2>
-{% if request.user.is_authenticated %}
-<div class="row">
-    {% for event in events %}
-    <div class='card'>
-        <div class='card-title'>
-            <h6>{{event.title}}</h6>
-            <small class='text-muted'><i class="fas fa-calendar-day"></i> {{event.date|date:'Y-m-d H:i'}}</br><i class="far fa-compass"></i> {{event.location}}</small>
-        </div>
-        <div class='card-body'>
-            {{event.description | truncatewords_html:35}}
-        </div>
-    </div>
-    {% endfor %}
-</div>
-{%else%}
-    Veuillez vous connecter pour visualiser les événements à venir.
-{%endif%}
-<h2>Dernières annonces</h2>
-{% for post in posts %}
-<a href="{{post.get_absolute_url}}" style='color:white' class="mb-1">
-  <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
-    <div class="card-body">
-      <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'d:m'}}</h5>
-      <h6 class="card-subtitle mb-2">{{post.get_group.name}}</h6>
-  </h6>
-      <p class="card-text" >{{post.description | truncatewords_html:20}}</p>
-    </div>
-  </div>
-</a>
-<br \>
-{% endfor %}
-<h2>Membres</h2>
-{% if request.user.is_authenticated %}
-{% for member in members %}
-    <a href='{% url "student:detail" member.student.id%}' class='card'>
-        {{member.student.user.first_name}} {{member.student.user.last_name}} -
-        {{member.function}} - {{member.year}}
-    </a>
-{% endfor %}
-{%else%}
-    Veuillez vous connecter pour visualiser les membres.
-{%endif%}
-<div class="modal fade" tabindex="-1" role="dialog" id="addModal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        {% load crispy_forms_tags %}
-        <form method="post" action="{% url 'group:add-member' object.slug %}">
-            {% csrf_token %}
-        
-        <div class="modal-header">
-            <h5 class="modal-title">M'ajouter à {{object.name}}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+
+    {% if request.user.is_authenticated %}
+        {%if is_member %}
+            Vous êtes membre.
+        {% else %}
+            <button id='show-add-group' class='btn btn-dark btn-sm' data-toggle="modal" data-target="#addModal">
+                <i class="fa fa-user-plus"></i>
+                Je suis ou j'ai été membre de {{object.name}}
             </button>
+        {% endif %}
+    {% endif %}
+    {% if is_admin %}
+        <a href='{% url "group:update" object.slug %}'class="btn btn-dark btn-sm"><i class="fa fa-cogs"></i> Page admin</a>
+    {%endif%}
+
+    <p>{{object.description}}</p>
+    {%if object.logo %}
+        <img width="100" height="auto" src='{{object.logo.url}}'>
+    {% endif %}
+
+    <h2>Événements à venir</h2>
+    {% if request.user.is_authenticated %}
+        <div class="row">
+            {% for event in events %}
+                <div class='card'>
+                    <div class='card-title'>
+                        <h6>{{event.title}}</h6>
+                        <small class='text-muted'>
+                            <i class="fas fa-calendar-day"></i> 
+                            {{event.date|date:'Y-m-d H:i'}}</br>
+                            <i class="far fa-compass"></i> 
+                            {{event.location}}
+                        </small>
+                    </div>
+                    <div class='card-body'>
+                        {{event.description | truncatewords_html:35}}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {%else%}
+        Veuillez vous connecter pour visualiser les événements à venir.
+    {%endif%}
+    
+    <h2>Dernières annonces</h2>
+    {% for post in posts %}
+        <a href="{{post.get_absolute_url}}" style='color:white' class="mb-1">
+            <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
+                <div class="card-body">
+                    <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'d:m'}}</h5>
+                    <h6 class="card-subtitle mb-2">{{post.get_group.name}}</h6>
+                    <p class="card-text" >{{post.description | truncatewords_html:20}}</p>
+                </div>
             </div>
-        
-            <div class="modal-body">
-            {{form | crispy}}
+        </a>
+        <br \>
+    {% endfor %}
+
+    <h2>Membres</h2>
+    {% if request.user.is_authenticated %}
+        {% for member in members %}
+            <a href='{% url "student:detail" member.student.id%}' class='card'>
+                {{member.student.user.first_name}} {{member.student.user.last_name}} -
+                {{member.function}} - {{member.year}}
+            </a>
+        {% endfor %}
+    {%else%}
+        Veuillez vous connecter pour visualiser les membres.
+    {%endif%}
+    
+    <div class="modal fade" tabindex="-1" role="dialog" id="addModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {% load crispy_forms_tags %}
+                <form method="post" action="{% url 'group:add-member' object.slug %}">
+                    {% csrf_token %}        
+                    <div class="modal-header">
+                        <h5 class="modal-title">M'ajouter à {{object.name}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>        
+                    <div class="modal-body">
+                        {{form | crispy}}
+                    </div>        
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="submit-btn btn btn-dark">M'ajouter</button>
+                    </div>        
+                </form>
             </div>
-        
-            <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-            <button type="submit" class="submit-btn btn btn-dark">M'ajouter</button>
-            </div>
-        
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 {% endblock %}

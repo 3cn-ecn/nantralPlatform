@@ -44,3 +44,21 @@ h6 {
 a:hover {
 	text-decoration: none;
 }
+
+
+.grille {
+	/*organisation de la page*/
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+	grid-gap: 1rem;
+	grid-auto-flow: dense;
+}
+
+.grille-icon {
+	width: 100px;
+	max-width: 100%;
+}
+
+.grille-icon img {
+	width: 100%;
+}
