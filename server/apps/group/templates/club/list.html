@@ -4,20 +4,27 @@
 {% block content %}
 
 <br />
-<h1>Clubs Nantraliens</h1>
+<div class="row">
+	<div class="col">
+		<h1>Clubs Nantraliens</h1>
+	</div>
+	<!--div class="col text-end">
+		<input type="textbox">
+	</div-->
+</div>
 <br />
 
 {% for type in bdx %}
-<h5>{{ type.nom }}</h5>
+<h2>{{ type.nom }}</h2>
 <div class="grille">
 	{% for club in object_list%}
   		{% if club.bdx_type == type.cle %}
   			<div class="grille-icon text-center">
 	    		<a href="{{ club.get_absolute_url }}">
       				{% if club.logo %}
-        				<img src="{{ club.logo.url }}" style="max-width:100px;">
+        				<img src="{{ club.logo.url }}">
       				{% else %}
-        				<img src="{% static 'img/logo.svg' %}" style="max-width:100px;opacity:0.3">
+        				<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
       				{% endif %}
 				</a>
 				<h6>{{ club.name | title }}</h6>
@@ -25,7 +32,6 @@
   		{% endif %}
   	{% endfor %}
 </div>
-<br><br>
 {% endfor %}
 
 <!--div class="table-responsive">
