@@ -93,6 +93,9 @@ class Club(Group):
     def save(self, *args, **kwargs):
         self.slug = f'club--{slugify(self.name)}'
         super(Club, self).save(*args, **kwargs)
+    
+    class Meta:
+        ordering = ['name' ]
 
 
 class NamedMembershipClub(models.Model):
