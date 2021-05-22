@@ -26,13 +26,13 @@
   <body>
     
     <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
-      <div class="container-xxl">
+      <div class="container">
       <a class="navbar-brand" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;">
         <img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
         Nantral Platform.
       </a>
       {% if request.user.is_authenticated %}
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
@@ -79,22 +79,19 @@
             </ul>
           </li>
         </ul>
-        <ul class="navbar-nav ml-auto me-auto mb-2 mb-lg-0">
-          {% if request.user.student.id %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'student:detail' request.user.student.id %}">{{ request.user.first_name | title}} {{ request.user.last_name | upper}}</a>
-          </li>
-          {% endif  %}
-          <li class="nav-item dropdown pull-right">
+        <ul class="navbar-nav ml-auto ">
+          <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fas fa-cog"></i>
+              {{ request.user.first_name | title}} {{ request.user.last_name | upper}}    <i class="fas fa-cog"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-right" role="menu">
-              <li><a class="dropdown-item" href='{% url "account:redirect-student"  request.user.id%}'><i class="fas fa-user"></i>  Modifier mon profil</a></li>
-              <li><hr class="divider"></li>
-              <li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
-              <li><hr class="divider"></li>
+              {% if request.user.student.id %}
+              <li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.id %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
+              {% endif  %}
+              <li><a class="dropdown-item" href='{% url "account:redirect-student" request.user.id%}'><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
               <li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
             </ul>
           </li>
         </ul>
@@ -106,7 +103,7 @@
     {% block content-large %}
     {% endblock %}
     
-    <div class="container-xxl">
+    <div class="container">
       {% if messages %}
         {% for message in messages %}
           <br/>

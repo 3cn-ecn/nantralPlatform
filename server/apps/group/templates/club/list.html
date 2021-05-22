@@ -1,81 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
-<br \>
+
+<br />
 <h1>Clubs Nantraliens</h1>
-<br \>
+<br />
 
-<h5>Associations</h5>
+{% for type in bdx %}
+<h5>{{ type.nom }}</h5>
 <div class="grille">
-  {% for club in object_list%}
-  {% if club.bdx_type == "Asso" %}
-  <div class="grille-icon text-center">
-    <a href="{{ club.get_absolute_url }}">
-      {% if club.logo %}
-        <img src={{ club.logo.url }}>
-      {% else %}
-        <img src="{% static 'img/logo.svg' %}" style="max-width:100px;">
-      {% endif %}
-      </a>
-    <h6>{{ club.name | title }}</h6>
-  </div>
-  {% endif %}
-  {% endfor %}
+	{% for club in object_list%}
+  		{% if club.bdx_type == type.cle %}
+  			<div class="grille-icon text-center">
+	    		<a href="{{ club.get_absolute_url }}">
+      				{% if club.logo %}
+        				<img src="{{ club.logo.url }}" style="max-width:100px;">
+      				{% else %}
+        				<img src="{% static 'img/logo.svg' %}" style="max-width:100px;opacity:0.3">
+      				{% endif %}
+				</a>
+				<h6>{{ club.name | title }}</h6>
+  			</div>
+  		{% endif %}
+  	{% endfor %}
 </div>
-
-<h5>Clubs BDE</h5>
-<div class="grille">
-  {% for club in object_list%}
-  {% if club.bdx_type == "BDE" %}
-  <div class="grille-icon text-center">
-    <a href="{{ club.get_absolute_url }}">
-      {% if club.logo %}
-        <img src={{ club.logo.url }}>
-      {% else %}
-        <img src="{% static 'img/logo.svg' %}" style="max-width:100px;">
-      {% endif %}
-      </a>
-    <h6>{{ club.name | title }}</h6>
-  </div>
-  {% endif %}
-  {% endfor %}
-</div>
-
-<h5>Clubs BDA</h5>
-<div class="grille">
-  {% for club in object_list%}
-  {% if club.bdx_type == "BDA" %}
-  <div class="grille-icon text-center">
-    <a href="{{ club.get_absolute_url }}">
-      {% if club.logo %}
-        <img src={{ club.logo.url }}>
-      {% else %}
-        <img src="{% static 'img/logo.svg' %}" style="max-width:100px;">
-      {% endif %}
-      </a>
-    <h6>{{ club.name | title }}</h6>
-  </div>
-  {% endif %}
-  {% endfor %}
-</div>
-
-<h5>Clubs BDS</h5>
-<div class="grille">
-  {% for club in object_list%}
-  {% if club.bdx_type == "BDS" %}
-  <div class="grille-icon text-center">
-    <a href="{{ club.get_absolute_url }}">
-      {% if club.logo %}
-        <img src={{ club.logo.url }}>
-      {% else %}
-        <img src="{% static 'img/logo.svg' %}" style="max-width:100px;">
-      {% endif %}
-      </a>
-    <h6>{{ club.name | title }}</h6>
-  </div>
-  {% endif %}
-  {% endfor %}
-</div>
+<br><br>
+{% endfor %}
 
 <!--div class="table-responsive">
     <table class="table table-hover table-sm">

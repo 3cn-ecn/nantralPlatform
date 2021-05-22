@@ -40,7 +40,6 @@ class Group(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ['name']
 
     def __str__(self):
         return self.name
@@ -94,8 +93,6 @@ class Club(Group):
         self.slug = f'club--{slugify(self.name)}'
         super(Club, self).save(*args, **kwargs)
     
-    class Meta:
-        ordering = ['name' ]
 
 
 class NamedMembershipClub(models.Model):

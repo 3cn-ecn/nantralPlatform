@@ -22,6 +22,17 @@ class ListClubView(ListView):
     model = Club
     template_name = 'club/list.html'
     ordering = ['bdx_type', 'name']
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        bdx = [
+            {'cle': 'Asso', 'nom': 'Associations'},
+            {'cle': 'BDE', 'nom': 'Clubs BDE'},
+            {'cle': 'BDA', 'nom': 'Clubs BDA'},
+            {'cle': 'BDS', 'nom': 'Clubs BDS'},
+        ]
+        context['bdx'] = bdx
+        return context
 
 
 class ListeListView(ListView):
