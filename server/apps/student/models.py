@@ -38,10 +38,21 @@ class Student(models.Model):
     path = models.CharField(max_length=200, verbose_name='Cursus', choices=PATHS, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        if self.first_name and self.last_name:
+            return f'{self.first_name.capitalize()} {self.last_name.upper()}'
+        elif self.first_name:
+            return self.first_name.capitalize()
+        elif self.last_name:
+            return self.last_name.upper()
+        else:
+            return f'{self.id}'
 
     def get_absolute_url(self):
         return reverse('student:detail', args=[self.pk])
+    
+    class Meta:
+        ordering = ['first_name', 'last_name', ]
+
 
 @receiver(post_save, sender=User)
 def update_student_signal(sender, instance, created, **kwargs):
