@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from rest_framework import generics
+from rest_framework import generics, permissions
 
 from .models import BaseEvent
 from .serializers import BaseEventSerializer
@@ -10,6 +10,7 @@ class ListEventsGroupAPIView(generics.ListAPIView):
     """List events for a group depending on the chosen
     time window. By default only returns current events."""
     serializer_class = BaseEventSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         if self.request.method == 'GET':
@@ -21,6 +22,7 @@ class ListEventsGroupAPIView(generics.ListAPIView):
 
 
 class UpdateEventAPIView(generics.RetrieveDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = BaseEventSerializer
     lookup_field = 'slug'
     lookup_url_kwarg = 'event_slug'
