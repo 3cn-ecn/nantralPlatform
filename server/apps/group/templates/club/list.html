@@ -1,10 +1,34 @@
 {% extends 'base.html' %}
-{% block content%}
-<br \>
-<h2>Clubs Nantraliens</h2>
-<br \>
+{% load static %}
 
-<div class="table-responsive">
+{% block content %}
+
+<br />
+<h1>Clubs Nantraliens</h1>
+<br />
+
+{% for type in bdx %}
+<h5>{{ type.nom }}</h5>
+<div class="grille">
+	{% for club in object_list%}
+  		{% if club.bdx_type == type.cle %}
+  			<div class="grille-icon text-center">
+	    		<a href="{{ club.get_absolute_url }}">
+      				{% if club.logo %}
+        				<img src="{{ club.logo.url }}" style="max-width:100px;">
+      				{% else %}
+        				<img src="{% static 'img/logo.svg' %}" style="max-width:100px;opacity:0.3">
+      				{% endif %}
+				</a>
+				<h6>{{ club.name | title }}</h6>
+  			</div>
+  		{% endif %}
+  	{% endfor %}
+</div>
+<br><br>
+{% endfor %}
+
+<!--div class="table-responsive">
     <table class="table table-hover table-sm">
       <thead>
         <tr>
@@ -27,5 +51,5 @@
       $(".clickable-row").click(function() {
           window.location = $(this).data("href");
       });
-    }); </script> 
+    }); </script--> 
 {% endblock %}
