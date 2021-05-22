@@ -16,12 +16,12 @@
     <input class="form-control" type="text" name="prenom" placeholder="Jean-Baptiste">
     <label  for="annee">Année / <i>Year</i> : </label>
     <input class="form-control" type="number" name="annee" placeholder="1,2,3,55...">
-    <small class="form-text text-muted">Entrez votre année à l'école en chiffre. / <i>Your school year in number format.</i></small><br>
+    <small class="form-text text-muted">Entrez votre année à l'école en chiffre. / <i>Your school year in number format.</i></small>
     <label for="option">Option / <i>Option</i> : </label>
-    <input class="form-control" type="text" name="option" placeholder="Cassage de bâtiment">
+    <input class="form-control" type="text" name="option" placeholder="Cassage de Bâtiment C">
     <label for="misc">Autre / <i>Other</i> : </label>
     <textarea class="form-control" name="misc" cols="20" rows="2" placeholder="Directeur d'École, Gardien de crèche"></textarea>
-    <small class="form-text text-muted">Ce qui vous distingue : associations, DD par exemple webmaster, J.E. ... / <i>What makes you unique: associations, international...</i></small><br/>
+    <small class="form-text text-muted">Ce qui vous distingue : associations, DD par exemple webmaster, J.E. ... / <i>What makes you unique: associations, international...</i></small>
     <label for="tel">Téléphone / <i>Phone</i> : </label>
     <input class="form-control" type="tel" name="tel" placeholder="+33 2...">
     <label for="mail">Courriel / <i>Mail</i> : </label>
@@ -98,6 +98,7 @@
   </ul>
   </div>
   </div>
+
 <script>
   $(document).ready(function() {
     $('#generer').click(function() {
@@ -107,16 +108,16 @@
 
       //année
       if ($('input[name="annee"]').val() == 1) {
-        $("#an").text("1ère");
+        $("#an").text("1re");
       } else {
-        $("#an").text($('input[name="annee"]').val() + "ème");
+        $("#an").text($('input[name="annee"]').val() + "e");
       }
 
       //option
       if ($('input[name="option"]').val() == "") {
         $('#op').text("");
       } else {
-        $('#op').text("Option " + $('input[name="option"]').val());
+        $('#op').text("<td>Option " + $('input[name="option"]').val() + "</td>");
       }
 
       //divers
