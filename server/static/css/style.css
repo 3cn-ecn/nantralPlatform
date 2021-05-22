@@ -64,5 +64,13 @@ a:hover {
 }
 
 .grille-icon a:hover img {
-	box-shadow: 0px 0px 10px #999;
+	box-shadow: 0px 0px 7px #999;
 }
+
+
+@media all and (min-width: 992px) {
+	.navbar .nav-item .dropdown-menu{ display: none; }
+	.navbar .nav-item:hover .dropdown-menu{ display: block; }
+	.navbar .nav-item .dropdown-menu{ margin-top:0; }
+	.navbar .nav-item .dropdown-menu-end{ right:0; }
+}	
