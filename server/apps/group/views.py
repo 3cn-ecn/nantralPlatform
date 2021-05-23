@@ -4,7 +4,7 @@ from django.http.request import HttpRequest
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, View, FormView, TemplateView
 from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
-from .forms import NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, UpdateClubForm
+from .forms import NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, NamedMembershipListeFormset, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -22,7 +22,7 @@ class ListClubView(ListView):
     model = Club
     template_name = 'club/list.html'
     ordering = ['bdx_type', 'name']
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         bdx = [
@@ -82,6 +82,7 @@ class UpdateGroupMembersView(UserIsAdmin, View):
         return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
 
     def post(self, request,  group_slug):
+        print(f'Post {group_slug}')
         return edit_named_memberships(request, group_slug)
 
 
@@ -138,17 +139,20 @@ class AddToGroupView(LoginRequiredMixin, FormView):
 @ require_http_methods(['POST'])
 @ login_required
 def edit_named_memberships(request, group_slug):
-    club = Club.objects.filter(slug=group_slug).first()
-    form = NamedMembershipClubFormset(request.POST)
+    group = Group.get_group_by_slug(group_slug)
+    if isinstance(group, Club):
+        form = NamedMembershipClubFormset(request.POST)
+    elif isinstance(group, Liste):
+        form = NamedMembershipListeFormset(request.POST)
     if form.is_valid():
         members = form.save(commit=False)
         for member in members:
-            member.group = club
+            member.group = group
             member.save()
         for member in form.deleted_objects:
             member.delete()
         messages.success(request, 'Membres modifies')
-        return redirect('group:update', club.id)
+        return redirect('group:update', group.slug)
     else:
         messages.warning(request, form.errors)
-        return redirect('group:update', club.id)
+        return redirect('group:update', group.slug)
