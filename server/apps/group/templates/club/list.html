@@ -21,11 +21,13 @@
   		{% if club.bdx_type == type.cle %}
   			<div class="grille-icon text-center">
 	    		<a href="{{ club.get_absolute_url }}">
-      				{% if club.logo %}
-        				<img src="{{ club.logo.url }}">
-      				{% else %}
-        				<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
-      				{% endif %}
+					<div class="ratio ratio-1x1">
+      					{% if club.logo %}
+	        				<img src="{{ club.logo.url }}">
+      					{% else %}
+	        				<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
+      					{% endif %}
+					</div>
 				</a>
 				<h6>{{ club.name | title }}</h6>
   			</div>
