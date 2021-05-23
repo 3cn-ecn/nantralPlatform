@@ -1,28 +1,42 @@
 {% extends 'base.html' %}
-{% block content%}
-<br \>
-<h2>Listes</h2>
-<br \>
+{% load static %}
 
-<div class="table-responsive">
-    <table class="table table-hover table-sm">
-      <thead>
-        <tr>
-          <th scope="col">Nom de la liste</th>
-          <th scope="col">Année</th>
-          <th scope="col">Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for liste in object_list %}
-        <tr style="transform: rotate(0);">
-          <td><a href="{{ liste.get_absolute_url }}" class="stretched-link"></a>{{liste.name | title}}</a></td>
-          <td>{{liste.year}}</td>
-          <td>{{liste.liste_type}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    </div>
-    
+{% block content %}
+
+<br />
+<div class="row">
+	<div class="col">
+		<h1>Listes BDX</h1>
+	</div>
+	<!--div class="col text-end">
+		<input type="textbox">
+	</div-->
+</div>
+<br />
+
+{% for annee in annees %}
+<h2>Campagnes {{ annee.year_start }}-{{ annee.year_end }}</h2>
+<div class="grille">
+	{% for liste in annee.listes %}
+  	  <div class="grille-icon text-center" style="transform:rotate(0);">
+	    	<a href="{{ liste.get_absolute_url }}" class="stretched-link">
+				  <div class="ratio ratio-1x1">
+      				{% if liste.logo %}
+	        			<img src="{{ liste.logo.url }}">
+      				{% else %}
+	        			<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
+      				{% endif %}
+				  </div>
+			</a>
+			<p>
+        {{ liste.name | title }}
+        <br>
+        <small>{{ liste.liste_type | upper }}</small>
+      </p>
+  		</div>
+  	{% endfor %}
+</div>
+{% endfor %}
+
 {% endblock %}
+

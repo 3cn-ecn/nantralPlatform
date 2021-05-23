@@ -21,24 +21,37 @@ from apps.utils.accessMixins import UserIsAdmin
 class ListClubView(ListView):
     model = Club
     template_name = 'club/list.html'
-    ordering = ['bdx_type', 'name']
-
+    # ordering = ['bdx_type', 'name']
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        bdx = [
-            {'cle': 'Asso', 'nom': 'Associations'},
-            {'cle': 'BDE', 'nom': 'Clubs BDE'},
-            {'cle': 'BDA', 'nom': 'Clubs BDA'},
-            {'cle': 'BDS', 'nom': 'Clubs BDS'},
+        list_bdx = [
+            {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(members__user=self.request.user)},
+            {'nom': 'Associations', 'list': Club.objects.filter(bdx_type="Asso").order_by('name')},
+            {'nom': 'Clubs BDE', 'list': Club.objects.filter(bdx_type="BDE").order_by('name')},
+            {'nom': 'Clubs BDA', 'list': Club.objects.filter(bdx_type="BDA").order_by('name')},
+            {'nom': 'Clubs BDS', 'list': Club.objects.filter(bdx_type="BDS").order_by('name')},
         ]
-        context['bdx'] = bdx
+        context['list_bdx'] = list_bdx
         return context
 
 
 class ListeListView(ListView):
     model = Liste
     template_name = 'liste/list.html'
-    ordering = ['-year', 'liste_type', 'name']
+    # ordering = ['-year', 'liste_type', 'name']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        annees = []
+        bdx = Liste.objects.order_by('-year', 'liste_type', 'name')
+        annees.append({'year_start': bdx[0].year-1, 'year_end': bdx[0].year, 'listes': []})
+        for liste in bdx:
+            if liste.year == annees[-1]['year_end']:
+                annees[-1]['listes'].append(liste)
+            else:
+                annees.append({'year_start': liste.year-1, 'year_end': liste.year, 'listes': [liste]})
+        context['annees'] = annees
+        return context
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
