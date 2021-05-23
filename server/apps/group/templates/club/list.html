@@ -14,26 +14,26 @@
 </div>
 <br />
 
-{% for type in bdx %}
-<h2>{{ type.nom }}</h2>
-<div class="grille">
-	{% for club in object_list%}
-  		{% if club.bdx_type == type.cle %}
-  			<div class="grille-icon text-center">
-	    		<a href="{{ club.get_absolute_url }}">
-					<div class="ratio ratio-1x1">
-      					{% if club.logo %}
-	        				<img src="{{ club.logo.url }}">
-      					{% else %}
-	        				<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
-      					{% endif %}
-					</div>
-				</a>
-				<h6>{{ club.name | title }}</h6>
-  			</div>
-  		{% endif %}
-  	{% endfor %}
-</div>
+{% for bdx in list_bdx %}
+	{% if bdx.list %}
+		<h2>{{ bdx.nom }}</h2>
+		<div class="grille">
+			{% for club in bdx.list %}
+  				<div class="grille-icon text-center" style="transform:rotate(0);">
+		    		<a href="{{ club.get_absolute_url }}" class="stretched-link">
+						<div class="ratio ratio-1x1">
+	      					{% if club.logo %}
+	        					<img src="{{ club.logo.url }}">
+      						{% else %}
+			        			<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
+      						{% endif %}
+						</div>
+					</a>
+					<h6>{{ club.name | title }}</h6>
+  				</div>
+  			{% endfor %}
+		</div>
+	{% endif %}
 {% endfor %}
 
 {% endblock %}
