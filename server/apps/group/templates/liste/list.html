@@ -15,8 +15,8 @@
       </thead>
       <tbody>
         {% for liste in object_list %}
-        <tr class='clickable-row' data-href='{{liste.get_absolute_url}}' style="cursor: pointer">
-          <td>{{liste.name | title}}</a></td>
+        <tr style="transform: rotate(0);">
+          <td><a href="{{ liste.get_absolute_url }}" class="stretched-link"></a>{{liste.name | title}}</a></td>
           <td>{{liste.year}}</td>
           <td>{{liste.liste_type}}</td>
         </tr>
@@ -25,9 +25,4 @@
     </table>
     </div>
     
-    <script> jQuery(document).ready(function($) {
-      $(".clickable-row").click(function() {
-          window.location = $(this).data("href");
-      });
-    }); </script> 
 {% endblock %}
