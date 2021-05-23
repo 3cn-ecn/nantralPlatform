@@ -7,7 +7,7 @@
         {%if is_member %}
             Vous êtes membre.
         {% else %}
-            <button id='show-add-group' class='btn btn-dark btn-sm' data-toggle="modal" data-target="#addModal">
+            <button id='show-add-group' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                 <i class="fa fa-user-plus"></i>
                 Je suis ou j'ai été membre de {{object.name}}
             </button>
@@ -72,26 +72,21 @@
         Veuillez vous connecter pour visualiser les membres.
     {%endif%}
     
-    <div class="modal fade" tabindex="-1" role="dialog" id="addModal">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="addModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
-                {% load crispy_forms_tags %}
-                <form method="post" action="{% url 'group:add-member' object.slug %}">
-                    {% csrf_token %}        
+                {% load crispy_forms_tags %}  
                     <div class="modal-header">
                         <h5 class="modal-title">M'ajouter à {{object.name}}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>        
                     <div class="modal-body">
-                        {{form | crispy}}
-                    </div>        
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="submit-btn btn btn-dark">M'ajouter</button>
-                    </div>        
-                </form>
+                        <form method="post" action="{% url 'group:add-member' object.slug %}">
+                            {% csrf_token %}      
+                            {{form | crispy}}
+                            <button type="submit" value="Submit" class="btn btn-dark">M'ajouter</button>
+                        </form>
+                    </div>
             </div>
         </div>
     </div>

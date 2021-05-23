@@ -34,3 +34,10 @@ NamedMembershipClubFormset = modelformset_factory(
     extra=1,
     can_delete=True
 )
+
+NamedMembershipListeFormset = modelformset_factory(
+    NamedMembershipList,
+    fields=['function', 'student'],
+    extra=1,
+    can_delete=True
+)

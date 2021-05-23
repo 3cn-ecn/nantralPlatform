@@ -30,11 +30,16 @@ else:
 
 
 class Group(models.Model):
-    name = models.CharField(verbose_name='Nom du groupe', unique=True, max_length=200)
-    description = models.TextField(verbose_name='Description du groupe', blank=True)
-    admins = models.ManyToManyField(Student, verbose_name='Administrateur.rice.s du groupe', related_name='%(class)s_admins', blank=True)
-    members = models.ManyToManyField(Student, verbose_name='Membres du groupe', related_name='%(class)s_members')
-    logo = models.ImageField(verbose_name='Logo du groupe', blank=True, null=True, upload_to=path_and_rename_group)
+    name = models.CharField(verbose_name='Nom du groupe',
+                            unique=True, max_length=200)
+    description = models.TextField(
+        verbose_name='Description du groupe', blank=True)
+    admins = models.ManyToManyField(
+        Student, verbose_name='Administrateur.rice.s du groupe', related_name='%(class)s_admins', blank=True)
+    members = models.ManyToManyField(
+        Student, verbose_name='Membres du groupe', related_name='%(class)s_members')
+    logo = models.ImageField(verbose_name='Logo du groupe',
+                             blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     parent = models.SlugField(max_length=40, blank=True, null=True)
 
@@ -70,13 +75,15 @@ class Group(models.Model):
     @staticmethod
     def get_group_by_slug(slug:  str):
         """Get a group from a slug."""
+        print(slug)
         type_slug = slug.split('--')[0]
+        print(type_slug)
         if type_slug == 'club':
             return Club.objects.get(slug=slug)
         elif type_slug == 'liste':
             return Liste.objects.get(slug=slug)
         else:
-            return None
+            raise Exception('Unknown group')
 
     @property
     def get_absolute_url(self):
@@ -85,14 +92,14 @@ class Group(models.Model):
 
 class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
-    bdx_type = models.CharField(verbose_name='Type de club BDX', choices=TYPE_BDX, max_length=60)
+    bdx_type = models.CharField(
+        verbose_name='Type de club BDX', choices=TYPE_BDX, max_length=60)
     logo = models.ImageField(verbose_name='Logo du club',
                              blank=True, null=True, upload_to=path_and_rename_club)
 
     def save(self, *args, **kwargs):
         self.slug = f'club--{slugify(self.name)}'
         super(Club, self).save(*args, **kwargs)
-    
 
 
 class NamedMembershipClub(models.Model):
