@@ -25,7 +25,7 @@ class ListClubView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         list_bdx = [
-            {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(members__user=self.request.user)},
+            {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(members__user=self.request.user).order_by('name')},
             {'nom': 'Associations', 'list': Club.objects.filter(bdx_type="Asso").order_by('name')},
             {'nom': 'Clubs BDE', 'list': Club.objects.filter(bdx_type="BDE").order_by('name')},
             {'nom': 'Clubs BDA', 'list': Club.objects.filter(bdx_type="BDA").order_by('name')},
