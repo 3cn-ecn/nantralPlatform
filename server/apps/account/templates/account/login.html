@@ -1,26 +1,34 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+
 {% block content%}
-<style> body
-    {
-      background-image: url('{% static "/img/central_background.jpg" %}');
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-</style>
+    <style> 
+        body {
+            background-image: url('{% static "/img/central_background.jpg" %}');
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .bg-light {
+            background-color: rgba(248, 249, 251, 0.85) !important;
+            backdrop-filter: blur(4px);
+        }
+    </style>
+    
     <div class='row'>
         <div class='col-md-3'></div>
         <div class='card col-md-6 col-12  my-3 p-3 bg-light text-center'>
-            <h2>Nantral Platform</h2>
-            <small>Veuillez vous connecter</small>
+            <p><img src='{% static "/img/logo.svg" %}' style="height:5rem;max-width:150px;"> </p>
+            <h1>Nantral Platform.</h1>
+            <small>Le site des clubs et assos de Centrale Nantes !</small>
+            <p></p>
             <form method='POST'>
                 {% csrf_token %}
                 {{ form|crispy }}
-            <div class='text-center'>
-                <button class="btn btn-dark">Se connecter</button>  
-                <a href="{% url 'account:registration' %}" class="btn btn-light">Pas de compte ?</a>
-            </div>
+                <div class='text-center'>
+                    <button class="btn btn-dark">Se connecter</button>  
+                    <a href="{% url 'account:registration' %}" class="btn btn-light">Pas de compte ?</a>
+                </div>
             </form>
         </div>
         <div class='col-md-3'></div>

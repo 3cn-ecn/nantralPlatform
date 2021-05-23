@@ -36,28 +36,4 @@
 </div>
 {% endfor %}
 
-<!--div class="table-responsive">
-    <table class="table table-hover table-sm">
-      <thead>
-        <tr>
-          <th scope="col">Club</th>
-          <th scope="col">Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for club in object_list%}
-        <tr class='clickable-row' data-href='{{club.get_absolute_url}}' style="cursor: pointer">
-          <td>{{club.name | title}}</a></td>
-          <td>{{club.bdx_type}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    </div>
-    
-    <script> jQuery(document).ready(function($) {
-      $(".clickable-row").click(function() {
-          window.location = $(this).data("href");
-      });
-    }); </script--> 
 {% endblock %}
