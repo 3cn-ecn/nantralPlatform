@@ -99,6 +99,7 @@ class Club(Group):
         verbose_name='Type de club BDX', choices=TYPE_BDX, max_length=60)
     logo = models.ImageField(verbose_name='Logo du club',
                              blank=True, null=True, upload_to=path_and_rename_club)
+    social = models.ManyToManyField('ReseauSocial', through='LienSocialClub')
 
     def save(self, *args, **kwargs):
         self.slug = f'club--{slugify(self.name)}'
@@ -171,3 +172,25 @@ def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
                 })
                 user.email_user(
                     f'Vous n\'êtes plus admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
+
+
+class ReseauSocial(models.Model):
+    name = models.CharField(verbose_name='Nom', max_length=20)
+    color = models.CharField(verbose_name='Couleur en hexadécimal', max_length=7)
+    icon_name = models.CharField(verbose_name="Nom Bootstrap de l'icône", max_length=20)
+
+    class Meta:
+        verbose_name = "Réseau Social"
+        verbose_name_plural = "Réseaux Sociaux"
+    
+    def __str__(self):
+        return self.name
+
+
+class LienSocialClub(models.Model):
+    url = models.CharField(verbose_name='URL', max_length=200)
+    reseau = models.ForeignKey(ReseauSocial, on_delete=models.CASCADE)
+    club = models.ForeignKey(Club, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.url

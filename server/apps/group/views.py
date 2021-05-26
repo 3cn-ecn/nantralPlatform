@@ -3,7 +3,7 @@ from django.http.request import HttpRequest
 
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, View, FormView, TemplateView
-from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
+from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList, ReseauSocial, LienSocialClub
 from .forms import NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, NamedMembershipListeFormset, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -108,13 +108,17 @@ class DetailGroupView(TemplateView):
         context['object'] = self.object
         if isinstance(context['object'], Club):
             members = NamedMembershipClub.objects.filter(club=self.object)
+            social = LienSocialClub.objects.filter(club=self.object)
             context['form'] = NamedMembershipAddClub()
         elif isinstance(context['object'], Liste):
             members = NamedMembershipList.objects.filter(liste=self.object)
             context['form'] = NamedMembershipAddListe()
+            social = ""
         else:
             members = self.object.members
+            social = ""
         context['members'] = members
+        context['social'] = social
         context['is_member'] = self.object.is_member(self.request.user)
         context['is_admin'] = self.object.is_admin(
             self.request.user) if self.request.user.is_authenticated else False
