@@ -80,10 +80,15 @@ a:hover {
 }	
 
 .logo {
-	width: 100%;
+	width: 90%;
 	object-fit: contain;
+	margin: 5%;
 }
 
+.grille-rs {
+	display: flex;
+	flex-wrap: wrap;
+}
 a.rs {
 	background: #eaeaea;
 	border-radius: 1em;
@@ -95,6 +100,7 @@ a.rs {
 	width: max-content;
 	height: 2rem;
 	margin-right: 0.3rem;
+	margin-bottom: 0.3rem;
 }
 
 a.rs div, a.rs i {
