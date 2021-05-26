@@ -15,27 +15,27 @@
 <br />
 
 {% for annee in annees %}
-<h2>Campagnes {{ annee.year_start }}-{{ annee.year_end }}</h2>
-<div class="grille">
-	{% for liste in annee.listes %}
-  	  <div class="grille-icon text-center" style="transform:rotate(0);">
-	    	<a href="{{ liste.get_absolute_url }}" class="stretched-link">
-				  <div class="ratio ratio-1x1">
-      				{% if liste.logo %}
-	        			<img src="{{ liste.logo.url }}">
-      				{% else %}
-	        			<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
-      				{% endif %}
-				  </div>
-			</a>
-			<p>
-        {{ liste.name }}
-        <br>
-        <small class="text-secondary">{{ liste.liste_type | upper }}</small>
-      </p>
-  		</div>
-  	{% endfor %}
-</div>
+	<h2>Campagnes {{ annee.year_start }}-{{ annee.year_end }}</h2>
+	<div class="grille">
+		{% for liste in annee.listes %}
+  			<div class="grille-icon text-center" style="transform:rotate(0);">
+	    		<a href="{{ liste.get_absolute_url }}" class="stretched-link">
+					<div class="ratio ratio-1x1">
+      					{% if liste.logo %}
+	        				<img src="{{ liste.logo.url }}">
+      					{% else %}
+		        			<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
+      					{% endif %}
+					</div>
+				</a>
+				<p>
+				    {{ liste.name }}
+        			<br>
+        			<small class="text-secondary">{{ liste.liste_type | upper }}</small>
+      			</p>
+  			</div>
+  		{% endfor %}
+	</div>
 {% endfor %}
 
 {% endblock %}

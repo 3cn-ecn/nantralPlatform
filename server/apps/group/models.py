@@ -92,6 +92,9 @@ class Group(models.Model):
 
 class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
+    abbr = models.CharField(verbose_name='Nom abrégé', max_length=20, null=True, blank=True)
+    prefere_abbr = models.BooleanField(verbose_name="Utiliser le nom abrégé plutôt que le nom complet",
+                                        default=False)
     bdx_type = models.CharField(
         verbose_name='Type de club BDX', choices=TYPE_BDX, max_length=60)
     logo = models.ImageField(verbose_name='Logo du club',

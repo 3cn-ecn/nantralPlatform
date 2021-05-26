@@ -29,7 +29,13 @@
       						{% endif %}
 						</div>
 					</a>
-					<h6>{{ club.name }}</h6>
+					<h6>
+						{% if club.prefere_abbr %}
+							{{ club.abbr }}
+						{% else %}
+							{{ club.name }}
+						{% endif %}
+					</h6>
   				</div>
   			{% endfor %}
 		</div>
