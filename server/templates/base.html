@@ -100,10 +100,11 @@
       </div>
     </nav>
     
-    {% block content-large %}
+    {% block banniere %}
     {% endblock %}
     
     <div class="container">
+      <br>
       {% if messages %}
         {% for message in messages %}
           <br/>
@@ -113,9 +114,13 @@
           </div>
         {%endfor%}
       {% endif %}
+
       {% block content %}
       {% endblock %}
+
+      <br><br><br><br><br>
     </div>
+
   </body>
   {% block script %}
   {% endblock %}

@@ -23,25 +23,25 @@ if settings.DEBUG:
     path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
     path_and_rename_liste = PathAndRename("./static/upload/groups/logo/liste")
     path_and_rename_group = PathAndRename("./static/upload/groups/logo/group")
+    path_and_rename_club_banniere = PathAndRename("./static/upload/groups/banniere/club")
+    path_and_rename_liste_banniere = PathAndRename("./static/upload/groups/banniere/club")
 else:
     path_and_rename_club = PathAndRename("groups/logo/club")
     path_and_rename_liste = PathAndRename("groups/logo/liste")
     path_and_rename_group = PathAndRename("groups/logo/group")
+    path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
+    path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
 
 
 class Group(models.Model):
-    name = models.CharField(verbose_name='Nom du groupe',
-                            unique=True, max_length=200)
-    description = models.TextField(
-        verbose_name='Description du groupe', blank=True)
-    admins = models.ManyToManyField(
-        Student, verbose_name='Administrateur.rice.s du groupe', related_name='%(class)s_admins', blank=True)
-    members = models.ManyToManyField(
-        Student, verbose_name='Membres du groupe', related_name='%(class)s_members')
-    logo = models.ImageField(verbose_name='Logo du groupe',
-                             blank=True, null=True, upload_to=path_and_rename_group)
+    name = models.CharField(verbose_name='Nom du groupe', unique=True, max_length=200)
+    description = models.TextField(verbose_name='Description du groupe', blank=True)
+    admins = models.ManyToManyField(Student, verbose_name='Admins du groupe', related_name='%(class)s_admins', blank=True)
+    members = models.ManyToManyField(Student, verbose_name='Membres du groupe', related_name='%(class)s_members')
+    logo = models.ImageField(verbose_name='Logo du groupe', blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     parent = models.SlugField(max_length=40, blank=True, null=True)
+    modified_date = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -92,13 +92,10 @@ class Group(models.Model):
 
 class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
-    abbr = models.CharField(verbose_name='Nom abrégé', max_length=20, null=True, blank=True)
-    prefere_abbr = models.BooleanField(verbose_name="Utiliser le nom abrégé plutôt que le nom complet",
-                                        default=False)
-    bdx_type = models.CharField(
-        verbose_name='Type de club BDX', choices=TYPE_BDX, max_length=60)
-    logo = models.ImageField(verbose_name='Logo du club',
-                             blank=True, null=True, upload_to=path_and_rename_club)
+    alt_name = models.CharField(verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
+    bdx_type = models.CharField(verbose_name='Type de club BDX', choices=TYPE_BDX, max_length=60)
+    logo = models.ImageField(verbose_name='Logo du club', blank=True, null=True, upload_to=path_and_rename_club)
+    banniere = models.ImageField(verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
     social = models.ManyToManyField('ReseauSocial', through='LienSocialClub')
 
     def save(self, *args, **kwargs):
