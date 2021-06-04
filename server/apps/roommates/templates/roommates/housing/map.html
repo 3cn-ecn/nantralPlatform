@@ -16,10 +16,6 @@
 		margin-top: 0.5rem !important;
     position: relative;
     top: 50%;
-    transform: translateY(-50%);
-  }
-  .mapbox > div {
-    flex: 1;
   }
 </style>
 
@@ -31,10 +27,10 @@
 <br>
 <div class="row">
 	<div class="col-12">
-		<div id="root" class="mapbox"></div>
+		<div id="root"></div>
 	</div>
 </div>
-<div class="row">
+<div class="row mb-2">
 	<div class="col-12">
 		<a class='btn btn-success mt-3' href="{% url 'roommates:create-new' %}">Ajouter une coloc</a>
 	</div>
