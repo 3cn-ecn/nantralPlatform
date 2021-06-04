@@ -219,6 +219,7 @@ function Root(props): JSX.Element {
 			mapStyle="mapbox://styles/mapbox/bright-v9"
 			onViewportChange={setViewPort}
 			mapboxApiAccessToken={props.api_key}
+			onClick={() => setPopUpinfo(null)}
 		>
 			{mapRef.current && (
 				<Cluster
