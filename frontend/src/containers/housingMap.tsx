@@ -203,10 +203,14 @@ function ClusterMarker(props): JSX.Element {
 }
 
 function Root(props): JSX.Element {
-  const navControlStyle = {
+  const navControlStyle: React.CSSProperties = {
     right: 10,
     top: 10,
   };
+	const styleSearchBar: React.CSSProperties = {
+		marginTop: "2rem",
+		maxWidth: "300px"
+	};
   const [data, setData] = useState([]);
   const [colocs, setColocs] = useState([]);
   const [selectColoc, setSelectColoc] = useState([]);
@@ -228,7 +232,7 @@ function Root(props): JSX.Element {
         .then((res) => {
           setColocs(
             res.data.map((roommate) => {
-              return { label: roommate.name, id: roommate.id };
+              return { label: roommate.name, roommate: roommate };
             })
           );
           setData(res.data);
@@ -244,14 +248,17 @@ function Root(props): JSX.Element {
     <>
 		<div className="row">
         <div className="col-12">
-          <Form.Group>
+          <Form.Group style={styleSearchBar}>
             <Typeahead
               id="search-colocs"
               onChange={(coloc) => {
+								if(typeof coloc[0] === "undefined"){
+									return;
+								}
                 setSelectColoc(coloc);
                 let roommate = data.filter((roommateElt) => 
-                  roommateElt.id===coloc[0].id);
-                if (roommate.length != 1) return;
+                  roommateElt.id===coloc[0].roommate.id);
+                if (typeof roommate[0] === "undefined") return;
                 roommate = roommate[0];
                 setViewPort({
                   zoom: 16,
@@ -261,9 +268,27 @@ function Root(props): JSX.Element {
                   transitionInterpolator: new FlyToInterpolator(),
                   transitionEasing: rd3.easeCubic,
                 });
+								setPopUpinfo(
+									<Popup
+										tipSize={10}
+										anchor="bottom"
+										longitude={roommate.longitude}
+										latitude={roommate.latitude}
+										closeOnClick={false}
+										onClose={() => setPopUpinfo(null)}
+										dynamicPosition={false}
+										offsetTop={-10}
+										offsetLeft={10}
+									>
+										<ColocInfo
+											housing={roommate}
+											housingDetailsUrl={housing_details_url}
+										/>
+									</Popup>
+								);
               }}
               options={colocs}
-              placeholder="Select your favourite coloc"
+              placeholder="Recherche"
               selected={selectColoc}
             />
           </Form.Group>
