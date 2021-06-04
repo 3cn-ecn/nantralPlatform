@@ -8,10 +8,12 @@ import MapGL, {
   FlyToInterpolator,
   NavigationControl,
 } from "react-map-gl";
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import axios from "axios";
 import Cluster from "./cluster.tsx";
 import rd3 from "react-d3-library";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
 
 export interface Housing {
   id: number;
@@ -75,11 +77,11 @@ const positionOptions = {
   enableHighAccuracy: true,
 };
 
-function toTitle(str:string):string{
-	if(str){
-		return str.charAt(0).toUpperCase() + str.slice(1);
-	}
-	return undefined;
+function toTitle(str: string): string {
+  if (str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  return undefined;
 }
 
 function ColocInfo(props: CityInfoProps): JSX.Element {
@@ -94,7 +96,10 @@ function ColocInfo(props: CityInfoProps): JSX.Element {
     typeof housing.roommates[0].members != "undefined"
   ) {
     roommatesList = housing.roommates[0].members
-      .map((e) => toTitle(e.student.first_name) + " " + toTitle(e.student.last_name))
+      .map(
+        (e) =>
+          toTitle(e.student.first_name) + " " + toTitle(e.student.last_name)
+      )
       .join(",");
     roommatesList = roommatesList.replace(/(,\s*)$/, "");
   }
@@ -203,6 +208,8 @@ function Root(props): JSX.Element {
     top: 10,
   };
   const [data, setData] = useState([]);
+  const [colocs, setColocs] = useState([]);
+  const [selectColoc, setSelectColoc] = useState([]);
   // Add an object here
   const [viewport, setViewPort] = useState({
     latitude: 47.21784689284845,
@@ -219,6 +226,11 @@ function Root(props): JSX.Element {
       await axios
         .get(props.api_housing_url)
         .then((res) => {
+          setColocs(
+            res.data.map((roommate) => {
+              return { label: roommate.name, id: roommate.id };
+            })
+          );
           setData(res.data);
         })
         .catch((err) => {
@@ -229,75 +241,108 @@ function Root(props): JSX.Element {
   }, []);
 
   return (
-    <MapGL
-      {...viewport}
-      width="100vw"
-      height="80vh"
-      ref={mapRef}
-      mapStyle="mapbox://styles/mapbox/bright-v9"
-      onViewportChange={setViewPort}
-      mapboxApiAccessToken={props.api_key}
-      onClick={() => setPopUpinfo(null)}
-    >
-      {mapRef.current && (
-        <Cluster
-          map={mapRef.current.getMap()}
-          radius={20}
-          extent={512}
-          nodeSize={40}
-          element={(clusterProps) => <ClusterMarker {...clusterProps} />}
-        >
-          {data.map((roommate) => (
-            <Marker
-              key={roommate.address}
-              longitude={roommate.longitude}
-              latitude={roommate.latitude}
-            >
-              <Pin
-                size={25}
-                onClick={() => {
-                  setViewPort({
-                    zoom: 16,
-                    longitude: roommate.longitude,
-                    latitude: roommate.latitude,
-                    transitionDuration: 500,
-                    transitionInterpolator: new FlyToInterpolator(),
-                    transitionEasing: rd3.easeCubic,
-                  });
-                  setPopUpinfo(
-                    <Popup
-                      tipSize={10}
-                      anchor="bottom"
-                      longitude={roommate.longitude}
-                      latitude={roommate.latitude}
-                      closeOnClick={false}
-                      onClose={() => setPopUpinfo(null)}
-                      dynamicPosition={false}
-                      offsetTop={-10}
-                      offsetLeft={10}
-                    >
-                      <ColocInfo
-                        housing={roommate}
-                        housingDetailsUrl={housing_details_url}
-                      />
-                    </Popup>
-                  );
-                }}
-              />
-            </Marker>
-          ))}
-        </Cluster>
-      )}
+    <>
+		<div className="row">
+        <div className="col-12">
+          <Form.Group>
+            <Typeahead
+              id="search-colocs"
+              onChange={(coloc) => {
+                setSelectColoc(coloc);
+                let roommate = data.filter((roommateElt) => 
+                  roommateElt.id===coloc[0].id);
+                if (roommate.length != 1) return;
+                roommate = roommate[0];
+                setViewPort({
+                  zoom: 16,
+                  longitude: roommate.longitude,
+                  latitude: roommate.latitude,
+                  transitionDuration: 500,
+                  transitionInterpolator: new FlyToInterpolator(),
+                  transitionEasing: rd3.easeCubic,
+                });
+              }}
+              options={colocs}
+              placeholder="Select your favourite coloc"
+              selected={selectColoc}
+            />
+          </Form.Group>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12 mapbox">
+          <MapGL
+            {...viewport}
+            width="100vw"
+            height="80vh"
+            ref={mapRef}
+            mapStyle="mapbox://styles/mapbox/bright-v9"
+            onViewportChange={setViewPort}
+            mapboxApiAccessToken={props.api_key}
+            onClick={() => setPopUpinfo(null)}
+          >
+            {mapRef.current && (
+              <Cluster
+                map={mapRef.current.getMap()}
+                radius={20}
+                extent={512}
+                nodeSize={40}
+                element={(clusterProps) => <ClusterMarker {...clusterProps} />}
+              >
+                {data.map((roommate) => (
+                  <Marker
+                    key={roommate.address}
+                    longitude={roommate.longitude}
+                    latitude={roommate.latitude}
+                  >
+                    <Pin
+                      size={25}
+                      onClick={() => {
+                        setViewPort({
+                          zoom: 16,
+                          longitude: roommate.longitude,
+                          latitude: roommate.latitude,
+                          transitionDuration: 500,
+                          transitionInterpolator: new FlyToInterpolator(),
+                          transitionEasing: rd3.easeCubic,
+                        });
+                        setPopUpinfo(
+                          <Popup
+                            tipSize={10}
+                            anchor="bottom"
+                            longitude={roommate.longitude}
+                            latitude={roommate.latitude}
+                            closeOnClick={false}
+                            onClose={() => setPopUpinfo(null)}
+                            dynamicPosition={false}
+                            offsetTop={-10}
+                            offsetLeft={10}
+                          >
+                            <ColocInfo
+                              housing={roommate}
+                              housingDetailsUrl={housing_details_url}
+                            />
+                          </Popup>
+                        );
+                      }}
+                    />
+                  </Marker>
+                ))}
+              </Cluster>
+            )}
 
-      {popupInfo}
-      <GeolocateControl
-        style={geolocateStyle}
-        positionOptions={positionOptions}
-        trackUserLocation
-        auto
-      />
-      <NavigationControl showCompass={false} style={navControlStyle} />
-    </MapGL>
+            {popupInfo}
+            <GeolocateControl
+              style={geolocateStyle}
+              positionOptions={positionOptions}
+              trackUserLocation
+              auto
+            />
+            <NavigationControl showCompass={false} style={navControlStyle} />
+          </MapGL>
+        </div>
+      </div>
+    </>
   );
 }
 
