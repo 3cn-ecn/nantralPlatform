@@ -3,8 +3,8 @@ from django.http.request import HttpRequest
 
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, View, FormView, TemplateView
-from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
-from .forms import NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, UpdateClubForm
+from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList, ReseauSocial, LienSocialClub
+from .forms import NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, NamedMembershipListeFormset, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,13 +21,37 @@ from apps.utils.accessMixins import UserIsAdmin
 class ListClubView(ListView):
     model = Club
     template_name = 'club/list.html'
-    ordering = ['bdx_type', 'name']
+    # ordering = ['bdx_type', 'name']
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        list_bdx = [
+            {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(members__user=self.request.user).order_by('name')},
+            {'nom': 'Associations', 'list': Club.objects.filter(bdx_type="Asso").order_by('name')},
+            {'nom': 'Clubs BDE', 'list': Club.objects.filter(bdx_type="BDE").order_by('name')},
+            {'nom': 'Clubs BDA', 'list': Club.objects.filter(bdx_type="BDA").order_by('name')},
+            {'nom': 'Clubs BDS', 'list': Club.objects.filter(bdx_type="BDS").order_by('name')},
+        ]
+        context['list_bdx'] = list_bdx
+        return context
 
 
 class ListeListView(ListView):
     model = Liste
     template_name = 'liste/list.html'
-    ordering = ['-year', 'liste_type', 'name']
+    # ordering = ['-year', 'liste_type', 'name']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        annees = []
+        bdx = Liste.objects.order_by('-year', 'liste_type', 'name')
+        annees.append({'year_start': bdx[0].year-1, 'year_end': bdx[0].year, 'listes': []})
+        for liste in bdx:
+            if liste.year == annees[-1]['year_end']:
+                annees[-1]['listes'].append(liste)
+            else:
+                annees.append({'year_start': liste.year-1, 'year_end': liste.year, 'listes': [liste]})
+        context['annees'] = annees
+        return context
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
@@ -47,7 +71,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
     def post(self, request, group_slug):
         group = Group.get_group_by_slug(self.kwargs['group_slug'])
         if isinstance(group, Club):
-            form = UpdateClubForm(request.POST, instance=group)
+            form = UpdateClubForm(request.POST, request.FILES, instance=group)
             form.save()
         else:
             pass
@@ -71,6 +95,7 @@ class UpdateGroupMembersView(UserIsAdmin, View):
         return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
 
     def post(self, request,  group_slug):
+        print(f'Post {group_slug}')
         return edit_named_memberships(request, group_slug)
 
 
@@ -83,13 +108,17 @@ class DetailGroupView(TemplateView):
         context['object'] = self.object
         if isinstance(context['object'], Club):
             members = NamedMembershipClub.objects.filter(club=self.object)
+            social = LienSocialClub.objects.filter(club=self.object)
             context['form'] = NamedMembershipAddClub()
         elif isinstance(context['object'], Liste):
             members = NamedMembershipList.objects.filter(liste=self.object)
             context['form'] = NamedMembershipAddListe()
+            social = ""
         else:
             members = self.object.members
+            social = ""
         context['members'] = members
+        context['social'] = social
         context['is_member'] = self.object.is_member(self.request.user)
         context['is_admin'] = self.object.is_admin(
             self.request.user) if self.request.user.is_authenticated else False
@@ -127,17 +156,20 @@ class AddToGroupView(LoginRequiredMixin, FormView):
 @ require_http_methods(['POST'])
 @ login_required
 def edit_named_memberships(request, group_slug):
-    club = Club.objects.filter(slug=group_slug).first()
-    form = NamedMembershipClubFormset(request.POST)
+    group = Group.get_group_by_slug(group_slug)
+    if isinstance(group, Club):
+        form = NamedMembershipClubFormset(request.POST)
+    elif isinstance(group, Liste):
+        form = NamedMembershipListeFormset(request.POST)
     if form.is_valid():
         members = form.save(commit=False)
         for member in members:
-            member.group = club
+            member.group = group
             member.save()
         for member in form.deleted_objects:
             member.delete()
         messages.success(request, 'Membres modifies')
-        return redirect('group:update', club.id)
+        return redirect('group:update', group.slug)
     else:
         messages.warning(request, form.errors)
-        return redirect('group:update', club.id)
+        return redirect('group:update', group.slug)

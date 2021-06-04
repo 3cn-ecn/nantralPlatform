@@ -1,31 +1,44 @@
 {% extends 'base.html' %}
-{% block content%}
-<br \>
-<h2>Clubs Nantraliens</h2>
-<br \>
+{% load static %}
 
-<div class="table-responsive">
-    <table class="table table-hover table-sm">
-      <thead>
-        <tr>
-          <th scope="col">Club</th>
-          <th scope="col">Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for club in object_list%}
-        <tr class='clickable-row' data-href='{{club.get_absolute_url}}' style="cursor: pointer">
-          <td>{{club.name | title}}</a></td>
-          <td>{{club.bdx_type}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    </div>
-    
-    <script> jQuery(document).ready(function($) {
-      $(".clickable-row").click(function() {
-          window.location = $(this).data("href");
-      });
-    }); </script> 
+{% block content %}
+
+<div class="row">
+	<div class="col">
+		<h1>Clubs Nantraliens</h1>
+	</div>
+	<!--div class="col text-end">
+		<input type="textbox">
+	</div-->
+</div>
+<br />
+
+{% for bdx in list_bdx %}
+	{% if bdx.list %}
+		<h2>{{ bdx.nom }}</h2>
+		<div class="grille">
+			{% for club in bdx.list %}
+  				<div class="grille-icon text-center" style="transform:rotate(0);">
+		    		<a href="{{ club.get_absolute_url }}" class="stretched-link">
+						<div class="ratio ratio-1x1">
+	      					{% if club.logo %}
+	        					<img src="{{ club.logo.url }}">
+      						{% else %}
+			        			<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
+      						{% endif %}
+						</div>
+					</a>
+					<h6>
+						{% if club.prefere_abbr %}
+							{{ club.abbr }}
+						{% else %}
+							{{ club.name }}
+						{% endif %}
+					</h6>
+  				</div>
+  			{% endfor %}
+		</div>
+	{% endif %}
+{% endfor %}
+
 {% endblock %}

@@ -17,8 +17,8 @@
   </thead>
   <tbody>
     {% for student in object_list%}
-    <tr class='clickable-row' data-href='{% url "student:detail" student.id%}' style="cursor: pointer">
-      <td>{{student.last_name | upper}}</a></td>
+    <tr style="transform: rotate(0);">
+      <td><a href="{% url "student:detail" student.id%}" class="stretched-link"></a>{{student.last_name | upper}}</a></td>
       <td>{{student.first_name | title}}</td>
       <td class="d-none d-sm-table-cell">{{student.promo}}</td>
       <td class="d-none d-sm-table-cell">{{student.get_faculty_display}}</td>
@@ -29,11 +29,6 @@
 </table>
 </div>
 
-<script> jQuery(document).ready(function($) {
-  $(".clickable-row").click(function() {
-      window.location = $(this).data("href");
-  });
-}); </script> 
 
 {% endblock %}
 

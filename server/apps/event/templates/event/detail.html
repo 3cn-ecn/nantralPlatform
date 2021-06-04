@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-</br>
 <h1>{{object.title}}</h1>
 <p>Organisé par <a href='{{group.get_absolute_url}}'>{{group.name}}</a></p>
 {% if event.image %}

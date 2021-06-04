@@ -1,8 +1,12 @@
-﻿{% extends 'base.html'%} {% load static %} {% block head %}
+﻿{% extends 'base.html'%} 
+{% load static %} 
+
+{% block head %}
 <link
   href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css"
   rel="stylesheet"
 />
+
 <style>
   .mapbox {
     display: -ms-flex;
@@ -15,7 +19,12 @@
   }
 </style>
 
-{% endblock %} {% block content%}
+{% endblock %} 
+
+
+{% block content%}
+<h1>Carte des colocs</h1>
+<br>
 <div class="row">
 	<div class="col-12">
 		<div id="root"></div>
@@ -27,7 +36,9 @@
 	</div>
 </div>
 
-{% endblock content%} {% block script %}
+{% endblock content%} 
+
+{% block script %}
 <script>
   const MAPBOX_TOKEN = "{{MAPBOX_API_KEY}}";
   const api_housing_url = "{% url 'roommates_api:housing-and-roommates' %}";
