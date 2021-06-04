@@ -137,7 +137,7 @@ function Pin(props: PinProps): JSX.Element {
 			onClick={props.onClick}
 		>
 			<path
-				fill="#0079f2"
+				fill="#cc0000"
 				d="M256,0C153.755,0,70.573,83.182,70.573,185.426c0,126.888,165.939,313.167,173.004,321.035
 		c6.636,7.391,18.222,7.378,24.846,0c7.065-7.868,173.004-194.147,173.004-321.035C441.425,83.182,358.244,0,256,0z M256,278.719
 		c-51.442,0-93.292-41.851-93.292-93.293S204.559,92.134,256,92.134s93.291,41.851,93.291,93.293S307.441,278.719,256,278.719z"
@@ -146,24 +146,40 @@ function Pin(props: PinProps): JSX.Element {
 	);
 }
 
-function PinGroup(props): JSX.Element {
-	const { cluster } = props;
-	return <div>{cluster.properties.point_count}</div>;
-}
 
-const style: React.CSSProperties = {
-	width: '20px',
-	height: '20px',
-	color: '#fff',
-	background: '#1978c8',
-	borderRadius: '20px',
-	textAlign: 'center'
+const styleClusterMarker: React.CSSProperties = {
+	position: 'absolute',
+  top: '50%',
+	transform: 'translate(0, -50%)',
+  width: '25px',
+  height: '25px',
+  lineHeight: '25px',
+  borderRadius: '50%',
+  fontSize: '1rem',
+  color: '#fff',
+  textAlign: 'center',
+	background: '#0079f2'
+};
+
+const styleClusterMarkerContainer: React.CSSProperties = {
+	position: 'relative',
+  width: '35px',
+  height: '35px',
+  lineHeight: '35px',
+  borderRadius: '50%',
+  fontSize: '1rem',
+  color: '#fff',
+	display: 'flex',
+  justifyContent: 'center',
+	background: '#cce6ff'
 };
 
 function ClusterMarker(props):JSX.Element {
 	const { cluster } = props;
 	return(
-		<div style={{ ...style, background: '#f28a25' }}>{cluster.properties.point_count}</div>
+		<div style={ styleClusterMarkerContainer }>
+			<div style={ styleClusterMarker }>{cluster.properties.point_count}</div>
+		</div>
 	)
 }
 
