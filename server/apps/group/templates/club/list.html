@@ -3,7 +3,6 @@
 
 {% block content %}
 
-<br />
 <div class="row">
 	<div class="col">
 		<h1>Clubs Nantraliens</h1>
@@ -29,7 +28,13 @@
       						{% endif %}
 						</div>
 					</a>
-					<h6>{{ club.name | title }}</h6>
+					<h6>
+						{% if club.prefere_abbr %}
+							{{ club.abbr }}
+						{% else %}
+							{{ club.name }}
+						{% endif %}
+					</h6>
   				</div>
   			{% endfor %}
 		</div>

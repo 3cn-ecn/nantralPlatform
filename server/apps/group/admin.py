@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Club, NamedMembershipClub, Liste, NamedMembershipList
+from .models import Club, NamedMembershipClub, Liste, NamedMembershipList, ReseauSocial, LienSocialClub
 
 class ClubAdmin(admin.ModelAdmin):
     list_display = ['name', 'bdx_type']
@@ -20,3 +20,5 @@ admin.site.register(Club, ClubAdmin)
 admin.site.register(NamedMembershipClub, ClubMembershipsAdmin)
 admin.site.register(NamedMembershipList, NamedMembershipListAdmin)
 admin.site.register(Liste, ListeAdmin)
+admin.site.register(ReseauSocial)
+admin.site.register(LienSocialClub)

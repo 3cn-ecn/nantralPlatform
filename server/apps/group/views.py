@@ -3,7 +3,7 @@ from django.http.request import HttpRequest
 
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, View, FormView, TemplateView
-from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
+from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList, ReseauSocial, LienSocialClub
 from .forms import NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, NamedMembershipListeFormset, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -25,7 +25,7 @@ class ListClubView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         list_bdx = [
-            {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(members__user=self.request.user)},
+            {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(members__user=self.request.user).order_by('name')},
             {'nom': 'Associations', 'list': Club.objects.filter(bdx_type="Asso").order_by('name')},
             {'nom': 'Clubs BDE', 'list': Club.objects.filter(bdx_type="BDE").order_by('name')},
             {'nom': 'Clubs BDA', 'list': Club.objects.filter(bdx_type="BDA").order_by('name')},
@@ -108,13 +108,17 @@ class DetailGroupView(TemplateView):
         context['object'] = self.object
         if isinstance(context['object'], Club):
             members = NamedMembershipClub.objects.filter(club=self.object)
+            social = LienSocialClub.objects.filter(club=self.object)
             context['form'] = NamedMembershipAddClub()
         elif isinstance(context['object'], Liste):
             members = NamedMembershipList.objects.filter(liste=self.object)
             context['form'] = NamedMembershipAddListe()
+            social = ""
         else:
             members = self.object.members
+            social = ""
         context['members'] = members
+        context['social'] = social
         context['is_member'] = self.object.is_member(self.request.user)
         context['is_admin'] = self.object.is_admin(
             self.request.user) if self.request.user.is_authenticated else False
