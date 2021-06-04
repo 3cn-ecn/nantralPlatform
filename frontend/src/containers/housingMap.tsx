@@ -75,6 +75,13 @@ const positionOptions = {
   enableHighAccuracy: true,
 };
 
+function toTitle(str:string):string{
+	if(str){
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	}
+	return undefined;
+}
+
 function ColocInfo(props: CityInfoProps): JSX.Element {
   const housing: Housing = props.housing;
   const housing_details_url = props.housingDetailsUrl.replace(
@@ -87,7 +94,7 @@ function ColocInfo(props: CityInfoProps): JSX.Element {
     typeof housing.roommates[0].members != "undefined"
   ) {
     roommatesList = housing.roommates[0].members
-      .map((e) => e.student.first_name + " " + e.student.last_name)
+      .map((e) => toTitle(e.student.first_name) + " " + toTitle(e.student.last_name))
       .join(",");
     roommatesList = roommatesList.replace(/(,\s*)$/, "");
   }
