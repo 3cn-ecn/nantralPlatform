@@ -1,11 +1,13 @@
 from django.contrib import admin
-from .models import Club, NamedMembershipClub, Liste, NamedMembershipList
+from .models import Club, NamedMembershipClub, Liste, NamedMembershipList, AdminRightsRequest
+
 
 class ClubAdmin(admin.ModelAdmin):
     list_display = ['name', 'bdx_type']
 
+
 class ClubMembershipsAdmin(admin.ModelAdmin):
-    list_display =  ['student', 'club', 'function', 'year']
+    list_display = ['student', 'club', 'function', 'year']
 
 
 class ListeAdmin(admin.ModelAdmin):
@@ -20,3 +22,4 @@ admin.site.register(Club, ClubAdmin)
 admin.site.register(NamedMembershipClub, ClubMembershipsAdmin)
 admin.site.register(NamedMembershipList, NamedMembershipListAdmin)
 admin.site.register(Liste, ListeAdmin)
+admin.site.register(AdminRightsRequest)

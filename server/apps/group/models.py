@@ -5,11 +5,13 @@ from django.dispatch import receiver
 from django.utils.text import slugify
 from django.urls.base import reverse
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 from django.conf import settings
 
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
+from apps.utils.github import create_issue, close_issue
 
 
 TYPE_BDX = [
@@ -75,9 +77,7 @@ class Group(models.Model):
     @staticmethod
     def get_group_by_slug(slug:  str):
         """Get a group from a slug."""
-        print(slug)
         type_slug = slug.split('--')[0]
-        print(type_slug)
         if type_slug == 'club':
             return Club.objects.get(slug=slug)
         elif type_slug == 'liste':
@@ -168,3 +168,45 @@ def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
                 })
                 user.email_user(
                     f'Vous n\'êtes plus admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
+
+
+class AdminRightsRequest(models.Model):
+    """A model to request admin rights on a group."""
+    group = models.SlugField(verbose_name="Groupe demandé.")
+    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
+    date = models.DateField(
+        verbose_name="Date de la requête", default=timezone.now)
+    reason = models.CharField(
+        max_length=100, verbose_name="Raison de la demande", blank=True)
+    domain = models.CharField(max_length=64)
+    issue = models.IntegerField(blank=True)
+
+    def save(self, domain: str, *args, **kwargs):
+        self.date = timezone.now()
+        self.domain = domain
+        self.issue = 0
+        super(AdminRightsRequest, self).save()
+        group = Group.get_group_by_slug(self.group)
+        title = f'[Admin Req] {group} - {self.student}'
+        body = f'<a href="{self.accept_url}">Accepter</a> </br>\
+            <a href="{self.deny_url}">Refuser</a>'
+        self.issue = create_issue(title=title, body=body)
+        super(AdminRightsRequest, self).save()
+
+    @property
+    def accept_url(self):
+        return f"http://{self.domain}{reverse('group:accept-admin-req', kwargs={'group_slug': self.group,'id': self.id})}"
+
+    @property
+    def deny_url(self):
+        return f"http://{self.domain}{reverse('group:deny-admin-req', kwargs={'group_slug': self.group, 'id': self.id})}"
+
+    def accept(self):
+        group = Group.get_group_by_slug(self.group)
+        group.admins.add(self.student)
+        close_issue(self.issue)
+        self.delete()
+
+    def deny(self):
+        close_issue(self.issue)
+        self.delete()
