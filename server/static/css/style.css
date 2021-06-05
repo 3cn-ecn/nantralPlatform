@@ -78,3 +78,70 @@ a:hover {
 	.navbar .nav-item .dropdown-menu{ margin-top:0; }
 	.navbar .nav-item .dropdown-menu-end{ right:0; }
 }	
+
+.ratio-banniere {
+	--bs-aspect-ratio: 30%;
+}
+
+img.banniere {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.logo {
+	width: 95%;
+	object-fit: contain;
+	margin-right: 5%;
+}
+
+.grille-rs {
+	display: flex;
+	flex-wrap: wrap;
+}
+a.rs {
+	background: #eaeaea;
+	border-radius: 1em;
+	text-decoration: none;
+	color: var(--color-rs);
+	padding: 0.2em;
+	display: flex;
+	position: relative;
+	width: max-content;
+	height: 2rem;
+	margin-right: 0.3rem;
+	margin-bottom: 0.3rem;
+}
+
+a.rs div, a.rs i {
+	background: var(--color-rs);
+	color: #fff;
+	border-radius: 1em;
+	padding: 0.2em;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 2rem;
+	height: 2rem;
+	transition: all 0.1s ease;
+}
+
+a.rs > div > i {
+	text-align: center;
+	padding: 0.5rem;
+}
+
+a.rs span {
+	margin-left: 2rem;
+	padding: 0.1rem;
+	padding-right: 0.5rem;
+}
+
+a.rs:hover div {
+	width: 100%;
+}
+
+a.rs:hover span {
+	color: #fff;
+	z-index: 1;
+}
