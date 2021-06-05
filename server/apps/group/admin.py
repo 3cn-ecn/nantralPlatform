@@ -1,10 +1,5 @@
-from .models import Club, NamedMembershipClub, Liste, NamedMembershipList, ReseauSocial, LienSocialClub
-from .models import Club, NamedMembershipClub, Liste, NamedMembershipList, AdminRightsRequest
+from .models import *
 from django.contrib import admin
-<< << << < HEAD
-
-== == == =
->>>>>> > master
 
 
 class ClubAdmin(admin.ModelAdmin):
