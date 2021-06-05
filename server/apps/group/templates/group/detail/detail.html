@@ -107,7 +107,13 @@
     {% block add-member %}
     {% include 'group/detail/add-member.html' %}
     {% endblock%}
+    {% if is_member and not is_admin %}
+        <button class='btn btn-light btn-sm disabled'>
+            <i class="fa fa-crown"></i>
+            Vous êtes administrateur du groupe.
+        </button>
     {% block admin-req %}
     {% include 'group/detail/request-admin.html' %}
     {% endblock %}
+    {%endif%}
 {% endblock %}
