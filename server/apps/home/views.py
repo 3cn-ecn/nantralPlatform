@@ -7,6 +7,7 @@ from django.contrib import messages
 
 from apps.event.models import BaseEvent
 from apps.post.models import Post
+from apps.utils.github import create_issue
 
 from django.conf import settings
 
@@ -31,14 +32,12 @@ class SuggestionView(LoginRequiredAccessMixin, FormView):
     form_class = SuggestionForm
 
     def form_valid(self, form):
-        issue = {
-            'title': form.cleaned_data['title'],
-            'body': form.cleaned_data['description'] + f' <br/> Proposé par {self.request.user.email}'
-        }
-        requests.post('https://api.github.com/repos/unitrium/nantralPlatform/issues',
-                      json=issue, auth=(settings.GITHUB_USER, settings.GITHUB_TOKEN))
+        create_issue(
+            title=form.cleaned_data['title'],
+            body=f"{form.cleaned_data['description']} <br/> Proposé par {self.request.user.email}"
+        )
         messages.success(
-            self.request, 'Votre suggestion a ete enregistree merci')
+            self.request, 'Votre suggestion a été enregistré merci')
         return redirect('home:home')
 
 
