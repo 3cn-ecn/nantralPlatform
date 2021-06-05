@@ -1,16 +1,16 @@
 from datetime import date, timedelta
-from django.http.request import HttpRequest
 
 from django.shortcuts import redirect, render
+from django.urls.base import reverse
 from django.views.generic import ListView, View, FormView, TemplateView
-from .models import Club, Group, NamedMembershipClub, Liste, NamedMembershipList
-from .forms import NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, NamedMembershipListeFormset, UpdateClubForm
+from .models import AdminRightsRequest, Club, Group, NamedMembershipClub, Liste, NamedMembershipList
+from .forms import AdminRightsRequestForm, NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, NamedMembershipListeFormset, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
 from django.views.decorators.http import require_http_methods
 
-from apps.student.models import Student
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 
@@ -21,15 +21,20 @@ from apps.utils.accessMixins import UserIsAdmin
 class ListClubView(ListView):
     model = Club
     template_name = 'club/list.html'
-    # ordering = ['bdx_type', 'name']
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         list_bdx = [
-            {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(members__user=self.request.user)},
-            {'nom': 'Associations', 'list': Club.objects.filter(bdx_type="Asso").order_by('name')},
-            {'nom': 'Clubs BDE', 'list': Club.objects.filter(bdx_type="BDE").order_by('name')},
-            {'nom': 'Clubs BDA', 'list': Club.objects.filter(bdx_type="BDA").order_by('name')},
-            {'nom': 'Clubs BDS', 'list': Club.objects.filter(bdx_type="BDS").order_by('name')},
+            {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(
+                members__user=self.request.user)},
+            {'nom': 'Associations', 'list': Club.objects.filter(
+                bdx_type="Asso").order_by('name')},
+            {'nom': 'Clubs BDE', 'list': Club.objects.filter(
+                bdx_type="BDE").order_by('name')},
+            {'nom': 'Clubs BDA', 'list': Club.objects.filter(
+                bdx_type="BDA").order_by('name')},
+            {'nom': 'Clubs BDS', 'list': Club.objects.filter(
+                bdx_type="BDS").order_by('name')},
         ]
         context['list_bdx'] = list_bdx
         return context
@@ -38,18 +43,19 @@ class ListClubView(ListView):
 class ListeListView(ListView):
     model = Liste
     template_name = 'liste/list.html'
-    # ordering = ['-year', 'liste_type', 'name']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         annees = []
         bdx = Liste.objects.order_by('-year', 'liste_type', 'name')
-        annees.append({'year_start': bdx[0].year-1, 'year_end': bdx[0].year, 'listes': []})
+        annees.append(
+            {'year_start': bdx[0].year-1, 'year_end': bdx[0].year, 'listes': []})
         for liste in bdx:
             if liste.year == annees[-1]['year_end']:
                 annees[-1]['listes'].append(liste)
             else:
-                annees.append({'year_start': liste.year-1, 'year_end': liste.year, 'listes': [liste]})
+                annees.append({'year_start': liste.year-1,
+                              'year_end': liste.year, 'listes': [liste]})
         context['annees'] = annees
         return context
 
@@ -100,12 +106,13 @@ class UpdateGroupMembersView(UserIsAdmin, View):
 
 
 class DetailGroupView(TemplateView):
-    template_name = 'group/detail.html'
+    template_name = 'group/detail/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         self.object = Group.get_group_by_slug(self.kwargs['group_slug'])
         context['object'] = self.object
+        context['admin_req_form'] = AdminRightsRequestForm()
         if isinstance(context['object'], Club):
             members = NamedMembershipClub.objects.filter(club=self.object)
             context['form'] = NamedMembershipAddClub()
@@ -169,3 +176,43 @@ def edit_named_memberships(request, group_slug):
     else:
         messages.warning(request, form.errors)
         return redirect('group:update', group.slug)
+
+
+class RequestAdminRightsView(LoginRequiredMixin, FormView):
+    raise_exception = True
+    form_class = AdminRightsRequestForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = Group.get_group_by_slug(self.kwargs['group_slug'])
+        return context
+
+    def form_valid(self, form):
+        messages.success(
+            self.request, 'Votre demande a été enregistré, on revient rapidement avec une réponse.')
+        object = form.save(commit=False)
+        object.student = self.request.user.student
+        object.group = self.kwargs['group_slug']
+        object.save(domain=get_current_site(self.request).domain)
+        return super().form_valid(form)
+
+    def get_success_url(self) -> str:
+        return reverse('group:detail', kwargs={'group_slug': self.kwargs['group_slug']})
+
+
+class AcceptAdminRequestView(UserIsAdmin, View):
+    def get(self, request, group_slug, id):
+        admin_req = AdminRightsRequest.objects.get(id=id)
+        messages.success(
+            request, message=f"Vous avez accepté la demande de {admin_req.student}")
+        admin_req.accept()
+        return redirect('group:update', group_slug)
+
+
+class DenyAdminRequestView(UserIsAdmin, View):
+    def get(self, request, group_slug, id):
+        admin_req = AdminRightsRequest.objects.get(id=id)
+        messages.success(
+            request, message=f"Vous avez refusé la demande de {admin_req.student}")
+        admin_req.deny()
+        return redirect('group:update', group_slug)
