@@ -5,7 +5,12 @@ import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.dev_local')
+    if sys.argv[1] == 'makemigrations':
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                              'config.settings.migrations')
+    else:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                              'config.settings.dev_local')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

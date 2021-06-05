@@ -1,5 +1,5 @@
 from django.forms import ModelForm, modelformset_factory
-from .models import NamedMembershipClub, Group, Club, NamedMembershipList
+from .models import AdminRightsRequest, NamedMembershipClub, Club, NamedMembershipList
 
 
 class NamedMembershipClubForm(ModelForm):
@@ -41,3 +41,9 @@ NamedMembershipListeFormset = modelformset_factory(
     extra=1,
     can_delete=True
 )
+
+
+class AdminRightsRequestForm(ModelForm):
+    class Meta:
+        model = AdminRightsRequest
+        fields = ['reason']
