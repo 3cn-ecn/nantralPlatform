@@ -1,0 +1,18 @@
+<div class="modal fade" id="addModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {% load crispy_forms_tags %}  
+                <div class="modal-header">
+                    <h5 class="modal-title">M'ajouter à {{object.name}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>        
+                <div class="modal-body">
+                    <form method="post" action="{% url 'group:add-member' object.slug %}">
+                        {% csrf_token %}      
+                        {{form | crispy}}
+                        <button type="submit" value="Submit" class="btn btn-dark">M'ajouter</button>
+                    </form>
+                </div>
+        </div>
+    </div>
+</div>
