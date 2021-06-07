@@ -193,12 +193,18 @@ const styleClusterMarkerContainer: React.CSSProperties = {
   background: "#cce6ff",
 };
 
+const styleClusterOnClickContainer: React.CSSProperties = {
+	zIndex: 9
+}
+
 function ClusterMarker(props): JSX.Element {
-  const { cluster } = props;
+  const { cluster, onClick } = props;
   return (
-    <div style={styleClusterMarkerContainer}>
-      <div style={styleClusterMarker}>{cluster.properties.point_count}</div>
-    </div>
+		<div style={styleClusterOnClickContainer} onClick={onClick}>
+			<div style={styleClusterMarkerContainer}>
+				<div style={styleClusterMarker}>{cluster.properties.point_count}</div>
+			</div>
+		</div>
   );
 }
 
@@ -207,10 +213,10 @@ function Root(props): JSX.Element {
     right: 10,
     top: 10,
   };
-	const styleSearchBar: React.CSSProperties = {
-		marginTop: "2rem",
-		maxWidth: "300px"
-	};
+  const styleSearchBar: React.CSSProperties = {
+    marginTop: "2rem",
+    maxWidth: "300px",
+  };
   const [data, setData] = useState([]);
   const [colocs, setColocs] = useState([]);
   const [selectColoc, setSelectColoc] = useState([]);
@@ -230,17 +236,17 @@ function Root(props): JSX.Element {
       await axios
         .get(props.api_housing_url)
         .then((res) => {
-					// For some reason, Axios roommates which have more than one inhabitant,
-					// so we have to do this mess to filter everything.
-					// Hours wasted: 2
-					var uniqueIds:number[] = [];
-					let dataBuffer = res.data.filter((e, i) => {
-						if(!uniqueIds.includes(e.id)){
-							uniqueIds.push(e.id);
-							return true;
-						}
-						return false;
-					});
+          // For some reason, Axios roommates which have more than one inhabitant,
+          // so we have to do this mess to filter everything.
+          // Hours wasted: 2
+          var uniqueIds: number[] = [];
+          let dataBuffer = res.data.filter((e, i) => {
+            if (!uniqueIds.includes(e.id)) {
+              uniqueIds.push(e.id);
+              return true;
+            }
+            return false;
+          });
           setColocs(
             dataBuffer.map((roommate) => {
               return { label: roommate.name, roommate: roommate };
@@ -257,18 +263,19 @@ function Root(props): JSX.Element {
 
   return (
     <>
-		<div className="row">
+      <div className="row">
         <div className="col-12">
           <Form.Group style={styleSearchBar}>
             <Typeahead
               id="search-colocs"
               onChange={(coloc) => {
-								if(typeof coloc[0] === "undefined"){
-									return;
-								}
+                if (typeof coloc[0] === "undefined") {
+                  return;
+                }
                 setSelectColoc(coloc);
-                let roommate = data.filter((roommateElt) => 
-                  roommateElt.id===coloc[0].roommate.id);
+                let roommate = data.filter(
+                  (roommateElt) => roommateElt.id === coloc[0].roommate.id
+                );
                 if (typeof roommate[0] === "undefined") return;
                 roommate = roommate[0];
                 setViewPort({
@@ -279,24 +286,24 @@ function Root(props): JSX.Element {
                   transitionInterpolator: new FlyToInterpolator(),
                   transitionEasing: rd3.easeCubic,
                 });
-								setPopUpinfo(
-									<Popup
-										tipSize={10}
-										anchor="bottom"
-										longitude={roommate.longitude}
-										latitude={roommate.latitude}
-										closeOnClick={false}
-										onClose={() => setPopUpinfo(null)}
-										dynamicPosition={false}
-										offsetTop={-10}
-										offsetLeft={10}
-									>
-										<ColocInfo
-											housing={roommate}
-											housingDetailsUrl={housing_details_url}
-										/>
-									</Popup>
-								);
+                setPopUpinfo(
+                  <Popup
+                    tipSize={10}
+                    anchor="bottom"
+                    longitude={roommate.longitude}
+                    latitude={roommate.latitude}
+                    closeOnClick={false}
+                    onClose={() => setPopUpinfo(null)}
+                    dynamicPosition={false}
+                    offsetTop={-10}
+                    offsetLeft={10}
+                  >
+                    <ColocInfo
+                      housing={roommate}
+                      housingDetailsUrl={housing_details_url}
+                    />
+                  </Popup>
+                );
               }}
               options={colocs}
               placeholder="Recherche"
@@ -323,7 +330,22 @@ function Root(props): JSX.Element {
                 radius={20}
                 extent={512}
                 nodeSize={40}
-                element={(clusterProps) => <ClusterMarker {...clusterProps} />}
+                element={(clusterProps) => (
+                  <ClusterMarker
+                    {...clusterProps}
+										onClick={() => {
+											const [longitude, latitude] = clusterProps.cluster.geometry.coordinates;
+											setViewPort({
+												zoom: 16,
+												longitude: longitude,
+												latitude: latitude,
+												transitionDuration: 500,
+												transitionInterpolator: new FlyToInterpolator(),
+												transitionEasing: rd3.easeCubic,
+											});
+										}}
+                  />
+                )}
               >
                 {data.map((roommate) => (
                   <Marker
