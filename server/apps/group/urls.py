@@ -25,5 +25,11 @@ urlpatterns = [
          UpdateGroupPostsView.as_view(), name='update-posts'),
     path('club/<slug:group_slug>/members/edit',
          UpdateGroupMembersView.as_view(), name='update-members'),
-    path('liste/', ListeListView.as_view(), name='liste-list')
+    path('liste/', ListeListView.as_view(), name='liste-list'),
+    path('group/<slug:group_slug>/admin-request/',
+         RequestAdminRightsView.as_view(), name='admin-req'),
+    path('group/<slug:group_slug>/admin-request/<int:id>/accept',
+         AcceptAdminRequestView.as_view(), name='accept-admin-req'),
+    path('group/<slug:group_slug>/admin-request/<int:id>/deny',
+         DenyAdminRequestView.as_view(), name='deny-admin-req')
 ]
