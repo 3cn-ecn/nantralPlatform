@@ -193,18 +193,12 @@ const styleClusterMarkerContainer: React.CSSProperties = {
   background: "#cce6ff",
 };
 
-const styleClusterOnClickContainer: React.CSSProperties = {
-  zIndex: 9,
-};
-
 function ClusterMarker(props): JSX.Element {
   const { cluster, onClick } = props;
   return (
-    <div style={styleClusterOnClickContainer} onClick={onClick}>
-      <div style={styleClusterMarkerContainer}>
-        <div style={styleClusterMarker}>{cluster.properties.point_count}</div>
-      </div>
-    </div>
+		<div style={styleClusterMarkerContainer} onClick={onClick}>
+			<div style={styleClusterMarker} onClick={onClick}>{cluster.properties.point_count}</div>
+		</div>
   );
 }
 
