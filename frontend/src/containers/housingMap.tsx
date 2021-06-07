@@ -230,12 +230,23 @@ function Root(props): JSX.Element {
       await axios
         .get(props.api_housing_url)
         .then((res) => {
+					// For some reason, Axios roommates which have more than one inhabitant,
+					// so we have to do this mess to filter everything.
+					// Hours wasted: 2
+					var uniqueIds:number[] = [];
+					let dataBuffer = res.data.filter((e, i) => {
+						if(!uniqueIds.includes(e.id)){
+							uniqueIds.push(e.id);
+							return true;
+						}
+						return false;
+					});
           setColocs(
-            res.data.map((roommate) => {
+            dataBuffer.map((roommate) => {
               return { label: roommate.name, roommate: roommate };
             })
           );
-          setData(res.data);
+          setData(dataBuffer);
         })
         .catch((err) => {
           setData([]);
