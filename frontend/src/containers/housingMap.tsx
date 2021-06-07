@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import ReactDOM, { render } from "react-dom";
 import MapGL, {
   Marker,
@@ -194,17 +194,17 @@ const styleClusterMarkerContainer: React.CSSProperties = {
 };
 
 const styleClusterOnClickContainer: React.CSSProperties = {
-	zIndex: 9
-}
+  zIndex: 9,
+};
 
 function ClusterMarker(props): JSX.Element {
   const { cluster, onClick } = props;
   return (
-		<div style={styleClusterOnClickContainer} onClick={onClick}>
-			<div style={styleClusterMarkerContainer}>
-				<div style={styleClusterMarker}>{cluster.properties.point_count}</div>
-			</div>
-		</div>
+    <div style={styleClusterOnClickContainer} onClick={onClick}>
+      <div style={styleClusterMarkerContainer}>
+        <div style={styleClusterMarker}>{cluster.properties.point_count}</div>
+      </div>
+    </div>
   );
 }
 
@@ -230,6 +230,47 @@ function Root(props): JSX.Element {
   });
   const [popupInfo, setPopUpinfo] = useState(null);
   const mapRef = useRef(null);
+  const markers = useMemo(() => {
+    return data.map((roommate) => (
+      <Marker
+        key={roommate.address}
+        longitude={roommate.longitude}
+        latitude={roommate.latitude}
+      >
+        <Pin
+          size={25}
+          onClick={() => {
+            setViewPort({
+              zoom: 16,
+              longitude: roommate.longitude,
+              latitude: roommate.latitude,
+              transitionDuration: 500,
+              transitionInterpolator: new FlyToInterpolator(),
+              transitionEasing: rd3.easeCubic,
+            });
+            setPopUpinfo(
+              <Popup
+                tipSize={10}
+                anchor="bottom"
+                longitude={roommate.longitude}
+                latitude={roommate.latitude}
+                closeOnClick={false}
+                onClose={() => setPopUpinfo(null)}
+                dynamicPosition={false}
+                offsetTop={-10}
+                offsetLeft={10}
+              >
+                <ColocInfo
+                  housing={roommate}
+                  housingDetailsUrl={housing_details_url}
+                />
+              </Popup>
+            );
+          }}
+        />
+      </Marker>
+    ));
+  }, [data]);
 
   useEffect(() => {
     async function getRoommates(): Promise<void> {
@@ -260,7 +301,6 @@ function Root(props): JSX.Element {
     }
     getRoommates();
   }, []);
-
   return (
     <>
       <div className="row">
@@ -273,11 +313,11 @@ function Root(props): JSX.Element {
                   return;
                 }
                 setSelectColoc(coloc);
-                let roommate = data.filter(
+                let roommates: Housing[] = data.filter(
                   (roommateElt) => roommateElt.id === coloc[0].roommate.id
                 );
-                if (typeof roommate[0] === "undefined") return;
-                roommate = roommate[0];
+                if (typeof roommates[0] === "undefined") return;
+                let roommate: Housing = roommates[0];
                 setViewPort({
                   zoom: 16,
                   longitude: roommate.longitude,
@@ -324,7 +364,7 @@ function Root(props): JSX.Element {
             mapboxApiAccessToken={props.api_key}
             onClick={() => setPopUpinfo(null)}
           >
-            {mapRef.current && (
+            {mapRef.current && markers && (
               <Cluster
                 map={mapRef.current.getMap()}
                 radius={20}
@@ -333,59 +373,22 @@ function Root(props): JSX.Element {
                 element={(clusterProps) => (
                   <ClusterMarker
                     {...clusterProps}
-										onClick={() => {
-											const [longitude, latitude] = clusterProps.cluster.geometry.coordinates;
-											setViewPort({
-												zoom: 16,
-												longitude: longitude,
-												latitude: latitude,
-												transitionDuration: 500,
-												transitionInterpolator: new FlyToInterpolator(),
-												transitionEasing: rd3.easeCubic,
-											});
-										}}
+                    onClick={() => {
+                      const [longitude, latitude] =
+                        clusterProps.cluster.geometry.coordinates;
+                      setViewPort({
+                        zoom: 16,
+                        longitude: longitude,
+                        latitude: latitude,
+                        transitionDuration: 500,
+                        transitionInterpolator: new FlyToInterpolator(),
+                        transitionEasing: rd3.easeCubic,
+                      });
+                    }}
                   />
                 )}
               >
-                {data.map((roommate) => (
-                  <Marker
-                    key={roommate.address}
-                    longitude={roommate.longitude}
-                    latitude={roommate.latitude}
-                  >
-                    <Pin
-                      size={25}
-                      onClick={() => {
-                        setViewPort({
-                          zoom: 16,
-                          longitude: roommate.longitude,
-                          latitude: roommate.latitude,
-                          transitionDuration: 500,
-                          transitionInterpolator: new FlyToInterpolator(),
-                          transitionEasing: rd3.easeCubic,
-                        });
-                        setPopUpinfo(
-                          <Popup
-                            tipSize={10}
-                            anchor="bottom"
-                            longitude={roommate.longitude}
-                            latitude={roommate.latitude}
-                            closeOnClick={false}
-                            onClose={() => setPopUpinfo(null)}
-                            dynamicPosition={false}
-                            offsetTop={-10}
-                            offsetLeft={10}
-                          >
-                            <ColocInfo
-                              housing={roommate}
-                              housingDetailsUrl={housing_details_url}
-                            />
-                          </Popup>
-                        );
-                      }}
-                    />
-                  </Marker>
-                ))}
+                {markers}
               </Cluster>
             )}
 
