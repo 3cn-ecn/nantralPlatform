@@ -14,12 +14,6 @@ from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 
 
-TYPE_BDX = [
-    ('BDA', 'Bureau des Arts'),
-    ('BDE', 'Bureau des Élèves'),
-    ('BDS', 'Bureau des Sports'),
-    ('Asso', 'Association')
-]
 
 if settings.DEBUG:
     path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
@@ -38,6 +32,8 @@ else:
 
 
 class Group(models.Model):
+    '''Modèle abstrait servant de modèle pour tous les types de Groupes.'''
+
     name = models.CharField(verbose_name='Nom du groupe',
                             unique=True, max_length=200)
     description = models.TextField(
@@ -49,7 +45,7 @@ class Group(models.Model):
     logo = models.ImageField(verbose_name='Logo du groupe',
                              blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
-    parent = models.SlugField(max_length=40, blank=True, null=True)
+    # parent = models.SlugField(max_length=40, blank=True, null=True)
     modified_date = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -74,12 +70,12 @@ class Group(models.Model):
         student = Student.objects.filter(user=user).first()
         return student in self.members.all()
 
-    @property
-    def get_parent(self):
-        """Get the parent group of this group."""
-        if self.parent is None or self.parent == self.slug:
-            return None
-        return Group.get_group_by_slug(self.parent)
+    # @property
+    # def get_parent(self):
+        # """Get the parent group of this group."""
+        # if self.parent is None or self.parent == self.slug:
+            # return None
+        # return Group.get_group_by_slug(self.parent)
 
     @staticmethod
     def get_group_by_slug(slug:  str):
@@ -89,6 +85,8 @@ class Group(models.Model):
             return Club.objects.get(slug=slug)
         elif type_slug == 'liste':
             return Liste.objects.get(slug=slug)
+        elif type_slug == 'bdx':
+            return BDX.objects.get(slug=slug)
         else:
             raise Exception('Unknown group')
 
@@ -97,12 +95,41 @@ class Group(models.Model):
         return reverse('group:detail', kwargs={'group_slug': self.slug})
 
 
+class BDX(Group):
+    '''Groupe représentant un BDX.'''
+
+    members = models.ManyToManyField(Student, through='NamedMembershipBDX')
+    alt_name = models.CharField(
+        verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
+    logo = models.ImageField(verbose_name='Logo du club',
+                             blank=True, null=True, upload_to=path_and_rename_club)
+    banniere = models.ImageField(
+        verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
+    # social = models.ManyToManyField('ReseauSocial', through='LienSocialClub')
+
+    def save(self, *args, **kwargs):
+        self.slug = f'bdx--{slugify(self.name)}'
+        super(BDX, self).save(*args, **kwargs)
+
+
+class NamedMembershipBDX(models.Model):
+    function = models.CharField(
+        verbose_name='Poste occupé', max_length=200, blank=True)
+    year = models.IntegerField(
+        verbose_name='Année du poste', blank=True, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    bdx = models.ForeignKey(BDX, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('function', 'year', 'student', 'club')
+
+
+
 class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
     alt_name = models.CharField(
         verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
-    bdx_type = models.CharField(
-        verbose_name='Type de club BDX', choices=TYPE_BDX, max_length=60)
+    bdx_type = models.ForeignKey(BDX, on_delete=models.SET_NULL, verbose_name='Type de club BDX')
     logo = models.ImageField(verbose_name='Logo du club',
                              blank=True, null=True, upload_to=path_and_rename_club)
     banniere = models.ImageField(
@@ -126,16 +153,9 @@ class NamedMembershipClub(models.Model):
         unique_together = ('function', 'year', 'student', 'club')
 
 
-TYPE_LISTE = [
-    ('BDA', 'Bureau des Arts'),
-    ('BDE', 'Bureau des Élèves'),
-    ('BDS', 'Bureau des Sports')
-]
-
 
 class Liste(Group):
-    liste_type = models.CharField(
-        verbose_name='Type de liste BDX', choices=TYPE_LISTE, max_length=60)
+    liste_type = models.ForeignKey(BDX, on_delete=models.SET_NULL, verbose_name='Type de BDX')
     year = models.IntegerField(
         verbose_name='Année de la liste', blank=True, null=True)
     members = models.ManyToManyField(Student, through='NamedMembershipList')
@@ -246,3 +266,5 @@ class LienSocialClub(models.Model):
 
     def __str__(self):
         return self.url
+
+
