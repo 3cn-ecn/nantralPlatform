@@ -208,7 +208,6 @@ function Root(props): JSX.Element {
     top: 10,
   };
   const styleSearchBar: React.CSSProperties = {
-    marginTop: "2rem",
     maxWidth: "300px",
   };
   const [data, setData] = useState([]);
@@ -352,7 +351,7 @@ function Root(props): JSX.Element {
             width="100vw"
             height="80vh"
             ref={mapRef}
-            mapStyle="mapbox://styles/mapbox/bright-v9"
+            mapStyle="mapbox://styles/mapbox/streets-v11?optimize=true"
             onViewportChange={setViewPort}
             mapboxApiAccessToken={props.api_key}
             onClick={() => setPopUpinfo(null)}
