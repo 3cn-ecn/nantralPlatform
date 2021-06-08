@@ -302,6 +302,8 @@ function Root(props): JSX.Element {
           <Form.Group style={styleSearchBar}>
             <Typeahead
               id="search-colocs"
+							options={colocs}
+              placeholder="Recherche"
               onChange={(coloc) => {
                 if (typeof coloc[0] === "undefined") {
                   return;
@@ -339,9 +341,6 @@ function Root(props): JSX.Element {
                   </Popup>
                 );
               }}
-              options={colocs}
-              placeholder="Recherche"
-              selected={selectColoc}
             />
           </Form.Group>
         </div>
