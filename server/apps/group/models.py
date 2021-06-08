@@ -121,7 +121,7 @@ class NamedMembershipBDX(models.Model):
     bdx = models.ForeignKey(BDX, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('function', 'year', 'student', 'club')
+        unique_together = ('function', 'year', 'student', 'bdx')
 
 
 
@@ -129,7 +129,7 @@ class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
     alt_name = models.CharField(
         verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
-    bdx_type = models.ForeignKey(BDX, on_delete=models.SET_NULL, verbose_name='Type de club BDX')
+    bdx_type = models.ForeignKey(BDX, on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
     logo = models.ImageField(verbose_name='Logo du club',
                              blank=True, null=True, upload_to=path_and_rename_club)
     banniere = models.ImageField(
@@ -155,7 +155,7 @@ class NamedMembershipClub(models.Model):
 
 
 class Liste(Group):
-    liste_type = models.ForeignKey(BDX, on_delete=models.SET_NULL, verbose_name='Type de BDX')
+    liste_type = models.ForeignKey(BDX, on_delete=models.CASCADE, verbose_name='Type de BDX')
     year = models.IntegerField(
         verbose_name='Année de la liste', blank=True, null=True)
     members = models.ManyToManyField(Student, through='NamedMembershipList')
