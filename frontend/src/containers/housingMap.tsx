@@ -100,7 +100,7 @@ function ColocInfo(props: CityInfoProps): JSX.Element {
         (e) =>
           toTitle(e.student.first_name) + " " + toTitle(e.student.last_name)
       )
-      .join(",");
+      .join(", ");
     roommatesList = roommatesList.replace(/(,\s*)$/, "");
   }
   return (
