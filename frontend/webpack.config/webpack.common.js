@@ -1,6 +1,4 @@
 var path = require('path');
-var webpack = require('webpack');
-var BundleTracker = require('webpack-bundle-tracker');
 module.exports = {
   entry:  {
     studentCourseSelector: path.join(__dirname, '../src/containers/studentCourseSelector.tsx'),
@@ -13,18 +11,17 @@ module.exports = {
   output: {
     path: path.join(__dirname, '../../server/static/js'),
     filename: '[name].js'
-  },  plugins: [
-    new BundleTracker({
-      path: __dirname,
-      filename: 'webpack-stats.json'
-    }),
-  ],
+  },
   module: {
     rules: [
       {
         test: [/\.jsx?$/, /\.tsx?$/],
         use: 'babel-loader',
         exclude: /node_modules/,
+      },
+			{
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
       },
     ],
   }
