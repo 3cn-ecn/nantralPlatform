@@ -13,7 +13,7 @@
     <div class="row">
         {%if object.logo %}
             <div class="col-sm-3">
-                <img class="logo" src='{{object.logo.url}}'>
+                <img class="logo" src='{{object.logo.url}}?{{object.modified_date}}'>
             </div>
         {% endif %}
         <div class="col">
