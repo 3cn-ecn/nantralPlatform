@@ -11,7 +11,7 @@ import MapGL, {
 import { Button, Form } from "react-bootstrap";
 import axios from "axios";
 import Cluster from "./cluster.tsx";
-import rd3 from "react-d3-library";
+import { easeCubic } from "react-d3-library";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 
@@ -240,7 +240,7 @@ function Root(props): JSX.Element {
               latitude: roommate.latitude,
               transitionDuration: 500,
               transitionInterpolator: new FlyToInterpolator(),
-              transitionEasing: rd3.easeCubic,
+              transitionEasing: easeCubic,
             });
             setPopUpinfo(
               <Popup
@@ -318,7 +318,7 @@ function Root(props): JSX.Element {
                   latitude: roommate.latitude,
                   transitionDuration: 500,
                   transitionInterpolator: new FlyToInterpolator(),
-                  transitionEasing: rd3.easeCubic,
+                  transitionEasing: easeCubic,
                 });
                 setPopUpinfo(
                   <Popup
@@ -376,7 +376,7 @@ function Root(props): JSX.Element {
                         latitude: latitude,
                         transitionDuration: 500,
                         transitionInterpolator: new FlyToInterpolator(),
-                        transitionEasing: rd3.easeCubic,
+                        transitionEasing: easeCubic,
                       });
                     }}
                   />
