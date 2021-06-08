@@ -4,7 +4,7 @@
 {% block banniere %}
     {% if object.banniere %}
     <div class="ratio ratio-banniere">
-        <img class="banniere" src='{{ object.banniere.url }}'>
+        <img class="banniere" src='{{ object.banniere.url }}?{{object.modified_date}}'>
     </div>
     {% endif %}
 {% endblock %}
