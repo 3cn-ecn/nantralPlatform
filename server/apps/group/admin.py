@@ -3,7 +3,7 @@ from django.contrib import admin
 
 
 class ClubAdmin(admin.ModelAdmin):
-    list_display = ['name', 'bdx_type']
+    list_display = ['name'] #, 'bdx_type']
 
 
 class ClubMembershipsAdmin(admin.ModelAdmin):
@@ -25,3 +25,5 @@ admin.site.register(Liste, ListeAdmin)
 admin.site.register(AdminRightsRequest)
 admin.site.register(ReseauSocial)
 admin.site.register(LienSocialClub)
+admin.site.register(BDX)
+admin.site.register(NamedMembershipBDX)
