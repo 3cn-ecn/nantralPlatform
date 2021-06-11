@@ -13,11 +13,11 @@
 </div>
 <br />
 
-{% for group in items_groups %}
-	{% if group.list %}
-		<h2>{{ group.nom }}</h2>
+{% for bdx in list_bdx %}
+	{% if bdx.list %}
+		<h2>{{ bdx.nom }}</h2>
 		<div class="grille">
-			{% for club in group.list %}
+			{% for club in bdx.list %}
   				<div class="grille-icon text-center" style="transform:rotate(0);">
 		    		<a href="{{ club.get_absolute_url }}" class="stretched-link">
 						<div class="ratio ratio-1x1">
@@ -29,7 +29,11 @@
 						</div>
 					</a>
 					<h6>
-						{{ club.name }}
+						{% if club.prefere_abbr %}
+							{{ club.abbr }}
+						{% else %}
+							{{ club.name }}
+						{% endif %}
 					</h6>
   				</div>
   			{% endfor %}
