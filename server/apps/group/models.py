@@ -14,12 +14,21 @@ from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 
 
+
 if settings.DEBUG:
+    path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
     path_and_rename_liste = PathAndRename("./static/upload/groups/logo/liste")
     path_and_rename_group = PathAndRename("./static/upload/groups/logo/group")
+    path_and_rename_club_banniere = PathAndRename(
+        "./static/upload/groups/banniere/club")
+    path_and_rename_liste_banniere = PathAndRename(
+        "./static/upload/groups/banniere/club")
 else:
+    path_and_rename_club = PathAndRename("groups/logo/club")
     path_and_rename_liste = PathAndRename("groups/logo/liste")
     path_and_rename_group = PathAndRename("groups/logo/group")
+    path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
+    path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
 
 
 class Group(models.Model):
@@ -36,8 +45,8 @@ class Group(models.Model):
     logo = models.ImageField(verbose_name='Logo du groupe',
                              blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
+    # parent = models.SlugField(max_length=40, blank=True, null=True)
     modified_date = models.DateTimeField(auto_now=True)
-    social = models.ManyToManyField('ReseauSocial', through='SocialLink')
 
     class Meta:
         abstract = True
@@ -61,19 +70,20 @@ class Group(models.Model):
         student = Student.objects.filter(user=user).first()
         return student in self.members.all()
 
-    def save(self, *args, **kwargs):
-        self.slug = f'{type(self).name}--{slugify(self.name)}'
-        super(Group, self).save(*args, **kwargs)
+    # @property
+    # def get_parent(self):
+        # """Get the parent group of this group."""
+        # if self.parent is None or self.parent == self.slug:
+            # return None
+        # return Group.get_group_by_slug(self.parent)
 
     @staticmethod
     def get_group_by_slug(slug:  str):
         """Get a group from a slug."""
         type_slug = slug.split('--')[0]
         if type_slug == 'club':
-            from apps.club.models import Club
             return Club.objects.get(slug=slug)
         elif type_slug == 'liste':
-
             return Liste.objects.get(slug=slug)
         elif type_slug == 'BDX':
             return BDX.objects.get(slug=slug)
@@ -177,7 +187,6 @@ class NamedMembershipList(models.Model):
         unique_together = ('function', 'student', 'liste')
 
 
-
 @receiver(m2m_changed, sender=Group.admins.through)
 def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
     if isinstance(instance, Group):
@@ -243,3 +252,29 @@ class AdminRightsRequest(models.Model):
     def deny(self):
         close_issue(self.issue)
         self.delete()
+
+
+class ReseauSocial(models.Model):
+    name = models.CharField(verbose_name='Nom', max_length=20)
+    color = models.CharField(
+        verbose_name='Couleur en hexadécimal', max_length=7)
+    icon_name = models.CharField(
+        verbose_name="Nom Bootstrap de l'icône", max_length=20)
+
+    class Meta:
+        verbose_name = "Réseau Social"
+        verbose_name_plural = "Réseaux Sociaux"
+
+    def __str__(self):
+        return self.name
+
+
+class LienSocialClub(models.Model):
+    url = models.CharField(verbose_name='URL', max_length=200)
+    reseau = models.ForeignKey(ReseauSocial, on_delete=models.CASCADE)
+    club = models.ForeignKey(Club, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.url
+
+

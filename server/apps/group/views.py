@@ -5,7 +5,6 @@ from django.urls.base import reverse
 from django.views.generic import ListView, View, FormView, TemplateView
 from .models import AdminRightsRequest, Club, Group, NamedMembershipClub, Liste, NamedMembershipList, LienSocialClub, BDX, NamedMembershipBDX
 from .forms import AdminRightsRequestForm, NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, NamedMembershipListeFormset, UpdateClubForm
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,13 +13,6 @@ from django.views.decorators.http import require_http_methods
 
 from apps.event.models import BaseEvent
 from apps.post.models import Post
-
-from apps.club.models import Club, NamedMembershipClub, BDX
-from apps.club.forms import NamedMembershipClubFormset, UpdateClubForm, NamedMembershipAddClub
-from apps.liste.models import Liste, NamedMembershipList
-from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormset
-
-from apps.sociallink.models import SocialLink
 
 
 from apps.utils.accessMixins import UserIsAdmin
@@ -122,7 +114,7 @@ class DetailGroupView(TemplateView):
         context['admin_req_form'] = AdminRightsRequestForm()
         if isinstance(context['object'], Club):
             members = NamedMembershipClub.objects.filter(club=self.object)
-            social = SocialLink.objects.filter(group=self.object.slug)
+            social = LienSocialClub.objects.filter(club=self.object)
             context['form'] = NamedMembershipAddClub()
         elif isinstance(context['object'], Liste):
             members = NamedMembershipList.objects.filter(liste=self.object)
