@@ -19,7 +19,6 @@ class SocialNetwork(models.Model):
 class SocialLink(models.Model):
     url = models.CharField(verbose_name='URL', max_length=200)
     reseau = models.ForeignKey(SocialNetwork, on_delete=models.CASCADE)
-    group = models.SlugField()
 
     def __str__(self):
         return self.url

@@ -12,6 +12,7 @@ from django.conf import settings
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
+from apps.sociallink.models import SocialLink, SocialNetwork
 
 
 if settings.DEBUG:
@@ -37,7 +38,7 @@ class Group(models.Model):
                              blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
-    social = models.ManyToManyField('ReseauSocial', through='SocialLink')
+    social = models.ManyToManyField(to=SocialLink)
 
     class Meta:
         abstract = True
@@ -73,9 +74,10 @@ class Group(models.Model):
             from apps.club.models import Club
             return Club.objects.get(slug=slug)
         elif type_slug == 'liste':
-
+            from apps.liste.models import Liste
             return Liste.objects.get(slug=slug)
         elif type_slug == 'bdx':
+            from apps.club.models import BDX
             return BDX.objects.get(slug=slug)
         else:
             raise Exception('Unknown group')
