@@ -24,7 +24,7 @@ AUTH_PASSWORD_VALIDATORS = [
 SECRET_KEY = 'dev_key'
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
