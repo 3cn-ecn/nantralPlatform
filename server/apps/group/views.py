@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.views.generic import ListView, View, FormView, TemplateView
-from .models import AdminRightsRequest, Club, Group, NamedMembershipClub, Liste, NamedMembershipList, LienSocialClub
+from .models import AdminRightsRequest, Club, Group, NamedMembershipClub, Liste, NamedMembershipList, LienSocialClub, BDX, NamedMembershipBDX
 from .forms import AdminRightsRequestForm, NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, NamedMembershipListeFormset, UpdateClubForm
 
 from django.contrib import messages
@@ -26,45 +26,44 @@ from apps.sociallink.models import SocialLink
 from apps.utils.accessMixins import UserIsAdmin
 
 
-class ListClubView(ListView):
-    model = Club
+class ListClubView(TemplateView):
+    
     template_name = 'club/list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        list_bdx = [
+        items_groups = [
             {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(
-                members__user=self.request.user).order_by('name')},
+                members__user=self.request.user)},
             {'nom': 'Associations', 'list': Club.objects.filter(
-                bdx_type="Asso").order_by('name')},
-            {'nom': 'Clubs BDE', 'list': Club.objects.filter(
-                bdx_type="BDE").order_by('name')},
-            {'nom': 'Clubs BDA', 'list': Club.objects.filter(
-                bdx_type="BDA").order_by('name')},
-            {'nom': 'Clubs BDS', 'list': Club.objects.filter(
-                bdx_type="BDS").order_by('name')},
+                bdx_type__isnull=True)},
         ]
-        context['list_bdx'] = list_bdx
+        list_bdx = BDX.objects.all()
+        for bdx in list_bdx:
+            items_groups.append({
+                'nom': 'Clubs '+bdx.name, 
+                'list': Club.objects.filter(bdx_type=bdx),
+            })
+        context['items_groups'] = items_groups
         return context
 
 
-class ListeListView(ListView):
-    model = Liste
+class ListeListView(TemplateView):
     template_name = 'liste/list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        annees = []
-        bdx = Liste.objects.order_by('-year', 'liste_type', 'name')
-        annees.append(
-            {'year_start': bdx[0].year-1, 'year_end': bdx[0].year, 'listes': []})
-        for liste in bdx:
-            if liste.year == annees[-1]['year_end']:
-                annees[-1]['listes'].append(liste)
+        items_groups = []
+        listes = Liste.objects.all()
+        items_groups.append(
+            {'year_start': listes[0].year-1, 'year_end': listes[0].year, 'listes': []})
+        for liste in listes:
+            if liste.year == listes[-1]['year_end']:
+                items_groups[-1]['listes'].append(liste)
             else:
-                annees.append({'year_start': liste.year-1,
+                items_groups.append({'year_start': liste.year-1,
                               'year_end': liste.year, 'listes': [liste]})
-        context['annees'] = annees
+        context['items_groups'] = items_groups
         return context
 
 

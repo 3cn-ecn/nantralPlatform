@@ -83,7 +83,7 @@ class Group(models.Model):
         elif type_slug == 'liste':
 
             return Liste.objects.get(slug=slug)
-        elif type_slug == 'bdx':
+        elif type_slug == 'BDX':
             return BDX.objects.get(slug=slug)
         else:
             raise Exception('Unknown group')
@@ -105,8 +105,12 @@ class BDX(Group):
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
     # social = models.ManyToManyField('ReseauSocial', through='LienSocialClub')
 
+    class Meta:
+        verbose_name_plural = 'BDX'
+        ordering = ['name']
+    
     def save(self, *args, **kwargs):
-        self.slug = f'bdx--{slugify(self.name)}'
+        self.slug = f'BDX--{slugify(self.name)}'
         super(BDX, self).save(*args, **kwargs)
 
 
@@ -116,10 +120,10 @@ class NamedMembershipBDX(models.Model):
     year = models.IntegerField(
         verbose_name='Année du poste', blank=True, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    bdx = models.ForeignKey(BDX, on_delete=models.CASCADE)
+    BDX = models.ForeignKey(BDX, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('function', 'year', 'student', 'bdx')
+        unique_together = ('function', 'year', 'student', 'BDX')
 
 
 
@@ -127,12 +131,15 @@ class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
     alt_name = models.CharField(
         verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
-    bdx_type = models.ForeignKey(BDX, on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
+    bdx_type = models.ForeignKey('BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
     logo = models.ImageField(verbose_name='Logo du club',
                              blank=True, null=True, upload_to=path_and_rename_club)
     banniere = models.ImageField(
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
     social = models.ManyToManyField('ReseauSocial', through='LienSocialClub')
+
+    class Meta:
+        ordering = ['name']
 
     def save(self, *args, **kwargs):
         self.slug = f'club--{slugify(self.name)}'
@@ -160,6 +167,9 @@ class Liste(Group):
     logo = models.ImageField(verbose_name='Logo de la liste',
                              blank=True, null=True, upload_to=path_and_rename_liste)
 
+    class Meta:
+        ordering = ['-year', 'liste_type', 'name']
+    
     def save(self, *args, **kwargs):
         self.slug = f'liste--{slugify(self.name)}'
         super(Liste, self).save(*args, **kwargs)
