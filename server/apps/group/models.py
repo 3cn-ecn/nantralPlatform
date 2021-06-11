@@ -15,19 +15,11 @@ from apps.utils.github import create_issue, close_issue
 
 
 if settings.DEBUG:
-    path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
     path_and_rename_liste = PathAndRename("./static/upload/groups/logo/liste")
     path_and_rename_group = PathAndRename("./static/upload/groups/logo/group")
-    path_and_rename_club_banniere = PathAndRename(
-        "./static/upload/groups/banniere/club")
-    path_and_rename_liste_banniere = PathAndRename(
-        "./static/upload/groups/banniere/club")
 else:
-    path_and_rename_club = PathAndRename("groups/logo/club")
     path_and_rename_liste = PathAndRename("groups/logo/liste")
     path_and_rename_group = PathAndRename("groups/logo/group")
-    path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
-    path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
 
 
 class Group(models.Model):
