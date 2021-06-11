@@ -15,20 +15,26 @@ else:
     path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
 
 
-class Club(Group):
+
+class BDX(Group):
+    '''Groupe représentant un BDX.'''
+
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
     alt_name = models.CharField(
-        verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
-    bdx_type = models.ForeignKey(
-        'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
+        verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
     logo = models.ImageField(verbose_name='Logo du club',
                              blank=True, null=True, upload_to=path_and_rename_club)
     banniere = models.ImageField(
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
 
 
-class BDX(Club):
-    '''Groupe représentant un BDX.'''
+
+class Club(BDX):
+    '''Groupe représentat un club. hérite des mêmes champs que BDX.'''
+
+    bdx_type = models.ForeignKey(
+        'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
+
 
 
 class NamedMembershipClub(models.Model):
