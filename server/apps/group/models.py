@@ -68,7 +68,7 @@ class Group(models.Model):
         return student in self.members.all()
 
     def save(self, *args, **kwargs):
-        self.slug = f'{type(self).name}--{slugify(self.name)}'
+        self.slug = f'{type(self).__name__.lower()}--{slugify(self.name)}'
         super(Group, self).save(*args, **kwargs)
 
     @staticmethod

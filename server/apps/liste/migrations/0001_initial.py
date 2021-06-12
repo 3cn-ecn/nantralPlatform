@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('student', '0003_alter_student_options'),
+        ('group', '0005_move_liste')
     ]
 
     operations = [
