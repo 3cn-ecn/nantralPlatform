@@ -13,10 +13,10 @@
 </div>
 <br />
 
-{% for annee in annees %}
-	<h2>Campagnes {{ annee.year_start }}-{{ annee.year_end }}</h2>
+{% for group in items_groups %}
+	<h2>Campagnes {{ group.year_start }}-{{ group.year_end }}</h2>
 	<div class="grille">
-		{% for liste in annee.listes %}
+		{% for liste in group.listes %}
   			<div class="grille-icon text-center" style="transform:rotate(0);">
 	    		<a href="{{ liste.get_absolute_url }}" class="stretched-link">
 					<div class="ratio ratio-1x1">
@@ -30,7 +30,7 @@
 				<p>
 				    {{ liste.name }}
         			<br>
-        			<small class="text-secondary">{{ liste.liste_type | upper }}</small>
+        			<small class="text-secondary">{{ liste.liste_type.nom | upper }}</small>
       			</p>
   			</div>
   		{% endfor %}
