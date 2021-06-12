@@ -58,6 +58,10 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        self.slug = f'{type(self).__name__}--{slugify(self.name)}'
+        super(Club, self).save(*args, **kwargs)
+
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
         if user.is_superuser or user.is_staff:
@@ -108,10 +112,6 @@ class Club(Group):
     banniere = models.ImageField(
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
 
-    def save(self, *args, **kwargs):
-        self.slug = f'club--{slugify(self.name)}'
-        super(Club, self).save(*args, **kwargs)
-
 
 class NamedMembershipClub(models.Model):
     function = models.CharField(
@@ -140,10 +140,6 @@ class Liste(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipList')
     logo = models.ImageField(verbose_name='Logo de la liste',
                              blank=True, null=True, upload_to=path_and_rename_liste)
-
-    def save(self, *args, **kwargs):
-        self.slug = f'liste--{slugify(self.name)}'
-        super(Liste, self).save(*args, **kwargs)
 
 
 class NamedMembershipList(models.Model):
