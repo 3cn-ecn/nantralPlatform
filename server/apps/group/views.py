@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.views.generic import ListView, View, FormView, TemplateView
-from .models import AdminRightsRequest, Club, Group, NamedMembershipClub, Liste, NamedMembershipList, LienSocialClub
+from .models import AdminRightsRequest, Club, Group, NamedMembershipClub, Liste, NamedMembershipList
 from .forms import AdminRightsRequestForm, NamedMembershipClubFormset, NamedMembershipAddClub, NamedMembershipAddListe, NamedMembershipListeFormset, UpdateClubForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,6 +13,8 @@ from django.views.decorators.http import require_http_methods
 
 from apps.event.models import BaseEvent
 from apps.post.models import Post
+
+from apps.sociallink.models import SocialLink
 
 
 from apps.utils.accessMixins import UserIsAdmin
@@ -115,7 +117,8 @@ class DetailGroupView(TemplateView):
         context['admin_req_form'] = AdminRightsRequestForm()
         if isinstance(context['object'], Club):
             members = NamedMembershipClub.objects.filter(club=self.object)
-            social = LienSocialClub.objects.filter(club=self.object)
+            # FIXME SocialLink will be done differently directly in Club
+            #social = SocialLink.objects.filter(club=self.object)
             context['form'] = NamedMembershipAddClub()
         elif isinstance(context['object'], Liste):
             members = NamedMembershipList.objects.filter(liste=self.object)
