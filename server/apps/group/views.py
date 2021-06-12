@@ -121,7 +121,7 @@ class DetailGroupView(TemplateView):
         if isinstance(context['object'], Club):
             members = NamedMembershipClub.objects.filter(club=self.object)
             # FIXME SocialLink will be done differently directly in Club
-            #social = SocialLink.objects.filter(club=self.object)
+            social = ""  # SocialLink.objects.filter(club=self.object)
             context['form'] = NamedMembershipAddClub()
         elif isinstance(context['object'], Liste):
             members = NamedMembershipList.objects.filter(liste=self.object)
