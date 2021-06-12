@@ -14,7 +14,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='BDX',
             fields=[
-                ('club_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='club.club')),
+                ('club_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='club.club')),
             ],
             options={
                 'abstract': False,
@@ -25,9 +26,14 @@ class Migration(migrations.Migration):
             model_name='club',
             name='parent',
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name='club',
             name='bdx_type',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='club.bdx', verbose_name='Type de club BDX'),
+        ),
+        migrations.AddField(
+            model_name='club',
+            name='bdx_type',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                    to='club.bdx', verbose_name='Type de club BDX'),
         ),
     ]

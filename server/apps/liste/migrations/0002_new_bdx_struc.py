@@ -16,9 +16,14 @@ class Migration(migrations.Migration):
             model_name='liste',
             name='parent',
         ),
-        migrations.AlterField(
+        migrations.RemoveField(
             model_name='liste',
             name='liste_type',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='club.bdx'),
+        ),
+        migrations.AddField(
+            model_name='liste',
+            name='liste_type',
+            field=models.ForeignKey(
+                blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='club.bdx'),
         ),
     ]
