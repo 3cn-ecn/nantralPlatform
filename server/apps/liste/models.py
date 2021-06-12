@@ -1,6 +1,7 @@
 from django.db import models
 from apps.student.models import Student
 from apps.group.models import Group
+from apps.club.models import BDX
 from apps.utils.upload import PathAndRename
 
 from django.conf import settings
@@ -10,16 +11,10 @@ if settings.DEBUG:
 else:
     path_and_rename_liste = PathAndRename("groups/logo/liste")
 
-TYPE_LISTE = [
-    ('BDA', 'Bureau des Arts'),
-    ('BDE', 'Bureau des Élèves'),
-    ('BDS', 'Bureau des Sports')
-]
-
 
 class Liste(Group):
-    liste_type = models.CharField(
-        verbose_name='Type de liste BDX', choices=TYPE_LISTE, max_length=60)
+    liste_type = models.ForeignKey(
+        BDX, on_delete=models.SET_NULL, null=True, blank=True)
     year = models.IntegerField(
         verbose_name='Année de la liste', blank=True, null=True)
     members = models.ManyToManyField(Student, through='NamedMembershipList')

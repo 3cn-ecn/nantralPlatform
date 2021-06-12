@@ -6,13 +6,6 @@ from apps.utils.upload import PathAndRename
 
 from django.conf import settings
 
-TYPE_BDX = [
-    ('BDA', 'Bureau des Arts'),
-    ('BDE', 'Bureau des Élèves'),
-    ('BDS', 'Bureau des Sports'),
-    ('Asso', 'Association')
-]
-
 if settings.DEBUG:
     path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
     path_and_rename_club_banniere = PathAndRename(
@@ -29,12 +22,16 @@ class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
     alt_name = models.CharField(
         verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
-    bdx_type = models.CharField(
-        verbose_name='Type de club BDX', choices=TYPE_BDX, max_length=60)
+    bdx_type = models.ForeignKey(
+        'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
     logo = models.ImageField(verbose_name='Logo du club',
                              blank=True, null=True, upload_to=path_and_rename_club)
     banniere = models.ImageField(
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
+
+
+class BDX(Club):
+    '''Groupe représentant un BDX.'''
 
 
 class NamedMembershipClub(models.Model):

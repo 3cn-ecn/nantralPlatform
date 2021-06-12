@@ -14,13 +14,6 @@ from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 
 
-TYPE_BDX = [
-    ('BDA', 'Bureau des Arts'),
-    ('BDE', 'Bureau des Élèves'),
-    ('BDS', 'Bureau des Sports'),
-    ('Asso', 'Association')
-]
-
 if settings.DEBUG:
     path_and_rename_group = PathAndRename("./static/upload/groups/logo/group")
 else:
@@ -39,7 +32,6 @@ class Group(models.Model):
     logo = models.ImageField(verbose_name='Logo du groupe',
                              blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
-    parent = models.SlugField(max_length=40, blank=True, null=True)
     modified_date = models.DateTimeField(auto_now=True)
 
     class Meta:
