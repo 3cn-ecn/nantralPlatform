@@ -1,10 +1,11 @@
 from django.db import models
-from apps.group.models import Group
 from django.utils.text import slugify
 from django.urls.base import reverse
 
+from apps.group.models import Group
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
+from apps.sociallink.models import SocialNetwork, SocialLink
 
 
 class Housing(models.Model):

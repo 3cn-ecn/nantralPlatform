@@ -28,6 +28,8 @@ class Club(Group):
                              blank=True, null=True, upload_to=path_and_rename_club)
     banniere = models.ImageField(
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
+    bdx_type = models.ForeignKey(
+        'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
 
 
 class BDX(Club):

@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from apps.student.models import Student
+from apps.sociallink.models import SocialNetwork, SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 from apps.sociallink.models import SocialLink, SocialNetwork
@@ -26,6 +27,8 @@ class Group(models.Model):
 
     name = models.CharField(verbose_name='Nom du groupe',
                             unique=True, max_length=200)
+    alt_name = models.CharField(
+        verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
     description = models.TextField(
         verbose_name='Description du groupe', blank=True)
     admins = models.ManyToManyField(
@@ -36,7 +39,7 @@ class Group(models.Model):
                              blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
-    social = models.ManyToManyField(to=SocialLink)
+    #social = models.ManyToManyField(SocialNetwork, through='SocialLink')
 
     class Meta:
         abstract = True
@@ -78,7 +81,7 @@ class Group(models.Model):
         elif type_slug == 'liste':
             from apps.liste.models import Liste
             return Liste.objects.get(slug=slug)
-        elif type_slug == 'bdx':
+        elif type_slug == 'BDX':
             from apps.club.models import BDX
             return BDX.objects.get(slug=slug)
         else:
@@ -87,6 +90,99 @@ class Group(models.Model):
     @property
     def get_absolute_url(self):
         return reverse('group:detail', kwargs={'group_slug': self.slug})
+
+
+'''
+class BDX(Group):
+
+    members = models.ManyToManyField(Student, through='NamedMembershipBDX')
+    alt_name = models.CharField(
+        verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
+    logo = models.ImageField(verbose_name='Logo du club',
+                             blank=True, null=True, upload_to=path_and_rename_club)
+    banniere = models.ImageField(
+        verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
+    # social = models.ManyToManyField('ReseauSocial', through='LienSocialClub')
+
+    class Meta:
+        verbose_name_plural = 'BDX'
+        ordering = ['name']
+    
+    def save(self, *args, **kwargs):
+        self.slug = f'BDX--{slugify(self.name)}'
+        super(BDX, self).save(*args, **kwargs)
+
+
+class NamedMembershipBDX(models.Model):
+    function = models.CharField(
+        verbose_name='Poste occupé', max_length=200, blank=True)
+    year = models.IntegerField(
+        verbose_name='Année du poste', blank=True, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    BDX = models.ForeignKey(BDX, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('function', 'year', 'student', 'BDX')
+
+
+
+class Club(Group):
+    members = models.ManyToManyField(Student, through='NamedMembershipClub')
+    alt_name = models.CharField(
+        verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
+    bdx_type = models.ForeignKey('BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
+    logo = models.ImageField(verbose_name='Logo du club',
+                             blank=True, null=True, upload_to=path_and_rename_club)
+    banniere = models.ImageField(
+        verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
+    social = models.ManyToManyField('ReseauSocial', through='LienSocialClub')
+
+    class Meta:
+        ordering = ['name']
+
+    def save(self, *args, **kwargs):
+        self.slug = f'club--{slugify(self.name)}'
+        super(Club, self).save(*args, **kwargs)
+
+
+class NamedMembershipClub(models.Model):
+    function = models.CharField(
+        verbose_name='Poste occupé', max_length=200, blank=True)
+    year = models.IntegerField(
+        verbose_name='Année du poste', blank=True, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    club = models.ForeignKey(Club, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('function', 'year', 'student', 'club')
+
+
+
+class Liste(Group):
+    liste_type = models.ForeignKey(BDX, on_delete=models.CASCADE, verbose_name='Type de BDX')
+    year = models.IntegerField(
+        verbose_name='Année de la liste', blank=True, null=True)
+    members = models.ManyToManyField(Student, through='NamedMembershipList')
+    logo = models.ImageField(verbose_name='Logo de la liste',
+                             blank=True, null=True, upload_to=path_and_rename_liste)
+
+    class Meta:
+        ordering = ['-year', 'liste_type', 'name']
+    
+    def save(self, *args, **kwargs):
+        self.slug = f'liste--{slugify(self.name)}'
+        super(Liste, self).save(*args, **kwargs)
+
+
+class NamedMembershipList(models.Model):
+    function = models.CharField(
+        verbose_name='Poste occupé', max_length=200, blank=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    liste = models.ForeignKey(Liste, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('function', 'student', 'liste')
+'''
 
 
 @receiver(m2m_changed, sender=Group.admins.through)
