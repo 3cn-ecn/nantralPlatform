@@ -11,5 +11,4 @@ class NamedMembershipListAdmin(admin.ModelAdmin):
 
 
 admin.site.register(NamedMembershipList, NamedMembershipListAdmin)
-
 admin.site.register(Liste, ListeAdmin)
