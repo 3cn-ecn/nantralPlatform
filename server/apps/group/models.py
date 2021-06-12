@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from apps.student.models import Student
+from apps.sociallink.models import SocialNetwork, SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 
@@ -27,6 +28,8 @@ class Group(models.Model):
 
     name = models.CharField(verbose_name='Nom du groupe',
                             unique=True, max_length=200)
+    alt_name = models.CharField(
+        verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
     description = models.TextField(
         verbose_name='Description du groupe', blank=True)
     admins = models.ManyToManyField(
@@ -37,7 +40,7 @@ class Group(models.Model):
                              blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
-    social = models.ManyToManyField('ReseauSocial', through='SocialLink')
+    #social = models.ManyToManyField(SocialNetwork, through='SocialLink')
 
     class Meta:
         abstract = True
@@ -73,9 +76,10 @@ class Group(models.Model):
             from apps.club.models import Club
             return Club.objects.get(slug=slug)
         elif type_slug == 'liste':
-
+            from apps.liste.models import Liste
             return Liste.objects.get(slug=slug)
         elif type_slug == 'BDX':
+            from apps.club.models import BDX
             return BDX.objects.get(slug=slug)
         else:
             raise Exception('Unknown group')
@@ -84,9 +88,8 @@ class Group(models.Model):
     def get_absolute_url(self):
         return reverse('group:detail', kwargs={'group_slug': self.slug})
 
-
+'''
 class BDX(Group):
-    '''Groupe représentant un BDX.'''
 
     members = models.ManyToManyField(Student, through='NamedMembershipBDX')
     alt_name = models.CharField(
@@ -175,7 +178,7 @@ class NamedMembershipList(models.Model):
 
     class Meta:
         unique_together = ('function', 'student', 'liste')
-
+'''
 
 
 @receiver(m2m_changed, sender=Group.admins.through)

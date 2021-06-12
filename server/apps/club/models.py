@@ -16,24 +16,23 @@ else:
 
 
 
-class BDX(Group):
-    '''Groupe représentant un BDX.'''
+
+
+
+class Club(Group):
+    '''Groupe représentat un club.'''
 
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
-    alt_name = models.CharField(
-        verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
     logo = models.ImageField(verbose_name='Logo du club',
                              blank=True, null=True, upload_to=path_and_rename_club)
     banniere = models.ImageField(
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
-
-
-
-class Club(BDX):
-    '''Groupe représentat un club. hérite des mêmes champs que BDX.'''
-
     bdx_type = models.ForeignKey(
         'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
+
+
+class BDX(Club):
+    '''Groupe représentant un BDX.'''
 
 
 
@@ -43,7 +42,8 @@ class NamedMembershipClub(models.Model):
     year = models.IntegerField(
         verbose_name='Année du poste', blank=True, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    group = models.SlugField(verbose_name='Groupe')
+    club = models.ForeignKey(Club, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('function', 'year', 'student', 'group')
+        unique_together = ('function', 'year', 'student', 'club')
+
