@@ -3,8 +3,8 @@ from datetime import date, timedelta
 from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.views.generic import ListView, View, FormView, TemplateView
-from .models import AdminRightsRequest, Club, Group, NamedMembershipClub
-from .forms import AdminRightsRequestForm, NamedMembershipClubFormset, NamedMembershipAddClub, UpdateClubForm
+from .models import AdminRightsRequest, Group
+from .forms import AdminRightsRequestForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,6 +16,9 @@ from apps.post.models import Post
 
 from apps.liste.models import Liste, NamedMembershipList
 from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormset
+
+from apps.club.models import Club, NamedMembershipClub
+from apps.club.forms import NamedMembershipClubFormset, NamedMembershipAddClub, UpdateClubForm
 
 from apps.sociallink.models import SocialLink
 

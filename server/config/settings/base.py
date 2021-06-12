@@ -58,6 +58,7 @@ COMMON_APPS = [
     'apps.home',
     'apps.group',
     'apps.liste',
+    'apps.club',
     'apps.academic',
     'apps.event',
     'apps.services',

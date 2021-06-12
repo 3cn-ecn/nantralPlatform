@@ -22,19 +22,9 @@ TYPE_BDX = [
 ]
 
 if settings.DEBUG:
-    path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
-    path_and_rename_liste = PathAndRename("./static/upload/groups/logo/liste")
     path_and_rename_group = PathAndRename("./static/upload/groups/logo/group")
-    path_and_rename_club_banniere = PathAndRename(
-        "./static/upload/groups/banniere/club")
-    path_and_rename_liste_banniere = PathAndRename(
-        "./static/upload/groups/banniere/club")
 else:
-    path_and_rename_club = PathAndRename("groups/logo/club")
-    path_and_rename_liste = PathAndRename("groups/logo/liste")
     path_and_rename_group = PathAndRename("groups/logo/group")
-    path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
-    path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
 
 
 class Group(models.Model):
@@ -60,7 +50,7 @@ class Group(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = f'{type(self).__name__}--{slugify(self.name)}'
-        super(Club, self).save(*args, **kwargs)
+        super(Group, self).save(*args, **kwargs)
 
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
@@ -90,6 +80,7 @@ class Group(models.Model):
         """Get a group from a slug."""
         type_slug = slug.split('--')[0]
         if type_slug == 'club':
+            from apps.club.models import Club
             return Club.objects.get(slug=slug)
         elif type_slug == 'liste':
             from apps.liste.models import Liste
@@ -100,30 +91,6 @@ class Group(models.Model):
     @property
     def get_absolute_url(self):
         return reverse('group:detail', kwargs={'group_slug': self.slug})
-
-
-class Club(Group):
-    members = models.ManyToManyField(Student, through='NamedMembershipClub')
-    alt_name = models.CharField(
-        verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
-    bdx_type = models.CharField(
-        verbose_name='Type de club BDX', choices=TYPE_BDX, max_length=60)
-    logo = models.ImageField(verbose_name='Logo du club',
-                             blank=True, null=True, upload_to=path_and_rename_club)
-    banniere = models.ImageField(
-        verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
-
-
-class NamedMembershipClub(models.Model):
-    function = models.CharField(
-        verbose_name='Poste occupé', max_length=200, blank=True)
-    year = models.IntegerField(
-        verbose_name='Année du poste', blank=True, null=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    club = models.ForeignKey(Club, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('function', 'year', 'student', 'club')
 
 
 @receiver(m2m_changed, sender=Group.admins.through)
