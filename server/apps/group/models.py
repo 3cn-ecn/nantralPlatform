@@ -13,7 +13,6 @@ from apps.student.models import Student
 from apps.sociallink.models import SocialNetwork, SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
-from apps.sociallink.models import SocialLink, SocialNetwork
 
 
 if settings.DEBUG:
