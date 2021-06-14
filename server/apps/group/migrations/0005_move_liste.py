@@ -4,7 +4,7 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
+    #atomic=False
     dependencies = [
         ('group', '0004_move_social_network'),
     ]
