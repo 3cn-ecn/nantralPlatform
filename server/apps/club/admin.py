@@ -25,7 +25,7 @@ class BDXAdmin(admin.ModelAdmin):
 
 
 class ClubMembershipsAdmin(admin.ModelAdmin):
-    list_display = ['student', 'club', 'function', 'year']
+    list_display = ['student', 'club', 'function', 'date_begin']
 
 
 admin.site.register(Club, ClubAdmin)

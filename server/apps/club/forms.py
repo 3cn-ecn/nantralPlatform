@@ -5,14 +5,14 @@ from .models import NamedMembershipClub, Club
 class NamedMembershipClubForm(ModelForm):
     class Meta:
         model = NamedMembershipClub
-        fields = ['function', 'year', 'student']
+        fields = ['function', 'date_begin', 'student']
 
 
 class NamedMembershipAddClub(ModelForm):
     """Form for a club page to add one self to a club."""
     class Meta:
         model = NamedMembershipClub
-        fields = ['function', 'year']
+        fields = ['function', 'date_begin']
 
 
 class UpdateClubForm(ModelForm):
@@ -23,7 +23,7 @@ class UpdateClubForm(ModelForm):
 
 NamedMembershipClubFormset = modelformset_factory(
     NamedMembershipClub,
-    fields=['function', 'year', 'student'],
+    fields=['function', 'date_begin', 'student'],
     extra=1,
     can_delete=True
 )

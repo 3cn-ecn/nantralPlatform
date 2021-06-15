@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.urls.base import reverse
+from datetime import date
 
 from apps.group.models import Group
 from apps.student.models import Student
@@ -35,8 +36,8 @@ class Housing(models.Model):
 
 
 class Roommates(Group):
-    begin_date = models.DateField()
-    end_date = models.DateField(null=True, blank=True)
+    begin_date = models.DateField("Date d'emménagement", default=date.today)
+    end_date = models.DateField("Date de sortie", null=True, blank=True)
     housing = models.ForeignKey(
         to=Housing, on_delete=models.CASCADE)
     members = models.ManyToManyField(
