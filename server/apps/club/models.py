@@ -1,10 +1,11 @@
 from django.db import models
+from django.db.models import F
+from django.conf import settings
 
 from apps.group.models import Group
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 
-from django.conf import settings
 
 if settings.DEBUG:
     path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
@@ -28,7 +29,7 @@ class Club(Group):
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
     
     class Meta:
-        ordering = ['bdx_type', 'name']
+        ordering = [F('bdx_type').asc(nulls_last=False), 'name']
 
 
 class BDX(Club):
