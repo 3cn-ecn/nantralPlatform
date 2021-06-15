@@ -20,20 +20,22 @@ else:
 
 class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
-    alt_name = models.CharField(
-        verbose_name='Nom abrégé', max_length=200, null=True, blank=True)
     bdx_type = models.ForeignKey(
         'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
     logo = models.ImageField(verbose_name='Logo du club',
                              blank=True, null=True, upload_to=path_and_rename_club)
     banniere = models.ImageField(
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
-    bdx_type = models.ForeignKey(
-        'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
+    
+    class Meta:
+        ordering = ['bdx_type', 'name']
 
 
 class BDX(Club):
     '''Groupe représentant un BDX.'''
+
+    class Meta:
+        ordering = ['name']
 
 
 class NamedMembershipClub(models.Model):

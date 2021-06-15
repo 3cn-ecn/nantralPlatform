@@ -4,36 +4,27 @@ from django.shortcuts import redirect, render
 from django.urls.base import reverse
 from django.views.generic import ListView, View, FormView, TemplateView
 
-from apps.group.models import AdminRightsRequest, Group
-from apps.club.models import Club, NamedMembershipClub, BDX
-from apps.liste.models import Liste, NamedMembershipList
-from apps.sociallink.models import SocialNetwork, SocialLink
-
-from apps.group.forms import AdminRightsRequestForm
-from apps.club.forms import NamedMembershipClubFormset, NamedMembershipAddClub, UpdateClubForm
-from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormset
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.decorators.http import require_http_methods
 
+
+from apps.group.models import AdminRightsRequest, Group
+from apps.club.models import Club, NamedMembershipClub, BDX
+from apps.liste.models import Liste, NamedMembershipList
+from apps.sociallink.models import SocialNetwork, SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 
-from apps.liste.models import Liste, NamedMembershipList
-from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormset
-
-from apps.club.models import Club, NamedMembershipClub
+from apps.group.forms import AdminRightsRequestForm
 from apps.club.forms import NamedMembershipClubFormset, NamedMembershipAddClub, UpdateClubForm
-
-from apps.sociallink.models import SocialLink
-
+from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormset
 
 from apps.utils.accessMixins import UserIsAdmin
 
-
+'''
 class ListClubView(TemplateView):
     
     template_name = 'club/list.html'
@@ -73,7 +64,7 @@ class ListeListView(TemplateView):
                               'year_end': liste.year, 'listes': [liste]})
         context['items_groups'] = items_groups
         return context
-
+'''
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
     template_name = 'group/update.html'

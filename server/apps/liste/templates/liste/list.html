@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col">
+		<h1>Listes BDX</h1>
+	</div>
+	<!--div class="col text-end">
+		<input type="textbox">
+	</div-->
+</div>
+<br />
+{% regroup object_list by year as year_list %}
+
+{% for group in year_list %}
+	<h2>Campagnes {{ group.grouper }}-{{ group.grouper|add:1 }}</h2>
+	<div class="grille">
+		{% for liste in group.list %}
+  			<div class="grille-icon text-center" style="transform:rotate(0);">
+	    		<a href="{{ liste.get_absolute_url }}" class="stretched-link">
+					<div class="ratio ratio-1x1">
+      					{% if liste.logo %}
+	        				<img src="{{ liste.logo.url }}?{{object.modified_date}}">
+      					{% else %}
+		        			<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
+      					{% endif %}
+					</div>
+				</a>
+				<p>
+				    {{ liste.name }}
+        			<br>
+        			<small class="text-secondary">{{ liste.liste_type.nom | upper }}</small>
+      			</p>
+  			</div>
+  		{% endfor %}
+	</div>
+{% endfor %}
+
+{% endblock %}
+

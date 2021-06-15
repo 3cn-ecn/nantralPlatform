@@ -21,6 +21,9 @@ class Liste(Group):
     logo = models.ImageField(verbose_name='Logo de la liste',
                              blank=True, null=True, upload_to=path_and_rename_liste)
 
+    class Meta:
+        ordering = ['-year', 'liste_type', 'name']
+
 
 class NamedMembershipList(models.Model):
     function = models.CharField(
