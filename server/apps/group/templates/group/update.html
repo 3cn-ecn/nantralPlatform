@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-{% include 'navbar_edit.html' with open='general' %}
+{% include 'group/navbar_edit.html' with open='general' %}
 <form method='POST' enctype="multipart/form-data">
     {% csrf_token %}
     {{ form|crispy }}

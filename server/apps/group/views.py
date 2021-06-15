@@ -24,7 +24,7 @@ from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormse
 
 from apps.utils.accessMixins import UserIsAdmin
 
-
+'''
 class ListClubView(TemplateView):
     
     template_name = 'club/list.html'
@@ -64,7 +64,7 @@ class ListeListView(TemplateView):
                               'year_end': liste.year, 'listes': [liste]})
         context['items_groups'] = items_groups
         return context
-
+'''
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
     template_name = 'group/update.html'
