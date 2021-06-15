@@ -16,7 +16,10 @@
 
 {% for bdx in my_clubs|add:bdx_list %}
 	{% if bdx.grouper %}
-		<h2>{{ bdx.grouper.name }}</h2>
+		<h2>
+			{% if not "Mes" in bdx.grouper.name %} Clubs {% endif %}
+			{{ bdx.grouper.name }}
+		</h2>
 	{% else %}
 		<h2>Associations</h2>
 	{% endif %}
