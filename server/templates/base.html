@@ -1,6 +1,7 @@
 {% load static %}
+{% load club_tags %}
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
   <head>
     <meta charset="utf-8">
@@ -49,14 +50,7 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             BDX
             </a>
-            <ul class="dropdown-menu" role="menu">
-              {% for bdx in request.club %}
-                <li><a class="dropdown-item" href="{{ bdx.get_absolute_url }}">bdx.name</a></li>
-              {% endfor %}
-              <li><a class="dropdown-item" href="/group/group/club--bureau-des-eleves/">BDE</a></li>
-              <li><a class="dropdown-item" href="/group/group/club--bureau-des-arts/">BDA</a></li>
-              <li><a class="dropdown-item" href="/group/group/club--bureau-des-sports/">BDS</a></li>
-            </ul>
+            {% show_navbar_bdx %}
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -64,8 +58,8 @@
             </a>
             <ul class="dropdown-menu" role="menu">
               <!--li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li-->
-              <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
               <li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
+              <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
               <li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
               <li><a class="dropdown-item disabled" href="#">Offres Partenariats</a></li>
             </ul>
