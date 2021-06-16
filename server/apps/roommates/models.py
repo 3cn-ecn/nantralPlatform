@@ -52,7 +52,7 @@ class Roommates(Group):
 
 
 class NamedMembershipRoommates(NamedMembership):
-    roommates = models.ForeignKey(
+    group = models.ForeignKey(
         to=Roommates, on_delete=models.CASCADE, blank=True, null=True)
     nickname = models.CharField(
         max_length=100, verbose_name='Surnom', blank=True, null=True)

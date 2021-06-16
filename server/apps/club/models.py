@@ -44,7 +44,7 @@ class BDX(Club):
 
 
 class NamedMembershipClub(NamedMembership):
-    club = models.ForeignKey(Club, on_delete=models.CASCADE)
+    group = models.ForeignKey(Club, on_delete=models.CASCADE)
     function = models.CharField(
         verbose_name='Poste occupé', max_length=200, blank=True)
     date_begin = models.DateField(verbose_name='Date de début', default=date.today)

@@ -50,20 +50,23 @@ class Group(models.Model):
 
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
+        if user.is_anonymous or not user.is_authenticated or not user.student:
+            return False
+        student = Student.objects.filter(user=user).first()
+        res = False
         if user.is_superuser or user.is_staff:
-            return True
-        student = Student.objects.get(user=user)
-        if self.type_bdx is not None:
-            if student in self.type_bdx.members.filter(admin=True):
-                return True
-        return student in self.members.filter(admin=True)
-        #return student in self.admins.all() or self.get_parent is not None and self.get_parent.is_admin(user)
+            res = True
+        if not(res) and self.is_member(user):
+            members_list = self.members.through.objects.filter(group=self)
+            my_member = members_list.filter(student=student).first()
+            res = my_member.admin 
+        if not(res) and self.bdx_type :
+            res = self.bdx_type.is_admin(user)
+        return res
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated:
-            return False
-        if not user.student:
+        if user.is_anonymous or not user.is_authenticated or not user.student:
             return False
         student = Student.objects.filter(user=user).first()
         return student in self.members.all()
@@ -96,6 +99,7 @@ class Group(models.Model):
 class NamedMembership(models.Model):
     admin = models.BooleanField(default=False)
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
+    group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True

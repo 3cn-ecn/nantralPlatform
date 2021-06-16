@@ -28,7 +28,7 @@ class Liste(Group):
 class NamedMembershipList(NamedMembership):
     function = models.CharField(
         verbose_name='Poste occupé', max_length=200, blank=True)
-    liste = models.ForeignKey(Liste, on_delete=models.CASCADE)
+    group = models.ForeignKey(Liste, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('function', 'student', 'liste')
+        unique_together = ('function', 'student', 'group')
