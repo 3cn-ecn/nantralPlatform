@@ -24,47 +24,6 @@ from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormse
 
 from apps.utils.accessMixins import UserIsAdmin
 
-'''
-class ListClubView(TemplateView):
-    
-    template_name = 'club/list.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        items_groups = [
-            {'nom': 'Mes Clubs & Assos', 'list': Club.objects.filter(
-                members__user=self.request.user)},
-            {'nom': 'Associations', 'list': Club.objects.filter(
-                bdx_type__isnull=True)},
-        ]
-        list_bdx = BDX.objects.all()
-        for bdx in list_bdx:
-            items_groups.append({
-                'nom': 'Clubs '+bdx.name, 
-                'list': Club.objects.filter(bdx_type=bdx),
-            })
-        context['items_groups'] = items_groups
-        return context
-
-
-class ListeListView(TemplateView):
-    template_name = 'liste/list.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        items_groups = []
-        listes = Liste.objects.all()
-        items_groups.append(
-            {'year_start': listes[0].year-1, 'year_end': listes[0].year, 'listes': []})
-        for liste in listes:
-            if liste.year == listes[-1]['year_end']:
-                items_groups[-1]['listes'].append(liste)
-            else:
-                items_groups.append({'year_start': liste.year-1,
-                              'year_end': liste.year, 'listes': [liste]})
-        context['items_groups'] = items_groups
-        return context
-'''
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
     template_name = 'group/update.html'
@@ -130,6 +89,7 @@ class DetailGroupView(TemplateView):
         else:
             social = ""
         context['social'] = SocialLink.objects.filter(slug=self.object.slug)
+        context['is_member'] = self.object.is_member(self.request.user)
         if self.request.user.is_authenticated:
             context['is_admin'] = self.object.is_admin(self.request.user)
         else:
