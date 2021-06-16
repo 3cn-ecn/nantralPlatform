@@ -30,9 +30,9 @@ class Group(models.Model):
         verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
     description = models.TextField(
         verbose_name='Description du groupe', blank=True)
-    admins = models.ManyToManyField(
-        Student, verbose_name='Admins du groupe', related_name='%(class)s_admins', blank=True)
-    members = models.ManyToManyField(Student, verbose_name='Membres du groupe', related_name='%(class)s_members')
+    # admins = models.ManyToManyField(
+       # Student, verbose_name='Admins du groupe', related_name='%(class)s_admins', blank=True)
+    members = models.ManyToManyField(Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
     logo = models.ImageField(verbose_name='Logo du groupe',blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
@@ -89,8 +89,15 @@ class Group(models.Model):
         return reverse('group:detail', kwargs={'group_slug': self.slug})
 
 
+class NamedMembership(models.Model):
+    admin = models.BooleanField(default=False)
+    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
 
-@receiver(m2m_changed, sender=Group.admins.through)
+    class Meta:
+        abstract = True
+
+'''
+@receiver(m2m_changed, sender=Group.members.admin.through)
 def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
     if isinstance(instance, Group):
         # FIXME temporary fix because this signal shotguns m2m_changed which other can't
@@ -113,7 +120,7 @@ def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
                 })
                 user.email_user(
                     f'Vous n\'êtes plus admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
-
+'''
 
 class AdminRightsRequest(models.Model):
     """A model to request admin rights on a group."""

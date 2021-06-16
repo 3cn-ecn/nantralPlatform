@@ -1,6 +1,6 @@
 from django.db import models
 from apps.student.models import Student
-from apps.group.models import Group
+from apps.group.models import Group, NamedMembership
 from apps.club.models import BDX
 from apps.utils.upload import PathAndRename
 
@@ -25,10 +25,9 @@ class Liste(Group):
         ordering = ['-year', 'liste_type', 'name']
 
 
-class NamedMembershipList(models.Model):
+class NamedMembershipList(NamedMembership):
     function = models.CharField(
         verbose_name='Poste occupé', max_length=200, blank=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     liste = models.ForeignKey(Liste, on_delete=models.CASCADE)
 
     class Meta:

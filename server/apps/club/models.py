@@ -3,7 +3,7 @@ from django.db.models import F
 from django.conf import settings
 from datetime import date
 
-from apps.group.models import Group
+from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 
@@ -43,8 +43,7 @@ class BDX(Club):
         verbose_name_plural = "BDX"
 
 
-class NamedMembershipClub(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+class NamedMembershipClub(NamedMembership):
     club = models.ForeignKey(Club, on_delete=models.CASCADE)
     function = models.CharField(
         verbose_name='Poste occupé', max_length=200, blank=True)
