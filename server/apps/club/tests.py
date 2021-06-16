@@ -2,6 +2,7 @@ from django.test import TestCase
 from apps.utils.utest import TestMixin
 from django.urls import reverse
 from rest_framework import status
+from datetime import date
 
 from .models import Club, NamedMembershipClub
 
@@ -29,7 +30,7 @@ class TestGroups(TestCase, TestMixin):
         club = Club.objects.create(name='TestClub')
         payload = {
             'function': 'test',
-            'year': 2020
+            'date_begin': date.today(),
         }
         url = reverse('group:add-member', args=[club.slug])
         resp = self.client.post(url, payload)
