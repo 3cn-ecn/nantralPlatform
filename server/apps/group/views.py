@@ -57,7 +57,7 @@ class UpdateGroupMembersView(UserIsAdmin, View):
         context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
         if isinstance(context['object'], Club):
             memberships = NamedMembershipClub.objects.filter(
-                club=context['object'])
+                group=context['object'])
             membersForm = NamedMembershipClubFormset(queryset=memberships)
             context['members'] = membersForm
         return context
@@ -109,9 +109,9 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         self.object = form.save(commit=False)
         self.object.student = self.request.user.student
         if self.form_class == NamedMembershipAddClub:
-            self.object.club = Club.objects.get(slug=self.kwargs['slug'])
+            self.object.group = Club.objects.get(slug=self.kwargs['slug'])
         elif self.form_class == NamedMembershipAddListe:
-            self.object.liste = Liste.objects.get(slug=self.kwargs['slug'])
+            self.object.group = Liste.objects.get(slug=self.kwargs['slug'])
         self.object.save()
         return redirect('group:detail', self.kwargs['slug'])
 
