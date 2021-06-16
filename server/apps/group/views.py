@@ -119,22 +119,17 @@ class DetailGroupView(TemplateView):
         self.object = Group.get_group_by_slug(self.kwargs['group_slug'])
         context['object'] = self.object
         context['admin_req_form'] = AdminRightsRequestForm()
-        members = self.object.members.through.objects.filter(group=self.object)
+        context['members'] = self.object.members.through.objects.filter(group=self.object)
         if isinstance(context['object'], Club):
-            # members = NamedMembershipClub.objects.filter(group=self.object)
             # FIXME SocialLink will be done differently directly in Club
             social = ""  # SocialLink.objects.filter(club=self.object)
             context['form'] = NamedMembershipAddClub()
         elif isinstance(context['object'], Liste):
-            # members = NamedMembershipList.objects.filter(group=self.object)
             context['form'] = NamedMembershipAddListe()
             social = ""
         else:
-            members = self.object.members
             social = ""
-        context['members'] = members
-        context['social'] = social
-        context['is_member'] = self.object.is_member(self.request.user)
+        context['social'] = SocialLink.objects.filter(slug=self.object.slug)
         if self.request.user.is_authenticated:
             context['is_admin'] = self.object.is_admin(self.request.user)
         else:
