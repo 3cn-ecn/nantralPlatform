@@ -17,7 +17,7 @@ def make_BDS(modeladmin, request, queryset):
 
 class ClubAdmin(admin.ModelAdmin):
     list_display = ['name', 'bdx_type']
-    actions = [make_BDA, make_BDE, make_BDS]
+    actions = [make_BDE, make_BDA, make_BDS]
 
 
 class BDXAdmin(admin.ModelAdmin):

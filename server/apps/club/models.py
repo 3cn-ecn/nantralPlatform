@@ -30,7 +30,7 @@ class Club(Group):
         verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
     
     class Meta:
-        ordering = [F('bdx_type').asc(nulls_last=False), 'name']
+        ordering = [F('bdx_type').asc(nulls_first=True), 'name']
 
 
 class BDX(Club):
