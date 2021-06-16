@@ -52,8 +52,12 @@ class Group(models.Model):
         """Indicates if a user is admin."""
         if user.is_superuser or user.is_staff:
             return True
-        student = Student.objects.filter(user=user).first()
-        return student in self.admins.all() or self.get_parent is not None and self.get_parent.is_admin(user)
+        student = Student.objects.get(user=user)
+        if self.type_bdx is not None:
+            if student in self.type_bdx.members.filter(admin=True):
+                return True
+        return student in self.members.filter(admin=True)
+        #return student in self.admins.all() or self.get_parent is not None and self.get_parent.is_admin(user)
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
