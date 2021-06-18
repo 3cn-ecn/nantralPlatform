@@ -1,8 +1,8 @@
+"""A configuration for local docker use in developpment. DO NOT USE IN PRODUCTION."""
 from .base import *
 
-print("Running prod config")
-
-DEBUG = False
+print("Using docker config")
+DEBUG = True
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -49,18 +49,14 @@ AWS_S3_OBJECT_PARAMETERS = {
 AWS_S3_REGION_NAME = 'eu-west-3'
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = "test"
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = ["django"]
 
 EMAIL_BACKEND = 'django_amazon_ses.EmailBackend'
 
 AWS_SES_REGION = 'eu-central-1'
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
 
 MAPBOX_API_KEY = env('MAPBOX_API_KEY')
 

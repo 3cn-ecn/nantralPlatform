@@ -17,7 +17,11 @@ class BaseEventTestCase(TestCase, TestMixin):
         self.user_setup()
         self.club = Club.objects.create(
             name="TestClubForEvents")
-        self.club.admins.set([self.u2.student])
+        self.club.members.through.objects.create(
+            student=self.u2.student,
+            group=self.club,
+            admin=True
+        )
         self.event = BaseEvent.objects.create(
             title="TestEvent", group=self.club.slug, date=make_aware(datetime.now()),
             description="Test Desc", location="Amphi A")

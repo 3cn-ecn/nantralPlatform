@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from apps.student.models import Student
-#from apps.sociallink.models import SocialNetwork, SocialLink
+from apps.sociallink.models import SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 
@@ -30,13 +30,13 @@ class Group(models.Model):
         verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
     description = models.TextField(
         verbose_name='Description du groupe', blank=True)
-    admins = models.ManyToManyField(
-        Student, verbose_name='Admins du groupe', related_name='%(class)s_admins', blank=True)
-    members = models.ManyToManyField(Student, verbose_name='Membres du groupe', related_name='%(class)s_members')
-    logo = models.ImageField(verbose_name='Logo du groupe',blank=True, null=True, upload_to=path_and_rename_group)
+    members = models.ManyToManyField(
+        Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
+    logo = models.ImageField(verbose_name='Logo du groupe',
+                             blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
-    #social = models.ManyToManyField('SocialNetwork', through='SocialLink')
+    social = models.ManyToManyField(SocialLink, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -50,16 +50,23 @@ class Group(models.Model):
 
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
-        if user.is_superuser or user.is_staff:
-            return True
+        if user.is_anonymous or not user.is_authenticated or not user.student:
+            return False
         student = Student.objects.filter(user=user).first()
-        return student in self.admins.all() or self.get_parent is not None and self.get_parent.is_admin(user)
+        res = False
+        if user.is_superuser or user.is_staff:
+            res = True
+        if not(res) and self.is_member(user):
+            members_list = self.members.through.objects.filter(group=self)
+            my_member = members_list.filter(student=student).first()
+            res = my_member.admin
+        if not(res) and self.bdx_type:
+            res = self.bdx_type.is_admin(user)
+        return res
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated:
-            return False
-        if not user.student:
+        if user.is_anonymous or not user.is_authenticated or not user.student:
             return False
         student = Student.objects.filter(user=user).first()
         return student in self.members.all()
@@ -69,7 +76,7 @@ class Group(models.Model):
         super(Group, self).save(*args, **kwargs)
 
     @staticmethod
-    def get_group_by_slug(slug:  str):
+    def get_group_by_slug(slug:  str) -> 'Group':
         """Get a group from a slug."""
         type_slug = slug.split('--')[0]
         if type_slug == 'club':
@@ -89,30 +96,13 @@ class Group(models.Model):
         return reverse('group:detail', kwargs={'group_slug': self.slug})
 
 
+class NamedMembership(models.Model):
+    admin = models.BooleanField(default=False)
+    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
+    group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
 
-@receiver(m2m_changed, sender=Group.admins.through)
-def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
-    if isinstance(instance, Group):
-        # FIXME temporary fix because this signal shotguns m2m_changed which other can't
-        # use. To avoid this we check the instance before to make sure it's a group.
-        if action == "post_add":
-            for pk in pk_set:
-                user = User.objects.get(pk=pk)
-                mail = render_to_string('group/mail/new_admin.html', {
-                    'group': instance,
-                    'user': user
-                })
-                user.email_user(f'Vous êtes admin de {instance}', mail,
-                                'group-manager@nantral-platform.fr', html_message=mail)
-        elif action == "post_remove":
-            for pk in pk_set:
-                user = User.objects.get(pk=pk)
-                mail = render_to_string('group/mail/remove_admin.html', {
-                    'group': instance,
-                    'user': user
-                })
-                user.email_user(
-                    f'Vous n\'êtes plus admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
+    class Meta:
+        abstract = True
 
 
 class AdminRightsRequest(models.Model):
@@ -148,10 +138,51 @@ class AdminRightsRequest(models.Model):
 
     def accept(self):
         group = Group.get_group_by_slug(self.group)
-        group.admins.add(self.student)
+        if group.is_member(self.student.user):
+            membership = group.members.through.objects.get(
+                student=self.student.id)
+            membership.admin = True
+            membership.save()
+        else:
+            group.members.through.objects.create(
+                student=self.student,
+                group=group,
+                admin=True
+            )
+        mail = render_to_string('group/mail/new_admin.html', {
+            'group': group,
+            'user': self.student.user
+        })
+        self.student.user.email_user(f'Vous êtes admin de {group}', mail,
+                                     'group-manager@nantral-platform.fr', html_message=mail)
         close_issue(self.issue)
         self.delete()
 
     def deny(self):
         close_issue(self.issue)
         self.delete()
+
+# FIXME Broken since the move of admins inside of members, nice to fix
+# @receiver(m2m_changed, sender=Group.members.through)
+# def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
+#     if isinstance(instance, Group):
+#         # FIXME temporary fix because this signal shotguns m2m_changed which other can't
+#         # use. To avoid this we check the instance before to make sure it's a group.
+#         if action == "post_add":
+#             for pk in pk_set:
+#                 user = User.objects.get(pk=pk)
+#                 mail = render_to_string('group/mail/new_admin.html', {
+#                     'group': instance,
+#                     'user': user
+#                 })
+#                 user.email_user(f'Vous êtes admin de {instance}', mail,
+#                                 'group-manager@nantral-platform.fr', html_message=mail)
+#         elif action == "post_remove":
+#             for pk in pk_set:
+#                 user = User.objects.get(pk=pk)
+#                 mail = render_to_string('group/mail/remove_admin.html', {
+#                     'group': instance,
+#                     'user': user
+#                 })
+#                 user.email_user(
+#                     f'Vous n\'êtes plus membre de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)

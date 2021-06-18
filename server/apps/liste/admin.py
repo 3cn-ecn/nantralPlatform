@@ -7,7 +7,7 @@ class ListeAdmin(admin.ModelAdmin):
 
 
 class NamedMembershipListAdmin(admin.ModelAdmin):
-    list_display = ['student', 'liste', 'function']
+    list_display = ['student', 'group', 'function']
 
 
 admin.site.register(NamedMembershipList, NamedMembershipListAdmin)

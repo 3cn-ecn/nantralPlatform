@@ -3,7 +3,7 @@ from django.utils.text import slugify
 from django.urls.base import reverse
 from datetime import date
 
-from apps.group.models import Group
+from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
 from apps.sociallink.models import SocialNetwork, SocialLink
@@ -51,9 +51,8 @@ class Roommates(Group):
         super(Roommates, self).save(*args, **kwargs)
 
 
-class NamedMembershipRoommates(models.Model):
-    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
-    roommates = models.ForeignKey(
+class NamedMembershipRoommates(NamedMembership):
+    group = models.ForeignKey(
         to=Roommates, on_delete=models.CASCADE, blank=True, null=True)
     nickname = models.CharField(
         max_length=100, verbose_name='Surnom', blank=True, null=True)
