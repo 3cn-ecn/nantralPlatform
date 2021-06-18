@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.conf import settings
 
 from apps.student.models import Student
-#from apps.sociallink.models import SocialNetwork, SocialLink
+from apps.sociallink.models import SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 
@@ -30,13 +30,13 @@ class Group(models.Model):
         verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
     description = models.TextField(
         verbose_name='Description du groupe', blank=True)
-    # admins = models.ManyToManyField(
-       # Student, verbose_name='Admins du groupe', related_name='%(class)s_admins', blank=True)
-    members = models.ManyToManyField(Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
-    logo = models.ImageField(verbose_name='Logo du groupe',blank=True, null=True, upload_to=path_and_rename_group)
+    members = models.ManyToManyField(
+        Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
+    logo = models.ImageField(verbose_name='Logo du groupe',
+                             blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
-    #social = models.ManyToManyField('SocialNetwork', through='SocialLink')
+    social = models.ManyToManyField(SocialLink, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -59,8 +59,8 @@ class Group(models.Model):
         if not(res) and self.is_member(user):
             members_list = self.members.through.objects.filter(group=self)
             my_member = members_list.filter(student=student).first()
-            res = my_member.admin 
-        if not(res) and self.bdx_type :
+            res = my_member.admin
+        if not(res) and self.bdx_type:
             res = self.bdx_type.is_admin(user)
         return res
 
@@ -76,7 +76,7 @@ class Group(models.Model):
         super(Group, self).save(*args, **kwargs)
 
     @staticmethod
-    def get_group_by_slug(slug:  str):
+    def get_group_by_slug(slug:  str) -> 'Group':
         """Get a group from a slug."""
         type_slug = slug.split('--')[0]
         if type_slug == 'club':
@@ -104,6 +104,7 @@ class NamedMembership(models.Model):
     class Meta:
         abstract = True
 
+
 '''
 @receiver(m2m_changed, sender=Group.members.admin.through)
 def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
@@ -129,6 +130,7 @@ def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
                 user.email_user(
                     f'Vous n\'êtes plus admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
 '''
+
 
 class AdminRightsRequest(models.Model):
     """A model to request admin rights on a group."""

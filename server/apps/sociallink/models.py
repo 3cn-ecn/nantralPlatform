@@ -20,8 +20,8 @@ class SocialNetwork(models.Model):
 class SocialLink(models.Model):
     url = models.CharField(verbose_name='URL', max_length=200)
     reseau = models.ForeignKey(SocialNetwork, on_delete=models.CASCADE)
-    slug = models.SlugField(verbose_name='Slug du lien', unique=True, null=True)
-    #group = models.ForeignKey('Group', on_delete=models.CASCADE)
+    slug = models.SlugField(verbose_name='Slug du lien',
+                            unique=True, null=True)
 
     def __str__(self):
         return self.url
