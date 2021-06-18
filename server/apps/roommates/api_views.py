@@ -45,7 +45,7 @@ class HousingRoommates(generics.ListCreateAPIView):
     def get_queryset(self):
         now = timezone.now()
         query = Housing.objects.filter(
-					Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None)))|(Q(roommates__members=None) & Q(roommates__admins=None)))
+            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | (Q(roommates__members=None) & Q(roommates__admins=None)))
         return query
 
 
@@ -90,7 +90,7 @@ class RoommatesMembersView(generics.ListCreateAPIView):
         group = generics.get_object_or_404(
             Roommates, id=self.kwargs['pk'])
         copy = request.data.copy()
-        copy['roommates'] = group.id
+        copy['group'] = group.id
         student = generics.get_object_or_404(
             Student, id=request.data['student'])
         serializer = self.get_serializer(data=copy)

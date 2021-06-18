@@ -41,4 +41,4 @@ class TestGroups(TestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
         self.assertEqual(NamedMembershipClub.objects.filter(
-            club=club, student=self.u2.student).count(), 1)
+            group=club, student=self.u2.student).count(), 1)
