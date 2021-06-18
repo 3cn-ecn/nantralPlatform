@@ -105,33 +105,6 @@ class NamedMembership(models.Model):
         abstract = True
 
 
-'''
-@receiver(m2m_changed, sender=Group.members.admin.through)
-def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
-    if isinstance(instance, Group):
-        # FIXME temporary fix because this signal shotguns m2m_changed which other can't
-        # use. To avoid this we check the instance before to make sure it's a group.
-        if action == "post_add":
-            for pk in pk_set:
-                user = User.objects.get(pk=pk)
-                mail = render_to_string('group/mail/new_admin.html', {
-                    'group': instance,
-                    'user': user
-                })
-                user.email_user(f'Vous êtes admin de {instance}', mail,
-                                'group-manager@nantral-platform.fr', html_message=mail)
-        elif action == "post_remove":
-            for pk in pk_set:
-                user = User.objects.get(pk=pk)
-                mail = render_to_string('group/mail/remove_admin.html', {
-                    'group': instance,
-                    'user': user
-                })
-                user.email_user(
-                    f'Vous n\'êtes plus admin de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
-'''
-
-
 class AdminRightsRequest(models.Model):
     """A model to request admin rights on a group."""
     group = models.SlugField(verbose_name="Groupe demandé.")
@@ -176,9 +149,40 @@ class AdminRightsRequest(models.Model):
                 group=group,
                 admin=True
             )
+        mail = render_to_string('group/mail/new_admin.html', {
+            'group': group,
+            'user': self.student.user
+        })
+        self.student.user.email_user(f'Vous êtes admin de {group}', mail,
+                                     'group-manager@nantral-platform.fr', html_message=mail)
         close_issue(self.issue)
         self.delete()
 
     def deny(self):
         close_issue(self.issue)
         self.delete()
+
+# FIXME Broken since the move of admins inside of members, nice to fix
+# @receiver(m2m_changed, sender=Group.members.through)
+# def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
+#     if isinstance(instance, Group):
+#         # FIXME temporary fix because this signal shotguns m2m_changed which other can't
+#         # use. To avoid this we check the instance before to make sure it's a group.
+#         if action == "post_add":
+#             for pk in pk_set:
+#                 user = User.objects.get(pk=pk)
+#                 mail = render_to_string('group/mail/new_admin.html', {
+#                     'group': instance,
+#                     'user': user
+#                 })
+#                 user.email_user(f'Vous êtes admin de {instance}', mail,
+#                                 'group-manager@nantral-platform.fr', html_message=mail)
+#         elif action == "post_remove":
+#             for pk in pk_set:
+#                 user = User.objects.get(pk=pk)
+#                 mail = render_to_string('group/mail/remove_admin.html', {
+#                     'group': instance,
+#                     'user': user
+#                 })
+#                 user.email_user(
+#                     f'Vous n\'êtes plus membre de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
