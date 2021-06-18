@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('student', '0003_alter_student_options'),
-        ('liste', '0005_auto_20210616_1115'),
+        ('liste', '0005_transfer_admin_in_membership'),
     ]
 
     operations = [
