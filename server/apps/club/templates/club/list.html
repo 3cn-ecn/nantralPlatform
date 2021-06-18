@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col">
+		<h1>Clubs Nantraliens</h1>
+	</div>
+	<!--div class="col text-end">
+		<input type="textbox">
+	</div-->
+</div>
+<br />
+{% regroup object_list by bdx_type as bdx_list %}
+
+{% for bdx in my_clubs|add:bdx_list %}
+	{% if bdx.grouper %}
+		<h2>
+			{% if not "Mes" in bdx.grouper.name %} Clubs {% endif %}
+			{{ bdx.grouper.name }}
+		</h2>
+	{% else %}
+		<h2>Associations</h2>
+	{% endif %}
+		<div class="grille">
+			{% for club in bdx.list %}
+  				<div class="grille-icon text-center" style="transform:rotate(0);">
+		    		<a href="{{ club.get_absolute_url }}" class="stretched-link">
+						<div class="ratio ratio-1x1">
+	      					{% if club.logo %}
+	        					<img src="{{ club.logo.url }}?{{object.modified_date}}">
+      						{% else %}
+			        			<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
+      						{% endif %}
+						</div>
+					</a>
+					<h6>
+						{{ club.name }}
+					</h6>
+  				</div>
+  			{% endfor %}
+		</div>
+{% endfor %}
+
+{% endblock %}

@@ -1,6 +1,7 @@
 {% load static %}
+{% load club_tags %}
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
   <head>
     <meta charset="utf-8">
@@ -43,17 +44,13 @@
             <a class="nav-link" href="#">Campagnes</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'group:club-list' %}">Clubs & Assos</a>
+            <a class="nav-link" href="{% url 'club:club-list' %}">Clubs & Assos</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             BDX
             </a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a class="dropdown-item" href="/group/group/club--bureau-des-eleves/">BDE</a></li>
-              <li><a class="dropdown-item" href="/group/group/club--bureau-des-arts/">BDA</a></li>
-              <li><a class="dropdown-item" href="/group/group/club--bureau-des-sports/">BDS</a></li>
-            </ul>
+            {% show_navbar_bdx %}
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -61,8 +58,8 @@
             </a>
             <ul class="dropdown-menu" role="menu">
               <!--li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li-->
-              <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
               <li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
+              <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
               <li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
               <li><a class="dropdown-item disabled" href="#">Offres Partenariats</a></li>
             </ul>
@@ -73,7 +70,7 @@
             </a>
             <ul class="dropdown-menu" role="menu">
               <li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
-              <li><a class="dropdown-item" href="{% url 'group:liste-list' %}">Listes BDX</a></li>
+              <li><a class="dropdown-item" href="{% url 'liste:liste-list' %}">Listes BDX</a></li>
               <li><a class="dropdown-item disabled" href="#">Options disciplinaires</a></li>
               <li><a class="dropdown-item disabled" href="#">Contacts & Liens</a></li>
             </ul>
