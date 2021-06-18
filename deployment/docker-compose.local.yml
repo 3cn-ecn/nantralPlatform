@@ -26,16 +26,17 @@ services:
     environment:
       - DB_HOSTNAME
       - DB_PORT
-      - DB_NAME
       - POSTGRES_USER
       - POSTGRES_PASSWORD
+      - DB_NAME
+      - S3_BUCKET
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
-      - S3_BUCKET
       - GITHUB_USER
       - GITHUB_TOKEN
       - DJANGO_ALLOWED_HOSTS
       - SECRET_KEY
+      - MAPBOX_API_KEY
 
   nginx:
     build: ./containers/nginx_http

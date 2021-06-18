@@ -9,7 +9,7 @@ from rest_framework import status
 from .models import BaseEvent
 
 from apps.utils.utest import TestMixin
-from apps.group.models import Club
+from apps.club.models import Club
 
 
 class BaseEventTestCase(TestCase, TestMixin):

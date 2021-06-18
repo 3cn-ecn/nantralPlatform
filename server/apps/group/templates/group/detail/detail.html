@@ -98,7 +98,7 @@
         {% for member in members %}
             <a href='{% url "student:detail" member.student.id%}' class='card'>
                 {{member.student.user.first_name}} {{member.student.user.last_name}} -
-                {{member.function}} - {{member.year}}
+                {{member.function}} - {{member.date_begin}}
             </a>
         {% endfor %}
     {%else%}

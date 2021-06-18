@@ -1,9 +1,10 @@
-{% extends 'group/base_edit.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block page %}
-</br>
-</br>
+
+{% block content %}
+{% include 'group/navbar_edit.html' with open='events' %}
+
 <h2>Liste des events archivés</h2>
 <div id="root"></div>
 {% endblock %}

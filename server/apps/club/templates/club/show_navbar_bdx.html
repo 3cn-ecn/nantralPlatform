@@ -1,0 +1,6 @@
+
+<ul class="dropdown-menu" role="menu">
+    {% for bdx in bdx_list %}
+    <li><a class="dropdown-item" href="{{ bdx.get_absolute_url }}">{{ bdx.name }}</a></li>
+    {% endfor %}
+</ul>
