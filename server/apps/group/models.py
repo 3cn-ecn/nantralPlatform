@@ -163,7 +163,17 @@ class AdminRightsRequest(models.Model):
 
     def accept(self):
         group = Group.get_group_by_slug(self.group)
-        group.admins.add(self.student)
+        if group.is_member(self.student.user):
+            membership = group.members.through.objects.get(
+                student=self.student.id)
+            membership.admin = True
+            membership.save()
+        else:
+            group.members.through.objects.create(
+                student=self.student,
+                group=group,
+                admin=True
+            )
         close_issue(self.issue)
         self.delete()
 
