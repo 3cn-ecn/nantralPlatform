@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from apps.group.models import NamedMembershipClub
+from apps.club.models import NamedMembershipClub
 from apps.academic.models import FollowCourse
 from apps.academic.forms import TakeCourseFormSet
 

@@ -1,7 +1,9 @@
-{% extends 'group/base_edit.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block page %}
-</br>
+
+{% block content %}
+
+{% include 'group/navbar_edit.html' with open='news' %}
 <form method='POST'>
   {% csrf_token %}
   {{form|crispy}}
