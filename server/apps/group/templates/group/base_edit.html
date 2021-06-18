@@ -18,12 +18,6 @@
         <a class="nav-link" href="{% url 'group:update-posts' object.slug %}" ><i class="fa fa-calendar-plus-o"></i> Annonces</a>
       </li>
     </ul>
-    <!--
-      <a href="{% url 'group:update' object.slug %}" class="btn btn-dark btn-sm mb-1"><i class="fa fa-cog"></i> Général</a>
-      <a href="{% url 'group:update-members' object.slug %}" class="btn btn-dark btn-sm mb-1"><i class="fa fa-users"></i> Membres</a>
-      <a href="{% url 'group:update-events' object.slug %}" class="btn btn-dark btn-sm mb-1"><i class="fa fa-calendar-plus-o"></i> Événements</a>
-      <a href="{% url 'group:update-posts' object.slug %}" class="btn btn-dark btn-sm mb-1"><i class="fa fa-calendar-plus-o"></i> Annonces</a>
-    -->
     {% block page %}
     {% endblock %}
 {% endblock %}

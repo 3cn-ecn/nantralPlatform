@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url('^admin/', admin.site.urls),
+    path('djrichtextfield/', include('djrichtextfield.urls')),
     url('^account/', include('apps.account.urls', namespace='account')),
     url('^student/', include('apps.student.urls', namespace='student')),
     url('^api/student/', include('apps.student.api_urls', namespace='student_api')),
@@ -45,4 +46,5 @@ handler404 = 'apps.home.views.handler404'
 handler500 = 'apps.home.views.handler500'
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
