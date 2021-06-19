@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.shortcuts import reverse, get_object_or_404
 
+from djrichtextfield.models import RichTextField
 
 from apps.post.models import AbstractPost
 from apps.student.models import Student
@@ -18,7 +19,7 @@ class BaseEvent(AbstractPost):
     """
     title = models.CharField(
         max_length=200, verbose_name='Titre de l\'événement')
-    description = models.TextField(verbose_name='Description de l\'événement')
+    description = RichTextField(verbose_name='Description de l\'événement')
     date = models.DateTimeField(verbose_name='Date de l\'événement')
     location = models.CharField(max_length=200, verbose_name='Lieu')
     group = models.SlugField(verbose_name='Groupe organisateur')
