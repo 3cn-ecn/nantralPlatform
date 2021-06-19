@@ -19,7 +19,6 @@ jobs:
       GITHUB_TOKEN: test
       S3_BUCKET: test
       MAPBOX_API_KEY: test
-      TINY_API_KEY: test
 
     steps:
       - uses: actions/checkout@v2
