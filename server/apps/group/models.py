@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from django.conf import settings
 
-from djrichtextfield.models import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
 from apps.sociallink.models import SocialLink
@@ -30,7 +30,7 @@ class Group(models.Model):
                             unique=True, max_length=200)
     alt_name = models.CharField(
         verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
-    description = RichTextField(
+    description = CKEditor5Field(
         verbose_name='Description du groupe', blank=True)
     members = models.ManyToManyField(
         Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
