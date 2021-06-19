@@ -132,12 +132,14 @@ USE_TZ = True
 # Richtext config
 
 DJRICHTEXTFIELD_CONFIG = {
-    'js': ['https://cdn.tiny.cloud/1/ta3y8rxw09kt1c8h7r8gtbsx1ock4kkxql2i3q6ky7po2a8d/tinymce/5/tinymce.min.js'],
+    'js': [f'https://cdn.tiny.cloud/1/{env("TINY_API_KEY")}/tinymce/5/tinymce.min.js'],
     'init_template': 'djrichtextfield/init/tinymce.js',
     'settings': {
         'menubar': False,
-        'plugins': 'link image',
-        'toolbar': 'bold italic | link image | removeformat',
+        'plugins': 'link',
+        'browser_spellcheck': True,
+        'contextmenu': False,
+        'toolbar': 'bold italic | link | removeformat',
         'width': 700
     }
 }
