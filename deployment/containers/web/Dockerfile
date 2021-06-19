@@ -2,7 +2,7 @@ FROM python:3.7-slim-buster
 
 ENV C_FORCE_ROOT 1
 ENV DOCKER True
-ARG DJANGO_SETTINGS_MODULE=config.settings.production
+ENV DJANGO_SETTINGS_MODULE=config.settings.production
 
 # create unprivileged user
 RUN adduser --disabled-password --gecos '' myuser
