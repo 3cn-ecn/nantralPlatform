@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('club', '0006_auto_20210616_1115'),
+        ('club', '0006_transfer_admin_in_membership'),
     ]
 
     operations = [
