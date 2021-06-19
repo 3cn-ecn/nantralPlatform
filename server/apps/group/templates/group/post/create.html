@@ -6,6 +6,7 @@
 {% include 'group/navbar_edit.html' with open='news' %}
 <form method='POST'>
   {% csrf_token %}
+  {{ form.media }}
   {{form|crispy}}
   </br>
   <button class='btn btn-dark'>Poster l'annonce</button>

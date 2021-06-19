@@ -6,6 +6,7 @@
 
 <form method='POST'>
   {% csrf_token %}
+  {{ form.media }}
   {{form|crispy}}
   </br>
   <button class='btn btn-dark'>Ajouter l'événement</button>
