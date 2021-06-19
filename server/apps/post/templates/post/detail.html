@@ -7,5 +7,7 @@
 <img width="100" height="auto" src='{{object.image.url}}'>{
 {% endif %}
 </br>
+{% autoescape off %}
 <p>{{object.description}}</p>
+{% endautoescape %}
 {% endblock %}

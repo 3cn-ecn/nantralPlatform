@@ -49,7 +49,8 @@ THIRD_PARTY_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'storages',
-    'rest_framework'
+    'rest_framework',
+    'djrichtextfield'
 ]
 
 COMMON_APPS = [
@@ -127,6 +128,21 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Richtext config
+
+DJRICHTEXTFIELD_CONFIG = {
+    'js': [f'https://cdn.tiny.cloud/1/{env("TINY_API_KEY")}/tinymce/5/tinymce.min.js'],
+    'init_template': 'djrichtextfield/init/tinymce.js',
+    'settings': {
+        'menubar': False,
+        'plugins': 'link',
+        'browser_spellcheck': True,
+        'contextmenu': False,
+        'toolbar': 'bold italic | link | removeformat',
+        'width': 700
+    }
+}
 
 
 # Static files (CSS, JavaScript, Images)

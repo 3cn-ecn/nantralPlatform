@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404, reverse
 
+from djrichtextfield.models import RichTextField
+
 from apps.group.models import Group
 from apps.utils.upload import PathAndRename
 
@@ -30,7 +32,7 @@ class AbstractPost(models.Model):
         verbose_name="Date de publication", default=timezone.now)
     title = models.CharField(
         max_length=200, verbose_name='Titre de l\'annonce')
-    description = models.TextField(verbose_name='Texte de l\'annonce')
+    description = RichTextField(verbose_name='Texte de l\'annonce')
     group = models.SlugField(verbose_name='Groupe publiant l\'annonce')
     slug = models.SlugField(
         verbose_name='Slug de l\'annonce', unique=True, null=True)

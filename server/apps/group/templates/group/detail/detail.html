@@ -42,7 +42,9 @@
             {% endif %}
             </p>
             <p></p>
+            {% autoescape off %}
             <p>{{object.description}}</p>
+            {% endautoescape %}
             <p></p>
             <div class="grille-rs">
             {% for rs in social %}
