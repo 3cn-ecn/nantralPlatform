@@ -33,6 +33,11 @@ class Housing(models.Model):
 
     def __str__(self):
         return self.address if self.address else ''
+    
+    def name(self):
+        roommates_list = Roommates.objects.filter(housing=self).order_by('begin_date')
+        last_roommates = roommates_list[0]
+        return last_roommates.name
 
 
 class Roommates(Group):

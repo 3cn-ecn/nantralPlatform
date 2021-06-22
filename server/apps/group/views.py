@@ -2,7 +2,7 @@ from datetime import date, timedelta
 
 from django.shortcuts import redirect, render
 from django.urls.base import reverse
-from django.views.generic import ListView, View, FormView, TemplateView
+from django.views.generic import ListView, View, FormView, TemplateView, DetailView
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -28,9 +28,12 @@ from apps.utils.accessMixins import UserIsAdmin
 class UpdateGroupView(UserIsAdmin, TemplateView):
     template_name = 'group/update.html'
 
+    def get_object(self, **kwargs):
+        return Group.get_group_by_slug(self.kwargs['group_slug'])
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.object = Group.get_group_by_slug(self.kwargs['group_slug'])
+        self.object = self.get_object()
         context['object'] = self.object
         if isinstance(context['object'], Club):
             context['club'] = True
@@ -49,12 +52,15 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
         return redirect('group:update', group_slug)
 
 
-class UpdateGroupMembersView(UserIsAdmin, View):
+class UpdateGroupMembersView(UserIsAdmin, TemplateView):
     template_name = 'group/members_edit.html'
 
+    def get_object(self, **kwargs):
+        return Group.get_group_by_slug(self.kwargs['group_slug'])
+    
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
+        context['object'] = self.get_object()
         if isinstance(context['object'], Club):
             memberships = NamedMembershipClub.objects.filter(
                 group=context['object'])
@@ -62,32 +68,29 @@ class UpdateGroupMembersView(UserIsAdmin, View):
             context['members'] = membersForm
         return context
 
-    def get(self, request, group_slug):
-        return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
+    #def get(self, request, group_slug):
+        #return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
 
     def post(self, request,  group_slug):
         print(f'Post {group_slug}')
         return edit_named_memberships(request, group_slug)
 
 
-class DetailGroupView(TemplateView):
+class DetailGroupView(DetailView):
     template_name = 'group/detail/detail.html'
+
+    def get_object(self, **kwargs):
+        return Group.get_group_by_slug(self.kwargs['group_slug'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.object = Group.get_group_by_slug(self.kwargs['group_slug'])
-        context['object'] = self.object
+        self.object = self.get_object()
         context['admin_req_form'] = AdminRightsRequestForm()
         context['members'] = self.object.members.through.objects.filter(group=self.object)
         if isinstance(context['object'], Club):
-            # FIXME SocialLink will be done differently directly in Club
-            social = ""  # SocialLink.objects.filter(club=self.object)
             context['form'] = NamedMembershipAddClub()
         elif isinstance(context['object'], Liste):
             context['form'] = NamedMembershipAddListe()
-            social = ""
-        else:
-            social = ""
         context['social'] = SocialLink.objects.filter(slug=self.object.slug)
         context['is_member'] = self.object.is_member(self.request.user)
         if self.request.user.is_authenticated:
@@ -105,18 +108,24 @@ class DetailGroupView(TemplateView):
 class AddToGroupView(LoginRequiredMixin, FormView):
     raise_exception = True
 
+    def get_group(self, **kwargs):
+        return Group.get_group_by_slug(self.kwargs['group_slug'])
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.student = self.request.user.student
+        self.object.group = self.get_group()
+        '''
         if self.form_class == NamedMembershipAddClub:
-            self.object.group = Club.objects.get(slug=self.kwargs['slug'])
+            self.object.group = Club.objects.get(slug=self.kwargs['group_slug'])
         elif self.form_class == NamedMembershipAddListe:
-            self.object.group = Liste.objects.get(slug=self.kwargs['slug'])
+            self.object.group = Liste.objects.get(slug=self.kwargs['group_slug'])
+        '''
         self.object.save()
-        return redirect('group:detail', self.kwargs['slug'])
+        return redirect('group:detail', self.kwargs['group_slug'])
 
     def get_form_class(self):
-        group = Group.get_group_by_slug(self.kwargs['slug'])
+        group = self.get_group()
         if isinstance(group, Club):
             self.form_class = NamedMembershipAddClub
             return NamedMembershipAddClub

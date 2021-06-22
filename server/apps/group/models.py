@@ -96,6 +96,10 @@ class Group(models.Model):
     @property
     def get_absolute_url(self):
         return reverse('group:detail', kwargs={'group_slug': self.slug})
+    
+    @property
+    def mini_slug(self):
+        return self.slug.split('--')[1]
 
 
 class NamedMembership(models.Model):

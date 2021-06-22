@@ -11,6 +11,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.views.decorators.http import require_http_methods
 
 
+from apps.group.views import *
 # from apps.group.models import AdminRightsRequest, Group
 from apps.club.models import Club, NamedMembershipClub, BDX
 # from apps.liste.models import Liste, NamedMembershipList
@@ -41,4 +42,45 @@ class ListClubView(ListView):
             'list': my_clubs,
         } ]
         return context
+
+
+class UpdateClubView(UpdateGroupView):
+    def get_object(self, **kwargs):
+        slug = self.kwargs['group_slug']
+        club = Club.objects.filter(slug = 'club--'+slug)
+        if club:
+            return club[0]
+        else:
+            return BDX.objects.filter(slug = 'bdx--'+slug)[0]
+
+
+class UpdateClubMembersView(UpdateGroupMembersView):
+    def get_object(self, **kwargs):
+        slug = self.kwargs['group_slug']
+        club = Club.objects.filter(slug = 'club--'+slug)
+        if club:
+            return club[0]
+        else:
+            return BDX.objects.filter(slug = 'bdx--'+slug)[0]
+
+
+class DetailClubView(DetailGroupView):
+    def get_object(self, **kwargs):
+        slug = self.kwargs['group_slug']
+        club = Club.objects.filter(slug = 'club--'+slug)
+        if club:
+            return club[0]
+        else:
+            return BDX.objects.filter(slug = 'bdx--'+slug)[0]
+    
+
+class AddToClubView(AddToGroupView):
+    def get_object(self, **kwargs):
+        slug = self.kwargs['group_slug']
+        club = Club.objects.filter(slug = 'club--'+slug)
+        if club:
+            return club[0]
+        else:
+            return BDX.objects.filter(slug = 'bdx--'+slug)[0]
+
 

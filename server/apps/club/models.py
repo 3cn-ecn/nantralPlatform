@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import F
 from django.conf import settings
 from datetime import date
+from django.urls.base import reverse
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
@@ -31,6 +32,10 @@ class Club(Group):
     
     class Meta:
         ordering = [F('bdx_type').asc(nulls_first=True), 'name']
+
+    @property
+    def get_absolute_url(self):
+        return reverse('club:detail', kwargs={'group_slug': self.mini_slug})
 
 
 class BDX(Club):
