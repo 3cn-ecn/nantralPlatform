@@ -25,6 +25,13 @@ from apps.club.models import Club, NamedMembershipClub, BDX
 
 # from apps.utils.accessMixins import UserIsAdmin
 
+def complete_slug(mini_slug):
+    clubs = Club.objects.filter(slug = 'club--'+mini_slug)
+    if clubs:
+        return 'club--'+mini_slug
+    else:
+        return 'bdx--'+mini_slug
+
 
 class ListClubView(ListView):
     model = Club
@@ -45,26 +52,23 @@ class ListClubView(ListView):
 
 
 class UpdateClubView(UpdateGroupView):
-    def get_object(self, **kwargs):
-        slug = self.kwargs['group_slug']
-        club = Club.objects.filter(slug = 'club--'+slug)
-        if club:
-            return club[0]
-        else:
-            return BDX.objects.filter(slug = 'bdx--'+slug)[0]
+    @property
+    def get_slug(self, **kwargs):
+        return complete_slug(self.kwargs['group_slug'])
 
 
 class UpdateClubMembersView(UpdateGroupMembersView):
-    def get_object(self, **kwargs):
-        slug = self.kwargs['group_slug']
-        club = Club.objects.filter(slug = 'club--'+slug)
-        if club:
-            return club[0]
-        else:
-            return BDX.objects.filter(slug = 'bdx--'+slug)[0]
+    @property
+    def get_slug(self, **kwargs):
+        return complete_slug(self.kwargs['group_slug'])
 
 
 class DetailClubView(DetailGroupView):
+    @property
+    def get_slug(self, **kwargs):
+        return complete_slug(self.kwargs['group_slug'])
+
+    '''
     def get_object(self, **kwargs):
         slug = self.kwargs['group_slug']
         club = Club.objects.filter(slug = 'club--'+slug)
@@ -72,15 +76,12 @@ class DetailClubView(DetailGroupView):
             return club[0]
         else:
             return BDX.objects.filter(slug = 'bdx--'+slug)[0]
+    '''
     
 
 class AddToClubView(AddToGroupView):
-    def get_object(self, **kwargs):
-        slug = self.kwargs['group_slug']
-        club = Club.objects.filter(slug = 'club--'+slug)
-        if club:
-            return club[0]
-        else:
-            return BDX.objects.filter(slug = 'bdx--'+slug)[0]
+    @property
+    def get_slug(self, **kwargs):
+        return complete_slug(self.kwargs['group_slug'])
 
 

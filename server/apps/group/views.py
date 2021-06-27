@@ -26,10 +26,14 @@ from apps.utils.accessMixins import UserIsAdmin
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
-    template_name = 'group/update.html'
+    template_name = 'group/edit/update.html'
+
+    @property
+    def get_slug(self, **kwargs):
+        return self.kwargs['group_slug']
 
     def get_object(self, **kwargs):
-        return Group.get_group_by_slug(self.kwargs['group_slug'])
+        return Group.get_group_by_slug(self.get_slug)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,7 +47,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
         return context
 
     def post(self, request, group_slug):
-        group = Group.get_group_by_slug(self.kwargs['group_slug'])
+        group = self.get_object()
         if isinstance(group, Club):
             form = UpdateClubForm(request.POST, request.FILES, instance=group)
             form.save()
@@ -53,10 +57,14 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
 
 
 class UpdateGroupMembersView(UserIsAdmin, TemplateView):
-    template_name = 'group/members_edit.html'
+    template_name = 'group/edit/members_edit.html'
+
+    @property
+    def get_slug(self, **kwargs):
+        return self.kwargs['group_slug']
 
     def get_object(self, **kwargs):
-        return Group.get_group_by_slug(self.kwargs['group_slug'])
+        return Group.get_group_by_slug(self.get_slug)
     
     def get_context_data(self, **kwargs):
         context = {}
@@ -79,8 +87,12 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
 class DetailGroupView(DetailView):
     template_name = 'group/detail/detail.html'
 
+    @property
+    def get_slug(self, **kwargs):
+        return self.kwargs['group_slug']
+
     def get_object(self, **kwargs):
-        return Group.get_group_by_slug(self.kwargs['group_slug'])
+        return Group.get_group_by_slug(self.get_slug)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -108,21 +120,19 @@ class DetailGroupView(DetailView):
 class AddToGroupView(LoginRequiredMixin, FormView):
     raise_exception = True
 
+    @property
+    def get_slug(self, **kwargs):
+        return self.kwargs['group_slug']
+
     def get_group(self, **kwargs):
-        return Group.get_group_by_slug(self.kwargs['group_slug'])
+        return Group.get_group_by_slug(self.get_slug)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.student = self.request.user.student
         self.object.group = self.get_group()
-        '''
-        if self.form_class == NamedMembershipAddClub:
-            self.object.group = Club.objects.get(slug=self.kwargs['group_slug'])
-        elif self.form_class == NamedMembershipAddListe:
-            self.object.group = Liste.objects.get(slug=self.kwargs['group_slug'])
-        '''
         self.object.save()
-        return redirect('group:detail', self.kwargs['group_slug'])
+        return redirect(self.object.group.get_absolute_url)
 
     def get_form_class(self):
         group = self.get_group()
@@ -160,9 +170,16 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
     raise_exception = True
     form_class = AdminRightsRequestForm
 
+    @property
+    def get_slug(self, **kwargs):
+        return self.kwargs['group_slug']
+
+    def get_group(self, **kwargs):
+        return Group.get_group_by_slug(self.get_slug)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object'] = Group.get_group_by_slug(self.kwargs['group_slug'])
+        context['object'] = self.get_group()
         return context
 
     def form_valid(self, form):
@@ -170,12 +187,12 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
             self.request, 'Votre demande a été enregistré, on revient rapidement avec une réponse.')
         object = form.save(commit=False)
         object.student = self.request.user.student
-        object.group = self.kwargs['group_slug']
+        object.group = self.get_slug
         object.save(domain=get_current_site(self.request).domain)
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
-        return reverse('group:detail', kwargs={'group_slug': self.kwargs['group_slug']})
+        return reverse('group:detail', kwargs={'group_slug': self.get_slug})
 
 
 class AcceptAdminRequestView(UserIsAdmin, View):

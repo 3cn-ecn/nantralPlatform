@@ -10,6 +10,8 @@
 {% endblock %}
 
 {% block content %}
+{% with appname=request.resolver_match.app_name %}
+<p</p>
     <div class="row">
         {%if object.logo %}
             <div class="col-sm-3">
@@ -37,7 +39,7 @@
                     </button>
                 {% endif %}
                 {% if is_admin %}
-                    <a href='{% url "group:update" object.slug %}'class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
+                    <a href='{% url appname|add:":update" object.mini_slug %}'class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
                 {%endif%}
             {% endif %}
             </p>
@@ -114,4 +116,5 @@
     {% include 'group/detail/request-admin.html' %}
     {% endblock %}
     {%endif%}
+{%endwith%}
 {% endblock %}

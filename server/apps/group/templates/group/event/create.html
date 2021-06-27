@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-{% include 'group/navbar_edit.html' with open='events' %}
+{% include 'group/edit/navbar_edit.html' with open='events' %}
 
 <form method='POST'>
   {% csrf_token %}

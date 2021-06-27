@@ -7,12 +7,17 @@ from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
 app_name = 'group'
 
 urlpatterns = [
-    path('<slug:group_slug>/', DetailGroupView.as_view(), name='detail'),
-    path('<slug:group_slug>/edit',
-         UpdateGroupView.as_view(), name='update'),
+    # vue generale du groupe
+    path('<slug:group_slug>/', 
+         DetailGroupView.as_view(), name='detail'),
     path('<slug:group_slug>/member/add/',
          AddToGroupView.as_view(), name='add-member'),
-    # path('club/', ListClubView.as_view(), name='club-list'),
+
+    # edition (réservée aux admins)
+    path('<slug:group_slug>/edit',
+         UpdateGroupView.as_view(), name='update'),
+    path('<slug:group_slug>/members/edit',
+         UpdateGroupMembersView.as_view(), name='update-members'),
     path('<slug:group_slug>/events/edit',
          UpdateGroupEventsView.as_view(), name='update-events'),
     path('<slug:group_slug>/events/archived',
@@ -23,9 +28,8 @@ urlpatterns = [
          UpdateGroupCreatePostView.as_view(), name='create-post'),
     path('<slug:group_slug>/posts/edit',
          UpdateGroupPostsView.as_view(), name='update-posts'),
-    path('<slug:group_slug>/members/edit',
-         UpdateGroupMembersView.as_view(), name='update-members'),
-    # path('liste/', ListeListView.as_view(), name='liste-list'),
+    
+    # formulaire de demande d'admin
     path('<slug:group_slug>/admin-request/',
          RequestAdminRightsView.as_view(), name='admin-req'),
     path('<slug:group_slug>/admin-request/<int:id>/accept',

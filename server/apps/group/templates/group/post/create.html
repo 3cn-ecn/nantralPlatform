@@ -3,7 +3,7 @@
 
 {% block content %}
 
-{% include 'group/navbar_edit.html' with open='news' %}
+{% include 'group/edit/navbar_edit.html' with open='news' %}
 <form method='POST'>
   {% csrf_token %}
   {{ form.media }}
