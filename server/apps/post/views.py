@@ -7,15 +7,16 @@ from .forms import PostForm, PostFormSet
 from .models import Post
 
 from apps.group.models import Group
+from apps.group.views import GroupSlugFonctions
 from apps.utils.accessMixins import UserIsAdmin, LoginRequiredAccessMixin
 
 
-class PostDetailView(LoginRequiredAccessMixin, TemplateView):
+class PostDetailView(GroupSlugFonctions, LoginRequiredAccessMixin, TemplateView):
     template_name = 'post/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.object = Post.get_post_by_slug(self.kwargs['post_slug'])
+        self.object = Post.get_post_by_slug(self.get_slug)
         context['object'] = self.object
         context['group'] = self.object.get_group
         return context
@@ -45,37 +46,37 @@ class PostUpdateView(UserIsAdmin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class UpdateGroupCreatePostView(UserIsAdmin, FormView):
+class UpdateGroupCreatePostView(GroupSlugFonctions, UserIsAdmin, FormView):
     """In the context of a group, create a post view."""
     template_name = 'group/post/create.html'
     form_class = PostForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object'] = Group.get_group_by_slug(self.kwargs['group_slug'])
+        context['object'] = Group.get_group_by_slug(self.get_slug)
         return context
 
     def form_valid(self, form, **kwargs):
         post = form.save(commit=False)
         post.group = Group.get_group_by_slug(
-            slug=self.kwargs['group_slug']).slug
+            slug=self.get_slug).slug
         post.save()
-        return redirect('group:create-post', self.kwargs['group_slug'])
+        return redirect('group:create-post', self.get_slug)
 
 
-class UpdateGroupPostsView(UserIsAdmin, View):
+class UpdateGroupPostsView(GroupSlugFonctions, UserIsAdmin, View):
     """In the context of a group, list and update the posts."""
     template_name = 'group/post/last_30_d.html'
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = Group.get_group_by_slug(kwargs['group_slug'])
+        context['object'] = Group.get_group_by_slug(self.get_slug)
         context['posts'] = Post.objects.filter(
-            group=kwargs['group_slug'])
+            group=self.get_slug)
         context['form'] = PostFormSet(queryset=context['posts'])
         return context
 
-    def get(self, request, group_slug):
+    def get(self, request, group_slug, **kwargs):
         return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
 
     def post(self, request,  group_slug):
