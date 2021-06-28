@@ -14,6 +14,6 @@ class LoginRequiredAccessMixin(object):
 class UserIsAdmin(UserPassesTestMixin):
     def test_func(self):
         if self.request.user.is_authenticated:
-            group = self.get_object()
+            group = Group.get_group_by_slug(self.get_slug)
             return group.is_admin(self.request.user)
         return False

@@ -25,12 +25,31 @@ from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormse
 from apps.utils.accessMixins import UserIsAdmin
 
 
-class UpdateGroupView(UserIsAdmin, TemplateView):
-    template_name = 'group/edit/update.html'
+
+class GroupSlugFonctions():
+    # classe modèle pour définir le choix du slug
+    # lorsque l'url ne précise pas le groupe
+    # ex : nantral-platform.fr/club/bde
 
     @property
     def get_slug(self, **kwargs):
-        return self.kwargs['group_slug']
+        group = self.kwargs.get("group_type", None)
+        slug = self.kwargs.get("group_slug")
+        if (group == "club"):
+            clubs = Club.objects.filter(slug = 'club--'+slug)
+            if clubs:
+                return 'club--'+slug
+            else:
+                return 'bdx--'+slug
+        elif (group == "liste"):
+            return 'liste--'+slug
+        else:
+            return slug
+
+
+
+class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
+    template_name = 'group/edit/update.html'
 
     def get_object(self, **kwargs):
         return Group.get_group_by_slug(self.get_slug)
@@ -56,12 +75,8 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
         return redirect('group:update', group_slug)
 
 
-class UpdateGroupMembersView(UserIsAdmin, TemplateView):
+class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
     template_name = 'group/edit/members_edit.html'
-
-    @property
-    def get_slug(self, **kwargs):
-        return self.kwargs['group_slug']
 
     def get_object(self, **kwargs):
         return Group.get_group_by_slug(self.get_slug)
@@ -84,16 +99,12 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
         return edit_named_memberships(request, group_slug)
 
 
-class DetailGroupView(DetailView):
+class DetailGroupView(GroupSlugFonctions, DetailView):
     template_name = 'group/detail/detail.html'
-
-    @property
-    def get_slug(self, **kwargs):
-        return self.kwargs['group_slug']
-
+    
     def get_object(self, **kwargs):
         return Group.get_group_by_slug(self.get_slug)
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         self.object = self.get_object()
@@ -117,12 +128,8 @@ class DetailGroupView(DetailView):
         return context
 
 
-class AddToGroupView(LoginRequiredMixin, FormView):
+class AddToGroupView(GroupSlugFonctions, LoginRequiredMixin, FormView):
     raise_exception = True
-
-    @property
-    def get_slug(self, **kwargs):
-        return self.kwargs['group_slug']
 
     def get_group(self, **kwargs):
         return Group.get_group_by_slug(self.get_slug)
@@ -166,13 +173,9 @@ def edit_named_memberships(request, group_slug):
         return redirect('group:update', group.slug)
 
 
-class RequestAdminRightsView(LoginRequiredMixin, FormView):
+class RequestAdminRightsView(GroupSlugFonctions, LoginRequiredMixin, FormView):
     raise_exception = True
     form_class = AdminRightsRequestForm
-
-    @property
-    def get_slug(self, **kwargs):
-        return self.kwargs['group_slug']
 
     def get_group(self, **kwargs):
         return Group.get_group_by_slug(self.get_slug)
