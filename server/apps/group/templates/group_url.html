@@ -1,0 +1,5 @@
+{% if appname == "group" %}
+    {% url appname|add:":"|add:page obj.slug %}
+{% else %}
+    {% url appname|add:":"|add:page obj.mini_slug %}
+{% endif %}

@@ -17,10 +17,7 @@ from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 
 
-if settings.DEBUG:
-    path_and_rename_group = PathAndRename("./static/upload/groups/logo/group")
-else:
-    path_and_rename_group = PathAndRename("groups/logo/group")
+path_and_rename_group = PathAndRename("groups/logo/group")
 
 
 class Group(models.Model):
@@ -38,7 +35,7 @@ class Group(models.Model):
                              blank=True, null=True, upload_to=path_and_rename_group)
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
-    social = models.ManyToManyField(SocialLink, null=True, blank=True)
+    #social = models.ManyToManyField(SocialLink, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -90,6 +87,9 @@ class Group(models.Model):
         elif type_slug == 'bdx':
             from apps.club.models import BDX
             return BDX.objects.get(slug=slug)
+        elif type_slug == 'roommates':
+            from apps.roommates.models import Roommates
+            return Roommates.objects.get(slug=slug)
         else:
             raise Exception('Unknown group')
 

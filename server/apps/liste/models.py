@@ -5,11 +5,10 @@ from apps.club.models import BDX
 from apps.utils.upload import PathAndRename
 
 from django.conf import settings
+from django.urls.base import reverse
 
-if settings.DEBUG:
-    path_and_rename_liste = PathAndRename("./static/upload/groups/logo/liste")
-else:
-    path_and_rename_liste = PathAndRename("groups/logo/liste")
+
+path_and_rename_liste = PathAndRename("groups/logo/liste")
 
 
 class Liste(Group):
@@ -23,6 +22,10 @@ class Liste(Group):
 
     class Meta:
         ordering = ['-year', 'liste_type', 'name']
+
+    @property
+    def get_absolute_url(self):
+        return reverse('liste:detail', kwargs={'group_slug': self.mini_slug})
 
 
 class NamedMembershipList(NamedMembership):

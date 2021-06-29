@@ -36,8 +36,11 @@ class Housing(models.Model):
     
     def name(self):
         roommates_list = Roommates.objects.filter(housing=self).order_by('begin_date')
-        last_roommates = roommates_list[0]
-        return last_roommates.name
+        if roommates_list:
+            last_roommates = roommates_list[0]
+            return last_roommates.name
+        else:
+            return "La coloc du " + self.address
 
 
 class Roommates(Group):
@@ -50,6 +53,10 @@ class Roommates(Group):
 
     class Meta:
         verbose_name_plural = "Roommates"
+    
+    @property
+    def get_absolute_url(self):
+        return reverse('roommates:detail', kwargs={'group_slug': self.mini_slug})
 
     def save(self, *args, **kwargs):
         self.slug = f'coloc--{slugify(self.name)}-{self.pk}'

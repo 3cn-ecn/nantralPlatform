@@ -9,16 +9,9 @@ from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 
 
-if settings.DEBUG:
-    path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
-    path_and_rename_club_banniere = PathAndRename(
-        "./static/upload/groups/banniere/club")
-    path_and_rename_liste_banniere = PathAndRename(
-        "./static/upload/groups/banniere/club")
-else:
-    path_and_rename_club = PathAndRename("groups/logo/club")
-    path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
-    path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
+path_and_rename_club = PathAndRename("groups/logo/club")
+path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
+path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
 
 
 class Club(Group):

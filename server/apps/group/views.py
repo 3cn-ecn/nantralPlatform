@@ -11,14 +11,14 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.views.decorators.http import require_http_methods
 
 
-from apps.group.models import AdminRightsRequest, Group
+from .models import AdminRightsRequest, Group
 from apps.club.models import Club, NamedMembershipClub, BDX
 from apps.liste.models import Liste, NamedMembershipList
-from apps.sociallink.models import SocialNetwork, SocialLink
+from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 
-from apps.group.forms import AdminRightsRequestForm
+from .forms import UpdateGroupForm, NamedMembershipGroupForm, NamedMembershipAddGroup, NamedMembershipGroupFormset, AdminRightsRequestForm
 from apps.club.forms import NamedMembershipClubFormset, NamedMembershipAddClub, UpdateClubForm
 from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormset
 
@@ -33,16 +33,15 @@ class GroupSlugFonctions():
 
     @property
     def get_slug(self, **kwargs):
-        group = self.kwargs.get("group_type", None)
+        group_type = self.kwargs.get('group_type')
         slug = self.kwargs.get("group_slug")
-        if (group == "club"):
-            clubs = Club.objects.filter(slug = 'club--'+slug)
-            if clubs:
-                return 'club--'+slug
+        if (group_type == "club"):
+            if Club.objects.filter(slug = 'club--'+slug):
+                return 'club--' + slug
             else:
-                return 'bdx--'+slug
-        elif (group == "liste"):
-            return 'liste--'+slug
+                return 'bdx--' + slug
+        elif (group_type != "group"):
+            return group_type + '--' + slug
         else:
             return slug
 
@@ -56,23 +55,25 @@ class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        group_type = self.kwargs.get('group_type')
         self.object = self.get_object()
         context['object'] = self.object
-        if isinstance(context['object'], Club):
-            context['club'] = True
-            context['form'] = UpdateClubForm(instance=self.object)
-        else:
-            context['club'] = False
+        form_to_call = UpdateGroupForm(type(self.object))
+        if form_to_call:
+            context['form'] = form_to_call(instance=self.object)
         return context
 
-    def post(self, request, group_slug):
+    def post(self, request, group_slug, group_type):
         group = self.get_object()
-        if isinstance(group, Club):
-            form = UpdateClubForm(request.POST, request.FILES, instance=group)
+        form_to_call = UpdateGroupForm(type(group))
+        if form_to_call:
+            form = form_to_call(request.POST, request.FILES, instance=group)
             form.save()
+        if group_type=="group":
+            group_slug = group.slug
         else:
-            pass
-        return redirect('group:update', group_slug)
+            group_slug = group.mini_slug
+        return redirect(group_type+':update', group_slug)
 
 
 class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
@@ -94,7 +95,7 @@ class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
     #def get(self, request, group_slug):
         #return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
 
-    def post(self, request,  group_slug):
+    def post(self, request,  group_slug, **kwargs):
         print(f'Post {group_slug}')
         return edit_named_memberships(request, group_slug)
 

@@ -11,7 +11,7 @@ app_name = 'group'
 # pour créer un nouveau groupe, utilisez
 # urlpatterns = makeGroupUrlpatterns("nom_du_groupe_dans_slug")
 
-def makeGroupUrlpatterns(group_name = None):
+def makeGroupUrlpatterns(group_name):
     group = {'group_type': group_name}
     urlpatterns = [
         # vue generale du groupe
@@ -47,4 +47,4 @@ def makeGroupUrlpatterns(group_name = None):
     return urlpatterns
 
 
-urlpatterns = makeGroupUrlpatterns()
+urlpatterns = makeGroupUrlpatterns("group")
