@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from django.conf import settings
 
-from djrichtextfield.models import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
 from apps.sociallink.models import SocialLink
@@ -33,7 +33,7 @@ class Group(models.Model):
     logo = models.ImageField(verbose_name='Logo du groupe',
                              blank=True, null=True, upload_to=path_and_rename_group)
     resume = models.CharField('Résumé', max_length=500, null=True, blank=True)
-    description = RichTextField(
+    description = CKEditor5Field(
         verbose_name='Description du groupe', blank=True)
     video1 = models.URLField('Lien vidéo 1', max_length=200, null=True, blank=True)
     video2 = models.URLField('Lien vidéo 2', max_length=200, null=True, blank=True)

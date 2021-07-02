@@ -50,7 +50,7 @@ THIRD_PARTY_APPS = [
     'crispy_bootstrap5',
     'storages',
     'rest_framework',
-    'djrichtextfield'
+    'django_ckeditor_5'
 ]
 
 COMMON_APPS = [
@@ -132,16 +132,75 @@ USE_TZ = True
 
 # Richtext config
 
-DJRICHTEXTFIELD_CONFIG = {
-    'js': [f'https://cdn.tiny.cloud/1/{env("TINY_API_KEY")}/tinymce/5/tinymce.min.js'],
-    'init_template': 'djrichtextfield/init/tinymce.js',
-    'settings': {
-        'menubar': False,
-        'plugins': 'link',
-        'browser_spellcheck': True,
-        'contextmenu': False,
-        'toolbar': 'bold italic | link | removeformat',
-        'width': 700
+customColorPalette = [
+    {
+        'color': 'hsl(4, 90%, 58%)',
+        'label': 'Red'
+    },
+    {
+        'color': 'hsl(340, 82%, 52%)',
+        'label': 'Pink'
+    },
+    {
+        'color': 'hsl(291, 64%, 42%)',
+        'label': 'Purple'
+    },
+    {
+        'color': 'hsl(262, 52%, 47%)',
+        'label': 'Deep Purple'
+    },
+    {
+        'color': 'hsl(231, 48%, 48%)',
+        'label': 'Indigo'
+    },
+    {
+        'color': 'hsl(207, 90%, 54%)',
+        'label': 'Blue'
+    },
+]
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
+                    'bulletedList', 'numberedList', 'blockQuote', ],
+
+    },
+    'extends': {
+        'blockToolbar': [
+            'paragraph', 'heading1', 'heading2', 'heading3',
+            '|',
+            'bulletedList', 'numberedList',
+            '|',
+            'blockQuote', 'imageUpload'
+        ],
+        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
+                    'code', 'subscript', 'superscript', 'highlight', '|', 'codeBlock',
+                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
+                    'insertTable', ],
+        'table': {
+            'contentToolbar': ['tableColumn', 'tableRow', 'mergeTableCells',
+                               'tableProperties', 'tableCellProperties'],
+            'tableProperties': {
+                'borderColors': customColorPalette,
+                'backgroundColors': customColorPalette
+            },
+            'tableCellProperties': {
+                'borderColors': customColorPalette,
+                'backgroundColors': customColorPalette
+            }
+        },
+        'heading': {
+            'options': [
+                   {'model': 'paragraph', 'title': 'Paragraph',
+                    'class': 'ck-heading_paragraph'},
+                   {'model': 'heading1', 'view': 'h1',
+                       'title': 'Heading 1', 'class': 'ck-heading_heading1'},
+                   {'model': 'heading2', 'view': 'h2',
+                       'title': 'Heading 2', 'class': 'ck-heading_heading2'},
+                   {'model': 'heading3', 'view': 'h3',
+                       'title': 'Heading 3', 'class': 'ck-heading_heading3'}
+            ]
+        }
     }
 }
 
@@ -154,5 +213,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 GITHUB_REPO = 'nantral-platform/nantralPlatform'

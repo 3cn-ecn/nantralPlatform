@@ -18,7 +18,7 @@ class NamedMembershipAddClub(ModelForm):
 class UpdateClubForm(ModelForm):
     class Meta:
         model = Club
-        fields = ['name', 'alt_name', 'description', 'logo', 'banniere', 'bdx_type']
+        fields = ['alt_name', 'description', 'logo', 'banniere']
 
 
 class UpdateBDXForm(ModelForm):

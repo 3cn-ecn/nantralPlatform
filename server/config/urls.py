@@ -22,7 +22,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('djrichtextfield/', include('djrichtextfield.urls')),
 
     path('account/', include('apps.account.urls', namespace='account')),
 
@@ -55,6 +54,6 @@ urlpatterns = [
 handler404 = 'apps.home.views.handler404'
 handler500 = 'apps.home.views.handler500'
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+urlpatterns += [
+    path("ckeditor5/", include('django_ckeditor_5.urls'))
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
