@@ -20,7 +20,7 @@
     <link rel="shortcut icon" href='{% static "/img/logo.svg" %}'>
     {% block head %}
     {% endblock %}
-    <title>Nantral Platform</title>
+    <title>{% block title %}{% endblock %}Nantral Platform</title>
   </head>
   
   <body>

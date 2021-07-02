@@ -1,5 +1,5 @@
 from django.forms import ModelForm, modelformset_factory
-from .models import NamedMembershipClub, Club
+from .models import NamedMembershipClub, Club, BDX
 
 
 class NamedMembershipClubForm(ModelForm):
@@ -19,6 +19,12 @@ class UpdateClubForm(ModelForm):
     class Meta:
         model = Club
         fields = ['name', 'alt_name', 'description', 'logo', 'banniere', 'bdx_type']
+
+
+class UpdateBDXForm(ModelForm):
+    class Meta:
+        model = BDX
+        fields = ['name', 'alt_name', 'description', 'logo', 'banniere']
 
 
 NamedMembershipClubFormset = modelformset_factory(

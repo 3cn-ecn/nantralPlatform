@@ -23,19 +23,26 @@ path_and_rename_group = PathAndRename("groups/logo/group")
 class Group(models.Model):
     '''Modèle abstrait servant de modèle pour tous les types de Groupes.'''
 
+    #Nom du groupe
     name = models.CharField(verbose_name='Nom du groupe',
-                            unique=True, max_length=200)
+                            unique=True, max_length=100)
     alt_name = models.CharField(
-        verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
-    description = RichTextField(
-        verbose_name='Description du groupe', blank=True)
-    members = models.ManyToManyField(
-        Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
+        verbose_name='Nom alternatif', max_length=100, null=True, blank=True)
+    
+    #présentation
     logo = models.ImageField(verbose_name='Logo du groupe',
                              blank=True, null=True, upload_to=path_and_rename_group)
+    resume = models.CharField('Résumé', max_length=500, null=True, blank=True)
+    description = RichTextField(
+        verbose_name='Description du groupe', blank=True)
+    video1 = models.URLField('Lien vidéo 1', max_length=200, null=True, blank=True)
+    video2 = models.URLField('Lien vidéo 2', max_length=200, null=True, blank=True)
+
+    #paramètres techniques
+    members = models.ManyToManyField(
+        Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
-    #social = models.ManyToManyField(SocialLink, null=True, blank=True)
 
     class Meta:
         abstract = True
