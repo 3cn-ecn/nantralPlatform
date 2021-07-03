@@ -80,8 +80,9 @@ a:hover {
 }	
 
 .ratio-banniere {
-	/*--bs-aspect-ratio: 30%;*/
-	height: 20vh;
+	--bs-aspect-ratio: 30%;
+	max-height: 50vh;
+	z-index:-1;
 }
 
 img.banniere {

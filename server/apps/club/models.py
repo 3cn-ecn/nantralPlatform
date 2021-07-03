@@ -11,7 +11,6 @@ from apps.utils.upload import PathAndRename
 
 path_and_rename_club = PathAndRename("groups/logo/club")
 path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
-path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
 
 
 class Club(Group):

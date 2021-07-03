@@ -9,6 +9,7 @@ from django.urls.base import reverse
 
 
 path_and_rename_liste = PathAndRename("groups/logo/liste")
+path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
 
 
 class Liste(Group):
@@ -19,6 +20,8 @@ class Liste(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipList')
     logo = models.ImageField(verbose_name='Logo de la liste',
                              blank=True, null=True, upload_to=path_and_rename_liste)
+    banniere = models.ImageField(
+        verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_liste_banniere)
 
     class Meta:
         ordering = ['-year', 'liste_type', 'name']
