@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
 
 COMMON_APPS = [
     'apps.account',
+    'apps.booking',
     'apps.student',
     'apps.home',
     'apps.group',
