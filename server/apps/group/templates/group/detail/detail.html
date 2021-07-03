@@ -33,16 +33,13 @@
                         Vous êtes déjà membre !
                     </button>
                 {% else %}
-                    {% block add-member %}
                     <button id='show-add-group' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                         <i class="fa fa-user-plus"></i>
                         Devenir membre
                     </button>
-                    {% include 'group/detail/add-member.html' %}
-                    {% endblock%}
                 {% endif %}
                 {% if is_admin %}
-                    <a href='{%url group_type|add:"update" group_slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
+                    <a href='{%url group_type|add:":update" group_slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
                 {%endif%}
             {% endif %}
             </p>
@@ -103,10 +100,10 @@
         {% endautoescape %}
     {% endif %}
 
-    {% if members %}
-        <br />
-        <h2>Membres</h2>
-        {% if request.user.is_authenticated %}
+    <br />
+    <h2>Membres</h2>
+    {% if request.user.is_authenticated %}
+        {% if members %}
             {% for member in members %}
                 <a href='{% url "student:detail" member.student.id%}' class='card'>
                     {{member.student.user.first_name}} {{member.student.user.last_name}} -
@@ -114,8 +111,10 @@
                 </a>
             {% endfor %}
         {%else%}
-            Veuillez vous connecter pour voir les membres.
+            <p>Aucun membre pour l'instant... 😥</p>
         {%endif%}
+    {% else %}
+        <p>Veuillez vous connecter pour voir les membres.</p>
     {% endif %}
 
     {% block extra-content %}
@@ -126,6 +125,10 @@
             {% include 'group/detail/request-admin.html' %}
         {%endif%}
     {% endblock %}
+
+    {% block add-member %}
+        {% include 'group/detail/add-member.html' %}
+    {% endblock%}
 
     <br>
 {% endblock %}

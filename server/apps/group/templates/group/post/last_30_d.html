@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{% include 'group/edit/navbar_edit.html' with open='news' %}
+{% include 'group/edit/navbar_edit.html' with open='posts' %}
 <a class='btn btn-dark' href="{% url 'group:create-post' object.slug%}">Poster une nouvelle annonce</a>
 </br>
 </br>

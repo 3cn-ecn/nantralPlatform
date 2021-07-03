@@ -2,7 +2,8 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-{% include 'group/edit/navbar_edit.html' with open='members' %}
+{% include 'group/edit/navbar_edit.html' with open='posts' %}
+
 <form method='POST'>
   {% csrf_token %}
   {{ form.media }}

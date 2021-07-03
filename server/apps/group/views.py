@@ -35,6 +35,7 @@ class GroupSlugFonctions():
     def get_slug(self, **kwargs):
         group_type = self.kwargs.get('group_type')
         slug = self.kwargs.get("group_slug")
+        if (not group_type): group_type='group'
         # cas spécial du groupe club/bdx (mêmes urls)
         if (group_type == "club"):
             if BDX.objects.filter(slug = 'bdx--'+slug):
