@@ -1,5 +1,7 @@
 from .base import *
 
+print("Running prod config")
+
 DEBUG = False
 
 # Database

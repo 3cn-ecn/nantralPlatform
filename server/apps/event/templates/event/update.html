@@ -1,8 +1,10 @@
-{% extends 'group/base_edit.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block page %}
+{% block content %}
+{% include 'group/edit/navbar_edit.html' with open='events' %}
 <form method='POST'>
   {% csrf_token %}
+  {{ form.media }}
   {{form|crispy}}
   </br>
   <button class='btn btn-dark'>Modifier l'événement</button>

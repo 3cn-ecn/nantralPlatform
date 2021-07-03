@@ -1,8 +1,10 @@
-{% extends 'group/base_edit.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block page %}
-</br>
+
+{% block content %}
+
+{% include 'group/edit/navbar_edit.html' with open='posts' %}
 <a class='btn btn-dark' href="{% url 'group:create-post' object.slug%}">Poster une nouvelle annonce</a>
 </br>
 </br>

@@ -1,8 +1,10 @@
-{% extends 'group/base_edit.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block page %}
-</br>
-</br>
+
+{% block content %}
+
+{% include 'group/edit/navbar_edit.html' with open='posts' %}
+
 <h2>Liste des annonces</h2>
 {% if posts.count > 0 %}
 <form method='POST' action="{% url 'group:update-post' object.slug %}">

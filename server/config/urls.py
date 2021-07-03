@@ -14,33 +14,46 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.conf.urls import url, include
-from django.urls import path
+#from django.conf.urls import url, include
+from django.urls import path, include
 # pour importer les fichiers en dev local
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url('^admin/', admin.site.urls),
-    url('^account/', include('apps.account.urls', namespace='account')),
-    url('^student/', include('apps.student.urls', namespace='student')),
-    url('^api/student/', include('apps.student.api_urls', namespace='student_api')),
-    url('^group/', include('apps.group.urls',  namespace='group')),
-    url('^academic/', include('apps.academic.urls', namespace='academic')),
-    url('^api/academic/', include('apps.academic.api_urls', namespace='academic_api')),
-    url('^services/', include('apps.services.urls', namespace='services')),
-    url('^event/', include('apps.event.urls', namespace='event')),
-    url('^api/event/', include('apps.event.api_urls', namespace='event_api')),
-    url('^post/', include('apps.post.urls', namespace='post')),
-    url('^api/post/', include('apps.post.api_urls', namespace='post_api')),
-    url('^exchange/', include('apps.exchange.urls', namespace='exchange')),
-    url('^roommates/', include('apps.roommates.urls', namespace='roommates')),
-    url('^api/roommates/', include('apps.roommates.api_urls', namespace='roommates_api')),
-    url('', include('apps.home.urls', namespace='home')),
+    path('admin/', admin.site.urls),
+
+    path('account/', include('apps.account.urls', namespace='account')),
+
+    path('student/', include('apps.student.urls', namespace='student')),
+    path('api/student/', include('apps.student.api_urls', namespace='student_api')),
+
+    path('group/', include('apps.group.urls',  namespace='group')),
+    path('club/', include('apps.club.urls',  namespace='club')),
+    path('liste/', include('apps.liste.urls',  namespace='liste')),
+
+    path('academic/', include('apps.academic.urls', namespace='academic')),
+    path('api/academic/', include('apps.academic.api_urls', namespace='academic_api')),
+
+    path('services/', include('apps.services.urls', namespace='services')),
+
+    path('event/', include('apps.event.urls', namespace='event')),
+    path('api/event/', include('apps.event.api_urls', namespace='event_api')),
+    path('post/', include('apps.post.urls', namespace='post')),
+    path('api/post/', include('apps.post.api_urls', namespace='post_api')),
+
+    path('exchange/', include('apps.exchange.urls', namespace='exchange')),
+
+    path('colocs/', include('apps.roommates.urls', namespace='roommates')),
+    path('roommates/', include('apps.roommates.urls')),
+    path('api/roommates/', include('apps.roommates.api_urls', namespace='roommates_api')),
+
+    path('', include('apps.home.urls', namespace='home')),
 ]
 
 handler404 = 'apps.home.views.handler404'
 handler500 = 'apps.home.views.handler500'
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += [
+    path("ckeditor5/", include('django_ckeditor_5.urls'))
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

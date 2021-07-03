@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls.base import reverse_lazy
 from apps.roommates.models import Housing, Roommates, NamedMembershipRoommates
 from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, UpdateView, DetailView
+from django.views.generic import TemplateView, UpdateView, DetailView, ListView
 import locale
 
 from django.conf import settings
@@ -19,6 +19,11 @@ class HousingMap(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['MAPBOX_API_KEY'] = settings.MAPBOX_API_KEY
         return context
+
+
+class HousingList(LoginRequiredMixin, ListView):
+    model = Housing
+    template_name = 'roommates/housing/list.html'
 
 
 class HousingDetailView(LoginRequiredMixin, DetailView):
@@ -47,7 +52,7 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
             duration = "Du " + begin_date + " au " + end_date if group.end_date is not None else "Depuis le " + \
                 begin_date + " (date de fin non renseignée)"
 
-            for member in NamedMembershipRoommates.objects.filter(roommates=group.id):
+            for member in NamedMembershipRoommates.objects.filter(group=group.id):
                 # On évite d'afficher un None si le coloc n'a pas de surnom
                 nicknm = "" if member.nickname is None else member.nickname
 

@@ -1,7 +1,9 @@
-{% extends 'group/base_edit.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
-{% block page %}
-</br>
+
+{% block content %}
+{% include 'group/edit/navbar_edit.html' with open='members' %}
+
 <h2>Membres</h2>
 <form method='POST' action="{% url 'group:update-members' object.slug %}">
     {% csrf_token %}

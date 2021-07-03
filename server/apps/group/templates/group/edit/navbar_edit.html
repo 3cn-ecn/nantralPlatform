@@ -1,0 +1,36 @@
+
+
+<h1>
+    <a href="{{ object.get_absolute_url }}"><i class="fas fa-arrow-alt-circle-left link-dark"></i></a>  
+    {{object.name}}
+</h1>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link {% if open == 'general' %}active" aria-current="page{% endif %}" 
+            href="{% url group_type|add:':update' group_slug %}">
+            <i class="fa fa-cog"></i> Général
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if open == "members" %}active" aria-current="page{% endif %}" 
+            href="{% url group_type|add:':update-members' group_slug %}">
+            <i class="fa fa-users"></i> Membres
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if open == "events" %}active" aria-current="page{% endif %}" 
+            href="{% url group_type|add:':update-events' group_slug %}">
+            <i class="fa fa-calendar-plus-o"></i> Évènements
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if open == "posts" %}active" aria-current="page{% endif %}"
+            href="{% url group_type|add:':update-posts' group_slug %}" >
+            <i class="fa fa-calendar-plus-o"></i> Annonces
+        </a>
+    </li>
+</ul>
+
+<br/>
+

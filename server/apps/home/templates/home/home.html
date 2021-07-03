@@ -37,7 +37,10 @@
               {% endif %}
           </div>
         </h6>
-            <p class="card-text" >{{event.description | truncatewords_html:20}}</p>
+            <p class="card-text" >{% autoescape off %}
+              {{event.description | truncatewords_html:20}}
+              {% endautoescape %}
+            </p>
           </div>
         </div>
       </a>

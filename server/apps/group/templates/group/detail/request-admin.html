@@ -1,24 +1,26 @@
 {% load crispy_forms_tags %}
+
 <div class="modal fade" id="adminModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Demande de droits admin {{object.name}}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>        
-                <div class="modal-body">
-                    <form method='POST' action="{% url 'group:admin-req' object.slug%}">
-                        {% csrf_token %}
-                        {{admin_req_form | crispy}}
-                        </br>
-                        <button class='btn btn-dark'>Faire une demande</button>
-                    </form>
-                </div>
+            <div class="modal-header">
+                <h5 class="modal-title">Demande de droits admin {{object.name}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>        
+            <div class="modal-body">
+                <form method='POST' action="{% url group_type|add:':admin-req' group_slug %}">
+                    {% csrf_token %}
+                    {{admin_req_form | crispy}}
+                    </br>
+                    <button class='btn btn-dark'>Faire une demande</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
+<br><br><small>
+<p>Vous souhaitez modifier le contenu de cette page ? 
 <button id='show-admin-req' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#adminModal">
     <i class="fa fa-user-plus"></i>
-    Demander à devenir admin de {{object.name}}
-</button>
+    Faites une demande d'admin
+</button></small>

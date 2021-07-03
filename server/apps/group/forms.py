@@ -1,46 +1,43 @@
-from django.forms import ModelForm, modelformset_factory
-from .models import AdminRightsRequest, NamedMembershipClub, Club, NamedMembershipList
+from django.forms import ModelForm
+from .models import AdminRightsRequest
+from apps.club.models import Club, BDX
+from apps.liste.models import Liste
+from apps.club.forms import *
+from apps.liste.forms import *
 
 
-class NamedMembershipClubForm(ModelForm):
-    class Meta:
-        model = NamedMembershipClub
-        fields = ['function', 'year', 'student']
+def UpdateGroupForm(group):
+    if group==Club:
+        return UpdateClubForm
+    elif group==BDX:
+        return UpdateBDXForm
+    else:
+        return None
 
 
-class NamedMembershipAddClub(ModelForm):
-    """Form for a club page to add one self to a club."""
-    class Meta:
-        model = NamedMembershipClub
-        fields = ['function', 'year']
+def NamedMembershipGroupForm(group):
+    if group==Club or group==BDX:
+        return NamedMembershipClubForm
+    else:
+        return None
 
 
-class NamedMembershipAddListe(ModelForm):
-    """Form for a club page to add one self to a liste."""
-    class Meta:
-        model = NamedMembershipList
-        fields = ['function']
+def NamedMembershipAddGroup(group):
+    if group==Club or group==BDX:
+        return NamedMembershipAddClub
+    elif group=="list":
+        return NamedMembershipAddListe
+    else:
+        return None
 
 
-class UpdateClubForm(ModelForm):
-    class Meta:
-        model = Club
-        fields = ['description', 'admins', 'logo']
-
-
-NamedMembershipClubFormset = modelformset_factory(
-    NamedMembershipClub,
-    fields=['function', 'year', 'student'],
-    extra=1,
-    can_delete=True
-)
-
-NamedMembershipListeFormset = modelformset_factory(
-    NamedMembershipList,
-    fields=['function', 'student'],
-    extra=1,
-    can_delete=True
-)
+def NamedMembershipGroupFormset(group):
+    if group==Club or group==BDX:
+        return NamedMembershipClubFormset
+    elif group==Liste:
+        return NamedMembershipListeFormset
+    else:
+        return None
 
 
 class AdminRightsRequestForm(ModelForm):

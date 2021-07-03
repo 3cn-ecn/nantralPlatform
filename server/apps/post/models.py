@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404, reverse
 
+from django_ckeditor_5.fields import CKEditor5Field
+
 from apps.group.models import Group
 from apps.utils.upload import PathAndRename
 
@@ -30,7 +32,8 @@ class AbstractPost(models.Model):
         verbose_name="Date de publication", default=timezone.now)
     title = models.CharField(
         max_length=200, verbose_name='Titre de l\'annonce')
-    description = models.TextField(verbose_name='Texte de l\'annonce')
+    description = CKEditor5Field(
+        verbose_name='Texte de l\'annonce', blank=True)
     group = models.SlugField(verbose_name='Groupe publiant l\'annonce')
     slug = models.SlugField(
         verbose_name='Slug de l\'annonce', unique=True, null=True)

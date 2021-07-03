@@ -1,13 +1,15 @@
-{% extends 'group/base_edit.html' %}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
-{% block page %}
-</br>
-<a class='btn btn-dark' href="{% url 'group:create-event' object.slug%}">Ajouter un event</a>
+
+{% block content %}
+{% include 'group/edit/navbar_edit.html' with open='events' %}
+
+<a class='btn btn-dark' href="{% url group_type|add:':create-event' group_slug%}">Ajouter un event</a>
 </br>
 </br>
 <h2>Liste des events planifiés</h2>
-<a class='btn btn-dark' href="{% url 'group:archived-events' object.slug%}">Events archivés</a>
+<a class='btn btn-dark' href="{% url group_type|add:':archived-events' group_slug%}">Events archivés</a>
 </br>
 <div id="root"></div>
 {% endblock %}

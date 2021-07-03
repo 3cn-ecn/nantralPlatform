@@ -48,7 +48,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.INSTANCE_ADDRESS }}
-          username: "ec2-user"
+          username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             cd nantralPlatform
