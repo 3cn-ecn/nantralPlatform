@@ -131,10 +131,6 @@ class DetailGroupView(GroupSlugFonctions, DetailView):
         context['posts'] = Post.objects.filter(
             group=self.object.slug, publication_date__gte=date.today()-timedelta(days=10)
         ).order_by('publication_date')
-        context['videoframe'] = {
-            'video1': self.object.embed(self.object.video1),
-            'video2': self.object.embed(self.object.video2),
-        }
         return context
 
 

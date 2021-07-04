@@ -107,22 +107,6 @@ class Group(models.Model):
     @property
     def mini_slug(self):
         return self.slug.split('--')[1]
-    
-    # à supprimer, créer un gabarit personnalisé plutôt
-    def embed(self, video_url):
-        if 'youtube' in video_url:
-            from urllib.parse import parse_qs, urlparse
-            video_id = parse_qs(urlparse(video_url).query)['v'][0]
-            return '<iframe src="https://www.youtube-nocookie.com/embed/' + video_id \
-                    + '" title="YouTube video player" frameborder="0" allow="accelerometer; \
-                    autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" \
-                    allowfullscreen></iframe>'
-        elif 'dailymotion' in video_url:
-            video_id = video_url.split('?')[0].split('/')[-1]
-            return '<iframe frameborder="0" type="text/html" src="https://www.dailymotion.com/embed/video/' \
-                    + video_id + '?autoplay=0" allowfullscreen allow="autoplay"></iframe>'
-        else:
-            return '<p>Vidéo non prise en charge...</p>'
 
 
 

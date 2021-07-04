@@ -12,7 +12,9 @@
 {% endblock %}
 
 {% block content %}
+    <!-- En-tête de la page -->
     <div class="row">
+        <!-- logo -->
         {%if object.logo %}
             <div class="col-12 col-md-4 col-xl-3">
                 <div class="ratio ratio-1x1">
@@ -20,6 +22,7 @@
                 </div>
             </div>
         {% endif %}
+        <!-- description du club : nom, infos... -->
         <div class="col">
             <h1>{{object.name}}</h1>
             <p>
@@ -52,6 +55,8 @@
             {% include "sociallink/liste.html" with sociallinks=sociallinks%}
         </div>
     </div>
+
+    <!-- Events -->
     {% if events %}
         <br>   
         <h2>Évènements</h2>
@@ -79,6 +84,7 @@
         {%endif%}
     {% endif %}
     
+    <!-- Anonces -->
     {% if posts %}
         <br>
         <h2>Annonces</h2>
@@ -95,29 +101,45 @@
         {% endfor %}
     {% endif %}
 
+    <!-- Vidéos s'il y en a 2 -->
     {% if object.video1 and object.video2 %}
+        {% load group_tags %}
         <br />
-        <div class="row">
+        <h2>Vidéos</h2>
+        <div class="row gy-3">
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
-                     {{ videoframe.video1 }}
+                    {% video_embed object.video1 %}
                 </div>
             </div>
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
-                    {{ videoframe.video2 }}
+                    {% video_embed object.video2 %}
                 </div>
             </div>
         </div>
     {% endif %}
 
-    {% if object.description %}
+    <!-- Description avec vidéo dans le coin s'il y en a une seulement-->
+    {% if object.description or object.video1 and not object.video2 %}
         <br>
-        {% autoescape off %}
-        <p>{{object.description}}</p>
-        {% endautoescape %}
+        <div class="clearfix">
+            {% if object.video1 and not object.video2 %}
+            <div class="col-md-6 float-md-end mb-3 ms-md-3">
+                <div class="ratio ratio-16x9">
+                    {% video_embed object.video1 %}
+                </div>
+            </div>
+            {% endif %}
+            {% if object.description %}
+                {% autoescape off %}
+                    {{object.description}}
+                {% endautoescape %}
+            {% endif %}
+        </div>
     {% endif %}
 
+    <!-- Liste des membres -->
     <br />
     <h2>Membres</h2>
     {% if request.user.is_authenticated %}
@@ -135,15 +157,18 @@
         <p>Veuillez vous connecter pour voir les membres.</p>
     {% endif %}
 
+    {# Ajout possible de contenus pour certaines pages #}
     {% block extra-content %}
     {% endblock %}
 
+    {# Bouton pour faire une demande pour devenir admin #}
     {% block admin-req %}
         {% if is_member and not is_admin %}
             {% include 'group/detail/request-admin.html' %}
         {%endif%}
     {% endblock %}
 
+    {# popup pour devenir membre du groupe #}
     {% block add-member %}
         {% include 'group/detail/add-member.html' %}
     {% endblock%}
