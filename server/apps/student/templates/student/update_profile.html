@@ -1,6 +1,7 @@
 {% extends 'base.html'%}
 {% load crispy_forms_tags %}
 {% load static %}
+
 {% block  content%}
 <h1>{{object.first_name | title}} {{object.last_name | upper}}</h1>
 <p>{{object.user.email}}</p>
