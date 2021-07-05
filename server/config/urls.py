@@ -27,7 +27,7 @@ urlpatterns = [
     path('student/', include('apps.student.urls', namespace='student')),
     path('api/student/', include('apps.student.api_urls', namespace='student_api')),
 
-    path('group/', include('apps.group.urls',  namespace='group')),
+    #path('group/', include('apps.group.urls',  namespace='group')),
     path('club/', include('apps.club.urls',  namespace='club')),
     path('liste/', include('apps.liste.urls',  namespace='liste')),
 

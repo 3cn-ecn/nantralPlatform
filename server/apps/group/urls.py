@@ -46,5 +46,3 @@ def makeGroupUrlpatterns(group_name):
     ]
     return urlpatterns
 
-
-urlpatterns = makeGroupUrlpatterns("group")

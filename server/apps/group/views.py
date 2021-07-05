@@ -17,16 +17,20 @@ from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 
-from .forms import UpdateGroupForm, NamedMembershipGroupForm, NamedMembershipAddGroup, NamedMembershipGroupFormset, AdminRightsRequestForm
+from .forms import UpdateGroupForm, NamedMembershipAddGroup, NamedMembershipGroupFormset, AdminRightsRequestForm
 
 from apps.utils.accessMixins import UserIsAdmin
 
 
 
 class GroupSlugFonctions():
-    # classe modèle pour définir le choix du slug
-    # lorsque l'url ne précise pas le groupe
-    # ex : nantral-platform.fr/club/bde
+    # group_type : nom de l'app correspondant au modèle demandé
+    # ------------ reproduit la chaîne devant le slug dans le modèle
+    # group_slug : le slug du group, sans le type devant, reçu dans l'url
+    # ex: 
+    # pour www.nantral-platform.fr/club/nantral-platform,
+    # on a group_type=club et group_slug=nantral-platform
+    # la fonction ci-dessous renvoie alors slug="club--nantral-platform"
 
     @property
     def get_slug(self, **kwargs):
@@ -40,11 +44,8 @@ class GroupSlugFonctions():
             else:
                 return 'club--' + slug
         #autres groupes
-        elif (group_type != "group"):
-            return group_type + '--' + slug
-        #groupe abstrait
         else:
-            return slug
+            return group_type + '--' + slug
 
 
 
