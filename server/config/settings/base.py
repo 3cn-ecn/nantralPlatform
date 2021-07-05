@@ -116,6 +116,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+# Choose default type for primary keys in models
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

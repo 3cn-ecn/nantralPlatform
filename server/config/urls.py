@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 # pour importer les fichiers en dev local
 from django.conf import settings
 from django.conf.urls.static import static
@@ -44,8 +45,7 @@ urlpatterns = [
     path('exchange/', include('apps.exchange.urls', namespace='exchange')),
 
     path('colocs/', include('apps.roommates.urls', namespace='roommates')),
-    path('roommates/', include('apps.roommates.urls')),
-    path('api/roommates/', include('apps.roommates.api_urls', namespace='roommates_api')),
+    path('api/colocs/', include('apps.roommates.api_urls', namespace='roommates_api')),
 
     path('', include('apps.home.urls', namespace='home')),
 ]
