@@ -48,8 +48,7 @@
                 {%endif%}
             {% endif %}
             </p>
-            {% if resume %}
-                <br>
+            {% if object.resume %}
                 <p>{{ object.resume }}</p>
             {% endif %}
             {% include "sociallink/liste.html" with sociallinks=sociallinks%}
@@ -159,13 +158,13 @@
     {# Bouton pour faire une demande pour devenir admin #}
     {% block admin-req %}
         {% if is_member and not is_admin %}
-            {% include 'group/detail/request-admin.html' %}
+            {% include 'group/included/request-admin.html' %}
         {%endif%}
     {% endblock %}
 
     {# popup pour devenir membre du groupe #}
     {% block add-member %}
-        {% include 'group/detail/add-member.html' %}
+        {% include 'group/included/add-member.html' %}
     {% endblock%}
 
     <br>

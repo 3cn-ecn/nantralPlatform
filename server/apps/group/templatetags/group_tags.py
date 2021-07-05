@@ -2,7 +2,7 @@ from django import template
 
 register = template.Library()
 
-@register.inclusion_tag('group/detail/video.html')
+@register.inclusion_tag('group/included/video.html')
 def video_embed(video_url):
     if 'youtube' in video_url:
         from urllib.parse import parse_qs, urlparse

@@ -30,7 +30,7 @@ class EventDetailView(LoginRequiredAccessMixin, TemplateView):
 
 class UpdateGroupCreateEventView(GroupSlugFonctions, UserIsAdmin, FormView):
     """In the context of a group, create event view."""
-    template_name = 'group/event/create.html'
+    template_name = 'group/edit/event/create.html'
     form_class = EventForm
 
     def get_context_data(self, **kwargs):
@@ -81,7 +81,7 @@ class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
 
 
 class UpdateGroupEventsView(GroupSlugFonctions, UserIsAdmin, View):
-    template_name = 'group/event/planned_edit.html'
+    template_name = 'group/edit/event/planned_edit.html'
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -102,7 +102,7 @@ class UpdateGroupEventsView(GroupSlugFonctions, UserIsAdmin, View):
 
 
 class UpdateGroupArchivedEventsView(GroupSlugFonctions, UserIsAdmin, View):
-    template_name = 'group/event/archived_edit.html'
+    template_name = 'group/edit/event/archived_edit.html'
 
     def get_context_data(self, **kwargs):
         context = {}

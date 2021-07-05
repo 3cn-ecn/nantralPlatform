@@ -48,5 +48,6 @@ class NamedMembershipClub(NamedMembership):
     date_end = models.DateField(verbose_name='Date de fin', blank=True, null=True)
     order = models.IntegerField(verbose_name='Hiérarchie', default=0)
 
-    # class Meta:
-        # unique_together = ('function', 'date_begin', 'student', 'club')
+    @property
+    def get_year(self, **kwargs):
+        pass

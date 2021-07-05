@@ -34,13 +34,15 @@
                             {% elif member.nickname %}
                                 {{ member.nickname }}<br>
                             {% endif %}
-                            <small><i>
-                                {% if member.date_end %}
-                                    Membre de {{member.date_begin}} à {{ member.date_end }}
-                                {% else %}
-                                    Membre depuis {{member.date_begin }}
-                                {% endif %}
-                            </i></small>
+                            {% if member.date_begin %}
+                                <small><i>
+                                    {% if member.date_end %}
+                                        Membre du {{ member.date_begin}} au {{ member.date_end }}
+                                    {% else %}
+                                        Membre depuis le {{ member.date_begin }}
+                                    {% endif %}
+                                </i></small>
+                            {% endif %}
                         </span>
                     </div>
                 </div>

@@ -50,6 +50,81 @@ class GroupSlugFonctions():
             return slug
 
 
+class DetailGroupView(GroupSlugFonctions, DetailView):
+    template_name = 'group/detail/detail.html'
+    
+    def get_object(self, **kwargs):
+        return Group.get_group_by_slug(self.get_slug)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['group_type'] = self.kwargs.get('group_type')
+        context['group_slug'] = self.kwargs.get('group_slug')
+        self.object = self.get_object()
+        context['admin_req_form'] = AdminRightsRequestForm()
+        context['members'] = self.object.members.through.objects.filter(group=self.object)
+        if isinstance(context['object'], Club):
+            context['form'] = NamedMembershipAddClub()
+        elif isinstance(context['object'], Liste):
+            context['form'] = NamedMembershipAddListe()
+        context['sociallinks'] = SocialLink.objects.filter(slug=self.object.slug)
+        context['is_member'] = self.object.is_member(self.request.user)
+        if self.request.user.is_authenticated:
+            context['is_admin'] = self.object.is_admin(self.request.user)
+        else:
+            context['is_admin'] = False
+        context['events'] = BaseEvent.objects.filter(
+            group=self.object.slug, date__gte=date.today()).order_by('date')
+        context['posts'] = Post.objects.filter(
+            group=self.object.slug, publication_date__gte=date.today()-timedelta(days=10)
+        ).order_by('publication_date')
+        return context
+
+
+class DetailGroupMembersView(GroupSlugFonctions, LoginRequiredMixin, TemplateView):
+    template_name = 'group/detail/members.html'
+    
+    def get_object(self, **kwargs):
+        return Group.get_group_by_slug(self.get_slug)
+    
+    def get_queryset(self, **kwargs):
+        object = self.get_object()
+        members = object.members.through.objects.filter(group=object)
+        return members
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['group_type'] = self.kwargs.get('group_type')
+        context['group_slug'] = self.kwargs.get('group_slug')
+        membergroup_list = []
+        members = self.get_queryset()
+        for member in members:
+            member.get_year
+        return context
+
+
+class AddToGroupView(GroupSlugFonctions, LoginRequiredMixin, FormView):
+    raise_exception = True
+
+    def get_group(self, **kwargs):
+        return Group.get_group_by_slug(self.get_slug)
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.student = self.request.user.student
+        self.object.group = self.get_group()
+        self.object.save()
+        return redirect(self.object.group.get_absolute_url)
+
+    def get_form_class(self):
+        group = self.get_group()
+        if isinstance(group, Club):
+            self.form_class = NamedMembershipAddClub
+            return NamedMembershipAddClub
+        if isinstance(group, Liste):
+            self.form_class = NamedMembershipAddListe
+            return NamedMembershipAddListe
+
 
 class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
     template_name = 'group/edit/update.html'
@@ -101,60 +176,6 @@ class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
     def post(self, request, group_slug, group_type):
         group = self.get_object()
         return edit_named_memberships(request, group, group_slug, group_type)
-
-
-class DetailGroupView(GroupSlugFonctions, DetailView):
-    template_name = 'group/detail/detail.html'
-    
-    def get_object(self, **kwargs):
-        return Group.get_group_by_slug(self.get_slug)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
-        self.object = self.get_object()
-        context['admin_req_form'] = AdminRightsRequestForm()
-        context['members'] = self.object.members.through.objects.filter(group=self.object)
-        if isinstance(context['object'], Club):
-            context['form'] = NamedMembershipAddClub()
-        elif isinstance(context['object'], Liste):
-            context['form'] = NamedMembershipAddListe()
-        context['sociallinks'] = SocialLink.objects.filter(slug=self.object.slug)
-        context['is_member'] = self.object.is_member(self.request.user)
-        if self.request.user.is_authenticated:
-            context['is_admin'] = self.object.is_admin(self.request.user)
-        else:
-            context['is_admin'] = False
-        context['events'] = BaseEvent.objects.filter(
-            group=self.object.slug, date__gte=date.today()).order_by('date')
-        context['posts'] = Post.objects.filter(
-            group=self.object.slug, publication_date__gte=date.today()-timedelta(days=10)
-        ).order_by('publication_date')
-        return context
-
-
-class AddToGroupView(GroupSlugFonctions, LoginRequiredMixin, FormView):
-    raise_exception = True
-
-    def get_group(self, **kwargs):
-        return Group.get_group_by_slug(self.get_slug)
-
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.student = self.request.user.student
-        self.object.group = self.get_group()
-        self.object.save()
-        return redirect(self.object.group.get_absolute_url)
-
-    def get_form_class(self):
-        group = self.get_group()
-        if isinstance(group, Club):
-            self.form_class = NamedMembershipAddClub
-            return NamedMembershipAddClub
-        if isinstance(group, Liste):
-            self.form_class = NamedMembershipAddListe
-            return NamedMembershipAddListe
 
 
 @ require_http_methods(['POST'])
