@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='liste',
-            name='resume',
+            name='summary',
             field=models.CharField(blank=True, max_length=500, null=True, verbose_name='Résumé'),
         ),
         migrations.AddField(

@@ -32,7 +32,7 @@ class Group(models.Model):
     #présentation
     logo = models.ImageField(verbose_name='Logo du groupe',
                              blank=True, null=True, upload_to=path_and_rename_group)
-    resume = models.CharField('Résumé', max_length=500, null=True, blank=True)
+    summary = models.CharField('Résumé', max_length=500, null=True, blank=True)
     description = CKEditor5Field(
         verbose_name='Description du groupe', blank=True)
     video1 = models.URLField('Lien vidéo 1', max_length=200, null=True, blank=True)

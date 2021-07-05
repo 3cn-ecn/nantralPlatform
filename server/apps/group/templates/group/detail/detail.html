@@ -43,9 +43,9 @@
                 {%endif%}
             {% endif %}
             </p>
-            {% if resume %}
+            {% if object.summary %}
                 <br>
-                <p>{{ object.resume }}</p>
+                <p>{{ object.summary }}</p>
             {% endif %}
             {% include "sociallink/liste.html" with sociallinks=sociallinks%}
         </div>
