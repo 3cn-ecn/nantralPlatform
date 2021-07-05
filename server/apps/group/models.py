@@ -56,7 +56,7 @@ class Group(models.Model):
 
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
-        if user.is_anonymous or not user.is_authenticated or not user.student:
+        if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
         res = False
@@ -72,7 +72,7 @@ class Group(models.Model):
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated or not user.student:
+        if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
         return student in self.members.all()

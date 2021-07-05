@@ -7,23 +7,23 @@ from apps.liste.forms import *
 
 
 def UpdateGroupForm(group):
-    if group==Club:
+    if isinstance(group, Club):
         return UpdateClubForm
-    elif group==BDX:
+    elif isinstance(group, BDX):
         return UpdateBDXForm
     else:
         return None
 
 
 def NamedMembershipGroupForm(group):
-    if group==Club or group==BDX:
+    if isinstance(group, Club) or isinstance(group, BDX):
         return NamedMembershipClubForm
     else:
         return None
 
 
 def NamedMembershipAddGroup(group):
-    if group==Club or group==BDX:
+    if isinstance(group, Club) or isinstance(group, BDX):
         return NamedMembershipAddClub
     elif group=="list":
         return NamedMembershipAddListe
@@ -32,9 +32,9 @@ def NamedMembershipAddGroup(group):
 
 
 def NamedMembershipGroupFormset(group):
-    if group==Club or group==BDX:
+    if isinstance(group, Club) or isinstance(group, BDX):
         return NamedMembershipClubFormset
-    elif group==Liste:
+    elif isinstance(group, Liste):
         return NamedMembershipListeFormset
     else:
         return None

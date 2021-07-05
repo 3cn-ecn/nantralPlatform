@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls.base import reverse
 from django.views.generic import ListView, View, FormView, TemplateView, DetailView
 
@@ -12,15 +12,12 @@ from django.views.decorators.http import require_http_methods
 
 
 from .models import AdminRightsRequest, Group
-from apps.club.models import Club, NamedMembershipClub, BDX
-from apps.liste.models import Liste, NamedMembershipList
+from apps.club.models import BDX
 from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 
 from .forms import UpdateGroupForm, NamedMembershipGroupForm, NamedMembershipAddGroup, NamedMembershipGroupFormset, AdminRightsRequestForm
-from apps.club.forms import NamedMembershipClubFormset, NamedMembershipAddClub, UpdateClubForm
-from apps.liste.forms import NamedMembershipAddListe, NamedMembershipListeFormset
 
 from apps.utils.accessMixins import UserIsAdmin
 
@@ -63,14 +60,14 @@ class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
         context['group_slug'] = self.kwargs.get('group_slug')
         self.object = self.get_object()
         context['object'] = self.object
-        form_to_call = UpdateGroupForm(type(self.object))
+        form_to_call = UpdateGroupForm(self.object)
         if form_to_call:
             context['form'] = form_to_call(instance=self.object)
         return context
 
     def post(self, request, group_slug, group_type):
         group = self.get_object()
-        form_to_call = UpdateGroupForm(type(group))
+        form_to_call = UpdateGroupForm(group)
         if form_to_call:
             form = form_to_call(request.POST, request.FILES, instance=group)
             form.save()
@@ -88,11 +85,10 @@ class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
         context['group_type'] = self.kwargs.get('group_type')
         context['group_slug'] = self.kwargs.get('group_slug')
         context['object'] = self.get_object()
-        if isinstance(context['object'], Club):
-            memberships = NamedMembershipClub.objects.filter(
+        memberships = context['object'].members.through.objects.filter(
                 group=context['object'])
-            membersForm = NamedMembershipClubFormset(queryset=memberships)
-            context['members'] = membersForm
+        membersForm = NamedMembershipGroupFormset(context['object'])(queryset=memberships)
+        context['members'] = membersForm
         return context
 
     #def get(self, request, group_slug):
@@ -116,10 +112,7 @@ class DetailGroupView(GroupSlugFonctions, DetailView):
         self.object = self.get_object()
         context['admin_req_form'] = AdminRightsRequestForm()
         context['members'] = self.object.members.through.objects.filter(group=self.object)
-        if isinstance(context['object'], Club):
-            context['form'] = NamedMembershipAddClub()
-        elif isinstance(context['object'], Liste):
-            context['form'] = NamedMembershipAddListe()
+        context['form'] = NamedMembershipAddGroup(context['object'])
         context['sociallinks'] = SocialLink.objects.filter(slug=self.object.slug)
         context['is_member'] = self.object.is_member(self.request.user)
         if self.request.user.is_authenticated:
@@ -149,18 +142,14 @@ class AddToGroupView(GroupSlugFonctions, LoginRequiredMixin, FormView):
 
     def get_form_class(self):
         group = self.get_group()
-        if isinstance(group, Club):
-            self.form_class = NamedMembershipAddClub
-            return NamedMembershipAddClub
-        if isinstance(group, Liste):
-            self.form_class = NamedMembershipAddListe
-            return NamedMembershipAddListe
+        self.form_class = NamedMembershipAddGroup(group)
+        return NamedMembershipAddGroup(group)
 
 
 @ require_http_methods(['POST'])
 @ login_required
 def edit_named_memberships(request, group, group_slug, group_type):
-    form_to_call = NamedMembershipGroupFormset(type(group))
+    form_to_call = NamedMembershipGroupFormset(group)
     if form_to_call:
         form = form_to_call(request.POST)
     if form.is_valid():
