@@ -29,9 +29,12 @@ class EventDetailView(LoginRequiredAccessMixin, TemplateView):
         return context
 
 
+
+# Application Group
+
 class UpdateGroupCreateEventView(GroupSlugFonctions, UserIsAdmin, FormView):
-    """In the context of a group, create event view."""
-    template_name = 'group/edit/event/create.html'
+    """In the context of edit group, create event view."""
+    template_name = 'group/event/create.html'
     form_class = EventForm
 
     def get_context_data(self, **kwargs):
@@ -65,8 +68,6 @@ class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['object'] = self.object.get_group
         context['event'] = self.object
-        context['group_type'] = self.object.group.split('--')[0]
-        context['group_slug'] = self.object.group.split('--')[1]
         return context
 
     def get_object(self, **kwargs):
@@ -83,7 +84,8 @@ class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
 
 
 class UpdateGroupEventsView(GroupSlugFonctions, UserIsAdmin, View):
-    template_name = 'group/edit/event/planned_edit.html'
+    '''In the context of edit group, show planned events'''
+    template_name = 'group/event/planned_edit.html'
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -91,8 +93,6 @@ class UpdateGroupEventsView(GroupSlugFonctions, UserIsAdmin, View):
         context['events'] = BaseEvent.objects.filter(
             group=self.get_slug, date__gte=date.today())
         context['form'] = EventFormSet(queryset=context['events'])
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         return context
 
     def get(self, request, **kwargs):
@@ -114,8 +114,6 @@ class UpdateGroupArchivedEventsView(GroupSlugFonctions, UserIsAdmin, View):
         context['events'] = BaseEvent.objects.filter(
             group=self.get_slug, date__lte=date.today())
         context['form'] = EventFormSet(queryset=context['events'])
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         return context
 
     def get(self, request, **kwargs):
