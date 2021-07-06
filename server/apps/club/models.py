@@ -2,22 +2,16 @@ from django.db import models
 from django.db.models import F
 from django.conf import settings
 from datetime import date
+from django.urls.base import reverse
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 
 
-if settings.DEBUG:
-    path_and_rename_club = PathAndRename("./static/upload/groups/logo/club")
-    path_and_rename_club_banniere = PathAndRename(
-        "./static/upload/groups/banniere/club")
-    path_and_rename_liste_banniere = PathAndRename(
-        "./static/upload/groups/banniere/club")
-else:
-    path_and_rename_club = PathAndRename("groups/logo/club")
-    path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
-    path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
+path_and_rename_club = PathAndRename("groups/logo/club")
+path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
+path_and_rename_liste_banniere = PathAndRename("groups/banniere/club")
 
 
 class Club(Group):
@@ -41,6 +35,10 @@ class BDX(Club):
     class Meta:
         ordering = ['order']
         verbose_name_plural = "BDX"
+    
+    @property
+    def group_type(self):
+        return 'club'
 
 
 class NamedMembershipClub(NamedMembership):
