@@ -14,6 +14,7 @@ from apps.group.models import Group
 from apps.group.views import GroupSlugFonctions
 from apps.utils.accessMixins import LoginRequiredAccessMixin, UserIsAdmin
 
+# Application Event
 
 class EventDetailView(LoginRequiredAccessMixin, TemplateView):
     template_name = 'event/detail.html'
@@ -36,8 +37,6 @@ class UpdateGroupCreateEventView(GroupSlugFonctions, UserIsAdmin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = Group.get_group_by_slug(self.get_slug)
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         return context
 
     def form_valid(self, form, **kwargs):
@@ -47,17 +46,19 @@ class UpdateGroupCreateEventView(GroupSlugFonctions, UserIsAdmin, FormView):
         ).slug
         event.save()
         group_type = self.kwargs.get('group_type')
-        group_slug = self.kwargs.get('group_slug')
-        return redirect(group_type+':create-event', group_slug)
+        mini_slug = self.kwargs.get('mini_slug')
+        return redirect(group_type+':create-event', mini_slug)
 
 
 class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
+    '''In the context of edit group, update an event'''
     template_name = 'event/update.html'
     fields = ['title', 'description', 'location',
               'date', 'publicity', 'color', 'image']
 
     def test_func(self) -> bool:
-        self.kwargs['group_slug'] = self.object.get_group.slug
+        self.kwargs['group_type'] = self.object.get_group.group_type
+        self.kwargs['mini_slug']  = self.object.get_group.mini_slug
         return super().test_func()
 
     def get_context_data(self, **kwargs):
@@ -73,7 +74,8 @@ class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = BaseEvent.get_event_by_slug(self.kwargs['event_slug'])
-        self.kwargs['group_slug'] = self.object.get_group.slug
+        self.kwargs['group_type'] = self.object.get_group.group_type
+        self.kwargs['mini_slug']  = self.object.get_group.mini_slug
         if isinstance(self.object, EatingEvent):
             self.fields = ['title', 'description', 'location',
                            'date', 'publicity', 'color', 'image', 'menu']
@@ -93,16 +95,18 @@ class UpdateGroupEventsView(GroupSlugFonctions, UserIsAdmin, View):
         context['group_slug'] = self.kwargs.get('group_slug')
         return context
 
-    def get(self, request, group_slug, **kwargs):
-        context=self.get_context_data(group_slug=group_slug)
+    def get(self, request, **kwargs):
+        context=self.get_context_data()
         return render(request, self.template_name, context)
 
-    def post(self, request,  group_slug, group_type):
-        return edit_events(request, group_slug, group_type)
+    def post(self, request,  **kwargs):
+        object = Group.get_group_by_slug(self.get_slug)
+        return edit_events(request, object)
 
 
 class UpdateGroupArchivedEventsView(GroupSlugFonctions, UserIsAdmin, View):
-    template_name = 'group/edit/event/archived_edit.html'
+    '''In the context of edit group, show archived events'''
+    template_name = 'group/event/archived_edit.html'
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -114,11 +118,13 @@ class UpdateGroupArchivedEventsView(GroupSlugFonctions, UserIsAdmin, View):
         context['group_slug'] = self.kwargs.get('group_slug')
         return context
 
-    def get(self, request, group_slug, **kwargs):
-        return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
+    def get(self, request, **kwargs):
+        context=self.get_context_data()
+        return render(request, self.template_name, context)
 
-    def post(self, request, group_slug, group_type):
-        return edit_events(request, group_slug, group_type)
+    def post(self, request,  **kwargs):
+        object = Group.get_group_by_slug(self.get_slug)
+        return edit_events(request, object)
 
 
 @login_required
@@ -142,8 +148,7 @@ def remove_participant(request, event_slug):
 
 
 @login_required
-def edit_events(request, group_slug, group_type):
-    group = Group.get_group_by_slug(group_slug)
+def edit_events(request, group):
     form = EventFormSet(request.POST)
     if form.is_valid():
         events = form.save(commit=False)
@@ -155,7 +160,7 @@ def edit_events(request, group_slug, group_type):
         for event in form.deleted_objects:
             event.delete()
         messages.success(request, 'Events  modifies')
-        return redirect(group_type+':update-events', group_slug)
+        return redirect(group.group_type+':update-events', group.mini_slug)
     else:
         messages.warning(request, form.errors)
-        return redirect(group_type+':update-events', group_slug)
+        return redirect(group.group_type+':update-events', group.mini_slug)

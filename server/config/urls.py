@@ -14,7 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-#from django.conf.urls import url, include
 from django.urls import path, include
 # pour importer les fichiers en dev local
 from django.conf import settings
@@ -28,7 +27,7 @@ urlpatterns = [
     path('student/', include('apps.student.urls', namespace='student')),
     path('api/student/', include('apps.student.api_urls', namespace='student_api')),
 
-    path('group/', include('apps.group.urls',  namespace='group')),
+    #path('group/', include('apps.group.urls',  namespace='group')),
     path('club/', include('apps.club.urls',  namespace='club')),
     path('liste/', include('apps.liste.urls',  namespace='liste')),
 
@@ -45,8 +44,7 @@ urlpatterns = [
     path('exchange/', include('apps.exchange.urls', namespace='exchange')),
 
     path('colocs/', include('apps.roommates.urls', namespace='roommates')),
-    path('roommates/', include('apps.roommates.urls')),
-    path('api/roommates/', include('apps.roommates.api_urls', namespace='roommates_api')),
+    path('api/colocs/', include('apps.roommates.api_urls', namespace='roommates_api')),
 
     path('', include('apps.home.urls', namespace='home')),
 ]

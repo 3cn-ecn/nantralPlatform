@@ -25,10 +25,6 @@ class Club(Group):
     class Meta:
         ordering = [F('bdx_type').asc(nulls_first=True), 'name']
 
-    @property
-    def get_absolute_url(self):
-        return reverse('club:detail', kwargs={'group_slug': self.mini_slug})
-
 
 class BDX(Club):
     '''Groupe représentant un BDX.'''
@@ -38,6 +34,10 @@ class BDX(Club):
     class Meta:
         ordering = ['order']
         verbose_name_plural = "BDX"
+    
+    @property
+    def group_type(self):
+        return 'club'
 
 
 class NamedMembershipClub(NamedMembership):
