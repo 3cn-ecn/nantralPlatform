@@ -39,8 +39,6 @@ class PostUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['object'] = self.object.get_group
         context['post'] = self.object
-        context['group_type'] = self.object.group.split('--')[0]
-        context['group_slug'] = self.object.group.split('--')[1]
         return context
 
     def get_object(self, **kwargs):
@@ -55,7 +53,7 @@ class PostUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
 
 class UpdateGroupCreatePostView(GroupSlugFonctions, UserIsAdmin, FormView):
     """In the context of a group, create a post view."""
-    template_name = 'group/edit/post/create.html'
+    template_name = 'group/post/create.html'
     form_class = PostForm
 
     def get_context_data(self, **kwargs):
@@ -75,7 +73,7 @@ class UpdateGroupCreatePostView(GroupSlugFonctions, UserIsAdmin, FormView):
 
 class UpdateGroupPostsView(GroupSlugFonctions, UserIsAdmin, View):
     """In the context of a group, list and update the posts."""
-    template_name = 'group/edit/post/last_30_d.html'
+    template_name = 'group/post/last_30_d.html'
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -83,8 +81,6 @@ class UpdateGroupPostsView(GroupSlugFonctions, UserIsAdmin, View):
         context['posts'] = Post.objects.filter(
             group=self.get_slug)
         context['form'] = PostFormSet(queryset=context['posts'])
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         return context
 
     def get(self, request, **kwargs):
