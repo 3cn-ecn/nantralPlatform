@@ -112,16 +112,17 @@ class Group(models.Model):
             raise Exception('Unknown group')
 
     @property
-    def get_absolute_url(self):
-        return reverse(self.group_type+':detail', kwargs={'mini_slug': self.mini_slug})
-    
-    @property
     def mini_slug(self):
         return break_slug(self.slug)[1]
     
     @property
     def group_type(self):
         return break_slug(self.slug)[0]
+    
+    @property
+    def get_absolute_url(self):
+        return reverse(self.group_type+':detail', kwargs={'mini_slug': self.mini_slug})
+    
 
 
 class NamedMembership(models.Model):
