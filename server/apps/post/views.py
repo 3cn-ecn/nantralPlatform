@@ -10,6 +10,7 @@ from apps.group.models import Group
 from apps.group.views import GroupSlugFonctions
 from apps.utils.accessMixins import UserIsAdmin, LoginRequiredAccessMixin
 
+# Application Post
 
 class PostDetailView(LoginRequiredAccessMixin, TemplateView):
     template_name = 'post/detail.html'
@@ -21,22 +22,23 @@ class PostDetailView(LoginRequiredAccessMixin, TemplateView):
         context['group'] = self.object.get_group
         return context
 
+# Application Group
 
 class PostUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
+    """In the context of a group, update a post."""
     template_name = 'post/update.html'
     fields = ['title', 'description',
               'publication_date', 'publicity', 'color', 'image']
 
     def test_func(self) -> bool:
-        self.kwargs['group_slug'] = self.object.get_group.slug
+        self.kwargs['group_type'] = self.object.get_group.group_type
+        self.kwargs['mini_slug']  = self.object.get_group.mini_slug
         return super().test_func()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = self.object.get_group
         context['post'] = self.object
-        context['group_type'] = self.object.group.split('--')[0]
-        context['group_slug'] = self.object.group.split('--')[1]
         return context
 
     def get_object(self, **kwargs):
@@ -44,7 +46,8 @@ class PostUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = Post.get_post_by_slug(self.kwargs['post_slug'])
-        self.kwargs['group_slug'] = self.object.get_group.slug
+        self.kwargs['group_type'] = self.object.get_group.group_type
+        self.kwargs['mini_slug']  = self.object.get_group.mini_slug
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -56,8 +59,6 @@ class UpdateGroupCreatePostView(GroupSlugFonctions, UserIsAdmin, FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = Group.get_group_by_slug(self.get_slug)
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         return context
 
     def form_valid(self, form, **kwargs):
@@ -66,8 +67,8 @@ class UpdateGroupCreatePostView(GroupSlugFonctions, UserIsAdmin, FormView):
             slug=self.get_slug).slug
         post.save()
         group_type = self.kwargs.get('group_type')
-        group_slug = self.kwargs.get('group_slug')
-        return redirect(group_type+':create-post', group_slug)
+        mini_slug = self.kwargs.get('mini_slug')
+        return redirect(group_type+':create-post', mini_slug)
 
 
 class UpdateGroupPostsView(GroupSlugFonctions, UserIsAdmin, View):
@@ -80,20 +81,19 @@ class UpdateGroupPostsView(GroupSlugFonctions, UserIsAdmin, View):
         context['posts'] = Post.objects.filter(
             group=self.get_slug)
         context['form'] = PostFormSet(queryset=context['posts'])
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         return context
 
-    def get(self, request, group_slug, **kwargs):
-        return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
+    def get(self, request, **kwargs):
+        context=self.get_context_data()
+        return render(request, self.template_name, context)
 
-    def post(self, request,  group_slug, group_type):
-        return edit_posts(request, group_slug, group_type)
+    def post(self, request,  **kwargs):
+        object = Group.get_group_by_slug(self.get_slug)
+        return edit_posts(request, object)
 
 
 @login_required
-def edit_posts(request, group_slug, group_type):
-    group = Group.get_group_by_slug(group_slug)
+def edit_posts(request, group):
     form = PostFormSet(request.POST)
     if form.is_valid():
         posts = form.save(commit=False)
@@ -105,7 +105,7 @@ def edit_posts(request, group_slug, group_type):
         for event in form.deleted_objects:
             post.delete()
         messages.success(request, 'Annonces  modifies')
-        return redirect(group_type+':update-posts', group_slug)
+        return redirect(group.group_type+':update-posts', group.mini_slug)
     else:
         messages.warning(request, form.errors)
-        return redirect(group_type+':update-posts', group_slug)
+        return redirect(group.group_type+':update-posts', group.mini_slug)

@@ -5,11 +5,11 @@
 {% block content %}
 {% include 'group/edit/navbar_edit.html' with open='events' %}
 
-<a class='btn btn-dark' href="{% url group_type|add:':create-event' group_slug%}">Ajouter un event</a>
+<a class='btn btn-dark' href="{% url object.group_type|add:':create-event' object.mini_slug%}">Ajouter un event</a>
 </br>
 </br>
 <h2>Liste des events planifiés</h2>
-<a class='btn btn-dark' href="{% url group_type|add:':archived-events' group_slug%}">Events archivés</a>
+<a class='btn btn-dark' href="{% url object.group_type|add:':archived-events' object.mini_slug%}">Events archivés</a>
 </br>
 <div id="root"></div>
 {% endblock %}

@@ -39,7 +39,7 @@
                     </button>
                 {% endif %}
                 {% if is_admin %}
-                    <a href='{%url group_type|add:":update" group_slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
+                    <a href='{%url object.group_type|add:":update" object.mini_slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
                 {%endif%}
             {% endif %}
             </p>

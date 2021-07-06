@@ -53,10 +53,6 @@ class Roommates(Group):
 
     class Meta:
         verbose_name_plural = "Roommates"
-    
-    @property
-    def get_absolute_url(self):
-        return reverse('roommates:detail', kwargs={'group_slug': self.mini_slug})
 
     def save(self, *args, **kwargs):
         self.slug = f'coloc--{slugify(self.name)}-{self.pk}'

@@ -26,26 +26,25 @@ from apps.utils.accessMixins import UserIsAdmin
 class GroupSlugFonctions():
     # group_type : nom de l'app correspondant au modèle demandé
     # ------------ reproduit la chaîne devant le slug dans le modèle
-    # group_slug : le slug du group, sans le type devant, reçu dans l'url
+    # mini_slug : le slug du group, sans le type devant, reçu dans l'url
     # ex: 
     # pour www.nantral-platform.fr/club/nantral-platform,
-    # on a group_type=club et group_slug=nantral-platform
+    # on a group_type=club et mini_slug=nantral-platform
     # la fonction ci-dessous renvoie alors slug="club--nantral-platform"
 
     @property
     def get_slug(self, **kwargs):
         group_type = self.kwargs.get('group_type')
-        slug = self.kwargs.get("group_slug")
-        if (not group_type): group_type='group'
+        mini_slug = self.kwargs.get("mini_slug")
         # cas spécial du groupe club/bdx (mêmes urls)
         if (group_type == "club"):
-            if BDX.objects.filter(slug = 'bdx--'+slug):
-                return 'bdx--' + slug
+            if BDX.objects.filter(slug = 'bdx--'+mini_slug):
+                return 'bdx--' + mini_slug
             else:
-                return 'club--' + slug
+                return 'club--' + mini_slug
         #autres groupes
         else:
-            return group_type + '--' + slug
+            return group_type + '--' + mini_slug
 
 
 
@@ -57,8 +56,6 @@ class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         self.object = self.get_object()
         context['object'] = self.object
         form_to_call = UpdateGroupForm(self.object)
@@ -66,13 +63,13 @@ class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
             context['form'] = form_to_call(instance=self.object)
         return context
 
-    def post(self, request, group_slug, group_type):
+    def post(self, request, **kwargs):
         group = self.get_object()
         form_to_call = UpdateGroupForm(group)
         if form_to_call:
             form = form_to_call(request.POST, request.FILES, instance=group)
             form.save()
-        return redirect(group_type+':update', group_slug)
+        return redirect(group.group_type+':update', group.mini_slug)
 
 
 class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
@@ -83,8 +80,6 @@ class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = {}
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         context['object'] = self.get_object()
         memberships = context['object'].members.through.objects.filter(
                 group=context['object'])
@@ -92,12 +87,12 @@ class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
         context['members'] = membersForm
         return context
 
-    #def get(self, request, group_slug):
-        #return render(request, self.template_name, context=self.get_context_data(group_slug=group_slug))
+    #def get(self, request, mini_slug, group_type):
+        #return render(request, self.template_name, context=self.get_context_data(mini_slug=mini_slug))
 
-    def post(self, request, group_slug, group_type):
+    def post(self, request, **kwargs):
         group = self.get_object()
-        return edit_named_memberships(request, group, group_slug, group_type)
+        return edit_named_memberships(request, group)
 
 
 class DetailGroupView(GroupSlugFonctions, DetailView):
@@ -108,8 +103,6 @@ class DetailGroupView(GroupSlugFonctions, DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         self.object = self.get_object()
         context['admin_req_form'] = AdminRightsRequestForm()
         context['members'] = self.object.members.through.objects.filter(group=self.object)
@@ -149,7 +142,7 @@ class AddToGroupView(GroupSlugFonctions, LoginRequiredMixin, FormView):
 
 @ require_http_methods(['POST'])
 @ login_required
-def edit_named_memberships(request, group, group_slug, group_type):
+def edit_named_memberships(request, group):
     form_to_call = NamedMembershipGroupFormset(group)
     if form_to_call:
         form = form_to_call(request.POST)
@@ -161,10 +154,10 @@ def edit_named_memberships(request, group, group_slug, group_type):
         for member in form.deleted_objects:
             member.delete()
         messages.success(request, 'Membres modifies')
-        return redirect(group_type+':update-members', group_slug)
+        return redirect(group.group_type+':update-members', group.mini_slug)
     else:
         messages.warning(request, form.errors)
-        return redirect(group_type+':update-members', group_slug)
+        return redirect(group.group_type+':update-members', group.mini_slug)
 
 
 class RequestAdminRightsView(GroupSlugFonctions, LoginRequiredMixin, FormView):
@@ -176,8 +169,6 @@ class RequestAdminRightsView(GroupSlugFonctions, LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         context['object'] = self.get_group()
         return context
 
@@ -191,24 +182,23 @@ class RequestAdminRightsView(GroupSlugFonctions, LoginRequiredMixin, FormView):
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
-        group_type = self.kwargs.get('group_type')
-        group_slug = self.kwargs.get('group_slug')
-        return reverse(group_type+':detail', kwargs={'group_slug': group_slug})
+        group = self.get_group()
+        return reverse(group.group_type+':detail', kwargs={'mini_slug': group.mini_slug})
 
 
 class AcceptAdminRequestView(UserIsAdmin, View):
-    def get(self, request, group_slug, id, group_type):
+    def get(self, request, mini_slug, id, group_type):
         admin_req = AdminRightsRequest.objects.get(id=id)
         messages.success(
             request, message=f"Vous avez accepté la demande de {admin_req.student}")
         admin_req.accept()
-        return redirect(group_type+':detail', group_slug)
+        return redirect(group_type+':detail', mini_slug)
 
 
 class DenyAdminRequestView(UserIsAdmin, View):
-    def get(self, request, group_slug, id, group_type):
+    def get(self, request, mini_slug, id, group_type):
         admin_req = AdminRightsRequest.objects.get(id=id)
         messages.success(
             request, message=f"Vous avez refusé la demande de {admin_req.student}")
         admin_req.deny()
-        return redirect(group_type+':detail', group_slug)
+        return redirect(group_type+':detail', mini_slug)

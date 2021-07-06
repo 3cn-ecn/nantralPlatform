@@ -23,10 +23,6 @@ class Liste(Group):
     class Meta:
         ordering = ['-year', 'liste_type', 'name']
 
-    @property
-    def get_absolute_url(self):
-        return reverse('liste:detail', kwargs={'group_slug': self.mini_slug})
-
 
 class NamedMembershipList(NamedMembership):
     function = models.CharField(

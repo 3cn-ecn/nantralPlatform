@@ -5,7 +5,7 @@
 {% include 'group/edit/navbar_edit.html' with open='members' %}
 
 <h2>Membres</h2>
-<form method='POST' action="{% url 'group:update-members' object.slug %}">
+<form method='POST' action="{% url object.group_type|add:':update-members' object.mini_slug %}">
     {% csrf_token %}
     {{ members.management_form }}
     {% for member in members %}
