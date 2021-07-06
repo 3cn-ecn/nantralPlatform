@@ -17,7 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
     <!-- favicon -->
-    <link rel="shortcut icon" href='{% static "/img/logo.svg" %}'>
+    <link rel="shortcut icon" href='{% block favicon %}{% static "/img/logo.svg" %}{% endblock %}'>
     {% block head %}
     {% endblock %}
     <title>{% block title %}{% endblock %}Nantral Platform</title>

@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ object.name }} -{% endblock %}
+{% block title %}{{ object.name }} - {% endblock %}
+
+{% if object.logo %}{% block favicon %}{{object.logo.url}}{%endblock%}{%endif%}
 
 {% block banniere %}
     {% if object.banniere %}
@@ -49,7 +51,6 @@
             {% endif %}
             </p>
             {% if object.summary %}
-                <br>
                 <p>{{ object.summary }}</p>
             {% endif %}
             {% include "sociallink/liste.html" with sociallinks=sociallinks%}

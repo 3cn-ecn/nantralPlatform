@@ -169,22 +169,20 @@ class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['group_type'] = self.kwargs.get('group_type')
-        context['group_slug'] = self.kwargs.get('group_slug')
         self.object = self.get_object()
         context['object'] = self.object
-        form_to_call = UpdateGroupForm(type(self.object))
+        form_to_call = UpdateGroupForm(self.object)
         if form_to_call:
             context['form'] = form_to_call(instance=self.object)
         return context
 
-    def post(self, request, group_slug, group_type):
+    def post(self, request, **kwargs):
         group = self.get_object()
-        form_to_call = UpdateGroupForm(type(group))
+        form_to_call = UpdateGroupForm(group)
         if form_to_call:
             form = form_to_call(request.POST, request.FILES, instance=group)
             form.save()
-        return redirect(group_type+':update', group_slug)
+        return redirect(group.group_type+':update', group.mini_slug)
 
 
 class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
