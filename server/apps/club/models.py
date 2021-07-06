@@ -24,6 +24,10 @@ class Club(Group):
     
     class Meta:
         ordering = [F('bdx_type').asc(nulls_first=True), 'name']
+    
+    @property
+    def group_type(self):
+        return 'club'
 
 
 class BDX(Club):
@@ -34,10 +38,7 @@ class BDX(Club):
     class Meta:
         ordering = ['order']
         verbose_name_plural = "BDX"
-    
-    @property
-    def group_type(self):
-        return 'club'
+
 
 
 class NamedMembershipClub(NamedMembership):
