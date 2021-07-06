@@ -161,53 +161,6 @@ class AddToGroupView(GroupSlugFonctions, LoginRequiredMixin, FormView):
         return NamedMembershipAddGroup(group)
 
 
-class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
-    template_name = 'group/edit/update.html'
-
-    def get_object(self, **kwargs):
-        return Group.get_group_by_slug(self.get_slug)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        self.object = self.get_object()
-        context['object'] = self.object
-        form_to_call = UpdateGroupForm(self.object)
-        if form_to_call:
-            context['form'] = form_to_call(instance=self.object)
-        return context
-
-    def post(self, request, **kwargs):
-        group = self.get_object()
-        form_to_call = UpdateGroupForm(group)
-        if form_to_call:
-            form = form_to_call(request.POST, request.FILES, instance=group)
-            form.save()
-        return redirect(group.group_type+':update', group.mini_slug)
-
-
-class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
-    template_name = 'group/edit/members_edit.html'
-
-    def get_object(self, **kwargs):
-        return Group.get_group_by_slug(self.get_slug)
-    
-    def get_context_data(self, **kwargs):
-        context = {}
-        context['object'] = self.get_object()
-        memberships = context['object'].members.through.objects.filter(
-                group=context['object'])
-        membersForm = NamedMembershipGroupFormset(context['object'])(queryset=memberships)
-        context['members'] = membersForm
-        return context
-
-    #def get(self, request, mini_slug, group_type):
-        #return render(request, self.template_name, context=self.get_context_data(mini_slug=mini_slug))
-
-    def post(self, request, **kwargs):
-        group = self.get_object()
-        return edit_named_memberships(request, group)
-
-
 @ require_http_methods(['POST'])
 @ login_required
 def edit_named_memberships(request, group):
