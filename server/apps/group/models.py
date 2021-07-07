@@ -89,7 +89,12 @@ class Group(models.Model):
         return student in self.members.all()
 
     def save(self, *args, **kwargs):
-        self.slug = f'{type(self).__name__.lower()}--{slugify(self.name)}'
+        group_type = type(self).__name__.lower()
+        # on force le slug s'il ne correspond pas au bon format
+        # par exemple s'il est vide (ie non défini) ou modifié maladroitement
+        # => permet de ne pas le changer si renommage du club
+        if self.slug.split('--')[0] != group_type:
+            self.slug = f'{group_type}--{slugify(self.name)}'
         super(Group, self).save(*args, **kwargs)
 
     @staticmethod
