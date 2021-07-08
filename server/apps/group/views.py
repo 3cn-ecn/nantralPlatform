@@ -121,8 +121,8 @@ class DetailGroupView(GroupSlugFonctions, DetailView):
         return context
 
 
-class DetailGroupMembersView(GroupSlugFonctions, LoginRequiredMixin, TemplateView):
-    template_name = 'group/detail/members.html'
+class DetailGroupMembersView(GroupSlugFonctions, LoginRequiredMixin, ListView):
+    template_name = 'club/members.html'
     
     def get_object(self, **kwargs):
         return Group.get_group_by_slug(self.get_slug)
@@ -130,15 +130,11 @@ class DetailGroupMembersView(GroupSlugFonctions, LoginRequiredMixin, TemplateVie
     def get_queryset(self, **kwargs):
         object = self.get_object()
         members = object.members.through.objects.filter(group=object)
-        return members
+        return members.order_by('year', 'order')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = self.get_object()
-        membergroup_list = []
-        members = self.get_queryset()
-        for member in members:
-            member.get_year
         return context
 
 

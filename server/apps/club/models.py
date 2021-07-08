@@ -3,6 +3,7 @@ from django.db.models import F
 from django.conf import settings
 from datetime import date
 from django.urls.base import reverse
+import datetime
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
@@ -50,5 +51,12 @@ class NamedMembershipClub(NamedMembership):
     order = models.IntegerField(verbose_name='Hiérarchie', default=0)
 
     @property
-    def get_year(self, **kwargs):
-        pass
+    def year(self, **kwargs):
+        '''Renvoie l'année scolaire où l'étudiant est devenu membre.
+           On renvoie seulement la 2eme année de l'année scolaire.'''
+        y = self.date_begin.strftime('%Y')
+        m = self.date_begin.strftime('%m')
+        if m >= 8:
+            return y + 1
+        else:
+            return y

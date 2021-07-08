@@ -17,12 +17,12 @@ def makeGroupUrlpatterns(group_name):
         # vue generale du groupe
         path('<slug:mini_slug>/', 
             DetailGroupView.as_view(), args, name='detail'),
-        path('<slug:mini_slug>/events/',
-            UpdateGroupArchivedEventsView.as_view(), args, name='archived-events'),
+        path('<slug:mini_slug>/members/add/',
+            AddToGroupView.as_view(), args, name='add-member'),
+        path('<slug:mini_slug>/members/',
+            DetailGroupMembersView.as_view(), args, name='members'),
 
         # edition (réservée aux admins)
-        path('<slug:mini_slug>/member/add/',
-            AddToGroupView.as_view(), args, name='add-member'),
         path('<slug:mini_slug>/edit/',
             UpdateGroupView.as_view(), args, name='update'),
         path('<slug:mini_slug>/edit/members/',
@@ -31,6 +31,8 @@ def makeGroupUrlpatterns(group_name):
             UpdateGroupEventsView.as_view(), args, name='update-events'),
         path('<slug:mini_slug>/edit/events/create/',
             UpdateGroupCreateEventView.as_view(), args, name='create-event'),
+        path('<slug:mini_slug>/edit/events/archives/',
+            UpdateGroupArchivedEventsView.as_view(), args, name='archived-events'),
         path('<slug:mini_slug>/edit/posts/',
             UpdateGroupPostsView.as_view(), args, name='update-posts'),
         path('<slug:mini_slug>/edit/posts/create/',

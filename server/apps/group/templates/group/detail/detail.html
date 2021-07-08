@@ -3,7 +3,13 @@
 
 {% block title %}{{ object.name }} - {% endblock %}
 
-{% if object.logo %}{% block favicon %}{{object.logo.url}}{%endblock%}{%endif%}
+{% block favicon %}
+    {% if object.logo %}
+        {{object.logo.url}}
+    {% else %}
+        {% static '/img/logo.svg' %}
+    {%endif%}
+{% endblock %}
 
 {% block banniere %}
     {% if object.banniere %}
