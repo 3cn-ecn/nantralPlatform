@@ -49,9 +49,9 @@ class NamedMembershipClub(NamedMembership):
     date_begin = models.DateField(verbose_name='Date de début', default=date.today)
     date_end = models.DateField(verbose_name='Date de fin', blank=True, null=True)
     order = models.IntegerField(verbose_name='Hiérarchie', default=0)
+    year = models.IntegerField(verbose_name='Année', blank=True)
 
-    @property
-    def year(self, **kwargs):
+    def calulate_year(self, **kwargs):
         '''Renvoie l'année scolaire où l'étudiant est devenu membre.
            On renvoie seulement la 2eme année de l'année scolaire.'''
         y = self.date_begin.strftime('%Y')
@@ -60,3 +60,7 @@ class NamedMembershipClub(NamedMembership):
             return y + 1
         else:
             return y
+    
+    def save(self, *args, **kwargs):
+        self.year = self.calculate_year()
+        super(NamedMembershipClub, self).save(*args, **kwargs)

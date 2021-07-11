@@ -61,10 +61,6 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        self.slug = f'{type(self).__name__}--{slugify(self.name)}'
-        super(Group, self).save(*args, **kwargs)
-
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
