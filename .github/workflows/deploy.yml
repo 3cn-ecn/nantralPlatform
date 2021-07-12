@@ -53,7 +53,7 @@ jobs:
             cd nantralPlatform
             cd scripts
             git pull
-            python -m venv env
+            python3 -m venv env
             source env/bin/activate
             pip install -r requirements.txt
             python db_backup.py
