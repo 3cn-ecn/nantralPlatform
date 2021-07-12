@@ -108,12 +108,17 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                #"apps.group.contexts.appname",
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+# Choose default type for primary keys in models
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
 # Internationalization

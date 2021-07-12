@@ -5,11 +5,10 @@ from apps.club.models import BDX
 from apps.utils.upload import PathAndRename
 
 from django.conf import settings
+from django.urls.base import reverse
 
-if settings.DEBUG:
-    path_and_rename_liste = PathAndRename("./static/upload/groups/logo/liste")
-else:
-    path_and_rename_liste = PathAndRename("groups/logo/liste")
+
+path_and_rename_liste = PathAndRename("groups/logo/liste")
 
 
 class Liste(Group):
