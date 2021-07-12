@@ -13,13 +13,13 @@ logging.basicConfig(filename='db_backup.log',
                     level=logging.DEBUG)
 
 
-def docker_db_dump(db_user: str, db_name: str, container_name: str):
+def docker_db_dump(filename: str, db_user: str, db_name: str, container_name: str):
 
     client = docker.from_env()
     db_container = client.containers.get(container_name)
     _, output = db_container.exec_run(
         f"pg_dump {db_name} -U {db_user}")
-    with gzip.open("output.sql.gz", "wb") as file:
+    with gzip.open(f"{filename}", "wb") as file:
         file.write(output)
     client.close()
 
@@ -79,7 +79,7 @@ try:
     AWS_REGION = env.str("AWS_SES_REGION")
     ERROR_RECIPIENT = env.str("ERROR_RECIPIENT")
     try:
-        docker_db_dump(DB_USER, DB_NAME, DB_CONTAINER)
+        docker_db_dump("output.sql.gz", DB_USER, DB_NAME, DB_CONTAINER)
         upload_file("output.sql.gz", bucket=BUCKET,
                     object_name=f"backups/{date.today().strftime('%Y/%B/%d')}.sql.gz", access_key_id=AWS_ACCESS_KEY_ID, access_secret_key=AWS_SECRET_ACCESS_KEY)
         os.remove("output.sql.gz")
