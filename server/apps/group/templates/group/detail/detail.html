@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}{{ object.name }} -{% endblock %}
+
 {% block banniere %}
     {% if object.banniere %}
     <div class="ratio ratio-banniere">
@@ -23,7 +25,7 @@
                 {% if is_member and is_admin %}
                     <button class='btn btn-light btn-sm disabled'>
                         <i class="fa fa-crown"></i>
-                        Vous êtes administrateur du groupe.
+                        Vous êtes admin du groupe.
                     </button>
                 {% elif is_member %}
                     <button class='btn btn-light btn-sm disabled'>
@@ -37,81 +39,96 @@
                     </button>
                 {% endif %}
                 {% if is_admin %}
-                    <a href='{% url "group:update" object.slug %}'class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
+                    <a href='{%url object.group_type|add:":update" object.mini_slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
                 {%endif%}
             {% endif %}
             </p>
-            <p></p>
-            {% autoescape off %}
-            <p>{{object.description}}</p>
-            {% endautoescape %}
-            <p></p>
-            <div class="grille-rs">
-            {% for rs in social %}
-                <a href="{{ rs.url }}" target="_blank" class="rs" style="--color-rs: {{ rs.reseau.color }}">
-                    <div><i class="fa fa-{{ rs.reseau.icon_name }}"></i></div>
-                    <span>{{ rs.reseau.name }}</span>
-                </a>
-            {% endfor %}
-            </div>
+            {% if object.summary %}
+                <br>
+                <p>{{ object.summary }}</p>
+            {% endif %}
+            {% include "sociallink/liste.html" with sociallinks=sociallinks%}
         </div>
     </div>
-    <br>
-    <h2>Événements à venir</h2>
-    {% if request.user.is_authenticated %}
-        <div class="row">
-            {% for event in events %}
-                <div class='card'>
-                    <div class='card-title'>
-                        <h6>{{event.title}}</h6>
-                        <small class='text-muted'>
-                            <i class="fas fa-calendar-day"></i> 
-                            {{event.date|date:'Y-m-d H:i'}}</br>
-                            <i class="far fa-compass"></i> 
-                            {{event.location}}
-                        </small>
+    {% if events %}
+        <br>   
+        <h2>Évènements</h2>
+        {% if request.user.is_authenticated %}
+            <div class="row">
+                {% for event in events %}
+                    <div class='card'>
+                        <div class='card-title'>
+                            <h6>{{event.title}}</h6>
+                            <small class='text-muted'>
+                                <i class="fas fa-calendar-day"></i> 
+                                {{event.date|date:'Y-m-d H:i'}}</br>
+                                <i class="far fa-compass"></i> 
+                                {{event.location}}
+                            </small>
+                        </div>
+                        <div class='card-body'>
+                            {{event.description | truncatewords_html:35}}
+                        </div>
                     </div>
-                    <div class='card-body'>
-                        {{event.description | truncatewords_html:35}}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    {%else%}
-        Veuillez vous connecter pour visualiser les événements à venir.
-    {%endif%}
-    
-    <h2>Dernières annonces</h2>
-    {% for post in posts %}
-        <a href="{{post.get_absolute_url}}" style='color:white' class="mb-1">
-            <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
-                <div class="card-body">
-                    <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'d:m'}}</h5>
-                    <h6 class="card-subtitle mb-2">{{post.get_group.name}}</h6>
-                    <p class="card-text" >{{post.description | truncatewords_html:20}}</p>
-                </div>
+                {% endfor %}
             </div>
-        </a>
-        <br \>
-    {% endfor %}
-
-    <h2>Membres</h2>
-    {% if request.user.is_authenticated %}
-        {% for member in members %}
-            <a href='{% url "student:detail" member.student.id%}' class='card'>
-                {{member.student.user.first_name}} {{member.student.user.last_name}} -
-                {{member.function}} - {{member.date_begin}}
+        {%else%}
+            <p>Veuillez vous connecter pour voir les évènements à venir.</p>
+        {%endif%}
+    {% endif %}
+    
+    {% if posts %}
+        <br>
+        <h2>Annonces</h2>
+        {% for post in posts %}
+            <a href="{{post.get_absolute_url}}" style='color:white' class="mb-1">
+                <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
+                    <div class="card-body">
+                        <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'d:m'}}</h5>
+                        <h6 class="card-subtitle mb-2">{{post.get_group.name}}</h6>
+                        <p class="card-text" >{{post.description | truncatewords_html:20}}</p>
+                    </div>
+                </div>
             </a>
         {% endfor %}
-    {%else%}
-        Veuillez vous connecter pour visualiser les membres.
-    {%endif%}
-    {% block add-member %}
-    {% include 'group/detail/add-member.html' %}
-    {% endblock%}
-    {% if is_member and not is_admin %}
-    {% block admin-req %}
-    {% include 'group/detail/request-admin.html' %}
+    {% endif %}
+
+    {% if object.description %}
+        <br>
+        {% autoescape off %}
+        <p>{{object.description}}</p>
+        {% endautoescape %}
+    {% endif %}
+
+    <br />
+    <h2>Membres</h2>
+    {% if request.user.is_authenticated %}
+        {% if members %}
+            {% for member in members %}
+                <a href='{% url "student:detail" member.student.id%}' class='card'>
+                    {{member.student.user.first_name}} {{member.student.user.last_name}} -
+                    {{member.function}} - {{member.date_begin}}
+                </a>
+            {% endfor %}
+        {%else%}
+            <p>Aucun membre pour l'instant... 😥</p>
+        {%endif%}
+    {% else %}
+        <p>Veuillez vous connecter pour voir les membres.</p>
+    {% endif %}
+
+    {% block extra-content %}
     {% endblock %}
-    {%endif%}
+
+    {% block admin-req %}
+        {% if is_member and not is_admin %}
+            {% include 'group/detail/request-admin.html' %}
+        {%endif%}
+    {% endblock %}
+
+    {% block add-member %}
+        {% include 'group/detail/add-member.html' %}
+    {% endblock%}
+
+    <br>
 {% endblock %}

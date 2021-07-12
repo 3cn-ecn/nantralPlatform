@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {Button, Card, Modal} from 'react-bootstrap';
-import moment from 'moment';
+var dayjs = require("dayjs");
 
-moment().format();
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -37,7 +36,7 @@ function PostsListUpdateDelete(props){
                     <Card.Img variant="top" src={`${static_url_prefix}${post.image.url}`} />
                 }
                 <Card.Body>
-                    <Card.Subtitle>Date : {moment(post.publication_date).format("dddd, MMMM Do YYYY, HH:mm")}</Card.Subtitle>
+                    <Card.Subtitle>Date : {dayjs(post.publication_date).format("dddd, MMMM Do YYYY, HH:mm")}</Card.Subtitle>
                     <Card.Subtitle>Visibilité : {post.publicity}</Card.Subtitle>
                     <Card.Subtitle>Description :</Card.Subtitle>
                     <Card.Text>
@@ -53,7 +52,7 @@ function PostsListUpdateDelete(props){
                         handleShow();
                     }}>Supprimer cette annonce</Button>
                 </Card.Body>
-                <Card.Footer className="text-center text-muted">{moment(post.publication_date).fromNow()}</Card.Footer>
+                <Card.Footer className="text-center text-muted">{dayjs(post.publication_date).fromNow()}</Card.Footer>
             </Card>
             </div>
         )) : "C'est un peu mort par ici ... Ajoute vite une annonce, utilise les annonces passées pour t'inspirer."}

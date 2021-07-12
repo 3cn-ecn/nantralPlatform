@@ -1,11 +1,10 @@
 from django.urls import path
 
-from .views import *
-#from apps.event.views import UpdateGroupCreateEventView, UpdateGroupArchivedEventsView, UpdateGroupEventsView
-#from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
+from .views import ListClubView
+from apps.group.urls import makeGroupUrlpatterns
 
 app_name = 'club'
 
 urlpatterns = [
-    path('', ListClubView.as_view(), name='club-list'),
-]
+     path('', ListClubView.as_view(), name='club-list'),
+] + makeGroupUrlpatterns("club")

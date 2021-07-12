@@ -43,7 +43,23 @@ jobs:
           pip install -r requirements.txt
           python manage.py test
 
-      # Runs a set of commands using the runners shell
+      - name: Backup before deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: "ubuntu"
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          script: |
+            cd nantralPlatform
+            cd scripts
+            git pull
+            python3 -m venv env
+            source env/bin/activate
+            pip install -r requirements.txt
+            python3 db_backup.py
+            deactivate
+            rm -r env
+
       - name: Deploy to a foreign instance
         uses: appleboy/ssh-action@master
         with:

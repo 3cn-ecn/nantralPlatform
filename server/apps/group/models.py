@@ -17,28 +17,43 @@ from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 
 
-if settings.DEBUG:
-    path_and_rename_group = PathAndRename("./static/upload/groups/logo/group")
-else:
-    path_and_rename_group = PathAndRename("groups/logo/group")
+path_and_rename_group = PathAndRename("groups/logo/group")
+
+
+
+def break_slug(slug):
+    '''Réupère le type du groupe et le mini-slug du group,
+       partir du slug entier.'''
+    
+    list = slug.split('--')
+    group_type = list[0]
+    mini_slug = ''.join(list[1:])
+    return group_type, mini_slug
 
 
 class Group(models.Model):
     '''Modèle abstrait servant de modèle pour tous les types de Groupes.'''
 
+    #Nom du groupe
     name = models.CharField(verbose_name='Nom du groupe',
-                            unique=True, max_length=200)
+                            unique=True, max_length=100)
     alt_name = models.CharField(
-        verbose_name='Nom alternatif', max_length=200, null=True, blank=True)
-    description = CKEditor5Field(
-        verbose_name='Description du groupe', blank=True)
-    members = models.ManyToManyField(
-        Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
+        verbose_name='Nom alternatif', max_length=100, null=True, blank=True)
+    
+    #présentation
     logo = models.ImageField(verbose_name='Logo du groupe',
                              blank=True, null=True, upload_to=path_and_rename_group)
+    summary = models.CharField('Résumé', max_length=500, null=True, blank=True)
+    description = CKEditor5Field(
+        verbose_name='Description du groupe', blank=True)
+    video1 = models.URLField('Lien vidéo 1', max_length=200, null=True, blank=True)
+    video2 = models.URLField('Lien vidéo 2', max_length=200, null=True, blank=True)
+
+    #paramètres techniques
+    members = models.ManyToManyField(
+        Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
-    social = models.ManyToManyField(SocialLink, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -52,7 +67,7 @@ class Group(models.Model):
 
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
-        if user.is_anonymous or not user.is_authenticated or not user.student:
+        if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
         res = False
@@ -68,7 +83,7 @@ class Group(models.Model):
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated or not user.student:
+        if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
         return student in self.members.all()
@@ -90,12 +105,24 @@ class Group(models.Model):
         elif type_slug == 'bdx':
             from apps.club.models import BDX
             return BDX.objects.get(slug=slug)
+        elif type_slug == 'roommates':
+            from apps.roommates.models import Roommates
+            return Roommates.objects.get(slug=slug)
         else:
             raise Exception('Unknown group')
 
     @property
+    def mini_slug(self):
+        return break_slug(self.slug)[1]
+    
+    @property
+    def group_type(self):
+        return break_slug(self.slug)[0]
+    
+    @property
     def get_absolute_url(self):
-        return reverse('group:detail', kwargs={'group_slug': self.slug})
+        return reverse(self.group_type+':detail', kwargs={'mini_slug': self.mini_slug})
+    
 
 
 class NamedMembership(models.Model):
@@ -132,11 +159,13 @@ class AdminRightsRequest(models.Model):
 
     @property
     def accept_url(self):
-        return f"http://{self.domain}{reverse('group:accept-admin-req', kwargs={'group_slug': self.group,'id': self.id})}"
+        group_type, mini_slug = break_slug(self.group)
+        return f"http://{self.domain}{reverse(group_type+':accept-admin-req', kwargs={'mini_slug': mini_slug,'id': self.id})}"
 
     @property
     def deny_url(self):
-        return f"http://{self.domain}{reverse('group:deny-admin-req', kwargs={'group_slug': self.group, 'id': self.id})}"
+        group_type, mini_slug = break_slug(self.group)
+        return f"http://{self.domain}{reverse(group_type+':deny-admin-req', kwargs={'mini_slug': mini_slug, 'id': self.id})}"
 
     def accept(self):
         group = Group.get_group_by_slug(self.group)
