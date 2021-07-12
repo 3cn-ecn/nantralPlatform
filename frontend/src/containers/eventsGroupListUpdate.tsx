@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import {Button, Card, Modal} from 'react-bootstrap';
-import moment from 'moment';
-
-moment().format();
+var dayjs = require("dayjs");
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
@@ -35,7 +33,7 @@ function EventsListUpdateDelete(props){
                 }
                 <Card.Body>
                     <Card.Subtitle>Lieu : {event.location}</Card.Subtitle>
-                    <Card.Subtitle>Date : {moment(event.date).format("dddd, MMMM Do YYYY, HH:mm")}</Card.Subtitle>
+                    <Card.Subtitle>Date : {dayjs(event.date).format("dddd, MMMM Do YYYY, HH:mm")}</Card.Subtitle>
                     <Card.Subtitle>Publicite : {event.publicity}</Card.Subtitle>
                     <Card.Subtitle>Description :</Card.Subtitle>
                     <Card.Text>
@@ -51,7 +49,7 @@ function EventsListUpdateDelete(props){
                         handleShow();
                     }}>Supprimer cet évènement</Button>
                 </Card.Body>
-                <Card.Footer className="text-center text-muted">{moment(event.date).fromNow()}</Card.Footer>
+                <Card.Footer className="text-center text-muted">{dayjs(event.date).fromNow()}</Card.Footer>
             </Card>
             </div>
         )) : "C'est un peu mort par ici ... Ajoute vite un évènement, utilise les évenements archivés pour t'inspirer."}
