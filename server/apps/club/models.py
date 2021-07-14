@@ -18,10 +18,14 @@ class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
     bdx_type = models.ForeignKey(
         'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
-    logo = models.ImageField(verbose_name='Logo du club',
-                             blank=True, null=True, upload_to=path_and_rename_club)
+    logo = models.ImageField(
+        verbose_name='Logo du club', blank=True, null=True, 
+        upload_to=path_and_rename_club,
+        help_text="Votre logo sera affiché au format 306x306 pixels.")
     banniere = models.ImageField(
-        verbose_name='Bannière', blank=True, null=True, upload_to=path_and_rename_club_banniere)
+        verbose_name='Bannière', blank=True, null=True, 
+        upload_to=path_and_rename_club_banniere,
+        help_text="Votre bannière sera affichée au format 1320x492 pixels.")
     
     class Meta:
         ordering = [F('bdx_type').asc(nulls_first=True), 'name']
@@ -49,9 +53,9 @@ class NamedMembershipClub(NamedMembership):
     date_begin = models.DateField(verbose_name='Date de début', default=date.today)
     date_end = models.DateField(verbose_name='Date de fin', blank=True, null=True)
     order = models.IntegerField(verbose_name='Hiérarchie', default=0)
-    year = models.IntegerField(verbose_name='Année', blank=True)
 
-    def calulate_year(self, **kwargs):
+    @property
+    def year(self, **kwargs):
         '''Renvoie l'année scolaire où l'étudiant est devenu membre.
            On renvoie seulement la 2eme année de l'année scolaire.'''
         y = self.date_begin.strftime('%Y')
@@ -60,7 +64,3 @@ class NamedMembershipClub(NamedMembership):
             return y + 1
         else:
             return y
-    
-    def save(self, *args, **kwargs):
-        self.year = self.calculate_year()
-        super(NamedMembershipClub, self).save(*args, **kwargs)
