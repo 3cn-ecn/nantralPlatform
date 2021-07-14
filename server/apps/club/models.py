@@ -34,7 +34,7 @@ class Club(Group):
     @property
     def group_type(self):
         return 'club'
-    
+        
     def save(self, *args, **kwargs):
         # compression des images
         if not self.pk or self.banniere != Club.objects.get(pk=self.pk).banniere:

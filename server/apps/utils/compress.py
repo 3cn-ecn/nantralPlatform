@@ -6,8 +6,11 @@ import sys
 
 def compressImage(image, size=(500,500), contains=False):
     '''Compresse une image'''
-    #find the format
+    # exception null
+    if not image: return image
+    # find the format
     format = find_format(image)
+    # pas de compression pour les gifs, pour conserver l'animation
     if format == 'GIF': return image
     # open the image
     im = Image.open(image)
