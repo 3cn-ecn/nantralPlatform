@@ -58,10 +58,10 @@ class Student(models.Model):
     def get_absolute_url(self):
         return reverse('student:detail', args=[self.pk])
     
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.pk or self.picture != Student.objects.get(pk=self.pk).picture:
             self.picture = compressImage(self.picture)
-        super(Student, self).save()
+        super(Student, self).save(*args, **kwargs)
     
     class Meta:
         ordering = ['last_name', 'first_name']
