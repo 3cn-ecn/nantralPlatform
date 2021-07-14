@@ -1,5 +1,8 @@
 from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from apps.club.models import Club
+from apps.group.models import Group
+from apps.group.views import GroupSlugFonctions
 
 
 class ListClubView(ListView):
@@ -19,3 +22,21 @@ class ListClubView(ListView):
         } ]
         return context
 
+
+
+class DetailGroupMembersView(GroupSlugFonctions, LoginRequiredMixin, ListView):
+    template_name = 'club/members.html'
+    
+    def get_object(self, **kwargs):
+        self.kwargs['group_type'] = 'club'
+        return Group.get_group_by_slug(self.get_slug)
+    
+    def get_queryset(self, **kwargs):
+        object = self.get_object()
+        members = object.members.through.objects.filter(group=object)
+        return members.order_by('year', 'order')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = self.get_object()
+        return context

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>
+    <a href="{{ object.get_absolute_url }}"><i class="fas fa-arrow-alt-circle-left link-dark"></i></a>  
+    {{object.name}} - Liste des Membres
+</h1>
+
+
+{% regroup object_list by year as year_list %}
+
+{% for year in year_list %}
+    <h2>
+        Membres depuis l'année {{year.grouper|add:-1}}-{{year.grouper}}
+    </h2>
+    {% include 'student/student_cards.html' with members=year.list %}
+{% endfor %}
+
+{% endblock %}

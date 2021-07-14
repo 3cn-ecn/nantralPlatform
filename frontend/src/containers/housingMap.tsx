@@ -208,7 +208,7 @@ function Root(props): JSX.Element {
     top: 10,
   };
   const styleSearchBar: React.CSSProperties = {
-    marginTop: "2rem",
+    //marginTop: "2rem",
     maxWidth: "300px",
   };
   const [data, setData] = useState([]);

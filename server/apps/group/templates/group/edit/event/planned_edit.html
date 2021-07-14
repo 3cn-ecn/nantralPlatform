@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block content %}
-{% include 'group/edit/navbar_edit.html' with open='events' %}
+{% include 'group/included/navbar_edit.html' with open='events' %}
 
 <a class='btn btn-dark' href="{% url object.group_type|add:':create-event' object.mini_slug%}">Ajouter un event</a>
 </br>

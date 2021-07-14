@@ -1,23 +1,36 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ object.name }} -{% endblock %}
+{% block title %}{{ object.name }} - {% endblock %}
+
+{% block favicon %}
+    {% if object.logo %}
+        {{object.logo.url}}
+    {% else %}
+        {% static '/img/logo.svg' %}
+    {%endif%}
+{% endblock %}
 
 {% block banniere %}
     {% if object.banniere %}
-    <div class="ratio ratio-banniere">
-        <img class="banniere" src='{{ object.banniere.url }}?{{object.modified_date}}'>
-    </div>
+        <div class="ratio ratio-banniere container-xl">
+            <img class="banniere" src='{{ object.banniere.url }}?{{object.modified_date}}'>
+        </div>
     {% endif %}
 {% endblock %}
 
 {% block content %}
+    <!-- En-tête de la page -->
     <div class="row">
+        <!-- logo -->
         {%if object.logo %}
-            <div class="col-sm-3">
-                <img class="logo" src='{{object.logo.url}}?{{object.modified_date}}'>
+            <div class="col-12 col-sm-3">
+                <div class="ratio ratio-1x1 logo-div mb-4">
+                    <img class="logo" src='{{object.logo.url}}?{{object.modified_date}}'>
+                </div>
             </div>
         {% endif %}
+        <!-- description du club : nom, infos... -->
         <div class="col">
             <h1>{{object.name}}</h1>
             <p>
@@ -44,12 +57,13 @@
             {% endif %}
             </p>
             {% if object.summary %}
-                <br>
                 <p>{{ object.summary }}</p>
             {% endif %}
             {% include "sociallink/liste.html" with sociallinks=sociallinks%}
         </div>
     </div>
+
+    <!-- Events -->
     {% if events %}
         <br>   
         <h2>Évènements</h2>
@@ -77,6 +91,7 @@
         {%endif%}
     {% endif %}
     
+    <!-- Anonces -->
     {% if posts %}
         <br>
         <h2>Annonces</h2>
@@ -93,23 +108,50 @@
         {% endfor %}
     {% endif %}
 
-    {% if object.description %}
-        <br>
-        {% autoescape off %}
-        <p>{{object.description}}</p>
-        {% endautoescape %}
+    <!-- Vidéos s'il y en a 2 -->
+    {% if object.video1 and object.video2 %}
+        {% load group_tags %}
+        <br />
+        <h2>Vidéos</h2>
+        <div class="row gy-3">
+            <div class="col-12 col-md-6">
+                <div class="ratio ratio-16x9">
+                    {% video_embed object.video1 %}
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="ratio ratio-16x9">
+                    {% video_embed object.video2 %}
+                </div>
+            </div>
+        </div>
     {% endif %}
 
+    <!-- Description avec vidéo dans le coin s'il y en a une seulement-->
+    {% if object.description or object.video1 and not object.video2 %}
+        <br>
+        <div class="clearfix">
+            {% if object.video1 and not object.video2 %}
+            <div class="col-md-6 float-md-end mb-3 ms-md-3">
+                <div class="ratio ratio-16x9">
+                    {% video_embed object.video1 %}
+                </div>
+            </div>
+            {% endif %}
+            {% if object.description %}
+                {% autoescape off %}
+                    {{object.description}}
+                {% endautoescape %}
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <!-- Liste des membres -->
     <br />
     <h2>Membres</h2>
     {% if request.user.is_authenticated %}
         {% if members %}
-            {% for member in members %}
-                <a href='{% url "student:detail" member.student.id%}' class='card'>
-                    {{member.student.user.first_name}} {{member.student.user.last_name}} -
-                    {{member.function}} - {{member.date_begin}}
-                </a>
-            {% endfor %}
+            {% include 'student/student_cards.html' with members=members %}
         {%else%}
             <p>Aucun membre pour l'instant... 😥</p>
         {%endif%}
@@ -117,17 +159,20 @@
         <p>Veuillez vous connecter pour voir les membres.</p>
     {% endif %}
 
+    {# Ajout possible de contenus pour certaines pages #}
     {% block extra-content %}
     {% endblock %}
 
+    {# Bouton pour faire une demande pour devenir admin #}
     {% block admin-req %}
         {% if is_member and not is_admin %}
-            {% include 'group/detail/request-admin.html' %}
+            {% include 'group/included/request-admin.html' %}
         {%endif%}
     {% endblock %}
 
+    {# popup pour devenir membre du groupe #}
     {% block add-member %}
-        {% include 'group/detail/add-member.html' %}
+        {% include 'group/included/add-member.html' %}
     {% endblock%}
 
     <br>

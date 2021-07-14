@@ -1,3 +1,7 @@
+
+/* GENERAL */
+/* ------- */
+
 html {
 	margin: 0px;
 	height: 100%;
@@ -9,22 +13,6 @@ body {
 	margin: 0px;
 	min-height: 100%;
 	width: 100%;
-}
-
-@import "bootstrap";
-.card-columns {
-	@include media-breakpoint-only(xl) {
-		column-count: 5;
-	}
-	@include media-breakpoint-only(lg) {
-		column-count: 4;
-	}
-	@include media-breakpoint-only(md) {
-		column-count: 3;
-	}
-	@include media-breakpoint-only(sm) {
-		column-count: 2;
-	}
 }
 
 h1,
@@ -45,6 +33,20 @@ a:hover {
 	text-decoration: none;
 }
 
+
+/* BARRE DE NAVIGATION */
+/* ------------------- */
+
+@media all and (min-width: 992px) {
+	.navbar .nav-item .dropdown-menu{ display: none; }
+	.navbar .nav-item:hover .dropdown-menu{ display: block; }
+	.navbar .nav-item .dropdown-menu{ margin-top:0; }
+	.navbar .nav-item .dropdown-menu-end{ right:0; }
+}	
+
+
+/* MODULE DE GRILLE */
+/* ---------------- */
 
 .grille {
 	/*organisation de la page*/
@@ -72,30 +74,41 @@ a:hover {
 }
 
 
-@media all and (min-width: 992px) {
-	.navbar .nav-item .dropdown-menu{ display: none; }
-	.navbar .nav-item:hover .dropdown-menu{ display: block; }
-	.navbar .nav-item .dropdown-menu{ margin-top:0; }
-	.navbar .nav-item .dropdown-menu-end{ right:0; }
-}	
+/* PAGES DE DÉTAILS */
+/* ---------------- */
 
+/* banniere */
 .ratio-banniere {
-	/*--bs-aspect-ratio: 30%;*/
-	height: 20vh;
+	--bs-aspect-ratio: 37%;
+	z-index:-1;
+	margin-bottom: 0.5rem;
 }
-
 img.banniere {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
 }
-
-.logo {
-	width: 95%;
-	object-fit: contain;
-	margin-right: 5%;
+@media (min-width: 1200px) {
+	img.banniere {
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
 }
 
+/* logo */
+img.logo {
+	object-fit: contain;
+	border-radius: 10%;
+}
+@media (max-width: 576px) {
+	div.logo-div {
+		width: 15rem;
+		max-width: 100%;
+		margin: auto;
+	}
+}
+
+/* reseaux sociaux */
 .grille-rs {
 	display: flex;
 	flex-wrap: wrap;
@@ -113,7 +126,6 @@ a.rs {
 	margin-right: 0.3rem;
 	margin-bottom: 0.3rem;
 }
-
 a.rs div, a.rs i {
 	background: var(--color-rs);
 	color: #fff;
@@ -126,22 +138,18 @@ a.rs div, a.rs i {
 	height: 2rem;
 	transition: all 0.1s ease;
 }
-
 a.rs > div > i {
 	text-align: center;
 	padding: 0.5rem;
 }
-
 a.rs span {
 	margin-left: 2rem;
 	padding: 0.1rem;
 	padding-right: 0.5rem;
 }
-
 a.rs:hover div {
 	width: 100%;
 }
-
 a.rs:hover span {
 	color: #fff;
 	z-index: 1;

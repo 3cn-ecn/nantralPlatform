@@ -1,6 +1,5 @@
 
 {% if sociallinks %}
-    <br>
     <div class="grille-rs">
         {% for sociallink in sociallinks %}
             <a href="{{ sociallink.url }}" target="_blank" class="rs" style="--color-rs: {{ sociallink.network.color }}">
@@ -9,7 +8,7 @@
                     {% if sociallink.label %}
                         {{ sociallink.label }}
                     {% else %}
-                        {{ sociallink.name }}
+                        {{ sociallink.network.name }}
                     {% endif %}
                 </span>
             </a>
