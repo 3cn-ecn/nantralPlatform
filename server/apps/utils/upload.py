@@ -14,15 +14,11 @@ class PathAndRename(object):
         # get filename
         try:
             filename = f'{instance.slug}.{ext}'
-            print(ext)
-            print(instance.slug)
-            print(filename)
         except AttributeError:
             try:
                 filename = f'{instance.pk}.{ext}'
             except AttributeError:
                 # set filename as random string
                 filename = f'{uuid4().hex}.{ext}'
-        print(filename)
         # return the whole path to the file
         return os.path.join(self.path, filename)
