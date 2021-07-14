@@ -8,6 +8,7 @@ import datetime
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
+from apps.utils.compress import compressImage
 
 
 path_and_rename_club = PathAndRename("groups/logo/club")
@@ -33,6 +34,12 @@ class Club(Group):
     @property
     def group_type(self):
         return 'club'
+    
+    def save(self, *args, **kwargs):
+        # compression des images
+        if not self.pk or self.banniere != Club.objects.get(pk=self.pk).banniere:
+            self.banniere = compressImage(self.banniere, size=(1320,492), contains=False)
+        super(Club, self).save(*args, **kwargs)
 
 
 class BDX(Club):
@@ -58,8 +65,8 @@ class NamedMembershipClub(NamedMembership):
     def year(self, **kwargs):
         '''Renvoie l'année scolaire où l'étudiant est devenu membre.
            On renvoie seulement la 2eme année de l'année scolaire.'''
-        y = self.date_begin.strftime('%Y')
-        m = self.date_begin.strftime('%m')
+        y = self.date_begin.year
+        m = self.date_begin.month
         if m >= 8:
             return y + 1
         else:

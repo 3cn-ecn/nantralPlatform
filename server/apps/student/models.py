@@ -3,10 +3,11 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-
 from django.conf import settings
 
 from apps.utils.upload import PathAndRename
+from apps.utils.compress import compressImage
+
 
 FACULTIES = [
     ('Gen', 'Élève Ingénieur Généraliste'),
@@ -26,11 +27,7 @@ PATHS = [
     ('O-I', 'Officier-Ingénieur')
 ]
 
-if settings.DEBUG:
-    path_and_rename = PathAndRename(
-        "./static/upload/students/profile_pictures")
-else:
-    path_and_rename = PathAndRename("students/profile_pictures")
+path_and_rename = PathAndRename("students/profile_pictures")
 
 
 class Student(models.Model):
@@ -61,8 +58,13 @@ class Student(models.Model):
     def get_absolute_url(self):
         return reverse('student:detail', args=[self.pk])
     
+    def save(self):
+        if not self.pk or self.picture != Student.objects.get(pk=self.pk).picture:
+            self.picture = compressImage(self.picture)
+        super(Student, self).save()
+    
     class Meta:
-        ordering = ['first_name', 'last_name', ]
+        ordering = ['last_name', 'first_name']
 
 
 

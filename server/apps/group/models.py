@@ -15,6 +15,7 @@ from apps.student.models import Student
 from apps.sociallink.models import SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
+from apps.utils.compress import compressImage
 
 
 path_and_rename_group = PathAndRename("groups/logo/group")
@@ -85,12 +86,14 @@ class Group(models.Model):
         return student in self.members.all()
 
     def save(self, *args, **kwargs):
+        # cration du slug si non-existant ou corrompu
         group_type = type(self).__name__.lower()
-        # on force le slug s'il ne correspond pas au bon format
-        # par exemple s'il est vide (ie non défini) ou modifié maladroitement
-        # => permet de ne pas le changer si renommage du club
         if self.slug.split('--')[0] != group_type:
             self.slug = f'{group_type}--{slugify(self.name)}'
+        # compression des images
+        if not self.pk or self.logo != self.__class__.objects.get(pk=self.pk).logo:
+            self.logo = compressImage(self.logo, size=(500,500), contains=True)
+        # enregistrement
         super(Group, self).save(*args, **kwargs)
 
     @staticmethod
