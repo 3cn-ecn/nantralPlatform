@@ -47,13 +47,13 @@ class Student(models.Model):
 
     def __str__(self):
         if self.first_name and self.last_name:
-            return f'{self.first_name.capitalize()} {self.last_name.upper()}'
+            return f'{self.user.first_name} {self.user.last_name.upper()}'
         elif self.first_name:
-            return self.first_name.capitalize()
+            return self.user.first_name
         elif self.last_name:
-            return self.last_name.upper()
+            return self.user.last_name.upper()
         else:
-            return f'{self.id}'
+            return self.user.username
 
     def get_absolute_url(self):
         return reverse('student:detail', args=[self.pk])

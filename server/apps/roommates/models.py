@@ -23,27 +23,37 @@ class Housing(models.Model):
         self.longitude = coordinates['long']
         super(Housing, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.address if self.address else self.id
+    
+    @property
+    def last_roommates(self):
+        roommates_list = Roommates.objects.filter(housing=self).order_by('begin_date')
+        if roommates_list:
+            return roommates_list[0]
+        else:
+            return None
+
+    @property
+    def name(self):
+        if self.last_roommates:
+            return self.last_roommates.name
+        else:
+            return "La coloc du " + self.address
+    
     @property
     def get_absolute_url(self):
-        return reverse('roommates:housing-details', kwargs={'pk': self.id})
+        return self.last_roommates.get_absolute_url
 
     @property
     def get_absolute_edit_url(self):
-        return reverse('roommates:edit-housing', kwargs={'pk': self.id})
+        return self.last_roommates.get_absolute_edit_url
 
-    def __str__(self):
-        return self.address if self.address else ''
-    
-    def name(self):
-        roommates_list = Roommates.objects.filter(housing=self).order_by('begin_date')
-        if roommates_list:
-            last_roommates = roommates_list[0]
-            return last_roommates.name
-        else:
-            return "La coloc du " + self.address
 
 
 class Roommates(Group):
+    name = models.CharField(verbose_name='Nom du groupe',
+                            max_length=100)
     begin_date = models.DateField("Date d'emménagement", default=date.today)
     end_date = models.DateField("Date de sortie", null=True, blank=True)
     housing = models.ForeignKey(
@@ -54,17 +64,20 @@ class Roommates(Group):
     class Meta:
         verbose_name_plural = "Roommates"
     
-    def save(self, *args, **kwargs):
-        self.slug = f'coloc--{slugify(self.name)}-{self.pk}'
-        super(Roommates, self).save(*args, **kwargs)
+    @property
+    def get_absolute_edit_url(self):
+        return reverse('roommates:update', kwargs={'mini_slug': self.mini_slug})
 
 
 class NamedMembershipRoommates(NamedMembership):
     group = models.ForeignKey(
-        to=Roommates, on_delete=models.CASCADE, blank=True, null=True)
+        to=Roommates, on_delete=models.CASCADE)
     nickname = models.CharField(
         max_length=100, verbose_name='Surnom', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.student.first_name} {self.student.last_name}' \
-            if self.nickname is None else f'{self.student.first_name} {self.student.last_name} alias {self.nickname}'
+        if self.nickname:
+            return f'{self.nickname} ({self.student})'
+        else:
+            return self.student
+            

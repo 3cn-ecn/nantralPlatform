@@ -21,11 +21,11 @@ class TestHousing(TestCase, TestMixin):
         Housing.objects.create(
             address='Place royale, Nantes 44000')
         house = Housing.objects.all().first()
-        url = reverse('roommates:housing-details', args=[house.pk])
+        url = reverse('roommates:detail', args=[house.pk])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-        url = reverse('roommates:edit-housing', args=[house.pk])
+        url = reverse('roommates:update', args=[house.pk])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 

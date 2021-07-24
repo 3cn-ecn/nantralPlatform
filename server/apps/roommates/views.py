@@ -78,4 +78,4 @@ class EditHousingView(LoginRequiredMixin, UpdateView):
     fields = ['details']
 
     def get_success_url(self) -> str:
-        return reverse_lazy('roommates:edit-housing', kwargs={'pk': self.object.id})
+        return reverse_lazy('roommates:update', kwargs={'pk': self.object.id})

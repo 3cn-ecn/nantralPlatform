@@ -11,9 +11,9 @@ def geocode(search: str) -> List[str]:
 		results = requests.get(
 				f'https://api.mapbox.com/geocoding/v5/mapbox.places/'
 				f'{quote(search)}.json'
-				'?proximity=47.2186371,-1.5541362'
+				'?proximity=-1.5541362,47.2186371'
 				'&autocomplete=true'
-				'&country=fr'
+				'&language=fr'
 				'&types=address'
 				'&limit=3'
 				f'&access_token={settings.MAPBOX_API_KEY}')

@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>Adresse: {{object.address}}</h1>
-    <a href="{% url 'roommates:edit-housing' object.id %}" class='btn-sm btn-success'>Modifier la coloc</a>
+    <a href="{% url 'roommates:update' object.id %}" class='btn-sm btn-success'>Modifier la coloc</a>
 </br>
 </br>
 <p>{{object.details}}</p>

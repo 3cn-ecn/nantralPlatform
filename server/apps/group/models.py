@@ -89,9 +89,14 @@ class Group(models.Model):
         # cration du slug si non-existant ou corrompu
         group_type = type(self).__name__.lower()
         if self.slug.split('--')[0] != group_type:
-            self.slug = f'{group_type}--{slugify(self.name)}'
+            slug = f'{group_type}--{slugify(self.name)}'
+            if type(self).objects.filter(slug=slug):
+                id = 1
+                while type(self).objects.filter(slug=f'{slug}-{id}'): id += 1
+                slug = f'{slug}-{id}'
+            self.slug = slug
         # compression des images
-        if not self.pk or self.logo != self.__class__.objects.get(pk=self.pk).logo:
+        if not self.pk or self.logo != type(self).objects.get(pk=self.pk).logo:
             self.logo = compressImage(self.logo, size=(500,500), contains=True)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
@@ -103,12 +108,12 @@ class Group(models.Model):
         if type_slug == 'club':
             from apps.club.models import Club
             return Club.objects.get(slug=slug)
-        elif type_slug == 'liste':
-            from apps.liste.models import Liste
-            return Liste.objects.get(slug=slug)
         elif type_slug == 'bdx':
             from apps.club.models import BDX
             return BDX.objects.get(slug=slug)
+        elif type_slug == 'liste':
+            from apps.liste.models import Liste
+            return Liste.objects.get(slug=slug)
         elif type_slug == 'roommates':
             from apps.roommates.models import Roommates
             return Roommates.objects.get(slug=slug)

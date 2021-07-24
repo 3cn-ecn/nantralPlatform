@@ -151,4 +151,10 @@ Never base a branch on another branch.
 Contributors :
     
 
+## Useful Links
 
+* [Django - MDN Tutorial](https://developer.mozilla.org/fr/docs/Learn/Server-side/Django)
+* [Django Documentation](https://docs.djangoproject.com/en/3.2/)
+* [Bootstrap for HTML](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+* [Bootstrap for React](https://react-bootstrap.github.io/components/alerts)
+* [Font Awesome](https://fontawesome.com/v5.15/icons?d=gallery&p=2&m=free) (for icons)

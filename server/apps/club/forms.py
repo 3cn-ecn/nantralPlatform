@@ -22,10 +22,6 @@ class NamedMembershipAddClub(ModelForm):
         fields = ['function', 'date_begin']
 
 
-class NamedMembershipClubForm(ModelForm):
-    class Meta:
-        model = NamedMembershipClub
-        fields = ['student', 'function', 'date_begin', 'date_end', 'admin']
 
 NamedMembershipClubFormset = modelformset_factory(
     NamedMembershipClub,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReactDOM, { render } from "react-dom";
-import { Form, Button, Modal } from "react-bootstrap";
+import { Form, Button, Modal, ListGroup, Alert } from "react-bootstrap";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -14,7 +14,7 @@ function CreateHousing(props) {
   function getSuggestions(search: string) {
     if (search.length > 5) {
       fetch(
-        `/api/roommates/geocoding/?search_string=${encodeURI(search)}`
+        props.geo_url+`?search_string=${encodeURI(search)}`
       ).then((resp) =>
         resp.json().then((suggs) => {
           updateSuggestions(suggs);
@@ -50,8 +50,8 @@ function CreateHousing(props) {
 
   return (
     <div>
-      <h1>Commençons par le bati</h1>
-      <Form>
+      <h1>Ajouter une coloc</h1>
+      <Form autocomplete="off">
         <Form.Group controlId="address">
           <Form.Label>Où se situe la coloc ?</Form.Label>
           <Form.Control
@@ -61,26 +61,25 @@ function CreateHousing(props) {
             placeholder="10 Rue de la Bléterie"
           />
         </Form.Group>
+        <ListGroup>
         {suggestions.length > 0 &&
           suggestions.map((suggestion) => (
-            <div>
-              <Button
-                variant="secondary"
+              <ListGroup.Item action
                 onClick={() => selectAddress(suggestion.place_name)}
               >
                 {suggestion.place_name}
-              </Button>
-              <br />
-            </div>
+              </ListGroup.Item>
           ))}
+        </ListGroup>
       </Form>
       {currentHousing["address"] != null && (
         <div>
+          <br />
           {alreadyExists != "" && (
-            <p>
+            <Alert variant='warning'>
               Cette habitation semble déjà exister, vous pouvez la retrouver{" "}
-              <a href={alreadyExists}>ici</a>.
-            </p>
+              <Alert.Link href={alreadyExists}>ici</Alert.Link>.
+            </Alert>
           )}
           <Form>
             <h1>{currentHousing["address"]}</h1>
@@ -122,6 +121,6 @@ function CreateHousing(props) {
 
 document.body.style.margin = "0";
 render(
-  <CreateHousing api_url={api_url} check_url={check_url} map_url={map_url} />,
+  <CreateHousing api_url={api_url} check_url={check_url} map_url={map_url} geo_url={geo_url} />,
   document.getElementById("root")
 );

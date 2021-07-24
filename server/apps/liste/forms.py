@@ -1,5 +1,11 @@
 from django.forms import ModelForm, modelformset_factory
-from .models import NamedMembershipList
+from .models import NamedMembershipList, Liste
+
+
+class UpdateListeForm(ModelForm):
+    class Meta:
+        model = Liste
+        fields = ['name', 'year', 'summary', 'video1', 'video2', 'description', 'logo', 'banniere', 'liste_type']
 
 
 class NamedMembershipAddListe(ModelForm):
@@ -11,7 +17,7 @@ class NamedMembershipAddListe(ModelForm):
 
 NamedMembershipListeFormset = modelformset_factory(
     NamedMembershipList,
-    fields=['function', 'student'],
+    fields=['student', 'function'],
     extra=1,
     can_delete=True
 )

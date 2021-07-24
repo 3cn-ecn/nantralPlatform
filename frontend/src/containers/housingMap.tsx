@@ -88,7 +88,7 @@ function ColocInfo(props: CityInfoProps): JSX.Element {
   const housing: Housing = props.housing;
   const housing_details_url = props.housingDetailsUrl.replace(
     "1",
-    housing.id.toString()
+    housing.get_absolute_url.toString()
   );
   let roommatesList: string = "";
   if (
