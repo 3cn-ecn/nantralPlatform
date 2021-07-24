@@ -30,6 +30,12 @@
             <i class="fa fa-calendar-plus-o"></i> Annonces
         </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link {% if open == "services" %}active" aria-current="page{% endif %}"
+            href="{% url object.group_type|add:':update-services' object.mini_slug %}" >
+            <i class="fa fa-calendar-plus-o"></i> Services
+        </a>
+    </li>
 </ul>
 
 <br/>
