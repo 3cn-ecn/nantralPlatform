@@ -53,7 +53,7 @@ class PostUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
 
 class UpdateGroupCreatePostView(GroupSlugFonctions, UserIsAdmin, FormView):
     """In the context of a group, create a post view."""
-    template_name = 'group/post/create.html'
+    template_name = 'group/edit/post/create.html'
     form_class = PostForm
 
     def get_context_data(self, **kwargs):
@@ -73,7 +73,7 @@ class UpdateGroupCreatePostView(GroupSlugFonctions, UserIsAdmin, FormView):
 
 class UpdateGroupPostsView(GroupSlugFonctions, UserIsAdmin, View):
     """In the context of a group, list and update the posts."""
-    template_name = 'group/post/last_30_d.html'
+    template_name = 'group/edit/post/last_30_d.html'
 
     def get_context_data(self, **kwargs):
         context = {}

@@ -19,15 +19,21 @@
         </a>
     </li>
     <li class="nav-item">
+        <a class="nav-link {% if open == "sociallinks" %}active" aria-current="page{% endif %}"
+            href="{% url object.group_type|add:':update-sociallinks' object.mini_slug %}" >
+            <i class="fa fa-share-alt"></i> Liens
+        </a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link {% if open == "events" %}active" aria-current="page{% endif %}" 
             href="{% url object.group_type|add:':update-events' object.mini_slug %}">
-            <i class="fa fa-calendar-plus-o"></i> Évènements
+            <i class="fa fa-calendar-alt"></i> Évènements
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link {% if open == "posts" %}active" aria-current="page{% endif %}"
             href="{% url object.group_type|add:':update-posts' object.mini_slug %}" >
-            <i class="fa fa-calendar-plus-o"></i> Annonces
+            <i class="fa fa-bullhorn"></i> Annonces
         </a>
     </li>
     <li class="nav-item">

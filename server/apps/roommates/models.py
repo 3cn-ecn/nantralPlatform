@@ -53,7 +53,7 @@ class Roommates(Group):
 
     class Meta:
         verbose_name_plural = "Roommates"
-
+    
     def save(self, *args, **kwargs):
         self.slug = f'coloc--{slugify(self.name)}-{self.pk}'
         super(Roommates, self).save(*args, **kwargs)

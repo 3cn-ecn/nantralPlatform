@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import *
+from .views import DetailGroupView, AddToGroupView, UpdateGroupView, UpdateGroupMembersView, RequestAdminRightsView, AcceptAdminRequestView, DenyAdminRequestView, UpdateGroupSocialLinksView
 from apps.event.views import UpdateGroupCreateEventView, UpdateGroupArchivedEventsView, UpdateGroupEventsView
 from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
 from apps.booking.views import CreateServiceView, UpdateGroupListServicesView
@@ -19,20 +19,22 @@ def makeGroupUrlpatterns(group_name):
         # vue generale du groupe
         path('<slug:mini_slug>/',
              DetailGroupView.as_view(), args, name='detail'),
-        path('<slug:mini_slug>/events/',
-             UpdateGroupArchivedEventsView.as_view(), args, name='archived-events'),
+        path('<slug:mini_slug>/members/add/',
+             AddToGroupView.as_view(), args, name='add-member'),
 
         # edition (réservée aux admins)
-        path('<slug:mini_slug>/member/add/',
-             AddToGroupView.as_view(), args, name='add-member'),
         path('<slug:mini_slug>/edit/',
              UpdateGroupView.as_view(), args, name='update'),
         path('<slug:mini_slug>/edit/members/',
              UpdateGroupMembersView.as_view(), args, name='update-members'),
+        path('<slug:mini_slug>/edit/socialnetworks/',
+             UpdateGroupSocialLinksView.as_view(), args, name='update-sociallinks'),
         path('<slug:mini_slug>/edit/events/',
              UpdateGroupEventsView.as_view(), args, name='update-events'),
         path('<slug:mini_slug>/edit/events/create/',
              UpdateGroupCreateEventView.as_view(), args, name='create-event'),
+        path('<slug:mini_slug>/edit/events/archives/',
+             UpdateGroupArchivedEventsView.as_view(), args, name='archived-events'),
         path('<slug:mini_slug>/edit/posts/',
              UpdateGroupPostsView.as_view(), args, name='update-posts'),
         path('<slug:mini_slug>/edit/posts/create/',

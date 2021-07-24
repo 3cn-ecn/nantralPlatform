@@ -15,6 +15,7 @@ from apps.student.models import Student
 from apps.sociallink.models import SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
+from apps.utils.compress import compressImage
 
 
 path_and_rename_group = PathAndRename("groups/logo/group")
@@ -61,10 +62,6 @@ class Group(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        self.slug = f'{type(self).__name__}--{slugify(self.name)}'
-        super(Group, self).save(*args, **kwargs)
-
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
@@ -89,7 +86,14 @@ class Group(models.Model):
         return student in self.members.all()
 
     def save(self, *args, **kwargs):
-        self.slug = f'{type(self).__name__.lower()}--{slugify(self.name)}'
+        # cration du slug si non-existant ou corrompu
+        group_type = type(self).__name__.lower()
+        if self.slug.split('--')[0] != group_type:
+            self.slug = f'{group_type}--{slugify(self.name)}'
+        # compression des images
+        if not self.pk or self.logo != self.__class__.objects.get(pk=self.pk).logo:
+            self.logo = compressImage(self.logo, size=(500,500), contains=True)
+        # enregistrement
         super(Group, self).save(*args, **kwargs)
 
     @staticmethod

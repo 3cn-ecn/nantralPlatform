@@ -163,6 +163,7 @@ customColorPalette = [
         'label': 'Blue'
     },
 ]
+
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': ['heading', '|', 'bold', 'italic', 'link',
@@ -223,3 +224,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 GITHUB_REPO = 'nantral-platform/nantralPlatform'
+
+# Less origin restrictive for Youtube embed videos
+SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"

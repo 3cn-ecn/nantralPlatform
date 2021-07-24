@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'group/included/navbar_edit.html' with open='sociallinks' %}
+
+<h2>Liens de Réseaux Sociaux</h2>
+<form method='POST' action="{% url object.group_type|add:':update-sociallinks' object.mini_slug %}">
+    {% csrf_token %}
+    {{ sociallinks.management_form }}
+    {% for sociallink in sociallinks %}
+    <div class='card'>
+        <div class='card-body'>
+            {{sociallink |crispy}}
+        </div>
+    </div>
+    {% endfor %}
+    </br>
+    <button class='btn btn-dark'>Valider</button>
+</form>
+{% endblock %}
