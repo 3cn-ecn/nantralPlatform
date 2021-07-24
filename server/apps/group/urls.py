@@ -39,6 +39,10 @@ def makeGroupUrlpatterns(group_name):
              UpdateGroupPostsView.as_view(), args, name='update-posts'),
         path('<slug:mini_slug>/edit/posts/create/',
              UpdateGroupCreatePostView.as_view(), args, name='create-post'),
+        path('<slug:mini_slug>/edit/service/create/',
+             CreateServiceView.as_view(), args, name='create-service'),
+        path('<slug:mini_slug>/edit/service/',
+             UpdateGroupListServicesView.as_view(), args, name='update-services'),
 
         # formulaire de demande d'admin
         path('<slug:mini_slug>/admin-request/',
@@ -47,9 +51,5 @@ def makeGroupUrlpatterns(group_name):
              AcceptAdminRequestView.as_view(), args, name='accept-admin-req'),
         path('<slug:mini_slug>/admin-request/<int:id>/deny',
              DenyAdminRequestView.as_view(), args, name='deny-admin-req'),
-        path('<slug:mini_slug>/edit/service/create/',
-             CreateServiceView.as_view(), name='create-service'),
-        path('<slug:mini_slug>/edit/service/',
-             UpdateGroupListServicesView.as_view(), name='update-services')
     ]
     return urlpatterns
