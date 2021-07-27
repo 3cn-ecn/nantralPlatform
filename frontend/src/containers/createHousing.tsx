@@ -14,7 +14,7 @@ function CreateHousing(props) {
   function getSuggestions(search: string) {
     if (search.length > 5) {
       fetch(
-        `/api/roommates/geocoding/?search_string=${encodeURI(search)}`
+        `/api/colocs/geocoding/?search_string=${encodeURI(search)}`
       ).then((resp) =>
         resp.json().then((suggs) => {
           updateSuggestions(suggs);
