@@ -8,7 +8,7 @@ from .models import Housing, NamedMembershipRoommates, Roommates
 
 class HousingSerializer(serializers.ModelSerializer):
     edit_url = serializers.HyperlinkedIdentityField(
-        view_name='roommates:update', read_only=True)
+        view_name='roommates:update2', read_only=True, lookup_field='mini_slug')
     url = serializers.HyperlinkedIdentityField(
         view_name='roommates:detail', read_only=True)
     roommates = serializers.SerializerMethodField()

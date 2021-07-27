@@ -28,18 +28,19 @@ class Housing(models.Model):
     
     @property
     def last_roommates(self):
-        roommates_list = Roommates.objects.filter(housing=self).order_by('begin_date')
-        if roommates_list:
-            return roommates_list[0]
-        else:
-            return None
-
+        last_roommates = Roommates.objects.filter(housing=self).order_by('begin_date').last()
+        return last_roommates
+    
     @property
     def name(self):
         if self.last_roommates:
             return self.last_roommates.name
         else:
             return "La coloc du " + self.address
+    
+    @property
+    def mini_slug(self):
+        return self.last_roommates.mini_slug
     
     @property
     def get_absolute_url(self):
