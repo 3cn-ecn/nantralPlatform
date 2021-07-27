@@ -2,12 +2,27 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
+{% block navbar %}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+        <ul class="navbar-nav ml-auto ">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'club:club-list' %}">Voir les Clubs & Assos</a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
 {% block content%}
     <style> 
         body {
             background-image: url('{% static "/img/central_background.jpg" %}');
             background-repeat: no-repeat;
             background-size: cover;
+            background-attachment: fixed;
         }
         .bg-light {
             background-color: rgba(248, 249, 251, 0.85) !important;
