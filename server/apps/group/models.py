@@ -21,36 +21,39 @@ from apps.utils.compress import compressImage
 path_and_rename_group = PathAndRename("groups/logo/group")
 
 
-
 def break_slug(slug):
     '''Réupère le type du groupe et le mini-slug du group,
        partir du slug entier.'''
-    
+
     list = slug.split('--')
     group_type = list[0]
     mini_slug = ''.join(list[1:])
+    if group_type == 'bdx':
+        group_type = 'club'
     return group_type, mini_slug
 
 
 class Group(models.Model):
     '''Modèle abstrait servant de modèle pour tous les types de Groupes.'''
 
-    #Nom du groupe
+    # Nom du groupe
     name = models.CharField(verbose_name='Nom du groupe',
                             unique=True, max_length=100)
     alt_name = models.CharField(
         verbose_name='Nom alternatif', max_length=100, null=True, blank=True)
-    
-    #présentation
+
+    # présentation
     logo = models.ImageField(verbose_name='Logo du groupe',
                              blank=True, null=True, upload_to=path_and_rename_group)
     summary = models.CharField('Résumé', max_length=500, null=True, blank=True)
     description = CKEditor5Field(
         verbose_name='Description du groupe', blank=True)
-    video1 = models.URLField('Lien vidéo 1', max_length=200, null=True, blank=True)
-    video2 = models.URLField('Lien vidéo 2', max_length=200, null=True, blank=True)
+    video1 = models.URLField(
+        'Lien vidéo 1', max_length=200, null=True, blank=True)
+    video2 = models.URLField(
+        'Lien vidéo 2', max_length=200, null=True, blank=True)
 
-    #paramètres techniques
+    # paramètres techniques
     members = models.ManyToManyField(
         Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
     slug = models.SlugField(max_length=40, unique=True, blank=True)
@@ -92,7 +95,8 @@ class Group(models.Model):
             self.slug = f'{group_type}--{slugify(self.name)}'
         # compression des images
         if not self.pk or self.logo != self.__class__.objects.get(pk=self.pk).logo:
-            self.logo = compressImage(self.logo, size=(500,500), contains=True)
+            self.logo = compressImage(
+                self.logo, size=(500, 500), contains=True)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
 
@@ -118,15 +122,14 @@ class Group(models.Model):
     @property
     def mini_slug(self):
         return break_slug(self.slug)[1]
-    
+
     @property
     def group_type(self):
         return break_slug(self.slug)[0]
-    
+
     @property
     def get_absolute_url(self):
         return reverse(self.group_type+':detail', kwargs={'mini_slug': self.mini_slug})
-    
 
 
 class NamedMembership(models.Model):
@@ -175,7 +178,7 @@ class AdminRightsRequest(models.Model):
         group = Group.get_group_by_slug(self.group)
         if group.is_member(self.student.user):
             membership = group.members.through.objects.get(
-                student=self.student.id)
+                student=self.student.id, group=group)
             membership.admin = True
             membership.save()
         else:
