@@ -1,4 +1,9 @@
+from typing import List
+from datetime import date
 from django.contrib import admin
+from django.template.response import TemplateResponse
+from django.urls.conf import path
+from django.urls.resolvers import URLPattern
 from .models import *
 
 
@@ -20,6 +25,28 @@ def make_BDS(modeladmin, request, queryset):
 class ClubAdmin(admin.ModelAdmin):
     list_display = ['name', 'bdx_type']
     actions = [make_BDE, make_BDA, make_BDS]
+
+    def get_urls(self) -> List[URLPattern]:
+        urls = super().get_urls()
+        customUrls = [
+            path('metrics/', self.admin_site.admin_view(self.metrics_view),
+                 name='metrics')
+        ]
+        return customUrls + urls
+
+    def metrics_view(self, request):
+        no_admins = []
+        for club in Club.objects.all():
+            if NamedMembershipClub.objects.filter(
+                    group=club.id, admin=True,
+                    date_begin__year__gte=(date.today().year-1)).count() == 0:
+                no_admins.append(club)
+        context = dict(
+            self.admin_site.each_context(request=request),
+            no_admins=no_admins,
+            total_clubs=Club.objects.all().count()
+        )
+        return TemplateResponse(request=request, template='admin/club/metrics.html', context=context)
 
 
 class BDXAdmin(admin.ModelAdmin):
