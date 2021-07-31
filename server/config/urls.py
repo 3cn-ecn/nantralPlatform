@@ -40,6 +40,7 @@ urlpatterns = [
     path('api/event/', include('apps.event.api_urls', namespace='event_api')),
     path('post/', include('apps.post.urls', namespace='post')),
     path('api/post/', include('apps.post.api_urls', namespace='post_api')),
+    path('api/booking', include('apps.booking.api_urls', namespace='booking_api')),
     path('booking/', include('apps.booking.urls', namespace='booking')),
     path('exchange/', include('apps.exchange.urls', namespace='exchange')),
 
