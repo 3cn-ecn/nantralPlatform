@@ -14,14 +14,15 @@ class StudentAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         customUrls = [
             path('metrics/', self.admin_site.admin_view(self.metrics_view),
-                 name='metrics')
+                 name='student-metrics')
         ]
         return customUrls + urls
 
     def metrics_view(self, request):
         context = dict(
             self.admin_site.each_context(request=request),
-            promos=Student.objects.all().values('promo').annotate(Count('id')),
+            promos=Student.objects.all().values('promo').annotate(
+                count=Count('promo')).order_by(),
             nb_students=Student.objects.all().count()
         )
         return TemplateResponse(request=request, template='admin/student/metrics.html', context=context)
