@@ -1,16 +1,25 @@
 from django.db import models
 from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.models import User
+from django.urls import reverse
+from apps.utils.accessMixins import OwnedObject
 
 
-class Service(models.Model):
+class Service(OwnedObject):
     name = models.CharField(verbose_name='Nom du service', max_length=32)
-    description = CKEditor5Field()
-    proposed_by = models.SlugField()
+    description = CKEditor5Field(null=True, blank=True)
+    group = models.SlugField()
     conditions = CKEditor5Field(null=True, blank=True)
-    price = models.FloatField(null=True, blank=True)
-    paiment_link = models.URLField(
+    price = models.FloatField(verbose_name='Prix', null=True, blank=True)
+    payment_link = models.URLField(
         verbose_name='Lien de paiement', null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('booking:service-detail', kwargs={'pk': self.id})
+
+    @property
+    def get_edit_url(self):
+        return reverse('booking:service-edit', kwargs={'pk': self.id})
 
 
 class Availabilty(models.Model):
