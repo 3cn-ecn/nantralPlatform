@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block content %}
+{% include 'group/included/navbar_edit.html' with open='services' %}
+
+<a class='btn btn-dark' href="{% url object.group_type|add:':create-service' object.mini_slug%}">Ajouter un service</a>
+</br>
+</br>
+<h2>Liste des services proposés</h2>
+<div class="col-12 col-sm-6 col-lg-4 col-xxl-3 d-grid"></div>
+{% for service in object_list %}
+<a class="btn btn-light" href="{{ service.get_edit_url }}">
+    <div class="row g-3">
+        <div class="col-6">
+            <div class="ratio ratio-1x1">
+                <img class='icon' src="{% static 'img/logo.svg' %}">
+            </div>
+        </div>
+        <div class="col text-start">
+            <h5>{{service.name}}</h5>
+        </div>
+    </div>
+</a>
+{% endfor %}
+</div>
+{% endblock %}

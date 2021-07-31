@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{object.name}}</h2>
+<p>Proposé par <a href="{{group.get_absolute_url}}">{{group.name}}</a></p>
+{%if admin%}
+<a class='btn btn-success' href="{% url 'booking:service-edit' object.pk %}">Modifier</a>
+{%endif%}
+<h3>Description</h3>
+{% autoescape off %}
+<p>{{object.description}}</p>
+{%if object.conditions%}
+<h3>Conditions</h3>
+<p>{{object.conditions}}</p>
+{%endif%}
+{% endautoescape %}
+{%if object.price%}
+<h3>Prix</h3>
+<p>{{object.price}} EUR</p>
+{%endif%}
+{%if object.payment_link%}
+<h3>Prix</h3>
+<a href="{{object.payment_link}}">Lien de paiement</a>
+{%endif%}
+<h3>Prochaines disponibilités</h3>
+{% endblock %}

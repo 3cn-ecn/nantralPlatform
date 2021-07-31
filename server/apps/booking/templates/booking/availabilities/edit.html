@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'group/included/navbar_edit.html' with open='general' %}
+<h1>{{service.name}}</h1>
+<a class="btn btn-success" href="{% url 'booking:service-edit' service.id %}">Modifier les généralités.</a>
+</br>
+<h2>Disponibilités:</h2>
+
+{% endblock %}

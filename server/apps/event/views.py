@@ -2,7 +2,6 @@ from datetime import date
 
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.views.generic.base import TemplateView, View
 from django.views.generic import UpdateView, FormView
 from django.contrib.auth.decorators import login_required
@@ -16,18 +15,19 @@ from apps.utils.accessMixins import LoginRequiredAccessMixin, UserIsAdmin
 
 # Application Event
 
+
 class EventDetailView(LoginRequiredAccessMixin, TemplateView):
     template_name = 'event/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.object = BaseEvent.get_event_by_slug(self.kwargs.get('event_slug'))
+        self.object = BaseEvent.get_event_by_slug(
+            self.kwargs.get('event_slug'))
         context['object'] = self.object
         context['group'] = self.object.get_group
         context['is_participating'] = self.object.is_participating(
             self.request.user)
         return context
-
 
 
 # Application Group
@@ -61,7 +61,7 @@ class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
 
     def test_func(self) -> bool:
         self.kwargs['group_type'] = self.object.get_group.group_type
-        self.kwargs['mini_slug']  = self.object.get_group.mini_slug
+        self.kwargs['mini_slug'] = self.object.get_group.mini_slug
         return super().test_func()
 
     def get_context_data(self, **kwargs):
@@ -76,7 +76,7 @@ class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         self.object = BaseEvent.get_event_by_slug(self.kwargs['event_slug'])
         self.kwargs['group_type'] = self.object.get_group.group_type
-        self.kwargs['mini_slug']  = self.object.get_group.mini_slug
+        self.kwargs['mini_slug'] = self.object.get_group.mini_slug
         if isinstance(self.object, EatingEvent):
             self.fields = ['title', 'description', 'location',
                            'date', 'publicity', 'color', 'image', 'menu']
@@ -96,7 +96,7 @@ class UpdateGroupEventsView(GroupSlugFonctions, UserIsAdmin, View):
         return context
 
     def get(self, request, **kwargs):
-        context=self.get_context_data()
+        context = self.get_context_data()
         return render(request, self.template_name, context)
 
     def post(self, request,  **kwargs):
@@ -117,7 +117,7 @@ class UpdateGroupArchivedEventsView(GroupSlugFonctions, UserIsAdmin, View):
         return context
 
     def get(self, request, **kwargs):
-        context=self.get_context_data()
+        context = self.get_context_data()
         return render(request, self.template_name, context)
 
     def post(self, request,  **kwargs):
