@@ -30,7 +30,7 @@ class ClubAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         customUrls = [
             path('metrics/', self.admin_site.admin_view(self.metrics_view),
-                 name='metrics')
+                 name='club-metrics')
         ]
         return customUrls + urls
 
