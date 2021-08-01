@@ -1,3 +1,4 @@
+from typing import Dict
 from django import forms
 from django.contrib.auth.models import User
 from ..student.models import Student
@@ -46,8 +47,7 @@ class SignUpForm(UserCreationForm):
     def clean(self):
         cleaned_data = super(SignUpForm, self).clean()
         email = cleaned_data.get("email")
-        confirm_email = cleaned_data.get("confirm_email").lower()
-
+        confirm_email = cleaned_data.get("confirm_email")
         try:
             User.objects.get(email=email)
             raise forms.ValidationError('Cet email est déjà utilisé.')
@@ -61,6 +61,10 @@ class SignUpForm(UserCreationForm):
 
     def clean_email(self) -> str:
         data: str = self.cleaned_data['email']
+        return data.lower()
+
+    def clean_confirm_email(self) -> str:
+        data: str = self.cleaned_data['confirm_email']
         return data.lower()
 
     class Meta:
