@@ -12,7 +12,6 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text
 from django.views import View
 from django.urls import reverse, reverse_lazy
-from urllib import parse
 from .emailAuthBackend import EmailBackend
 from apps.student.models import Student
 from django.contrib import messages
@@ -25,8 +24,8 @@ class RegistrationView(FormView):
     def form_valid(self, form):
         user = form.save()
         user.student.promo = form.cleaned_data.get('promo')
-        user.student.last_name = form.cleaned_data.get('last_name').lower()
-        user.student.first_name = form.cleaned_data.get('first_name').lower()
+        user.student.last_name = form.cleaned_data.get('last_name')
+        user.student.first_name = form.cleaned_data.get('first_name')
         user.student.email = form.cleaned_data.get('email')
         user.student.faculty = form.cleaned_data.get('faculty')
         user.student.path = form.cleaned_data.get('path')
