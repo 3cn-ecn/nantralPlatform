@@ -26,7 +26,7 @@ def geocode(search: str) -> List[str]:
 		else:
 			return [{
 				'place_name': 'Ecole Centrale',
-				'long': '47.2186371',
-				'lat': '-1.5541362'
+				'long': '-1.5541362',
+				'lat': '47.2186371'
 			}]
 
