@@ -11,6 +11,5 @@ urlpatterns = [
     path('create', CreateHousingView.as_view(), name='create-new'),
     path('map', HousingMap.as_view(), name='housing-map'),
     path('liste', HousingList.as_view(), name='housing-list'),
-    path('coloc/<slug:mini_slug>/edit', UpdateGroupView.as_view(), name='update2'),
     path('', HousingList.as_view()),
 ] + makeGroupUrlpatterns(group_type="roommates", url_base='coloc/')

@@ -7,10 +7,10 @@ from .models import Housing, NamedMembershipRoommates, Roommates
 
 
 class HousingSerializer(serializers.ModelSerializer):
-    edit_url = serializers.HyperlinkedIdentityField(
-        view_name='roommates:update2', read_only=True, lookup_field='mini_slug')
-    url = serializers.HyperlinkedIdentityField(
-        view_name='roommates:detail', read_only=True)
+    # edit_url = serializers.HyperlinkedIdentityField(
+    #     view_name='roommates:update', read_only=True, lookup_field='mini_slug')
+    # url = serializers.HyperlinkedIdentityField(
+    #     view_name='roommates:detail', read_only=True, lookup_field='mini_slug')
     roommates = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
 
@@ -23,7 +23,7 @@ class HousingSerializer(serializers.ModelSerializer):
         return RoommatesGroupSerializer(roommates, many=True, context=self._context).data
 
     def get_name(self, obj):
-        query = Roommates.objects.filter(housing=obj).last()
+        query = Roommates.objects.filter(housing=obj).order_by('begin_date').last()
         return query.name if query else "Coloc sans nom"
 
 

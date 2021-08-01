@@ -11,9 +11,9 @@ from apps.sociallink.models import SocialNetwork, SocialLink
 
 class Housing(models.Model):
     address = models.CharField(
-        max_length=250, verbose_name='Adresse de la colocation.')
-    details = models.CharField(max_length=100, verbose_name='Détails',
-                               null=True, blank=True)
+        max_length=250, verbose_name='Adresse')
+    details = models.CharField(
+        max_length=100, verbose_name='Complément d\'adresse', null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
 

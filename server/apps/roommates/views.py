@@ -26,6 +26,13 @@ class HousingList(LoginRequiredMixin, ListView):
     template_name = 'roommates/housing/list.html'
 
 
+class CreateHousingView(LoginRequiredMixin, TemplateView):
+    template_name = 'roommates/housing/create.html'
+
+
+
+
+
 class HousingDetailView(LoginRequiredMixin, DetailView):
     template_name = 'roommates/housing/detail.html'
     model = Housing
@@ -66,11 +73,6 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
         context['roommates_groups'] = list_roommates
 
         return context
-
-
-class CreateHousingView(LoginRequiredMixin, TemplateView):
-    template_name = 'roommates/housing/create.html'
-
 
 class EditHousingView(LoginRequiredMixin, UpdateView):
     template_name = 'roommates/housing/edit.html'

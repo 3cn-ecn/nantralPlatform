@@ -2,6 +2,11 @@ from django.forms import ModelForm, modelformset_factory
 from .models import NamedMembershipRoommates, Roommates
 
 
+class CreateRoommatesForm(ModelForm):
+    class Meta:
+        model = Roommates
+        fields = ['name', 'begin_date', 'end_date', 'summary']
+
 
 class UpdateRoommatesForm(ModelForm):
     class Meta:

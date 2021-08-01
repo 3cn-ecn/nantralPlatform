@@ -22,8 +22,8 @@ path_and_rename_group = PathAndRename("groups/logo/group")
 
 
 def break_slug(slug):
-    '''Réupère le type du groupe et le mini-slug du group,
-       partir du slug entier.'''
+    '''Renvoie le mini-slug du groupe, avec
+       le nom de l'appli correspondant au groupe.'''
 
     list = slug.split('--')
     group_type = list[0]
