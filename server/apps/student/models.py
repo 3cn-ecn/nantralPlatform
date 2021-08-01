@@ -57,15 +57,18 @@ class Student(models.Model):
 
     def get_absolute_url(self):
         return reverse('student:detail', args=[self.pk])
-    
+
     def save(self, *args, **kwargs):
+        if self.first_name is not None:
+            self.first_name = self.first_name.lower()
+        if self.last_name is not None:
+            self.last_name = self.last_name.lower()
         if not self.pk or self.picture != Student.objects.get(pk=self.pk).picture:
             self.picture = compressImage(self.picture)
         super(Student, self).save(*args, **kwargs)
-    
+
     class Meta:
         ordering = ['last_name', 'first_name']
-
 
 
 @receiver(post_save, sender=User)

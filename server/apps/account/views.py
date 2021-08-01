@@ -24,8 +24,8 @@ class RegistrationView(FormView):
     def form_valid(self, form):
         user = form.save()
         user.student.promo = form.cleaned_data.get('promo')
-        user.student.last_name = form.cleaned_data.get('last_name').lower()
-        user.student.first_name = form.cleaned_data.get('first_name').lower()
+        user.student.last_name = form.cleaned_data.get('last_name')
+        user.student.first_name = form.cleaned_data.get('first_name')
         user.student.email = form.cleaned_data.get('email')
         user.student.faculty = form.cleaned_data.get('faculty')
         user.student.path = form.cleaned_data.get('path')
