@@ -1,26 +1,32 @@
 from django import forms
 from django.contrib.auth.models import User
-from ..student.models import Student
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
 from apps.student.models import FACULTIES, PATHS
 
+
 def check_ecn_mail(mail):
     if not 'ec-nantes.fr' in mail:
-        raise ValidationError('Vous devez avoir une adresse mail de Centrale Nantes finissant par ec-nantes.fr')
+        raise ValidationError(
+            'Vous devez avoir une adresse mail de Centrale Nantes finissant par ec-nantes.fr')
+
 
 def check_passwords(pass1, pass2):
     if not pass1 == pass2:
         raise ValidationError('Les deux mots de passe ne correspondent pas.')
 
+
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(max_length=200, validators=[check_ecn_mail], required=True, help_text='Votre adresse mail ec-nantes.fr')
+    email = forms.EmailField(max_length=200, validators=[
+                             check_ecn_mail], required=True, help_text='Votre adresse mail ec-nantes.fr')
     promo = forms.IntegerField(min_value=1919, required=True)
     first_name = forms.CharField(max_length=200, required=True)
     last_name = forms.CharField(max_length=200, required=True)
     faculty = forms.ChoiceField(required=True, choices=FACULTIES)
-    path = forms.ChoiceField(choices=PATHS, help_text='Vous pourrez modifier cela plus tard', required=False)
+    path = forms.ChoiceField(
+        choices=PATHS, help_text='Vous pourrez modifier cela plus tard', required=False)
+
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
         self.fields['email'].label = "Adresse mail"
@@ -35,26 +41,35 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'password1', 'password2', 'promo', 'faculty')
+        fields = ('first_name', 'last_name', 'email',
+                  'password1', 'password2', 'promo', 'faculty')
+
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(max_length=200, validators=[check_ecn_mail], required=True, help_text='Votre adresse mail ec-nantes.fr')
+    email = forms.EmailField(max_length=200, validators=[
+                             check_ecn_mail], required=True, help_text='Votre adresse mail ec-nantes.fr')
     password = forms.CharField(widget=forms.PasswordInput)
+
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['password'].label = "Mot de passe"
         self.fields['password'].help_text = "<a class='text-muted' href='/account/forgotten'>Mot de passe oublié  ?</a>"
 
+
 class ForgottenPassForm(forms.Form):
-    email = forms.EmailField(max_length=200, required=True, help_text='Entrez l\'adresse mail associée au compte')
+    email = forms.EmailField(max_length=200, required=True,
+                             help_text='Entrez l\'adresse mail associée au compte')
+
 
 class ResetPassForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
     password_confirm = forms.CharField(widget=forms.PasswordInput)
+
     def __init__(self, *args, **kwargs):
         super(ResetPassForm, self).__init__(*args, **kwargs)
         self.fields['password'].label = "Votre nouveau mot de passe"
         self.fields['password_confirm'].label = "Confirmer le mot de passe"
+
     def clean(self):
         cleaned_data = super(ResetPassForm, self).clean()
         password = cleaned_data.get('password')
@@ -62,5 +77,14 @@ class ResetPassForm(forms.Form):
 
         if password and password_confirm:
             if password != password_confirm:
-                raise forms.ValidationError("Les deux mots de passe ne correspondent pas.")
+                raise forms.ValidationError(
+                    "Les deux mots de passe ne correspondent pas.")
         return cleaned_data
+
+
+class TemporaryRequestSignUpForm(SignUpForm):
+    '''A form to request a temporary access to the platform.
+    The user will have to confirm the school mail address later.
+    '''
+    email = forms.EmailField(
+        max_length=200, required=True, help_text='Votre adresse mail personnelle.')

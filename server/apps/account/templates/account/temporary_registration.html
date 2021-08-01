@@ -15,9 +15,9 @@
         <h2>Inscription sur Nantral Platform</h2>
         <p>
             Pour vous inscrire sur Nantral Platform vous devez être affilié à Centrale Nantes.
-            Votre affiliation est determinée en utilisant votre addresse mail Centrale Nantes @xxxx.ec-nantes.fr.
-            Si vous ne disposez pas encore de votre addresse vous pouvez demander un accès temporaire.</br>
-            <a class="btn btn-success" href="{% url 'account:temporary-registration' %}">Demande d'accès temporaire.</a>
+            Si vous ne disposez pas encore de votre addresse vous pouvez demander un accès temporaire. Vous pourrez vous
+            connecter en utilisant votre addresse personelle jusqu'au {{DATE_LIMITE_TEMPORARY_REGISTRATION}}.
+            Vous devrez avoir renseigné et validé votre addresse Centrale avant cette date.
         </p>
         <form method='POST'>
             {% csrf_token %}

@@ -5,14 +5,13 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.generic.edit import FormView
-from .forms import SignUpForm, LoginForm, ForgottenPassForm
+from .forms import SignUpForm, LoginForm, ForgottenPassForm, TemporaryRequestSignUpForm
 from .tokens import account_activation_token
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text
 from django.views import View
 from django.urls import reverse, reverse_lazy
-from urllib import parse
 from .emailAuthBackend import EmailBackend
 from apps.student.models import Student
 from django.contrib import messages
@@ -56,6 +55,11 @@ class RegistrationView(FormView):
         messages.success(
             self.request, 'Un mail vous a été envoyé pour confirmer votre mail ECN.')
         return redirect(reverse('home:home'))
+
+
+class TemporaryRegistrationView(FormView):
+    form_class = TemporaryRequestSignUpForm
+    template_name = 'account/temporary_registration.html'
 
 
 class ConfirmUser(View):
