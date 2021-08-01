@@ -13,11 +13,12 @@ from apps.student.models import Student
 class Test_Account(TestCase, TestMixin):
     def setUp(self):
         pass
+
     def tearDown(self):
         # Delete everything you created
         self.user_teardown()
         User.objects.all().delete()
-    
+
     def test_create_user_view(self):
         url = reverse('account:registration')
         response = self.client.get(url)
@@ -26,6 +27,7 @@ class Test_Account(TestCase, TestMixin):
             'first_name': 'test_name',
             'last_name': 'test_last_name',
             'email': 'test@ec-nantes.fr',
+            'confirm_email': 'test@ec-nantes.fr',
             'password1': 'pass',
             'password2': 'pass',
             'promo': 2020,
