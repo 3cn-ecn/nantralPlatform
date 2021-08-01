@@ -9,4 +9,4 @@ class ListCreateAvailaibilites(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Availabilty.objects.filter(service=self.kwargs['id'])
+        return Availabilty.objects.filter(service=self.kwargs['pk'])

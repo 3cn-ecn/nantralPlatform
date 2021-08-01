@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
 {% include 'group/included/navbar_edit.html' with open='general' %}
@@ -7,5 +8,13 @@
 <a class="btn btn-success" href="{% url 'booking:service-edit' service.id %}">Modifier les généralités.</a>
 </br>
 <h2>Disponibilités:</h2>
+<div id='root'></div>
 
+{% endblock %}
+{% block script%}
+<script>
+    var static_url_prefix = "{% static '' %}";
+    var api_list_url = "{% url 'booking_api:list-create-availabilities' service.id %}";
+</script>
+<script src='{% static "js/availabilitiesEdit.js" %}'></script>
 {% endblock %}

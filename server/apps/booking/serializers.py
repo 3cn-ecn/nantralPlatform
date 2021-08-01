@@ -1,6 +1,8 @@
-from django.db.models import fields
 from rest_framework import serializers
+from .models import Availabilty
 
 
 class AvailabilitySerializer(serializers.ModelSerializer):
-    fields = 'all'
+    class Meta:
+        model = Availabilty
+        fields = '__all__'
