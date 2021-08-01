@@ -40,7 +40,7 @@ class Test_Account(TestCase, TestMixin):
 
         self.assertEqual(len(User.objects.all()), 1)
 
-        student = Student.objects.get(first_name='test_name')
+        student = Student.objects.get(user__first_name='test_name')
         self.assertEqual(student.user, User.objects.all().last())
 
     def test_login_view(self):
