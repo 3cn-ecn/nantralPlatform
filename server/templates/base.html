@@ -31,69 +31,83 @@
         <img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
         Nantral Platform.
       </a>
-      {% if request.user.is_authenticated %}
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'home:home' %}">Actualités</a>
-          </li>
-          <li class="nav-item d-none">
-            <a class="nav-link" href="#">Campagnes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'club:club-list' %}">Clubs & Assos</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            BDX
-            </a>
-            {% show_navbar_bdx %}
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Services
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <!--li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li-->
-              <li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
-              <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
-              <li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
-              <li><a class="dropdown-item disabled" href="#">Offres Partenariats</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Annuaire
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
-              <li><a class="dropdown-item" href="{% url 'liste:liste-list' %}">Listes BDX</a></li>
-              <li><a class="dropdown-item disabled" href="#">Options disciplinaires</a></li>
-              <li><a class="dropdown-item disabled" href="#">Contacts & Liens</a></li>
-            </ul>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto ">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{ request.user.first_name | title}} {{ request.user.last_name | upper}}    <i class="fas fa-cog"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" role="menu">
-              {% if request.user.student.id %}
-              <li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.id %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
-              {% endif  %}
-              <li><a class="dropdown-item" href='{% url "account:redirect-student" request.user.id%}'><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
-              <li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      {% endif %}
+      {% block navbar %}
+        {% if request.user.is_authenticated %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home:home' %}">Actualités</a>
+            </li>
+            <li class="nav-item d-none">
+              <a class="nav-link" href="#">Campagnes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'club:club-list' %}">Clubs & Assos</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              BDX
+              </a>
+              {% show_navbar_bdx %}
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Services
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <!--li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li-->
+                <li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
+                <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
+                <li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
+                <li><a class="dropdown-item disabled" href="#">Offres Partenariats</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Annuaire
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
+                <li><a class="dropdown-item" href="{% url 'liste:liste-list' %}">Listes BDX</a></li>
+                <li><a class="dropdown-item disabled" href="#">Options disciplinaires</a></li>
+                <li><a class="dropdown-item disabled" href="#">Contacts & Liens</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="navbar-nav ml-auto ">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ request.user.first_name | title}} {{ request.user.last_name | upper}}    <i class="fas fa-cog"></i>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" role="menu">
+                {% if request.user.student.id %}
+                <li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.id %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
+                {% endif  %}
+                <li><a class="dropdown-item" href='{% url "account:redirect-student" request.user.id%}'><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
+                <li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        {% else %}
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+          <ul class="navbar-nav ml-auto ">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account:login' %}">Connexion <i class="fas fa-sign-in-alt"></i></a>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+      {% endblock %}
       </div>
     </nav>
     
