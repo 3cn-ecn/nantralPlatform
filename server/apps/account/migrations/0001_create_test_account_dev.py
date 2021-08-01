@@ -20,9 +20,6 @@ def create_user(apps, schema_editor):
     student = Student.objects.create(user=user)
     student.save()
     user.student = student
-    user.student.first_name = 'Robin'
-    user.student.last_name = 'Test'
-    user.student.email = 'robin@ec-nantes.fr'
     user.student.promo = 2017
     user.student.save()
     user.save()

@@ -1,20 +1,24 @@
 from django.contrib.auth import login, logout
-from django.contrib.auth.views import PasswordResetConfirmView
-from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
 from django.contrib.sites.shortcuts import get_current_site
-from django.views.generic.edit import FormView
-from .forms import SignUpForm, LoginForm, ForgottenPassForm
-from .tokens import account_activation_token
+from django.contrib import messages
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text
-from django.views import View
 from django.urls import reverse, reverse_lazy
-from .emailAuthBackend import EmailBackend
+
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.views.generic.edit import FormView
+from django.views import View
+
+from django.contrib.auth.forms import SetPasswordForm
+from .forms import SignUpForm, LoginForm, ForgottenPassForm
+
+from django.contrib.auth.models import User
 from apps.student.models import Student
-from django.contrib import messages
+
+from .tokens import account_activation_token
+from .emailAuthBackend import EmailBackend
 
 
 class RegistrationView(FormView):
@@ -24,9 +28,6 @@ class RegistrationView(FormView):
     def form_valid(self, form):
         user = form.save()
         user.student.promo = form.cleaned_data.get('promo')
-        user.student.last_name = form.cleaned_data.get('last_name')
-        user.student.first_name = form.cleaned_data.get('first_name')
-        user.student.email = form.cleaned_data.get('email')
         user.student.faculty = form.cleaned_data.get('faculty')
         user.student.path = form.cleaned_data.get('path')
         # create a unique user name
@@ -84,7 +85,7 @@ class AuthView(FormView):
     def get(self, request):
         if request.user.is_authenticated:
             user = request.user
-            message = f'Vous etes déjà connecté en tant que {user.first_name}.'
+            message = f'Vous etes déjà connecté en tant que {user.first_name.capitalize()}.'
             messages.warning(request, message)
             return redirect(reverse('home:home'))
         else:
@@ -102,7 +103,7 @@ class AuthView(FormView):
         if user is not None:
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')
-            message = f'Bonjour {user.first_name} !'
+            message = f'Bonjour {user.first_name.capitalize()} !'
             messages.success(self.request, message)
             return redirect(reverse('home:home'))
         else:
