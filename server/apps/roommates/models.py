@@ -78,7 +78,7 @@ class NamedMembershipRoommates(NamedMembership):
 
     def __str__(self):
         if self.nickname:
-            return f'{self.nickname} ({self.student})'
+            return f'{self.nickname} ({self.student.name})'
         else:
-            return self.student
+            return self.student.name
             

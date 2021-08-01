@@ -43,8 +43,7 @@ function EditHousing(props) {
                   <Col md="10" xs="12">
                     {roommateGroup["members"].map((member) => (
                       <p>
-                        {member["student"]["first_name"]}{" "}
-                        {member["student"]["last_name"]}
+                        {member["student"]["name"]}
                       </p>
                     ))}
                   </Col>
@@ -143,7 +142,6 @@ function EditRoommatesGroup(props) {
                 <Card.Header>
                   <Row>
                     <Col>Nom</Col>
-                    <Col>Prénom</Col>
                     <Col>Surnom</Col>
                     <Col></Col>
                   </Row>
@@ -151,8 +149,7 @@ function EditRoommatesGroup(props) {
                 {selectedRoommatesGroup.members.map((member, index) => (
                   <Card>
                     <Row className="text-center">
-                      <Col>{member["student"]["first_name"]}</Col>
-                      <Col>{member["student"]["last_name"]}</Col>
+                      <Col>{member["student"]["name"]}</Col>
                       <Col>
                         <Form>
                           <Form.Group controlId="name">
@@ -212,7 +209,7 @@ function EditRoommatesGroup(props) {
                   searchedStudents.map((suggestion) => (
                     <div>
                       <Button onClick={() => selectStudent(suggestion)}>
-                        {suggestion.first_name} {suggestion.last_name}
+                        {suggestion.name}
                         {" P"}
                         {suggestion.promo}
                       </Button>

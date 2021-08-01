@@ -57,8 +57,8 @@ class HousingDetailView(LoginRequiredMixin, DetailView):
                 nicknm = "" if member.nickname is None else member.nickname
 
                 member_list.append({
-                    'first_name': member.student.first_name,
-                    'last_name': member.student.last_name,
+                    'first_name': member.student.user.first_name,
+                    'last_name': member.student.user.last_name,
                     'nickname': nicknm,
                 })
             list_roommates.append(

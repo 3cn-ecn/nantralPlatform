@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 {% block  content%}
-<h1>{{object.first_name | title}} {{object.last_name | upper}}</h1>
+<h1>{{object.name }}</h1>
 {% if object.picture %}
 <img width="100" height="auto" src='{{object.picture.url}}'>
 {% endif %}

@@ -55,8 +55,7 @@ export interface Student {
   id: number;
   promo: any;
   picture: any;
-  first_name: string;
-  last_name: string;
+  name: string;
   faculty: string;
   path: any;
   user: number;
@@ -98,7 +97,7 @@ function ColocInfo(props: CityInfoProps): JSX.Element {
     roommatesList = housing.roommates[0].members
       .map(
         (e) =>
-          toTitle(e.student.first_name) + " " + toTitle(e.student.last_name)
+          toTitle(e.student.name)
       )
       .join(", ");
     roommatesList = roommatesList.replace(/(,\s*)$/, "");

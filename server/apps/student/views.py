@@ -18,7 +18,7 @@ from .forms import ChangePassForm
 class StudentList(LoginRequiredMixin, ListView):
     model = Student
     template_name = 'student/list.html'
-    ordering = ['last_name', 'first_name']
+    ordering = ['user__last_name', 'user__first_name']
 
 
 class StudentProfile(LoginRequiredMixin, DetailView):

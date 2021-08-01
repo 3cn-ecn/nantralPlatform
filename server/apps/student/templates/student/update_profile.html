@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block  content%}
-<h1>{{object.first_name | title}} {{object.last_name | upper}}</h1>
+<h1>{{object.name}}</h1>
 <p>{{object.user.email}}</p>
 <form method='POST' enctype="multipart/form-data">
     {% csrf_token %}
