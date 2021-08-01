@@ -1,11 +1,12 @@
 from typing import Dict
 from django import forms
+
 from django.contrib.auth.models import User
-from ..student.models import Student
+from apps.student.models import Student
+from apps.student.models import FACULTIES, PATHS
+
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-
-from apps.student.models import FACULTIES, PATHS
 
 
 def check_ecn_mail(mail):
@@ -69,8 +70,8 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email',
-                  'password1', 'password2', 'promo', 'faculty')
+        fields = ('first_name', 'last_name', 'email','confirm_email',
+                  'password1', 'password2', 'promo', 'faculty', )
 
 
 class LoginForm(forms.Form):

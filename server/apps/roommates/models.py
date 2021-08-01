@@ -66,5 +66,7 @@ class NamedMembershipRoommates(NamedMembership):
         max_length=100, verbose_name='Surnom', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.student.first_name} {self.student.last_name}' \
-            if self.nickname is None else f'{self.student.first_name} {self.student.last_name} alias {self.nickname}'
+        if self.nickname:
+            return f'{self.student.name} alias {self.nickname}'
+        else:
+            return self.student.name

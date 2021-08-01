@@ -36,39 +36,44 @@ class Student(models.Model):
         verbose_name='Année de promotion entrante', null=True, blank=True)
     picture = models.ImageField(
         verbose_name='Photo de profil', upload_to=path_and_rename, null=True, blank=True)
-    first_name = models.CharField(
-        max_length=200, verbose_name='Prénom', null=True)
-    last_name = models.CharField(
-        max_length=200, verbose_name='Nom de famille', null=True)
     faculty = models.CharField(
         max_length=200, verbose_name='Filière', choices=FACULTIES)
     path = models.CharField(
         max_length=200, verbose_name='Cursus', choices=PATHS, null=True, blank=True)
+    
+    @property
+    def name(self):
+        '''Renvoie le nom de l'utilisateur au format Prénom NOM.'''
+        if self.user.first_name and self.user.last_name:
+            return f'{self.user.first_name.capitalize()} {self.user.last_name.upper()}'
+        elif self.user.first_name:
+            return self.user.first_name.capitalize()
+        elif self.user.last_name:
+            return self.user.last_name.capitalize()
+        else:
+            return self.user.username
+    
+    @property
+    def alphabetical_name(self):
+        '''Renvoie le nom de l'utilisateur au format NOM Prénom.'''
+        if self.user.first_name and self.user.last_name:
+            return f'{self.user.last_name.upper()} {self.user.first_name.capitalize()}'
+        else:
+            return self.name
 
     def __str__(self):
-        if self.first_name and self.last_name:
-            return f'{self.first_name.capitalize()} {self.last_name.upper()}'
-        elif self.first_name:
-            return self.first_name.capitalize()
-        elif self.last_name:
-            return self.last_name.upper()
-        else:
-            return f'{self.id}'
-
+        return self.alphabetical_name
+    
     def get_absolute_url(self):
         return reverse('student:detail', args=[self.pk])
 
     def save(self, *args, **kwargs):
-        if self.first_name is not None:
-            self.first_name = self.first_name.lower()
-        if self.last_name is not None:
-            self.last_name = self.last_name.lower()
         if not self.pk or self.picture != Student.objects.get(pk=self.pk).picture:
             self.picture = compressImage(self.picture)
         super(Student, self).save(*args, **kwargs)
-
+    
     class Meta:
-        ordering = ['last_name', 'first_name']
+        ordering = ['user__last_name', 'user__first_name']
 
 
 @receiver(post_save, sender=User)
