@@ -80,7 +80,7 @@
           <ul class="navbar-nav ml-auto ">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ request.user.first_name | title}} {{ request.user.last_name | upper}}    <i class="fas fa-cog"></i>
+                {{ request.user.student.name }}    <i class="fas fa-cog"></i>
               </a>
               <ul class="dropdown-menu dropdown-menu-end" role="menu">
                 {% if request.user.student.id %}
