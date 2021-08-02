@@ -45,7 +45,7 @@ class HousingRoommates(generics.ListCreateAPIView):
     def get_queryset(self):
         now = timezone.now()
         query = Housing.objects.filter(
-            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | (Q(roommates__members=None)))
+            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | (Q(roommates__members=None))).distinct()
         return query
 
 
