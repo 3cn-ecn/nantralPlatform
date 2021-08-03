@@ -1,19 +1,16 @@
 from typing import Any, Dict
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls.base import reverse_lazy
-from apps.roommates.models import Housing, Roommates, NamedMembershipRoommates
-from django.shortcuts import get_object_or_404
-from django.views.generic import TemplateView, UpdateView, DetailView, ListView
-import locale
-
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.conf import settings
+from django.views.generic import TemplateView, CreateView, ListView
 
-from apps.roommates.models import Housing
+from apps.roommates.models import Housing, Roommates
 
 
 class HousingMap(LoginRequiredMixin, TemplateView):
-    template_name = 'roommates/housing/map.html'
+    template_name = 'roommates/map.html'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -23,16 +20,31 @@ class HousingMap(LoginRequiredMixin, TemplateView):
 
 class HousingList(LoginRequiredMixin, ListView):
     model = Housing
-    template_name = 'roommates/housing/list.html'
+    template_name = 'roommates/list.html'
 
 
 class CreateHousingView(LoginRequiredMixin, TemplateView):
-    template_name = 'roommates/housing/create.html'
+    template_name = 'roommates/create/create-housing.html'
+
+
+class CreateRoommatesView(LoginRequiredMixin, CreateView):
+    template_name = 'roommates/create/create-roommates.html'
+    model = Roommates
+    fields = ['name', 'begin_date', 'end_date']
+
+    def form_valid(self, form):
+        form.instance.housing = Housing.objects.get(pk=self.kwargs['housing_pk'])
+        roommates = form.save()
+        roommates.members.add(self.request.user.student)
+        roommates.members.through.objects.get(
+            student=self.request.user.student,
+            group=roommates
+            ).admin=True
+        return redirect(reverse('roommates:detail', args=[roommates.mini_slug]))
 
 
 
-
-
+'''
 class HousingDetailView(LoginRequiredMixin, DetailView):
     template_name = 'roommates/housing/detail.html'
     model = Housing
@@ -81,3 +93,4 @@ class EditHousingView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self) -> str:
         return reverse_lazy('roommates:update', kwargs={'pk': self.object.id})
+'''

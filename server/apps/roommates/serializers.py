@@ -7,7 +7,8 @@ from .models import Housing, NamedMembershipRoommates, Roommates
 
 
 class HousingLastRoommatesSerializer(serializers.ModelSerializer):
-    '''Serializer for the Housing Model to display on the map.'''
+    '''Serializer for the Housing Model to display on the map, 
+       with only the last roommates.'''
 
     roommates = serializers.SerializerMethodField()
 

@@ -94,7 +94,7 @@ function ColocInfo(props: CityInfoProps): JSX.Element {
 					<Button
 						variant="secondary"
 						size="sm"
-						href={`${housing.roommates.url}`}
+						href={housing.roommates.url}
 					>
 						Détails
 					</Button>

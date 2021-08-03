@@ -8,7 +8,8 @@ from apps.group.views import UpdateGroupView
 app_name = 'roommates'
 
 urlpatterns = [
-    path('create', CreateHousingView.as_view(), name='create-new'),
+    path('create/housing', CreateHousingView.as_view(), name='create-housing'),
+    path('create/<int:housing_pk>/roommates', CreateRoommatesView.as_view(), name='create-roommates'),
     path('map', HousingMap.as_view(), name='housing-map'),
     path('liste', HousingList.as_view(), name='housing-list'),
     path('', HousingList.as_view()),

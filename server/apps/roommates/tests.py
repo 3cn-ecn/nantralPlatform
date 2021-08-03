@@ -29,7 +29,7 @@ class TestHousing(TestCase, TestMixin):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-        url = reverse('roommates:create-new')
+        url = reverse('roommates:create-housing')
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 

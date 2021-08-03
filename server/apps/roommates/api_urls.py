@@ -6,9 +6,9 @@ app_name = 'roommates_api'
 
 urlpatterns = [
     path('geocoding/', SearchGeocodingView.as_view(), name='geocoding'),
-    path('housing/for-map', HousingForMap.as_view(), name='housing-for-map'),
+    path('housing/', HousingView.as_view(), name='housing'),
+    path('housing/check', CheckAddressView.as_view(), name='address-check'),
     # path('housing/', HousingView.as_view(), name='housing'),
-    # path('housing/check', CheckAddressView.as_view(), name='address-check'),
     # path('housing/<int:pk>/roommates',
     #      RoommatesGroupView.as_view(), name='housing-roommates'),
     # path('roommates/<int:pk>/members',

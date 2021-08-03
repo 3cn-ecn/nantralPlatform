@@ -8,9 +8,8 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
 function CreateHousing(props) {
 	const [currentHousing, updateCurrentHousing] = useState({});
-	const [alreadyExists, updateAlreadyExists] = useState("");
+	const [alreadyExists, updateAlreadyExists] = useState([]);
 	const [suggestions, updateSuggestions] = useState([]);
-	const [showModal, updateShowModal] = useState(false);
 
 	function getSuggestions(search: string) {
 		if (search.length > 5) {
@@ -46,18 +45,19 @@ function CreateHousing(props) {
 	}
 
 	function submitHousing() {
+
 		axios.post(props.api_url, currentHousing).then((resp) => {
-			updateAlreadyExists(resp.data["edit_url"]);
-			updateShowModal(true);
+			updateAlreadyExists(resp.data);
+			location.href = props.create_url.replace('0', resp.data.id);
 		});
 	}
 
 	return (
 		<div>
-			<h1>Ajouter une coloc</h1>
+			<h1>Ajouter ma coloc</h1>
 			<Form autocomplete="off">
 				<Form.Group controlId="address">
-					<Form.Label>Où se situe la coloc ?</Form.Label>
+					<Form.Label>Adresse :</Form.Label>
 					<Form.Control
 						onInput={(event) => {
 							getSuggestions(event.target.value);
@@ -79,44 +79,53 @@ function CreateHousing(props) {
 			{currentHousing["address"] != null && (
 				<div>
 					<br />
-					{alreadyExists != "" && (
-						<Alert variant='warning'>
-							Cette habitation semble déjà exister, vous pouvez la retrouver{" "}
-							<Alert.Link href={alreadyExists}>ici</Alert.Link>.
-						</Alert>
+					<h5>{currentHousing["address"]}</h5>
+					{alreadyExists.length > 0 && (
+						<div>
+							<p>
+								Cette adresse est déjà enregistrée ! Si votre coloc est située
+								à la même adresse que l'une des colocs ci-dessous, sélectionnez-la. 
+								Sinon, créez une nouvelle adresse !
+							</p>
+							<ListGroup>
+								{
+									alreadyExists.map((housing) => (
+									<ListGroup.Item action
+										href={props.create_url.replace('0', housing.pk)}
+									>
+										{housing.name}
+									</ListGroup.Item>
+									))
+								}
+								<ListGroup.Item action
+									onClick={() => updateAlreadyExists([])}
+								>
+									Créer une nouvelle adresse
+								</ListGroup.Item>
+							</ListGroup>
+						</div>
 					)}
-					<Form>
-						<h1>{currentHousing["address"]}</h1>
-						<Form.Group controlId="details">
-							<Form.Label>Complément d'addresse</Form.Label>
-							<Form.Control
-								onInput={(event) => {
-									updateDetails(event.target.value);
+					{alreadyExists.length == 0 && (
+						<Form>
+							<Form.Group controlId="details">
+								<Form.Label>Complément d'addresse</Form.Label>
+								<Form.Control
+									onInput={(event) => {
+										updateDetails(event.target.value);
+									}}
+									placeholder="Appart 101"
+								/>
+							</Form.Group>
+							<br/>
+							<Button
+								onClick={() => {
+									submitHousing();
 								}}
-								placeholder="Appart 101"
-							/>
-						</Form.Group>
-					</Form>
-					<Button
-						onClick={() => {
-							submitHousing();
-						}}
-					>
-						Créer le bâti
-					</Button>
-					<Modal show={showModal}>
-						<Modal.Header>
-							<p>L'habitation a été enregistré!</p>
-						</Modal.Header>
-						<Modal.Footer>
-							<Button href={props.map_url} variant="secondary">
-								Voir sur la carte
+							>
+								Continuer
 							</Button>
-							<Button href={alreadyExists} variant="success">
-								Ajouter les habitants
-							</Button>
-						</Modal.Footer>
-					</Modal>
+						</Form>
+					)}
 				</div>
 			)}
 		</div>
@@ -125,6 +134,6 @@ function CreateHousing(props) {
 
 
 render(
-	<CreateHousing api_url={api_url} check_url={check_url} map_url={map_url} geo_url={geo_url} />,
+	<CreateHousing api_url={api_url} check_url={check_url} geo_url={geo_url} create_url={create_url} />,
 	document.getElementById("root")
 );

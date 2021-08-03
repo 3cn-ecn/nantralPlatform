@@ -19,7 +19,7 @@ class SearchGeocodingView(APIView):
         return Response(data=geocode(request.GET.get("search_string")))
 
 
-class HousingForMap(generics.ListCreateAPIView):
+class HousingView(generics.ListCreateAPIView):
     """API View to get all the housing and their current roommates"""
     serializer_class = HousingLastRoommatesSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -32,6 +32,20 @@ class HousingForMap(generics.ListCreateAPIView):
 
 
 
+class CheckAddressView(APIView):
+    """An API view to wether wether a housing already exists at selected address.
+    Returns the pk if it does, None otherwise"""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        query = Housing.objects.filter(address=request.data.get("address"))
+        data = [{
+                    'pk':housing.pk, 
+                    'name': f'{housing.address} - {housing.details} ({housing.last_roommates})'
+                } for housing in query ]
+        return Response(data=data)
+
+
 '''
 class HousingView(generics.ListCreateAPIView):
     serializer_class = HousingSerializer
@@ -40,15 +54,6 @@ class HousingView(generics.ListCreateAPIView):
     def get_queryset(self):
         return Housing.objects.all()
 
-
-class CheckAddressView(APIView):
-    """An API view to wether wether a housing already exists at selected address.
-    Returns the pk if it does, None otherwise"""
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request):
-        housing = Housing.objects.filter(address=request.data.get("address"))
-        return Response(data=(None if len(housing) == 0 else housing))
 
 
 class HousingRoommates(generics.ListCreateAPIView):
