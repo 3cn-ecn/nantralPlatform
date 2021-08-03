@@ -24,11 +24,9 @@
 
 {% block content%}
 <div id="root"></div>
-<div class="row mb-2">
-	<div class="col-12">
-		<a class='btn btn-success mt-3' href="{% url 'roommates:create-housing' %}">Ajouter ma coloc</a>
-	</div>
-</div>
+
+<a class='btn btn-primary mt-3' href="{% url 'roommates:housing-list' %}">Voir la liste</a>
+<a class='btn btn-primary mt-3' href="{% url 'roommates:create-housing' %}">Ajouter ma coloc</a>
 
 {% endblock content%} 
 
