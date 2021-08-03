@@ -68,6 +68,10 @@ class Roommates(Group):
     @property
     def get_absolute_edit_url(self):
         return reverse('roommates:update', kwargs={'mini_slug': self.mini_slug})
+    
+    @property
+    def get_absolute_url(self):
+        return reverse('roommates:detail', kwargs={'mini_slug': self.mini_slug})
 
 
 class NamedMembershipRoommates(NamedMembership):

@@ -35,7 +35,7 @@
 {% block script %}
 <script>
   const MAPBOX_TOKEN = "{{MAPBOX_API_KEY}}";
-  const api_housing_url = "{% url 'roommates_api:housing-and-roommates' %}";
+  const api_housing_url = "{% url 'roommates_api:housing-for-map' %}";
 	const housing_details_url = "{% url 'roommates:detail' mini_slug=1 %}";
 </script>
 <script src='{% static "js/housingMap.js" %}'></script>

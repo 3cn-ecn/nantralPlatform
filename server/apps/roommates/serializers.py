@@ -6,6 +6,56 @@ from apps.student.serializers import StudentSerializer
 from .models import Housing, NamedMembershipRoommates, Roommates
 
 
+class HousingLastRoommatesSerializer(serializers.ModelSerializer):
+    '''Serializer for the Housing Model to display on the map.'''
+
+    roommates = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Housing
+        fields='__all__'
+    
+    def get_roommates(self, obj):
+        roommates = Roommates.objects.filter(housing=obj).order_by('begin_date').last()
+        return RoommatesSerializer(roommates, many=False, context=self._context).data
+
+
+class RoommatesMemberSerializer(serializers.ModelSerializer):
+    '''Serializer for a member of roommates'''
+    
+    #student = StudentSerializer(read_only=True)
+    name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = NamedMembershipRoommates
+        fields = ['nickname', 'name']
+    
+    def get_name(self, obj):
+        return obj.student.name
+
+
+class RoommatesSerializer(serializers.ModelSerializer):
+    '''Serializer for roommates'''
+
+    members = serializers.SerializerMethodField() #RoommatesMemberSerializer(read_only=True, many=True)
+    url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Roommates
+        fields = ['name', 'begin_date', 'end_date', 'members', 'url']
+
+    def get_members(self, obj):
+        members = NamedMembershipRoommates.objects.filter(group=obj)
+        return RoommatesMemberSerializer(members, many=True, context=self._context).data
+    
+    def get_url(self, obj):
+        return obj.get_absolute_url
+
+
+
+
+
+'''
 class HousingSerializer(serializers.ModelSerializer):
     edit_url = serializers.HyperlinkedIdentityField(
         view_name='roommates:update', read_only=True, lookup_field='mini_slug')
@@ -73,3 +123,4 @@ class RoommatesGroupSerializer(serializers.ModelSerializer):
                 nickname=member['nickname']
             )
         return roommates
+'''

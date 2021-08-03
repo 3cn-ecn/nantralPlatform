@@ -15,67 +15,47 @@ import { easeCubic } from "react-d3-library";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 
+// définitions des modèles -> cf serializers
 export interface Housing {
 	id: number;
-	edit_url: string;
 	url: string;
-	roommates: Roommate[];
-	name: string;
+	roommates: Roommate;
 	address: string;
 	details: string;
 	latitude: number;
 	longitude: number;
 }
-
 export interface Roommate {
-	id: number;
 	members: Member[];
-	admins: Member[];
-	edit_members_api_url: string;
-	edit_api_url: string;
+	url: string;
 	name: string;
-	description: string;
-	logo: any;
-	slug: string;
-	parent: any;
 	begin_date: string;
 	end_date: string;
-	housing: number;
 }
-
 export interface Member {
-	id: number;
-	student: Student;
-	edit_api_url: string;
 	nickname: string;
-	roommates: number;
-}
-
-export interface Student {
-	id: number;
-	promo: any;
-	picture: any;
 	name: string;
-	faculty: string;
-	path: any;
-	user: number;
 }
 
+// objets à afficher sur la carte
 interface CityInfoProps {
 	housing: Housing;
 	housingDetailsUrl: string;
 }
 
+// styles CSS
 const geolocateStyle = {
 	top: 0,
 	left: 0,
 	margin: 10,
 };
 
+// options de la carte
 const positionOptions = {
 	enableHighAccuracy: true,
 };
 
+// mettre les noms au bon format
 function toTitle(str: string): string {
 	if (str) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
@@ -83,39 +63,30 @@ function toTitle(str: string): string {
 	return undefined;
 }
 
+// affichage du contenu de la bulle
 function ColocInfo(props: CityInfoProps): JSX.Element {
 	const housing: Housing = props.housing;
-	const housing_details_url = props.housingDetailsUrl.replace(
-		"1",
-		housing.get_absolute_url.toString()
-	);
 	let roommatesList: string = "";
 	if (
-		typeof housing.roommates[0] != "undefined" &&
-		typeof housing.roommates[0].members != "undefined"
+		typeof housing.roommates != "undefined" &&
+		typeof housing.roommates.members != "undefined"
 	) {
-		roommatesList = housing.roommates[0].members
-			.map(
-				(e) =>
-					toTitle(e.student.name)
-			)
-			.join(", ");
-		roommatesList = roommatesList.replace(/(,\s*)$/, "");
+		roommatesList = housing.roommates.members
+			.map((e) => e.name)
+			.join(", ")
+			.replace(/(,\s*)$/, "");
 	}
 	return (
 		<div>
 			<div>
 				<p>
-					<strong>{housing.name}</strong>
+					<strong>{housing.roommates.name}</strong>
 					&nbsp;-&nbsp;
 					<Button
 						variant="primary"
 						size="sm"
-						onClick={() =>
-							window.open(
-								`https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${housing.address}`
-							)
-						}
+						href={`https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${housing.address}`}
+						target="_blank"
 					>
 						Y aller
 					</Button>
@@ -123,22 +94,26 @@ function ColocInfo(props: CityInfoProps): JSX.Element {
 					<Button
 						variant="secondary"
 						size="sm"
-						onClick={() => window.open(housing_details_url)}
+						href={`${housing.roommates.url}`}
 					>
 						Détails
 					</Button>
 					<br />
-					{housing.address}
-					<br />
+					<small>
+						{housing.address}
+						<br />
+						<i>{housing.details}</i>
+					</small>
+				</p>
+				<p>
 					{roommatesList}
-					<br />
-					<br />
-					<i>{housing.details}</i>
 				</p>
 			</div>
 		</div>
 	);
 }
+
+// affichage des points sur la carte 
 
 interface PinProps {
 	size: number;
@@ -201,6 +176,7 @@ function ClusterMarker(props): JSX.Element {
 	);
 }
 
+// affichage principal 
 function Root(props): JSX.Element {
 	const navControlStyle: React.CSSProperties = {
 		right: 10,
@@ -224,19 +200,19 @@ function Root(props): JSX.Element {
 	const [popupInfo, setPopUpinfo] = useState(null);
 	const mapRef = useRef(null);
 	const markers = useMemo(() => {
-		return data.map((roommate) => (
+		return data.map((housing) => (
 			<Marker
-				key={roommate.address}
-				longitude={roommate.longitude}
-				latitude={roommate.latitude}
+				key={housing.address}
+				longitude={housing.longitude}
+				latitude={housing.latitude}
 			>
 				<Pin
 					size={25}
 					onClick={() => {
 						setViewPort({
 							zoom: 16,
-							longitude: roommate.longitude,
-							latitude: roommate.latitude,
+							longitude: housing.longitude,
+							latitude: housing.latitude,
 							transitionDuration: 500,
 							transitionInterpolator: new FlyToInterpolator(),
 							transitionEasing: easeCubic,
@@ -245,8 +221,8 @@ function Root(props): JSX.Element {
 							<Popup
 								tipSize={10}
 								anchor="bottom"
-								longitude={roommate.longitude}
-								latitude={roommate.latitude}
+								longitude={housing.longitude}
+								latitude={housing.latitude}
 								closeOnClick={false}
 								onClose={() => setPopUpinfo(null)}
 								dynamicPosition={false}
@@ -254,8 +230,8 @@ function Root(props): JSX.Element {
 								offsetLeft={10}
 							>
 								<ColocInfo
-									housing={roommate}
-									housingDetailsUrl={housing_details_url}
+									housing={housing}
+									housingDetailsUrl={housing.roommates.url}
 								/>
 							</Popup>
 						);
@@ -282,8 +258,8 @@ function Root(props): JSX.Element {
 						return false;
 					});
 					setColocs(
-						dataBuffer.map((roommate) => {
-							return { label: roommate.name, roommate: roommate };
+						dataBuffer.map((housing) => {
+							return { label: housing.roommates.name, housing: housing };
 						})
 					);
 					setData(dataBuffer);
@@ -309,15 +285,15 @@ function Root(props): JSX.Element {
 									return;
 								}
 								setSelectColoc(coloc);
-								let roommates: Housing[] = data.filter(
-									(roommateElt) => roommateElt.id === coloc[0].roommate.id
+								let housings: Housing[] = data.filter(
+									(housing) => housing.id === coloc[0].housing.id
 								);
-								if (typeof roommates[0] === "undefined") return;
-								let roommate: Housing = roommates[0];
+								if (typeof housings[0] === "undefined") return;
+								let housing: Housing = housings[0];
 								setViewPort({
 									zoom: 16,
-									longitude: roommate.longitude,
-									latitude: roommate.latitude,
+									longitude: housing.longitude,
+									latitude: housing.latitude,
 									transitionDuration: 500,
 									transitionInterpolator: new FlyToInterpolator(),
 									transitionEasing: easeCubic,
@@ -326,8 +302,8 @@ function Root(props): JSX.Element {
 									<Popup
 										tipSize={10}
 										anchor="bottom"
-										longitude={roommate.longitude}
-										latitude={roommate.latitude}
+										longitude={housing.longitude}
+										latitude={housing.latitude}
 										closeOnClick={false}
 										onClose={() => setPopUpinfo(null)}
 										dynamicPosition={false}
@@ -335,8 +311,8 @@ function Root(props): JSX.Element {
 										offsetLeft={10}
 									>
 										<ColocInfo
-											housing={roommate}
-											housingDetailsUrl={housing_details_url}
+											housing={housing}
+											housingDetailsUrl={housing.roommates.url}
 										/>
 									</Popup>
 								);
