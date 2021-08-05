@@ -13,4 +13,9 @@ urlpatterns = [
     path('map', HousingMap.as_view(), name='housing-map'),
     path('liste', HousingList.as_view(), name='housing-list'),
     path('', HousingList.as_view()),
-] + makeGroupUrlpatterns(group_type="roommates", url_base='coloc/')
+] + makeGroupUrlpatterns(
+            group_type="roommates", 
+            url_base='coloc/',
+            detail_view=DetailRoommatesView.as_view(),
+            update_view=UpdateRoommatesView.as_view(),
+        )

@@ -1,8 +1,9 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 from apps.club.models import Club
 from apps.group.models import Group
-from apps.group.views import GroupSlugFonctions
+from apps.group.views import GroupSlugFonctions, BaseDetailGroupView
 
 
 class ListClubView(ListView):
@@ -24,11 +25,15 @@ class ListClubView(ListView):
 
 
 
+class DetailClubView(BaseDetailGroupView):
+    '''Vue de détails d'un club.'''
+    pass
+
+
 class DetailGroupMembersView(GroupSlugFonctions, LoginRequiredMixin, ListView):
     template_name = 'club/members.html'
     
     def get_object(self, **kwargs):
-        self.kwargs['group_type'] = 'club'
         return Group.get_group_by_slug(self.get_slug)
     
     def get_queryset(self, **kwargs):

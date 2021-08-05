@@ -2,7 +2,8 @@ from datetime import date, timedelta
 
 from django.shortcuts import redirect
 from django.urls.base import reverse
-from django.views.generic import ListView, View, FormView, TemplateView, DetailView
+from django.urls import resolve
+from django.views.generic import View, FormView, TemplateView, DetailView
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -33,20 +34,21 @@ class GroupSlugFonctions():
 
     @property
     def get_slug(self, **kwargs):
-        group_type = self.kwargs.get('group_type')
+        #group_type = self.kwargs.get('group_type')
+        app = resolve(self.request.path).app_name
         mini_slug = self.kwargs.get("mini_slug")
         # cas spécial du groupe club/bdx (mêmes urls)
-        if (group_type == "club"):
+        if (app == "club"):
             if BDX.objects.filter(slug='bdx--'+mini_slug):
                 return 'bdx--' + mini_slug
             else:
                 return 'club--' + mini_slug
         # autres groupes
         else:
-            return group_type + '--' + mini_slug
+            return app + '--' + mini_slug
 
 
-class DetailGroupView(GroupSlugFonctions, DetailView):
+class BaseDetailGroupView(GroupSlugFonctions, DetailView):
     '''Vue de détails d'un groupe.'''
     template_name = 'group/detail/detail.html'
 
@@ -55,24 +57,28 @@ class DetailGroupView(GroupSlugFonctions, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.object = self.get_object()
+        group = context['object']
         context['admin_req_form'] = AdminRightsRequestForm()
-        context['members'] = self.object.members.through.objects.filter(
-            group=self.object).order_by('student__user__first_name')
-        context['form'] = NamedMembershipAddGroup(context['object'])
+        context['members'] = group.members.through.objects.filter(
+            group=group).order_by('student__user__first_name')
+        context['form'] = NamedMembershipAddGroup(group)
         context['sociallinks'] = SocialLink.objects.filter(
-            slug=self.object.slug)
-        context['is_member'] = self.object.is_member(self.request.user)
+            slug=group.slug)
+        context['is_member'] = group.is_member(self.request.user)
         if self.request.user.is_authenticated:
-            context['is_admin'] = self.object.is_admin(self.request.user)
+            context['is_admin'] = group.is_admin(self.request.user)
         else:
             context['is_admin'] = False
         context['events'] = BaseEvent.objects.filter(
-            group=self.object.slug, date__gte=date.today()).order_by('date')
+            group=group.slug, date__gte=date.today()).order_by('date')
         context['posts'] = Post.objects.filter(
-            group=self.object.slug, publication_date__gte=date.today()-timedelta(days=10)
+            group=group.slug, publication_date__gte=date.today()-timedelta(days=10)
         ).order_by('publication_date')
         return context
+
+
+class DetailGroupView(BaseDetailGroupView, LoginRequiredMixin):
+    pass
 
 
 class AddToGroupView(GroupSlugFonctions, LoginRequiredMixin, FormView):
@@ -211,6 +217,7 @@ def edit_sociallinks(request, group):
     else:
         messages.warning(request, form.errors)
         return redirect(group.group_type+':update-sociallinks', group.mini_slug)
+
 
 
 class RequestAdminRightsView(GroupSlugFonctions, LoginRequiredMixin, FormView):

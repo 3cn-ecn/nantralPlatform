@@ -38,7 +38,7 @@ def makeGroupUrlpatterns(
             group par une vue personnalisée pour le groupe 
     '''
     
-    args = {'group_type': group_type}
+    args = {}
 
     urlpatterns = [
         # vue generale du groupe

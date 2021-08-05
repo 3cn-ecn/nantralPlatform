@@ -48,9 +48,7 @@ class UpdateGroupCreateEventView(GroupSlugFonctions, UserIsAdmin, FormView):
             slug=self.get_slug
         ).slug
         event.save()
-        group_type = self.kwargs.get('group_type')
-        mini_slug = self.kwargs.get('mini_slug')
-        return redirect(group_type+':create-event', mini_slug)
+        return redirect(event.group.app+':create-event', event.group.mini_slug)
 
 
 class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
@@ -60,7 +58,7 @@ class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
               'date', 'publicity', 'color', 'image']
 
     def test_func(self) -> bool:
-        self.kwargs['group_type'] = self.object.get_group.group_type
+        self.request.path = '/'+self.object.get_group.app+'/'
         self.kwargs['mini_slug']  = self.object.get_group.mini_slug
         return super().test_func()
 
@@ -75,7 +73,6 @@ class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = BaseEvent.get_event_by_slug(self.kwargs['event_slug'])
-        self.kwargs['group_type'] = self.object.get_group.group_type
         self.kwargs['mini_slug']  = self.object.get_group.mini_slug
         if isinstance(self.object, EatingEvent):
             self.fields = ['title', 'description', 'location',
@@ -158,7 +155,7 @@ def edit_events(request, group):
         for event in form.deleted_objects:
             event.delete()
         messages.success(request, 'Events  modifies')
-        return redirect(group.group_type+':update-events', group.mini_slug)
+        return redirect(group.app+':update-events', group.mini_slug)
     else:
         messages.warning(request, form.errors)
-        return redirect(group.group_type+':update-events', group.mini_slug)
+        return redirect(group.app+':update-events', group.mini_slug)

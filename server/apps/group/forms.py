@@ -1,9 +1,11 @@
 from django.forms import ModelForm
+
 from .models import AdminRightsRequest
 from apps.sociallink.models import SocialLink
 from apps.club.models import Club, BDX
 from apps.liste.models import Liste
 from apps.roommates.models import Roommates
+
 from apps.club.forms import *
 from apps.liste.forms import *
 from apps.roommates.forms import *
@@ -11,10 +13,10 @@ from apps.roommates.forms import *
 #NotaBene : pour un bdx, isinstance(bdx, Club)=isinstance(bdx, BDX)=True
 
 def UpdateGroupForm(group):
-    if type(group) == Club:
-        return UpdateClubForm
-    elif type(group) == BDX:
+    if isinstance(group, BDX):
         return UpdateBDXForm
+    elif isinstance(group, Club):
+        return UpdateClubForm
     elif isinstance(group, Liste):
         return UpdateListeForm
     elif isinstance(group, Roommates):

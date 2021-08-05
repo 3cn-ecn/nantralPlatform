@@ -1,14 +1,11 @@
 from django.db import models
 from django.db.models import F
-from django.conf import settings
 from datetime import date
-from django.urls.base import reverse
-import datetime
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressImage
+from apps.utils.compress import compressModelImage
 
 
 path_and_rename_club = PathAndRename("groups/logo/club")
@@ -31,14 +28,9 @@ class Club(Group):
     class Meta:
         ordering = [F('bdx_type').asc(nulls_first=True), 'name']
     
-    @property
-    def group_type(self):
-        return 'club'
-        
     def save(self, *args, **kwargs):
         # compression des images
-        if not self.pk or self.banniere != Club.objects.get(pk=self.pk).banniere:
-            self.banniere = compressImage(self.banniere, size=(1320,492), contains=False)
+        compressModelImage(self, 'banniere', size=(1320,492), contains=False)
         super(Club, self).save(*args, **kwargs)
 
 

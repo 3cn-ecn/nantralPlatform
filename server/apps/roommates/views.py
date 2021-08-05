@@ -6,7 +6,10 @@ from django.urls import reverse
 from django.conf import settings
 from django.views.generic import TemplateView, CreateView, ListView
 
-from apps.roommates.models import Housing, Roommates
+from .models import Housing, Roommates
+from .forms import UpdateHousingForm
+
+from apps.group.views import UpdateGroupView, DetailGroupView
 
 
 class HousingMap(LoginRequiredMixin, TemplateView):
@@ -36,11 +39,43 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
         form.instance.housing = Housing.objects.get(pk=self.kwargs['housing_pk'])
         roommates = form.save()
         roommates.members.add(self.request.user.student)
-        roommates.members.through.objects.get(
+        member = roommates.members.through.objects.get(
             student=self.request.user.student,
             group=roommates
-            ).admin=True
+            )
+        member.admin=True
+        member.save()
         return redirect(reverse('roommates:detail', args=[roommates.mini_slug]))
+
+
+class DetailRoommatesView(DetailGroupView):
+    '''Vue de détails d'une coloc.'''
+    template_name = 'roommates/coloc/detail/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['housing'] = context['object'].housing
+        context['roommates_list'] = Roommates.objects.filter(
+                housing=context['housing']
+            ).exclude(pk=context['object'].pk).order_by('-begin_date')
+        return context
+
+
+class UpdateRoommatesView(UpdateGroupView):
+    '''Vue pour modifier les infos générales sur une coloc.'''
+
+    template_name = 'roommates/coloc/edit/update.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form_housing'] = UpdateHousingForm(instance=context['object'].housing)
+        return context
+
+    def post(self, request, **kwargs):
+        group = self.get_object()
+        form_housing = UpdateHousingForm(request.POST, request.FILES, instance=group.housing)
+        form_housing.save()
+        return super().post(request, **kwargs)
 
 
 

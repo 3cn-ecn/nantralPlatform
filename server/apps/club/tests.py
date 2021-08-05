@@ -18,6 +18,7 @@ class TestGroups(TestCase, TestMixin):
     def test_club_views(self):
         Club.objects.create(name='TestClub')
         club = Club.objects.all().first()
+
         url = reverse('club:detail', args=[club.mini_slug])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)

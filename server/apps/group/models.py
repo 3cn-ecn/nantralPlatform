@@ -15,7 +15,7 @@ from apps.student.models import Student
 from apps.sociallink.models import SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
-from apps.utils.compress import compressImage
+from apps.utils.compress import compressModelImage
 
 
 path_and_rename_group = PathAndRename("groups/logo/group")
@@ -26,11 +26,11 @@ def break_slug(slug):
        le nom de l'appli correspondant au groupe.'''
 
     list = slug.split('--')
-    group_type = list[0]
+    app = list[0]
     mini_slug = ''.join(list[1:])
-    if group_type == 'bdx':
-        group_type = 'club'
-    return group_type, mini_slug
+    if app == 'bdx':
+        app = 'club'
+    return app, mini_slug
 
 
 class Group(models.Model):
@@ -90,17 +90,15 @@ class Group(models.Model):
 
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
-        group_type = type(self).__name__.lower()
-        if self.slug.split('--')[0] != group_type:
-            slug = f'{group_type}--{slugify(self.name)}'
+        if self.slug.split('--')[0] != self.app:
+            slug = f'{self.app}--{slugify(self.name)}'
             if type(self).objects.filter(slug=slug):
                 id = 1
                 while type(self).objects.filter(slug=f'{slug}-{id}'): id += 1
                 slug = f'{slug}-{id}'
             self.slug = slug
         # compression des images
-        if not self.pk or self.logo != type(self).objects.get(pk=self.pk).logo:
-            self.logo = compressImage(self.logo, size=(500,500), contains=True)
+        compressModelImage(self, 'logo', size=(500,500), contains=True)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
 
@@ -132,8 +130,12 @@ class Group(models.Model):
         return break_slug(self.slug)[0]
 
     @property
+    def app(self):
+        return self._meta.app_label
+    
+    @property
     def get_absolute_url(self):
-        return reverse(self.group_type+':detail', kwargs={'mini_slug': self.mini_slug})
+        return reverse(self.app+':detail', kwargs={'mini_slug': self.mini_slug})
 
 
 class NamedMembership(models.Model):

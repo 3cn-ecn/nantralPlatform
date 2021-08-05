@@ -1,12 +1,14 @@
 from django.db import models
-from django.utils.text import slugify
-from django.urls.base import reverse
 from datetime import date
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
-from apps.sociallink.models import SocialNetwork, SocialLink
+from apps.utils.upload import PathAndRename
+from apps.utils.compress import compressModelImage
+
+
+path_and_rename_roommates_banniere = PathAndRename("groups/banniere/roommates")
 
 
 class Housing(models.Model):
@@ -19,8 +21,9 @@ class Housing(models.Model):
 
     def save(self, *args, **kwargs):
         coordinates = geocode(self.address)[0]
-        self.latitude = coordinates['lat']
-        self.longitude = coordinates['long']
+        if not self.latitude or not self.longitude or abs(self.latitude-coordinates['lat'])>5e-3 or abs(self.longitude-coordinates['long'])>5e-3:
+            self.latitude = coordinates['lat']
+            self.longitude = coordinates['long']
         super(Housing, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -42,17 +45,18 @@ class Roommates(Group):
         to=Housing, on_delete=models.CASCADE)
     members = models.ManyToManyField(
         to=Student, through='NamedMembershipRoommates', blank=True)
+    banniere = models.ImageField(
+        verbose_name='Photo', blank=True, null=True, 
+        upload_to=path_and_rename_roommates_banniere,
+        help_text="Votre photo sera affichée au format 1320x492 pixels.")
 
     class Meta:
         verbose_name_plural = "Roommates"
     
-    @property
-    def get_absolute_edit_url(self):
-        return reverse('roommates:update', kwargs={'mini_slug': self.mini_slug})
-    
-    @property
-    def get_absolute_url(self):
-        return reverse('roommates:detail', kwargs={'mini_slug': self.mini_slug})
+    def save(self, *args, **kwargs):
+        # compression des images
+        compressModelImage(self, 'banniere', size=(1320,492), contains=False)
+        super(Roommates, self).save(*args, **kwargs)
 
 
 class NamedMembershipRoommates(NamedMembership):

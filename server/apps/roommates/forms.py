@@ -1,5 +1,5 @@
 from django.forms import ModelForm, modelformset_factory
-from .models import NamedMembershipRoommates, Roommates
+from .models import Housing, NamedMembershipRoommates, Roommates
 
 
 class CreateRoommatesForm(ModelForm):
@@ -11,7 +11,13 @@ class CreateRoommatesForm(ModelForm):
 class UpdateRoommatesForm(ModelForm):
     class Meta:
         model = Roommates
-        fields = ['name', 'begin_date', 'end_date', 'summary', 'video1', 'video2', 'description' ]
+        fields = ['name', 'begin_date', 'end_date', 'banniere', 'video1', 'video2', 'description' ]
+
+
+class UpdateHousingForm(ModelForm):
+    class Meta:
+        model = Housing
+        fields = ['details', 'latitude', 'longitude']
 
 
 class NamedMembershipAddRoommates(ModelForm):

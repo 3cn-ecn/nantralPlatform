@@ -31,7 +31,6 @@ class PostUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
               'publication_date', 'publicity', 'color', 'image']
 
     def test_func(self) -> bool:
-        self.kwargs['group_type'] = self.object.get_group.group_type
         self.kwargs['mini_slug']  = self.object.get_group.mini_slug
         return super().test_func()
 
@@ -46,7 +45,6 @@ class PostUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = Post.get_post_by_slug(self.kwargs['post_slug'])
-        self.kwargs['group_type'] = self.object.get_group.group_type
         self.kwargs['mini_slug']  = self.object.get_group.mini_slug
         return super().dispatch(request, *args, **kwargs)
 
