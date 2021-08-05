@@ -117,8 +117,7 @@
     <div class="container">
       {% if messages %}
         {% for message in messages %}
-          <br/>
-          <div id="alertScore" class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+          <div id="alertScore" class="alert alert-{% if message.tags == 'error'%}danger{%else%}{{message.tags}}{%endif%} alert-dismissible fade show mt-4" role="alert">
             {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>

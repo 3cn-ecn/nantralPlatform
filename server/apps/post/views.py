@@ -112,7 +112,7 @@ def edit_posts(request, group):
         # Delete  missing events
         for event in form.deleted_objects:
             post.delete()
-        messages.success(request, 'Annonces  modifiées')
+        messages.success(request, 'Annonces modifiées')
     else:
-        messages.warning(request, form.errors)
+        messages.error(request, form.errors)
     return redirect(group.app+':update-posts', group.slug)

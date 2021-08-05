@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load file_url %}
+{% load video %}
 
 {% block title %}{{ object.name }} - {% endblock %}
 
 {% block favicon %}
     {% if object.logo %}
-        {{object.logo.url}}
+        {{object.logo|file_url}}
     {% else %}
         {% static '/img/logo.svg' %}
     {%endif%}
@@ -14,7 +16,7 @@
 {% block banniere %}
     {% if object.banniere %}
         <div class="ratio ratio-banniere container-xl">
-            <img class="banniere" src='{{ object.banniere.url }}?{{object.modified_date}}'>
+            <img class="banniere" src='{{ object.banniere|file_url }}'>
         </div>
     {% endif %}
 {% endblock %}
@@ -26,7 +28,7 @@
         {%if object.logo %}
             <div class="col-12 col-sm-3">
                 <div class="ratio ratio-1x1 logo-div mb-4">
-                    <img class="logo" src='{{object.logo.url}}?{{object.modified_date}}'>
+                    <img class="logo" src='{{object.logo|file_url}}'>
                 </div>
             </div>
         {% endif %}
@@ -36,15 +38,25 @@
             <p>
             {% if request.user.is_authenticated %}
                 {% if is_member and is_admin %}
-                    <button class='btn btn-light btn-sm disabled'>
-                        <i class="fa fa-crown"></i>
-                        Vous êtes admin du groupe.
-                    </button>
+                    <div class="btn-group" role="group">
+                        <button class='btn btn-light btn-sm disabled border'>
+                            <i class="fa fa-crown"></i>
+                            Vous êtes admin !
+                        </button>
+                        <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
+                            Modifier
+                        </button>
+                    </div>
                 {% elif is_member %}
-                    <button class='btn btn-light btn-sm disabled'>
-                        <i class="fa fa-user"></i>
-                        Vous êtes déjà membre !
-                    </button>
+                    <div class="btn-group" role="group">
+                        <button class='btn btn-light btn-sm disabled'>
+                            <i class="fa fa-user"></i>
+                            Vous êtes membre !
+                        </button>
+                        <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
+                            Modifier
+                        </button>
+                    </div>
                 {% else %}
                     <button id='show-add-group' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                         <i class="fa fa-user-plus"></i>
@@ -116,18 +128,17 @@
 
     <!-- Vidéos s'il y en a 2 -->
     {% if object.video1 and object.video2 or object.video1 and not object.description %}
-        {% load group_tags %}
         <br />
         <div class="row gy-3">
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
-                    {% video_embed object.video1 %}
+                    {% video object.video1 %}
                 </div>
             </div>
             {% if object.video2 %}
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
-                    {% video_embed object.video2 %}
+                    {% video object.video2 %}
                 </div>
             </div>
             {% endif %}
@@ -141,7 +152,7 @@
             {% if object.video1 and not object.video2 %}
             <div class="col-md-6 float-md-end mb-3 ms-md-3">
                 <div class="ratio ratio-16x9">
-                    {% video_embed object.video1 %}
+                    {% video object.video1 %}
                 </div>
             </div>
             {% endif %}

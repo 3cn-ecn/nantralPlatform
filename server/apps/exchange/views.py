@@ -24,7 +24,7 @@ class AddExchangeView(LoginRequiredMixin, FormView):
         try:
             self.request.user.student.exchange
             message = f'Vous avez déjà un échange. Modifiez-le ou supprimez-le.'
-            messages.warning(self.request, message)
+            messages.error(self.request, message)
             return  redirect('exchange:exchange')
         except:
             return super(AddExchangeView,self).dispatch(request, *args,**kwargs)

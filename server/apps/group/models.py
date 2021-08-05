@@ -72,13 +72,11 @@ class Group(models.Model):
         # cration du slug si non-existant ou corrompu
         if not self.slug:
             slug = slugify(self.name)
-        else:
-            slug = self.slug
-        if type(self).objects.filter(slug=slug):
-            id = 1
-            while type(self).objects.filter(slug=f'{slug}-{id}'): id += 1
-            slug = f'{slug}-{id}'
-        self.slug = slug
+            if type(self).objects.filter(slug=slug):
+                id = 1
+                while type(self).objects.filter(slug=f'{slug}-{id}'): id += 1
+                slug = f'{slug}-{id}'
+            self.slug = slug
         # compression des images
         compressModelImage(self, 'logo', size=(500,500), contains=True)
         # enregistrement

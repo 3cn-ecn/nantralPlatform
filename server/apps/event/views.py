@@ -172,5 +172,5 @@ def edit_events(request, group):
             event.delete()
         messages.success(request, 'Évènements modifiés !')
     else:
-        messages.warning(request, form.errors)
+        messages.error(request, form.errors)
     return redirect(group.app+':update-events', group.slug)

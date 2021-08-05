@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 @register.inclusion_tag('group/included/video.html')
-def video_embed(video_url):
+def video(video_url):
     try:
         if 'youtube' in video_url:
             from urllib.parse import parse_qs, urlparse
@@ -18,3 +18,4 @@ def video_embed(video_url):
         video_type = None
         video_id = None
     return {'video_type': video_type, 'video_id': video_id}
+

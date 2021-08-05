@@ -1,5 +1,6 @@
 {% extends 'group/detail/detail.html' %}
 {% load static %}
+{% load file_url %}
 
 
 {% block object_name %}
@@ -49,7 +50,7 @@
                     <div class="card h-100">
                         {% if roommates.banniere %}
                             <div class="ratio card-img-top" style="--bs-aspect-ratio: 37%;">
-                                <img src="{{roommates.banniere.url}}" class="card-img-top" style="object-fit: cover;" />
+                                <img src="{{roommates.banniere|file_url}}" class="card-img-top" style="object-fit: cover;" />
                             </div>
                         {% endif %}
                         <div class="card-body">

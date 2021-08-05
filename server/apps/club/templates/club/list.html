@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load file_url %}
 
 {% block content %}
 
@@ -30,7 +31,7 @@
 					<a href="{{ club.get_absolute_url }}" class="stretched-link">
 						<div class="ratio ratio-1x1">
 							{% if club.logo %}
-								<img src="{{ club.logo.url }}?{{club.modified_date}}">
+								<img src="{{ club.logo|file_url }}">
 							{% else %}
 								<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
 							{% endif %}
