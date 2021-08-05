@@ -2,7 +2,6 @@ from datetime import date
 
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.views.generic.base import TemplateView, View
 from django.views.generic import UpdateView, FormView
 from django.contrib.auth.decorators import login_required
@@ -13,6 +12,7 @@ from .forms import EventForm, EventFormSet
 from apps.group.models import Group
 from apps.group.views import GroupSlugFonctions
 from apps.utils.accessMixins import LoginRequiredAccessMixin, UserIsAdmin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Application Event
 
@@ -32,7 +32,7 @@ class EventDetailView(LoginRequiredAccessMixin, TemplateView):
 
 # Application Group
 
-class UpdateGroupCreateEventView(GroupSlugFonctions, UserIsAdmin, FormView):
+class UpdateGroupCreateEventView(UserIsAdmin, GroupSlugFonctions, FormView):
     """In the context of edit group, create event view."""
     template_name = 'group/edit/event/create.html'
     form_class = EventForm
@@ -51,7 +51,7 @@ class UpdateGroupCreateEventView(GroupSlugFonctions, UserIsAdmin, FormView):
         return redirect(event.group.app+':create-event', event.group.mini_slug)
 
 
-class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
+class EventUpdateView(UserIsAdmin, GroupSlugFonctions, UpdateView):
     '''In the context of edit group, update an event'''
     template_name = 'event/update.html'
     fields = ['title', 'description', 'location',
@@ -80,7 +80,7 @@ class EventUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class UpdateGroupEventsView(GroupSlugFonctions, UserIsAdmin, View):
+class UpdateGroupEventsView(UserIsAdmin, GroupSlugFonctions, View):
     '''In the context of edit group, show planned events'''
     template_name = 'group/edit/event/planned_edit.html'
 
@@ -101,7 +101,7 @@ class UpdateGroupEventsView(GroupSlugFonctions, UserIsAdmin, View):
         return edit_events(request, object)
 
 
-class UpdateGroupArchivedEventsView(GroupSlugFonctions, UserIsAdmin, View):
+class UpdateGroupArchivedEventsView(UserIsAdmin, GroupSlugFonctions, View):
     '''In the context of edit group, show archived events'''
     template_name = 'group/edit/event/archived_edit.html'
 

@@ -77,11 +77,11 @@ class BaseDetailGroupView(GroupSlugFonctions, DetailView):
         return context
 
 
-class DetailGroupView(BaseDetailGroupView, LoginRequiredMixin):
+class DetailGroupView(LoginRequiredMixin, BaseDetailGroupView):
     pass
 
 
-class AddToGroupView(GroupSlugFonctions, LoginRequiredMixin, FormView):
+class AddToGroupView(LoginRequiredMixin, GroupSlugFonctions, FormView):
     '''Vue pour le bouton "Devenir Membre".'''
 
     raise_exception = True
@@ -102,7 +102,7 @@ class AddToGroupView(GroupSlugFonctions, LoginRequiredMixin, FormView):
         return NamedMembershipAddGroup(group)
 
 
-class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
+class UpdateGroupView(UserIsAdmin, GroupSlugFonctions, TemplateView):
     '''Vue pour modifier les infos générales sur un groupe.'''
 
     template_name = 'group/edit/update.html'
@@ -128,7 +128,7 @@ class UpdateGroupView(GroupSlugFonctions, UserIsAdmin, TemplateView):
         return redirect(group.group_type+':update', group.mini_slug)
 
 
-class UpdateGroupMembersView(GroupSlugFonctions, UserIsAdmin, TemplateView):
+class UpdateGroupMembersView(UserIsAdmin, GroupSlugFonctions, TemplateView):
     '''Vue pour modifier les membres d'un groupe.'''
 
     template_name = 'group/edit/members_edit.html'
@@ -174,7 +174,7 @@ def edit_named_memberships(request, group):
         return redirect(group.group_type+':update-members', group.mini_slug)
 
 
-class UpdateGroupSocialLinksView(GroupSlugFonctions, UserIsAdmin, TemplateView):
+class UpdateGroupSocialLinksView(UserIsAdmin, GroupSlugFonctions, TemplateView):
     '''Vue pour modifier les réseaux sociaux d'un groupe.'''
 
     template_name = 'group/edit/sociallinks_edit.html'
@@ -220,7 +220,7 @@ def edit_sociallinks(request, group):
 
 
 
-class RequestAdminRightsView(GroupSlugFonctions, LoginRequiredMixin, FormView):
+class RequestAdminRightsView(LoginRequiredMixin, GroupSlugFonctions, FormView):
     raise_exception = True
     form_class = AdminRightsRequestForm
 
@@ -246,7 +246,7 @@ class RequestAdminRightsView(GroupSlugFonctions, LoginRequiredMixin, FormView):
         return reverse(group.group_type+':detail', kwargs={'mini_slug': group.mini_slug})
 
 
-class AcceptAdminRequestView(GroupSlugFonctions, UserIsAdmin, View):
+class AcceptAdminRequestView(UserIsAdmin, GroupSlugFonctions, View):
     def get(self, request, mini_slug, id, group_type):
         admin_req = AdminRightsRequest.objects.get(id=id)
         messages.success(
@@ -255,7 +255,7 @@ class AcceptAdminRequestView(GroupSlugFonctions, UserIsAdmin, View):
         return redirect(group_type+':detail', mini_slug)
 
 
-class DenyAdminRequestView(GroupSlugFonctions, UserIsAdmin, View):
+class DenyAdminRequestView(UserIsAdmin, GroupSlugFonctions, View):
     def get(self, request, mini_slug, id, group_type):
         admin_req = AdminRightsRequest.objects.get(id=id)
         messages.success(

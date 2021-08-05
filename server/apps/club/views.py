@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.club.models import Club
@@ -30,7 +30,7 @@ class DetailClubView(BaseDetailGroupView):
     pass
 
 
-class DetailGroupMembersView(GroupSlugFonctions, LoginRequiredMixin, ListView):
+class DetailGroupMembersView(LoginRequiredMixin, GroupSlugFonctions, ListView):
     template_name = 'club/members.html'
     
     def get_object(self, **kwargs):

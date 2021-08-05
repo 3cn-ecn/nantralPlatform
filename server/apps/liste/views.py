@@ -1,10 +1,10 @@
 from django.views.generic import ListView
-from apps.utils.accessMixins import LoginRequiredAccessMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.liste.models import Liste
 
 
-class ListListeView(ListView, LoginRequiredAccessMixin):
+class ListListeView(LoginRequiredMixin, ListView):
     model = Liste
     template_name = 'liste/list.html'
 

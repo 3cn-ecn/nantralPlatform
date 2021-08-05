@@ -24,7 +24,7 @@ class PostDetailView(LoginRequiredAccessMixin, TemplateView):
 
 # Application Group
 
-class PostUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
+class PostUpdateView(UserIsAdmin, GroupSlugFonctions, UpdateView):
     """In the context of a group, update a post."""
     template_name = 'post/update.html'
     fields = ['title', 'description',
@@ -49,7 +49,7 @@ class PostUpdateView(GroupSlugFonctions, UserIsAdmin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class UpdateGroupCreatePostView(GroupSlugFonctions, UserIsAdmin, FormView):
+class UpdateGroupCreatePostView(UserIsAdmin, GroupSlugFonctions, FormView):
     """In the context of a group, create a post view."""
     template_name = 'group/edit/post/create.html'
     form_class = PostForm
@@ -69,7 +69,7 @@ class UpdateGroupCreatePostView(GroupSlugFonctions, UserIsAdmin, FormView):
         return redirect(group_type+':create-post', mini_slug)
 
 
-class UpdateGroupPostsView(GroupSlugFonctions, UserIsAdmin, View):
+class UpdateGroupPostsView(UserIsAdmin, GroupSlugFonctions, View):
     """In the context of a group, list and update the posts."""
     template_name = 'group/edit/post/last_30_d.html'
 
