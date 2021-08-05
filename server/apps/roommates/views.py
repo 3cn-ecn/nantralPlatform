@@ -45,7 +45,7 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
             )
         member.admin=True
         member.save()
-        return redirect(reverse('roommates:detail', args=[roommates.mini_slug]))
+        return redirect(reverse('roommates:detail', args=[roommates.slug]))
 
 
 class DetailRoommatesView(DetailGroupView):

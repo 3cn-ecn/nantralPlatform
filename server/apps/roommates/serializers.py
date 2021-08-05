@@ -59,9 +59,9 @@ class RoommatesSerializer(serializers.ModelSerializer):
 '''
 class HousingSerializer(serializers.ModelSerializer):
     edit_url = serializers.HyperlinkedIdentityField(
-        view_name='roommates:update', read_only=True, lookup_field='mini_slug')
+        view_name='roommates:update', read_only=True, lookup_field='slug')
     url = serializers.HyperlinkedIdentityField(
-        view_name='roommates:detail', read_only=True, lookup_field='mini_slug')
+        view_name='roommates:detail', read_only=True, lookup_field='slug')
     roommates = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
 

@@ -7,7 +7,7 @@
 
 <h2>Liste des annonces</h2>
 {% if posts.count > 0 %}
-<form method='POST' action="{% url object.group_type|add:':update-post' object.mini_slug %}">
+<form method='POST' action="{% url object.app|add:':update-post' object.slug %}">
   {% csrf_token %}
   {{ form.management_form }}
   {% for post in form %}

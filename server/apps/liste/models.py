@@ -32,7 +32,7 @@ class Liste(Group):
 
 class NamedMembershipList(NamedMembership):
     function = models.CharField(
-        verbose_name='Poste occupé', max_length=200, blank=True)
+        verbose_name='Rôle (facultatif)', max_length=200, blank=True)
     group = models.ForeignKey(Liste, on_delete=models.CASCADE)
 
     class Meta:

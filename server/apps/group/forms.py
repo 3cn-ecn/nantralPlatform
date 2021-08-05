@@ -10,7 +10,8 @@ from apps.club.forms import *
 from apps.liste.forms import *
 from apps.roommates.forms import *
 
-#NotaBene : pour un bdx, isinstance(bdx, Club)=isinstance(bdx, BDX)=True
+
+#NB : Les BDX sont aussi des instances de Club
 
 def UpdateGroupForm(group):
     if isinstance(group, BDX):

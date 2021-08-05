@@ -1,36 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import m2m_changed
-from django.dispatch import receiver
 from django.utils.text import slugify
 from django.urls.base import reverse
 from django.template.loader import render_to_string
 from django.utils import timezone
 
-from django.conf import settings
-
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
-from apps.sociallink.models import SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 from apps.utils.compress import compressModelImage
+from apps.utils.slug import *
 
 
 path_and_rename_group = PathAndRename("groups/logo/group")
-
-
-def break_slug(slug):
-    '''Renvoie le mini-slug du groupe, avec
-       le nom de l'appli correspondant au groupe.'''
-
-    list = slug.split('--')
-    app = list[0]
-    mini_slug = ''.join(list[1:])
-    if app == 'bdx':
-        app = 'club'
-    return app, mini_slug
 
 
 class Group(models.Model):
@@ -86,55 +70,35 @@ class Group(models.Model):
 
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
-        if self.slug.split('--')[0] != self.app:
-            slug = f'{self.app}--{slugify(self.name)}'
-            if type(self).objects.filter(slug=slug):
-                id = 1
-                while type(self).objects.filter(slug=f'{slug}-{id}'): id += 1
-                slug = f'{slug}-{id}'
-            self.slug = slug
+        if not self.slug:
+            slug = slugify(self.name)
+        else:
+            slug = self.slug
+        if type(self).objects.filter(slug=slug):
+            id = 1
+            while type(self).objects.filter(slug=f'{slug}-{id}'): id += 1
+            slug = f'{slug}-{id}'
+        self.slug = slug
         # compression des images
         compressModelImage(self, 'logo', size=(500,500), contains=True)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
-
-    @staticmethod
-    def get_group_by_slug(slug:  str) -> 'Group':
-        """Get a group from a slug."""
-        type_slug = slug.split('--')[0]
-        if type_slug == 'club':
-            from apps.club.models import Club
-            return Club.objects.get(slug=slug)
-        elif type_slug == 'bdx':
-            from apps.club.models import BDX
-            return BDX.objects.get(slug=slug)
-        elif type_slug == 'liste':
-            from apps.liste.models import Liste
-            return Liste.objects.get(slug=slug)
-        elif type_slug == 'roommates':
-            from apps.roommates.models import Roommates
-            return Roommates.objects.get(slug=slug)
-        else:
-            raise Exception('Unknown group')
-
-    @property
-    def mini_slug(self):
-        return break_slug(self.slug)[1]
-
-    @property
-    def group_type(self):
-        return break_slug(self.slug)[0]
 
     @property
     def app(self):
         return self._meta.app_label
     
     @property
+    def full_slug(self):
+        return f'{self.app}--{self.slug}'
+    
+    @property
     def get_absolute_url(self):
-        return reverse(self.app+':detail', kwargs={'mini_slug': self.mini_slug})
+        return reverse(self.app+':detail', kwargs={'slug': self.slug})
     
     @property
     def modelName(self):
+        '''Plural Model name, used in templates'''
         return self.__class__._meta.verbose_name_plural
 
 
@@ -163,7 +127,7 @@ class AdminRightsRequest(models.Model):
         self.domain = domain
         self.issue = 0
         super(AdminRightsRequest, self).save()
-        group = Group.get_group_by_slug(self.group)
+        group = get_object_from_full_slug(self.group)
         title = f'[Admin Req] {group} - {self.student}'
         body = f'<a href="{self.accept_url}">Accepter</a> </br>\
             <a href="{self.deny_url}">Refuser</a>'
@@ -172,16 +136,16 @@ class AdminRightsRequest(models.Model):
 
     @property
     def accept_url(self):
-        group_type, mini_slug = break_slug(self.group)
-        return f"http://{self.domain}{reverse(group_type+':accept-admin-req', kwargs={'mini_slug': mini_slug,'id': self.id})}"
+        app, slug = get_tuple_from_full_slug(self.group)
+        return f"http://{self.domain}{reverse(app+':accept-admin-req', kwargs={'slug': slug,'id': self.id})}"
 
     @property
     def deny_url(self):
-        group_type, mini_slug = break_slug(self.group)
-        return f"http://{self.domain}{reverse(group_type+':deny-admin-req', kwargs={'mini_slug': mini_slug, 'id': self.id})}"
+        app, slug = get_tuple_from_full_slug(self.group)
+        return f"http://{self.domain}{reverse(app+':deny-admin-req', kwargs={'slug': slug, 'id': self.id})}"
 
     def accept(self):
-        group = Group.get_group_by_slug(self.group)
+        group = get_object_from_full_slug(self.group)
         if group.is_member(self.student.user):
             membership = group.members.through.objects.get(
                 student=self.student.id, group=group)
@@ -205,6 +169,7 @@ class AdminRightsRequest(models.Model):
     def deny(self):
         close_issue(self.issue)
         self.delete()
+
 
 # FIXME Broken since the move of admins inside of members, nice to fix
 # @receiver(m2m_changed, sender=Group.members.through)
