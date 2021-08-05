@@ -24,7 +24,7 @@ class TestHomeView(TestCase, TestMixin):
             title='An Event in the past',
             description="",
             location="Test",
-            group=self.test_club.slug,
+            group=self.test_club.full_slug,
             publicity=VISIBILITY[0][0],
         )
         self.today = BaseEvent.objects.create(
@@ -32,7 +32,7 @@ class TestHomeView(TestCase, TestMixin):
             title='An Event today',
             description="",
             location="Test",
-            group=self.test_club.slug,
+            group=self.test_club.full_slug,
             publicity=VISIBILITY[0][0]
         )
         self.tomorrow = BaseEvent.objects.create(
@@ -40,7 +40,7 @@ class TestHomeView(TestCase, TestMixin):
             title='An Event tomorrow',
             description="",
             location="Test",
-            group=self.test_club.slug,
+            group=self.test_club.full_slug,
             publicity=VISIBILITY[0][0]
         )
         self.future = BaseEvent.objects.create(
@@ -48,7 +48,7 @@ class TestHomeView(TestCase, TestMixin):
             title='An Event in the distant future',
             description="",
             location="Test",
-            group=self.test_club.slug,
+            group=self.test_club.full_slug,
             publicity=VISIBILITY[0][0]
         )
         self.assertEqual(len(BaseEvent.objects.all()), 4)

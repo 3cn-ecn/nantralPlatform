@@ -9,5 +9,7 @@ app_name = 'club'
 urlpatterns = [
      path('', ListClubView.as_view(), name='index'),
      path('liste/', ListClubView.as_view(), name='club-list'),
-     path('<slug:mini_slug>/members/', DetailGroupMembersView.as_view(), name='members'),
-] + makeGroupUrlpatterns("club", detail_view=DetailClubView.as_view())
+     path('<slug:slug>/members/', DetailGroupMembersView.as_view(), name='members'),
+] + makeGroupUrlpatterns(
+          detail_view=DetailClubView.as_view()
+     )

@@ -7,7 +7,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>        
                 <div class="modal-body">
-                    <form method="post" action="{% url object.group_type|add:':add-member' object.mini_slug %}">
+                    <form method="post" action="{% url object.app|add:':add-member' object.slug %}">
                         {% csrf_token %}      
                         {{form | crispy}}
                         <button type="submit" value="Submit" class="btn btn-dark">M'ajouter</button>

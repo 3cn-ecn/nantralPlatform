@@ -5,7 +5,7 @@ from .models import Housing, NamedMembershipRoommates, Roommates
 class CreateRoommatesForm(ModelForm):
     class Meta:
         model = Roommates
-        fields = ['name', 'begin_date', 'end_date', 'summary']
+        fields = ['name', 'begin_date', 'end_date', 'description']
 
 
 class UpdateRoommatesForm(ModelForm):

@@ -27,11 +27,11 @@ class TestHousing(TestCase, TestMixin):
             begin_date = date.today()
         )
         coloc = Roommates.objects.all().first()
-        url = reverse('roommates:detail', args=[coloc.mini_slug])
+        url = reverse('roommates:detail', args=[coloc.slug])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-        url = reverse('roommates:update', args=[coloc.mini_slug])
+        url = reverse('roommates:update', args=[coloc.slug])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 

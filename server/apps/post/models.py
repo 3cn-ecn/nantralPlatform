@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, reverse
 
 from django_ckeditor_5.fields import CKEditor5Field
 
-from apps.group.models import Group
+from apps.utils.slug import *
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compressModelImage
 
@@ -50,7 +50,7 @@ class AbstractPost(models.Model):
 
     @property
     def get_group(self):
-        return Group.get_group_by_slug(self.group)
+        return get_object_from_full_slug(self.group)
     
     def save(self, *args, **kwargs):
         # compression des images
