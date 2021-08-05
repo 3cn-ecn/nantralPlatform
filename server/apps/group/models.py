@@ -15,22 +15,22 @@ from apps.student.models import Student
 from apps.sociallink.models import SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
-from apps.utils.compress import compressImage
+from apps.utils.compress import compressModelImage
 
 
 path_and_rename_group = PathAndRename("groups/logo/group")
 
 
 def break_slug(slug):
-    '''Réupère le type du groupe et le mini-slug du group,
-       partir du slug entier.'''
+    '''Renvoie le mini-slug du groupe, avec
+       le nom de l'appli correspondant au groupe.'''
 
     list = slug.split('--')
-    group_type = list[0]
+    app = list[0]
     mini_slug = ''.join(list[1:])
-    if group_type == 'bdx':
-        group_type = 'club'
-    return group_type, mini_slug
+    if app == 'bdx':
+        app = 'club'
+    return app, mini_slug
 
 
 class Group(models.Model):
@@ -70,33 +70,31 @@ class Group(models.Model):
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
-        res = False
         if user.is_superuser or user.is_staff:
-            res = True
-        if not(res) and self.is_member(user):
+            return True
+        if self.is_member(user):
             members_list = self.members.through.objects.filter(group=self)
             my_member = members_list.filter(student=student).first()
-            res = my_member.admin
-        if not(res) and self.bdx_type:
-            res = self.bdx_type.is_admin(user)
-        return res
+            return my_member.admin
+        return False
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
-        student = Student.objects.filter(user=user).first()
-        return student in self.members.all()
+        return user.student in self.members.all()
 
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
-        group_type = type(self).__name__.lower()
-        if self.slug.split('--')[0] != group_type:
-            self.slug = f'{group_type}--{slugify(self.name)}'
+        if self.slug.split('--')[0] != self.app:
+            slug = f'{self.app}--{slugify(self.name)}'
+            if type(self).objects.filter(slug=slug):
+                id = 1
+                while type(self).objects.filter(slug=f'{slug}-{id}'): id += 1
+                slug = f'{slug}-{id}'
+            self.slug = slug
         # compression des images
-        if not self.pk or self.logo != self.__class__.objects.get(pk=self.pk).logo:
-            self.logo = compressImage(
-                self.logo, size=(500, 500), contains=True)
+        compressModelImage(self, 'logo', size=(500,500), contains=True)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
 
@@ -107,12 +105,12 @@ class Group(models.Model):
         if type_slug == 'club':
             from apps.club.models import Club
             return Club.objects.get(slug=slug)
-        elif type_slug == 'liste':
-            from apps.liste.models import Liste
-            return Liste.objects.get(slug=slug)
         elif type_slug == 'bdx':
             from apps.club.models import BDX
             return BDX.objects.get(slug=slug)
+        elif type_slug == 'liste':
+            from apps.liste.models import Liste
+            return Liste.objects.get(slug=slug)
         elif type_slug == 'roommates':
             from apps.roommates.models import Roommates
             return Roommates.objects.get(slug=slug)
@@ -128,8 +126,16 @@ class Group(models.Model):
         return break_slug(self.slug)[0]
 
     @property
+    def app(self):
+        return self._meta.app_label
+    
+    @property
     def get_absolute_url(self):
-        return reverse(self.group_type+':detail', kwargs={'mini_slug': self.mini_slug})
+        return reverse(self.app+':detail', kwargs={'mini_slug': self.mini_slug})
+    
+    @property
+    def modelName(self):
+        return self.__class__._meta.verbose_name_plural
 
 
 class NamedMembership(models.Model):

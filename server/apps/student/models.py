@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 
 from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressImage
+from apps.utils.compress import compressModelImage
 
 
 FACULTIES = [
@@ -68,8 +68,7 @@ class Student(models.Model):
         return reverse('student:detail', args=[self.pk])
 
     def save(self, *args, **kwargs):
-        if not self.pk or self.picture != Student.objects.get(pk=self.pk).picture:
-            self.picture = compressImage(self.picture)
+        compressModelImage(self, 'picture')
         super(Student, self).save(*args, **kwargs)
     
     class Meta:

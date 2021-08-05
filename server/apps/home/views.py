@@ -1,8 +1,7 @@
 from datetime import *
-import requests
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, FormView
-from ..utils.accessMixins import LoginRequiredAccessMixin
+from apps.utils.accessMixins import LoginRequiredAccessMixin
 from django.contrib import messages
 
 from apps.event.models import BaseEvent

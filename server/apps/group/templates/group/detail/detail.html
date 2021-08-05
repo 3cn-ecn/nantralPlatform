@@ -32,7 +32,7 @@
         {% endif %}
         <!-- description du club : nom, infos... -->
         <div class="col">
-            <h1>{{object.name}}</h1>
+            <h1>{% block object_name %}{{object.name}}{% endblock %}</h1>
             <p>
             {% if request.user.is_authenticated %}
                 {% if is_member and is_admin %}
@@ -56,12 +56,18 @@
                 {%endif%}
             {% endif %}
             </p>
-            {% if object.summary %}
-                <p>{{ object.summary }}</p>
-            {% endif %}
+            {% block infos %}
+                {% if object.summary %}
+                    <p>{{ object.summary }}</p>
+                {% endif %}
+            {% endblock %}
             {% include "sociallink/liste.html" with sociallinks=sociallinks%}
         </div>
     </div>
+
+    {# Ajout possible de contenus pour certaines pages #}
+    {% block before_content %}
+    {% endblock %}
 
     <!-- Events -->
     {% if events %}
@@ -109,26 +115,27 @@
     {% endif %}
 
     <!-- Vidéos s'il y en a 2 -->
-    {% if object.video1 and object.video2 %}
+    {% if object.video1 and object.video2 or object.video1 and not object.description %}
         {% load group_tags %}
         <br />
-        <h2>Vidéos</h2>
         <div class="row gy-3">
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
                     {% video_embed object.video1 %}
                 </div>
             </div>
+            {% if object.video2 %}
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
                     {% video_embed object.video2 %}
                 </div>
             </div>
+            {% endif %}
         </div>
     {% endif %}
 
     <!-- Description avec vidéo dans le coin s'il y en a une seulement-->
-    {% if object.description or object.video1 and not object.video2 %}
+    {% if object.description %}
         <br>
         <div class="clearfix">
             {% if object.video1 and not object.video2 %}
@@ -146,34 +153,42 @@
         </div>
     {% endif %}
 
-    <!-- Liste des membres -->
-    <br />
-    <h2>Membres</h2>
-    {% if request.user.is_authenticated %}
-        {% if members %}
-            {% include 'student/student_cards.html' with members=members %}
-        {%else%}
-            <p>Aucun membre pour l'instant... 😥</p>
-        {%endif%}
-    {% else %}
-        <p>Veuillez vous connecter pour voir les membres.</p>
-    {% endif %}
-
-    {# Ajout possible de contenus pour certaines pages #}
-    {% block extra-content %}
+    {% block members %}
+        <!-- Liste des membres -->
+        <br />
+        <h2>Membres</h2>
+        {% if request.user.is_authenticated %}
+            {% if members %}
+                {% include 'student/student_cards.html' with members=members %}
+            {%else%}
+                <p>Aucun membre pour l'instant... 😥</p>
+            {%endif%}
+        {% else %}
+            <p>Veuillez vous connecter pour voir les membres.</p>
+        {% endif %}
     {% endblock %}
 
+    {# Ajout possible de contenus pour certaines pages #}
+    {% block after_content %}
+    {% endblock %}
+
+    {% block go_to_list %}
+        <br><br>
+        <p><a href="{% url object.app|add:":index" %}">← Retour à la liste des {{object.modelName|title}}</a></p>
+        <br>
+    {% endblock %}
+    
     {# Bouton pour faire une demande pour devenir admin #}
-    {% block admin-req %}
+    {% block admin_req %}
         {% if is_member and not is_admin %}
             {% include 'group/included/request-admin.html' %}
         {%endif%}
     {% endblock %}
 
     {# popup pour devenir membre du groupe #}
-    {% block add-member %}
+    {% block add_member %}
         {% include 'group/included/add-member.html' %}
-    {% endblock%}
+    {% endblock %}
 
     <br>
 {% endblock %}

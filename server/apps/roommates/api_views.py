@@ -2,8 +2,8 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.roommates.serializers import HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer
-from apps.roommates.models import Housing, NamedMembershipRoommates, Roommates
+from .serializers import HousingLastRoommatesSerializer #HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer
+from .models import Housing, NamedMembershipRoommates, Roommates
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
 
@@ -19,22 +19,41 @@ class SearchGeocodingView(APIView):
         return Response(data=geocode(request.GET.get("search_string")))
 
 
+class HousingView(generics.ListCreateAPIView):
+    """API View to get all the housing and their current roommates"""
+    serializer_class = HousingLastRoommatesSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        now = timezone.now()
+        query = Housing.objects.filter(
+            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | (Q(roommates__members=None))).distinct()
+        return query
+
+
+
 class CheckAddressView(APIView):
     """An API view to wether wether a housing already exists at selected address.
     Returns the pk if it does, None otherwise"""
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        housing = Housing.objects.filter(address=request.data.get("address"))
-        return Response(data=(None if len(housing) == 0 else housing.first().get_absolute_edit_url))
+        query = Housing.objects.filter(address=request.data.get("address"))
+        data = [{
+                    'pk':housing.pk, 
+                    'name': f'{housing.address} - {housing.details} ({housing.last_roommates})'
+                } for housing in query ]
+        return Response(data=data)
 
 
+'''
 class HousingView(generics.ListCreateAPIView):
     serializer_class = HousingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Housing.objects.all()
+
 
 
 class HousingRoommates(generics.ListCreateAPIView):
@@ -45,7 +64,7 @@ class HousingRoommates(generics.ListCreateAPIView):
     def get_queryset(self):
         now = timezone.now()
         query = Housing.objects.filter(
-            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | (Q(roommates__members=None)))
+            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | (Q(roommates__members=None))).distinct()
         return query
 
 
@@ -117,3 +136,4 @@ class RoommatesMemberView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return NamedMembershipRoommates.objects.filter(id=self.kwargs['pk'])
+'''

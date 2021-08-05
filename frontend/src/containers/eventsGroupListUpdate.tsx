@@ -63,7 +63,7 @@ function EventsListUpdateDelete(props){
             Enfait non
           </Button>
           <Button variant="danger" onClick={() => {
-              axios.delete(`/api/event/${currentEvent.slug}`)
+              axios.delete(`/api/event/${currentEvent['slug']}`)
               .then(() => {
                     handleClose();
                     getEvents();

@@ -3,10 +3,7 @@ from apps.student.models import Student
 from apps.group.models import Group, NamedMembership
 from apps.club.models import BDX
 from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressImage
-
-from django.conf import settings
-from django.urls.base import reverse
+from apps.utils.compress import compressModelImage
 
 
 path_and_rename_liste = PathAndRename("groups/logo/liste")
@@ -29,8 +26,7 @@ class Liste(Group):
     
     def save(self, *args, **kwargs):
         # compression des images
-        if not self.pk or self.banniere != Liste.objects.get(pk=self.pk).banniere:
-            self.banniere = compressImage(self.banniere, size=(1320,492), contains=False)
+        compressModelImage(self, 'banniere', size=(1320,492), contains=False)
         super(Liste, self).save(*args, **kwargs)
 
 
