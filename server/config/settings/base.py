@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
+from datetime import date
 import os
 import environ
 env = environ.Env()
@@ -108,7 +109,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                #"apps.group.contexts.appname",
+                # "apps.group.contexts.appname",
             ],
         },
     },
@@ -219,6 +220,11 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Discord connection
+DISCORD_TOKEN = env('DISCORD_TOKEN', default='')
+DISCORD_SERVER = env('DISCORD_SERVER', default='')
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -226,3 +232,5 @@ GITHUB_REPO = 'nantral-platform/nantralPlatform'
 
 # Less origin restrictive for Youtube embed videos
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
+
+TEMPORARY_ACCOUNTS_DATE_LIMIT = date(year=2021, month=10, day=1)
