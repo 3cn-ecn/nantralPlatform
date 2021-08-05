@@ -43,13 +43,21 @@ def user_creation(form: Union[SignUpForm, TemporaryRequestSignUpForm], request) 
     user.username = f'{first_name}.{last_name}{promo}-{user.id}'
     # user can't login until link confirmed
     user.is_active = False
+    user.save()
 
     subject = 'Activation de votre compte Nantral Platform'
     current_site = get_current_site(request)
     # load a template like get_template()
     # and calls its render() method immediately.
-    template = 'account/mail/activation_request.html' if isinstance(
-        form, SignUpForm) else 'account/mail/activation_temporary_request.html'
+    template = 'account/mail/activation_request.html'
+    if isinstance(
+            form, TemporaryRequestSignUpForm):
+        temporaryAccessRequest = TemporaryAccessRequest(
+            user=user
+        )
+        domain = get_current_site(request).domain
+        temporaryAccessRequest.save(domain=domain)
+        template = 'account/mail/activation_temporary_request.html'
     message = render_to_string(template, {
         'user': user,
         'domain': current_site.domain,
@@ -90,10 +98,10 @@ class ConfirmUser(View):
             user = None
         # checking if the user is not a temporary one
         try:
-            TemporaryAccessRequest.objects.get(user=user)
+            TemporaryAccessRequest.objects.get(user=user.id)
             return render(self.request, 'account/activation_invalid.html')
         except TemporaryAccessRequest.DoesNotExist:
-            pass
+            print('Did not work')
         # checking if the user exists, if the token is valid.
         if user is not None and account_activation_token.check_token(user, token):
             # if valid set active true
@@ -216,16 +224,16 @@ class ABCApprovalTemporaryResgistrationView(UserIsSuperAdmin, View):
 
 class ApproveTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
     def get(self, request, id):
-        super().get()
+        super().get(request, id)
         self.temp_req.approve()
         messages.success(
             request, f'Vous avez accepté la demande de {self.temp_req.user.first_name} {self.temp_req.user.last_name}')
         return redirect(reverse('home:home'))
 
 
-class DenyTemporaryRegistrationView(UserIsSuperAdmin, View):
+class DenyTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
     def get(self, request, id):
-        super().get()
+        super().get(request, id)
         messages.success(
             request, f'Vous avez refusé la demande de {self.temp_req.user.first_name} {self.temp_req.user.last_name}')
         self.temp_req.deny()
@@ -242,11 +250,6 @@ class ConfirmUserTemporary(View):
         # checking if the user exists, if the token is valid.
         if user is not None and account_activation_token.check_token(user, token):
             # if valid set active true
-            temporaryAccessRequest = TemporaryAccessRequest(
-                user=user
-            )
-            domain = get_current_site(self.request).domain
-            temporaryAccessRequest.save(domain=domain)
             messages.success(request, 'Votre addresse mail est confirmé! \n\
             Comme vous n\'avez pas utilisé votre adresse Centrale, vous devez encore attendre qu\'un administrateur vérifie votre inscription.\n\
             On vous prévient par mail dès que c\'est bon!. ')

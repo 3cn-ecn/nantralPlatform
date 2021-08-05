@@ -18,7 +18,7 @@ urlpatterns = [
     path('activate/<slug:uidb64>/<slug:token>/',
          ConfirmUser.as_view(), name='confirm'),
     path('activate/<slug:uidb64>/<slug:token>/temporary',
-         ConfirmUserTemporary.as_view(), name='confirm'),
+         ConfirmUserTemporary.as_view(), name='confirm-temporary'),
     url('forgotten', ForgottenPassView.as_view(), name='forgotten_pass'),
     path('reset_pass/<slug:uidb64>/<slug:token>',
          PasswordResetConfirmCustomView.as_view(), name='reset_pass'),

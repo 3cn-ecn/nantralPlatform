@@ -13,22 +13,24 @@ class TemporaryAccessRequest(models.Model):
     date = models.DateField()
     message_id = models.IntegerField(blank=True, null=True)
     domain = models.CharField(max_length=64)
+    approved = models.BooleanField(default=False)
 
     def save(self, domain: str, *args, **kwargs):
         self.date = timezone.now()
         self.approved_until = timezone.now()
         self.domain = domain
         super(TemporaryAccessRequest, self).save()
-        message = f'{self.user.first_name} {self.user.last_name} demande à rejoindre Nantral Platform.\n'
-        embeds = [
-            {"title": "Accepter",
-             "url": self.approve_url},
-            {"title": "Refuser",
-             "url": self.deny_url}
-        ]
-        self.message_id = send_message(
-            872205601298604052, message, embeds)
-        super(TemporaryAccessRequest, self).save()
+        if self.message_id is None:
+            message = f'{self.user.first_name} {self.user.last_name} demande à rejoindre Nantral Platform.\n'
+            embeds = [
+                {"title": "Accepter",
+                 "url": self.approve_url},
+                {"title": "Refuser",
+                 "url": self.deny_url}
+            ]
+            self.message_id = send_message(
+                872205601298604052, message, embeds)
+            super(TemporaryAccessRequest, self).save()
 
     @property
     def approve_url(self):
@@ -48,7 +50,8 @@ class TemporaryAccessRequest(models.Model):
             'domain': self.domain
         })
         user.email_user(
-            subject=subject, from_email='accounts@nantral-platform.fr', html_message=message)
+            subject=subject, message=message, from_email='accounts@nantral-platform.fr', html_message=message)
+        self.approved = True
         self.save(self.domain)
 
     def deny(self):
@@ -59,6 +62,6 @@ class TemporaryAccessRequest(models.Model):
             'domain': self.domain
         })
         user.email_user(
-            subject=subject, from_email='accounts@nantral-platform.fr', html_message=message)
+            subject=subject, message=message, from_email='accounts@nantral-platform.fr', html_message=message)
         self.user.delete()
         self.delete()
