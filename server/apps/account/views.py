@@ -1,6 +1,12 @@
+from datetime import date
+from typing import Union
 from django.contrib.auth import login, logout
 from django.contrib.sites.shortcuts import get_current_site
+from django.http.response import HttpResponse
 from django.views.generic.edit import FormView
+from django.shortcuts import get_object_or_404
+
+from apps.utils.accessMixins import UserIsSuperAdmin
 from .forms import SignUpForm, LoginForm, ForgottenPassForm, TemporaryRequestSignUpForm
 from .tokens import account_activation_token
 from django.contrib import messages
@@ -11,17 +17,50 @@ from django.utils.encoding import force_bytes, force_text
 from django.urls import reverse, reverse_lazy
 
 from django.contrib.auth.views import PasswordResetConfirmView
-from django.views.generic.edit import FormView
 from django.views import View
 
 from django.contrib.auth.forms import SetPasswordForm
-from .forms import SignUpForm, LoginForm, ForgottenPassForm
 
 from django.contrib.auth.models import User
 from apps.student.models import Student
 
 from .tokens import account_activation_token
 from .emailAuthBackend import EmailBackend
+from .models import TemporaryAccessRequest
+
+
+def user_creation(form: Union[SignUpForm, TemporaryRequestSignUpForm], request) -> User:
+    user: User = form.save()
+    user.student.promo = form.cleaned_data.get('promo')
+    user.student.faculty = form.cleaned_data.get('faculty')
+    user.student.path = form.cleaned_data.get('path')
+    # create a unique user name
+    first_name = ''.join(e.lower() for e in form.cleaned_data.get(
+        'first_name') if e.isalnum())
+    last_name = ''.join(e.lower() for e in form.cleaned_data.get(
+        'last_name') if e.isalnum())
+    promo = form.cleaned_data.get('promo')
+    user.username = f'{first_name}.{last_name}{promo}-{user.id}'
+    # user can't login until link confirmed
+    user.is_active = False
+
+    subject = 'Activation de votre compte Nantral Platform'
+    current_site = get_current_site(request)
+    # load a template like get_template()
+    # and calls its render() method immediately.
+    template = 'account/mail/activation_request.html' if isinstance(
+        form, SignUpForm) else 'account/mail/activation_temporary_request.html'
+    message = render_to_string(template, {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        # method will generate a hash value with user related data
+        'token': account_activation_token.make_token(user),
+    })
+    user.email_user(
+        subject, message, 'registration@nantral-platform.fr', html_message=message)
+    messages.success(
+        request, 'Un mail vous a été envoyé pour confirmer votre adresse mail.')
 
 
 class RegistrationView(FormView):
@@ -29,41 +68,17 @@ class RegistrationView(FormView):
     form_class = SignUpForm
 
     def form_valid(self, form):
-        user = form.save()
-        user.student.promo = form.cleaned_data.get('promo')
-        user.student.faculty = form.cleaned_data.get('faculty')
-        user.student.path = form.cleaned_data.get('path')
-        # create a unique user name
-        first_name = ''.join(e.lower() for e in form.cleaned_data.get(
-            'first_name') if e.isalnum())
-        last_name = ''.join(e.lower() for e in form.cleaned_data.get(
-            'last_name') if e.isalnum())
-        promo = form.cleaned_data.get('promo')
-        user.username = f'{first_name}.{last_name}{promo}-{user.id}'
-        # user can't login until link confirmed
-        user.is_active = False
-        user.save()
-        subject = 'Activation de votre compte Nantral Platform'
-        current_site = get_current_site(self.request)
-        # load a template like get_template()
-        # and calls its render() method immediately.
-        message = render_to_string('account/mail/activation_request.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            # method will generate a hash value with user related data
-            'token': account_activation_token.make_token(user),
-        })
-        user.email_user(
-            subject, message, 'registration@nantral-platform.fr', html_message=message)
-        messages.success(
-            self.request, 'Un mail vous a été envoyé pour confirmer votre mail ECN.')
+        user_creation(form, self.request)
         return redirect(reverse('home:home'))
 
 
 class TemporaryRegistrationView(FormView):
     form_class = TemporaryRequestSignUpForm
     template_name = 'account/temporary_registration.html'
+
+    def form_valid(self, form) -> HttpResponse:
+        user_creation(form, self.request)
+        return redirect(reverse('home:home'))
 
 
 class ConfirmUser(View):
@@ -73,6 +88,12 @@ class ConfirmUser(View):
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
+        # checking if the user is not a temporary one
+        try:
+            TemporaryAccessRequest.objects.get(user=user)
+            return render(self.request, 'account/activation_invalid.html')
+        except TemporaryAccessRequest.DoesNotExist:
+            pass
         # checking if the user exists, if the token is valid.
         if user is not None and account_activation_token.check_token(user, token):
             # if valid set active true
@@ -109,10 +130,28 @@ class AuthView(FormView):
         password = form.cleaned_data['password']
         user = EmailBackend.authenticate(username=username, password=password)
         if user is not None:
+            if user.is_active:
+                message = f'Bonjour {user.first_name.capitalize()} !'
+                messages.success(self.request, message)
+            else:
+                try:
+                    temporaryAccessRequest = TemporaryAccessRequest.objects.get(
+                        user=user,
+                        approved_until__gte=date.today()
+                    )
+                    message = f'Votre compte n\'est pas encore validé.\
+                        Veuillez le valider <a href="">ici</a>.\
+                        Attention après le {temporaryAccessRequest.approved_until}\
+                        vous ne pourrez plus vous connecter.'
+                    messages.warning(self.request, message)
+                except TemporaryAccessRequest.DoesNotExist:
+                    message = 'Votre compte n\'est pas encore actif.\
+                        Veuillez cliquer sur le lien envoyé par mail pour l\'\
+                            activer.'
+                    messages.error(self.request, message)
+                    return redirect(reverse('account.login'))
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')
-            message = f'Bonjour {user.first_name.capitalize()} !'
-            messages.success(self.request, message)
             return redirect(reverse('home:home'))
         else:
             messages.error(
@@ -163,3 +202,54 @@ def redirect_to_student(request, user_id):
     user = User.objects.get(id=user_id)
     student = Student.objects.get(user=user)
     return redirect('student:update', student.pk)
+
+
+class ABCApprovalTemporaryResgistrationView(UserIsSuperAdmin, View):
+    def get(self, request, id):
+        self.temp_req: TemporaryAccessRequest = get_object_or_404(
+            TemporaryAccessRequest, id=id)
+
+        if self.temp_req.approved:
+            messages.warning(request, f'Cette requête a déjà été approuvée.')
+            return redirect(reverse('home:home'))
+
+
+class ApproveTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
+    def get(self, request, id):
+        super().get()
+        self.temp_req.approve()
+        messages.success(
+            request, f'Vous avez accepté la demande de {self.temp_req.user.first_name} {self.temp_req.user.last_name}')
+        return redirect(reverse('home:home'))
+
+
+class DenyTemporaryRegistrationView(UserIsSuperAdmin, View):
+    def get(self, request, id):
+        super().get()
+        messages.success(
+            request, f'Vous avez refusé la demande de {self.temp_req.user.first_name} {self.temp_req.user.last_name}')
+        self.temp_req.deny()
+        return redirect(reverse('home:home'))
+
+
+class ConfirmUserTemporary(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        # checking if the user exists, if the token is valid.
+        if user is not None and account_activation_token.check_token(user, token):
+            # if valid set active true
+            temporaryAccessRequest = TemporaryAccessRequest(
+                user=user
+            )
+            domain = get_current_site(self.request).domain
+            temporaryAccessRequest.save(domain=domain)
+            messages.success(request, 'Votre addresse mail est confirmé! \n\
+            Comme vous n\'avez pas utilisé votre adresse Centrale, vous devez encore attendre qu\'un administrateur vérifie votre inscription.\n\
+            On vous prévient par mail dès que c\'est bon!. ')
+            return redirect(reverse('home:home'))
+        else:
+            return render(self.request, 'account/activation_invalid.html')
