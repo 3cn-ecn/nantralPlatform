@@ -40,42 +40,54 @@
 
 {% block after_content %}
     <!-- Liste des autres colocs -->
-    <br>
-    <h2 class="mb-3">Ils sont aussi passés par là...</h2>
-    <div class="row">
-        {% for roommates in roommates_list %}
-            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                <div class="card h-100">
-                    {% if roommates.banniere %}
-                        <div class="ratio card-img-top" style="--bs-aspect-ratio: 37%;">
-                            <img src="{{roommates.banniere.url}}" style="object-fit: cover;" />
+    <br><br>
+    {% if roommates_list %}
+        <h2 class="mb-3">Ils sont aussi passés par là...</h2>
+        <div class="row">
+            {% for roommates in roommates_list %}
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                    <div class="card h-100">
+                        {% if roommates.banniere %}
+                            <div class="ratio card-img-top" style="--bs-aspect-ratio: 37%;">
+                                <img src="{{roommates.banniere.url}}" style="object-fit: cover;" />
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{roommates.name}} ({{roommates.begin_date|date:'Y'}})</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                {% if roommates.end_date %}
+                                    De {{roommates.begin_date|date:'F Y'|title}} à {{roommates.end_date|date:'F Y'|title}}
+                                {% else %}
+                                    Depuis {{roommates.begin_date|date:'F Y'|title}}
+                                {% endif %}
+                            </h6>
+                            <p class="card-text">
+                                {{roommates.members.all|join:", "}}
+                            </p>
+                            <a href="{{roommates.get_absolute_url}}" class="stretched-link"></a>
                         </div>
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{roommates.name}} ({{roommates.begin_date|date:'Y'}})</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            {% if roommates.end_date %}
-                                De {{roommates.begin_date|date:'F Y'|title}} à {{roommates.end_date|date:'F Y'|title}}
-                            {% else %}
-                                Depuis {{roommates.begin_date|date:'F Y'|title}}
-                            {% endif %}
-                        </h6>
-                        <p class="card-text">
-                            {{roommates.members.all|join:", "}}
-                        </p>
-                        <a href="{{roommates.get_absolute_url}}" class="stretched-link"></a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                <div class="card bg-success text-white text-center h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="d-block w-100">
+                            <i class="fas fa-plus-circle" style="font-size:5rem;"></i><br/><br>
+                            <p class="card-text">Ajouter ma coloc à cette adresse</p>
+                            <a href="{% url 'roommates:create-roommates' housing.pk %}" class="stretched-link"></a>
+                        </div>
                     </div>
                 </div>
             </div>
-        {% endfor %}
-        <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-            <div class="card bg-success text-white text-center h-100">
-                <div class="card-body">
-
-                    <p class="card-text">Ajouter ma coloc à cette adresse</p>
-                    <a href="{% url 'roommates:create-roommates' housing.pk %}" class="stretched-link"></a>
-                </div>
-            </div>
         </div>
-    </div>
+    {% else %}
+    {% endif %}
+{% endblock %}
+
+
+{% block go_to_list %}
+    <br><br>
+    <p><a href="{% url object.app|add:":housing-map" %}">← Retour à la carte des {{object.modelName|title}}</a></p>
+    <br>
 {% endblock %}

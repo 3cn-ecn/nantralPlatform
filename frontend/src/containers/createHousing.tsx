@@ -44,8 +44,8 @@ function CreateHousing(props) {
 		});
 	}
 
-	function submitHousing() {
-
+	function submitHousing(e) {
+		e.preventDefault();
 		axios.post(props.api_url, currentHousing).then((resp) => {
 			updateAlreadyExists(resp.data);
 			location.href = props.create_url.replace('0', resp.data.id);
@@ -55,7 +55,7 @@ function CreateHousing(props) {
 	return (
 		<div>
 			<h1>Ajouter ma coloc</h1>
-			<Form autocomplete="off">
+			<Form autoComplete="off">
 				<Form.Group controlId="address">
 					<Form.Label>Adresse :</Form.Label>
 					<Form.Control
@@ -106,7 +106,7 @@ function CreateHousing(props) {
 						</div>
 					)}
 					{alreadyExists.length == 0 && (
-						<Form>
+						<Form noValidate onSubmit={submitHousing}>
 							<Form.Group controlId="details">
 								<Form.Label>Complément d'addresse</Form.Label>
 								<Form.Control
@@ -117,11 +117,7 @@ function CreateHousing(props) {
 								/>
 							</Form.Group>
 							<br/>
-							<Button
-								onClick={() => {
-									submitHousing();
-								}}
-							>
+							<Button type="submit">
 								Continuer
 							</Button>
 						</Form>

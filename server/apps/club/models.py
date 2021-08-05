@@ -27,11 +27,20 @@ class Club(Group):
     
     class Meta:
         ordering = [F('bdx_type').asc(nulls_first=True), 'name']
+        verbose_name = "club/asso"
+        verbose_name_plural = "clubs & assos"
     
     def save(self, *args, **kwargs):
         # compression des images
         compressModelImage(self, 'banniere', size=(1320,492), contains=False)
         super(Club, self).save(*args, **kwargs)
+    
+    def is_admin(self, user) -> bool:
+        is_admin = super(Club, self).is_admin(user)
+        if not is_admin and self.bdx_type:
+            return self.bdx_type.is_admin(user)
+        else:
+            return is_admin
 
 
 class BDX(Club):

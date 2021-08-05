@@ -51,7 +51,7 @@ class Roommates(Group):
         help_text="Votre photo sera affichée au format 1320x492 pixels.")
 
     class Meta:
-        verbose_name_plural = "Roommates"
+        verbose_name = "coloc"
     
     def save(self, *args, **kwargs):
         # compression des images

@@ -1,4 +1,4 @@
-from django.forms import ModelForm, modelformset_factory
+from django.forms import ModelForm, modelformset_factory, CharField
 from .models import Housing, NamedMembershipRoommates, Roommates
 
 
@@ -22,6 +22,8 @@ class UpdateHousingForm(ModelForm):
 
 class NamedMembershipAddRoommates(ModelForm):
     """Form for a club page to add one self to roommates."""
+    nickname = CharField(
+        max_length=100, label='Avez-vous un surnom ? (facultatif)', required=False)
     class Meta:
         model = NamedMembershipRoommates
         fields = ['nickname']

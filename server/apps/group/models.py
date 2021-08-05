@@ -70,23 +70,19 @@ class Group(models.Model):
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
-        res = False
         if user.is_superuser or user.is_staff:
-            res = True
-        if not(res) and self.is_member(user):
+            return True
+        if self.is_member(user):
             members_list = self.members.through.objects.filter(group=self)
             my_member = members_list.filter(student=student).first()
-            res = my_member.admin
-        if not(res) and self.bdx_type:
-            res = self.bdx_type.is_admin(user)
-        return res
+            return my_member.admin
+        return False
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
-        student = Student.objects.filter(user=user).first()
-        return student in self.members.all()
+        return user.student in self.members.all()
 
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
@@ -136,6 +132,10 @@ class Group(models.Model):
     @property
     def get_absolute_url(self):
         return reverse(self.app+':detail', kwargs={'mini_slug': self.mini_slug})
+    
+    @property
+    def modelName(self):
+        return self.__class__._meta.verbose_name_plural
 
 
 class NamedMembership(models.Model):

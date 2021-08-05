@@ -12,7 +12,7 @@ urlpatterns = [
     path('create/<int:housing_pk>/roommates', CreateRoommatesView.as_view(), name='create-roommates'),
     path('map', HousingMap.as_view(), name='housing-map'),
     path('liste', HousingList.as_view(), name='housing-list'),
-    path('', HousingList.as_view()),
+    path('', HousingList.as_view(), name='index'),
 ] + makeGroupUrlpatterns(
             group_type="roommates", 
             url_base='coloc/',
