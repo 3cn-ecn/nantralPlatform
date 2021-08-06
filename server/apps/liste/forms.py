@@ -17,7 +17,7 @@ class NamedMembershipAddListe(ModelForm):
 
 NamedMembershipListeFormset = modelformset_factory(
     NamedMembershipList,
-    fields=['student', 'function'],
+    fields=['student', 'function', 'admin'],
     extra=1,
     can_delete=True
 )
