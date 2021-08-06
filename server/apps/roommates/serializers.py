@@ -1,8 +1,4 @@
 from rest_framework import serializers
-
-from apps.student.models import Student
-from apps.student.serializers import StudentSerializer
-
 from .models import Housing, NamedMembershipRoommates, Roommates
 
 

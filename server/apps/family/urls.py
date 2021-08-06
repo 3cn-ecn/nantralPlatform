@@ -7,5 +7,5 @@ from apps.group.urls import makeGroupUrlpatterns
 app_name = 'family'
 
 urlpatterns = [
-
+    path('', )
 ] + makeGroupUrlpatterns()
