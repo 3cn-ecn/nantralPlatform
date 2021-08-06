@@ -13,12 +13,20 @@ class TemporaryAccessRequest(models.Model):
     date = models.DateField()
     message_id = models.IntegerField(blank=True, null=True)
     domain = models.CharField(max_length=64)
-    approved = models.BooleanField(default=False)
+    approved = models.BooleanField()
+    mail_valid = models.BooleanField()
+    final_email = models.EmailField(blank=True, null=True)
 
-    def save(self, domain: str, *args, **kwargs):
+    def save(self, domain: str = None, *args, **kwargs):
+        if self.mail_valid is None:
+            self.mail_valid = False
+        if self.approved is None:
+            self.approved = False
         self.date = timezone.now()
-        self.approved_until = timezone.now()
-        self.domain = domain
+        if self.approved_until is None:
+            self.approved_until = timezone.now()
+        if domain is not None:
+            self.domain = domain
         super(TemporaryAccessRequest, self).save()
         if self.message_id is None:
             message = f'{self.user.first_name} {self.user.last_name} demande à rejoindre Nantral Platform.\n'
@@ -29,7 +37,7 @@ class TemporaryAccessRequest(models.Model):
                  "url": self.deny_url}
             ]
             self.message_id = send_message(
-                872205601298604052, message, embeds)
+                settings.DISCORD_CHANNEL_ID, message, embeds)
             super(TemporaryAccessRequest, self).save()
 
     @property
@@ -42,7 +50,10 @@ class TemporaryAccessRequest(models.Model):
 
     def approve(self):
         self.approved_until = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
-        react_message(872205601298604052, self.message_id, '%F0%9F%91%8C')
+        self.approved = True
+        self.save()
+        react_message(settings.DISCORD_CHANNEL_ID,
+                      self.message_id, '%F0%9F%91%8C')
         user: User = self.user
         subject = '[Nantral Platform] Votre accès temporaire a été approuvé.'
         message = render_to_string('account/mail/temp_req_approved.html', {
@@ -51,8 +62,6 @@ class TemporaryAccessRequest(models.Model):
         })
         user.email_user(
             subject=subject, message=message, from_email='accounts@nantral-platform.fr', html_message=message)
-        self.approved = True
-        self.save(self.domain)
 
     def deny(self):
         user: User = self.user
