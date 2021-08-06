@@ -1,14 +1,13 @@
 from django import template
-import pathlib
+import os
 
 register = template.Library()
 
 
 @register.filter
 def file_url(field):
-    fname = pathlib.Path(field.path)
-    if fname.exists():
-        date = fname.stat().st_mtime
-    else:
-        date = ""
-    return f'{field.url}?{date}'
+    try:
+        date = os.path.getmtime(field.path)
+        return f'{field.url}?{date}'
+    except Exception:
+        return field.url
