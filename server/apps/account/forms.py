@@ -1,5 +1,7 @@
 from typing import Dict
+from datetime import date
 from django import forms
+from django.conf import settings
 
 from django.contrib.auth.models import User
 from apps.student.models import FACULTIES, PATHS
@@ -8,10 +10,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
 
-def check_ecn_mail(mail):
+def check_ecn_mail(mail: str):
     if not 'ec-nantes.fr' in mail:
         raise ValidationError(
             'Vous devez avoir une adresse mail de Centrale Nantes finissant par ec-nantes.fr')
+
+
+def check_ecn_mail_login(mail: str):
+    """A wrapper around the login check to disable during periods where all emails can be used."""
+    if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today():
+        return
+    check_ecn_mail(mail)
 
 
 def check_passwords(pass1, pass2):
@@ -75,7 +84,7 @@ class SignUpForm(UserCreationForm):
 
 class LoginForm(forms.Form):
     email = forms.EmailField(max_length=200, validators=[
-                             check_ecn_mail], required=True, help_text='Votre adresse mail ec-nantes.fr')
+                             check_ecn_mail_login], required=True, help_text='Votre adresse mail ec-nantes.fr')
     password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
@@ -124,3 +133,10 @@ class TemporaryRequestSignUpForm(SignUpForm):
     '''
     email = forms.EmailField(
         max_length=200, required=True, help_text='Votre adresse mail personnelle.')
+
+
+class UpgradePermanentAccountForm(forms.Form):
+    """Form to get the school mail of the user for verification."""
+    email = forms.EmailField(
+        max_length=200, required=True, help_text='Votre adresse mail Centrale Nantes.', validators=[check_ecn_mail]
+    )
