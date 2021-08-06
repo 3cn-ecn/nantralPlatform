@@ -14,12 +14,9 @@ def send_message(channel_id: int, message: str, embeds: List[dict] = None) -> in
     }
     if embeds is not None:
         payload['embeds'] = embeds
-    print(payload)
     resp = requests.post(
         f'{BASE_URL}/channels/{channel_id}/messages', json=payload,
         headers=AUTH_HEADER)
-    print(resp.reason)
-    print(resp.content)
     return int(resp.json()['id'])
 
 
