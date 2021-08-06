@@ -4,36 +4,18 @@ from datetime import date
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
-from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressModelImage
 
-
-path_and_rename_club = PathAndRename("groups/logo/club")
-path_and_rename_club_banniere = PathAndRename("groups/banniere/club")
 
 
 class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
     bdx_type = models.ForeignKey(
         'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
-    logo = models.ImageField(
-        verbose_name='Logo du club', blank=True, null=True, 
-        upload_to=path_and_rename_club,
-        help_text="Votre logo sera affiché au format 306x306 pixels.")
-    banniere = models.ImageField(
-        verbose_name='Bannière', blank=True, null=True, 
-        upload_to=path_and_rename_club_banniere,
-        help_text="Votre bannière sera affichée au format 1320x492 pixels.")
     
     class Meta:
         ordering = [F('bdx_type').asc(nulls_first=True), 'name']
         verbose_name = "club/asso"
         verbose_name_plural = "clubs & assos"
-    
-    def save(self, *args, **kwargs):
-        # compression des images
-        self.banniere = compressModelImage(self, 'banniere', size=(1320,492), contains=False)
-        super(Club, self).save(*args, **kwargs)
     
     def is_admin(self, user) -> bool:
         is_admin = super(Club, self).is_admin(user)

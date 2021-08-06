@@ -4,11 +4,7 @@ from datetime import date
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
-from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressModelImage
 
-
-path_and_rename_roommates_banniere = PathAndRename("groups/banniere/roommates")
 
 
 class Housing(models.Model):
@@ -45,18 +41,10 @@ class Roommates(Group):
         to=Housing, on_delete=models.CASCADE)
     members = models.ManyToManyField(
         to=Student, through='NamedMembershipRoommates', blank=True)
-    banniere = models.ImageField(
-        verbose_name='Photo', blank=True, null=True, 
-        upload_to=path_and_rename_roommates_banniere,
-        help_text="Votre photo sera affichée au format 1320x492 pixels.")
 
     class Meta:
         verbose_name = "coloc"
-    
-    def save(self, *args, **kwargs):
-        # compression des images
-        self.banniere = compressModelImage(self, 'banniere', size=(1320,492), contains=False)
-        super(Roommates, self).save(*args, **kwargs)
+
 
 
 class NamedMembershipRoommates(NamedMembership):
