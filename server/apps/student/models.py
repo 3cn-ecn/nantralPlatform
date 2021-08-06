@@ -68,7 +68,7 @@ class Student(models.Model):
         return reverse('student:detail', args=[self.pk])
 
     def save(self, *args, **kwargs):
-        compressModelImage(self, 'picture')
+        self.picture = compressModelImage(self, 'picture')
         super(Student, self).save(*args, **kwargs)
     
     class Meta:

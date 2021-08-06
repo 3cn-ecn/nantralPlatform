@@ -54,7 +54,7 @@ class AbstractPost(models.Model):
     
     def save(self, *args, **kwargs):
         # compression des images
-        compressModelImage(self, 'image', size=(1320,492), contains=False)
+        self.image = compressModelImage(self, 'image', size=(1320,492), contains=False)
         super(AbstractPost, self).save(*args, **kwargs)
 
 
