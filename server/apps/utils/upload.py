@@ -13,7 +13,7 @@ class PathAndRename(object):
         ext = filename.split('.')[-1]
         # get filename
         try:
-            filename = f'{instance.slug}.{ext}'
+            filename = f'{instance.full_slug}.{ext}'
         except AttributeError:
             try:
                 filename = f'{instance.pk}.{ext}'
