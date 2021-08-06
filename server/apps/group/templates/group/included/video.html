@@ -15,5 +15,14 @@
             allowfullscreen 
             allow="autoplay">
         </iframe>
+    {% else %}
+        <div class="card text-center bg-dark text-white">
+            <div class="card-body d-flex align-items-center">
+                <div class="w-100">
+                    <i class="fas fa-dizzy mb-4" style="font-size:5rem;"></i><br/>
+                    <h5 class="card-title">Oooups ! Le lien de la vidéo n'est pas reconnu...</h5>
+                </div>
+            </div>
+        </div>
     {% endif %}
 </div>

@@ -48,7 +48,14 @@ class BaseDetailGroupView(DetailView):
         context['members'] = group.members.through.objects.filter(
             group=group).order_by('student__user__first_name')
         context['is_member'] = group.is_member(self.request.user)
-        context['form'] = NamedMembershipAddGroup(group)
+        if context['is_member']:
+            membership = group.members.through.objects.get(
+                student=self.request.user.student,
+                group=group,
+            )
+            context['form'] = NamedMembershipAddGroup(group)(instance=membership)
+        else:
+            context['form'] = NamedMembershipAddGroup(group)()
         #admin
         context['is_admin'] = group.is_admin(self.request.user)
         context['admin_req_form'] = AdminRightsRequestForm()
@@ -70,17 +77,38 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         slug = self.kwargs.get("slug")
         return get_object_from_slug(app, slug)
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.student = self.request.user.student
-        self.object.group = self.get_group()
-        self.object.save()
-        return redirect(self.object.group.get_absolute_url)
-
     def get_form_class(self):
         group = self.get_group()
         self.form_class = NamedMembershipAddGroup(group)
         return NamedMembershipAddGroup(group)
+
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        student = self.request.user.student
+        group = self.get_group()
+        membership = group.members.through.objects.filter(group=group, student=student).first()
+        return form_class(instance=membership, **self.get_form_kwargs())
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.student = self.request.user.student
+        self.object.group = self.get_group()
+        if not self.object.pk:
+            self.object.save()
+            messages.success(self.request, 'Bienvenue dans le groupe !')
+        elif self.request.POST.get('delete'):
+            self.object.delete()
+            messages.success(self.request, 'Membre supprimé.')
+        else:
+            self.object.save()
+            messages.success(self.request, 'Les modifications ont bien été enregistrées !')
+        return redirect(self.object.group.get_absolute_url)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, 'Modification refusée... 😥')
+        return redirect(self.get_group().get_absolute_url)
+
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
@@ -110,7 +138,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
                 form.save()
                 messages.success(request, 'Informations modifiées !')
             else:
-                messages.warning(request, form.errors)
+                messages.error(request, form.errors)
         return redirect(group.app+':update', group.slug)
 
 
@@ -155,7 +183,7 @@ def edit_named_memberships(request, group):
                 member.delete()
             messages.success(request, 'Membres modifiés')
         else:
-            messages.warning(request, form.errors)
+            messages.error(request, form.errors)
     return redirect(group.app+':update-members', group.slug)
 
 
@@ -195,7 +223,7 @@ def edit_sociallinks(request, group):
             sociallink.delete()
         messages.success(request, 'Liens modifiés')
     else:
-        messages.warning(request, form.errors)
+        messages.error(request, form.errors)
     return redirect(group.app+':update-sociallinks', group.slug)
 
 
