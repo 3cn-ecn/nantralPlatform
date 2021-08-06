@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 from datetime import date
 import os
 import environ
+from django.urls import reverse_lazy
 env = environ.Env()
 # reading .env file
 environ.Env.read_env()
@@ -87,12 +88,12 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-LOGIN_REDIRECT_URL = 'None'
-LOGIN_URL = '/account/login/'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 ROOT_URLCONF = 'config.urls'
+LOGIN_REDIRECT_URL = 'None'
+LOGIN_URL = reverse_lazy('account:login')
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
@@ -223,6 +224,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Discord connection
 DISCORD_TOKEN = env('DISCORD_TOKEN', default='')
 DISCORD_SERVER = env('DISCORD_SERVER', default='')
+DISCORD_CHANNEL_ID = env('DISCORD_CHANNEL_ID', default='')
 
 
 MEDIA_URL = '/media/'
@@ -233,4 +235,5 @@ GITHUB_REPO = 'nantral-platform/nantralPlatform'
 # Less origin restrictive for Youtube embed videos
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
-TEMPORARY_ACCOUNTS_DATE_LIMIT = date(year=2021, month=10, day=1)
+TEMPORARY_ACCOUNTS_DATE_LIMIT = date(year=env('TEMPORARY_ACCOUNTS_DATE_LIMIT_YEAR', default=2000), month=env(
+    'TEMPORARY_ACCOUNTS_DATE_LIMIT_MONTH', default=1), day=env('TEMPORARY_ACCOUNTS_DATE_LIMIT_DAY', default=1))
