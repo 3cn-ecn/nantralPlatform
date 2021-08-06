@@ -78,7 +78,7 @@ class Group(models.Model):
                 slug = f'{slug}-{id}'
             self.slug = slug
         # compression des images
-        compressModelImage(self, 'logo', size=(500,500), contains=True)
+        self.logo = compressModelImage(self, 'logo', size=(500,500), contains=True)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
 

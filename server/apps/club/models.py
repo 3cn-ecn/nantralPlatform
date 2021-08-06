@@ -32,7 +32,7 @@ class Club(Group):
     
     def save(self, *args, **kwargs):
         # compression des images
-        compressModelImage(self, 'banniere', size=(1320,492), contains=False)
+        self.banniere = compressModelImage(self, 'banniere', size=(1320,492), contains=False)
         super(Club, self).save(*args, **kwargs)
     
     def is_admin(self, user) -> bool:
