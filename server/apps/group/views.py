@@ -97,7 +97,7 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         if not self.object.pk:
             self.object.save()
             messages.success(self.request, 'Bienvenue dans le groupe !')
-        elif self.object.date_end and self.object.date_begin > self.object.date_end:
+        elif self.request.POST.get('delete'):
             self.object.delete()
             messages.success(self.request, 'Membre supprimé.')
         else:
