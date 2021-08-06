@@ -14,7 +14,8 @@ from apps.utils.compress import compressModelImage
 from apps.utils.slug import *
 
 
-path_and_rename_group = PathAndRename("groups/logo/group")
+path_and_rename_group = PathAndRename("groups/logo")
+path_and_rename_group_banniere = PathAndRename("groups/banniere")
 
 
 class Group(models.Model):
@@ -27,8 +28,14 @@ class Group(models.Model):
         verbose_name='Nom alternatif', max_length=100, null=True, blank=True)
 
     # présentation
-    logo = models.ImageField(verbose_name='Logo du groupe',
-                             blank=True, null=True, upload_to=path_and_rename_group)
+    logo = models.ImageField(
+        verbose_name='Logo du groupe', blank=True, null=True, 
+        upload_to=path_and_rename_group,
+        help_text="Votre logo sera affiché au format 306x306 pixels.")
+    banniere = models.ImageField(
+        verbose_name='Bannière', blank=True, null=True, 
+        upload_to=path_and_rename_group_banniere,
+        help_text="Votre bannière sera affichée au format 1320x492 pixels.")
     summary = models.CharField('Résumé', max_length=500, null=True, blank=True)
     description = CKEditor5Field(
         verbose_name='Description du groupe', blank=True)
@@ -79,6 +86,7 @@ class Group(models.Model):
             self.slug = slug
         # compression des images
         self.logo = compressModelImage(self, 'logo', size=(500,500), contains=True)
+        self.banniere = compressModelImage(self, 'banniere', size=(1320,492), contains=False)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
 
