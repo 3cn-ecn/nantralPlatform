@@ -235,5 +235,5 @@ GITHUB_REPO = 'nantral-platform/nantralPlatform'
 # Less origin restrictive for Youtube embed videos
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
-TEMPORARY_ACCOUNTS_DATE_LIMIT = date(year=env('TEMPORARY_ACCOUNTS_DATE_LIMIT_YEAR', default=2000), month=env(
-    'TEMPORARY_ACCOUNTS_DATE_LIMIT_MONTH', default=1), day=env('TEMPORARY_ACCOUNTS_DATE_LIMIT_DAY', default=1))
+TEMPORARY_ACCOUNTS_DATE_LIMIT = date.fromisoformat(
+    env('TEMPORARY_ACCOUNTS_DATE_LIMIT'))

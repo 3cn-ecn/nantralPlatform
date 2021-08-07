@@ -55,6 +55,11 @@ class TemporaryRegistrationView(FormView):
             return redirect(reverse('account:registration'))
         return super().dispatch(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['DEADLINE_TEMPORARY_REGISTRATION'] = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
+        return context
+
     def form_valid(self, form) -> HttpResponse:
         user_creation(form, self.request)
         return redirect(reverse('home:home'))
