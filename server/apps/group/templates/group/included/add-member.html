@@ -3,14 +3,25 @@
         <div class="modal-content">
             {% load crispy_forms_tags %}  
                 <div class="modal-header">
-                    <h5 class="modal-title">M'ajouter à {{object.name}}</h5>
+                    <h5 class="modal-title">
+                        {% if is_member %}
+                            Modifier un membre
+                        {% else %}
+                            Devenir membre de {{object.name}}
+                        {% endif %}
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>        
                 <div class="modal-body">
-                    <form method="post" action="{% url object.group_type|add:':add-member' object.mini_slug %}">
+                    <form method="post" action="{% url object.app|add:':add-member' object.slug %}">
                         {% csrf_token %}      
                         {{form | crispy}}
-                        <button type="submit" value="Submit" class="btn btn-dark">M'ajouter</button>
+                        {% if is_member %}
+                            <button type="submit" value="Submit" class="btn btn-success">Valider</button>
+                            <button type="submit" value="Submit" name="delete" class="btn btn-danger">Supprimer</button>
+                        {% else %}
+                            <button type="submit" value="Submit" class="btn btn-success">M'ajouter</button>
+                        {% endif %}
                     </form>
                 </div>
         </div>

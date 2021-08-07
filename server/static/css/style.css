@@ -33,6 +33,9 @@ a:hover {
 	text-decoration: none;
 }
 
+table.table-sort th {
+    cursor: pointer;
+}
 
 /* BARRE DE NAVIGATION */
 /* ------------------- */

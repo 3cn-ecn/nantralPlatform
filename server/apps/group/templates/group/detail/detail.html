@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load file_url %}
+{% load video %}
 
 {% block title %}{{ object.name }} - {% endblock %}
 
 {% block favicon %}
     {% if object.logo %}
-        {{object.logo.url}}
+        {{object.logo|file_url}}
     {% else %}
         {% static '/img/logo.svg' %}
     {%endif%}
@@ -14,7 +16,7 @@
 {% block banniere %}
     {% if object.banniere %}
         <div class="ratio ratio-banniere container-xl">
-            <img class="banniere" src='{{ object.banniere.url }}?{{object.modified_date}}'>
+            <img class="banniere" src='{{ object.banniere|file_url }}'>
         </div>
     {% endif %}
 {% endblock %}
@@ -26,25 +28,35 @@
         {%if object.logo %}
             <div class="col-12 col-sm-3">
                 <div class="ratio ratio-1x1 logo-div mb-4">
-                    <img class="logo" src='{{object.logo.url}}?{{object.modified_date}}'>
+                    <img class="logo" src='{{object.logo|file_url}}'>
                 </div>
             </div>
         {% endif %}
         <!-- description du club : nom, infos... -->
         <div class="col">
-            <h1>{{object.name}}</h1>
+            <h1>{% block object_name %}{{object.name}}{% endblock %}</h1>
             <p>
             {% if request.user.is_authenticated %}
                 {% if is_member and is_admin %}
-                    <button class='btn btn-light btn-sm disabled'>
-                        <i class="fa fa-crown"></i>
-                        Vous êtes admin du groupe.
-                    </button>
+                    <div class="btn-group" role="group">
+                        <button class='btn btn-light btn-sm disabled border'>
+                            <i class="fa fa-crown"></i>
+                            Vous êtes admin !
+                        </button>
+                        <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
+                            Modifier
+                        </button>
+                    </div>
                 {% elif is_member %}
-                    <button class='btn btn-light btn-sm disabled'>
-                        <i class="fa fa-user"></i>
-                        Vous êtes déjà membre !
-                    </button>
+                    <div class="btn-group" role="group">
+                        <button class='btn btn-light btn-sm disabled'>
+                            <i class="fa fa-user"></i>
+                            Vous êtes membre !
+                        </button>
+                        <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
+                            Modifier
+                        </button>
+                    </div>
                 {% else %}
                     <button id='show-add-group' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                         <i class="fa fa-user-plus"></i>
@@ -52,16 +64,22 @@
                     </button>
                 {% endif %}
                 {% if is_admin %}
-                    <a href='{%url object.group_type|add:":update" object.mini_slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
+                    <a href='{%url object.app|add:":update" object.slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
                 {%endif%}
             {% endif %}
             </p>
-            {% if object.summary %}
-                <p>{{ object.summary }}</p>
-            {% endif %}
+            {% block infos %}
+                {% if object.summary %}
+                    <p>{{ object.summary }}</p>
+                {% endif %}
+            {% endblock %}
             {% include "sociallink/liste.html" with sociallinks=sociallinks%}
         </div>
     </div>
+
+    {# Ajout possible de contenus pour certaines pages #}
+    {% block before_content %}
+    {% endblock %}
 
     <!-- Events -->
     {% if events %}
@@ -109,32 +127,32 @@
     {% endif %}
 
     <!-- Vidéos s'il y en a 2 -->
-    {% if object.video1 and object.video2 %}
-        {% load group_tags %}
+    {% if object.video1 and object.video2 or object.video1 and not object.description %}
         <br />
-        <h2>Vidéos</h2>
         <div class="row gy-3">
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
-                    {% video_embed object.video1 %}
+                    {% video object.video1 %}
                 </div>
             </div>
+            {% if object.video2 %}
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
-                    {% video_embed object.video2 %}
+                    {% video object.video2 %}
                 </div>
             </div>
+            {% endif %}
         </div>
     {% endif %}
 
     <!-- Description avec vidéo dans le coin s'il y en a une seulement-->
-    {% if object.description or object.video1 and not object.video2 %}
+    {% if object.description %}
         <br>
         <div class="clearfix">
             {% if object.video1 and not object.video2 %}
             <div class="col-md-6 float-md-end mb-3 ms-md-3">
                 <div class="ratio ratio-16x9">
-                    {% video_embed object.video1 %}
+                    {% video object.video1 %}
                 </div>
             </div>
             {% endif %}
@@ -146,34 +164,42 @@
         </div>
     {% endif %}
 
-    <!-- Liste des membres -->
-    <br />
-    <h2>Membres</h2>
-    {% if request.user.is_authenticated %}
-        {% if members %}
-            {% include 'student/student_cards.html' with members=members %}
-        {%else%}
-            <p>Aucun membre pour l'instant... 😥</p>
-        {%endif%}
-    {% else %}
-        <p>Veuillez vous connecter pour voir les membres.</p>
-    {% endif %}
-
-    {# Ajout possible de contenus pour certaines pages #}
-    {% block extra-content %}
+    {% block members %}
+        <!-- Liste des membres -->
+        <br />
+        <h2>Membres</h2>
+        {% if request.user.is_authenticated %}
+            {% if members %}
+                {% include 'student/student_cards.html' with members=members %}
+            {%else%}
+                <p>Aucun membre pour l'instant... 😥</p>
+            {%endif%}
+        {% else %}
+            <p>Veuillez vous connecter pour voir les membres.</p>
+        {% endif %}
     {% endblock %}
 
+    {# Ajout possible de contenus pour certaines pages #}
+    {% block after_content %}
+    {% endblock %}
+
+    {% block go_to_list %}
+        <br><br>
+        <p><a href="{% url object.app|add:":index" %}">← Retour à la liste des {{object.modelName|title}}</a></p>
+        <br>
+    {% endblock %}
+    
     {# Bouton pour faire une demande pour devenir admin #}
-    {% block admin-req %}
+    {% block admin_req %}
         {% if is_member and not is_admin %}
             {% include 'group/included/request-admin.html' %}
         {%endif%}
     {% endblock %}
 
     {# popup pour devenir membre du groupe #}
-    {% block add-member %}
+    {% block add_member %}
         {% include 'group/included/add-member.html' %}
-    {% endblock%}
+    {% endblock %}
 
     <br>
 {% endblock %}

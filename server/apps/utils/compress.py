@@ -4,6 +4,13 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
 
 
+def compressModelImage(object, field, size=(500,500), contains=False):
+    imageField = getattr(object, field)
+    if not object.pk or imageField != getattr(type(object).objects.get(pk=object.pk), field):
+        imageField = compressImage(imageField, size, contains)
+    return imageField
+
+
 def compressImage(image, size=(500,500), contains=False):
     '''Compresse une image'''
     # exception null

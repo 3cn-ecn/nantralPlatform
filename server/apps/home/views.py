@@ -1,20 +1,17 @@
 from datetime import *
-import requests
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, FormView
-from ..utils.accessMixins import LoginRequiredAccessMixin
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 from apps.utils.github import create_issue
 
-from django.conf import settings
-
 from .forms import SuggestionForm
 
 
-class HomeView(LoginRequiredAccessMixin, TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home/home.html'
 
     def get_context_data(self, **kwargs):
@@ -27,7 +24,7 @@ class HomeView(LoginRequiredAccessMixin, TemplateView):
         return context
 
 
-class SuggestionView(LoginRequiredAccessMixin, FormView):
+class SuggestionView(LoginRequiredMixin, FormView):
     template_name = 'home/suggestions.html'
     form_class = SuggestionForm
 

@@ -1,0 +1,10 @@
+<small>English version bellow</small>
+<h2>Vous avez accès à Nantral Platform !</h2>
+<p>Bonjour {{ user.first_name|title }}, votre compte a été approuvé.</p>
+<p>Attention, vous devez renseigner et valider votre adresse mail ecole avant le {{deadline}} sinon votre compte sera supprimé.</p>
+<p>Vous pouvez vous connecter <a href='http://{{ domain }}{% url "account:login"%}'>ici</a>.</p>
+
+<h2>You have access to Nantral Platform !</h2>
+<p>Hi {{ user.first_name|title }}, you have been approved.</p>
+<p>Please remember that you have to enter and confirm your school email before the {{deadline}} otherwise your account will be deleted.</p>
+<p>You can login <a href='http://{{ domain }}{% url "account:login"%}'>here</a></p>

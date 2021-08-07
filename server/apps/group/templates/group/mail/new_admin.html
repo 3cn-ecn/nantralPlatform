@@ -1,8 +1,8 @@
 <small>English version bellow</small>
 <h2>Vous etes devenu admin de {{ group.name }}!</h2>
-<p>Bonjour {{user.first_name}}, tu es devenu admin de {{ group.name }}.</p>
-<p>Tu peux maintenant éditer le club, ses events et ses news <a href='http://nantral-platform.fr{% url group.group_type|add:":update" group.mini_slug %}'>ici</a>.</p>
+<p>Bonjour {{ user.first_name|title }}, tu es devenu admin de {{ group.name }}.</p>
+<p>Tu peux maintenant éditer le club, ses events et ses news <a href='http://nantral-platform.fr{% url group.app|add:":update" group.slug %}'>ici</a>.</p>
 
 <h2>You're now admin of {{ group.name }}!</h2>
-<p>Hi {{user.first_name}}, you are now admin of {{ group.name }}.</p>
-<p>You can now edit the club, its events and news <a href='http://nantral-platform.fr{% url group.group_type|add:":update" group.mini_slug %}'>here</a>.</p>
+<p>Hi {{ user.first_name|title }}, you are now admin of {{ group.name }}.</p>
+<p>You can now edit the club, its events and news <a href='http://nantral-platform.fr{% url group.app|add:":update" group.slug %}'>here</a>.</p>

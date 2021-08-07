@@ -18,11 +18,12 @@ class TestGroups(TestCase, TestMixin):
     def test_club_views(self):
         Club.objects.create(name='TestClub')
         club = Club.objects.all().first()
-        url = reverse('club:detail', args=[club.mini_slug])
+
+        url = reverse('club:detail', args=[club.slug])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
-        url = reverse('club:update', args=[club.mini_slug])
+        url = reverse('club:update', args=[club.slug])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
@@ -32,7 +33,7 @@ class TestGroups(TestCase, TestMixin):
             'function': 'test',
             'date_begin': date.today(),
         }
-        url = reverse('club:add-member', args=[club.mini_slug])
+        url = reverse('club:add-member', args=[club.slug])
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 

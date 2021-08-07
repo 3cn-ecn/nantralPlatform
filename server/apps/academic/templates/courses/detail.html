@@ -7,7 +7,7 @@
     <h3>{{promo}}</h3>
     {% for student in values%}
         <a class='card' href="{% url 'student:detail' student.id %}">
-            {{student.first_name}} {{student.last_name}}
+            {{student.name}}
         </a>
     {% endfor %}
 {% endfor %}

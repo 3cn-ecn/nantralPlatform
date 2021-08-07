@@ -1,49 +1,40 @@
 from django.db import models
-from django.utils.text import slugify
-from django.urls.base import reverse
 from datetime import date
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
-from apps.sociallink.models import SocialNetwork, SocialLink
+
 
 
 class Housing(models.Model):
     address = models.CharField(
-        max_length=250, verbose_name='Adresse de la colocation.')
-    details = models.CharField(max_length=100, verbose_name='Détails',
-                               null=True, blank=True)
+        max_length=250, verbose_name='Adresse')
+    details = models.CharField(
+        max_length=100, verbose_name='Complément d\'adresse', null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         coordinates = geocode(self.address)[0]
-        self.latitude = coordinates['lat']
-        self.longitude = coordinates['long']
+        if not self.latitude or not self.longitude or abs(self.latitude-coordinates['lat'])>5e-3 or abs(self.longitude-coordinates['long'])>5e-3:
+            self.latitude = coordinates['lat']
+            self.longitude = coordinates['long']
         super(Housing, self).save(*args, **kwargs)
 
-    @property
-    def get_absolute_url(self):
-        return reverse('roommates:housing-details', kwargs={'pk': self.id})
-
-    @property
-    def get_absolute_edit_url(self):
-        return reverse('roommates:edit-housing', kwargs={'pk': self.id})
-
     def __str__(self):
-        return self.address if self.address else ''
+        return self.address if self.address else self.id
     
-    def name(self):
-        roommates_list = Roommates.objects.filter(housing=self).order_by('begin_date')
-        if roommates_list:
-            last_roommates = roommates_list[0]
-            return last_roommates.name
-        else:
-            return "La coloc du " + self.address
+    @property
+    def last_roommates(self):
+        last_roommates = Roommates.objects.filter(housing=self).order_by('begin_date').last()
+        return last_roommates
+
 
 
 class Roommates(Group):
+    name = models.CharField(verbose_name='Nom du groupe',
+                            max_length=100)
     begin_date = models.DateField("Date d'emménagement", default=date.today)
     end_date = models.DateField("Date de sortie", null=True, blank=True)
     housing = models.ForeignKey(
@@ -52,19 +43,19 @@ class Roommates(Group):
         to=Student, through='NamedMembershipRoommates', blank=True)
 
     class Meta:
-        verbose_name_plural = "Roommates"
-    
-    def save(self, *args, **kwargs):
-        self.slug = f'coloc--{slugify(self.name)}-{self.pk}'
-        super(Roommates, self).save(*args, **kwargs)
+        verbose_name = "coloc"
+
 
 
 class NamedMembershipRoommates(NamedMembership):
     group = models.ForeignKey(
-        to=Roommates, on_delete=models.CASCADE, blank=True, null=True)
+        to=Roommates, on_delete=models.CASCADE)
     nickname = models.CharField(
         max_length=100, verbose_name='Surnom', blank=True, null=True)
 
     def __str__(self):
-        return f'{self.student.first_name} {self.student.last_name}' \
-            if self.nickname is None else f'{self.student.first_name} {self.student.last_name} alias {self.nickname}'
+        if self.nickname:
+            return f'{self.nickname} ({self.student.name})'
+        else:
+            return self.student.name
+            

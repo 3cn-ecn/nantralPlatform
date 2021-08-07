@@ -6,8 +6,8 @@ module.exports = {
     postsGroupListUpdate: path.join(__dirname, '../src/containers/postsGroupListUpdate.tsx'),
     housingMap: path.join(__dirname, '../src/containers/housingMap.tsx'),
     createHousing: path.join(__dirname, '../src/containers/createHousing.tsx'),
-    editHousing: path.join(__dirname, '../src/containers/editHousing.tsx'),
     availabilitiesEdit: path.join(__dirname, '../src/containers/availabilitiesEdit.tsx')
+    //editHousing: path.join(__dirname, '../src/containers/editHousing.tsx')
   },
   output: {
     path: path.join(__dirname, '../../server/static/js'),

@@ -18,7 +18,7 @@ from .forms import ChangePassForm
 class StudentList(LoginRequiredMixin, ListView):
     model = Student
     template_name = 'student/list.html'
-    ordering = ['last_name', 'first_name']
+    ordering = ['user__last_name', 'user__first_name']
 
 
 class StudentProfile(LoginRequiredMixin, DetailView):
@@ -61,5 +61,5 @@ def change_password(request, pk):
         messages.success(request, 'Mot de passge changé !')
         return redirect('student:update', pk)
     else:
-        messages.warning(request, form.errors)
+        messages.error(request, form.errors)
         return redirect('student:update', pk)
