@@ -40,5 +40,5 @@ def follow_courses(request, student_id):
         messages.success(request, 'Cours modifiés!')
         return redirect('student:update', student_id)
     else:
-        messages.warning(request, forms.errors)
+        messages.error(request, form.errors)
         return redirect('student:update', student_id)

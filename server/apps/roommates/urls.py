@@ -3,14 +3,18 @@ from django.urls import path
 
 from .views import *
 from apps.group.urls import makeGroupUrlpatterns
+from apps.group.views import UpdateGroupView
 
 app_name = 'roommates'
 
 urlpatterns = [
-    path('<int:pk>', HousingDetailView.as_view(), name='housing-details'),
-    path('create', CreateHousingView.as_view(), name='create-new'),
-    path('<int:pk>/edit', EditHousingView.as_view(), name='edit-housing'),
+    path('create/housing', CreateHousingView.as_view(), name='create-housing'),
+    path('create/<int:housing_pk>/roommates', CreateRoommatesView.as_view(), name='create-roommates'),
     path('map', HousingMap.as_view(), name='housing-map'),
     path('liste', HousingList.as_view(), name='housing-list'),
-    path('', HousingList.as_view()),
-] + makeGroupUrlpatterns("roommates")
+    path('', HousingList.as_view(), name='index'),
+] + makeGroupUrlpatterns(
+            url_base='coloc/',
+            detail_view=DetailRoommatesView.as_view(),
+            update_view=UpdateRoommatesView.as_view(),
+        )

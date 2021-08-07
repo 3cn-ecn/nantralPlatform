@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load file_url %}
 
 {% block content %}
 
@@ -22,7 +23,7 @@
 	    		<a href="{{ liste.get_absolute_url }}" class="stretched-link">
 					<div class="ratio ratio-1x1">
       					{% if liste.logo %}
-	        				<img src="{{ liste.logo.url }}?{{liste.modified_date}}">
+	        				<img src="{{ liste.logo|file_url }}">
       					{% else %}
 		        			<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
       					{% endif %}

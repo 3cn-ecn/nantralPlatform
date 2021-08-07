@@ -1,18 +1,9 @@
 {% extends 'base_bg.html' %}
 {% load crispy_forms_tags %}
 {% load static%}
-{% block content%}
-<style>
-    body {
-        background-image: url('{% static "/img/central_background.jpg" %}');
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-</style>
-<div class='row'>
-    <div class='col-md-3'></div>
-    <div class='card col-md-6 col-12  my-3 p-3 bg-light text-center'>
-        <h2>Inscription sur Nantral Platform</h2>
+{% block card_content %}
+    <h2 class="text-center">Inscription sur Nantral Platform</h2>
+    </br>
         {% if temporary_registration %}
         <p>
             Pour vous inscrire sur Nantral Platform vous devez être affilié à Centrale Nantes.</br>
@@ -21,12 +12,9 @@
             <a class="btn btn-success" href="{% url 'account:temporary-registration' %}">Demande d'accès temporaire.</a>
         </p>
         {% endif %}
-        <form method='POST'>
+        <form method='POST' class="text-start">
             {% csrf_token %}
             {{ form|crispy }}
             <button class="btn btn-success">Inscription</button>
         </form>
-    </div>
-    <div class='col-md-3'></div>
-</div>
 {% endblock %}

@@ -1,4 +1,4 @@
-from django.forms import ModelForm, modelformset_factory
+from django.forms import ModelForm, modelformset_factory, CharField
 from .models import NamedMembershipClub, Club, BDX
 
 
@@ -19,13 +19,9 @@ class NamedMembershipAddClub(ModelForm):
     """Form for a club page to add one self to a club."""
     class Meta:
         model = NamedMembershipClub
-        fields = ['function', 'date_begin']
+        fields = ['function', 'date_begin', 'date_end']
 
 
-class NamedMembershipClubForm(ModelForm):
-    class Meta:
-        model = NamedMembershipClub
-        fields = ['student', 'function', 'date_begin', 'date_end', 'admin']
 
 NamedMembershipClubFormset = modelformset_factory(
     NamedMembershipClub,

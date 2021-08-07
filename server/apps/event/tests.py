@@ -23,7 +23,7 @@ class BaseEventTestCase(TestCase, TestMixin):
             admin=True
         )
         self.event = BaseEvent.objects.create(
-            title="TestEvent", group=self.club.slug, date=make_aware(datetime.now()),
+            title="TestEvent", group=self.club.full_slug, date=make_aware(datetime.now()),
             description="Test Desc", location="Amphi A")
         self.assertEqual(len(BaseEvent.objects.all()), 1)
 

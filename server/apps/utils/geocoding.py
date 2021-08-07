@@ -13,6 +13,7 @@ def geocode(search: str) -> List[str]:
 				f'{quote(search)}.json'
 				'?proximity=-1.5541362,47.2186371'
 				'&autocomplete=true'
+				'&language=fr'
 				'&types=address'
 				'&limit=3'
 				f'&access_token={settings.MAPBOX_API_KEY}')
@@ -25,7 +26,7 @@ def geocode(search: str) -> List[str]:
 		else:
 			return [{
 				'place_name': 'Ecole Centrale',
-				'long': '47.2186371',
-				'lat': '-1.5541362'
+				'long': '-1.5541362',
+				'lat': '47.2186371'
 			}]
 

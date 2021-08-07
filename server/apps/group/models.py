@@ -1,36 +1,21 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import m2m_changed
-from django.dispatch import receiver
 from django.utils.text import slugify
 from django.urls.base import reverse
 from django.template.loader import render_to_string
 from django.utils import timezone
 
-from django.conf import settings
-
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
-from apps.sociallink.models import SocialLink
 from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
-from apps.utils.compress import compressImage
+from apps.utils.compress import compressModelImage
+from apps.utils.slug import *
 
 
-path_and_rename_group = PathAndRename("groups/logo/group")
-
-
-def break_slug(slug):
-    '''Réupère le type du groupe et le mini-slug du group,
-       partir du slug entier.'''
-
-    list = slug.split('--')
-    group_type = list[0]
-    mini_slug = ''.join(list[1:])
-    if group_type == 'bdx':
-        group_type = 'club'
-    return group_type, mini_slug
+path_and_rename_group = PathAndRename("groups/logo")
+path_and_rename_group_banniere = PathAndRename("groups/banniere")
 
 
 class Group(models.Model):
@@ -43,8 +28,14 @@ class Group(models.Model):
         verbose_name='Nom alternatif', max_length=100, null=True, blank=True)
 
     # présentation
-    logo = models.ImageField(verbose_name='Logo du groupe',
-                             blank=True, null=True, upload_to=path_and_rename_group)
+    logo = models.ImageField(
+        verbose_name='Logo du groupe', blank=True, null=True, 
+        upload_to=path_and_rename_group,
+        help_text="Votre logo sera affiché au format 306x306 pixels.")
+    banniere = models.ImageField(
+        verbose_name='Bannière', blank=True, null=True, 
+        upload_to=path_and_rename_group_banniere,
+        help_text="Votre bannière sera affichée au format 1320x492 pixels.")
     summary = models.CharField('Résumé', max_length=500, null=True, blank=True)
     description = CKEditor5Field(
         verbose_name='Description du groupe', blank=True)
@@ -70,66 +61,51 @@ class Group(models.Model):
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
-        res = False
         if user.is_superuser or user.is_staff:
-            res = True
-        if not(res) and self.is_member(user):
+            return True
+        if self.is_member(user):
             members_list = self.members.through.objects.filter(group=self)
             my_member = members_list.filter(student=student).first()
-            res = my_member.admin
-        if not(res) and self.bdx_type:
-            res = self.bdx_type.is_admin(user)
-        return res
+            return my_member.admin
+        return False
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
-        student = Student.objects.filter(user=user).first()
-        return student in self.members.all()
+        return user.student in self.members.all()
 
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
-        group_type = type(self).__name__.lower()
-        if self.slug.split('--')[0] != group_type:
-            self.slug = f'{group_type}--{slugify(self.name)}'
+        if not self.slug:
+            slug = slugify(self.name)
+            if type(self).objects.filter(slug=slug):
+                id = 1
+                while type(self).objects.filter(slug=f'{slug}-{id}'): id += 1
+                slug = f'{slug}-{id}'
+            self.slug = slug
         # compression des images
-        if not self.pk or self.logo != self.__class__.objects.get(pk=self.pk).logo:
-            self.logo = compressImage(
-                self.logo, size=(500, 500), contains=True)
+        self.logo = compressModelImage(self, 'logo', size=(500,500), contains=True)
+        self.banniere = compressModelImage(self, 'banniere', size=(1320,492), contains=False)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
 
-    @staticmethod
-    def get_group_by_slug(slug:  str) -> 'Group':
-        """Get a group from a slug."""
-        type_slug = slug.split('--')[0]
-        if type_slug == 'club':
-            from apps.club.models import Club
-            return Club.objects.get(slug=slug)
-        elif type_slug == 'liste':
-            from apps.liste.models import Liste
-            return Liste.objects.get(slug=slug)
-        elif type_slug == 'bdx':
-            from apps.club.models import BDX
-            return BDX.objects.get(slug=slug)
-        elif type_slug == 'roommates':
-            from apps.roommates.models import Roommates
-            return Roommates.objects.get(slug=slug)
-        else:
-            raise Exception('Unknown group')
-
     @property
-    def mini_slug(self):
-        return break_slug(self.slug)[1]
-
+    def app(self):
+        return self._meta.app_label
+    
     @property
-    def group_type(self):
-        return break_slug(self.slug)[0]
-
+    def full_slug(self):
+        return f'{self.app}--{self.slug}'
+    
     @property
     def get_absolute_url(self):
-        return reverse(self.group_type+':detail', kwargs={'mini_slug': self.mini_slug})
+        return reverse(self.app+':detail', kwargs={'slug': self.slug})
+    
+    @property
+    def modelName(self):
+        '''Plural Model name, used in templates'''
+        return self.__class__._meta.verbose_name_plural
 
 
 class NamedMembership(models.Model):
@@ -157,7 +133,7 @@ class AdminRightsRequest(models.Model):
         self.domain = domain
         self.issue = 0
         super(AdminRightsRequest, self).save()
-        group = Group.get_group_by_slug(self.group)
+        group = get_object_from_full_slug(self.group)
         title = f'[Admin Req] {group} - {self.student}'
         body = f'<a href="{self.accept_url}">Accepter</a> </br>\
             <a href="{self.deny_url}">Refuser</a>'
@@ -166,16 +142,16 @@ class AdminRightsRequest(models.Model):
 
     @property
     def accept_url(self):
-        group_type, mini_slug = break_slug(self.group)
-        return f"http://{self.domain}{reverse(group_type+':accept-admin-req', kwargs={'mini_slug': mini_slug,'id': self.id})}"
+        app, slug = get_tuple_from_full_slug(self.group)
+        return f"http://{self.domain}{reverse(app+':accept-admin-req', kwargs={'slug': slug,'id': self.id})}"
 
     @property
     def deny_url(self):
-        group_type, mini_slug = break_slug(self.group)
-        return f"http://{self.domain}{reverse(group_type+':deny-admin-req', kwargs={'mini_slug': mini_slug, 'id': self.id})}"
+        app, slug = get_tuple_from_full_slug(self.group)
+        return f"http://{self.domain}{reverse(app+':deny-admin-req', kwargs={'slug': slug, 'id': self.id})}"
 
     def accept(self):
-        group = Group.get_group_by_slug(self.group)
+        group = get_object_from_full_slug(self.group)
         if group.is_member(self.student.user):
             membership = group.members.through.objects.get(
                 student=self.student.id, group=group)
@@ -199,6 +175,7 @@ class AdminRightsRequest(models.Model):
     def deny(self):
         close_issue(self.issue)
         self.delete()
+
 
 # FIXME Broken since the move of admins inside of members, nice to fix
 # @receiver(m2m_changed, sender=Group.members.through)

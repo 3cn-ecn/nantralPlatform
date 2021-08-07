@@ -61,5 +61,5 @@ def change_password(request, pk):
         messages.success(request, 'Mot de passge changé !')
         return redirect('student:update', pk)
     else:
-        messages.warning(request, form.errors)
+        messages.error(request, form.errors)
         return redirect('student:update', pk)
