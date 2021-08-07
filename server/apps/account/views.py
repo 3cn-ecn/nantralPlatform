@@ -49,10 +49,11 @@ class TemporaryRegistrationView(FormView):
     form_class = TemporaryRequestSignUpForm
     template_name = 'account/temporary_registration.html'
 
-    def get(self, request):
+    def dispatch(self, request, *args: Any, **kwargs: Any):
+        """Do not allow to use this view outside of allowed temporary accounts windows."""
         if not settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today():
             return redirect(reverse('account:registration'))
-        return super().get(request)
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form) -> HttpResponse:
         user_creation(form, self.request)

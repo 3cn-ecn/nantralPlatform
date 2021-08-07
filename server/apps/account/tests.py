@@ -1,15 +1,17 @@
-from django.conf import settings
+from unittest import mock
+from datetime import date
+from freezegun import freeze_time
 from django.contrib.auth import get_user
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.contrib.auth.models import User
 from apps.account.models import TemporaryAccessRequest
 from apps.student.models import Student
 from django.core import mail
 import re
-from unittest import mock
 from apps.utils.utest import TestMixin
 from apps.student.models import Student
+from apps.utils.testing.mocks import discord_mock_message_post
 
 
 # Create your tests here.
@@ -53,23 +55,19 @@ class Test_Account(TestCase, TestMixin):
         self.assertEqual(response.status_code, 200)
 
 
+@freeze_time("2021-09-01")
+@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=date(year=2021, month=9, day=2))
 class TestTemporaryAccounts(TestCase, TestMixin):
+    """Check that temporary accounts work within the correct time frame."""
+
     def setUp(self):
         pass
 
     @mock.patch('apps.utils.discord.requests.post')
     def test_temporary_registration_process(self, mock_post):
-        # Mock response from the discord API
-        mock_response = mock.Mock()
-        expected_dict = {
-            'id': 1
-        }
-        # Define response data for my Mock object
-        mock_response.json.return_value = expected_dict
-        mock_response.status_code = 200
 
         # Define response for the fake API
-        mock_post.return_value = mock_response
+        mock_post.return_value = discord_mock_message_post()
 
         url = reverse('account:temporary-registration')
         response = self.client.get(url)
@@ -208,16 +206,9 @@ class TestTemporaryAccounts(TestCase, TestMixin):
 
     @mock.patch('apps.utils.discord.requests.post')
     def test_deny_temporary_req(self, mock_post):
-        mock_response = mock.Mock()
-        expected_dict = {
-            'id': 1
-        }
-        # Define response data for my Mock object
-        mock_response.json.return_value = expected_dict
-        mock_response.status_code = 200
 
         # Define response for the fake API
-        mock_post.return_value = mock_response
+        mock_post.return_value = discord_mock_message_post()
 
         url = reverse('account:temporary-registration')
 
@@ -256,3 +247,92 @@ class TestTemporaryAccounts(TestCase, TestMixin):
             User.objects.get(email='test@ec-nantes.fr')
         except User.DoesNotExist:
             pass
+
+
+@freeze_time("2021-09-03")
+@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=date(year=2021, month=9, day=2))
+class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
+    """Check that temporary accounts don't work outside of the correct time frame."""
+
+    def setUp(self):
+        pass
+
+    def test_temp_registration_not_available(self):
+        url = reverse('account:temporary-registration')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        payload = {
+            'first_name': 'test_name',
+            'last_name': 'test_last_name',
+            'email': 'test@not-ec-nantes.fr',
+            'confirm_email': 'test@not-ec-nantes.fr',
+            'password1': 'pass',
+            'password2': 'pass',
+            'promo': 2020,
+            'faculty': 'Gen',
+            'path': 'Cla'
+        }
+
+        response = self.client.post(url, payload)
+        self.assertEqual(response.status_code, 302)
+        with self.assertRaises(User.DoesNotExist):
+            User.objects.get(email='test@not-ec-nantes.fr')
+
+    def test_temp_creation_not_available(self):
+        user: User = User(
+            first_name='test',
+            last_name='test',
+            email='test@ec-nantes.fr',
+            is_active=False
+        )
+        user.save()
+        TemporaryAccessRequest.objects.create(
+            user=user
+        )
+        self.assertEqual(TemporaryAccessRequest.objects.all().count(), 0)
+
+    @freeze_time("2021-09-01")
+    @mock.patch('apps.utils.discord.requests.post')
+    def test_temp_request_expired(self, mock_post):
+        # Define response for the fake API
+        mock_post.return_value = discord_mock_message_post()
+
+        url = reverse('account:temporary-registration')
+        payload = {
+            'first_name': 'test_name',
+            'last_name': 'test_last_name',
+            'email': 'test@not-ec-nantes.fr',
+            'confirm_email': 'test@not-ec-nantes.fr',
+            'password1': 'pass',
+            'password2': 'pass',
+            'promo': 2020,
+            'faculty': 'Gen',
+            'path': 'Cla'
+        }
+
+        response = self.client.post(url, payload)
+        self.assertEqual(response.status_code, 302)
+        user: User = User.objects.get(email='test@not-ec-nantes.fr')
+        assert len(mail.outbox) == 1
+        extract = re.search(
+            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
+        uidb64 = extract.group(1)
+        token = extract.group(2)
+
+        # Check that the user cannot use the link to activate the account
+        url = reverse('account:confirm-temporary', kwargs={
+                      'uidb64': uidb64, 'token': token})
+        response = self.client.get(url)
+
+        TemporaryAccessRequest.objects.get(user=user).approve()
+        with freeze_time("2021-09-03"):
+            # Check that you still cannot login
+            url = reverse('account:login')
+            payload = {
+                'email': 'test@not-ec-nantes.fr',
+                'password': 'pass'
+            }
+            response = self.client.post(url, payload)
+            self.assertEqual(response.status_code, 302)
+            self.assertFalse(get_user(self.client).is_authenticated)

@@ -1,3 +1,4 @@
+from datetime import date
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.db import models
@@ -18,27 +19,28 @@ class TemporaryAccessRequest(models.Model):
     final_email = models.EmailField(blank=True, null=True)
 
     def save(self, domain: str = None, *args, **kwargs):
-        if self.mail_valid is None:
-            self.mail_valid = False
-        if self.approved is None:
-            self.approved = False
-        self.date = timezone.now()
-        if self.approved_until is None:
-            self.approved_until = timezone.now()
-        if domain is not None:
-            self.domain = domain
-        super(TemporaryAccessRequest, self).save()
-        if self.message_id is None:
-            message = f'{self.user.first_name} {self.user.last_name} demande à rejoindre Nantral Platform.\n'
-            embeds = [
-                {"title": "Accepter",
-                 "url": self.approve_url},
-                {"title": "Refuser",
-                 "url": self.deny_url}
-            ]
-            self.message_id = send_message(
-                settings.DISCORD_CHANNEL_ID, message, embeds)
+        if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT > date.today():
+            if self.mail_valid is None:
+                self.mail_valid = False
+            if self.approved is None:
+                self.approved = False
+            self.date = timezone.now()
+            if self.approved_until is None:
+                self.approved_until = timezone.now()
+            if domain is not None:
+                self.domain = domain
             super(TemporaryAccessRequest, self).save()
+            if self.message_id is None:
+                message = f'{self.user.first_name} {self.user.last_name} demande à rejoindre Nantral Platform.\n'
+                embeds = [
+                    {"title": "Accepter",
+                     "url": self.approve_url},
+                    {"title": "Refuser",
+                     "url": self.deny_url}
+                ]
+                self.message_id = send_message(
+                    settings.DISCORD_CHANNEL_ID, message, embeds)
+                super(TemporaryAccessRequest, self).save()
 
     @property
     def approve_url(self):
