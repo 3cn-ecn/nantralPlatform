@@ -235,4 +235,4 @@ GITHUB_REPO = 'nantral-platform/nantralPlatform'
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
 TEMPORARY_ACCOUNTS_DATE_LIMIT = date.fromisoformat(
-    env('TEMPORARY_ACCOUNTS_DATE_LIMIT'))
+    env('TEMPORARY_ACCOUNTS_DATE_LIMIT', default='2000-12-31'))
