@@ -88,6 +88,8 @@ class ConfirmUser(View):
             if tempAccessReq is not None:
                 user.email = tempAccessReq.final_email
                 tempAccessReq.delete()
+                messages.warning(
+                    request, f'Dorénavant vous devez utiliser {user.email} pour vous connecter.')
             user.save()
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')

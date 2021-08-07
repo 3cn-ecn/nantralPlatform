@@ -61,6 +61,10 @@ def send_email_confirmation(user: User, request: HttpRequest, temporary_access: 
     else:
         user.email_user(
             subject, message, 'registration@nantral-platform.fr', html_message=message)
-    messages.success(
-        request, 'Un mail vous a été envoyé pour confirmer votre adresse mail.\n\
-             Vous pouvez accéder à votre boîte mail école <a href="https://webmail.ec-nantes.fr">ici</a>.')
+    if temporary_access:
+        messages.success(
+            request, 'Un mail vous a été envoyé pour confirmer votre adresse mail personnelle.')
+    else:
+        messages.success(
+            request, 'Un mail vous a été envoyé pour confirmer votre adresse mail Centrale Nantes.\n\
+                Vous pouvez accéder à votre boîte mail école <a href="https://webmail.ec-nantes.fr">ici</a>.')
