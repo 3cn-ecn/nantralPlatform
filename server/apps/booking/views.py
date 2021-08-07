@@ -6,10 +6,9 @@ from apps.utils.accessMixins import UserIsAdmin, UserEditRightsObjectView
 from .models import Availabilty, Service
 
 from apps.group.models import Group
-from apps.group.views import GroupSlugFonctions
 
 
-class UpdateGroupListServicesView(GroupSlugFonctions, UserIsAdmin, ListView):
+class UpdateGroupListServicesView(UserIsAdmin, ListView):
     model = Service
     template_name = 'booking/service/list.html'
 
@@ -22,7 +21,7 @@ class UpdateGroupListServicesView(GroupSlugFonctions, UserIsAdmin, ListView):
         return context
 
 
-class CreateServiceView(GroupSlugFonctions, UserIsAdmin, CreateView):
+class CreateServiceView(UserIsAdmin, CreateView):
     model = Service
     fields = ['name', 'description', 'conditions', 'price', 'payment_link']
     template_name = 'booking/service/create.html'
