@@ -27,7 +27,12 @@ class QuestionMemberAdmin(admin.ModelAdmin):
     inlines = [OptionInline]
 class QuestionFamilyAdmin(admin.ModelAdmin):
     inlines = [OptionInline]
+class GroupQuestionAdmin(admin.ModelAdmin):
+    inlines = [OptionInline]
 admin.site.register(QuestionMember, QuestionMemberAdmin)
 admin.site.register(QuestionFamily, QuestionFamilyAdmin)
-admin.site.register(QuestionGroup)
+admin.site.register(GroupQuestion, GroupQuestionAdmin)
+
+admin.site.register(QuestionPage)
+admin.site.register(Affichage)
 

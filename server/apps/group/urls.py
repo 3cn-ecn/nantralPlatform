@@ -30,10 +30,12 @@ def makeGroupUrlpatterns(
     Fonction créant toutes les urls pour un groupe 
     (ex: clubs, listes, colocs, cours...).
         ->  url_base est l'url qui peut être ajoutée 
-            devant les slugs
+            devant les slugs, sans aucun slash
         ->  *_view permet de remplacer la vue générale de 
             group par une vue personnalisée pour le groupe 
     '''
+    
+    if url_base: url_base += '/'
     
     urlpatterns = [
         # vue generale du groupe

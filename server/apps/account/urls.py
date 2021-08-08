@@ -12,5 +12,5 @@ urlpatterns = [
     path('activate/<slug:uidb64>/<slug:token>', ConfirmUser.as_view(), name='confirm'),
     url('forgotten', ForgottenPassView.as_view(), name='forgotten_pass'),
     path('reset_pass/<slug:uidb64>/<slug:token>', PasswordResetConfirmCustomView.as_view(), name='reset_pass'),
-    path('<slug:user_id>/student', redirect_to_student,name='redirect-student')
+    path('<slug:user_id>/student', redirect_to_student, name='redirect-student')
 ]
