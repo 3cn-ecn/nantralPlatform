@@ -32,17 +32,20 @@ gérées automatiquement mais peuvent être réécrites si besoin.
 
 """
 
-def get_object_from_slug(app_name:str, slug:str):
+from typing import Union
+
+
+def get_object_from_slug(app_name: str, slug: str):
     """Get a model object from a slug and an app."""
-    
+
     if app_name == 'club':
         from apps.club.models import Club, BDX
         object = Club.objects.get(slug=slug)
         if isinstance(object, BDX):
             return BDX.objects.get(slug=slug)
-        else:   
+        else:
             return object
-    
+
     elif app_name == 'liste':
         from apps.liste.models import Liste
         return Liste.objects.get(slug=slug)
@@ -59,23 +62,22 @@ def get_object_from_slug(app_name:str, slug:str):
         raise Exception(f'Unknown application : {app_name}')
 
 
-def get_full_slug_from_slug(app:str, slug:str):
+def get_full_slug_from_slug(app: str, slug: str):
     """Get the full slug from a slug and an app."""
     return f'{app}--{slug}'
 
 
-
-def get_app_from_full_slug(full_slug:str):
+def get_app_from_full_slug(full_slug: str):
     """Get the model object app name from a full slug."""
     return full_slug.split('--')[0]
 
 
-def get_slug_from_full_slug(full_slug:str):
+def get_slug_from_full_slug(full_slug: str):
     """Get the slug from a full slug."""
     return '--'.join(full_slug.split('--')[1:])
 
 
-def get_tuple_from_full_slug(full_slug:str):
+def get_tuple_from_full_slug(full_slug: str):
     """Get a tuple (app, slug) from a full slug."""
     slug_list = full_slug.split('--')
     app_name = slug_list[0]
@@ -83,7 +85,7 @@ def get_tuple_from_full_slug(full_slug:str):
     return (app_name, slug)
 
 
-def get_object_from_full_slug(full_slug:str):
+def get_object_from_full_slug(full_slug: str) -> Union['Group']:
     """Get a model object from a full slug."""
     app_name, slug = get_tuple_from_full_slug(full_slug)
     return get_object_from_slug(app_name, slug)

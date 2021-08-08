@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.decorators.http import require_http_methods
+from apps.group.models import Group
 
 
 from apps.sociallink.models import SocialLink
@@ -20,8 +21,6 @@ from .forms import *
 
 from apps.utils.accessMixins import UserIsAdmin
 from apps.utils.slug import *
-
-
 
 
 class BaseDetailGroupView(DetailView):
@@ -36,7 +35,7 @@ class BaseDetailGroupView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         group = context['object']
-        #infos
+        # infos
         context['sociallinks'] = SocialLink.objects.filter(
             slug=group.full_slug)
         context['events'] = BaseEvent.objects.filter(
@@ -44,7 +43,7 @@ class BaseDetailGroupView(DetailView):
         context['posts'] = Post.objects.filter(
             group=group.full_slug, publication_date__gte=date.today()-timedelta(days=10)
         ).order_by('publication_date')
-        #members
+        # members
         context['members'] = group.members.through.objects.filter(
             group=group).order_by('student__user__first_name')
         context['is_member'] = group.is_member(self.request.user)
@@ -53,10 +52,11 @@ class BaseDetailGroupView(DetailView):
                 student=self.request.user.student,
                 group=group,
             )
-            context['form'] = NamedMembershipAddGroup(group)(instance=membership)
+            context['form'] = NamedMembershipAddGroup(
+                group)(instance=membership)
         else:
             context['form'] = NamedMembershipAddGroup(group)()
-        #admin
+        # admin
         context['is_admin'] = group.is_admin(self.request.user)
         context['admin_req_form'] = AdminRightsRequestForm()
         return context
@@ -87,7 +87,8 @@ class AddToGroupView(LoginRequiredMixin, FormView):
             form_class = self.get_form_class()
         student = self.request.user.student
         group = self.get_group()
-        membership = group.members.through.objects.filter(group=group, student=student).first()
+        membership = group.members.through.objects.filter(
+            group=group, student=student).first()
         return form_class(instance=membership, **self.get_form_kwargs())
 
     def form_valid(self, form):
@@ -102,13 +103,13 @@ class AddToGroupView(LoginRequiredMixin, FormView):
             messages.success(self.request, 'Membre supprimé.')
         else:
             self.object.save()
-            messages.success(self.request, 'Les modifications ont bien été enregistrées !')
+            messages.success(
+                self.request, 'Les modifications ont bien été enregistrées !')
         return redirect(self.object.group.get_absolute_url)
-    
+
     def form_invalid(self, form):
         messages.error(self.request, 'Modification refusée... 😥')
         return redirect(self.get_group().get_absolute_url)
-
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
@@ -159,7 +160,7 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
             group=context['object'])
         MembersFormset = NamedMembershipGroupFormset(
             context['object'])
-        if MembersFormset: 
+        if MembersFormset:
             context['members'] = MembersFormset(queryset=memberships)
         return context
 
@@ -200,11 +201,12 @@ class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = self.get_object()
-        sociallinks = SocialLink.objects.filter(slug=context['object'].full_slug)
+        sociallinks = SocialLink.objects.filter(
+            slug=context['object'].full_slug)
         form = SocialLinkGroupFormset(queryset=sociallinks)
         context['sociallinks'] = form
         return context
-    
+
     def post(self, request, **kwargs):
         group = self.get_object()
         return edit_sociallinks(request, group)
@@ -225,7 +227,6 @@ def edit_sociallinks(request, group):
     else:
         messages.error(request, form.errors)
     return redirect(group.app+':update-sociallinks', group.slug)
-
 
 
 class RequestAdminRightsView(LoginRequiredMixin, FormView):
@@ -258,19 +259,26 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 
 class AcceptAdminRequestView(UserIsAdmin, View):
     def get(self, request, slug, id):
-        admin_req = AdminRightsRequest.objects.get(id=id)
-        messages.success(
-            request, message=f"Vous avez accepté la demande de {admin_req.student}")
-        admin_req.accept()
-        app=reverse(request.path).app_name
-        return redirect(app+':detail', slug)
+        admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
+        app = reverse(request.path).app_name
+        if f'{app}--{slug}' == admin_req.group:
+            # Checking whether the url is legit
+            group: Group = get_object_from_full_slug(admin_req.group)
+            messages.success(
+                request, message=f"Vous avez accepté la demande de {admin_req.student}")
+            admin_req.accept()
+
+        return redirect(group)
 
 
 class DenyAdminRequestView(UserIsAdmin, View):
     def get(self, request, slug, id):
-        admin_req = AdminRightsRequest.objects.get(id=id)
-        messages.success(
-            request, message=f"Vous avez refusé la demande de {admin_req.student}")
-        admin_req.deny()
-        app=reverse(request.path).app_name
-        return redirect(app+':detail', slug)
+        admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
+        app = reverse(request.path).app_name
+        if f'{app}--{slug}' == admin_req.group:
+            # Checking whether the url is legit
+            group: Group = get_object_from_full_slug(admin_req.group)
+            messages.success(
+                request, message=f"Vous avez refusé la demande de {admin_req.student}")
+            admin_req.deny()
+        return redirect(group.get_absolute_url)
