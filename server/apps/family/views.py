@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import date
 
 from apps.group.views import DetailGroupView
-from .models import Affichage, AnswerMember, QuestionMember, QuestionFamily
+from .models import Affichage, QuestionMember, QuestionFamily, AnswerMember, Family, MembershipFamily
+from .forms import CreateFamilyForm
 
 
 # Create your views here.
@@ -39,11 +40,50 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class ListFamilyView(ListView):
-    pass
+class ListFamilyView(TemplateView):
+    template_name = 'family/list.html'
 
-class CreateFamilyView(TemplateView):
-    pass
+    def get_context_date(*args, **kwargs):
+        list_family = [
+            {
+                'name':f.name, 
+                'url':f.get_absolute_url,
+            } 
+            for f in Family.objects.all()
+        ]
+        list_2A = [
+            {
+                'name': m.student.alphabetical_name, 
+                'family': m.group.name,
+                'url': m.group.get_absolute_url,
+            }
+            for m in MembershipFamily.objects.filter(role='2A+')  
+        ]
+        list_1A = [
+            {
+                'name': m.student.alphabetical_name, 
+                'family': m.group.name,
+                'url': m.group.get_absolute_url,
+            }
+            for m in MembershipFamily.objects.filter(role='1A')  
+        ]
+        context = {
+            'list_family': list_family,
+            'list_2A': list_2A,
+            'list_1A': list_1A,
+        }
+        return context
+
+
+
+class CreateFamilyView(FormView):
+    template_name = 'family/create.html'
+    form_class = CreateFamilyForm
+
+    def get_initial(self, *args, **kwargs):
+        initial = super().get_initial()
+        initial['member1'] = self.request.user.student
+        return initial
 
 class QuestionnaryView(TemplateView):
     pass

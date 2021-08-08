@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Liste des Familles</h1>
+    <br>
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="family-tab" data-bs-toggle="tab" data-bs-target="#family" type="button" role="tab" aria-controls="family" aria-selected="true">Par Familles</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="A2-tab" data-bs-toggle="tab" data-bs-target="#A2" type="button" role="tab" aria-controls="A2" aria-selected="false">Par Parrains/Marraines</button>
+        </li>
+        {% if list_1a %}
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="A1-tab" data-bs-toggle="tab" data-bs-target="#A1" type="button" role="tab" aria-controls="A1" aria-selected="false">Par Filleul·e·s</button>
+        </li>
+        {% endif %}
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+        
+        <div class="tab-pane fade show active" id="family" role="tabpanel" aria-labelledby="family-tab">
+            <br>
+            <div class="table-responsive">
+                <table class="table table-hover table-sm">
+                    <tbody>
+                        {% for f in list_family %}
+                            <tr style="transform: rotate(0);">
+                                <td><a href="{{ f.url }}" class="stretched-link"></a>{{f.name}}</a></td>
+                            </tr>   
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade" id="A2" role="tabpanel" aria-labelledby="A2-tab">
+            <br>
+            <div class="table-responsive">
+                <table class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Famille</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in list_2a %}
+                            <tr style="transform: rotate(0);">
+                                <td><a href="{{ m.url }}" class="stretched-link"></a>{{m.name}}</a></td>
+                                <td>{{ m.family }}</td>
+                            </tr>   
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {% if list_1a %}
+        <div class="tab-pane fade" id="A1" role="tabpanel" aria-labelledby="A1-tab">
+            <br>
+            <div class="table-responsive">
+                <table class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Famille</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in list_1a %}
+                            <tr style="transform: rotate(0);">
+                                <td><a href="{{ m.url }}" class="stretched-link"></a>{{m.name}}</a></td>
+                                <td>{{ m.family }}</td>
+                            </tr>   
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    
+    </div>
+
+{% endblock %}

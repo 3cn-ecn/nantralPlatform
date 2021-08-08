@@ -93,8 +93,8 @@ def create_questions(apps, schema_editor):
     q3.questionmember_set.create(label="Graphisme", label_en="Drawing/graphic design")
     q4 = GroupQuestion.objects.create(
         code_name="Sports",
-        label="Quels sports aimes-tu ?",
-        label_en="",
+        label="Et sportivement ?",
+        label_en="And what about sports?",
         page=p2,
         coeff=1,
         order=4,
@@ -102,7 +102,15 @@ def create_questions(apps, schema_editor):
     q4.option_set.create(value=0, text="J'adore", text_en="I love")
     q4.option_set.create(value=1, text="J'apprécie", text_en="I like")
     q4.option_set.create(value=2, text="Indifférent/Je n'aime pas", text_en="No interest/I don't like")
-    q4.questionmember_set.create(label="Sport", label_en="Sport")
+    q4.questionmember_set.create(label="Rugby", label_en="Rugby")
+    q4.questionmember_set.create(label="Hand", label_en="Hand")
+    q4.questionmember_set.create(label="Foot", label_en="Football")
+    q4.questionmember_set.create(label="Tennis", label_en="Tennis")
+    q4.questionmember_set.create(label="Aviron", label_en="Rowing")
+    q4.questionmember_set.create(label="Volley", label_en="Volley")
+    q4.questionmember_set.create(label="Sports de combat", label_en="Fighting sports")
+    q4.questionmember_set.create(label="Danse", label_en="Dance")
+    q4.questionmember_set.create(label="Athlétisme", label_en="Athetics")
 
     ### PAGE 3
     p3 = QuestionPage.objects.create(
@@ -185,7 +193,35 @@ def create_questions(apps, schema_editor):
     q5.option_set.create(value=1, text="Occasionnellement", text_en="Sometimes")
     q5.option_set.create(value=2, text="Régulièrement", text_en="Often")
 
-    
+    # QUESTIONS FAMILLES
+    # question 1
+    f1 = QuestionFamily.objects.create(
+        label="Fréquence des soirées", 
+        label_en="Party Frequency",
+        order=1,
+        equivalent=q3,
+        quota=33,
+    )
+    f1.option_set.create(value=0, text="Jamais", text_en="Never")
+    f1.option_set.create(value=0, text="Une fois par mois", text_en="Once a month")
+    f1.option_set.create(value=0, text="Une fois par semaine", text_en="Once a week")
+    f1.option_set.create(value=0, text="Plusieurs fois par semaine", text_en="Several times a week")
+    f1.option_set.create(value=0, text="Une fois par jour (ou plus)", text_en="Once a day (or more)")
+    # question 2
+    f2 = QuestionFamily.objects.create(
+        code_name = "Alcool",
+        label="En termes d'alcool, où se situe la famille ? (en moyenne, à peu près)",
+        label_en = "Which quantity of alcohol the family drink? (in average)",
+        order=2,
+        equivalent=q2,
+        quota=100,
+    )
+    f2.option_set.create(value=0, text="Pas du tout", text_en="I don't drink")
+    f2.option_set.create(value=1, text="Quelques verres", text_en="A few drinks")
+    f2.option_set.create(value=2, text="Pas mal de verres", text_en="More drinks")
+    f2.option_set.create(value=3, text="Bourré", text_en="Drunk")
+    f2.option_set.create(value=4, text="Trop bien", text_en="Too many drinks")
+    f2.option_set.create(value=5, text="Beaucoup trop", text_en="The answer above too many drinks")
 
 
 

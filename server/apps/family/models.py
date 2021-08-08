@@ -27,6 +27,7 @@ class Family(Group):
     
     class Meta:
         verbose_name="Famille"
+        ordering = ['name']
     
     def save(self, *args, **kwargs):
         # set the year
@@ -47,6 +48,7 @@ class MembershipFamily(NamedMembership):
 
     class Meta:
         verbose_name = "Membre"
+        ordering = ['student']
     
     def __str__(self):
         if self.student:
