@@ -61,14 +61,10 @@ class MembershipFamily(NamedMembership):
     class Meta:
         verbose_name = "Membre"
         ordering = ['student']
+        unique_together = ['group', 'student']
     
     def __str__(self):
-        if self.student:
-            return self.student
-        elif self.name:
-            return self.name
-        else:
-            return self.id
+        return self.student.__str__()
 
 
 class QuestionPage(models.Model):
@@ -81,6 +77,7 @@ class QuestionPage(models.Model):
     class Meta:
         verbose_name = "Page de Questions"
         verbose_name_plural = "Pages de Questions"
+        ordering=['order']
     
     def __str__(self):
         return self.name
@@ -124,6 +121,7 @@ class Option(models.Model):
 
     class Meta:
         ordering = ['question', 'value']
+        unique_together = ['question', 'value']
 
 
 
@@ -183,7 +181,6 @@ class BaseAnswer(models.Model):
     answer = models.IntegerField()
 
     class Meta:
-        verbose_name = "Réponse"
         abstract=True
     
     def __str__(self):
@@ -193,6 +190,15 @@ class AnswerMember(BaseAnswer):
     question = models.ForeignKey(QuestionMember, on_delete=models.CASCADE)
     member = models.ForeignKey(MembershipFamily, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = "Réponse"
+        unique_together = ['question', 'member']
+
+
 class AnswerFamily(BaseAnswer):
     question = models.ForeignKey(QuestionFamily, on_delete=models.CASCADE)
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Réponse"
+        unique_together = ['question', 'family']

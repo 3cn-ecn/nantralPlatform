@@ -160,10 +160,10 @@ def create_questions(apps, schema_editor):
         order=3,
     )
     q3.option_set.create(value=0, text="Jamais", text_en="Never")
-    q3.option_set.create(value=0, text="Une fois par mois", text_en="Once a month")
-    q3.option_set.create(value=0, text="Une fois par semaine", text_en="Once a week")
-    q3.option_set.create(value=0, text="Plusieurs fois par semaine", text_en="Several times a week")
-    q3.option_set.create(value=0, text="Une fois par jour (ou plus)", text_en="Once a day (or more)")
+    q3.option_set.create(value=1, text="Une fois par mois", text_en="Once a month")
+    q3.option_set.create(value=2, text="Une fois par semaine", text_en="Once a week")
+    q3.option_set.create(value=3, text="Plusieurs fois par semaine", text_en="Several times a week")
+    q3.option_set.create(value=4, text="Une fois par jour (ou plus)", text_en="Once a day (or more)")
     # question 4
     q4 = GroupQuestion.objects.create(
         code_name="Type de soirée",
@@ -228,7 +228,7 @@ def create_questions(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('family', '0019_alter_option_options'),
+        ('family', '0001_initial'),
     ]
 
     operations = [

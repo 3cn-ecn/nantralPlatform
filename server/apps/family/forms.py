@@ -56,10 +56,10 @@ class FamilyQuestionsForm(forms.Form):
             print(answers)
             for question, val in answers:
                 id = int(question[9:])
-                AnswerFamily.objects.create(
+                AnswerFamily(
                     answer = val,
                     family = family,
                     question = QuestionFamily.objects.get(pk=id)
-                )
+                ).save()
 
 

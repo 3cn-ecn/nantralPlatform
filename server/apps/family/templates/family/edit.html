@@ -14,10 +14,19 @@
         <div class="row g-5">
             <div class="col-12 col-md-6">
                 <h2>Membres</h2>
-                {{ members_form.management_form }}
-                {% for form in members_form %}
-                    <p>{{ form }}</p>
-                {% endfor %}
+                <table>
+                    {{ members_form.management_form|crispy }}
+                    {% for form in members_form.forms %}
+                        {# Include the hidden fields in the form #}
+                        {% if forloop.first %}
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.student|as_crispy_field }}
+                        {{ form.errors|as_crispy_errors }}
+                    {% endfor %}
+                </table>
             </div>
             <div class="col-12 col-md-6">
                 <h2>Infos générales</h2>
