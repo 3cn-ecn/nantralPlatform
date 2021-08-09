@@ -1,7 +1,9 @@
 from django.db import models
+from django.urls.base import reverse
+from datetime import date
+
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
-from datetime import date
 
 
 class Affichage(models.Model):
@@ -19,7 +21,7 @@ class Affichage(models.Model):
 
 class Family(Group):
     '''Famille de parrainage.'''
-    members = models.ManyToManyField(Student, through='MembershipFamily', related_name='family')
+    members = models.ManyToManyField(Student, through='MembershipFamily')
     year = models.IntegerField('Année de parrainage')
     non_subscribed_members = models.CharField("Autres parrains", max_length=300, null=True, blank=True,
         help_text = "Si certains des membres de la famille ne sont pas inscrits sur Nantral Platform, \
@@ -33,14 +35,24 @@ class Family(Group):
         # set the year
         if not self.year: self.year = date.today().year
         super(Family, self).save(*args, **kwargs)
+    
+    def get_answers_dict(self):
+        initial = {}
+        for ans in self.answerfamily_set.all():
+            initial[f'question-{ans.question.pk}'] = ans.answer
+        return initial
+    
+    @property
+    def get_absolute_url(self):
+        return reverse('family:detail', kwargs={'pk': self.pk})
 
 
 class MembershipFamily(NamedMembership):
     """A member of a family"""
-    group = models.ForeignKey(Family, on_delete=models.CASCADE, null=True, blank=True, related_name='memberships')
-    student = models.ForeignKey(to=Student, on_delete=models.CASCADE, null=True, blank=True, related_name='membershipfamily')
+    group = models.ForeignKey(to=Family, on_delete=models.CASCADE, related_name='memberships')
+    student = models.ForeignKey(to=Student, verbose_name="Parrain/Marraine", on_delete=models.CASCADE, related_name='membershipfamily')
     role = models.CharField("Rôle", max_length=3, choices=[('1A', "1ère Année"), ('2A+', "2ème Année et plus")])
-    gender = models.CharField("Genre", max_length=1,
+    gender = models.CharField("Genre", max_length=1, null=True,
         choices = [('F', 'Féminin'), ('M', 'Masculin'), ('A', 'Autre')])
     foreign_student = models.BooleanField("Êtes-vous un étudiant étranger ?", default=False)
     itii = models.BooleanField("Êtes-vous un étudiant ITII ?", default=False)

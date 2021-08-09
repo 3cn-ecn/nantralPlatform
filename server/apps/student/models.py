@@ -45,11 +45,11 @@ class Student(models.Model):
     def name(self):
         '''Renvoie le nom de l'utilisateur au format Prénom NOM.'''
         if self.user.first_name and self.user.last_name:
-            return f'{self.user.first_name.capitalize()} {self.user.last_name.upper()}'
+            return f'{self.user.first_name.title()} {self.user.last_name.upper()}'
         elif self.user.first_name:
-            return self.user.first_name.capitalize()
+            return self.user.first_name.title()
         elif self.user.last_name:
-            return self.user.last_name.capitalize()
+            return self.user.last_name.title()
         else:
             return self.user.username
     
@@ -57,7 +57,7 @@ class Student(models.Model):
     def alphabetical_name(self):
         '''Renvoie le nom de l'utilisateur au format NOM Prénom.'''
         if self.user.first_name and self.user.last_name:
-            return f'{self.user.last_name.upper()} {self.user.first_name.capitalize()}'
+            return f'{self.user.last_name.upper()} {self.user.first_name.title()}'
         else:
             return self.name
 

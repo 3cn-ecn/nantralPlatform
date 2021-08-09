@@ -203,15 +203,15 @@ def create_questions(apps, schema_editor):
         quota=33,
     )
     f1.option_set.create(value=0, text="Jamais", text_en="Never")
-    f1.option_set.create(value=0, text="Une fois par mois", text_en="Once a month")
-    f1.option_set.create(value=0, text="Une fois par semaine", text_en="Once a week")
-    f1.option_set.create(value=0, text="Plusieurs fois par semaine", text_en="Several times a week")
-    f1.option_set.create(value=0, text="Une fois par jour (ou plus)", text_en="Once a day (or more)")
+    f1.option_set.create(value=1, text="Une fois par mois", text_en="Once a month")
+    f1.option_set.create(value=2, text="Une fois par semaine", text_en="Once a week")
+    f1.option_set.create(value=3, text="Plusieurs fois par semaine", text_en="Several times a week")
+    f1.option_set.create(value=4, text="Une fois par jour (ou plus)", text_en="Once a day (or more)")
     # question 2
     f2 = QuestionFamily.objects.create(
         code_name = "Alcool",
         label="En termes d'alcool, où se situe la famille ? (en moyenne, à peu près)",
-        label_en = "Which quantity of alcohol the family drink? (in average)",
+        label_en = "Which quantity of alcohol does the family drink? (in average)",
         order=2,
         equivalent=q2,
         quota=100,

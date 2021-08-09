@@ -106,7 +106,7 @@ class AuthView(FormView):
     def get(self, request):
         if request.user.is_authenticated:
             user = request.user
-            message = f'Vous etes déjà connecté en tant que {user.first_name.capitalize()}.'
+            message = f'Vous etes déjà connecté en tant que {user.first_name.title()}.'
             messages.warning(request, message)
             return redirect(reverse('home:home'))
         else:
@@ -123,7 +123,7 @@ class AuthView(FormView):
         user = EmailBackend.authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
-                message = f'Bonjour {user.first_name.capitalize()} !'
+                message = f'Bonjour {user.first_name.title()} !'
                 messages.success(self.request, message)
             else:
                 if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today():
