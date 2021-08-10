@@ -19,7 +19,7 @@ class UpdateFamilyForm(forms.ModelForm):
         fields = ['name', 'summary', 'non_subscribed_members']
 
 
-class MemberForm(forms.BaseInlineFormSet):
+class MemberForDeleteForm(forms.BaseInlineFormSet):
     def _should_delete_form(self, form):
         """Return whether or not the form was marked for deletion."""
         return form.cleaned_data.get('DELETE', False) or not form.cleaned_data.get('student', False)
@@ -33,13 +33,13 @@ Member2AFormset = forms.inlineformset_factory(
     validate_max=True,
     fields=['student'],
     can_delete=True,
-    formset=MemberForm,
+    formset=MemberForDeleteForm,
 )
 
 
 class FamilyQuestionsForm(forms.Form):
 
-    def __init__(self, initial, *args, **kwargs):
+    def __init__(self, initial=None, *args, **kwargs):
         super(FamilyQuestionsForm, self).__init__(initial=initial, *args, **kwargs)
         questions = QuestionFamily.objects.all()
         for question in questions:
@@ -76,6 +76,11 @@ class FamilyQuestionsForm(forms.Form):
                     )
 
 
+class MembershipFamilyForm(forms.ModelForm):
+    class Meta:
+        model=MembershipFamily
+        fields=('gender', 'foreign_student', 'itii')
+
 
 class MemberQuestionsForm(forms.Form):
 
@@ -98,7 +103,6 @@ class MemberQuestionsForm(forms.Form):
         """Save the answers"""
         if self.is_valid():
             answers = self.cleaned_data.items()
-            print(answers)
             for question, val in answers:
                 id = int(question[9:])
                 try: 

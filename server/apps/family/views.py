@@ -109,7 +109,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
         self.kwargs['slug'] = self.get_family().slug
         return super().test_func()
     
-    def get(self, request, *args, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = {}
         context['update_form'] = UpdateFamilyForm(
             instance=self.get_family())
@@ -118,13 +118,15 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
             queryset=MembershipFamily.objects.filter(role='2A+'))
         context['question_form'] = FamilyQuestionsForm(
             initial = self.get_family().get_answers_dict())
-        return render(request, self.template_name, context=context)
+        return context
     
     def post(self, request, *args, **kwargs):
         forms = [
             UpdateFamilyForm(request.POST, instance=self.get_family()),
             Member2AFormset(request.POST, instance=self.get_family(), queryset=MembershipFamily.objects.filter(role='2A+')),
-            FamilyQuestionsForm(request.POST)]
+            FamilyQuestionsForm(data=request.POST)]
+        print(forms[2].is_bound)
+        print([form.initial for form in forms])
         if forms[0].is_valid() and forms[1].is_valid() and forms[2].is_valid():
             # on vérifie le nb de membres
             non_subscribed_list = forms[0].cleaned_data['non_subscribed_members']
@@ -161,9 +163,9 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                     et maximum 7 membres (vérifiez les noms du champ "Autres parrains")')
         else:
             messages.error(request, "OOOOUPS !!! Il y a une erreur...")
-            print(forms[1].errors)
+            print(forms[2].errors)
         context={'update_form':forms[0], 'members_form':forms[1], 'question_form':forms[2]}
-        return render(request, self.template_name, context=context)
+        return self.render_to_response(context)
 
 
 
@@ -211,6 +213,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['page'] = self.get_page()
+        context['percent'] = int(100*self.get_page().order/QuestionPage.objects.all().count())
         return context
 
     

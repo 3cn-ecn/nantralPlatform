@@ -49,7 +49,7 @@ class Family(Group):
 
 class MembershipFamily(NamedMembership):
     """A member of a family"""
-    group = models.ForeignKey(to=Family, on_delete=models.CASCADE, related_name='memberships')
+    group = models.ForeignKey(to=Family, on_delete=models.CASCADE, null=True, blank=True, related_name='memberships')
     student = models.ForeignKey(to=Student, verbose_name="Parrain/Marraine", on_delete=models.CASCADE, related_name='membershipfamily')
     role = models.CharField("Rôle", max_length=3, choices=[('1A', "1ère Année"), ('2A+', "2ème Année et plus")])
     gender = models.CharField("Genre", max_length=1, null=True,
@@ -76,8 +76,8 @@ class MembershipFamily(NamedMembership):
 class QuestionPage(models.Model):
     name = models.CharField("Nom de la page", max_length=100)
     name_en = models.CharField("Nom (en)", max_length=100)
-    details = models.CharField("Informations supplémentaires", max_length=200, null=True, blank=True)
-    details_en = models.CharField("Infos (en)", max_length=200, null=True, blank=True)
+    details = models.TextField("Informations supplémentaires", null=True, blank=True)
+    details_en = models.TextField("Infos (en)", null=True, blank=True)
     order = models.IntegerField("Ordre", help_text="Ordre d'apparition de la page dans le questionnaire")
 
     class Meta:
@@ -165,9 +165,10 @@ class QuestionMember(BaseQuestion):
 
 
 class QuestionFamily(BaseQuestion):
-    equivalent = models.OneToOneField(
-        to=QuestionMember, verbose_name="Question équivalente", on_delete=models.CASCADE,
-        help_text="Question équivalente dans le questionnaire des membres")
+    equivalent = models.OneToOneField(to=QuestionMember, 
+        verbose_name="Question équivalente", on_delete=models.CASCADE, null=True, blank=True,
+        help_text="Question équivalente dans le questionnaire des membres. Laissez vide si vous \
+                    souhaitez que cette question ne soit pas prise en compte dans l'algo.")
     quota = models.IntegerField("Quota", 
         help_text = "Pourcentage de prise en compte de cette question dans le \
         calcul des réponses du parrain. 100 supprime la question du questionnaire \
