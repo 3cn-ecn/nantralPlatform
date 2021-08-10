@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+    <h1>Questionnaire de Parrainage</h1>
+    <h2>Page {{page.order}}</h2>
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy}}
+        <button type="submit" class="btn btn-success">Valider</button>
+    </form>
+
+{% endblock %}

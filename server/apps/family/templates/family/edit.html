@@ -18,13 +18,17 @@
                     {{ members_form.management_form|crispy }}
                     {% for form in members_form.forms %}
                         {# Include the hidden fields in the form #}
-                        {% if forloop.first %}
-                            {% for hidden in form.hidden_fields %}
-                                {{ hidden }}
-                            {% endfor %}
-                        {% endif %}
-                        {{ form.student|as_crispy_field }}
-                        {{ form.errors|as_crispy_errors }}
+                        {% for field in form %}
+                            {% if forloop.first %}
+                                {% for hidden in form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                            {% endif %}
+                            {% if not field.name == 'DELETE' %}
+                                {{field|as_crispy_field}}
+                            {% endif %}
+                        {% endfor %}
+                        {{ form|as_crispy_errors }}
                     {% endfor %}
                 </table>
             </div>

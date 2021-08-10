@@ -12,7 +12,8 @@ urlpatterns = [
     path('', HomeFamilyView.as_view(), name='home'),
     path('liste-famille', ListFamilyView.as_view(), name='family-list'),
     path('create-family', CreateFamilyView.as_view(), name='create-family'),
-    path('questionnaire', QuestionnaryView.as_view(), name='questionnary'),
+    path('questionnaire', QuestionnaryHomeView.as_view(), name='questionnary'),
+    path('questionnaire/<int:id>', QuestionnaryPageView.as_view(), name='questionnary-page'),
     path('famille/<int:pk>', DetailFamilyView.as_view(), name='detail'),
     path('famille/<int:pk>/edit', UpdateFamilyView.as_view(), name='update'),
 ]

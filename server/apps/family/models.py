@@ -65,6 +65,12 @@ class MembershipFamily(NamedMembership):
     
     def __str__(self):
         return self.student.__str__()
+    
+    def get_answers_dict(self, page):
+        initial = {}
+        for ans in self.answermember_set.filter(question__page=page):
+            initial[f'question-{ans.question.pk}'] = ans.answer
+        return initial
 
 
 class QuestionPage(models.Model):

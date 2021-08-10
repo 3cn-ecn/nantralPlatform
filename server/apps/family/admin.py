@@ -8,8 +8,11 @@ from .models import *
 class AnswerFamilyInline(admin.TabularInline):
     model=AnswerFamily
     extra=0
+class MemberFamilyInline(admin.TabularInline):
+    model=MembershipFamily
+    extra=0
 class FamilyAdmin(admin.ModelAdmin):
-    inlines=[AnswerFamilyInline]
+    inlines=[MemberFamilyInline, AnswerFamilyInline]
 admin.site.register(Family, FamilyAdmin)
 
 
