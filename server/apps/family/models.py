@@ -78,7 +78,8 @@ class QuestionPage(models.Model):
     name_en = models.CharField("Nom (en)", max_length=100)
     details = models.TextField("Informations supplémentaires", null=True, blank=True)
     details_en = models.TextField("Infos (en)", null=True, blank=True)
-    order = models.IntegerField("Ordre", help_text="Ordre d'apparition de la page dans le questionnaire")
+    order = models.IntegerField("Ordre", unique=True, 
+        help_text="Ordre d'apparition de la page dans le questionnaire")
 
     class Meta:
         verbose_name = "Page de Questions"

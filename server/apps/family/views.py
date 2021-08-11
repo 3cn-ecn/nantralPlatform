@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.views.generic import TemplateView, CreateView, DetailView, FormView
+from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from datetime import date
@@ -169,8 +169,33 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
 
 
 
-class QuestionnaryHomeView(LoginRequiredMixin, FormView):
-    pass
+class QuestionnaryHomeView(LoginRequiredMixin, UpdateView):
+    model = MembershipFamily
+    fields = ('gender', 'foreign_student', 'itii')
+    template_name = 'family/questionnary.html'
+    
+    def get_object(self, *args, **kargs):
+        student = self.request.user.student
+        year = date.today().year
+        try:
+            member = MembershipFamily.objects.get(
+                student = student,
+                role = '2A+',
+                group__year = year,
+            )
+        except MembershipFamily.DoesNotExist:
+            try:
+                member = MembershipFamily.objects.get(
+                    student=student,
+                    role='1A'
+                )
+            except MembershipFamily.DoesNotExist:
+                member = MembershipFamily.objects.create(
+                    student = student,
+                    role = '1A'
+                )
+        return member
+
 
 
 

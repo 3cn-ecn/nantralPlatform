@@ -13,8 +13,14 @@
     <br>
     <form method="post">
         {% csrf_token %}
-        {{ form|crispy}}
-        <button type="submit" class="btn btn-success">Valider</button>
+        {{ form}}
+        <button type="submit" class="btn btn-success">
+            {% if percent == 100 %}
+                Valider mes réponses&nbsp&nbsp<i class="fas fa-check-circle"></i>
+            {% else %}
+                Page suivante&nbsp&nbsp<i class="fas fa-chevron-circle-right"></i>
+            {% endif %}
+        </button>
     </form>
 
 {% endblock %}

@@ -53,6 +53,7 @@ class FamilyQuestionsForm(forms.Form):
                 help_text = question.details,
                 widget = forms.RadioSelect
             )
+            self.fields[name].group = question.group
 
     def save(self, family:Family):
         """Save the answers"""
