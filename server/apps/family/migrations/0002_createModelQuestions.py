@@ -31,7 +31,7 @@ def create_questions(apps, schema_editor):
     q1.option_set.create(value=10, text="10", text_en="10")
     q2 = QuestionMember.objects.create(
         code_name="Genre",
-        label="À quel genre vous identifiez-vous ?",
+        label="À quel genre t'identifies-tu ?",
         label_en="What gender do you identify with?",
         page=p1,
         coeff=0,
@@ -39,10 +39,10 @@ def create_questions(apps, schema_editor):
     )
     q2.option_set.create(value=0, text="Masculin", text_en="Male")
     q2.option_set.create(value=1, text="Féminin", text_en="Female")
-    q2.option_set.create(value=2, text="Neutre", text_en="Neutral")
+    q2.option_set.create(value=2, text="Autre", text_en="Other")
     q3 = QuestionMember.objects.create(
         code_name='International',
-        label="Êtes-vous un élève étranger ?",
+        label="Es-tu un·e élève étranger·ère ?",
         label_en="Are you a foreign student?",
         page=p1,
         coeff=0,
@@ -52,7 +52,7 @@ def create_questions(apps, schema_editor):
     q3.option_set.create(value=1, text="Non", text_en="No")
     q4 = QuestionMember.objects.create(
         code_name='ITII',
-        label="Êtes-vous un étudiant en ITII ?",
+        label="Es-tu un·e étudiant·e en ITII ?",
         label_en="Are you an ITII student?",
         page=p1,
         coeff=0,

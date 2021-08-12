@@ -1,11 +1,36 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block content %}
 
-    <h1>Questionnaire de Parrainage</h1>
-    <h2>Préliminaires</h2>
+{% block content %}
     
-    {{form|crispy}}
+    <h1 class="mb-4">Questionnaire de Parrainage</h1>
+    <h2>{{page.order}}. {{page.name}}</h2>
+
+    <div class="progress mt-3 mb-4" style="height:5px;">
+        <div class="progress-bar bg-success" role="progressbar" style="width: {{percent}}%" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+
+    {% if is_2Aplus %}
+        {% if details2A %}
+            <p>{{ page.details2A }}</p>
+        {% endif %}
+    {% else %}
+        {% if page.details1A %}
+            <p>{{ page.details1A }}</p>
+        {% endif %}
+    {% endif %}
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">
+            {% if percent == 100 %}
+                Valider mes réponses&nbsp&nbsp<i class="fas fa-check-circle"></i>
+            {% else %}
+                Page suivante&nbsp&nbsp<i class="fas fa-chevron-circle-right"></i>
+            {% endif %}
+        </button>
+    </form>
 
 {% endblock %}

@@ -169,12 +169,12 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
 
 
 
-class QuestionnaryHomeView(LoginRequiredMixin, UpdateView):
-    model = MembershipFamily
-    fields = ('gender', 'foreign_student', 'itii')
-    template_name = 'family/questionnary-page.html'
-    
-    def get_object(self, *args, **kargs):
+
+class QuestionnaryPageView(LoginRequiredMixin, FormView):
+    form_class = MemberQuestionsForm
+    template_name = 'family/questionnary.html'
+
+    def get_member(self, *args, **kargs):
         student = self.request.user.student
         year = date.today().year
         try:
@@ -195,20 +195,6 @@ class QuestionnaryHomeView(LoginRequiredMixin, UpdateView):
                     role = '1A'
                 )
         return member
-
-
-
-
-class QuestionnaryPageView(LoginRequiredMixin, FormView):
-    form_class = MemberQuestionsForm
-    template_name = 'family/questionnary-page.html'
-
-    def get_member(self):
-        m = MembershipFamily.objects.get(
-            student = self.request.user.student,
-            group__year = date.today().year
-        )
-        return m
     
     def get_page(self):
         return QuestionPage.objects.get(order=self.kwargs['id'])
@@ -226,7 +212,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         form.save(self.get_member())
         try:
             next_page = QuestionPage.objects.get(order=self.get_page().order + 1)
-            return redirect('family:questionnary-page', next_page.order)
+            return redirect('family:questionnary', next_page.order)
         except QuestionPage.DoesNotExist:
             messages.success(self.request, "🥳 Merci beaucoup ! Vos réponses ont bien été enregistrées !")
             return redirect('family:home')
@@ -239,6 +225,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         context = super().get_context_data(*args, **kwargs)
         context['page'] = self.get_page()
         context['percent'] = int(100*self.get_page().order/QuestionPage.objects.all().count())
+        context['is_2Aplus'] = self.get_member().role == '2A+'
         return context
 
     

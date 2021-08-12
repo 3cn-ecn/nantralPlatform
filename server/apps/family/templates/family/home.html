@@ -21,7 +21,7 @@
                     <p>Ce questionnaire de personnalité servira à vous attrbuer des filleuls et filleules 
                         avec qui vous êtes plus susceptibles de bien vous entendre. Toutes les données
                         récoltées seront détruites après la fin des processus de parrainage.</p>
-                    <a href="{% url 'family:questionnary' %}" class="btn btn-dark">Remplir mon questionnaire</a>
+                    <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir mon questionnaire</a>
                 {% endif %}
             {% else %}
                 <h2>Ma Famille</h2>
@@ -40,7 +40,7 @@
                 <p>Ce questionnaire de personnalité servira à vous attrbuer des parrains et marraines 
                     avec qui vous êtes plus susceptibles de bien vous entendre. Toutes les données
                     récoltées seront détruites après la fin des processus de parrainage.</p>
-                <a href="{% url 'family:questionnary' %}" class="btn btn-dark">Remplir mon questionnaire</a>
+                <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir le questionnaire 1ère année</a>
                 <br><br><hr><br>
                 <p>Vous n'êtes pas en 1ère année ? Merci de vérifiez votre année de promotion
                     dans les <a href="{% url 'student:update' request.user.student.pk %}">paramètres</a> de
@@ -73,7 +73,7 @@
                 <p>Vous n'avez pas rempli le questionnaire à temps ! Pas de panique, on
                     va vous dépanner : remplissez-le quand même, on essaiera de vous attribuer
                     une famille adaptée...</p>
-                <a href="{% url 'family:questionnary' %}" class="btn btn-dark">Remplir mon questionnaire</a>
+                <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir mon questionnaire</a>
             {% endif %}
         {% endif %}
         <br><br>
