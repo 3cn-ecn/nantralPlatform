@@ -9,13 +9,16 @@ def create_questions(apps, schema_editor):
     p1 = QuestionPage.objects.create(
         order=1, 
         name="Pour commencer...", 
-        name_en="To begin with...")
+        name_en="To begin with...",
+    )
     q1 = QuestionMember.objects.create(
         code_name="Nombre", 
         label="Choisis un chiffre entre 1 et 10",
         label_en="Choose a number between 1 and 10",
         page=p1,
-        coeff=0)
+        coeff=0,
+        order=4,
+    )
     q1.option_set.create(value=1, text="1", text_en="1")
     q1.option_set.create(value=2, text="2", text_en="2")
     q1.option_set.create(value=3, text="3", text_en="3")
@@ -26,14 +29,49 @@ def create_questions(apps, schema_editor):
     q1.option_set.create(value=8, text="8", text_en="8")
     q1.option_set.create(value=9, text="9", text_en="9")
     q1.option_set.create(value=10, text="10", text_en="10")
+    q2 = QuestionMember.objects.create(
+        code_name="Genre",
+        label="À quel genre vous identifiez-vous ?",
+        label_en="What gender do you identify with?",
+        page=p1,
+        coeff=0,
+        order=1,
+    )
+    q2.option_set.create(value=0, text="Masculin", text_en="Male")
+    q2.option_set.create(value=1, text="Féminin", text_en="Female")
+    q2.option_set.create(value=2, text="Neutre", text_en="Neutral")
+    q3 = QuestionMember.objects.create(
+        code_name='International',
+        label="Êtes-vous un élève étranger ?",
+        label_en="Are you a foreign student?",
+        page=p1,
+        coeff=0,
+        order=2,
+    )
+    q3.option_set.create(value=0, text="Oui", text_en="Yes")
+    q3.option_set.create(value=1, text="Non", text_en="No")
+    q4 = QuestionMember.objects.create(
+        code_name='ITII',
+        label="Êtes-vous un étudiant en ITII ?",
+        label_en="Are you an ITII student?",
+        page=p1,
+        coeff=0,
+        order=3,
+    )
+    q4.option_set.create(value=0, text="Oui", text_en="Yes")
+    q4.option_set.create(value=1, text="Non", text_en="No")
 
     ### PAGE 2
+    details1A="Pour ne jamais être à court de sujets de discussion, voici quelques questions à propos de tes goûts.",
+    details1A_en="Here are some questions about your tastes, so that you can always have something to talk about",
     p2 = QuestionPage.objects.create(
         order=2,
         name="Tes goûts",
         name_en="Your tastes",
-        details="Pour ne jamais être à court de sujets de discussion, voici quelques questions à propos de tes goûts.",
-        details_en="Here are some questions about your tastes, so that you can always have something to talk about"
+        details1A=details1A,
+        details1A_en=details1A_en,
+        details2A=details1A,
+        details2A_en=details1A_en,
     )
     # question 1
     q1 = GroupQuestion.objects.create(
@@ -222,6 +260,16 @@ def create_questions(apps, schema_editor):
     f2.option_set.create(value=3, text="Bourré", text_en="Drunk")
     f2.option_set.create(value=4, text="Trop bien", text_en="Too many drinks")
     f2.option_set.create(value=5, text="Beaucoup trop", text_en="The answer above too many drinks")
+    # question 3
+    f3 = QuestionFamily.objects.create(
+        code_name="Parrainages Games",
+        label="Etes-vous chauds pour les <i>Parrainages Games</i> ? (le samedi)",
+        label_en="Do you want to participate to the Mentoring Games? (on Saturday)",
+        order=3,
+        quota=0,
+    )
+    f3.option_set.create(value=0, text="Oui", text_en="Yes")
+    f3.option_set.create(value=1, text="Non", text_en="No")
 
 
 

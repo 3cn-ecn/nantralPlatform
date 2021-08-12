@@ -172,7 +172,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
 class QuestionnaryHomeView(LoginRequiredMixin, UpdateView):
     model = MembershipFamily
     fields = ('gender', 'foreign_student', 'itii')
-    template_name = 'family/questionnary.html'
+    template_name = 'family/questionnary-page.html'
     
     def get_object(self, *args, **kargs):
         student = self.request.user.student

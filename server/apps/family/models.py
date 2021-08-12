@@ -52,11 +52,6 @@ class MembershipFamily(NamedMembership):
     group = models.ForeignKey(to=Family, on_delete=models.CASCADE, null=True, blank=True, related_name='memberships')
     student = models.ForeignKey(to=Student, verbose_name="Parrain/Marraine", on_delete=models.CASCADE, related_name='membershipfamily')
     role = models.CharField("Rôle", max_length=3, choices=[('1A', "1ère Année"), ('2A+', "2ème Année et plus")])
-    gender = models.CharField("Genre", max_length=1, null=True,
-        choices = [('F', 'Féminin'), ('M', 'Masculin'), ('A', 'Autre')])
-    foreign_student = models.BooleanField("Êtes-vous un étudiant étranger ?", default=False)
-    itii = models.BooleanField("Êtes-vous un étudiant ITII ?", default=False)
-    remixage = models.BooleanField("Membre remixé", default=False)
 
     class Meta:
         verbose_name = "Membre"
@@ -76,8 +71,10 @@ class MembershipFamily(NamedMembership):
 class QuestionPage(models.Model):
     name = models.CharField("Nom de la page", max_length=100)
     name_en = models.CharField("Nom (en)", max_length=100)
-    details = models.TextField("Informations supplémentaires", null=True, blank=True)
-    details_en = models.TextField("Infos (en)", null=True, blank=True)
+    details1A = models.TextField("Infos 1A", null=True, blank=True)
+    details1A_en = models.TextField("Infos 1A (en)", null=True, blank=True)
+    details2A = models.TextField("Infos 2A+", null=True, blank=True)
+    details2A_en = models.TextField("Infos 2A+ (en)", null=True, blank=True)
     order = models.IntegerField("Ordre", unique=True, 
         help_text="Ordre d'apparition de la page dans le questionnaire")
 

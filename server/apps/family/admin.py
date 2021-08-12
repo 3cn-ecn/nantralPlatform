@@ -40,6 +40,17 @@ admin.site.register(QuestionMember, QuestionMemberAdmin)
 admin.site.register(QuestionFamily, QuestionFamilyAdmin)
 admin.site.register(GroupQuestion, GroupQuestionAdmin)
 
-admin.site.register(QuestionPage)
+# pages
+class QuestionMemberInline(admin.TabularInline):
+    model=QuestionMember
+    extra=0
+class QuestionGroupInline(admin.TabularInline):
+    model=GroupQuestion
+    extra=0
+class QuestionPageAdmin(admin.ModelAdmin):
+    inlines=[QuestionGroupInline, QuestionMemberInline]
+admin.site.register(QuestionPage, QuestionPageAdmin)
+
+
 admin.site.register(Affichage)
 

@@ -53,7 +53,10 @@ class FamilyQuestionsForm(forms.Form):
                 help_text = question.details,
                 widget = forms.RadioSelect
             )
-            self.fields[name].group = question.group
+            if hasattr(question, 'group'):
+                self.fields[name].group = question.group
+            else:
+                self.fields[name].group = None
 
     def save(self, family:Family):
         """Save the answers"""
@@ -76,11 +79,6 @@ class FamilyQuestionsForm(forms.Form):
                         question = QuestionFamily.objects.get(pk=id)
                     )
 
-
-class MembershipFamilyForm(forms.ModelForm):
-    class Meta:
-        model=MembershipFamily
-        fields=('gender', 'foreign_student', 'itii')
 
 
 class MemberQuestionsForm(forms.Form):
