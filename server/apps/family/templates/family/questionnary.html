@@ -1,6 +1,4 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
-
 
 {% block content %}
     
@@ -23,7 +21,7 @@
     <br>
     <form method="post">
         {% csrf_token %}
-        {{ form|crispy }}
+        {% include 'family/forms/form.html' with form=form %}
         <button type="submit" class="btn btn-success">
             {% if percent == 100 %}
                 Valider mes réponses&nbsp&nbsp<i class="fas fa-check-circle"></i>
