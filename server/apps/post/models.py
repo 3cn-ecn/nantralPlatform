@@ -3,12 +3,14 @@ from django.utils import timezone
 
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404, reverse
+from django.contrib.auth.models import User
 
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.utils.slug import *
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compressModelImage
+from apps.group.models import Group
 
 
 path_and_rename = PathAndRename("posts/pictures")
@@ -49,13 +51,20 @@ class AbstractPost(models.Model):
         abstract = True
 
     @property
-    def get_group(self):
+    def get_group(self) -> Group:
         return get_object_from_full_slug(self.group)
-    
+
     def save(self, *args, **kwargs):
         # compression des images
-        self.image = compressModelImage(self, 'image', size=(1320,492), contains=False)
+        self.image = compressModelImage(
+            self, 'image', size=(1320, 492), contains=False)
         super(AbstractPost, self).save(*args, **kwargs)
+
+    def can_view(self, user: User) -> bool:
+        print(self.publicity)
+        if self.publicity == 'Pub':
+            return True
+        return self.get_group.is_member(user)
 
 
 class Post(AbstractPost):
