@@ -13,6 +13,7 @@ from apps.utils.accessMixins import UserIsAdmin
 
 # Application Post
 
+
 class PostDetailView(LoginRequiredMixin, TemplateView):
     template_name = 'post/detail.html'
 
@@ -31,8 +32,9 @@ class PostUpdateView(UserIsAdmin, UpdateView):
               'publication_date', 'publicity', 'color', 'image']
 
     def test_func(self) -> bool:
-        self.request.path = '/' + get_app_from_full_slug(self.object.group) + '/'
-        self.kwargs['slug']  = get_slug_from_full_slug(self.object.group)
+        self.request.path = '/' + \
+            get_app_from_full_slug(self.object.group) + '/'
+        self.kwargs['slug'] = get_slug_from_full_slug(self.object.group)
         return super().test_func()
 
     def get_context_data(self, **kwargs):
@@ -46,7 +48,7 @@ class PostUpdateView(UserIsAdmin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = Post.get_post_by_slug(self.kwargs['post_slug'])
-        self.kwargs['slug']  = get_slug_from_full_slug(self.object.group)
+        self.kwargs['slug'] = get_slug_from_full_slug(self.object.group)
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -59,19 +61,22 @@ class UpdateGroupCreatePostView(UserIsAdmin, FormView):
 
     def get_app(self, **kwargs):
         return resolve(self.request.path).app_name
+
     def get_slug(self, **kwargs):
         return self.kwargs.get("slug")
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object'] = get_object_from_slug(self.get_app(), self.get_slug())
+        context['object'] = get_object_from_slug(
+            self.get_app(), self.get_slug())
         return context
 
     def form_valid(self, form, **kwargs):
         post = form.save(commit=False)
         post.group = get_full_slug_from_slug(self.get_app(), self.get_slug())
         post.save()
-        return redirect(self.get_app()+':create-post', self.get_slug())
+        messages.success(self.request, 'Votre annonce a été enregistrée.')
+        return redirect(self.get_app()+':update-posts', self.get_slug())
 
 
 class UpdateGroupPostsView(UserIsAdmin, View):
@@ -80,19 +85,21 @@ class UpdateGroupPostsView(UserIsAdmin, View):
 
     def get_app(self, **kwargs):
         return resolve(self.request.path).app_name
+
     def get_slug(self, **kwargs):
         return self.kwargs.get("slug")
-    
+
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = get_object_from_slug(self.get_app(), self.get_slug())
+        context['object'] = get_object_from_slug(
+            self.get_app(), self.get_slug())
         context['posts'] = Post.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()))
         context['form'] = PostFormSet(queryset=context['posts'])
         return context
 
     def get(self, request, **kwargs):
-        context=self.get_context_data()
+        context = self.get_context_data()
         return render(request, self.template_name, context)
 
     def post(self, request,  **kwargs):

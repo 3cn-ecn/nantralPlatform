@@ -22,13 +22,13 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.object = BaseEvent.get_event_by_slug(self.kwargs.get('event_slug'))
+        self.object = BaseEvent.get_event_by_slug(
+            self.kwargs.get('event_slug'))
         context['object'] = self.object
         context['group'] = self.object.get_group
         context['is_participating'] = self.object.is_participating(
             self.request.user)
         return context
-
 
 
 # Application Group
@@ -40,19 +40,23 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
 
     def get_app(self, **kwargs):
         return resolve(self.request.path).app_name
+
     def get_slug(self, **kwargs):
         return self.kwargs.get("slug")
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object'] = get_object_from_slug(self.get_app(), self.get_slug())
+        context['object'] = get_object_from_slug(
+            self.get_app(), self.get_slug())
         return context
 
     def form_valid(self, form, **kwargs):
         event = form.save(commit=False)
         event.group = get_full_slug_from_slug(self.get_app(), self.get_slug())
         event.save()
-        return redirect(self.get_app()+':create-event', self.get_slug())
+        messages.success(
+            self.request, f'Vous avez programé {event.title}, le {event.date}.')
+        return redirect(self.get_app()+':update-events', self.get_slug())
 
 
 class EventUpdateView(UserIsAdmin, UpdateView):
@@ -62,8 +66,9 @@ class EventUpdateView(UserIsAdmin, UpdateView):
               'date', 'publicity', 'color', 'image']
 
     def test_func(self) -> bool:
-        self.request.path = '/' + get_app_from_full_slug(self.object.group) + '/'
-        self.kwargs['slug']  = get_slug_from_full_slug(self.object.group)
+        self.request.path = '/' + \
+            get_app_from_full_slug(self.object.group) + '/'
+        self.kwargs['slug'] = get_slug_from_full_slug(self.object.group)
         return super().test_func()
 
     def get_context_data(self, **kwargs):
@@ -77,7 +82,7 @@ class EventUpdateView(UserIsAdmin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = BaseEvent.get_event_by_slug(self.kwargs['event_slug'])
-        self.kwargs['slug']  = get_slug_from_full_slug(self.object.group)
+        self.kwargs['slug'] = get_slug_from_full_slug(self.object.group)
         if isinstance(self.object, EatingEvent):
             self.fields = ['title', 'description', 'location',
                            'date', 'publicity', 'color', 'image', 'menu']
@@ -90,20 +95,22 @@ class UpdateGroupEventsView(UserIsAdmin, View):
 
     def get_app(self, **kwargs):
         return resolve(self.request.path).app_name
+
     def get_slug(self, **kwargs):
         return self.kwargs.get("slug")
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = get_object_from_slug(self.get_app(), self.get_slug())
+        context['object'] = get_object_from_slug(
+            self.get_app(), self.get_slug())
         context['events'] = BaseEvent.objects.filter(
-            group=get_full_slug_from_slug(self.get_app(), self.get_slug()), 
+            group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
             date__gte=date.today())
         context['form'] = EventFormSet(queryset=context['events'])
         return context
 
     def get(self, request, **kwargs):
-        context=self.get_context_data()
+        context = self.get_context_data()
         return render(request, self.template_name, context)
 
     def post(self, request,  **kwargs):
@@ -117,12 +124,14 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
 
     def get_app(self, **kwargs):
         return resolve(self.request.path).app_name
+
     def get_slug(self, **kwargs):
         return self.kwargs.get("slug")
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = get_object_from_slug(self.get_app(), self.get_slug())
+        context['object'] = get_object_from_slug(
+            self.get_app(), self.get_slug())
         context['events'] = BaseEvent.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
             date__lte=date.today())
@@ -130,7 +139,7 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
         return context
 
     def get(self, request, **kwargs):
-        context=self.get_context_data()
+        context = self.get_context_data()
         return render(request, self.template_name, context)
 
     def post(self, request,  **kwargs):
