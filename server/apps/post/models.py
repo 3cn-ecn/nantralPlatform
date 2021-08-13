@@ -61,8 +61,7 @@ class AbstractPost(models.Model):
         super(AbstractPost, self).save(*args, **kwargs)
 
     def can_view(self, user: User) -> bool:
-        print(self.publicity)
-        if self.publicity == 'Pub':
+        if self.publicity == VISIBILITY[0][0]:
             return True
         return self.get_group.is_member(user)
 
