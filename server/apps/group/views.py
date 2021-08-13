@@ -43,7 +43,7 @@ class BaseDetailGroupView(DetailView):
         context['events'] = [event for event in events if event.can_view(
             self.request.user)]
         posts = Post.objects.filter(
-            group=group.full_slug, publication_date__gte=date.today()-timedelta(days=10)).order_by('publication_date')
+            group=group.full_slug, publication_date__gte=date.today()-timedelta(days=10)).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
         # members

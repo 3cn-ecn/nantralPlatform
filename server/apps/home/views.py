@@ -25,7 +25,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
             self.request.user)]
         context['events'] = event_sort(events, self.request)
         posts: List[Post] = Post.objects.filter(
-            publication_date__gte=date.today()-timedelta(days=10)).order_by('publication_date')
+            publication_date__gte=date.today()-timedelta(days=10)).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
         return context
