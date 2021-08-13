@@ -66,3 +66,25 @@ MAPBOX_API_KEY = env('MAPBOX_API_KEY')
 
 GITHUB_USER = env('GITHUB_USER')
 GITHUB_TOKEN = env('GITHUB_TOKEN')
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
+            'propagate': False,
+        },
+    },
+}
