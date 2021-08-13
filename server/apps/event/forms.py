@@ -12,7 +12,7 @@ class EventForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EventForm, self).__init__(*args, **kwargs)
-        #self.fields['date'].widget.attrs['class'] = 'datepicker'
+        self.fields['date'].widget.attrs['class'] = 'datepicker'
 
 
 EventFormSet = modelformset_factory(
@@ -21,7 +21,7 @@ EventFormSet = modelformset_factory(
             'date', 'publicity', 'color', 'image'],
     extra=0,
     can_delete=True,
-    # widgets={
-    #     'date': forms.DateTimeInput(attrs={'class': 'datepicker'})
-    # }
+    widgets={
+        'date': forms.DateTimeInput(attrs={'class': 'datepicker'})
+    }
 )
