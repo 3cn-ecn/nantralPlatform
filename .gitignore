@@ -8,7 +8,7 @@ media
 
 
 # Compiled translation
-.*mo
+*.mo
 # Backup files # 
 *.bak 
 *.gz
