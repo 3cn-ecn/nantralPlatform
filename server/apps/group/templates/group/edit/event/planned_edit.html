@@ -16,7 +16,7 @@
 {% block script %}
 <script>
   var static_url_prefix = "{% static '' %}";
-  var api_url = "{% url 'event_api:list-group-events' object.slug %}";
+  var api_url = "{% url 'event_api:list-group-events' object.full_slug %}";
 </script>
 <script src='{% static "js/eventsGroupListUpdate.js" %}'></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
