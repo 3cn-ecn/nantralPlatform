@@ -13,9 +13,9 @@
                     <div class="card table-responsive">
                         <table class="table align-middle">
                             <thead class="card-header"><tr>
-                                <td class="text-nowrap">{{ field.group.label }}</td>
+                                <td class="align-middle text-nowrap">{{ field.group.label }}</td>
                                 {% for option in field.group.option_set.all %}
-                                    <td class="text-nowrap text-center">{{ option.text }}</td>
+                                    <td class="align-middle text-center">{{ option.text }}</td>
                                 {% endfor %}
                             </tr></thead>
                             <tbody class="card-body">

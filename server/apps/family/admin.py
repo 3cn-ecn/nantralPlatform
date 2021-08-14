@@ -22,7 +22,6 @@ class AnswerMemberInline(admin.TabularInline):
     extra=0
 class MembershipFamilyAdmin(admin.ModelAdmin):
     inlines=[AnswerMemberInline]
-    raw_id_fields = ("student",)
 admin.site.register(MembershipFamily, MembershipFamilyAdmin)
 
 

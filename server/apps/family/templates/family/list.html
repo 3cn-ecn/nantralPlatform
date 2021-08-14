@@ -9,9 +9,11 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="family-tab" data-bs-toggle="tab" data-bs-target="#family" type="button" role="tab" aria-controls="family" aria-selected="true">Par Familles</button>
         </li>
+        {% if list_2a %}
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="A2-tab" data-bs-toggle="tab" data-bs-target="#A2" type="button" role="tab" aria-controls="A2" aria-selected="false">Par Parrains/Marraines</button>
         </li>
+        {% endif %}
         {% if list_1a %}
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="A1-tab" data-bs-toggle="tab" data-bs-target="#A1" type="button" role="tab" aria-controls="A1" aria-selected="false">Par Filleul·e·s</button>
@@ -36,6 +38,7 @@
             </div>
         </div>
         
+        {% if list_2A %}
         <div class="tab-pane fade" id="A2" role="tabpanel" aria-labelledby="A2-tab">
             <br>
             <div class="table-responsive">
@@ -57,6 +60,7 @@
                 </table>
             </div>
         </div>
+        {% endif %}
 
         {% if list_1a %}
         <div class="tab-pane fade" id="A1" role="tabpanel" aria-labelledby="A1-tab">

@@ -44,35 +44,50 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
 class ListFamilyView(LoginRequiredMixin, TemplateView):
     template_name = 'family/list.html'
 
-    def get_context_data(*args, **kwargs):
-        list_family = [
+    def get_context_data(self, *args, **kwargs):
+        phase = Affichage.objects.first().phase
+        try:
+            role = self.request.user.student.membershipfamily.last().role
+        except MembershipFamily.DoesNotExist:
+            role='1A'
+        show_name = (role == '2A+') or (phase >= 3)
+        context = {}
+        context['list_family'] = [
             {
-                'name':f.name, 
+                'name':f.name if show_name else f'Famille n°{f.id}', 
                 'url':f.get_absolute_url,
             } 
             for f in Family.objects.all()
         ]
-        list_2A = [
-            {
-                'name': m.student.alphabetical_name, 
-                'family': m.group.name,
-                'url': m.group.get_absolute_url,
-            }
-            for m in MembershipFamily.objects.filter(role='2A+')  
-        ]
-        list_1A = [
-            {
-                'name': m.student.alphabetical_name, 
-                'family': m.group.name,
-                'url': m.group.get_absolute_url,
-            }
-            for m in MembershipFamily.objects.filter(role='1A')  
-        ]
-        context = {
-            'list_family': list_family,
-            'list_2A': list_2A,
-            'list_1A': list_1A,
-        }
+        if show_name:
+            context['list_2A'] = [
+                {
+                    'name': m.student.alphabetical_name, 
+                    'family': m.group.name if show_name else f'Famille n°{m.group.id}',
+                    'url': m.group.get_absolute_url,
+                }
+                for m in MembershipFamily.objects.filter(role='2A+')  
+            ]
+        if phase >= 2:
+            context['list_1A'] = [
+                {
+                    'name': m.student.alphabetical_name, 
+                    'family': m.group.name if show_name else f'Famille n°{m.group.id}',
+                    'url': m.group.get_absolute_url,
+                }
+                for m in MembershipFamily.objects.filter(role='1A')  
+            ]
+        return context
+
+
+
+class ListFamilyJoinView(ListFamilyView):
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        for list in context:
+            for object in context[list]:
+                object['url'] += '/join'
         return context
 
 
@@ -97,6 +112,11 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
 
 class DetailFamilyView(LoginRequiredMixin, DetailView):
     pass
+
+
+class JoinFamilyView(LoginRequiredMixin, DetailView):
+    pass
+
 
 
 class UpdateFamilyView(UserIsAdmin, TemplateView):
@@ -125,8 +145,6 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
             UpdateFamilyForm(request.POST, instance=self.get_family()),
             Member2AFormset(request.POST, instance=self.get_family(), queryset=MembershipFamily.objects.filter(role='2A+')),
             FamilyQuestionsForm(data=request.POST)]
-        print(forms[2].is_bound)
-        print([form.initial for form in forms])
         if forms[0].is_valid() and forms[1].is_valid() and forms[2].is_valid():
             # on vérifie le nb de membres
             non_subscribed_list = forms[0].cleaned_data['non_subscribed_members']
@@ -163,7 +181,6 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                     et maximum 7 membres (vérifiez les noms du champ "Autres parrains")')
         else:
             messages.error(request, "OOOOUPS !!! Il y a une erreur...")
-            print(forms[2].errors)
         context={'update_form':forms[0], 'members_form':forms[1], 'question_form':forms[2]}
         return self.render_to_response(context)
 
@@ -184,16 +201,10 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
                 group__year = year,
             )
         except MembershipFamily.DoesNotExist:
-            try:
-                member = MembershipFamily.objects.get(
-                    student=student,
-                    role='1A'
-                )
-            except MembershipFamily.DoesNotExist:
-                member = MembershipFamily.objects.create(
-                    student = student,
-                    role = '1A'
-                )
+            member = MembershipFamily.objects.get_or_create(
+                student=student,
+                role='1A'
+            )
         return member
     
     def get_page(self):

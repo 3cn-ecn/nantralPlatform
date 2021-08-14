@@ -95,7 +95,7 @@ class MemberQuestionsForm(forms.Form):
                     for o in question.option_set.all()
                 ],
                 help_text = question.details,
-                widget = forms.RadioSelect(attrs={'class':'form-check-input'})
+                widget = forms.RadioSelect(attrs={'class':'form-check-input', 'required':'False'})
             )
             self[name].group = question.group
             if not last_name or self[name].group != self[last_name].group:
