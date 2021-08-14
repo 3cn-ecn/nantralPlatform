@@ -6,6 +6,9 @@ __pycache__
 db.sqlite3
 media
 
+
+# Compiled translation
+.*mo
 # Backup files # 
 *.bak 
 *.gz
