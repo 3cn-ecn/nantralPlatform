@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from django.http.request import HttpRequest
 
 from django.shortcuts import redirect
 from django.urls.base import reverse
@@ -261,9 +262,9 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 
 
 class AcceptAdminRequestView(UserIsAdmin, View):
-    def get(self, request, slug, id):
+    def get(self, request: HttpRequest, slug, id):
         admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
-        app = reverse(request.path).app_name
+        app = resolve(request.path_info).app_name
         if f'{app}--{slug}' == admin_req.group:
             # Checking whether the url is legit
             group: Group = get_object_from_full_slug(admin_req.group)
@@ -271,13 +272,13 @@ class AcceptAdminRequestView(UserIsAdmin, View):
                 request, message=f"Vous avez accepté la demande de {admin_req.student}")
             admin_req.accept()
 
-        return redirect(group)
+        return redirect(group.get_absolute_url)
 
 
 class DenyAdminRequestView(UserIsAdmin, View):
-    def get(self, request, slug, id):
+    def get(self, request: HttpRequest, slug, id):
         admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
-        app = reverse(request.path).app_name
+        app = resolve(request.path_info).app_name
         if f'{app}--{slug}' == admin_req.group:
             # Checking whether the url is legit
             group: Group = get_object_from_full_slug(admin_req.group)
