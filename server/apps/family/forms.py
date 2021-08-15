@@ -53,9 +53,6 @@ class FamilyQuestionsForm(forms.Form):
                 help_text = question.details,
                 widget = forms.RadioSelect(attrs={'class':'form-check-input'})
             )
-            if question.group != group: self[name].group_first = True
-            group = question.group
-            self[name].group = group
 
     def save(self, family:Family):
         """Save the answers"""

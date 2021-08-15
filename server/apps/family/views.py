@@ -46,11 +46,8 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         phase = Affichage.objects.first().phase
-        try:
-            role = self.request.user.student.membershipfamily.last().role
-        except MembershipFamily.DoesNotExist:
-            role='1A'
-        show_name = (role == '2A+') or (phase >= 3)
+        first_year = self.request.user.student.promo == date.today().year
+        show_name = (not first_year) or (phase >= 3)
         context = {}
         context['list_family'] = [
             {
@@ -63,7 +60,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
             context['list_2A'] = [
                 {
                     'name': m.student.alphabetical_name, 
-                    'family': m.group.name if show_name else f'Famille n°{m.group.id}',
+                    'family': m.group.name,
                     'url': m.group.get_absolute_url,
                 }
                 for m in MembershipFamily.objects.filter(role='2A+')  
@@ -94,7 +91,7 @@ class ListFamilyJoinView(ListFamilyView):
 
 class CreateFamilyView(LoginRequiredMixin, CreateView):
     """Vue pour créer une nouvelle famille"""
-    template_name = 'family/create.html'
+    template_name = 'family/family/create.html'
     form_class = CreateFamilyForm
 
     def form_valid(self, form):
@@ -111,7 +108,23 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
 
 
 class DetailFamilyView(LoginRequiredMixin, DetailView):
-    pass
+    template_name = 'family/family/detail.html'
+
+    def get_object(self):
+        return Family.objects.get(pk=self.kwargs['pk'])
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        phase = Affichage.objects.first().phase
+        family = self.get_object()
+        first_year = self.request.user.student.promo == date.today().year
+        context['show_name'] = (not first_year) or (phase >= 3)
+        context['is_admin'] = family.is_admin(self.request.user)
+        context['parrains'] = family.memberships.filter(role='2A+')
+        context['filleuls'] = family.memberships.filter(role='1A')
+        return context
+
+
 
 
 class JoinFamilyView(LoginRequiredMixin, DetailView):
@@ -120,7 +133,7 @@ class JoinFamilyView(LoginRequiredMixin, DetailView):
 
 
 class UpdateFamilyView(UserIsAdmin, TemplateView):
-    template_name = 'family/edit.html'
+    template_name = 'family/family/edit.html'
 
     def get_family(self):
         return Family.objects.get(pk=self.kwargs['pk'])

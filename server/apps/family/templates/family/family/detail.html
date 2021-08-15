@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    {% if show_name %}
+        <h1>{{ object.name }}</h1>
+        <p>Famille n°{{object.pk}}</p>
+    {% else %}
+        <h1>Famille n°{{ object.pk }}</h1>
+    {% endif %}
+    <br>
+
+    {% if object.summary %}
+        <p>{{object.summary}}</p>
+        <br>
+    {% endif %}
+
+    {% if show_name %}
+        <h2>Les marraines et parrains</h2>
+        {% include 'student/student_cards.html' with members=parrains %}
+        {% if object.non_subscribed_members %}
+            <p class='mt-2'>Et aussi : {{ object.non_subscribed_members }}</p>
+        {% endif %}
+        <br>
+    {% endif %}
+
+    {% if filleuls %}
+        <h2>Les filleules et filleuls</h2>
+        {% include 'student/student_cards.html' with members=filleuls %}
+        <br>
+    {% endif %}
+
+    {% if is_admin %}
+        <a href="{% url 'family:update' object.pk %}" class="btn btn-dark btn-sm">Voir le Questionnaire Famille</a>
+    {% endif %}
+
+{% endblock %}
