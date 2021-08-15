@@ -280,7 +280,15 @@ function Root(props): JSX.Element {
 							id="search-colocs"
 							options={colocs}
 							placeholder="Recherche"
-							onChange={(coloc) => {
+							onChange={(coloc) => {                    
+								let i=0, j=0;
+								for(i=0;i<dataBuffer.length;i++){
+									for(j=i;j<dataBuffer.length;j++){
+										if(dataBuffer[i].latitude===dataBuffer[j].latitude){
+											dataBuffer[j]+=0.00000000001000;
+										}
+									}
+								}
 								if (typeof coloc[0] === "undefined") {
 									return;
 								}
