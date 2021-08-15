@@ -127,8 +127,10 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
 
 
 
-class JoinFamilyView(LoginRequiredMixin, DetailView):
-    pass
+class JoinFamilyView(LoginRequiredMixin, TemplateView):
+    template_name = 'family/family/join.html'
+
+    def 
 
 
 
