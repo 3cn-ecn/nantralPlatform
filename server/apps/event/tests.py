@@ -9,7 +9,7 @@ from rest_framework import status
 from .models import BaseEvent
 
 from apps.utils.utest import TestMixin
-from apps.group.models import Club
+from apps.club.models import Club
 
 
 class BaseEventTestCase(TestCase, TestMixin):
@@ -17,9 +17,13 @@ class BaseEventTestCase(TestCase, TestMixin):
         self.user_setup()
         self.club = Club.objects.create(
             name="TestClubForEvents")
-        self.club.admins.set([self.u2.student])
+        self.club.members.through.objects.create(
+            student=self.u2.student,
+            group=self.club,
+            admin=True
+        )
         self.event = BaseEvent.objects.create(
-            title="TestEvent", group=self.club.slug, date=make_aware(datetime.now()),
+            title="TestEvent", group=self.club.full_slug, date=make_aware(datetime.now()),
             description="Test Desc", location="Amphi A")
         self.assertEqual(len(BaseEvent.objects.all()), 1)
 

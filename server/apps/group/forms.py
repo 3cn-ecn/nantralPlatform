@@ -1,46 +1,62 @@
-from django.forms import ModelForm, modelformset_factory
-from .models import AdminRightsRequest, NamedMembershipClub, Club, NamedMembershipList
+from django.forms import ModelForm
+
+from .models import AdminRightsRequest
+from apps.sociallink.models import SocialLink
+from apps.club.models import Club, BDX
+from apps.liste.models import Liste
+from apps.roommates.models import Roommates
+
+from apps.club.forms import *
+from apps.liste.forms import *
+from apps.roommates.forms import *
 
 
-class NamedMembershipClubForm(ModelForm):
-    class Meta:
-        model = NamedMembershipClub
-        fields = ['function', 'year', 'student']
+#NB : Les BDX sont aussi des instances de Club
+
+def UpdateGroupForm(group):
+    if isinstance(group, BDX):
+        return UpdateBDXForm
+    elif isinstance(group, Club):
+        return UpdateClubForm
+    elif isinstance(group, Liste):
+        return UpdateListeForm
+    elif isinstance(group, Roommates):
+        return UpdateRoommatesForm
+    else:
+        return None
 
 
-class NamedMembershipAddClub(ModelForm):
-    """Form for a club page to add one self to a club."""
-    class Meta:
-        model = NamedMembershipClub
-        fields = ['function', 'year']
+def NamedMembershipAddGroup(group):
+    if isinstance(group, Club):
+        return NamedMembershipAddClub
+    elif isinstance(group, Liste):
+        return NamedMembershipAddListe
+    elif isinstance(group, Roommates):
+        return NamedMembershipAddRoommates
+    else:
+        return None
 
 
-class NamedMembershipAddListe(ModelForm):
-    """Form for a club page to add one self to a liste."""
-    class Meta:
-        model = NamedMembershipList
-        fields = ['function']
+
+def NamedMembershipGroupFormset(group):
+    if isinstance(group, Club):
+        return NamedMembershipClubFormset
+    elif isinstance(group, Liste):
+        return NamedMembershipListeFormset
+    elif isinstance(group, Roommates):
+        return NamedMembershipRoommatesFormset
+    else:
+        return None
 
 
-class UpdateClubForm(ModelForm):
-    class Meta:
-        model = Club
-        fields = ['description', 'admins', 'logo']
 
-
-NamedMembershipClubFormset = modelformset_factory(
-    NamedMembershipClub,
-    fields=['function', 'year', 'student'],
+SocialLinkGroupFormset = modelformset_factory(
+    SocialLink,
+    fields=['network', 'url', 'label'],
     extra=1,
-    can_delete=True
+    can_delete=True,
 )
 
-NamedMembershipListeFormset = modelformset_factory(
-    NamedMembershipList,
-    fields=['function', 'student'],
-    extra=1,
-    can_delete=True
-)
 
 
 class AdminRightsRequestForm(ModelForm):

@@ -2,7 +2,7 @@ FROM python:3.7-slim-buster
 
 ENV C_FORCE_ROOT 1
 ENV DOCKER True
-ENV DJANGO_SETTINGS_MODULE config.settings.production
+ENV DJANGO_SETTINGS_MODULE=config.settings.production
 
 # create unprivileged user
 RUN adduser --disabled-password --gecos '' myuser
@@ -30,7 +30,7 @@ RUN pip install -U pip && \
 # Copy stuff in rarest-to-most-often order
 # Files that should basically never change
 COPY server/manage.py \
-     server/run_server.sh
+    server/run_server.sh
 # Files that will change rarely
 COPY server/templates ./templates
 COPY server/config ./config

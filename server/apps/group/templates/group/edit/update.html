@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'group/included/navbar_edit.html' with open='general' %}
+
+<form method='POST' enctype="multipart/form-data">
+    {{ form.media }}
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-dark">Valider</button>
+</form>
+{% endblock %}

@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load file_url %}
+
 {% block content %}
-<h1>{{object.title}}</h1>
-<p>Annonce par <a href='{{group.get_absolute_url}}'>{{group.name}}</a></p>
-{% if event.image %}
-<img width="100" height="auto" src='{{object.image.url}}'>{
-{% endif %}
-</br>
-<p>{{object.description}}</p>
+    <h1>{{object.title}}</h1>
+    <p>Annonce par <a href='{{group.get_absolute_url}}'>{{group.name}}</a></p>
+    {% if event.image %}
+        <img width="100" height="auto" src='{{object.image|file_url}}'>{
+    {% endif %}
+    </br>
+    {% autoescape off %}
+        <p>{{object.description}}</p>
+    {% endautoescape %}
 {% endblock %}

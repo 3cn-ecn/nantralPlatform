@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% include 'group/included/navbar_edit.html' with open='posts' %}
+
+<h2>Liste des annonces</h2>
+{% if posts.count > 0 %}
+<form method='POST' action="{% url object.app|add:':update-post' object.slug %}">
+  {% csrf_token %}
+  {{ form.management_form }}
+  {% for post in form %}
+  <div class='card'>
+    <div class='card-body'>
+      {{post | crispy}}
+    </div>
+  </div>
+  {% endfor %}
+  </br>
+  <button class='btn btn-dark'>Enregistrer les modifications</button>
+</form>
+{% else %}
+<p>Pour le moment il n'y a pas d'annonces ici.</p>
+{% endif %}
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script>
+  $(function () {
+    $('input.datepicker').daterangepicker({
+      singleDatePicker: true,
+      drops: 'up',
+      showDropdowns: true,
+      autoApply: true,
+      timePicker: true,
+      timePicker24Hour: true,
+      timePickerIncrement: 15,
+      locale: {
+        format: 'YYYY-MM-DD HH:mm'
+      },
+      minYear: 2020,
+      maxYear: parseInt(moment().format('YYYY'), 10)
+    });
+  });
+</script>
+{% endblock %}

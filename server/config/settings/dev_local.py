@@ -1,6 +1,8 @@
 import os
 from .base import *
 
+print("Running dev settings")
+
 DEBUG = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -24,7 +26,7 @@ AUTH_PASSWORD_VALIDATORS = [
 SECRET_KEY = 'dev_key'
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
@@ -39,7 +41,3 @@ if 'GITHUB_USER' in env:
 else:
     GITHUB_USER = ''
     GITHUB_TOKEN = ''
-
-
-MEDIA_ROOT = 'media/'
-MEDIA_URL = '/media/'

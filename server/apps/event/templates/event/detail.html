@@ -1,26 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
-<h1>{{object.title}}</h1>
-<p>Organisé par <a href='{{group.get_absolute_url}}'>{{group.name}}</a></p>
-{% if event.image %}
-<img width="100" height="auto" src='{{object.image.url}}'>{
-{% endif %}
+{% load file_url %}
 
-<div class="btn-group btn-group-sm" role="group">
-    <button type="button" class="btn btn-secondary btn-lg active">{{object.get_number_participants}} participants</button>
-    {% if request.user.is_authenticated %}
-        {%if is_participating %}
-            <a href='{% url "event:remove-participant" object.slug %}' class="btn btn-secondary btn-lg" role="button">
-                <i class="fa fa-times" aria-hidden="true"></i> Je ne participe plus
-            </a>
-        {% else %}
-            <a href='{% url "event:add-participant" object.slug %}' class="btn btn-secondary btn-lg" role="button">
-                <i class="fa fa-check" aria-hidden="true"></i> Je participe
-            </a>
-        {% endif %}
+{% block content %}
+    <h1>{{object.title}}</h1>
+    <p>Organisé par <a href='{{group.get_absolute_url}}'>{{group.name}}</a></p>
+
+    {% if event.image %}
+        <img width="100" height="auto" src='{{object.image|file_url}}'>{
     {% endif %}
-</div>
-</br>
-<p>{{object.description}}</p>
+
+    <div class="btn-group btn-group-sm" role="group">
+        <button type="button" class="btn btn-secondary btn-lg active">{{object.get_number_participants}} participants</button>
+        {% if request.user.is_authenticated %}
+            {%if is_participating %}
+                <a href='{% url "event:remove-participant" object.slug %}' class="btn btn-secondary btn-lg" role="button">
+                    <i class="fa fa-times" aria-hidden="true"></i> Je ne participe plus
+                </a>
+            {% else %}
+                <a href='{% url "event:add-participant" object.slug %}' class="btn btn-secondary btn-lg" role="button">
+                    <i class="fa fa-check" aria-hidden="true"></i> Je participe
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    </br>
+    {% autoescape off %}
+        <p>{{object.description}}</p>
+    {% endautoescape %}
+
 {% endblock %}

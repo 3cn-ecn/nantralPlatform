@@ -1,33 +1,37 @@
 from datetime import *
-import requests
+from typing import List
+from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, FormView
-from ..utils.accessMixins import LoginRequiredAccessMixin
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 from apps.utils.github import create_issue
 
-from django.conf import settings
-
 from .forms import SuggestionForm
 
 
-class HomeView(LoginRequiredAccessMixin, TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home/home.html'
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        context['events'] = event_sort(BaseEvent.objects.filter(
-            date__gte=date.today()).order_by('date'), self.request)
-        context['posts'] = Post.objects.filter(
-            publication_date__gte=date.today()-timedelta(days=10)).order_by('publication_date')
+        events: List[BaseEvent] = BaseEvent.objects.filter(
+            date__gte=date.today()).order_by('date')
+        events = [event for event in events if event.can_view(
+            self.request.user)]
+        context['events'] = event_sort(events, self.request)
+        posts: List[Post] = Post.objects.filter(
+            publication_date__gte=date.today()-timedelta(days=10)).order_by('-publication_date')
+        context['posts'] = [
+            post for post in posts if post.can_view(self.request.user)]
         return context
 
 
-class SuggestionView(LoginRequiredAccessMixin, FormView):
+class SuggestionView(LoginRequiredMixin, FormView):
     template_name = 'home/suggestions.html'
     form_class = SuggestionForm
 

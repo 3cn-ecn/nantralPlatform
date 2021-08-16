@@ -1,0 +1,29 @@
+<div class="modal fade" id="addModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {% load crispy_forms_tags %}  
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        {% if is_member %}
+                            Modifier un membre
+                        {% else %}
+                            Devenir membre de {{object.name}}
+                        {% endif %}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>        
+                <div class="modal-body">
+                    <form method="post" action="{% url object.app|add:':add-member' object.slug %}">
+                        {% csrf_token %}      
+                        {{form | crispy}}
+                        {% if is_member %}
+                            <button type="submit" value="Submit" class="btn btn-success">Valider</button>
+                            <button type="submit" value="Submit" name="delete" class="btn btn-danger">Supprimer</button>
+                        {% else %}
+                            <button type="submit" value="Submit" class="btn btn-success">M'ajouter</button>
+                        {% endif %}
+                    </form>
+                </div>
+        </div>
+    </div>
+</div>

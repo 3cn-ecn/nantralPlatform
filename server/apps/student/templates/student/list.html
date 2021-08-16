@@ -1,7 +1,6 @@
 {% extends 'base.html'%}
 {% block content%}
-<br \>
-<h2>Annuaire des Nantralien·ne·s</h2>
+<h1>Annuaire des Nantralien·ne·s</h1>
 <br \>
 <div class="table-responsive">
 <table class="table table-hover table-sm">
@@ -18,8 +17,8 @@
   <tbody>
     {% for student in object_list%}
     <tr style="transform: rotate(0);">
-      <td><a href="{% url "student:detail" student.id%}" class="stretched-link"></a>{{student.last_name | upper}}</a></td>
-      <td>{{student.first_name | title}}</td>
+      <td><a href="{% url "student:detail" student.id%}" class="stretched-link"></a>{{student.user.last_name | upper}}</a></td>
+      <td>{{student.user.first_name | title}}</td>
       <td class="d-none d-sm-table-cell">{{student.promo}}</td>
       <td class="d-none d-sm-table-cell">{{student.get_faculty_display}}</td>
       <td class="d-none d-sm-table-cell">{{student.get_path_display}}</td>

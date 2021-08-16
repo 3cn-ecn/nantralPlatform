@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'group/included/navbar_edit.html' with open='members' %}
+
+<h2>Membres</h2>
+<form method='POST' action="{% url object.app|add:':update-members' object.slug %}">
+    {% csrf_token %}
+    {{ members.management_form }}
+    {% for member in members %}
+    <div class='card'>
+        <div class='card-body'>
+            {{member |crispy}}
+        </div>
+    </div>
+    {% endfor %}
+    </br>
+    <button class='btn btn-dark'>Modifier les membres</button>
+</form>
+{% endblock %}

@@ -1,0 +1,17 @@
+
+{% if sociallinks %}
+    <div class="grille-rs">
+        {% for sociallink in sociallinks %}
+            <a href="{{ sociallink.url }}" target="_blank" class="rs" style="--color-rs: {{ sociallink.network.color }}">
+                <div><i class="{{ sociallink.network.icon_name }}"></i></div>
+                <span>
+                    {% if sociallink.label %}
+                        {{ sociallink.label }}
+                    {% else %}
+                        {{ sociallink.network.name }}
+                    {% endif %}
+                </span>
+            </a>
+        {% endfor %}
+    </div>
+{% endif %}

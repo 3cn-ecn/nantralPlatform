@@ -11,13 +11,19 @@ class PathAndRename(object):
 
     def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
-        # get filename
-        if instance.slug:
-            filename = f'{instance.slug}.{ext}'
-        elif instance.pk:
-            filename = f'{instance.pk}.{ext}'
+        from apps.group.models import Group
+        if isinstance(instance, Group):
+            dir = os.path.join(self.path, instance.app)
         else:
-            # set filename as random string
-            filename = f'{uuid4().hex}.{ext}'
+            dir = self.path
+        # get filename
+        try:
+            filename = f'{instance.full_slug}.{ext}'
+        except AttributeError:
+            try:
+                filename = f'{instance.pk}.{ext}'
+            except AttributeError:
+                # set filename as random string
+                filename = f'{uuid4().hex}.{ext}'
         # return the whole path to the file
-        return os.path.join(self.path, filename)
+        return os.path.join(dir, filename)
