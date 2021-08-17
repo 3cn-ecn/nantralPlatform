@@ -48,6 +48,19 @@ class Test_Account(TestCase, TestMixin):
 
         student = Student.objects.get(user__first_name='test_name')
         self.assertEqual(student.user, User.objects.all().last())
+        assert len(mail.outbox) == 1
+        extract = re.search(
+            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
+        uidb64 = extract.group(1)
+        token = extract.group(2)
+
+        # Check that the user cannot use the link to activate the account
+        url = reverse('account:confirm', kwargs={
+                      'uidb64': uidb64, 'token': token})
+        response = self.client.get(url)
+
+        user: User = User.objects.get(email='test@ec-nantes.fr')
+        self.assertTrue(user.is_active)
 
     def test_login_view(self):
         url = reverse('account:login')

@@ -78,9 +78,7 @@ class ConfirmUser(View):
             tempAccessReq: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
                 user=user.pk)
             if not tempAccessReq.approved:
-                messages.warning(
-                    self.request, 'Votre requête d\'accès temporaire n\'a pas encore été approuvée.')
-                return redirect('home:home')
+                return render(self.request, 'account/activation_invalid.html')
         except TemporaryAccessRequest.DoesNotExist:
             tempAccessReq = None
         # checking if the token is valid.
