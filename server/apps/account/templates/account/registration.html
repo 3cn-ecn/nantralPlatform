@@ -5,14 +5,15 @@
 {% block card_content %}
     <h2 class="text-center">{% translate "Inscription sur Nantral Platform" %}</h2>
     </br>
-        {% if temporary_registration %}
         <p>
            {% translate "Pour vous inscrire sur Nantral Platform vous devez être affilié à Centrale Nantes."%} </br>
             {% translate "Votre affiliation est determinée en utilisant votre addresse mail Centrale Nantes @xxxx.ec-nantes.fr."%}</br>
+            {% if temporary_registration %}
             {% translate "Si vous ne disposez pas encore de votre addresse vous pouvez demander un accès temporaire."%}</br>
             <a class="btn btn-success" href="{% url 'account:temporary-registration' %}">{% translate "Demande d'accès temporaire."%}</a>
+            {% endif %}
         </p>
-        {% endif %}
+
         <form method='POST' class="text-start">
             {% csrf_token %}
             {{ form|crispy }}
