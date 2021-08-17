@@ -10,6 +10,7 @@
     {% elif phase == 1%}
         <!-- phase 1 : questionnaires -->
         {% if is_2Aplus %}
+            <p><a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p><br>
             {% if user_family %}
                 <h2>Ma Famille</h2>
                 <p>Félicitations, vous êtes enregistré dans la famille <a href="{{ user_family.get_absolute_url }}">{{ user_family.name }}</a> !</p>
@@ -26,7 +27,7 @@
             {% else %}
                 <h2>Ma Famille</h2>
                 <a class='btn btn-dark' href="{% url 'family:create-family' %}">Créer ma famille</a>
-                <a class='btn btn-dark' href="{% url 'family:family-list' %}">Rejoindre une famille existante</a>
+                <a class='btn btn-dark' href="{% url 'family:family-list-join' %}">Rejoindre une famille existante</a>
                 <br><br><hr><br>
                 <p>Vous n'êtes pas un parrain ou une marraine ? Merci de vérifiez votre année de promotion
                     dans les <a href="{% url 'student:update' request.user.student.pk %}">paramètres</a> de
@@ -52,11 +53,13 @@
         <!-- phase 2 : la chasse aux parrains -->
         {% if is_2Aplus %}
             {% if user_family %}
-                <h2>Mes filleules et filleuls</h2>
-                {% include 'student/student_cards.html' with members=1A_members %}
-                <p>Voir tous les membres de la famille 
+                <h2>Ma Famille</h2>
+                <p class='mt-2'>Voir la page de la famille 
                     <a href="{{ user_family.get_absolute_url }}">{{ user_family.name }}</a>
                 </p>
+                <br>
+                <h2>Mes filleules et filleuls</h2>
+                {% include 'student/student_cards.html' with members=1A_members %}
             {% else %}
                 <p>Hmmm, il semblerait que vous n'êtes inscrit dans aucune famille...
                 Essayez de vous y prendre plus tôt l'an prochain !</p>
@@ -82,7 +85,7 @@
             <a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p>
     {% elif phase == 3 %}
         <p>Le parrainage est terminé pour cette année !</p>
-        <a href="">Consulter la liste des familles</a>
+        <p><a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p>
     {% endif %}
 {% endblock %}
         

@@ -9,12 +9,12 @@
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="family-tab" data-bs-toggle="tab" data-bs-target="#family" type="button" role="tab" aria-controls="family" aria-selected="true">Par Familles</button>
         </li>
-        {% if list_2a %}
+        {% if list_2A %}
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="A2-tab" data-bs-toggle="tab" data-bs-target="#A2" type="button" role="tab" aria-controls="A2" aria-selected="false">Par Parrains/Marraines</button>
         </li>
         {% endif %}
-        {% if list_1a %}
+        {% if list_1A %}
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="A1-tab" data-bs-toggle="tab" data-bs-target="#A1" type="button" role="tab" aria-controls="A1" aria-selected="false">Par Filleul·e·s</button>
         </li>
@@ -50,7 +50,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for m in list_2a %}
+                        {% for m in list_2A %}
                             <tr style="transform: rotate(0);">
                                 <td><a href="{{ m.url }}" class="stretched-link"></a>{{m.name}}</a></td>
                                 <td>{{ m.family }}</td>
@@ -62,7 +62,7 @@
         </div>
         {% endif %}
 
-        {% if list_1a %}
+        {% if list_1A %}
         <div class="tab-pane fade" id="A1" role="tabpanel" aria-labelledby="A1-tab">
             <br>
             <div class="table-responsive">
@@ -74,7 +74,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for m in list_1a %}
+                        {% for m in list_1A %}
                             <tr style="transform: rotate(0);">
                                 <td><a href="{{ m.url }}" class="stretched-link"></a>{{m.name}}</a></td>
                                 <td>{{ m.family }}</td>

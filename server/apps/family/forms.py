@@ -79,27 +79,32 @@ class FamilyQuestionsForm(forms.Form):
 
 class MemberQuestionsForm(forms.Form):
 
-    def __init__(self, page, initial, *args, **kwargs):
+    def __init__(self, page, is_2Aplus, initial, *args, **kwargs):
         super(MemberQuestionsForm, self).__init__(initial=initial, *args, **kwargs)
         questions = QuestionMember.objects.filter(page=page)
         last_name = None
         for question in questions:
-            name = f'question-{question.pk}'
-            self.fields[name] = forms.ChoiceField(
-                label = question.label,
-                choices = [
-                    (o.value, o.text)
-                    for o in question.option_set.all()
-                ],
-                help_text = question.details,
-                widget = forms.RadioSelect(attrs={'class':'form-check-input', 'required':'False'})
-            )
-            self[name].group = question.group
-            if not last_name or self[name].group != self[last_name].group:
-                self[name].group_first = True
-                if last_name is not None: self[last_name].group_last = True
-            last_name = name
-        self[last_name].group_last = True
+            try:
+                show_question = not is_2Aplus or question.equivalent.quota < 100
+            except Exception:
+                show_question = True
+            if show_question:
+                name = f'question-{question.pk}'
+                self.fields[name] = forms.ChoiceField(
+                    label = question.label,
+                    choices = [
+                        (o.value, o.text)
+                        for o in question.option_set.all()
+                    ],
+                    help_text = question.details,
+                    widget = forms.RadioSelect(attrs={'class':'form-check-input', 'required':'False'})
+                )
+                self[name].group = question.group
+                if not last_name or self[name].group != self[last_name].group:
+                    self[name].group_first = True
+                    if last_name is not None: self[last_name].group_last = True
+                last_name = name
+        if last_name: self[last_name].group_last = True
 
     def save(self, member:MembershipFamily):
         """Save the answers"""

@@ -163,7 +163,7 @@ class QuestionMember(BaseQuestion):
 
 
 class QuestionFamily(BaseQuestion):
-    equivalent = models.OneToOneField(to=QuestionMember, 
+    equivalent = models.OneToOneField(to=QuestionMember, related_name='equivalent',
         verbose_name="Question équivalente", on_delete=models.CASCADE, null=True, blank=True,
         help_text="Question équivalente dans le questionnaire des membres. Laissez vide si vous \
                     souhaitez que cette question ne soit pas prise en compte dans l'algo.")

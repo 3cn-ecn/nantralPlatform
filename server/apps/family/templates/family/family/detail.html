@@ -11,7 +11,7 @@
     {% endif %}
     <br>
 
-    {% if object.summary %}
+    {% if object.summary and show_name %}
         <p>{{object.summary}}</p>
         <br>
     {% endif %}
@@ -32,7 +32,7 @@
     {% endif %}
 
     {% if is_admin %}
-        <a href="{% url 'family:update' object.pk %}" class="btn btn-dark btn-sm">Voir le Questionnaire Famille</a>
+        <a href="{% url 'family:update' object.pk %}" class="btn btn-dark btn-sm">Modifier la Famille</a>
     {% endif %}
 
 {% endblock %}

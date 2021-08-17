@@ -18,11 +18,7 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         student = self.request.user.student
-        try:
-            phase = Affichage.objects.first().phase
-        except Exception:
-            Affichage().save()
-            phase = Affichage.objects.first().phase
+        phase = Affichage.objects.first().phase
         context = {}
         context['phase'] = phase
         context['user_family'] = student.family_set.filter(year=date.today().year).first()
@@ -46,7 +42,13 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         phase = Affichage.objects.first().phase
-        first_year = self.request.user.student.promo == date.today().year
+        try:
+            first_year = True
+            for membership in self.request.user.student.membershipfamily.all():
+                if membership.role == '2A+':
+                    first_year = False
+        except MembershipFamily.DoesNotExist:
+            first_year = self.request.user.student.promo == date.today().year
         show_name = (not first_year) or (phase >= 3)
         context = {}
         context['list_family'] = [
@@ -117,7 +119,13 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(*args, **kwargs)
         phase = Affichage.objects.first().phase
         family = self.get_object()
-        first_year = self.request.user.student.promo == date.today().year
+        try:
+            first_year = True
+            for membership in self.request.user.student.membershipfamily.all():
+                if membership.role == '2A+':
+                    first_year = False
+        except MembershipFamily.DoesNotExist:
+            first_year = self.request.user.student.promo == date.today().year
         context['show_name'] = (not first_year) or (phase >= 3)
         context['is_admin'] = family.is_admin(self.request.user)
         context['parrains'] = family.memberships.filter(role='2A+')
@@ -127,11 +135,49 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
 
 
 
-class JoinFamilyView(LoginRequiredMixin, TemplateView):
+class JoinFamilyView(LoginRequiredMixin, DetailView):
     template_name = 'family/family/join.html'
 
-    def 
-
+    def get_object(self):
+        return Family.objects.get(pk=self.kwargs['pk'])
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        phase = Affichage.objects.first().phase
+        family = self.get_object()
+        try:
+            first_year = True
+            for membership in self.request.user.student.membershipfamily.all():
+                if membership.role == '2A+':
+                    first_year = False
+        except MembershipFamily.DoesNotExist:
+            first_year = self.request.user.student.promo == date.today().year
+        context['show_name'] = (not first_year) or (phase >= 3)
+        context['is_member'] = self.request.user.student.family_set.filter(year=date.today().year).count() > 0
+        context['names_list'] = family.non_subscribed_members.split(',')
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        family = self.get_object()
+        student = request.user.student
+        selected_name = request.POST['member']
+        names_list = family.non_subscribed_members.split(',')
+        new_list = []
+        print(selected_name)
+        for name in names_list:
+            print(name)
+            if name == selected_name:
+                MembershipFamily.objects.create(
+                    student = student,
+                    group = family,
+                    role = '2A+',
+                    admin = True,
+                )
+            else:
+                new_list.append(name)
+        family.non_subscribed_members = ','.join(new_list)
+        family.save()
+        return redirect('family:home')
 
 
 class UpdateFamilyView(UserIsAdmin, TemplateView):
@@ -206,7 +252,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
     form_class = MemberQuestionsForm
     template_name = 'family/questionnary.html'
 
-    def get_member(self, *args, **kargs):
+    def get_member(self):
         student = self.request.user.student
         year = date.today().year
         try:
@@ -219,19 +265,23 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
             member = MembershipFamily.objects.get_or_create(
                 student=student,
                 role='1A'
-            )
+            )[0]
         return member
     
     def get_page(self):
         return QuestionPage.objects.get(order=self.kwargs['id'])
     
     def get_initial(self):
+        print(self.get_member())
         self.intial = self.get_member().get_answers_dict(self.get_page())
         return self.intial
     
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs.update({'page': self.get_page()})
+        kwargs.update({
+            'page': self.get_page(),
+            'is_2Aplus': self.get_member().role == '2A+'
+            })
         return kwargs
     
     def form_valid(self, form):
