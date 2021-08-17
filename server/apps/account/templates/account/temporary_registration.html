@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% block content%}
 <style>
@@ -14,10 +15,9 @@
     <div class='card col-md-6 col-12  my-3 p-3 bg-light text-center'>
         <h2>Inscription sur Nantral Platform</h2>
         <p>
-            Pour vous inscrire sur Nantral Platform vous devez être affilié à Centrale Nantes.
-            Si vous ne disposez pas encore de votre adresse vous pouvez demander un accès temporaire. </br>
-             Vous pourrez vous connecter en utilisant votre adresse personelle <b>jusqu'au {{DEADLINE_TEMPORARY_REGISTRATION}}</b>.
-            Vous devrez avoir renseigné et validé votre adresse Centrale avant cette date.
+            {% translate "Pour vous inscrire sur Nantral Platform vous devez être affilié à Centrale Nantes. Si vous ne disposez pas encore de votre adresse vous pouvez demander un accès temporaire."%} </br>
+             {% translate "Vous pourrez vous connecter en utilisant votre adresse personelle"%} <b> {% translate "jusqu'au" %} {{DEADLINE_TEMPORARY_REGISTRATION}}</b>.
+            {% translate "Vous devrez avoir renseigné et validé votre adresse Centrale avant cette date."%}
         </p>
         <form method='POST'>
             {% csrf_token %}
