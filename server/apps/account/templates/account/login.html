@@ -30,8 +30,7 @@
         {{ form|crispy }}
         <div class='text-center'>
             <button class="btn btn-dark">{% translate "Se connecter" %}</button>  
-            <a href="" class="btn btn-light disabled">{% translate "Pas de compte ?" %}</a></br>
-            <small>Suite à un bug les inscriptions sont temporairement désactivées.</small>
+            <a href="{% url 'account:registration'%}" class="btn btn-light disabled">{% translate "Pas de compte ?" %}</a>
         </div>
     </form>
     
