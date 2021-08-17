@@ -8,7 +8,7 @@ app_name = 'account'
 urlpatterns = [
     path('login', AuthView.as_view(), name='login'),
     path('logout', LogoutView.as_view(), name='logout'),
-    path('registration', RegistrationView.as_view(), name='registration'),
+    #path('registration', RegistrationView.as_view(), name='registration'),
     path('registration/temporary/<int:id>/approve', ApproveTemporaryRegistrationView.as_view(),
          name='temp-req-approve'),
     path('registration/temporary/<int:id>/deny', DenyTemporaryRegistrationView.as_view(),
