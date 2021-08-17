@@ -25,29 +25,29 @@ class Test_Account(TestCase, TestMixin):
         self.user_teardown()
         User.objects.all().delete()
 
-    def test_create_user_view(self):
-        url = reverse('account:registration')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        payload = {
-            'first_name': 'test_name',
-            'last_name': 'test_last_name',
-            'email': 'test@ec-nantes.fr',
-            'confirm_email': 'test@ec-nantes.fr',
-            'password1': 'pass',
-            'password2': 'pass',
-            'promo': 2020,
-            'faculty': 'Gen',
-            'path': 'Cla'
-        }
-        url = reverse('account:registration')
-        response = self.client.post(url, data=payload)
-        self.assertEqual(response.status_code, 302)
+    # def test_create_user_view(self):
+    #     url = reverse('account:registration')
+    #     response = self.client.get(url)
+    #     self.assertEqual(response.status_code, 200)
+    #     payload = {
+    #         'first_name': 'test_name',
+    #         'last_name': 'test_last_name',
+    #         'email': 'test@ec-nantes.fr',
+    #         'confirm_email': 'test@ec-nantes.fr',
+    #         'password1': 'pass',
+    #         'password2': 'pass',
+    #         'promo': 2020,
+    #         'faculty': 'Gen',
+    #         'path': 'Cla'
+    #     }
+    #     url = reverse('account:registration')
+    #     response = self.client.post(url, data=payload)
+    #     self.assertEqual(response.status_code, 302)
 
-        self.assertEqual(len(User.objects.all()), 1)
+    #     self.assertEqual(len(User.objects.all()), 1)
 
-        student = Student.objects.get(user__first_name='test_name')
-        self.assertEqual(student.user, User.objects.all().last())
+    #     student = Student.objects.get(user__first_name='test_name')
+    #     self.assertEqual(student.user, User.objects.all().last())
 
     def test_login_view(self):
         url = reverse('account:login')
@@ -257,82 +257,82 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
     def setUp(self):
         pass
 
-    def test_temp_registration_not_available(self):
-        url = reverse('account:temporary-registration')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 302)
+    # def test_temp_registration_not_available(self):
+    #     url = reverse('account:temporary-registration')
+    #     response = self.client.get(url)
+    #     self.assertEqual(response.status_code, 302)
 
-        payload = {
-            'first_name': 'test_name',
-            'last_name': 'test_last_name',
-            'email': 'test@not-ec-nantes.fr',
-            'confirm_email': 'test@not-ec-nantes.fr',
-            'password1': 'pass',
-            'password2': 'pass',
-            'promo': 2020,
-            'faculty': 'Gen',
-            'path': 'Cla'
-        }
+    #     payload = {
+    #         'first_name': 'test_name',
+    #         'last_name': 'test_last_name',
+    #         'email': 'test@not-ec-nantes.fr',
+    #         'confirm_email': 'test@not-ec-nantes.fr',
+    #         'password1': 'pass',
+    #         'password2': 'pass',
+    #         'promo': 2020,
+    #         'faculty': 'Gen',
+    #         'path': 'Cla'
+    #     }
 
-        response = self.client.post(url, payload)
-        self.assertEqual(response.status_code, 302)
-        with self.assertRaises(User.DoesNotExist):
-            User.objects.get(email='test@not-ec-nantes.fr')
+    #     response = self.client.post(url, payload)
+    #     self.assertEqual(response.status_code, 302)
+    #     with self.assertRaises(User.DoesNotExist):
+    #         User.objects.get(email='test@not-ec-nantes.fr')
 
-    def test_temp_creation_not_available(self):
-        user: User = User(
-            first_name='test',
-            last_name='test',
-            email='test@ec-nantes.fr',
-            is_active=False
-        )
-        user.save()
-        TemporaryAccessRequest.objects.create(
-            user=user
-        )
-        self.assertEqual(TemporaryAccessRequest.objects.all().count(), 0)
+    # def test_temp_creation_not_available(self):
+    #     user: User = User(
+    #         first_name='test',
+    #         last_name='test',
+    #         email='test@ec-nantes.fr',
+    #         is_active=False
+    #     )
+    #     user.save()
+    #     TemporaryAccessRequest.objects.create(
+    #         user=user
+    #     )
+    #     self.assertEqual(TemporaryAccessRequest.objects.all().count(), 0)
 
-    @freeze_time("2021-09-01")
-    @mock.patch('apps.utils.discord.requests.post')
-    def test_temp_request_expired(self, mock_post):
-        # Define response for the fake API
-        mock_post.return_value = discord_mock_message_post()
+    # @freeze_time("2021-09-01")
+    # @mock.patch('apps.utils.discord.requests.post')
+    # def test_temp_request_expired(self, mock_post):
+    #     # Define response for the fake API
+    #     mock_post.return_value = discord_mock_message_post()
 
-        url = reverse('account:temporary-registration')
-        payload = {
-            'first_name': 'test_name',
-            'last_name': 'test_last_name',
-            'email': 'test@not-ec-nantes.fr',
-            'confirm_email': 'test@not-ec-nantes.fr',
-            'password1': 'pass',
-            'password2': 'pass',
-            'promo': 2020,
-            'faculty': 'Gen',
-            'path': 'Cla'
-        }
+    #     url = reverse('account:temporary-registration')
+    #     payload = {
+    #         'first_name': 'test_name',
+    #         'last_name': 'test_last_name',
+    #         'email': 'test@not-ec-nantes.fr',
+    #         'confirm_email': 'test@not-ec-nantes.fr',
+    #         'password1': 'pass',
+    #         'password2': 'pass',
+    #         'promo': 2020,
+    #         'faculty': 'Gen',
+    #         'path': 'Cla'
+    #     }
 
-        response = self.client.post(url, payload)
-        self.assertEqual(response.status_code, 302)
-        user: User = User.objects.get(email='test@not-ec-nantes.fr')
-        assert len(mail.outbox) == 1
-        extract = re.search(
-            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
-        uidb64 = extract.group(1)
-        token = extract.group(2)
+    #     response = self.client.post(url, payload)
+    #     self.assertEqual(response.status_code, 302)
+    #     user: User = User.objects.get(email='test@not-ec-nantes.fr')
+    #     assert len(mail.outbox) == 1
+    #     extract = re.search(
+    #         "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
+    #     uidb64 = extract.group(1)
+    #     token = extract.group(2)
 
-        # Check that the user cannot use the link to activate the account
-        url = reverse('account:confirm-temporary', kwargs={
-                      'uidb64': uidb64, 'token': token})
-        response = self.client.get(url)
+    #     # Check that the user cannot use the link to activate the account
+    #     url = reverse('account:confirm-temporary', kwargs={
+    #                   'uidb64': uidb64, 'token': token})
+    #     response = self.client.get(url)
 
-        TemporaryAccessRequest.objects.get(user=user).approve()
-        with freeze_time("2021-09-03"):
-            # Check that you still cannot login
-            url = reverse('account:login')
-            payload = {
-                'email': 'test@not-ec-nantes.fr',
-                'password': 'pass'
-            }
-            response = self.client.post(url, payload)
-            self.assertEqual(response.status_code, 302)
-            self.assertFalse(get_user(self.client).is_authenticated)
+    #     TemporaryAccessRequest.objects.get(user=user).approve()
+    #     with freeze_time("2021-09-03"):
+    #         # Check that you still cannot login
+    #         url = reverse('account:login')
+    #         payload = {
+    #             'email': 'test@not-ec-nantes.fr',
+    #             'password': 'pass'
+    #         }
+    #         response = self.client.post(url, payload)
+    #         self.assertEqual(response.status_code, 302)
+    #         self.assertFalse(get_user(self.client).is_authenticated)
