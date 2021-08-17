@@ -202,7 +202,7 @@ function Root(props): JSX.Element {
 	const markers = useMemo(() => {
 		return data.map((housing) => (
 			<Marker
-				key={housing.address}
+				key={housing.longitude}
 				longitude={housing.longitude}
 				latitude={housing.latitude}
 			>
@@ -246,7 +246,7 @@ function Root(props): JSX.Element {
 			await axios
 				.get(props.api_housing_url)
 				.then((res) => {
-					// For some reason, Axios roommates which have more than one inhabitant,
+					// For some reason, doubles Axios roommates which have more than one inhabitant,
 					// so we have to do this mess to filter everything.
 					// Hours wasted: 2
 					var uniqueIds: number[] = [];
@@ -257,6 +257,17 @@ function Root(props): JSX.Element {
 						}
 						return false;
 					});
+					// Here, we avoid problems with roommates in the same building
+					// (on different floors for example)
+					// If two roommates are on the same coordinates, we shift them slightly so they don't overlap.
+					let i=0, j=0;
+					for(i=0;i<dataBuffer.length;i++){
+						for(j=i+1;j<dataBuffer.length;j++){
+							if(dataBuffer[i].longitude===dataBuffer[j].longitude){
+								dataBuffer[j].longitude+=0.000010;
+							}
+						}
+					}
 					setColocs(
 						dataBuffer.map((housing) => {
 							return { label: housing.roommates.name, housing: housing };
