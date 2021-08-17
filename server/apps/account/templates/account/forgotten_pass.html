@@ -1,13 +1,14 @@
 {% extends 'base_bg.html' %}
+{% load i19 %}
 {% load crispy_forms_tags %}
 
 {% block card_content%}
-    <h2>Recuperation de mot de passe</h2>
+    <h2>{% translate 'Réinitialisation de mot de passe' %}</h2>
 
     <form method='POST'>
         {% csrf_token %}
         {{ form|crispy }}
-        <button class="btn btn-success">Récuperer  le compte</button>
+        <button class="btn btn-success">{% translate "Envoyer l'email" %}</button>
     </form>
     
 {% endblock %}
