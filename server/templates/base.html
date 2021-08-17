@@ -1,137 +1,147 @@
 {% load static %}
-{% load club_tags %}
 
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- css -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2.6">
-    <!-- js --> 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-    <!-- fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
-    <!-- favicon -->
-    <link rel="shortcut icon" href='{% block favicon %}{% static "/img/logo.svg" %}{% endblock %}'>
-    {% block head %}
-    {% endblock %}
-    <title>{% block title %}{% endblock %}Nantral Platform</title>
-  </head>
-  
-  <body>
-    
-    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
-      <div class="container">
-      <a class="navbar-brand" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;">
-        <img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
-        Nantral Platform.
-      </a>
-      {% block navbar %}
-        {% if request.user.is_authenticated %}
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'home:home' %}">Actualités</a>
-            </li>
-            <li class="nav-item d-none">
-              <a class="nav-link" href="#">Campagnes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'club:club-list' %}">Clubs & Assos</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              BDX
-              </a>
-              {% show_navbar_bdx %}
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Services
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                <!--li><a class="dropdown-item" href="{% url 'exchange:exchange' %}">Bourse aux options</a></li-->
-                <li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
-                <li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
-                <li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
-                <li><a class="dropdown-item disabled" href="#">Offres Partenariats</a></li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Annuaire
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
-                <li><a class="dropdown-item" href="{% url 'liste:liste-list' %}">Listes BDX</a></li>
-                <li><a class="dropdown-item disabled" href="#">Options disciplinaires</a></li>
-                <li><a class="dropdown-item disabled" href="#">Contacts & Liens</a></li>
-              </ul>
-            </li>
-          </ul>
-          <ul class="navbar-nav ml-auto ">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ request.user.student.name }}    <i class="fas fa-cog"></i>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" role="menu">
-                {% if request.user.student.id %}
-                <li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.id %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
-                {% endif  %}
-                <li><a class="dropdown-item" href='{% url "account:redirect-student" request.user.id%}'><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
-                <li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        {% else %}
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-          <ul class="navbar-nav ml-auto ">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'account:login' %}">Connexion <i class="fas fa-sign-in-alt"></i></a>
-            </li>
-          </ul>
-        </div>
-        {% endif %}
-      {% endblock %}
-      </div>
-    </nav>
-    
-    {% block banniere %}
-    {% endblock %}
-    
-    <div class="container">
-      {% if messages %}
-        {% for message in messages %}
-          <div id="alertScore" class="alert alert-{% if message.tags == 'error'%}danger{%else%}{{message.tags}}{%endif%} alert-dismissible fade show mt-4" role="alert">
-            {{ message|safe }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {%endfor%}
-      {% endif %}
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- css -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}?v=2.6">
+	<!-- js --> 
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+	<!-- fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet"> 
+	<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
+	<!-- favicon -->
+	<link rel="shortcut icon" href='{% block favicon %}{% static "/img/logo.svg" %}{% endblock %}'>
+	{% block head %}
+	{% endblock %}
+	<title>{% block title %}{% endblock %}Nantral Platform</title>
+</head>
 
-      <br>
-      {% block content %}
-      {% endblock %}
+<body>
+	
+	<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
+		<div class="container">
+			<a class="navbar-brand" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;">
+				<img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
+				Nantral Platform.
+			</a>
+			{% block navbar %}
+				{% if request.user.is_authenticated %}
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarText">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'home:home' %}">Actualités</a>
+							</li>
+							{% if navbar_family_phase %}
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'family:home' %}">Parrainage</a>
+							</li>
+							{% endif %}
+							<li class="nav-item d-none">
+								<a class="nav-link" href="#">Campagnes</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'club:index' %}">Clubs & Assos</a>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								BDX
+								</a>
+								<ul class="dropdown-menu" role="menu">
+									{% for bdx in navbar_bdx %}
+									<li><a class="dropdown-item" href="{{ bdx.get_absolute_url }}">{{ bdx.name }}</a></li>
+									{% endfor %}
+								</ul>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Services
+								</a>
+								<ul class="dropdown-menu" role="menu">
+									<!--li><a class="dropdown-item" href="{#% url 'exchange:exchange' %#}">Bourse aux options</a></li-->
+									<li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
+									<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
+									<li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
+									<li><a class="dropdown-item disabled" href="#">Offres Partenariats</a></li>
+								</ul>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Annuaires
+								</a>
+								<ul class="dropdown-menu" role="menu">
+									<li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
+									<li><a class="dropdown-item" href="{% url 'liste:index' %}">Listes BDX</a></li>
+									<li><a class="dropdown-item disabled" href="#">Options disciplinaires</a></li>
+									<li><a class="dropdown-item disabled" href="#">Contacts & Liens</a></li>
+								</ul>
+							</li>
+						</ul>
+						<ul class="navbar-nav ml-auto ">
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									{{ request.user.student.name }}    <i class="fas fa-cog"></i>
+								</a>
+								<ul class="dropdown-menu dropdown-menu-end" role="menu">
+									{% if request.user.student.pk %}
+										<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
+										<li><a class="dropdown-item" href="{% url 'student:update' request.user.student.pk %}"><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
+										<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
+									{% else %}
+										<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
+									{% endif  %}
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				{% else %}
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarText">
+						<ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+						<ul class="navbar-nav ml-auto ">
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'account:login' %}">Connexion <i class="fas fa-sign-in-alt"></i></a>
+							</li>
+						</ul>
+					</div>
+				{% endif %}
+			{% endblock %}
+		</div>
+	</nav>
+	
+	{% block banniere %}
+	{% endblock %}
+	
+	<div class="container">
+	{% if messages %}
+		{% for message in messages %}
+		<div id="alertScore" class="alert alert-{% if message.tags == 'error'%}danger{%else%}{{message.tags}}{%endif%} alert-dismissible fade show mt-4" role="alert">
+			{{ message|safe }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		{%endfor%}
+	{% endif %}
 
-      <br><br><br>
-    </div>
+	<br>
+	{% block content %}
+	{% endblock %}
 
-  </body>
-  {% block script %}
-  {% endblock %}
+	<br><br><br>
+	</div>
+
+</body>
+{% block script %}
+{% endblock %}
 </html>

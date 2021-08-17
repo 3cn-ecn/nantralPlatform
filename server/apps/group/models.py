@@ -115,6 +115,9 @@ class NamedMembership(models.Model):
 
     class Meta:
         abstract = True
+    
+    def __str__(self):
+        return self.student
 
 
 class AdminRightsRequest(models.Model):

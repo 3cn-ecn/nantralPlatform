@@ -27,7 +27,6 @@ urlpatterns = [
     path('student/', include('apps.student.urls', namespace='student')),
     path('api/student/', include('apps.student.api_urls', namespace='student_api')),
 
-    #path('group/', include('apps.group.urls',  namespace='group')),
     path('club/', include('apps.club.urls',  namespace='club')),
     path('liste/', include('apps.liste.urls',  namespace='liste')),
 
@@ -41,10 +40,12 @@ urlpatterns = [
     path('post/', include('apps.post.urls', namespace='post')),
     path('api/post/', include('apps.post.api_urls', namespace='post_api')),
 
-    path('exchange/', include('apps.exchange.urls', namespace='exchange')),
+    #path('exchange/', include('apps.exchange.urls', namespace='exchange')),
 
     path('colocs/', include('apps.roommates.urls', namespace='roommates')),
     path('api/colocs/', include('apps.roommates.api_urls', namespace='roommates_api')),
+
+    path('parrainage/', include('apps.family.urls', namespace='family')),
 
     path('', include('apps.home.urls', namespace='home')),
 ]
