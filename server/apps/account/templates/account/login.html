@@ -1,4 +1,5 @@
 {% extends 'base_bg.html' %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 {% load static %}
 
@@ -10,7 +11,7 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
         <ul class="navbar-nav ml-auto ">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'club:club-list' %}">Voir les Clubs & Assos</a>
+                <a class="nav-link" href="{% url 'club:club-list' %}">{% translate "Voir les Clubs & Assos" %}</a>
             </li>
         </ul>
     </div>
@@ -21,15 +22,15 @@
     <p><img src='{% static "/img/logo.svg" %}' style="height:5rem;max-width:150px;"> </p>
 
     <h1>Nantral Platform.</h1>
-    <small>Le site des clubs et assos de Centrale Nantes !</small>
+    <small>{% translate "Le site des clubs et assos de Centrale Nantes !" %}</small>
     <p></p>
     
     <form method='POST'>
         {% csrf_token %}
         {{ form|crispy }}
         <div class='text-center'>
-            <button class="btn btn-dark">Se connecter</button>  
-            <a href="{% url 'account:registration' %}" class="btn btn-light">Pas de compte ?</a>
+            <button class="btn btn-dark">{% translate "Se connecter" %}</button>  
+            <a href="{% url 'account:registration' %}" class="btn btn-light">{% translate "Pas de compte ?" %}</a>
         </div>
     </form>
     
