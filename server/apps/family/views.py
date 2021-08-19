@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.urls.base import reverse
 from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -232,7 +233,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                     forms[0].save()
                     forms[1].save()
                     forms[2].save(self.get_family())
-                    messages.success(request, "Les informations ont bien été enregistrées !")
+                    messages.success(request, "Les informations ont bien été enregistrées ! <a href='"+reverse("family:home")+"'>Compléter mon questionnaire perso</a>")
                     return redirect('family:update', self.get_family().pk)
                 else:
                     messages.error(request, "Erreur : les membres suivants sont déjà dans une famille : "
