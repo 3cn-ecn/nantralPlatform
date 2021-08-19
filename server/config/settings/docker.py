@@ -53,7 +53,7 @@ SECRET_KEY = "test"
 
 ALLOWED_HOSTS = ["django"]
 
-EMAIL_BACKEND = 'django_amazon_ses.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AWS_SES_REGION = 'eu-central-1'
 

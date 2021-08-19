@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    {% if show_name %}
+        <h1>{{ object.name }}</h1>
+        <p>Famille n°{{object.pk}} - <a href="{{ object.get_absolute_url }}">Voir la page</a></p>
+    {% else %}
+        <h1>Famille n°{{ object.pk }}</h1>
+        <p><a href="{{ object.get_absolute_url }}">Voir la page</a></p>
+    {% endif %}
+    <br>
+
+    {% if is_member %}
+        <p>Désolé, vous êtes déjà membre d'une autre famille, vous ne pouvez donc pas 
+        rejoindre cette famille !</p>
+    {% elif names_list %}
+        <p>Choisissez votre nom dans la liste ci-dessous. Attention, une fois le nom choisis, 
+        vous ne pourrez plus le modifier ensuite ni changer de famille.</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="list-group">
+            {% for name in names_list %}
+                <button type="submit" name="member" value="{{name}}" class="list-group-item list-group-item-action">{{ name }}</button>
+            {% endfor %}
+            </div>
+        </form>
+    {% else %}
+        <p>Désolé, aucun membre ne peut être ajouté dans cette famille. Si 
+        vous pensez que c'est une erreur, contactez un des membres de la famille
+        déjà enregistré pour qu'il vous ajoute.</p>
+    {% endif %}
+
+{% endblock %}

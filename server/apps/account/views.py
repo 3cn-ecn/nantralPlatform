@@ -72,17 +72,17 @@ class ConfirmUser(View):
             uid = force_text(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
+            return render(self.request, 'account/activation_invalid.html')
         # checking if the user is not a temporary one
         try:
             tempAccessReq: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
-                user=user.id)
+                user=user.pk)
             if not tempAccessReq.approved:
                 return render(self.request, 'account/activation_invalid.html')
         except TemporaryAccessRequest.DoesNotExist:
-            pass
-        # checking if the user exists, if the token is valid.
-        if user is not None and account_activation_token.check_token(user, token):
+            tempAccessReq = None
+        # checking if the token is valid.
+        if account_activation_token.check_token(user, token):
             # if valid set active true
             user.is_active = True
             if tempAccessReq is not None:
@@ -152,6 +152,9 @@ class AuthView(FormView):
                         messages.error(
                             self.request, 'Identifiant inconnu ou mot de passe invalide.')
                         return redirect(reverse('account:login'))
+                else:
+                    messages.warning(
+                        self.request, 'Votre compte n\'est pas encore actif. Veuillez cliquer sur le lien dans \'email.')
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')
             return redirect(reverse('home:home'))
