@@ -13,30 +13,31 @@
 	</div-->
 </div>
 <br />
-{% regroup object_list by year as year_list %}
 
-{% for group in year_list %}
-	<h2>Campagnes {{ group.grouper|add:-1 }}-{{ group.grouper }}</h2>
-	<div class="grille">
-		{% for liste in group.list %}
-  			<div class="grille-icon text-center" style="transform:rotate(0);">
-	    		<a href="{{ liste.get_absolute_url }}" class="stretched-link">
-					<div class="ratio ratio-1x1">
-      					{% if liste.logo %}
-	        				<img src="{{ liste.logo|file_url }}">
-      					{% else %}
-		        			<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
-      					{% endif %}
-					</div>
-				</a>
-				<p>
-				    {{ liste.name }}
-        			<br>
-        			<small class="text-secondary">{{ liste.liste_type.name | upper }}</small>
-      			</p>
-  			</div>
-  		{% endfor %}
-	</div>
+{% for group in liste_list %}
+	{% if group.list %}
+		<h2>{{ group.grouper }}</h2>
+		<div class="grille">
+			{% for liste in group.list %}
+				<div class="grille-icon text-center" style="transform:rotate(0);">
+					<a href="{{ liste.get_absolute_url }}" class="stretched-link">
+						<div class="ratio ratio-1x1">
+							{% if liste.logo %}
+								<img src="{{ liste.logo|file_url }}">
+							{% else %}
+								<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
+							{% endif %}
+						</div>
+					</a>
+					<p>
+						{{ liste.name }}
+						<br>
+						<small class="text-secondary">{{ liste.liste_type.name | upper }}</small>
+					</p>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
 {% endfor %}
 
 {% endblock %}
