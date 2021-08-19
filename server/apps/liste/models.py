@@ -8,7 +8,7 @@ class Liste(Group):
     liste_type = models.ForeignKey(
         BDX, on_delete=models.SET_NULL, null=True, blank=True)
     year = models.IntegerField(
-        verbose_name='Année de la liste')
+        verbose_name='Année de la liste', blank=True, null=True)
     members = models.ManyToManyField(Student, through='NamedMembershipList')
 
     class Meta:
