@@ -5,12 +5,15 @@
 
 {% block card_content %}
     <h2>Inscription sur Nantral Platform</h2>
+    <br>
     <p>
         {% translate "Pour vous inscrire sur Nantral Platform vous devez être affilié à Centrale Nantes. Si vous ne disposez pas encore de votre adresse vous pouvez demander un accès temporaire."%} </br>
-            {% translate "Vous pourrez vous connecter en utilisant votre adresse personelle"%} <b> {% translate "jusqu'au" %} {{DEADLINE_TEMPORARY_REGISTRATION}}</b>.
+    </p>
+    <p>
+        {% translate "Vous pourrez vous connecter en utilisant votre adresse personelle"%} <b> {% translate "jusqu'au" %} {{DEADLINE_TEMPORARY_REGISTRATION}}</b>.
         {% translate "Vous devrez avoir renseigné et validé votre adresse Centrale avant cette date."%}
     </p>
-    <form method='POST'>
+    <form method='POST' class="text-start">
         {% csrf_token %}
         {{ form|crispy }}
         <button class="btn btn-success">Inscription</button>
