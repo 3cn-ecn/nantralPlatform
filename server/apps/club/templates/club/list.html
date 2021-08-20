@@ -13,20 +13,12 @@
 	</div-->
 </div>
 <br />
-{% regroup object_list by bdx_type as bdx_list %}
 
-{% for bdx in my_clubs|add:bdx_list %}
-	{% if bdx.list %}
-		{% if bdx.grouper %}
-			<h2>
-				{% if not "Mes" in bdx.grouper.name %} Clubs {% endif %}
-				{{ bdx.grouper.name }}
-			</h2>
-		{% else %}
-			<h2>Associations</h2>
-		{% endif %}
+{% for group in club_list %}
+	{% if group.list %}
+		<h2>{{ group.grouper }}</h2>
 		<div class="grille">
-			{% for club in bdx.list %}
+			{% for club in group.list %}
 				<div class="grille-icon text-center" style="transform:rotate(0);">
 					<a href="{{ club.get_absolute_url }}" class="stretched-link">
 						<div class="ratio ratio-1x1">
