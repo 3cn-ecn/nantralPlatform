@@ -37,6 +37,9 @@ services:
       - DJANGO_ALLOWED_HOSTS
       - SECRET_KEY
       - MAPBOX_API_KEY
+      - DISCORD_TOKEN
+      - DISCORD_CHANNEL_ID
+      - TEMPORARY_ACCOUNTS_DATE_LIMIT
 
   nginx:
     build: ./containers/nginx
