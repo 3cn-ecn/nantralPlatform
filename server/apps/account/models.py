@@ -12,7 +12,7 @@ class TemporaryAccessRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     approved_until = models.DateField()
     date = models.DateField()
-    message_id = models.IntegerField(blank=True, null=True)
+    message_id = models.CharField(max_length=50, blank=True, null=True)
     domain = models.CharField(max_length=64)
     approved = models.BooleanField()
     mail_valid = models.BooleanField()
