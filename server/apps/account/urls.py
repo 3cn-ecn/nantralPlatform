@@ -22,7 +22,7 @@ urlpatterns = [
     path('permanent', PermanentAccountUpgradeView.as_view(),
          name='upgrade-permanent'),
     path('forgotten', ForgottenPassView.as_view(), name='forgotten_pass'),
-    path('reset_pass/<slug:uidb64>/<slug:token>',
+    path('reset_pass/<slug:uidb64>/<slug:token>/',
          PasswordResetConfirmCustomView.as_view(), name='reset_pass'),
     path('<slug:user_id>/student', redirect_to_student, name='redirect-student'),
 ]

@@ -176,19 +176,22 @@ class ForgottenPassView(FormView):
     template_name = 'account/forgotten_pass.html'
 
     def form_valid(self, form):
-        user = User.objects.get(email=form.cleaned_data['email'])
-        if user is not None:
-            subject = '[Nantral Platform] Reinitialisation de votre mot de passe'
-            current_site = get_current_site(self.request)
-            message = render_to_string('account/mail/password_request.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
-                # method will generate a hash value with user related data
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(
-                subject, message, 'accounts@nantral-platform.fr', html_message=message)
+        try:
+            user = User.objects.get(email=form.cleaned_data['email'])
+            if user is not None:
+                subject = '[Nantral Platform] Reinitialisation de votre mot de passe'
+                current_site = get_current_site(self.request)
+                message = render_to_string('account/mail/password_request.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
+                    # method will generate a hash value with user related data
+                    'token': account_activation_token.make_token(user),
+                })
+                user.email_user(
+                    subject, message, 'accounts@nantral-platform.fr', html_message=message)
+        except User.DoesNotExist:
+            pass
         messages.success(
             self.request, 'Un email de récuperation a été envoyé si cette adresse existe.')
         return redirect(reverse('account:login'))
