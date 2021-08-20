@@ -392,3 +392,71 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
             response = self.client.post(url, payload)
             self.assertEqual(response.status_code, 302)
             self.assertFalse(get_user(self.client).is_authenticated)
+
+
+class TestForgottenPass(TestCase, TestMixin):
+
+    def setUp(self) -> None:
+        self.create_user(username='test', email='test@ec-nantes.fr')
+
+    def tearDown(self) -> None:
+        self.user_teardown()
+
+    def test_forgotten_pass_request(self):
+        url = reverse('account:forgotten_pass')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        payload = {
+            'email': 'not@ec-nantes.fr'
+        }
+        # Check that you cannot send email to unexisting email.
+        response = self.client.post(url, data=payload)
+        self.assertEqual(response.status_code, 302)
+        assert len(mail.outbox) == 0
+
+        payload = {
+            'email': 'test@ec-nantes.fr'
+        }
+        response = self.client.post(url, data=payload)
+        self.assertEqual(response.status_code, 302)
+        assert len(mail.outbox) == 1
+        extract = re.search(
+            "<a href='http:\/\/testserver/account/reset_pass/([^/]*)/([^/]*)", mail.outbox[0].body)
+        uidb64 = extract.group(1)
+        token = extract.group(2)
+        url = reverse('account:reset_pass', kwargs={
+                      'uidb64': uidb64, 'token': 'token'})
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Lien invalide')
+        payload = {
+            'new_password1': 'new',
+            'new_password2': 'new'
+        }
+        response = self.client.post(url, payload)
+        self.assertEqual(response.status_code, 200)
+
+        # Check that you still cannot login
+        url = reverse('account:login')
+        payload = {
+            'email': 'test@ec-nantes.fr',
+            'password': 'new'
+        }
+        response = self.client.post(url, payload)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(get_user(self.client).is_authenticated)
+
+        # Check with a valid token now
+
+        url = reverse('account:reset_pass', kwargs={
+                      'uidb64': uidb64, 'token': token})
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        payload = {
+            'new_password1': 'new',
+            'new_password2': 'new'
+        }
+        response = self.client.post(url, payload)
+        self.assertEqual(response.status_code, 302)
