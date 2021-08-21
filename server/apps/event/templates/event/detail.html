@@ -2,13 +2,17 @@
 {% load static %}
 {% load file_url %}
 
+{% block banniere %}
+    {% if object.image %}
+        <div class="ratio ratio-banniere container-xl">
+            <img class="banniere" src='{{ object.image|file_url }}'>
+        </div>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
     <h1>{{object.title}}</h1>
     <p>Organisé par <a href='{{group.get_absolute_url}}'>{{group.name}}</a></p>
-
-    {% if event.image %}
-        <img width="100" height="auto" src='{{object.image|file_url}}'>{
-    {% endif %}
 
     <div class="btn-group btn-group-sm" role="group">
         <button type="button" class="btn btn-secondary btn-lg active">{{object.get_number_participants}} participants</button>
