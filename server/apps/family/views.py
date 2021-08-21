@@ -26,6 +26,7 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
         if context['user_family']:
             context['is_2Aplus'] = (context['user_family'].memberships.filter(student=student).first().role == '2A+')
             context['1A_members'] = context['user_family'].memberships.filter(role='1A')
+            context['family_not_completed'] = context['user_family'].memberships.all().count() == 1
         else:
             context['is_2Aplus'] = (student.promo < date.today().year)
             context['1A_members'] = None
@@ -104,7 +105,8 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
         MembershipFamily.objects.create(
             group=self.object,
             student=self.request.user.student,
-            role='2A+'
+            role='2A+',
+            admin=True,
         )
         return redirect('family:update', self.object.pk)
     
