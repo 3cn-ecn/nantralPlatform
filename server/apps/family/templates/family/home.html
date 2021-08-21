@@ -11,7 +11,7 @@
         <!-- phase 1 : questionnaires -->
         {% if is_2Aplus %}
             <p><a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p><br>
-            {% if user_family %}
+            {% if user_family and not family_not_completed %}
                 <h2>Ma Famille</h2>
                 <p>Félicitations, vous êtes enregistré dans la famille <a href="{{ user_family.get_absolute_url }}">{{ user_family.name }}</a> !</p>
                 <br>
@@ -24,6 +24,11 @@
                         récoltées seront détruites après la fin des processus de parrainage.</p>
                     <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir mon questionnaire</a>
                 {% endif %}
+            {% elif family_not_completed %}
+                <h2>Ma Famille</h2>
+                <p>Félicitations, vous êtes enregistré dans la famille <a href="{{ user_family.get_absolute_url }}">{{ user_family.name }}</a> !</p>
+                <br>
+                <a href="{% url 'family:update' user_family.pk %}" class="btn btn-dark">Remplir le questionnaire famille</a>
             {% else %}
                 <h2>Ma Famille</h2>
                 <a class='btn btn-dark' href="{% url 'family:create-family' %}">Créer ma famille</a>
