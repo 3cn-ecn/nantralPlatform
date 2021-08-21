@@ -41,6 +41,7 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
 
 class ListFamilyView(LoginRequiredMixin, TemplateView):
     template_name = 'family/list.html'
+    show = False
 
     def get_context_data(self, *args, **kwargs):
         phase = Affichage.objects.first().phase
@@ -51,7 +52,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
                     first_year = False
         except MembershipFamily.DoesNotExist:
             first_year = self.request.user.student.promo == date.today().year
-        show_name = (not first_year) or (phase >= 3)
+        show_name = (not first_year) or (phase >= 3) or self.show
         context = {}
         context['list_family'] = [
             {
@@ -85,6 +86,8 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
 class ListFamilyJoinView(ListFamilyView):
 
     def get_context_data(self, *args, **kwargs):
+        phase = Affichage.objects.first().phase
+        self.show = (phase == 1)
         context = super().get_context_data(*args, **kwargs)
         for list in context:
             for object in context[list]:
@@ -157,7 +160,9 @@ class JoinFamilyView(LoginRequiredMixin, DetailView):
             first_year = self.request.user.student.promo == date.today().year
         context['show_name'] = (not first_year) or (phase >= 3)
         context['is_member'] = self.request.user.student.family_set.filter(year=date.today().year).count() > 0
-        context['names_list'] = family.non_subscribed_members.split(',')
+        non_subscribed_list = family.non_subscribed_members
+        if non_subscribed_list:
+            context['names_list'] = non_subscribed_list.split(',')
         return context
     
     def post(self, request, *args, **kwargs):

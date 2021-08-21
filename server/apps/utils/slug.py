@@ -41,10 +41,11 @@ def get_object_from_slug(app_name: str, slug: str):
     if app_name == 'club':
         from apps.club.models import Club, BDX
         object = Club.objects.get(slug=slug)
-        if isinstance(object, BDX):
-            return BDX.objects.get(slug=slug)
-        else:
-            return object
+        try:
+            object = object.bdx
+        except BDX.DoesNotExist:
+            pass
+        return object
 
     elif app_name == 'liste':
         from apps.liste.models import Liste
