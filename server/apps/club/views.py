@@ -16,11 +16,11 @@ class ListClubView(TemplateView):
         try:
             context['club_list'].append({
                 'grouper': "Mes Clubs et Assos",
-                'list': Club.objects.select_related('name', 'slug', 'logo').filter(members__user=self.request.user),
+                'list': Club.objects.filter(members__user=self.request.user),
             })
         except Exception:
             pass
-        club_list = Club.objects.select_related('name', 'slug', 'logo', 'bdx_type').all()
+        club_list = Club.objects.select_related('bdx_type').all()
         context['club_list'].append({
             'grouper': "Associations",
             'list': club_list.filter(bdx_type__isnull=True)
