@@ -13,22 +13,40 @@ class ListClubView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = {'club_list': [] }
+        # on ajoute les clubs de l'utilisateur
         try:
             context['club_list'].append({
                 'grouper': "Mes Clubs et Assos",
                 'list': Club.objects.filter(members__user=self.request.user),
             })
-        except Exception:
+        except AttributeError:
             pass
-        context['club_list'].append({
-            'grouper': "Associations",
-            'list': Club.objects.filter(bdx_type__isnull=True)
-        })
-        for bdx in BDX.objects.all():
+        # on affiche la liste de tous les clubs
+        list_club = Club.objects.all()
+        list_group = {}
+        for club in list_club:
+            try: name = f'Clubs {club.bdx_type.name}'
+            except AttributeError: name = "Associations"
+            list_group[name] = list_group.get(name, []) + [{
+                'name': club.name,
+                'logo': club.logo,
+                'url': club.get_absolute_url,
+            }]
+        # on réorganise la liste
+        for key, value in list_group.items():
             context['club_list'].append({
-                'grouper': f'Clubs {bdx.name}',
-                'list': Club.objects.filter(bdx_type=bdx),
+                'grouper': key,
+                'list': value,
             })
+        # context['club_list'].append({
+        #     'grouper': "Associations",
+        #     'list': Club.objects.filter(bdx_type__isnull=True)
+        # })
+        # for bdx in BDX.objects.all():
+        #     context['club_list'].append({
+        #         'grouper': f'Clubs {bdx.name}',
+        #         'list': Club.objects.filter(bdx_type=bdx),
+        #     })
         return context
 
 
