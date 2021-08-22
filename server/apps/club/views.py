@@ -13,25 +13,23 @@ class ListClubView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = {'club_list': [] }
-        list_group = {}
         # on ajoute les clubs de l'utilisateur
-        if hasattr(self.request, 'user'):
-            list_club = Club.objects.filter(members__user=self.request.user)
-            list_group['Mes Clubs & Assos'] = []
-            for club in list_club:
-                list_group['Mes Clubs & Assos'].append({
-                    'name': club.name,
-                    'logo': f'{club.logo.url}?{club.logo.file.size}' if club.logo else None,
-                    'url': club.get_absolute_url,
-                })
+        try:
+            context['club_list'].append({
+                'grouper': "Mes Clubs et Assos",
+                'list': Club.objects.filter(members__user=self.request.user),
+            })
+        except AttributeError:
+            pass
         # on affiche la liste de tous les clubs
         list_club = Club.objects.all()
+        list_group = {}
         for club in list_club:
             try: name = f'Clubs {club.bdx_type.name}'
             except AttributeError: name = "Associations"
             list_group[name] = list_group.get(name, []) + [{
                 'name': club.name,
-                'logo': f'{club.logo.url}?{club.logo.file.size}' if club.logo else None,
+                'logo': club.logo,
                 'url': club.get_absolute_url,
             }]
         # on réorganise la liste
@@ -40,13 +38,6 @@ class ListClubView(TemplateView):
                 'grouper': key,
                 'list': value,
             })
-        # try:
-        #     context['club_list'].append({
-        #         'grouper': "Mes Clubs et Assos",
-        #         'list': Club.objects.filter(members__user=self.request.user),
-        #     })
-        # except AttributeError:
-        #     pass
         # context['club_list'].append({
         #     'grouper': "Associations",
         #     'list': Club.objects.filter(bdx_type__isnull=True)
