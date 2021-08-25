@@ -10,6 +10,7 @@ Django==3.2.4
 django-amazon-ses==4.0.0
 django-ckeditor-5==0.0.14
 django-crispy-forms==1.11.2
+django-debug-toolbar==3.2.2
 django-environ==0.4.5
 django-storages==1.11.1
 djangorestframework==3.12.4
