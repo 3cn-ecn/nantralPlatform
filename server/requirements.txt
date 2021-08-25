@@ -10,6 +10,7 @@ Django==3.2.4
 django-amazon-ses==4.0.0
 django-ckeditor-5==0.0.14
 django-crispy-forms==1.11.2
+django-debug-toolbar==3.2.2
 django-environ==0.4.5
 django-storages==1.11.1
 djangorestframework==3.12.4
@@ -27,6 +28,7 @@ pluggy==0.13.1
 psycopg2-binary==2.8.6
 py==1.10.0
 pycodestyle==2.7.0
+pymemcache==3.5.0
 pyparsing==2.4.7
 pytest==6.2.4
 python-dateutil==2.8.1
