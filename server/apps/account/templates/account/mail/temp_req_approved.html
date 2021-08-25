@@ -2,9 +2,16 @@
 <h2>Vous avez accès à Nantral Platform !</h2>
 <p>Bonjour {{ user.first_name|title }}, votre compte a été approuvé.</p>
 <p>Attention, vous devez renseigner et valider votre adresse mail ecole avant le {{deadline}} sinon votre compte sera supprimé.</p>
+{%if email_valid %}
 <p>Vous pouvez vous connecter <a href='http://{{ domain }}{% url "account:login"%}'>ici</a>.</p>
-
+{%else%}
+<p>Il vous reste une étape avant de pouvoir vous connecter, vous devez valider cet adresse mail. Nous vous avons envoyé un mail avec un lien pour cela, merci de cliquer sur ce lien.</p>
+{%endif%}
 <h2>You have access to Nantral Platform !</h2>
 <p>Hi {{ user.first_name|title }}, you have been approved.</p>
 <p>Please remember that you have to enter and confirm your school email before the {{deadline}} otherwise your account will be deleted.</p>
+{%if email_valid %}
 <p>You can login <a href='http://{{ domain }}{% url "account:login"%}'>here</a></p>
+{%else%}
+<p>One last step before you can login, you need to confirm this email address. We sent you an email with a link, please click on the link.</p>
+{%endif%}
