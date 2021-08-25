@@ -241,11 +241,3 @@ SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
 TEMPORARY_ACCOUNTS_DATE_LIMIT = date.fromisoformat(
     env('TEMPORARY_ACCOUNTS_DATE_LIMIT', default='2000-12-31'))
-
-# Cache config
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
