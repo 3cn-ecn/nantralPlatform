@@ -2,8 +2,7 @@ from django.views.generic import ListView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import resolve
 
-from apps.club.models import Club, BDX
-from apps.group.models import Group
+from apps.club.models import Club
 from apps.group.views import BaseDetailGroupView
 
 from apps.utils.slug import *
@@ -12,24 +11,18 @@ class ListClubView(TemplateView):
     template_name = 'club/list.html'
 
     def get_context_data(self, **kwargs):
-        context = {'club_list': [] }
-        try:
-            context['club_list'].append({
-                'grouper': "Mes Clubs et Assos",
-                'list': Club.objects.filter(members__user=self.request.user).only('name', 'slug', 'logo', 'bdx_type'),
-            })
-        except Exception:
-            pass
-        club_list = Club.objects.all().select_related('bdx_type').only('name', 'slug', 'logo', 'bdx_type')
-        context['club_list'].append({
-            'grouper': "Associations",
-            'list': club_list.filter(bdx_type__isnull=True)
-        })
-        for bdx in BDX.objects.all():
-            context['club_list'].append({
-                'grouper': f'Clubs {bdx.name}',
-                'list': club_list.filter(bdx_type=bdx),
-            })
+        context = {'club_list': {} }
+        clubList = {}
+        allMembersClub = Club.objects.filter(members__user=self.request.user).only('name', 'slug', 'logo', 'bdx_type')
+        for club in allMembersClub:
+          clubList.setdefault("Mes Clubs et Assos", []).append(club)
+        allClubs = Club.objects.all().select_related("bdx_type").only('name', 'slug', 'logo', 'bdx_type')
+        for club in allClubs:
+          if(club.bdx_type is None):
+            clubList.setdefault("Associations", []).append(club)
+          else:
+            clubList.setdefault(f'Clubs {club.bdx_type.name}', []).append(club)
+        context['club_list']=clubList
         return context
 
 
