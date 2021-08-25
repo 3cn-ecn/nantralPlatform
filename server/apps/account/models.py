@@ -61,7 +61,8 @@ class TemporaryAccessRequest(models.Model):
         message = render_to_string('account/mail/temp_req_approved.html', {
             'user': user,
             'domain': self.domain,
-            'deadline': settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
+            'deadline': settings.TEMPORARY_ACCOUNTS_DATE_LIMIT,
+            'email_valid': self.mail_valid
         })
         user.email_user(
             subject=subject, message=message, from_email='accounts@nantral-platform.fr', html_message=message)
