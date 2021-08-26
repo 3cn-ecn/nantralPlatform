@@ -9,26 +9,34 @@
         <div class="progress-bar bg-success" role="progressbar" style="width: {{percent}}%" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
-    {% if is_2Aplus %}
-        {% if page.details2A %}
-            <p>{{ page.details2A }}</p>
-        {% endif %}
+    {% if error %}
+        <p>Désolé, vous ne pouvez pas remplir le questionnaire : vous êtes enregistré 
+        comme un étudiant en deuxième année ou plus, et vous n'avez pas encore choisi de famille.
+        Si ce n'est pas le cas, vérifiez votre année de promotion dans les paramètres de votre compte.
+        Sinon, enregistrez-vous dans une famille.</p>
+        <p><a href='{% url "family:home" %}'>Retour à l'accueil</a></p>
     {% else %}
-        {% if page.details1A %}
-            <p>{{ page.details1A }}</p>
-        {% endif %}
-    {% endif %}
-    <br>
-    <form method="post">
-        {% csrf_token %}
-        {% include 'family/forms/form.html' with form=form %}
-        <button type="submit" class="btn btn-success">
-            {% if percent == 100 %}
-                Valider mes réponses&nbsp&nbsp<i class="fas fa-check-circle"></i>
-            {% else %}
-                Page suivante&nbsp&nbsp<i class="fas fa-chevron-circle-right"></i>
+        {% if is_2Aplus %}
+            {% if page.details2A %}
+                <p>{{ page.details2A }}</p>
             {% endif %}
-        </button>
-    </form>
+        {% else %}
+            {% if page.details1A %}
+                <p>{{ page.details1A }}</p>
+            {% endif %}
+        {% endif %}
+        <br>
+        <form method="post">
+            {% csrf_token %}
+            {% include 'family/forms/form.html' with form=form %}
+            <button type="submit" class="btn btn-success">
+                {% if percent == 100 %}
+                    Valider mes réponses&nbsp&nbsp<i class="fas fa-check-circle"></i>
+                {% else %}
+                    Page suivante&nbsp&nbsp<i class="fas fa-chevron-circle-right"></i>
+                {% endif %}
+            </button>
+        </form>
+    {% endif %}
 
 {% endblock %}

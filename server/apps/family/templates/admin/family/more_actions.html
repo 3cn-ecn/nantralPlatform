@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h2>Statstiques</h2>
+<ul>
+    <li>Nombre de familles cette année : {{ nb_family }}</li>
+    <li>Nombre de familles avec 1 seul parrain : {{ nb_solo_family }}<br>
+        Les familles concernées :
+        <ul>
+        {% for fam in solo_family %}
+            <li><a href='{{ fam.get_absolute_url }}'>{{fam.name}}</a></li>
+        {%endfor %}
+        </ul>
+    </li>
+</ul>
+{% endblock %}

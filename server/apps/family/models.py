@@ -10,9 +10,10 @@ class Affichage(models.Model):
     phase = models.IntegerField(
         choices = [
             (0, 'Tout masquer'),
-            (1, 'Questionnaires Parrainage'),
-            (2, 'Chasse aux parrains'),
-            (3, 'Résultats Parrainage'),
+            (1, 'Questionnaires Familles & Parrains'),
+            (2, 'Questionnaires pour tous'),
+            (3, 'Chasse aux parrains'),
+            (4, 'Résultats Parrainage'),
         ],
         default=0
     )
@@ -66,6 +67,14 @@ class MembershipFamily(NamedMembership):
         for ans in self.answermember_set.filter(question__page=page):
             initial[f'question-{ans.question.pk}'] = ans.answer
         return initial
+    
+    def form_complete(self):
+        nb_done = self.answermember_set.all().count()
+        nb_tot = QuestionMember.objects.all().count()
+        nb_fam_only = QuestionFamily.objects.filter(quota=100).count()
+        return (nb_done >= (nb_tot - nb_fam_only*int(self.role == '2A+')))
+
+
 
 
 class QuestionPage(models.Model):
