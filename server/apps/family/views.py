@@ -1,12 +1,12 @@
 from django.shortcuts import redirect, render
 from django.urls.base import reverse
-from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, FormView
+from django.views.generic import TemplateView, CreateView, View, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from datetime import date
 
 from apps.utils.accessMixins import UserIsAdmin
-from .models import QuestionMember, QuestionFamily, AnswerMember, Family, MembershipFamily, QuestionPage
+from .models import Family, MembershipFamily, QuestionPage
 from .forms import CreateFamilyForm, UpdateFamilyForm, Member2AFormset, FamilyQuestionsForm, MemberQuestionsForm
 from .utils import *
 
@@ -19,16 +19,15 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
     template_name = 'family/home.html'
 
     def get_context_data(self, **kwargs):
-        phase = read_phase()
         membership = get_membership(self.request.user)
         context = {}
-        context['phase'] = phase
-        context['user_family'] = get_family(self.request.user, membership)
+        context['phase'] = read_phase()
         context['is_2Aplus'] = not is_1A(self.request.user, membership)
-        if context['user_family']:
-            context['1A_members'] = context['user_family'].memberships.filter(role='1A')
-            context['family_not_completed'] = context['user_family'].memberships.all().count() <= 1
-        context['form_complete'] = membership.form_complete()
+        if membership:
+            context['user_family'] = membership.group
+            context['1A_members'] = membership.group.memberships.filter(role='1A')
+            context['family_not_completed'] = membership.group.memberships.all().count() <= 1
+            context['form_complete'] = membership.form_complete()
         return context
 
 
@@ -245,13 +244,13 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         membership = get_membership(self.request.user)
         if membership is None:
             if is_1A(self.request.user):
-                member = MembershipFamily.objects.create(
+                membership = MembershipFamily.objects.create(
                     student=self.request.user.student,
                     role='1A'
                 )
             else:
-                member = None
-        return member
+                membership = None
+        return membership
     
     def get_page(self):
         return QuestionPage.objects.get(order=self.kwargs['id'])
@@ -293,3 +292,5 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         return context
 
     
+class ProcessAlgorithm(LoginRequiredMixin, View):
+    pass

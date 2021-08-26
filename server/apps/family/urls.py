@@ -17,4 +17,5 @@ urlpatterns = [
     path('famille/<int:pk>/join', JoinFamilyView.as_view(), name='join'),
     path('famille/<int:pk>/edit', UpdateFamilyView.as_view(), name='update'),
     path('questionnaire/<int:id>', QuestionnaryPageView.as_view(), name='questionnary'),
+    path('process/<str:redirection>', ProcessAlgorithm.as_view(), name='process'),
 ]
