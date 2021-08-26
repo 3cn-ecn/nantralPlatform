@@ -62,3 +62,24 @@ MAPBOX_API_KEY = env('MAPBOX_API_KEY')
 
 GITHUB_USER = env('GITHUB_USER')
 GITHUB_TOKEN = env('GITHUB_TOKEN')
+
+
+# Cache config
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+
+def show_toolbar(request):
+    return True
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+}

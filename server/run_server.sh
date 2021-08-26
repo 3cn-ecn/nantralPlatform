@@ -5,6 +5,8 @@ echo "Database not found on network."
 sleep 1
 done
 
+# Start the memory cache
+memcached -u root -d
 
 cd /var/app
 
