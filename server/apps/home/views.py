@@ -38,7 +38,7 @@ class SuggestionView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         create_issue(
             title=form.cleaned_data['title'],
-            body=f"{form.cleaned_data['description']} <br/> <a href='{self.request.user.student.get_absolute_url}>'Proposé par</a>"
+            body=f"{form.cleaned_data['description']} <br/> <a href='{self.request.user.student.get_absolute_url()}>'Proposé par</a>"
         )
         messages.success(
             self.request, 'Votre suggestion a été enregistré merci')

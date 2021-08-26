@@ -40,7 +40,7 @@ class Student(models.Model):
         max_length=200, verbose_name='Filière', choices=FACULTIES)
     path = models.CharField(
         max_length=200, verbose_name='Cursus', choices=PATHS, null=True, blank=True)
-    
+
     @property
     def name(self):
         '''Renvoie le nom de l'utilisateur au format Prénom NOM.'''
@@ -52,7 +52,7 @@ class Student(models.Model):
             return self.user.last_name.title()
         else:
             return self.user.username
-    
+
     @property
     def alphabetical_name(self):
         '''Renvoie le nom de l'utilisateur au format NOM Prénom.'''
@@ -63,14 +63,14 @@ class Student(models.Model):
 
     def __str__(self):
         return self.alphabetical_name
-    
-    def get_absolute_url(self):
+
+    def get_absolute_url(self) -> str:
         return reverse('student:detail', args=[self.pk])
 
     def save(self, *args, **kwargs):
         self.picture = compressModelImage(self, 'picture')
         super(Student, self).save(*args, **kwargs)
-    
+
     class Meta:
         ordering = ['user__last_name', 'user__first_name']
 
