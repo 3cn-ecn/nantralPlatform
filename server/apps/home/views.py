@@ -1,5 +1,6 @@
 from datetime import *
 from typing import List
+from django.contrib.sites.shortcuts import get_current_site
 from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, FormView
@@ -38,7 +39,7 @@ class SuggestionView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         create_issue(
             title=form.cleaned_data['title'],
-            body=f"{form.cleaned_data['description']} <br/> <a href='{self.request.user.student.get_absolute_url()}>'Proposé par</a>"
+            body=f"{form.cleaned_data['description']} <br/> <a href='http://{get_current_site(self.request)}/{self.request.user.student.get_absolute_url()}'>Clique pour découvrir qui propose ça.</a>"
         )
         messages.success(
             self.request, 'Votre suggestion a été enregistré merci')
