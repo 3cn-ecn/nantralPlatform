@@ -52,7 +52,8 @@ THIRD_PARTY_APPS = [
     'crispy_bootstrap5',
     'storages',
     'rest_framework',
-    'django_ckeditor_5'
+    'django_ckeditor_5',
+    'debug_toolbar',
 ]
 
 COMMON_APPS = [
@@ -75,6 +76,7 @@ COMMON_APPS = [
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',

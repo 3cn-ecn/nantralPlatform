@@ -41,3 +41,14 @@ if 'GITHUB_USER' in env:
 else:
     GITHUB_USER = ''
     GITHUB_TOKEN = ''
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+# Dummy cache for dev
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
