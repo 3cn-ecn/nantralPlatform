@@ -13,15 +13,16 @@ class ListClubView(TemplateView):
     def get_context_data(self, **kwargs):
         context = {'club_list': {} }
         clubList = {}
-        allMembersClub = Club.objects.filter(members__user=self.request.user).only('name', 'slug', 'logo', 'bdx_type')
-        for club in allMembersClub:
-          clubList.setdefault("Mes Clubs et Assos", []).append(club)
+        if self.request.user.is_authenticated:
+            allMembersClub = Club.objects.filter(members__user=self.request.user).only('name', 'slug', 'logo', 'bdx_type')
+            for club in allMembersClub:
+                clubList.setdefault("Mes Clubs et Assos", []).append(club)
         allClubs = Club.objects.all().select_related("bdx_type").only('name', 'slug', 'logo', 'bdx_type')
         for club in allClubs:
-          if(club.bdx_type is None):
-            clubList.setdefault("Associations", []).append(club)
-          else:
-            clubList.setdefault(f'Clubs {club.bdx_type.name}', []).append(club)
+            if club.bdx_type is None:
+                clubList.setdefault("Associations", []).append(club)
+            else:
+                clubList.setdefault(f'Clubs {club.bdx_type.name}', []).append(club)
         context['club_list']=clubList
         return context
 
