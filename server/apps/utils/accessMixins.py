@@ -5,6 +5,7 @@ from apps.utils.slug import *
 
 
 class UserIsAdmin(UserPassesTestMixin):
+    """Check if a user is an admin, for a group page"""
     def test_func(self):
         if self.request.user.is_authenticated:
             app = resolve(self.request.path).app_name
@@ -18,4 +19,12 @@ class UserIsSuperAdmin(UserPassesTestMixin):
     def test_func(self):
         if self.request.user.is_authenticated:
             return self.request.user.is_superuser
+        return False
+
+
+
+class UserIsFamilyAdmin(UserPassesTestMixin):
+    def test_func(self):
+        if self.request.user.is_authenticated:
+            return self.request.user.groups.filter(name = "admin-family").exists()
         return False

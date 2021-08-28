@@ -48,6 +48,7 @@ urlpatterns = [
     path('api/colocs/', include('apps.roommates.api_urls', namespace='roommates_api')),
 
     path('parrainage/', include('apps.family.urls', namespace='family')),
+    path('parrainage/admin/', include('apps.family.admin_urls', namespace='family-admin')),
 
     path('', include('apps.home.urls', namespace='home')),
 ]
