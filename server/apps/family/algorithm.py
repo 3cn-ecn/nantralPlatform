@@ -3,7 +3,7 @@ import random
 from matching.games import StableMarriage
 from datetime import date
 
-from .models import Family, MembershipFamily, QuestionMember, AnswerFamily
+from .models import Family, MembershipFamily, QuestionMember
 
 
 def vectisnan(vect:np.ndarray) -> bool:
