@@ -1,44 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Parrainage - Page Admin</h1>
-<ul>
-    <li>Nombre de familles cette année : {{ nb_families }}</li>
-    <li>Familles avec moins de 3 parrains déclarés : ({{nb_bad_nb_families}} familles en tout)
-        <ul>
-            {% for f in bad_nb_families %}
-            <li><a href="{{ f.get_absolute_url }}">{{f.name}}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li>Familles qui n'ont pas répondu au questionnaire Famille : ({{nb_bad_ans_families}} familles en tout)
-        <ul>
-            {% for f in bad_ans_families %}
-            <li><a href="{{ f.get_absolute_url }}">{{f.name}}</a></li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li>Membres 1A qui n'ont pas terminé le formulaire : ({{nb_non_complete_1A}} membres en tout)
-        <ul>
-            {% for m in non_complete_1A %}
-            <li>{{m}}</li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li>Membres 2A qui n'ont pas terminé le formulaire : ({{nb_non_complete_2A}} membres en tout)
-        <ul>
-            {% for m in non_complete_2A %}
-            <li>{{m}} (<a href="{{ m.group.get_absolute_url }}">{{m.group.name}}</a>)</li>
-            {% endfor %}
-        </ul>
-    </li>
-    <li>Membres 2A non inscrits : ({{nb_non_subscribed_2A}} membres en tout)
-        <ul>
-            {% for m, f in non_subscribed_2A %}
-            <li>{{m}} (<a href="{{ f.get_absolute_url }}">{{f.name}}</a>)</li>
-            {% endfor %}
-        </ul>
-    </li>
-</ul>
-<a href='{% url "family-admin:results" %}' class="btn btn-primary">Lancer l'algorithme</a>
+    <h1>Parrainage - Page Admin</h1>
+    <h3>Statistiques générales</h3>
+    <ul>
+        <li>Nombre de familles cette année : {{ nb_families }}</li>
+        <li>Familles avec moins de 3 parrains déclarés : ({{nb_bad_nb_families}} familles en tout)
+            <ul>
+                {% for f in bad_nb_families %}
+                <li><a href="{{ f.get_absolute_url }}">{{f.name}}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Familles qui n'ont pas répondu au questionnaire Famille : ({{nb_bad_ans_families}} familles en tout)
+            <ul>
+                {% for f in bad_ans_families %}
+                <li><a href="{{ f.get_absolute_url }}">{{f.name}}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Membres 1A qui n'ont pas terminé le formulaire : ({{nb_non_complete_1A}} membres en tout)
+            <ul>
+                {% for m in non_complete_1A %}
+                <li>{{m}}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Membres 2A qui n'ont pas terminé le formulaire : ({{nb_non_complete_2A}} membres en tout)
+            <ul>
+                {% for m in non_complete_2A %}
+                <li>{{m}} (<a href="{{ m.group.get_absolute_url }}">{{m.group.name}}</a>)</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li>Membres 2A non inscrits : ({{nb_non_subscribed_2A}} membres en tout)
+            <ul>
+                {% for m, f in non_subscribed_2A %}
+                <li>{{m}} (<a href="{{ f.get_absolute_url }}">{{f.name}}</a>)</li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+    <br>
+    <h3>Outils</h3>
+    <a href='{% url "family-admin:results" %}' class="btn btn-warning">Lancer l'algorithme</a>
+    <a href='{% url "family-admin:results-saved" %}' class="btn btn-success">Voir les affectations</a>
+    <a href='{% url "admin:app_list" "family" %}' class='btn btn-secondary'>Modifier les questions et l'affichage</a>
 {% endblock %}

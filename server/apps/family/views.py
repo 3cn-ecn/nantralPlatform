@@ -123,6 +123,7 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
         context['is_admin'] = family.is_admin(self.request.user)
         context['parrains'] = family.memberships.filter(role='2A+')
         context['filleuls'] = family.memberships.filter(role='1A')
+        context['phase'] = read_phase()
         return context
 
 

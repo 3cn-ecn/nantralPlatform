@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Parrainage - Page Admin - Résultats</h1>
-    <p>Attention, les résultats présentés ne sont pas encore enregistrés : ils seront perdus si vous quittez cette page.</p>
+    <p>Les résultats suivants sont sauvegardés dans la base de données.</p>
     {% for f in families %}
         <h2>{{f.family.name}}</h2>
         <table><tr><td>
@@ -19,10 +19,11 @@
             {% endfor %}
         </ul></td></tr></table>
     {% endfor %}
+    <br>
     <form method='POST'>
         {% csrf_token %}
-        <button type="submit" name="action_family" value="save" class="btn btn-primary">Sauvegarder</button>
+        <button type="submit" name="action_family" value="reset" class="btn btn-danger">Réinitialiser (attention pas de confirmation)</button>
     </form>
     <br>
-    <a href="{% url 'family-admin:home' %}">Retour à la page principale (et perdre les données)</a>
+    <a href="{% url 'family-admin:home' %}">Retour à la page principale</a>
 {% endblock %}

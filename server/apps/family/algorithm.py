@@ -25,31 +25,25 @@ def get_question_list():
 
 def get_answer(member:MembershipFamily, question):
 	'''Get the answer to a question for a member'''
-	answers = member.answermember_set.filter(question=question['id'])
+	answers = [ans for ans in member.answermember_set.all() if ans.question.id==question['id']]
 
-	if answers.count() == 1:
+	if len(answers) == 1:
 		# ordinary question case
-		ans = answers.first().answer
+		ans = answers[0].answer
 		if member.role == '2A+' and question['equivalent'] is not None:
 			# we check if we have to penderate with a family question
-			f_ans = AnswerFamily.objects.get(
-				family = member.group,
-				question = question['equivalent'],
-			)
+			f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
 			f_ans_value = f_ans.answer
 			quota = f_ans.question.quota/100
 			ans = (1-quota)*ans + quota*f_ans_value
 		return ans
 	
-	elif answers.count() == 0:
+	elif len(answers) == 0:
 		# case of no answer to this question
 		if member.role == '2A+' and question['equivalent'] is not None:
 			# ordinary case : it is an only-family question (quota=100)
 			# or if he didn't answer we take the family answer
-			f_ans = AnswerFamily.objects.get(
-				family = member.group,
-				question = question['equivalent'],
-			)
+			f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
 			return f_ans.answer
 		else:
 			return np.nan
@@ -71,7 +65,8 @@ def get_answers(member:MembershipFamily, question_list):
 
 def get_member1A_list(question_list):
 	"""Get the list of 1A students with their answers"""
-	data = MembershipFamily.objects.filter(role='1A', group__isnull=True)
+	data = MembershipFamily.objects.filter(role='1A', group__isnull=True).prefetch_related(
+		'answermember_set__question', 'group__answerfamily_set__question')
 	member1A_list = []
 	for membership in data:
 		answers = get_answers(membership, question_list)
@@ -87,7 +82,8 @@ def get_member2A_list(question_list):
 	"""Get the list of 2A+ students with their answers"""
 
 	# add all membershipFamily students
-	data = MembershipFamily.objects.filter(role='2A+', group__year=date.today().year)
+	data = MembershipFamily.objects.filter(role='2A+', group__year=date.today().year).prefetch_related(
+		'answermember_set__question', 'group__answerfamily_set__question')
 	member2A_list = []
 	for membership in data:
 		member2A_list.append({
@@ -247,7 +243,7 @@ def main_algorithm():
 		member1A_list[id_1A]['family'] = member2A_list[id_2A]['family']
 	
 	print('Done!')
-	return member1A_list, member2A_list
+	return member1A_list, member2A_list, family_list
 
 
 
@@ -261,7 +257,7 @@ def save(member1A_list):
 	
 
 
-def delete_members1A():
+def reset():
 	"""Reset the decision of the algorithm"""
 	print('Deleting...')
 	for m in MembershipFamily.objects.filter(role='1A', group__year=date.today().year):

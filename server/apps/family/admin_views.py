@@ -1,16 +1,14 @@
-from django.shortcuts import redirect, render
-from django.urls.base import reverse
-from django.views.generic import TemplateView, CreateView, View, DetailView, FormView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
-from django.db.models import Count
+from django.shortcuts import redirect
+from django.views.generic import TemplateView
 from django.db.models import Q
+from django.core.cache import cache
+from django.contrib import messages
 from datetime import date
 
 from apps.utils.accessMixins import UserIsInGroup
-from .models import Family, MembershipFamily, QuestionFamily, QuestionPage
+from .models import Family, MembershipFamily, QuestionFamily
 from .utils import read_phase
-from .algorithm import main_algorithm, save
+from .algorithm import main_algorithm, save, reset
 
 
 GROUP_NAME = 'admin-family'
@@ -60,14 +58,46 @@ class ResultsView(UserIsInGroup, TemplateView):
     group = GROUP_NAME
     template_name = 'family/admin/results.html'
 
+    def post(self, request, *args, **kwargs):
+        if request.POST['action_family'] == 'save':
+            member1A_list = cache.get('member1A_list')
+            if member1A_list: 
+                save(member1A_list)
+                messages.success(request, "Résultats sauvegardés !")
+                return redirect('family-admin:results-saved')
+            else:
+                messages.error(request, "Les résultats ont été perdus, désolé !")
+        return redirect('family-admin:home')
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         member1A_list, member2A_list, family_list = main_algorithm()
-        context['member1A_list'] = member1A_list
+        cache.set('member1A_list', member1A_list, 3600)
         families = []
         for f in family_list:
             members_2A = [m['member'] for m in member2A_list if m['family']==f['family']]
             members_1A = [m['member'] for m in member1A_list if m['family']==f['family']]
+            families.append({'A1':members_1A, 'A2':members_2A, 'family':f['family']})
+        context['families'] = families
+        return context
+
+
+class ResultsSavedView(UserIsInGroup, TemplateView):
+    group = GROUP_NAME
+    template_name = 'family/admin/results_saved.html'
+
+    def post(self, request, *args, **kwargs):
+        if request.POST['action_family'] == 'reset':
+            reset()
+        return redirect('family-admin:home')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        families = []
+        for f in Family.objects.filter(year=date.today().year):
+            members_2A = f.memberships.filter(role='2A+')
+            members_1A = f.memberships.filter(role='1A')
             families.append({'A1':members_1A, 'A2':members_2A, 'family':f})
         context['families'] = families
         return context
+
