@@ -108,13 +108,14 @@ def get_member2A_list(question_list):
 
 	# add the non_subscribed_members
 	for family in family_list:
-		m_list = family['family'].non_subscribed_members.split(',')
-		for m in m_list:
-			member2A_list.append({
-				'member': m,
-				'answers': family['answers'],
-				'family': family['family'],
-			})
+		if family['family'].non_subscribed_members:
+			m_list = family['family'].non_subscribed_members.split(',')
+			for m in m_list:
+				member2A_list.append({
+					'member': m,
+					'answers': family['answers'],
+					'family': family['family'],
+				})
 	
 	return member2A_list, family_list
 
