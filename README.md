@@ -149,6 +149,10 @@ Never base a branch on another branch.
 
 
 Contributors :
+* Robin TROESCH
+* Charles ZABLIT
+* Alexis DELAGE
+* Maxime GOURCEYRAUD
     
 
 ## Useful Links
