@@ -34,7 +34,7 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         context['bad_ans_families'] = bad_ans_families
         context['nb_bad_ans_families'] = len(bad_ans_families)
         # members
-        members = MembershipFamily.objects.filter(Q(group__isnull=True) | Q(group__year=date.today().year))
+        members = MembershipFamily.objects.filter(Q(group__isnull=True) | Q(group__year=date.today().year)).order_by('group__name')
         members1A = members.filter(role='1A')
         members2A = members.filter(role='2A+')
         non_complete_1A = [m for m in members1A if not m.form_complete()]
