@@ -252,7 +252,7 @@ def save(member1A_list):
 	print('Saving...')
 	for member1A in member1A_list:
 		member1A['member'].group = member1A['family']
-		member1A.save()
+		member1A['member'].save()
 	print('Saved!')
 	
 

@@ -71,16 +71,16 @@ class ResultsView(UserIsInGroup, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        families = []
         try:
             member1A_list, member2A_list, family_list = main_algorithm()
             cache.set('member1A_list', member1A_list, 3600)
+            for f in family_list:
+                members_2A = [m['member'] for m in member2A_list if m['family']==f['family']]
+                members_1A = [m['member'] for m in member1A_list if m['family']==f['family']]
+                if members_2A or members_1A: families.append({'A1':members_1A, 'A2':members_2A, 'family':f['family']})
         except Exception as e:
             messages.error(self.request, e)
-        families = []
-        for f in family_list:
-            members_2A = [m['member'] for m in member2A_list if m['family']==f['family']]
-            members_1A = [m['member'] for m in member1A_list if m['family']==f['family']]
-            families.append({'A1':members_1A, 'A2':members_2A, 'family':f['family']})
         context['families'] = families
         return context
 
@@ -99,8 +99,9 @@ class ResultsSavedView(UserIsInGroup, TemplateView):
         families = []
         for f in Family.objects.filter(year=date.today().year):
             members_2A = f.memberships.filter(role='2A+')
+            members_2A_plus = f.non_subscribed_members.split(',') if f.non_subscribed_members else []
             members_1A = f.memberships.filter(role='1A')
-            families.append({'A1':members_1A, 'A2':members_2A, 'family':f})
+            families.append({'A1':members_1A, 'A2':members_2A, 'A2plus':members_2A_plus, 'family':f})
         context['families'] = families
         return context
 
