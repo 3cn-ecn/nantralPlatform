@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import *
+from .views import HomeFamilyView, ListFamilyJoinView, ListFamilyView, CreateFamilyView, DetailFamilyView, JoinFamilyView, UpdateFamilyView, QuestionnaryPageView
 
 # petite note : on n'utilise pas les urls des groupes ici
 # afin de masquer les noms des familles dans les urls

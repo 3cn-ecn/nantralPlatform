@@ -25,7 +25,7 @@
         <br>
     {% endif %}
 
-    {% if filleuls %}
+    {% if filleuls and phase > 2 %}
         <h2>Les filleules et filleuls</h2>
         {% include 'student/student_cards.html' with members=filleuls %}
         <br>

@@ -4,11 +4,11 @@
     <h1>Parrainage</h1>
     <p>Bienvenue sur la page de Parrainage !</p>
 
-    {% if phase == 0 %}
+    {% if phase == 0 or phase == 1 and not is_2Aplus %}
         <!-- phase 0 : rien -->
         <p>Désolé, la procédure de parrainage n'a pas encore été lancée...</p>
-    {% elif phase == 1%}
-        <!-- phase 1 : questionnaires -->
+    {% elif phase == 1 or phase == 2 %}
+        <!-- phase 1 et 2 : questionnaires -->
         {% if is_2Aplus %}
             <p><a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p><br>
             {% if user_family and not family_not_completed %}
@@ -26,8 +26,9 @@
                 {% endif %}
             {% elif family_not_completed %}
                 <h2>Ma Famille</h2>
-                <p>Félicitations, vous êtes enregistré dans la famille <a href="{{ user_family.get_absolute_url }}">{{ user_family.name }}</a> !</p>
-                <br>
+                <p>Félicitations, la famille <a href="{{ user_family.get_absolute_url }}">{{ user_family.name }}</a> a bien été créée !</p>
+                <p><strong>ATTENTION CEPENDANT !</strong> Votre famille n'est pas encore finalisée, il manque des membres : pensez à la remplir,
+                sinon vous ne serez pas pris en compte dans l'algorithme et ne recevrez aucun filleul.</p>
                 <a href="{% url 'family:update' user_family.pk %}" class="btn btn-dark">Remplir le questionnaire famille</a>
             {% else %}
                 <h2>Ma Famille</h2>
@@ -54,8 +55,8 @@
                 </p>
             {% endif %}
         {% endif %}
-    {% elif phase == 2 %}
-        <!-- phase 2 : la chasse aux parrains -->
+    {% elif phase == 3 %}
+        <!-- phase 3 : la chasse aux parrains -->
         {% if is_2Aplus %}
             {% if user_family %}
                 <h2>Ma Famille</h2>
@@ -88,7 +89,7 @@
         <h2>Liste des familles</h2>
         <p>Vous cherchez une famille en particulier ? 
             <a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p>
-    {% elif phase == 3 %}
+    {% elif phase == 4 %}
         <p>Le parrainage est terminé pour cette année !</p>
         <p><a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p>
     {% endif %}

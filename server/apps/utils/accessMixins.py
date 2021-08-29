@@ -4,7 +4,15 @@ from django.urls import resolve
 from apps.utils.slug import *
 
 
+class UserIsSuperAdmin(UserPassesTestMixin):
+    def test_func(self):
+        if self.request.user.is_authenticated:
+            return self.request.user.is_superuser
+        return False
+
+
 class UserIsAdmin(UserPassesTestMixin):
+    """Check if a user is an admin, for a group page"""
     def test_func(self):
         if self.request.user.is_authenticated:
             app = resolve(self.request.path).app_name
@@ -14,8 +22,11 @@ class UserIsAdmin(UserPassesTestMixin):
         return False
 
 
-class UserIsSuperAdmin(UserPassesTestMixin):
+class UserIsInGroup(UserIsSuperAdmin):
+    '''Check if a user is in a group, declared in self.group'''
     def test_func(self):
+        if super().test_func():
+            return True
         if self.request.user.is_authenticated:
-            return self.request.user.is_superuser
+            return self.request.user.groups.filter(name = self.group).exists()
         return False

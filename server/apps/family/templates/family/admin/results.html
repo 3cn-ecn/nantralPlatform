@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Parrainage - Page Admin - Résultats</h1>
+    <p>Attention, les résultats présentés ne sont pas encore enregistrés : ils seront perdus si vous quittez cette page.</p>
+    <br>
+    <table class=''><tbody>
+    {% for f in families %}
+        <tr><th><h2>{{f.family.name}}</h2></th></tr>
+        <tr class="align-top"><td>
+            2A+ :
+            <ul>
+            {% for m in f.A2 %}
+                <li>{{m}}</li>
+            {% endfor %}
+        </ul></td><td>
+            1A :
+            <ul>
+            {% for m in f.A1 %}
+                <li>{{m}}</li>
+            {% endfor %}
+        </ul></td></tr>
+    {% empty %}
+        <p>Désolé, l'algorithme a renvoyé une liste vide. Cela peut-être dû à ce que tous les 1A ont déjà une famille attribuée
+        (dans ce cas, réinitialisez depuis la page de vue) ou à un bug.</p>
+    {% endfor %}
+    </tbody></table>
+    <form method='POST'>
+        {% csrf_token %}
+        <button type="submit" name="action_family" value="save" class="btn btn-primary">Sauvegarder</button>
+    </form>
+    <br>
+    <a href="{% url 'family-admin:home' %}">Retour à la page principale (et perdre les données)</a>
+{% endblock %}
