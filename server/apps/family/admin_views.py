@@ -71,8 +71,11 @@ class ResultsView(UserIsInGroup, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        member1A_list, member2A_list, family_list = main_algorithm()
-        cache.set('member1A_list', member1A_list, 3600)
+        try:
+            member1A_list, member2A_list, family_list = main_algorithm()
+            cache.set('member1A_list', member1A_list, 3600)
+        except Exception as e:
+            messages.error(self.request, e)
         families = []
         for f in family_list:
             members_2A = [m['member'] for m in member2A_list if m['family']==f['family']]
