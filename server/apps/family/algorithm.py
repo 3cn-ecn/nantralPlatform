@@ -1,9 +1,9 @@
 import numpy as np
 import random
 from matching.games import StableMarriage
+from datetime import date
 
-from .models import *
-from .utils import *
+from .models import Family, MembershipFamily, QuestionMember, AnswerFamily
 
 
 def vectisnan(vect:np.ndarray) -> bool:
@@ -75,7 +75,7 @@ def get_member1A_list(question_list):
 	member1A_list = []
 	for membership in data:
 		answers = get_answers(membership, question_list)
-		if vectisnan(answers):
+		if not vectisnan(answers):
 			member1A_list.append({
 				'member': membership,
 				'answers': answers
@@ -131,7 +131,7 @@ def get_family_list(member2A_list):
 	for fam in Family.objects.filter(year=date.today().year):
 		answers_list = np.array([m['answers'] for m in member2A_list if m['family']==fam])
 		answers_mean = np.nanmean(answers_list, axis=0)
-		if np.isnan(answers_mean): raise Exception(f'Family {fam.name} has no members')
+		if answers_mean is np.nan: raise Exception(f'Family {fam.name} has no members')
 		if vectisnan(answers_mean): raise Exception(f'Members of {fam.name} have no answers')
 		family_list.append({
 			'family': fam,
@@ -162,7 +162,7 @@ def make_same_length(member1A_list, member2A_list, family_list):
 	def lenFamily(family):
 		return family['nb']
 
-	delta_len = member1A_list.size - member2A_list.size
+	delta_len = len(member1A_list) - len(member2A_list)
 
 	if delta_len > 0: # more first year than second year
 		# we add fake members in each family, one by one, 
@@ -232,7 +232,7 @@ def main_algorithm():
 			key=lambda n: loveScore(member2A_list[i]['answers'], member1A_list[n]['answers'], coeff_list)
 		)
 	
-	# make the marriage and solve the problem!
+	# make the marriage and solve the problem! Les 1A sont privilégiés dans leurs préférences
 	print('Solving...')
 	game = StableMarriage.create_from_dictionaries(
 		firstYear_prefs, secondYear_prefs
@@ -241,11 +241,13 @@ def main_algorithm():
 
 	# get the family for each 1A
 	print('Add families to 1A members')
-	for id_1A, id_2A in dict_solved.items():
+	for player_1A, player_2A in dict_solved.items():
+		id_1A = player_1A.name
+		id_2A = player_2A.name
 		member1A_list[id_1A]['family'] = member2A_list[id_2A]['family']
 	
 	print('Done!')
-	return member1A_list
+	return member1A_list, member2A_list
 
 
 

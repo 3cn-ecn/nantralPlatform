@@ -8,7 +8,7 @@ from datetime import date
 from apps.utils.accessMixins import UserIsAdmin
 from .models import Family, MembershipFamily, QuestionPage
 from .forms import CreateFamilyForm, UpdateFamilyForm, Member2AFormset, FamilyQuestionsForm, MemberQuestionsForm
-from .utils import *
+from .utils import read_phase, get_membership, is_1A, show_sensible_data
 
 
 # Create your views here.
@@ -25,9 +25,10 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
         context['is_2Aplus'] = not is_1A(self.request.user, membership)
         if membership:
             context['user_family'] = membership.group
-            context['1A_members'] = membership.group.memberships.filter(role='1A')
-            context['family_not_completed'] = membership.group.memberships.all().count() <= 1
-            context['form_complete'] = membership.form_complete()
+            if membership.group:
+                context['1A_members'] = membership.group.memberships.filter(role='1A')
+                context['family_not_completed'] = membership.group.memberships.all().count() <= 1
+                context['form_complete'] = membership.form_complete()
         return context
 
 
@@ -238,7 +239,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
 
 class QuestionnaryPageView(LoginRequiredMixin, FormView):
     form_class = MemberQuestionsForm
-    template_name = 'family/questionnary.html'
+    template_name = 'family/forms/questionnary.html'
 
     def get_member(self):
         membership = get_membership(self.request.user)
@@ -290,7 +291,3 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         else:
             context['error'] = True
         return context
-
-    
-class ProcessAlgorithm(LoginRequiredMixin, View):
-    pass

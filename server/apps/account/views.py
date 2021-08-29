@@ -93,7 +93,7 @@ class ConfirmUser(View):
             user.save()
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')
-            messages.success(request, 'Votre compte est desormais actif !')
+            messages.success(request, 'Votre compte est désormais actif !')
             return redirect(reverse('home:home'))
         else:
             return render(self.request, 'account/activation_invalid.html')

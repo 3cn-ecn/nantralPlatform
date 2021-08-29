@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Parrainage - Page Admin - Résultats</h1>
+<p>Attention, les résultats présentés ne sont pas encore enregistrés : ils seront perdus si vous quittez cette page.</p>
+{% for f in families %}
+    <h2>{{f.family.name}}</h2>
+    <table><tr><td><ul>
+        {% for m in f.A2 %}
+            <li>{{m}}</li>
+        {% endfor %}
+    </ul></td><td><ul>
+        {% for m in f.A1 %}
+            <li>{{m}}</li>
+        {% endfor %}
+    </ul></td></tr></table>
+{% endfor %}
+<form method='POST'>
+    <button type="submit" name="game_solved" value="{{member1A_list}}" class="btn btn-primary">Sauvegarder</button>
+</form>
+{% endblock %}

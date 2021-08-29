@@ -43,7 +43,7 @@ class Family(Group):
             initial[f'question-{ans.question.pk}'] = ans.answer
         return initial
     
-    def count_members2A(self):
+    def count_members2A(self) -> int:
         nb_subscribed = self.memberships.filter(role='2A+').count()
         if self.non_subscribed_members:
             nb_non_subscribed = len(self.non_subscribed_members.split(','))
