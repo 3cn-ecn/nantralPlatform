@@ -46,8 +46,9 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         # membres non inscrits
         non_subscribed_2A = []
         for f in families:
-            for m in f.non_subscribed_members.split(','):
-                if m: non_subscribed_2A.append((m, f))
+            if f.non_subscribed_members:
+                for m in f.non_subscribed_members.split(','):
+                    if m: non_subscribed_2A.append((m, f))
         context['non_subscribed_2A'] = non_subscribed_2A
         context['nb_non_subscribed_2A'] = len(non_subscribed_2A)
         return context
