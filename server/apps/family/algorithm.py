@@ -193,19 +193,19 @@ def make_same_length(member1A_list, member2A_list, family_list):
 
 
 
-def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, coeff_list):
+def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, q_name, coeff_list):
 	"""Empêcher de créer des familles avec des personnes seules du point de vue
 	d'un critère : femmes, étudiants étrangers..."""
 
 	# on regarde pour chaque membre le critère
 	for m in member1A_list:
-		m['critery'] = m['answers'][q_id] == q_val
+		m[q_name] = m['answers'][q_id] == q_val
 	for m in member2A_list:
-		m['critery'] = m['answers'][q_id] == q_val
+		m[q_name] = m['answers'][q_id] == q_val
 	# on compte le nombre de personnes avec ce critère par famille
 	for f in family_list:
-		f['nb_critery_1A'] = len([m for m in member1A_list if m['critery'] and m['family']==f['family']])
-		f['nb_critery_2A'] = len([m for m in member1A_list if m['critery'] and m['family']==f['family']])
+		f['nb_critery_1A'] = len([m for m in member1A_list if m[q_name] and m['family']==f['family']])
+		f['nb_critery_2A'] = len([m for m in member1A_list if m[q_name] and m['family']==f['family']])
 	# on sélectionne les familles avec un 1A seul pour le critère
 	lonely_family_list = [f for f in family_list if f['nb_critery_1A']==1 and f['nb_critery_2A']==0]
 	# pour chaque famille avec un membre seul
@@ -214,14 +214,14 @@ def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, c
 		lonely_member_id = [
 			i 
 			for i in range(len(member1A_list)) 
-			if member1A_list[i]['critery'] and member1A_list[i]['family']==lonely_family['family']
+			if member1A_list[i][q_name] and member1A_list[i]['family']==lonely_family['family']
 		][0]
 		lonely_member = member1A_list[lonely_member_id]
 		print(f'{lonely_member} is alone')
 		# on sélectionne les familles qui ont déjà un membre avec ce critère où on peut rajouter le membre seul
 		candidate_family_list = [f for f in family_list if f['nb_critery_1A']>=1 or f['nb_critery_2A']>=1]
 		# on prend les membres candidats n'ayant pas ce critère avec qui on peut échanger
-		candidate_member_list = [m for m in member1A_list if not m['critery'] and m['family'] in candidate_family_list]
+		candidate_member_list = [m for m in member1A_list if not m[q_name] and m['family'] in candidate_family_list]
 		# si il reste des membres avec qui échanger
 		if candidate_member_list:
 			# on cherche le membre candidat avec le score le plus proche
@@ -299,13 +299,13 @@ def main_algorithm():
 	print("checking that no girl is alone")
 	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='Genre'][0]
 	question_value = 1
-	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, coeff_list)
+	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'genre', coeff_list)
 
 	# prevent lonely foreign students
 	print("Checking that no international student is alone")
 	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='International'][0]
 	question_value = 0
-	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, coeff_list)
+	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'inter', coeff_list)
 	
 	print('Done!')
 	return member1A_list, member2A_list, family_list

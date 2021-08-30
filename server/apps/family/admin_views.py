@@ -37,6 +37,8 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         members = MembershipFamily.objects.filter(Q(group__isnull=True) | Q(group__year=date.today().year)).order_by('group__name')
         members1A = members.filter(role='1A')
         members2A = members.filter(role='2A+')
+        context['nb_1A'] = members1A.count()
+        context['nb_2A'] = members2A.count()
         non_complete_1A = [m for m in members1A if not m.form_complete()]
         non_complete_2A = [m for m in members2A if not m.form_complete()]
         context['non_complete_1A'] = non_complete_1A
@@ -77,8 +79,8 @@ class ResultsView(UserIsInGroup, TemplateView):
             member1A_list, member2A_list, family_list = main_algorithm()
             cache.set('member1A_list', member1A_list, 3600)
             for f in family_list:
-                members_2A = [m['member'] for m in member2A_list if m['family']==f['family']]
-                members_1A = [m['member'] for m in member1A_list if m['family']==f['family']]
+                members_2A = [m for m in member2A_list if m['family']==f['family']]
+                members_1A = [m for m in member1A_list if m['family']==f['family']]
                 if members_2A or members_1A: families.append({'A1':members_1A, 'A2':members_2A, 'family':f['family']})
         except Exception as e:
             messages.error(self.request, e)
