@@ -53,6 +53,7 @@ function ParticipateButton(props): JSX.Element {
   const [numberOfParticipants, setNumberOfParticipants] = useState(
     props.number_of_participants
   );
+  const [isLoading, setLoading] = useState(false);
 
   const faIconStyle: CSSProperties = {
     marginRight: 7,
@@ -67,6 +68,7 @@ function ParticipateButton(props): JSX.Element {
         variant="secondary"
         size="sm"
         onClick={() => {
+          setLoading(true);
           axios
             .get(
               isParticipating
@@ -77,7 +79,8 @@ function ParticipateButton(props): JSX.Element {
               let offset = isParticipating ? -1 : 1;
               setIsParticipating(!isParticipating);
               setNumberOfParticipants(numberOfParticipants + offset);
-            });
+            })
+            .finally(() => setLoading(false));
         }}
       >
         {(() => {
@@ -85,14 +88,14 @@ function ParticipateButton(props): JSX.Element {
             return (
               <>
                 <i className="fas fa-times" style={faIconStyle}></i>
-                {"Je ne participe plus"}
+                {isLoading ? "Chargement..." : "Je ne participe plus"}
               </>
             );
           }
           return (
             <>
               <i className="fas fa-check" style={faIconStyle}></i>
-              {"Je participe"}
+              {isLoading ? "Chargement..." : "Je participe"}
             </>
           );
         })()}
