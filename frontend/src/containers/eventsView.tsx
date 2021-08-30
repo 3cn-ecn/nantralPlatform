@@ -213,10 +213,11 @@ render(
 );
 
 function getDate(date: Date): string {
-  if (dayjs(date).isToday) {
+  if (dayjs(date).isToday()) {
     return "Aujourd'hui";
   }
-  if (dayjs(date).isTomorrow) {
+
+  if (dayjs(date).isTomorrow()) {
     return "Demain";
   }
   return dayjs(date).format("dddd D MMMM");
