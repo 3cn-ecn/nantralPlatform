@@ -3,6 +3,10 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import ReactDOM, { render } from "react-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { CSSProperties } from "@material-ui/core/styles/withStyles";
+
 var dayjs = require("dayjs");
 var isToday = require("dayjs/plugin/isToday");
 dayjs.extend(isToday);
@@ -120,6 +124,8 @@ function Event(props): JSX.Element {
 
 function Root(props): JSX.Element {
   const [eventInfos, setEventInfos] = useState(new Map());
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     async function getEvents(): Promise<void> {
       await axios
@@ -141,19 +147,41 @@ function Root(props): JSX.Element {
         })
         .catch((err) => {
           setEventInfos(new Map());
-        });
+        })
+        .finally(() => setIsLoading(false));
     }
     getEvents();
   }, []);
+
+  const spinnerDivStyle: CSSProperties = {
+    display: "flex",
+    justifyContent: "center",
+    alignContent: "center",
+    fontSize: "5rem",
+  };
+
+  const spinnerStyle: CSSProperties = {
+    width: 75,
+    height: 75,
+  };
+
+  if (isLoading) {
+    return (
+      <div style={spinnerDivStyle}>
+        <CircularProgress style={spinnerStyle} />
+      </div>
+    );
+  }
+
   return (
     <>
       {Array.from(eventInfos, (events, key) => {
         return (
-          <div>
+          <div key={key + "outerdiv"}>
             <h3>{events[0]}</h3>
             {events[1].map((el, i) => {
               return (
-                <div>
+                <div key={key + i.toString() + "innerdiv"}>
                   <Event
                     key={key + i.toString()}
                     eventInfos={el}
