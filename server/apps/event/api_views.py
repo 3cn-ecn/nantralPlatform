@@ -17,6 +17,11 @@ class ListEventsHomeAPIView(generics.ListAPIView):
         return [event for event in events if event.can_view(
             self.request.user)]
 
+    def get_serializer_context(self):
+        context = super(ListEventsHomeAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
 
 class ListEventsGroupAPIView(generics.ListAPIView):
     """List events for a group depending on the chosen

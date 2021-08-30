@@ -29,6 +29,7 @@ interface eventInfos {
   number_of_participants: number;
   get_absolute_url: string;
   get_group_name: string;
+  is_participating: boolean;
 }
 
 const eventLink: React.CSSProperties = {
@@ -42,7 +43,9 @@ const cardStyle: React.CSSProperties = {
 function ParticipateButton(props): JSX.Element {
   const urls: urls = props.urls;
   const eventInfos: eventInfos = props.eventInfos;
-  const [isParticipating, setIsParticipating] = useState(true);
+  const [isParticipating, setIsParticipating] = useState(
+    eventInfos.is_participating
+  );
   const [numberOfParticipants, setNumberOfParticipants] = useState(
     props.number_of_participants
   );
@@ -50,6 +53,7 @@ function ParticipateButton(props): JSX.Element {
     <div className="btn-group" role="group">
       <Button variant="secondary" color="muted" size="sm">
         {numberOfParticipants}
+        {"  "}
         <i className="fas fa-users"></i>
       </Button>
       <Button
@@ -149,14 +153,17 @@ function Root(props): JSX.Element {
             <h3>{events[0]}</h3>
             {events[1].map((el, i) => {
               return (
-                <Event
-                  key={key + i.toString()}
-                  eventInfos={el}
-                  urls={{
-                    add: props.eventsRemoveParticipant,
-                    remove: props.eventsRemoveParticipant,
-                  }}
-                />
+                <div>
+                  <Event
+                    key={key + i.toString()}
+                    eventInfos={el}
+                    urls={{
+                      add: props.eventsAddParticipant,
+                      remove: props.eventsRemoveParticipant,
+                    }}
+                  />
+                  <br />
+                </div>
               );
             })}
             <br />
