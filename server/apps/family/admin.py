@@ -20,6 +20,7 @@ class AnswerMemberInline(admin.TabularInline):
     model=AnswerMember
     extra=0
 class MembershipFamilyAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'role']
     inlines=[AnswerMemberInline]
 admin.site.register(MembershipFamily, MembershipFamilyAdmin)
 

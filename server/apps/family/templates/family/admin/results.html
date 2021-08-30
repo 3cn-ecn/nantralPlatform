@@ -2,7 +2,8 @@
 
 {% block content %}
     <h1>Parrainage - Page Admin - Résultats</h1>
-    <p>Attention, les résultats présentés ne sont pas encore enregistrés : ils seront perdus si vous quittez cette page.</p>
+    <p>Attention, les résultats présentés ne sont pas encore enregistrés : ils seront perdus si vous quittez cette page.
+    Légende : filles en rose, internationaux soulignés.</p>
     <br>
     <table class=''><tbody>
     {% for f in families %}
@@ -11,13 +12,21 @@
             2A+ :
             <ul>
             {% for m in f.A2 %}
-                <li>{{m}}</li>
+                <li style="
+                    {%if m.genre %}color:#C36788;{%endif%}
+                    {%if m.inter %}text-decoration:underline;{%endif%}">
+                    {{m.member}}
+                </li>
             {% endfor %}
         </ul></td><td>
             1A :
             <ul>
             {% for m in f.A1 %}
-                <li>{{m}}</li>
+                <li style="
+                    {%if m.genre %}color:#C36788;{%endif%}
+                    {%if m.inter %}text-decoration:underline;{%endif%}">
+                    {{m.member}}
+                </li>
             {% endfor %}
         </ul></td></tr>
     {% empty %}
