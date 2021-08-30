@@ -20,11 +20,6 @@ class HomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        events: List[BaseEvent] = BaseEvent.objects.filter(
-            date__gte=date.today()).order_by('date')
-        events = [event for event in events if event.can_view(
-            self.request.user)]
-        context['events'] = event_sort(events, self.request)
         posts: List[Post] = Post.objects.filter(
             publication_date__gte=date.today()-timedelta(days=10)).order_by('-publication_date')
         context['posts'] = [
@@ -39,7 +34,7 @@ class SuggestionView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         create_issue(
             title=form.cleaned_data['title'],
-            body=f"{form.cleaned_data['description']} <br/> <a href='http://{get_current_site(self.request)}{self.request.user.student.get_absolute_url()}'>Clique pour découvrir qui propose ça.</a>"
+            body=f"{form.cleaned_data['description']} <br/> <a href='http://{get_current_site(self.request)}{self.request.user.student.get_absolute_url}'>Clique pour découvrir qui propose ça.</a>"
         )
         messages.success(
             self.request, 'Votre suggestion a été enregistré merci')

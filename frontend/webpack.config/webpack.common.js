@@ -4,6 +4,7 @@ module.exports = {
     studentCourseSelector: path.join(__dirname, '../src/containers/studentCourseSelector.tsx'),
     eventsGroupListUpdate: path.join(__dirname, '../src/containers/eventsGroupListUpdate.tsx'),
     postsGroupListUpdate: path.join(__dirname, '../src/containers/postsGroupListUpdate.tsx'),
+    eventsView: path.join(__dirname, '../src/containers/eventsView.tsx'),
     housingMap: path.join(__dirname, '../src/containers/housingMap.tsx'),
     createHousing: path.join(__dirname, '../src/containers/createHousing.tsx'),
     //editHousing: path.join(__dirname, '../src/containers/editHousing.tsx')
