@@ -5,6 +5,7 @@ import { Button, Modal, CloseButton } from "react-bootstrap";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import Truncate from "react-truncate";
 
 var dayjs = require("dayjs");
 var isToday = require("dayjs/plugin/isToday");
@@ -205,10 +206,12 @@ function Event(props): JSX.Element {
             eventInfos={eventInfos}
           />
         </h6>
-        <p
-          className="card-text"
-          dangerouslySetInnerHTML={{ __html: eventInfos.description }}
-        ></p>
+        <Truncate lines={3}>
+          <p
+            className="card-text"
+            dangerouslySetInnerHTML={{ __html: eventInfos.description }}
+          ></p>
+        </Truncate>
       </div>
     </div>
   );
@@ -275,7 +278,6 @@ function Root(props): JSX.Element {
                 </div>
               );
             })}
-            <br />
             <br />
           </div>
         );
