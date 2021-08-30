@@ -24,7 +24,7 @@ class ListEventsHomeAPIView(generics.ListAPIView):
         return context
 
 
-class ListEventsParticipatingAPIView(generics.ListAPIView):
+class ListEventsParticipantsAPIView(generics.ListAPIView):
     """List the persons participating to an event.
     Only allowed to members of the group to which the event belongs."""
     serializer_class = EventParticipatingSerializer

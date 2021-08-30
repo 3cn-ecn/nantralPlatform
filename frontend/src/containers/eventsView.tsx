@@ -1,7 +1,7 @@
 ﻿import * as React from "react";
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import { Button } from "react-bootstrap";
+import { Button, Modal, CloseButton } from "react-bootstrap";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
@@ -14,12 +14,30 @@ dayjs.extend(isTomorrow);
 require("dayjs/locale/fr");
 dayjs.locale("fr");
 
-interface urls {
-  add: string;
-  remove: string;
+const spinnerDivStyle: CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  alignContent: "center",
+  fontSize: "5rem",
+};
+
+const spinnerStyle: CSSProperties = {
+  width: 75,
+  height: 75,
+};
+
+interface Student {
+  name: string;
+  get_absolute_url: string;
 }
 
-interface eventInfos {
+interface Urls {
+  add: string;
+  remove: string;
+  participants: string;
+}
+
+interface EventInfos {
   title: string;
   group: string;
   description: string;
@@ -45,8 +63,9 @@ const cardStyle: React.CSSProperties = {
 };
 
 function ParticipateButton(props): JSX.Element {
-  const urls: urls = props.urls;
-  const eventInfos: eventInfos = props.eventInfos;
+  const urls: Urls = props.urls;
+  const eventInfos: EventInfos = props.eventInfos;
+
   const [isParticipating, setIsParticipating] = useState(
     eventInfos.is_participating
   );
@@ -54,6 +73,12 @@ function ParticipateButton(props): JSX.Element {
     props.number_of_participants
   );
   const [isLoading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [isParticipantsLoading, setIsParticipantsLoading] = useState(false);
+  const [participants, setParticipants] = useState([]);
+
+  const handleClose = () => setShowModal(false);
+  const handleOpen = () => setShowModal(true);
 
   const faIconStyle: CSSProperties = {
     marginRight: 7,
@@ -103,21 +128,60 @@ function ParticipateButton(props): JSX.Element {
       {(() => {
         if (eventInfos.is_member) {
           return (
-            <Button variant="secondary" size="sm">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => {
+                setIsParticipantsLoading(true);
+                handleOpen();
+                axios
+                  .get(urls.participants.replace("1", eventInfos.slug))
+                  .then((res) => {
+                    setParticipants(res.data);
+                  })
+                  .catch((err) => {
+                    setParticipants([]);
+                  })
+                  .finally(() => setIsParticipantsLoading(false));
+              }}
+            >
               <i className="fas fa-list" style={faIconStyle}></i>
               {"Liste des participant.e.s"}
             </Button>
           );
         }
       })()}
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Liste des participant.e.s</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {isParticipantsLoading ? (
+            <div style={spinnerDivStyle}>
+              <CircularProgress style={spinnerStyle} />
+            </div>
+          ) : (
+            <ul>
+              {participants.map((e: Student) => {
+                return (
+                  <>
+                    <li>
+                      <a href={e.get_absolute_url}>{e.name}</a>
+                    </li>
+                  </>
+                );
+              })}
+            </ul>
+          )}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
 
 function Event(props): JSX.Element {
   const urls = props.urls;
-  const eventInfos: eventInfos = props.eventInfos;
-  const [isParticipant, setIsParticipant] = useState(true);
+  const eventInfos: EventInfos = props.eventInfos;
 
   return (
     <div className={`card pt-0 bg-${eventInfos.color}`} style={cardStyle}>
@@ -159,7 +223,7 @@ function Root(props): JSX.Element {
       await axios
         .get(props.eventsApiUrl)
         .then((res) => {
-          let events: eventInfos[] = res.data;
+          let events: EventInfos[] = res.data;
           let orderedEventsInfoMap = new Map();
           for (let event of events) {
             let eventReadableDate = getDate(event.date);
@@ -180,18 +244,6 @@ function Root(props): JSX.Element {
     }
     getEvents();
   }, []);
-
-  const spinnerDivStyle: CSSProperties = {
-    display: "flex",
-    justifyContent: "center",
-    alignContent: "center",
-    fontSize: "5rem",
-  };
-
-  const spinnerStyle: CSSProperties = {
-    width: 75,
-    height: 75,
-  };
 
   if (isLoading) {
     return (
@@ -216,6 +268,7 @@ function Root(props): JSX.Element {
                     urls={{
                       add: props.eventsAddParticipant,
                       remove: props.eventsRemoveParticipant,
+                      participants: props.eventListParticipants,
                     }}
                   />
                   <br />
@@ -236,6 +289,7 @@ render(
     eventsApiUrl={eventsApiUrl}
     eventsRemoveParticipant={eventsRemoveParticipant}
     eventsAddParticipant={eventsAddParticipant}
+    eventListParticipants={eventListParticipants}
   />,
   document.getElementById("root")
 );
