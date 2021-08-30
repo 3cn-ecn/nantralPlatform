@@ -19,7 +19,7 @@ def get_question_list():
 	"""Get the questions as a list of dicts, with keys id, coeff 
 	and if there is an equivalent question for families, and then 
 	defines the NAN_VECT constant."""
-	question_list = QuestionMember.objects.all().values('id', 'coeff', 'equivalent')
+	question_list = QuestionMember.objects.all().values('id', 'coeff', 'equivalent', 'code_name')
 	return question_list
 
 
@@ -193,6 +193,58 @@ def make_same_length(member1A_list, member2A_list, family_list):
 
 
 
+def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, coeff_list):
+	"""Empêcher de créer des familles avec des personnes seules du point de vue
+	d'un critère : femmes, étudiants étrangers..."""
+
+	# on regarde pour chaque membre le critère
+	for m in member1A_list:
+		m['critery'] = m['answers'][q_id] == q_val
+	for m in member2A_list:
+		m['critery'] = m['answers'][q_id] == q_val
+	# on compte le nombre de personnes avec ce critère par famille
+	for f in family_list:
+		f['nb_critery_1A'] = len([m for m in member1A_list if m['critery'] and m['family']==f['family']])
+		f['nb_critery_2A'] = len([m for m in member1A_list if m['critery'] and m['family']==f['family']])
+	# on sélectionne les familles avec un 1A seul pour le critère
+	lonely_family_list = [f for f in family_list if f['nb_critery_1A']==1 and f['nb_critery_2A']==0]
+	# pour chaque famille avec un membre seul
+	for lonely_family in lonely_family_list:
+		# on récupère le membre seul dans la famille
+		lonely_member_id = [
+			i 
+			for i in range(len(member1A_list)) 
+			if member1A_list[i]['critery'] and member1A_list[i]['family']==lonely_family['family']
+		][0]
+		lonely_member = member1A_list[lonely_member_id]
+		print(f'{lonely_member} is alone')
+		# on sélectionne les familles qui ont déjà un membre avec ce critère où on peut rajouter le membre seul
+		candidate_family_list = [f for f in family_list if f['nb_critery_1A']>=1 or f['nb_critery_2A']>=1]
+		# on prend les membres candidats n'ayant pas ce critère avec qui on peut échanger
+		candidate_member_list = [m for m in member1A_list if not m['critery'] and m['family'] in candidate_family_list]
+		# si il reste des membres avec qui échanger
+		if candidate_member_list:
+			# on cherche le membre candidat avec le score le plus proche
+			candidate_member = min(
+				candidate_member_list, 
+				key=lambda m: loveScore(m['answers'], lonely_member['answer'], coeff_list)
+			)
+			# on récupère l'index du candidat dans la liste member1A_list
+			candidate_member_id = [i for i in range(len(member1A_list)) if member1A_list[i]==candidate_member][0]
+			# on échange les familles
+			lonely_member['family'] = member1A_list[candidate_member_id]['family']
+			candidate_member['family'] = member1A_list[lonely_member_id]['family']
+			member1A_list[candidate_member_id] = candidate_member
+			member1A_list[lonely_member_id] = lonely_member
+			# on met à jour le nb de personnes avec critère dans ces familles
+			family_more = [i for i in range(len(family_list)) if family_list[i]['family']==lonely_member['family']][0]
+			family_less = [i for i in range(len(family_list)) if family_list[i]['family']==candidate_member['family']][0]
+			family_list[family_more]['nb_critery_1A'] += 1
+			family_list[family_less]['nb_critery_1A'] -= 1
+	return member1A_list
+
+
+
 def main_algorithm():
 	# get the questionnary
 	print('Get questions...')
@@ -205,14 +257,14 @@ def main_algorithm():
 	print('Get 2A answers...')
 	member2A_list, family_list = get_member2A_list(question_list)
 
-	# Make sure both lists have the same lenght
+	# Add or delete 2A members so as to have the same length as 1A members
 	print('Checking the length...')
-	member2A_list = make_same_length(member1A_list, member2A_list, family_list)
+	member2A_list_plus = make_same_length(member1A_list, member2A_list, family_list)
 
 	# randomize lists in order to avoid unwanted effects
 	print('Randomize lists...')
 	random.shuffle(member1A_list)
-	random.shuffle(member2A_list)
+	random.shuffle(member2A_list_plus)
 
 	# creating the dicts
 	print('Creating the dicts for solving...')
@@ -222,11 +274,11 @@ def main_algorithm():
 	for i in range(N):
 		firstYear_prefs[i] = sorted(
 			range(N), 
-			key=lambda n: loveScore(member2A_list[n]['answers'], member1A_list[i]['answers'], coeff_list)
+			key=lambda n: loveScore(member2A_list_plus[n]['answers'], member1A_list[i]['answers'], coeff_list)
 		)
 		secondYear_prefs[i] = sorted(
 			range(N), 
-			key=lambda n: loveScore(member2A_list[i]['answers'], member1A_list[n]['answers'], coeff_list)
+			key=lambda n: loveScore(member2A_list_plus[i]['answers'], member1A_list[n]['answers'], coeff_list)
 		)
 	
 	# make the marriage and solve the problem! Les 1A sont privilégiés dans leurs préférences
@@ -241,7 +293,19 @@ def main_algorithm():
 	for player_1A, player_2A in dict_solved.items():
 		id_1A = player_1A.name
 		id_2A = player_2A.name
-		member1A_list[id_1A]['family'] = member2A_list[id_2A]['family']
+		member1A_list[id_1A]['family'] = member2A_list_plus[id_2A]['family']
+	
+	# prevent lonely girls
+	print("checking that no girl is alone")
+	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='Genre'][0]
+	question_value = 1
+	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, coeff_list)
+
+	# prevent lonely foreign students
+	print("Checking that no international student is alone")
+	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='International'][0]
+	question_value = 0
+	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, coeff_list)
 	
 	print('Done!')
 	return member1A_list, member2A_list, family_list
