@@ -5,6 +5,7 @@ from rest_framework import generics, permissions
 from .models import BaseEvent
 from .serializers import BaseEventSerializer
 
+
 class ListEventsHomeAPIView(generics.ListAPIView):
     """List events for a group depending on the chosen
     time window. By default only returns current events."""

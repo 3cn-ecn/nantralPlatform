@@ -3,6 +3,13 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import ReactDOM, { render } from "react-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+var dayjs = require("dayjs");
+var isToday = require("dayjs/plugin/isToday");
+dayjs.extend(isToday);
+var isTomorrow = require("dayjs/plugin/isTomorrow");
+dayjs.extend(isTomorrow);
+require("dayjs/locale/fr");
+dayjs.locale("fr");
 
 interface urls {
   add: string;
@@ -21,6 +28,7 @@ interface eventInfos {
   slug: string;
   number_of_participants: number;
   get_absolute_url: string;
+  get_group_name: string;
 }
 
 const eventLink: React.CSSProperties = {
@@ -77,7 +85,7 @@ function Event(props): JSX.Element {
 
   return (
     <div>
-      <h3>{eventInfos.date}</h3>
+      <h3>{getDate(eventInfos.date)}</h3>
       <div className={`card pt-0 bg-${eventInfos.color}`} style={cardStyle}>
         <div className="card-body">
           <a
@@ -87,10 +95,10 @@ function Event(props): JSX.Element {
           >
             {" "}
             <h5 className="card-title">
-              {eventInfos.title} • Début : {eventInfos.date} •{" "}
-              {eventInfos.location}
+              {eventInfos.title} • Début :{" "}
+              {dayjs(eventInfos.date).format("HH:mm")} • {eventInfos.location}
             </h5>
-            <h6 className="card-subtitle mb-2">{eventInfos.group}</h6>
+            <h6 className="card-subtitle mb-2">{eventInfos.get_group_name}</h6>
           </a>
           <h6 className="card-subtitle mb-2">
             <ParticipateButton
@@ -151,3 +159,13 @@ render(
   />,
   document.getElementById("root")
 );
+
+function getDate(date: Date): string {
+  if (dayjs(date).isToday) {
+    return "Aujourd'hui";
+  }
+  if (dayjs(date).isTomorrow) {
+    return "Demain";
+  }
+  return dayjs(date).format("dddd D MMMM");
+}

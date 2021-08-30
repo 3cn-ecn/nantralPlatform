@@ -54,6 +54,10 @@ class AbstractPost(models.Model):
     def get_group(self) -> Group:
         return get_object_from_full_slug(self.group)
 
+    @property
+    def get_group_name(self) -> Group:
+        return get_object_from_full_slug(self.group).name
+
     def save(self, *args, **kwargs):
         # compression des images
         self.image = compressModelImage(
