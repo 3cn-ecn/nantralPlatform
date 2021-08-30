@@ -3,11 +3,11 @@ from datetime import datetime
 from rest_framework import generics, permissions
 
 from .models import BaseEvent
-from .serializers import BaseEventSerializer
+from .serializers import *
 
 
 class ListEventsHomeAPIView(generics.ListAPIView):
-    """List events for a group depending on the chosen
+    """List all events for a user depending on the chosen
     time window. By default only returns current events."""
     serializer_class = BaseEventSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -22,6 +22,22 @@ class ListEventsHomeAPIView(generics.ListAPIView):
         context = super(ListEventsHomeAPIView, self).get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+class ListEventsParticipatingAPIView(generics.ListAPIView):
+    """List the persons participating to an event.
+    Only allowed to members of the group to which the event belongs."""
+    serializer_class = EventParticipatingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        eventSlug = self.kwargs['event_slug']
+        event = BaseEvent.objects.get(slug=eventSlug)
+        group = event.get_group
+        if group.is_member(user):
+            return event.participants
+        return []
 
 
 class ListEventsGroupAPIView(generics.ListAPIView):

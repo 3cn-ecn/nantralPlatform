@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import BaseEvent
+from apps.student.models import Student
 
 
 class BaseEventSerializer(serializers.ModelSerializer):
@@ -23,3 +24,12 @@ class BaseEventSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         group = obj.get_group
         return group.is_member(user)
+
+
+class EventParticipatingSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField()
+    get_absolute_url = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Student
+        fields = ['name', 'get_absolute_url']
