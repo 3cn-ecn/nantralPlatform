@@ -84,69 +84,86 @@ function Event(props): JSX.Element {
   const [isParticipant, setIsParticipant] = useState(true);
 
   return (
-    <div>
-      <h3>{getDate(eventInfos.date)}</h3>
-      <div className={`card pt-0 bg-${eventInfos.color}`} style={cardStyle}>
-        <div className="card-body">
-          <a
-            href={eventInfos.get_absolute_url}
-            style={eventLink}
-            className="mb-1"
-          >
-            {" "}
-            <h5 className="card-title">
-              {eventInfos.title} • Début :{" "}
-              {dayjs(eventInfos.date).format("HH:mm")} • {eventInfos.location}
-            </h5>
-            <h6 className="card-subtitle mb-2">{eventInfos.get_group_name}</h6>
-          </a>
-          <h6 className="card-subtitle mb-2">
-            <ParticipateButton
-              number_of_participants={eventInfos.number_of_participants}
-              urls={urls}
-              eventInfos={eventInfos}
-            />
-          </h6>
-          <p
-            className="card-text"
-            dangerouslySetInnerHTML={{ __html: eventInfos.description }}
-          ></p>
-        </div>
+    <div className={`card pt-0 bg-${eventInfos.color}`} style={cardStyle}>
+      <div className="card-body">
+        <a
+          href={eventInfos.get_absolute_url}
+          style={eventLink}
+          className="mb-1"
+        >
+          {" "}
+          <h5 className="card-title">
+            {eventInfos.title} • Début :{" "}
+            {dayjs(eventInfos.date).format("HH:mm")} • {eventInfos.location}
+          </h5>
+          <h6 className="card-subtitle mb-2">{eventInfos.get_group_name}</h6>
+        </a>
+        <h6 className="card-subtitle mb-2">
+          <ParticipateButton
+            number_of_participants={eventInfos.number_of_participants}
+            urls={urls}
+            eventInfos={eventInfos}
+          />
+        </h6>
+        <p
+          className="card-text"
+          dangerouslySetInnerHTML={{ __html: eventInfos.description }}
+        ></p>
       </div>
-
-      <br />
-      <br />
     </div>
   );
 }
 
 function Root(props): JSX.Element {
-  const [eventInfos, setEventInfos] = useState([]);
+  const [eventInfos, setEventInfos] = useState(new Map());
   useEffect(() => {
     async function getEvents(): Promise<void> {
       await axios
         .get(props.eventsApiUrl)
         .then((res) => {
-          setEventInfos(res.data);
+          let events: eventInfos[] = res.data;
+          let orderedEventsInfoMap = new Map();
+          for (let event of events) {
+            let eventReadableDate = getDate(event.date);
+            let orderedEventsInfo = orderedEventsInfoMap.get(eventReadableDate);
+            if (orderedEventsInfo != undefined) {
+              orderedEventsInfo.push(event);
+              orderedEventsInfoMap.set(eventReadableDate, orderedEventsInfo);
+            } else {
+              orderedEventsInfoMap.set(eventReadableDate, [event]);
+            }
+          }
+          setEventInfos(orderedEventsInfoMap);
         })
         .catch((err) => {
-          setEventInfos([]);
+          setEventInfos(new Map());
         });
     }
     getEvents();
   }, []);
   return (
     <>
-      {eventInfos.map((e, i) => (
-        <Event
-          key={i}
-          eventInfos={e}
-          urls={{
-            add: props.eventsRemoveParticipant,
-            remove: props.eventsRemoveParticipant,
-          }}
-        />
-      ))}
+      {Array.from(eventInfos, (events, key) => {
+        return (
+          <div>
+            <h3>{events[0]}</h3>
+            {events[1].map((el, i) => {
+              return (
+                <Event
+                  key={key + i.toString()}
+                  eventInfos={el}
+                  urls={{
+                    add: props.eventsRemoveParticipant,
+                    remove: props.eventsRemoveParticipant,
+                  }}
+                />
+              );
+            })}
+            <br />
+            <br />
+          </div>
+        );
+      })}
     </>
   );
 }

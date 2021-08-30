@@ -13,7 +13,9 @@ class ListEventsHomeAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return BaseEvent.objects.filter(date__gte=datetime.today())
+        events = BaseEvent.objects.filter(date__gte=datetime.today())
+        return [event for event in events if event.can_view(
+            self.request.user)]
 
 
 class ListEventsGroupAPIView(generics.ListAPIView):
