@@ -42,23 +42,23 @@ class BaseEventTestCase(TestCase, TestMixin):
         url = reverse('event:add-participant', args=[self.event.slug])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(self.event.get_number_participants, 0)
+        self.assertEqual(self.event.number_of_participants, 0)
 
         self.client.login(username=self.u2, password="pass")
         # You get redirected at the end of the function
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(self.event.get_number_participants, 1)
+        self.assertEqual(self.event.number_of_participants, 1)
         # Check that you only get counted once
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(self.event.get_number_participants, 1)
+        self.assertEqual(self.event.number_of_participants, 1)
 
         url = reverse('event:remove-participant', args=[self.event.slug])
         resp = self.client.get(url)
         # You get redirected at the end of the function
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(self.event.get_number_participants, 0)
+        self.assertEqual(self.event.number_of_participants, 0)
 
     def test_event_update_view(self):
         url = reverse("event:edit", args=[self.event.slug])

@@ -15,7 +15,7 @@
     <p>Organisé par <a href='{{group.get_absolute_url}}'>{{group.name}}</a></p>
 
     <div class="btn-group btn-group-sm" role="group">
-        <button type="button" class="btn btn-secondary btn-lg active">{{object.get_number_participants}} participants</button>
+        <button type="button" class="btn btn-secondary btn-lg active">{{object.number_of_participants}} participants</button>
         {% if request.user.is_authenticated %}
             {%if is_participating %}
                 <a href='{% url "event:remove-participant" object.slug %}' class="btn btn-secondary btn-lg" role="button">

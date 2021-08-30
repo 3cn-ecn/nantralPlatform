@@ -95,7 +95,7 @@
                         <h6 class="card-subtitle mb-2">{{event.get_group.name}}</h6>
                         <h6 class="card-subtitle mb-2">
                           <div class="btn-group" role="group">
-                          <button type="button" class="btn btn-secondary disabled">{{event.get_number_participants}} <i class="fas fa-users"></i></button>
+                          <button type="button" class="btn btn-secondary disabled">{{event.number_of_participants}} <i class="fas fa-users"></i></button>
                           {% if request.user.is_authenticated %}
                               {%if is_participating %}
                                   <a href='{% url "event:remove-participant" event.slug %}?redirect=home' class="btn btn-secondary" role="button">

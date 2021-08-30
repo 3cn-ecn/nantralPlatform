@@ -154,7 +154,7 @@ def add_participant(request, event_slug):
     event.participants.add(request.user.student)
     if request.GET.get('redirect'):
         return redirect('home:home')
-    return redirect(event.get_absolute_url())
+    return redirect(event.get_absolute_url)
 
 
 @login_required
@@ -164,7 +164,7 @@ def remove_participant(request, event_slug):
     event.participants.remove(request.user.student)
     if request.GET.get('redirect'):
         return redirect('home:home')
-    return redirect(event.get_absolute_url())
+    return redirect(event.get_absolute_url)
 
 
 @login_required

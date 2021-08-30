@@ -5,6 +5,15 @@ from rest_framework import generics, permissions
 from .models import BaseEvent
 from .serializers import BaseEventSerializer
 
+class ListEventsHomeAPIView(generics.ListAPIView):
+    """List events for a group depending on the chosen
+    time window. By default only returns current events."""
+    serializer_class = BaseEventSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return BaseEvent.objects.filter(date__gte=datetime.today())
+
 
 class ListEventsGroupAPIView(generics.ListAPIView):
     """List events for a group depending on the chosen

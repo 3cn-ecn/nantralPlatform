@@ -32,7 +32,7 @@ class BaseEvent(AbstractPost):
         verbose_name='Lien vers la billeterie', blank=True, max_length=200, null=True)
 
     @property
-    def get_number_participants(self) -> int:
+    def number_of_participants(self) -> int:
         return self.participants.all().count()
 
     def is_participating(self, user: User) -> bool:
@@ -43,6 +43,7 @@ class BaseEvent(AbstractPost):
         self.slug = f'bevent--{slugify(self.title)}-{self.date.year}-{self.date.month}-{self.date.day}'
         super(BaseEvent, self).save(*args, **kwargs)
 
+    @property
     def get_absolute_url(self):
         return reverse('event:detail', args=[self.slug])
 
