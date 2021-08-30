@@ -1,10 +1,9 @@
 ﻿import * as React from "react";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { CSSProperties } from "@material-ui/core/styles/withStyles";
 
 var dayjs = require("dayjs");
@@ -34,6 +33,7 @@ interface eventInfos {
   get_absolute_url: string;
   get_group_name: string;
   is_participating: boolean;
+  is_member: boolean;
 }
 
 const eventLink: React.CSSProperties = {
@@ -53,16 +53,18 @@ function ParticipateButton(props): JSX.Element {
   const [numberOfParticipants, setNumberOfParticipants] = useState(
     props.number_of_participants
   );
+
+  const faIconStyle: CSSProperties = {
+    marginRight: 7,
+  };
   return (
     <div className="btn-group" role="group">
-      <Button variant="secondary" color="muted" size="sm">
+      <Button variant="secondary" size="sm">
+        <i className="fas fa-users" style={faIconStyle}></i>
         {numberOfParticipants}
-        {"  "}
-        <i className="fas fa-users"></i>
       </Button>
       <Button
         variant="secondary"
-        color="muted"
         size="sm"
         onClick={() => {
           axios
@@ -79,9 +81,32 @@ function ParticipateButton(props): JSX.Element {
         }}
       >
         {(() => {
-          return isParticipating ? "Je ne participe plus" : "Je participe";
+          if (isParticipating) {
+            return (
+              <>
+                <i className="fas fa-check" style={faIconStyle}></i>
+                {"Je participe"}
+              </>
+            );
+          }
+          return (
+            <>
+              <i className="fas fa-times" style={faIconStyle}></i>
+              {"Je ne participe plus"}
+            </>
+          );
         })()}
       </Button>
+      {(() => {
+        if (eventInfos.is_member) {
+          return (
+            <Button variant="secondary" size="sm">
+              <i className="fas fa-list" style={faIconStyle}></i>
+              {"Liste des participant.e.s"}
+            </Button>
+          );
+        }
+      })()}
     </div>
   );
 }
