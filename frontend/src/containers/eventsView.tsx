@@ -84,15 +84,15 @@ function ParticipateButton(props): JSX.Element {
           if (isParticipating) {
             return (
               <>
-                <i className="fas fa-check" style={faIconStyle}></i>
-                {"Je participe"}
+                <i className="fas fa-times" style={faIconStyle}></i>
+                {"Je ne participe plus"}
               </>
             );
           }
           return (
             <>
-              <i className="fas fa-times" style={faIconStyle}></i>
-              {"Je ne participe plus"}
+              <i className="fas fa-check" style={faIconStyle}></i>
+              {"Je participe"}
             </>
           );
         })()}
