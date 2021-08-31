@@ -3,6 +3,7 @@ from datetime import datetime
 from rest_framework import generics, permissions
 
 from .models import BaseEvent
+from apps.group.models import Group
 from .serializers import *
 
 
@@ -20,6 +21,27 @@ class ListEventsHomeAPIView(generics.ListAPIView):
 
     def get_serializer_context(self):
         context = super(ListEventsHomeAPIView, self).get_serializer_context()
+        context.update({"request": self.request})
+        return context
+
+
+class ListAllEventsGroupAPIView(generics.ListAPIView):
+    """List all events for a group depending on the chosen
+    time window. By default only returns current events."""
+    serializer_class = BaseEventSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        group = self.kwargs["group"]
+        events = BaseEvent.objects.filter(
+            group=group,
+            date__gte=datetime.today()).order_by("date")
+        return [event for event in events if event.can_view(
+            self.request.user)]
+
+    def get_serializer_context(self):
+        context = super(ListAllEventsGroupAPIView,
+                        self).get_serializer_context()
         context.update({"request": self.request})
         return context
 
