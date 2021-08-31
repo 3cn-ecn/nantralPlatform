@@ -37,7 +37,7 @@ class SuggestionView(LoginRequiredMixin, FormView):
             body=f"{form.cleaned_data['description']} <br/> <a href='http://{get_current_site(self.request)}{self.request.user.student.get_absolute_url}'>Clique pour découvrir qui propose ça.</a>"
         )
         messages.success(
-            self.request, 'Votre suggestion a été enregistré merci')
+            self.request, 'Votre suggestion a été enregistrée merci')
         return redirect('home:home')
 
 
