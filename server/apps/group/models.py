@@ -12,6 +12,10 @@ from apps.utils.upload import PathAndRename
 from apps.utils.github import create_issue, close_issue
 from apps.utils.compress import compressModelImage
 from apps.utils.slug import *
+from django.conf import settings
+
+import uuid
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
 
 path_and_rename_group = PathAndRename("groups/logo")
@@ -29,11 +33,11 @@ class Group(models.Model):
 
     # présentation
     logo = models.ImageField(
-        verbose_name='Logo du groupe', blank=True, null=True, 
+        verbose_name='Logo du groupe', blank=True, null=True,
         upload_to=path_and_rename_group,
         help_text="Votre logo sera affiché au format 306x306 pixels.")
     banniere = models.ImageField(
-        verbose_name='Bannière', blank=True, null=True, 
+        verbose_name='Bannière', blank=True, null=True,
         upload_to=path_and_rename_group_banniere,
         help_text="Votre bannière sera affichée au format 1320x492 pixels.")
     summary = models.CharField('Résumé', max_length=500, null=True, blank=True)
@@ -81,27 +85,30 @@ class Group(models.Model):
             slug = slugify(self.name)
             if type(self).objects.filter(slug=slug):
                 id = 1
-                while type(self).objects.filter(slug=f'{slug}-{id}'): id += 1
+                while type(self).objects.filter(slug=f'{slug}-{id}'):
+                    id += 1
                 slug = f'{slug}-{id}'
             self.slug = slug
         # compression des images
-        self.logo = compressModelImage(self, 'logo', size=(500,500), contains=True)
-        self.banniere = compressModelImage(self, 'banniere', size=(1320,492), contains=False)
+        self.logo = compressModelImage(
+            self, 'logo', size=(500, 500), contains=True)
+        self.banniere = compressModelImage(
+            self, 'banniere', size=(1320, 492), contains=False)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
 
     @property
     def app(self):
         return self._meta.app_label
-    
+
     @property
     def full_slug(self):
         return f'{self.app}--{self.slug}'
-    
+
     @property
     def get_absolute_url(self):
         return reverse(self.app+':detail', kwargs={'slug': self.slug})
-    
+
     @property
     def modelName(self):
         '''Plural Model name, used in templates'''
@@ -115,7 +122,7 @@ class NamedMembership(models.Model):
 
     class Meta:
         abstract = True
-    
+
     def __str__(self):
         return self.student
 
@@ -129,7 +136,7 @@ class AdminRightsRequest(models.Model):
     reason = models.CharField(
         max_length=100, verbose_name="Raison de la demande", blank=True)
     domain = models.CharField(max_length=64)
-    issue = models.IntegerField(blank=True)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def save(self, domain: str, *args, **kwargs):
         self.date = timezone.now()
@@ -137,18 +144,29 @@ class AdminRightsRequest(models.Model):
         self.issue = 0
         super(AdminRightsRequest, self).save()
         group = get_object_from_full_slug(self.group)
-        title = f'[Admin Req] {group} - {self.student}'
-        body = f'<a href="{self.accept_url}">Accepter</a> </br>\
-            <a href="{self.deny_url}">Refuser</a>'
-        self.issue = create_issue(title=title, body=body)
+
+        webhook = DiscordWebhook(
+            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(title=f'{self.student} demande à devenir admin de {group}',
+                             description=self.reason,
+                             color=242424)
+        embed.add_embed_field(
+            name='Accepter', value=f"[Accepter]({self.accept_url})", inline=True)
+        embed.add_embed_field(
+            name='Refuser', value=f"[Refuser]({self.deny_url})", inline=True)
+        print(self.student.picture)
+        if(self.student.picture):
+            embed.thumbnail = {"url": self.student.picture.url}
+        webhook.add_embed(embed)
+        webhook.execute()
         super(AdminRightsRequest, self).save()
 
-    @property
+    @ property
     def accept_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
         return f"http://{self.domain}{reverse(app+':accept-admin-req', kwargs={'slug': slug,'id': self.id})}"
 
-    @property
+    @ property
     def deny_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
         return f"http://{self.domain}{reverse(app+':deny-admin-req', kwargs={'slug': slug, 'id': self.id})}"
