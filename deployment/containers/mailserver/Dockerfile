@@ -1,0 +1,1 @@
+﻿FROM iredmail/mariadb:stable
