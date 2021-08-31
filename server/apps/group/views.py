@@ -39,10 +39,6 @@ class BaseDetailGroupView(DetailView):
         # infos
         context['sociallinks'] = SocialLink.objects.filter(
             slug=group.full_slug)
-        events = BaseEvent.objects.filter(
-            group=group.full_slug, date__gte=date.today()).order_by('date')
-        context['events'] = [event for event in events if event.can_view(
-            self.request.user)]
         posts = Post.objects.filter(
             group=group.full_slug, publication_date__gte=date.today()-timedelta(days=10)).order_by('-publication_date')
         context['posts'] = [
