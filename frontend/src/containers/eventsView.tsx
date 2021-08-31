@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import axios from "axios";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { Spinner } from "react-bootstrap";
 import { getDate } from "./eventsView/utils";
 import { Event } from "./eventsView/event";
 import { spinnerDivStyle, spinnerStyle } from "./eventsView/styles";
@@ -42,7 +42,7 @@ function Root(props): JSX.Element {
   if (isLoading) {
     return (
       <div style={spinnerDivStyle}>
-        <CircularProgress style={spinnerStyle} />
+        <Spinner animation="border" role="status" style={spinnerStyle} />
       </div>
     );
   }

@@ -4,12 +4,12 @@ export const spinnerDivStyle: CSSProperties = {
   display: "flex",
   justifyContent: "center",
   alignContent: "center",
-  fontSize: "5rem",
+  fontSize: "1.5rem",
 };
 
 export const spinnerStyle: CSSProperties = {
-  width: 75,
   height: 75,
+  width: 75,
 };
 
 export const eventLink: CSSProperties = {

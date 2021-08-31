@@ -1,9 +1,8 @@
 ﻿import * as React from "react";
-import { useState } from "react";
+import { useState, CSSProperties } from "react";
 import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import { CSSProperties } from "@material-ui/core/styles/withStyles";
+import { Spinner } from "react-bootstrap";
 import { EventInfos, Urls, Student } from "./interfaces";
 import { spinnerDivStyle, spinnerStyle } from "./styles";
 
@@ -103,7 +102,7 @@ export function ParticipateButton(props): JSX.Element {
         <Modal.Body>
           {isParticipantsLoading ? (
             <div style={spinnerDivStyle}>
-              <CircularProgress style={spinnerStyle} />
+              <Spinner animation="border" role="status" style={spinnerStyle} />
             </div>
           ) : (
             <ul>
