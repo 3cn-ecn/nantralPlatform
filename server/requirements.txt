@@ -42,3 +42,4 @@ toml==0.10.2
 urllib3==1.26.5
 zipp==3.4.1
 numpy==1.21.2
+discord-webhook==0.14.0

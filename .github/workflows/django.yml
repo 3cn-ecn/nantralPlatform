@@ -19,6 +19,7 @@ jobs:
       GITHUB_TOKEN: test
       S3_BUCKET: test
       MAPBOX_API_KEY: test
+      DISCORD_ADMIN_MODERATION_WEBHOOK: test
 
     steps:
       - uses: actions/checkout@v2
