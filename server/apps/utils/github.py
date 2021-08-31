@@ -7,6 +7,7 @@ def create_issue(title: str, body: str):
         'title': title,
         'body': body
     }
+    print(body)
     resp = requests.post(f'https://api.github.com/repos/{settings.GITHUB_REPO}/issues',
                          json=issue, auth=(settings.GITHUB_USER, settings.GITHUB_TOKEN))
     if resp.status_code != 201:
