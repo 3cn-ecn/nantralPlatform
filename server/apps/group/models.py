@@ -9,7 +9,6 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
-from apps.utils.github import create_issue, close_issue
 from apps.utils.compress import compressModelImage
 from apps.utils.slug import *
 from django.conf import settings
@@ -141,7 +140,6 @@ class AdminRightsRequest(models.Model):
     def save(self, domain: str, *args, **kwargs):
         self.date = timezone.now()
         self.domain = domain
-        self.issue = 0
         super(AdminRightsRequest, self).save()
         group = get_object_from_full_slug(self.group)
 
@@ -154,7 +152,6 @@ class AdminRightsRequest(models.Model):
             name='Accepter', value=f"[Accepter]({self.accept_url})", inline=True)
         embed.add_embed_field(
             name='Refuser', value=f"[Refuser]({self.deny_url})", inline=True)
-        print(self.student.picture)
         if(self.student.picture):
             embed.thumbnail = {"url": self.student.picture.url}
         webhook.add_embed(embed)
@@ -190,11 +187,23 @@ class AdminRightsRequest(models.Model):
         })
         self.student.user.email_user(f'Vous êtes admin de {group}', mail,
                                      'group-manager@nantral-platform.fr', html_message=mail)
-        close_issue(self.issue)
+        webhook = DiscordWebhook(
+            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été acceptée.',
+                             description="",
+                             color=00000)
+        webhook.add_embed(embed)
+        webhook.execute()
         self.delete()
 
     def deny(self):
-        close_issue(self.issue)
+        webhook = DiscordWebhook(
+            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été refusée.',
+                             description="",
+                             color=00000)
+        webhook.add_embed(embed)
+        webhook.execute()
         self.delete()
 
 
