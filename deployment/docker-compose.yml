@@ -57,7 +57,7 @@ services:
 
   mail:
     build: ./containers/mailserver
-    hostname: mailserver
+    container_name: mailserver
     ports:
       - 81:80
       - 444:443
