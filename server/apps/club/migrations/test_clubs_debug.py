@@ -3,6 +3,8 @@ import os
 from django.conf import settings
 from django.db import migrations
 from apps.club.models import Club, BDX
+from apps.club.fixtures.fixture import dummyClubs
+import random
 
 
 def create_clubs(apps, schema_editor):
@@ -11,10 +13,28 @@ def create_clubs(apps, schema_editor):
     )
     bde.save()
     bde.refresh_from_db()
-    Club.objects.create(
-        name='TestClubBDE',
-        bdx_type=bde
+    bds = BDX(
+        name='BDA'
     )
+    bds.save()
+    bds.refresh_from_db()
+    bda = BDX(
+        name='BDS'
+    )
+    bda.save()
+    bda.refresh_from_db()
+    for club in dummyClubs:
+        bdx_id = random.randint(0, 2)
+        if(bdx_id == 0):
+            bdx_type = bde
+        elif (bdx_id == 1):
+            bdx_type = bds
+        else:
+            bdx_type = bda
+        Club.objects.create(
+            bdx_type=bdx_type,
+            **club
+        )
 
 
 migrations_files = os.listdir('apps/club/migrations')
