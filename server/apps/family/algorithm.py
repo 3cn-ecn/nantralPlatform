@@ -223,7 +223,8 @@ def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, q
 	# on sélectionne les familles avec un 1A seul pour le critère
 	lonely_family_list = [f for f in family_list if f['nb_critery_1A']==1 and f['nb_critery_2A']==0]
 	# pour chaque famille avec un membre seul
-	for lonely_family in lonely_family_list:
+	while lonely_family_list:
+		lonely_family = lonely_family_list[0]
 		# on récupère le membre seul dans la famille
 		lonely_member_id = [
 			i 
@@ -254,6 +255,8 @@ def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, q
 			family_less = [i for i in range(len(family_list)) if family_list[i]['family']==candidate_member['family']][0]
 			family_list[family_more]['nb_critery_1A'] += 1
 			family_list[family_less]['nb_critery_1A'] -= 1
+		# on met à jour la liste des familles
+		lonely_family_list = [f for f in family_list if f['nb_critery_1A']==1 and f['nb_critery_2A']==0]
 	return member1A_list
 
 
