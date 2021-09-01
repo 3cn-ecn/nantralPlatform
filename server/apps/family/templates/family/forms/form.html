@@ -1,5 +1,5 @@
 {% load crispy_forms_tags %}
-
+{{ form.non_field_errors }}
 <div class="row">
     {% for field in form %}
         {% if forloop.first %}
@@ -21,7 +21,7 @@
                             <tbody class="card-body">
             {% endif %}
                                 <tr><fieldset>
-                                    <td>{{ field.label }}</td>
+                                    <td>{{ field.label }}<br><small>{{ field.errors }}</small></td>
                                     {% for radio in field %}
                                         <td class="text-center"><div class="form-check form-check-inline">
                                             {{ radio.tag }}
@@ -38,7 +38,7 @@
             <div class="col-12 -6 mb-4">
                 <div class="card">
                     <fieldset>
-                        <legend class="card-header">{{ field.label }}</legend>
+                        <legend class="card-header">{{ field.label }}<br><small>{{ field.errors }}</small></legend>
                         <div class="card-body">
                             {% for radio in field %}
                                 <div class="form-check">
@@ -76,5 +76,9 @@
     }
     .card .table tr:last-child td {
         border-bottom-width: 0px;
+    }
+    ul.errorlist {
+        color: var(--bs-danger);
+        margin-bottom: 0;
     }
 </style>

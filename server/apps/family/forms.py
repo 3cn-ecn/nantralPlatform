@@ -80,6 +80,7 @@ class MemberQuestionsForm(forms.Form):
 
     def __init__(self, page, is_2Aplus, initial, *args, **kwargs):
         super(MemberQuestionsForm, self).__init__(initial=initial, *args, **kwargs)
+        self.use_required_attribute = False
         questions = QuestionMember.objects.filter(page=page)
         last_name = None
         for question in questions:
@@ -96,7 +97,7 @@ class MemberQuestionsForm(forms.Form):
                         for o in question.option_set.all()
                     ],
                     help_text = question.details,
-                    widget = forms.RadioSelect(attrs={'class':'form-check-input', 'required':'False'})
+                    widget = forms.RadioSelect(attrs={'class':'form-check-input'})
                 )
                 self[name].group = question.group
                 if not last_name or self[name].group != self[last_name].group:
