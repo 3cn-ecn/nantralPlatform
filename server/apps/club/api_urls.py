@@ -6,5 +6,5 @@ app_name = 'event'
 
 urlpatterns = [
     path('my-clubs', ListMyClubAPIView.as_view(),
-         name='list-my-events'),
+         name='list-my-clubs'),
 ]

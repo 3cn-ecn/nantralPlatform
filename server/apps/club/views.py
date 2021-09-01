@@ -14,10 +14,6 @@ class ListClubView(TemplateView):
     def get_context_data(self, **kwargs):
         context = {'club_list': {}}
         clubList = {}
-        if self.request.user.is_authenticated:
-            allMembersClub = Club.objects.filter(members__user=self.request.user).only(
-                'name', 'slug', 'logo', 'bdx_type')
-            clubList.setdefault("Mes Clubs et Assos", allMembersClub)
         allClubs = Club.objects.all().select_related(
             "bdx_type").only('name', 'slug', 'logo', 'bdx_type')
         for club in allClubs:
