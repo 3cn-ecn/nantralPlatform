@@ -69,11 +69,10 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             cd nantralPlatform
-            cd deployment
-            docker-compose down
             git pull
-            cd ../frontend
+            cd frontend
             npm install
             npm start
             cd ../deployment
+            docker-compose build
             docker-compose up -d
