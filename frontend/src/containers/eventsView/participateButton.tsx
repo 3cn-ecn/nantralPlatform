@@ -105,13 +105,11 @@ export function ParticipateButton(props): JSX.Element {
             </div>
           ) : (
             <ul>
-              {participants.map((e: Student) => {
+              {participants.map((e: Student, i: number) => {
                 return (
-                  <>
-                    <li>
-                      <a href={e.get_absolute_url}>{e.name}</a>
-                    </li>
-                  </>
+                  <li key={i}>
+                    <a href={e.get_absolute_url}>{e.name}</a>
+                  </li>
                 );
               })}
             </ul>
