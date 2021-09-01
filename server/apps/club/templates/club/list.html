@@ -1,39 +1,42 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load file_url %}
-
 {% block content %}
 
 <div class="row">
-	<div class="col">
-		<h1>Clubs Nantraliens</h1>
-	</div>
-	<!--div class="col text-end">
+  <div class="col">
+    <h1>Clubs Nantraliens</h1>
+  </div>
+  <!--div class="col text-end">
 		<input type="textbox">
 	</div-->
 </div>
 <br />
 
 {% for key, value in club_list.items %}
-	<h2>{{ key }}</h2>
-	<div class="grille">
-		{% for club in value %}
-			<div class="grille-icon text-center" style="transform:rotate(0);">
-				<a href="{{ club.get_absolute_url }}" class="stretched-link">
-					<div class="ratio ratio-1x1">
-						{% if club.logo %}
-							<img src="{{ club.logo|file_url }}">
-						{% else %}
-							<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
-						{% endif %}
-					</div>
-				</a>
-				<h6>
-					{{ club.name }}
-				</h6>
-			</div>
-		{% endfor %}
-	</div>
+<div id="root"></div>
+<h2>{{ key }}</h2>
+<div class="grille">
+  {% for club in value %}
+  <div class="grille-icon text-center" style="transform: rotate(0)">
+    <a href="{{ club.get_absolute_url }}" class="stretched-link">
+      <div class="ratio ratio-1x1">
+        {% if club.logo %}
+        <img src="{{ club.logo|file_url }}" />
+        {% else %}
+        <img src="{% static 'img/logo.svg' %}" style="opacity: 0.3" />
+        {% endif %}
+      </div>
+    </a>
+    <h6>{{ club.name }}</h6>
+  </div>
+  {% endfor %}
+</div>
 {% endfor %}
-
+{% endblock %} 
+{% block script %}
+<script>
+  const myClubsURL = "{% url 'club_api:list-my-clubs' %}";
+</script>
+<script src='{% static "js/clubsList.js" %}'></script>
 {% endblock %}

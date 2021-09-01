@@ -1,7 +1,6 @@
 ﻿import * as React from "react";
 import { useState, CSSProperties } from "react";
 import { Button, Modal } from "react-bootstrap";
-import axios from "axios";
 import { Spinner } from "react-bootstrap";
 import { EventInfos, Urls, Student } from "./interfaces";
 import { spinnerDivStyle, spinnerStyle } from "./styles";
@@ -38,13 +37,12 @@ export function ParticipateButton(props): JSX.Element {
         size="sm"
         onClick={() => {
           setLoading(true);
-          axios
-            .get(
-              isParticipating
-                ? urls.remove.replace("1", eventInfos.slug)
-                : urls.add.replace("1", eventInfos.slug)
-            )
-            .then(() => {
+          fetch(
+            isParticipating
+              ? urls.remove.replace("1", eventInfos.slug)
+              : urls.add.replace("1", eventInfos.slug)
+          )
+            .then((resp) => {
               let offset = isParticipating ? -1 : 1;
               setIsParticipating(!isParticipating);
               setNumberOfParticipants(numberOfParticipants + offset);
@@ -78,10 +76,11 @@ export function ParticipateButton(props): JSX.Element {
               onClick={() => {
                 setIsParticipantsLoading(true);
                 handleOpen();
-                axios
-                  .get(urls.participants.replace("1", eventInfos.slug))
+                fetch(urls.participants.replace("1", eventInfos.slug))
                   .then((res) => {
-                    setParticipants(res.data);
+                    res.json().then((data) => {
+                      setParticipants(data);
+                    });
                   })
                   .catch((err) => {
                     setParticipants([]);
@@ -106,13 +105,11 @@ export function ParticipateButton(props): JSX.Element {
             </div>
           ) : (
             <ul>
-              {participants.map((e: Student) => {
+              {participants.map((e: Student, i: number) => {
                 return (
-                  <>
-                    <li>
-                      <a href={e.get_absolute_url}>{e.name}</a>
-                    </li>
-                  </>
+                  <li key={i}>
+                    <a href={e.get_absolute_url}>{e.name}</a>
+                  </li>
                 );
               })}
             </ul>
