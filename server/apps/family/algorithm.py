@@ -35,10 +35,13 @@ def get_answer(member:MembershipFamily, question):
 		ans = answers[0].answer
 		if member.role == '2A+' and question['equivalent'] is not None:
 			# we check if we have to penderate with a family question
-			f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
-			f_ans_value = f_ans.answer
-			quota = f_ans.question.quota/100
-			ans = (1-quota)*ans + quota*f_ans_value
+			try: 
+				f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
+				f_ans_value = f_ans.answer
+				quota = f_ans.question.quota/100
+				ans = (1-quota)*ans + quota*f_ans_value
+			except IndexError:
+				raise Exception(f'La famille {member.group} n\'a pas répondu aux questions.')
 		return ans
 	
 	elif len(answers) == 0:
@@ -46,7 +49,10 @@ def get_answer(member:MembershipFamily, question):
 		if member.role == '2A+' and question['equivalent'] is not None:
 			# ordinary case : it is an only-family question (quota=100)
 			# or if he didn't answer we take the family answer
-			f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
+			try: 
+				f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
+			except IndexError:
+				raise Exception(f'La famille {member.group} n\'a pas répondu aux questions.')
 			return f_ans.answer
 		else:
 			return np.nan
@@ -225,9 +231,8 @@ def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, q
 			if member1A_list[i][q_name] and member1A_list[i]['family']==lonely_family['family']
 		][0]
 		lonely_member = member1A_list[lonely_member_id]
-		print(f'{lonely_member} is alone')
 		# on sélectionne les familles qui ont déjà un membre avec ce critère où on peut rajouter le membre seul
-		candidate_family_list = [f for f in family_list if f['nb_critery_1A']>=1 or f['nb_critery_2A']>=1]
+		candidate_family_list = [f for f in family_list if f!=lonely_family and (f['nb_critery_1A']>=1 or f['nb_critery_2A']>=1)]
 		# on prend les membres candidats n'ayant pas ce critère avec qui on peut échanger
 		candidate_member_list = [m for m in member1A_list if not m[q_name] and m['family'] in candidate_family_list]
 		# si il reste des membres avec qui échanger
