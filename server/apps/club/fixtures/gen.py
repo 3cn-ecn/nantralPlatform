@@ -1,5 +1,12 @@
-﻿import json
+﻿# ---- Description ----
+# This file generates the fixtures for the Club model.
+# It generates 200 clubs with a dummy data.
+# Run it from the fixtures directory to generate fixtures.json, which is then used in the initial migrations.
+# If changes are made to the required fields of the Club model, this file WILL HAVE TO BE EDITED accordingly.
+
+import json
 import copy
+
 clubtemp = {
     "name": "Club 1",
     "alt_name": "Le club 1",
@@ -14,14 +21,23 @@ clubtemp = {
     "meeting_place": "Chez le/la prez du club 1",
     "meeting_hour": "Mardi à 10h"
 }
+
+
 L = []
-for i in range(1, 200):
-    newClub = copy.deepcopy(clubtemp)
-    newClub["name"] = f'Club {i}'
-    newClub["alt_name"] = f'Le club {i}'
-    newClub["summary"] = f'Ceci est le club {i}'
-    newClub["email"] = f'club{i}@nantral-platform.fr'
-    newClub["meeting_place"] = f'Chez le/la prez du club {i}'
-    L.append(newClub)
-with open('./apps/club/fixtures/data.json', 'w') as outfile:
-    json.dump(L, outfile)
+
+
+def generate():
+    for i in range(1, 200):
+        newClub = copy.deepcopy(clubtemp)
+        newClub["name"] = f'Club {i}'
+        newClub["alt_name"] = f'Le club {i}'
+        newClub["summary"] = f'Ceci est le club {i}'
+        newClub["email"] = f'club{i}@nantral-platform.fr'
+        newClub["meeting_place"] = f'Chez le/la prez du club {i}'
+        L.append(newClub)
+    with open('fixtures.json', 'w') as outfile:
+        json.dump(L, outfile)
+
+
+if __name__ == "__main__":
+    generate()

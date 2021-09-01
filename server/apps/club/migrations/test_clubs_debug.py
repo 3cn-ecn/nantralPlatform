@@ -3,8 +3,9 @@ import os
 from django.conf import settings
 from django.db import migrations
 from apps.club.models import Club, BDX
-from apps.club.fixtures.fixture import dummyClubs
 import random
+import json
+from pathlib import Path
 
 
 def create_clubs(apps, schema_editor):
@@ -23,6 +24,9 @@ def create_clubs(apps, schema_editor):
     )
     bda.save()
     bda.refresh_from_db()
+
+    with open(Path(__file__).parent / "../fixtures/fixtures.json") as f:
+        dummyClubs = json.load(f)
     for club in dummyClubs:
         bdx_id = random.randint(0, 2)
         if(bdx_id == 0):
@@ -41,7 +45,7 @@ migrations_files = os.listdir('apps/club/migrations')
 migrations_files.sort()
 migrations_files = [
     migrations_file for migrations_file in migrations_files if migrations_file[0:3].isnumeric()]
-latest_migration_file = migrations_files[-1][:-3]
+latest_migration_file = migrations_files[-1][: -3]
 
 
 if settings.DEBUG:
