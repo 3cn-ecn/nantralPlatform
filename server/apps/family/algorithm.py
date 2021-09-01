@@ -147,9 +147,11 @@ def loveScore(answersA, answersB, coeff_list):
 	somme_coeff = np.sum((1-np.isnan(answersA+answersB)) * coeff_list)
 
 	if somme_coeff:
+		# if we can calculate the score
 		return somme/somme_coeff
 	else:
-		raise Exception('One of the students has no answers')
+		# if one of the students has not answered to any coefficiented question
+		return np.inf
 
 
 def make_same_length(member1A_list, member2A_list, family_list):
@@ -185,7 +187,10 @@ def make_same_length(member1A_list, member2A_list, family_list):
 				j for j in range(len(member2A_list)) 
 				if member2A_list[j]['family']==family_list[i % n]['family']
 			]
-			index = random.choice(index_members)
+			try:
+				index = random.choice(index_members)
+			except IndexError:
+				raise Exception("Erreur : pas encore assez de 1A pour faire tourner l'algo.")
 			member2A_list = np.delete(member2A_list, index)
 			i += 1
 	
