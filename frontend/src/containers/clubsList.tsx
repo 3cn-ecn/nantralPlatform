@@ -2,8 +2,9 @@
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import { Spinner } from "react-bootstrap";
-import { spinnerDivStyle, spinnerStyle, clubStyle } from "./clubsList/styles";
+import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
 import { Club } from "./clubsList/interfaces";
+import { ClubIcon } from "./clubsList/clubIcon";
 
 function Root(props): JSX.Element {
   const [clubs, setClubs] = useState([]);
@@ -41,20 +42,7 @@ function Root(props): JSX.Element {
       <h2>Mes Clubs et Assos</h2>
       <div className="grille">
         {clubs.map((club: Club, key: number) => {
-          return (
-            <div
-              className="grille-icon text-center"
-              style={clubStyle}
-              key={key}
-            >
-              <a href={club.get_absolute_url} className="stretched-link">
-                <div className="ratio ratio-1x1">
-                  <img src={club.logo_url} style={{ opacity: club.opacity }} />
-                </div>
-              </a>
-              <h6>{club.name}</h6>
-            </div>
-          );
+          return <ClubIcon club={club} key={key} />;
         })}
       </div>
     </>
