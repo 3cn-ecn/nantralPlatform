@@ -2,7 +2,7 @@
 import os
 from django.conf import settings
 from django.db import migrations
-from apps.club.models import Club, BDX
+from apps.club.models import Club, BDX, NamedMembershipClub
 import random
 import json
 from pathlib import Path
@@ -27,6 +27,7 @@ def create_clubs(apps, schema_editor):
 
     with open(Path(__file__).parent / "../fixtures/fixtures.json") as f:
         dummyClubs = json.load(f)
+
     for club in dummyClubs:
         bdx_id = random.randint(0, 2)
         if(bdx_id == 0):
@@ -35,10 +36,16 @@ def create_clubs(apps, schema_editor):
             bdx_type = bds
         else:
             bdx_type = bda
-        Club.objects.create(
+        newClub = Club.objects.create(
             bdx_type=bdx_type,
             **club
         )
+        nbOfNewMembers = random.randint(1, 50)
+        for i in range(0, nbOfNewMembers):
+            studentID = random.randint(1, 199)
+            is_admin = random.random() > 0.9
+            NamedMembershipClub.objects.create(
+                group=newClub, function="Membre", student_id=studentID, admin=is_admin)
 
 
 migrations_files = os.listdir('apps/club/migrations')
