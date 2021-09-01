@@ -9,7 +9,10 @@
 
 {% block infos %}
     <p>
-        Adresse : <a href="https://www.google.com/maps/dir/?api=1&travelmode=transit&destination={{housing.address}}" target='_blank'>{{housing.address}}</a> - {{housing.details}}
+        Adresse : <a href="https://www.google.com/maps/dir/?api=1&travelmode=transit&destination={{housing.address}}" target='_blank'>{{housing.address}}</a> 
+        {% if housing.details is not None %}
+         - {{housing.details}}
+        {% endif %}
         <br/>
         {% if object.end_date %}
             Colocataires de {{object.begin_date|date:'F Y'|title}} à {{object.end_date|date:'F Y'|title}}.
