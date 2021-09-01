@@ -47,6 +47,11 @@
                 <p>Ce questionnaire de personnalité servira à vous attrbuer des parrains et marraines 
                     avec qui vous êtes plus susceptibles de bien vous entendre. Toutes les données
                     récoltées seront détruites après la fin des processus de parrainage.</p>
+                {% if registered %}
+                    <p>Votre participation a bien été enregistrée ! Merci de compléter le questionnaire pour que
+                        nous puissions vous trouvez des parrains et marraines avec qui vous êtes le plus susceptible 
+                        de bien vous entendre.</p>
+                {% endif %}
                 <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir le questionnaire 1ère année</a>
                 <br><br><hr><br>
                 <p>Vous n'êtes pas en 1ère année ? Merci de vérifiez votre année de promotion
