@@ -1,14 +1,17 @@
 from django.contrib.auth.hashers import make_password
 from django.db import migrations
 from django.conf import settings
-from apps.account.fixtures.fixture import dummyUsers
 from random import randint
+import json
+from pathlib import Path
 
 
 def create_user(apps, schema_editor):
     User = apps.get_registered_model('auth', 'User')
     Student = apps.get_registered_model('student', 'Student')
     password = make_password("pass")
+    with open(Path(__file__).parent / "../fixtures/fixtures.json") as f:
+        dummyUsers = json.load(f)
     for user in dummyUsers:
         user = User(
             password=password,

@@ -54,11 +54,11 @@ def get_object_from_slug(app_name: str, slug: str):
     elif app_name == 'roommates':
         from apps.roommates.models import Roommates
         return Roommates.objects.get(slug=slug)
-    
+
     elif app_name == 'family':
         from apps.family.models import Family
         return Family.objects.get(slug=slug)
-    
+
     else:
         raise Exception(f'Unknown application : {app_name}')
 

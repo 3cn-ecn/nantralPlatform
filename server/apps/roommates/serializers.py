@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from .models import Housing, NamedMembershipRoommates, Roommates
+from django.db.models import Q
+
+from django.utils import timezone
 
 
 class HousingLastRoommatesSerializer(serializers.ModelSerializer):
@@ -10,23 +13,22 @@ class HousingLastRoommatesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Housing
-        fields='__all__'
-    
+        fields = '__all__'
+
     def get_roommates(self, obj):
-        roommates = Roommates.objects.filter(housing=obj).order_by('begin_date').last()
-        return RoommatesSerializer(roommates, many=False, context=self._context).data
+        return RoommatesSerializer(obj.current_roommates, many=False, context=self._context).data
 
 
 class RoommatesMemberSerializer(serializers.ModelSerializer):
     '''Serializer for a member of roommates'''
-    
+
     #student = StudentSerializer(read_only=True)
     name = serializers.SerializerMethodField()
 
     class Meta:
         model = NamedMembershipRoommates
         fields = ['nickname', 'name']
-    
+
     def get_name(self, obj):
         return obj.student.name
 
@@ -34,7 +36,8 @@ class RoommatesMemberSerializer(serializers.ModelSerializer):
 class RoommatesSerializer(serializers.ModelSerializer):
     '''Serializer for roommates'''
 
-    members = serializers.SerializerMethodField() #RoommatesMemberSerializer(read_only=True, many=True)
+    # RoommatesMemberSerializer(read_only=True, many=True)
+    members = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField()
 
     class Meta:
@@ -44,12 +47,9 @@ class RoommatesSerializer(serializers.ModelSerializer):
     def get_members(self, obj):
         members = NamedMembershipRoommates.objects.filter(group=obj)
         return RoommatesMemberSerializer(members, many=True, context=self._context).data
-    
+
     def get_url(self, obj):
         return obj.get_absolute_url
-
-
-
 
 
 '''
