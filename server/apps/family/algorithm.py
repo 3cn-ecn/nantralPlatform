@@ -220,43 +220,39 @@ def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, q
 	for f in family_list:
 		f['nb_critery_1A'] = len([m for m in member1A_list if m[q_name] and m['family']==f['family']])
 		f['nb_critery_2A'] = len([m for m in member2A_list if m[q_name] and m['family']==f['family']])
-	# on sélectionne les familles avec un 1A seul pour le critère
-	lonely_family_list = [f for f in family_list if f['nb_critery_1A']==1 and f['nb_critery_2A']==0]
-	# pour chaque famille avec un membre seul
-	while lonely_family_list:
-		lonely_family = lonely_family_list[0]
-		# on récupère le membre seul dans la famille
-		lonely_member_id = [
-			i 
-			for i in range(len(member1A_list)) 
-			if member1A_list[i][q_name] and member1A_list[i]['family']==lonely_family['family']
-		][0]
-		lonely_member = member1A_list[lonely_member_id]
-		# on sélectionne les familles qui ont déjà un membre avec ce critère où on peut rajouter le membre seul
-		candidate_family_list = [f for f in family_list if f!=lonely_family and (f['nb_critery_1A']>=1 or f['nb_critery_2A']>=1)]
-		# on prend les membres candidats n'ayant pas ce critère avec qui on peut échanger
-		candidate_member_list = [m for m in member1A_list if not m[q_name] and m['family'] in candidate_family_list]
-		# si il reste des membres avec qui échanger
-		if candidate_member_list:
-			# on cherche le membre candidat avec le score le plus proche
-			candidate_member = min(
-				candidate_member_list, 
-				key=lambda m: loveScore(m['answers'], lonely_member['answer'], coeff_list)
-			)
-			# on récupère l'index du candidat dans la liste member1A_list
-			candidate_member_id = [i for i in range(len(member1A_list)) if member1A_list[i]==candidate_member][0]
-			# on échange les familles
-			lonely_member['family'] = member1A_list[candidate_member_id]['family']
-			candidate_member['family'] = member1A_list[lonely_member_id]['family']
-			member1A_list[candidate_member_id] = candidate_member
-			member1A_list[lonely_member_id] = lonely_member
-			# on met à jour le nb de personnes avec critère dans ces familles
-			family_more = [i for i in range(len(family_list)) if family_list[i]['family']==lonely_member['family']][0]
-			family_less = [i for i in range(len(family_list)) if family_list[i]['family']==candidate_member['family']][0]
-			family_list[family_more]['nb_critery_1A'] += 1
-			family_list[family_less]['nb_critery_1A'] -= 1
-		# on met à jour la liste des familles
-		lonely_family_list = [f for f in family_list if f['nb_critery_1A']==1 and f['nb_critery_2A']==0]
+	# on cherche les familles avec une personne seule pour le critère
+	for f in family_list:
+		if f['nb_critery_1A'] == 1 and f['nb_critery_2A'] == 0:
+			# on récupère le membre seul dans la famille et son id
+			lonely_member_id = [
+				i 
+				for i in range(len(member1A_list)) 
+				if member1A_list[i][q_name] and member1A_list[i]['family']==f['family']
+			][0]
+			lonely_member = member1A_list[lonely_member_id]
+			# on sélectionne les membres dans une famille qui ont déjà un membre
+			# avec ce critère où on peut rajouter le membre seul
+			candidate_member_list = []
+			for g in family_list:
+				if g!=f and (g['nb_critery_1A']>=1 or g['nb_critery_2A']>=1):
+					members = [m for m in member1A_list if not m[q_name] and m['family']==g['family']]
+					candidate_member_list += members
+			# si il y a des membres avec qui échanger
+			if candidate_member_list:
+				# on cherche le membre candidat avec le score le plus proche
+				candidate_member = min(
+					candidate_member_list, 
+					key=lambda m: loveScore(m['answers'], lonely_member['answer'], coeff_list)
+				)
+				# on récupère l'index du candidat dans la liste member1A_list
+				candidate_member_id = [i for i in range(len(member1A_list)) if member1A_list[i]==candidate_member][0]
+				candidate_family_id = [i for i in range(len(family_list)) if family_list[i]['family']==candidate_member['family']][0]
+				# on échange les familles
+				member1A_list[lonely_member_id]['family'] = family_list[candidate_family_id]['family']
+				member1A_list[candidate_member_id]['family'] = f['family']
+				# on met à jour le nb de personnes avec critère dans ces familles
+				f['nb_critery_1A'] -= 1
+				family_list[candidate_family_id]['nb_critery_1A'] += 1
 	return member1A_list
 
 
