@@ -2,7 +2,8 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import HousingLastRoommatesSerializer #HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer
+# HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer
+from .serializers import HousingLastRoommatesSerializer
 from .models import Housing, NamedMembershipRoommates, Roommates
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
@@ -31,7 +32,6 @@ class HousingView(generics.ListCreateAPIView):
         return query
 
 
-
 class CheckAddressView(APIView):
     """An API view to wether wether a housing already exists at selected address.
     Returns the pk if it does, None otherwise"""
@@ -40,9 +40,9 @@ class CheckAddressView(APIView):
     def post(self, request):
         query = Housing.objects.filter(address=request.data.get("address"))
         data = [{
-                    'pk':housing.pk, 
-                    'name': f'{housing.address} - {housing.details} ({housing.last_roommates})'
-                } for housing in query ]
+            'pk': housing.pk,
+            'name': f'{housing.address} - {housing.details} ({housing.current_roommates})'
+        } for housing in query]
         return Response(data=data)
 
 
