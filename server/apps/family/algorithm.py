@@ -3,6 +3,9 @@ import random
 from matching.games import StableMarriage
 from datetime import date
 
+import sys
+sys.setrecursionlimit(150000)
+
 from .models import Family, MembershipFamily, QuestionMember
 
 
