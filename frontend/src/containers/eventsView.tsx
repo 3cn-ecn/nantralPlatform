@@ -1,7 +1,6 @@
 ﻿import * as React from "react";
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import axios from "axios";
 import { Spinner } from "react-bootstrap";
 import { getDate } from "./eventsView/utils";
 import { Event } from "./eventsView/event";
@@ -14,22 +13,24 @@ function Root(props): JSX.Element {
 
   useEffect(() => {
     async function getEvents(): Promise<void> {
-      await axios
-        .get(props.eventsApiUrl)
-        .then((res) => {
-          let events: EventInfos[] = res.data;
-          let orderedEventsInfoMap = new Map();
-          for (let event of events) {
-            let eventReadableDate = getDate(event.date);
-            let orderedEventsInfo = orderedEventsInfoMap.get(eventReadableDate);
-            if (orderedEventsInfo != undefined) {
-              orderedEventsInfo.push(event);
-              orderedEventsInfoMap.set(eventReadableDate, orderedEventsInfo);
-            } else {
-              orderedEventsInfoMap.set(eventReadableDate, [event]);
+      await fetch(props.eventsApiUrl)
+        .then((resp) => {
+          resp.json().then((data) => {
+            let events: EventInfos[] = data;
+            let orderedEventsInfoMap = new Map();
+            for (let event of events) {
+              let eventReadableDate = getDate(event.date);
+              let orderedEventsInfo =
+                orderedEventsInfoMap.get(eventReadableDate);
+              if (orderedEventsInfo != undefined) {
+                orderedEventsInfo.push(event);
+                orderedEventsInfoMap.set(eventReadableDate, orderedEventsInfo);
+              } else {
+                orderedEventsInfoMap.set(eventReadableDate, [event]);
+              }
             }
-          }
-          setEventInfos(orderedEventsInfoMap);
+            setEventInfos(orderedEventsInfoMap);
+          });
         })
         .catch((err) => {
           setEventInfos(new Map());
