@@ -242,7 +242,7 @@ def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, q
 				# on cherche le membre candidat avec le score le plus proche
 				candidate_member = min(
 					candidate_member_list, 
-					key=lambda m: loveScore(m['answers'], lonely_member['answer'], coeff_list)
+					key=lambda m: loveScore(m['answers'], lonely_member['answers'], coeff_list)
 				)
 				# on récupère l'index du candidat dans la liste member1A_list
 				candidate_member_id = [i for i in range(len(member1A_list)) if member1A_list[i]==candidate_member][0]
