@@ -28,9 +28,8 @@ def createEvents(apps, schema_editor):
             **event
         )
         nbOfParticipants = random.randint(1, 50)
-        for i in range(0, nbOfParticipants):
-            studentID = random.randint(1, 199)
-            newEvent.participants.add(studentID)
+        for id in random.sample(range(1, 199), nbOfParticipants):
+            newEvent.participants.add(id)
         newEvent.save()
 
 

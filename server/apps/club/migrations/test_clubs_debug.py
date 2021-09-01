@@ -41,11 +41,10 @@ def create_clubs(apps, schema_editor):
             **club
         )
         nbOfNewMembers = random.randint(1, 50)
-        for i in range(0, nbOfNewMembers):
-            studentID = random.randint(1, 199)
+        for id in random.sample(range(1, 199), nbOfNewMembers):
             is_admin = random.random() > 0.9
             NamedMembershipClub.objects.create(
-                group=newClub, function="Membre", student_id=studentID, admin=is_admin)
+                group=newClub, function="Membre", student_id=id, admin=is_admin)
 
 
 migrations_files = os.listdir('apps/club/migrations')
