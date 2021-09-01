@@ -27,7 +27,7 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
             context['user_family'] = membership.group
             if membership.group:
                 context['1A_members'] = membership.group.memberships.filter(role='1A')
-                context['family_not_completed'] = membership.group.memberships.all().count() <= 1
+                context['family_not_completed'] = membership.group.count_members2A() < 3
                 context['form_complete'] = membership.form_complete()
         return context
 
@@ -265,7 +265,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs.update({
             'page': self.get_page(),
-            'is_2Aplus': self.get_member().role == '2A+'
+            'is_2Aplus': self.get_member().role == '2A+',
             })
         return kwargs
     
