@@ -1,6 +1,6 @@
 ﻿# ---- Description ----
 # This file generates the fixtures for the Club model.
-# It generates 200 clubs with a dummy data.
+# It generates 200 clubs with dummy data.
 # Run it from the fixtures directory to generate fixtures.json, which is then used in the initial migrations.
 # If changes are made to the required fields of the Club model, this file WILL HAVE TO BE EDITED accordingly.
 
