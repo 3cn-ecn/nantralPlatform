@@ -30,6 +30,8 @@ urlpatterns = [
     path('api/student/', include('apps.student.api_urls', namespace='student_api')),
 
     path('club/', include('apps.club.urls',  namespace='club')),
+    path('api/club/', include('apps.club.api_urls', namespace='club_api')),
+
     path('liste/', include('apps.liste.urls',  namespace='liste')),
 
     path('academic/', include('apps.academic.urls', namespace='academic')),
@@ -48,7 +50,8 @@ urlpatterns = [
     path('api/colocs/', include('apps.roommates.api_urls', namespace='roommates_api')),
 
     path('parrainage/', include('apps.family.urls', namespace='family')),
-    path('parrainage/admin/', include('apps.family.admin_urls', namespace='family-admin')),
+    path('parrainage/admin/',
+         include('apps.family.admin_urls', namespace='family-admin')),
 
     path('', include('apps.home.urls', namespace='home')),
 ]
