@@ -26,10 +26,12 @@
     {% endfor %}
     </tbody></table>
     <br>
-    <form method='POST'>
-        {% csrf_token %}
-        <button type="submit" name="action_family" value="reset" class="btn btn-danger">Réinitialiser (attention pas de confirmation)</button>
-    </form>
+    {% if phase < 3 %}
+        <form method='POST'>
+            {% csrf_token %}
+            <button type="submit" name="action_family" value="reset" class="btn btn-danger">Réinitialiser (attention pas de confirmation)</button>
+        </form>
+    {% endif %}
     <br>
     <a href="{% url 'family-admin:home' %}">Retour à la page principale</a>
 {% endblock %}
