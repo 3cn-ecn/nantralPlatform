@@ -83,11 +83,16 @@
                     autres première année qui sont dans votre famille :</p>
                 {% include 'student/student_cards.html' with members=1A_members %}
             {% else %}
-                <h2>Ooooups !</h2>
-                <p>Vous n'avez pas rempli le questionnaire à temps ! Pas de panique, on
-                    va vous dépanner : remplissez-le quand même, on essaiera de vous attribuer
-                    une famille adaptée...</p>
-                <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir mon questionnaire</a>
+                {% if form_complete %}
+                    <p>Votre questionnaire a bien été enregistré. N'hésitez pas à contacter un 
+                    administrateur si besoin pour vous attribuer une famille !</p>
+                {% else %}
+                    <h2>Ooooups !</h2>
+                    <p>Vous n'avez pas rempli le questionnaire à temps ! Pas de panique, on
+                        va vous dépanner : remplissez-le quand même, on essaiera de vous attribuer
+                        une famille adaptée...</p>
+                    <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir mon questionnaire</a>
+                {% endif %}
             {% endif %}
         {% endif %}
         <br><br>

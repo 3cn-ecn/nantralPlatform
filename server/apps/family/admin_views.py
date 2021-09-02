@@ -8,7 +8,7 @@ from datetime import date
 from apps.utils.accessMixins import UserIsInGroup
 from .models import Family, MembershipFamily, QuestionFamily
 from .utils import read_phase
-from .algorithm import main_algorithm, save, reset
+from .algorithm import delta_algorithm, main_algorithm, reset
 
 
 GROUP_NAME = 'admin-family'
@@ -39,6 +39,8 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         members2A = members.filter(role='2A+')
         context['nb_1A'] = members1A.count()
         context['nb_2A'] = members2A.count()
+        context['nb_1A_unplaced'] = members1A.filter(group__isnull=True).count()
+        context['nb_1A_placed'] = members1A.filter(group__isnull=False).count()
         non_complete_1A = [m for m in members1A if not m.form_complete()]
         non_complete_2A = [m for m in members2A if not m.form_complete()]
         context['non_complete_1A'] = non_complete_1A
@@ -66,14 +68,16 @@ class ResultsView(UserIsInGroup, TemplateView):
             reset()
         return redirect('family-admin:home')
     
+    def resolve(self):
+        if MembershipFamily.objects.filter(role='1A', group__year=date.today().year).exists():
+            raise Exception('Some 1A members are already placed in families this year. The algorithm has already been executed!')
+        return main_algorithm()
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         families = []
         try:
-            if MembershipFamily.objects.filter(role='1A', group__year=date.today().year).exists():
-                raise Exception('Some 1A members are already placed in families this year.')
-            member1A_list, member2A_list, family_list = main_algorithm()
-            save(member1A_list)
+            member1A_list, member2A_list, family_list = self.resolve()
             for f in family_list:
                 members_2A = [m for m in member2A_list if m['family']==f['family']]
                 members_1A = [m for m in member1A_list if m['family']==f['family']]
@@ -81,7 +85,16 @@ class ResultsView(UserIsInGroup, TemplateView):
         except Exception as e:
             messages.error(self.request, e)
         context['families'] = families
+        context['phase'] = read_phase()
         return context
+
+
+
+class ResultsDeltasView(ResultsView):
+    """View for adding 1A member in late"""
+
+    def resolve(self):
+        return delta_algorithm()
 
 
 class ResultsSavedView(UserIsInGroup, TemplateView):
@@ -102,5 +115,6 @@ class ResultsSavedView(UserIsInGroup, TemplateView):
             members_1A = f.memberships.filter(role='1A')
             families.append({'A1':members_1A, 'A2':members_2A, 'A2plus':members_2A_plus, 'family':f})
         context['families'] = families
+        context['phase'] = read_phase()
         return context
 
