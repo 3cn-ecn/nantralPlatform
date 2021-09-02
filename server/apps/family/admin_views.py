@@ -62,23 +62,18 @@ class ResultsView(UserIsInGroup, TemplateView):
     template_name = 'family/admin/results.html'
 
     def post(self, request, *args, **kwargs):
-        if request.POST['action_family'] == 'save':
-            member1A_list = cache.get('member1A_list')
-            if member1A_list: 
-                save(member1A_list)
-                messages.success(request, "Résultats sauvegardés !")
-                return redirect('family-admin:results-saved')
-            else:
-                messages.error(request, "Les résultats ont été perdus, désolé !")
+        if request.POST['action_family'] == 'reset':
+            reset()
         return redirect('family-admin:home')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         families = []
         try:
+            if MembershipFamily.objects.filter(role='1A', group__year=date.today().year).exists():
+                raise Exception('Some 1A members are already placed in families this year.')
             member1A_list, member2A_list, family_list = main_algorithm()
-            member1A_list_light = [{'member':m['member'], 'family':m['family']} for m in member1A_list]
-            cache.set('member1A_list', member1A_list_light, 600)
+            save(member1A_list)
             for f in family_list:
                 members_2A = [m for m in member2A_list if m['family']==f['family']]
                 members_1A = [m for m in member1A_list if m['family']==f['family']]

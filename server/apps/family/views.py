@@ -44,6 +44,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
             {
                 'name':f.name if show_data else f'Famille n°{f.id}', 
                 'url':f.get_absolute_url,
+                'id':f.id,
             } 
             for f in Family.objects.all()
         ]
