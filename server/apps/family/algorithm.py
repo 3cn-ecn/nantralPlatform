@@ -331,7 +331,8 @@ def save(member1A_list):
 		member1A['member'].group = member1A['family']
 		member1A['member'].save()
 	print('Saved!')
-	
+
+
 
 
 def reset():
