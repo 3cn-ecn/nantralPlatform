@@ -77,7 +77,8 @@ class ResultsView(UserIsInGroup, TemplateView):
         families = []
         try:
             member1A_list, member2A_list, family_list = main_algorithm()
-            cache.set('member1A_list', member1A_list, 3600)
+            member1A_list_light = [{'member':m['member'], 'family':m['family']} for m in member1A_list]
+            cache.set('member1A_list', member1A_list_light, 600)
             for f in family_list:
                 members_2A = [m for m in member2A_list if m['family']==f['family']]
                 members_1A = [m for m in member1A_list if m['family']==f['family']]
