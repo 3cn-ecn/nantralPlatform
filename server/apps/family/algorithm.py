@@ -306,18 +306,18 @@ def main_algorithm():
 		id_1A = player_1A.name
 		id_2A = player_2A.name
 		member1A_list[id_1A]['family'] = member2A_list_plus[id_2A]['family']
-	
-	# prevent lonely girls
-	print("checking that no girl is alone")
-	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='Genre'][0]
-	question_value = 1
-	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'genre', coeff_list)
 
 	# prevent lonely foreign students
 	print("Checking that no international student is alone")
 	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='International'][0]
 	question_value = 0
 	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'inter', coeff_list)
+	
+	# prevent lonely girls
+	print("checking that no girl is alone")
+	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='Genre'][0]
+	question_value = 1
+	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'genre', coeff_list)
 	
 	print('Done!')
 	return member1A_list, member2A_list, family_list
