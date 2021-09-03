@@ -6,14 +6,14 @@ from .models import MembershipFamily, Family, Affichage
 
 
 def read_phase():
-    phase = cache.get('family_phase2')
+    phase = cache.get('family_phase')
     if not phase:
         try:
             phase = Affichage.objects.first().phase
         except Exception:
             Affichage().save()
             phase = Affichage.objects.first().phase
-        cache.set('family_phase2', phase, 3600)
+        cache.set('family_phase', phase, 3600)
     return phase
 
 
