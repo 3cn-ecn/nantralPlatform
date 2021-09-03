@@ -62,7 +62,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
             context['list_1A'] = [
                 {
                     'name': m.student.alphabetical_name, 
-                    'family': m.group.name if show_data and phase > 3 else f'Famille n°{m.group.id}',
+                    'family': m.group.id if m.group else '',
                     'url': m.group.get_absolute_url,
                 }
                 for m in memberships.filter(role='1A')
