@@ -33,11 +33,11 @@
 {% endblock%}
 
 {% block script %}
-<script>
+{% comment %} <script>
   const eventsApiUrl = "{% url 'event_api:list-home-events' %}";
   const eventListParticipants = "{% url 'event_api:list-participants' '1' %}"
   const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}"
   const eventsAddParticipant = "{% url 'event:add-participant' '1' %}"
 </script>
-<script src='{% static "js/eventsView.js" %}'></script>
+<script src='{% static "js/eventsView.js" %}'></script> {% endcomment %}
 {% endblock %}
