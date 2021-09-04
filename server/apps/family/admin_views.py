@@ -41,6 +41,8 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         context['nb_2A'] = members2A.count()
         context['nb_1A_unplaced'] = members1A.filter(group__isnull=True).count()
         context['nb_1A_placed'] = members1A.filter(group__isnull=False).count()
+        if context['nb_1A_unplaced'] < 10:
+            context['unplaced_1A'] = members1A.filter(group__isnull=True)
         non_complete_1A = [m for m in members1A if not m.form_complete()]
         non_complete_2A = [m for m in members2A if not m.form_complete()]
         context['non_complete_1A'] = non_complete_1A

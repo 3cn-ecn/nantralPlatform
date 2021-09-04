@@ -362,7 +362,7 @@ def delta_algorithm():
 	for f in family_list:
 		nb_1A = len([m for m in placed_1A if m.group==f['family']])
 		nb_2A = f['nb']
-		f['delta'] = nb_2A - nb_1A
+		f['delta'] = nb_1A - nb_2A
 	
 	# pour chaque membre 1A non attribué, on lui cherche une famille
 	print('Attributes a family to new 1As...')
