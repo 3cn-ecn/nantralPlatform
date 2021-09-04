@@ -42,14 +42,16 @@ class SuggestionView(LoginRequiredMixin, FormView):
         return redirect('home:home')
 
 
+def handler403(request, *args, **argv):
+    response = render(request, '403.html', context={}, status=403)
+    return response
+
 def handler404(request, *args, **argv):
     response = render(request, '404.html', context={}, status=404)
     return response
 
-
 def handler500(request, *args, **argv):
-    response = render(request, '500.html', context={},
-                      status=500)
+    response = render(request, '500.html', context={}, status=500)
     return response
 
 
