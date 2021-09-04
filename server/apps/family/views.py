@@ -29,6 +29,7 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
             context['user_family'] = membership.group
             if membership.group:
                 context['1A_members'] = membership.group.memberships.filter(role='1A')
+                context['2A_members'] = membership.group.memberships.filter(role='2A+')
                 context['family_not_completed'] = membership.group.count_members2A() < 3
         return context
 
