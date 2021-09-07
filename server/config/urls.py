@@ -56,6 +56,7 @@ urlpatterns = [
     path('', include('apps.home.urls', namespace='home')),
 ]
 
+handler403 = 'apps.home.views.handler403'
 handler404 = 'apps.home.views.handler404'
 handler500 = 'apps.home.views.handler500'
 

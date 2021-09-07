@@ -77,17 +77,22 @@
             {% endif %}
         {% else %}
             {% if user_family %}
-                <h2>Ma Famille</h2>
+                <h2>Ma Famille : famille n°{{user_family.pk}}</h2>
                 <p>Vous devez rechercher vos parrains parmi tous les Nantraliens ce soir... 
                     Saurez-vous les trouver ? Pour vous aider dans votre tâche, voici les 
                     autres première année qui sont dans votre famille :</p>
                 {% include 'student/student_cards.html' with members=1A_members %}
             {% else %}
-                <h2>Ooooups !</h2>
-                <p>Vous n'avez pas rempli le questionnaire à temps ! Pas de panique, on
-                    va vous dépanner : remplissez-le quand même, on essaiera de vous attribuer
-                    une famille adaptée...</p>
-                <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir mon questionnaire</a>
+                {% if form_complete %}
+                    <p>Votre questionnaire a bien été enregistré. N'hésitez pas à contacter un 
+                    administrateur si besoin pour vous attribuer une famille !</p>
+                {% else %}
+                    <h2>Ooooups !</h2>
+                    <p>Vous n'avez pas rempli le questionnaire à temps ! Pas de panique, on
+                        va vous dépanner : remplissez-le quand même, on essaiera de vous attribuer
+                        une famille adaptée...</p>
+                    <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir mon questionnaire</a>
+                {% endif %}
             {% endif %}
         {% endif %}
         <br><br>
@@ -96,7 +101,23 @@
             <a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p>
     {% elif phase == 4 %}
         <p>Le parrainage est terminé pour cette année !</p>
-        <p><a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p>
+        <br>
+        {% if user_family %}
+            <h2>Ma Famille</h2>
+            <p class='mt-2'>Voir la page de la famille 
+                <a href="{{ user_family.get_absolute_url }}">{{ user_family.name }}</a>
+            </p>
+            <br>
+            <h2>Les fillots</h2>
+            {% include 'student/student_cards.html' with members=1A_members %}
+            <br>
+            <h2>Les parrains/marraines</h2>
+            {% include 'student/student_cards.html' with members=2A_members %}
+            <br><br>
+        {% endif %}
+        <h2>Liste des familles</h2>
+        <p>Vous cherchez une famille en particulier ? 
+            <a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p>
     {% endif %}
 {% endblock %}
         

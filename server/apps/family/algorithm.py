@@ -35,10 +35,13 @@ def get_answer(member:MembershipFamily, question):
 		ans = answers[0].answer
 		if member.role == '2A+' and question['equivalent'] is not None:
 			# we check if we have to penderate with a family question
-			f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
-			f_ans_value = f_ans.answer
-			quota = f_ans.question.quota/100
-			ans = (1-quota)*ans + quota*f_ans_value
+			try: 
+				f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
+				f_ans_value = f_ans.answer
+				quota = f_ans.question.quota/100
+				ans = (1-quota)*ans + quota*f_ans_value
+			except IndexError:
+				raise Exception(f'La famille {member.group} n\'a pas répondu aux questions.')
 		return ans
 	
 	elif len(answers) == 0:
@@ -46,7 +49,10 @@ def get_answer(member:MembershipFamily, question):
 		if member.role == '2A+' and question['equivalent'] is not None:
 			# ordinary case : it is an only-family question (quota=100)
 			# or if he didn't answer we take the family answer
-			f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
+			try: 
+				f_ans = [ans for ans in member.group.answerfamily_set.all() if ans.question.id==question['equivalent']][0]
+			except IndexError:
+				raise Exception(f'La famille {member.group} n\'a pas répondu aux questions.')
 			return f_ans.answer
 		else:
 			return np.nan
@@ -161,15 +167,12 @@ def make_same_length(member1A_list, member2A_list, family_list):
 	'''Add or delete 2A students so as to have the same number
 	than 1A students'''
 
-	def lenFamily(family):
-		return family['nb']
-
 	delta_len = len(member1A_list) - len(member2A_list)
 
 	if delta_len > 0: # more first year than second year
 		# we add fake members in each family, one by one, 
 		# the more little first with the mean answer of the family
-		family_list.sort(key=lenFamily)
+		family_list.sort(key=lambda f: f['nb'])
 		i = 0
 		n = len(family_list)
 		while delta_len - i > 0:
@@ -182,7 +185,7 @@ def make_same_length(member1A_list, member2A_list, family_list):
 
 	elif delta_len < 0: # more second year than first year
 		# Remove random second year students, in big families first
-		family_list.sort(key=lenFamily, reverse=True)
+		family_list.sort(key=lambda f: f['nb'], reverse=True)
 		i = 0
 		n = len(family_list)
 		while delta_len + i < 0:
@@ -214,42 +217,48 @@ def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, q
 	for f in family_list:
 		f['nb_critery_1A'] = len([m for m in member1A_list if m[q_name] and m['family']==f['family']])
 		f['nb_critery_2A'] = len([m for m in member2A_list if m[q_name] and m['family']==f['family']])
-	# on sélectionne les familles avec un 1A seul pour le critère
-	lonely_family_list = [f for f in family_list if f['nb_critery_1A']==1 and f['nb_critery_2A']==0]
-	# pour chaque famille avec un membre seul
-	for lonely_family in lonely_family_list:
-		# on récupère le membre seul dans la famille
-		lonely_member_id = [
-			i 
-			for i in range(len(member1A_list)) 
-			if member1A_list[i][q_name] and member1A_list[i]['family']==lonely_family['family']
-		][0]
-		lonely_member = member1A_list[lonely_member_id]
-		print(f'{lonely_member} is alone')
-		# on sélectionne les familles qui ont déjà un membre avec ce critère où on peut rajouter le membre seul
-		candidate_family_list = [f for f in family_list if f['nb_critery_1A']>=1 or f['nb_critery_2A']>=1]
-		# on prend les membres candidats n'ayant pas ce critère avec qui on peut échanger
-		candidate_member_list = [m for m in member1A_list if not m[q_name] and m['family'] in candidate_family_list]
-		# si il reste des membres avec qui échanger
-		if candidate_member_list:
-			# on cherche le membre candidat avec le score le plus proche
-			candidate_member = min(
-				candidate_member_list, 
-				key=lambda m: loveScore(m['answers'], lonely_member['answer'], coeff_list)
-			)
-			# on récupère l'index du candidat dans la liste member1A_list
-			candidate_member_id = [i for i in range(len(member1A_list)) if member1A_list[i]==candidate_member][0]
-			# on échange les familles
-			lonely_member['family'] = member1A_list[candidate_member_id]['family']
-			candidate_member['family'] = member1A_list[lonely_member_id]['family']
-			member1A_list[candidate_member_id] = candidate_member
-			member1A_list[lonely_member_id] = lonely_member
-			# on met à jour le nb de personnes avec critère dans ces familles
-			family_more = [i for i in range(len(family_list)) if family_list[i]['family']==lonely_member['family']][0]
-			family_less = [i for i in range(len(family_list)) if family_list[i]['family']==candidate_member['family']][0]
-			family_list[family_more]['nb_critery_1A'] += 1
-			family_list[family_less]['nb_critery_1A'] -= 1
+	# on cherche les familles avec une personne seule pour le critère
+	for f in family_list:
+		if f['nb_critery_1A'] == 1 and f['nb_critery_2A'] == 0:
+			# on récupère le membre seul dans la famille et son id
+			lonely_member_id = [
+				i 
+				for i in range(len(member1A_list)) 
+				if member1A_list[i][q_name] and member1A_list[i]['family']==f['family']
+			][0]
+			lonely_member = member1A_list[lonely_member_id]
+			# on sélectionne les membres dans une famille qui ont déjà un membre
+			# avec ce critère où on peut rajouter le membre seul
+			candidate_member_list = []
+			for g in family_list:
+				if g!=f and (g['nb_critery_1A']>=1 or g['nb_critery_2A']>=1):
+					members = [m for m in member1A_list if not m[q_name] and m['family']==g['family']]
+					candidate_member_list += members
+			# si il y a des membres avec qui échanger
+			if candidate_member_list:
+				# on cherche le membre candidat avec le score le plus proche
+				candidate_member = min(
+					candidate_member_list, 
+					key=lambda m: loveScore(m['answers'], lonely_member['answers'], coeff_list)
+				)
+				# on récupère l'index du candidat dans la liste member1A_list
+				candidate_member_id = [i for i in range(len(member1A_list)) if member1A_list[i]==candidate_member][0]
+				candidate_family_id = [i for i in range(len(family_list)) if family_list[i]['family']==candidate_member['family']][0]
+				# on échange les familles
+				member1A_list[lonely_member_id]['family'] = family_list[candidate_family_id]['family']
+				member1A_list[candidate_member_id]['family'] = f['family']
+				# on met à jour le nb de personnes avec critère dans ces familles
+				f['nb_critery_1A'] -= 1
+				family_list[candidate_family_id]['nb_critery_1A'] += 1
 	return member1A_list
+
+
+
+def save(member1A_list):
+	'''Save the families for 1A students in the database'''
+	for member1A in member1A_list:
+		member1A['member'].group = member1A['family']
+		member1A['member'].save()
 
 
 
@@ -302,12 +311,6 @@ def main_algorithm():
 		id_1A = player_1A.name
 		id_2A = player_2A.name
 		member1A_list[id_1A]['family'] = member2A_list_plus[id_2A]['family']
-	
-	# prevent lonely girls
-	print("checking that no girl is alone")
-	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='Genre'][0]
-	question_value = 1
-	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'genre', coeff_list)
 
 	# prevent lonely foreign students
 	print("Checking that no international student is alone")
@@ -315,19 +318,19 @@ def main_algorithm():
 	question_value = 0
 	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'inter', coeff_list)
 	
+	# prevent lonely girls
+	print("checking that no girl is alone")
+	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='Genre'][0]
+	question_value = 1
+	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'genre', coeff_list)
+	
+	# saveing in database
+	print('Saving...')
+	save(member1A_list)
+
 	print('Done!')
 	return member1A_list, member2A_list, family_list
 
-
-
-def save(member1A_list):
-	'''Save the families for 1A students in the database'''
-	print('Saving...')
-	for member1A in member1A_list:
-		member1A['member'].group = member1A['family']
-		member1A['member'].save()
-	print('Saved!')
-	
 
 
 def reset():
@@ -339,3 +342,44 @@ def reset():
 	print('Deleted!')
 
 
+
+def delta_algorithm():
+	
+	# get the questionnary
+	print('Get questions...')
+	question_list = get_question_list()
+	coeff_list = np.array([q['coeff'] for q in question_list], dtype=int)
+
+	# get the members list with their answers for each question
+	print('Get new 1A answers...')
+	member1A_list = get_member1A_list(question_list)
+	print('Get 2A answers...')
+	member2A_list, family_list = get_member2A_list(question_list)
+
+	# count number of members per family
+	print('Calculate the deltas...')
+	placed_1A = MembershipFamily.objects.filter(role='1A', group__year=date.today().year).prefetch_related('group')
+	for f in family_list:
+		nb_1A = len([m for m in placed_1A if m.group==f['family']])
+		nb_2A = f['nb']
+		f['delta'] = nb_1A - nb_2A
+	
+	# pour chaque membre 1A non attribué, on lui cherche une famille
+	print('Attributes a family to new 1As...')
+	for m in member1A_list:
+		# on prend les 20 premières familles où il manque encore des 1A et/ou 
+		# il y a peu de 1A en plus par rapport aux 2A, et si on a le même nombre
+		# on tri par petites familles d'abord
+		family_list.sort(key=lambda f: f['nb'])
+		family_list.sort(key=lambda f: f['delta'])
+		little_family_list = family_list[:20]
+		
+		# on cherche la meilleure famille
+		m['family'] = min(little_family_list,
+			key = lambda f: loveScore(m['answers'], f['answers'], coeff_list))['family']
+	
+	print('Saving...')
+	save(member1A_list)
+
+	print('Done !')
+	return member1A_list, member2A_list, family_list
