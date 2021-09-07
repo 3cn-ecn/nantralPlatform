@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls.base import reverse
+from django.core.cache import cache
 from datetime import date
 
 from apps.group.models import Group, NamedMembership
@@ -18,6 +19,11 @@ class Affichage(models.Model):
         default=0
     )
     res_itii = models.BooleanField("Afficher les résultats ITII", default=False)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        cache.set('family_phase', self.phase, 3600)
+    
 
 
 class Family(Group):
