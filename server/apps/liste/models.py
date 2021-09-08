@@ -1,4 +1,8 @@
 from django.db import models
+
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
+
 from apps.student.models import Student
 from apps.group.models import Group, NamedMembership
 from apps.club.models import BDX
@@ -13,6 +17,13 @@ class Liste(Group):
 
     class Meta:
         ordering = ['-year', 'liste_type', 'name']
+        
+    def save(self, *args, **kwargs):
+        # mise à jour du cache de la liste des clubs
+        key = make_template_fragment_key('liste_list')
+        cache.delete(key)
+        # enregistrement
+        super().save(*args, **kwargs)
 
 
 class NamedMembershipList(NamedMembership):
