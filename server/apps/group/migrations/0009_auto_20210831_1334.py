@@ -15,9 +15,4 @@ class Migration(migrations.Migration):
             model_name='adminrightsrequest',
             name='issue',
         ),
-        migrations.AddField(
-            model_name='adminrightsrequest',
-            name='uuid',
-            field=models.UUIDField(default=uuid.uuid4, editable=False, unique=True),
-        ),
     ]
