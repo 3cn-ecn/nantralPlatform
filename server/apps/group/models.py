@@ -13,7 +13,6 @@ from apps.utils.compress import compressModelImage
 from apps.utils.slug import *
 from django.conf import settings
 
-import uuid
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 import logging
@@ -138,7 +137,6 @@ class AdminRightsRequest(models.Model):
     reason = models.CharField(
         max_length=100, verbose_name="Raison de la demande", blank=True)
     domain = models.CharField(max_length=64)
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def save(self, domain: str, *args, **kwargs):
         self.date = timezone.now()
