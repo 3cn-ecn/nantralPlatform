@@ -18,7 +18,7 @@
 
 	<div id="root"></div>
 
-	{% cache 86400 club_list %}
+	{% cache None club_list %}
 		{% for key, value in club_list.items %}
 			<h2>{{ key }}</h2>
 			<div class="grille">
