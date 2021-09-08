@@ -142,20 +142,22 @@ class AdminRightsRequest(models.Model):
         self.domain = domain
         super(AdminRightsRequest, self).save()
         group = get_object_from_full_slug(self.group)
-
-        webhook = DiscordWebhook(
-            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(title=f'{self.student} demande à devenir admin de {group}',
-                             description=self.reason,
-                             color=242424)
-        embed.add_embed_field(
-            name='Accepter', value=f"[Accepter]({self.accept_url})", inline=True)
-        embed.add_embed_field(
-            name='Refuser', value=f"[Refuser]({self.deny_url})", inline=True)
-        if(self.student.picture):
-            embed.thumbnail = {"url": self.student.picture.url}
-        webhook.add_embed(embed)
-        webhook.execute()
+        try:
+            webhook = DiscordWebhook(
+                url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+            embed = DiscordEmbed(title=f'{self.student} demande à devenir admin de {group}',
+                                 description=self.reason,
+                                 color=242424)
+            embed.add_embed_field(
+                name='Accepter', value=f"[Accepter]({self.accept_url})", inline=True)
+            embed.add_embed_field(
+                name='Refuser', value=f"[Refuser]({self.deny_url})", inline=True)
+            if(self.student.picture):
+                embed.thumbnail = {"url": self.student.picture.url}
+            webhook.add_embed(embed)
+            webhook.execute()
+        except Exception as e:
+            print(e)
         super(AdminRightsRequest, self).save()
 
     @ property
