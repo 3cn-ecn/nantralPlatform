@@ -16,6 +16,9 @@ from django.conf import settings
 import uuid
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 path_and_rename_group = PathAndRename("groups/logo")
 path_and_rename_group_banniere = PathAndRename("groups/banniere")
@@ -157,7 +160,7 @@ class AdminRightsRequest(models.Model):
             webhook.add_embed(embed)
             webhook.execute()
         except Exception as e:
-            print(e)
+            logger.error(e)
         super(AdminRightsRequest, self).save()
 
     @ property

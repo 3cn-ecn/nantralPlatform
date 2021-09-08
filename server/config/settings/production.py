@@ -72,17 +72,25 @@ GITHUB_TOKEN = env('GITHUB_TOKEN')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '[DJANGO] %(levelname)s %(asctime)s %(module)s '
+            '%(name)s.%(funcName)s:%(lineno)s: %(message)s'
+        },
+    },
     'handlers': {
         'console': {
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-        },
+            'formatter': 'default',
+        }
     },
     'root': {
         'handlers': ['console'],
         'level': 'WARNING',
     },
     'loggers': {
-        'django': {
+        '*': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
             'propagate': False,
