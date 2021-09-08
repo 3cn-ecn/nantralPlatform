@@ -19,7 +19,7 @@ class Liste(Group):
         ordering = ['-year', 'liste_type', 'name']
         
     def save(self, *args, **kwargs):
-        # mise à jour du cache de la liste des clubs
+        # mise à jour du cache de la liste des listes
         key = make_template_fragment_key('liste_list')
         cache.delete(key)
         # enregistrement
