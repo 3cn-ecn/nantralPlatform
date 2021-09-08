@@ -1,6 +1,8 @@
 from django.views.generic import ListView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import resolve
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 
 from apps.club.models import Club
 from apps.group.views import BaseDetailGroupView
@@ -12,17 +14,20 @@ class ListClubView(TemplateView):
     template_name = 'club/list.html'
 
     def get_context_data(self, **kwargs):
-        context = {'club_list': {}}
-        clubList = {}
-        allClubs = Club.objects.all().select_related(
-            "bdx_type").only('name', 'slug', 'logo', 'bdx_type')
-        for club in allClubs:
-            if club.bdx_type is None:
-                clubList.setdefault("Associations", []).append(club)
-            else:
-                clubList.setdefault(
-                    f'Clubs {club.bdx_type.name}', []).append(club)
-        context['club_list'] = clubList
+        context = {}
+        key = make_template_fragment_key('club_list')
+        cached = cache.get(key)
+        if cached is None:
+            clubList = {}
+            allClubs = Club.objects.all().select_related(
+                "bdx_type").only('name', 'slug', 'logo', 'bdx_type')
+            for club in allClubs:
+                if club.bdx_type is None:
+                    clubList.setdefault("Associations", []).append(club)
+                else:
+                    clubList.setdefault(
+                        f'Clubs {club.bdx_type.name}', []).append(club)
+            context['club_list'] = clubList
         return context
 
 

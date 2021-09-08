@@ -2,6 +2,9 @@ from django.db import models
 from django.db.models import F
 from datetime import date
 
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
+
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 
@@ -16,7 +19,7 @@ class Club(Group):
     meeting_hour = models.CharField("Heure et jour de réunion périodique", max_length=50, null=True, blank=True)
     
     class Meta:
-        ordering = [F('bdx_type').asc(nulls_first=True), 'name']
+        ordering = ['name']
         verbose_name = "club/asso"
         verbose_name_plural = "clubs & assos"
     
@@ -26,6 +29,13 @@ class Club(Group):
             return self.bdx_type.is_admin(user)
         else:
             return is_admin
+    
+    def save(self, *args, **kwargs):
+        # mise à jour du cache de la liste des clubs
+        key = make_template_fragment_key('club_list')
+        cache.delete(key)
+        # enregistrement
+        super().save(*args, **kwargs)
 
 
 class BDX(Club):
