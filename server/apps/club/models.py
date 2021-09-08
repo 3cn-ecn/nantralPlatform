@@ -19,7 +19,7 @@ class Club(Group):
     meeting_hour = models.CharField("Heure et jour de réunion périodique", max_length=50, null=True, blank=True)
     
     class Meta:
-        ordering = ['name']
+        ordering = [F('bdx_type').asc(nulls_first=True), 'name']
         verbose_name = "club/asso"
         verbose_name_plural = "clubs & assos"
     
