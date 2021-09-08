@@ -15,7 +15,7 @@
 </div>
 <br />
 
-{% cache 86400 liste_list %}
+{% cache None liste_list %}
 	{% for group in liste_list %}
 		{% if group.list %}
 			<h2>{{ group.grouper }}</h2>
