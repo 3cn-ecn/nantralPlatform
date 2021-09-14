@@ -7,6 +7,7 @@ from django.views.generic import UpdateView, FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import resolve
+from django.db.utils import IntegrityError
 
 from .models import *
 from .forms import EventForm, EventFormSet
@@ -53,10 +54,15 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
     def form_valid(self, form, **kwargs):
         event = form.save(commit=False)
         event.group = get_full_slug_from_slug(self.get_app(), self.get_slug())
-        event.save()
-        messages.success(
-            self.request, f'Vous avez programé {event.title}, le {event.date}.')
-        return redirect(self.get_app()+':update-events', self.get_slug())
+        try:
+            event.save()
+            messages.success(
+                self.request, f'Vous avez programé {event.title}, le {event.date}.')
+            return redirect(self.get_app()+':update-events', self.get_slug())
+        except IntegrityError as e:
+            messages.error(
+                self.request, f"L'événement {event.title} existe déjà. Veuillez modifier l'événement existant ou changer le nom de l'événement que vous tentez d'ajouter.")
+            return self.form_invalid(self.request)
 
 
 class EventUpdateView(UserIsAdmin, UpdateView):
