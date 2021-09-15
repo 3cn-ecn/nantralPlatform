@@ -25,3 +25,10 @@ export interface EventInfos {
   is_participating: boolean;
   is_member: boolean;
 }
+
+export interface APIUrls {
+  eventsApiUrl: string;
+  eventsRemoveParticipant: string;
+  eventsAddParticipant: string;
+  eventListParticipants: string;
+}
