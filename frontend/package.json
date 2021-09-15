@@ -50,6 +50,8 @@
     "bootstrap": "^4.5.0",
     "css-loader": "^5.2.7",
     "dayjs": "^1.10.6",
+    "exceljs": "^4.3.0",
+    "file-saver": "^2.0.5",
     "g": "^2.0.1",
     "jquery": "^3.5.1",
     "js-cookie": "^2.2.1",

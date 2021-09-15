@@ -5,9 +5,9 @@ import { Spinner } from "react-bootstrap";
 import { getDate } from "./eventsView/utils";
 import { Event } from "./eventsView/event";
 import { spinnerDivStyle, spinnerStyle } from "./eventsView/styles";
-import { EventInfos } from "./eventsView/interfaces";
+import { EventInfos, APIUrls } from "./eventsView/interfaces";
 
-function Root(props): JSX.Element {
+function Root(props: APIUrls): JSX.Element {
   const [eventInfos, setEventInfos] = useState(new Map());
   const [isLoading, setIsLoading] = useState(true);
 
