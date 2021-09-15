@@ -32,3 +32,8 @@ export interface APIUrls {
   eventsAddParticipant: string;
   eventListParticipants: string;
 }
+
+export interface ExportProps {
+  participants: Student[];
+  title: string;
+}
