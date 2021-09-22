@@ -82,6 +82,7 @@
     {% endblock %}
 
     <!-- Events -->
+    {% if has_events %}
         <br>   
         <h2>Évènements</h2>
         {% if request.user.is_authenticated %}
@@ -89,6 +90,7 @@
         {%else%}
             <p>Veuillez vous connecter pour voir les évènements à venir.</p>
         {%endif%}
+    {% endif %}
     
     <!-- Anonces -->
     {% if posts %}
