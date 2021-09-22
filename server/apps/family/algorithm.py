@@ -254,30 +254,9 @@ def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, q
 
 
 
-def save(member1A_list):
-	'''Save the families for 1A students in the database'''
-	for member1A in member1A_list:
-		member1A['member'].group = member1A['family']
-		member1A['member'].save()
-
-
-
-def main_algorithm():
-	# get the questionnary
-	print('Get questions...')
-	question_list = get_question_list()
-	coeff_list = np.array([q['coeff'] for q in question_list], dtype=int)
-
-	# get the members list with their answers for each question
-	print('Get 1A answers...')
-	member1A_list = get_member1A_list(question_list)
-	print('Get 2A answers...')
-	member2A_list, family_list = get_member2A_list(question_list)
-
-	# Add or delete 2A members so as to have the same length as 1A members
-	print('Checking the length...')
-	member2A_list_plus = make_same_length(member1A_list, member2A_list, family_list)
-
+def solveProblem(member1A_list, member2A_list_plus, coeff_list):
+	"""Solve the matching problem"""
+	
 	# randomize lists in order to avoid unwanted effects
 	print('Randomize lists...')
 	random.shuffle(member1A_list)
@@ -311,6 +290,29 @@ def main_algorithm():
 		id_1A = player_1A.name
 		id_2A = player_2A.name
 		member1A_list[id_1A]['family'] = member2A_list_plus[id_2A]['family']
+	
+	return member1A_list
+
+
+
+def main_algorithm():
+	# get the questionnary
+	print('Get questions...')
+	question_list = get_question_list()
+	coeff_list = np.array([q['coeff'] for q in question_list], dtype=int)
+
+	# get the members list with their answers for each question
+	print('Get 1A answers...')
+	member1A_list = get_member1A_list(question_list)
+	print('Get 2A answers...')
+	member2A_list, family_list = get_member2A_list(question_list)
+
+	# Add or delete 2A members so as to have the same length as 1A members
+	print('Checking the length...')
+	member2A_list_plus = make_same_length(member1A_list, member2A_list, family_list)
+
+	# Solve the matching problem
+	member1A_list = solveProblem(member1A_list, member2A_list_plus, coeff_list)
 
 	# prevent lonely foreign students
 	print("Checking that no international student is alone")
@@ -324,12 +326,20 @@ def main_algorithm():
 	question_value = 1
 	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'genre', coeff_list)
 	
-	# saveing in database
+	# saving in database
 	print('Saving...')
 	save(member1A_list)
 
 	print('Done!')
 	return member1A_list, member2A_list, family_list
+
+
+
+def save(member1A_list):
+	'''Save the families for 1A students in the database'''
+	for member1A in member1A_list:
+		member1A['member'].group = member1A['family']
+		member1A['member'].save()
 
 
 
@@ -344,6 +354,7 @@ def reset():
 
 
 def delta_algorithm():
+	"""Atribute 1A members to families after the first algorithm"""
 	
 	# get the questionnary
 	print('Get questions...')
@@ -382,4 +393,39 @@ def delta_algorithm():
 	save(member1A_list)
 
 	print('Done !')
+	return member1A_list, member2A_list, family_list
+
+
+
+
+def itii_algorithm():
+	"""Relaunch the main algorithm but for itii only"""
+
+	# get the questionnary
+	print('Get questions...')
+	question_list = get_question_list()
+	coeff_list = np.array([q['coeff'] for q in question_list], dtype=int)
+
+	# get the members list with their answers for each question
+	print('Get 1A answers...')
+	member1A_list = get_member1A_list(question_list)
+	print('Get 2A answers...')
+	member2A_list, family_list = get_member2A_list(question_list)
+
+	# filter by itiis
+	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='ITII'][0]
+	member1A_list = [m for m in member1A_list if m['answers'][question_id]==0]
+
+	# Add or delete 2A members so as to have the same length as 1A members
+	print('Checking the length...')
+	member2A_list_plus = make_same_length(member1A_list, member2A_list, family_list)
+
+	# Solve the matching problem
+	member1A_list = solveProblem(member1A_list, member2A_list_plus, coeff_list)
+
+	# saving in database
+	print('Saving...')
+	save(member1A_list)
+
+	print('Done!')
 	return member1A_list, member2A_list, family_list
