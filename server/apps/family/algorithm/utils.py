@@ -6,7 +6,7 @@ from datetime import date
 import sys
 sys.setrecursionlimit(150000)
 
-from .models import Family, MembershipFamily, QuestionMember
+from ..models import Family, MembershipFamily, QuestionMember
 
 
 def vectisnan(vect:np.ndarray) -> bool:
@@ -72,10 +72,14 @@ def get_answers(member:MembershipFamily, question_list):
 
 
 
-def get_member1A_list(question_list):
+def get_member1A_list(question_list, itii=False):
 	"""Get the list of 1A students with their answers"""
 	data = MembershipFamily.objects.filter(role='1A', group__isnull=True).prefetch_related(
 		'answermember_set__question', 'group__answerfamily_set__question')
+	if itii:
+		data = data.filter(student__faculty='Iti')
+	else:
+		data = data.exclude(student__faculty='Iti')
 	member1A_list = []
 	for membership in data:
 		answers = get_answers(membership, question_list)
@@ -254,27 +258,27 @@ def prevent_lonelyness(member1A_list, member2A_list, family_list, q_id, q_val, q
 
 
 
-def solveProblem(member1A_list, member2A_list_plus, coeff_list):
+def solveProblem(member_list1, member_list2, coeff_list):
 	"""Solve the matching problem"""
 	
 	# randomize lists in order to avoid unwanted effects
 	print('Randomize lists...')
-	random.shuffle(member1A_list)
-	random.shuffle(member2A_list_plus)
+	random.shuffle(member_list1)
+	random.shuffle(member_list2)
 
 	# creating the dicts
 	print('Creating the dicts for solving...')
-	N = len(member1A_list)
+	N = len(member_list1)
 	firstYear_prefs = {}
 	secondYear_prefs = {}
 	for i in range(N):
 		firstYear_prefs[i] = sorted(
 			range(N), 
-			key=lambda n: loveScore(member2A_list_plus[n]['answers'], member1A_list[i]['answers'], coeff_list)
+			key=lambda n: loveScore(member_list2[n]['answers'], member_list1[i]['answers'], coeff_list)
 		)
 		secondYear_prefs[i] = sorted(
 			range(N), 
-			key=lambda n: loveScore(member2A_list_plus[i]['answers'], member1A_list[n]['answers'], coeff_list)
+			key=lambda n: loveScore(member_list2[i]['answers'], member_list1[n]['answers'], coeff_list)
 		)
 	
 	# make the marriage and solve the problem! Les 1A sont privilégiés dans leurs préférences
@@ -289,49 +293,11 @@ def solveProblem(member1A_list, member2A_list_plus, coeff_list):
 	for player_1A, player_2A in dict_solved.items():
 		id_1A = player_1A.name
 		id_2A = player_2A.name
-		member1A_list[id_1A]['family'] = member2A_list_plus[id_2A]['family']
+		member_list1[id_1A]['family'] = member_list2[id_2A]['family']
 	
-	return member1A_list
+	return member_list1
 
 
-
-def main_algorithm():
-	# get the questionnary
-	print('Get questions...')
-	question_list = get_question_list()
-	coeff_list = np.array([q['coeff'] for q in question_list], dtype=int)
-
-	# get the members list with their answers for each question
-	print('Get 1A answers...')
-	member1A_list = get_member1A_list(question_list)
-	print('Get 2A answers...')
-	member2A_list, family_list = get_member2A_list(question_list)
-
-	# Add or delete 2A members so as to have the same length as 1A members
-	print('Checking the length...')
-	member2A_list_plus = make_same_length(member1A_list, member2A_list, family_list)
-
-	# Solve the matching problem
-	member1A_list = solveProblem(member1A_list, member2A_list_plus, coeff_list)
-
-	# prevent lonely foreign students
-	print("Checking that no international student is alone")
-	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='International'][0]
-	question_value = 0
-	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'inter', coeff_list)
-	
-	# prevent lonely girls
-	print("checking that no girl is alone")
-	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='Genre'][0]
-	question_value = 1
-	member1A_list = prevent_lonelyness(member1A_list, member2A_list, family_list, question_id, question_value, 'genre', coeff_list)
-	
-	# saving in database
-	print('Saving...')
-	save(member1A_list)
-
-	print('Done!')
-	return member1A_list, member2A_list, family_list
 
 
 
@@ -351,81 +317,3 @@ def reset():
 		m.save()
 	print('Deleted!')
 
-
-
-def delta_algorithm():
-	"""Atribute 1A members to families after the first algorithm"""
-	
-	# get the questionnary
-	print('Get questions...')
-	question_list = get_question_list()
-	coeff_list = np.array([q['coeff'] for q in question_list], dtype=int)
-
-	# get the members list with their answers for each question
-	print('Get new 1A answers...')
-	member1A_list = get_member1A_list(question_list)
-	print('Get 2A answers...')
-	member2A_list, family_list = get_member2A_list(question_list)
-
-	# count number of members per family
-	print('Calculate the deltas...')
-	placed_1A = MembershipFamily.objects.filter(role='1A', group__year=date.today().year).prefetch_related('group')
-	for f in family_list:
-		nb_1A = len([m for m in placed_1A if m.group==f['family']])
-		nb_2A = f['nb']
-		f['delta'] = nb_1A - nb_2A
-	
-	# pour chaque membre 1A non attribué, on lui cherche une famille
-	print('Attributes a family to new 1As...')
-	for m in member1A_list:
-		# on prend les 20 premières familles où il manque encore des 1A et/ou 
-		# il y a peu de 1A en plus par rapport aux 2A, et si on a le même nombre
-		# on tri par petites familles d'abord
-		family_list.sort(key=lambda f: f['nb'])
-		family_list.sort(key=lambda f: f['delta'])
-		little_family_list = family_list[:20]
-		
-		# on cherche la meilleure famille
-		m['family'] = min(little_family_list,
-			key = lambda f: loveScore(m['answers'], f['answers'], coeff_list))['family']
-	
-	print('Saving...')
-	save(member1A_list)
-
-	print('Done !')
-	return member1A_list, member2A_list, family_list
-
-
-
-
-def itii_algorithm():
-	"""Relaunch the main algorithm but for itii only"""
-
-	# get the questionnary
-	print('Get questions...')
-	question_list = get_question_list()
-	coeff_list = np.array([q['coeff'] for q in question_list], dtype=int)
-
-	# get the members list with their answers for each question
-	print('Get 1A answers...')
-	member1A_list = get_member1A_list(question_list)
-	print('Get 2A answers...')
-	member2A_list, family_list = get_member2A_list(question_list)
-
-	# filter by itiis
-	question_id = [i for i in range(len(question_list)) if question_list[i]['code_name']=='ITII'][0]
-	member1A_list = [m for m in member1A_list if m['answers'][question_id]==0]
-
-	# Add or delete 2A members so as to have the same length as 1A members
-	print('Checking the length...')
-	member2A_list_plus = make_same_length(member1A_list, member2A_list, family_list)
-
-	# Solve the matching problem
-	member1A_list = solveProblem(member1A_list, member2A_list_plus, coeff_list)
-
-	# saving in database
-	print('Saving...')
-	save(member1A_list)
-
-	print('Done!')
-	return member1A_list, member2A_list, family_list

@@ -67,6 +67,7 @@ class MembershipFamily(NamedMembership):
     group = models.ForeignKey(to=Family, on_delete=models.CASCADE, null=True, blank=True, related_name='memberships')
     student = models.ForeignKey(to=Student, verbose_name="Parrain/Marraine", on_delete=models.CASCADE, related_name='membershipfamily')
     role = models.CharField("Rôle", max_length=3, choices=[('1A', "1ère Année"), ('2A+', "2ème Année et plus")])
+    itii = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "Membre"

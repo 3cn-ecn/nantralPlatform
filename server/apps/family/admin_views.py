@@ -8,9 +8,12 @@ from datetime import date
 from apps.utils.accessMixins import UserIsInGroup
 from .models import Family, MembershipFamily, QuestionFamily
 from .utils import read_phase
-from .algorithm import delta_algorithm, main_algorithm, reset
+from .algorithm.main import main_algorithm
+from .algorithm.delta import delta_algorithm
+from .algorithm.itii import itii_algorithm
+from .algorithm.utils import reset
 
-
+# group of users who have access
 GROUP_NAME = 'admin-family'
 
 
