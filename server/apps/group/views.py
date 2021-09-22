@@ -43,6 +43,8 @@ class BaseDetailGroupView(DetailView):
             group=group.full_slug, publication_date__gte=date.today()-timedelta(days=10)).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
+        context['has_events'] = BaseEvent.objects.filter(
+            group=group.full_slug, date__gte=date.today()).exists()
         # members
         context['members'] = group.members.through.objects.filter(
             group=group).order_by('student__user__first_name')
