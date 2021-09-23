@@ -62,7 +62,7 @@ class TemporaryRegistrationView(FormView):
 
     def form_valid(self, form) -> HttpResponse:
         user_creation(form, self.request)
-        return redirect(reverse('home:home'))
+        return redirect(reverse('account:login'))
 
 
 class ConfirmUser(View):
