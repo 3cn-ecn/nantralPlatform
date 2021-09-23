@@ -3,6 +3,7 @@ from typing import List
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.generic import TemplateView, FormView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,12 +11,25 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 from apps.utils.github import create_issue
+from apps.account.models import TemporaryAccessRequest
 
 from .forms import SuggestionForm
 
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home/home.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            temporaryAccessRequest = TemporaryAccessRequest.objects.filter(
+                user=self.request.user).first()
+            if temporaryAccessRequest:
+                message = f'Votre compte n\'est pas encore définitif.\
+                    Veuillez le valider <a href="{reverse("account:upgrade-permanent")}">ici</a>.\
+                    Attention après le {temporaryAccessRequest.approved_until}\
+                    vous ne pourrez plus vous connecter si vous n\'avez pas renseigné votre adresse Centrale.'
+                messages.warning(request, message)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -46,9 +60,11 @@ def handler403(request, *args, **argv):
     response = render(request, '403.html', context={}, status=403)
     return response
 
+
 def handler404(request, *args, **argv):
     response = render(request, '404.html', context={}, status=404)
     return response
+
 
 def handler500(request, *args, **argv):
     response = render(request, '500.html', context={}, status=500)
