@@ -12,6 +12,7 @@ import re
 from apps.utils.utest import TestMixin
 from apps.student.models import Student
 from apps.utils.testing.mocks import discord_mock_message_post
+from .tasks import remove_inactive_accounts
 
 
 # Create your tests here.
