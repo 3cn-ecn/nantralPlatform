@@ -14,6 +14,11 @@ def itii_algorithm():
 	member1A_list = get_member1A_list(question_list, itii=True)
 	print('Get family answers...')
 	_, family_list = get_member2A_list(question_list)
+	id = [i for i in range(len)]
+	family_list = [f for f in family_list if f['answers']]
+	
+	nbItii = len(member1A_list)
+	nbFami = len(family_list)
     
 	# Solve the matching problem
 	member1A_list = solveProblem(member1A_list, member2A_list_plus, coeff_list)
