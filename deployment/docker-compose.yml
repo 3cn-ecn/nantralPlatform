@@ -51,7 +51,6 @@ services:
       - ../server:/var/app
       - static_volume:/var/app/staticfiles/
       - /etc/letsencrypt:/etc/letsencrypt
-      - ./containers/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf:rw
     depends_on:
       - server
 
