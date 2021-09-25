@@ -80,7 +80,7 @@ services:
       - "127.0.0.1:8143:143"
       - "127.0.0.1:8993:993"
     volumes:
-      - "./certs:/certs"
+      - "/etc/letsencrypt/live/nantral-platform.fr:/certs"
       - "./overrides/nginx:/overrides:ro"
 
   resolver:
