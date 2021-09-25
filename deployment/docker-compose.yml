@@ -64,7 +64,7 @@ services:
     
   # Core services
   front:
-    build: ./containers/front
+    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}nginx:${MAILU_VERSION:-1.8}
     restart: always
     env_file: mailu.env
     logging:
@@ -80,7 +80,7 @@ services:
       - "127.0.0.1:143:143"
       - "127.0.0.1:993:993"
     volumes:
-      - "/etc/letsencrypt/live/nantral-platform.fr:/certs"
+      - "./certs:/certs"
       - "./overrides/nginx:/overrides:ro"
 
   resolver:
