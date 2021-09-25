@@ -89,6 +89,12 @@ ENV/
 env.bak/ 
 venv.bak/ 
 
+# Config folders
+certs/
+data/
+filter/
+redis/
+
 # mkdocs documentation 
 /site 
 
