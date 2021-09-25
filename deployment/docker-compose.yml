@@ -64,21 +64,21 @@ services:
     
   # Core services
   front:
-    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}nginx:${MAILU_VERSION:-1.8}
+    build: ./containers/front
     restart: always
     env_file: mailu.env
     logging:
       driver: json-file
     ports:
-      - "127.0.0.1:880:80"
+      - "127.0.0.1:8080:80"
       - "127.0.0.1:8443:443"
-      - "127.0.0.1:825:25"
-      - "127.0.0.1:8465:465"
-      - "127.0.0.1:8587:587"
-      - "127.0.0.1:8110:110"
-      - "127.0.0.1:8995:995"
-      - "127.0.0.1:8143:143"
-      - "127.0.0.1:8993:993"
+      - "127.0.0.1:25:25"
+      - "127.0.0.1:465:465"
+      - "127.0.0.1:587:587"
+      - "127.0.0.1:110:110"
+      - "127.0.0.1:995:995"
+      - "127.0.0.1:143:143"
+      - "127.0.0.1:993:993"
     volumes:
       - "/etc/letsencrypt/live/nantral-platform.fr:/certs"
       - "./overrides/nginx:/overrides:ro"
