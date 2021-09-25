@@ -1,5 +1,5 @@
 ![Testing](https://github.com/RobinetFox/nantralPlatform/workflows/Testing/badge.svg?branch=master)
-![EC2 Deploy](https://github.com/RobinetFox/nantralPlatform/workflows/EC2%20Deploy/badge.svg)
+![OVH Deploy](https://github.com/RobinetFox/nantralPlatform/workflows/OVH%20Deploy/badge.svg)
 # Nantral Platform
 
 1. Project structure
