@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from apps.club.models import NamedMembershipClub
+from apps.roommates.models import NamedMembershipRoommates
 from apps.academic.models import FollowCourse
 from apps.academic.forms import TakeCourseFormSet
 
@@ -30,6 +31,8 @@ class StudentProfile(LoginRequiredMixin, DetailView):
         context['clubs'] = NamedMembershipClub.objects.filter(
             student=self.object)
         context['courses'] = FollowCourse.objects.filter(student=self.object)
+        context['colocs'] = NamedMembershipRoommates.objects.filter(
+            student=self.object)
         return context
 
 
