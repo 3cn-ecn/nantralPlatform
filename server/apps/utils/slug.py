@@ -34,8 +34,6 @@ gérées automatiquement mais peuvent être réécrites si besoin.
 
 from typing import Union
 from importlib import import_module
-from django.http import Http404
-
 
 # list of models who uses slugs
 # 'app_name': ['location', 'model_name']
@@ -59,10 +57,7 @@ def get_object_from_slug(app_name: str, slug: str):
 
     if app_name == 'club':
         from apps.club.models import Club, BDX
-        try:
-            object = Club.objects.get(slug=slug)
-        except Club.DoesNotExist:
-            raise Http404("Club does not exist.")
+        object = Club.objects.get(slug=slug)
         try:
             object = object.bdx
         except BDX.DoesNotExist:
@@ -72,10 +67,7 @@ def get_object_from_slug(app_name: str, slug: str):
         try:
             package = import_module(SLUG_MODELS[app_name][0])
             Model = getattr(package, SLUG_MODELS[app_name][1])
-            try:
-                return Model.objects.get(slug=slug)
-            except Model.DoesNotExist:
-                raise Http404("The group does not exist.")
+            return Model.objects.get(slug=slug)
         except KeyError:
             raise Exception(f'Unknown application : {app_name}')
 
