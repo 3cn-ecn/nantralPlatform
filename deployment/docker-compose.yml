@@ -166,6 +166,15 @@ services:
     depends_on:
       - imap
 
+  wiki:
+    image: requarks/wiki:2
+    depends_on:
+      - database
+    env_file: wiki.env
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:3000"
+
 volumes:
   postgres_data:
   static_volume:

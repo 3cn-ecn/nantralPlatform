@@ -90,6 +90,8 @@ env.bak/
 venv.bak/ 
 
 # Config folders
+dav/
+dkim/
 certs/
 data/
 filter/
