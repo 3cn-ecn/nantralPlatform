@@ -200,6 +200,7 @@ class AdminRightsRequest(models.Model):
         self.delete()
 
     def deny(self):
+        group = get_object_from_full_slug(self.group)
         webhook = DiscordWebhook(
             url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été refusée.',
