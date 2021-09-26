@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import Course, FollowCourse
+from .models import Course, NamedMembershipCourse, FollowCourse
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['name', 'course_type']
+    list_display = ['name', 'type']
 
-class FollowCourseAdmin(admin.ModelAdmin):
-    list_display = ['student', 'course', 'when']
+class NamedMembershipCourseAdmin(admin.ModelAdmin):
+    list_display = ['student', 'group', 'year']
 
 admin.site.register(Course, CourseAdmin)
-admin.site.register(FollowCourse, FollowCourseAdmin)
+admin.site.register(NamedMembershipCourse, NamedMembershipCourseAdmin)
+admin.site.register(FollowCourse)

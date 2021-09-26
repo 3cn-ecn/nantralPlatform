@@ -1,34 +1,34 @@
 from rest_framework import generics, status, permissions
 from rest_framework.response import Response
 
-from apps.academic.serializers import FollowCourseSerializer
-from apps.academic.models import FollowCourse, Course
+from apps.academic.serializers import NamedMembershipCourseSerializer
+from apps.academic.models import NamedMembershipCourse, Course
 from apps.student.models import Student
 from apps.student.serializers import StudentSerializer
 
 
 class StudentCoursesView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = FollowCourseSerializer
+    serializer_class = NamedMembershipCourseSerializer
 
     def get_queryset(self):
-        return FollowCourse.objects.filter(student=self.kwargs['student_id'])
+        return NamedMembershipCourse.objects.filter(student=self.kwargs['student_id'])
 
     def create(self, request, *args, **kwargs):
-        FollowCourse.objects.create(
+        NamedMembershipCourse.objects.create(
             student=Student.objects.get(pk=kwargs['student_id']),
-            course=Course.objects.get(pk=request.data['course']),
-            when=request.data['when']
+            course=Course.objects.get(pk=request.data['group']),
+            when=request.data['year']
         )
         return Response({'Success': 'Student will folow this course (maybe)'}, status=status.HTTP_201_CREATED)
 
 
-class StudentEditFollowCourse(generics.DestroyAPIView):
+class StudentEditNamedMembershipCourse(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = FollowCourseSerializer
+    serializer_class = NamedMembershipCourseSerializer
 
     def get_queryset(self):
-        return FollowCourse.objects.filter(id=self.kwargs['pk'])
+        return NamedMembershipCourse.objects.filter(id=self.kwargs['pk'])
 
 
 class StudentList(generics.ListAPIView):

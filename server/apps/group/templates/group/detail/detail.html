@@ -34,7 +34,7 @@
         {% endif %}
         <!-- description du club : nom, infos... -->
         <div class="col">
-            <h1>{% block object_name %}{{object.name}}{% endblock %}</h1>
+            {% block object_name %}<h1>{{object.name}}</h1>{% endblock %}
             <p>
             {% if request.user.is_authenticated %}
                 {% if is_member and is_admin %}

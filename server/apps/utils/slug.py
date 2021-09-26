@@ -26,13 +26,30 @@ AJOUTER UN NOUVEAU GROUPE
 
 Si vous ajoutez un nouveau type de groupe, créez une appli dédiée. Déclarez
 les urls avec la fonction makeGroupUrlpatterns de apps.groups.urls, et ajoutez
-ensuite ce nouveau groupe dans la fonction get_object_from_slug ci-dessous.
+ensuite ce nouveau groupe dans la liste SLUG_MODELS ci-dessous.
 Il vous faudra aussi ajouter vos formulaires dans group/forms.py. Les vues sont
 gérées automatiquement mais peuvent être réécrites si besoin.
 
 """
 
 from typing import Union
+from importlib import import_module
+
+# list of models who uses slugs
+# 'app_name': ['location', 'model_name']
+SLUG_GROUPS = {
+    'club': ['apps.club.models', 'Club'],
+    'liste': ['apps.liste.models', 'Liste'],
+    'roommates': ['apps.roommates.models', 'Roommates'],
+    'family': ['apps.family.models', 'Family'],
+    'academic': ['apps.academic.models', 'Course'],
+}
+SLUG_MODELS = {
+    'event': ['apps.event.models', 'Event'],
+    'post': ['apps.post.models', 'Post'],
+}
+SLUG_MODELS.update(SLUG_GROUPS)
+
 
 
 def get_object_from_slug(app_name: str, slug: str):
@@ -46,21 +63,13 @@ def get_object_from_slug(app_name: str, slug: str):
         except BDX.DoesNotExist:
             pass
         return object
-
-    elif app_name == 'liste':
-        from apps.liste.models import Liste
-        return Liste.objects.get(slug=slug)
-
-    elif app_name == 'roommates':
-        from apps.roommates.models import Roommates
-        return Roommates.objects.get(slug=slug)
-
-    elif app_name == 'family':
-        from apps.family.models import Family
-        return Family.objects.get(slug=slug)
-
     else:
-        raise Exception(f'Unknown application : {app_name}')
+        try:
+            package = import_module(SLUG_MODELS[app_name][0])
+            Model = getattr(package, SLUG_MODELS[app_name][1])
+            return Model.objects.get(slug=slug)
+        except KeyError:
+            raise Exception(f'Unknown application : {app_name}')
 
 
 def get_full_slug_from_slug(app: str, slug: str):

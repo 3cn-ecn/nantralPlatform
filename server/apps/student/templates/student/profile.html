@@ -46,15 +46,18 @@
         </p>
     {% endif %}
 
-    {% if courses %}
-        <h2>Parcours scolaire</h2>
+    {% if courses or request.user == object.user %}
+        <h2>Formations suivies</h2>
         <p>
         {% for course in courses %}
-            {{course.when}} : <a href="{% url 'academic:course' course.id%}">{{course.course.course_type}} {{course.course.name}}</a><br/>
+            {{course.year}} - <a href="{{ course.group.get_absolute_url }}">{{course.group.get_type_display}} : {{course.group.name}}</a><br/>
         {% endfor %}
+            {% if request.user == object.user %}
+                <a href="{% url 'academic:index' %}">Ajouter une formation</a>
+            {% endif %}
         </p>
     {% endif %}
-
+    
     {% if clubs %}
         <h2>Clubs</h2>
         <div class="grille">
