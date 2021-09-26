@@ -41,7 +41,7 @@
         <h2>Colocs</h2>
         <p>
         {% for membership in colocs %}
-            <a href="{{membership.group.get_absolute_url}}">{{ membership.group.name }} ({{membership.group.begin_date|date:'Y'}})</a><br/>
+            <a href="{{membership.group.get_absolute_url()}}">{{ membership.group.name }} ({{membership.group.begin_date|date:'Y'}})</a><br/>
         {% endfor %}
         </p>
     {% endif %}
@@ -50,7 +50,7 @@
         <h2>Formations suivies</h2>
         <p>
         {% for course in courses %}
-            {{course.year}} - <a href="{{ course.group.get_absolute_url }}">{{course.group.get_type_display}} : {{course.group.name}}</a><br/>
+            {{course.year}} - <a href="{{ course.group.get_absolute_url() }}">{{course.group.get_type_display}} : {{course.group.name}}</a><br/>
         {% endfor %}
             {% if request.user == object.user %}
                 <a href="{% url 'academic:index' %}">Ajouter une formation</a>
@@ -63,7 +63,7 @@
         <div class="grille">
             {% for membership in clubs %}
                 <div class="grille-icon text-center" style="transform: rotate(0)">
-                    <a href="{{ membership.group.get_absolute_url }}" class="stretched-link">
+                    <a href="{{ membership.group.get_absolute_url() }}" class="stretched-link">
                         <div class="ratio ratio-1x1">
                             {% if membership.group.logo %}
                                 <img src="{{ membership.group.logo|file_url }}" />

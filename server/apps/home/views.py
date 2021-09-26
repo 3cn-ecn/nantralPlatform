@@ -92,7 +92,6 @@ def event_sort(events, request):
     return tri
 
 
-
 def handler403(request, *args, **argv):
     response = render(request, 'errors/403.html', context={}, status=403)
     return response

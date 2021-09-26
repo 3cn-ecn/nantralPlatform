@@ -64,6 +64,8 @@ class Student(models.Model):
     def __str__(self):
         return self.alphabetical_name
 
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self) -> str:
         return reverse('student:detail', args=[self.pk])
 

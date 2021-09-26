@@ -14,7 +14,7 @@
   			<tbody>
 				{% for course in object_list %}
 					<tr style="transform: rotate(0);">
-	  					<td><a href="{{ course.get_absolute_url }}" class="stretched-link"></a>{{course.name}}</a></td>
+	  					<td><a href="{{ course.get_absolute_url() }}" class="stretched-link"></a>{{course.name}}</a></td>
 	  					<td>{{course.type}}</td>
 					</tr>
 				{% endfor %}

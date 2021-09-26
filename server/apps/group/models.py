@@ -106,7 +106,8 @@ class Group(models.Model):
     def full_slug(self):
         return f'{self.app}--{self.slug}'
 
-    @property
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
         return reverse(self.app+':detail', kwargs={'slug': self.slug})
 

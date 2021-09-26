@@ -76,6 +76,8 @@ class Post(AbstractPost):
         self.slug = f'post--{slugify(self.title)}-{self.publication_date.year}-{self.publication_date.month}-{self.publication_date.day}'
         super(Post, self).save(*args, **kwargs)
 
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
         return reverse('post:detail', args=[self.slug])
 

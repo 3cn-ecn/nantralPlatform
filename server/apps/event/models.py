@@ -43,7 +43,8 @@ class BaseEvent(AbstractPost):
         self.slug = f'bevent--{slugify(self.title)}-{self.date.year}-{self.date.month}-{self.date.day}'
         super(BaseEvent, self).save(*args, **kwargs)
 
-    @property
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
         return reverse('event:detail', args=[self.slug])
 
