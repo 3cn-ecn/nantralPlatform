@@ -53,7 +53,11 @@ SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
-EMAIL_BACKEND = 'django_amazon_ses.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp'
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 AWS_SES_REGION = 'eu-central-1'
 
