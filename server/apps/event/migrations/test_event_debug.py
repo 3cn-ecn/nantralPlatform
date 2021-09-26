@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import migrations
 from apps.event.models import BaseEvent
 from apps.club.models import Club
+from apps.student.models import Student
 import random
 import json
 from pathlib import Path
@@ -17,7 +18,7 @@ def createEvents(apps, schema_editor):
 
     for event in dummyEvents:
         clubs = Club.objects.all()[:]
-        clubID = random.randint(1, 199)
+        clubID = random.randint(0, len(clubs))
         randomDate = timezone.now() + \
             timedelta(days=random.randint(1, 20))
         # For some reason, slugs are appended with a '-1'
@@ -27,9 +28,10 @@ def createEvents(apps, schema_editor):
             date=randomDate,
             **event
         )
-        nbOfParticipants = random.randint(1, 50)
-        for id in random.sample(range(1, 199), nbOfParticipants):
-            newEvent.participants.add(id)
+        students = Student.objects.all()[:]
+        nbOfParticipants = random.randint(1, len(students))
+        for id in random.sample(range(0, len(students)), nbOfParticipants):
+            newEvent.participants.add(students[id].id)
         newEvent.save()
 
 
