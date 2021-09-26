@@ -9,15 +9,15 @@ class TestCourses(TestCase, TestMixin):
         self.user_setup()
     
     def test_create_course(self):
-        Course.objects.create(name='testCourse', type='Option Disciplinaire')
+        Course.objects.create(name='testCourse', type='OD')
 
         self.assertEqual(len(Course.objects.all()), 1)
 
         course = Course.objects.all().first()
-        url = reverse('academic:course', args=[course.pk])
+        url = reverse('academic:detail', args=[course.slug])
         result = self.client.get(url)
 
-        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.status_code, 302)
 
     def test_follow_course(self):
         pass
