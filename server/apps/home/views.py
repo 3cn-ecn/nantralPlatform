@@ -56,21 +56,6 @@ class SuggestionView(LoginRequiredMixin, FormView):
         return redirect('home:home')
 
 
-def handler403(request, *args, **argv):
-    response = render(request, '403.html', context={}, status=403)
-    return response
-
-
-def handler404(request, *args, **argv):
-    response = render(request, '404.html', context={}, status=404)
-    return response
-
-
-def handler500(request, *args, **argv):
-    response = render(request, '500.html', context={}, status=500)
-    return response
-
-
 def event_sort(events, request):
     tri = {}
     jours = ["Lundi", "Mardi", "Mercredi",
@@ -105,3 +90,24 @@ def event_sort(events, request):
                 tri[written_date].append(
                     (event, event.is_participating(request.user)))
     return tri
+
+
+
+def handler403(request, *args, **argv):
+    response = render(request, 'errors/403.html', context={}, status=403)
+    return response
+
+
+def handler404(request, *args, **argv):
+    response = render(request, 'errors/404.html', context={}, status=404)
+    return response
+
+
+def handler413(request, *args, **argv):
+    response = render(request, 'errors/413.html', context={}, status=404)
+    return response
+
+
+def handler500(request, *args, **argv):
+    response = render(request, 'errors/500.html', context={}, status=500)
+    return response
