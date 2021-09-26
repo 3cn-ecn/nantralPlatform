@@ -7,25 +7,25 @@ from .models import Course, TYPE
 
 class CourseODList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Course.objects.filter(course_type='OD')
+    queryset = Course.objects.filter(type='OD')
     serializer_class = CourseSerializer
 
 
 class CourseOPList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Course.objects.filter(course_type='OP')
+    queryset = Course.objects.filter(type='OP')
     serializer_class = CourseSerializer
 
 
 class CourseITIIList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Course.objects.filter(course_type='ITII')
+    queryset = Course.objects.filter(type='ITII')
     serializer_class = CourseSerializer
 
 
 class CourseMasterList(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    queryset = Course.objects.filter(course_type='Master')
+    queryset = Course.objects.filter(type='Master')
     serializer_class = CourseSerializer
 
 

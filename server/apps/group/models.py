@@ -125,7 +125,7 @@ class NamedMembership(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.student
+        return self.student.__str__()
 
 
 class AdminRightsRequest(models.Model):
