@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.shortcuts import reverse
 from apps.utils.utest import TestMixin
 
-from .models import Course, FollowCourse
+from .models import Course
 
 class TestCourses(TestCase, TestMixin):
     def setUp(self):
