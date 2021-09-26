@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='course',
             name='slug',
-            field=models.SlugField(blank=True, max_length=40, unique=True),
+            field=models.SlugField(blank=True, max_length=40),
         ),
         migrations.AddField(
             model_name='course',
