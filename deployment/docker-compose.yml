@@ -71,7 +71,7 @@ services:
     ports:
       - "127.0.0.1:8080:80"
       - "127.0.0.1:8443:443"
-      - 25:25
+      - "0.0.0.0:25:25"
       - 465:465
       - 587:587
       - 110:110
@@ -165,6 +165,16 @@ services:
       - "./webmail:/data"
     depends_on:
       - imap
+
+  wiki:
+    image: requarks/wiki:2
+    depends_on:
+      - database
+    env_file: wiki.env
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:3000"
+      - "127.0.0.1:8444:3443"
 
 volumes:
   postgres_data:
