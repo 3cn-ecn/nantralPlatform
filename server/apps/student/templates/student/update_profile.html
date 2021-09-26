@@ -17,11 +17,4 @@
     {{ password_form|crispy }}
     <button class="btn btn-success">Modifier</button>
 </form>
-<br />
-<div id='root'></div>
-<script>
-    var student_id = "{{object.id}}";
-</script>
-<script src='{% static "js/studentCourseSelector.js" %}'>
-</script>
 {%endblock%}

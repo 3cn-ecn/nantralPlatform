@@ -18,9 +18,9 @@ class Migration(migrations.Migration):
             name='Exchange',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('got', models.ForeignKey(limit_choices_to={'course_type': 'OD'}, on_delete=django.db.models.deletion.CASCADE, related_name='got_by', to='academic.Course')),
+                ('got', models.ForeignKey(limit_choices_to={'type': 'OD'}, on_delete=django.db.models.deletion.CASCADE, related_name='got_by', to='academic.Course')),
                 ('student', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='exchange', to='student.Student')),
-                ('wanted', models.ManyToManyField(limit_choices_to={'course_type': 'OD'}, related_name='wanted_by', to='academic.Course')),
+                ('wanted', models.ManyToManyField(limit_choices_to={'type': 'OD'}, related_name='wanted_by', to='academic.Course')),
             ],
         ),
     ]
