@@ -24,7 +24,7 @@
 			<div class="grille">
 				{% for club in value %}
 					<div class="grille-icon text-center" style="transform: rotate(0)">
-						<a href="{{ club.get_absolute_url() }}" class="stretched-link">
+						<a href="{{ club.absolute_url }}" class="stretched-link">
 							<div class="ratio ratio-1x1">
 								{% if club.logo %}
 									<img src="{{ club.logo|file_url }}" />

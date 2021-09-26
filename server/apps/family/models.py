@@ -62,6 +62,10 @@ class Family(Group):
     def get_absolute_url(self):
         return reverse('family:detail', kwargs={'pk': self.pk})
 
+    @property
+    def absolute_url(self):
+        return self.get_absolute_url()
+
 
 class MembershipFamily(NamedMembership):
     """A member of a family"""

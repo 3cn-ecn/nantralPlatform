@@ -81,6 +81,10 @@ class Post(AbstractPost):
     def get_absolute_url(self):
         return reverse('post:detail', args=[self.slug])
 
+    @property
+    def absolute_url(self):
+        return self.get_absolute_url()
+
     @staticmethod
     def get_post_by_slug(slug:  str):
         """Get a group from a slug."""

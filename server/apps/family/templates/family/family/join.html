@@ -5,10 +5,10 @@
 
     {% if show_name %}
         <h1>{{ object.name }}</h1>
-        <p>Famille n°{{object.pk}} - <a href="{{ object.get_absolute_url() }}">Voir la page</a></p>
+        <p>Famille n°{{object.pk}} - <a href="{{ object.absolute_url }}">Voir la page</a></p>
     {% else %}
         <h1>Famille n°{{ object.pk }}</h1>
-        <p><a href="{{ object.get_absolute_url() }}">Voir la page</a></p>
+        <p><a href="{{ object.absolute_url }}">Voir la page</a></p>
     {% endif %}
     <br>
 

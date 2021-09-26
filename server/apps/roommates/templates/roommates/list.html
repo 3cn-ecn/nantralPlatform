@@ -15,7 +15,7 @@
 				<tr style="transform: rotate(0);">
 				<td>
 					{% if housing.current_roommates %}
-						<a href="{{ housing.current_roommates.get_absolute_url() }}" class="stretched-link"></a>
+						<a href="{{ housing.current_roommates.absolute_url }}" class="stretched-link"></a>
 					{% else %}
 						<a href="{% url 'roommates:create-roommates' housing.pk %}" class="stretched-link"></a>
 					{% endif %}

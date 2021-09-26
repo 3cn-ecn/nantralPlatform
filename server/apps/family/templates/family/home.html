@@ -13,7 +13,7 @@
             <p><a href="{% url 'family:family-list' %}">Consulter la liste des familles</a></p><br>
             {% if user_family and not family_not_completed %}
                 <h2>Ma Famille</h2>
-                <p>Félicitations, vous êtes enregistré dans la famille <a href="{{ user_family.get_absolute_url() }}">{{ user_family.name }}</a> !</p>
+                <p>Félicitations, vous êtes enregistré dans la famille <a href="{{ user_family.absolute_url }}">{{ user_family.name }}</a> !</p>
                 <br>
                 <h2>Mon Questionnaire</h2>
                 {% if form_complete %}
@@ -26,7 +26,7 @@
                 {% endif %}
             {% elif family_not_completed %}
                 <h2>Ma Famille</h2>
-                <p>Félicitations, la famille <a href="{{ user_family.get_absolute_url() }}">{{ user_family.name }}</a> a bien été créée !</p>
+                <p>Félicitations, la famille <a href="{{ user_family.absolute_url }}">{{ user_family.name }}</a> a bien été créée !</p>
                 <p><strong>ATTENTION CEPENDANT !</strong> Votre famille n'est pas encore finalisée, il manque des membres : pensez à la remplir,
                 sinon vous ne serez pas pris en compte dans l'algorithme et ne recevrez aucun filleul.</p>
                 <a href="{% url 'family:update' user_family.pk %}" class="btn btn-dark">Remplir le questionnaire famille</a>
@@ -66,7 +66,7 @@
             {% if user_family %}
                 <h2>Ma Famille</h2>
                 <p class='mt-2'>Voir la page de la famille 
-                    <a href="{{ user_family.get_absolute_url() }}">{{ user_family.name }}</a>
+                    <a href="{{ user_family.absolute_url }}">{{ user_family.name }}</a>
                 </p>
                 <br>
                 <h2>Mes filleules et filleuls</h2>
@@ -105,7 +105,7 @@
         {% if user_family %}
             <h2>Ma Famille</h2>
             <p class='mt-2'>Voir la page de la famille 
-                <a href="{{ user_family.get_absolute_url() }}">{{ user_family.name }}</a>
+                <a href="{{ user_family.absolute_url }}">{{ user_family.name }}</a>
             </p>
             <br>
             <h2>Les fillots</h2>
