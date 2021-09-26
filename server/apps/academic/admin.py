@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, NamedMembershipCourse, FollowCourse
+from .models import Course, NamedMembershipCourse
 
 class CourseAdmin(admin.ModelAdmin):
     list_display = ['name', 'type']
@@ -9,4 +9,3 @@ class NamedMembershipCourseAdmin(admin.ModelAdmin):
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(NamedMembershipCourse, NamedMembershipCourseAdmin)
-admin.site.register(FollowCourse)

@@ -5,21 +5,24 @@ from django.db import migrations
 
 def migrate_data(apps, schema_editor):
     # add slugs
-    from apps.academic.models import Course
-    for course in Course.objects.all():
-        course.save()
-    # transfer memberships
-    from apps.academic.models import FollowCourse, NamedMembershipCourse
-    for follow in FollowCourse.objects.all():
-        year = follow.student.promo
-        if follow.when == 'EI2': year +=1
-        if follow.when == 'EI3': year +=2
-        if follow.when == 'M2': year +=1
-        NamedMembershipCourse.objects.create(
-            group = follow.course,
-            student = follow.student,
-            year = year,
-        )
+    try:
+        from apps.academic.models import Course
+        for course in Course.objects.all():
+            course.save()
+        # transfer memberships
+        from apps.academic.models import FollowCourse, NamedMembershipCourse
+        for follow in FollowCourse.objects.all():
+            year = follow.student.promo
+            if follow.when == 'EI2': year +=1
+            if follow.when == 'EI3': year +=2
+            if follow.when == 'M2': year +=1
+            NamedMembershipCourse.objects.create(
+                group = follow.course,
+                student = follow.student,
+                year = year,
+            )
+    except Exception:
+        print("échec de la migration 5 de academic")
 
 
 class Migration(migrations.Migration):
