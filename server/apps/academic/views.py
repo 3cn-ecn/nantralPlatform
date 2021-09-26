@@ -14,6 +14,10 @@ class CourseView(DetailView):
     model = Course
     template_name = 'courses/detail.html'
 
+    def get_object(self, **kwargs):
+        course = Course.objects.get(id=self.kwargs.get('id'))
+        return course
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         students_following = FollowCourse.objects.filter(course=self.object)
