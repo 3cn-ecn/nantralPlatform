@@ -24,6 +24,7 @@ MOMENTS = [
 class Course(Group):
     type = models.CharField(verbose_name='Type de cours', max_length=10, choices=TYPE)
     members = models.ManyToManyField(Student, through='NamedMembershipCourse')
+    slug = models.SlugField(max_length=40, unique=False, blank=True)
     #archived = models.BooleanField("Formation archivée", default=False)
     
     class Meta:
