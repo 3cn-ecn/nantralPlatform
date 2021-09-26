@@ -83,7 +83,7 @@ class Group(models.Model):
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
         if not self.slug:
-            slug = slugify(self.name)
+            slug = slugify(self.name)[:35]
             if type(self).objects.filter(slug=slug):
                 id = 1
                 while type(self).objects.filter(slug=f'{slug}-{id}'):
