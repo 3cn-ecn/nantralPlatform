@@ -107,11 +107,11 @@ class AddToGroupView(LoginRequiredMixin, FormView):
             self.object.save()
             messages.success(
                 self.request, 'Les modifications ont bien été enregistrées !')
-        return redirect(self.object.group.get_absolute_url)
+        return redirect(self.object.group.get_absolute_url())
 
     def form_invalid(self, form):
         messages.error(self.request, 'Modification refusée... 😥')
-        return redirect(self.get_group().get_absolute_url)
+        return redirect(self.get_group().get_absolute_url())
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
@@ -275,7 +275,7 @@ class AcceptAdminRequestView(UserIsAdmin, View):
         except AdminRightsRequest.DoesNotExist:
             messages.error(
                 request, message=f"La demande a déjà été traitée !")
-        return redirect(group.get_absolute_url)
+        return redirect(group.get_absolute_url())
 
 
 class DenyAdminRequestView(UserIsAdmin, View):
@@ -294,4 +294,4 @@ class DenyAdminRequestView(UserIsAdmin, View):
         except AdminRightsRequest.DoesNotExist:
             messages.error(
                 request, message=f"La demande a déjà été traitée !")
-        return redirect(group.get_absolute_url)
+        return redirect(group.get_absolute_url())
