@@ -124,7 +124,7 @@ img.logo {
 }
 a.rs {
   background: #eaeaea;
-  border-radius: 1em;
+  border-radius: 10rem;
   text-decoration: none;
   color: var(--color-rs);
   padding: 0.2em;
@@ -139,7 +139,7 @@ a.rs div,
 a.rs i {
   background: var(--color-rs);
   color: #fff;
-  border-radius: 1em;
+  border-radius: 10rem;
   padding: 0.2em;
   position: absolute;
   top: 0;
