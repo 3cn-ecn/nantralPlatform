@@ -4,7 +4,7 @@
 
 
 {% block object_name %}
-    {{object.name}} ({{object.begin_date|date:'Y'}})
+    <h1>{{object.name}} ({{object.begin_date|date:'Y'}})</h1>
 {% endblock %}
 
 {% block infos %}
@@ -68,7 +68,7 @@
                             <p class="card-text">
                                 {{roommates.members.all|join:", "}}
                             </p>
-                            <a href="{{roommates.get_absolute_url}}" class="stretched-link"></a>
+                            <a href="{{roommates.absolute_url }}" class="stretched-link"></a>
                         </div>
                     </div>
                 </div>

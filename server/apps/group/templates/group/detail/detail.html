@@ -34,7 +34,7 @@
         {% endif %}
         <!-- description du club : nom, infos... -->
         <div class="col">
-            <h1>{% block object_name %}{{object.name}}{% endblock %}</h1>
+            {% block object_name %}<h1>{{object.name}}</h1>{% endblock %}
             <p>
             {% if request.user.is_authenticated %}
                 {% if is_member and is_admin %}
@@ -97,7 +97,7 @@
         <br>
         <h2>Annonces</h2>
         {% for post in posts %}
-        <a href="{{post.get_absolute_url}}" style='color:white;' class="mb-1">
+        <a href="{{post.absolute_url }}" style='color:white;' class="mb-1">
             <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
               <div class="card-body">
                 <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'l d F'}}</h5>

@@ -1,8 +1,11 @@
 from django.views.generic import ListView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import resolve
+from django.db.models import Q
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
+
+from datetime import date
 
 from apps.club.models import Club
 from apps.group.views import BaseDetailGroupView
@@ -35,6 +38,15 @@ class DetailClubView(BaseDetailGroupView):
     '''Vue de détails d'un club.'''
 
     template_name = 'club/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        group = context['object']
+        context['members'] = group.members.through.objects.filter(
+            Q(group=group) & (Q(date_end__isnull=True) | Q(date_end__gt=date.today()))
+        ).order_by('student__user__first_name')
+        return context
+    
 
 
 class DetailGroupMembersView(LoginRequiredMixin, ListView):

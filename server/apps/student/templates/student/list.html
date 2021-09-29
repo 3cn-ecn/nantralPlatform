@@ -21,7 +21,7 @@
       <td>{{student.user.first_name | title}}</td>
       <td class="d-none d-sm-table-cell">{{student.promo}}</td>
       <td class="d-none d-sm-table-cell">{{student.get_faculty_display}}</td>
-      <td class="d-none d-sm-table-cell">{{student.get_path_display}}</td>
+      <td class="d-none d-sm-table-cell">{{student.get_path_display|default_if_none:""}}</td>
     </tr>
     {% endfor %}
   </tbody>

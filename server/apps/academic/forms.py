@@ -1,14 +1,25 @@
-from django import forms
-from .models import FollowCourse
+from django.forms import ModelForm, modelformset_factory
+from .models import NamedMembershipCourse, Course
 
-class TakeCourseForm(forms.ModelForm):
+
+class UpdateCourseForm(ModelForm):
     class Meta:
-        model = FollowCourse
-        fields = ['course', 'when']
+        model = Course
+        fields = ['name', 'alt_name', 'type', 'summary', 'logo',
+                  'banniere', 'video1', 'video2', 'description']
 
-TakeCourseFormSet = forms.modelformset_factory(
-    FollowCourse,
-    form=TakeCourseForm,
+
+class NamedMembershipAddCourse(ModelForm):
+    """Form for a course page to add one self to a club."""
+    class Meta:
+        model = NamedMembershipCourse
+        fields = ['year']
+
+
+
+NamedMembershipCourseFormset = modelformset_factory(
+    NamedMembershipCourse,
+    fields=['student', 'year', 'admin'],
+    extra=1,
     can_delete=True,
-    extra=1
 )

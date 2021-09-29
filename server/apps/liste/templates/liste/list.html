@@ -22,7 +22,7 @@
 			<div class="grille">
 				{% for liste in group.list %}
 					<div class="grille-icon text-center" style="transform:rotate(0);">
-						<a href="{{ liste.get_absolute_url }}" class="stretched-link">
+						<a href="{{ liste.absolute_url }}" class="stretched-link">
 							<div class="ratio ratio-1x1">
 								{% if liste.logo %}
 									<img src="{{ liste.logo|file_url }}">

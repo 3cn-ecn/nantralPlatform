@@ -83,7 +83,7 @@ class Group(models.Model):
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
         if not self.slug:
-            slug = slugify(self.name)
+            slug = slugify(self.name)[:35]
             if type(self).objects.filter(slug=slug):
                 id = 1
                 while type(self).objects.filter(slug=f'{slug}-{id}'):
@@ -106,9 +106,14 @@ class Group(models.Model):
     def full_slug(self):
         return f'{self.app}--{self.slug}'
 
-    @property
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
         return reverse(self.app+':detail', kwargs={'slug': self.slug})
+
+    @property
+    def absolute_url(self):
+        return self.get_absolute_url()
 
     @property
     def modelName(self):
@@ -125,7 +130,7 @@ class NamedMembership(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.student
+        return self.student.__str__()
 
 
 class AdminRightsRequest(models.Model):
@@ -200,6 +205,7 @@ class AdminRightsRequest(models.Model):
         self.delete()
 
     def deny(self):
+        group = get_object_from_full_slug(self.group)
         webhook = DiscordWebhook(
             url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été refusée.',

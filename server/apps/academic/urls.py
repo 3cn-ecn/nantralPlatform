@@ -2,10 +2,12 @@ from django.conf.urls import url
 from django.urls import path
 
 from .views import *
+from apps.group.urls import makeGroupUrlpatterns
 
 app_name = 'academic'
 
 urlpatterns = [
-    path('<slug:student_id>/courses', follow_courses, name='student_courses'),
-    path('course/<slug:pk>', CourseView.as_view(), name='course')
-]
+    path('liste/', CoursesList.as_view(), name='index')
+] + makeGroupUrlpatterns(
+    detail_view=DetailCourseView.as_view()
+)

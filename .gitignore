@@ -81,12 +81,21 @@ celerybeat-schedule.*
 
 # Environments 
 .env 
+mailu.env
 .venv 
 env/ 
 venv/ 
 ENV/ 
 env.bak/ 
 venv.bak/ 
+
+# Config folders
+dav/
+dkim/
+certs/
+data/
+filter/
+redis/
 
 # mkdocs documentation 
 /site 
