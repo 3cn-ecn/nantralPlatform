@@ -90,7 +90,6 @@ table.table-sort th {
 /* banniere */
 .ratio-banniere {
   --bs-aspect-ratio: 37%;
-  z-index: -1;
   margin-bottom: 0.5rem;
 }
 img.banniere {
