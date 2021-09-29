@@ -44,7 +44,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
         context['list_family'] = [
             {
                 'name':f.name if show_data else f'Famille n°{f.id}', 
-                'url':f.get_absolute_url,
+                'url':f.get_absolute_url(),
                 'id':f.id,
             } 
             for f in Family.objects.all()
@@ -55,7 +55,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
                 {
                     'name': m.student.alphabetical_name, 
                     'family': m.group.name,
-                    'url': m.group.get_absolute_url,
+                    'url': m.group.get_absolute_url(),
                 }
                 for m in memberships.filter(role='2A+')
             ]
@@ -64,7 +64,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
                 {
                     'name': m.student.alphabetical_name, 
                     'family': m.group.name if show_data and phase > 3 else f'Famille n°{m.group.id}',
-                    'url': m.group.get_absolute_url,
+                    'url': m.group.get_absolute_url(),
                 }
                 for m in memberships.filter(role='1A', group__isnull=False)
             ]
