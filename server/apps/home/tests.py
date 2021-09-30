@@ -3,6 +3,7 @@ from django.utils.timezone import make_aware
 from django.urls import reverse
 from rest_framework import status
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 from apps.event.models import BaseEvent
 from apps.post.models import VISIBILITY
@@ -19,7 +20,7 @@ class TestHomeView(TestCase, TestMixin):
         """Test wether the home view displays events
         correctly."""
         self.past = BaseEvent.objects.create(
-            date=make_aware(datetime.now() - timedelta(days=1)),
+            date=timezone.now() - timedelta(days=1),
             title='An Event in the past',
             description="",
             location="Test",
@@ -27,7 +28,7 @@ class TestHomeView(TestCase, TestMixin):
             publicity=VISIBILITY[0][0],
         )
         self.today = BaseEvent.objects.create(
-            date=make_aware(datetime.now()),
+            date=timezone.now(),
             title='An Event today',
             description="",
             location="Test",
@@ -35,7 +36,7 @@ class TestHomeView(TestCase, TestMixin):
             publicity=VISIBILITY[0][0]
         )
         self.tomorrow = BaseEvent.objects.create(
-            date=make_aware(datetime.now() + timedelta(days=1)),
+            date=timezone.now() + timedelta(days=1),
             title='An Event tomorrow',
             description="",
             location="Test",
@@ -43,7 +44,7 @@ class TestHomeView(TestCase, TestMixin):
             publicity=VISIBILITY[0][0]
         )
         self.future = BaseEvent.objects.create(
-            date=make_aware(datetime.now() + timedelta(days=10)),
+            date=timezone.now() + timedelta(days=10),
             title='An Event in the distant future',
             description="",
             location="Test",
