@@ -13,6 +13,7 @@ class UserAdmin(admin.ModelAdmin):
 
 class TemporaryAccessRequestAdmin(admin.ModelAdmin):
     actions = ["send_reminder"]
+    list_display = ["user"]
 
     @admin.action(description="Send reminder to upgrade account.")
     def send_reminder(self, request, queryset):
