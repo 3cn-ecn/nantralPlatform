@@ -40,12 +40,14 @@ class BaseDetailGroupView(DetailView):
         # infos
         context['sociallinks'] = SocialLink.objects.filter(
             slug=group.full_slug)
+        publication_date = timezone.now().today()-timedelta(days=10)
         posts = Post.objects.filter(
-            group=group.full_slug, publication_date__gte=timezone.make_aware((timezone.now().today()-timedelta(days=10)))).order_by('-publication_date')
+            group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
+        date_gte = timezone.now().today()
         context['has_events'] = BaseEvent.objects.filter(
-            group=group.full_slug, date__gte=timezone.make_aware(timezone.now().today())).exists()
+            group=group.full_slug, date__gte=date_gte).exists()
         # members
         context['members'] = group.members.through.objects.filter(
             group=group).order_by('student__user__first_name')

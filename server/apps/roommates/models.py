@@ -29,7 +29,7 @@ class Housing(models.Model):
 
     @property
     def current_roommates(self):
-        now = timezone.make_aware(timezone.now())
+        now = timezone.now()
         return Roommates.objects.filter(Q(housing=self) & (Q(Q(begin_date__lte=now) & (
             Q(end_date__gte=now) | Q(end_date=None))) | (Q(members=None)))).order_by('begin_date').last()
 
