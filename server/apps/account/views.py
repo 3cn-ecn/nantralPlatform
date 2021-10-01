@@ -1,3 +1,4 @@
+from datetime import date, datetime
 from django.utils import timezone
 from typing import Any, Dict, Union
 from django.conf import settings
@@ -138,7 +139,7 @@ class AuthView(FormView):
                                 activer.'
                             messages.error(self.request, message)
                             return redirect(reverse('account:login'))
-                        if temporaryAccessRequest.approved_until <= timezone.now().today():
+                        if temporaryAccessRequest.approved_until <= datetime.now().date():
                             message = 'Votre compte n\'a pas encore été approuvé.\
                                 On vous prévient par mail dès que c\'est le cas.'
                             messages.error(self.request, message)
