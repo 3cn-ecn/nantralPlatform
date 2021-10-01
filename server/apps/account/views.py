@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import date, datetime
+from django.utils import timezone
 from typing import Any, Dict, Union
 from django.conf import settings
 from django.contrib.auth import login, logout
@@ -37,7 +38,7 @@ class RegistrationView(FormView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['temporary_registration'] = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today()
+        context['temporary_registration'] = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today()
         return context
 
     def form_valid(self, form):
@@ -51,7 +52,7 @@ class TemporaryRegistrationView(FormView):
 
     def dispatch(self, request, *args: Any, **kwargs: Any):
         """Do not allow to use this view outside of allowed temporary accounts windows."""
-        if not settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today():
+        if not settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
             return redirect(reverse('account:registration'))
         return super().dispatch(request, *args, **kwargs)
 
@@ -126,7 +127,7 @@ class AuthView(FormView):
                 message = f'Bonjour {user.first_name.title()} !'
                 messages.success(self.request, message)
             else:
-                if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today():
+                if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
                     # During certain periods allow temporary accounts.
                     try:
                         temporaryAccessRequest: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
@@ -138,7 +139,7 @@ class AuthView(FormView):
                                 activer.'
                             messages.error(self.request, message)
                             return redirect(reverse('account:login'))
-                        if temporaryAccessRequest.approved_until <= date.today():
+                        if temporaryAccessRequest.approved_until <= datetime.now().date():
                             message = 'Votre compte n\'a pas encore été approuvé.\
                                 On vous prévient par mail dès que c\'est le cas.'
                             messages.error(self.request, message)

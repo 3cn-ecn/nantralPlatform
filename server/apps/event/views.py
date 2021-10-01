@@ -1,4 +1,4 @@
-from datetime import date
+from django.utils import timezone
 
 from django.shortcuts import redirect, render
 from django.contrib import messages
@@ -109,9 +109,10 @@ class UpdateGroupEventsView(UserIsAdmin, View):
         context = {}
         context['object'] = get_object_from_slug(
             self.get_app(), self.get_slug())
+        date_gte = timezone.make_aware(timezone.now().today())
         context['events'] = BaseEvent.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
-            date__gte=date.today())
+            date__gte=date_gte)
         context['form'] = EventFormSet(queryset=context['events'])
         return context
 
@@ -138,9 +139,10 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
         context = {}
         context['object'] = get_object_from_slug(
             self.get_app(), self.get_slug())
+        date_lte = timezone.make_aware(timezone.now().today())
         context['events'] = BaseEvent.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
-            date__lte=date.today())
+            date__lte=date_lte)
         context['form'] = EventFormSet(queryset=context['events'])
         return context
 

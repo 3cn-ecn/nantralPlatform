@@ -1,7 +1,7 @@
 import numpy as np
 import random
 from matching.games import StableMarriage
-from datetime import date
+from django.utils import timezone
 
 import sys
 sys.setrecursionlimit(150000)
@@ -91,7 +91,7 @@ def get_member2A_list(question_list):
 	"""Get the list of 2A+ students with their answers"""
 
 	# add all membershipFamily students
-	data = MembershipFamily.objects.filter(role='2A+', group__year=date.today().year).prefetch_related(
+	data = MembershipFamily.objects.filter(role='2A+', group__year=timezone.now().year).prefetch_related(
 		'answermember_set__question', 'group__answerfamily_set__question')
 	member2A_list = []
 	for membership in data:
@@ -134,7 +134,7 @@ def get_family_list(member2A_list):
 	"""return a list of families with the average answer
 	based of all his members who completed the form"""
 	family_list = []
-	for fam in Family.objects.filter(year=date.today().year):
+	for fam in Family.objects.filter(year=timezone.now().year):
 		answers_list = np.array([m['answers'] for m in member2A_list if m['family']==fam])
 		answers_mean = np.nanmean(answers_list, axis=0)
 		if answers_mean is np.nan: raise Exception(f'Family {fam.name} has no members')
@@ -336,7 +336,7 @@ def main_algorithm():
 def reset():
 	"""Reset the decision of the algorithm"""
 	print('Deleting...')
-	for m in MembershipFamily.objects.filter(role='1A', group__year=date.today().year):
+	for m in MembershipFamily.objects.filter(role='1A', group__year=timezone.now().year):
 		m.group = None
 		m.save()
 	print('Deleted!')
@@ -358,7 +358,7 @@ def delta_algorithm():
 
 	# count number of members per family
 	print('Calculate the deltas...')
-	placed_1A = MembershipFamily.objects.filter(role='1A', group__year=date.today().year).prefetch_related('group')
+	placed_1A = MembershipFamily.objects.filter(role='1A', group__year=timezone.now().year).prefetch_related('group')
 	for f in family_list:
 		nb_1A = len([m for m in placed_1A if m.group==f['family']])
 		nb_2A = f['nb']

@@ -1,11 +1,10 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 # HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer
 from .serializers import HousingLastRoommatesSerializer
-from .models import Housing, NamedMembershipRoommates, Roommates
-from apps.student.models import Student
+from .models import Housing
 from apps.utils.geocoding import geocode
 
 from django.utils import timezone

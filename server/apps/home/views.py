@@ -1,14 +1,13 @@
-from datetime import *
+from datetime import timedelta
+from django.utils import timezone
 from typing import List
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import TemplateView, FormView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from apps.event.models import BaseEvent
 from apps.post.models import Post
 from apps.utils.github import create_issue
 from apps.account.models import TemporaryAccessRequest
@@ -34,8 +33,9 @@ class HomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
+        publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
         posts: List[Post] = Post.objects.filter(
-            publication_date__gte=date.today()-timedelta(days=10)).order_by('-publication_date')
+            publication_date__gte=publication_date).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
         return context
@@ -63,7 +63,7 @@ def event_sort(events, request):
     mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
     for event in events:
-        if event.date.date() == date.today():
+        if event.date.date() == timezone.now().today():
             if "Aujourd'hui" in tri:
                 tri["Aujourd'hui"].append(
                     (event, event.is_participating(request.user)))
@@ -71,7 +71,7 @@ def event_sort(events, request):
                 tri["Aujourd'hui"] = list()
                 tri["Aujourd'hui"].append(
                     (event, event.is_participating(request.user)))
-        elif event.date.date() == (date.today()+timedelta(days=1)):
+        elif event.date.date() == timezone.make_aware(timezone.now().today()+timedelta(days=1)):
             if "Demain" in tri:
                 tri["Demain"].append(
                     (event, event.is_participating(request.user)))

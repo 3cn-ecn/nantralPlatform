@@ -1,4 +1,5 @@
-from datetime import date, timedelta
+from datetime import timedelta
+from django.utils import timezone
 from django.http.request import HttpRequest
 
 from django.shortcuts import redirect
@@ -39,12 +40,14 @@ class BaseDetailGroupView(DetailView):
         # infos
         context['sociallinks'] = SocialLink.objects.filter(
             slug=group.full_slug)
+        publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
         posts = Post.objects.filter(
-            group=group.full_slug, publication_date__gte=date.today()-timedelta(days=10)).order_by('-publication_date')
+            group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
+        date_gte = timezone.make_aware(timezone.now().today())
         context['has_events'] = BaseEvent.objects.filter(
-            group=group.full_slug, date__gte=date.today()).exists()
+            group=group.full_slug, date__gte=date_gte).exists()
         # members
         context['members'] = group.members.through.objects.filter(
             group=group).order_by('student__user__first_name')
