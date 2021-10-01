@@ -1,6 +1,5 @@
 from datetime import date
 from unittest import mock
-from django.utils import timezone
 from freezegun import freeze_time
 from django.contrib.auth import get_user
 from django.test import TestCase, override_settings
@@ -27,7 +26,7 @@ class Test_Account(TestCase, TestMixin):
         User.objects.all().delete()
 
     @freeze_time("2021-09-01")
-    @override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=timezone.make_aware(date(year=2021, month=9, day=2)))
+    @override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=date(year=2021, month=9, day=2))
     def test_create_user_view_inside_temp(self):
         """Test that you can still create an account during temporary registration periods."""
         url = reverse('account:registration')
@@ -67,7 +66,7 @@ class Test_Account(TestCase, TestMixin):
         self.assertTrue(user.is_active)
 
     @freeze_time("2021-09-03")
-    @override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=timezone.make_aware(date(year=2021, month=9, day=2)))
+    @override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=date(year=2021, month=9, day=2))
     def test_create_user_view_outside_temp(self):
         """Test that you can still create an account outside temporary registration periods."""
         url = reverse('account:registration')
@@ -113,7 +112,7 @@ class Test_Account(TestCase, TestMixin):
 
 
 @freeze_time("2021-09-01")
-@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=timezone.make_aware(date(year=2021, month=9, day=2)))
+@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=date(year=2021, month=9, day=2))
 class TestTemporaryAccounts(TestCase, TestMixin):
     """Check that temporary accounts work within the correct time frame."""
 
@@ -307,7 +306,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
 
 
 @freeze_time("2021-09-03")
-@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=timezone.make_aware(date(year=2021, month=9, day=2)))
+@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=date(year=2021, month=9, day=2))
 class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
     """Check that temporary accounts don't work outside of the correct time frame."""
 
