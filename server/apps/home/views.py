@@ -36,7 +36,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         posts: List[Post] = Post.objects.filter(
-            publication_date__gte=timezone.now().today()-timedelta(days=10)).order_by('-publication_date')
+            publication_date__gte=timezone.make_aware(timezone.now().today()-timedelta(days=10))).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
         return context

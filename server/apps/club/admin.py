@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.template.response import TemplateResponse
 from django.urls.conf import path
 from django.urls.resolvers import URLPattern
+from django.utils import timezone
 from .models import *
 
 
@@ -38,7 +39,7 @@ class ClubAdmin(admin.ModelAdmin):
         for club in Club.objects.all():
             if NamedMembershipClub.objects.filter(
                     group=club.id, admin=True,
-                    date_begin__year__gte=(date.today().year-1)).count() == 0:
+                    date_begin__year__gte=timezone.make_aware(timezone.now().year-1)).count() == 0:
                 no_admins.append(club)
         context = dict(
             self.admin_site.each_context(request=request),

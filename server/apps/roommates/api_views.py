@@ -26,7 +26,7 @@ class HousingView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        now = timezone.now()
+        now = timezone.make_aware(timezone.now())
         query = Housing.objects.filter(
             Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | (Q(roommates__members=None))).distinct()
         return query
