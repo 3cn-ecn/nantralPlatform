@@ -1,4 +1,4 @@
-from datetime import date
+from django.utils import timezone
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.db import models
@@ -19,7 +19,7 @@ class TemporaryAccessRequest(models.Model):
     final_email = models.EmailField(blank=True, null=True)
 
     def save(self, domain: str = None, *args, **kwargs):
-        if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT > date.today():
+        if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT > timezone.now().today():
             if self.mail_valid is None:
                 self.mail_valid = False
             if self.approved is None:

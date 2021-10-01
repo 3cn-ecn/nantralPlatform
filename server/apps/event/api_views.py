@@ -1,9 +1,8 @@
-from datetime import datetime
+from django.utils import timezone
 
 from rest_framework import generics, permissions
 
 from .models import BaseEvent
-from apps.group.models import Group
 from .serializers import *
 
 
@@ -15,7 +14,7 @@ class ListEventsHomeAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         events = BaseEvent.objects.filter(
-            date__gte=datetime.today()).order_by("date")
+            date__gte=timezone.now().today()).order_by("date")
         return [event for event in events if event.can_view(
             self.request.user)]
 
@@ -35,7 +34,7 @@ class ListAllEventsGroupAPIView(generics.ListAPIView):
         group = self.kwargs["group"]
         events = BaseEvent.objects.filter(
             group=group,
-            date__gte=datetime.today()).order_by("date")
+            date__gte=timezone.now().today()).order_by("date")
         return [event for event in events if event.can_view(
             self.request.user)]
 
@@ -71,10 +70,10 @@ class ListEventsGroupAPIView(generics.ListAPIView):
     def get_queryset(self):
         if self.request.method == 'GET':
             if self.request.GET.get('view') == 'archives':
-                return BaseEvent.objects.filter(group=self.kwargs['group'], date__lt=datetime.today())
+                return BaseEvent.objects.filter(group=self.kwargs['group'], date__lt=timezone.now().today())
             elif self.request.GET.get('view') == 'all':
                 return BaseEvent.objects.filter(group=self.kwargs['group'])
-        return BaseEvent.objects.filter(group=self.kwargs['group'], date__gte=datetime.today())
+        return BaseEvent.objects.filter(group=self.kwargs['group'], date__gte=timezone.now().today())
 
 
 class UpdateEventAPIView(generics.RetrieveDestroyAPIView):

@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 
-from datetime import date
+from django.utils import timezone
 
 from apps.club.models import Club
 from apps.group.views import BaseDetailGroupView
@@ -43,7 +43,7 @@ class DetailClubView(BaseDetailGroupView):
         context = super().get_context_data(**kwargs)
         group = context['object']
         context['members'] = group.members.through.objects.filter(
-            Q(group=group) & (Q(date_end__isnull=True) | Q(date_end__gt=date.today()))
+            Q(group=group) & (Q(date_end__isnull=True) | Q(date_end__gt=timezone.now().today()))
         ).order_by('student__user__first_name')
         return context
     

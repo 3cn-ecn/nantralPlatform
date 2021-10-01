@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.utils.timezone import make_aware
 from django.urls import reverse
 from rest_framework import status
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.utils import timezone
 
 from apps.event.models import BaseEvent

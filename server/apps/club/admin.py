@@ -1,5 +1,4 @@
 from typing import List
-from datetime import date
 from django.contrib import admin
 from django.template.response import TemplateResponse
 from django.urls.conf import path

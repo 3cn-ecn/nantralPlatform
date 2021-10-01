@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from datetime import date
+from django.utils import timezone
 
 from .models import MembershipFamily, Family, Affichage
 
@@ -17,7 +17,7 @@ def read_phase():
     return phase
 
 
-def get_membership(user:User, year=date.today().year) -> MembershipFamily:
+def get_membership(user:User, year=timezone.now().year) -> MembershipFamily:
     '''return the membership of this year'''
     try:
         member = MembershipFamily.objects.get(
@@ -37,18 +37,18 @@ def get_membership(user:User, year=date.today().year) -> MembershipFamily:
             return None
 
 
-def is_1A(user:User, membership:MembershipFamily=None, year=date.today().year) -> bool:
+def is_1A(user:User, membership:MembershipFamily=None, year=timezone.now().year) -> bool:
     if not membership: 
         membership = get_membership(user, year)
     if membership:
         return membership.role == '1A'
     else:
         promo = user.student.promo
-        return promo == date.today().year
+        return promo == timezone.now().year
         
 
 
-def get_family(user:User, membership:MembershipFamily=None, year=date.today().year) -> Family:
+def get_family(user:User, membership:MembershipFamily=None, year=timezone.now().year) -> Family:
     if not membership:
         membership = get_membership(user, year)
     if membership:

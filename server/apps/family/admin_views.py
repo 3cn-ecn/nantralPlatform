@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from django.db.models import Q
 from django.core.cache import cache
 from django.contrib import messages
-from datetime import date
+from django.utils import timezone
 
 from apps.utils.accessMixins import UserIsInGroup
 from .models import Family, MembershipFamily, QuestionFamily
@@ -22,7 +22,7 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         context = super().get_context_data(**kwargs)
         context['phase'] = read_phase()
         # family - general
-        families = Family.objects.filter(year=date.today().year)
+        families = Family.objects.filter(year=timezone.now().year)
         nb_fquestion = QuestionFamily.objects.all().count()
         context['nb_families'] = len(families)
         # family - bad number of members
@@ -34,7 +34,7 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         context['bad_ans_families'] = bad_ans_families
         context['nb_bad_ans_families'] = len(bad_ans_families)
         # members
-        members = MembershipFamily.objects.filter(Q(group__isnull=True) | Q(group__year=date.today().year)).order_by('group__name')
+        members = MembershipFamily.objects.filter(Q(group__isnull=True) | Q(group__year=timezone.now().year)).order_by('group__name')
         members1A = members.filter(role='1A')
         members2A = members.filter(role='2A+')
         context['nb_1A'] = members1A.count()
@@ -71,7 +71,7 @@ class ResultsView(UserIsInGroup, TemplateView):
         return redirect('family-admin:home')
     
     def resolve(self):
-        if MembershipFamily.objects.filter(role='1A', group__year=date.today().year).exists():
+        if MembershipFamily.objects.filter(role='1A', group__year=timezone.now().year).exists():
             raise Exception('Some 1A members are already placed in families this year. The algorithm has already been executed!')
         return main_algorithm()
     
@@ -111,7 +111,7 @@ class ResultsSavedView(UserIsInGroup, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         families = []
-        for f in Family.objects.filter(year=date.today().year):
+        for f in Family.objects.filter(year=timezone.now().year):
             members_2A = f.memberships.filter(role='2A+')
             members_2A_plus = f.non_subscribed_members.split(',') if f.non_subscribed_members else []
             members_1A = f.memberships.filter(role='1A')
