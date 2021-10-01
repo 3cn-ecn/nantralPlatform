@@ -6,8 +6,6 @@ from apps.student.models import Student
 from apps.utils.geocoding import geocode
 from django.db.models import Q
 
-from django.utils import timezone
-
 
 class Housing(models.Model):
     address = models.CharField(

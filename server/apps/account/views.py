@@ -37,7 +37,7 @@ class RegistrationView(FormView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['temporary_registration'] = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today
+        context['temporary_registration'] = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today()
         return context
 
     def form_valid(self, form):

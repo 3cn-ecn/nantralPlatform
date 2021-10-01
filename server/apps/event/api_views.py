@@ -13,7 +13,7 @@ class ListEventsHomeAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        date_gte=timezone.now().today()
+        date_gte=timezone.make_aware(timezone.now().today())
         events = BaseEvent.objects.filter(
           # If we don't do this, it throws a RunTimeWarning for some reason
             date__gte=date_gte).order_by("date")
@@ -34,7 +34,7 @@ class ListAllEventsGroupAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         group = self.kwargs["group"]
-        date_gte = timezone.now().today()
+        date_gte = timezone.make_aware(timezone.now().today())
         events = BaseEvent.objects.filter(
             group=group,
             date__gte=date_gte).order_by("date")
@@ -73,11 +73,11 @@ class ListEventsGroupAPIView(generics.ListAPIView):
     def get_queryset(self):
         if self.request.method == 'GET':
             if self.request.GET.get('view') == 'archives':
-                date_lt = timezone.now().today()
+                date_lt = timezone.make_aware(timezone.now().today())
                 return BaseEvent.objects.filter(group=self.kwargs['group'], date__lt=date_lt)
             elif self.request.GET.get('view') == 'all':
                 return BaseEvent.objects.filter(group=self.kwargs['group'])
-        date_gte = timezone.now().today()
+        date_gte = timezone.make_aware(timezone.now().today())
         return BaseEvent.objects.filter(group=self.kwargs['group'], date__gte=date_gte)
 
 

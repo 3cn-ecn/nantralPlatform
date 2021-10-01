@@ -109,7 +109,7 @@ class UpdateGroupEventsView(UserIsAdmin, View):
         context = {}
         context['object'] = get_object_from_slug(
             self.get_app(), self.get_slug())
-        date_gte = timezone.now().today()
+        date_gte = timezone.make_aware(timezone.now().today())
         context['events'] = BaseEvent.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
             date__gte=date_gte)
@@ -139,7 +139,7 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
         context = {}
         context['object'] = get_object_from_slug(
             self.get_app(), self.get_slug())
-        date_lte = timezone.now().today()
+        date_lte = timezone.make_aware(timezone.now().today())
         context['events'] = BaseEvent.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
             date__lte=date_lte)

@@ -33,7 +33,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        publication_date = timezone.now().today()-timedelta(days=10)
+        publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
         posts: List[Post] = Post.objects.filter(
             publication_date__gte=publication_date).order_by('-publication_date')
         context['posts'] = [
@@ -71,7 +71,7 @@ def event_sort(events, request):
                 tri["Aujourd'hui"] = list()
                 tri["Aujourd'hui"].append(
                     (event, event.is_participating(request.user)))
-        elif event.date.date() == (timezone.now().today()+timedelta(days=1)):
+        elif event.date.date() == timezone.make_aware(timezone.now().today()+timedelta(days=1)):
             if "Demain" in tri:
                 tri["Demain"].append(
                     (event, event.is_participating(request.user)))
