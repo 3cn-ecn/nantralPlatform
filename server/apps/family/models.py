@@ -15,10 +15,11 @@ class Affichage(models.Model):
             (2, 'Questionnaires pour tous'),
             (3, 'Chasse aux parrains'),
             (4, 'Résultats Parrainage'),
+            (5, 'Candidatures ITII'),
+            (6, 'Résultats ITII'),
         ],
         default=0
     )
-    res_itii = models.BooleanField("Afficher les résultats ITII", default=False)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -51,6 +52,7 @@ class Family(Group):
     
     def count_members2A(self) -> int:
         nb_subscribed = self.memberships.filter(role='2A+').count()
+        # test if field is not None or is different to ""
         if self.non_subscribed_members:
             nb_non_subscribed = len(self.non_subscribed_members.split(','))
         else:
@@ -65,6 +67,12 @@ class Family(Group):
     @property
     def absolute_url(self):
         return self.get_absolute_url()
+    
+    def form_complete(self):
+        nb_done = self.answerfamily_set.all().count()
+        nb_tot = QuestionFamily.objects.all().count()
+        nb_members = self.count_members2A()
+        return (nb_done >= nb_tot and nb_members>=3 and nb_members<=7)
 
 
 class MembershipFamily(NamedMembership):

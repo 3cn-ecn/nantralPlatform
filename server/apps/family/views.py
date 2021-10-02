@@ -19,18 +19,21 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
     template_name = 'family/home.html'
 
     def get_context_data(self, **kwargs):
+        # by default all functions call data for the current year only
         membership = get_membership(self.request.user)
         context = {}
         context['phase'] = read_phase()
         context['is_2Aplus'] = not is_1A(self.request.user, membership)
+        context['show_sensible_data'] = show_sensible_data(self.request.user, membership)
+        context['is_itii'] = self.request.user.student.faculty == 'Iti'
+        context['membership'] = membership
         if membership:
-            context['registered'] = True
-            context['form_complete'] = membership.form_complete()
-            context['user_family'] = membership.group
-            if membership.group:
-                context['1A_members'] = membership.group.memberships.filter(role='1A')
-                context['2A_members'] = membership.group.memberships.filter(role='2A+')
-                context['family_not_completed'] = membership.group.count_members2A() < 3
+            context['form_perso_complete'] = membership.form_complete()
+            family = membership.group
+            context['family'] = family
+            if family:
+                context['form_family_complete'] = family.form_complete()
+                context['1A_members'] = family.memberships.filter(role='1A')
         return context
 
 
