@@ -30,17 +30,19 @@
                 {# formulaire famille non terminé #}
                 {% if phase <= 2 %}
                     <h2>Ma Famille</h2>
-                    <p>Félicitations, votre famille <a href="{{ family.absolute_url }}">{{ family.name }}</a> a bien été créée !</p>
+                    <p>Félicitations, votre famille <a href="{{ family.get_absolute_url }}">{{ family.name }}</a> a bien été créée !</p>
                     <p><strong>ATTENTION CEPENDANT !</strong> Votre famille n'est pas encore finalisée, merci de terminer le questionnaire
                     famille pour pouvoir remplir votre questionnaire personnel ensuite.</p>
                     <a href="{% url 'family:update' family.pk %}" class="btn btn-dark">Finir le questionnaire famille</a>
+                    <br>
                 {% elif phase == 5 %}
                     <h2>Ma Famille</h2>
-                    <p>Voir la page de ma famille : <a href="{{ family.absolute_url }}">{{ family.name }}</a></p>
+                    <p>Voir la page de ma famille : <a href="{{ family.get_absolute_url }}">{{ family.name }}</a></p>
                     <p>Attention : nous allons bientôt accueilir les ITII à Centrale Nantes ! Pour les placer dans 
                     les familles, merci de répondre au questionnaire ci-dessous pour nous dire si vous souhaitez les
                     accueillir ou non.</p>
                     <a href="{% url 'family:update' family.pk %}" class="btn btn-dark">Répondre au questionnaire</a>
+                    <br>
                 {% else %}
                     <p>Désolé, la procédure de parrainage est terminée !</p>
                 {% endif %}
@@ -48,13 +50,14 @@
                 {# formulaire famille terminé mais pas formulaire perso #}
                 {% if phase <= 2 %}
                     <h2>Ma Famille</h2>
-                    <p>Voir la page de ma famille : <a href="{{ family.absolute_url }}">{{ family.name }}</a></p>
+                    <p>Voir la page de ma famille : <a href="{{ family.get_absolute_url }}">{{ family.name }}</a></p>
                     <br>
                     <h2>Questionnaire de personnalité</h2>
                     <p>Ce questionnaire de personnalité servira à vous attrbuer des fillots 
                         avec qui vous êtes le plus susceptible de bien vous entendre. Toutes les données
                         récoltées seront détruites après la fin des processus de parrainage.</p>
                     <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Remplir le questionnaire</a>
+                    <br>
                 {% else %}
                     <p>Désolé, la procédure de parrainage est terminée !</p>
                 {% endif %}
@@ -62,15 +65,16 @@
                 {# tous les formulaires sont terminés #}
                 {% if phase <= 2 %}
                     <h2>Ma Famille</h2>
-                    <p>Voir la page de ma famille : <a href="{{ family.absolute_url }}">{{ family.name }} (n°{{ family.pk }})</a></p>
+                    <p>Voir la page de ma famille : <a href="{{ family.get_absolute_url }}">{{ family.name }} (n°{{ family.pk }})</a></p>
                     <br>
                     <h2>Questionnaire de personnalité</h2>
                     <p>Vos réponses ont bien été enregistrées ! Vous pouvez encore les modifier si vous
                     le souhaitez ci-dessous.</p>
                     <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Modifier mes réponses</a>
+                    <br>
                 {% else %}
                     <h2>Ma Famille</h2>
-                    <p>Voir la page de ma famille : <a href="{{ family.absolute_url }}">{{ family.name }} (n°{{ family.pk }})</a></p>
+                    <p>Voir la page de ma famille : <a href="{{ family.get_absolute_url }}">{{ family.name }} (n°{{ family.pk }})</a></p>
                     <br>
                     <p>Liste de mes fillots :</p>
                     {% include 'student/student_cards.html' with members=1A_members %}
@@ -103,6 +107,7 @@
                     <p>Nous avons bien enregistré votre participation, néanmoins vous n'avez pas fini de 
                     remplir le questionnaire : merci de le terminer pour être attribué à une famille le jour J !</p>
                     <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Reprendre le questionnaire 1ère année</a>
+                    <br>
                 {% else %}
                     <p>Désolé, la procédure de parrainage est terminée !</p>
                 {% endif %}
@@ -113,6 +118,7 @@
                 vous avez été affecté ici, après la phase d'attribution. Vous pouvez aussi modifier 
                 vos réponses ci-dessous.</p>
                 <a href="{% url 'family:questionnary' 1 %}" class="btn btn-dark">Modifier mes réponses</a>
+                <br>
             {% else %}
                 {# sinon le fillot a une famille #}
                 <h2>Ma Famille</h2>
@@ -122,13 +128,13 @@
                     <p>Pour vous aider à trouver vos parrains ce soir, voici la liste de vos co-fillots :</p>
                     {% include 'student/student_cards.html' with members=1A_members %}
                 {% else %}
-                    <p>Voir la page de ma famille : <a href="{{ family.absolute_url }}">{{ family.name }}</a></p>
+                    <p>Voir la page de ma famille : <a href="{{ family.get_absolute_url }}">{{ family.name }}</a></p>
                 {% endif %}
             {% endif %}
         {% endif %}
 
         {% if is_2Aplus or phase >= 3 %}
-            <br><br>
+            <br>
             <h2>Liste des familles</h2>
             <p>Vous cherchez une famille en particulier ? 
             <a href="{% url 'family:family-list' %}">Voir la liste des familles</a></p>

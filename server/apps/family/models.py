@@ -64,10 +64,6 @@ class Family(Group):
     def get_absolute_url(self):
         return reverse('family:detail', kwargs={'pk': self.pk})
 
-    @property
-    def absolute_url(self):
-        return self.get_absolute_url()
-    
     def form_complete(self):
         nb_done = self.answerfamily_set.all().count()
         nb_tot = QuestionFamily.objects.all().count()

@@ -57,7 +57,7 @@ def is_1A(user:User, membership:MembershipFamily=None, year=scholar_year()) -> b
         return membership.role == '1A'
     else:
         promo = user.student.promo
-        return promo == timezone.now().year
+        return promo == scholar_year()
         
 
 

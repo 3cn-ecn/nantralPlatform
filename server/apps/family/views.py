@@ -1,14 +1,13 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls.base import reverse
-from django.views.generic import TemplateView, CreateView, View, DetailView, FormView
+from django.views.generic import TemplateView, CreateView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.utils import timezone
 
 from apps.utils.accessMixins import UserIsAdmin
 from .models import Family, MembershipFamily, QuestionPage
 from .forms import CreateFamilyForm, UpdateFamilyForm, Member2AFormset, FamilyQuestionsForm, MemberQuestionsForm
-from .utils import read_phase, get_membership, is_1A, show_sensible_data
+from .utils import read_phase, get_membership, is_1A, show_sensible_data, scholar_year
 
 
 # Create your views here.
@@ -96,9 +95,7 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         if self.can_create():
-            self.object = form.save(commit=False)
-            self.object.year = timezone.now().year
-            self.object.save()
+            self.object = form.save()
             MembershipFamily.objects.create(
                 group=self.object,
                 student=self.request.user.student,
@@ -218,7 +215,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                 membres_doublon = []
                 for form in forms[1]:
                     if hasattr(form.instance,'student'):
-                        if form.instance.student.family_set.filter(year=timezone.now().year).exclude(pk=self.get_family().pk):
+                        if form.instance.student.family_set.filter(year=scholar_year()).exclude(pk=self.get_family().pk):
                             membres_doublon.append(form.instance.student.alphabetical_name)
                 if not membres_doublon:
                     # c'est bon on sauvegarde !

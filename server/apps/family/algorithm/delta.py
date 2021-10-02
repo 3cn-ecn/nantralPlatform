@@ -1,4 +1,5 @@
 from .utils import *
+from ..utils import scholar_year
 
 
 def delta_algorithm():
@@ -17,7 +18,7 @@ def delta_algorithm():
 
 	# count number of members per family
 	print('Calculate the deltas...')
-	placed_1A = MembershipFamily.objects.filter(role='1A', group__year=timezone.now().year).prefetch_related('group')
+	placed_1A = MembershipFamily.objects.filter(role='1A', group__year=scholar_year()).prefetch_related('group')
 	for f in family_list:
 		nb_1A = len([m for m in placed_1A if m.group==f['family']])
 		nb_2A = f['nb']
