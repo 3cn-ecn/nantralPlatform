@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import F
-from datetime import date
+from django.utils import timezone
 
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
@@ -53,7 +53,7 @@ class NamedMembershipClub(NamedMembership):
     group = models.ForeignKey(Club, on_delete=models.CASCADE)
     function = models.CharField(
         verbose_name='Rôle (facultatif)', max_length=200, blank=True)
-    date_begin = models.DateField(verbose_name='Date de début', default=date.today)
+    date_begin = models.DateField(verbose_name='Date de début', default=timezone.now().today)
     date_end = models.DateField(verbose_name='Date de fin (facultatif)', blank=True, null=True)
     order = models.IntegerField(verbose_name='Hiérarchie', default=0)
 

@@ -140,12 +140,12 @@ services:
 
   # Optional services
 
-  webdav:
-    image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}radicale:${MAILU_VERSION:-1.8}
-    restart: always
-    env_file: mailu.env
-    volumes:
-      - "./dav:/data"
+  #webdav:
+  #  image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}radicale:${MAILU_VERSION:-1.8}
+  #  restart: always
+  #  env_file: mailu.env
+  #  volumes:
+  #    - "./dav:/data"
 
   fetchmail:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}fetchmail:${MAILU_VERSION:-1.8}

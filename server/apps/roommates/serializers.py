@@ -1,8 +1,5 @@
 from rest_framework import serializers
 from .models import Housing, NamedMembershipRoommates, Roommates
-from django.db.models import Q
-
-from django.utils import timezone
 
 
 class HousingLastRoommatesSerializer(serializers.ModelSerializer):

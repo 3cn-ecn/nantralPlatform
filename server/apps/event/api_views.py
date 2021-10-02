@@ -1,9 +1,8 @@
-from datetime import datetime
+from django.utils import timezone
 
 from rest_framework import generics, permissions
 
 from .models import BaseEvent
-from apps.group.models import Group
 from .serializers import *
 
 
@@ -14,8 +13,10 @@ class ListEventsHomeAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        date_gte=timezone.make_aware(timezone.now().today())
         events = BaseEvent.objects.filter(
-            date__gte=datetime.today()).order_by("date")
+          # If we don't do this, it throws a RunTimeWarning for some reason
+            date__gte=date_gte).order_by("date")
         return [event for event in events if event.can_view(
             self.request.user)]
 
@@ -33,9 +34,10 @@ class ListAllEventsGroupAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         group = self.kwargs["group"]
+        date_gte = timezone.make_aware(timezone.now().today())
         events = BaseEvent.objects.filter(
             group=group,
-            date__gte=datetime.today()).order_by("date")
+            date__gte=date_gte).order_by("date")
         return [event for event in events if event.can_view(
             self.request.user)]
 
@@ -71,10 +73,12 @@ class ListEventsGroupAPIView(generics.ListAPIView):
     def get_queryset(self):
         if self.request.method == 'GET':
             if self.request.GET.get('view') == 'archives':
-                return BaseEvent.objects.filter(group=self.kwargs['group'], date__lt=datetime.today())
+                date_lt = timezone.make_aware(timezone.now().today())
+                return BaseEvent.objects.filter(group=self.kwargs['group'], date__lt=date_lt)
             elif self.request.GET.get('view') == 'all':
                 return BaseEvent.objects.filter(group=self.kwargs['group'])
-        return BaseEvent.objects.filter(group=self.kwargs['group'], date__gte=datetime.today())
+        date_gte = timezone.make_aware(timezone.now().today())
+        return BaseEvent.objects.filter(group=self.kwargs['group'], date__gte=date_gte)
 
 
 class UpdateEventAPIView(generics.RetrieveDestroyAPIView):

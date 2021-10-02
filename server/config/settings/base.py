@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-from datetime import date
+from datetime import date, datetime
 import os
 import environ
 from django.urls import reverse_lazy
@@ -239,5 +239,5 @@ GITHUB_REPO = 'nantral-platform/nantralPlatform'
 # Less origin restrictive for Youtube embed videos
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
-TEMPORARY_ACCOUNTS_DATE_LIMIT = date.fromisoformat(
+TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
     env('TEMPORARY_ACCOUNTS_DATE_LIMIT', default='2000-12-31'))
