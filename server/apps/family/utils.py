@@ -77,11 +77,10 @@ def show_sensible_data(user:User, membership:MembershipFamily=None) -> bool:
     les 2A+ et pour les 1A après la chasse aux parrains (phase > 3)."""
     if not membership:
         membership = get_membership(user)
+    phase = read_phase()
     if membership:
-        phase = read_phase()
         first_year = is_1A(user, membership)
-        show = (not first_year) or (phase >= 4)
-        return show
+        return (not first_year) or (phase >= 4)
     else:
-        return False
+        return phase >= 4
 
