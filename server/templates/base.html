@@ -57,7 +57,7 @@
 								</a>
 								<ul class="dropdown-menu" role="menu">
 									{% for bdx in navbar_bdx %}
-									<li><a class="dropdown-item" href="{{ bdx.absolute_url }}">{{ bdx.name }}</a></li>
+									<li><a class="dropdown-item" href="{{ bdx.get_absolute_url }}">{{ bdx.name }}</a></li>
 									{% endfor %}
 								</ul>
 							</li>

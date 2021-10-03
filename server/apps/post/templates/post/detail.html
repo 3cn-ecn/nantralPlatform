@@ -12,7 +12,7 @@
 
 {% block content %}
     <h1>{{object.title}}</h1>
-    <p>Annonce par <a href='{{group.absolute_url }}'>{{group.name}}</a></p>
+    <p>Annonce par <a href='{{group.get_absolute_url }}'>{{group.name}}</a></p>
     </br>
     {% autoescape off %}
         <p>{{object.description}}</p>

@@ -45,7 +45,7 @@ The server is a django application.
 
 ### Let's get you started:
 #### Install
-- First install python 3.6 +
+- First install python 3.7 +
 - Install virtualenv for python with `pip3 install virtualenv`
 
 #### Server

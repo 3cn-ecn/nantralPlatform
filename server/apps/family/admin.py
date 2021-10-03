@@ -11,7 +11,8 @@ class MemberFamilyInline(admin.TabularInline):
     extra=0
 
 class FamilyAdmin(admin.ModelAdmin):
-    inlines=[MemberFamilyInline, AnswerFamilyInline]
+    inlines=[AnswerFamilyInline]
+
 admin.site.register(Family, FamilyAdmin)
 
 
