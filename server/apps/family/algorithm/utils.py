@@ -82,8 +82,8 @@ def get_member1A_list(question_list, itii=False):
 		data = data.exclude(student__faculty='Iti')
 	member1A_list = []
 	for membership in data:
-		answers = get_answers(membership, question_list)
-		if not vectisnan(answers):
+		if len(membership.answermember_set) >= len(question_list):
+			answers = get_answers(membership, question_list)
 			member1A_list.append({
 				'member': membership,
 				'answers': answers

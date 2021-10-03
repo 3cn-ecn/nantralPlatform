@@ -75,8 +75,13 @@ def get_family(user:User, membership:MembershipFamily=None, year=scholar_year())
 def show_sensible_data(user:User, membership:MembershipFamily=None) -> bool:
     """Décide si on doit montrer les données sensibles : on les montre pour
     les 2A+ et pour les 1A après la chasse aux parrains (phase > 3)."""
-    phase = read_phase()
-    first_year = is_1A(user, membership)
-    show = (not first_year) or (phase >= 4)
-    return show
+    if not membership:
+        membership = get_membership(user)
+    if membership:
+        phase = read_phase()
+        first_year = is_1A(user, membership)
+        show = (not first_year) or (phase >= 4)
+        return show
+    else:
+        return False
 

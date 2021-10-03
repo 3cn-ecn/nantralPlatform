@@ -11,11 +11,11 @@ class Affichage(models.Model):
     phase = models.IntegerField(
         choices = [
             (0, 'Tout masquer'),
-            (1, 'Questionnaires Familles & Parrains'),
-            (2, 'Questionnaires pour tous'),
-            (3, 'Chasse aux parrains'),
-            (4, 'Résultats Parrainage'),
-            (5, 'Candidatures ITII'),
+            (1, 'Questionnaires 2A+'),
+            (2, 'Questionnaires 1A et 2A+'),
+            (3, 'Soirée de parrainage'),
+            (4, 'Résultats du parrainage'),
+            (5, 'Questionnaires ITII'),
             (6, 'Résultats ITII'),
         ],
         default=0
