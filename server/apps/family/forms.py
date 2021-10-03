@@ -76,6 +76,25 @@ class FamilyQuestionsForm(forms.Form):
 
 
 
+class FamilyQuestionItiiForm(FamilyQuestionsForm):
+
+    def __init__(self, initial=None, *args, **kwargs):
+        super(FamilyQuestionsForm, self).__init__(initial=initial, *args, **kwargs)
+        question = QuestionFamily.objects.get(code_name='itii')
+        name = f'question-{question.pk}'
+        self.fields[name] = forms.ChoiceField(
+            label = question.label,
+            choices = [
+                (o.value, o.text)
+                for o in question.option_set.all()
+            ],
+            help_text = question.details,
+            widget = forms.RadioSelect(attrs={'class':'form-check-input'})
+        )
+
+
+
+
 class MemberQuestionsForm(forms.Form):
 
     def __init__(self, page, is_2Aplus, initial, *args, **kwargs):
