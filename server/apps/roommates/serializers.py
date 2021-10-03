@@ -1,8 +1,5 @@
 from rest_framework import serializers
 from .models import Housing, NamedMembershipRoommates, Roommates
-from django.db.models import Q
-
-from django.utils import timezone
 
 
 class HousingLastRoommatesSerializer(serializers.ModelSerializer):
@@ -49,7 +46,7 @@ class RoommatesSerializer(serializers.ModelSerializer):
         return RoommatesMemberSerializer(members, many=True, context=self._context).data
 
     def get_url(self, obj):
-        return obj.get_absolute_url
+        return obj.get_absolute_url()
 
 
 '''

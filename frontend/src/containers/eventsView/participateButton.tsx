@@ -1,9 +1,11 @@
 ﻿import * as React from "react";
 import { useState, CSSProperties } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { faIconStyle } from "./styles";
 import { Spinner } from "react-bootstrap";
 import { EventInfos, Urls, Student } from "./interfaces";
 import { spinnerDivStyle, spinnerStyle } from "./styles";
+import { ExportButton } from "./exportButton";
 
 export function ParticipateButton(props): JSX.Element {
   const urls: Urls = props.urls;
@@ -23,9 +25,6 @@ export function ParticipateButton(props): JSX.Element {
   const handleClose = () => setShowModal(false);
   const handleOpen = () => setShowModal(true);
 
-  const faIconStyle: CSSProperties = {
-    marginRight: 7,
-  };
   return (
     <div className="btn-group" role="group">
       <Button variant="secondary" size="sm">
@@ -70,33 +69,36 @@ export function ParticipateButton(props): JSX.Element {
       {(() => {
         if (eventInfos.is_member) {
           return (
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => {
-                setIsParticipantsLoading(true);
-                handleOpen();
-                fetch(urls.participants.replace("1", eventInfos.slug))
-                  .then((res) => {
-                    res.json().then((data) => {
-                      setParticipants(data);
-                    });
-                  })
-                  .catch((err) => {
-                    setParticipants([]);
-                  })
-                  .finally(() => setIsParticipantsLoading(false));
-              }}
-            >
-              <i className="fas fa-list" style={faIconStyle}></i>
-              {"Liste des participant.e.s"}
-            </Button>
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => {
+                  setIsParticipantsLoading(true);
+                  handleOpen();
+                  fetch(urls.participants.replace("1", eventInfos.slug))
+                    .then((res) => {
+                      res.json().then((data) => {
+                        setParticipants(data);
+                      });
+                    })
+                    .catch((err) => {
+                      setParticipants([]);
+                    })
+                    .finally(() => setIsParticipantsLoading(false));
+                }}
+              >
+                <i className="fas fa-list" style={faIconStyle}></i>
+                {"Liste des participant.e.s"}
+              </Button>
+            </>
           );
         }
       })()}
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Liste des participant.e.s</Modal.Title>
+          <ExportButton participants={participants} title={eventInfos.title} />
         </Modal.Header>
         <Modal.Body>
           {isParticipantsLoading ? (

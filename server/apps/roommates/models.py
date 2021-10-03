@@ -1,12 +1,10 @@
 from django.db import models
-from datetime import date
+from django.utils import timezone
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
 from django.db.models import Q
-
-from django.utils import timezone
 
 
 class Housing(models.Model):
@@ -37,7 +35,7 @@ class Housing(models.Model):
 class Roommates(Group):
     name = models.CharField(verbose_name='Nom du groupe',
                             max_length=100)
-    begin_date = models.DateField("Date d'emménagement", default=date.today)
+    begin_date = models.DateField("Date d'emménagement", default=timezone.now().today)
     end_date = models.DateField("Date de sortie", null=True, blank=True)
     housing = models.ForeignKey(
         to=Housing, on_delete=models.CASCADE)

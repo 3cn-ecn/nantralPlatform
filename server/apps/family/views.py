@@ -3,7 +3,7 @@ from django.urls.base import reverse
 from django.views.generic import TemplateView, CreateView, View, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from datetime import date
+from django.utils import timezone
 
 from apps.utils.accessMixins import UserIsAdmin
 from .models import Family, MembershipFamily, QuestionPage
@@ -44,7 +44,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
         context['list_family'] = [
             {
                 'name':f.name if show_data else f'Famille n°{f.id}', 
-                'url':f.get_absolute_url,
+                'url':f.get_absolute_url(),
                 'id':f.id,
             } 
             for f in Family.objects.all()
@@ -55,7 +55,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
                 {
                     'name': m.student.alphabetical_name, 
                     'family': m.group.name,
-                    'url': m.group.get_absolute_url,
+                    'url': m.group.get_absolute_url(),
                 }
                 for m in memberships.filter(role='2A+')
             ]
@@ -64,7 +64,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
                 {
                     'name': m.student.alphabetical_name, 
                     'family': m.group.name if show_data and phase > 3 else f'Famille n°{m.group.id}',
-                    'url': m.group.get_absolute_url,
+                    'url': m.group.get_absolute_url(),
                 }
                 for m in memberships.filter(role='1A', group__isnull=False)
             ]
@@ -94,7 +94,7 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         if self.can_create():
             self.object = form.save(commit=False)
-            self.object.year = date.today().year
+            self.object.year = timezone.now().year
             self.object.save()
             MembershipFamily.objects.create(
                 group=self.object,
@@ -215,7 +215,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                 membres_doublon = []
                 for form in forms[1]:
                     if hasattr(form.instance,'student'):
-                        if form.instance.student.family_set.filter(year=date.today().year).exclude(pk=self.get_family().pk):
+                        if form.instance.student.family_set.filter(year=timezone.now().year).exclude(pk=self.get_family().pk):
                             membres_doublon.append(form.instance.student.alphabetical_name)
                 if not membres_doublon:
                     # c'est bon on sauvegarde !

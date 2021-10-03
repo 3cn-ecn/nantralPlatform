@@ -1,4 +1,5 @@
-from datetime import date, timedelta
+from datetime import timedelta
+from django.utils import timezone
 from django.http.request import HttpRequest
 
 from django.shortcuts import redirect
@@ -39,10 +40,14 @@ class BaseDetailGroupView(DetailView):
         # infos
         context['sociallinks'] = SocialLink.objects.filter(
             slug=group.full_slug)
+        publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
         posts = Post.objects.filter(
-            group=group.full_slug, publication_date__gte=date.today()-timedelta(days=10)).order_by('-publication_date')
+            group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
+        date_gte = timezone.make_aware(timezone.now().today())
+        context['has_events'] = BaseEvent.objects.filter(
+            group=group.full_slug, date__gte=date_gte).exists()
         # members
         context['members'] = group.members.through.objects.filter(
             group=group).order_by('student__user__first_name')
@@ -105,11 +110,11 @@ class AddToGroupView(LoginRequiredMixin, FormView):
             self.object.save()
             messages.success(
                 self.request, 'Les modifications ont bien été enregistrées !')
-        return redirect(self.object.group.get_absolute_url)
+        return redirect(self.object.group.get_absolute_url())
 
     def form_invalid(self, form):
         messages.error(self.request, 'Modification refusée... 😥')
-        return redirect(self.get_group().get_absolute_url)
+        return redirect(self.get_group().get_absolute_url())
 
 
 class UpdateGroupView(UserIsAdmin, TemplateView):
@@ -259,26 +264,37 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 
 class AcceptAdminRequestView(UserIsAdmin, View):
     def get(self, request: HttpRequest, slug, id):
-        admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
         app = resolve(request.path_info).app_name
-        if f'{app}--{slug}' == admin_req.group:
-            # Checking whether the url is legit
-            group: Group = get_object_from_full_slug(admin_req.group)
-            messages.success(
-                request, message=f"Vous avez accepté la demande de {admin_req.student}")
-            admin_req.accept()
-
-        return redirect(group.get_absolute_url)
+        group: Group = get_object_from_slug(app, slug)
+        try:
+            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
+            if group.full_slug == admin_req.group:
+                # Checking whether the url is legit
+                messages.success(
+                    request, message=f"Vous avez accepté la demande de {admin_req.student}")
+                admin_req.accept()
+            else:
+                messages.error(request, message="L'URL est invalide !!!")
+        except AdminRightsRequest.DoesNotExist:
+            messages.error(
+                request, message=f"La demande a déjà été traitée !")
+        return redirect(group.get_absolute_url())
 
 
 class DenyAdminRequestView(UserIsAdmin, View):
     def get(self, request: HttpRequest, slug, id):
-        admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
         app = resolve(request.path_info).app_name
-        if f'{app}--{slug}' == admin_req.group:
-            # Checking whether the url is legit
-            group: Group = get_object_from_full_slug(admin_req.group)
-            messages.success(
-                request, message=f"Vous avez refusé la demande de {admin_req.student}")
-            admin_req.deny()
-        return redirect(group.get_absolute_url)
+        group: Group = get_object_from_slug(app, slug)
+        try:
+            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
+            if group.full_slug == admin_req.group:
+                # Checking whether the url is legit
+                messages.success(
+                    request, message=f"Vous avez refusé la demande de {admin_req.student}")
+                admin_req.deny()
+            else:
+                messages.error(request, message="L'URL est invalide !!!")
+        except AdminRightsRequest.DoesNotExist:
+            messages.error(
+                request, message=f"La demande a déjà été traitée !")
+        return redirect(group.get_absolute_url())

@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls.base import reverse
 from django.core.cache import cache
-from datetime import date
+from django.utils import timezone
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
@@ -40,7 +40,7 @@ class Family(Group):
     
     def save(self, *args, **kwargs):
         # set the year
-        if not self.year: self.year = date.today().year
+        if not self.year: self.year = timezone.now().year
         super(Family, self).save(*args, **kwargs)
     
     def get_answers_dict(self):
@@ -56,10 +56,15 @@ class Family(Group):
         else:
             nb_non_subscribed = 0
         return nb_subscribed + nb_non_subscribed
-    
-    @property
+
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).   
     def get_absolute_url(self):
         return reverse('family:detail', kwargs={'pk': self.pk})
+
+    @property
+    def absolute_url(self):
+        return self.get_absolute_url()
 
 
 class MembershipFamily(NamedMembership):

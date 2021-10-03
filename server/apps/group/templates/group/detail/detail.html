@@ -27,14 +27,16 @@
         <!-- logo -->
         {%if object.logo %}
             <div class="col-12 col-sm-3">
-                <div class="ratio ratio-1x1 logo-div mb-4">
-                    <img class="logo" src='{{object.logo|file_url}}'>
-                </div>
+                <a href="{{object.logo|file_url}}">
+                    <div class="ratio ratio-1x1 logo-div mb-4">
+                        <img class="logo" src="{{object.logo|file_url}}">
+                    </div>
+                </a>
             </div>
         {% endif %}
         <!-- description du club : nom, infos... -->
         <div class="col">
-            <h1>{% block object_name %}{{object.name}}{% endblock %}</h1>
+            {% block object_name %}<h1>{{object.name}}</h1>{% endblock %}
             <p>
             {% if request.user.is_authenticated %}
                 {% if is_member and is_admin %}
@@ -82,6 +84,7 @@
     {% endblock %}
 
     <!-- Events -->
+    {% if has_events %}
         <br>   
         <h2>Évènements</h2>
         {% if request.user.is_authenticated %}
@@ -89,13 +92,14 @@
         {%else%}
             <p>Veuillez vous connecter pour voir les évènements à venir.</p>
         {%endif%}
+    {% endif %}
     
     <!-- Anonces -->
     {% if posts %}
         <br>
         <h2>Annonces</h2>
         {% for post in posts %}
-        <a href="{{post.get_absolute_url}}" style='color:white;' class="mb-1">
+        <a href="{{post.absolute_url }}" style='color:white;' class="mb-1">
             <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
               <div class="card-body">
                 <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'l d F'}}</h5>

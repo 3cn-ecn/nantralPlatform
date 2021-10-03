@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: EC2 Deploy
+name: OVH Deploy
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -74,5 +74,9 @@ jobs:
             npm install
             npm start
             cd ../deployment
-            docker-compose build
+            sudo cp 001-post-renew.sh /etc/letsencrypt/renewal-hooks/post/001-post-renew.sh
+            sudo chmod +x /etc/letsencrypt/renewal-hooks/post/001-post-renew.sh
+            sudo cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPlatform/deployment/certs/key.pem
+            sudo cp /etc/letsencrypt/live/nantral-platform.fr/fullchain.pem /home/ubuntu/nantralPlatform/deployment/certs/cert.pem
+            sudo docker-compose build
             docker-compose up -d

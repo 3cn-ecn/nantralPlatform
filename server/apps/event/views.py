@@ -1,4 +1,4 @@
-from datetime import date
+from django.utils import timezone
 
 from django.shortcuts import redirect, render
 from django.contrib import messages
@@ -7,6 +7,7 @@ from django.views.generic import UpdateView, FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import resolve
+from django.db.utils import IntegrityError
 
 from .models import *
 from .forms import EventForm, EventFormSet
@@ -53,10 +54,15 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
     def form_valid(self, form, **kwargs):
         event = form.save(commit=False)
         event.group = get_full_slug_from_slug(self.get_app(), self.get_slug())
-        event.save()
-        messages.success(
-            self.request, f'Vous avez programé {event.title}, le {event.date}.')
-        return redirect(self.get_app()+':update-events', self.get_slug())
+        try:
+            event.save()
+            messages.success(
+                self.request, f'Vous avez programé {event.title}, le {event.date}.')
+            return redirect(self.get_app()+':update-events', self.get_slug())
+        except IntegrityError as e:
+            messages.error(
+                self.request, f"L'événement {event.title} existe déjà. Veuillez modifier l'événement existant ou changer le nom de l'événement que vous tentez d'ajouter.")
+            return self.form_invalid(self.request)
 
 
 class EventUpdateView(UserIsAdmin, UpdateView):
@@ -103,9 +109,10 @@ class UpdateGroupEventsView(UserIsAdmin, View):
         context = {}
         context['object'] = get_object_from_slug(
             self.get_app(), self.get_slug())
+        date_gte = timezone.make_aware(timezone.now().today())
         context['events'] = BaseEvent.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
-            date__gte=date.today())
+            date__gte=date_gte)
         context['form'] = EventFormSet(queryset=context['events'])
         return context
 
@@ -132,9 +139,10 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
         context = {}
         context['object'] = get_object_from_slug(
             self.get_app(), self.get_slug())
+        date_lte = timezone.make_aware(timezone.now().today())
         context['events'] = BaseEvent.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
-            date__lte=date.today())
+            date__lte=date_lte)
         context['form'] = EventFormSet(queryset=context['events'])
         return context
 
@@ -154,7 +162,7 @@ def add_participant(request, event_slug):
     event.participants.add(request.user.student)
     if request.GET.get('redirect'):
         return redirect('home:home')
-    return redirect(event.get_absolute_url)
+    return redirect(event.get_absolute_url())
 
 
 @login_required
@@ -164,7 +172,7 @@ def remove_participant(request, event_slug):
     event.participants.remove(request.user.student)
     if request.GET.get('redirect'):
         return redirect('home:home')
-    return redirect(event.get_absolute_url)
+    return redirect(event.get_absolute_url())
 
 
 @login_required

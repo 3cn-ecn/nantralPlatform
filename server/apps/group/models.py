@@ -13,8 +13,10 @@ from apps.utils.compress import compressModelImage
 from apps.utils.slug import *
 from django.conf import settings
 
-import uuid
 from discord_webhook import DiscordWebhook, DiscordEmbed
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 path_and_rename_group = PathAndRename("groups/logo")
@@ -81,7 +83,7 @@ class Group(models.Model):
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
         if not self.slug:
-            slug = slugify(self.name)
+            slug = slugify(self.name)[:35]
             if type(self).objects.filter(slug=slug):
                 id = 1
                 while type(self).objects.filter(slug=f'{slug}-{id}'):
@@ -104,9 +106,14 @@ class Group(models.Model):
     def full_slug(self):
         return f'{self.app}--{self.slug}'
 
-    @property
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
         return reverse(self.app+':detail', kwargs={'slug': self.slug})
+
+    @property
+    def absolute_url(self):
+        return self.get_absolute_url()
 
     @property
     def modelName(self):
@@ -123,7 +130,7 @@ class NamedMembership(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.student
+        return self.student.__str__()
 
 
 class AdminRightsRequest(models.Model):
@@ -135,27 +142,28 @@ class AdminRightsRequest(models.Model):
     reason = models.CharField(
         max_length=100, verbose_name="Raison de la demande", blank=True)
     domain = models.CharField(max_length=64)
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def save(self, domain: str, *args, **kwargs):
         self.date = timezone.now()
         self.domain = domain
         super(AdminRightsRequest, self).save()
         group = get_object_from_full_slug(self.group)
-
-        webhook = DiscordWebhook(
-            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(title=f'{self.student} demande à devenir admin de {group}',
-                             description=self.reason,
-                             color=242424)
-        embed.add_embed_field(
-            name='Accepter', value=f"[Accepter]({self.accept_url})", inline=True)
-        embed.add_embed_field(
-            name='Refuser', value=f"[Refuser]({self.deny_url})", inline=True)
-        if(self.student.picture):
-            embed.thumbnail = {"url": self.student.picture.url}
-        webhook.add_embed(embed)
-        webhook.execute()
+        try:
+            webhook = DiscordWebhook(
+                url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+            embed = DiscordEmbed(title=f'{self.student} demande à devenir admin de {group}',
+                                 description=self.reason,
+                                 color=242424)
+            embed.add_embed_field(
+                name='Accepter', value=f"[Accepter]({self.accept_url})", inline=True)
+            embed.add_embed_field(
+                name='Refuser', value=f"[Refuser]({self.deny_url})", inline=True)
+            if(self.student.picture):
+                embed.thumbnail = {"url": self.student.picture.url}
+            webhook.add_embed(embed)
+            webhook.execute()
+        except Exception as e:
+            logger.error(e)
         super(AdminRightsRequest, self).save()
 
     @ property
@@ -197,6 +205,7 @@ class AdminRightsRequest(models.Model):
         self.delete()
 
     def deny(self):
+        group = get_object_from_full_slug(self.group)
         webhook = DiscordWebhook(
             url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été refusée.',
