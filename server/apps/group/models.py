@@ -112,10 +112,6 @@ class Group(models.Model):
         return reverse(self.app+':detail', kwargs={'slug': self.slug})
 
     @property
-    def absolute_url(self):
-        return self.get_absolute_url()
-
-    @property
     def modelName(self):
         '''Plural Model name, used in templates'''
         return self.__class__._meta.verbose_name_plural

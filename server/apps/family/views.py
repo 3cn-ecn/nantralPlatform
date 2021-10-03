@@ -1,14 +1,13 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls.base import reverse
-from django.views.generic import TemplateView, CreateView, View, DetailView, FormView
+from django.views.generic import TemplateView, CreateView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.utils import timezone
 
 from apps.utils.accessMixins import UserIsAdmin
 from .models import Family, MembershipFamily, QuestionPage
 from .forms import CreateFamilyForm, UpdateFamilyForm, Member2AFormset, FamilyQuestionsForm, MemberQuestionsForm
-from .utils import read_phase, get_membership, is_1A, show_sensible_data
+from .utils import read_phase, get_membership, is_1A, show_sensible_data, scholar_year
 
 
 # Create your views here.
@@ -19,18 +18,21 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
     template_name = 'family/home.html'
 
     def get_context_data(self, **kwargs):
+        # by default all functions call data for the current year only
         membership = get_membership(self.request.user)
         context = {}
         context['phase'] = read_phase()
         context['is_2Aplus'] = not is_1A(self.request.user, membership)
+        context['show_sensible_data'] = show_sensible_data(self.request.user, membership)
+        context['is_itii'] = self.request.user.student.faculty == 'Iti'
+        context['membership'] = membership
         if membership:
-            context['registered'] = True
-            context['form_complete'] = membership.form_complete()
-            context['user_family'] = membership.group
-            if membership.group:
-                context['1A_members'] = membership.group.memberships.filter(role='1A')
-                context['2A_members'] = membership.group.memberships.filter(role='2A+')
-                context['family_not_completed'] = membership.group.count_members2A() < 3
+            context['form_perso_complete'] = membership.form_complete()
+            family = membership.group
+            context['family'] = family
+            if family:
+                context['form_family_complete'] = family.form_complete()
+                context['1A_members'] = family.memberships.filter(role='1A')
         return context
 
 
@@ -93,9 +95,7 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         if self.can_create():
-            self.object = form.save(commit=False)
-            self.object.year = timezone.now().year
-            self.object.save()
+            self.object = form.save()
             MembershipFamily.objects.create(
                 group=self.object,
                 student=self.request.user.student,
@@ -215,7 +215,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                 membres_doublon = []
                 for form in forms[1]:
                     if hasattr(form.instance,'student'):
-                        if form.instance.student.family_set.filter(year=timezone.now().year).exclude(pk=self.get_family().pk):
+                        if form.instance.student.family_set.filter(year=scholar_year()).exclude(pk=self.get_family().pk):
                             membres_doublon.append(form.instance.student.alphabetical_name)
                 if not membres_doublon:
                     # c'est bon on sauvegarde !
