@@ -75,7 +75,6 @@
                 {% else %}
                     <h2>Ma Famille</h2>
                     <p>Voir la page de ma famille : <a href="{{ family.get_absolute_url }}">{{ family.name }} (n°{{ family.pk }})</a></p>
-                    <br>
                     <p>Liste de mes fillots :</p>
                     {% include 'student/student_cards.html' with members=1A_members %}
                 {% endif %}
