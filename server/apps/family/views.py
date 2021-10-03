@@ -6,7 +6,7 @@ from django.contrib import messages
 
 from apps.utils.accessMixins import UserIsAdmin
 from .models import Family, MembershipFamily, QuestionPage
-from .forms import CreateFamilyForm, UpdateFamilyForm, Member2AFormset, FamilyQuestionsForm, MemberQuestionsForm
+from .forms import CreateFamilyForm, UpdateFamilyForm, Member2AFormset, FamilyQuestionsForm, MemberQuestionsForm, FamilyQuestionItiiForm
 from .utils import read_phase, get_membership, is_1A, show_sensible_data, scholar_year
 
 
@@ -238,6 +238,30 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
         context={'update_form':forms[0], 'members_form':forms[1], 'question_form':forms[2]}
         return self.render_to_response(context)
 
+
+class ItiiQuestionFamilyView(UserIsAdmin, TemplateView):
+    template_name = 'family/family/edit-itii.html'
+
+    def get_family(self):
+        return Family.objects.get(pk=self.kwargs['pk'])
+
+    def test_func(self):
+        self.kwargs['slug'] = self.get_family().slug
+        return super().test_func()
+    
+    def get_context_data(self, *args, **kwargs):
+        context = {}
+        context['question_form'] = FamilyQuestionItiiForm()
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        form = FamilyQuestionItiiForm(data=request.POST)
+        if form.is_valid():
+            form.save(self.get_family())
+            messages.success(request, "Votre choix a bien été enregistré !")
+            return redirect('family:home', self.get_family().pk)
+        context={'question_form':form}
+        return self.render_to_response(context)
 
 
 

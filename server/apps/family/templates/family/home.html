@@ -41,7 +41,7 @@
                     <p>Attention : nous allons bientôt accueilir les ITII à Centrale Nantes ! Pour les placer dans 
                     les familles, merci de répondre au questionnaire ci-dessous pour nous dire si vous souhaitez les
                     accueillir ou non.</p>
-                    <a href="{% url 'family:update' family.pk %}" class="btn btn-dark">Répondre au questionnaire</a>
+                    <a href="{% url 'family:itii-question' family.pk %}" class="btn btn-dark">Répondre au questionnaire</a>
                     <br>
                 {% else %}
                     <p>Désolé, la procédure de parrainage est terminée !</p>
