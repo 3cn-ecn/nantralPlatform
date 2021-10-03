@@ -259,7 +259,7 @@ class ItiiQuestionFamilyView(UserIsAdmin, TemplateView):
         if form.is_valid():
             form.save(self.get_family())
             messages.success(request, "Votre choix a bien été enregistré !")
-            return redirect('family:home', self.get_family().pk)
+            return redirect('family:home')
         context={'question_form':form}
         return self.render_to_response(context)
 
