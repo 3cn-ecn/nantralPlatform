@@ -22,4 +22,4 @@ def remove_inactive_accounts():
             except TemporaryAccessRequest.DoesNotExist:
                 user.delete()
     else:
-        User.objects.delete(is_valid=False)
+        User.objects.filter(is_valid=False).delete()
