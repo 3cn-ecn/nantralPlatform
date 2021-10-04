@@ -13,15 +13,19 @@ def migrate_data(apps, schema_editor):
         from apps.academic.models import FollowCourse, NamedMembershipCourse
         for follow in FollowCourse.objects.all():
             year = follow.student.promo
-            if follow.when == 'EI2': year +=1
-            if follow.when == 'EI3': year +=2
-            if follow.when == 'M2': year +=1
+            if follow.when == 'EI2':
+                year += 1
+            if follow.when == 'EI3':
+                year += 2
+            if follow.when == 'M2':
+                year += 1
             NamedMembershipCourse.objects.create(
-                group = follow.course,
-                student = follow.student,
-                year = year,
+                group=follow.course,
+                student=follow.student,
+                year=year,
             )
-    except Exception:
+    except Exception as err:
+        print(err)
         print("échec de la migration 5 de academic")
 
 
