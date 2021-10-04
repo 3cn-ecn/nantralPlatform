@@ -19,8 +19,7 @@ def createEvents(apps, schema_editor):
     for event in dummyEvents:
         clubs = Club.objects.all()[:]
         clubID = random.randint(0, len(clubs))
-        randomDate = timezone.make_aware(timezone.now() + \
-            timedelta(days=random.randint(1, 20)))
+        randomDate = timezone.now() + timedelta(days=random.randint(1, 20))
         # For some reason, slugs are appended with a '-1'
         # so we have to add it manually or it won't find anything
         newEvent = BaseEvent.objects.create(
