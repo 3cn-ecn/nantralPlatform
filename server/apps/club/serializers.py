@@ -1,6 +1,8 @@
 from rest_framework import serializers
-from .models import Club
 from django.templatetags.static import static
+
+from .models import Club, NamedMembershipClub
+from apps.student.serializers import StudentSerializer
 
 
 class ClubSerializer(serializers.ModelSerializer):
@@ -21,3 +23,11 @@ class ClubSerializer(serializers.ModelSerializer):
         if(obj.logo):
             return 1
         return 0.3
+
+
+class ClubMemberSerializer(serializers.ModelSerializer):
+    student = StudentSerializer(read_only=True)
+
+    class Meta:
+        model = NamedMembershipClub
+        fields = "__all__"
