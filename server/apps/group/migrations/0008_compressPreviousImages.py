@@ -3,13 +3,9 @@
 
 from django.db import migrations
 from apps.utils.compress import compressImage
-from apps.group.models import Group
-from apps.club.models import Club
-from apps.liste.models import Liste
-from apps.roommates.models import Roommates
 
 
-def compress(model):
+def compress(model, Group):
     for object in model.objects.all():
         try:
             object.logo = compressImage(object.logo, size=(500,500), contains=True)
@@ -19,9 +15,13 @@ def compress(model):
             print("Fichier non existant")
 
 def main_operations(apps, schema_editor):
-    compress(Club)
-    compress(Liste)
-    compress(Roommates)
+    Club = apps.get_model('club', 'Club')
+    Liste = apps.get_model('liste', 'Liste')
+    Roommates = apps.get_model('roommates', 'Roommates')
+    Group = apps.get_model('group', 'Group')
+    compress(Club, Group)
+    compress(Liste, Group)
+    compress(Roommates, Group)
 
 
 class Migration(migrations.Migration):
