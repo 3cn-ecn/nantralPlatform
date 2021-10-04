@@ -148,4 +148,4 @@ server/static/js/*.js
 server/static/upload/*
 
 # Do not push celerybeat db
-celerybeat-schedule
+*/celerybeat-schedule
