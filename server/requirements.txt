@@ -13,7 +13,7 @@ click-didyoumean==0.0.3
 click-plugins==1.1.1
 click-repl==0.2.0
 crispy-bootstrap5==0.4
-discord_webhook==0.14.0
+discord-webhook==0.14.0
 Django==3.2.5
 django-amazon-ses==4.0.0
 django-celery-beat==2.2.1
