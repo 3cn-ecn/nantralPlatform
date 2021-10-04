@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from celery import shared_task
 from django.contrib.auth.models import User
 from apps.account.models import TemporaryAccessRequest
@@ -11,8 +11,8 @@ logger = get_task_logger(__name__)
 
 @shared_task
 def remove_inactive_accounts():
-    if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT > date.today():
-        for user in User.objects.filter(is_valid=False):
+    if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT > datetime.now():
+        for user in User.objects.filter(is_active=False):
             user: User
             try:
                 authorization: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
@@ -22,4 +22,10 @@ def remove_inactive_accounts():
             except TemporaryAccessRequest.DoesNotExist:
                 user.delete()
     else:
-        User.objects.filter(is_valid=False).delete()
+        User.objects.filter(is_active=False).delete()
+
+
+@shared_task
+def remove_temporary_access():
+    TemporaryAccessRequest.objects.filter(
+        approved_until__lt=datetime.now().date()).delete()
