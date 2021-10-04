@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from celery import shared_task
 from django.contrib.auth.models import User
 from apps.account.models import TemporaryAccessRequest
@@ -22,7 +22,8 @@ def remove_inactive_accounts():
             except TemporaryAccessRequest.DoesNotExist:
                 user.delete()
     else:
-        User.objects.filter(is_active=False).delete()
+        User.objects.filter(
+            is_active=False, date_joined__lt=(datetime.now()-timedelta(hours=1))).delete()
 
 
 @shared_task
