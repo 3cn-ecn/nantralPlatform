@@ -155,15 +155,7 @@
         <!-- Liste des membres -->
         <br />
         <h2>Membres</h2>
-        {% if request.user.is_authenticated %}
-            {% if members %}
-                {% include 'student/student_cards.html' with members=members %}
-            {%else%}
-                <p>Aucun membre pour l'instant... 😥</p>
-            {%endif%}
-        {% else %}
-            <p>Veuillez vous connecter pour voir les membres.</p>
-        {% endif %}
+        <div id=root2></div>
     {% endblock %}
 
     {# Ajout possible de contenus pour certaines pages #}
@@ -194,10 +186,13 @@
 {% block script %}
 <script>
   const eventsApiUrl = "{% url 'event_api:list-all-group-events' object.full_slug %}";
-  const eventListParticipants = "{% url 'event_api:list-participants' '1' %}"
-  const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}"
-  const eventsAddParticipant = "{% url 'event:add-participant' '1' %}"
+  const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
+  const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
+  const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
+  const clubMembersURL = "{% url 'club_api:list-club-members' %}";
+  const clubSlug = "{{ object.slug }}";
 </script>
 <script src='{% static "js/eventsView.js" %}'></script>
+<script src='{% static "js/clubMembers.js" %}'></script>
 {% endblock %}
 
