@@ -34,19 +34,14 @@ jobs:
           npm run start
       - name: Tar the files
         run: cd server/static/ && tar -zcvf js.tgz ./js
-      - name: Create Release
-        uses: ncipollo/release-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload files to the VPS
+        uses: appleboy/scp-action@master
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag: v${{ env.PACKAGE_VERSION }}
-          artifacts: "js.tgz"
-          body: Release
-          draft: false
-          allowUpdates: true
-          prerelease: false
-          replacesArtifacts: true
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: "ubuntu"
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          source: "js.tgz"
+          target: "nantralPlatform/server/static/js/js.tgz"
 
   test:
     runs-on: ubuntu-latest
@@ -116,7 +111,6 @@ jobs:
             cd nantralPlatform
             git pull
             cd server/static/js
-            wget https://github.com/nantral-platform/nantralPlatform/releases/download/v1.0.0/js.tgz
             tar -xzf js.tgz
             rm js.tgz
             cd ../../deployment
