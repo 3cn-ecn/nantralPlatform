@@ -115,9 +115,10 @@ jobs:
           script: |
             cd nantralPlatform
             git pull
-            cd server/static
+            cd server/static/js
             wget https://github.com/nantral-platform/nantralPlatform/releases/download/v1.0.0/js.tgz
             tar -xzf js.tgz
+            rm js.tgz
             cd ../../deployment
             sudo cp 001-post-renew.sh /etc/letsencrypt/renewal-hooks/post/001-post-renew.sh
             sudo chmod +x /etc/letsencrypt/renewal-hooks/post/001-post-renew.sh
