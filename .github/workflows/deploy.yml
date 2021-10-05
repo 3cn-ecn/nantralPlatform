@@ -28,7 +28,6 @@ jobs:
       - name: Get package's version
         run: node -p -e '`PACKAGE_VERSION=${require("./frontend/package.json").version}`' >> $GITHUB_ENV
       - name: Build React
-        working-directory: ./frontend
         run: |
           cd frontend
           npm install
