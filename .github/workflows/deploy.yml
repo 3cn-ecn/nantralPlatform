@@ -33,7 +33,7 @@ jobs:
           npm install
           npm run start
       - name: Tar the files
-        run: cd server/static/js/ && tar -zcvf ../js.tgz .
+        run: cd server/static/ && tar -zcvf js.tgz ./js
       - name: Create Release
         uses: ncipollo/release-action@v1
         env:
@@ -41,7 +41,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ env.PACKAGE_VERSION }}
-          artifacts: "server/static/js.tgz"
+          artifacts: "js.tgz"
           body: Release
           draft: false
           allowUpdates: true
