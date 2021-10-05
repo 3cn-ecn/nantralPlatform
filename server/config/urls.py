@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/club/', include('apps.club.api_urls', namespace='club_api')),
 
     path('liste/', include('apps.liste.urls',  namespace='liste')),
+    path('api/liste/', include('apps.liste.api_urls',  namespace='liste_api')),
 
     path('academic/', include('apps.academic.urls', namespace='academic')),
     path('api/academic/', include('apps.academic.api_urls', namespace='academic_api')),

@@ -189,13 +189,15 @@
   const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
   const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
   const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
-  {% if '/club/' in request.path%}
+  {% if '/club/' in request.path %}
     const membersURL = "{% url 'club_api:list-club-members' %}?slug={{ object.slug }}";
+  {% elif '/liste/' in request.path %}
+    const membersURL = "{% url 'liste_api:list-liste-members' %}?slug={{ object.slug }}";
   {% elif '/academic/' in request.path%}
     const membersURL = "{% url 'academic_api:list-course-members' %}?id={{ object.id }}";
   {% endif %}
 </script>
 <script src='{% static "js/eventsView.js" %}'></script>
-<script src='{% static "js/clubMembers.js" %}'></script>
+<script src='{% static "js/groupMembers.js" %}'></script>
 {% endblock %}
 
