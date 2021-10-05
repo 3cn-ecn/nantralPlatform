@@ -39,7 +39,7 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           source: "server/static/js/*.js"
-          target: "nantralPlatform/server/static/js"
+          target: "nantralPlatform"
 
   test:
     runs-on: ubuntu-latest
