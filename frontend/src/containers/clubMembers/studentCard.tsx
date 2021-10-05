@@ -12,6 +12,14 @@ export function StudentCard(props): JSX.Element {
       : "/static/img/logo.svg";
   const date_begin = makeNiceDate(member.date_begin);
   const date_end = makeNiceDate(member.date_end);
+  if (member.year !== null) {
+    var memberTimeSpan = `Promotion ${member.year}`;
+  } else {
+    var memberTimeSpan =
+      date_end === null
+        ? `Membre depuis le ${date_begin}`
+        : `Membre du ${date_begin} au ${date_end}`;
+  }
   return (
     <div className="col-12 col-sm-6 col-lg-4 col-xxl-3 d-grid">
       <a className="btn btn-light" href={member.student.absolute_url}>
@@ -34,11 +42,7 @@ export function StudentCard(props): JSX.Element {
             <span>{member.function}</span>
             <br />
             <small style={smallStyle}>
-              <i>
-                {date_end === null
-                  ? `Membre depuis le ${date_begin}`
-                  : `Membre du ${date_begin} au ${date_end}`}
-              </i>
+              <i>{memberTimeSpan}</i>
             </small>
             <br />
           </div>

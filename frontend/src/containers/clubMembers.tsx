@@ -12,8 +12,8 @@ function Root(props): JSX.Element {
   const [isAuthorized, setIsAuthorized] = useState(true);
 
   useEffect(() => {
-    async function getClubMembers(): Promise<void> {
-      await fetch(props.clubMembersURL)
+    async function getMembers(): Promise<void> {
+      await fetch(props.membersURL)
         .then((resp) => {
           if (resp.status === 403) {
             setMembers([]);
@@ -28,7 +28,7 @@ function Root(props): JSX.Element {
         })
         .finally(() => setIsLoading(false));
     }
-    getClubMembers();
+    getMembers();
   }, []);
 
   if (isLoading) {
@@ -54,7 +54,4 @@ function Root(props): JSX.Element {
   );
 }
 
-render(
-  <Root clubMembersURL={clubMembersURL + "?slug=" + clubSlug} />,
-  document.getElementById("root2")
-);
+render(<Root membersURL={membersURL} />, document.getElementById("root2"));
