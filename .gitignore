@@ -131,7 +131,6 @@ GitHub.sublime-settings
 
 # Node
 node_modules
-package-lock.json
 webpack-stats.json
 
 # MacOS
