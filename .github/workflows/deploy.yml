@@ -32,12 +32,8 @@ jobs:
           cd frontend
           npm install
           npm run start
-      - name: Zip the files
-        uses: papeloto/action-zip@v1
-        with:
-          files: ./server/static/js/
-          dest: js.zip
-          recursive: false
+      - name: Tar the files
+        run: cd server/static/js/ && tar -zcvf ../js.tgz .
       - name: Create Release
         uses: ncipollo/release-action@v1
         env:
@@ -45,7 +41,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ env.PACKAGE_VERSION }}
-          artifacts: "js.zip"
+          artifacts: "server/static/js.tgz"
           body: Release
           draft: false
           allowUpdates: true
@@ -120,8 +116,8 @@ jobs:
             cd nantralPlatform
             git pull
             cd server/static
-            wget https://github.com/nantral-platform/nantralPlatform/releases/download/v1.0.0/js.zip
-            unzip js.zip
+            wget https://github.com/nantral-platform/nantralPlatform/releases/download/v1.0.0/js.tgz
+            tar -xzf js.tgz
             cd ../../deployment
             sudo cp 001-post-renew.sh /etc/letsencrypt/renewal-hooks/post/001-post-renew.sh
             sudo chmod +x /etc/letsencrypt/renewal-hooks/post/001-post-renew.sh
