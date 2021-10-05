@@ -20,7 +20,11 @@ export function StudentCard(props): JSX.Element {
             <div className="ratio ratio-1x1">
               <img
                 // TODO: Enlever le nom de domaine ici
-                src={`https://nantral-platform.fr${picture}`}
+                src={
+                  picture.includes("https://")
+                    ? picture
+                    : `https://nantral-platform.fr${picture}`
+                }
                 style={iconStyle}
               />
             </div>
