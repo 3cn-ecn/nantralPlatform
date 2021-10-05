@@ -13,9 +13,10 @@ export interface Member {
   id: number;
   student: Student;
   admin: boolean;
-  function: string;
-  date_begin: string;
-  date_end?: any;
-  order: number;
+  function?: string;
+  date_begin?: string;
+  date_end?: string;
+  year?: string;
+  order?: number;
   group: number;
 }
