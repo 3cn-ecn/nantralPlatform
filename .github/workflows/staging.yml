@@ -1,0 +1,109 @@
+# This is a basic workflow to help you get started with Actions
+
+name: OVH Staging
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [staging]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# This workflow contains 3 jobs.
+# webpack and test can run side by side
+jobs:
+  webpack:
+    # Specify which OS we are running our job on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # A step can use a GitHub action which is available on the marketplace or simply run a command in the runner's shell.
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Pull latest commit
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.16.0"
+      - name: Build React
+        run: |
+          cd frontend
+          npm install
+          npm run start
+      - name: Upload files to the VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: "ubuntu"
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          source: "server/static/js/*.js"
+          target: "nantralPlatform-staging"
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+    steps:
+      - name: Pull latest commit
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Testing
+        working-directory: ./server
+        env:
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          GITHUB_USER: unitrium
+          GITHUB_TOKEN: test
+          S3_BUCKET: test
+          MAPBOX_API_KEY: test
+          DISCORD_ADMIN_MODERATION_WEBHOOK: test
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python manage.py test
+
+      - name: Clone before staging
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: "ubuntu"
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          script: |
+            cd nantralPlatform-staging
+            cd scripts
+            git checkout staging && git pull
+            python3 -m venv env
+            source env/bin/activate
+            pip install -r requirements.txt
+            python3 db_clone.py
+            deactivate
+            rm -r env
+
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    needs: [webpack, test]
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Pull latest commit
+        uses: actions/checkout@v2
+      - name: Deploy to the VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: "ubuntu"
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          script: |
+            cd nantralPlatform-staging/deployment
+            git checkout staging && git pull
+            docker-compose up --force-recreate --no-deps server-staging
