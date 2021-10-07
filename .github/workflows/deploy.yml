@@ -25,8 +25,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "14.16.0"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
       - name: Build React
         run: |
           cd frontend
