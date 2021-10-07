@@ -107,4 +107,5 @@ jobs:
             cd nantralPlatform-staging/deployment
             git checkout staging && git pull origin staging
             cd ~/nantralPlatform/deployment
-            docker-compose up --force-recreate --no-deps server-staging
+            sudo docker-compose build server-staging
+            docker-compose up  -d
