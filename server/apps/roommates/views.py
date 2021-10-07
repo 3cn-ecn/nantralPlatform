@@ -23,7 +23,7 @@ class HousingMap(LoginRequiredMixin, TemplateView):
 
 class HousingList(LoginRequiredMixin, ListView):
     model = Housing
-    template_name = 'roommates/list.html'
+    template_name = 'roommates/liste.html'
 
 
 class CreateHousingView(LoginRequiredMixin, TemplateView):
