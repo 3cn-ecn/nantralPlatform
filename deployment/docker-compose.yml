@@ -46,7 +46,7 @@ services:
   server-staging:
     build:
       context: ../../nantralPlatform-staging
-      dockerfile: deployment/containers/web_staging/Dockerfile
+      dockerfile: ./deployment/containers/web_staging/Dockerfile
     env_file: ../../nantralPlatform-staging/deployment/.env
     expose:
       - 8001
