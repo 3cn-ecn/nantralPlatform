@@ -105,6 +105,6 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             cd nantralPlatform-staging/deployment
-            git checkout staging && git pull
+            git checkout staging && git pull origin staging
             cd ~/nantralPlatform/deployment
             docker-compose up --force-recreate --no-deps server-staging

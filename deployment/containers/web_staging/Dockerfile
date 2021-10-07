@@ -30,7 +30,7 @@ RUN pip install -U pip && \
 # Copy stuff in rarest-to-most-often order
 # Files that should basically never change
 COPY server/manage.py \
-    server/run_server.sh
+    server/run_server_staging.sh
 # Files that will change rarely
 COPY server/templates ./templates
 COPY server/config ./config
