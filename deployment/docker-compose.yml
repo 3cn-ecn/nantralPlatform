@@ -46,8 +46,7 @@ services:
   server-staging:
     build:
       context: ../../nantralPlatform-staging/
-      dockerfile: deployment/containers/web_staging/Dockerfile
-    env_file: deployment/.env
+      dockerfile: ./deployment/containers/web_staging/Dockerfile
     expose:
       - 8001
     command: sh run_server_staging.sh
@@ -62,8 +61,7 @@ services:
       - DB_PORT
       - POSTGRES_USER
       - POSTGRES_PASSWORD
-      - DB_NAME
-      - DB_NAME_PROD
+      - DB_NAME=${DB_NAME_STAGING}
       - S3_BUCKET
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
