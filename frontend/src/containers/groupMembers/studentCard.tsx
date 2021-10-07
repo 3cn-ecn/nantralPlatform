@@ -13,7 +13,7 @@ export function StudentCard(props): JSX.Element {
   const date_begin = makeNiceDate(member.date_begin);
   const date_end = makeNiceDate(member.date_end);
   if (member.year != null) {
-    var memberTimeSpan = `Promotion ${member.year}`;
+    var memberTimeSpan = `Année en cours ${member.year}`;
   } else if (member.date_begin == null) {
     var memberTimeSpan = ``;
   } else {
