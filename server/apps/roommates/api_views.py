@@ -32,7 +32,7 @@ class HousingView(generics.ListCreateAPIView):
 
 
 class CheckAddressView(APIView):
-    """An API view to wether wether a housing already exists at selected address.
+    """An API view to check whether a housing already exists at the selected address.
     Returns the pk if it does, None otherwise"""
     permission_classes = [permissions.IsAuthenticated]
 

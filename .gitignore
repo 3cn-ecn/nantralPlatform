@@ -131,7 +131,6 @@ GitHub.sublime-settings
 
 # Node
 node_modules
-package-lock.json
 webpack-stats.json
 
 # MacOS
@@ -146,3 +145,6 @@ deployment/backups/*
 # Do not push compiled static js from front because it will be compiled by the server
 server/static/js/*.js
 server/static/upload/*
+
+# Do not push celerybeat db
+*/celerybeat-schedule
