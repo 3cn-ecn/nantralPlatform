@@ -26,8 +26,8 @@ try:
     env = Env()
     env.read_env("../deployment/.env")
     DB_USER = env.str("POSTGRES_USER")
-    DB_NAME = env.str("DB_NAME")
-    DB_NAME_PROD = env.str("DB_NAME_PROD")
+    DB_NAME = env.str("DB_NAME_STAGING")
+    DB_NAME_PROD = env.str("DB_NAME")
     DB_CONTAINER = env.str("DB_CONTAINER")
     BUCKET = env.str("S3_BUCKET")
     AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
@@ -35,7 +35,8 @@ try:
     AWS_REGION = env.str("AWS_SES_REGION")
     ERROR_RECIPIENT = env.str("ERROR_RECIPIENT")
     try:
-        docker_db_clone("dump_staging.sql", DB_USER, DB_NAME_PROD, DB_NAME, DB_CONTAINER)
+        docker_db_clone("dump_staging.sql", DB_USER,
+                        DB_NAME_PROD, DB_NAME, DB_CONTAINER)
     except Exception as err:
         text = f"Got an error while cloning the DB : {err}"
 
