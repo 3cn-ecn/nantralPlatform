@@ -3,6 +3,10 @@
 {% load file_url %}
 {% load video %}
 
+{% block head %}
+    <meta name="description" CONTENT="{{object.summary}} - {{object.name}} ({{object.alt_name}}) - Centrale Nantes">
+{% endblock %}
+
 {% block title %}{{ object.name }} - {% endblock %}
 
 {% block favicon %}

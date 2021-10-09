@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load i18n %}
+
+{% block head %}
+    <meta name="robots" content="noindex">
+{% endblock %}
+
 {% block content%}
     <form method='POST'>
         {% csrf_token %}
