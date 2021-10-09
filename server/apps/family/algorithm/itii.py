@@ -1,4 +1,4 @@
-from server.apps.family.models import QuestionFamily
+from apps.family.models import QuestionFamily
 from .utils import *
 
 
