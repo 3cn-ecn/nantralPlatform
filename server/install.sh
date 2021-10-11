@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "========= Installing virtualenv"
+pip install virtualenv
+echo "========= DONE ========"
+
 echo "========= Creating environment"
 python3 -m virtualenv env
 echo "========= DONE ========="
