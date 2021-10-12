@@ -34,3 +34,7 @@ echo -e "${YELLOW}========= ${GREEN}DONE ${YELLOW}=========${NC}"
 echo -e "${YELLOW}========= ${ORANGE}Initializing database${NC}"
 python manage.py migrate
 echo -e "${YELLOW}========= ${GREEN}DONE ${YELLOW}=========${NC}"
+
+echo -e "${YELLOW}========= ${ORANGE}Creating environment variables${NC}"
+cat ./config/settings/sample_env.txt > ./.env
+echo -e "${YELLOW}========= ${GREEN}DONE ${YELLOW}=========${NC}"
