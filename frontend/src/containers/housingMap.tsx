@@ -1,27 +1,16 @@
 ﻿import * as React from "react";
 import { useState, useEffect, useRef, useMemo } from "react";
 import ReactDOM, { render } from "react-dom";
-import MapGL, {
-  Marker,
-  GeolocateControl,
-  Popup,
-  FlyToInterpolator,
-  NavigationControl,
-} from "react-map-gl";
-import { Form } from "react-bootstrap";
 import axios from "axios";
-import Cluster from "./housingMap/cluster";
 import { easeCubic } from "react-d3-library";
-import { Typeahead } from "react-bootstrap-typeahead";
-import "react-bootstrap-typeahead/css/Typeahead.css";
+import { Popup, Marker, FlyToInterpolator } from "react-map-gl";
 
 import { Housing } from "./housingMap/interfaces";
-import { geolocateStyle, navControlStyle } from "./housingMap/styles";
-import { ClusterMarker } from "./housingMap/clusterMarker";
+import { MapForm } from "./housingMap/mapForm";
 import { Pin } from "./housingMap/pin";
 import { ColocInfo } from "./housingMap/colocInfo";
+import { Map } from "./housingMap/map";
 
-// affichage principal
 function Root(props): JSX.Element {
   const [data, setData] = useState([]);
   const [colocs, setColocs] = useState([]);
@@ -125,105 +114,22 @@ function Root(props): JSX.Element {
         <div className="col">
           <h1>Carte des Colocs</h1>
         </div>
-        <div className="col-12 col-md-6 col-lg-5 col-xl-4">
-          <Form.Group>
-            <Typeahead
-              id="search-colocs"
-              options={colocs}
-              placeholder="Recherche"
-              onChange={(coloc) => {
-                if (typeof coloc[0] === "undefined") {
-                  return;
-                }
-                let housings: Housing[] = data.filter(
-                  (housing) => housing.id === coloc[0].housing.id
-                );
-                if (typeof housings[0] === "undefined") return;
-                let housing: Housing = housings[0];
-                setViewPort({
-                  zoom: 16,
-                  longitude: housing.longitude,
-                  latitude: housing.latitude,
-                  transitionDuration: 500,
-                  transitionInterpolator: new FlyToInterpolator(),
-                  transitionEasing: easeCubic,
-                });
-                setPopUpinfo(
-                  <Popup
-                    tipSize={10}
-                    anchor="bottom"
-                    longitude={housing.longitude}
-                    latitude={housing.latitude}
-                    closeOnClick={false}
-                    onClose={() => setPopUpinfo(null)}
-                    dynamicPosition={false}
-                    offsetTop={-10}
-                    offsetLeft={10}
-                  >
-                    <ColocInfo
-                      housing={housing}
-                      housingDetailsUrl={housing.roommates.url}
-                    />
-                  </Popup>
-                );
-              }}
-            />
-          </Form.Group>
-        </div>
       </div>
-      <div className="row">
-        <div className="col-12 mapbox">
-          <MapGL
-            {...viewport}
-            width="100vw"
-            height="80vh"
-            ref={mapRef}
-            mapStyle="mapbox://styles/mapbox/bright-v9"
-            onViewportChange={setViewPort}
-            mapboxApiAccessToken={props.api_key}
-            onClick={() => setPopUpinfo(null)}
-          >
-            {mapRef.current && markers && (
-              <Cluster
-                map={mapRef.current.getMap()}
-                radius={20}
-                extent={512}
-                nodeSize={40}
-                element={(clusterProps) => (
-                  <ClusterMarker
-                    {...clusterProps}
-                    onClick={() => {
-                      const [longitude, latitude] =
-                        clusterProps.cluster.geometry.coordinates;
-                      setViewPort({
-                        zoom: 16,
-                        longitude: longitude,
-                        latitude: latitude,
-                        transitionDuration: 500,
-                        transitionInterpolator: new FlyToInterpolator(),
-                        transitionEasing: easeCubic,
-                      });
-                    }}
-                  />
-                )}
-              >
-                {markers}
-              </Cluster>
-            )}
-
-            {popupInfo}
-            <GeolocateControl
-              style={geolocateStyle}
-              positionOptions={{
-                enableHighAccuracy: true,
-              }}
-              trackUserLocation
-              auto
-            />
-            <NavigationControl showCompass={false} style={navControlStyle} />
-          </MapGL>
-        </div>
-      </div>
+      <MapForm
+        colocs={colocs}
+        data={data}
+        setViewPort={setViewPort}
+        setPopUpinfo={setPopUpinfo}
+      />
+      <Map
+        viewport={viewport}
+        mapRef={mapRef}
+        apiKey={props.api_key}
+        markers={markers}
+        popupInfo={popupInfo}
+        setViewPort={setViewPort}
+        setPopUpinfo={setPopUpinfo}
+      />
     </>
   );
 }

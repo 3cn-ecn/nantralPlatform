@@ -1,7 +1,5 @@
 ﻿import * as React from "react";
 
-import "react-bootstrap-typeahead/css/Typeahead.css";
-
 import { clusterMarkerStyle, clusterMarkerContainerStyle } from "./styles";
 
 export function ClusterMarker(props): JSX.Element {
