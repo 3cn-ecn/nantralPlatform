@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import { Spinner } from "react-bootstrap";
+
 import { getDate } from "./eventsView/utils";
 import { Event } from "./eventsView/event";
 import { spinnerDivStyle, spinnerStyle } from "./eventsView/styles";
