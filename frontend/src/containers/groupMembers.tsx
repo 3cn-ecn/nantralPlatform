@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import { Spinner } from "react-bootstrap";
+
 import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
 import { Member } from "./groupMembers/interfaces";
 import { StudentCard } from "./groupMembers/studentCard";

@@ -2,6 +2,11 @@
 {% load crispy_forms_tags %}
 {% load static%}
 {% load i18n %}
+
+{% block head %}
+    <meta name="robots" content="noindex">
+{% endblock %}
+
 {% block card_content %}
     <h2>{% translate "Inscription sur Nantral Platform" %}</h2>
     </br>
