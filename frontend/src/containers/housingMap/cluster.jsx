@@ -1,3 +1,9 @@
+/*
+ * WARNING
+ * This document is voudou magic from https://github.com/ats1999/rahul-react-map-gl-cluster
+ * Please do not attempt to edit it thinking your understand it, you don't.
+*/
+
 import Supercluster from 'supercluster';
 import { point } from '@turf/helpers';
 import { Children, PureComponent, createElement } from 'react';
