@@ -54,7 +54,7 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
 class ColocathlonFormView(LoginRequiredMixin, UpdateView):
     template_name = 'roommates/coloc/edit/colocathlon.html'
     model = Roommates
-    fields = ['colocathlon_agree', 'colocathlon_hours', 'colocathlon_activities']
+    fields = ['colocathlon_agree', 'colocathlon_quota', 'colocathlon_hours', 'colocathlon_activities']
 
 
 
@@ -69,6 +69,7 @@ class DetailRoommatesView(DetailGroupView):
                 housing=context['housing']
             ).exclude(pk=context['object'].pk).order_by('-begin_date')
         context['colocathlon'] = Setting.get('PHASE_COLOCATHLON', default=0)
+        context['nb_participants'] = self.object.colocathlon_participants.count()
         return context
 
 
