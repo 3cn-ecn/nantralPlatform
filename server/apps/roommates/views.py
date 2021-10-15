@@ -4,7 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.conf import settings
-from django.views.generic import TemplateView, CreateView, ListView
+from django.views.generic import TemplateView, CreateView, ListView, UpdateView
+
+from extra_settings.models import Setting
 
 from .models import Housing, Roommates
 from .forms import UpdateHousingForm
@@ -48,6 +50,14 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
         return redirect(reverse('roommates:detail', args=[roommates.slug]))
 
 
+
+class ColocathlonFormView(LoginRequiredMixin, UpdateView):
+    template_name = 'roommates/coloc/edit/colocathlon.html'
+    model = Roommates
+    fields = ['colocathlon_agree', 'colocathlon_hours', 'colocathlon_activities']
+
+
+
 class DetailRoommatesView(DetailGroupView):
     '''Vue de détails d'une coloc.'''
     template_name = 'roommates/coloc/detail/detail.html'
@@ -58,7 +68,9 @@ class DetailRoommatesView(DetailGroupView):
         context['roommates_list'] = Roommates.objects.filter(
                 housing=context['housing']
             ).exclude(pk=context['object'].pk).order_by('-begin_date')
+        context['colocathlon'] = Setting.get('PHASE_COLOCATHLON', default=0)
         return context
+
 
 
 class UpdateRoommatesView(UpdateGroupView):

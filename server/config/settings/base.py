@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
     'django_ckeditor_5',
     'debug_toolbar',
     'django_celery_beat',
+    'extra_settings',
 ]
 
 COMMON_APPS = [
