@@ -2,6 +2,10 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
+{% block head %}
+    <meta name="robots" content="noindex">
+{% endblock %}
+
 {% block card_content%}
     <h2>{% translate 'Réinitialisation de mot de passe' %}</h2>
 

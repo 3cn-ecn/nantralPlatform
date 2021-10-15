@@ -1,12 +1,12 @@
 # This is a basic workflow to help you get started with Actions
 
-name: OVH Deploy
+name: OVH Staging
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
-    branches: [master]
+    branches: [staging]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 # This workflow contains 3 jobs.
@@ -37,7 +37,7 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           source: "server/static/js/*.js"
-          target: "nantralPlatform"
+          target: "nantralPlatform-staging"
 
   test:
     runs-on: ubuntu-latest
@@ -67,20 +67,18 @@ jobs:
           pip install -r requirements.txt
           python manage.py test
 
-      - name: Backup before deploy
+      - name: Clone before staging
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.INSTANCE_ADDRESS }}
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
-            cd nantralPlatform
-            cd scripts
-            git pull
+            cd nantralPlatform/scripts
             python3 -m venv env
             source env/bin/activate
             pip install -r requirements.txt
-            python3 db_backup.py
+            python3 db_clone.py
             deactivate
             rm -r env
 
@@ -104,11 +102,8 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
-            cd nantralPlatform/deployment
-            git pull
-            sudo cp 001-post-renew.sh /etc/letsencrypt/renewal-hooks/post/001-post-renew.sh
-            sudo chmod +x /etc/letsencrypt/renewal-hooks/post/001-post-renew.sh
-            sudo cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPlatform/deployment/certs/key.pem
-            sudo cp /etc/letsencrypt/live/nantral-platform.fr/fullchain.pem /home/ubuntu/nantralPlatform/deployment/certs/cert.pem
-            sudo docker-compose build
-            docker-compose up -d
+            cd nantralPlatform-staging/deployment
+            git checkout staging && git pull origin staging
+            cd ~/nantralPlatform/deployment
+            sudo docker-compose build server-staging
+            docker-compose up  -d
