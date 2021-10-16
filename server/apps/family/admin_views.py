@@ -22,32 +22,39 @@ class HomeAdminView(UserIsInGroup, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['phase'] = read_phase()
+        ## FAMILIES
         # family - general
         families = Family.objects.filter(year=scholar_year())
-        nb_fquestion = QuestionFamily.objects.all().count()
         context['nb_families'] = len(families)
         # family - bad number of members
         bad_nb_families = [f for f in families if f.count_members2A()<3]
         context['bad_nb_families'] = bad_nb_families
         context['nb_bad_nb_families'] = len(bad_nb_families)
-        # family - bad number of answers
-        bad_ans_families = [f for f in families if len(f.get_answers_dict()) != nb_fquestion]
-        context['bad_ans_families'] = bad_ans_families
-        context['nb_bad_ans_families'] = len(bad_ans_families)
-        # members
+        # family - not finish to complete all answers
+        non_completed_families = [f for f in families if not f.form_complete()]
+        context['nb_non_complete_families'] = len(non_completed_families)
+        if context['nb_non_complete_families'] < 10:
+            context['non_complete_families'] = non_completed_families
+        ## MEMBERS
         members = MembershipFamily.objects.filter(Q(group__isnull=True) | Q(group__year=scholar_year())).order_by('group__name')
+        ## MEMBERS 1A
         members1A = members.filter(role='1A')
-        members2A = members.filter(role='2A+')
         context['nb_1A'] = members1A.count()
-        context['nb_2A'] = members2A.count()
+        context['nb_itii'] = members1A.filter(student__faculty='Iti').count()
         context['nb_1A_unplaced'] = members1A.filter(group__isnull=True).count()
         context['nb_1A_placed'] = members1A.filter(group__isnull=False).count()
+        # 1A pas encore dans une famille
         if context['nb_1A_unplaced'] < 10:
             context['unplaced_1A'] = members1A.filter(group__isnull=True)
+        # 1A n'ayant pas fini le questionnaire
         non_complete_1A = [m for m in members1A if not m.form_complete()]
-        non_complete_2A = [m for m in members2A if not m.form_complete()]
-        context['non_complete_1A'] = non_complete_1A
         context['nb_non_complete_1A'] = len(non_complete_1A)
+        context['non_complete_1A'] = non_complete_1A
+        ## MEMBERS 2A+
+        members2A = members.filter(role='2A+')
+        context['nb_2A'] = members2A.count()
+        # 2A n'ayant pas fini leur questionnaire
+        non_complete_2A = [m for m in members2A if not m.form_complete()]
         context['non_complete_2A'] = non_complete_2A
         context['nb_non_complete_2A'] = len(non_complete_2A)
         # membres non inscrits

@@ -3,13 +3,20 @@ from .utils import *
 
 
 def check_itii_answers(family_list):
-	question_id = QuestionFamily.objects.get(code_name='Itii').id
+	try:
+		question_id = QuestionFamily.objects.get(code_name='itii').id
+	except QuestionFamily.DoesNotExist:
+		raise Exception("Pas de question labellisée 'itii' dans le questionnaire famille")
 	question_value = 0
 	new_family_list = []
 	for f in family_list:
-		f_ans = [ans for ans in f.answerfamily_set.all() if ans.question.id==question_id][0]
-		if f_ans.answer == question_value:
-			new_family_list.append(f)
+		try:
+			f_ans = [ans for ans in f['family'].answerfamily_set.all() if ans.question.id==question_id][0]
+			if f_ans.answer == question_value:
+				new_family_list.append(f)
+		except IndexError:
+			# the family didn't answered this question
+			pass
 	return new_family_list
 
 
