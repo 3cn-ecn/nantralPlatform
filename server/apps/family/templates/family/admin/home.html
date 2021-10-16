@@ -2,53 +2,42 @@
 
 {% block content %}
     <h1>Parrainage - Page Admin</h1>
-    <h3>Statistiques générales</h3>
+    <h2>Statistiques générales</h2>
+    <h3>Familles (2A+)</h3>
     <ul>
         <li>Nombre de familles cette année : {{ nb_families }}</li>
-        <li>Nombre de 1A : {{ nb_1A }}
-            <ul>
-                <li>Dont 1A placés dans une famille : {{ nb_1A_placed }}</li>
-                <li>Dont 1A non-placés dans une famille : {{ nb_1A_unplaced }}
-                    {% if unplaced_1A %}
-                        <ul>
-                            {% for m in non_complete_1A %}
-                                <li>{{m}}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                </li>
-            </ul>
+        <li>Familles avec moins de 3 parrains déclarés : {{nb_bad_nb_families}}
+            {% if bad_nb_families %}
+                <ul>
+                    {% for f in bad_nb_families %}
+                        <li><a href="{{ f.get_absolute_url }}">{{f.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </li>
+        <li>Familles qui n'ont fini le questionnaire : {{nb_non_complete_families}}
+            {% if non_complete_families %}
+                <ul>
+                    {% for f in non_complete_families %}
+                        <li><a href="{{ f.get_absolute_url }}">{{f.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    </ul>
+    <h3>Parrains et marraines (2A+)</h3>
+    <ul>
         <li>Nombre de 2A+ inscrits : {{ nb_2A }}</li>
-        <li>Familles avec moins de 3 parrains déclarés : ({{nb_bad_nb_families}} familles en tout)
-            <ul>
-                {% for f in bad_nb_families %}
-                <li><a href="{{ f.get_absolute_url }}">{{f.name}}</a></li>
-                {% endfor %}
-            </ul>
+        <li>Membres 2A+ qui n'ont pas terminé le formulaire : {{nb_non_complete_2A}}
+            {% if non_complete_2A %}
+                <ul>
+                    {% for m in non_complete_2A %}
+                        <li><a href="{{m.student.get_absolute_url}}">{{m}}</a> (<a href="{{ m.group.get_absolute_url }}">{{m.group.name}}</a>)</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </li>
-        <li>Familles qui n'ont pas répondu au questionnaire Famille : ({{nb_bad_ans_families}} familles en tout)
-            <ul>
-                {% for f in bad_ans_families %}
-                <li><a href="{{ f.get_absolute_url }}">{{f.name}}</a></li>
-                {% endfor %}
-            </ul>
-        </li>
-        <li>Membres 1A qui n'ont pas terminé le formulaire : ({{nb_non_complete_1A}} membres en tout)
-            <ul>
-                {% for m in non_complete_1A %}
-                <li>{{m}}</li>
-                {% endfor %}
-            </ul>
-        </li>
-        <li>Membres 2A qui n'ont pas terminé le formulaire : ({{nb_non_complete_2A}} membres en tout)
-            <ul>
-                {% for m in non_complete_2A %}
-                <li>{{m}} (<a href="{{ m.group.get_absolute_url }}">{{m.group.name}}</a>)</li>
-                {% endfor %}
-            </ul>
-        </li>
-        <li>Membres 2A non inscrits : ({{nb_non_subscribed_2A}} membres en tout)
+        <li>Membres 2A+ non inscrits : {{nb_non_subscribed_2A}}
             <ul>
                 {% for m, f in non_subscribed_2A %}
                 <li>{{m}} (<a href="{{ f.get_absolute_url }}">{{f.name}}</a>)</li>
@@ -56,10 +45,35 @@
             </ul>
         </li>
     </ul>
+    <h3>Fillot⋅es (1A)</h3>
+    <ul>
+        <li>Nombre total de 1A : {{ nb_1A }}</li>
+        <li>Nombre total de 1A en ITII : {{ nb_itii }}
+        <li>1A placés dans une famille : {{ nb_1A_placed }}</li>
+        <li>1A non-placés dans une famille : {{ nb_1A_unplaced }}
+            {% if unplaced_1A %}
+                <ul>
+                    {% for m in unplaced_1A %}
+                        <li><a href="{{ m.student.get_absolute_url}}">{{m}}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+        <li>1A n'ayant pas terminé le formulaire : {{nb_non_complete_1A}}
+            {% if non_complete_1A %}
+                <ul>
+                    {% for m in non_complete_1A %}
+                        <li><a href="{{ m.student.get_absolute_url}}">{{m}}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+    </ul>
     <br>
-    <h3>Outils</h3>
+    <h2>Outils</h2>
     <a href='{% url "family-admin:results" %}' class="btn btn-warning">Lancer l'algorithme initial</a>
     <a href='{% url "family-admin:results-deltas" %}' class="btn btn-warning">Lancer l'algorithme delta</a>
+    <a href='{% url "family-admin:results-itii" %}' class='btn btn-warning'>Lancer l'algorithme ITII</a>
     <a href='{% url "family-admin:results-saved" %}' class="btn btn-success">Voir les affectations</a>
     <a href='{% url "admin:app_list" "family" %}' class='btn btn-secondary'>Modifier les questions et l'affichage</a>
 {% endblock %}
