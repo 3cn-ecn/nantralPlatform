@@ -2,7 +2,7 @@ from apps.family.models import QuestionFamily
 from .utils import *
 
 
-def check_itii_answers(family_list, question_list):
+def check_itii_answers(family_list):
 	question_id = QuestionFamily.objects.get(code_name='Itii').id
 	question_value = 0
 	new_family_list = []
@@ -28,8 +28,8 @@ def itii_algorithm():
 
 	# get the family who have said yes to itii question
 	print('Get family answers...')
-	_, family_list = get_member2A_list(question_list)
-	family_list = check_itii_answers(family_list, question_list)
+	member2A_list, family_list = get_member2A_list(question_list)
+	family_list = check_itii_answers(family_list)
 	
 	# count difference of number of members per family
 	print('Calculate the deltas...')
@@ -39,7 +39,7 @@ def itii_algorithm():
 		nb_2A = f['nb']
 		f['delta'] = nb_1A - nb_2A
 	
-	# math the correct number : we add families and priorize the little ones
+	# match the correct number : we add families and priorize the little ones
 	family_list.sort(key=lambda f: f['nb'])
 	family_list.sort(key=lambda f: f['delta'])
 	# duplicate families
@@ -57,6 +57,18 @@ def itii_algorithm():
 	save(itii_result_list)
 
 	print('Done!')
-	return itii_list, family_list
+	return itii_list, member2A_list, family_list
 
 
+
+def reset_itii():
+	"""Reset the decision of the algorithm"""
+	print('Deleting...')
+	m_list = MembershipFamily.objects.filter(
+		role='1A', 
+		group__year=scholar_year(), 
+		student__faculty='Iti')
+	for m in m_list:
+		m.group = None
+		m.save()
+	print('Deleted!')

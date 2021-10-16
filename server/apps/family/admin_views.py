@@ -8,7 +8,7 @@ from .models import Family, MembershipFamily, QuestionFamily
 from .utils import read_phase, scholar_year
 from .algorithm.main import main_algorithm
 from .algorithm.delta import delta_algorithm
-from .algorithm.itii import itii_algorithm
+from .algorithm.itii import itii_algorithm, reset_itii
 from .algorithm.utils import reset
 
 # group of users who have access
@@ -100,6 +100,18 @@ class ResultsDeltasView(ResultsView):
         return delta_algorithm()
 
 
+class ResultsItiiView(ResultsView):
+    """View for itii results"""
+
+    def post(self, request, *args, **kwargs):
+        if request.POST['action_family'] == 'reset':
+            reset_itii()
+        return redirect('family-admin:home')
+    
+    def resolve(self):
+        return itii_algorithm()
+
+
 class ResultsSavedView(UserIsInGroup, TemplateView):
     group = GROUP_NAME
     template_name = 'family/admin/results_saved.html'
@@ -107,6 +119,8 @@ class ResultsSavedView(UserIsInGroup, TemplateView):
     def post(self, request, *args, **kwargs):
         if request.POST['action_family'] == 'reset':
             reset()
+        elif request.POST['action_family'] == 'reset_itii':
+            reset_itii()
         return redirect('family-admin:home')
     
     def get_context_data(self, **kwargs):
