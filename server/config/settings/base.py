@@ -184,11 +184,15 @@ CKEDITOR_5_CONFIGS = {
             '|',
             'blockQuote', 'imageUpload'
         ],
-        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-                    'code', 'subscript', 'superscript', 'highlight', '|', 'codeBlock',
-                    'bulletedList', 'numberedList', 'todoList', '|', 'blockQuote', 'imageUpload', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
-                    'insertTable', ],
+        'toolbar': [
+            'heading', '|', 'outdent', 'indent', '|',
+            'bold', 'italic', 'link', 'underline', 'strikethrough', 'code',
+            'subscript', 'superscript', 'highlight', '|',
+            'codeBlock', 'bulletedList', 'numberedList', 'todoList', '|',
+            'blockQuote', 'imageUpload', '|',
+            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
+            'mediaEmbed', 'removeFormat', 'insertTable',
+        ],
         'table': {
             'contentToolbar': ['tableColumn', 'tableRow', 'mergeTableCells',
                                'tableProperties', 'tableCellProperties'],
