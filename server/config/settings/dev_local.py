@@ -1,5 +1,5 @@
-import os
-from .base import *
+# flake8: noqa: F405
+from .base import *  # noqa: F403
 
 print("Running dev settings")
 
