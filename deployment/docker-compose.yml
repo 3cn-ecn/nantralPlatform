@@ -43,6 +43,38 @@ services:
       - DISCORD_ADMIN_MODERATION_WEBHOOK
       - TEMPORARY_ACCOUNTS_DATE_LIMIT
 
+  server-staging:
+    build:
+      context: ../../nantralPlatform-staging/
+      dockerfile: ./deployment/containers/web_staging/Dockerfile
+    expose:
+      - 8001
+    command: sh run_server_staging.sh
+    volumes:
+      - ../../nantralPlatform-staging/server:/var/app
+      - static_volume:/var/app/staticfiles/
+    depends_on:
+      - database
+      - redis
+    environment:
+      - DB_HOSTNAME
+      - DB_PORT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_NAME=${DB_NAME_STAGING}
+      - S3_BUCKET
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - GITHUB_USER
+      - GITHUB_TOKEN
+      - DJANGO_ALLOWED_HOSTS
+      - SECRET_KEY
+      - MAPBOX_API_KEY
+      - DISCORD_TOKEN
+      - DISCORD_CHANNEL_ID
+      - DISCORD_ADMIN_MODERATION_WEBHOOK
+      - TEMPORARY_ACCOUNTS_DATE_LIMIT
+
   nginx:
     build: ./containers/nginx
     ports:
