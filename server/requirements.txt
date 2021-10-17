@@ -25,6 +25,7 @@ django-storages==1.11.1
 django-timezone-field==4.2.1
 djangorestframework==3.12.4
 docutils==0.17.1
+flake8==4.0.1
 flower==1.0.0
 freezegun==1.1.0
 gunicorn==20.1.0
@@ -35,6 +36,7 @@ iniconfig==1.1.1
 jmespath==0.10.0
 kombu==5.1.0
 matching==1.4
+mccabe==0.6.1
 more-itertools==8.8.0
 numpy==1.21.2
 packaging==20.9
@@ -44,7 +46,8 @@ prometheus-client==0.11.0
 prompt-toolkit==3.0.20
 psycopg2-binary==2.8.6
 py==1.10.0
-pycodestyle==2.7.0
+pycodestyle==2.8.0
+pyflakes==2.4.0
 pymemcache==3.5.0
 pyparsing==2.4.7
 pytest==6.2.4
