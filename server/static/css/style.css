@@ -14,16 +14,16 @@ body {
   width: 100%;
 }
 
-h1,
-h2,
-h5 {
+h1, .h1,
+h2, .h2,
+h5, .h5 {
   font-family: "Heebo", sans-serif;
   font-weight: 900;
 }
 
-h3,
-h4,
-h6 {
+h3, .h3,
+h4, .h4,
+h6, .h6 {
   font-family: "Heebo", sans-serif;
   font-weight: 500;
 }
