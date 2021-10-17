@@ -34,7 +34,8 @@ gérées automatiquement mais peuvent être réécrites si besoin.
 
 from typing import Union
 from importlib import import_module
-from django.http import Http404
+from django.shortcuts import get_object_or_404
+from django.utils.text import slugify
 
 
 # list of models who uses slugs
@@ -59,10 +60,7 @@ def get_object_from_slug(app_name: str, slug: str):
 
     if app_name == 'club':
         from apps.club.models import Club, BDX
-        try:
-            object = Club.objects.get(slug=slug)
-        except Club.DoesNotExist:
-            raise Http404("Club does not exist.")
+        object = get_object_or_404(Club, slug=slug)
         try:
             object = object.bdx
         except BDX.DoesNotExist:
@@ -107,3 +105,19 @@ def get_object_from_full_slug(full_slug: str) -> Union['Group']:
     """Get a model object from a full slug."""
     app_name, slug = get_tuple_from_full_slug(full_slug)
     return get_object_from_slug(app_name, slug)
+
+
+
+class SlugModel:
+    """ A class to define a method to create and update slugs"""
+
+    def set_slug(self, text, max_length=50):
+        if not self.slug:
+            slug = slugify(text)[:max_length-5]
+            model = type(self)
+            if model.objects.filter(slug=slug).exists():
+                id = 1
+                while model.objects.filter(slug=f'{slug}-{id}'):
+                    id += 1
+                slug = f'{slug}-{id}'
+            self.slug = slug

@@ -26,24 +26,25 @@ export function Event(props): JSX.Element {
         >
           {" "}
           <h5 className="card-title">
-            {eventInfos.title} • Début :{" "}
-            {dayjs(eventInfos.date).format("HH:mm")} • {eventInfos.location}
+            {eventInfos.title}
           </h5>
-          <h6 className="card-subtitle mb-2">{eventInfos.get_group_name}</h6>
+          <h6 className="card-subtitle mb-3">
+            {dayjs(eventInfos.date).format("HH:mm")} • {eventInfos.location} • {eventInfos.get_group_name}
+          </h6>
         </a>
-        <h6 className="card-subtitle mb-2">
+        <p className="card-subtitle mb-0">
           <ParticipateButton
             number_of_participants={eventInfos.number_of_participants}
             urls={urls}
             eventInfos={eventInfos}
           />
-        </h6>
-        <Truncate lines={3}>
+        </p>
+        {/* <Truncate lines={3}>
           <p
             className="card-text"
             dangerouslySetInnerHTML={{ __html: eventInfos.description }}
           ></p>
-        </Truncate>
+        </Truncate> */}
       </div>
     </div>
   );
