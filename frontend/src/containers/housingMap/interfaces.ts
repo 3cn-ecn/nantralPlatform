@@ -44,3 +44,9 @@ export interface PinProps {
   size: number;
   onClick: any;
 }
+
+export interface RootProps {
+  API_KEY: string;
+  API_HOUSING_URL: string;
+  PHASE_COLOCATHLON: number;
+}
