@@ -27,12 +27,12 @@ export function ParticipateButton(props): JSX.Element {
 
   return (
     <div className="btn-group" role="group">
-      <Button variant="secondary" size="sm">
+      <Button variant={eventInfos.color} size="sm">
         <i className="fas fa-users" style={faIconStyle}></i>
         {numberOfParticipants}
       </Button>
       <Button
-        variant="secondary"
+        variant={eventInfos.color}
         size="sm"
         onClick={() => {
           setLoading(true);
@@ -71,7 +71,7 @@ export function ParticipateButton(props): JSX.Element {
           return (
             <>
               <Button
-                variant="secondary"
+                variant={eventInfos.color}
                 size="sm"
                 onClick={() => {
                   setIsParticipantsLoading(true);

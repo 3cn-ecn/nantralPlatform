@@ -29,6 +29,7 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
         context['group'] = self.object.get_group
         context['is_participating'] = self.object.is_participating(
             self.request.user)
+        context['is_admin'] = context['group'].is_admin(self.request.user)
         return context
 
 

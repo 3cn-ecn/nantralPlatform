@@ -1,12 +1,18 @@
 ﻿import axios from "axios";
+import { Housing } from "./interfaces";
 
 export async function getRoommates(
   api_housing_url: string,
   setColocs,
-  setData
+  setData,
+  colocathlonParticipants = false
 ): Promise<void> {
   axios
-    .get(api_housing_url)
+    .get(
+      `${api_housing_url}?colocathlonParticipants=${
+        colocathlonParticipants ? 1 : 0
+      }`
+    )
     .then((res) => {
       // For some reason, doubles Axios roommates which have more than one inhabitant,
       // so we have to do this mess to filter everything.
@@ -32,7 +38,11 @@ export async function getRoommates(
         }
       }
       setColocs(
-        dataBuffer.map((housing) => {
+        dataBuffer.map((housing: Housing) => {
+          housing.address = housing.address.replace(
+            ", 44100 Nantes, France",
+            ""
+          );
           return { label: housing.roommates.name, housing: housing };
         })
       );

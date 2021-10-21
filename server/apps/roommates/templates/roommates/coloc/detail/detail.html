@@ -24,6 +24,39 @@
 
 
 {% block before_content %}
+    {% if colocathlon >= 1 and is_admin or colocathlon == 2 and object.colocathlon_agree %}
+        <div class="card" style="padding:1rem;margin-top:1.5rem;margin-bottom:1.5rem;">
+            <h2 style="position: relative; top:0; left: 0; transform: translateY(-2.1rem);margin-bottom:-1.5rem;background-color: white;width:max-content;">Cowlocathlon</h2>
+            {% if not object.colocathlon_agree %}
+                <p>Remplissez le form pour participer au colocathlon !</p>
+                <a class="btn btn-primary" style="width: max-content;" href="{% url 'roommates:colocathlon-edit' object.slug %}">
+                    Formulaire Cowlocathlon
+                </a>
+            {% else %}
+                <p>Horaires d'ouverture : {{object.colocathlon_hours|default:"Non précisé"}}
+                <br>Activités proposées : {{object.colocathlon_activities|default:"Non précisé"}}</p>
+                {% if is_admin %}
+                    <p><a class="btn btn-success" style="width: max-content;" href="#">
+                        Voir les participants
+                        <span class="badge bg-light text-success">
+                            {{nb_participants}}/{{object.colocathlon_quota}}
+                        </span>
+                    </a>
+                    <a class="btn btn-secondary" style="width: max-content;" href="{% url 'roommates:colocathlon-edit' object.slug %}">
+                        Modifier
+                    </a></p>
+                {% else %}
+                    <a class="btn btn-primary" style="width: max-content;" href="#">
+                        Réserver ma place ! 
+                        <span class="badge bg-light text-primary">
+                            {{nb_participants}}/{{object.colocathlon_quota}}
+                        </span>
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endif %}
+
     <!-- Liste des membres -->
     <br />
     {% if request.user.is_authenticated %}
