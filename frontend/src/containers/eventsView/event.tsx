@@ -1,8 +1,9 @@
 ﻿import * as React from "react";
 import { EventInfos } from "./interfaces";
 import Truncate from "react-truncate";
-import { cardStyle, eventLink } from "./styles";
+import { cardStyle } from "./styles";
 import { ParticipateButton } from "./participateButton";
+import { Card } from "react-bootstrap";
 
 var dayjs = require("dayjs");
 var isToday = require("dayjs/plugin/isToday");
@@ -17,34 +18,34 @@ export function Event(props): JSX.Element {
   const eventInfos: EventInfos = props.eventInfos;
 
   return (
-    <div className={`card pt-0 bg-${eventInfos.color}`} style={cardStyle}>
-      <div className="card-body">
+    <Card border={eventInfos.color} style={cardStyle}>
+      <Card.Img variant="top" src={eventInfos.image} />
+      <Card.Body>
         <a
           href={eventInfos.get_absolute_url}
-          style={eventLink}
-          className="mb-1"
+          className="mb-1 text-dark"
         >
-          {" "}
-          <h5 className="card-title">
-            {eventInfos.title} • Début :{" "}
-            {dayjs(eventInfos.date).format("HH:mm")} • {eventInfos.location}
-          </h5>
-          <h6 className="card-subtitle mb-2">{eventInfos.get_group_name}</h6>
+          <Card.Title>
+            {eventInfos.title}
+          </Card.Title>
+          <Card.Subtitle className="mb-3">
+            {dayjs(eventInfos.date).format("HH:mm")} • {eventInfos.location} • {eventInfos.get_group_name}
+          </Card.Subtitle>
         </a>
-        <h6 className="card-subtitle mb-2">
+        <Card.Text>
           <ParticipateButton
             number_of_participants={eventInfos.number_of_participants}
             urls={urls}
             eventInfos={eventInfos}
           />
-        </h6>
-        <Truncate lines={3}>
+        </Card.Text>
+        {/* <Truncate lines={3}>
           <p
             className="card-text"
             dangerouslySetInnerHTML={{ __html: eventInfos.description }}
           ></p>
-        </Truncate>
-      </div>
-    </div>
+        </Truncate> */}
+      </Card.Body>
+    </Card>
   );
 }

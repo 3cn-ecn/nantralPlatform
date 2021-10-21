@@ -10,7 +10,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compressModelImage
-from apps.utils.slug import *
+from apps.utils.slug import get_object_from_full_slug, get_tuple_from_full_slug, SlugModel
 from django.conf import settings
 
 from discord_webhook import DiscordWebhook, DiscordEmbed
@@ -23,7 +23,7 @@ path_and_rename_group = PathAndRename("groups/logo")
 path_and_rename_group_banniere = PathAndRename("groups/banniere")
 
 
-class Group(models.Model):
+class Group(models.Model, SlugModel):
     '''Modèle abstrait servant de modèle pour tous les types de Groupes.'''
 
     # Nom du groupe
@@ -82,14 +82,7 @@ class Group(models.Model):
 
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
-        if not self.slug:
-            slug = slugify(self.name)[:35]
-            if type(self).objects.filter(slug=slug):
-                id = 1
-                while type(self).objects.filter(slug=f'{slug}-{id}'):
-                    id += 1
-                slug = f'{slug}-{id}'
-            self.slug = slug
+        self.set_slug(self.name, 40)
         # compression des images
         self.logo = compressModelImage(
             self, 'logo', size=(500, 500), contains=True)

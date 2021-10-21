@@ -32,6 +32,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      - name: linting
+        working-directory: ./server
+        run: git diff -u | flake8 --diff --config flake8.cfg
       - name: Run Tests
         working-directory: ${{ env.working-directory }}
         run: |
