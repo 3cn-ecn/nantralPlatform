@@ -2,10 +2,14 @@
 
 from django.db import migrations
 import os
-from ..models import QuestionMember, QuestionFamily, QuestionPage, GroupQuestion
 
 
 def create_questions(apps, schema_editor):
+
+    QuestionMember = apps.get_model('family', 'QuestionMember')
+    QuestionFamily = apps.get_model('family', 'QuestionFamily')
+    QuestionPage = apps.get_model('family', 'QuestionPage')
+    GroupQuestion = apps.get_model('family', 'GroupQuestion')
     
     ### PAGE 1
     p1 = QuestionPage.objects.create(
