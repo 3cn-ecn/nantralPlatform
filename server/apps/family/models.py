@@ -177,6 +177,7 @@ class QuestionMember(BaseQuestion):
     
     def save(self, *args, **kwargs):
         if self.group:
+            print('has group')
             self.page = self.group.page
             self.coeff = self.group.coeff
             self.order = self.group.order
@@ -190,6 +191,7 @@ class QuestionMember(BaseQuestion):
                     text_en = o.text_en,
                 )
         else:
+            print('has not group')
             super(QuestionMember, self).save(*args, **kwargs)
 
 
