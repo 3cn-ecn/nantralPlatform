@@ -52,9 +52,6 @@ class Roommates(Group):
     colocathlon_hours = models.CharField(
         verbose_name="Horaires d'ouvertures",
         max_length=50, null=True, blank=True)
-    # colocathlon_cost = models.CharField(
-    #     verbose_name="Prix demandé par participant", 
-    #     max_length=10, null=True, blank=True)
     colocathlon_activities = models.CharField(
         verbose_name="Activités proposées", 
         max_length=250, null=True, blank=True)
