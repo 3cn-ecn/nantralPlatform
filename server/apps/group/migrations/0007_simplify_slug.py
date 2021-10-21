@@ -21,7 +21,7 @@ def simplify_slug(model):
 
 def main_simplify_slug(apps, schema_editor):
     Club = apps.get_model('club', 'Club')
-    Liste = apps.get_models('liste', 'Liste')
+    Liste = apps.get_model('liste', 'Liste')
     Roommates = apps.get_model('roommates', 'Roommates')
     simplify_slug(Club)
     simplify_slug(Liste)

@@ -10,7 +10,28 @@ def create_questions(apps, schema_editor):
     QuestionFamily = apps.get_model('family', 'QuestionFamily')
     QuestionPage = apps.get_model('family', 'QuestionPage')
     GroupQuestion = apps.get_model('family', 'GroupQuestion')
+    Option = apps.get_model('family', 'Option')
     
+    def add_question(g:GroupQuestion, label, label_en=None):
+        if not label_en:
+            label_en = label
+        q = g.questionmember_set.create(
+            code_name = label,
+            label = label,
+            label_en = label_en,
+            page = g.page,
+            coeff = g.coeff,
+            order = g.order
+        )
+        for o in Option.objects.filter(question=q):
+            o.delete()
+        for o in g.option_set.all():
+            q.option_set.create(
+                value = o.value,
+                text = o.text,
+                text_en = o.text_en,
+            )
+
     ### PAGE 1
     p1 = QuestionPage.objects.create(
         order=1, 
@@ -90,9 +111,9 @@ def create_questions(apps, schema_editor):
     )
     q1.option_set.create(value=0, text="Oui", text_en="Yes")
     q1.option_set.create(value=1, text="Non", text_en="No")
-    q1.questionmember_set.create(label='BDE')
-    q1.questionmember_set.create(label='BDA')
-    q1.questionmember_set.create(label='BDS')
+    add_question(q1, label='BDE')
+    add_question(q1, label='BDA')
+    add_question(q1, label='BDS')
     # question 2
     q2 = GroupQuestion.objects.create(
         code_name='Musique',
@@ -105,16 +126,16 @@ def create_questions(apps, schema_editor):
     q2.option_set.create(value=0, text="J'adore", text_en="I love")
     q2.option_set.create(value=1, text="J'apprécie", text_en="I like")
     q2.option_set.create(value=2, text="Indifférent/Je n'aime pas", text_en="No interest/I don't like")
-    q2.questionmember_set.create(label="Rock")
-    q2.questionmember_set.create(label="Métal", label_en="Metal")
-    q2.questionmember_set.create(label="Electro posé", label_en="Electro soft")
-    q2.questionmember_set.create(label="Electro hard", label_en="Electro hard")
-    q2.questionmember_set.create(label="Rap")
-    q2.questionmember_set.create(label="Pop")
-    q2.questionmember_set.create(label="Musique française", label_en="French music")
-    q2.questionmember_set.create(label="Musique classique", label_en="Classical music")
-    q2.questionmember_set.create(label="Jazz")
-    q2.questionmember_set.create(label="Kpop")
+    add_question(q2, label="Rock")
+    add_question(q2, label="Métal", label_en="Metal")
+    add_question(q2, label="Electro posé", label_en="Electro soft")
+    add_question(q2, label="Electro hard", label_en="Electro hard")
+    add_question(q2, label="Rap")
+    add_question(q2, label="Pop")
+    add_question(q2, label="Musique française", label_en="French music")
+    add_question(q2, label="Musique classique", label_en="Classical music")
+    add_question(q2, label="Jazz")
+    add_question(q2, label="Kpop")
     
     # question 3
     q3 = GroupQuestion.objects.create(
@@ -128,14 +149,14 @@ def create_questions(apps, schema_editor):
     q3.option_set.create(value=0, text="J'adore", text_en="I love")
     q3.option_set.create(value=1, text="J'apprécie", text_en="I like")
     q3.option_set.create(value=2, text="Indifférent/Je n'aime pas", text_en="No interest/I don't like")
-    q3.questionmember_set.create(label="Peinture", label_en="Painting")
-    q3.questionmember_set.create(label="Littérature", label_en="Literature")
-    q3.questionmember_set.create(label="Sculpture", label_en="Sculpture")
-    q3.questionmember_set.create(label="Danse", label_en="Dance")
-    q3.questionmember_set.create(label="Musique", label_en="Music")
-    q3.questionmember_set.create(label="Théâtre", label_en="Drama")
-    q3.questionmember_set.create(label="Cinéma", label_en="Cinema")
-    q3.questionmember_set.create(label="Graphisme", label_en="Drawing/graphic design")
+    add_question(q3, label="Peinture", label_en="Painting")
+    add_question(q3, label="Littérature", label_en="Literature")
+    add_question(q3, label="Sculpture", label_en="Sculpture")
+    add_question(q3, label="Danse", label_en="Dance")
+    add_question(q3, label="Musique", label_en="Music")
+    add_question(q3, label="Théâtre", label_en="Drama")
+    add_question(q3, label="Cinéma", label_en="Cinema")
+    add_question(q3, label="Graphisme", label_en="Drawing/graphic design")
     q4 = GroupQuestion.objects.create(
         code_name="Sports",
         label="Et sportivement ?",
@@ -147,15 +168,15 @@ def create_questions(apps, schema_editor):
     q4.option_set.create(value=0, text="J'adore", text_en="I love")
     q4.option_set.create(value=1, text="J'apprécie", text_en="I like")
     q4.option_set.create(value=2, text="Indifférent/Je n'aime pas", text_en="No interest/I don't like")
-    q4.questionmember_set.create(label="Rugby", label_en="Rugby")
-    q4.questionmember_set.create(label="Hand", label_en="Hand")
-    q4.questionmember_set.create(label="Foot", label_en="Football")
-    q4.questionmember_set.create(label="Tennis", label_en="Tennis")
-    q4.questionmember_set.create(label="Aviron", label_en="Rowing")
-    q4.questionmember_set.create(label="Volley", label_en="Volley")
-    q4.questionmember_set.create(label="Sports de combat", label_en="Fighting sports")
-    q4.questionmember_set.create(label="Danse", label_en="Dance")
-    q4.questionmember_set.create(label="Athlétisme", label_en="Athetics")
+    add_question(q4, label="Rugby", label_en="Rugby")
+    add_question(q4, label="Hand", label_en="Hand")
+    add_question(q4, label="Foot", label_en="Football")
+    add_question(q4, label="Tennis", label_en="Tennis")
+    add_question(q4, label="Aviron", label_en="Rowing")
+    add_question(q4, label="Volley", label_en="Volley")
+    add_question(q4, label="Sports de combat", label_en="Fighting sports")
+    add_question(q4, label="Danse", label_en="Dance")
+    add_question(q4, label="Athlétisme", label_en="Athetics")
     
     
     ### PAGE 3
@@ -176,11 +197,11 @@ def create_questions(apps, schema_editor):
     q1.option_set.create(value=0, text="J'adore", text_en="I love")
     q1.option_set.create(value=1, text="J'apprécie", text_en="I like")
     q1.option_set.create(value=2, text="Indifférent/Je n'aime pas", text_en="No interest/I don't like")
-    q3.questionmember_set.create(label="Du sport", label_en="Practise sport")
-    q3.questionmember_set.create(label="Aller au ciné", label_en="Go to the cinema")
-    q3.questionmember_set.create(label="Des sorties culturelles", label_en="Cultural activities")
-    q3.questionmember_set.create(label="Jouer aux jeux vidéos/de société", label_en="Play board or video games")
-    q3.questionmember_set.create(label="Regarder un match", label_en="Watch a match")
+    add_question(q3, label="Du sport", label_en="Practise sport")
+    add_question(q3, label="Aller au ciné", label_en="Go to the cinema")
+    add_question(q3, label="Des sorties culturelles", label_en="Cultural activities")
+    add_question(q3, label="Jouer aux jeux vidéos/de société", label_en="Play board or video games")
+    add_question(q3, label="Regarder un match", label_en="Watch a match")
     # question 2
     q2 = QuestionMember.objects.create(
         code_name = "Alcool",
@@ -222,10 +243,10 @@ def create_questions(apps, schema_editor):
     q4.option_set.create(value=0, text="J'adore", text_en="I love")
     q4.option_set.create(value=1, text="J'apprécie", text_en="I like")
     q4.option_set.create(value=2, text="Indifférent/Je n'aime pas", text_en="No interest/I don't like")
-    q4.questionmember_set.create(label="Dans un bar", label_en="In a bar")
-    q4.questionmember_set.create(label="Tranquille dans un appart", label_en="Relax in an apartment")
-    q4.questionmember_set.create(label="Grosse soirée dans un appart", label_en="Big party in an apartment")
-    q4.questionmember_set.create(label="En boîte", label_en="In a nightclub")
+    add_question(q4, label="Dans un bar", label_en="In a bar")
+    add_question(q4, label="Tranquille dans un appart", label_en="Relax in an apartment")
+    add_question(q4, label="Grosse soirée dans un appart", label_en="Big party in an apartment")
+    add_question(q4, label="En boîte", label_en="In a nightclub")
     # question 5
     q5 = QuestionMember.objects.create(
         code_name="Fumette",
