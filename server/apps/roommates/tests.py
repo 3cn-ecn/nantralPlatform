@@ -23,8 +23,8 @@ class TestHousing(TestCase, TestMixin):
         house = Housing.objects.all().first()
         Roommates.objects.create(
             name="Coloc test",
-            housing = house,
-            begin_date = date.today()
+            housing=house,
+            begin_date=date.today()
         )
         coloc = Roommates.objects.all().first()
         url = reverse('roommates:detail', args=[coloc.slug])
@@ -54,7 +54,7 @@ class TestHousing(TestCase, TestMixin):
     def test_housing_api_views(self):
         self.client.login(username=self.u1.username, password="pass")
         url = reverse('roommates_api:housing')
-        resp = self.client.get(url)
+        resp = self.client.get(f'{url}?colocathlonParticipants=0')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         payload = {
