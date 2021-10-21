@@ -66,7 +66,6 @@ function Root(props): JSX.Element {
               >
                 <ColocInfo
                   housing={housing}
-                  housingDetailsUrl={housing.roommates.url}
                   colocathlonOnly={colocathlonParticipantsOnly}
                 />
               </Popup>
@@ -87,17 +86,17 @@ function Root(props): JSX.Element {
         <div className="col">
           <h1>Carte des Colocs</h1>
         </div>
-      </div>
-      <div className="row">
-        <ColocathlonSwitch
-          status={colocathlonParticipantsOnly}
-          handle={handleColocathlonParticipants}
-        />
         <MapForm
           colocs={colocs}
           data={data}
           setViewPort={setViewPort}
           setPopUpinfo={setPopUpinfo}
+        />
+      </div>
+      <div className="row">
+        <ColocathlonSwitch
+          status={colocathlonParticipantsOnly}
+          handle={handleColocathlonParticipants}
         />
       </div>
       <Map
