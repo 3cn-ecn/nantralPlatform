@@ -1,5 +1,4 @@
 ﻿import axios from "axios";
-import { Housing } from "./interfaces";
 
 export async function getRoommates(
   api_housing_url: string,
