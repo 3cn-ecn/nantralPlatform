@@ -1,13 +1,17 @@
 import * as React from "react";
 import Switch from "react-switch";
 
-import { colocathlonSwitchStyle, colocathlonSwitchChildStyle } from "./styles";
+import {
+  colocathlonSwitchDivStyle,
+  colocathlonSwitchChildStyle,
+  colocathlonSwitchElementStyle,
+} from "./styles";
 
 export function ColocathlonSwitch(props) {
   const { status, handle } = props;
   return (
-    <div className="col" style={colocathlonSwitchStyle}>
-      <div style={colocathlonSwitchChildStyle}>
+    <div className="col" style={colocathlonSwitchDivStyle}>
+      <div style={colocathlonSwitchElementStyle}>
         <Switch
           checked={status}
           onChange={handle}

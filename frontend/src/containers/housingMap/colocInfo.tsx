@@ -1,14 +1,15 @@
 ﻿import * as React from "react";
 import { Button } from "react-bootstrap";
 
-import { Housing, CityInfoProps } from "./interfaces";
+import { ColocInfoProps } from "./interfaces";
 
-export function ColocInfo(props: CityInfoProps): JSX.Element {
-  const housing: Housing = props.housing;
+export function ColocInfo(props: ColocInfoProps): JSX.Element {
+  const { housing, colocathlonOnly } = props;
   let roommatesList: string = "";
   if (
     typeof housing.roommates != "undefined" &&
-    typeof housing.roommates.members != "undefined"
+    typeof housing.roommates.members != "undefined" &&
+    !colocathlonOnly
   ) {
     roommatesList = housing.roommates.members
       .map((e) => e.name)
@@ -42,10 +43,18 @@ export function ColocInfo(props: CityInfoProps): JSX.Element {
           <small>
             {housing.address}
             <br />
-            <i>{housing.details}</i>
+            <i>
+              {colocathlonOnly
+                ? `Horaires: ${housing.roommates.colocathlon_hours}`
+                : housing.details}
+            </i>
           </small>
         </p>
-        <p>{roommatesList}</p>
+        <p>
+          {colocathlonOnly
+            ? housing.roommates.colocathlon_activities
+            : roommatesList}
+        </p>
       </div>
     </div>
   );

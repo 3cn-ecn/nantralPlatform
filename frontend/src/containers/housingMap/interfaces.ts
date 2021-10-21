@@ -35,9 +35,9 @@ export interface ColocathlonParticipant {
   user: number;
 }
 
-export interface CityInfoProps {
+export interface ColocInfoProps {
   housing: Housing;
-  housingDetailsUrl: string;
+  colocathlonOnly: boolean;
 }
 
 export interface PinProps {

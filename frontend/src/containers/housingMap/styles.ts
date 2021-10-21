@@ -38,12 +38,18 @@ export const navControlStyle: CSSProperties = {
   top: 10,
 };
 
-export const colocathlonSwitchStyle: CSSProperties = {
+export const colocathlonSwitchDivStyle: CSSProperties = {
   display: "inline-block",
   verticalAlign: "middle",
 };
 
 export const colocathlonSwitchChildStyle: CSSProperties = {
+  display: "inline-block",
+  verticalAlign: "middle",
+  marginLeft: "1rem",
+};
+
+export const colocathlonSwitchElementStyle: CSSProperties = {
   display: "inline-block",
   verticalAlign: "middle",
   paddingTop: "0.4rem",
