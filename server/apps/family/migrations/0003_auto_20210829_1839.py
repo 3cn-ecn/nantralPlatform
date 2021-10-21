@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('family', '0001_initial'),
+        ('family', '0002_createModelQuestions'),
     ]
 
     operations = [

@@ -301,17 +301,11 @@ def create_questions(apps, schema_editor):
     f3.option_set.create(value=1, text="Non", text_en="No")
 
 
-migrations_files = os.listdir('apps/family/migrations')
-migrations_files.sort()
-migrations_files = [
-    migrations_file for migrations_file in migrations_files if migrations_file[0:3].isnumeric()]
-latest_migration_file = migrations_files[-1][: -3]
-
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('family', latest_migration_file),
+        ('family', '0001_initial'),
     ]
 
     operations = [
