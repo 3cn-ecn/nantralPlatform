@@ -37,3 +37,14 @@ export const navControlStyle: CSSProperties = {
   right: 10,
   top: 10,
 };
+
+export const colocathlonSwitchStyle: CSSProperties = {
+  display: "inline-block",
+  verticalAlign: "middle",
+};
+
+export const colocathlonSwitchChildStyle: CSSProperties = {
+  display: "inline-block",
+  verticalAlign: "middle",
+  paddingTop: "0.4rem",
+};

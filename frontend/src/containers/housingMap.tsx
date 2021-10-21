@@ -5,6 +5,7 @@ import { easeCubic } from "react-d3-library";
 import { Popup, Marker, FlyToInterpolator } from "react-map-gl";
 
 import { Housing } from "./housingMap/interfaces";
+import { ColocathlonSwitch } from "./housingMap/colocathlonSwitch";
 import { MapForm } from "./housingMap/mapForm";
 import { Pin } from "./housingMap/pin";
 import { ColocInfo } from "./housingMap/colocInfo";
@@ -23,6 +24,13 @@ function Root(props): JSX.Element {
     pitch: 0,
   });
   const [popupInfo, setPopUpinfo] = useState(null);
+  const [colocathlonParticipantsOnly, setColocathlonParticipantsOnly] =
+    useState(false);
+
+  const handleColocathlonParticipants = (e) => {
+    getRoommates(props.api_housing_url, setColocs, setData, e);
+    setColocathlonParticipantsOnly(e);
+  };
 
   const mapRef = useRef(null);
 
@@ -79,12 +87,18 @@ function Root(props): JSX.Element {
           <h1>Carte des Colocs</h1>
         </div>
       </div>
-      <MapForm
-        colocs={colocs}
-        data={data}
-        setViewPort={setViewPort}
-        setPopUpinfo={setPopUpinfo}
-      />
+      <div className="row">
+        <ColocathlonSwitch
+          status={colocathlonParticipantsOnly}
+          handle={handleColocathlonParticipants}
+        />
+        <MapForm
+          colocs={colocs}
+          data={data}
+          setViewPort={setViewPort}
+          setPopUpinfo={setPopUpinfo}
+        />
+      </div>
       <Map
         viewport={viewport}
         mapRef={mapRef}

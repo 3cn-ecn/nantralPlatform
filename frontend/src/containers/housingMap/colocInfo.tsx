@@ -30,7 +30,12 @@ export function ColocInfo(props: CityInfoProps): JSX.Element {
             Y aller
           </Button>
           &nbsp;
-          <Button variant="secondary" size="sm" href={housing.roommates.url}>
+          <Button
+            variant="secondary"
+            size="sm"
+            href={housing.roommates.url}
+            style={{ marginRight: "1rem" }}
+          >
             Détails
           </Button>
           <br />

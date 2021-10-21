@@ -54,7 +54,6 @@ SLUG_MODELS = {
 SLUG_MODELS.update(SLUG_GROUPS)
 
 
-
 def get_object_from_slug(app_name: str, slug: str):
     """Get a model object from a slug and an app."""
 
@@ -70,10 +69,7 @@ def get_object_from_slug(app_name: str, slug: str):
         try:
             package = import_module(SLUG_MODELS[app_name][0])
             Model = getattr(package, SLUG_MODELS[app_name][1])
-            try:
-                return Model.objects.get(slug=slug)
-            except Model.DoesNotExist:
-                raise Http404("The group does not exist.")
+            return get_object_or_404(Model, slug=slug)
         except KeyError:
             raise Exception(f'Unknown application : {app_name}')
 
@@ -105,7 +101,6 @@ def get_object_from_full_slug(full_slug: str) -> Union['Group']:
     """Get a model object from a full slug."""
     app_name, slug = get_tuple_from_full_slug(full_slug)
     return get_object_from_slug(app_name, slug)
-
 
 
 class SlugModel:
