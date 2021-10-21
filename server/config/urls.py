@@ -16,6 +16,7 @@ Including another URLconf
 import debug_toolbar
 from django.contrib import admin
 from django.urls import path, include
+
 # pour importer les fichiers en dev local
 from django.conf import settings
 from django.conf.urls.static import static
@@ -27,15 +28,22 @@ urlpatterns = [
     path('account/', include('apps.account.urls', namespace='account')),
 
     path('student/', include('apps.student.urls', namespace='student')),
-    path('api/student/', include('apps.student.api_urls', namespace='student_api')),
+    path(
+        'api/student/', include('apps.student.api_urls',
+                                namespace='student_api')
+    ),
 
     path('club/', include('apps.club.urls',  namespace='club')),
     path('api/club/', include('apps.club.api_urls', namespace='club_api')),
 
     path('liste/', include('apps.liste.urls',  namespace='liste')),
+    path('api/liste/', include('apps.liste.api_urls',  namespace='liste_api')),
 
     path('academic/', include('apps.academic.urls', namespace='academic')),
-    path('api/academic/', include('apps.academic.api_urls', namespace='academic_api')),
+    path(
+        'api/academic/', include('apps.academic.api_urls',
+                                 namespace='academic_api')
+    ),
 
     path('services/', include('apps.services.urls', namespace='services')),
 
@@ -44,10 +52,13 @@ urlpatterns = [
     path('post/', include('apps.post.urls', namespace='post')),
     path('api/post/', include('apps.post.api_urls', namespace='post_api')),
 
-    #path('exchange/', include('apps.exchange.urls', namespace='exchange')),
+    # path('exchange/', include('apps.exchange.urls', namespace='exchange')),
 
     path('colocs/', include('apps.roommates.urls', namespace='roommates')),
-    path('api/colocs/', include('apps.roommates.api_urls', namespace='roommates_api')),
+    path(
+        'api/colocs/', include('apps.roommates.api_urls',
+                               namespace='roommates_api')
+    ),
 
     path('parrainage/', include('apps.family.urls', namespace='family')),
     path('parrainage/admin/',

@@ -82,7 +82,7 @@ def get_member1A_list(question_list, itii=False):
 		data = data.exclude(student__faculty='Iti')
 	member1A_list = []
 	for membership in data:
-		if len(membership.answermember_set) >= len(question_list):
+		if len(membership.answermember_set.all()) >= len(question_list):
 			answers = get_answers(membership, question_list)
 			member1A_list.append({
 				'member': membership,

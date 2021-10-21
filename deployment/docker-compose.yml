@@ -23,12 +23,45 @@ services:
       - static_volume:/var/app/staticfiles/
     depends_on:
       - database
+      - redis
     environment:
       - DB_HOSTNAME
       - DB_PORT
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - DB_NAME
+      - S3_BUCKET
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - GITHUB_USER
+      - GITHUB_TOKEN
+      - DJANGO_ALLOWED_HOSTS
+      - SECRET_KEY
+      - MAPBOX_API_KEY
+      - DISCORD_TOKEN
+      - DISCORD_CHANNEL_ID
+      - DISCORD_ADMIN_MODERATION_WEBHOOK
+      - TEMPORARY_ACCOUNTS_DATE_LIMIT
+
+  server-staging:
+    build:
+      context: ../../nantralPlatform-staging/
+      dockerfile: ./deployment/containers/web_staging/Dockerfile
+    expose:
+      - 8001
+    command: sh run_server_staging.sh
+    volumes:
+      - ../../nantralPlatform-staging/server:/var/app
+      - static_volume:/var/app/staticfiles/
+    depends_on:
+      - database
+      - redis
+    environment:
+      - DB_HOSTNAME
+      - DB_PORT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_NAME=${DB_NAME_STAGING}
       - S3_BUCKET
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
@@ -60,7 +93,60 @@ services:
     restart: always
     volumes:
       - "./redis:/data"
-    
+
+  celery:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+    command: celery -A apps.celery worker -l info
+    volumes:
+      - ../server:/var/app
+    depends_on:
+      - celery-beat
+      - redis
+    environment:
+      - DB_HOSTNAME
+      - DB_PORT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_NAME
+      - S3_BUCKET
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
+      - GITHUB_USER
+      - GITHUB_TOKEN
+      - MAPBOX_API_KEY
+      - DISCORD_TOKEN
+      - DISCORD_CHANNEL_ID
+      - TEMPORARY_ACCOUNTS_DATE_LIMIT
+
+  celery-beat:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+    command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ../server:/var/app
+    depends_on:
+      - redis
+    environment:
+      - DB_HOSTNAME
+      - DB_PORT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_NAME
+      - S3_BUCKET
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
+      - GITHUB_USER
+      - GITHUB_TOKEN
+      - MAPBOX_API_KEY
+      - DISCORD_TOKEN
+      - DISCORD_CHANNEL_ID
+      - TEMPORARY_ACCOUNTS_DATE_LIMIT
+
   # Core services
   front:
     image: ${DOCKER_ORG:-mailu}/${DOCKER_PREFIX:-}nginx:${MAILU_VERSION:-1.8}

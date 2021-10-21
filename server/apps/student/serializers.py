@@ -6,6 +6,7 @@ from .models import Student
 
 class StudentSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
+    absolute_url = serializers.ReadOnlyField()
 
     class Meta:
         model = Student

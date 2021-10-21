@@ -47,7 +47,6 @@ class DetailClubView(BaseDetailGroupView):
             Q(group=group) & (Q(date_end__isnull=True) | Q(date_end__gt=date_end))
         ).order_by('student__user__first_name')
         return context
-    
 
 
 class DetailGroupMembersView(LoginRequiredMixin, ListView):

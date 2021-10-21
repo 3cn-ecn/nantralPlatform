@@ -1,5 +1,9 @@
-"""A configuration for local docker use in developpment. DO NOT USE IN PRODUCTION."""
-from .base import *
+"""A configuration for local docker use in development.
+DO NOT USE IN PRODUCTION."""
+# flake8: noqa: F405
+from celery.schedules import crontab
+
+from .base import *  # noqa: F403
 
 print("Using docker config")
 DEBUG = True
@@ -51,7 +55,7 @@ AWS_S3_REGION_NAME = 'eu-west-3'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "test"
 
-ALLOWED_HOSTS = ["django"]
+ALLOWED_HOSTS = ["django", "localhost"]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -82,4 +86,22 @@ def show_toolbar(request):
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+}
+
+
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Paris'
+
+CELERY_BEAT_SCHEDULE = {
+    'remove-inactive-accounts': {
+        'task': 'apps.account.tasks.remove_inactive_accounts',
+        'schedule': crontab(hour='4'),
+    },
+    'remove-temp-access': {
+        'task': 'apps.account.tasks.remove_temporary_access',
+        'schedule': crontab(hour='4')}
 }

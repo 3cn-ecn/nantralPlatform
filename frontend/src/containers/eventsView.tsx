@@ -1,7 +1,8 @@
 ﻿import * as React from "react";
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Row, Col } from "react-bootstrap";
+
 import { getDate } from "./eventsView/utils";
 import { Event } from "./eventsView/event";
 import { spinnerDivStyle, spinnerStyle } from "./eventsView/styles";
@@ -54,9 +55,10 @@ function Root(props: APIUrls): JSX.Element {
         return (
           <div key={key + "outerdiv"}>
             <h3>{events[0]}</h3>
+            <Row>
             {events[1].map((el, i) => {
               return (
-                <div key={key + i.toString() + "innerdiv"}>
+                <Col xs={12} md={6} xl={4} key={key + i.toString() + "innerdiv"}>
                   <Event
                     key={key + i.toString()}
                     eventInfos={el}
@@ -67,9 +69,10 @@ function Root(props: APIUrls): JSX.Element {
                     }}
                   />
                   <br />
-                </div>
+                </Col>
               );
             })}
+            </Row>
             <br />
           </div>
         );
