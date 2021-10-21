@@ -6,6 +6,7 @@
   latitude: number;
   longitude: number;
 }
+
 export interface Roommates {
   name: string;
   begin_date: string;
@@ -38,6 +39,10 @@ export interface ColocathlonParticipant {
 export interface ColocInfoProps {
   housing: Housing;
   colocathlonOnly: boolean;
+=======
+export interface CityInfoProps {
+  housing: Housing;
+  housingDetailsUrl: string;
 }
 
 export interface PinProps {
