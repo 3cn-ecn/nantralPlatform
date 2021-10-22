@@ -123,5 +123,5 @@ render(
     API_HOUSING_URL={API_HOUSING_URL}
     PHASE_COLOCATHLON={PHASE_COLOCATHLON}
   />,
-  document.getElementById("root)
+  document.getElementById("root")
 );
