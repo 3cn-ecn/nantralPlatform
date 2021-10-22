@@ -11,7 +11,7 @@ class CreateRoommatesForm(ModelForm):
 class UpdateRoommatesForm(ModelForm):
     class Meta:
         model = Roommates
-        fields = ['name', 'begin_date', 'end_date', 'banniere', 'video1', 'video2', 'description' ]
+        fields = ['name', 'begin_date', 'end_date', 'banniere', 'video1', 'video2', 'description']
 
 
 class UpdateHousingForm(ModelForm):

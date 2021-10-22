@@ -3,10 +3,6 @@
 
 from django.db import migrations
 from apps.utils.compress import compressImage
-from apps.group.models import Group
-from apps.club.models import Club
-from apps.liste.models import Liste
-from apps.roommates.models import Roommates
 
 
 def compress(model):
@@ -14,11 +10,14 @@ def compress(model):
         try:
             object.logo = compressImage(object.logo, size=(500,500), contains=True)
             object.banniere = compressImage(object.banniere, size=(1320,492), contains=False)
-            super(Group, object).save()
+            object.save()
         except Exception:
             print("Fichier non existant")
 
 def main_operations(apps, schema_editor):
+    Club = apps.get_model('club', 'Club')
+    Liste = apps.get_model('liste', 'Liste')
+    Roommates = apps.get_model('roommates', 'Roommates')
     compress(Club)
     compress(Liste)
     compress(Roommates)
