@@ -1,22 +1,58 @@
-{
-    "background_color": "grey",
-    "theme_color": "#941A25",
-    "description": "The application of clubs ans associations at Centrale Nantes",
-    "display": "standalone",
-    "icons": [
-      {
-        "src": "/static/img/logo.svg",
-        "sizes": "256x256",
-        "type": "image/svg"
-      },
-      {
-        "src": "/static/img/logo.svg",
-        "sizes": "192x192",
-        "type": "image/svg"
-      }
-    ],
-    "name": "Nantral Platform",
-    "short_name": "Nantral Platform",
-    "start_url": "/"
-  }
+{	
+	"name": "Nantral Platform",
+	"short_name": "Nantral Platform",
+	"description": "L'application officielle des clubs et assos à Centrale Nantes",
+	"start_url": "/",
+	"display": "standalone",
+	"theme_color": "#941A25",
+	"background_color": "grey",
+	"icons": [
+		{
+			"src": "/static/img/logo.svg",
+			"type": "image/svg"
+	  	},
+	  	{
+			"src": "/static/icons/logo_512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+	  	},
+	  	{
+			"src": "/static/icons/logo_256.png",
+			"sizes": "256x256",
+			"type": "image/png"
+	  	},
+	  	{
+			"src": "/static/icons/logo_192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+	  	},
+	  	{
+			"src": "/static/icons/logo_144.png",
+			"sizes": "144x144",
+			"type": "image/png"
+	  	},
+	  	{
+			"src": "/static/icons/logo_96.png",
+			"sizes": "96x96",
+			"type": "image/png"
+	  	}
+	],
+	"shortcuts" : [
+	  	{
+		  	"name": "Évènements",
+		  	"url": "/",
+		  	"description": "Liste des prochains évènememts !"
+	  	},
+	  	{
+		  	"name": "Clubs & Assos",
+		  	"url": "/club/",
+		  	"description": "Liste des Clubs & Assos"
+	  	},
+	  	{
+		  	"name": "Carte des Colocs",
+		  	"url": "/colocs/map",			  
+		  	"description": "Découvre la carte des colocations centraliennes !"
+	  	}
+  	]
+}
   
