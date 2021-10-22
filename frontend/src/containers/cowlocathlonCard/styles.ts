@@ -15,3 +15,8 @@ export const cardH2Style: CSSProperties = {
   backgroundColor: "white",
   width: "max-content",
 };
+
+export const spinnerStyle: CSSProperties = {
+  height: "0.5rem",
+  width: "0.5rem",
+};

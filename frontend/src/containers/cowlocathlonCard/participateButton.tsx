@@ -1,8 +1,9 @@
 ﻿import * as React from "react";
 import { useState } from "react";
-import { Button } from "react-bootstrap";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { Button, Spinner } from "react-bootstrap";
+import axios, { AxiosResponse } from "axios";
 import { ParticipateButtonProps } from "./interfaces";
+import { spinnerStyle } from "./styles";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -12,28 +13,45 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
   const [numberOfParticipants, setNumberOfParticipants] = useState(
     props.nbParticipants
   );
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   return (
     <Button
       variant="primary"
-      size="sm"
+      // Do not listen to the linter here, "" works just fine...
+      size=""
       style={{ width: "max-content" }}
       onClick={() => {
+        setIsLoading(true);
+        if (numberOfParticipants >= props.quota && !isParticipating) {
+          return;
+        }
         axios
           .post(props.API_URL, {
             addOrDelete: isParticipating ? 1 : 0,
             slug: props.ROOMMATES_SLUG,
           })
-          .then((res) => {
+          .then((res: AxiosResponse) => {
             setIsParticipating(!isParticipating);
             setNumberOfParticipants(
               numberOfParticipants + (isParticipating ? -1 : 1)
             );
-          });
+          })
+          .finally(() => setIsLoading(false));
       }}
     >
-      {props.isParticipating ? "Libérer ma place   " : "Réserver ma place !   "}
+      {isParticipating
+        ? "Libérer ma place"
+        : numberOfParticipants < props.quota
+        ? "Réserver ma place !"
+        : "Complet"}
+      {"    "}
+
       <span className="badge bg-light text-primary">
-        {numberOfParticipants}/{props.quota}
+        {isLoading ? (
+          <Spinner animation="border" role="status" style={spinnerStyle} />
+        ) : (
+          `${numberOfParticipants}/${props.quota}`
+        )}
       </span>
     </Button>
   );
