@@ -6,6 +6,7 @@
 	"display": "standalone",
 	"theme_color": "#941A25",
 	"background_color": "grey",
+	"lang": "fr-FR",
 	"icons": [
 		{
 			"src": "/static/img/logo.svg",
@@ -53,6 +54,19 @@
 		  	"url": "/colocs/map",			  
 		  	"description": "Découvre la carte des colocations centraliennes !"
 	  	}
-  	]
+  	],
+	"url_handlers": [
+        {
+            "origin": "https://nantral-platform.fr"
+        },
+        {
+            "origin": "https://www.nantral-platform.fr"
+        },
+        {
+            "origin": "http://nantral-platform.fr"
+        },
+        {
+            "origin": "http://www.nantral-platform.fr"
+        }
+    ]
 }
-  
