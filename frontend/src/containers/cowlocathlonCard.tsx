@@ -55,7 +55,7 @@ function Root(props: RootProps): JSX.Element {
             style={{ width: "max-content" }}
             href="#"
           >
-            Voir les participant.e.s
+            {"Voir les participant.e.s    "}
             <span className="badge bg-light text-success">
               {roommates.colocathlon_participants.length}/
               {roommates.colocathlon_quota}
