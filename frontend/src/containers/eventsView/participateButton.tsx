@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import { useState, CSSProperties } from "react";
+import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { faIconStyle } from "./styles";
 import { Spinner } from "react-bootstrap";
