@@ -1,5 +1,5 @@
-import os
-from .base import *
+# flake8: noqa: F405
+from .base import *  # noqa: F403
 
 print("Running dev settings")
 
@@ -35,9 +35,25 @@ if 'MAPBOX_API_KEY' in env:
 else:
     MAPBOX_API_KEY = ''
 
+if 'MAPBOX_API_KEY' in env:
+    DISCORD_ADMIN_MODERATION_WEBHOOK = env('DISCORD_ADMIN_MODERATION_WEBHOOK')
+else:
+    DISCORD_ADMIN_MODERATION_WEBHOOK = ''
+
 if 'GITHUB_USER' in env:
     GITHUB_USER = env('GITHUB_USER')
     GITHUB_TOKEN = env('GITHUB_TOKEN')
 else:
     GITHUB_USER = ''
     GITHUB_TOKEN = ''
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+# Dummy cache for dev
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}

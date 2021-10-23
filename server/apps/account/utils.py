@@ -18,12 +18,14 @@ def user_creation(form: Union[SignUpForm, TemporaryRequestSignUpForm], request: 
     user.student.promo = form.cleaned_data.get('promo')
     user.student.faculty = form.cleaned_data.get('faculty')
     user.student.path = form.cleaned_data.get('path')
+    if user.first_name is not None:
+        user.first_name = user.first_name.lower()
+    if user.last_name is not None:
+        user.last_name = user.last_name.lower()
     # create a unique user name
-    first_name = ''.join(e.lower() for e in form.cleaned_data.get(
-        'first_name') if e.isalnum())
-    last_name = ''.join(e.lower() for e in form.cleaned_data.get(
-        'last_name') if e.isalnum())
-    promo = form.cleaned_data.get('promo')
+    first_name = ''.join(e for e in user.first_name if e.isalnum())
+    last_name = ''.join(e for e in user.last_name if e.isalnum())
+    promo = user.student.promo
     user.username = f'{first_name}.{last_name}{promo}-{user.id}'
     # user can't login until link confirmed
     user.is_active = False

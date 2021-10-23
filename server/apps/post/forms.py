@@ -12,7 +12,7 @@ class PostForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
-        #self.fields['publication_date'].widget.attrs['class'] = 'datepicker'
+        self.fields['publication_date'].widget.attrs['class'] = 'datepicker'
 
 
 PostFormSet = modelformset_factory(
@@ -21,7 +21,7 @@ PostFormSet = modelformset_factory(
             'publication_date', 'publicity', 'color', 'image'],
     extra=0,
     can_delete=True,
-    # widgets={
-    #     'publication_date': forms.DateTimeInput(attrs={'class': 'datepicker'})
-    # }
+    widgets={
+        'publication_date': forms.DateTimeInput(attrs={'class': 'datepicker'})
+    }
 )

@@ -1,6 +1,5 @@
-from datetime import date
-from django.template.loader import render_to_string
 from django.utils import timezone
+from django.template.loader import render_to_string
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -12,14 +11,14 @@ class TemporaryAccessRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     approved_until = models.DateField()
     date = models.DateField()
-    message_id = models.IntegerField(blank=True, null=True)
+    message_id = models.CharField(max_length=50, blank=True, null=True)
     domain = models.CharField(max_length=64)
     approved = models.BooleanField()
     mail_valid = models.BooleanField()
     final_email = models.EmailField(blank=True, null=True)
 
     def save(self, domain: str = None, *args, **kwargs):
-        if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT > date.today():
+        if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT > timezone.now().today():
             if self.mail_valid is None:
                 self.mail_valid = False
             if self.approved is None:
@@ -61,7 +60,8 @@ class TemporaryAccessRequest(models.Model):
         message = render_to_string('account/mail/temp_req_approved.html', {
             'user': user,
             'domain': self.domain,
-            'deadline': settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
+            'deadline': settings.TEMPORARY_ACCOUNTS_DATE_LIMIT,
+            'email_valid': self.mail_valid
         })
         user.email_user(
             subject=subject, message=message, from_email='accounts@nantral-platform.fr', html_message=message)

@@ -1,23 +1,39 @@
-var path = require('path');
+var path = require("path");
 module.exports = {
   entry: {
-    studentCourseSelector: path.join(__dirname, '../src/containers/studentCourseSelector.tsx'),
-    eventsGroupListUpdate: path.join(__dirname, '../src/containers/eventsGroupListUpdate.tsx'),
-    postsGroupListUpdate: path.join(__dirname, '../src/containers/postsGroupListUpdate.tsx'),
-    housingMap: path.join(__dirname, '../src/containers/housingMap.tsx'),
-    createHousing: path.join(__dirname, '../src/containers/createHousing.tsx'),
+    studentCourseSelector: path.join(
+      __dirname,
+      "../src/containers/studentCourseSelector.tsx"
+    ),
+    clubsList: path.join(__dirname, "../src/containers/clubsList.tsx"),
+    eventsGroupListUpdate: path.join(
+      __dirname,
+      "../src/containers/eventsGroupListUpdate.tsx"
+    ),
+    postsGroupListUpdate: path.join(
+      __dirname,
+      "../src/containers/postsGroupListUpdate.tsx"
+    ),
+    eventsView: path.join(__dirname, "../src/containers/eventsView.tsx"),
+    cowlocathlonCard: path.join(
+      __dirname,
+      "../src/containers/cowlocathlonCard.tsx"
+    ),
+    housingMap: path.join(__dirname, "../src/containers/housingMap.tsx"),
+    createHousing: path.join(__dirname, "../src/containers/createHousing.tsx"),
+    groupMembers: path.join(__dirname, "../src/containers/groupMembers.tsx"),
     availabilitiesEdit: path.join(__dirname, '../src/containers/availabilitiesEdit.tsx')
     //editHousing: path.join(__dirname, '../src/containers/editHousing.tsx')
   },
   output: {
-    path: path.join(__dirname, '../../server/static/js'),
-    filename: '[name].js'
+    path: path.join(__dirname, "../../server/static/js"),
+    filename: "[name].js",
   },
   module: {
     rules: [
       {
         test: [/\.jsx?$/, /\.tsx?$/],
-        use: 'babel-loader',
+        use: "babel-loader",
         exclude: /node_modules/,
       },
       {
@@ -25,5 +41,8 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
     ],
-  }
-}
+  },
+  resolve: {
+    extensions: [".tsx", ".js", ".json", ".ts", ".jsx"],
+  },
+};

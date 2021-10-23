@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.text import slugify
 from django.urls.base import reverse
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -9,16 +8,21 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
-from apps.utils.github import create_issue, close_issue
 from apps.utils.compress import compressModelImage
-from apps.utils.slug import *
+from apps.utils.slug import get_object_from_full_slug, get_tuple_from_full_slug, SlugModel
+from django.conf import settings
+
+from discord_webhook import DiscordWebhook, DiscordEmbed
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 path_and_rename_group = PathAndRename("groups/logo")
 path_and_rename_group_banniere = PathAndRename("groups/banniere")
 
 
-class Group(models.Model):
+class Group(models.Model, SlugModel):
     '''Modèle abstrait servant de modèle pour tous les types de Groupes.'''
 
     # Nom du groupe
@@ -61,7 +65,7 @@ class Group(models.Model):
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
-        if user.is_superuser or user.is_staff:
+        if user.is_superuser:
             return True
         if self.is_member(user):
             members_list = self.members.through.objects.filter(group=self)
@@ -77,14 +81,7 @@ class Group(models.Model):
 
     def save(self, *args, **kwargs):
         # cration du slug si non-existant ou corrompu
-        if not self.slug:
-            slug = slugify(self.name)
-            if type(self).objects.filter(slug=slug):
-                id = 1
-                while type(self).objects.filter(slug=f'{slug}-{id}'):
-                    id += 1
-                slug = f'{slug}-{id}'
-            self.slug = slug
+        self.set_slug(self.name, 40)
         # compression des images
         self.logo = compressModelImage(
             self, 'logo', size=(500, 500), contains=True)
@@ -101,7 +98,8 @@ class Group(models.Model):
     def full_slug(self):
         return f'{self.app}--{self.slug}'
 
-    @property
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
         return reverse(self.app+':detail', kwargs={'slug': self.slug})
 
@@ -119,6 +117,9 @@ class NamedMembership(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.student.__str__()
+
 
 class AdminRightsRequest(models.Model):
     """A model to request admin rights on a group."""
@@ -129,26 +130,36 @@ class AdminRightsRequest(models.Model):
     reason = models.CharField(
         max_length=100, verbose_name="Raison de la demande", blank=True)
     domain = models.CharField(max_length=64)
-    issue = models.IntegerField(blank=True)
 
     def save(self, domain: str, *args, **kwargs):
         self.date = timezone.now()
         self.domain = domain
-        self.issue = 0
         super(AdminRightsRequest, self).save()
         group = get_object_from_full_slug(self.group)
-        title = f'[Admin Req] {group} - {self.student}'
-        body = f'<a href="{self.accept_url}">Accepter</a> </br>\
-            <a href="{self.deny_url}">Refuser</a>'
-        self.issue = create_issue(title=title, body=body)
+        try:
+            webhook = DiscordWebhook(
+                url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+            embed = DiscordEmbed(title=f'{self.student} demande à devenir admin de {group}',
+                                 description=self.reason,
+                                 color=242424)
+            embed.add_embed_field(
+                name='Accepter', value=f"[Accepter]({self.accept_url})", inline=True)
+            embed.add_embed_field(
+                name='Refuser', value=f"[Refuser]({self.deny_url})", inline=True)
+            if(self.student.picture):
+                embed.thumbnail = {"url": self.student.picture.url}
+            webhook.add_embed(embed)
+            webhook.execute()
+        except Exception as e:
+            logger.error(e)
         super(AdminRightsRequest, self).save()
 
-    @property
+    @ property
     def accept_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
         return f"http://{self.domain}{reverse(app+':accept-admin-req', kwargs={'slug': slug,'id': self.id})}"
 
-    @property
+    @ property
     def deny_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
         return f"http://{self.domain}{reverse(app+':deny-admin-req', kwargs={'slug': slug, 'id': self.id})}"
@@ -172,11 +183,24 @@ class AdminRightsRequest(models.Model):
         })
         self.student.user.email_user(f'Vous êtes admin de {group}', mail,
                                      'group-manager@nantral-platform.fr', html_message=mail)
-        close_issue(self.issue)
+        webhook = DiscordWebhook(
+            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été acceptée.',
+                             description="",
+                             color=00000)
+        webhook.add_embed(embed)
+        webhook.execute()
         self.delete()
 
     def deny(self):
-        close_issue(self.issue)
+        group = get_object_from_full_slug(self.group)
+        webhook = DiscordWebhook(
+            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été refusée.',
+                             description="",
+                             color=00000)
+        webhook.add_embed(embed)
+        webhook.execute()
         self.delete()
 
 

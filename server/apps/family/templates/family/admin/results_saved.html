@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Parrainage - Page Admin - Résultats</h1>
+    <p>Les résultats suivants sont sauvegardés dans la base de données.</p>
+    <br>
+    <table class=''><tbody>
+    {% for f in families %}
+        <tr><th><h2>{{f.family.name}}</h2></th></tr>
+        <tr class="align-top"><td>
+            2A+ :
+            <ul>
+            {% for m in f.A2 %}
+                <li>{{m}}</li>
+            {% endfor %}
+            {% for m in f.A2plus %}
+                <li>{{m}}</li>
+            {% endfor %}
+        </ul></td><td>
+            1A :
+            <ul>
+            {% for m in f.A1 %}
+                <li>{{m}}</li>
+            {% endfor %}
+        </ul></td></tr>
+    {% endfor %}
+    </tbody></table>
+    <br>
+    {% if phase < 3 %}
+        <form method='POST'>
+            {% csrf_token %}
+            <button type="submit" name="action_family" value="reset" class="btn btn-danger">Réinitialiser (attention pas de confirmation)</button>
+        </form>
+    {% endif %}
+    {% if phase == 5 %}
+        <form method='POST'>
+            {% csrf_token %}
+            <button type="submit" name="action_family" value="reset_itii" class="btn btn-danger">Réinitialiser ITII (attention pas de confirmation)</button>
+        </form>
+    {% endif %}
+    <br>
+    <a href="{% url 'family-admin:home' %}">Retour à la page principale</a>
+{% endblock %}

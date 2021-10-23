@@ -14,15 +14,15 @@
 			{% for housing in object_list%}
 				<tr style="transform: rotate(0);">
 				<td>
-					{% if housing.last_roommates %}
-						<a href="{{ housing.last_roommates.get_absolute_url }}" class="stretched-link"></a>
+					{% if housing.current_roommates %}
+						<a href="{{ housing.current_roommates.get_absolute_url }}" class="stretched-link"></a>
 					{% else %}
 						<a href="{% url 'roommates:create-roommates' housing.pk %}" class="stretched-link"></a>
 					{% endif %}
 					{{housing.address}} {% if housing.details %}- {{housing.details}}{% endif %}
 				</td>
 				<td>
-					{% if housing.last_roommates %}{{housing.last_roommates.name}}{% endif %}
+					{% if housing.current_roommates %}{{housing.current_roommates.name}}{% endif %}
 				</td>
 				</tr>
 			{% endfor %}

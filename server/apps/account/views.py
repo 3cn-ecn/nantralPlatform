@@ -1,4 +1,5 @@
-from datetime import date
+from datetime import date, datetime
+from django.utils import timezone
 from typing import Any, Dict, Union
 from django.conf import settings
 from django.contrib.auth import login, logout
@@ -37,7 +38,7 @@ class RegistrationView(FormView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['temporary_registration'] = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today()
+        context['temporary_registration'] = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today()
         return context
 
     def form_valid(self, form):
@@ -51,7 +52,7 @@ class TemporaryRegistrationView(FormView):
 
     def dispatch(self, request, *args: Any, **kwargs: Any):
         """Do not allow to use this view outside of allowed temporary accounts windows."""
-        if not settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today():
+        if not settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
             return redirect(reverse('account:registration'))
         return super().dispatch(request, *args, **kwargs)
 
@@ -62,7 +63,7 @@ class TemporaryRegistrationView(FormView):
 
     def form_valid(self, form) -> HttpResponse:
         user_creation(form, self.request)
-        return redirect(reverse('home:home'))
+        return redirect(reverse('account:login'))
 
 
 class ConfirmUser(View):
@@ -72,17 +73,17 @@ class ConfirmUser(View):
             uid = force_text(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
+            return render(self.request, 'account/activation_invalid.html')
         # checking if the user is not a temporary one
         try:
             tempAccessReq: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
-                user=user.id)
+                user=user.pk)
             if not tempAccessReq.approved:
                 return render(self.request, 'account/activation_invalid.html')
         except TemporaryAccessRequest.DoesNotExist:
-            pass
-        # checking if the user exists, if the token is valid.
-        if user is not None and account_activation_token.check_token(user, token):
+            tempAccessReq = None
+        # checking if the token is valid.
+        if account_activation_token.check_token(user, token):
             # if valid set active true
             user.is_active = True
             if tempAccessReq is not None:
@@ -93,7 +94,7 @@ class ConfirmUser(View):
             user.save()
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')
-            messages.success(request, 'Votre compte est desormais actif !')
+            messages.success(request, 'Votre compte est désormais actif !')
             return redirect(reverse('home:home'))
         else:
             return render(self.request, 'account/activation_invalid.html')
@@ -106,7 +107,7 @@ class AuthView(FormView):
     def get(self, request):
         if request.user.is_authenticated:
             user = request.user
-            message = f'Vous etes déjà connecté en tant que {user.first_name.capitalize()}.'
+            message = f'Vous etes déjà connecté en tant que {user.first_name.title()}.'
             messages.warning(request, message)
             return redirect(reverse('home:home'))
         else:
@@ -123,10 +124,10 @@ class AuthView(FormView):
         user = EmailBackend.authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
-                message = f'Bonjour {user.first_name.capitalize()} !'
+                message = f'Bonjour {user.first_name.title()} !'
                 messages.success(self.request, message)
             else:
-                if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today():
+                if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
                     # During certain periods allow temporary accounts.
                     try:
                         temporaryAccessRequest: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
@@ -138,7 +139,7 @@ class AuthView(FormView):
                                 activer.'
                             messages.error(self.request, message)
                             return redirect(reverse('account:login'))
-                        if temporaryAccessRequest.approved_until <= date.today():
+                        if temporaryAccessRequest.approved_until <= datetime.now().date():
                             message = 'Votre compte n\'a pas encore été approuvé.\
                                 On vous prévient par mail dès que c\'est le cas.'
                             messages.error(self.request, message)
@@ -152,6 +153,9 @@ class AuthView(FormView):
                         messages.error(
                             self.request, 'Identifiant inconnu ou mot de passe invalide.')
                         return redirect(reverse('account:login'))
+                else:
+                    messages.warning(
+                        self.request, 'Votre compte n\'est pas encore actif. Veuillez cliquer sur le lien dans \'email.')
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')
             return redirect(reverse('home:home'))
@@ -173,19 +177,22 @@ class ForgottenPassView(FormView):
     template_name = 'account/forgotten_pass.html'
 
     def form_valid(self, form):
-        user = User.objects.get(email=form.cleaned_data['email'])
-        if user is not None:
-            subject = '[Nantral Platform] Reinitialisation de votre mot de passe'
-            current_site = get_current_site(self.request)
-            message = render_to_string('account/mail/password_request.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
-                # method will generate a hash value with user related data
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(
-                subject, message, 'accounts@nantral-platform.fr', html_message=message)
+        try:
+            user = User.objects.get(email=form.cleaned_data['email'])
+            if user is not None:
+                subject = '[Nantral Platform] Reinitialisation de votre mot de passe'
+                current_site = get_current_site(self.request)
+                message = render_to_string('account/mail/password_request.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
+                    # method will generate a hash value with user related data
+                    'token': account_activation_token.make_token(user),
+                })
+                user.email_user(
+                    subject, message, 'accounts@nantral-platform.fr', html_message=message)
+        except User.DoesNotExist:
+            pass
         messages.success(
             self.request, 'Un email de récuperation a été envoyé si cette adresse existe.')
         return redirect(reverse('account:login'))

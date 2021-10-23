@@ -1,49 +1,54 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load cache %}
 {% load file_url %}
+
+{% block head %}
+    <meta name="description" CONTENT="Découvrez les clubs & associations de Centrale Nantes ! BDE, BDA, BDS... tous les clubs sont référencés !">
+{% endblock %}
+
+{% block title %}Clubs & Assos - {% endblock %}
 
 {% block content %}
 
-<div class="row">
-	<div class="col">
-		<h1>Clubs Nantraliens</h1>
-	</div>
-	<!--div class="col text-end">
-		<input type="textbox">
-	</div-->
-</div>
-<br />
-{% regroup object_list by bdx_type as bdx_list %}
-
-{% for bdx in my_clubs|add:bdx_list %}
-	{% if bdx.list %}
-		{% if bdx.grouper %}
-			<h2>
-				{% if not "Mes" in bdx.grouper.name %} Clubs {% endif %}
-				{{ bdx.grouper.name }}
-			</h2>
-		{% else %}
-			<h2>Associations</h2>
-		{% endif %}
-		<div class="grille">
-			{% for club in bdx.list %}
-				<div class="grille-icon text-center" style="transform:rotate(0);">
-					<a href="{{ club.get_absolute_url }}" class="stretched-link">
-						<div class="ratio ratio-1x1">
-							{% if club.logo %}
-								<img src="{{ club.logo|file_url }}">
-							{% else %}
-								<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
-							{% endif %}
-						</div>
-					</a>
-					<h6>
-						{{ club.name }}
-					</h6>
-				</div>
-			{% endfor %}
+	<div class="row">
+		<div class="col">
+			<h1>Clubs Nantraliens</h1>
 		</div>
-	{% endif %}
-{% endfor %}
+		<!--div class="col text-end">
+			<input type="textbox">
+		</div-->
+	</div>
+	<br />
 
+	<div id="root"></div>
+
+	{% cache None club_list %}
+		{% for key, value in club_list.items %}
+			<h2>{{ key }}</h2>
+			<div class="grille">
+				{% for club in value %}
+					<div class="grille-icon text-center" style="transform: rotate(0)">
+						<a href="{{ club.get_absolute_url }}" class="stretched-link">
+							<div class="ratio ratio-1x1">
+								{% if club.logo %}
+									<img src="{{ club.logo|file_url }}" />
+								{% else %}
+									<img src="{% static 'img/logo.svg' %}" style="opacity: 0.3" />
+								{% endif %}
+							</div>
+						</a>
+						<h6>{{ club.name }}</h6>
+					</div>
+				{% endfor %}
+			</div>
+		{% endfor %}
+	{% endcache %}
+{% endblock %}
+
+{% block script %}
+	<script>
+		const myClubsURL = "{% url 'club_api:list-my-clubs' %}";
+	</script>
+	<script src='{% static "js/clubsList.js" %}'></script>
 {% endblock %}

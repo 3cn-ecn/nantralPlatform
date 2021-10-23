@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-from datetime import date
+from datetime import datetime
 import os
 import environ
 from django.urls import reverse_lazy
@@ -52,7 +52,10 @@ THIRD_PARTY_APPS = [
     'crispy_bootstrap5',
     'storages',
     'rest_framework',
-    'django_ckeditor_5'
+    'django_ckeditor_5',
+    'debug_toolbar',
+    'django_celery_beat',
+    'extra_settings',
 ]
 
 COMMON_APPS = [
@@ -69,14 +72,17 @@ COMMON_APPS = [
     'apps.exchange',
     'apps.post',
     'apps.roommates',
-    'apps.sociallink'
+    'apps.sociallink',
+    'apps.family',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -111,6 +117,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.home.context_processors.navbar_context'
             ],
         },
     },
@@ -179,11 +186,15 @@ CKEDITOR_5_CONFIGS = {
             '|',
             'blockQuote', 'imageUpload'
         ],
-        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-                    'code', 'subscript', 'superscript', 'highlight', '|', 'codeBlock',
-                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
-                    'insertTable', ],
+        'toolbar': [
+            'heading', '|', 'outdent', 'indent', '|',
+            'bold', 'italic', 'link', 'underline', 'strikethrough', 'code',
+            'subscript', 'superscript', 'highlight', '|',
+            'codeBlock', 'bulletedList', 'numberedList', 'todoList', '|',
+            'blockQuote', 'imageUpload', '|',
+            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
+            'mediaEmbed', 'removeFormat', 'insertTable',
+        ],
         'table': {
             'contentToolbar': ['tableColumn', 'tableRow', 'mergeTableCells',
                                'tableProperties', 'tableCellProperties'],
@@ -235,5 +246,5 @@ GITHUB_REPO = 'nantral-platform/nantralPlatform'
 # Less origin restrictive for Youtube embed videos
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
-TEMPORARY_ACCOUNTS_DATE_LIMIT = date.fromisoformat(
+TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
     env('TEMPORARY_ACCOUNTS_DATE_LIMIT', default='2000-12-31'))

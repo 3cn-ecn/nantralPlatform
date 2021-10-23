@@ -1,5 +1,5 @@
+from datetime import datetime
 from unittest import mock
-from datetime import date
 from freezegun import freeze_time
 from django.contrib.auth import get_user
 from django.test import TestCase, override_settings
@@ -12,6 +12,7 @@ import re
 from apps.utils.utest import TestMixin
 from apps.student.models import Student
 from apps.utils.testing.mocks import discord_mock_message_post
+from .tasks import remove_inactive_accounts
 
 
 # Create your tests here.
@@ -25,7 +26,10 @@ class Test_Account(TestCase, TestMixin):
         self.user_teardown()
         User.objects.all().delete()
 
-    def test_create_user_view(self):
+    @freeze_time("2021-09-01")
+    @override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2))
+    def test_create_user_view_inside_temp(self):
+        """Test that you can still create an account during temporary registration periods."""
         url = reverse('account:registration')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -48,6 +52,59 @@ class Test_Account(TestCase, TestMixin):
 
         student = Student.objects.get(user__first_name='test_name')
         self.assertEqual(student.user, User.objects.all().last())
+        assert len(mail.outbox) == 1
+        extract = re.search(
+            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
+        uidb64 = extract.group(1)
+        token = extract.group(2)
+
+        # Check that the user cannot use the link to activate the account
+        url = reverse('account:confirm', kwargs={
+                      'uidb64': uidb64, 'token': token})
+        response = self.client.get(url)
+
+        user: User = User.objects.get(email='test@ec-nantes.fr')
+        self.assertTrue(user.is_active)
+
+    @freeze_time("2021-09-03")
+    @override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2))
+    def test_create_user_view_outside_temp(self):
+        """Test that you can still create an account outside temporary registration periods."""
+        url = reverse('account:registration')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        payload = {
+            'first_name': 'test_name',
+            'last_name': 'test_last_name',
+            'email': 'test@ec-nantes.fr',
+            'confirm_email': 'test@ec-nantes.fr',
+            'password1': 'pass',
+            'password2': 'pass',
+            'promo': 2020,
+            'faculty': 'Gen',
+            'path': 'Cla'
+        }
+        url = reverse('account:registration')
+        response = self.client.post(url, data=payload)
+        self.assertEqual(response.status_code, 302)
+
+        self.assertEqual(len(User.objects.all()), 1)
+
+        student = Student.objects.get(user__first_name='test_name')
+        self.assertEqual(student.user, User.objects.all().last())
+        assert len(mail.outbox) == 1
+        extract = re.search(
+            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
+        uidb64 = extract.group(1)
+        token = extract.group(2)
+
+        # Check that the user cannot use the link to activate the account
+        url = reverse('account:confirm', kwargs={
+                      'uidb64': uidb64, 'token': token})
+        response = self.client.get(url)
+
+        user: User = User.objects.get(email='test@ec-nantes.fr')
+        self.assertTrue(user.is_active)
 
     def test_login_view(self):
         url = reverse('account:login')
@@ -56,7 +113,7 @@ class Test_Account(TestCase, TestMixin):
 
 
 @freeze_time("2021-09-01")
-@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=date(year=2021, month=9, day=2))
+@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2))
 class TestTemporaryAccounts(TestCase, TestMixin):
     """Check that temporary accounts work within the correct time frame."""
 
@@ -250,7 +307,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
 
 
 @freeze_time("2021-09-03")
-@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=date(year=2021, month=9, day=2))
+@override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2))
 class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
     """Check that temporary accounts don't work outside of the correct time frame."""
 
@@ -336,3 +393,71 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
             response = self.client.post(url, payload)
             self.assertEqual(response.status_code, 302)
             self.assertFalse(get_user(self.client).is_authenticated)
+
+
+class TestForgottenPass(TestCase, TestMixin):
+
+    def setUp(self) -> None:
+        self.create_user(username='test', email='test@ec-nantes.fr')
+
+    def tearDown(self) -> None:
+        self.user_teardown()
+
+    def test_forgotten_pass_request(self):
+        url = reverse('account:forgotten_pass')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        payload = {
+            'email': 'not@ec-nantes.fr'
+        }
+        # Check that you cannot send email to unexisting email.
+        response = self.client.post(url, data=payload)
+        self.assertEqual(response.status_code, 302)
+        assert len(mail.outbox) == 0
+
+        payload = {
+            'email': 'test@ec-nantes.fr'
+        }
+        response = self.client.post(url, data=payload)
+        self.assertEqual(response.status_code, 302)
+        assert len(mail.outbox) == 1
+        extract = re.search(
+            "<a href='http:\/\/testserver/account/reset_pass/([^/]*)/([^/]*)", mail.outbox[0].body)
+        uidb64 = extract.group(1)
+        token = extract.group(2)
+        url = reverse('account:reset_pass', kwargs={
+                      'uidb64': uidb64, 'token': 'token'})
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Lien invalide')
+        payload = {
+            'new_password1': 'new',
+            'new_password2': 'new'
+        }
+        response = self.client.post(url, payload)
+        self.assertEqual(response.status_code, 200)
+
+        # Check that you still cannot login
+        url = reverse('account:login')
+        payload = {
+            'email': 'test@ec-nantes.fr',
+            'password': 'new'
+        }
+        response = self.client.post(url, payload)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(get_user(self.client).is_authenticated)
+
+        # Check with a valid token now
+
+        url = reverse('account:reset_pass', kwargs={
+                      'uidb64': uidb64, 'token': token})
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        payload = {
+            'new_password1': 'new',
+            'new_password2': 'new'
+        }
+        response = self.client.post(url, payload)
+        self.assertEqual(response.status_code, 302)

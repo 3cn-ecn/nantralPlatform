@@ -13,50 +13,16 @@
 
 <div style="clear:left">
     <h2>Évènements à venir</h2>
-    {% for when, events in events.items %}
-    <h3>{{when}}</h3>
-      {% for event, is_participating in events %}
-      <a href="{{event.get_absolute_url}}" style='color:white' class="mb-1">
-        <div class="card pt-0 bg-{{event.color}}" style="box-shadow: 1px 1px 7px #999">
-          <div class="card-body">
-            <h5 class="card-title" >{{event.title}} • {{event.date|date:'H:i'}} • {{event.location}}</h5>
-            <h6 class="card-subtitle mb-2">{{event.get_group.name}}</h6>
-            <h6 class="card-subtitle mb-2">
-              <div class="btn-group" role="group">
-              <button type="button" class="btn btn-secondary disabled">{{event.get_number_participants}} <i class="fas fa-users"></i></button>
-              {% if request.user.is_authenticated %}
-                  {%if is_participating %}
-                      <a href='{% url "event:remove-participant" event.slug %}?redirect=home' class="btn btn-secondary" role="button">
-                          <i class="fa fa-times" aria-hidden="true"></i> Je ne participe plus
-                      </a>
-                  {% else %}
-                      <a href='{% url "event:add-participant" event.slug %}?redirect=home' class="btn btn-secondary" role="button">
-                        <i class="fas fa-user-plus"></i> Je participe
-                      </a>
-                  {% endif %}
-              {% endif %}
-          </div>
-        </h6>
-            <p class="card-text" >{% autoescape off %}
-              {{event.description | truncatewords_html:20}}
-              {% endautoescape %}
-            </p>
-          </div>
-        </div>
-      </a>
-      <br \>
-      {% endfor %}
-      <br \>
-    {% endfor %}
+    <div id="root"></div>
     <h2>Dernières annonces</h2>
       {% for post in posts %}
-      <a href="{{post.get_absolute_url}}" style='color:white' class="mb-1">
+      <a href="{{post.get_absolute_url }}" style='color:white;' class="mb-1">
         <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
           <div class="card-body">
-            <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'d:m'}}</h5>
+            <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'l d F'}}</h5>
             <h6 class="card-subtitle mb-2">{{post.get_group.name}}</h6>
         </h6>
-            <p class="card-text" >{{post.description | truncatewords_html:20}}</p>
+            <p class="card-text" >{% autoescape off %}{{post.description | truncatewords_html:20}}{% endautoescape %}</p>
           </div>
         </div>
       </a>
@@ -65,3 +31,13 @@
 </div>
 
 {% endblock%}
+
+{% block script %}
+<script>
+  const eventsApiUrl = "{% url 'event_api:list-home-events' %}";
+  const eventListParticipants = "{% url 'event_api:list-participants' '1' %}"
+  const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}"
+  const eventsAddParticipant = "{% url 'event:add-participant' '1' %}"
+</script>
+<script src='{% static "js/eventsView.js" %}'></script>
+{% endblock %}

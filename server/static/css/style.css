@@ -1,159 +1,166 @@
-
 /* GENERAL */
 /* ------- */
 
 html {
-	margin: 0px;
-	height: 100%;
-	width: 100%;
+  margin: 0px;
+  height: 100%;
+  width: 100%;
 }
 
 body {
-	font-family: 'Heebo', sans-serif;
-	margin: 0px;
-	min-height: 100%;
-	width: 100%;
+  font-family: "Heebo", sans-serif;
+  margin: 0px;
+  min-height: 100%;
+  width: 100%;
 }
 
-h1,
-h2,
-h5 {
-	font-family: 'Heebo', sans-serif;
-	font-weight: 900;
+h1, .h1,
+h2, .h2,
+h5, .h5 {
+  font-family: "Heebo", sans-serif;
+  font-weight: 900;
 }
 
-h3,
-h4,
-h6 {
-	font-family: 'Heebo', sans-serif;
-	font-weight: 500;
+h3, .h3,
+h4, .h4,
+h6, .h6 {
+  font-family: "Heebo", sans-serif;
+  font-weight: 500;
 }
-
+a {
+  text-decoration: none;
+}
 a:hover {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 table.table-sort th {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* BARRE DE NAVIGATION */
 /* ------------------- */
 
 @media all and (min-width: 992px) {
-	.navbar .nav-item .dropdown-menu{ display: none; }
-	.navbar .nav-item:hover .dropdown-menu{ display: block; }
-	.navbar .nav-item .dropdown-menu{ margin-top:0; }
-	.navbar .nav-item .dropdown-menu-end{ right:0; }
-}	
-
+  .navbar .nav-item .dropdown-menu {
+    display: none;
+  }
+  .navbar .nav-item:hover .dropdown-menu {
+    display: block;
+  }
+  .navbar .nav-item .dropdown-menu {
+    margin-top: 0;
+  }
+  .navbar .nav-item .dropdown-menu-end {
+    right: 0;
+  }
+}
 
 /* MODULE DE GRILLE */
 /* ---------------- */
 
 .grille {
-	/*organisation de la page*/
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
-	grid-gap: 2rem;
-	grid-auto-flow: dense;
-	margin-top: 1.5rem;
-	margin-bottom: 2.5rem;
+  /*organisation de la page*/
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  grid-gap: 2rem;
+  grid-auto-flow: dense;
+  margin-top: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .grille-icon .ratio {
-	margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .grille-icon img {
-	width: 100%;
-	border-radius: 100%;
-	transition: all 0.1s ease;
-	object-fit: contain;
+  width: 100%;
+  border-radius: 100%;
+  transition: all 0.1s ease;
+  object-fit: contain;
 }
 
 .grille-icon a:hover img {
-	box-shadow: 0px 0px 7px #999;
+  box-shadow: 0px 0px 7px #999;
 }
-
 
 /* PAGES DE DÉTAILS */
 /* ---------------- */
 
 /* banniere */
 .ratio-banniere {
-	--bs-aspect-ratio: 37%;
-	z-index:-1;
-	margin-bottom: 0.5rem;
+  --bs-aspect-ratio: 37%;
+  margin-bottom: 0.5rem;
 }
 img.banniere {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 @media (min-width: 1200px) {
-	img.banniere {
-		border-bottom-left-radius: 10px;
-		border-bottom-right-radius: 10px;
-	}
+  img.banniere {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
 }
 
 /* logo */
 img.logo {
-	object-fit: contain;
-	border-radius: 10%;
+  object-fit: contain;
+  border-radius: 10%;
 }
 @media (max-width: 576px) {
-	div.logo-div {
-		width: 15rem;
-		max-width: 100%;
-		margin: auto;
-	}
+  div.logo-div {
+    width: 15rem;
+    max-width: 100%;
+    margin: auto;
+  }
 }
 
 /* reseaux sociaux */
 .grille-rs {
-	display: flex;
-	flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 a.rs {
-	background: #eaeaea;
-	border-radius: 1em;
-	text-decoration: none;
-	color: var(--color-rs);
-	padding: 0.2em;
-	display: flex;
-	position: relative;
-	width: max-content;
-	height: 2rem;
-	margin-right: 0.3rem;
-	margin-bottom: 0.3rem;
+  background: #eaeaea;
+  border-radius: 10rem;
+  text-decoration: none;
+  color: var(--color-rs);
+  padding: 0.2em;
+  display: flex;
+  position: relative;
+  width: max-content;
+  height: 2rem;
+  margin-right: 0.3rem;
+  margin-bottom: 0.3rem;
 }
-a.rs div, a.rs i {
-	background: var(--color-rs);
-	color: #fff;
-	border-radius: 1em;
-	padding: 0.2em;
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 2rem;
-	height: 2rem;
-	transition: all 0.1s ease;
+a.rs div,
+a.rs i {
+  background: var(--color-rs);
+  color: #fff;
+  border-radius: 10rem;
+  padding: 0.2em;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2rem;
+  height: 2rem;
+  transition: all 0.1s ease;
 }
 a.rs > div > i {
-	text-align: center;
-	padding: 0.5rem;
+  text-align: center;
+  padding: 0.5rem;
 }
 a.rs span {
-	margin-left: 2rem;
-	padding: 0.1rem;
-	padding-right: 0.5rem;
+  margin-left: 2rem;
+  padding: 0.1rem;
+  padding-right: 0.5rem;
 }
 a.rs:hover div {
-	width: 100%;
+  width: 100%;
 }
 a.rs:hover span {
-	color: #fff;
-	z-index: 1;
+  color: #fff;
+  z-index: 1;
 }

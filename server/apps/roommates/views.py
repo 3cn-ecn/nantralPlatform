@@ -4,7 +4,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.conf import settings
-from django.views.generic import TemplateView, CreateView, ListView
+from django.views.generic import TemplateView, CreateView, ListView, UpdateView
+
+from extra_settings.models import Setting
 
 from .models import Housing, Roommates
 from .forms import UpdateHousingForm
@@ -18,6 +20,8 @@ class HousingMap(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['MAPBOX_API_KEY'] = settings.MAPBOX_API_KEY
+        context['colocathlon'] = Setting.get(
+            'PHASE_COLOCATHLON', default=0)
         return context
 
 
@@ -36,16 +40,24 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
     fields = ['name', 'begin_date', 'end_date']
 
     def form_valid(self, form):
-        form.instance.housing = Housing.objects.get(pk=self.kwargs['housing_pk'])
+        form.instance.housing = Housing.objects.get(
+            pk=self.kwargs['housing_pk'])
         roommates = form.save()
         roommates.members.add(self.request.user.student)
         member = roommates.members.through.objects.get(
             student=self.request.user.student,
             group=roommates
-            )
-        member.admin=True
+        )
+        member.admin = True
         member.save()
         return redirect(reverse('roommates:detail', args=[roommates.slug]))
+
+
+class ColocathlonFormView(LoginRequiredMixin, UpdateView):
+    template_name = 'roommates/coloc/edit/colocathlon.html'
+    model = Roommates
+    fields = ['colocathlon_agree', 'colocathlon_quota',
+              'colocathlon_hours', 'colocathlon_activities']
 
 
 class DetailRoommatesView(DetailGroupView):
@@ -56,8 +68,10 @@ class DetailRoommatesView(DetailGroupView):
         context = super().get_context_data(**kwargs)
         context['housing'] = context['object'].housing
         context['roommates_list'] = Roommates.objects.filter(
-                housing=context['housing']
-            ).exclude(pk=context['object'].pk).order_by('-begin_date')
+            housing=context['housing']
+        ).exclude(pk=context['object'].pk).order_by('-begin_date')
+        context['colocathlon'] = Setting.get('PHASE_COLOCATHLON', default=0)
+        context['nb_participants'] = self.object.colocathlon_participants.count()
         return context
 
 
@@ -68,64 +82,13 @@ class UpdateRoommatesView(UpdateGroupView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form_housing'] = UpdateHousingForm(instance=context['object'].housing)
+        context['form_housing'] = UpdateHousingForm(
+            instance=context['object'].housing)
         return context
 
     def post(self, request, **kwargs):
         group = self.get_object()
-        form_housing = UpdateHousingForm(request.POST, request.FILES, instance=group.housing)
+        form_housing = UpdateHousingForm(
+            request.POST, request.FILES, instance=group.housing)
         form_housing.save()
         return super().post(request, **kwargs)
-
-
-
-'''
-class HousingDetailView(LoginRequiredMixin, DetailView):
-    template_name = 'roommates/housing/detail.html'
-    model = Housing
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['Roommates'] = Roommates.objects.filter(
-            housing=self.object.pk).order_by('-begin_date')
-
-        list_roommates = []
-        context['roommates_groups'] = Roommates.objects.filter(
-            housing=self.object.pk).order_by('-begin_date')
-
-        locale.setlocale(locale.LC_TIME, '')
-        for group in context['roommates_groups']:
-            member_list = []
-
-            # On met les dates en français et au bon format.
-            begin_date = str(group.begin_date.strftime('%d/%m/%Y'))
-            end_date = str(group.end_date.strftime('%d/%m/%Y')
-                           ) if group.end_date is not None else None
-
-            # On évite d'afficher None si la date de fin n'est pas renseignée
-            duration = "Du " + begin_date + " au " + end_date if group.end_date is not None else "Depuis le " + \
-                begin_date + " (date de fin non renseignée)"
-
-            for member in NamedMembershipRoommates.objects.filter(group=group.id):
-                # On évite d'afficher un None si le coloc n'a pas de surnom
-                nicknm = "" if member.nickname is None else member.nickname
-
-                member_list.append({
-                    'first_name': member.student.user.first_name,
-                    'last_name': member.student.user.last_name,
-                    'nickname': nicknm,
-                })
-            list_roommates.append(
-                {'name': group.name, 'description': group.description, 'duration': duration, 'members': member_list})
-        context['roommates_groups'] = list_roommates
-
-        return context
-
-class EditHousingView(LoginRequiredMixin, UpdateView):
-    template_name = 'roommates/housing/edit.html'
-    model = Housing
-    fields = ['details']
-
-    def get_success_url(self) -> str:
-        return reverse_lazy('roommates:update', kwargs={'pk': self.object.id})
-'''

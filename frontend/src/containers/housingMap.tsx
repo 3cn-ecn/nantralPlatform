@@ -1,383 +1,127 @@
 ﻿import * as React from "react";
 import { useState, useEffect, useRef, useMemo } from "react";
 import ReactDOM, { render } from "react-dom";
-import MapGL, {
-	Marker,
-	GeolocateControl,
-	Popup,
-	FlyToInterpolator,
-	NavigationControl,
-} from "react-map-gl";
-import { Button, Form } from "react-bootstrap";
-import axios from "axios";
-import Cluster from "./cluster.tsx";
 import { easeCubic } from "react-d3-library";
-import { Typeahead } from "react-bootstrap-typeahead";
-import "react-bootstrap-typeahead/css/Typeahead.css";
+import { Popup, Marker, FlyToInterpolator } from "react-map-gl";
 
-// définitions des modèles -> cf serializers
-export interface Housing {
-	id: number;
-	url: string;
-	roommates: Roommate;
-	address: string;
-	details: string;
-	latitude: number;
-	longitude: number;
-}
-export interface Roommate {
-	members: Member[];
-	url: string;
-	name: string;
-	begin_date: string;
-	end_date: string;
-}
-export interface Member {
-	nickname: string;
-	name: string;
-}
+import { Housing, RootProps } from "./housingMap/interfaces";
+import { ColocathlonSwitch } from "./housingMap/colocathlonSwitch";
+import { MapForm } from "./housingMap/mapForm";
+import { Pin } from "./housingMap/pin";
+import { ColocInfo } from "./housingMap/colocInfo";
+import { Map } from "./housingMap/map";
 
-// objets à afficher sur la carte
-interface CityInfoProps {
-	housing: Housing;
-	housingDetailsUrl: string;
-}
+import { getRoommates } from "./housingMap/utils";
 
-// styles CSS
-const geolocateStyle = {
-	top: 0,
-	left: 0,
-	margin: 10,
-};
+function Root(props: RootProps): JSX.Element {
+  const [data, setData] = useState([]);
+  const [colocs, setColocs] = useState([]);
+  const [viewport, setViewPort] = useState({
+    latitude: 47.21784689284845,
+    longitude: -1.5586376015280996,
+    zoom: 12,
+    bearing: 0,
+    pitch: 0,
+  });
+  const [popupInfo, setPopUpinfo] = useState(null);
+  const [colocathlonParticipantsOnly, setColocathlonParticipantsOnly] =
+    useState(false);
 
-// options de la carte
-const positionOptions = {
-	enableHighAccuracy: true,
-};
+  const handleColocathlonParticipants = (e) => {
+    getRoommates(props.API_HOUSING_URL, setColocs, setData, e);
+    setColocathlonParticipantsOnly(e);
+  };
 
-// mettre les noms au bon format
-function toTitle(str: string): string {
-	if (str) {
-		return str.charAt(0).toUpperCase() + str.slice(1);
-	}
-	return undefined;
-}
+  const mapRef = useRef(null);
 
-// affichage du contenu de la bulle
-function ColocInfo(props: CityInfoProps): JSX.Element {
-	const housing: Housing = props.housing;
-	let roommatesList: string = "";
-	if (
-		typeof housing.roommates != "undefined" &&
-		typeof housing.roommates.members != "undefined"
-	) {
-		roommatesList = housing.roommates.members
-			.map((e) => e.name)
-			.join(", ")
-			.replace(/(,\s*)$/, "");
-	}
-	return (
-		<div>
-			<div>
-				<p>
-					<strong>{housing.roommates.name}</strong>
-					&nbsp;-&nbsp;
-					<Button
-						variant="primary"
-						size="sm"
-						href={`https://www.google.com/maps/dir/?api=1&travelmode=transit&destination=${housing.address}`}
-						target="_blank"
-					>
-						Y aller
-					</Button>
-					&nbsp;
-					<Button
-						variant="secondary"
-						size="sm"
-						href={housing.roommates.url}
-					>
-						Détails
-					</Button>
-					<br />
-					<small>
-						{housing.address}
-						<br />
-						<i>{housing.details}</i>
-					</small>
-				</p>
-				<p>
-					{roommatesList}
-				</p>
-			</div>
-		</div>
-	);
-}
+  const markers = useMemo(() => {
+    return data.map((housing: Housing) => (
+      <Marker
+        key={housing.longitude}
+        longitude={housing.longitude}
+        latitude={housing.latitude}
+      >
+        <Pin
+          size={25}
+          onClick={() => {
+            setViewPort({
+              zoom: 16,
+              longitude: housing.longitude,
+              latitude: housing.latitude,
+              transitionDuration: 500,
+              transitionInterpolator: new FlyToInterpolator(),
+              transitionEasing: easeCubic,
+            });
+            setPopUpinfo(
+              <Popup
+                tipSize={10}
+                anchor="bottom"
+                longitude={housing.longitude}
+                latitude={housing.latitude}
+                closeOnClick={false}
+                onClose={() => setPopUpinfo(null)}
+                dynamicPosition={false}
+                offsetTop={-10}
+                offsetLeft={10}
+              >
+                <ColocInfo
+                  housing={housing}
+                  colocathlonOnly={colocathlonParticipantsOnly}
+                />
+              </Popup>
+            );
+          }}
+        />
+      </Marker>
+    ));
+  }, [data]);
 
-// affichage des points sur la carte 
+  useEffect(() => {
+    getRoommates(props.API_HOUSING_URL, setColocs, setData);
+  }, []);
 
-interface PinProps {
-	size: number;
-	onClick: any;
-}
-
-function Pin(props: PinProps): JSX.Element {
-	const size: number = 20;
-	return (
-		<svg
-			style={{ transform: `translate(${-size / 2}px,${-size}px)` }}
-			viewBox="0 0 512 512"
-			width={props.size}
-			height={props.size}
-			onClick={props.onClick}
-		>
-			<path
-				fill="#cc0000"
-				d="M256,0C153.755,0,70.573,83.182,70.573,185.426c0,126.888,165.939,313.167,173.004,321.035
-		c6.636,7.391,18.222,7.378,24.846,0c7.065-7.868,173.004-194.147,173.004-321.035C441.425,83.182,358.244,0,256,0z M256,278.719
-		c-51.442,0-93.292-41.851-93.292-93.293S204.559,92.134,256,92.134s93.291,41.851,93.291,93.293S307.441,278.719,256,278.719z"
-			/>
-		</svg>
-	);
-}
-
-const styleClusterMarker: React.CSSProperties = {
-	position: "absolute",
-	top: "50%",
-	transform: "translate(0, -50%)",
-	width: "25px",
-	height: "25px",
-	lineHeight: "25px",
-	borderRadius: "50%",
-	fontSize: "1rem",
-	color: "#fff",
-	textAlign: "center",
-	background: "#0079f2",
-};
-
-const styleClusterMarkerContainer: React.CSSProperties = {
-	position: "relative",
-	width: "35px",
-	height: "35px",
-	lineHeight: "35px",
-	borderRadius: "50%",
-	fontSize: "1rem",
-	color: "#fff",
-	display: "flex",
-	justifyContent: "center",
-	background: "#cce6ff",
-};
-
-function ClusterMarker(props): JSX.Element {
-	const { cluster, onClick } = props;
-	return (
-		<div style={styleClusterMarkerContainer} onClick={onClick}>
-			<div style={styleClusterMarker} onClick={onClick}>{cluster.properties.point_count}</div>
-		</div>
-	);
-}
-
-// affichage principal 
-function Root(props): JSX.Element {
-	const navControlStyle: React.CSSProperties = {
-		right: 10,
-		top: 10,
-	};
-	const styleSearchBar: React.CSSProperties = {
-		//marginTop: "2rem",
-		maxWidth: "300px",
-	};
-	const [data, setData] = useState([]);
-	const [colocs, setColocs] = useState([]);
-	const [selectColoc, setSelectColoc] = useState([]);
-	// Add an object here
-	const [viewport, setViewPort] = useState({
-		latitude: 47.21784689284845,
-		longitude: -1.5586376015280996,
-		zoom: 12,
-		bearing: 0,
-		pitch: 0,
-	});
-	const [popupInfo, setPopUpinfo] = useState(null);
-	const mapRef = useRef(null);
-	const markers = useMemo(() => {
-		return data.map((housing) => (
-			<Marker
-				key={housing.address}
-				longitude={housing.longitude}
-				latitude={housing.latitude}
-			>
-				<Pin
-					size={25}
-					onClick={() => {
-						setViewPort({
-							zoom: 16,
-							longitude: housing.longitude,
-							latitude: housing.latitude,
-							transitionDuration: 500,
-							transitionInterpolator: new FlyToInterpolator(),
-							transitionEasing: easeCubic,
-						});
-						setPopUpinfo(
-							<Popup
-								tipSize={10}
-								anchor="bottom"
-								longitude={housing.longitude}
-								latitude={housing.latitude}
-								closeOnClick={false}
-								onClose={() => setPopUpinfo(null)}
-								dynamicPosition={false}
-								offsetTop={-10}
-								offsetLeft={10}
-							>
-								<ColocInfo
-									housing={housing}
-									housingDetailsUrl={housing.roommates.url}
-								/>
-							</Popup>
-						);
-					}}
-				/>
-			</Marker>
-		));
-	}, [data]);
-
-	useEffect(() => {
-		async function getRoommates(): Promise<void> {
-			await axios
-				.get(props.api_housing_url)
-				.then((res) => {
-					// For some reason, Axios roommates which have more than one inhabitant,
-					// so we have to do this mess to filter everything.
-					// Hours wasted: 2
-					var uniqueIds: number[] = [];
-					let dataBuffer = res.data.filter((e, i) => {
-						if (!uniqueIds.includes(e.id)) {
-							uniqueIds.push(e.id);
-							return true;
-						}
-						return false;
-					});
-					setColocs(
-						dataBuffer.map((housing) => {
-							return { label: housing.roommates.name, housing: housing };
-						})
-					);
-					setData(dataBuffer);
-				})
-				.catch((err) => {
-					setData([]);
-				});
-		}
-		getRoommates();
-	}, []);
-	return (
-		<>
-			<div className="row">
-				<div className="col"><h1>Carte des Colocs</h1></div>
-				<div className="col-12 col-md-6 col-lg-5 col-xl-4">
-					<Form.Group>
-						<Typeahead
-							id="search-colocs"
-							options={colocs}
-							placeholder="Recherche"
-							onChange={(coloc) => {
-								if (typeof coloc[0] === "undefined") {
-									return;
-								}
-								setSelectColoc(coloc);
-								let housings: Housing[] = data.filter(
-									(housing) => housing.id === coloc[0].housing.id
-								);
-								if (typeof housings[0] === "undefined") return;
-								let housing: Housing = housings[0];
-								setViewPort({
-									zoom: 16,
-									longitude: housing.longitude,
-									latitude: housing.latitude,
-									transitionDuration: 500,
-									transitionInterpolator: new FlyToInterpolator(),
-									transitionEasing: easeCubic,
-								});
-								setPopUpinfo(
-									<Popup
-										tipSize={10}
-										anchor="bottom"
-										longitude={housing.longitude}
-										latitude={housing.latitude}
-										closeOnClick={false}
-										onClose={() => setPopUpinfo(null)}
-										dynamicPosition={false}
-										offsetTop={-10}
-										offsetLeft={10}
-									>
-										<ColocInfo
-											housing={housing}
-											housingDetailsUrl={housing.roommates.url}
-										/>
-									</Popup>
-								);
-							}}
-						/>
-					</Form.Group>
-				</div>
-			</div>
-			<div className="row">
-				<div className="col-12 mapbox">
-					<MapGL
-						{...viewport}
-						width="100vw"
-						height="80vh"
-						ref={mapRef}
-						mapStyle="mapbox://styles/mapbox/bright-v9"
-						onViewportChange={setViewPort}
-						mapboxApiAccessToken={props.api_key}
-						onClick={() => setPopUpinfo(null)}
-					>
-						{mapRef.current && markers && (
-							<Cluster
-								map={mapRef.current.getMap()}
-								radius={20}
-								extent={512}
-								nodeSize={40}
-								element={(clusterProps) => (
-									<ClusterMarker
-										{...clusterProps}
-										onClick={() => {
-											const [longitude, latitude] =
-												clusterProps.cluster.geometry.coordinates;
-											setViewPort({
-												zoom: 16,
-												longitude: longitude,
-												latitude: latitude,
-												transitionDuration: 500,
-												transitionInterpolator: new FlyToInterpolator(),
-												transitionEasing: easeCubic,
-											});
-										}}
-									/>
-								)}
-							>
-								{markers}
-							</Cluster>
-						)}
-
-						{popupInfo}
-						<GeolocateControl
-							style={geolocateStyle}
-							positionOptions={positionOptions}
-							trackUserLocation
-							auto
-						/>
-						<NavigationControl showCompass={false} style={navControlStyle} />
-					</MapGL>
-				</div>
-			</div>
-		</>
-	);
+  return (
+    <>
+      <div className="row">
+        <div className="col">
+          <h1>Carte des Colocs</h1>
+        </div>
+        <MapForm
+          colocs={colocs}
+          data={data}
+          setViewPort={setViewPort}
+          setPopUpinfo={setPopUpinfo}
+        />
+      </div>
+      {props.PHASE_COLOCATHLON > 1 ? (
+        <div className="row">
+          <ColocathlonSwitch
+            status={colocathlonParticipantsOnly}
+            handle={handleColocathlonParticipants}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
+      <Map
+        viewport={viewport}
+        mapRef={mapRef}
+        apiKey={props.API_KEY}
+        markers={markers}
+        popupInfo={popupInfo}
+        setViewPort={setViewPort}
+        setPopUpinfo={setPopUpinfo}
+      />
+    </>
+  );
 }
 
 document.body.style.margin = "0";
 render(
-	<Root api_key={MAPBOX_TOKEN} api_housing_url={api_housing_url} />,
-	document.getElementById("root")
+  <Root
+    API_KEY={MAPBOX_TOKEN}
+    API_HOUSING_URL={API_HOUSING_URL}
+    PHASE_COLOCATHLON={PHASE_COLOCATHLON}
+  />,
+  document.getElementById("root")
 );

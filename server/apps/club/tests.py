@@ -1,8 +1,9 @@
+from datetime import date, datetime, timedelta
 from django.test import TestCase
 from apps.utils.utest import TestMixin
 from django.urls import reverse
 from rest_framework import status
-from datetime import date
+from django.utils import timezone
 
 from .models import Club, NamedMembershipClub
 
@@ -31,7 +32,7 @@ class TestGroups(TestCase, TestMixin):
         club = Club.objects.create(name='TestClub')
         payload = {
             'function': 'test',
-            'date_begin': date.today(),
+            'date_begin': timezone.now().today().date(),
         }
         url = reverse('club:add-member', args=[club.slug])
         resp = self.client.post(url, payload)

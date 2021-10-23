@@ -26,52 +26,70 @@ AJOUTER UN NOUVEAU GROUPE
 
 Si vous ajoutez un nouveau type de groupe, créez une appli dédiée. Déclarez
 les urls avec la fonction makeGroupUrlpatterns de apps.groups.urls, et ajoutez
-ensuite ce nouveau groupe dans la fonction get_object_from_slug ci-dessous.
+ensuite ce nouveau groupe dans la liste SLUG_MODELS ci-dessous.
 Il vous faudra aussi ajouter vos formulaires dans group/forms.py. Les vues sont
 gérées automatiquement mais peuvent être réécrites si besoin.
 
 """
 
-def get_object_from_slug(app_name:str, slug:str):
+from typing import Union
+from importlib import import_module
+from django.shortcuts import get_object_or_404
+from django.utils.text import slugify
+
+
+# list of models who uses slugs
+# 'app_name': ['location', 'model_name']
+SLUG_GROUPS = {
+    'club': ['apps.club.models', 'Club'],
+    'liste': ['apps.liste.models', 'Liste'],
+    'roommates': ['apps.roommates.models', 'Roommates'],
+    'family': ['apps.family.models', 'Family'],
+    'academic': ['apps.academic.models', 'Course'],
+}
+SLUG_MODELS = {
+    'event': ['apps.event.models', 'Event'],
+    'post': ['apps.post.models', 'Post'],
+}
+SLUG_MODELS.update(SLUG_GROUPS)
+
+
+def get_object_from_slug(app_name: str, slug: str):
     """Get a model object from a slug and an app."""
-    
+
     if app_name == 'club':
         from apps.club.models import Club, BDX
-        object = Club.objects.get(slug=slug)
-        if isinstance(object, BDX):
-            return BDX.objects.get(slug=slug)
-        else:   
-            return object
-    
-    elif app_name == 'liste':
-        from apps.liste.models import Liste
-        return Liste.objects.get(slug=slug)
-
-    elif app_name == 'roommates':
-        from apps.roommates.models import Roommates
-        return Roommates.objects.get(slug=slug)
-    
+        object = get_object_or_404(Club, slug=slug)
+        try:
+            object = object.bdx
+        except BDX.DoesNotExist:
+            pass
+        return object
     else:
-        raise Exception(f'Unknown application : {app_name}')
+        try:
+            package = import_module(SLUG_MODELS[app_name][0])
+            Model = getattr(package, SLUG_MODELS[app_name][1])
+            return get_object_or_404(Model, slug=slug)
+        except KeyError:
+            raise Exception(f'Unknown application : {app_name}')
 
 
-def get_full_slug_from_slug(app:str, slug:str):
+def get_full_slug_from_slug(app: str, slug: str):
     """Get the full slug from a slug and an app."""
     return f'{app}--{slug}'
 
 
-
-def get_app_from_full_slug(full_slug:str):
+def get_app_from_full_slug(full_slug: str):
     """Get the model object app name from a full slug."""
     return full_slug.split('--')[0]
 
 
-def get_slug_from_full_slug(full_slug:str):
+def get_slug_from_full_slug(full_slug: str):
     """Get the slug from a full slug."""
     return '--'.join(full_slug.split('--')[1:])
 
 
-def get_tuple_from_full_slug(full_slug:str):
+def get_tuple_from_full_slug(full_slug: str):
     """Get a tuple (app, slug) from a full slug."""
     slug_list = full_slug.split('--')
     app_name = slug_list[0]
@@ -79,7 +97,22 @@ def get_tuple_from_full_slug(full_slug:str):
     return (app_name, slug)
 
 
-def get_object_from_full_slug(full_slug:str):
+def get_object_from_full_slug(full_slug: str) -> Union['Group']:
     """Get a model object from a full slug."""
     app_name, slug = get_tuple_from_full_slug(full_slug)
     return get_object_from_slug(app_name, slug)
+
+
+class SlugModel:
+    """ A class to define a method to create and update slugs"""
+
+    def set_slug(self, text, max_length=50):
+        if not self.slug:
+            slug = slugify(text)[:max_length-5]
+            model = type(self)
+            if model.objects.filter(slug=slug).exists():
+                id = 1
+                while model.objects.filter(slug=f'{slug}-{id}'):
+                    id += 1
+                slug = f'{slug}-{id}'
+            self.slug = slug
