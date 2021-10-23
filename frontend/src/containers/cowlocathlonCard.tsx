@@ -48,22 +48,21 @@ function Root(props: RootProps): JSX.Element {
           <br />
           Activités proposées : {roommates.colocathlon_activities}
         </p>
-
         <p>
-          <a
-            className="btn btn-success"
-            style={{ width: "max-content" }}
-            href="#"
-          >
-            {"Voir les participant.e.s    "}
-            <span className="badge bg-light text-success">
-              {roommates.colocathlon_participants.length}/
-              {roommates.colocathlon_quota}
-            </span>
-          </a>
+          <ParticipateButton
+            API_URL={API_URL}
+            ROOMMATES_SLUG={ROOMMATES_SLUG}
+            isParticipating={
+              roommates.colocathlon_participants.filter((e) => e.id === USER_ID)
+                .length > 0
+            }
+            participants={roommates.colocathlon_participants}
+            quota={roommates.colocathlon_quota}
+            isAdmin={isAdmin}
+          />
           <a
             className="btn btn-secondary"
-            style={{ width: "max-content" }}
+            style={{ width: "max-content", marginLeft: "0.2rem" }}
             href={EDIT_URL.replace("1", ROOMMATES_SLUG)}
           >
             Modifier
@@ -88,8 +87,9 @@ function Root(props: RootProps): JSX.Element {
             roommates.colocathlon_participants.filter((e) => e.id === USER_ID)
               .length > 0
           }
-          nbParticipants={roommates.colocathlon_participants.length}
+          participants={roommates.colocathlon_participants}
           quota={roommates.colocathlon_quota}
+          isAdmin={isAdmin}
         />
       </div>
     );

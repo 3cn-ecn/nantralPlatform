@@ -1,4 +1,6 @@
-﻿export interface RootProps {
+﻿import { ColocathlonParticipant } from "../housingMap/interfaces";
+
+export interface RootProps {
   API_URL: string;
   ROOMMATES_SLUG: string;
   EDIT_URL: string;
@@ -11,6 +13,13 @@ export interface ParticipateButtonProps {
   API_URL: string;
   ROOMMATES_SLUG: string;
   isParticipating: boolean;
-  nbParticipants: number;
+  participants: ColocathlonParticipant[];
   quota: number;
+  isAdmin: boolean;
+}
+
+export interface ParticipantsModalProps {
+  showModal: boolean;
+  handleClose: () => void;
+  participants: ColocathlonParticipant[];
 }
