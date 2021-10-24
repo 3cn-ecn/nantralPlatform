@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import { Spinner, Row, Col } from "react-bootstrap";
 
-import { getDate } from "./eventsView/utils";
+import { getGroupDate } from "./eventsView/utils";
 import { Event } from "./eventsView/event";
 import { spinnerDivStyle, spinnerStyle } from "./eventsView/styles";
 import { EventInfos, APIUrls } from "./eventsView/interfaces";
@@ -20,7 +20,7 @@ function Root(props: APIUrls): JSX.Element {
             let events: EventInfos[] = data;
             let orderedEventsInfoMap = new Map();
             for (let event of events) {
-              let eventReadableDate = getDate(event.date);
+              let eventReadableDate = getGroupDate(event.date);
               let orderedEventsInfo =
                 orderedEventsInfoMap.get(eventReadableDate);
               if (orderedEventsInfo != undefined) {
@@ -55,7 +55,7 @@ function Root(props: APIUrls): JSX.Element {
         return (
           <div key={key + "outerdiv"}>
             <h3>{events[0]}</h3>
-            <Row>
+            <Row className="gx-2 mb-3">
             {events[1].map((el, i) => {
               return (
                 <Col xs={12} md={6} xl={4} key={key + i.toString() + "innerdiv"}>
@@ -68,12 +68,10 @@ function Root(props: APIUrls): JSX.Element {
                       participants: props.eventListParticipants,
                     }}
                   />
-                  <br />
                 </Col>
               );
             })}
             </Row>
-            <br />
           </div>
         );
       })}

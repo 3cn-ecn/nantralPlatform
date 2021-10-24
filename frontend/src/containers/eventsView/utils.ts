@@ -7,12 +7,25 @@ require("dayjs/locale/fr");
 dayjs.locale("fr");
 
 export function getDate(date: Date): string {
-  if (dayjs(date).isToday()) {
+  return dayjs(date).format("dddd D MMMM");
+}
+
+export function getHour(date: Date): string {
+  return dayjs(date).format("HH:mm");
+}
+
+
+export function getGroupDate(date: Date): string {
+  var myDate = dayjs(date);
+  if (myDate.isToday()) {
     return "Aujourd'hui";
   }
-
-  if (dayjs(date).isTomorrow()) {
+  if (myDate.isTomorrow()) {
     return "Demain";
   }
-  return dayjs(date).format("dddd D MMMM");
+  var todayplus7 = dayjs().add('7', 'day');
+  if (myDate.isBefore(todayplus7)) {
+    return "Dans les 7 prochains jours";
+  }
+  return "Plus tard..."
 }

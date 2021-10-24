@@ -1,51 +1,31 @@
 ﻿import * as React from "react";
 import { EventInfos } from "./interfaces";
-import Truncate from "react-truncate";
 import { ParticipateButton } from "./participateButton";
 import { Card } from "react-bootstrap";
-import { getDate } from "./utils";
-
-var dayjs = require("dayjs");
-var isToday = require("dayjs/plugin/isToday");
-dayjs.extend(isToday);
-var isTomorrow = require("dayjs/plugin/isTomorrow");
-dayjs.extend(isTomorrow);
-require("dayjs/locale/fr");
-dayjs.locale("fr");
+import { getDate, getHour } from "./utils";
 
 export function Event(props): JSX.Element {
   const urls = props.urls;
   const eventInfos: EventInfos = props.eventInfos;
 
   return (
-    <Card border={eventInfos.color}>
-      <Card.Img variant="top" src={eventInfos.image} />
-      <Card.Body>
-        <a
-          href={eventInfos.get_absolute_url}
-          className="mb-1 text-dark"
-        >
-          <small className="text-uppercase">{getDate(eventInfos.date)}</small>
-          <Card.Title>
-            {eventInfos.title}
-          </Card.Title>
-          <Card.Subtitle className="mb-3">
-            {dayjs(eventInfos.date).format("HH:mm")} • {eventInfos.location} • {eventInfos.get_group_name}
-          </Card.Subtitle>
-        </a>
-        <Card.Text>
-          <ParticipateButton
-            number_of_participants={eventInfos.number_of_participants}
-            urls={urls}
-            eventInfos={eventInfos}
-          />
-        </Card.Text>
-        {/* <Truncate lines={3}>
-          <p
-            className="card-text"
-            dangerouslySetInnerHTML={{ __html: eventInfos.description }}
-          ></p>
-        </Truncate> */}
+    <Card border={eventInfos.color} className="mb-2">
+      <Card.Img variant="top" src={eventInfos.image} onClick={(e) => {window.location.href=eventInfos.get_absolute_url;}} style={{ cursor: "pointer" }}/>
+      <Card.Body as="a" href={eventInfos.get_absolute_url} className="pb-0 ">
+        <small className="text-uppercase card-date">{getDate(eventInfos.date)}</small>
+        <Card.Title as="h4">
+          {eventInfos.title}
+        </Card.Title>
+        <Card.Subtitle className="mb-3">
+          {getHour(eventInfos.date)} • {eventInfos.location} • {eventInfos.get_group_name}
+        </Card.Subtitle>
+      </Card.Body>
+      <Card.Body className="pt-0">
+        <ParticipateButton
+          number_of_participants={eventInfos.number_of_participants}
+          urls={urls}
+          eventInfos={eventInfos}
+        />
       </Card.Body>
     </Card>
   );
