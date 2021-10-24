@@ -70,12 +70,15 @@ class RoommatesDetails(APIView):
             return Response(status=403)
         addOrDelete = int(request.data.get("addOrDelete"))
 
-        # addOrDelete == 1 -> Delete user
-        # addOrDelete == 0 -> Add user
+        # addOrDelete == 1 --> Delete user
+        # addOrDelete == 0 --> Add user
         if addOrDelete == 0:
             if roommates.colocathlon_quota > roommates.colocathlon_participants.count():
                 roommates.colocathlon_participants.add(request.user.student)
                 return Response(status=200)
             return Response(status=403)
-        roommates.colocathlon_participants.remove(request.user.student)
-        return Response(status=200)
+        if Roommates.colocathlon_participants.through.objects.filter(
+                student_id=request.user.student).exists():
+            roommates.colocathlon_participants.remove(request.user.student)
+            return Response(status=200)
+        return Response(status=500)
