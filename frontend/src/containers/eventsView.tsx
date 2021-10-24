@@ -55,7 +55,7 @@ function Root(props: APIUrls): JSX.Element {
         return (
           <div key={key + "outerdiv"}>
             <h3>{events[0]}</h3>
-            <Row className="gx-2 mb-3">
+            <Row className="gx-2 mb-3 events">
             {events[1].map((el, i) => {
               return (
                 <Col xs={12} md={6} xl={4} key={key + i.toString() + "innerdiv"}>
