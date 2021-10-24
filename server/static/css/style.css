@@ -185,7 +185,7 @@ a.rs:hover span {
 }
 .container .events a.card-body, .container a:hover.card-image {
   text-decoration: none;
-  color:initial;
+  color:inherit;
 }
 .container .events .card-date {
   color: #222;
