@@ -1,10 +1,10 @@
+from django.http.response import HttpResponse
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# HousingSerializer, RoommatesGroupSerializer, RoommatesMemberSerializer
-from .serializers import HousingLastRoommatesSerializer
-from .models import Housing
+from .serializers import HousingLastRoommatesSerializer, RoommatesSerializer
+from .models import Housing, Roommates
 from apps.utils.geocoding import geocode
 
 from django.utils import timezone
@@ -25,9 +25,15 @@ class HousingView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        colocathlonParticipants = int(self.request.GET.get(
+            'colocathlonParticipants'))
         now = timezone.now()
+        if colocathlonParticipants == 1:
+            query = Housing.objects.filter((
+                Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | Q(roommates__members=None)) & Q(roommates__colocathlon_agree=True)).distinct()
+            return query
         query = Housing.objects.filter(
-            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | (Q(roommates__members=None))).distinct()
+            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | Q(roommates__members=None)).distinct()
         return query
 
 
@@ -45,94 +51,31 @@ class CheckAddressView(APIView):
         return Response(data=data)
 
 
-'''
-class HousingView(generics.ListCreateAPIView):
-    serializer_class = HousingSerializer
+class RoommatesDetails(APIView):
+    """An API view to return the details of a roommates instance"""
+    serializer_class = RoommatesSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        return Housing.objects.all()
+    def get(self, request):
+        roommatesSlug = self.request.GET.get(
+            'slug')
+        roommates = [generics.get_object_or_404(Roommates, slug=roommatesSlug)]
+        serializer = self.serializer_class(roommates, many=True)
+        return Response(serializer.data)
 
+    def post(self, request):
+        roommates = generics.get_object_or_404(
+            Roommates, slug=request.data.get("slug"))
+        if not roommates.colocathlon_agree:
+            return Response(status=403)
+        addOrDelete = int(request.data.get("addOrDelete"))
 
-
-class HousingRoommates(generics.ListCreateAPIView):
-    """API View to get all the housing and their current roommates"""
-    serializer_class = HousingSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        now = timezone.now()
-        query = Housing.objects.filter(
-            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | (Q(roommates__members=None))).distinct()
-        return query
-
-
-class RoommatesGroupView(generics.ListCreateAPIView):
-    """API View to get all the groups of roommates that lived in a house."""
-    serializer_class = RoommatesGroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return Roommates.objects.filter(housing=self.kwargs['pk'])
-
-    def create(self, request, *args, **kwargs):
-        housing = generics.get_object_or_404(Housing, pk=self.kwargs['pk'])
-        copy = request.data.copy()
-        copy['housing'] = housing.pk
-        serializer = self.get_serializer(
-            data=copy)
-        # Due to the fact that the student field in the NamedMembershipRoommates Serializer
-        # has to be read_only, the student id is passed as an attribute of the serializer
-        # otherwise it would be cleaned out in the validated data.
-        serializer.members = [] if not request.data['add_me'] else [
-            {
-                'student': request.user.student.id,
-                'nickname': request.data['nickname'],
-            }
-        ]
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-
-class RoommatesMembersView(generics.ListCreateAPIView):
-    """API View to list members of a roommates group."""
-    serializer_class = RoommatesMemberSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return NamedMembershipRoommates.objects.filter(roommates=self.kwargs['pk'])
-
-    def create(self, request, *args, **kwargs):
-        group = generics.get_object_or_404(
-            Roommates, id=self.kwargs['pk'])
-        copy = request.data.copy()
-        copy['group'] = group.id
-        student = generics.get_object_or_404(
-            Student, id=request.data['student'])
-        serializer = self.get_serializer(data=copy)
-        serializer.student = student
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-
-class RoommatesGroupEditView(generics.RetrieveUpdateDestroyAPIView):
-    """API View to update or delete a roommates group."""
-    serializer_class = RoommatesGroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return Roommates.objects.filter(id=self.kwargs['pk'])
-
-
-class RoommatesMemberView(generics.RetrieveUpdateDestroyAPIView):
-    """API View to get a specific membership and update or delete it."""
-    serializer_class = RoommatesMemberSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return NamedMembershipRoommates.objects.filter(id=self.kwargs['pk'])
-'''
+        # addOrDelete == 1 -> Delete user
+        # addOrDelete == 0 -> Add user
+        if addOrDelete == 0:
+            if roommates.colocathlon_quota > roommates.colocathlon_participants.count():
+                roommates.colocathlon_participants.add(request.user.student)
+                return Response(status=200)
+            return Response(status=403)
+        roommates.colocathlon_participants.remove(request.user.student)
+        return Response(status=200)

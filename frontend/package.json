@@ -66,6 +66,7 @@
     "react-map-gl": "^6.1.16",
     "react-router": "^5.2.1",
     "react-router-dom": "^5.2.1",
+    "react-switch": "^6.0.0",
     "react-truncate": "^2.4.0",
     "style-loader": "^2.0.0",
     "supercluster": "^7.1.3",

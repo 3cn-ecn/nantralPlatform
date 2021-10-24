@@ -4,7 +4,8 @@ import ReactDOM, { render } from "react-dom";
 import { easeCubic } from "react-d3-library";
 import { Popup, Marker, FlyToInterpolator } from "react-map-gl";
 
-import { Housing } from "./housingMap/interfaces";
+import { Housing, RootProps } from "./housingMap/interfaces";
+import { ColocathlonSwitch } from "./housingMap/colocathlonSwitch";
 import { MapForm } from "./housingMap/mapForm";
 import { Pin } from "./housingMap/pin";
 import { ColocInfo } from "./housingMap/colocInfo";
@@ -12,7 +13,7 @@ import { Map } from "./housingMap/map";
 
 import { getRoommates } from "./housingMap/utils";
 
-function Root(props): JSX.Element {
+function Root(props: RootProps): JSX.Element {
   const [data, setData] = useState([]);
   const [colocs, setColocs] = useState([]);
   const [viewport, setViewPort] = useState({
@@ -23,6 +24,13 @@ function Root(props): JSX.Element {
     pitch: 0,
   });
   const [popupInfo, setPopUpinfo] = useState(null);
+  const [colocathlonParticipantsOnly, setColocathlonParticipantsOnly] =
+    useState(false);
+
+  const handleColocathlonParticipants = (e) => {
+    getRoommates(props.API_HOUSING_URL, setColocs, setData, e);
+    setColocathlonParticipantsOnly(e);
+  };
 
   const mapRef = useRef(null);
 
@@ -58,7 +66,7 @@ function Root(props): JSX.Element {
               >
                 <ColocInfo
                   housing={housing}
-                  housingDetailsUrl={housing.roommates.url}
+                  colocathlonOnly={colocathlonParticipantsOnly}
                 />
               </Popup>
             );
@@ -69,7 +77,7 @@ function Root(props): JSX.Element {
   }, [data]);
 
   useEffect(() => {
-    getRoommates(props.api_housing_url, setColocs, setData);
+    getRoommates(props.API_HOUSING_URL, setColocs, setData);
   }, []);
 
   return (
@@ -78,17 +86,27 @@ function Root(props): JSX.Element {
         <div className="col">
           <h1>Carte des Colocs</h1>
         </div>
+        <MapForm
+          colocs={colocs}
+          data={data}
+          setViewPort={setViewPort}
+          setPopUpinfo={setPopUpinfo}
+        />
       </div>
-      <MapForm
-        colocs={colocs}
-        data={data}
-        setViewPort={setViewPort}
-        setPopUpinfo={setPopUpinfo}
-      />
+      {props.PHASE_COLOCATHLON > 1 ? (
+        <div className="row">
+          <ColocathlonSwitch
+            status={colocathlonParticipantsOnly}
+            handle={handleColocathlonParticipants}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
       <Map
         viewport={viewport}
         mapRef={mapRef}
-        apiKey={props.api_key}
+        apiKey={props.API_KEY}
         markers={markers}
         popupInfo={popupInfo}
         setViewPort={setViewPort}
@@ -100,6 +118,10 @@ function Root(props): JSX.Element {
 
 document.body.style.margin = "0";
 render(
-  <Root api_key={MAPBOX_TOKEN} api_housing_url={api_housing_url} />,
+  <Root
+    API_KEY={MAPBOX_TOKEN}
+    API_HOUSING_URL={API_HOUSING_URL}
+    PHASE_COLOCATHLON={PHASE_COLOCATHLON}
+  />,
   document.getElementById("root")
 );

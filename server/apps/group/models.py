@@ -66,7 +66,7 @@ class Group(models.Model, SlugModel):
         if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
-        if user.is_superuser or user.is_staff:
+        if user.is_superuser:
             return True
         if self.is_member(user):
             members_list = self.members.through.objects.filter(group=self)
