@@ -12,10 +12,6 @@ export const spinnerStyle: CSSProperties = {
   width: 75,
 };
 
-export const cardStyle: CSSProperties = {
-  boxShadow: "1px 1px 7px #999",
-};
-
 export const faIconStyle: CSSProperties = {
   marginRight: 7,
 };
