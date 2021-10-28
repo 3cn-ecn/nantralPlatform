@@ -61,6 +61,13 @@ class Roommates(Group):
 
     class Meta:
         verbose_name = "coloc"
+    
+    def occupied(self):
+        td = timezone.now().today
+        if self.begin_date <= td and (self.end_date is None or self.end_date >= td):
+            return True
+        return False
+
 
 
 class NamedMembershipRoommates(NamedMembership):
