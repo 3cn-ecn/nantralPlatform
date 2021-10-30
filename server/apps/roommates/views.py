@@ -50,7 +50,7 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
         )
         member.admin = True
         member.save()
-        return redirect(reverse('roommates:detail', args=[roommates.slug]))
+        return redirect('roommates:detail', roommates.slug)
 
 
 class ColocathlonFormView(UserIsMember, UpdateView):
