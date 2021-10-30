@@ -67,6 +67,7 @@ class Roommates(Group):
         if self.begin_date <= td and (self.end_date is None or self.end_date >= td):
             return True
         return False
+    
 
 
 
