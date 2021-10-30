@@ -84,7 +84,7 @@ def currentUserRoommatesView(request):
     if roommates:
         return redirect('roommates:detail', roommates.slug)
     else:
-        return HttpResponseNotFound("Pas de coloc trouvée")
+        return redirect('roommates:housing-map')
 
 
 
