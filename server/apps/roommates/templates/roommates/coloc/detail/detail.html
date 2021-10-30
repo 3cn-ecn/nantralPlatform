@@ -24,7 +24,7 @@
 
 
 {% block before_content %}
-    {% if colocathlon >= 1 and is_admin or colocathlon == 2 and object.colocathlon_agree %}
+    {% if colocathlon >= 1 and is_member or colocathlon == 2 and object.colocathlon_agree %}
         <div id="root"></div>
     {% endif %}
 
@@ -117,7 +117,7 @@
   const ROOMMATES_SLUG = "{{object.slug}}";
   const EDIT_URL = "{% url 'roommates:colocathlon-edit' 1 %}";
   const PHASE = {{colocathlon}};
-  const IS_ADMIN = "{{is_admin}}";
+  const IS_ADMIN = "{{is_member}}";
   const USER_ID = {{user.id}};
 </script>
 <script src='{% static "js/cowlocathlonCard.js" %}'></script>

@@ -24,7 +24,7 @@ export function StudentCard(props): JSX.Element {
   }
   return (
     <div className="col-12 col-sm-6 col-lg-4 col-xxl-3 d-grid">
-      <a className="btn btn-light" href={member.student.absolute_url}>
+      <a className="btn btn-light student" href={member.student.absolute_url}>
         <div className="row g-3">
           <div className="col-3">
             <div className="ratio ratio-1x1">
