@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.views.generic import TemplateView, FormView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotFound
 
 from apps.post.models import Post
@@ -59,14 +60,14 @@ class SuggestionView(LoginRequiredMixin, FormView):
             self.request, 'Votre suggestion a été enregistrée merci')
         return redirect('home:home')
 
-
+@login_required
 def currentUserPageView(request):
     """A view to redirect the user to his own page"""
     student = get_object_or_404(Student, pk=request.user.student.pk)
     response = redirect('student:detail', student.pk)
     return response
 
-
+@login_required
 def currentUserRoommatesView(request):
     """A view to redirect the user to his roommates page"""
     now = timezone.now()
