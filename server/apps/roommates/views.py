@@ -7,11 +7,11 @@ from django.conf import settings
 from django.views.generic import TemplateView, CreateView, ListView, UpdateView
 
 from extra_settings.models import Setting
+from apps.utils.accessMixins import UserIsMember
+from apps.group.views import UpdateGroupView, DetailGroupView
 
 from .models import Housing, Roommates
 from .forms import UpdateHousingForm
-
-from apps.group.views import UpdateGroupView, DetailGroupView
 
 
 class HousingMap(LoginRequiredMixin, TemplateView):
@@ -50,10 +50,10 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
         )
         member.admin = True
         member.save()
-        return redirect(reverse('roommates:detail', args=[roommates.slug]))
+        return redirect('roommates:detail', roommates.slug)
 
 
-class ColocathlonFormView(LoginRequiredMixin, UpdateView):
+class ColocathlonFormView(UserIsMember, UpdateView):
     template_name = 'roommates/coloc/edit/colocathlon.html'
     model = Roommates
     fields = ['colocathlon_agree', 'colocathlon_quota',
@@ -66,10 +66,10 @@ class DetailRoommatesView(DetailGroupView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['housing'] = context['object'].housing
+        context['housing'] = self.object.housing
         context['roommates_list'] = Roommates.objects.filter(
             housing=context['housing']
-        ).exclude(pk=context['object'].pk).order_by('-begin_date')
+        ).exclude(pk=self.object.pk).order_by('-begin_date')
         context['colocathlon'] = Setting.get('PHASE_COLOCATHLON', default=0)
         context['nb_participants'] = self.object.colocathlon_participants.count()
         return context

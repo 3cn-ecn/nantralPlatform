@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 from django.utils import timezone
 from typing import Any, Dict, Union
 from django.conf import settings
@@ -43,7 +43,7 @@ class RegistrationView(FormView):
 
     def form_valid(self, form):
         user_creation(form, self.request)
-        return redirect(reverse('home:home'))
+        return redirect('home:home')
 
 
 class TemporaryRegistrationView(FormView):
@@ -53,7 +53,7 @@ class TemporaryRegistrationView(FormView):
     def dispatch(self, request, *args: Any, **kwargs: Any):
         """Do not allow to use this view outside of allowed temporary accounts windows."""
         if not settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
-            return redirect(reverse('account:registration'))
+            return redirect('account:registration')
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -63,7 +63,7 @@ class TemporaryRegistrationView(FormView):
 
     def form_valid(self, form) -> HttpResponse:
         user_creation(form, self.request)
-        return redirect(reverse('account:login'))
+        return redirect('account:login')
 
 
 class ConfirmUser(View):
@@ -95,7 +95,7 @@ class ConfirmUser(View):
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')
             messages.success(request, 'Votre compte est désormais actif !')
-            return redirect(reverse('home:home'))
+            return redirect('home:home')
         else:
             return render(self.request, 'account/activation_invalid.html')
 
@@ -109,14 +109,14 @@ class AuthView(FormView):
             user = request.user
             message = f'Vous etes déjà connecté en tant que {user.first_name.title()}.'
             messages.warning(request, message)
-            return redirect(reverse('home:home'))
+            return redirect('home:home')
         else:
             return super(AuthView, AuthView).get(self, request)
 
     def form_invalid(self, form):
         message = f'Veuillez vous connecter avec votre adresse mail ECN.'
         messages.warning(self.request, message)
-        return redirect(reverse('account:login'))
+        return redirect('account:login')
 
     def form_valid(self, form):
         username = form.cleaned_data['email']
@@ -138,12 +138,12 @@ class AuthView(FormView):
                             Veuillez cliquer sur le lien envoyé par mail pour l\'\
                                 activer.'
                             messages.error(self.request, message)
-                            return redirect(reverse('account:login'))
+                            return redirect('account:login')
                         if temporaryAccessRequest.approved_until <= datetime.now().date():
                             message = 'Votre compte n\'a pas encore été approuvé.\
                                 On vous prévient par mail dès que c\'est le cas.'
                             messages.error(self.request, message)
-                            return redirect(reverse('account:login'))
+                            return redirect('account:login')
                         message = f'Votre compte n\'est pas encore définitif.\
                             Veuillez le valider <a href="{reverse("account:upgrade-permanent")}">ici</a>.\
                             Attention après le {temporaryAccessRequest.approved_until}\
@@ -152,24 +152,28 @@ class AuthView(FormView):
                     except TemporaryAccessRequest.DoesNotExist:
                         messages.error(
                             self.request, 'Identifiant inconnu ou mot de passe invalide.')
-                        return redirect(reverse('account:login'))
+                        return redirect('account:login')
                 else:
                     messages.warning(
                         self.request, 'Votre compte n\'est pas encore actif. Veuillez cliquer sur le lien dans \'email.')
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')
-            return redirect(reverse('home:home'))
+            # we send back the user to where he wanted to go or to home page
+            if self.request.GET.get('next'):
+                return redirect(self.request.GET.get('next'))
+            else:
+                return redirect('home:home')
         else:
             messages.error(
                 self.request, 'Identifiant inconnu ou mot de passe invalide.')
-            return redirect(reverse('account:login'))
+            return redirect('account:login')
 
 
 class LogoutView(View):
     def get(self, request):
         logout(request)
         messages.success(request, 'Vous avez été déconnecté.')
-        return redirect(reverse('account:login'))
+        return redirect('account:login')
 
 
 class ForgottenPassView(FormView):
@@ -195,7 +199,7 @@ class ForgottenPassView(FormView):
             pass
         messages.success(
             self.request, 'Un email de récuperation a été envoyé si cette adresse existe.')
-        return redirect(reverse('account:login'))
+        return redirect('account:login')
 
 
 class PasswordResetConfirmCustomView(PasswordResetConfirmView):
@@ -220,7 +224,7 @@ class ABCApprovalTemporaryResgistrationView(UserIsSuperAdmin, View):
 
         if self.temp_req.approved:
             messages.warning(request, f'Cette requête a déjà été approuvée.')
-            return redirect(reverse('home:home'))
+            return redirect('home:home')
 
 
 class ApproveTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
@@ -229,7 +233,7 @@ class ApproveTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
         self.temp_req.approve()
         messages.success(
             request, f'Vous avez accepté la demande de {self.temp_req.user.first_name} {self.temp_req.user.last_name}')
-        return redirect(reverse('home:home'))
+        return redirect('home:home')
 
 
 class DenyTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
@@ -238,7 +242,7 @@ class DenyTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
         messages.success(
             request, f'Vous avez refusé la demande de {self.temp_req.user.first_name} {self.temp_req.user.last_name}')
         self.temp_req.deny()
-        return redirect(reverse('home:home'))
+        return redirect('home:home')
 
 
 class ConfirmUserTemporary(View):
@@ -260,7 +264,7 @@ class ConfirmUserTemporary(View):
             messages.success(request, 'Votre addresse mail est confirmé! \n\
             Comme vous n\'avez pas utilisé votre adresse Centrale, vous devez encore attendre qu\'un administrateur vérifie votre inscription.\n\
             On vous prévient par mail dès que c\'est bon!. ')
-            return redirect(reverse('home:home'))
+            return redirect('home:home')
         else:
             return render(self.request, 'account/activation_invalid.html')
 
