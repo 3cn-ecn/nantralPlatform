@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 from django_ckeditor_5.fields import CKEditor5Field
 
-from apps.utils.slug import *
+from apps.utils.slug import SlugModel, get_object_from_full_slug
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compressModelImage
 from apps.group.models import Group
@@ -30,7 +30,7 @@ COLORS = [
 ]
 
 
-class AbstractPost(models.Model):
+class AbstractPost(models.Model, SlugModel):
     publication_date = models.DateTimeField(
         verbose_name="Date de publication", default=timezone.now)
     title = models.CharField(
@@ -54,6 +54,10 @@ class AbstractPost(models.Model):
     def get_group(self) -> Group:
         return get_object_from_full_slug(self.group)
 
+    @property
+    def get_group_name(self) -> Group:
+        return get_object_from_full_slug(self.group).name
+
     def save(self, *args, **kwargs):
         # compression des images
         self.image = compressModelImage(
@@ -66,12 +70,20 @@ class AbstractPost(models.Model):
         return self.get_group.is_member(user)
 
 
+
 class Post(AbstractPost):
 
     def save(self, *args, **kwargs):
-        self.slug = f'post--{slugify(self.title)}-{self.publication_date.year}-{self.publication_date.month}-{self.publication_date.day}'
+        self.set_slug(
+            str(self.publication_date.year) + "-" + 
+            str(self.publication_date.month) + "-" + 
+            str(self.publication_date.day) + "-" + 
+            self.title
+        )
         super(Post, self).save(*args, **kwargs)
 
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
         return reverse('post:detail', args=[self.slug])
 

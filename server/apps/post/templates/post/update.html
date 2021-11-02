@@ -4,7 +4,7 @@
 
 {% include 'group/included/navbar_edit.html' with open='posts' %}
 
-<form method='POST'>
+<form method='POST' enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.media }}
   {{form|crispy}}

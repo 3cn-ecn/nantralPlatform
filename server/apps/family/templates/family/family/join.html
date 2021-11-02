@@ -12,7 +12,7 @@
     {% endif %}
     <br>
 
-    {% if is_member %}
+    {% if not can_join %}
         <p>Désolé, vous êtes déjà membre d'une autre famille, vous ne pouvez donc pas 
         rejoindre cette famille !</p>
     {% elif names_list %}

@@ -11,18 +11,16 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
 
-  server:
+  celery:
     build:
       context: ../
       dockerfile: deployment/containers/web/Dockerfile
-    expose:
-      - 8000
-    command: sh run_server.sh
+    command: celery -A apps.celery worker -l info
     volumes:
       - ../server:/var/app
-      - static_volume:/var/app/staticfiles/
     depends_on:
-      - database
+      - celery-beat
+      - redis
     environment:
       - DB_HOSTNAME
       - DB_PORT
@@ -36,7 +34,100 @@ services:
       - GITHUB_USER
       - GITHUB_TOKEN
       - MAPBOX_API_KEY
-      - TINY_API_KEY
+      - DISCORD_TOKEN
+      - DISCORD_CHANNEL_ID
+      - TEMPORARY_ACCOUNTS_DATE_LIMIT
+
+  celery-beat:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+    command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ../server:/var/app
+    depends_on:
+      - redis
+    environment:
+      - DB_HOSTNAME
+      - DB_PORT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_NAME
+      - S3_BUCKET
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
+      - GITHUB_USER
+      - GITHUB_TOKEN
+      - MAPBOX_API_KEY
+      - DISCORD_TOKEN
+      - DISCORD_CHANNEL_ID
+      - TEMPORARY_ACCOUNTS_DATE_LIMIT
+
+  workers-dashboard:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+    command: celery -A apps.celery --broker=redis://redis:6379/0 flower --port=5555
+    ports:
+      - 5555:5555
+    depends_on:
+      - server
+      - redis
+      - celery
+    environment:
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+      - DB_HOSTNAME
+      - DB_PORT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_NAME
+      - S3_BUCKET
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
+      - GITHUB_USER
+      - GITHUB_TOKEN
+      - MAPBOX_API_KEY
+      - DISCORD_TOKEN
+      - DISCORD_CHANNEL_ID
+      - TEMPORARY_ACCOUNTS_DATE_LIMIT
+
+  redis:
+    image: redis:latest
+    expose:
+      - "6379"
+
+  server:
+    build:
+      context: ../
+      dockerfile: deployment/containers/web/Dockerfile
+    expose:
+      - 8000
+    command: sh run_server.sh
+    volumes:
+      - ../server:/var/app
+      - static_volume:/var/app/staticfiles/
+    depends_on:
+      - database
+      - redis
+    environment:
+      - DB_HOSTNAME
+      - DB_PORT
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - DB_NAME
+      - S3_BUCKET
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
+      - GITHUB_USER
+      - GITHUB_TOKEN
+      - MAPBOX_API_KEY
+      - DISCORD_TOKEN
+      - DISCORD_CHANNEL_ID
+      - TEMPORARY_ACCOUNTS_DATE_LIMIT
 
   nginx:
     build: ./containers/nginx_http

@@ -3,6 +3,10 @@
 {% load file_url %}
 {% load video %}
 
+{% block head %}
+    <meta name="description" CONTENT="{{object.summary}} - {{object.name}} ({{object.alt_name}}) - Centrale Nantes">
+{% endblock %}
+
 {% block title %}{{ object.name }} - {% endblock %}
 
 {% block favicon %}
@@ -27,14 +31,16 @@
         <!-- logo -->
         {%if object.logo %}
             <div class="col-12 col-sm-3">
-                <div class="ratio ratio-1x1 logo-div mb-4">
-                    <img class="logo" src='{{object.logo|file_url}}'>
-                </div>
+                <a href="{{object.logo|file_url}}">
+                    <div class="ratio ratio-1x1 logo-div mb-4">
+                        <img class="logo" src="{{object.logo|file_url}}">
+                    </div>
+                </a>
             </div>
         {% endif %}
         <!-- description du club : nom, infos... -->
         <div class="col">
-            <h1>{% block object_name %}{{object.name}}{% endblock %}</h1>
+            {% block object_name %}<h1>{{object.name}}</h1>{% endblock %}
             <p>
             {% if request.user.is_authenticated %}
                 {% if is_member and is_admin %}
@@ -82,42 +88,11 @@
     {% endblock %}
 
     <!-- Events -->
-    {% if events %}
+    {% if has_events %}
         <br>   
         <h2>Évènements</h2>
         {% if request.user.is_authenticated %}
-            <div class="row">
-                {% for event in events %}
-                <a href="{{event.get_absolute_url}}" style='color:white' class="mb-1">
-                    <div class="card pt-0 bg-{{event.color}}" style="box-shadow: 1px 1px 7px #999">
-                      <div class="card-body">
-                        <h5 class="card-title" >{{event.title}} • {{event.date|date:'l d F'}} • Début: {{event.date|date:'H:i'}} • {{event.location}}</h5>
-                        <h6 class="card-subtitle mb-2">{{event.get_group.name}}</h6>
-                        <h6 class="card-subtitle mb-2">
-                          <div class="btn-group" role="group">
-                          <button type="button" class="btn btn-secondary disabled">{{event.get_number_participants}} <i class="fas fa-users"></i></button>
-                          {% if request.user.is_authenticated %}
-                              {%if is_participating %}
-                                  <a href='{% url "event:remove-participant" event.slug %}?redirect=home' class="btn btn-secondary" role="button">
-                                      <i class="fa fa-times" aria-hidden="true"></i> Je ne participe plus
-                                  </a>
-                              {% else %}
-                                  <a href='{% url "event:add-participant" event.slug %}?redirect=home' class="btn btn-secondary" role="button">
-                                    <i class="fas fa-user-plus"></i> Je participe
-                                  </a>
-                              {% endif %}
-                          {% endif %}
-                      </div>
-                    </h6>
-                        <p class="card-text" >{% autoescape off %}
-                          {{event.description | truncatewords_html:20}}
-                          {% endautoescape %}
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                {% endfor %}
-            </div>
+            <div id="root"></div>
         {%else%}
             <p>Veuillez vous connecter pour voir les évènements à venir.</p>
         {%endif%}
@@ -128,7 +103,7 @@
         <br>
         <h2>Annonces</h2>
         {% for post in posts %}
-        <a href="{{post.get_absolute_url}}" style='color:white;' class="mb-1">
+        <a href="{{post.get_absolute_url }}" style='color:white;' class="mb-1">
             <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
               <div class="card-body">
                 <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'l d F'}}</h5>
@@ -184,15 +159,7 @@
         <!-- Liste des membres -->
         <br />
         <h2>Membres</h2>
-        {% if request.user.is_authenticated %}
-            {% if members %}
-                {% include 'student/student_cards.html' with members=members %}
-            {%else%}
-                <p>Aucun membre pour l'instant... 😥</p>
-            {%endif%}
-        {% else %}
-            <p>Veuillez vous connecter pour voir les membres.</p>
-        {% endif %}
+        <div id=root2></div>
     {% endblock %}
 
     {# Ajout possible de contenus pour certaines pages #}
@@ -219,3 +186,22 @@
 
     <br>
 {% endblock %}
+
+{% block script %}
+<script>
+  const eventsApiUrl = "{% url 'event_api:list-all-group-events' object.full_slug %}";
+  const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
+  const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
+  const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
+  {% if '/club/' in request.path %}
+    const membersURL = "{% url 'club_api:list-club-members' %}?slug={{ object.slug }}";
+  {% elif '/liste/' in request.path %}
+    const membersURL = "{% url 'liste_api:list-liste-members' %}?slug={{ object.slug }}";
+  {% elif '/academic/' in request.path%}
+    const membersURL = "{% url 'academic_api:list-course-members' %}?id={{ object.id }}";
+  {% endif %}
+</script>
+<script src='{% static "js/eventsView.js" %}'></script>
+<script src='{% static "js/groupMembers.js" %}'></script>
+{% endblock %}
+

@@ -1,18 +1,18 @@
 from django.contrib import admin
-from .models import *
-
-# Register your models here.
-
+from .models import AnswerFamily, MembershipFamily, Family, AnswerMember, Option, QuestionMember, QuestionFamily, GroupQuestion, QuestionPage, Affichage
 
 #familles
 class AnswerFamilyInline(admin.TabularInline):
     model=AnswerFamily
     extra=0
+
 class MemberFamilyInline(admin.TabularInline):
     model=MembershipFamily
     extra=0
+
 class FamilyAdmin(admin.ModelAdmin):
-    inlines=[MemberFamilyInline, AnswerFamilyInline]
+    inlines=[AnswerFamilyInline]
+
 admin.site.register(Family, FamilyAdmin)
 
 
@@ -21,6 +21,7 @@ class AnswerMemberInline(admin.TabularInline):
     model=AnswerMember
     extra=0
 class MembershipFamilyAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'role']
     inlines=[AnswerMemberInline]
 admin.site.register(MembershipFamily, MembershipFamilyAdmin)
 

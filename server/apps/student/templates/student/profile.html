@@ -1,25 +1,85 @@
 {% extends 'base.html'%}
 {% load file_url %}
+{% load static %}
 
 {% block  content%}
+    <div class="row">
+    
+        {%if object.picture %}
+            <div class="col-12 col-sm-3">
+                <a href="{{object.picture|file_url}}">
+                    <div class="ratio ratio-1x1 logo-div mb-4">
+                        <img style="border-radius:100%;" class="logo" src='{{object.picture|file_url}}'>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
 
-    <h1>{{object.name }}</h1>
-    {% if object.picture %}
-        <img width="100" height="auto" src='{{object.picture|file_url}}'>
+        <div class="col">
+            <h1>{{object.name}}</h1>
+            <p>{{object.get_faculty_display}}
+                {% if object.get_path_display %}
+                - {{object.get_path_display}}
+                {% endif %}
+                <br>
+                Année d'arrivée à Centrale Nantes : {{object.promo}}
+            </p>
+            <p>
+            {% if request.user == object.user %}
+                <a class='btn btn-dark btn-sm' href="{% url 'student:update' request.user.student.pk %}">
+                    <i class="fa fa-edit"></i>
+                    Modifier mon profil
+                </a>
+            {% endif %}
+            </p>
+            {% include "sociallink/liste.html" with sociallinks=sociallinks%}
+        </div>
+
+    </div>
+
+    {% if colocs %}
+        <h2>Colocs</h2>
+        <p>
+        {% for membership in colocs %}
+            <a href="{{membership.group.get_absolute_url }}">{{ membership.group.name }} ({{membership.group.begin_date|date:'Y'}})</a><br/>
+        {% endfor %}
+        </p>
     {% endif %}
-    <p>{{object.get_faculty_display}} | {{object.get_path_display}}</p>
-    <p>Promotion entrante : {{object.promo}}</p>
 
-    <h2>Parcours scolaire</h2>
-    {% for course in courses%}
-        <p>{{course.when}} {{course.course.course_type}} <a href="{% url 'academic:course' course.id%}">{{course.course.name}}</a></p>
-    {% endfor %}
-
-    <h2>Clubs</h2>
-    {% for club in clubs %}
-        <a href='{{ club.group.get_absolute_url }}' class='card'>
-            {{club.group.name}}<br>
-            {{club.function}} | {{club.year}}
-        </a>
-    {% endfor %}
+    {% if courses or request.user == object.user %}
+        <h2>Formations suivies</h2>
+        <p>
+        {% for course in courses %}
+            {{course.year}} - <a href="{{ course.group.get_absolute_url }}">{{course.group.get_type_display}} : {{course.group.name}}</a><br/>
+        {% endfor %}
+            {% if request.user == object.user %}
+                <a href="{% url 'academic:index' %}">Ajouter une formation</a>
+            {% endif %}
+        </p>
+    {% endif %}
+    
+    {% if clubs %}
+        <h2>Clubs</h2>
+        <div class="grille">
+            {% for membership in clubs %}
+                <div class="grille-icon text-center" style="transform: rotate(0)">
+                    <a href="{{ membership.group.get_absolute_url }}" class="stretched-link">
+                        <div class="ratio ratio-1x1">
+                            {% if membership.group.logo %}
+                                <img src="{{ membership.group.logo|file_url }}" />
+                            {% else %}
+                                <img src="{% static 'img/logo.svg' %}" style="opacity: 0.3" />
+                            {% endif %}
+                        </div>
+                    </a>
+                    <p>
+                        {{ membership.group.name }}
+                        <br>
+                        <small class="text-secondary">{{ membership.function }}</small>
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {%endblock%}
+

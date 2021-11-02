@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls.base import reverse
-from datetime import date
+from django.core.cache import cache
+from django.utils import timezone
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
@@ -10,13 +11,20 @@ class Affichage(models.Model):
     phase = models.IntegerField(
         choices = [
             (0, 'Tout masquer'),
-            (1, 'Questionnaires Parrainage'),
-            (2, 'Chasse aux parrains'),
-            (3, 'Résultats Parrainage'),
+            (1, 'Questionnaires 2A+'),
+            (2, 'Questionnaires 1A et 2A+'),
+            (3, 'Soirée de parrainage'),
+            (4, 'Résultats du parrainage'),
+            (5, 'Questionnaires ITII'),
+            (6, 'Résultats ITII'),
         ],
         default=0
     )
-    res_itii = models.BooleanField("Afficher les résultats ITII", default=False)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        cache.set('family_phase', self.phase, 3600)
+    
 
 
 class Family(Group):
@@ -33,7 +41,7 @@ class Family(Group):
     
     def save(self, *args, **kwargs):
         # set the year
-        if not self.year: self.year = date.today().year
+        if not self.year: self.year = timezone.now().year
         super(Family, self).save(*args, **kwargs)
     
     def get_answers_dict(self):
@@ -42,9 +50,25 @@ class Family(Group):
             initial[f'question-{ans.question.pk}'] = ans.answer
         return initial
     
-    @property
+    def count_members2A(self) -> int:
+        nb_subscribed = self.memberships.filter(role='2A+').count()
+        # test if field is not None or is different to ""
+        if self.non_subscribed_members:
+            nb_non_subscribed = len(self.non_subscribed_members.split(','))
+        else:
+            nb_non_subscribed = 0
+        return nb_subscribed + nb_non_subscribed
+
+    # Don't make this a property, Django expects it to be a method.
+    # Making it a property can cause a 500 error (see issue #553).   
     def get_absolute_url(self):
         return reverse('family:detail', kwargs={'pk': self.pk})
+
+    def form_complete(self):
+        nb_done = self.answerfamily_set.all().count()
+        nb_tot = QuestionFamily.objects.all().count()
+        nb_members = self.count_members2A()
+        return (nb_done >= nb_tot and nb_members>=3 and nb_members<=7)
 
 
 class MembershipFamily(NamedMembership):
@@ -66,6 +90,14 @@ class MembershipFamily(NamedMembership):
         for ans in self.answermember_set.filter(question__page=page):
             initial[f'question-{ans.question.pk}'] = ans.answer
         return initial
+    
+    def form_complete(self):
+        nb_done = self.answermember_set.all().count()
+        nb_tot = QuestionMember.objects.all().count()
+        nb_fam_only = QuestionFamily.objects.filter(quota=100).count()
+        return (nb_done >= (nb_tot - nb_fam_only*int(self.role == '2A+')))
+
+
 
 
 class QuestionPage(models.Model):

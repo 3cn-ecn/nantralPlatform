@@ -1,4 +1,4 @@
-from datetime import date
+from django.utils import timezone
 from django import forms
 from django.conf import settings
 from django.utils.translation import gettext as _
@@ -18,7 +18,7 @@ def check_ecn_mail(mail: str):
 
 def check_ecn_mail_login(mail: str):
     """A wrapper around the login check to disable during periods where all emails can be used."""
-    if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= date.today():
+    if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
         return
     check_ecn_mail(mail)
 

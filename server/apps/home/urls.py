@@ -6,6 +6,12 @@ from .views import *
 app_name = 'home'
 
 urlpatterns = [
-    url('sugestions/', SuggestionView.as_view(), name='sugestions'),
+    path('sugestions/', SuggestionView.as_view(), name='sugestions'),
+    path('me/', currentUserPageView, name='me'),
+    path('my_coloc/', currentUserRoommatesView, name='my_coloc'),
     path('', HomeView.as_view(), name='home'),
+    path('404', handler404),
+    path('403', handler403),
+    path('413', handler413),
+    path('500', handler500),
 ]

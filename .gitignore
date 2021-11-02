@@ -81,12 +81,21 @@ celerybeat-schedule.*
 
 # Environments 
 .env 
+mailu.env
 .venv 
 env/ 
 venv/ 
 ENV/ 
 env.bak/ 
 venv.bak/ 
+
+# Config folders
+dav/
+dkim/
+certs/
+data/
+filter/
+redis/
 
 # mkdocs documentation 
 /site 
@@ -122,8 +131,8 @@ GitHub.sublime-settings
 
 # Node
 node_modules
-package-lock.json
 webpack-stats.json
+package-lock.json
 
 # MacOS
 .DS_Store
@@ -137,3 +146,6 @@ deployment/backups/*
 # Do not push compiled static js from front because it will be compiled by the server
 server/static/js/*.js
 server/static/upload/*
+
+# Do not push celerybeat db
+*/celerybeat-schedule

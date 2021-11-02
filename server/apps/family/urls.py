@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import *
+from .views import HomeFamilyView, ListFamilyJoinView, ListFamilyView, CreateFamilyView, DetailFamilyView, JoinFamilyView, UpdateFamilyView, QuestionnaryPageView, ItiiQuestionFamilyView
 
 # petite note : on n'utilise pas les urls des groupes ici
 # afin de masquer les noms des familles dans les urls
@@ -16,5 +16,6 @@ urlpatterns = [
     path('famille/<int:pk>', DetailFamilyView.as_view(), name='detail'),
     path('famille/<int:pk>/join', JoinFamilyView.as_view(), name='join'),
     path('famille/<int:pk>/edit', UpdateFamilyView.as_view(), name='update'),
+    path('famille/<int:pk>/question-itii', ItiiQuestionFamilyView.as_view(), name='itii-question'),
     path('questionnaire/<int:id>', QuestionnaryPageView.as_view(), name='questionnary'),
 ]
