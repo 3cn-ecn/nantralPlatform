@@ -2,7 +2,13 @@
 import { makeNiceDate } from "./utils";
 
 import { Member } from "./interfaces";
-import { h5Style, iconStyle, smallStyle } from "./styles";
+import {
+  h5Style,
+  iconStyle,
+  smallStyle,
+  centerWrapper,
+  textWrapper,
+} from "./styles";
 
 export function StudentCard(props): JSX.Element {
   const member: Member = props.member;
@@ -30,43 +36,44 @@ export function StudentCard(props): JSX.Element {
         <div className="row g-3">
           {editMode ? (
             <div className="col-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1rem"
-                height="1rem"
-                fill="currentColor"
-                className="bi bi-grip-vertical"
-                viewBox="0 0 1rem 1rem"
-                {...props.listeners}
-                {...props.attributes}
-              >
-                <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-              </svg>
+              <div style={centerWrapper}>
+                <i
+                  className="fas fa-bars"
+                  {...props.attributes}
+                  {...props.listeners}
+                ></i>
+              </div>
             </div>
           ) : (
             <></>
           )}
           <div className="col-3">
-            <div className="ratio ratio-1x1">
-              <img
-                // TODO: Enlever le nom de domaine ici
-                src={
-                  picture.includes("https://")
-                    ? picture
-                    : `https://nantral-platform.fr${picture}`
-                }
-                style={iconStyle}
-              />
+            <div style={centerWrapper}>
+              <div className="ratio ratio-1x1">
+                <img
+                  // TODO: Enlever le nom de domaine ici
+                  src={
+                    picture.includes("https://")
+                      ? picture
+                      : `https://nantral-platform.fr${picture}`
+                  }
+                  style={iconStyle}
+                />
+              </div>
             </div>
           </div>
           <div className="col text-start">
-            <h5 style={h5Style}>{member.student.name}</h5>
-            <span>{member.function}</span>
-            <br />
-            <small style={smallStyle}>
-              <i>{memberTimeSpan}</i>
-            </small>
-            <br />
+            <div style={textWrapper}>
+              <div>
+                <h5 style={h5Style}>{member.student.name}</h5>
+                <span>{member.function}</span>
+                <br />
+                <small style={smallStyle}>
+                  <i>{memberTimeSpan}</i>
+                </small>
+                <br />
+              </div>
+            </div>
           </div>
         </div>
       </a>

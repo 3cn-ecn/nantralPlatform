@@ -121,7 +121,10 @@ function Root(props): JSX.Element {
           </SortableContext>
           <DragOverlay>
             {activeID ? (
-              <StudentCard member={members.find((e) => e.id == activeID)} />
+              <StudentCard
+                member={members.find((e) => e.id == activeID)}
+                editMode={true}
+              />
             ) : null}
           </DragOverlay>{" "}
         </DndContext>
