@@ -38,12 +38,15 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@dnd-kit/core": "^4.0.1",
+    "@dnd-kit/sortable": "^5.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@turf/helpers": "^6.3.0",
+    "array-move": "^4.0.0",
     "axios": "^0.21.1",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-transform-imports": "^2.0.0",
@@ -66,6 +69,7 @@
     "react-map-gl": "^6.1.16",
     "react-router": "^5.2.1",
     "react-router-dom": "^5.2.1",
+    "react-sortable-hoc": "^2.0.0",
     "react-switch": "^6.0.0",
     "react-truncate": "^2.4.0",
     "style-loader": "^2.0.0",
