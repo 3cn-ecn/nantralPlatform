@@ -28,7 +28,7 @@ export function StudentCard(props): JSX.Element {
   } else {
     var memberTimeSpan =
       date_end === null
-        ? `Membre depuis le ${date_begin}`
+        ? `A rejoint le ${date_begin}`
         : `Membre du ${date_begin} au ${date_end}`;
   }
   return (
