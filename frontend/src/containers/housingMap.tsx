@@ -10,6 +10,7 @@ import { MapForm } from "./housingMap/mapForm";
 import { Pin } from "./housingMap/pin";
 import { ColocInfo } from "./housingMap/colocInfo";
 import { Map } from "./housingMap/map";
+import { CurrentColocInfo } from "./housingMap/currentColocInfo";
 
 import { getRoommates } from "./housingMap/utils";
 
@@ -99,6 +100,14 @@ function Root(props: RootProps): JSX.Element {
             status={colocathlonParticipantsOnly}
             handle={handleColocathlonParticipants}
           />
+          {colocathlonParticipantsOnly ? (
+            <CurrentColocInfo
+              colocName={props.CURRENT_COLOC}
+              colocUrl={props.CURRENT_COLOC_URL}
+            />
+          ) : (
+            <></>
+          )}
         </div>
       ) : (
         <></>
@@ -122,6 +131,8 @@ render(
     API_KEY={MAPBOX_TOKEN}
     API_HOUSING_URL={API_HOUSING_URL}
     PHASE_COLOCATHLON={PHASE_COLOCATHLON}
+    CURRENT_COLOC={CURRENT_COLOC}
+    CURRENT_COLOC_URL={CURRENT_COLOC_URL}
   />,
   document.getElementById("root")
 );
