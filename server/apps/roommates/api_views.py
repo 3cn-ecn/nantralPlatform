@@ -57,25 +57,27 @@ class RoommatesDetails(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        roommatesSlug = self.request.GET.get(
-            'slug')
-        roommates = [generics.get_object_or_404(Roommates, slug=roommatesSlug)]
-        serializer = self.serializer_class(roommates, many=True)
+        object_slug = self.request.GET.get('slug')
+        objects = [generics.get_object_or_404(Roommates, slug=object_slug)]
+        serializer = self.serializer_class(objects, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        roommates = generics.get_object_or_404(
+        object = generics.get_object_or_404(
             Roommates, slug=request.data.get("slug"))
-        if not roommates.colocathlon_agree:
+        if not object.colocathlon_agree:
             return Response(status=403)
         addOrDelete = int(request.data.get("addOrDelete"))
 
-        # addOrDelete == 1 -> Delete user
-        # addOrDelete == 0 -> Add user
+        # addOrDelete == 1 --> Delete user
+        # addOrDelete == 0 --> Add user
         if addOrDelete == 0:
-            if roommates.colocathlon_quota > roommates.colocathlon_participants.count():
-                roommates.colocathlon_participants.add(request.user.student)
+            if object.colocathlon_quota > object.colocathlon_participants.count() and \
+                    not Roommates.objects.filter(colocathlon_participants=request.user.student).exists():
+                object.colocathlon_participants.add(request.user.student)
                 return Response(status=200)
             return Response(status=403)
-        roommates.colocathlon_participants.remove(request.user.student)
-        return Response(status=200)
+        if Roommates.objects.filter(colocathlon_participants=request.user.student).exists():
+            object.colocathlon_participants.remove(request.user.student)
+            return Response(status=200)
+        return Response(status=500)
