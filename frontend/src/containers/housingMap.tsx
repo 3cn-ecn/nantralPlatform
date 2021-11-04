@@ -86,7 +86,12 @@ function Root(props: RootProps): JSX.Element {
   }, [data]);
 
   useEffect(() => {
-    getRoommates(props.API_HOUSING_URL, setColocs, setData);
+    getRoommates(
+      props.API_HOUSING_URL,
+      setColocs,
+      setData,
+      colocathlonParticipantsOnly
+    );
   }, []);
 
   return (

@@ -5,7 +5,7 @@ export async function getRoommates(
   api_housing_url: string,
   setColocs,
   setData,
-  colocathlonParticipants = false
+  colocathlonParticipants
 ): Promise<void> {
   axios
     .get(
