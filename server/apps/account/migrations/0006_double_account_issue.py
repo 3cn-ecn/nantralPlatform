@@ -18,7 +18,8 @@ def sort_user(u):
 def forwards_func(apps, schema_editor):
     User = apps.get_registered_model('auth', 'User')
     for user in User.objects.all():
-        if User.objects.filter(email=user.email).count() > 1:
+        relatedUsers = User.objects.filter(email=user.email)
+        if len(relatedUsers) > 1:
             l = list(User.objects.filter(email=user.email))
             l.sort(key= sort_user)
             list_to_delete = l[:-1]
