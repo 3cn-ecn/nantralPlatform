@@ -23,8 +23,13 @@ export function SortableStudentCard(props): JSX.Element {
     opacity: isDragging ? 0 : 100,
   };
   return (
-    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <StudentCard member={member} />
+    <div ref={setNodeRef} style={style}>
+      <StudentCard
+        member={member}
+        editMode={true}
+        listeners={listeners}
+        attributes={attributes}
+      />
     </div>
   );
 }
