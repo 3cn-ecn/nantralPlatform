@@ -7,21 +7,16 @@ import {
   DndContext,
   closestCenter,
   useSensor,
-  DragOverlay,
   useSensors,
   DragEndEvent,
   MouseSensor,
   TouchSensor,
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { arrayMoveImmutable } from "array-move";
 
 import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
 import { Member } from "./groupMembers/interfaces";
-import { StudentCard } from "./groupMembers/studentCard";
 import { SortableStudentCard } from "./editGroupMembers/sortableStudentCard";
 import { membersSort } from "./editGroupMembers/utils";
 
@@ -107,7 +102,7 @@ function Root(props): JSX.Element {
         >
           <SortableContext
             items={members.map((e) => e.id.toString())}
-            strategy={verticalListSortingStrategy}
+            strategy={rectSortingStrategy}
           >
             {members.map((member: Member, index: number) => {
               return (
@@ -119,14 +114,6 @@ function Root(props): JSX.Element {
               );
             })}
           </SortableContext>
-          <DragOverlay>
-            {activeID ? (
-              <StudentCard
-                member={members.find((e) => e.id == activeID)}
-                editMode={true}
-              />
-            ) : null}
-          </DragOverlay>{" "}
         </DndContext>
       ) : (
         "Aucun membre pour l'instant... 😥"

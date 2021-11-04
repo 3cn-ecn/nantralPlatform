@@ -20,16 +20,17 @@ export function SortableStudentCard(props): JSX.Element {
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-    opacity: isDragging ? 0 : 100,
+    //opacity: isDragging ? 0 : 100,
+    zIndex: isDragging ? 1000 : "auto",
   };
   return (
-    <div ref={setNodeRef} style={style}>
-      <StudentCard
-        member={member}
-        editMode={true}
-        listeners={listeners}
-        attributes={attributes}
-      />
-    </div>
+    <StudentCard
+      member={member}
+      editMode={true}
+      listeners={listeners}
+      attributes={attributes}
+      sortStyle={style}
+      newRef={setNodeRef}
+    />
   );
 }
