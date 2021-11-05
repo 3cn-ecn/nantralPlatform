@@ -50,4 +50,16 @@ export interface RootProps {
   API_KEY: string;
   API_HOUSING_URL: string;
   PHASE_COLOCATHLON: number;
+  CURRENT_COLOC: string;
+  CURRENT_COLOC_URL: string;
+}
+
+export interface ColocathlonSwitchProps {
+  status: boolean;
+  handle: (any) => void;
+}
+
+export interface CurrentColocInfoProps {
+  colocName: string;
+  colocUrl: string;
 }

@@ -54,3 +54,9 @@ export const colocathlonSwitchElementStyle: CSSProperties = {
   verticalAlign: "middle",
   paddingTop: "0.4rem",
 };
+
+export const currentColocInfoStyles: CSSProperties = {
+  display: "flex",
+  justifyContent: "flex-end",
+  alignItems: "flex-end",
+};

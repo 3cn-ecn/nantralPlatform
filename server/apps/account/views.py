@@ -106,8 +106,11 @@ class AuthView(FormView):
 
     def get(self, request):
         if request.user.is_authenticated:
+            # we send back the user to where he wanted to go or to home page
+            if self.request.GET.get('next'):
+                return redirect(self.request.GET.get('next'))
             user = request.user
-            message = f'Vous etes déjà connecté en tant que {user.first_name.title()}.'
+            message = f'Vous êtes déjà connecté en tant que {user.first_name.title()}.'
             messages.warning(request, message)
             return redirect('home:home')
         else:

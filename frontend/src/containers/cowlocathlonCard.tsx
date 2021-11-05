@@ -53,7 +53,7 @@ function Root(props: RootProps): JSX.Element {
             API_URL={API_URL}
             ROOMMATES_SLUG={ROOMMATES_SLUG}
             isParticipating={
-              roommates.colocathlon_participants.filter((e) => e.id === USER_ID)
+              roommates.colocathlon_participants.filter((e) => e.user === USER_ID)
                 .length > 0
             }
             participants={roommates.colocathlon_participants}
@@ -84,7 +84,7 @@ function Root(props: RootProps): JSX.Element {
           API_URL={API_URL}
           ROOMMATES_SLUG={ROOMMATES_SLUG}
           isParticipating={
-            roommates.colocathlon_participants.filter((e) => e.id === USER_ID)
+            roommates.colocathlon_participants.filter((e) => e.user === USER_ID)
               .length > 0
           }
           participants={roommates.colocathlon_participants}
