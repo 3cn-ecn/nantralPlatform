@@ -8,16 +8,16 @@ export function CurrentColocInfo(props: CurrentColocInfoProps) {
 
   if (colocName === "") {
     return (
-      <div className="col" style={currentColocInfoStyles}>
-        <h5>Tu n'es inscrit.e à aucune coloc. Choisis-en une sur la carte!</h5>
+      <div className="col-12 col-sm-6" style={currentColocInfoStyles}>
+        <p className="mb-0">Tu n'es inscrit·e à aucune coloc. Choisis-en une sur la carte !</p>
       </div>
     );
   }
   return (
-    <div className="col" style={currentColocInfoStyles}>
-      <h5>
-        Tu es inscrit.e à <a href={colocUrl}>{colocName}</a>
-      </h5>
+    <div className="col-12 col-sm-6" style={currentColocInfoStyles}>
+      <p className="mb-0">
+        Tu es inscrit·e à <a href={colocUrl}>{colocName}</a>
+      </p>
     </div>
   );
 }
