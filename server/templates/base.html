@@ -28,10 +28,13 @@
 	
 	<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
 		<div class="container">
-			<a class="navbar-brand" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;">
-				<img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
-				Nantral Platform.
-			</a>
+			<div class="navbar-brand me-0">
+				<div id="goBackButton" class="d-inline-block"></div>
+				<a class="navbar-brand" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;">
+					<img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
+					Nantral Platform.
+				</a>
+			</div>
 			{% block navbar %}
 				{% if request.user.is_authenticated %}
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -144,6 +147,7 @@
 	</div>
 
 </body>
+<script src='{% static "js/goBackButton.js" %}'></script>
 {% block script %}
 {% endblock %}
 </html>

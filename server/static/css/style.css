@@ -58,6 +58,10 @@ table.table-sort th {
   }
 }
 
+#goBackButton:hover {
+  cursor: pointer;
+}
+
 /* MODULE DE GRILLE */
 /* ---------------- */
 
