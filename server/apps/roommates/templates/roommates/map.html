@@ -17,6 +17,11 @@
     position: relative;
     top: 50%;
   }
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 </style>
 
 {% endblock %} 
@@ -24,7 +29,13 @@
 {% block title %}Carte des Colocs - {% endblock %}
 
 {% block content%}
-<div id="root"></div>
+<div id="root">
+  <div class="loader">
+    <div class="spinner-border loader" style="height:75px!important; width:75px!important"role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+</div>
 
 <a class='btn btn-primary mt-3' href="{% url 'roommates:housing-list' %}">Voir la liste</a>
 <a class='btn btn-primary mt-3' href="{% url 'roommates:create-housing' %}">Ajouter ma coloc</a>

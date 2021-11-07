@@ -9,11 +9,25 @@
   Annuaire, évènements et services dédiés aux étudiant·e·s de Centrale Nantes.
 </div>
 
+<style>
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+
 <br />
 
 <div class="events" style="clear:left">
     <h2>Évènements à venir</h2>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loader">
+        <div class="spinner-border loader" style="height:75px!important; width:75px!important"role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+    </div>
     <h2>Dernières annonces</h2>
       {% for post in posts %}
       <a href="{{post.get_absolute_url }}" style='color:white;' class="mb-1">
