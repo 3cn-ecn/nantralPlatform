@@ -36,8 +36,8 @@ function Root(props: RootProps): JSX.Element {
     useState(colocathlonCookieValue);
 
   const handleColocathlonParticipants = (e: boolean) => {
-    setCookie("colocathlon-cookie", e);
     setColocathlonParticipantsOnly(e);
+    setCookie("colocathlon-cookie", e);
   };
 
   const mapRef = useRef(null);
