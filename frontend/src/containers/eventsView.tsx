@@ -42,11 +42,7 @@ function Root(props: APIUrls): JSX.Element {
   }, []);
 
   if (isLoading) {
-    return (
-      <div style={spinnerDivStyle}>
-        <Spinner animation="border" role="status" style={spinnerStyle} />
-      </div>
-    );
+    return (<></>);
   }
 
   return (

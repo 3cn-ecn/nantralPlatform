@@ -25,13 +25,7 @@ class HousingView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        colocathlonParticipants = int(self.request.GET.get(
-            'colocathlonParticipants'))
         now = timezone.now()
-        if colocathlonParticipants == 1:
-            query = Housing.objects.filter((
-                Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | Q(roommates__members=None)) & Q(roommates__colocathlon_agree=True)).distinct()
-            return query
         query = Housing.objects.filter(
             Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | Q(roommates__members=None)).distinct()
         return query
