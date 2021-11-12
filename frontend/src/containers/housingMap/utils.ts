@@ -4,15 +4,10 @@ import { Housing } from "./interfaces";
 export async function getRoommates(
   api_housing_url: string,
   setColocs,
-  setData,
-  colocathlonParticipants
+  setData
 ): Promise<void> {
   axios
-    .get(
-      `${api_housing_url}?colocathlonParticipants=${
-        colocathlonParticipants ? 1 : 0
-      }`
-    )
+    .get(api_housing_url)
     .then((res) => {
       // For some reason, doubles Axios roommates which have more than one inhabitant,
       // so we have to do this mess to filter everything.

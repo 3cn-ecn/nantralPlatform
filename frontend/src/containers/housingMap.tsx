@@ -16,7 +16,7 @@ import { CurrentColocInfo } from "./housingMap/currentColocInfo";
 import { getRoommates } from "./housingMap/utils";
 
 function Root(props: RootProps): JSX.Element {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Housing[]>([]);
   const [colocs, setColocs] = useState([]);
   const [viewport, setViewPort] = useState({
     latitude: 47.21784689284845,
@@ -36,15 +36,17 @@ function Root(props: RootProps): JSX.Element {
     useState(colocathlonCookieValue);
 
   const handleColocathlonParticipants = (e: boolean) => {
-    setCookie("colocathlon-cookie", e);
-    getRoommates(props.API_HOUSING_URL, setColocs, setData, e);
     setColocathlonParticipantsOnly(e);
+    setCookie("colocathlon-cookie", e);
   };
 
   const mapRef = useRef(null);
 
   const markers = useMemo(() => {
-    return data.map((housing: Housing) => (
+    let housings = data.filter(
+      (e) => !colocathlonParticipantsOnly || e.roommates.colocathlon_agree
+    );
+    return housings.map((housing: Housing) => (
       <Marker
         key={housing.longitude}
         longitude={housing.longitude}
@@ -83,15 +85,10 @@ function Root(props: RootProps): JSX.Element {
         />
       </Marker>
     ));
-  }, [data]);
+  }, [data, colocathlonParticipantsOnly]);
 
   useEffect(() => {
-    getRoommates(
-      props.API_HOUSING_URL,
-      setColocs,
-      setData,
-      colocathlonParticipantsOnly
-    );
+    getRoommates(props.API_HOUSING_URL, setColocs, setData);
   }, []);
 
   return (
@@ -102,7 +99,9 @@ function Root(props: RootProps): JSX.Element {
         </div>
         <MapForm
           colocs={colocs}
-          data={data}
+          data={data.filter(
+            (e) => !colocathlonParticipantsOnly || e.roommates.colocathlon_agree
+          )}
           setViewPort={setViewPort}
           setPopUpinfo={setPopUpinfo}
         />

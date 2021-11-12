@@ -5,6 +5,13 @@
 
 {% block head %}
     <meta name="description" CONTENT="Découvrez les clubs & associations de Centrale Nantes ! BDE, BDA, BDS... tous les clubs sont référencés !">
+		<style>
+			.loader {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+		</style>
 {% endblock %}
 
 {% block title %}Clubs & Assos - {% endblock %}
@@ -21,7 +28,14 @@
 	</div>
 	<br />
 
-	<div id="root"></div>
+	<h2>Mes Clubs et Assos</h2>
+	<div id="root">
+		<div class="loader">
+			<div class="spinner-border loader" style="height:75px!important; width:75px!important"role="status">
+				<span class="sr-only"></span>
+			</div>
+		</div>
+	</div>
 
 	{% cache None club_list %}
 		{% for key, value in club_list.items %}
