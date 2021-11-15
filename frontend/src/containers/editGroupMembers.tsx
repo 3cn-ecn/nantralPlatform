@@ -17,7 +17,7 @@ import { arrayMoveImmutable } from "array-move";
 
 import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
 import { Member } from "./groupMembers/interfaces";
-import { SortableStudentCard } from "./editGroupMembers/sortableStudentCard";
+import { SortableStudentCard } from "./groupMembers/sortableStudentCard";
 import { membersSort } from "./editGroupMembers/utils";
 
 function Root(props): JSX.Element {

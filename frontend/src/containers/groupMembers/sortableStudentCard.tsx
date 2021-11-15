@@ -3,8 +3,8 @@
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
 
-import { Member } from "../groupMembers/interfaces";
-import { StudentCard } from "../groupMembers/studentCard";
+import { Member } from "./interfaces";
+import { StudentCard } from "./studentCard";
 
 export function SortableStudentCard(props): JSX.Element {
   let member: Member = props.member;

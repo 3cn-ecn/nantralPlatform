@@ -17,8 +17,8 @@ import axios from "axios";
 
 import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
 import { Member } from "./groupMembers/interfaces";
-import { EditGroupMembersSwitch } from "./groupMembers/editGroupMembersSwitch";
-import { SortableStudentCard } from "./editGroupMembers/sortableStudentCard";
+import { EditGroupMembersSwitch } from "./groupMembers/groupMembersEditSwitch";
+import { SortableStudentCard } from "./groupMembers/sortableStudentCard";
 import { StudentCard } from "./groupMembers/studentCard";
 import { sendNewOrder } from "./groupMembers/utils";
 
