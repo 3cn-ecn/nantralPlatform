@@ -54,12 +54,14 @@ class ListClubMembersAPIView(APIView):
         editMode = request.data.get("editMode")
         # editMode == 1 -> Edit the order of the members
         # editMode == 2 -> Edit a member
+        # editMode == 3 -> Delete a member
         if editMode == 1:
             newOrderedMembers = request.data.get("orderedMembers")
             for member in newOrderedMembers:
                 NamedMembershipClub.objects.filter(
                     id=member.get("id")).update(order=member.get("order"))
             return HttpResponse(status=200)
+
         elif editMode == 2:
             id = request.data.get("id")
             role = request.data.get("role")
@@ -70,4 +72,9 @@ class ListClubMembersAPIView(APIView):
             admin = request.data.get("admin")
             NamedMembershipClub.objects.filter(
                 id=id).update(function=role, admin=admin, date_begin=beginDate, date_end=endDate)
+            return HttpResponse(status=200)
+
+        elif editMode == 3:
+            id = request.data.get("id")
+            NamedMembershipClub.objects.get(id=id).delete()
             return HttpResponse(status=200)

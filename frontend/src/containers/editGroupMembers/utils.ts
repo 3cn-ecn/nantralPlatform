@@ -24,7 +24,7 @@ export function updateMember(
   setIsUpdateLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setMembers: React.Dispatch<React.SetStateAction<Member[]>>
-) {
+): void {
   setIsUpdateLoading(true);
   axios
     .post(membersUrl, {
@@ -46,6 +46,39 @@ export function updateMember(
     })
     .catch((e) => {
       console.error("Le membre n'a pas pu être mis à jour.");
+    })
+    .finally(() => {
+      setIsUpdateLoading(false);
+      handleClose();
+      getMembers(membersUrl, setMembers, setIsLoading);
+    });
+}
+
+export function deleteMember(
+  membersUrl: string,
+  member: Member,
+  handleClose: () => void,
+  setIsUpdateLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setMembers: React.Dispatch<React.SetStateAction<Member[]>>
+): void {
+  setIsUpdateLoading(true);
+  axios
+    .post(membersUrl, {
+      editMode: 3,
+      id: member.id,
+    })
+    .then((resp) => {
+      if (resp.status !== 200) {
+        console.error(
+          "Le membre n'a pas pu être supprimé.",
+          "ERR:",
+          resp.status
+        );
+      }
+    })
+    .catch((e) => {
+      console.error("Le membre n'a pas pu être supprimé.");
     })
     .finally(() => {
       setIsUpdateLoading(false);

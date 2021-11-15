@@ -56,6 +56,7 @@ export async function getMembers(
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setIsAuthorized: React.Dispatch<React.SetStateAction<boolean>> = null
 ): Promise<void> {
+  setIsLoading(true);
   await fetch(membersURL)
     .then((resp) => {
       if (resp.status === 403) {

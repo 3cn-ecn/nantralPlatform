@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 
 import { EditGroupMembersModalProps } from "./interfaces";
-import { updateMember } from "./utils";
+import { updateMember, deleteMember } from "./utils";
 
 export function EditGroupMembersModal(
   props: EditGroupMembersModalProps
@@ -108,7 +108,21 @@ export function EditGroupMembersModal(
       </Modal.Body>
 
       <Modal.Footer>
-        <Button variant="danger">Supprimer</Button>
+        <Button
+          variant="danger"
+          onClick={() =>
+            deleteMember(
+              membersURL,
+              selectedMember,
+              handleClose,
+              setIsUpdateLoading,
+              setIsLoading,
+              setMembers
+            )
+          }
+        >
+          Supprimer
+        </Button>
       </Modal.Footer>
     </Modal>
   );
