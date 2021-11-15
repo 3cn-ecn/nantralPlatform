@@ -41,6 +41,7 @@
         <!-- description du club : nom, infos... -->
         <div class="col">
             {% block object_name %}<h1>{{object.name}}</h1>{% endblock %}
+            
             <p>
             {% if request.user.is_authenticated %}
                 {% if is_member and is_admin %}
@@ -71,7 +72,14 @@
                 {% endif %}
                 {% if is_admin %}
                     <a href='{%url object.app|add:":update" object.slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
-                {%endif%}
+                {% endif %}
+                    <button class='btn btn-dark btn-sm'>
+                    {% if subscribed %}
+                        <i class="far fa-bell-slash"></i> Se désabonner
+                    {% else %}
+                        <i class="fas fa-bell"></i> S'abonner
+                    {% endif %}
+                </button>
             {% endif %}
             </p>
             {% block infos %}

@@ -61,6 +61,9 @@ class Notification(models.Model):
         """Ajouter tous les utilisateurs dans les destinataires"""
         all_users = Student.objects.all()
         self.receivers.add(all_users)
+    
+    def __str__(self):
+        return f'\'{self.title}\' de {self.group}'
 
 
 

@@ -18,6 +18,7 @@ from apps.group.models import Group
 from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
+from apps.notification.models import Subscription
 
 from .forms import *
 
@@ -36,7 +37,7 @@ class BaseDetailGroupView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        group = context['object']
+        group = self.object
         # infos
         context['sociallinks'] = SocialLink.objects.filter(
             slug=group.full_slug)
@@ -64,6 +65,9 @@ class BaseDetailGroupView(DetailView):
         # admin
         context['is_admin'] = group.is_admin(self.request.user)
         context['admin_req_form'] = AdminRightsRequestForm()
+        context['subscribed'] = Subscription.objects.filter(
+            student=self.request.user.student, 
+            group = group.full_slug).exists()
         return context
 
 

@@ -5,6 +5,7 @@ from datetime import date
 from django.core.cache import cache
 
 from apps.club.models import BDX
+from apps.notification.models import ReceivedNotification
 from apps.family.utils import read_phase
 
 
@@ -24,4 +25,7 @@ def navbar_context(request):
             show = False
     else:
         show = (phase != 0)
-    return {'navbar_bdx': bdx, 'navbar_family_show': show}
+    # notifications
+    notifs = ReceivedNotification.objects.filter(student=request.user.student, seen=False).select_related('notification')
+    print(notifs)
+    return {'navbar_bdx': bdx, 'navbar_family_show': show, 'notifications': notifs}
