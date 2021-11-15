@@ -75,14 +75,9 @@ function Root(props): JSX.Element {
     if (active.id !== over.id) {
       let oldIndex = members.findIndex((e) => e.id === parseInt(active.id));
       let newIndex = members.findIndex((e) => e.id === parseInt(over.id));
-      let newMembers = arrayMoveImmutable(members, oldIndex, newIndex).map(
-        (e, i) => {
-          e.order = i;
-          return e;
-        }
-      );
+      let newMembers = arrayMoveImmutable(members, oldIndex, newIndex);
+      sendNewOrder(newMembers, members, props.membersURL);
       setMembers(newMembers);
-      sendNewOrder(newMembers, props.membersURL);
     }
   };
 

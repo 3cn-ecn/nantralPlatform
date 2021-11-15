@@ -12,12 +12,24 @@ export function makeNiceDate(date: string): string {
   return dayjs(date, "YYYY-MM-DD").format("D MMMM YYYY");
 }
 
-export function sendNewOrder(orderedMembers: Member[], membersURL: string) {
+export function sendNewOrder(
+  orderedMembers: Member[],
+  unorderedMembers: Member[],
+  membersURL: string
+) {
+  let membersToUpdate = [];
+  console.log(orderedMembers);
+  for (let i = 0; i < orderedMembers.length; i++) {
+    if (unorderedMembers[i].id !== orderedMembers[i].id) {
+      membersToUpdate.push({
+        id: orderedMembers[i].id,
+        order: orderedMembers[i].order,
+      });
+    }
+  }
   axios
     .post(membersURL, {
-      orderedMembers: orderedMembers.map((e, i) => {
-        return { id: e.id, order: e.order };
-      }),
+      orderedMembers: membersToUpdate,
     })
     .then((resp) => {
       console.log(resp);
