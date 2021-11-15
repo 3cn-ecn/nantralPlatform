@@ -23,9 +23,6 @@ import { membersSort } from "./editGroupMembers/utils";
 function Root(props): JSX.Element {
   const [members, setMembers] = useState<Member[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthorized, setIsAuthorized] = useState(true);
-
-  const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   useEffect(() => {
     async function getMembers(): Promise<void> {
@@ -33,7 +30,6 @@ function Root(props): JSX.Element {
         .then((resp) => {
           if (resp.status === 403) {
             setMembers([]);
-            setIsAuthorized(false);
           }
           resp.json().then((data: Member[]) => {
             setMembers(
@@ -62,49 +58,34 @@ function Root(props): JSX.Element {
     );
   }
 
-  if (!isAuthorized) {
-    return <p>Veuillez vous connecter pour voir les membres.</p>;
-  }
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (active.id !== over.id) {
-      let oldIndex = members.findIndex((e) => e.id === parseInt(active.id));
-      let newIndex = members.findIndex((e) => e.id === parseInt(over.id));
-      let newMembers = arrayMoveImmutable(members, oldIndex, newIndex);
-      setMembers(
-        newMembers.map((e, i) => {
-          e.order = i;
-          return e;
-        })
-      );
-    }
-  };
-
   return (
-    <div className="row g-3">
+    <div className="table-responsive">
       {members.length > 0 ? (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={members.map((e) => e.id.toString())}
-            strategy={rectSortingStrategy}
-          >
-            {members.map((member: Member, index: number) => {
-              return (
-                <SortableStudentCard
-                  member={member}
-                  key={member.id}
-                  index={index}
-                />
-              );
-            })}
-          </SortableContext>
-        </DndContext>
+        <table className="table table-hover table-sm">
+          <thead>
+            <tr>
+              <th scope="col">NOM</th>
+              <th scope="col" className="d-none d-sm-table-cell">
+                Membre depuis
+              </th>
+              <th scope="col" className="d-none d-sm-table-cell">
+                Role
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {members.map((e, i) => (
+              <tr style={{ transform: "rotate(0)" }} key={i}>
+                <td>
+                  <a href="/student/152/" className="stretched-link"></a>
+                  {e.student.name}
+                </td>
+                <td className="d-none d-sm-table-cell">{e.date_begin}</td>
+                <td className="d-none d-sm-table-cell">{e.function}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       ) : (
         "Aucun membre pour l'instant... 😥"
       )}
