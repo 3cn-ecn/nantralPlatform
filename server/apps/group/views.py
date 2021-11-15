@@ -69,8 +69,10 @@ class BaseDetailGroupView(DetailView):
             student=self.request.user.student, 
             group = group.full_slug).exists()
         context['ariane'] = [
-            {'target': group.app + ":index", 'label': group.modelName.title()},
-            {'target': group.app + ":detail", 'label': group.name},
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.modelName.title()
+            }
         ]
         return context
 
@@ -138,9 +140,20 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = self.get_object()
+        group = self.get_object()
         UpdateForm = UpdateGroupForm(context['object'])
         if UpdateForm:
             context['form'] = UpdateForm(instance=context['object'])
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.modelName.title()
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+        ]
         return context
 
     def post(self, request, **kwargs):

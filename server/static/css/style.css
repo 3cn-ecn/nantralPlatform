@@ -49,6 +49,12 @@ table.table-sort th {
 .navbar .navbar-nav .nav-item.dropdown > a:hover {
   background-color: #eee;
 }
+.navbar-brand {
+  margin-right: 0.5rem;
+}
+.navbar-brand i {
+  margin-right: 0.5rem;
+}
 /*
 @media all and (min-width: 992px) {
   .navbar .nav-item .dropdown-menu {

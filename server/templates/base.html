@@ -34,6 +34,12 @@
 					<img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
 					Nantral Platform.
 				</a>
+				{% for link in ariane %}
+					<i class="fas fa-angle-right"></i>
+					<a class="navbar-brand" href="{{ link.target }}" style="font: 'Heebo'; font-weight: 900;">
+						{{ link.label }}
+					</a>
+				{% endfor %}
 			</div>
 			<ul class="navbar-nav ml-auto me-0">
 				<li class="nav-item dropdown">
@@ -41,32 +47,37 @@
 						<img src='{% static "/icons/menu.png" %}' width="30" height="30" class="d-inline-block align-top" alt="menu" loading="lazy">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" role="menu">
-						<li>
-							<a class="dropdown-item" href="{% url 'home:home' %}">Actualités</a>
-						</li>
-						{% if navbar_family_show %}
-						<li>
-							<a class="dropdown-item" href="{% url 'family:home' %}">Parrainage</a>
-						</li>
-						{% endif %}
-						<li>
-							<a class="dropdown-item" href="{% url 'club:index' %}">Clubs & Assos</a>
-						</li>
+						<li><a class="dropdown-item" href="{% url 'home:home' %}">Posts et Évènements</a></li>
+						<li><a class="dropdown-item" href="{% url 'club:index' %}">Clubs & Assos</a></li>
 						<li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
-						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
-						<li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
 						<li><a class="dropdown-item" href="{% url 'liste:index' %}">Listes BDX</a></li>
-						<li><a class="dropdown-item" href="{% url 'academic:index' %}">Formations</a></li>
+						{% if navbar_family_show %}
+							<li><a class="dropdown-item" href="{% url 'family:home' %}">Parrainage</a></li>
+						{% endif %}
+						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
+						<li><a class="dropdown-item" href="{% url 'student:list' %}">Annuaire étudiant</a></li>
+						<li><a class="dropdown-item" href="{% url 'academic:index' %}">Cours et Formations</a></li>
 					</ul>
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<img src='{% static "/icons/notification_bell.png" %}' width="30" height="30" class="d-inline-block align-top" alt="notifications" loading="lazy">
 					</a>
-					<ul class="dropdown-menu dropdown-menu-end" role="menu">
-						{% for bdx in navbar_bdx %}
-						<li><a class="dropdown-item" href="{{ bdx.get_absolute_url }}">{{ bdx.name }}</a></li>
-						{% endfor %}
+					<ul class="dropdown-menu dropdown-menu-end" role="menu" id="notification-menu">
+						<div class="toast-container">
+							{% for n in notifications.all %}
+								<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+									<div class="toast-header">
+										<strong class="me-auto">{{n.notification.title}}</strong>
+										<small class="text-muted">{{n.notification.date}}</small>
+										<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+									</div>
+									<div class="toast-body">
+										{{n.notification.body}}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
 					</ul>
 				</li>
 				<li class="nav-item dropdown">
@@ -74,15 +85,19 @@
 						<img src='{% static "/icons/account.png" %}' width="30" height="30" class="d-inline-block align-top" alt="compte personnel" loading="lazy">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" role="menu">
-						{% if request.user.student.pk %}
-							<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
-							<li><a class="dropdown-item" href="{% url 'student:update' request.user.student.pk %}"><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
-							<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
+						{% if request.user.is_authenticated %}
+							{% if request.user.student.pk %}
+								<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
+								<li><a class="dropdown-item" href="{% url 'student:update' request.user.student.pk %}"><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
+								<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
+							{% else %}
+								<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
+							{% endif  %}
+							<li><hr class="dropdown-divider"></li>
+							<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
 						{% else %}
-							<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
-						{% endif  %}
-						<li><hr class="dropdown-divider"></li>
-						<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
+							<li><a class="dropdown-item" href="{% url 'account:login' %}"><i class="fas fa-sign-in-alt"></i>  Connexion</a></li>
+						{% endif %}
 					</ul>
 				</li>
 			</ul>
