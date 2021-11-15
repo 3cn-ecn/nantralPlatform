@@ -6,8 +6,8 @@ import axios from "axios";
 
 import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
 import { Member } from "./groupMembers/interfaces";
-import { membersSort } from "./editGroupMembers/utils";
 import { EditGroupMembersModal } from "./editGroupMembers/editGroupMembersModal";
+import { getMembers } from "./groupMembers/utils";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -19,29 +19,7 @@ function Root(props): JSX.Element {
   const [selectedMember, setSelectedMember] = useState<Member>(undefined);
 
   useEffect(() => {
-    async function getMembers(): Promise<void> {
-      await fetch(props.membersURL)
-        .then((resp) => {
-          if (resp.status === 403) {
-            setMembers([]);
-          }
-          resp.json().then((data: Member[]) => {
-            setMembers(
-              data.sort(membersSort).map((e, i) => {
-                if (e.order === 0) {
-                  e.order = i + 1;
-                }
-                return e;
-              })
-            );
-          });
-        })
-        .catch((err) => {
-          setMembers([]);
-        })
-        .finally(() => setIsLoading(false));
-    }
-    getMembers();
+    getMembers(props.membersURL, setMembers, setIsLoading);
   }, []);
 
   if (isLoading) {

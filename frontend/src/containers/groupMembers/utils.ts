@@ -1,6 +1,8 @@
 ﻿import { Member } from "./interfaces";
 import axios from "axios";
 
+import { membersSort } from "../editGroupMembers/utils";
+
 var dayjs = require("dayjs");
 require("dayjs/locale/fr");
 dayjs.locale("fr");
@@ -46,4 +48,28 @@ export function sendNewOrder(
       console.error("L'ordre des membres n'a pas pu être mis à jour.");
     })
     .finally(() => setIsRefreshingSort(false));
+}
+
+export async function getMembers(
+  membersURL: string,
+  setMembers: React.Dispatch<React.SetStateAction<Member[]>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsAuthorized: React.Dispatch<React.SetStateAction<boolean>> = null
+): Promise<void> {
+  await fetch(membersURL)
+    .then((resp) => {
+      if (resp.status === 403) {
+        setMembers([]);
+        if (setIsAuthorized) {
+          setIsAuthorized(true);
+        }
+      }
+      resp.json().then((data: Member[]) => {
+        setMembers(data);
+      });
+    })
+    .catch((err) => {
+      setMembers([]);
+    })
+    .finally(() => setIsLoading(false));
 }

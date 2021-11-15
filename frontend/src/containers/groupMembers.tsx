@@ -22,6 +22,7 @@ import { EditGroupMembersSwitch } from "./groupMembers/groupMembersEditSwitch";
 import { SortableStudentCard } from "./groupMembers/sortableStudentCard";
 import { StudentCard } from "./groupMembers/studentCard";
 import { sendNewOrder } from "./groupMembers/utils";
+import { getMembers } from "./groupMembers/utils";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -40,23 +41,7 @@ function Root(props): JSX.Element {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   useEffect(() => {
-    async function getMembers(): Promise<void> {
-      await fetch(props.membersURL)
-        .then((resp) => {
-          if (resp.status === 403) {
-            setMembers([]);
-            setIsAuthorized(false);
-          }
-          resp.json().then((data) => {
-            setMembers(data);
-          });
-        })
-        .catch((err) => {
-          setMembers([]);
-        })
-        .finally(() => setIsLoading(false));
-    }
-    getMembers();
+    getMembers(props.membersURL, setMembers, setIsLoading, setIsAuthorized);
   }, []);
 
   if (isLoading) {
