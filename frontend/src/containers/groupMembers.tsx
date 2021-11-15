@@ -79,13 +79,19 @@ function Root(props): JSX.Element {
       );
     }
   };
+
   if (!editMembersOrderMode) {
     return (
       <>
-        <EditGroupMembersSwitch
-          status={editMembersOrderMode}
-          handle={handleEditMembersOrderMode}
-        />
+        {props.isAdmin ? (
+          <EditGroupMembersSwitch
+            status={editMembersOrderMode}
+            handle={handleEditMembersOrderMode}
+          />
+        ) : (
+          <></>
+        )}
+
         <div className="row g-3">
           {members.length > 0
             ? members.map((member: Member, key: number) => {
@@ -99,11 +105,14 @@ function Root(props): JSX.Element {
 
   return (
     <>
-      {" "}
-      <EditGroupMembersSwitch
-        status={editMembersOrderMode}
-        handle={handleEditMembersOrderMode}
-      />
+      {props.isAdmin ? (
+        <EditGroupMembersSwitch
+          status={editMembersOrderMode}
+          handle={handleEditMembersOrderMode}
+        />
+      ) : (
+        <></>
+      )}
       <div className="row g-3">
         <DndContext
           sensors={sensors}
@@ -130,4 +139,7 @@ function Root(props): JSX.Element {
   );
 }
 
-render(<Root membersURL={membersURL} />, document.getElementById("root2"));
+render(
+  <Root membersURL={membersURL} isAdmin={is_admin} />,
+  document.getElementById("root2")
+);
