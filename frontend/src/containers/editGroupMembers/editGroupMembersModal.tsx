@@ -100,30 +100,30 @@ export function EditGroupMembersModal(
               }}
             />
           </Form.Group>
+          <div style={{ float: "right" }}>
+            <Button variant="primary" type="submit">
+              Mettre à jour
+            </Button>
 
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
+            <Button
+              style={{ marginLeft: "0.5rem" }}
+              variant="danger"
+              onClick={() =>
+                deleteMember(
+                  membersURL,
+                  selectedMember,
+                  handleClose,
+                  setIsUpdateLoading,
+                  setIsLoading,
+                  setMembers
+                )
+              }
+            >
+              Supprimer
+            </Button>
+          </div>
         </Form>
       </Modal.Body>
-
-      <Modal.Footer>
-        <Button
-          variant="danger"
-          onClick={() =>
-            deleteMember(
-              membersURL,
-              selectedMember,
-              handleClose,
-              setIsUpdateLoading,
-              setIsLoading,
-              setMembers
-            )
-          }
-        >
-          Supprimer
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 }

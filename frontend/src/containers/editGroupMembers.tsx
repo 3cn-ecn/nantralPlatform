@@ -45,12 +45,12 @@ function Root(props): JSX.Element {
           <table className="table table-hover table-sm">
             <thead>
               <tr>
-                <th scope="col">NOM</th>
+                <th scope="col">Nom</th>
                 <th scope="col" className="d-none d-sm-table-cell">
                   Membre depuis
                 </th>
                 <th scope="col" className="d-none d-sm-table-cell">
-                  Role
+                  Rôle
                 </th>
               </tr>
             </thead>
