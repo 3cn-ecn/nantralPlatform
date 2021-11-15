@@ -24,7 +24,6 @@ function Root(props): JSX.Element {
   const [members, setMembers] = useState<Member[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(true);
-  const [activeID, setActiveID] = useState(null);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
@@ -67,14 +66,7 @@ function Root(props): JSX.Element {
     return <p>Veuillez vous connecter pour voir les membres.</p>;
   }
 
-  const handleDragStart = (event) => {
-    setActiveID(event.active.id);
-  };
-  const handleDragCancel = (event) => {
-    setActiveID(null);
-  };
   const handleDragEnd = (event: DragEndEvent) => {
-    setActiveID(null);
     const { active, over } = event;
 
     if (active.id !== over.id) {
@@ -97,8 +89,6 @@ function Root(props): JSX.Element {
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
-          onDragStart={handleDragStart}
-          onDragCancel={handleDragCancel}
         >
           <SortableContext
             items={members.map((e) => e.id.toString())}
