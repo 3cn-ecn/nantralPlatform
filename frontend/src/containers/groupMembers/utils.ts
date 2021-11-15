@@ -18,7 +18,6 @@ export function sendNewOrder(
   membersURL: string
 ) {
   let membersToUpdate = [];
-  console.log(orderedMembers);
   for (let i = 0; i < orderedMembers.length; i++) {
     if (unorderedMembers[i].id !== orderedMembers[i].id) {
       membersToUpdate.push({
