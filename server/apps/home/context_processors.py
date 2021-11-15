@@ -26,6 +26,8 @@ def navbar_context(request):
     else:
         show = (phase != 0)
     # notifications
-    notifs = ReceivedNotification.objects.filter(student=request.user.student, seen=False).select_related('notification')
-    print(notifs)
+    try:
+        notifs = ReceivedNotification.objects.filter(student=request.user.student, seen=False).select_related('notification')
+    except Exception:
+        notifs = None
     return {'navbar_bdx': bdx, 'navbar_family_show': show, 'notifications': notifs}

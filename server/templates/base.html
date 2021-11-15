@@ -26,7 +26,7 @@
 
 <body>
 	
-	<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
+	<nav class="navbar navbar-expand sticky-top navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
 		<div class="container">
 			<div class="navbar-brand me-0">
 				<div id="goBackButton" class="d-inline-block"></div>
@@ -35,10 +35,63 @@
 					Nantral Platform.
 				</a>
 			</div>
+			<ul class="navbar-nav ml-auto me-0">
+				<li class="nav-item dropdown">
+					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<img src='{% static "/icons/menu.png" %}' width="30" height="30" class="d-inline-block align-top" alt="menu" loading="lazy">
+					</a>
+					<ul class="dropdown-menu dropdown-menu-end" role="menu">
+						<li>
+							<a class="dropdown-item" href="{% url 'home:home' %}">Actualités</a>
+						</li>
+						{% if navbar_family_show %}
+						<li>
+							<a class="dropdown-item" href="{% url 'family:home' %}">Parrainage</a>
+						</li>
+						{% endif %}
+						<li>
+							<a class="dropdown-item" href="{% url 'club:index' %}">Clubs & Assos</a>
+						</li>
+						<li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
+						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
+						<li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
+						<li><a class="dropdown-item" href="{% url 'liste:index' %}">Listes BDX</a></li>
+						<li><a class="dropdown-item" href="{% url 'academic:index' %}">Formations</a></li>
+					</ul>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<img src='{% static "/icons/notification_bell.png" %}' width="30" height="30" class="d-inline-block align-top" alt="notifications" loading="lazy">
+					</a>
+					<ul class="dropdown-menu dropdown-menu-end" role="menu">
+						{% for bdx in navbar_bdx %}
+						<li><a class="dropdown-item" href="{{ bdx.get_absolute_url }}">{{ bdx.name }}</a></li>
+						{% endfor %}
+					</ul>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<img src='{% static "/icons/account.png" %}' width="30" height="30" class="d-inline-block align-top" alt="compte personnel" loading="lazy">
+					</a>
+					<ul class="dropdown-menu dropdown-menu-end" role="menu">
+						{% if request.user.student.pk %}
+							<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
+							<li><a class="dropdown-item" href="{% url 'student:update' request.user.student.pk %}"><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
+							<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
+						{% else %}
+							<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
+						{% endif  %}
+						<li><hr class="dropdown-divider"></li>
+						<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
+					</ul>
+				</li>
+			</ul>
+			<!--
 			{% block navbar %}
 				{% if request.user.is_authenticated %}
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
+						<img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
+					
 					</button>
 					<div class="collapse navbar-collapse" id="navbarText">
 						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -71,7 +124,7 @@
 								Services
 								</a>
 								<ul class="dropdown-menu" role="menu">
-									<!--li><a class="dropdown-item" href="{#% url 'exchange:exchange' %#}">Bourse aux options</a></li-->
+									<!--li><a class="dropdown-item" href="{#% url 'exchange:exchange' %#}">Bourse aux options</a></li--><!--
 									<li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
 									<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
 									<li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
@@ -144,6 +197,7 @@
 					</div>
 				{% endif %}
 			{% endblock %}
+			-->
 		</div>
 	</nav>
 	

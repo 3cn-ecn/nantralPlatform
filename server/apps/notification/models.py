@@ -27,9 +27,8 @@ class Subscription(models.Model):
 
 class Notification(models.Model):
     """Contenu d'une notification"""
-    title = models.CharField('Titre', max_length=50)
     body = models.CharField('Corps', max_length=255)
-    url = models.URLField('Cible', max_length=255)
+    url = models.SlugField('Cible', max_length=255)
     group = models.SlugField('Groupe', max_length=50)
     receivers = models.ManyToManyField(
         Student, related_name='notification_set', through='ReceivedNotification')
@@ -63,7 +62,7 @@ class Notification(models.Model):
         self.receivers.add(all_users)
     
     def __str__(self):
-        return f'\'{self.title}\' de {self.group}'
+        return f'{self.body[:20]}...'
 
 
 

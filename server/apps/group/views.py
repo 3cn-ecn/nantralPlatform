@@ -68,6 +68,10 @@ class BaseDetailGroupView(DetailView):
         context['subscribed'] = Subscription.objects.filter(
             student=self.request.user.student, 
             group = group.full_slug).exists()
+        context['ariane'] = [
+            {'target': group.app + ":index", 'label': group.modelName.title()},
+            {'target': group.app + ":detail", 'label': group.name},
+        ]
         return context
 
 

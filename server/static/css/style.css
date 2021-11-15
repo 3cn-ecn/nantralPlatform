@@ -43,6 +43,13 @@ table.table-sort th {
 /* BARRE DE NAVIGATION */
 /* ------------------- */
 
+.navbar .navbar-nav .nav-item.dropdown > a {
+  border-radius: 50%;
+}
+.navbar .navbar-nav .nav-item.dropdown > a:hover {
+  background-color: #eee;
+}
+/*
 @media all and (min-width: 992px) {
   .navbar .nav-item .dropdown-menu {
     display: none;
@@ -56,7 +63,7 @@ table.table-sort th {
   .navbar .nav-item .dropdown-menu-end {
     right: 0;
   }
-}
+}*/
 
 #goBackButton:hover {
   cursor: pointer;

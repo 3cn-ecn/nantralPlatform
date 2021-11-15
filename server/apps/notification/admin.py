@@ -4,7 +4,7 @@ from .models import Notification, ReceivedNotification, Subscription
 # Register your models here.
 
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ['title', 'group', 'date', 'high_priority']
+    list_display = ['body', 'group', 'date', 'high_priority']
 
 class ReceivedNotificationAdmin(admin.ModelAdmin):
     list_display = ['student', 'notification']
