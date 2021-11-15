@@ -8,7 +8,7 @@
     "start": "webpack --config webpack.config/webpack.prod.js",
     "analyse": "webpack --config webpack.config/webpack.analyser.js",
     "dev": "webpack --config webpack.config/webpack.dev.js",
-    "watch": "npm run dev --watch",
+    "watch": "webpack --config webpack.config/webpack.dev.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Robin TROESCH",

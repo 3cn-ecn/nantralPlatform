@@ -1,4 +1,4 @@
-﻿import { CSSProperties } from "react";
+﻿import React, { CSSProperties } from "react";
 
 export const iconStyle: CSSProperties = {
   width: "100%",
@@ -39,4 +39,8 @@ export const editModeSwitchDivStyle: CSSProperties = {
 
 export const editModeSwitchElementStyle: CSSProperties = {
   marginLeft: "1rem",
+};
+
+export const loaderStyle: React.CSSProperties = {
+  opacity: 0.4,
 };

@@ -16,6 +16,7 @@ import { arrayMoveImmutable } from "array-move";
 import axios from "axios";
 
 import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
+import { loaderStyle } from "./groupMembers/styles";
 import { Member } from "./groupMembers/interfaces";
 import { EditGroupMembersSwitch } from "./groupMembers/groupMembersEditSwitch";
 import { SortableStudentCard } from "./groupMembers/sortableStudentCard";
@@ -28,6 +29,7 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 function Root(props): JSX.Element {
   const [members, setMembers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshingSort, setIsRefreshingSort] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(true);
   const [editMembersOrderMode, setEditMembersOrderMode] = useState(false);
 
@@ -76,7 +78,7 @@ function Root(props): JSX.Element {
       let oldIndex = members.findIndex((e) => e.id === parseInt(active.id));
       let newIndex = members.findIndex((e) => e.id === parseInt(over.id));
       let newMembers = arrayMoveImmutable(members, oldIndex, newIndex);
-      sendNewOrder(newMembers, members, props.membersURL);
+      sendNewOrder(newMembers, members, props.membersURL, setIsRefreshingSort);
       setMembers(newMembers);
     }
   };
@@ -92,7 +94,6 @@ function Root(props): JSX.Element {
         ) : (
           <></>
         )}
-
         <div className="row g-3">
           {members.length > 0
             ? members.map((member: Member, key: number) => {
@@ -114,7 +115,7 @@ function Root(props): JSX.Element {
       ) : (
         <></>
       )}
-      <div className="row g-3">
+      <div className="row g-3" style={isRefreshingSort ? loaderStyle : null}>
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}

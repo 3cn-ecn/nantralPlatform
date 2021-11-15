@@ -15,8 +15,10 @@ export function makeNiceDate(date: string): string {
 export function sendNewOrder(
   orderedMembers: Member[],
   unorderedMembers: Member[],
-  membersURL: string
+  membersURL: string,
+  setIsRefreshingSort: React.Dispatch<React.SetStateAction<boolean>>
 ) {
+  setIsRefreshingSort(true);
   let membersToUpdate = [];
   for (let i = 0; i < orderedMembers.length; i++) {
     if (unorderedMembers[i].id !== orderedMembers[i].id) {
@@ -32,6 +34,16 @@ export function sendNewOrder(
       orderedMembers: membersToUpdate,
     })
     .then((resp) => {
-      console.log(resp);
-    });
+      if (resp.status !== 200) {
+        console.error(
+          "L'ordre des membres n'a pas pu être mis à jour.",
+          "ERR:",
+          resp.status
+        );
+      }
+    })
+    .catch((e) => {
+      console.error("L'ordre des membres n'a pas pu être mis à jour.");
+    })
+    .finally(() => setIsRefreshingSort(false));
 }
