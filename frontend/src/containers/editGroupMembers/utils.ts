@@ -1,6 +1,7 @@
 ﻿import axios from "axios";
 
 import { Member } from "../groupMembers/interfaces";
+import { getMembers } from "../groupMembers/utils";
 
 export function membersSort(a: Member, b: Member): number {
   if (a.order === 0) {
@@ -18,8 +19,13 @@ export function updateMember(
   role: string,
   beginDate: string,
   endDate: string,
-  admin: boolean
+  admin: boolean,
+  handleClose: () => void,
+  setIsUpdateLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setMembers: React.Dispatch<React.SetStateAction<Member[]>>
 ) {
+  setIsUpdateLoading(true);
   axios
     .post(membersUrl, {
       editMode: 2,
@@ -41,5 +47,9 @@ export function updateMember(
     .catch((e) => {
       console.error("Le membre n'a pas pu être mis à jour.");
     })
-    .finally();
+    .finally(() => {
+      setIsUpdateLoading(false);
+      handleClose();
+      getMembers(membersUrl, setMembers, setIsLoading);
+    });
 }

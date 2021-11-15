@@ -37,6 +37,8 @@ function Root(props): JSX.Element {
         showModal={showModal}
         selectedMember={selectedMember}
         membersURL={props.membersURL}
+        setMembers={setMembers}
+        setIsLoading={setIsLoading}
       />
       <div className="table-responsive">
         {members.length > 0 ? (

@@ -47,7 +47,7 @@ class ListClubMembersAPIView(APIView):
         clubSlug = request.query_params.get('slug')
         club = get_object_or_404(Club, slug=clubSlug)
         toCheckIfAdmin = get_object_or_404(
-            NamedMembershipClub, club=club, student=student)
+            NamedMembershipClub, group=club, student=student)
         if not (toCheckIfAdmin.admin or user.is_staff):
             return HttpResponse(status=403)
 
@@ -63,9 +63,11 @@ class ListClubMembersAPIView(APIView):
         elif editMode == 2:
             id = request.data.get("id")
             role = request.data.get("role")
-            beginDate = request.data.get("beginDate")
-            endDate = request.data.get("endDate")
+            beginDate = parse_date(request.data.get("beginDate")) if request.data.get(
+                "beginDate") is not None else None
+            endDate = parse_date(request.data.get("endDate")) if request.data.get(
+                "endDate") is not None else None
             admin = request.data.get("admin")
             NamedMembershipClub.objects.filter(
-                id=id).update(function=role, admin=admin, date_begin=parse_date(beginDate), date_end=parse_date(endDate))
+                id=id).update(function=role, admin=admin, date_begin=beginDate, date_end=endDate)
             return HttpResponse(status=200)

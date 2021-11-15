@@ -9,15 +9,14 @@ import { updateMember } from "./utils";
 export function EditGroupMembersModal(
   props: EditGroupMembersModalProps
 ): JSX.Element {
-  const { showModal, setShowModal, selectedMember, membersURL } = props;
-
-  const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
-
-  const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    updateMember(membersURL, selectedMember, role, beginDate, endDate, admin);
-  };
+  const {
+    showModal,
+    setShowModal,
+    selectedMember,
+    membersURL,
+    setIsLoading,
+    setMembers,
+  } = props;
 
   if (!showModal) {
     return <></>;
@@ -35,6 +34,26 @@ export function EditGroupMembersModal(
       : null
   );
   const [admin, setAdmin] = useState(selectedMember.admin);
+  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
+
+  const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    updateMember(
+      membersURL,
+      selectedMember,
+      role,
+      beginDate,
+      endDate,
+      admin,
+      handleClose,
+      setIsUpdateLoading,
+      setIsLoading,
+      setMembers
+    );
+  };
 
   return (
     <Modal show={showModal} onHide={handleClose} onSubmit={handleSubmit}>
@@ -42,7 +61,7 @@ export function EditGroupMembersModal(
         <Modal.Title>{selectedMember.student.name}</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
+      <Modal.Body style={isUpdateLoading ? { opacity: "0.4" } : null}>
         <Form>
           <Form.Group className="mb-3" controlId="formRole">
             <Form.Label>Rôle</Form.Label>

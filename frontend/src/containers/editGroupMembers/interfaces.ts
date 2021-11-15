@@ -5,4 +5,6 @@ export interface EditGroupMembersModalProps {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   selectedMember: Member;
   membersURL: string;
+  setMembers: React.Dispatch<React.SetStateAction<Member[]>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
