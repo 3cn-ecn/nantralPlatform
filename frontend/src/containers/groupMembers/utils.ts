@@ -28,6 +28,7 @@ export function sendNewOrder(
   }
   axios
     .post(membersURL, {
+      editMode: 1,
       orderedMembers: membersToUpdate,
     })
     .then((resp) => {

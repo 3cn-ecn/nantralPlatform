@@ -24,8 +24,7 @@ class ListMyClubAPIView(generics.ListAPIView):
 
 
 class ListClubMembersAPIView(APIView):
-    """List all the members of a club."""
-    #serializer_class = ClubMemberSerializer
+    """API endpoint to interact with the members of a club."""
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
@@ -40,8 +39,12 @@ class ListClubMembersAPIView(APIView):
         return Response(data=serializer.data)
 
     def post(self, request, *args, **kwargs):
-        newOrderedMembers = request.POST
-        for member in newOrderedMembers:
-            NamedMembershipClub.objects.get(
-                member["id"]).update(order=member["order"])
-        return HttpResponse(status=200)
+        newOrderedMembers = request.data.get("orderedMembers")
+        editMode = request.data.get("editMode")
+        # editMode == 1 -> Edit the order of the members
+        # editMode == 2 -> Edit a member
+        if editMode == 1:
+            for member in newOrderedMembers:
+                NamedMembershipClub.objects.filter(
+                    id=member.get("id")).update(order=member.get("order"))
+            return HttpResponse(status=200)
