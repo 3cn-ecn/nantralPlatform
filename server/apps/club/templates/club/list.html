@@ -28,14 +28,16 @@
 	</div>
 	<br />
 
-	<h2>Mes Clubs et Assos</h2>
-	<div id="root">
-		<div class="loader">
-			<div class="spinner-border loader" style="height:75px!important; width:75px!important"role="status">
-				<span class="sr-only"></span>
+	{% if user.is_authenticated %}
+		<h2>Mes Clubs et Assos</h2>
+		<div id="root">
+			<div class="loader">
+				<div class="spinner-border loader" style="height:75px!important; width:75px!important"role="status">
+					<span class="sr-only"></span>
+				</div>
 			</div>
 		</div>
-	</div>
+	{% endif %}
 
 	{% cache None club_list %}
 		{% for key, value in club_list.items %}
@@ -61,8 +63,10 @@
 {% endblock %}
 
 {% block script %}
-	<script>
-		const myClubsURL = "{% url 'club_api:list-my-clubs' %}";
-	</script>
-	<script src='{% static "js/clubsList.js" %}'></script>
+	{% if user.is_authenticated %}
+		<script>
+			const myClubsURL = "{% url 'club_api:list-my-clubs' %}";
+		</script>
+		<script src='{% static "js/clubsList.js" %}'></script>
+	{% endif %}
 {% endblock %}
