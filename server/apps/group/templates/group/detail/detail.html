@@ -193,6 +193,7 @@
   const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
   const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
   const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
+  const is_admin = {{ is_admin|yesno:"true,false,false" }};
   {% if '/club/' in request.path %}
     const membersURL = "{% url 'club_api:list-club-members' %}?slug={{ object.slug }}";
   {% elif '/liste/' in request.path %}
