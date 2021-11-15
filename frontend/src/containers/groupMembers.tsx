@@ -81,47 +81,52 @@ function Root(props): JSX.Element {
   };
   if (!editMembersOrderMode) {
     return (
-      <div className="row g-3">
+      <>
         <EditGroupMembersSwitch
           status={editMembersOrderMode}
           handle={handleEditMembersOrderMode}
         />
-        {members.length > 0
-          ? members.map((member: Member, key: number) => {
-              return <StudentCard member={member} key={key} />;
-            })
-          : "Aucun membre pour l'instant... 😥"}
-      </div>
+        <div className="row g-3">
+          {members.length > 0
+            ? members.map((member: Member, key: number) => {
+                return <StudentCard member={member} key={key} />;
+              })
+            : "Aucun membre pour l'instant... 😥"}
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="row g-3">
+    <>
+      {" "}
       <EditGroupMembersSwitch
         status={editMembersOrderMode}
         handle={handleEditMembersOrderMode}
       />
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext
-          items={members.map((e) => e.id.toString())}
-          strategy={rectSortingStrategy}
+      <div className="row g-3">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
         >
-          {members.map((member: Member, index: number) => {
-            return (
-              <SortableStudentCard
-                member={member}
-                key={member.id}
-                index={index}
-              />
-            );
-          })}
-        </SortableContext>
-      </DndContext>
-    </div>
+          <SortableContext
+            items={members.map((e) => e.id.toString())}
+            strategy={rectSortingStrategy}
+          >
+            {members.map((member: Member, index: number) => {
+              return (
+                <SortableStudentCard
+                  member={member}
+                  key={member.id}
+                  index={index}
+                />
+              );
+            })}
+          </SortableContext>
+        </DndContext>
+      </div>
+    </>
   );
 }
 
