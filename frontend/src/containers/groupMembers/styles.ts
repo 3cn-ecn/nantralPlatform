@@ -30,3 +30,13 @@ export const textWrapper: React.CSSProperties = {
   height: "100%",
   width: "100%",
 };
+
+export const editModeSwitchDivStyle: CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  marginBottom: "1rem",
+};
+
+export const editModeSwitchElementStyle: CSSProperties = {
+  marginLeft: "1rem",
+};
