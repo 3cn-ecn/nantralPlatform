@@ -21,8 +21,7 @@ import { Member } from "./groupMembers/interfaces";
 import { EditGroupMembersSwitch } from "./groupMembers/groupMembersEditSwitch";
 import { SortableStudentCard } from "./groupMembers/sortableStudentCard";
 import { StudentCard } from "./groupMembers/studentCard";
-import { sendNewOrder } from "./groupMembers/utils";
-import { getMembers } from "./groupMembers/utils";
+import { getMembers, sendNewOrder } from "./groupMembers/utils";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -62,7 +61,14 @@ function Root(props): JSX.Element {
     if (active.id !== over.id) {
       let oldIndex = members.findIndex((e) => e.id === parseInt(active.id));
       let newIndex = members.findIndex((e) => e.id === parseInt(over.id));
-      let newMembers = arrayMoveImmutable(members, oldIndex, newIndex);
+      let newMembers: Member[] = arrayMoveImmutable(
+        members,
+        oldIndex,
+        newIndex
+      ).map((e: Member, i: number) => {
+        e.order = i;
+        return e;
+      });
       sendNewOrder(newMembers, members, props.membersURL, setIsRefreshingSort);
       setMembers(newMembers);
     }
