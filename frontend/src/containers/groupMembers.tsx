@@ -59,6 +59,9 @@ function Root(props): JSX.Element {
     const { active, over } = event;
 
     if (active.id !== over.id) {
+      let oldMembers = members.map((e) => {
+        return { id: e.id, order: e.order };
+      });
       let oldIndex = members.findIndex((e) => e.id === parseInt(active.id));
       let newIndex = members.findIndex((e) => e.id === parseInt(over.id));
       let newMembers: Member[] = arrayMoveImmutable(
@@ -66,10 +69,15 @@ function Root(props): JSX.Element {
         oldIndex,
         newIndex
       ).map((e: Member, i: number) => {
-        e.order = i;
+        e.order = i + 1;
         return e;
       });
-      sendNewOrder(newMembers, members, props.membersURL, setIsRefreshingSort);
+      sendNewOrder(
+        newMembers,
+        oldMembers,
+        props.membersURL,
+        setIsRefreshingSort
+      );
       setMembers(newMembers);
     }
   };
