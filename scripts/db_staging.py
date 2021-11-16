@@ -1,9 +1,5 @@
-import docker
-import gzip
-import os
+import psycopg2
 from environs import Env
-import boto3
-from datetime import date
 import logging
 
 logging.basicConfig(filename='db_staging.log',
@@ -12,21 +8,12 @@ logging.basicConfig(filename='db_staging.log',
                     datefmt='%m/%d/%Y %I:%M:%S %p',
                     level=logging.DEBUG)
 
-
-def docker_db_clone(filename: str, db_user: str, db_name: str, db_name_staging: str, container_name: str):
-
-    client = docker.from_env()
-    db_container = client.containers.get(container_name)
-    _, output = db_container.exec_run(
-        f"pg_dump {db_name} > {filename} -U {db_user} && psql -U {db_user} {db_name_staging} < {filename}")
-    client.close()
-
-
 try:
     env = Env()
     env.read_env("../deployment/.env")
     DB_USER = env.str("POSTGRES_USER")
-    DB_NAME = env.str("DB_NAME_STAGING")
+    DB_PASSWORD = env.str("POSTGRES_PASSWORD")
+    DB_NAME_STAGING = env.str("DB_NAME_STAGING")
     DB_NAME_PROD = env.str("DB_NAME")
     DB_CONTAINER = env.str("DB_CONTAINER")
     BUCKET = env.str("S3_BUCKET")
@@ -34,11 +21,24 @@ try:
     AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
     AWS_REGION = env.str("AWS_SES_REGION")
     ERROR_RECIPIENT = env.str("ERROR_RECIPIENT")
-    try:
-        docker_db_clone("dump_staging.sql", DB_USER,
-                        DB_NAME_PROD, DB_NAME, DB_CONTAINER)
-    except Exception as err:
-        text = f"Got an error while cloning the DB : {err}"
 
-except Exception as err:
-    logging.error(err)
+    ps_connection = psycopg2.connect(user=DB_USER,
+                                     password=DB_PASSWORD,
+                                     host="127.0.0.1",
+                                     port="5432")
+
+    cursor = ps_connection.cursor()
+
+    cursor.execute(f"DROP DATABASE IF EXISTS {DB_NAME_STAGING};")
+    cursor.execute(
+        f"CREATE DATABASE {DB_NAME_STAGING} WITH TEMPLATE {DB_NAME_PROD}")
+
+except (Exception, psycopg2.DatabaseError) as error:
+    print("Error while connecting to PostgreSQL", error)
+
+finally:
+    # closing database connection.
+    if ps_connection:
+        cursor.close()
+        ps_connection.close()
+        print("PostgreSQL connection is closed")
