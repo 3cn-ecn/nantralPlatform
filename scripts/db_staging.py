@@ -10,6 +10,7 @@ logging.basicConfig(filename='db_staging.log',
                     level=logging.DEBUG)
 
 try:
+    print("====|Getting .env variables...|====")
     env = Env()
     env.read_env("../../nantralPlatform/deployment/.env")
     DB_USER = env.str("POSTGRES_USER")
@@ -24,26 +25,50 @@ try:
     AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
     AWS_REGION = env.str("AWS_SES_REGION")
     ERROR_RECIPIENT = env.str("ERROR_RECIPIENT")
+    print("====|Done|====")
+
+    print("====|Getting DB container's IP...|====")
     client = docker.from_env()
     db_container = client.containers.get(DB_CONTAINER)
     IP = db_container.attrs["NetworkSettings"]["Networks"]["deployment_default"]["IPAddress"]
+    print("====|Done|====")
+
+    print("====|Connecting to the DB...|====")
     ps_connection = psycopg2.connect(user=DB_USER,
                                      password=DB_PASSWORD,
                                      host=IP,
                                      port=DB_PORT)
     ps_connection.autocommit = True
     cursor = ps_connection.cursor()
+    print("====|Done|====")
 
-    cursor.execute(f"DROP DATABASE {DB_NAME_STAGING} WITH ( FORCE );")
+    print("====|Dropping the old staging DB if it exists...|====")
     cursor.execute(
-        f"CREATE DATABASE {DB_NAME_STAGING} WITH TEMPLATE {DB_NAME_PROD}")
+        f"DROP DATABASE IF EXISTS {DB_NAME_STAGING} WITH ( FORCE );")
+    print("====|Done|====")
+
+    print("====|Recreating the staging DB...|====")
+    cursor.execute(f"CREATE DATABASE {DB_NAME_STAGING} OWNER {DB_USER};")
+    print("====|Done|====")
+
+    print("====|Dumping the contents of the production DB...|====")
+    _, output = db_container.exec_run(
+        f"/bin/bash -c 'pg_dump -U {DB_USER} {DB_NAME_PROD} > dump.sql'")
+    print("====|Done|====")
+
+    print("====|Importing the contents of the production DB...|====")
+    _, output = db_container.exec_run(
+        f"/bin/bash -c 'psql -U {DB_USER} {DB_NAME_STAGING} < dump.sql'")
+    print("====|Done|====")
 
 except (Exception, psycopg2.DatabaseError) as error:
     print("Error while connecting to PostgreSQL", error)
 
 finally:
-    # closing database connection.
     if ps_connection:
         cursor.close()
         ps_connection.close()
-        print("PostgreSQL connection is closed")
+
+    if client:
+        client.close()
+        print("====|Connections have been closed. Goodbye.|====")
