@@ -43,11 +43,19 @@ table.table-sort th {
 /* BARRE DE NAVIGATION */
 /* ------------------- */
 
+.navbar {
+  padding-top: 0.3rem;
+  padding-bottom: .3rem;
+}
 .navbar .navbar-nav .nav-item.dropdown > a {
   border-radius: 50%;
 }
 .navbar .navbar-nav .nav-item.dropdown > a:hover {
   background-color: #eee;
+}
+a.navbar-brand:hover {
+  background-color: #eee;
+  border-radius: 0.5rem;
 }
 .navbar-brand {
   margin-right: 0.5rem;

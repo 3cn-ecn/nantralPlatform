@@ -46,6 +46,8 @@ class BDX(Club):
     class Meta:
         ordering = ['order']
         verbose_name_plural = "BDX"
+    
+    app_name = "Clubs & Assos"
 
 
 

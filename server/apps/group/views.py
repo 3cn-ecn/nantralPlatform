@@ -71,8 +71,12 @@ class BaseDetailGroupView(DetailView):
         context['ariane'] = [
             {
                 'target': reverse(group.app+':index'), 
-                'label': group.modelName.title()
-            }
+                'label': group.app_name
+            },
+            {
+                'target': '#', 
+                'label': group.name
+            },
         ]
         return context
 
@@ -147,12 +151,16 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
         context['ariane'] = [
             {
                 'target': reverse(group.app+':index'), 
-                'label': group.modelName.title()
+                'label': group.app_name
             },
             {
                 'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
                 'label': group.name
             },
+            {
+                'target': '#',
+                'label': 'Édition'
+            }
         ]
         return context
 
