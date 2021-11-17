@@ -1,4 +1,6 @@
 {% load static %}
+{% load file_url %}
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -47,7 +49,7 @@
 					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<img src='{% static "/icon/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">
 					</a>
-					<ul class="dropdown-menu dropdown-menu-end" role="menu">
+					<ul class="dropdown-menu dropdown-menu-end" role="menu" style="right:-84px;">
 						<li><a class="dropdown-item" href="{% url 'home:home' %}">
 							<img src='{% static "/icon/event.svg" %}' class="align-middle" loading="lazy">
 							Posts et Évènements
@@ -76,7 +78,7 @@
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'student:list' %}">
 							<img src='{% static "/icon/list.svg" %}' class="align-middle" loading="lazy">
-							Annuaire étudiant
+							Annuaire Nantralien
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'academic:index' %}">
 							<img src='{% static "/icon/academic.svg" %}' class="align-middle" loading="lazy">
@@ -88,21 +90,23 @@
 					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<img src='{% static "/icon/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
 					</a>
-					<ul class="dropdown-menu dropdown-menu-end" role="menu" id="notification-menu">
-						<div class="toast-container">
-							{% for n in notifications.all %}
-								<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-									<div class="toast-header">
-										<strong class="me-auto">{{n.notification.title}}</strong>
-										<small class="text-muted">{{n.notification.date}}</small>
-										<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-									</div>
-									<div class="toast-body">
-										{{n.notification.body}}
-									</div>
-								</div>
-							{% endfor %}
-						</div>
+					<ul class="dropdown-menu dropdown-menu-end overflow-auto" role="menu" id="notification-menu"  style="width:18rem;max-width:90vw;right:-42px;max-height:70vh;">
+						<li><h5 class="dropdown-item-text">Notifications</h5></li>
+						<li><hr class="dropdown-divider"></li>
+						{% for n in notifications.all %}
+							<li>
+								<a class="dropdown-item text-wrap d-flex" href="{{n.notification.url}}">
+									{% if n.notification.get_group.logo %}
+										<img src="{{ n.notification.get_group.logo|file_url }}" loading="lazy">
+									{% else %}
+										<img src="{% static 'img/logo.svg' %}" loading="lazy">
+									{% endif %}
+									<small class="ms-2">{{n.notification.body}}</small>
+								</a>
+							</li>
+						{% empty %}
+							<li><small class="dropdown-item-text">Aucune notification pour l'instant !</small></li>
+						{% endfor %}
 					</ul>
 				</li>
 				<li class="nav-item dropdown">
@@ -112,14 +116,16 @@
 					<ul class="dropdown-menu dropdown-menu-end" role="menu">
 						{% if request.user.is_authenticated %}
 							{% if request.user.student.pk %}
-								<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
-								<li><a class="dropdown-item" href="{% url 'student:update' request.user.student.pk %}"><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
-								<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
+								<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>&nbsp Mon Profil</a></li>
+								{% if request.user.is_staff %}
+									<li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-star"></i>&nbsp Interface Admin</a></li>
+								{% endif %}
+								<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>&nbsp Me déconnecter</a></li>
 							{% else %}
 								<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
 							{% endif  %}
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
+							<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>&nbsp Suggestion / Bug</a></li>
 						{% else %}
 							<li><a class="dropdown-item" href="{% url 'account:login' %}"><i class="fas fa-sign-in-alt"></i>  Connexion</a></li>
 						{% endif %}

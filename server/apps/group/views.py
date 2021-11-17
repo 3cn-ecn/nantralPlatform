@@ -159,7 +159,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
             },
             {
                 'target': '#',
-                'label': 'Édition'
+                'label': 'Modifier'
             }
         ]
         return context
@@ -189,7 +189,22 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = self.get_object()
+        group = self.get_object()
+        context['object'] = group
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         # memberships = context['object'].members.through.objects.filter(
         #     group=context['object'])
         # MembersFormset = NamedMembershipGroupFormset(
@@ -234,11 +249,26 @@ class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = self.get_object()
+        group = self.get_object()
+        context['object'] = group
         sociallinks = SocialLink.objects.filter(
             slug=context['object'].full_slug)
         form = SocialLinkGroupFormset(queryset=sociallinks)
         context['sociallinks'] = form
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def post(self, request, **kwargs):

@@ -33,6 +33,12 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
             if family:
                 context['form_family_complete'] = family.form_complete()
                 context['1A_members'] = family.memberships.filter(role='1A')
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Parrainage'
+            }
+        ]
         return context
 
 

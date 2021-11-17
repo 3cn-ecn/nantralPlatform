@@ -12,7 +12,7 @@ urlpatterns = [
          CreateRoommatesView.as_view(), name='create-roommates'),
     path('map', HousingMap.as_view(), name='housing-map'),
     path('liste', HousingList.as_view(), name='housing-list'),
-    path('', HousingList.as_view(), name='index'),
+    path('', HousingMap.as_view(), name='index'),
     path('coloc/<slug:slug>/edit/colocathlon',
          ColocathlonFormView.as_view(), name='colocathlon-edit'),
 ] + makeGroupUrlpatterns(

@@ -79,13 +79,14 @@ function Root(props): JSX.Element {
         ) : (
           <></>
         )}
-        <div className="row g-3">
-          {members.length > 0
-            ? members.map((member: Member, key: number) => {
-                return <StudentCard member={member} key={key} />;
-              })
-            : "Aucun membre pour l'instant... 😥"}
-        </div>
+        {members.length > 0 ? (
+          <div className="row g-3">
+            {members.map((member: Member, key: number) => {
+              return <StudentCard member={member} key={key} />;
+            })}
+          </div>)
+          : "Aucun membre pour l'instant... 😥"
+        }
       </>
     );
   }

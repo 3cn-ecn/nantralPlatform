@@ -1,6 +1,11 @@
 /* GENERAL */
 /* ------- */
 
+::selection {
+  background: var(--bs-red) !important;
+  color: white !important;
+} 
+
 html {
   margin: 0px;
   height: 100%;
@@ -31,9 +36,11 @@ h6, .h6 {
 
 a {
   text-decoration: none;
+  color: var(--bs-red);
 }
 a:hover {
   text-decoration: none;
+  color: #99242f;
 }
 
 table.table-sort th {
@@ -44,6 +51,7 @@ table.table-sort th {
 /* ------------------- */
 .navbar .navbar-brand {
   overflow: hidden;
+  text-overflow: "...";
 }
 .navbar .navbar-brand a.ariane-link {
   margin-right: 0;
@@ -61,7 +69,7 @@ table.table-sort th {
 .navbar .navbar-brand i {
   margin: 0 .3rem;
 }
-@media all and (max-width: 992px) {
+@media all and (max-width: 768px) {
   .navbar .navbar-brand a.ariane-link span,
   .navbar .navbar-brand i {
     display: none;
@@ -81,6 +89,9 @@ table.table-sort th {
 .navbar .navbar-nav .nav-item.dropdown a.nav-link img {
   width: 35px;
   height: 35px;
+}
+.navbar .navbar-nav .nav-item.dropdown .dropdown-menu {
+  box-shadow: 3px 3px 6px #AAA;
 }
 .navbar .navbar-nav .nav-item.dropdown .dropdown-menu img {
   width: 2rem;
