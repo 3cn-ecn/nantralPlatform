@@ -17,26 +17,18 @@ module.exports = {
       __dirname,
       "../src/containers/postsGroupListUpdate.tsx"
     ),
-    eventsView: path.join(
-      __dirname, 
-      "../src/containers/eventsView.tsx"
-    ),
+    eventsView: path.join(__dirname, "../src/containers/eventsView.tsx"),
     cowlocathlonCard: path.join(
       __dirname,
       "../src/containers/cowlocathlonCard.tsx"
     ),
-    housingMap: path.join(
-      __dirname, 
-      "../src/containers/housingMap.tsx"
+    housingMap: path.join(__dirname, "../src/containers/housingMap.tsx"),
+    createHousing: path.join(__dirname, "../src/containers/createHousing.tsx"),
+    groupMembers: path.join(__dirname, "../src/containers/groupMembers.tsx"),
+    editGroupMembers: path.join(
+      __dirname,
+      "../src/containers/editGroupMembers.tsx"
     ),
-    createHousing: path.join(
-      __dirname, 
-      "../src/containers/createHousing.tsx"
-    ),
-    groupMembers: path.join(
-      __dirname, 
-      "../src/containers/groupMembers.tsx"
-    )
   },
   output: {
     path: path.join(__dirname, "../../server/static/js"),

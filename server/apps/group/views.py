@@ -190,12 +190,12 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
     def get_context_data(self, **kwargs):
         context = {}
         context['object'] = self.get_object()
-        memberships = context['object'].members.through.objects.filter(
-            group=context['object'])
-        MembersFormset = NamedMembershipGroupFormset(
-            context['object'])
-        if MembersFormset:
-            context['members'] = MembersFormset(queryset=memberships)
+        # memberships = context['object'].members.through.objects.filter(
+        #     group=context['object'])
+        # MembersFormset = NamedMembershipGroupFormset(
+        #     context['object'])
+        # if MembersFormset:
+        #     context['members'] = MembersFormset(queryset=memberships)
         return context
 
     def post(self, request, **kwargs):

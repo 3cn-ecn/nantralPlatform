@@ -20,3 +20,8 @@ export interface Member {
   order?: number;
   group: number;
 }
+
+export interface StudentCardBodyProps {
+  editMode: boolean;
+  member: Member;
+}
