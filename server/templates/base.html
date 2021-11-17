@@ -29,6 +29,7 @@
 	<nav class="navbar navbar-expand sticky-top navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
 		<div class="container">
 			<div class="navbar-brand me-0">
+				{# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
 				<!--div id="goBackButton" class="d-inline-block"></div-->
 				<a class="ariane-link" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;"><!--
 					--><img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top me-2" alt="logo" loading="lazy"><!--
@@ -44,24 +45,48 @@
 			<ul class="navbar-nav ml-auto me-0">
 				<li class="nav-item dropdown">
 					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<img src='{% static "/icons/menu.png" %}' width="30" height="30" class="d-inline-block align-top" alt="menu" loading="lazy">
+						<img src='{% static "/icon/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" role="menu">
-						<li><a class="dropdown-item" href="{% url 'home:home' %}">Posts et Évènements</a></li>
-						<li><a class="dropdown-item" href="{% url 'club:index' %}">Clubs & Assos</a></li>
-						<li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
-						<li><a class="dropdown-item" href="{% url 'liste:index' %}">Listes BDX</a></li>
+						<li><a class="dropdown-item" href="{% url 'home:home' %}">
+							<img src='{% static "/icon/event.svg" %}' class="align-middle" loading="lazy">
+							Posts et Évènements
+						</a></li>
+						<li><a class="dropdown-item" href="{% url 'club:index' %}">
+							<img src='{% static "/icon/club.svg" %}' class="align-middle" loading="lazy">
+							Clubs & Assos
+						</a></li>
+						<li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">
+							<img src='{% static "/icon/roommates.svg" %}' class="align-middle" loading="lazy">
+							Carte des Colocs
+						</a></li>
+						<li><a class="dropdown-item" href="{% url 'liste:index' %}">
+							<img src='{% static "/icon/campaign.svg" %}' class="align-middle" loading="lazy">
+							Listes BDX
+						</a></li>
 						{% if navbar_family_show %}
-							<li><a class="dropdown-item" href="{% url 'family:home' %}">Parrainage</a></li>
+							<li><a class="dropdown-item" href="{% url 'family:home' %}">
+								<img src='{% static "/icon/family.svg" %}' class="align-middle" loading="lazy">
+								Parrainage
+							</a></li>
 						{% endif %}
-						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
-						<li><a class="dropdown-item" href="{% url 'student:list' %}">Annuaire étudiant</a></li>
-						<li><a class="dropdown-item" href="{% url 'academic:index' %}">Cours et Formations</a></li>
+						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">
+							<img src='{% static "/icon/sign.svg" %}' class="align-middle" loading="lazy">
+							Signature ECN
+						</a></li>
+						<li><a class="dropdown-item" href="{% url 'student:list' %}">
+							<img src='{% static "/icon/list.svg" %}' class="align-middle" loading="lazy">
+							Annuaire étudiant
+						</a></li>
+						<li><a class="dropdown-item" href="{% url 'academic:index' %}">
+							<img src='{% static "/icon/academic.svg" %}' class="align-middle" loading="lazy">
+							Cours et Formations
+						</a></li>
 					</ul>
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<img src='{% static "/icons/notification_bell.png" %}' width="30" height="30" class="d-inline-block align-top" alt="notifications" loading="lazy">
+						<img src='{% static "/icon/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" role="menu" id="notification-menu">
 						<div class="toast-container">
@@ -82,7 +107,7 @@
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<img src='{% static "/icons/account.png" %}' width="30" height="30" class="d-inline-block align-top" alt="compte personnel" loading="lazy">
+						<img src='{% static "/icon/people.svg" %}' class="d-inline-block align-top" alt="compte personnel" loading="lazy">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" role="menu">
 						{% if request.user.is_authenticated %}
@@ -101,118 +126,6 @@
 					</ul>
 				</li>
 			</ul>
-			<!--
-			{% block navbar %}
-				{% if request.user.is_authenticated %}
-					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-						<img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
-					
-					</button>
-					<div class="collapse navbar-collapse" id="navbarText">
-						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'home:home' %}">Actualités</a>
-							</li>
-							{% if navbar_family_show %}
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'family:home' %}">Parrainage</a>
-							</li>
-							{% endif %}
-							<li class="nav-item d-none">
-								<a class="nav-link" href="#">Campagnes</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'club:index' %}">Clubs & Assos</a>
-							</li>
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								BDX
-								</a>
-								<ul class="dropdown-menu" role="menu">
-									{% for bdx in navbar_bdx %}
-									<li><a class="dropdown-item" href="{{ bdx.get_absolute_url }}">{{ bdx.name }}</a></li>
-									{% endfor %}
-								</ul>
-							</li>
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Services
-								</a>
-								<ul class="dropdown-menu" role="menu">
-									<!--li><a class="dropdown-item" href="{#% url 'exchange:exchange' %#}">Bourse aux options</a></li--><!--
-									<li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
-									<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
-									<li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
-									<li><a class="dropdown-item disabled" href="#">Offres Partenariats</a></li>
-								</ul>
-							</li>
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Annuaires
-								</a>
-								<ul class="dropdown-menu" role="menu">
-									<li><a class="dropdown-item" href="{% url 'student:list' %}">Étudiant⋅e⋅s</a></li>
-									<li><a class="dropdown-item" href="{% url 'liste:index' %}">Listes BDX</a></li>
-									<li><a class="dropdown-item" href="{% url 'academic:index' %}">Formations</a></li>
-									<li><a class="dropdown-item disabled" href="#">Contacts & Liens</a></li>
-								</ul>
-							</li>
-						</ul>
-						<ul class="navbar-nav ml-auto ">
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<i class="fas fa-bell"></i>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu" id="notification-menu">
-									<div class="toast-container">
-										{% for n in notifications.all %}
-											<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-												<div class="toast-header">
-													<strong class="me-auto">{{n.notification.title}}</strong>
-													<small class="text-muted">{{n.notification.date}}</small>
-													<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-												</div>
-												<div class="toast-body">
-													{{n.notification.body}}
-												</div>
-											</div>
-										{% endfor %}
-									</div>
-								</ul>
-							</li>
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									{{ request.user.student.name }}    <i class="fas fa-cog"></i>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									{% if request.user.student.pk %}
-										<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
-										<li><a class="dropdown-item" href="{% url 'student:update' request.user.student.pk %}"><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
-										<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
-									{% else %}
-										<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
-									{% endif  %}
-									<li><hr class="dropdown-divider"></li>
-									<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
-								</ul>
-							</li>
-						</ul>
-					</div>
-				{% else %}
-					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-					<div class="collapse navbar-collapse" id="navbarText">
-						<ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-						<ul class="navbar-nav ml-auto ">
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'account:login' %}">Connexion <i class="fas fa-sign-in-alt"></i></a>
-							</li>
-						</ul>
-					</div>
-				{% endif %}
-			{% endblock %}
-			-->
 		</div>
 	</nav>
 	

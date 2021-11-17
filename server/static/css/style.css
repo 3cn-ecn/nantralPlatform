@@ -71,11 +71,20 @@ table.table-sort th {
     display: inline !important;
   }
 }
-.navbar .navbar-nav .nav-item.dropdown > a {
+.navbar .navbar-nav .nav-item.dropdown  a.nav-link {
   border-radius: 50%;
+  padding: .2rem;
 }
-.navbar .navbar-nav .nav-item.dropdown > a:hover {
+.navbar .navbar-nav .nav-item.dropdown a.nav-link:hover {
   background-color: #eee;
+}
+.navbar .navbar-nav .nav-item.dropdown a.nav-link img {
+  width: 35px;
+  height: 35px;
+}
+.navbar .navbar-nav .nav-item.dropdown .dropdown-menu img {
+  width: 2rem;
+  height: 2rem;
 }
 
 #goBackButton:hover {
