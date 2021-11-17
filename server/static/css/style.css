@@ -42,10 +42,34 @@ table.table-sort th {
 
 /* BARRE DE NAVIGATION */
 /* ------------------- */
-
-.navbar {
-  padding-top: 0.3rem;
-  padding-bottom: .3rem;
+.navbar .navbar-brand {
+  overflow: hidden;
+}
+.navbar .navbar-brand a.ariane-link {
+  margin-right: 0;
+  color: rgba(0, 0, 0, .9);
+  padding-top: .3125rem;
+  padding-bottom: .3125rem;
+  border-radius: .5rem;
+}
+.navbar .navbar-brand a.ariane-link span {
+  margin: 0 .3rem;
+}
+.navbar .navbar-brand a.ariane-link:hover {
+  background-color: #eee;
+}
+.navbar .navbar-brand i {
+  margin: 0 .3rem;
+}
+@media all and (max-width: 992px) {
+  .navbar .navbar-brand a.ariane-link span,
+  .navbar .navbar-brand i {
+    display: none;
+  }
+  .navbar .navbar-brand a.ariane-link:nth-last-child(3) span,
+  .navbar .navbar-brand i:nth-last-child(4) {
+    display: inline !important;
+  }
 }
 .navbar .navbar-nav .nav-item.dropdown > a {
   border-radius: 50%;
@@ -53,31 +77,6 @@ table.table-sort th {
 .navbar .navbar-nav .nav-item.dropdown > a:hover {
   background-color: #eee;
 }
-a.navbar-brand:hover {
-  background-color: #eee;
-  border-radius: 0.5rem;
-}
-.navbar-brand {
-  margin-right: 0.5rem;
-}
-.navbar-brand i {
-  margin-right: 0.5rem;
-}
-/*
-@media all and (min-width: 992px) {
-  .navbar .nav-item .dropdown-menu {
-    display: none;
-  }
-  .navbar .nav-item:hover .dropdown-menu {
-    display: block;
-  }
-  .navbar .nav-item .dropdown-menu {
-    margin-top: 0;
-  }
-  .navbar .nav-item .dropdown-menu-end {
-    right: 0;
-  }
-}*/
 
 #goBackButton:hover {
   cursor: pointer;
