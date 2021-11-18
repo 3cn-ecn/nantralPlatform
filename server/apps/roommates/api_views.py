@@ -25,13 +25,7 @@ class HousingView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        colocathlonParticipants = int(self.request.GET.get(
-            'colocathlonParticipants'))
         now = timezone.now()
-        if colocathlonParticipants == 1:
-            query = Housing.objects.filter((
-                Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | Q(roommates__members=None)) & Q(roommates__colocathlon_agree=True)).distinct()
-            return query
         query = Housing.objects.filter(
             Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | Q(roommates__members=None)).distinct()
         return query
@@ -72,10 +66,14 @@ class RoommatesDetails(APIView):
         # addOrDelete == 1 --> Delete user
         # addOrDelete == 0 --> Add user
         if addOrDelete == 0:
-            if object.colocathlon_quota > object.colocathlon_participants.count() and \
-                    not Roommates.objects.filter(colocathlon_participants=request.user.student).exists():
-                object.colocathlon_participants.add(request.user.student)
-                return Response(status=200)
+            if object.colocathlon_quota > object.colocathlon_participants.count():
+                roommates = Roommates.objects.filter(
+                    colocathlon_participants=request.user.student)
+                if not roommates.exists():
+                    object.colocathlon_participants.add(request.user.student)
+                    return Response(status=200)
+                else:
+                    return Response(data=RoommatesSerializer(roommates.first()).data, status=403)
             return Response(status=403)
         if Roommates.objects.filter(colocathlon_participants=request.user.student).exists():
             object.colocathlon_participants.remove(request.user.student)

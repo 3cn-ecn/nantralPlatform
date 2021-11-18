@@ -30,17 +30,12 @@ function Root(props): JSX.Element {
   if (isLoading) {
     return (
       <>
-        <h2>Mes Clubs et Assos</h2>
-        <div className="grille" style={spinnerDivStyle}>
-          <Spinner animation="border" role="status" style={spinnerStyle} />
-        </div>
       </>
     );
   }
 
   return (
     <>
-      <h2>Mes Clubs et Assos</h2>
       <div className="grille">
         {clubs.map((club: Club, key: number) => {
           return <ClubIcon club={club} key={key} />;

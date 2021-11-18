@@ -73,6 +73,7 @@ COMMON_APPS = [
     'apps.roommates',
     'apps.sociallink',
     'apps.family',
+    'apps.administration',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS

@@ -46,6 +46,7 @@ SLUG_GROUPS = {
     'roommates': ['apps.roommates.models', 'Roommates'],
     'family': ['apps.family.models', 'Family'],
     'academic': ['apps.academic.models', 'Course'],
+    'administration': ['apps.administration.models', 'Administration'],
 }
 SLUG_MODELS = {
     'event': ['apps.event.models', 'Event'],

@@ -13,7 +13,7 @@ export function MapForm(props): JSX.Element {
 
   return (
     <div className="col-12 col-md-6 col-lg-5 col-xl-4">
-      <Form.Group>
+      <Form.Group className="mb-2">
         <Typeahead
           id="search-colocs"
           options={colocs}

@@ -6,8 +6,9 @@ import {
   colocathlonSwitchChildStyle,
   colocathlonSwitchElementStyle,
 } from "./styles";
+import { ColocathlonSwitchProps } from "./interfaces";
 
-export function ColocathlonSwitch(props) {
+export function ColocathlonSwitch(props: ColocathlonSwitchProps) {
   const { status, handle } = props;
   return (
     <div className="col" style={colocathlonSwitchDivStyle}>
