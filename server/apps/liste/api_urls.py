@@ -6,5 +6,5 @@ app_name = 'liste'
 
 urlpatterns = [
     path('list-members', ListListeMembersAPIView.as_view(),
-         name='list-liste-members'),
+         name='list-members'),
 ]
