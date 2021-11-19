@@ -7,11 +7,13 @@ from apps.club.models import Club, BDX
 from apps.liste.models import Liste
 from apps.roommates.models import Roommates
 from apps.academic.models import Course
+from apps.administration.models import Administration
 
 from apps.club.forms import *
 from apps.liste.forms import *
 from apps.roommates.forms import *
 from apps.academic.forms import *
+from apps.administration.forms import *
 
 
 #NB : Les BDX sont aussi des instances de Club
@@ -27,6 +29,8 @@ def UpdateGroupForm(group):
         return UpdateRoommatesForm
     elif isinstance(group, Course):
         return UpdateCourseForm
+    elif isinstance(group, Administration):
+        return UpdateAdministrationForm
     else:
         return None
 
@@ -40,6 +44,8 @@ def NamedMembershipAddGroup(group):
         return NamedMembershipAddRoommates
     elif isinstance(group, Course):
         return NamedMembershipAddCourse
+    elif isinstance(group, Administration):
+        return NamedMembershipAddAdministration
     else:
         return None
 
@@ -54,6 +60,8 @@ def NamedMembershipGroupFormset(group):
         return NamedMembershipRoommatesFormset
     elif isinstance(group, Course):
         return NamedMembershipCourseFormset
+    elif isinstance(group, Administration):
+        return NamedMembershipAdministrationFormset
     else:
         return None
 
