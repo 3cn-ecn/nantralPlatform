@@ -24,6 +24,7 @@
 {% block script %}
 <script>
   const membersURL = "{% url 'club_api:list-members'%}?slug={{object.slug}}";
+  const studentsURL = "{% url 'student_api:list' %}";
 </script>
 <script src='{% static "js/editGroupMembers.js" %}'></script>
 {% endblock %}

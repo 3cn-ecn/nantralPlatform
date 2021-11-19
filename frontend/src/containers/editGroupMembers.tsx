@@ -46,6 +46,7 @@ function Root(props): JSX.Element {
         setShowModal={setShowAddModal}
         showModal={showAddModal}
         membersURL={props.membersURL}
+        studentsURL={props.studentsURL}
         setMembers={setMembers}
         setIsLoading={setIsLoading}
       />
@@ -91,4 +92,7 @@ function Root(props): JSX.Element {
   );
 }
 
-render(<Root membersURL={membersURL} />, document.getElementById("root2"));
+render(
+  <Root membersURL={membersURL} studentsURL={studentsURL} />,
+  document.getElementById("root2")
+);

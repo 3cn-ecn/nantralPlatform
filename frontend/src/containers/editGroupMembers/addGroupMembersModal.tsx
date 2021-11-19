@@ -1,10 +1,12 @@
 ﻿import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
+import { Typeahead } from "react-bootstrap-typeahead";
 
-import { MemberAdd } from "../groupMembers/interfaces";
-import { addMember } from "./utils";
+import { MemberAdd, Student } from "../groupMembers/interfaces";
+import { addMember, getStudents } from "./utils";
+import { spinnerDivStyle, spinnerStyle } from "../clubsList/styles";
 
 export function AddGroupMembersModal(props): JSX.Element {
   const { showModal, setShowModal, membersURL, setIsLoading, setMembers } =
@@ -15,9 +17,11 @@ export function AddGroupMembersModal(props): JSX.Element {
   }
 
   const [formData, setFormData] = useState<MemberAdd>({
+    id: 0,
     function: "Membre",
     admin: false,
   });
+  const [students, setStudents] = useState<Student[]>([]);
   const [isAddLoading, setIsAddLoading] = useState(false);
 
   const handleClose = () => setShowModal(false);
@@ -35,6 +39,32 @@ export function AddGroupMembersModal(props): JSX.Element {
     );
   };
 
+  useEffect(
+    () => getStudents(props.studentsURL, setStudents, setIsAddLoading),
+    []
+  );
+
+  if (isAddLoading) {
+    return (
+      <Modal
+        show={showModal}
+        onHide={handleClose}
+        onSubmit={handleSubmit}
+        key={students.length}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Ajout d'un.e membre</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className="grille" style={spinnerDivStyle}>
+            <Spinner animation="border" role="status" style={spinnerStyle} />
+          </div>
+        </Modal.Body>
+      </Modal>
+    );
+  }
+
   return (
     <Modal show={showModal} onHide={handleClose} onSubmit={handleSubmit}>
       <Modal.Header closeButton>
@@ -45,11 +75,18 @@ export function AddGroupMembersModal(props): JSX.Element {
         <Form>
           <Form.Group className="mb-3" controlId="formRole">
             <Form.Label>Etudiant.e</Form.Label>
-            <Form.Control
-              type="integer"
-              onChange={({ target: { value } }) => {
+            <Typeahead
+              id="search-student"
+              options={students.map((e) => {
+                return { label: e.name, id: e.id };
+              })}
+              placeholder="Recherche"
+              onChange={(student) => {
+                if (typeof student[0] === "undefined") {
+                  return;
+                }
                 let newFormData = formData;
-                newFormData["id"] = value;
+                newFormData["id"] = student[0].id;
                 setFormData(newFormData);
               }}
             />

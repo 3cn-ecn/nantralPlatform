@@ -109,3 +109,28 @@ export function addMember(
       getMembers(membersUrl, setMembers, setIsLoading);
     });
 }
+
+export function getStudents(
+  studentsURL: string,
+  setStudents,
+  setIsAddLoading
+): void {
+  setIsAddLoading(true);
+  axios
+    .get(studentsURL)
+    .then((resp) => {
+      if (resp.status !== 200) {
+        console.error(
+          "Les etudiants n'ont pas pu être récupérés.",
+          "ERR:",
+          resp.status
+        );
+      }
+      setStudents(resp.data);
+      setIsAddLoading(false);
+    })
+    .catch((e) => {
+      console.error("L'ordre des membres n'a pas pu être mis à jour.");
+    })
+    .finally();
+}
