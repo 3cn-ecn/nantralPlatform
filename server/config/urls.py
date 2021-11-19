@@ -35,6 +35,9 @@ urlpatterns = [
 
     path('club/', include('apps.club.urls',  namespace='club')),
     path('api/club/', include('apps.club.api_urls', namespace='club_api')),
+    
+    path('administration/', include('apps.administration.urls',  namespace='administration')),
+    path('api/administration/', include('apps.administration.api_urls',  namespace='administration_api')),
 
     path('liste/', include('apps.liste.urls',  namespace='liste')),
     path('api/liste/', include('apps.liste.api_urls',  namespace='liste_api')),

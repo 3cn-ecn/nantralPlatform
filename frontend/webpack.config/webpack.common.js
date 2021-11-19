@@ -5,10 +5,7 @@ module.exports = {
       __dirname,
       "../src/containers/goBackButton.tsx"
     ),
-    clubsList: path.join(
-      __dirname, 
-      "../src/containers/clubsList.tsx"
-    ),
+    clubsList: path.join(__dirname, "../src/containers/clubsList.tsx"),
     eventsGroupListUpdate: path.join(
       __dirname,
       "../src/containers/eventsGroupListUpdate.tsx"

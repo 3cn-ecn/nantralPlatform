@@ -16,8 +16,6 @@ export function StudentCard(props): JSX.Element {
         className="col-12 col-sm-6 col-lg-4 col-xxl-3 d-grid"
         style={props.sortStyle ? props.sortStyle : null}
         ref={props.newRef ? props.newRef : null}
-        {...props.attributes}
-        {...props.listeners}
       >
         <div className="btn btn-light student">
           <div className="row g-3">
@@ -35,13 +33,7 @@ export function StudentCard(props): JSX.Element {
   }
 
   return (
-    <div
-      className="col-12 col-sm-6 col-lg-4 col-xxl-3 d-grid"
-      style={props.sortStyle ? props.sortStyle : null}
-      ref={props.newRef ? props.newRef : null}
-      {...props.attributes}
-      {...props.listeners}
-    >
+    <div className="col-12 col-sm-6 col-lg-4 col-xxl-3 d-grid">
       <div className="btn btn-light student">
         <div className="row g-3">
           <StudentCardPicture editMode={editMode} member={member} />
