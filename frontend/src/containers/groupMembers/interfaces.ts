@@ -24,7 +24,7 @@ export interface Member {
 export interface MemberAdd {
   id: number;
   admin: boolean;
-  function?: string;
+  function: string;
   date_begin?: string;
   date_end?: string;
 }

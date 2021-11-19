@@ -86,7 +86,7 @@ class ListClubMembersAPIView(APIView):
             # Check if student already exists
             if NamedMembershipClub.objects.filter(
                     student=studentToAdd, group=club).exists():
-                return HttpResponse(status=500)
+                return HttpResponse(status=403)
             admin = request.data.get("admin")
             function = request.data.get("function")
             beginDate = parse_date(request.data.get("date_begin")) if request.data.get(
@@ -95,9 +95,21 @@ class ListClubMembersAPIView(APIView):
                 "endDate") is not None else None
 
             # Check if dates are valid
-            if beginDate > endDate:
+            if beginDate is not None and endDate is not None and beginDate > endDate:
                 return HttpResponse(status=500)
 
-            NamedMembershipClub.objects.create(
-                student=studentToAdd, admin=admin, function=function, date_begin=dateBegin, date_end=dateEnd).save()
+            if beginDate is not None:
+                NamedMembershipClub.objects.create(
+                    group=club,
+                    student=studentToAdd,
+                    admin=admin,
+                    function=function,
+                    date_begin=beginDate,
+                    date_end=endDate).save()
+            else:
+                NamedMembershipClub.objects.create(
+                    group=club,
+                    student=studentToAdd,
+                    admin=admin,
+                    function=function).save()
             return HttpResponse(status=200)

@@ -14,7 +14,10 @@ export function AddGroupMembersModal(props): JSX.Element {
     return <></>;
   }
 
-  const [formData, setFormData] = useState<MemberAdd>({});
+  const [formData, setFormData] = useState<MemberAdd>({
+    function: "Membre",
+    admin: false,
+  });
   const [isAddLoading, setIsAddLoading] = useState(false);
 
   const handleClose = () => setShowModal(false);
@@ -56,6 +59,7 @@ export function AddGroupMembersModal(props): JSX.Element {
             <Form.Label>Rôle</Form.Label>
             <Form.Control
               type="text"
+              defaultValue={"Membre"}
               onChange={({ target: { value } }) => {
                 let newFormData = formData;
                 newFormData["role"] = value;
@@ -92,9 +96,10 @@ export function AddGroupMembersModal(props): JSX.Element {
             <Form.Check
               type="checkbox"
               label="Admin"
+              defaultChecked={false}
               onChange={({ target: { value } }) => {
                 let newFormData = formData;
-                newFormData["admin"] = value;
+                newFormData["admin"] = value === "on";
                 setFormData(newFormData);
               }}
             />
