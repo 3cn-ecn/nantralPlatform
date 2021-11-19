@@ -18,7 +18,7 @@ def docker_db_dump(filename: str, db_user: str, db_name: str, container_name: st
     client = docker.from_env()
     db_container = client.containers.get(container_name)
     _, output = db_container.exec_run(
-        f"pg_dump {db_name} -U {db_user}")
+        f"/bin/bash -c 'pg_dump {db_name} -U {db_user}'")
     with gzip.open(f"{filename}", "wb") as file:
         file.write(output)
     client.close()

@@ -3,15 +3,6 @@
 import { Member } from "../groupMembers/interfaces";
 import { getMembers } from "../groupMembers/utils";
 
-export function membersSort(a: Member, b: Member): number {
-  if (a.order === 0) {
-    return -1;
-  }
-  if (b.order === 0) {
-    return -1;
-  }
-  return a.order - b.order;
-}
 
 export function updateMember(
   membersUrl: string,

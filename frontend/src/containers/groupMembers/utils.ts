@@ -1,7 +1,6 @@
 ﻿import { Member } from "./interfaces";
 import axios from "axios";
 
-import { membersSort } from "../editGroupMembers/utils";
 
 var dayjs = require("dayjs");
 require("dayjs/locale/fr");
@@ -16,14 +15,16 @@ export function makeNiceDate(date: string): string {
 
 export function sendNewOrder(
   orderedMembers: Member[],
-  unorderedMembers: Member[],
+  oldMembers: any[],
   membersURL: string,
   setIsRefreshingSort: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   setIsRefreshingSort(true);
   let membersToUpdate = [];
   for (let i = 0; i < orderedMembers.length; i++) {
-    if (unorderedMembers[i].id !== orderedMembers[i].id) {
+    let oldMember = oldMembers.find((e) => e.id === orderedMembers[i].id);
+
+    if (oldMember.order !== orderedMembers[i].order) {
       membersToUpdate.push({
         id: orderedMembers[i].id,
         order: orderedMembers[i].order,
@@ -66,7 +67,7 @@ export async function getMembers(
         }
       }
       resp.json().then((data: Member[]) => {
-        setMembers(data);
+        setMembers(data.sort((a, b) => a.order - b.order));
       });
     })
     .catch((err) => {
