@@ -23,7 +23,12 @@
 	{% block head %}
 		<meta name="description" CONTENT="Bienvenue sur Nantral Platform, le site des clubs et assos de Centrale Nantes !">
 	{% endblock %}
-	<title>{% block title %}{% endblock %}Nantral Platform</title>
+	<title>
+		{% if ariane %}
+			{% with ariane|last as page %}{{page.label}} - {% endwith %}
+		{% endif %}
+		Nantral Platform
+	</title>
 </head>
 
 <body>
