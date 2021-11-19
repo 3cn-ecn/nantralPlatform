@@ -1,8 +1,7 @@
 ﻿import axios from "axios";
 
-import { Member } from "../groupMembers/interfaces";
+import { Member, MemberAdd } from "../groupMembers/interfaces";
 import { getMembers } from "../groupMembers/utils";
-
 
 export function updateMember(
   membersUrl: string,
@@ -73,6 +72,39 @@ export function deleteMember(
     })
     .finally(() => {
       setIsUpdateLoading(false);
+      handleClose();
+      getMembers(membersUrl, setMembers, setIsLoading);
+    });
+}
+
+export function addMember(
+  membersUrl: string,
+  formData: MemberAdd,
+  handleClose: () => void,
+  setIsAddLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setMembers: React.Dispatch<React.SetStateAction<Member[]>>
+): void {
+  setIsAddLoading(true);
+  axios
+    .post(membersUrl, {
+      editMode: 4,
+      id: formData.id,
+      date_begin: formData.date_begin,
+      date_end: formData.date_end,
+      admin: formData.admin,
+      function: formData.function,
+    })
+    .then((resp) => {
+      if (resp.status !== 200) {
+        console.error("Le membre n'a pas pu être ajouté.", "ERR:", resp.status);
+      }
+    })
+    .catch((e) => {
+      console.error("Le membre n'a pas pu être ajouté.");
+    })
+    .finally(() => {
+      setIsAddLoading(false);
       handleClose();
       getMembers(membersUrl, setMembers, setIsLoading);
     });
