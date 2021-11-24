@@ -70,6 +70,19 @@ class SuggestionView(LoginRequiredMixin, FormView):
         ]
         return context
 
+class LegalMentionsView(TemplateView):
+    template_name = 'home/mentions.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Mentions Légales'
+            }
+        ]
+        return context
+
 @login_required
 def currentUserPageView(request):
     """A view to redirect the user to his own page"""
