@@ -14,19 +14,21 @@ body {
   width: 100%;
 }
 
-h1,
-h2,
-h5 {
+h1, .h1,
+h2, .h2,
+h4, .h4,
+.student h5 {
   font-family: "Heebo", sans-serif;
   font-weight: 900;
 }
 
-h3,
-h4,
-h6 {
+h3, .h3,
+h5, .h5,
+h6, .h6 {
   font-family: "Heebo", sans-serif;
   font-weight: 500;
 }
+
 a {
   text-decoration: none;
 }
@@ -163,4 +165,33 @@ a.rs:hover div {
 a.rs:hover span {
   color: #fff;
   z-index: 1;
+}
+
+
+/* ÉVÈNEMENTS ET POSTS */
+/* ------------------- */
+
+.container .events .card {
+  box-shadow: 0 0 5px 2px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.container .events .card img {
+  transition: all 0.3s ease;
+}
+.container .events .card:hover {
+  box-shadow: 0 0 5px 4px rgba(0,0,0,0.3);
+}
+.container .events .card:hover img {
+  transform: scale(1.02);
+}
+.container .events a.card-body, .container a:hover.card-image {
+  text-decoration: none;
+  color:inherit;
+}
+.container .events .card-date {
+  color: #222;
+}
+.container .events .card-subtitle {
+  color: #333;
 }

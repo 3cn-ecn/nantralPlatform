@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.shortcuts import reverse, get_object_or_404
 
@@ -40,7 +39,9 @@ class BaseEvent(AbstractPost):
         return student in self.participants.all()
 
     def save(self, *args, **kwargs):
-        self.slug = f'bevent--{slugify(self.title)}-{self.date.year}-{self.date.month}-{self.date.day}'
+        self.set_slug(
+            str(self.date.year) + "-" + str(self.date.month) + "-" + str(self.date.day) + "-" + self.title
+        )
         super(BaseEvent, self).save(*args, **kwargs)
 
     # Don't make this a property, Django expects it to be a method.
@@ -50,11 +51,12 @@ class BaseEvent(AbstractPost):
 
     @staticmethod
     def get_event_by_slug(slug: str):
-        type_slug = slug.split('--')[0]
-        if type_slug == 'bevent':
-            return get_object_or_404(BaseEvent, slug=slug)
-        elif type_slug == 'eevent':
-            return EatingEvent.objects.get(slug=slug)
+        object = get_object_or_404(BaseEvent, slug=slug)
+        try:
+            object = object.eatingevent
+        except EatingEvent.DoesNotExist:
+            pass
+        return object
 
 
 class EatingEvent(BaseEvent):
@@ -63,7 +65,3 @@ class EatingEvent(BaseEvent):
     They can show a menu, ask people about their eating habbits...
     """
     menu = models.TextField(verbose_name='Menu de l\'événement')
-
-    def save(self, *args, **kwargs):
-        self.slug = f'eevent--{slugify(self.title)}'
-        super(EatingEvent, self).save(*args, **kwargs)

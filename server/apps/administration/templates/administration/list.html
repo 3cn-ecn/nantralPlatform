@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load file_url %}
+{% load cache %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col">
+			<h1>Administration</h1>
+		</div>
+		<!--div class="col text-end">
+			<input type="textbox">
+		</div-->
+	</div>
+	<div class="grille">
+		{% for group in object_list %}
+			<div class="grille-icon text-center" style="transform:rotate(0);">
+				<a href="{{ group.get_absolute_url }}" class="stretched-link">
+					<div class="ratio ratio-1x1">
+						{% if group.logo %}
+							<img src="{{ group.logo|file_url }}">
+						{% else %}
+							<img src="{% static 'img/logo.svg' %}" style="opacity:0.3">
+						{% endif %}
+					</div>
+				</a>
+				<p>
+					{{ group.name }}
+				</p>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+

@@ -12,12 +12,12 @@
 
 {% block content %}
     <h1>{{object.title}}</h1>
-    <p>Organisé par <a href='{{group.get_absolute_url }}'>{{group.name}}</a></p>
+    <p>{{object.date|date:"l j F Y à H:i"|capfirst}} - {{object.location}} - Organisé par <a href='{{group.get_absolute_url }}'>{{group.name}}</a></p>
 
     <div class="btn-group btn-group-sm" role="group">
         <button type="button" class="btn btn-secondary btn-lg active">{{object.number_of_participants}} participants</button>
         {% if request.user.is_authenticated %}
-            {%if is_participating %}
+            {% if is_participating %}
                 <a href='{% url "event:remove-participant" object.slug %}' class="btn btn-secondary btn-lg" role="button">
                     <i class="fa fa-times" aria-hidden="true"></i> Je ne participe plus
                 </a>
@@ -28,6 +28,9 @@
             {% endif %}
         {% endif %}
     </div>
+    {% if is_admin %}
+        <a href="{% url 'event:edit' object.slug %}" class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier l'évènement</a>
+    {% endif %}
 
     </br>
     {% autoescape off %}

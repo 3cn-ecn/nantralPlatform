@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-from datetime import date, datetime
+from datetime import datetime
 import os
 import environ
 from django.urls import reverse_lazy
@@ -55,6 +55,7 @@ THIRD_PARTY_APPS = [
     'django_ckeditor_5',
     'debug_toolbar',
     'django_celery_beat',
+    'extra_settings',
 ]
 
 COMMON_APPS = [
@@ -72,6 +73,7 @@ COMMON_APPS = [
     'apps.roommates',
     'apps.sociallink',
     'apps.family',
+    'apps.administration',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS
@@ -184,11 +186,15 @@ CKEDITOR_5_CONFIGS = {
             '|',
             'blockQuote', 'imageUpload'
         ],
-        'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
-                    'code', 'subscript', 'superscript', 'highlight', '|', 'codeBlock',
-                    'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
-                    'insertTable', ],
+        'toolbar': [
+            'heading', '|', 'outdent', 'indent', '|',
+            'bold', 'italic', 'link', 'underline', 'strikethrough', 'code',
+            'subscript', 'superscript', 'highlight', '|',
+            'codeBlock', 'bulletedList', 'numberedList', 'todoList', '|',
+            'blockQuote', 'imageUpload', '|',
+            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
+            'mediaEmbed', 'removeFormat', 'insertTable',
+        ],
         'table': {
             'contentToolbar': ['tableColumn', 'tableRow', 'mergeTableCells',
                                'tableProperties', 'tableCellProperties'],

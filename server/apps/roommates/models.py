@@ -41,9 +41,34 @@ class Roommates(Group):
         to=Housing, on_delete=models.CASCADE)
     members = models.ManyToManyField(
         to=Student, through='NamedMembershipRoommates', blank=True)
+    
+    #colocathlon fields
+    colocathlon_agree = models.BooleanField(
+        verbose_name="Participation au colocathlon", 
+        default=False)
+    colocathlon_quota = models.IntegerField(
+        verbose_name="Quantité max d'invités",
+        default=0)
+    colocathlon_hours = models.CharField(
+        verbose_name="Horaires d'ouvertures",
+        max_length=50, null=True, blank=True)
+    colocathlon_activities = models.CharField(
+        verbose_name="Activités proposées", 
+        max_length=250, null=True, blank=True)
+    colocathlon_participants = models.ManyToManyField(
+        to=Student, related_name="colocathlons_in"
+    )
 
     class Meta:
         verbose_name = "coloc"
+    
+    def occupied(self):
+        td = timezone.now().today
+        if self.begin_date <= td and (self.end_date is None or self.end_date >= td):
+            return True
+        return False
+    
+
 
 
 class NamedMembershipRoommates(NamedMembership):

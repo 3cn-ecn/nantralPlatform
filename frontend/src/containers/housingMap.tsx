@@ -3,17 +3,20 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import ReactDOM, { render } from "react-dom";
 import { easeCubic } from "react-d3-library";
 import { Popup, Marker, FlyToInterpolator } from "react-map-gl";
+import { useCookies, CookiesProvider } from "react-cookie";
 
-import { Housing } from "./housingMap/interfaces";
+import { Housing, RootProps } from "./housingMap/interfaces";
+import { ColocathlonSwitch } from "./housingMap/colocathlonSwitch";
 import { MapForm } from "./housingMap/mapForm";
 import { Pin } from "./housingMap/pin";
 import { ColocInfo } from "./housingMap/colocInfo";
 import { Map } from "./housingMap/map";
+import { CurrentColocInfo } from "./housingMap/currentColocInfo";
 
 import { getRoommates } from "./housingMap/utils";
 
-function Root(props): JSX.Element {
-  const [data, setData] = useState([]);
+function Root(props: RootProps): JSX.Element {
+  const [data, setData] = useState<Housing[]>([]);
   const [colocs, setColocs] = useState([]);
   const [viewport, setViewPort] = useState({
     latitude: 47.21784689284845,
@@ -24,10 +27,26 @@ function Root(props): JSX.Element {
   });
   const [popupInfo, setPopUpinfo] = useState(null);
 
+  const [cookies, setCookie, removeCookie] = useCookies(["colocathlon-cookie"]);
+  let colocathlonCookieValue: boolean =
+    cookies["colocathlon-cookie"] !== undefined
+      ? cookies["colocathlon-cookie"] === "true"
+      : props.PHASE_COLOCATHLON == 2;
+  const [colocathlonParticipantsOnly, setColocathlonParticipantsOnly] =
+    useState(colocathlonCookieValue);
+
+  const handleColocathlonParticipants = (e: boolean) => {
+    setColocathlonParticipantsOnly(e);
+    setCookie("colocathlon-cookie", e);
+  };
+
   const mapRef = useRef(null);
 
   const markers = useMemo(() => {
-    return data.map((housing: Housing) => (
+    let housings = data.filter(
+      (e) => !colocathlonParticipantsOnly || e.roommates.colocathlon_agree
+    );
+    return housings.map((housing: Housing) => (
       <Marker
         key={housing.longitude}
         longitude={housing.longitude}
@@ -58,7 +77,7 @@ function Root(props): JSX.Element {
               >
                 <ColocInfo
                   housing={housing}
-                  housingDetailsUrl={housing.roommates.url}
+                  colocathlonOnly={colocathlonParticipantsOnly}
                 />
               </Popup>
             );
@@ -66,10 +85,10 @@ function Root(props): JSX.Element {
         />
       </Marker>
     ));
-  }, [data]);
+  }, [data, colocathlonParticipantsOnly]);
 
   useEffect(() => {
-    getRoommates(props.api_housing_url, setColocs, setData);
+    getRoommates(props.API_HOUSING_URL, setColocs, setData);
   }, []);
 
   return (
@@ -78,17 +97,37 @@ function Root(props): JSX.Element {
         <div className="col">
           <h1>Carte des Colocs</h1>
         </div>
+        <MapForm
+          colocs={colocs}
+          data={data.filter(
+            (e) => !colocathlonParticipantsOnly || e.roommates.colocathlon_agree
+          )}
+          setViewPort={setViewPort}
+          setPopUpinfo={setPopUpinfo}
+        />
       </div>
-      <MapForm
-        colocs={colocs}
-        data={data}
-        setViewPort={setViewPort}
-        setPopUpinfo={setPopUpinfo}
-      />
+      {props.PHASE_COLOCATHLON > 1 ? (
+        <div className="row">
+          <ColocathlonSwitch
+            status={colocathlonParticipantsOnly}
+            handle={handleColocathlonParticipants}
+          />
+          {colocathlonParticipantsOnly ? (
+            <CurrentColocInfo
+              colocName={props.CURRENT_COLOC}
+              colocUrl={props.CURRENT_COLOC_URL}
+            />
+          ) : (
+            <></>
+          )}
+        </div>
+      ) : (
+        <></>
+      )}
       <Map
         viewport={viewport}
         mapRef={mapRef}
-        apiKey={props.api_key}
+        apiKey={props.API_KEY}
         markers={markers}
         popupInfo={popupInfo}
         setViewPort={setViewPort}
@@ -100,6 +139,14 @@ function Root(props): JSX.Element {
 
 document.body.style.margin = "0";
 render(
-  <Root api_key={MAPBOX_TOKEN} api_housing_url={api_housing_url} />,
+  <CookiesProvider>
+    <Root
+      API_KEY={MAPBOX_TOKEN}
+      API_HOUSING_URL={API_HOUSING_URL}
+      PHASE_COLOCATHLON={PHASE_COLOCATHLON}
+      CURRENT_COLOC={CURRENT_COLOC}
+      CURRENT_COLOC_URL={CURRENT_COLOC_URL}
+    />
+  </CookiesProvider>,
   document.getElementById("root")
 );

@@ -1,6 +1,9 @@
-"""A configuration for local docker use in developpment. DO NOT USE IN PRODUCTION."""
-from .base import *
+"""A configuration for local docker use in development.
+DO NOT USE IN PRODUCTION."""
+# flake8: noqa: F405
 from celery.schedules import crontab
+
+from .base import *  # noqa: F403
 
 print("Using docker config")
 DEBUG = True

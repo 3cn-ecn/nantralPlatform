@@ -20,3 +20,16 @@ export interface Member {
   order?: number;
   group: number;
 }
+
+export interface MemberAdd {
+  id: number;
+  admin: boolean;
+  function: string;
+  date_begin?: string;
+  date_end?: string;
+}
+
+export interface StudentCardBodyProps {
+  editMode: boolean;
+  member: Member;
+}

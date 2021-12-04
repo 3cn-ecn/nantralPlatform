@@ -1,9 +1,7 @@
 ﻿import * as React from "react";
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import { Spinner } from "react-bootstrap";
 
-import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
 import { Club } from "./clubsList/interfaces";
 import { ClubIcon } from "./clubsList/clubIcon";
 
@@ -28,19 +26,11 @@ function Root(props): JSX.Element {
   }, []);
 
   if (isLoading) {
-    return (
-      <>
-        <h2>Mes Clubs et Assos</h2>
-        <div className="grille" style={spinnerDivStyle}>
-          <Spinner animation="border" role="status" style={spinnerStyle} />
-        </div>
-      </>
-    );
+    return <></>;
   }
 
   return (
     <>
-      <h2>Mes Clubs et Assos</h2>
       <div className="grille">
         {clubs.map((club: Club, key: number) => {
           return <ClubIcon club={club} key={key} />;

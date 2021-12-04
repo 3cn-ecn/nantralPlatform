@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import { useState, CSSProperties } from "react";
+import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { faIconStyle } from "./styles";
 import { Spinner } from "react-bootstrap";
@@ -27,12 +27,12 @@ export function ParticipateButton(props): JSX.Element {
 
   return (
     <div className="btn-group" role="group">
-      <Button variant="secondary" size="sm">
+      <Button variant={eventInfos.color} size="sm">
         <i className="fas fa-users" style={faIconStyle}></i>
         {numberOfParticipants}
       </Button>
       <Button
-        variant="secondary"
+        variant={eventInfos.color}
         size="sm"
         onClick={() => {
           setLoading(true);
@@ -71,7 +71,7 @@ export function ParticipateButton(props): JSX.Element {
           return (
             <>
               <Button
-                variant="secondary"
+                variant={eventInfos.color}
                 size="sm"
                 onClick={() => {
                   setIsParticipantsLoading(true);

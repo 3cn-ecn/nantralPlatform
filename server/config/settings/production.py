@@ -1,4 +1,6 @@
-from .docker import *
+# flake8: noqa: F405
+
+from .docker import *  # noqa: F403
 
 print("Running prod config")
 

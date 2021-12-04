@@ -1,4 +1,5 @@
 ﻿import axios from "axios";
+import { Housing } from "./interfaces";
 
 export async function getRoommates(
   api_housing_url: string,
@@ -32,7 +33,11 @@ export async function getRoommates(
         }
       }
       setColocs(
-        dataBuffer.map((housing) => {
+        dataBuffer.map((housing: Housing) => {
+          housing.address = housing.address.replace(
+            ", 44100 Nantes, France",
+            ""
+          );
           return { label: housing.roommates.name, housing: housing };
         })
       );
