@@ -55,6 +55,7 @@ class ListClubMembersAPIView(APIView):
         # editMode == 1 -> Edit the order of the members
         # editMode == 2 -> Edit a member
         # editMode == 3 -> Delete a member
+        # editMode == 4 -> Add a member
         if editMode == 1:
             newOrderedMembers = request.data.get("orderedMembers")
             for member in newOrderedMembers:
@@ -77,4 +78,38 @@ class ListClubMembersAPIView(APIView):
         elif editMode == 3:
             id = request.data.get("id")
             NamedMembershipClub.objects.get(id=id).delete()
+            return HttpResponse(status=200)
+
+        elif editMode == 4:
+            studentIDToAdd = request.data.get("id")
+            studentToAdd = Student.objects.get(id=studentIDToAdd)
+            # Check if student already exists
+            if NamedMembershipClub.objects.filter(
+                    student=studentToAdd, group=club).exists():
+                return HttpResponse(status=403)
+            admin = request.data.get("admin")
+            function = request.data.get("function")
+            beginDate = parse_date(request.data.get("date_begin")) if request.data.get(
+                "beginDate") is not None else None
+            endDate = parse_date(request.data.get("date_end")) if request.data.get(
+                "endDate") is not None else None
+
+            # Check if dates are valid
+            if beginDate is not None and endDate is not None and beginDate > endDate:
+                return HttpResponse(status=500)
+
+            if beginDate is not None:
+                NamedMembershipClub.objects.create(
+                    group=club,
+                    student=studentToAdd,
+                    admin=admin,
+                    function=function,
+                    date_begin=beginDate,
+                    date_end=endDate).save()
+            else:
+                NamedMembershipClub.objects.create(
+                    group=club,
+                    student=studentToAdd,
+                    admin=admin,
+                    function=function).save()
             return HttpResponse(status=200)
