@@ -127,7 +127,7 @@
 							{% if request.user.student.pk %}
 								<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>&nbsp Mon Profil</a></li>
 								{% if request.user.is_staff %}
-									<li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-star"></i>&nbsp Interface Admin</a></li>
+									<li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-shield-alt"></i>&nbsp Interface Admin</a></li>
 								{% endif %}
 								<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>&nbsp Me déconnecter</a></li>
 							{% else %}
