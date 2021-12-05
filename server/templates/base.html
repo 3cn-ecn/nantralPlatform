@@ -105,12 +105,14 @@
 						{% for n in notifications.all %}
 							<li>
 								<a class="dropdown-item text-wrap d-flex" href="{{n.notification.url}}">
-									{% if n.notification.get_group.logo %}
-										<img src="{{ n.notification.get_group.logo|file_url }}" loading="lazy">
-									{% else %}
-										<img src="{% static 'img/logo.svg' %}" loading="lazy">
-									{% endif %}
-									<small class="ms-2">{{n.notification.body}}</small>
+									{% with logo=n.notification.get_logo %}
+										{% if logo %}
+											<img src="{{ logo|file_url }}" loading="lazy">
+										{% else %}
+											<img src="{% static 'img/logo.svg' %}" loading="lazy">
+										{% endif %}
+										<small class="ms-2">{{n.notification.body}}</small>
+									{% endwith %}
 								</a>
 							</li>
 						{% empty %}

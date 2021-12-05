@@ -58,15 +58,26 @@ class Notification(models.Model):
         'Action 1 - Cible', max_length=255, blank=True, null=True)
     date = models.DateTimeField('Date de création', default=timezone.now)
     high_priority = models.BooleanField('Prioritaire', default=False)
+    receivers = models.ManyToManyField(
+        Student, related_name='notification_set', through='SentNotification')
 
     def __str__(self):
         return f'{self.body[:20]}...'
     
+    def get_logo(self):
+        page = get_object_from_full_slug(self.owner)
+        while not(isinstance(page, Group)):
+            page = get_object_from_full_slug(page.owner)
+        if hasattr(page, "logo"):
+            return page.logo
+        else:
+            return None
+
     def addReveiversMember(self, owner):
         """Ajouter les membres de groupes en tant que destinataires"""
         page = get_object_from_full_slug(owner)
         if isinstance(page, Group):
-            self.receivers.add(page.members)
+            self.receivers.add(*page.members)
         elif hasattr(page, "owner"):
             self.addReceiversMember(page.owner)
     
@@ -75,14 +86,14 @@ class Notification(models.Model):
         page = get_object_from_full_slug(owner)
         if isinstance(page, Group):
             admins = page.members.through.objects.filter(group=page, admin=True)
-            self.receivers.add(admins)
+            self.receivers.add(*admins)
         elif hasattr(page, "owner"):
             self.addReceiverAdmin(page.owner)
 
     def addAllUsers(self):
         """Ajouter tous les utilisateurs dans les destinataires"""
         all_users = Student.objects.all()
-        self.receivers.add(all_users)
+        self.receivers.add(*all_users)
     
     def save(self, *args, **kwargs):
         """Sauver la notif et ajouter des destinataires"""
@@ -102,7 +113,7 @@ class Notification(models.Model):
 class SentNotification(models.Model):
     """Table des notifications envoyées à chaque utilisateur"""
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name="receivers")
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     seen = models.BooleanField('Vu', default=False)
     subscribed = models.BooleanField('Abonné', default=False,
         help_text="Vrai si on la montre dans les abonnements")

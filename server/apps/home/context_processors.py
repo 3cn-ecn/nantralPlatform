@@ -27,7 +27,8 @@ def navbar_context(request):
         show = (phase != 0)
     # notifications
     try:
-        notifs = SentNotification.objects.filter(student=request.user.student, seen=False).select_related('notification')
+        notifs = SentNotification.objects.filter(student=request.user.student).order_by('-notification__date').select_related('notification')
+        subscribed_notifs = notifs.filter(subscribed=True)[:20]
     except Exception:
         notifs = None
-    return {'navbar_bdx': bdx, 'navbar_family_show': show, 'notifications': notifs}
+    return {'navbar_bdx': bdx, 'navbar_family_show': show, 'notifications': notifs[:20], 'notifications_subscribed':subscribed_notifs}
