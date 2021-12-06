@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('student', '0006_student_receiveallnotifications'),
+        ('student', '0005_auto_20210801_1726'),
         ('notification', '0003_alter_notification_url'),
     ]
 

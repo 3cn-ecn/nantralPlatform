@@ -40,10 +40,6 @@ class Student(models.Model):
         max_length=200, verbose_name='Filière', choices=FACULTIES)
     path = models.CharField(
         max_length=200, verbose_name='Cursus', choices=PATHS, null=True, blank=True)
-    receiveAllNotifications = models.BooleanField(
-        default = True,
-        verbose_name = 'Recevoir toutes les notifications', 
-        help_text="Recevoir aussi les notifications des groupes auxquels vous n'êtes pas abonnés.")
 
     @property
     def name(self):
