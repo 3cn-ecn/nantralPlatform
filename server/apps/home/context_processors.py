@@ -30,5 +30,6 @@ def navbar_context(request):
         notifs = SentNotification.objects.filter(student=request.user.student).order_by('-notification__date').select_related('notification')
         subscribed_notifs = notifs.filter(subscribed=True)[:20]
     except Exception:
-        notifs = None
-    return {'navbar_bdx': bdx, 'navbar_family_show': show, 'notifications': notifs[:20], 'notifications_subscribed':subscribed_notifs}
+        notifs = []
+        subscribed_notifs = []
+    return {'navbar_bdx': bdx, 'navbar_family_show': show, 'notifications': notifs[:20], 'notifications_subscribed': subscribed_notifs}

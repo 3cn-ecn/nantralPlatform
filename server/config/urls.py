@@ -22,51 +22,58 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    # dev
     path('__debug__/', include(debug_toolbar.urls)),
     path('admin/', admin.site.urls),
 
-    path('account/', include('apps.account.urls', namespace='account')),
-
-    path('student/', include('apps.student.urls', namespace='student')),
-    path(
-        'api/student/', include('apps.student.api_urls',
-                                namespace='student_api')
-    ),
-
-    path('club/', include('apps.club.urls',  namespace='club')),
-    path('api/club/', include('apps.club.api_urls', namespace='club_api')),
-    
-    path('administration/', include('apps.administration.urls',  namespace='administration')),
-    path('api/administration/', include('apps.administration.api_urls',  namespace='administration_api')),
-
-    path('liste/', include('apps.liste.urls',  namespace='liste')),
-    path('api/liste/', include('apps.liste.api_urls',  namespace='liste_api')),
-
-    path('academic/', include('apps.academic.urls', namespace='academic')),
-    path(
-        'api/academic/', include('apps.academic.api_urls',
-                                 namespace='academic_api')
-    ),
-
-    path('services/', include('apps.services.urls', namespace='services')),
-
-    path('event/', include('apps.event.urls', namespace='event')),
-    path('api/event/', include('apps.event.api_urls', namespace='event_api')),
-    path('post/', include('apps.post.urls', namespace='post')),
-    path('api/post/', include('apps.post.api_urls', namespace='post_api')),
-
+    # apps
+    path('account/', 
+        include('apps.account.urls', namespace='account')),
+    path('student/', 
+        include('apps.student.urls', namespace='student')),
+    path('club/', 
+        include('apps.club.urls',  namespace='club')),
+    path('liste/', 
+        include('apps.liste.urls',  namespace='liste')),
+    path('colocs/', 
+        include('apps.roommates.urls', namespace='roommates')),
+    path('administration/', 
+        include('apps.administration.urls',  namespace='administration')),
+    path('academic/', 
+        include('apps.academic.urls', namespace='academic')),
+    path('parrainage/', 
+        include('apps.family.urls', namespace='family')),
+    path('parrainage/admin/', 
+        include('apps.family.admin_urls', namespace='family-admin')),
+    path('post/', 
+        include('apps.post.urls', namespace='post')),
+    path('event/', 
+        include('apps.event.urls', namespace='event')),
+    path('services/', 
+        include('apps.services.urls', namespace='services')),
     # path('exchange/', include('apps.exchange.urls', namespace='exchange')),
 
-    path('colocs/', include('apps.roommates.urls', namespace='roommates')),
-    path(
-        'api/colocs/', include('apps.roommates.api_urls',
-                               namespace='roommates_api')
-    ),
+    # api
+    path('api/student/', 
+        include('apps.student.api_urls', namespace='student_api')),
+    path('api/club/',  
+        include('apps.club.api_urls', namespace='club_api')),
+    path('api/liste/', 
+        include('apps.liste.api_urls',  namespace='liste_api')),
+    path('api/colocs/', 
+        include('apps.roommates.api_urls', namespace='roommates_api')),
+    path('api/administration/', 
+        include('apps.administration.api_urls',  namespace='administration_api')),
+    path('api/academic/', 
+        include('apps.academic.api_urls', namespace='academic_api')),
+    path('api/post/', 
+        include('apps.post.api_urls', namespace='post_api')),
+    path('api/event/', 
+        include('apps.event.api_urls', namespace='event_api')),
+    path('api/notification/', 
+        include('apps.notification.api_urls', namespace='notification_api')),
 
-    path('parrainage/', include('apps.family.urls', namespace='family')),
-    path('parrainage/admin/',
-         include('apps.family.admin_urls', namespace='family-admin')),
-
+    # homepage
     path('', include('apps.home.urls', namespace='home')),
 ]
 
