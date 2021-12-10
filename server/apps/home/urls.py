@@ -7,7 +7,7 @@ app_name = 'home'
 
 urlpatterns = [
     path('sugestions/', SuggestionView.as_view(), name='sugestions'),
-    path('legal_mentions', LegalMentionsView.as_view(), name='mentions'),
+    path('legal_mentions/', LegalMentionsView.as_view(), name='mentions'),
     path('me/', currentUserPageView, name='me'),
     path('my_coloc/', currentUserRoommatesView, name='my_coloc'),
     path('', HomeView.as_view(), name='home'),
