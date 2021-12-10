@@ -1,17 +1,17 @@
 from django.contrib import admin
-from .models import Notification, ReceivedNotification, Subscription
+from .models import Notification, SentNotification, Subscription
 
 # Register your models here.
 
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ['body', 'group', 'date', 'high_priority']
+    list_display = ['body', 'owner', 'date']
 
-class ReceivedNotificationAdmin(admin.ModelAdmin):
+class SentNotificationAdmin(admin.ModelAdmin):
     list_display = ['student', 'notification']
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ['student', 'group']
+    list_display = ['student', 'page']
 
 admin.site.register(Notification, NotificationAdmin)
-admin.site.register(ReceivedNotification, ReceivedNotificationAdmin)
+admin.site.register(SentNotification, SentNotificationAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)

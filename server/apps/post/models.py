@@ -11,6 +11,7 @@ from apps.utils.slug import SlugModel, get_object_from_full_slug
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compressModelImage
 from apps.group.models import Group
+from apps.notification.models import Notification
 
 
 path_and_rename = PathAndRename("posts/pictures")
@@ -80,7 +81,16 @@ class Post(AbstractPost):
             str(self.publication_date.day) + "-" + 
             self.title
         )
+        created = self.id is None
         super(Post, self).save(*args, **kwargs)
+        if created:
+            Notification.objects.create(
+                body = f'Nouveau post de {self.get_group_name} : {self.title}',
+                url = self.get_absolute_url(),
+                owner = self.group,
+                publicity = self.publicity,
+                date = self.publication_date
+            )
 
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).

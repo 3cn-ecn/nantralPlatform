@@ -6,6 +6,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.post.models import AbstractPost
 from apps.student.models import Student
+from apps.notification.models import Notification
 from apps.utils.upload import PathAndRename
 
 
@@ -42,7 +43,16 @@ class BaseEvent(AbstractPost):
         self.set_slug(
             str(self.date.year) + "-" + str(self.date.month) + "-" + str(self.date.day) + "-" + self.title
         )
+        created = self.id is None
         super(BaseEvent, self).save(*args, **kwargs)
+        if created:
+            Notification.objects.create(
+                body = f'Nouvel évènement de {self.get_group_name} : {self.title}',
+                url = self.get_absolute_url(),
+                owner = self.group,
+                publicity = self.publicity,
+                date = self.publication_date
+            )
 
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).

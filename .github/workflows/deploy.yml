@@ -111,5 +111,5 @@ jobs:
             sudo chmod +x /etc/letsencrypt/renewal-hooks/post/001-post-renew.sh
             sudo cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPlatform/deployment/certs/key.pem
             sudo cp /etc/letsencrypt/live/nantral-platform.fr/fullchain.pem /home/ubuntu/nantralPlatform/deployment/certs/cert.pem
-            sudo docker-compose build nginx server --no-cache
+            sudo docker-compose build --no-cache nginx server
             docker-compose up -d
