@@ -16,6 +16,7 @@ class TestNotification(TestCase, TestMixin):
         self.user_teardown()
 
     def test_subscription(self):
+        """Teste l'inscription d'un utilisateur à un club"""
         club = Club.objects.create(name="Club de test")
         Subscription.objects.create(
             student=self.u2.student, page=club.full_slug)
