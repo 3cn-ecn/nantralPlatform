@@ -11,6 +11,7 @@ class TestMixin(object):
         self.u3 = self.create_user('user3', 'user3@ec-nantes.fr')
     
     def create_user(self, username, email, is_active=True, name=""):
+        """Create a new User and a Student with it"""
         u = User.objects.create(username=username, email=email)
         u.set_password('pass')
         u.is_active = is_active

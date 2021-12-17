@@ -11,6 +11,9 @@ from .models import Club, NamedMembershipClub
 class TestGroups(TestCase, TestMixin):
     def setUp(self):
         self.user_setup()
+    
+    def tearDown(self):
+        self.user_teardown()
 
     def test_create_club(self):
         Club.objects.create(name='TestClub')
@@ -41,6 +44,5 @@ class TestGroups(TestCase, TestMixin):
         self.client.login(username=self.u2.username, password='pass')
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-
         self.assertEqual(NamedMembershipClub.objects.filter(
             group=club, student=self.u2.student).count(), 1)

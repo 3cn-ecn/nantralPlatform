@@ -15,7 +15,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes, force_str
 from django.urls import reverse, reverse_lazy
 
 from django.contrib.auth.views import PasswordResetConfirmView
@@ -70,7 +70,7 @@ class ConfirmUser(View):
     def get(self, request, uidb64, token):
         tempAccessReq: Union[TemporaryAccessRequest, None] = None
         try:
-            uid = force_text(urlsafe_base64_decode(uidb64))
+            uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             return render(self.request, 'account/activation_invalid.html')
@@ -251,7 +251,7 @@ class DenyTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
 class ConfirmUserTemporary(View):
     def get(self, request, uidb64, token):
         try:
-            uid = force_text(urlsafe_base64_decode(uidb64))
+            uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None

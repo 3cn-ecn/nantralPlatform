@@ -22,7 +22,7 @@ from apps.notification.models import Subscription
 
 from .forms import *
 
-from apps.utils.accessMixins import UserIsAdmin
+from apps.utils.accessMixins import UserIsAdmin, userIsConnected
 from apps.utils.slug import *
 
 
@@ -38,36 +38,38 @@ class BaseDetailGroupView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         group = self.object
-        # infos
-        context['sociallinks'] = SocialLink.objects.filter(
-            slug=group.full_slug)
-        publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
-        posts = Post.objects.filter(
-            group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
-        context['posts'] = [
-            post for post in posts if post.can_view(self.request.user)]
-        date_gte = timezone.make_aware(timezone.now().today())
-        context['has_events'] = BaseEvent.objects.filter(
-            group=group.full_slug, date__gte=date_gte).exists()
-        # members
-        context['members'] = group.members.through.objects.filter(
-            group=group).order_by('student__user__first_name')
-        context['is_member'] = group.is_member(self.request.user)
-        if context['is_member']:
-            membership = group.members.through.objects.get(
-                student=self.request.user.student,
-                group=group,
-            )
-            context['form'] = NamedMembershipAddGroup(
-                group)(instance=membership)
-        else:
-            context['form'] = NamedMembershipAddGroup(group)()
-        # admin
-        context['is_admin'] = group.is_admin(self.request.user)
-        context['admin_req_form'] = AdminRightsRequestForm()
-        context['subscribed'] = Subscription.objects.filter(
-            student=self.request.user.student, 
-            page = group.full_slug).exists()
+        # réseaux sociaux
+        context['sociallinks'] = SocialLink.objects.filter(slug=group.full_slug)
+        # seuement si connecté
+        context['connected'] = userIsConnected(self.request.user)
+        if userIsConnected(self.request.user):
+            publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
+            posts = Post.objects.filter(
+                group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
+            context['posts'] = [
+                post for post in posts if post.can_view(self.request.user)]
+            date_gte = timezone.make_aware(timezone.now().today())
+            context['has_events'] = BaseEvent.objects.filter(
+                group=group.full_slug, date__gte=date_gte).exists()
+            # members
+            context['members'] = group.members.through.objects.filter(
+                group=group).order_by('student__user__first_name')
+            context['is_member'] = group.is_member(self.request.user)
+            if context['is_member']:
+                membership = group.members.through.objects.get(
+                    student=self.request.user.student,
+                    group=group,
+                )
+                context['form'] = NamedMembershipAddGroup(
+                    group)(instance=membership)
+            else:
+                context['form'] = NamedMembershipAddGroup(group)()
+            # admin
+            context['is_admin'] = group.is_admin(self.request.user)
+            context['admin_req_form'] = AdminRightsRequestForm()
+            context['subscribed'] = Subscription.objects.filter(
+                student=self.request.user.student, 
+                page = group.full_slug).exists()
         context['ariane'] = [
             {
                 'target': reverse(group.app+':index'), 

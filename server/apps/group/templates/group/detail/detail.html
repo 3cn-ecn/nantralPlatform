@@ -42,7 +42,7 @@
             {% block object_name %}<h1>{{object.name}}</h1>{% endblock %}
             
             <p>
-            {% if request.user.is_authenticated %}
+            {% if connected %}
                 {% if is_member and is_admin %}
                     <div class="btn-group" role="group">
                         <button class='btn btn-light btn-sm disabled border'>
@@ -98,7 +98,7 @@
     {% if has_events %}
         <br>   
         <h2>Évènements</h2>
-        {% if request.user.is_authenticated %}
+        {% if connected %}
             <div id="root"></div>
         {%else%}
             <p>Veuillez vous connecter pour voir les évènements à venir.</p>
