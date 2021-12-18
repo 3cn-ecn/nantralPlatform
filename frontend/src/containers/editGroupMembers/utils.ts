@@ -1,6 +1,6 @@
 ﻿import axios from "axios";
 
-import { Member } from "../groupMembers/interfaces";
+import { Member, MemberAdd } from "../groupMembers/interfaces";
 import { getMembers } from "../groupMembers/utils";
 
 export function updateMember(
@@ -75,4 +75,62 @@ export function deleteMember(
       handleClose();
       getMembers(membersUrl, setMembers, setIsLoading);
     });
+}
+
+export function addMember(
+  membersUrl: string,
+  formData: MemberAdd,
+  handleClose: () => void,
+  setIsAddLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setMembers: React.Dispatch<React.SetStateAction<Member[]>>
+): void {
+  setIsAddLoading(true);
+  axios
+    .post(membersUrl, {
+      editMode: 4,
+      id: formData.id,
+      date_begin: formData.date_begin,
+      date_end: formData.date_end,
+      admin: formData.admin,
+      function: formData.function,
+    })
+    .then((resp) => {
+      if (resp.status !== 200) {
+        console.error("Le membre n'a pas pu être ajouté.", "ERR:", resp.status);
+      }
+    })
+    .catch((e) => {
+      console.error("Le membre n'a pas pu être ajouté.");
+    })
+    .finally(() => {
+      setIsAddLoading(false);
+      handleClose();
+      getMembers(membersUrl, setMembers, setIsLoading);
+    });
+}
+
+export function getStudents(
+  studentsURL: string,
+  setStudents,
+  setIsAddLoading
+): void {
+  setIsAddLoading(true);
+  axios
+    .get(studentsURL)
+    .then((resp) => {
+      if (resp.status !== 200) {
+        console.error(
+          "Les etudiants n'ont pas pu être récupérés.",
+          "ERR:",
+          resp.status
+        );
+      }
+      setStudents(resp.data);
+      setIsAddLoading(false);
+    })
+    .catch((e) => {
+      console.error("L'ordre des membres n'a pas pu être mis à jour.");
+    })
+    .finally();
 }

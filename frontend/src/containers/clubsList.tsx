@@ -1,9 +1,7 @@
 ﻿import * as React from "react";
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import { Spinner } from "react-bootstrap";
 
-import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
 import { Club } from "./clubsList/interfaces";
 import { ClubIcon } from "./clubsList/clubIcon";
 
@@ -28,10 +26,7 @@ function Root(props): JSX.Element {
   }, []);
 
   if (isLoading) {
-    return (
-      <>
-      </>
-    );
+    return <></>;
   }
 
   return (

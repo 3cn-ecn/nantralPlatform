@@ -10,10 +10,7 @@ module.exports = {
       __dirname,
       "../src/containers/postsGroupListUpdate.tsx"
     ),
-    eventsView: path.join(
-      __dirname, 
-      "../src/containers/eventsView.tsx"
-    ),
+    eventsView: path.join(__dirname, "../src/containers/eventsView.tsx"),
     cowlocathlonCard: path.join(
       __dirname,
       "../src/containers/cowlocathlonCard.tsx"

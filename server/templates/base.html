@@ -41,13 +41,8 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{% url 'home:home' %}">Actualités</a>
 							</li>
-							{% if navbar_family_show %}
 							<li class="nav-item">
-								<a class="nav-link" href="{% url 'family:home' %}">Parrainage</a>
-							</li>
-							{% endif %}
-							<li class="nav-item d-none">
-								<a class="nav-link" href="#">Campagnes</a>
+								<a class="nav-link" href="{% url 'liste:index' %}">Campagnes</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="{% url 'club:index' %}">Clubs & Assos</a>
@@ -69,9 +64,10 @@
 								<ul class="dropdown-menu" role="menu">
 									<!--li><a class="dropdown-item" href="{#% url 'exchange:exchange' %#}">Bourse aux options</a></li-->
 									<li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">Carte des Colocs</a></li>
+									<li><a class="dropdown-item" href="{% url 'family:home' %}">Parrainage</a></li>
 									<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">Signature ECN</a></li>
-									<li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
-									<li><a class="dropdown-item disabled" href="#">Offres Partenariats</a></li>
+									<!--li><a class="dropdown-item disabled" href="#">Services de Location</a></li>
+									<li><a class="dropdown-item disabled" href="#">Offres Partenariats</a></li-->
 								</ul>
 							</li>
 							<li class="nav-item dropdown">

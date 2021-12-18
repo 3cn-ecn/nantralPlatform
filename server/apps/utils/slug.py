@@ -98,7 +98,7 @@ def get_tuple_from_full_slug(full_slug: str):
     return (app_name, slug)
 
 
-def get_object_from_full_slug(full_slug: str) -> Union['Group']:
+def get_object_from_full_slug(full_slug: str):
     """Get a model object from a full slug."""
     app_name, slug = get_tuple_from_full_slug(full_slug)
     return get_object_from_slug(app_name, slug)
