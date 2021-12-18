@@ -10,7 +10,7 @@
 	<link rel="manifest" href="{% static 'manifest.webmanifest' %}">
 	<!-- css -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-	<link rel="stylesheet" href="{% static 'css/style.css' %}?v=3.2">
+	<link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
 	<!-- js --> 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 	<!-- fonts -->
@@ -39,7 +39,7 @@
 				{# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
 				<!--div id="goBackButton" class="d-inline-block"></div-->
 				<a class="ariane-link" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;"><!--
-					--><img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top me-2" alt="logo" loading="lazy"><!--
+					--><img src="{% static '/favicon/logo_512.png' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="logo" loading="lazy"><!--
 					--><span class="ms-0">Nantral Platform.</span><!--
 				--></a><!--
 				-->{% for link in ariane %}<!--
