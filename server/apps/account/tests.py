@@ -22,9 +22,7 @@ class Test_Account(TestCase, TestMixin):
         pass
 
     def tearDown(self):
-        # Delete everything you created
         self.user_teardown()
-        User.objects.all().delete()
 
     @freeze_time("2021-09-01")
     @override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2))

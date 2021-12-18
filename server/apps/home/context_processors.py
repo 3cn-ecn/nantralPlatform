@@ -5,6 +5,7 @@ from datetime import date
 from django.core.cache import cache
 
 from apps.club.models import BDX
+from apps.notification.models import SentNotification
 from apps.family.utils import read_phase
 
 
@@ -24,4 +25,11 @@ def navbar_context(request):
             show = False
     else:
         show = (phase != 0)
-    return {'navbar_bdx': bdx, 'navbar_family_show': show}
+    # notifications
+    try:
+        notifs = SentNotification.objects.filter(student=request.user.student).order_by('-notification__date').select_related('notification')
+        subscribed_notifs = notifs.filter(subscribed=True)[:20]
+    except Exception:
+        notifs = []
+        subscribed_notifs = []
+    return {'navbar_bdx': bdx, 'navbar_family_show': show, 'notifications': notifs[:20], 'notifications_subscribed': subscribed_notifs}

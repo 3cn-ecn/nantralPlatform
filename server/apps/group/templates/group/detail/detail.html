@@ -7,7 +7,6 @@
     <meta name="description" CONTENT="{{object.summary}} - {{object.name}} ({{object.alt_name}}) - Centrale Nantes">
 {% endblock %}
 
-{% block title %}{{ object.name }} - {% endblock %}
 
 {% block favicon %}
     {% if object.logo %}
@@ -41,8 +40,9 @@
         <!-- description du club : nom, infos... -->
         <div class="col">
             {% block object_name %}<h1>{{object.name}}</h1>{% endblock %}
+            
             <p>
-            {% if request.user.is_authenticated %}
+            {% if connected %}
                 {% if is_member and is_admin %}
                     <div class="btn-group" role="group">
                         <button class='btn btn-light btn-sm disabled border'>
@@ -71,7 +71,14 @@
                 {% endif %}
                 {% if is_admin %}
                     <a href='{%url object.app|add:":update" object.slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
-                {%endif%}
+                {% endif %}
+                    <button class='btn btn-dark btn-sm'>
+                    {% if subscribed %}
+                        <i class="far fa-bell-slash"></i> Se désabonner
+                    {% else %}
+                        <i class="fas fa-bell"></i> S'abonner
+                    {% endif %}
+                </button>
             {% endif %}
             </p>
             {% block infos %}
@@ -91,7 +98,7 @@
     {% if has_events %}
         <br>   
         <h2>Évènements</h2>
-        {% if request.user.is_authenticated %}
+        {% if connected %}
             <div id="root"></div>
         {%else%}
             <p>Veuillez vous connecter pour voir les évènements à venir.</p>
@@ -159,7 +166,7 @@
         <!-- Liste des membres -->
         <br />
         <h2>Membres</h2>
-        <div id=root2></div>
+        <div id="root2"></div>
     {% endblock %}
 
     {# Ajout possible de contenus pour certaines pages #}

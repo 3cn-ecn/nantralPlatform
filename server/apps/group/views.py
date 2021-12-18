@@ -18,10 +18,11 @@ from apps.group.models import Group
 from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
+from apps.notification.models import Subscription
 
 from .forms import *
 
-from apps.utils.accessMixins import UserIsAdmin
+from apps.utils.accessMixins import UserIsAdmin, userIsConnected
 from apps.utils.slug import *
 
 
@@ -36,34 +37,49 @@ class BaseDetailGroupView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        group = context['object']
-        # infos
-        context['sociallinks'] = SocialLink.objects.filter(
-            slug=group.full_slug)
-        publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
-        posts = Post.objects.filter(
-            group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
-        context['posts'] = [
-            post for post in posts if post.can_view(self.request.user)]
-        date_gte = timezone.make_aware(timezone.now().today())
-        context['has_events'] = BaseEvent.objects.filter(
-            group=group.full_slug, date__gte=date_gte).exists()
-        # members
-        context['members'] = group.members.through.objects.filter(
-            group=group).order_by('student__user__first_name')
-        context['is_member'] = group.is_member(self.request.user)
-        if context['is_member']:
-            membership = group.members.through.objects.get(
-                student=self.request.user.student,
-                group=group,
-            )
-            context['form'] = NamedMembershipAddGroup(
-                group)(instance=membership)
-        else:
-            context['form'] = NamedMembershipAddGroup(group)()
-        # admin
-        context['is_admin'] = group.is_admin(self.request.user)
-        context['admin_req_form'] = AdminRightsRequestForm()
+        group = self.object
+        # réseaux sociaux
+        context['sociallinks'] = SocialLink.objects.filter(slug=group.full_slug)
+        # seuement si connecté
+        context['connected'] = userIsConnected(self.request.user)
+        if userIsConnected(self.request.user):
+            publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
+            posts = Post.objects.filter(
+                group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
+            context['posts'] = [
+                post for post in posts if post.can_view(self.request.user)]
+            date_gte = timezone.make_aware(timezone.now().today())
+            context['has_events'] = BaseEvent.objects.filter(
+                group=group.full_slug, date__gte=date_gte).exists()
+            # members
+            context['members'] = group.members.through.objects.filter(
+                group=group).order_by('student__user__first_name')
+            context['is_member'] = group.is_member(self.request.user)
+            if context['is_member']:
+                membership = group.members.through.objects.get(
+                    student=self.request.user.student,
+                    group=group,
+                )
+                context['form'] = NamedMembershipAddGroup(
+                    group)(instance=membership)
+            else:
+                context['form'] = NamedMembershipAddGroup(group)()
+            # admin
+            context['is_admin'] = group.is_admin(self.request.user)
+            context['admin_req_form'] = AdminRightsRequestForm()
+            context['subscribed'] = Subscription.objects.filter(
+                student=self.request.user.student, 
+                page = group.full_slug).exists()
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': '#', 
+                'label': group.name
+            },
+        ]
         return context
 
 
@@ -130,9 +146,24 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = self.get_object()
+        group = self.get_object()
         UpdateForm = UpdateGroupForm(context['object'])
         if UpdateForm:
             context['form'] = UpdateForm(instance=context['object'])
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def post(self, request, **kwargs):
@@ -160,7 +191,22 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = self.get_object()
+        group = self.get_object()
+        context['object'] = group
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         # memberships = context['object'].members.through.objects.filter(
         #     group=context['object'])
         # MembersFormset = NamedMembershipGroupFormset(
@@ -205,11 +251,26 @@ class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = self.get_object()
+        group = self.get_object()
+        context['object'] = group
         sociallinks = SocialLink.objects.filter(
             slug=context['object'].full_slug)
         form = SocialLinkGroupFormset(queryset=sociallinks)
         context['sociallinks'] = form
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def post(self, request, **kwargs):

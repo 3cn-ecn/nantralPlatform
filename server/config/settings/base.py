@@ -73,6 +73,7 @@ COMMON_APPS = [
     'apps.roommates',
     'apps.sociallink',
     'apps.family',
+    'apps.notification',
     'apps.administration',
 ]
 

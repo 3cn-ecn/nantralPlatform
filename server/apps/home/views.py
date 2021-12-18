@@ -59,6 +59,29 @@ class SuggestionView(LoginRequiredMixin, FormView):
         messages.success(
             self.request, 'Votre suggestion a été enregistrée merci')
         return redirect('home:home')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Suggestions & Bugs'
+            }
+        ]
+        return context
+
+class LegalMentionsView(TemplateView):
+    template_name = 'home/mentions.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Mentions Légales'
+            }
+        ]
+        return context
 
 @login_required
 def currentUserPageView(request):

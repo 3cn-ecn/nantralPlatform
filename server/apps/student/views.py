@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 from django.contrib.auth import login
+from django.urls.base import reverse
 from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, ListView, UpdateView
 from django.contrib.auth import update_session_auth_hash
@@ -19,6 +20,16 @@ class StudentList(LoginRequiredMixin, ListView):
     model = Student
     template_name = 'student/list.html'
     ordering = ['user__last_name', 'user__first_name']
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': '#',
+                'label': "Annuaire Nantralien"
+            }
+        ]
+        return context
 
 
 class StudentProfile(LoginRequiredMixin, DetailView):
@@ -31,6 +42,16 @@ class StudentProfile(LoginRequiredMixin, DetailView):
             student=self.object)
         context['courses'] = NamedMembershipCourse.objects.filter(student=self.object).order_by('year')
         context['colocs'] = NamedMembershipRoommates.objects.filter(student=self.object)
+        context['ariane'] = [
+            {
+                'target': reverse('student:list'), 
+                'label': 'Annuaire'
+            },
+            {
+                'target': '#',
+                'label': self.get_object().name
+            }
+        ]
         return context
 
 
@@ -46,6 +67,16 @@ class StudentProfileEdit(UserPassesTestMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['password_form'] = ChangePassForm(self.object.user)
+        context['ariane'] = [
+            {
+                'target': reverse('home:me'), 
+                'label': 'Profil'
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
 
