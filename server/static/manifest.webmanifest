@@ -7,37 +7,6 @@
 	"theme_color": "#941A25",
 	"background_color": "grey",
 	"lang": "fr-FR",
-	"favicon": [
-		{
-			"src": "/static/img/logo.svg",
-			"type": "image/svg"
-	  	},
-	  	{
-			"src": "/static/favicon/logo_512.png",
-			"sizes": "512x512",
-			"type": "image/png"
-	  	},
-	  	{
-			"src": "/static/favicon/logo_256.png",
-			"sizes": "256x256",
-			"type": "image/png"
-	  	},
-	  	{
-			"src": "/static/favicon/logo_192.png",
-			"sizes": "192x192",
-			"type": "image/png"
-	  	},
-	  	{
-			"src": "/static/favicon/logo_144.png",
-			"sizes": "144x144",
-			"type": "image/png"
-	  	},
-	  	{
-			"src": "/static/favicon/logo_96.png",
-			"sizes": "96x96",
-			"type": "image/png"
-	  	}
-	],
 	"shortcuts" : [
 	  	{
 		  	"name": "Évènements",
