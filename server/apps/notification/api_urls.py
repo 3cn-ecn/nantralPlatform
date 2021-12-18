@@ -2,7 +2,7 @@ from django.urls import path
 
 from .api_views import *
 
-app_name = 'club'
+app_name = 'notification_api'
 
 urlpatterns = [
      path(
