@@ -77,7 +77,7 @@ class Notification(models.Model):
         """Ajouter les membres de groupes en tant que destinataires"""
         page = get_object_from_full_slug(owner)
         if isinstance(page, Group):
-            self.receivers.add(*page.members)
+            self.receivers.add(*page.members.all())
         elif hasattr(page, "owner"):
             self.addReceiversMember(page.owner)
     
@@ -86,7 +86,7 @@ class Notification(models.Model):
         page = get_object_from_full_slug(owner)
         if isinstance(page, Group):
             admins = page.members.through.objects.filter(group=page, admin=True)
-            self.receivers.add(*admins)
+            self.receivers.add(*admins.all())
         elif hasattr(page, "owner"):
             self.addReceiverAdmin(page.owner)
 

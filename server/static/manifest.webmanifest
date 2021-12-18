@@ -11,7 +11,13 @@
 	  	{
 		  	"name": "Évènements",
 		  	"url": "/",
-		  	"description": "Liste des prochains évènememts !"
+		  	"description": "Liste des prochains évènememts !",
+			"icons": [
+				{
+					"src": "/static/icon/event.svg",
+					"type": "image/svg"
+		  		}		
+			]
 	  	},
 	  	{
 		  	"name": "Clubs & Assos",
