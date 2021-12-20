@@ -26,6 +26,10 @@ module.exports = {
       __dirname,
       "../src/containers/editGroupMembers.tsx"
     ),
+    subscribeButton: path.join(
+      __dirname, 
+      "../src/containers/subscribeButton.tsx"
+    )
   },
   output: {
     path: path.join(__dirname, "../../server/static/js"),
