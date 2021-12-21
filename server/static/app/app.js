@@ -2,17 +2,23 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/static/app/sw.js') 
 };
 
-// Show Notification
-function showNotification(){
-  Notification.requestPermission((result)=> {
-    if (result === 'granted') {
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.showNotification('test',{
-          body: 'ceci est un test'
-        })
-      })
-    }   
-  })
-};
+Notification.requestPermission();
 
-showNotification();
+let defferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    defferredPrompt = e;
+    var opstel = confirm("Voulez vous installer Nantral-Platform sur vore appareil ?");
+    if (opstel == true) {
+      defferredPrompt.prompt();
+      defferredPrompt.userChoice.then((result) => {
+          if (result.outcome === 'accepted') {
+            console.log('User accepted the A2HS prompt');
+          } else {
+            console.log('User dismissed the A2HS prompt');
+          }
+          deferredPrompt = null;
+        });
+    }
+  });
