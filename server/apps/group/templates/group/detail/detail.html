@@ -7,15 +7,6 @@
     <meta name="description" CONTENT="{{object.summary}} - {{object.name}} ({{object.alt_name}}) - Centrale Nantes">
 {% endblock %}
 
-
-{% block favicon %}
-    {% if object.logo %}
-        {{object.logo|file_url}}
-    {% else %}
-        {% static '/img/logo.svg' %}
-    {%endif%}
-{% endblock %}
-
 {% block banniere %}
     {% if object.banniere %}
         <div class="ratio ratio-banniere container-xl">

@@ -23,15 +23,14 @@ class NotificationSerializer(serializers.ModelSerializer):
     
     def get_icon_url(self, obj):
         icon = obj.get_logo()
-        if icon is not None:
+        if icon:
             return icon.url
         return static('img/logo.svg')
 
 
 class SentNotificationSerializer(serializers.ModelSerializer):
     notification = NotificationSerializer(read_only=True)
-    student = StudentSerializer(read_only=True)
 
     class Meta:
         model = SentNotification
-        fields = '__all__'
+        fields = ['notification', 'subscribed', 'seen']

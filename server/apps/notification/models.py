@@ -58,8 +58,6 @@ class Notification(models.Model):
         'Action 1 - Cible', max_length=255, blank=True, null=True)
     date = models.DateTimeField('Date de création', default=timezone.now)
     high_priority = models.BooleanField('Prioritaire', default=False)
-    receivers = models.ManyToManyField(
-        Student, related_name='notification_set', through='SentNotification')
 
     def __str__(self):
         return f'{self.body[:20]}...'
@@ -77,7 +75,8 @@ class Notification(models.Model):
         """Ajouter les membres de groupes en tant que destinataires"""
         page = get_object_from_full_slug(owner)
         if isinstance(page, Group):
-            self.receivers.add(*page.members.all())
+            for s in page.members.all():
+                SentNotification.objects.create(student=s, notification=self)
         elif hasattr(page, "owner"):
             self.addReceiversMember(page.owner)
     
@@ -86,14 +85,16 @@ class Notification(models.Model):
         page = get_object_from_full_slug(owner)
         if isinstance(page, Group):
             admins = page.members.through.objects.filter(group=page, admin=True)
-            self.receivers.add(*admins.all())
+            for s in admins.all():
+                SentNotification.objects.create(student=s, notification=self)
         elif hasattr(page, "owner"):
             self.addReceiverAdmin(page.owner)
 
     def addAllUsers(self):
         """Ajouter tous les utilisateurs dans les destinataires"""
         all_users = Student.objects.all()
-        self.receivers.add(*all_users)
+        for s in all_users:
+            SentNotification.objects.create(student=s, notification=self)
     
     def save(self, *args, **kwargs):
         """Sauver la notif et ajouter des destinataires"""

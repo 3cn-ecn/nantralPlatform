@@ -1,5 +1,5 @@
 from datetime import date
-from django.test import TransactionTestCase 
+from django.test import TransactionTestCase
 from apps.utils.utest import TestMixin
 from django.urls import reverse
 from rest_framework import status
@@ -9,50 +9,101 @@ from .models import Subscription, Notification, SentNotification
 from apps.club.models import Club
 
 
-class TestNotification(TransactionTestCase, TestMixin):
+class TestSubscription(TransactionTestCase, TestMixin):
+    """Classe de test des abonnements à une page pour les notifications"""
+
     def setUp(self):
         self.user_setup()
+        self.slug = Club.objects.create(name="Club de test").full_slug
+        self.url = reverse('notification_api:subscription') + "?slug=" + self.slug
         
     def tearDown(self):
         self.user_teardown()
 
-    def test_subscription(self):
-        """Teste l'inscription d'un utilisateur à un club"""
-        club = Club.objects.create(name="Club de test")
-
-        # teste une inscription de u2 dans la bdd directement
+    def test_model_creation(self):
+        "test saving in the database"
         Subscription.objects.create(
-            student=self.u2.student, page=club.full_slug)
-        self.assertTrue(Subscription.hasSubscribed(club.full_slug, self.u2.student))
-        self.assertFalse(Subscription.hasSubscribed(club.full_slug, self.u3.student))
-        
-        # test de lecture
-        url = reverse('notification_api:subscription') + "?slug=" + club.full_slug
+            student=self.u2.student, page=self.slug)
+        self.assertTrue(Subscription.hasSubscribed(self.slug, self.u2.student))
+        self.assertFalse(Subscription.hasSubscribed(self.slug, self.u3.student))
+    
+    def test_reading_api(self):
+        "test to read subscription states in database"
+        # subscribe u2
+        Subscription.objects.create(
+            student=self.u2.student, page=self.slug)
+        # check u2 has subscribed
         self.client.login(username=self.u2.username, password='pass')
-        self.assertTrue(self.client.get(url).data)
+        self.assertTrue(self.client.get(self.url).data)
+        # check u3 didn't subscribed
         self.client.login(username=self.u3.username, password='pass')
-        self.assertFalse(self.client.get(url).data)
+        self.assertFalse(self.client.get(self.url).data)
 
-        # inscrit u3
-        resp = self.client.post(url)
+    def test_adding_api(self):
+        "test to subscribe"
+        # subscribe
+        self.client.login(username=self.u2.username, password='pass')
+        resp = self.client.post(self.url)
+        # check subscription is ok
         self.assertEqual(resp.status_code, 201)
-        self.assertTrue(self.client.get(url).data)
-        resp = self.client.post(url)
+        self.assertTrue(self.client.get(self.url).data)
+        # try to subscribe again and check the fail
+        resp = self.client.post(self.url)
         self.assertEqual(resp.status_code, 400)
 
-        # désinscrit u2
+    def test_delete_api(self):
+        "test to unsubscribe"
+        # subscribe
+        Subscription.objects.create(
+            student=self.u2.student, page=self.slug)
+        # delete subscription
         self.client.login(username=self.u2.username, password='pass')
-        resp = self.client.delete(url)
+        resp = self.client.delete(self.url)
+        # check deletion is ok
         self.assertEqual(resp.status_code, 204)
-        self.assertFalse(self.client.get(url).data)
-        resp = self.client.delete(url)
+        self.assertFalse(self.client.get(self.url).data)
+        # try to delete again and check the fail
+        resp = self.client.delete(self.url)
         self.assertEqual(resp.status_code, 404)
 
-        # check directly in the database
-        self.assertFalse(Subscription.hasSubscribed(club.full_slug, self.u2.student))
-        self.assertTrue(Subscription.hasSubscribed(club.full_slug, self.u3.student))
 
 
-
-
+class TestNotification(TransactionTestCase, TestMixin):
+    
+    def setUp(self):
+        self.user_setup()
+        self.club1 = Club.objects.create(name="Club génial").full_slug
+        self.club2 = Club.objects.create(name="Club inconnu").full_slug
         
+    def tearDown(self):
+        self.user_teardown()
+    
+    def test_notification_api(self):
+        # create subscriptions and notifications
+        Subscription.objects.create(
+            student=self.u2.student, page=self.club1)
+        Notification.objects.create(
+            body="Notif de test 1", 
+            url = '/', 
+            owner = self.club2,
+        )
+        Notification.objects.create(
+            body="Notif de test 2", 
+            url = '/', 
+            owner = self.club1,
+        )
+        Notification.objects.create(
+            body="Notif de test 3", 
+            url = '/', 
+            owner = self.club2,
+        )
+        # test subscribed notifs withoutlimit
+        self.client.login(username=self.u2.username, password='pass')
+        url = reverse('notification_api:my_notifications') + "?sub=True"
+        resp = self.client.get(url)
+        self.assertEqual(len(resp.data), 1)
+        self.assertEqual(resp.data[0]['notification']['body'], "Notif de test 2")
+        # test all notifs with limit of 2
+        url = reverse('notification_api:my_notifications') + "?sub=False&nb=2"
+        resp = self.client.get(url)
+        self.assertEqual(len(resp.data), 2)
