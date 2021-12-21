@@ -56,8 +56,8 @@ function SubscribeButton(props): JSX.Element {
       <Button variant="dark" size="sm" onClick={()=>changeSubscription()}>
         <i></i>
         {subscribed ? 
-          <><i className="far fa-bell-slash"></i> Se désabonner</> : 
-          <><i className="fas fa-bell"></i> S'abonner</>
+          <><i className="fas fa-bell"></i>&nbsp; Abonné</> : 
+          <><i className="far fa-bell"></i>&nbsp; S'abonner</>
         }
       </Button>
     </>

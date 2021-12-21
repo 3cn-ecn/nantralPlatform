@@ -44,33 +44,32 @@
             <p>
             {% if connected %}
                 {% if is_member and is_admin %}
-                    <div class="btn-group" role="group">
+                    <span class="btn-group" role="group">
                         <button class='btn btn-light btn-sm disabled border'>
-                            <i class="fa fa-crown"></i>
-                            Vous êtes admin !
+                            <i class="fa fa-crown"></i>&nbsp; Vous êtes admin !
                         </button>
                         <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                             Modifier
                         </button>
-                    </div>
+                    </span>
                 {% elif is_member %}
-                    <div class="btn-group" role="group">
+                    <span class="btn-group" role="group">
                         <button class='btn btn-light btn-sm disabled'>
-                            <i class="fa fa-user"></i>
-                            Vous êtes membre !
+                            <i class="fa fa-user"></i>&nbsp; Vous êtes membre !
                         </button>
                         <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                             Modifier
                         </button>
-                    </div>
+                    </span>
                 {% else %}
                     <button id='show-add-group' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
-                        <i class="fa fa-user-plus"></i>
-                        Devenir membre
+                        <i class="fa fa-user-plus"></i>&nbsp; Devenir membre
                     </button>
                 {% endif %}
                 {% if is_admin %}
-                    <a href='{%url object.app|add:":update" object.slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
+                    <a href='{%url object.app|add:":update" object.slug %}' class="btn btn-dark btn-sm">
+                        <i class="fa fa-pencil"></i>&nbsp; Modifier la page
+                    </a>
                 {% endif %}
                     <span id="subscription_button"></span>
             {% endif %}

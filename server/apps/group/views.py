@@ -1,20 +1,19 @@
 from datetime import timedelta
 from django.utils import timezone
-from django.http.request import HttpRequest
-
-from django.shortcuts import redirect
-from django.urls.base import reverse
-from django.urls import resolve
-from django.views.generic import View, FormView, TemplateView, DetailView
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
+from django.db.utils import IntegrityError
+from django.http.request import HttpRequest
+from django.shortcuts import redirect
+from django.urls.base import reverse
+from django.urls import resolve
 from django.views.decorators.http import require_http_methods
+from django.views.generic import View, FormView, TemplateView, DetailView
+
 from apps.group.models import Group
-
-
 from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
@@ -116,9 +115,17 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         if not self.object.pk:
             self.object.save()
             messages.success(self.request, 'Bienvenue dans le groupe !')
+            try: Subscription.objects.create(
+                    page=self.object.group.full_slug,
+                    student=self.object.student)
+            except IntegrityError: pass
         elif self.request.POST.get('delete'):
             self.object.delete()
             messages.success(self.request, 'Membre supprimé.')
+            try: Subscription.objects.get(
+                page=self.object.group.full_slug,
+                student=self.object.student).delete()
+            except Subscription.DoesNotExist: pass
         else:
             self.object.save()
             messages.success(
