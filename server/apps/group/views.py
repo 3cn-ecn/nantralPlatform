@@ -67,9 +67,6 @@ class BaseDetailGroupView(DetailView):
             # admin
             context['is_admin'] = group.is_admin(self.request.user)
             context['admin_req_form'] = AdminRightsRequestForm()
-            context['subscribed'] = Subscription.objects.filter(
-                student=self.request.user.student, 
-                page = group.full_slug).exists()
         context['ariane'] = [
             {
                 'target': reverse(group.app+':index'), 

@@ -72,13 +72,7 @@
                 {% if is_admin %}
                     <a href='{%url object.app|add:":update" object.slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
                 {% endif %}
-                    <button class='btn btn-dark btn-sm'>
-                    {% if subscribed %}
-                        <i class="far fa-bell-slash"></i> Se désabonner
-                    {% else %}
-                        <i class="fas fa-bell"></i> S'abonner
-                    {% endif %}
-                </button>
+                    <span id="subscription_button"></span>
             {% endif %}
             </p>
             {% block infos %}
@@ -202,8 +196,10 @@
     const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
     const is_admin = {{ is_admin|yesno:"true,false,false" }};
     const membersURL = "{% url object.app|add:'_api:list-members' %}?slug={{ object.slug }}";
+    const getSubscriptionURL = "{% url 'notification_api:subscription' %}?slug={{ object.full_slug }}";
 </script>
 <script src='{% static "js/eventsView.js" %}'></script>
 <script src='{% static "js/groupMembers.js" %}'></script>
+<script src='{% static "js/subscribeButton.js" %}'></script>
 {% endblock %}
 
