@@ -31,7 +31,7 @@ function SubscribeButton(props): JSX.Element {
 
   function changeSubscription(): void {
     const requestOptions = {
-      method: 'POST',
+      method: (subscribed ? 'DELETE' : 'POST'),
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken

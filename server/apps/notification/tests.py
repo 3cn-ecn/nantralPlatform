@@ -1,5 +1,5 @@
 from datetime import date
-from django.test import TestCase
+from django.test import TransactionTestCase 
 from apps.utils.utest import TestMixin
 from django.urls import reverse
 from rest_framework import status
@@ -9,7 +9,7 @@ from .models import Subscription, Notification, SentNotification
 from apps.club.models import Club
 
 
-class TestNotification(TestCase, TestMixin):
+class TestNotification(TransactionTestCase, TestMixin):
     def setUp(self):
         self.user_setup()
         
@@ -37,12 +37,16 @@ class TestNotification(TestCase, TestMixin):
         resp = self.client.post(url)
         self.assertEqual(resp.status_code, 201)
         self.assertTrue(self.client.get(url).data)
+        resp = self.client.post(url)
+        self.assertEqual(resp.status_code, 400)
 
         # désinscrit u2
         self.client.login(username=self.u2.username, password='pass')
-        resp = self.client.post(url)
-        self.assertEqual(resp.status_code, 200)
+        resp = self.client.delete(url)
+        self.assertEqual(resp.status_code, 204)
         self.assertFalse(self.client.get(url).data)
+        resp = self.client.delete(url)
+        self.assertEqual(resp.status_code, 404)
 
         # check directly in the database
         self.assertFalse(Subscription.hasSubscribed(club.full_slug, self.u2.student))
