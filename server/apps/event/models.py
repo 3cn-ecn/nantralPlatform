@@ -47,7 +47,7 @@ class BaseEvent(AbstractPost):
         super(BaseEvent, self).save(*args, **kwargs)
         if created:
             Notification.objects.create(
-                body = f'Nouvel évènement de {self.get_group_name} : {self.title}',
+                body = f'Nouvel event de {self.get_group_name} : {self.title}',
                 url = self.get_absolute_url(),
                 owner = self.group,
                 publicity = self.publicity,

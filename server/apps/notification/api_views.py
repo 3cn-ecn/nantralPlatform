@@ -54,6 +54,7 @@ class NotificationAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
+        """Get the notifications themselves or the number of them"""
         student = request.user.student
         # if we ask to count, we count
         count = request.query_params.get('count', None)
@@ -77,4 +78,22 @@ class NotificationAPIView(APIView):
             query = query[:nbMax]
         serializer = SentNotificationSerializer(query, many=True)
         return Response(serializer.data)
+    
+    def post(self, request, format=None):
+        """Mark a notifications as read"""
+        student = request.user.student
+        notif_id = request.query_params.get('notif_id', None)
+        if notif_id is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        try:
+            obj = SentNotification.objects.get(
+                student=student,
+                notification=notif_id
+            )
+            obj.seen = not(obj.seen)
+            obj.save()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        except SentNotification.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
 

@@ -49,53 +49,69 @@ table.table-sort th {
 
 /* BARRE DE NAVIGATION */
 /* ------------------- */
-.navbar .navbar-brand {
+
+#fil-dariane {
   overflow: hidden;
   text-overflow: "...";
 }
-.navbar .navbar-brand a.ariane-link {
+#fil-dariane a.ariane-link {
   margin-right: 0;
   color: rgba(0, 0, 0, .9);
   padding-top: .3125rem;
   padding-bottom: .3125rem;
   border-radius: .5rem;
 }
-.navbar .navbar-brand a.ariane-link span {
+#fil-dariane a.ariane-link span {
   margin: 0 .3rem;
 }
-.navbar .navbar-brand a.ariane-link:hover {
+#fil-dariane a.ariane-link:hover {
   background-color: #eee;
 }
-.navbar .navbar-brand i {
+#fil-dariane i {
   margin: 0 .3rem;
 }
 @media all and (max-width: 768px) {
-  .navbar .navbar-brand a.ariane-link span,
-  .navbar .navbar-brand i {
+  #fil-dariane a.ariane-link span,
+  #fil-dariane i {
     display: none;
   }
-  .navbar .navbar-brand a.ariane-link:nth-last-child(3) span,
-  .navbar .navbar-brand i:nth-last-child(4) {
+  #fil-dariane a.ariane-link:nth-last-child(3) span,
+  #fil-dariane i:nth-last-child(4) {
     display: inline !important;
   }
 }
-.navbar .navbar-nav .nav-item.dropdown  a.nav-link {
+
+
+#menuSet .dropdown a.nav-link {
   border-radius: 50%;
   padding: .2rem;
 }
-.navbar .navbar-nav .nav-item.dropdown a.nav-link:hover {
+#menuSet .dropdown a.nav-link:hover {
   background-color: #eee;
 }
-.navbar .navbar-nav .nav-item.dropdown a.nav-link img {
+#menuSet .dropdown a.nav-link img {
   width: 35px;
   height: 35px;
 }
-.navbar .navbar-nav .nav-item.dropdown .dropdown-menu {
+#menuSet .dropdown-menu {
   box-shadow: 3px 3px 6px #AAA;
 }
-.navbar .navbar-nav .nav-item.dropdown .dropdown-menu img {
+#menuSet .dropdown-menu img {
   width: 2rem;
   height: 2rem;
+  border-radius: 20%;
+  object-fit: contain;
+}
+#menuSet .dropdown-item:hover {
+  cursor: pointer;
+}
+/* bouton pour mettre en lu les notifications */
+#menuSet .dropdown-item .read-button {
+  display: flex;
+  flex-shrink: 0;
+  width: 1.5rem;
+  justify-content: center;
+  align-items: center;
 }
 
 #goBackButton:hover {

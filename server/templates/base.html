@@ -35,7 +35,7 @@
 	
 	<nav class="navbar navbar-expand sticky-top navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
 		<div class="container">
-			<div class="navbar-brand me-0">
+			<div id="fil-dariane" class="navbar-brand me-0">
 				{# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
 				<!--div id="goBackButton" class="d-inline-block"></div-->
 				<a class="ariane-link" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;"><!--
@@ -49,7 +49,7 @@
 					<span></span><span></span>
 				{% endfor %}
 			</div>
-			<ul class="navbar-nav ml-auto me-0">
+			<ul id="menuSet" class="navbar-nav ml-auto me-0">
 				<li class="nav-item dropdown">
 					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<img src='{% static "/icon/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">

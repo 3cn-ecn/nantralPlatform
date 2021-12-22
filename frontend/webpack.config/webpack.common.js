@@ -32,7 +32,7 @@ module.exports = {
     ),
     notifications: path.join(
       __dirname,
-      "../src/containers/notification/notificationPanel.tsx"
+      "../src/containers/notification/notificationMenu.tsx"
     )
   },
   output: {
