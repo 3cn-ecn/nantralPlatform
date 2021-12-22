@@ -28,7 +28,11 @@ module.exports = {
     ),
     subscribeButton: path.join(
       __dirname, 
-      "../src/containers/subscribeButton.tsx"
+      "../src/containers/notification/subscribeButton.tsx"
+    ),
+    notifications: path.join(
+      __dirname,
+      "../src/containers/notification/notificationPanel.tsx"
     )
   },
   output: {

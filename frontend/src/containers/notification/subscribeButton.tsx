@@ -3,6 +3,11 @@ import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Button} from "react-bootstrap";
 
+/**
+ * Function for the reading of a cookie
+ * @param name Name of the cookie
+ * @returns Value of the cookie
+ */
 function getCookie(name) {
   if (!document.cookie) {
     return null;
@@ -16,11 +21,19 @@ function getCookie(name) {
   return decodeURIComponent(xsrfCookies[0].split('=')[1]);
 }
 
+/**
+ * Load the Subscribe Button and update it when clicked
+ * @param props Properties of the XML element
+ * @returns HTML Button element
+ */
 function SubscribeButton(props): JSX.Element {
   const [subscribed, setSubscribed] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const csrfToken = getCookie('csrftoken');
 
+  /**
+   * Load the state of the subscription
+   */
   async function getSubscription(): Promise<void> {
     await fetch(props.getSubscriptionURL)
       .then(resp => resp.json())
@@ -29,12 +42,15 @@ function SubscribeButton(props): JSX.Element {
       .finally(() => setIsLoading(false));
   }
 
+  /**
+   * Change the state of the subscription
+   */
   function changeSubscription(): void {
     const requestOptions = {
-      method: (subscribed ? 'DELETE' : 'POST'),
+      method: (subscribed ? 'DELETE' : 'POST'), //Delete the sub if already subscribed, else create it
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken
+        'X-CSRFToken': csrfToken              //important ! cookie for authentification
       },
       body: JSON.stringify({ title: 'Change the subscription' })
     };
@@ -43,14 +59,17 @@ function SubscribeButton(props): JSX.Element {
       .catch(err => {setSubscribed(null); getSubscription();});
   }
 
+  // call the state loader in a parallel process
   useEffect(() => {
     getSubscription();
   }, []);
 
+  // while we don't know the state, display nothing
   if (isLoading || subscribed == null) {
     return <></>;
   }
 
+  // display the button with the right text
   return (
     <>
       <Button variant="dark" size="sm" onClick={()=>changeSubscription()}>
@@ -63,7 +82,8 @@ function SubscribeButton(props): JSX.Element {
     </>
   );
 }
-  
+
+
 render(
   <SubscribeButton getSubscriptionURL={getSubscriptionURL} />, 
   document.getElementById("subscription_button")

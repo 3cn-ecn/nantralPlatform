@@ -69,6 +69,7 @@ class TestSubscription(TransactionTestCase, TestMixin):
 
 
 class TestNotification(TransactionTestCase, TestMixin):
+    """Classe de tests pour l'API de lecture des notifications"""
     
     def setUp(self):
         self.user_setup()

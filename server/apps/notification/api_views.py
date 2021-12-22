@@ -55,6 +55,19 @@ class NotificationAPIView(APIView):
 
     def get(self, request, format=None):
         student = request.user.student
+        # if we ask to count, we count
+        count = request.query_params.get('count', None)
+        if count is not None:
+            if count=="sub" or count=="all":
+                nbNotifs = SentNotification.objects.filter(
+                    student=student,
+                    subscribed=(count=="sub"),
+                    seen=False,
+                ).count()
+                return Response(data=nbNotifs)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        # else we load all notifications
         subscribedOnly = (request.query_params.get('sub', "").lower() == "true")
         nbMax = int(request.query_params.get('nb', 0))
         query = SentNotification.objects.filter(student=student).order_by('-notification__date')
