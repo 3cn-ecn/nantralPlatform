@@ -112,7 +112,7 @@ function NotificationMenu(props): JSX.Element {
     let content;
     if (listSubNotifs == null) {
       content = <li><small className="dropdown-item-text">Chargement...</small></li>;
-    } else if (listSubNotifs == []) {
+    } else if (listSubNotifs.length == 0) {
       content = <li><small className="dropdown-item-text">Aucune notification ! Abonnez-vous à des pages pour en recevoir 😉</small></li>;
     } else {
       content = listSubNotifs.map((item, key) => <NotificationItem key={key} item={item} index={key}/>)
