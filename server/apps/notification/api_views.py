@@ -18,7 +18,7 @@ class SubscriptionAPIView(APIView):
         student = request.user.student
         page = request.query_params.get('slug', None)
         if page is None: 
-            Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         res = Subscription.hasSubscribed(page=page, student=student)
         return Response(data=res)
 
@@ -27,7 +27,7 @@ class SubscriptionAPIView(APIView):
         student = request.user.student
         page = request.query_params.get('slug', None)
         if page is None: 
-            Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
             Subscription.objects.create(page=page, student=student)
             return Response(status=status.HTTP_201_CREATED)
@@ -39,7 +39,7 @@ class SubscriptionAPIView(APIView):
         student = request.user.student
         page = request.query_params.get('slug', None)
         if page is None: 
-            Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
             obj = Subscription.objects.get(page=page, student=student)
             obj.delete()
