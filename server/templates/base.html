@@ -7,7 +7,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+	<link rel="manifest" href="{% static 'app/manifest.webmanifest' %}">
 	<!-- css -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
@@ -161,7 +161,8 @@
 </script>
 <script src="{% static 'js/notifications.js' %}"></script>
 <script src="{% static 'js/goBackButton.js' %}"></script>
-<script src="/static/app/app.js"></script>
+<script src="{% static 'app/installation.js' %}"></script>
+
 {% block script %}
 {% endblock %}
 

@@ -1,6 +1,19 @@
+
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/static/app/sw.js') 
-};
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/sw.js')
+      .then(registration => {
+        console.log('SW registration succeeded:', registration);
+        navigator.serviceWorker.ready.then(function (registration) {
+          console.log('SW is active:', registration.active);
+        });
+      })
+      .catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
 
 Notification.requestPermission();
 

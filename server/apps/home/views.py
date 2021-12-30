@@ -1,15 +1,17 @@
 from datetime import timedelta
-from django.utils import timezone
 from typing import List
-from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Q
-from django.urls import reverse
-from django.views.generic import TemplateView, FormView
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseNotFound
+from django.contrib.sites.shortcuts import get_current_site
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseNotFound
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import TemplateView, FormView
+from django.urls import reverse
+from django.utils import timezone
 
 from apps.post.models import Post
 from apps.student.models import Student
@@ -109,6 +111,14 @@ def currentUserRoommatesView(request):
     else:
         return redirect('roommates:housing-map')
 
+
+
+
+def service_worker(request):
+    """A view to serve the service worker"""
+    sw_path = settings.BASE_DIR + "/static/app/sw.js"
+    response = HttpResponse(open(sw_path).read(), content_type='application/javascript')
+    return response
 
 
 # ERROR PAGES VIEWS
