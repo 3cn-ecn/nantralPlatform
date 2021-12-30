@@ -1,5 +1,5 @@
 // Installing Service Worker
-/*
+
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open('v1').then(function(cache) {
@@ -8,4 +8,4 @@ self.addEventListener('install', function(event) {
       ]);
     })
   );
-});*/
+});
