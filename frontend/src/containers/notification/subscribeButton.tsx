@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import {Button} from "react-bootstrap";
+import {Button, Spinner} from "react-bootstrap";
 import {getCookie} from "./utils";
 
 /**
@@ -10,7 +10,7 @@ import {getCookie} from "./utils";
  * @returns HTML Button element
  */
 function SubscribeButton(props): JSX.Element {
-  const [subscribed, setSubscribed] = useState(null);
+  const [subscribed, setSubscribed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const csrfToken = getCookie('csrftoken');
 
@@ -20,15 +20,15 @@ function SubscribeButton(props): JSX.Element {
   async function getSubscription(): Promise<void> {
     await fetch(props.getSubscriptionURL)
       .then(resp => resp.json())
-      .then(data => setSubscribed(data))
-      .catch(err => setSubscribed(null))
-      .finally(() => setIsLoading(false));
+      .then(data => {setSubscribed(data); setIsLoading(false);})
+      .catch(err => getSubscription());
   }
 
   /**
    * Change the state of the subscription
    */
   function changeSubscription(): void {
+    setIsLoading(true);
     const requestOptions = {
       method: (subscribed ? 'DELETE' : 'POST'), //Delete the sub if already subscribed, else create it
       headers: {
@@ -38,8 +38,8 @@ function SubscribeButton(props): JSX.Element {
       body: JSON.stringify({ title: 'Change the subscription' })
     };
     fetch(props.getSubscriptionURL, requestOptions)
-      .then(resp => setSubscribed(!subscribed))
-      .catch(err => {setSubscribed(null); getSubscription();});
+      .then(resp => {setSubscribed(!subscribed); setIsLoading(false);})
+      .catch(err => {getSubscription();});
   }
 
   // call the state loader in a parallel process
@@ -47,22 +47,30 @@ function SubscribeButton(props): JSX.Element {
     getSubscription();
   }, []);
 
-  // while we don't know the state, display nothing
-  if (isLoading || subscribed == null) {
-    return <></>;
+  // while we don't know the state, display loading
+  if (isLoading) {
+      return <>
+        <Button variant="dark" size="sm">
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          &nbsp; {subscribed ? "Abonné !" : "S'abonner"}
+        </Button>
+      </>;
   }
 
   // display the button with the right text
   return (
-    <>
-      <Button variant="dark" size="sm" onClick={()=>changeSubscription()}>
-        <i></i>
-        {subscribed ? 
-          <><i className="fas fa-bell"></i>&nbsp; Abonné</> : 
-          <><i className="far fa-bell"></i>&nbsp; S'abonner</>
-        }
-      </Button>
-    </>
+    <Button variant="dark" size="sm" onClick={()=>changeSubscription()}>
+      {subscribed ? 
+        <><i className="fas fa-bell"></i>&nbsp; Abonné !</> : 
+        <><i className="far fa-bell"></i>&nbsp; S'abonner</>
+      }
+    </Button>
   );
 }
 

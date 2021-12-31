@@ -92,7 +92,7 @@ class NotificationAPIView(APIView):
             )
             obj.seen = not(obj.seen)
             obj.save()
-            return Response(status=status.HTTP_202_ACCEPTED)
+            return Response(status=status.HTTP_202_ACCEPTED, data=obj.seen)
         except SentNotification.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 

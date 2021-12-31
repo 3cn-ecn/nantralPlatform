@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
-import {Button} from "react-bootstrap";
+import {Spinner} from "react-bootstrap";
 import {SentNotification} from "./interfaces";
-import {getCookie} from "./utils";
+import {getCookie, merge} from "./utils";
 import { LaptopWindows } from "@material-ui/icons";
 
 
@@ -16,8 +16,7 @@ function NotificationMenu(props): JSX.Element {
   const [showPanel, setShowPanel] = useState(false);
   const [nbSubNotifs, setNbSubNotifs] = useState <number> (props.nbNotifs);
   const [nbAllNotifs, setNbAllNotifs] = useState <number> (null);
-  const [listSubNotifs, setListSubNotifs] = useState <SentNotification[]> (null);
-  const [listAllNotifs, setListAllNotifs] = useState <SentNotification[]> (null);
+  const [listNotifs, setListNotifs] = useState <SentNotification[]> (null);
   const nbMaxDefault = 20;
   var nbMax = nbMaxDefault;  
   const csrfToken = getCookie('csrftoken');
@@ -27,40 +26,33 @@ function NotificationMenu(props): JSX.Element {
     fetch(api_url+"?count=sub")
       .then(resp => resp.json())
       .then(data => setNbSubNotifs(data))
-      .catch(err => setNbSubNotifs(null))
+      .catch(err => setNbSubNotifs(null));
   }
 
   async function getNbAllNotifs(): Promise<void> {
     fetch(api_url+"?count=all")
       .then(resp => resp.json())
       .then(data => setNbAllNotifs(data))
-      .catch(err => setNbAllNotifs(null))
+      .catch(err => setNbAllNotifs(null));
   }
 
-  async function getListSubNotifs(): Promise<void> {
-    fetch(api_url+"?sub=true&nb="+nbMax)
+  async function getListNotifs(subOnly:boolean): Promise<void> {
+    const urlToRequest = api_url + "?sub=" + subOnly + "&nb=" + nbMax;
+    fetch(urlToRequest)
       .then(resp => resp.json())
-      .then(data => setListSubNotifs(data))
-      .catch(err => setListSubNotifs(null))
+      .then(data => setListNotifs(merge(data, listNotifs)))
+      .catch(err => {});
   }
 
-  async function getListAllNotifs(): Promise<void> {
-    fetch(api_url+"?sub=false&nb="+nbMax)
-      .then(resp => resp.json())
-      .then(data => setListAllNotifs(data))
-      .catch(err => setListAllNotifs(null))
-  }
 
+  // component for one notification in the list
   function NotificationItem(props): JSX.Element {
     const index = props.index;
-    const sn : SentNotification = props.item;
+    const sn = listNotifs[index];
     const n = sn.notification;
 
-    function markAsRead(openWindowAfter:boolean) {
-      if (openWindowAfter && sn.seen) {
-        window.open(n.url, "_self");
-        return;
-      }
+    function makeRequest() {
+      const urlToRequest = api_url + "?notif_id=" + n.id;
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -69,32 +61,65 @@ function NotificationMenu(props): JSX.Element {
         },
         body: JSON.stringify({ title: 'Mark a notification as read' })
       };
-      fetch(api_url+"?notif_id="+n.id, requestOptions)
-        .then(resp => {
-          if (openWindowAfter) {
-            window.open(n.url, "_self");
+      return fetch(urlToRequest, requestOptions);
+    }
+
+    function updateListNotifsWith(newVal:boolean) {
+      var newList = JSON.parse(JSON.stringify(listNotifs));
+      newList[index]['seen'] = newVal;
+      setListNotifs(newList);
+    }
+
+    function updateSeen() {
+      updateListNotifsWith(null);
+      makeRequest()
+        .then(resp => resp.json())
+        .then(data => {
+          // mettre à jour la liste des notifs
+          updateListNotifsWith(data);
+          // mettre à jour le compteur
+          if (data) {
+            if (sn.subscribed) setNbSubNotifs(nbSubNotifs - 1);
+            setNbAllNotifs(nbAllNotifs - 1);
           } else {
-            var newList = JSON.parse(JSON.stringify(listSubNotifs));
-            newList[index]['seen'] = !sn.seen;
-            setListSubNotifs(newList);
-            getNbSubNotifs();
+            if (sn.subscribed) setNbSubNotifs(nbSubNotifs + 1);
+            setNbAllNotifs(nbAllNotifs + 1);
           }
         })
         .catch(err => {});
     }
 
+    function openItem() {
+      updateListNotifsWith(null);
+      if (sn.seen) {
+        window.open(n.url, "_self");
+      } else {
+        makeRequest().finally(() => window.open(n.url, "_self"));
+      }
+    }
+
     return (
       <li>
-        <span className="dropdown-item d-flex ps-1">
+        <span className="dropdown-item d-flex p-0 ps-1">
           <span 
             className={`text-${sn.seen ? "light" : "danger"} read-button`}
-            onClick={()=>markAsRead(false)}
+            onClick={()=>updateSeen()}
           >
-            ●
+            { sn.seen == null ?
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            :
+              "●"
+            }
           </span>
           <span 
-            className="text-wrap d-flex" style={{alignItems: "center"}}
-            onClick={()=>markAsRead(true)}
+            className="text-wrap d-flex p-1 ps-0 w-100" style={{alignItems: "center"}}
+            onClick={()=>openItem()}
           >
             { n.icon_url ?
               <img src={n.icon_url} loading="lazy" />
@@ -108,14 +133,15 @@ function NotificationMenu(props): JSX.Element {
     );
   }
   
+  // component for the list of all notifications
   function NotificationPanel(props) : JSX.Element {
     let content;
-    if (listSubNotifs == null) {
+    if (listNotifs == null) {
       content = <li><small className="dropdown-item-text">Chargement...</small></li>;
-    } else if (listSubNotifs.length == 0) {
+    } else if (listNotifs.length == 0) {
       content = <li><small className="dropdown-item-text">Aucune notification ! Abonnez-vous à des pages pour en recevoir 😉</small></li>;
     } else {
-      content = listSubNotifs.map((item, key) => <NotificationItem key={key} item={item} index={key}/>)
+      content = listNotifs.map((item, key) => <NotificationItem key={key} index={key}/>)
     }
     return(
       <>
@@ -126,19 +152,18 @@ function NotificationMenu(props): JSX.Element {
     );
   }
 
-  function updateShowPanel() {
+  // open the menu
+  function openMenu() {
     setShowPanel(!showPanel);
-    if (listSubNotifs == null) {
-      getListSubNotifs();
-    }
+    if (listNotifs == null) getListNotifs(true);
+    if (nbAllNotifs == null) getNbAllNotifs();
   }
   
-  // display the icon for notifications
   return (
     <>
       <a 
         className={`nav-link ${showPanel ? "show" : ""}`} href="#"
-        onClick={updateShowPanel}
+        onClick={openMenu}
       >
         <img 
           src = '/static/icon/notification.svg'
