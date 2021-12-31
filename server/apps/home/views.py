@@ -123,6 +123,10 @@ def service_worker(request):
     return response
 
 
+def offline_view(request):
+    response = render(request, 'home/offline.html')
+    return response
+
 # ERROR PAGES VIEWS
 
 def handler403(request, *args, **argv):

@@ -113,7 +113,7 @@
 					<ul class="dropdown-menu dropdown-menu-end" role="menu">
 						{% if request.user.is_authenticated %}
 							{% if request.user.student.pk %}
-								<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>&nbsp Mon Profil</a></li>
+								<li><a class="dropdown-item" href="{% url 'home:me' %}"><i class="fas fa-user"></i>&nbsp Mon Profil</a></li>
 								{% if request.user.is_staff %}
 									<li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-shield-alt"></i>&nbsp Interface Admin</a></li>
 								{% endif %}
