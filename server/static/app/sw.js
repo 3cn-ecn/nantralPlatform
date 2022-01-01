@@ -76,6 +76,9 @@ workbox.routing.registerRoute(
     plugins: [
       new workbox.cacheableResponse.CacheableResponsePlugin({
         statuses: [200],
+      }),
+      new workbox.expiration.ExpirationPlugin({
+        maxAgeSeconds: 60 * 60 * 24 * 14,
       })
     ]
   })
@@ -109,19 +112,10 @@ self.addEventListener('install', async (event) => {
 });
 
 workbox.routing.setCatchHandler(async ({event}) => {
-  // The FALLBACK_URL entries must be added to the cache ahead of time, either
-  // via runtime or precaching. If they are precached, then call
-  // `matchPrecache(FALLBACK_URL)` (from the `workbox-precaching` package)
-  // to get the response from the correct cache.
-  //
-  // Use event, request, and url to figure out how to respond.
-  // One approach would be to use request.destination, see
-  // https://medium.com/dev-channel/service-worker-caching-strategies-based-on-request-types-57411dd7652c
   if (event.request.destination == 'document') {
     return caches.match(FALLBACK_HTML_URL);
   }
   // If we don't have a fallback, just return an error response.
   return Response.error();
 });
-
 
