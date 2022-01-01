@@ -24,7 +24,9 @@ workbox.routing.registerRoute(
 
 // cache images
 workbox.routing.registerRoute(
-  ({request}) => request.destination === 'image',
+  ({url, request}) => request.destination === 'image' ||
+                      url.origin === 'https://nantral-platform-prod.s3.amazonaws.com' ||
+                      url.origin === 'https://avatars.dicebear.com',
   new workbox.strategies.CacheFirst({
     cacheName: 'images',
     plugins: [
