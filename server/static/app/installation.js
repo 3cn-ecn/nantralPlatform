@@ -22,7 +22,8 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 function askToInstall() {
   if (defferredPrompt == null) {
-    alert("Désolé, l'installation d'appli n'est pas supportée par ce navigateur 😥");
+    alert("Désolé, l'installation d'appli n'est pas supportée \
+          par ce navigateur ou l'appli est déjà installée 😥");
   } else {
     defferredPrompt.prompt();
     defferredPrompt.userChoice.then((result) => {

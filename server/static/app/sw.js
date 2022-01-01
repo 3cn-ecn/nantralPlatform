@@ -16,7 +16,7 @@ workbox.routing.registerRoute(
       }),
       new workbox.expiration.ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * 30,  // le cache expire après 30 jours
-        maxEntries: 40,                    // pas plus de 40 fichiers dans le cache
+        maxEntries: 30,                    // pas plus de 30 fichiers dans le cache
       })
     ]
   })
@@ -47,8 +47,8 @@ workbox.routing.registerRoute(
     cacheName: 'static-resources',
     plugins: [
       new workbox.expiration.ExpirationPlugin({
-        maxEntries: 200,
-        maxAgeSeconds: 60 * 60 * 24 * 1, // 7 Days
+        maxEntries: 20,
+        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 Days
       }),
       new workbox.cacheableResponse.CacheableResponsePlugin({
         statuses: [200]
@@ -82,9 +82,44 @@ workbox.routing.registerRoute(
 
 // par défaut privilégier le réseau, mais utiliser le cache si hors-connexion
 workbox.routing.setDefaultHandler(
-  new workbox.strategies.NetworkFirst()
+  new workbox.strategies.NetworkFirst({
+    cacheName: "default-cache",
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 60 * 60 * 24 * 15,
+      })
+    ]
+  })
 );
 
 
 
-// À FAIRE : Ajouter une page hors-connexion*/
+// Page Hors-Connexion
+const CACHE_NAME = 'offline-html';
+const FALLBACK_HTML_URL = '/offline.html';
+
+self.addEventListener('install', async (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.add(FALLBACK_HTML_URL))
+  );
+});
+
+workbox.routing.setCatchHandler(async ({event}) => {
+  // The FALLBACK_URL entries must be added to the cache ahead of time, either
+  // via runtime or precaching. If they are precached, then call
+  // `matchPrecache(FALLBACK_URL)` (from the `workbox-precaching` package)
+  // to get the response from the correct cache.
+  //
+  // Use event, request, and url to figure out how to respond.
+  // One approach would be to use request.destination, see
+  // https://medium.com/dev-channel/service-worker-caching-strategies-based-on-request-types-57411dd7652c
+  if (event.request.destination == 'document') {
+    return caches.match(FALLBACK_HTML_URL);
+  }
+  // If we don't have a fallback, just return an error response.
+  return Response.error();
+});
+
+
