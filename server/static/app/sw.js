@@ -69,8 +69,7 @@ workbox.routing.registerRoute(
              url.pathname === '/signature/' ||
              url.pathname === '/student/' ||
              url.pathname === '/academic/liste/' ||
-             url.pathname === '/adminsitration' ||
-             url.pathname === '/me/',
+             url.pathname === '/adminsitration',
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: 'main-pages',
     plugins: [
