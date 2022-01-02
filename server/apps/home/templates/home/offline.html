@@ -10,7 +10,12 @@
 		</div>
 	</div>
 
-	<button class="btn btn-outline-dark" onclick="location.reload();">Actualiser</button>
+	<br>
+	<style>.btn.border-white:hover{border-color: var(--bs-dark)!important;}</style>
+	<button class="btn btn-outline-dark border-white" onclick="window.history.back();">
+		<i class="fas fa-arrow-left"></i> Retour
+	</button>
+	<button class="btn btn-outline-dark" onclick="location.reload();">Réessayer</button>
 
 {% endblock%}
 
