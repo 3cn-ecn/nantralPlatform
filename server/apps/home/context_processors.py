@@ -26,11 +26,11 @@ def navbar_context(request):
     # else:
     #     show = (phase != 0)
     # notifications
-    try:
-        nbNotifs = SentNotification.objects.filter(
-            student=request.user.student,
-            subscribed=True,
-            seen=False).count()
-    except Exception:
-        nbNotifs = 0
-    return {'nbNotifs': nbNotifs}
+    # try:
+    #     nbNotifs = SentNotification.objects.filter(
+    #         student=request.user.student,
+    #         subscribed=True,
+    #         seen=False).count()
+    # except Exception:
+    #     nbNotifs = 0
+    return {} #{'nbNotifs': nbNotifs}

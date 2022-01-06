@@ -14,13 +14,17 @@ import { LaptopWindows } from "@material-ui/icons";
  */
 function NotificationMenu(props): JSX.Element {
   const [showPanel, setShowPanel] = useState(false);
-  const [nbSubNotifs, setNbSubNotifs] = useState <number> (props.nbNotifs);
+  const [nbSubNotifs, setNbSubNotifs] = useState <number> (null);
   const [nbAllNotifs, setNbAllNotifs] = useState <number> (null);
   const [listNotifs, setListNotifs] = useState <SentNotification[]> (null);
   const nbMaxDefault = 20;
   var nbMax = nbMaxDefault;  
   const csrfToken = getCookie('csrftoken');
   const api_url = props.url;
+
+  if (nbSubNotifs === null) {
+    getNbSubNotifs();
+  }
 
   async function getNbSubNotifs(): Promise<void> {
     fetch(api_url+"?count=sub")
@@ -193,7 +197,7 @@ function NotificationMenu(props): JSX.Element {
 
 
 render(
-  <NotificationMenu url={notifications_url} nbNotifs={nbNotifs} />, 
+  <NotificationMenu url={notifications_url} />, 
   document.getElementById("notificationPanel")
 );
   
