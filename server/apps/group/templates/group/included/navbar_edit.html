@@ -38,7 +38,7 @@
     </li>
     <li class="nav-item">
         <a class="nav-link {% if open == "services" %}active" aria-current="page{% endif %}"
-            href="{% url object.group_type|add:':update-services' object.mini_slug %}" >
+            href="{% url object.app|add:':update-services' object.slug %}" >
             <i class="fa fa-calendar-plus-o"></i> Services
         </a>
     </li>

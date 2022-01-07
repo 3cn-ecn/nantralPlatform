@@ -3,6 +3,7 @@ from django.urls import path
 from .views import DetailGroupView, AddToGroupView, UpdateGroupView, UpdateGroupMembersView, RequestAdminRightsView, AcceptAdminRequestView, DenyAdminRequestView, UpdateGroupSocialLinksView
 from apps.event.views import UpdateGroupCreateEventView, UpdateGroupArchivedEventsView, UpdateGroupEventsView
 from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
+from apps.booking.urls import UpdateGroupListServicesView
 
 app_name = 'group'
 
@@ -24,6 +25,7 @@ def makeGroupUrlpatterns(
         archived_events_view=UpdateGroupArchivedEventsView.as_view(),
         update_posts_view=UpdateGroupPostsView.as_view(),
         create_post_view=UpdateGroupCreatePostView.as_view(),
+        update_services_view=UpdateGroupListServicesView.as_view()
 ):
     '''
     Fonction créant toutes les urls pour un groupe 
@@ -61,6 +63,9 @@ def makeGroupUrlpatterns(
              update_posts_view, name='update-posts'),
         path(url_base+'<slug:slug>/edit/posts/create/',
              create_post_view, name='create-post'),
+        path(url_base+'<slug:slug>/edit/services/',
+             update_services_view, name='update-services'
+             ),
 
         # formulaire de demande d'admin
         path(url_base+'<slug:slug>/admin-request/',
