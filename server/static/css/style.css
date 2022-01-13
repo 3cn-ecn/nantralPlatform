@@ -195,3 +195,13 @@ a.rs:hover span {
 .container .events .card-subtitle {
   color: #333;
 }
+
+
+/* CKEDITOR 5 */
+/* ---------- */
+
+/* tables and imgs respect the given sizes */
+figure > table, figure > img {
+  width: 100%;
+  height: 100%;
+}
