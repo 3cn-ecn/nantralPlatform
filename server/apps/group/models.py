@@ -14,6 +14,7 @@ from apps.utils.slug import get_object_from_full_slug, get_tuple_from_full_slug,
 from django.conf import settings
 
 from discord_webhook import DiscordWebhook, DiscordEmbed
+from lxml.html.clean import clean_html
 
 import logging
 logger = logging.getLogger(__name__)
@@ -89,6 +90,7 @@ class Group(models.Model, SlugModel):
         self.banniere = compressModelImage(
             self, 'banniere', size=(1320, 492), contains=False)
         # enregistrement
+        self.description = clean_html(self.description)
         super(Group, self).save(*args, **kwargs)
 
     @property

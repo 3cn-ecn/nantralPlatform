@@ -147,15 +147,13 @@ USE_TZ = True
 
 CKEDITOR_5_CONFIGS = {
     'default': {
-        'plugins': ['sourceEditing'],
         'toolbar': [
             'heading', '|', '|',
             'bold', 'italic', 'underline', 'strikethrough', 
             'subscript', 'superscript', 'fontColor', 'fontBackgroundColor', 'removeFormat', '|',
             'alignment', 'bulletedList', 'numberedList', '|',
             'code', 'blockQuote', '|',
-            'link', 'imageUpload', 'mediaEmbed', 'insertTable', '|',
-            'sourceEditing'
+            'link', 'imageUpload', 'mediaEmbed', 'insertTable',
         ],
         'language': 'fr',
         'image': {
