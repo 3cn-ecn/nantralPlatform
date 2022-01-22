@@ -153,7 +153,8 @@ CKEDITOR_5_CONFIGS = {
             'subscript', 'superscript', 'fontColor', 'fontBackgroundColor', 'removeFormat', '|',
             'alignment', 'bulletedList', 'numberedList', '|',
             'code', 'blockQuote', '|',
-            'link', 'imageUpload', 'mediaEmbed', 'insertTable',
+            'link', 'imageUpload', 'mediaEmbed', 'insertTable'
+            #'sourceEditing',
         ],
         'language': 'fr',
         'image': {
