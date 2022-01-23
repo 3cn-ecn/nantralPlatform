@@ -153,8 +153,7 @@ CKEDITOR_5_CONFIGS = {
             'subscript', 'superscript', 'fontColor', 'fontBackgroundColor', 'removeFormat', '|',
             'alignment', 'bulletedList', 'numberedList', '|',
             'code', 'blockQuote', '|',
-            'link', 'imageUpload', 'mediaEmbed', 'insertTable'
-            #'sourceEditing',
+            'link', 'imageUpload', 'insertTable', 'sourceEditing',
         ],
         'language': 'fr',
         'image': {
@@ -169,18 +168,6 @@ CKEDITOR_5_CONFIGS = {
             ]
 
         },
-        'table': {
-            'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
-            'tableProperties', 'tableCellProperties' ]
-        },
-        'heading' : {
-            'options': [
-                { 'model': 'paragraph', 'title': 'Paragraphe', 'class': 'ck-heading_paragraph' },
-                { 'model': 'heading1', 'view': 'h2', 'title': 'Titre 1', 'class': 'ck-heading_heading1' },
-                { 'model': 'heading2', 'view': 'h3', 'title': 'Titre 2', 'class': 'ck-heading_heading2' },
-                { 'model': 'heading3', 'view': 'h4', 'title': 'Titre 3', 'class': 'ck-heading_heading3' }
-            ]
-        },
         'link': {
             'addTargetToExternalLinks': True,  # open in new tab by default
             'defaultProtocol': 'https://',     # add https when missing
@@ -194,9 +181,6 @@ CKEDITOR_5_CONFIGS = {
                     }
                 }
             }
-        },
-        'mediaEmbed': {
-            'previewsInData': True
         }
     }
 }
