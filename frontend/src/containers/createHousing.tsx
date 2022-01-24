@@ -1,23 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import axios from "axios";
-import ReactDOM, { render } from "react-dom";
+import { render } from "react-dom";
 import { Form, Button, ListGroup } from "react-bootstrap";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-function CreateHousing(props) {
+declare const api_url: string;
+declare const check_url: string;
+declare const geo_url: string;
+declare const create_url: string;
+
+function Root(props: {}) {
   const [currentHousing, updateCurrentHousing] = useState({});
   const [alreadyExists, updateAlreadyExists] = useState([]);
   const [suggestions, updateSuggestions] = useState([]);
 
   function getSuggestions(search: string) {
     if (search.length > 5) {
-      fetch(props.geo_url + `?search_string=${encodeURI(search)}`).then(
-        (resp) =>
-          resp.json().then((suggs) => {
-            updateSuggestions(suggs);
-          })
+      fetch(geo_url + `?search_string=${encodeURI(search)}`).then((resp) =>
+        resp.json().then((suggs) => {
+          updateSuggestions(suggs);
+        })
       );
     }
   }
@@ -28,7 +32,7 @@ function CreateHousing(props) {
     });
     updateSuggestions([]);
     axios
-      .post(props.check_url, {
+      .post(check_url, {
         address: address,
       })
       .then((resp) => {
@@ -45,9 +49,9 @@ function CreateHousing(props) {
 
   function submitHousing(e) {
     e.preventDefault();
-    axios.post(props.api_url, currentHousing).then((resp) => {
+    axios.post(api_url, currentHousing).then((resp) => {
       updateAlreadyExists(resp.data);
-      location.href = props.create_url.replace("0", resp.data.id);
+      location.href = create_url.replace("0", resp.data.id);
     });
   }
 
@@ -58,7 +62,7 @@ function CreateHousing(props) {
         <Form.Group controlId="address">
           <Form.Label>Adresse :</Form.Label>
           <Form.Control
-            onInput={(event) => {
+            onInput={(event: ChangeEvent<HTMLInputElement>) => {
               getSuggestions(event.target.value);
             }}
             placeholder="10 Rue de la Bléterie"
@@ -91,7 +95,7 @@ function CreateHousing(props) {
                 {alreadyExists.map((housing) => (
                   <ListGroup.Item
                     action
-                    href={props.create_url.replace("0", housing.pk)}
+                    href={create_url.replace("0", housing.pk)}
                   >
                     {housing.name}
                   </ListGroup.Item>
@@ -107,7 +111,7 @@ function CreateHousing(props) {
               <Form.Group controlId="details">
                 <Form.Label>Complément d'addresse</Form.Label>
                 <Form.Control
-                  onInput={(event) => {
+                  onInput={(event: ChangeEvent<HTMLInputElement>) => {
                     updateDetails(event.target.value);
                   }}
                   placeholder="Appart 101"
@@ -123,12 +127,4 @@ function CreateHousing(props) {
   );
 }
 
-render(
-  <CreateHousing
-    api_url={api_url}
-    check_url={check_url}
-    geo_url={geo_url}
-    create_url={create_url}
-  />,
-  document.getElementById("root")
-);
+render(<Root />, document.getElementById("root"));

@@ -1,27 +1,34 @@
-﻿import * as React from "react";
-import { useState, useEffect, useRef, useMemo } from "react";
-import ReactDOM, { render } from "react-dom";
+﻿import React, { useState, useEffect, useRef, useMemo } from "react";
+import { render } from "react-dom";
 import { easeCubic } from "react-d3-library";
 import { Popup, Marker, FlyToInterpolator } from "react-map-gl";
 import { useCookies, CookiesProvider } from "react-cookie";
 
-import { Housing, RootProps } from "./housingMap/interfaces";
+import { Housing } from "./housingMap/interfaces";
 import { ColocathlonSwitch } from "./housingMap/colocathlonSwitch";
 import { MapForm } from "./housingMap/mapForm";
 import { Pin } from "./housingMap/pin";
 import { ColocInfo } from "./housingMap/colocInfo";
 import { Map } from "./housingMap/map";
 import { CurrentColocInfo } from "./housingMap/currentColocInfo";
-
 import { getRoommates } from "./housingMap/utils";
 
-function Root(props: RootProps): JSX.Element {
+declare const API_KEY: string;
+declare const API_HOUSING_URL: string;
+declare const PHASE_COLOCATHLON: number;
+declare const CURRENT_COLOC: string;
+declare const CURRENT_COLOC_URL: string;
+
+function Root(props: {}): JSX.Element {
   const [data, setData] = useState<Housing[]>([]);
   const [colocs, setColocs] = useState([]);
   const [viewport, setViewPort] = useState({
     latitude: 47.21784689284845,
     longitude: -1.5586376015280996,
     zoom: 12,
+    transitionDuration: 500,
+    transitionInterpolator: new FlyToInterpolator(),
+    transitionEasing: easeCubic,
     bearing: 0,
     pitch: 0,
   });
@@ -31,7 +38,7 @@ function Root(props: RootProps): JSX.Element {
   let colocathlonCookieValue: boolean =
     cookies["colocathlon-cookie"] !== undefined
       ? cookies["colocathlon-cookie"] === "true"
-      : props.PHASE_COLOCATHLON == 2;
+      : PHASE_COLOCATHLON == 2;
   const [colocathlonParticipantsOnly, setColocathlonParticipantsOnly] =
     useState(colocathlonCookieValue);
 
@@ -62,6 +69,8 @@ function Root(props: RootProps): JSX.Element {
               transitionDuration: 500,
               transitionInterpolator: new FlyToInterpolator(),
               transitionEasing: easeCubic,
+              bearing: 0,
+              pitch: 0,
             });
             setPopUpinfo(
               <Popup
@@ -88,7 +97,7 @@ function Root(props: RootProps): JSX.Element {
   }, [data, colocathlonParticipantsOnly]);
 
   useEffect(() => {
-    getRoommates(props.API_HOUSING_URL, setColocs, setData);
+    getRoommates(API_HOUSING_URL, setColocs, setData);
   }, []);
 
   return (
@@ -106,7 +115,7 @@ function Root(props: RootProps): JSX.Element {
           setPopUpinfo={setPopUpinfo}
         />
       </div>
-      {props.PHASE_COLOCATHLON > 1 ? (
+      {PHASE_COLOCATHLON > 1 ? (
         <div className="row">
           <ColocathlonSwitch
             status={colocathlonParticipantsOnly}
@@ -114,8 +123,8 @@ function Root(props: RootProps): JSX.Element {
           />
           {colocathlonParticipantsOnly ? (
             <CurrentColocInfo
-              colocName={props.CURRENT_COLOC}
-              colocUrl={props.CURRENT_COLOC_URL}
+              colocName={CURRENT_COLOC}
+              colocUrl={CURRENT_COLOC_URL}
             />
           ) : (
             <></>
@@ -127,7 +136,7 @@ function Root(props: RootProps): JSX.Element {
       <Map
         viewport={viewport}
         mapRef={mapRef}
-        apiKey={props.API_KEY}
+        apiKey={API_KEY}
         markers={markers}
         popupInfo={popupInfo}
         setViewPort={setViewPort}
@@ -140,13 +149,7 @@ function Root(props: RootProps): JSX.Element {
 document.body.style.margin = "0";
 render(
   <CookiesProvider>
-    <Root
-      API_KEY={MAPBOX_TOKEN}
-      API_HOUSING_URL={API_HOUSING_URL}
-      PHASE_COLOCATHLON={PHASE_COLOCATHLON}
-      CURRENT_COLOC={CURRENT_COLOC}
-      CURRENT_COLOC_URL={CURRENT_COLOC_URL}
-    />
+    <Root />
   </CookiesProvider>,
   document.getElementById("root")
 );

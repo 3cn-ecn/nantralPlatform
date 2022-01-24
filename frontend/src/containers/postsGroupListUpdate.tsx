@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
 import axios from "axios";
 import { Button, Card, Modal } from "react-bootstrap";
 var dayjs = require("dayjs");
@@ -9,7 +9,10 @@ dayjs.extend(relativeTime);
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-function PostsListUpdateDelete(props) {
+declare const group_slug: string;
+declare const static_url_prefix: string;
+
+function Root(props: {}) {
   const [show, setShow] = useState(false);
   const [currentPost, updateCurrentPost] = useState({});
   const [posts, updatePosts] = useState([]);
@@ -19,7 +22,7 @@ function PostsListUpdateDelete(props) {
   };
   const handleShow = () => setShow(true);
   const getPosts = () => {
-    fetch(`/api/post/group/${props.group_slug}/`).then((resp) =>
+    fetch(`/api/post/group/${group_slug}/`).then((resp) =>
       resp.json().then((posts) => {
         updatePosts(posts);
         console.log(posts);
@@ -88,7 +91,7 @@ function PostsListUpdateDelete(props) {
           <Button
             variant="danger"
             onClick={() => {
-              axios.delete(`/api/post/${currentPost.slug}`).then(() => {
+              axios.delete(`/api/post/${currentPost["slug"]}`).then(() => {
                 handleClose();
                 getPosts();
               });
@@ -102,5 +105,4 @@ function PostsListUpdateDelete(props) {
   );
 }
 
-const element = <PostsListUpdateDelete group_slug={group_slug} />;
-ReactDOM.render(element, document.getElementById("root"));
+render(<Root />, document.getElementById("root"));
