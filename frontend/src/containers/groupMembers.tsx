@@ -1,6 +1,5 @@
-﻿import * as React from "react";
-import { useState, useEffect } from "react";
-import ReactDOM, { render } from "react-dom";
+﻿import React, { useState, useEffect } from "react";
+import { render } from "react-dom";
 import { Spinner } from "react-bootstrap";
 import {
   DndContext,
@@ -26,7 +25,10 @@ import { getMembers, sendNewOrder } from "./groupMembers/utils";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-function Root(props): JSX.Element {
+declare const membersURL: string;
+declare const isAdmin: string;
+
+function Root(props: {}): JSX.Element {
   const [members, setMembers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshingSort, setIsRefreshingSort] = useState(false);
@@ -40,7 +42,7 @@ function Root(props): JSX.Element {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   useEffect(() => {
-    getMembers(props.membersURL, setMembers, setIsLoading, setIsAuthorized);
+    getMembers(membersURL, setMembers, setIsLoading, setIsAuthorized);
   }, []);
 
   if (isLoading) {
@@ -72,12 +74,7 @@ function Root(props): JSX.Element {
         e.order = i + 1;
         return e;
       });
-      sendNewOrder(
-        newMembers,
-        oldMembers,
-        props.membersURL,
-        setIsRefreshingSort
-      );
+      sendNewOrder(newMembers, oldMembers, membersURL, setIsRefreshingSort);
       setMembers(newMembers);
     }
   };
@@ -85,7 +82,7 @@ function Root(props): JSX.Element {
   if (!editMembersOrderMode) {
     return (
       <>
-        {props.isAdmin ? (
+        {isAdmin ? (
           <EditGroupMembersSwitch
             status={editMembersOrderMode}
             handle={handleEditMembersOrderMode}
@@ -98,16 +95,17 @@ function Root(props): JSX.Element {
             {members.map((member: Member, key: number) => {
               return <StudentCard member={member} key={key} />;
             })}
-          </div>)
-          : "Aucun membre pour l'instant... 😥"
-        }
+          </div>
+        ) : (
+          "Aucun membre pour l'instant... 😥"
+        )}
       </>
     );
   }
 
   return (
     <>
-      {props.isAdmin ? (
+      {isAdmin ? (
         <EditGroupMembersSwitch
           status={editMembersOrderMode}
           handle={handleEditMembersOrderMode}
@@ -141,7 +139,4 @@ function Root(props): JSX.Element {
   );
 }
 
-render(
-  <Root membersURL={membersURL} isAdmin={is_admin} />,
-  document.getElementById("root2")
-);
+render(<Root />, document.getElementById("root2"));
