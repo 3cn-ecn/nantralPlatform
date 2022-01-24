@@ -181,6 +181,12 @@ CKEDITOR_5_CONFIGS = {
                     }
                 }
             }
+        },
+        'htmlSupport': {
+            'allow': [
+                {'name': 'details', 'classes':True},
+                {'name': 'summary', 'classes':True}
+            ]
         }
     }
 }
