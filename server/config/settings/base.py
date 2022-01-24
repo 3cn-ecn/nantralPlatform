@@ -184,8 +184,9 @@ CKEDITOR_5_CONFIGS = {
         },
         'htmlSupport': {
             'allow': [
-                {'name': 'details', 'classes':True},
-                {'name': 'summary', 'classes':True}
+                {'name': 'details', 'classes': True},
+                {'name': 'summary', 'classes': True},
+                {'name': 'div', 'classes': True}
             ]
         }
     }
