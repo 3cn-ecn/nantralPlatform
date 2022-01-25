@@ -1,20 +1,23 @@
-﻿import * as React from "react";
-import { useState, useEffect } from "react";
-import ReactDOM, { render } from "react-dom";
-import { Spinner, Row, Col } from "react-bootstrap";
+﻿import React, { useState, useEffect } from "react";
+import { render } from "react-dom";
+import { Row, Col } from "react-bootstrap";
 
 import { getGroupDate } from "./eventsView/utils";
 import { Event } from "./eventsView/event";
-import { spinnerDivStyle, spinnerStyle } from "./eventsView/styles";
-import { EventInfos, APIUrls } from "./eventsView/interfaces";
+import { EventInfos } from "./eventsView/interfaces";
 
-function Root(props: APIUrls): JSX.Element {
+declare const eventsApiUrl: string;
+declare const eventsRemoveParticipant: string;
+declare const eventsAddParticipant: string;
+declare const eventListParticipants: string;
+
+function Root(props: {}): JSX.Element {
   const [eventInfos, setEventInfos] = useState(new Map());
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function getEvents(): Promise<void> {
-      await fetch(props.eventsApiUrl)
+      await fetch(eventsApiUrl)
         .then((resp) => {
           resp.json().then((data) => {
             let events: EventInfos[] = data;
@@ -42,7 +45,7 @@ function Root(props: APIUrls): JSX.Element {
   }, []);
 
   if (isLoading) {
-    return (<></>);
+    return <></>;
   }
 
   return (
@@ -52,21 +55,26 @@ function Root(props: APIUrls): JSX.Element {
           <div key={key + "outerdiv"}>
             <h3>{events[0]}</h3>
             <Row className="gx-2 mb-3 events">
-            {events[1].map((el, i) => {
-              return (
-                <Col xs={12} md={6} xl={4} key={key + i.toString() + "innerdiv"}>
-                  <Event
-                    key={key + i.toString()}
-                    eventInfos={el}
-                    urls={{
-                      add: props.eventsAddParticipant,
-                      remove: props.eventsRemoveParticipant,
-                      participants: props.eventListParticipants,
-                    }}
-                  />
-                </Col>
-              );
-            })}
+              {events[1].map((el, i) => {
+                return (
+                  <Col
+                    xs={12}
+                    md={6}
+                    xl={4}
+                    key={key + i.toString() + "innerdiv"}
+                  >
+                    <Event
+                      key={key + i.toString()}
+                      eventInfos={el}
+                      urls={{
+                        add: eventsAddParticipant,
+                        remove: eventsRemoveParticipant,
+                        participants: eventListParticipants,
+                      }}
+                    />
+                  </Col>
+                );
+              })}
             </Row>
           </div>
         );
@@ -75,12 +83,4 @@ function Root(props: APIUrls): JSX.Element {
   );
 }
 
-render(
-  <Root
-    eventsApiUrl={eventsApiUrl}
-    eventsRemoveParticipant={eventsRemoveParticipant}
-    eventsAddParticipant={eventsAddParticipant}
-    eventListParticipants={eventListParticipants}
-  />,
-  document.getElementById("root")
-);
+render(<Root />, document.getElementById("root"));

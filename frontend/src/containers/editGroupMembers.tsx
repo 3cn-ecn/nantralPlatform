@@ -1,6 +1,5 @@
-﻿import * as React from "react";
-import { useState, useEffect } from "react";
-import ReactDOM, { render } from "react-dom";
+﻿import React, { useState, useEffect } from "react";
+import { render } from "react-dom";
 import { Spinner, Button } from "react-bootstrap";
 import axios from "axios";
 
@@ -13,7 +12,10 @@ import { getMembers } from "./groupMembers/utils";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-function Root(props): JSX.Element {
+declare const membersURL: string;
+declare const studentsURL: string;
+
+function Root(props: {}): JSX.Element {
   const [members, setMembers] = useState<Member[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -21,7 +23,7 @@ function Root(props): JSX.Element {
   const [selectedMember, setSelectedMember] = useState<Member>(undefined);
 
   useEffect(() => {
-    getMembers(props.membersURL, setMembers, setIsLoading);
+    getMembers(membersURL, setMembers, setIsLoading);
   }, []);
 
   if (isLoading) {
@@ -38,15 +40,15 @@ function Root(props): JSX.Element {
         setShowModal={setShowEditModal}
         showModal={showEditModal}
         selectedMember={selectedMember}
-        membersURL={props.membersURL}
+        membersURL={membersURL}
         setMembers={setMembers}
         setIsLoading={setIsLoading}
       />
       <AddGroupMembersModal
         setShowModal={setShowAddModal}
         showModal={showAddModal}
-        membersURL={props.membersURL}
-        studentsURL={props.studentsURL}
+        membersURL={membersURL}
+        studentsURL={studentsURL}
         setMembers={setMembers}
         setIsLoading={setIsLoading}
       />
@@ -92,7 +94,4 @@ function Root(props): JSX.Element {
   );
 }
 
-render(
-  <Root membersURL={membersURL} studentsURL={studentsURL} />,
-  document.getElementById("root2")
-);
+render(<Root />, document.getElementById("root2"));

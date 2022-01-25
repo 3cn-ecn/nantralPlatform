@@ -26,13 +26,6 @@ export interface EventInfos {
   is_member: boolean;
 }
 
-export interface APIUrls {
-  eventsApiUrl: string;
-  eventsRemoveParticipant: string;
-  eventsAddParticipant: string;
-  eventListParticipants: string;
-}
-
 export interface ExportProps {
   participants: Student[];
   title: string;

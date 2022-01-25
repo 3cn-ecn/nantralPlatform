@@ -16,9 +16,9 @@
 {% endblock %}
 {% block script %}
 <script>
-  var group_slug = "{{object.full_slug}}";
-  var static_url_prefix = "{% static '' %}";
-  var api_list_url = "{% url 'post_api:list-group-posts' object.full_slug %}";
+  const group_slug = "{{object.full_slug}}";
+  const static_url_prefix = "{% static '' %}";
+  const api_list_url = "{% url 'post_api:list-group-posts' object.full_slug %}";
 </script>
 <script src='{% static "js/postsGroupListUpdate.js" %}'></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>

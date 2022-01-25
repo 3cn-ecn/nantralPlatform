@@ -146,78 +146,48 @@ USE_TZ = True
 
 # Richtext config
 
-customColorPalette = [
-    {
-        'color': 'hsl(4, 90%, 58%)',
-        'label': 'Red'
-    },
-    {
-        'color': 'hsl(340, 82%, 52%)',
-        'label': 'Pink'
-    },
-    {
-        'color': 'hsl(291, 64%, 42%)',
-        'label': 'Purple'
-    },
-    {
-        'color': 'hsl(262, 52%, 47%)',
-        'label': 'Deep Purple'
-    },
-    {
-        'color': 'hsl(231, 48%, 48%)',
-        'label': 'Indigo'
-    },
-    {
-        'color': 'hsl(207, 90%, 54%)',
-        'label': 'Blue'
-    },
-]
-
 CKEDITOR_5_CONFIGS = {
     'default': {
-        'toolbar': ['heading', '|', 'bold', 'italic', 'link',
-                    'bulletedList', 'numberedList', 'blockQuote', ],
-
-    },
-    'extends': {
-        'blockToolbar': [
-            'paragraph', 'heading1', 'heading2', 'heading3',
-            '|',
-            'bulletedList', 'numberedList',
-            '|',
-            'blockQuote', 'imageUpload'
-        ],
         'toolbar': [
-            'heading', '|', 'outdent', 'indent', '|',
-            'bold', 'italic', 'link', 'underline', 'strikethrough', 'code',
-            'subscript', 'superscript', 'highlight', '|',
-            'codeBlock', 'bulletedList', 'numberedList', 'todoList', '|',
-            'blockQuote', 'imageUpload', '|',
-            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
-            'mediaEmbed', 'removeFormat', 'insertTable',
+            'heading', '|', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 
+            'subscript', 'superscript', 'fontColor', 'fontBackgroundColor', 'removeFormat', '|',
+            'alignment', 'bulletedList', 'numberedList', '|',
+            'code', 'blockQuote', '|',
+            'link', 'imageUpload', 'insertTable', 'sourceEditing',
         ],
-        'table': {
-            'contentToolbar': ['tableColumn', 'tableRow', 'mergeTableCells',
-                               'tableProperties', 'tableCellProperties'],
-            'tableProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
-            },
-            'tableCellProperties': {
-                'borderColors': customColorPalette,
-                'backgroundColors': customColorPalette
+        'language': 'fr',
+        'image': {
+            'toolbar': ['imageTextAlternative', 'imageTitle', '|', 'imageStyle:alignLeft', 'imageStyle:full',
+                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
+            'styles': [
+                'full',
+                'side',
+                'alignLeft',
+                'alignRight',
+                'alignCenter',
+            ]
+
+        },
+        'link': {
+            'addTargetToExternalLinks': True,  # open in new tab by default
+            'defaultProtocol': 'https://',     # add https when missing
+            'decorators': {                    # check-box in options
+                'openInNewTab': {
+                    'mode': 'manual',
+                    'label': 'Ouvrir dans un nouvel onglet',
+                    'attributes': {
+                        'target': '_blank',
+                        'rel': 'noopener noreferrer'
+                    }
+                }
             }
         },
-        'heading': {
-            'options': [
-                   {'model': 'paragraph', 'title': 'Paragraph',
-                    'class': 'ck-heading_paragraph'},
-                   {'model': 'heading1', 'view': 'h1',
-                       'title': 'Heading 1', 'class': 'ck-heading_heading1'},
-                   {'model': 'heading2', 'view': 'h2',
-                       'title': 'Heading 2', 'class': 'ck-heading_heading2'},
-                   {'model': 'heading3', 'view': 'h3',
-                       'title': 'Heading 3', 'class': 'ck-heading_heading3'}
+        'htmlSupport': {
+            'allow': [
+                {'name': 'details', 'classes': True, 'styles': True},
+                {'name': 'summary', 'classes': True, 'styles': True},
+                {'name': 'div', 'classes': True, 'styles': True}
             ]
         }
     }

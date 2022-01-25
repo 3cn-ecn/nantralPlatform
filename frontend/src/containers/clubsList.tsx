@@ -1,17 +1,18 @@
-﻿import * as React from "react";
-import { useState, useEffect } from "react";
-import ReactDOM, { render } from "react-dom";
+﻿import React, { useState, useEffect } from "react";
+import { render } from "react-dom";
 
 import { Club } from "./clubsList/interfaces";
 import { ClubIcon } from "./clubsList/clubIcon";
 
-function Root(props): JSX.Element {
+declare const myClubsURL: string;
+
+function Root(props: {}): JSX.Element {
   const [clubs, setClubs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function getClubs(): Promise<void> {
-      await fetch(props.myClubsURL)
+      await fetch(myClubsURL)
         .then((resp) => {
           resp.json().then((data) => {
             setClubs(data);
@@ -40,4 +41,4 @@ function Root(props): JSX.Element {
   );
 }
 
-render(<Root myClubsURL={myClubsURL} />, document.getElementById("root"));
+render(<Root />, document.getElementById("root"));
