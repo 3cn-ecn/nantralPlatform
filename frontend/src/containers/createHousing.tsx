@@ -6,10 +6,10 @@ import { Form, Button, ListGroup } from "react-bootstrap";
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-declare const api_url: string;
-declare const check_url: string;
-declare const geo_url: string;
-declare const create_url: string;
+declare const API_URL: string;
+declare const CHECK_URL: string;
+declare const GEO_URL: string;
+declare const CREATE_URL: string;
 
 function Root(props: {}) {
   const [currentHousing, updateCurrentHousing] = useState({});
@@ -18,7 +18,7 @@ function Root(props: {}) {
 
   function getSuggestions(search: string) {
     if (search.length > 5) {
-      fetch(geo_url + `?search_string=${encodeURI(search)}`).then((resp) =>
+      fetch(GEO_URL + `?search_string=${encodeURI(search)}`).then((resp) =>
         resp.json().then((suggs) => {
           updateSuggestions(suggs);
         })
@@ -32,7 +32,7 @@ function Root(props: {}) {
     });
     updateSuggestions([]);
     axios
-      .post(check_url, {
+      .post(CHECK_URL, {
         address: address,
       })
       .then((resp) => {
@@ -49,9 +49,9 @@ function Root(props: {}) {
 
   function submitHousing(e) {
     e.preventDefault();
-    axios.post(api_url, currentHousing).then((resp) => {
+    axios.post(API_URL, currentHousing).then((resp) => {
       updateAlreadyExists(resp.data);
-      location.href = create_url.replace("0", resp.data.id);
+      location.href = CREATE_URL.replace("0", resp.data.id);
     });
   }
 
@@ -95,7 +95,7 @@ function Root(props: {}) {
                 {alreadyExists.map((housing) => (
                   <ListGroup.Item
                     action
-                    href={create_url.replace("0", housing.pk)}
+                    href={CREATE_URL.replace("0", housing.pk)}
                   >
                     {housing.name}
                   </ListGroup.Item>

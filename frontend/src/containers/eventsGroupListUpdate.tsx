@@ -9,8 +9,8 @@ dayjs.extend(relativeTime);
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-declare const api_url: string;
-declare const static_url_prefix: string;
+declare const API_URL: string;
+declare const STATIC_URL_PREFIX: string;
 
 function Root(props: {}) {
   const [show, setShow] = useState(false);
@@ -22,7 +22,7 @@ function Root(props: {}) {
   };
   const handleShow = () => setShow(true);
   const getEvents = () => {
-    fetch(api_url).then((resp) =>
+    fetch(API_URL).then((resp) =>
       resp.json().then((events) => {
         updateEvents(events);
       })
@@ -41,7 +41,7 @@ function Root(props: {}) {
                 {event.image != null && (
                   <Card.Img
                     variant="top"
-                    src={`${static_url_prefix}${event.image.url}`}
+                    src={`${STATIC_URL_PREFIX}${event.image.url}`}
                   />
                 )}
                 <Card.Body>
