@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
 import axios from "axios";
 import { Button, Card, Modal } from "react-bootstrap";
 var dayjs = require("dayjs");
@@ -9,7 +9,10 @@ dayjs.extend(relativeTime);
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-function EventsListUpdateDelete(props) {
+declare const api_url: string;
+declare const static_url_prefix: string;
+
+function Root(props: {}) {
   const [show, setShow] = useState(false);
   const [currentEvent, updateCurrentEvent] = useState({});
   const [events, updateEvents] = useState([]);
@@ -19,7 +22,7 @@ function EventsListUpdateDelete(props) {
   };
   const handleShow = () => setShow(true);
   const getEvents = () => {
-    fetch(props.api_url).then((resp) =>
+    fetch(api_url).then((resp) =>
       resp.json().then((events) => {
         updateEvents(events);
       })
@@ -100,5 +103,4 @@ function EventsListUpdateDelete(props) {
   );
 }
 
-const element = <EventsListUpdateDelete api_url={api_url} />;
-ReactDOM.render(element, document.getElementById("root"));
+render(<Root />, document.getElementById("root"));

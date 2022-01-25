@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load file_url %}
+{% load ckeditor5 %}
 
 {% block banniere %}
     {% if object.image %}
@@ -14,7 +15,5 @@
     <h1>{{object.title}}</h1>
     <p>Annonce par <a href='{{group.get_absolute_url }}'>{{group.name}}</a></p>
     </br>
-    {% autoescape off %}
-        <p>{{object.description}}</p>
-    {% endautoescape %}
+    {% ckeditor5 object.description %}
 {% endblock %}

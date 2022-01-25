@@ -1,15 +1,19 @@
-﻿import * as React from "react";
-import { useState, useEffect, useRef, useMemo } from "react";
-import ReactDOM, { render } from "react-dom";
+﻿import React, { useState, useEffect } from "react";
+import { render } from "react-dom";
 
-import { RootProps } from "./cowlocathlonCard/interfaces";
 import { cardStyle, cardH2Style } from "./cowlocathlonCard/styles";
 import { Roommates } from "./housingMap/interfaces";
 import { getRoommatesDetails } from "./cowlocathlonCard/utils";
 import { ParticipateButton } from "./cowlocathlonCard/participateButton";
 
-function Root(props: RootProps): JSX.Element {
-  const { API_URL, ROOMMATES_SLUG, EDIT_URL, PHASE, IS_ADMIN, USER_ID } = props;
+declare const API_URL: string;
+declare const ROOMMATES_SLUG: string;
+declare const EDIT_URL: string;
+declare const IS_ADMIN: string;
+declare const PHASE: number;
+declare const USER_ID: number;
+
+function Root(props: {}): JSX.Element {
   const isAdmin = IS_ADMIN === "True";
   const [roommates, setRoommates] = useState<Roommates>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -53,8 +57,9 @@ function Root(props: RootProps): JSX.Element {
             API_URL={API_URL}
             ROOMMATES_SLUG={ROOMMATES_SLUG}
             isParticipating={
-              roommates.colocathlon_participants.filter((e) => e.user === USER_ID)
-                .length > 0
+              roommates.colocathlon_participants.filter(
+                (e) => e.user === USER_ID
+              ).length > 0
             }
             participants={roommates.colocathlon_participants}
             quota={roommates.colocathlon_quota}
@@ -96,14 +101,4 @@ function Root(props: RootProps): JSX.Element {
   }
 }
 
-render(
-  <Root
-    API_URL={API_URL}
-    ROOMMATES_SLUG={ROOMMATES_SLUG}
-    EDIT_URL={EDIT_URL}
-    IS_ADMIN={IS_ADMIN}
-    PHASE={PHASE}
-    USER_ID={USER_ID}
-  />,
-  document.getElementById("root")
-);
+render(<Root />, document.getElementById("root"));
