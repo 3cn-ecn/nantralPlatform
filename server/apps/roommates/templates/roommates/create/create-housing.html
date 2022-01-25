@@ -8,10 +8,10 @@
 
 {% block script %}
 	<script>
-		let api_url = '{% url "roommates_api:housing" %}';
-		let check_url = '{% url "roommates_api:address-check" %}';
-		let geo_url = '{% url "roommates_api:geocoding" %}';
-		let create_url = '{% url "roommates:create-roommates" 0 %}';
+		const API_URL = '{% url "roommates_api:housing" %}';
+		const CHECK_URL = '{% url "roommates_api:address-check" %}';
+		const GEO_URL = '{% url "roommates_api:geocoding" %}';
+		const CREATE_URL = '{% url "roommates:create-roommates" 0 %}';
 	</script>
 	<script src='{% static "js/createHousing.js" %}'></script>
 {% endblock %}
