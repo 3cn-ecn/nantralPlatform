@@ -1,12 +1,11 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Spinner} from "react-bootstrap";
 import {SentNotification} from "./interfaces";
 import {getCookie, merge} from "./utils";
-import { LaptopWindows } from "@material-ui/icons";
 
-declare const NOTIFICATION_URL: string;
+declare const notifications_url: string;
+
 /**
  * Fonction principale de chargement des notifications
  * @param props Propriétés de l'élément html
@@ -20,7 +19,7 @@ function NotificationMenu(props): JSX.Element {
   const nbMaxDefault = 20;
   var nbMax = nbMaxDefault;  
   const csrfToken = getCookie('csrftoken');
-  const api_url = props.url;
+  const api_url = notifications_url;
 
   if (nbSubNotifs === null) {
     getNbSubNotifs();

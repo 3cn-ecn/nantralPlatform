@@ -1,39 +1,20 @@
 var path = require("path");
+var apps_dir = path.join(__dirname, '../src/containers')
+
 module.exports = {
   entry: {
-    goBackButton: path.join(
-      __dirname,
-      "../src/containers/goBackButton.tsx"
-    ),
-    clubsList: path.join(__dirname, "../src/containers/clubsList.tsx"),
-    eventsGroupListUpdate: path.join(
-      __dirname,
-      "../src/containers/eventsGroupListUpdate.tsx"
-    ),
-    postsGroupListUpdate: path.join(
-      __dirname,
-      "../src/containers/postsGroupListUpdate.tsx"
-    ),
-    eventsView: path.join(__dirname, "../src/containers/eventsView.tsx"),
-    cowlocathlonCard: path.join(
-      __dirname,
-      "../src/containers/cowlocathlonCard.tsx"
-    ),
-    housingMap: path.join(__dirname, "../src/containers/housingMap.tsx"),
-    createHousing: path.join(__dirname, "../src/containers/createHousing.tsx"),
-    groupMembers: path.join(__dirname, "../src/containers/groupMembers.tsx"),
-    editGroupMembers: path.join(
-      __dirname,
-      "../src/containers/editGroupMembers.tsx"
-    ),
-    subscribeButton: path.join(
-      __dirname, 
-      "../src/containers/notification/subscribeButton.tsx"
-    ),
-    notifications: path.join(
-      __dirname,
-      "../src/containers/notification/notificationMenu.tsx"
-    )
+    goBackButton:           path.join(apps_dir, "goBackButton.tsx"),
+    clubsList:              path.join(apps_dir, "club/clubsList.tsx"),
+    eventsGroupListUpdate:  path.join(apps_dir, "group/eventsGroupListUpdate.tsx"),
+    postsGroupListUpdate:   path.join(apps_dir, "group/postsGroupListUpdate.tsx"),
+    groupMembers:           path.join(apps_dir, "group/groupMembers.tsx"),
+    editGroupMembers:       path.join(apps_dir, "group/editGroupMembers.tsx"),
+    eventsView:             path.join(apps_dir, "event/eventsView.tsx"),
+    cowlocathlonCard:       path.join(apps_dir, "roommates/cowlocathlonCard.tsx"),
+    housingMap:             path.join(apps_dir, "roommates/housingMap.tsx"),
+    createHousing:          path.join(apps_dir, "roommates/createHousing.tsx"),
+    subscribeButton:        path.join(apps_dir, "notification/subscribeButton.tsx"),
+    notifications:          path.join(apps_dir, "notification/notificationMenu.tsx")
   },
   output: {
     path: path.join(__dirname, "../../server/static/js"),
