@@ -224,7 +224,7 @@ TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
 
 # webpush notifications
 WEBPUSH_SETTINGS = {
-    "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY', ''),
-    "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY', ''),
-    "VAPID_ADMIN_EMAIL": env('VAPID_ADMIN_EMAIL', '')
+    "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY', default=''),
+    "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY', default=''),
+    "VAPID_ADMIN_EMAIL": env('VAPID_ADMIN_EMAIL', default='')
 }
