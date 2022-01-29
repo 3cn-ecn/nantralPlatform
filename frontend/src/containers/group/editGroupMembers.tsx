@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import { Spinner, Button } from "react-bootstrap";
 import axios from "axios";
 
-import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
+import { spinnerDivStyle, spinnerStyle } from "../club/clubsList/styles";
 import { Member } from "./groupMembers/interfaces";
 import { EditGroupMembersModal } from "./editGroupMembers/editGroupMembersModal";
 import { AddGroupMembersModal } from "./editGroupMembers/addGroupMembersModal";

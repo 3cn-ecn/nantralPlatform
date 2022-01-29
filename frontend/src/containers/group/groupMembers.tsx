@@ -14,7 +14,7 @@ import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { arrayMoveImmutable } from "array-move";
 import axios from "axios";
 
-import { spinnerDivStyle, spinnerStyle } from "./clubsList/styles";
+import { spinnerDivStyle, spinnerStyle } from "../club/clubsList/styles";
 import { loaderStyle } from "./groupMembers/styles";
 import { Member } from "./groupMembers/interfaces";
 import { EditGroupMembersSwitch } from "./groupMembers/groupMembersEditSwitch";

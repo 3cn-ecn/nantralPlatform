@@ -6,7 +6,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 
 import { MemberAdd, Student } from "../groupMembers/interfaces";
 import { addMember, getStudents } from "./utils";
-import { spinnerDivStyle, spinnerStyle } from "../clubsList/styles";
+import { spinnerDivStyle, spinnerStyle } from "../../club/clubsList/styles";
 
 export function AddGroupMembersModal(props): JSX.Element {
   const { showModal, setShowModal, membersURL, setIsLoading, setMembers } =
