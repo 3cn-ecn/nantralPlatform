@@ -200,5 +200,3 @@ render(
   <NotificationMenu url={notifications_url} />, 
   document.getElementById("notificationPanel")
 );
-  
-
