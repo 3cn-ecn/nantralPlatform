@@ -183,7 +183,7 @@
     const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
     const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
     const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
-    const is_admin = {{ is_admin|yesno:"true,false,false" }};
+    const isAdmin = {{ is_admin|yesno:"true,false,false" }};
     const membersURL = "{% url object.app|add:'_api:list-members' %}?slug={{ object.slug }}";
     const getSubscriptionURL = "{% url 'notification_api:subscription' %}?slug={{ object.full_slug }}";
 </script>

@@ -13,7 +13,7 @@ import { Map } from "./housingMap/map";
 import { CurrentColocInfo } from "./housingMap/currentColocInfo";
 import { getRoommates } from "./housingMap/utils";
 
-declare const API_KEY: string;
+declare const MAPBOX_TOKEN: string;
 declare const API_HOUSING_URL: string;
 declare const PHASE_COLOCATHLON: number;
 declare const CURRENT_COLOC: string;
@@ -136,7 +136,7 @@ function Root(props: {}): JSX.Element {
       <Map
         viewport={viewport}
         mapRef={mapRef}
-        apiKey={API_KEY}
+        apiKey={MAPBOX_TOKEN}
         markers={markers}
         popupInfo={popupInfo}
         setViewPort={setViewPort}

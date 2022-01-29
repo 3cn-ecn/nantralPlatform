@@ -9,8 +9,8 @@ dayjs.extend(relativeTime);
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
-declare const group_slug: string;
-declare const static_url_prefix: string;
+declare const GROUP_SLUG: string;
+declare const STATIC_URL_PREFIX: string;
 
 function Root(props: {}) {
   const [show, setShow] = useState(false);
@@ -22,7 +22,7 @@ function Root(props: {}) {
   };
   const handleShow = () => setShow(true);
   const getPosts = () => {
-    fetch(`/api/post/group/${group_slug}/`).then((resp) =>
+    fetch(`/api/post/group/${GROUP_SLUG}/`).then((resp) =>
       resp.json().then((posts) => {
         updatePosts(posts);
         console.log(posts);
@@ -42,7 +42,7 @@ function Root(props: {}) {
                 {post.image != null && (
                   <Card.Img
                     variant="top"
-                    src={`${static_url_prefix}${post.image.url}`}
+                    src={`${STATIC_URL_PREFIX}${post.image.url}`}
                   />
                 )}
                 <Card.Body>
