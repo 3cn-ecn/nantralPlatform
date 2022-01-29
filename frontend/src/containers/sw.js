@@ -125,3 +125,37 @@ setCatchHandler(async ({event}) => {
   return Response.error();
 });
 
+
+
+// Receiving notifications
+self.addEventListener('push', function (event) {
+  // Retrieve the textual payload from event.data (a PushMessageData object).
+  // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
+  // on https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData.
+  const eventInfo = event.data.text();
+  const data = JSON.parse(eventInfo);
+
+  // Keep the service worker alive until the notification is created.
+  event.waitUntil(
+      self.registration.showNotification(data.title, {
+          body: data.body,
+          icon: data.icon || 'https://i.imgur.com/MZM3K5w.png',
+          image: data.image,
+          data: data.data
+      })
+  );
+});
+
+
+// react to clicking on a notification
+self.addEventListener('notificationclick', function(event) {
+  if (event.action === 'action1') {
+    clients.openWindows(event.notification.data.action1_url);
+  } else if (event.action == 'action2') {
+    clients.openWindows(event.notification.data.action2_url);
+  } else {
+    // User selected (e.g., clicked in) the main body of notification.
+    clients.openWindow(event.notification.data.url);
+  }
+  event.notification.close();
+}, false);

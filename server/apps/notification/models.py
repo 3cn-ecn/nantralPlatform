@@ -45,11 +45,11 @@ class Subscription(models.Model):
 
 class Notification(models.Model):
     """Contenu d'une notification"""
-    body = models.CharField('Corps', max_length=255)
+    title = models.CharField('Titre', max_length=255, default="Nantral Platform")
+    body = models.CharField('Corps', max_length=512)
     url = models.CharField('Cible', max_length=255)
-    owner = models.SlugField('Page parente', max_length=50)
-    publicity = models.CharField(choices=VISIBILITY, default='Pub',
-        max_length=3, verbose_name='Visibilité de la notification')
+    icon_url = models.CharField(max_length=255, blank=True, null=True)
+    image_url = models.CharField(max_length=255, blank=True, null=True)
     action1_label = models.CharField(
         'Action 1 - Label', max_length = 20, blank=True, null=True)
     action1_url = models.URLField(
@@ -58,6 +58,9 @@ class Notification(models.Model):
         'Action 1 - Label', max_length = 20, blank=True, null=True)
     action2_url = models.URLField(
         'Action 1 - Cible', max_length=255, blank=True, null=True)
+    owner = models.SlugField('Page parente', max_length=50)
+    publicity = models.CharField(choices=VISIBILITY, default='Pub',
+        max_length=3, verbose_name='Visibilité de la notification')
     date = models.DateTimeField('Date de création', default=timezone.now)
     high_priority = models.BooleanField('Prioritaire', default=False)
 
@@ -129,9 +132,15 @@ class SentNotification(models.Model):
         """Send the notification to the device."""
         user = self.student.user
         payload = {
-            'head': 'Nantral Platform',
+            'title': self.title,
+            'body': self.notification.body,
             'icon': self.notification.get_logo().url,
-            'body': self.notification.body
+            'image': self.notification.image_url,
+            'data': {
+                'url': self.notification.url,
+                'action1_url': self.notification.action1_url,
+                'action2_url': self.notification.action2_url
+            }
         }
         # try to send a notification to a user during 12h
         webpush.send_user_notification(user=user, payload=payload, ttl=12*3600)
