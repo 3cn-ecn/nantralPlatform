@@ -1,8 +1,9 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Button, Spinner} from "react-bootstrap";
 import {getCookie} from "./utils";
+
+declare const subscriptionURL: string;
 
 /**
  * Load the Subscribe Button and update it when clicked
@@ -18,7 +19,7 @@ function SubscribeButton(props): JSX.Element {
    * Load the state of the subscription
    */
   async function getSubscription(): Promise<void> {
-    await fetch(props.getSubscriptionURL)
+    await fetch(subscriptionURL)
       .then(resp => resp.json())
       .then(data => {setSubscribed(data); setIsLoading(false);})
       .catch(err => getSubscription());
@@ -37,7 +38,7 @@ function SubscribeButton(props): JSX.Element {
       },
       body: JSON.stringify({ title: 'Change the subscription' })
     };
-    fetch(props.getSubscriptionURL, requestOptions)
+    fetch(subscriptionURL, requestOptions)
       .then(resp => {setSubscribed(!subscribed); setIsLoading(false);})
       .catch(err => {getSubscription();});
   }
@@ -76,7 +77,7 @@ function SubscribeButton(props): JSX.Element {
 
 
 render(
-  <SubscribeButton getSubscriptionURL={getSubscriptionURL} />, 
+  <SubscribeButton />, 
   document.getElementById("subscription_button")
 );
   
