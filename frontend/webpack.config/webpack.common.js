@@ -1,9 +1,11 @@
 var path = require("path");
-var apps_dir = path.join(__dirname, '../src/containers')
+var apps_dir = path.join(__dirname, "../src/containers")
 
 module.exports = {
   entry: {
     goBackButton:           path.join(apps_dir, "goBackButton.tsx"),
+    registerSw:             path.join(apps_dir, "registerSw.js"),
+    sw:                     path.join(apps_dir, "sw.js"),
     clubsList:              path.join(apps_dir, "club/clubsList.tsx"),
     eventsGroupListUpdate:  path.join(apps_dir, "group/eventsGroupListUpdate.tsx"),
     postsGroupListUpdate:   path.join(apps_dir, "group/postsGroupListUpdate.tsx"),

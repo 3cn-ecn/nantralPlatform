@@ -1,4 +1,4 @@
-﻿import * as React from "react";
+﻿import React from "react";
 import ReactDOM, { render } from "react-dom";
 
 
@@ -9,11 +9,12 @@ function GoBackMain(): JSX.Element {
         <i aria-hidden="true" className="fas fa-arrow-left"></i>
       </div>
     );
+  } else {
+    return (<></>)
   }
 }
 
 render(
-  <GoBackMain
-  />,
+  <GoBackMain />,
   document.getElementById("goBackButton")
 );

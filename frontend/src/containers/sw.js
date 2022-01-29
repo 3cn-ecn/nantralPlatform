@@ -1,20 +1,27 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js');
+import { registerRoute, setCatchHandler } from 'workbox-routing';
+import {
+  NetworkFirst,
+  StaleWhileRevalidate,
+  CacheFirst,
+} from 'workbox-strategies';
+import {CacheableResponsePlugin} from 'workbox-cacheable-response';
+import {ExpirationPlugin} from 'workbox-expiration';
 
 
 // Cache the external fonts, stylesheets and plugins
-workbox.routing.registerRoute(
+registerRoute(
   ({url}) => url.origin === 'https://fonts.googleapis.com' ||
              url.origin === 'https://fonts.gstatic.com' ||
              url.origin === 'https://kit.fontawesome.com' ||
              url.origin === 'https://ka-f.fontawesome.com' ||
              url.origin === 'https://cdn.jsdelivr.net',
-  new workbox.strategies.CacheFirst({
+  new CacheFirst({
     cacheName: 'external-files',
     plugins: [
-      new workbox.cacheableResponse.CacheableResponsePlugin({
+      new CacheableResponsePlugin({
         statuses: [0, 200, 304],   // on cache uniquement les renvois non-erreurs
       }),
-      new workbox.expiration.ExpirationPlugin({
+      new ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * 30,  // le cache expire après 30 jours
         maxEntries: 30,                    // pas plus de 30 fichiers dans le cache
       })
@@ -23,18 +30,18 @@ workbox.routing.registerRoute(
 );
 
 // cache images
-workbox.routing.registerRoute(
+registerRoute(
   ({url, request}) => request.destination === 'image' ||
                       url.origin === 'https://nantral-platform-prod.s3.amazonaws.com' ||
                       url.origin === 'https://avatars.dicebear.com',
-  new workbox.strategies.CacheFirst({
+  new CacheFirst({
     cacheName: 'images',
     plugins: [
-      new workbox.expiration.ExpirationPlugin({
+      new ExpirationPlugin({
         maxEntries: 200,
         maxAgeSeconds: 60 * 60 * 24 * 7, // 7 Days
       }),
-      new workbox.cacheableResponse.CacheableResponsePlugin({
+      new CacheableResponsePlugin({
         statuses: [200],
       })
     ]
@@ -42,17 +49,17 @@ workbox.routing.registerRoute(
 );
 
 // cache js and css files
-workbox.routing.registerRoute(
+registerRoute(
   ({request}) => request.destination === 'script' ||
                  request.destination === 'style',
-  new workbox.strategies.CacheFirst({
+  new CacheFirst({
     cacheName: 'static-resources',
     plugins: [
-      new workbox.expiration.ExpirationPlugin({
+      new ExpirationPlugin({
         maxEntries: 20,
         maxAgeSeconds: 60 * 60 * 24 * 7, // 7 Days
       }),
-      new workbox.cacheableResponse.CacheableResponsePlugin({
+      new CacheableResponsePlugin({
         statuses: [200]
       })
     ]
@@ -61,7 +68,7 @@ workbox.routing.registerRoute(
 
 
 // cache the home and main pages to accelerate navigation
-workbox.routing.registerRoute(
+registerRoute(
   ({url}) => url.pathname === '/' ||
              url.pathname === '/club/' ||
              url.pathname === '/colocs/map' ||
@@ -70,13 +77,13 @@ workbox.routing.registerRoute(
              url.pathname === '/student/' ||
              url.pathname === '/academic/liste/' ||
              url.pathname === '/adminsitration',
-  new workbox.strategies.StaleWhileRevalidate({
+  new StaleWhileRevalidate({
     cacheName: 'main-pages',
     plugins: [
-      new workbox.cacheableResponse.CacheableResponsePlugin({
+      new CacheableResponsePlugin({
         statuses: [200],
       }),
-      new workbox.expiration.ExpirationPlugin({
+      new ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * 14,
       })
     ]
@@ -85,11 +92,11 @@ workbox.routing.registerRoute(
 
 
 // par défaut privilégier le réseau, mais utiliser le cache si hors-connexion
-workbox.routing.setDefaultHandler(
-  new workbox.strategies.NetworkFirst({
+setDefaultHandler(
+  new NetworkFirst({
     cacheName: "default-cache",
     plugins: [
-      new workbox.expiration.ExpirationPlugin({
+      new ExpirationPlugin({
         maxEntries: 50,
         maxAgeSeconds: 60 * 60 * 24 * 15,
       })
@@ -110,7 +117,7 @@ self.addEventListener('install', async (event) => {
   );
 });
 
-workbox.routing.setCatchHandler(async ({event}) => {
+setCatchHandler(async ({event}) => {
   if (event.request.destination == 'document') {
     return caches.match(FALLBACK_HTML_URL);
   }
