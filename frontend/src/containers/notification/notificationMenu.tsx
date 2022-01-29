@@ -6,7 +6,7 @@ import {SentNotification} from "./interfaces";
 import {getCookie, merge} from "./utils";
 import { LaptopWindows } from "@material-ui/icons";
 
-
+declare const NOTIFICATION_URL: string;
 /**
  * Fonction principale de chargement des notifications
  * @param props Propriétés de l'élément html
@@ -197,6 +197,6 @@ function NotificationMenu(props): JSX.Element {
 
 
 render(
-  <NotificationMenu url={notifications_url} />, 
+  <NotificationMenu />, 
   document.getElementById("notificationPanel")
 );
