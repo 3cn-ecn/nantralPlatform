@@ -22,9 +22,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    # dev
-    path('__debug__/', include(debug_toolbar.urls)),
+    # default and third-party apps
     path('admin/', admin.site.urls),
+    path('__debug__/', include(debug_toolbar.urls)),
+    path("ckeditor5/", include('django_ckeditor_5.urls')),
+    path('webpush/', include('webpush.urls')),
 
     # apps
     path('account/', 
@@ -74,14 +76,16 @@ urlpatterns = [
         include('apps.notification.api_urls', namespace='notification_api')),
 
     # homepage
-    path('', include('apps.home.urls', namespace='home')),
-]
+    path('', include('apps.home.urls', namespace='home'))
+] 
+
+urlpatterns += static(
+    settings.MEDIA_URL, 
+    document_root=settings.MEDIA_ROOT
+)
 
 handler403 = 'apps.home.views.handler403'
 handler404 = 'apps.home.views.handler404'
 handler413 = 'apps.home.views.handler413'
 handler500 = 'apps.home.views.handler500'
 
-urlpatterns += [
-    path("ckeditor5/", include('django_ckeditor_5.urls'))
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

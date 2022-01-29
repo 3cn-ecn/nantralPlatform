@@ -56,6 +56,7 @@ THIRD_PARTY_APPS = [
     'debug_toolbar',
     'django_celery_beat',
     'extra_settings',
+    'webpush'
 ]
 
 COMMON_APPS = [
@@ -219,3 +220,11 @@ SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
 TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
     env('TEMPORARY_ACCOUNTS_DATE_LIMIT', default='2000-12-31'))
+
+
+# webpush notifications
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY', ''),
+    "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY', ''),
+    "VAPID_ADMIN_EMAIL": env('VAPID_ADMIN_EMAIL', '')
+}

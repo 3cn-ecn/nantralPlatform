@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+import webpush
+
 from apps.utils.slug import get_object_from_full_slug
 from apps.student.models import Student
 from apps.group.models import Group
@@ -110,7 +112,6 @@ class Notification(models.Model):
 
 
 
-
 class SentNotification(models.Model):
     """Table des notifications envoyées à chaque utilisateur"""
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
@@ -126,8 +127,14 @@ class SentNotification(models.Model):
     
     def sendPushNotification(self):
         """Send the notification to the device."""
-        # pas encore de code ici
-        pass
+        user = self.student.user
+        payload = {
+            'head': 'Nantral Platform',
+            'icon': self.notification.get_logo().url,
+            'body': self.notification.body
+        }
+        # try to send a notification to a user during 12h
+        webpush.send_user_notification(user=user, payload=payload, ttl=12*3600)
     
     def save(self, *args, **kwargs):
         """Save object and send notifications to devices if needed"""
