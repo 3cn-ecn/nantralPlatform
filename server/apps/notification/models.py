@@ -132,7 +132,7 @@ class SentNotification(models.Model):
         """Send the notification to the device."""
         user = self.student.user
         payload = {
-            'title': self.title,
+            'title': self.notification.title,
             'body': self.notification.body,
             'icon': self.notification.get_logo().url,
             'image': self.notification.image_url,
@@ -147,7 +147,9 @@ class SentNotification(models.Model):
     
     def save(self, *args, **kwargs):
         """Save object and send notifications to devices if needed"""
-        if (self.notification.high_priority or Subscription.hasSubscribed(self.notification.owner, self.student)):
+        if (not self.id and
+            (self.notification.high_priority or 
+            Subscription.hasSubscribed(self.notification.owner, self.student))):
             self.subscribed = True
             self.sendPushNotification()
         super(SentNotification, self).save(*args, **kwargs)
