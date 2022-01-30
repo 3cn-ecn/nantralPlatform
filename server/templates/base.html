@@ -55,10 +55,10 @@
 			</div>
 			<ul id="menuSet" class="navbar-nav ms-auto">
 				<li class="nav-item dropdown">
-					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link" href="javascript:void(0);">
 						<img src='{% static "/icon/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">
 					</a>
-					<ul class="dropdown-menu dropdown-menu-end" role="menu" style="right:-84px;">
+					<ul class="dropdown-menu dropdown-menu-end" style="right:-84px;">
 						<li><a class="dropdown-item" href="{% url 'home:home' %}">
 							<img src='{% static "/icon/event.svg" %}' class="align-middle" loading="lazy">
 							Posts et Évènements
@@ -100,15 +100,15 @@
 					</ul>
 				</li>
 				<li id="notificationPanel" class="nav-item dropdown">
-					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link" href="javascript:void(0);">
 						<img src='{% static "/icon/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
 					</a>
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link" href="javascript:void(0);">
 						<img src='{% static "/icon/people.svg" %}' class="d-inline-block align-top" alt="compte personnel" loading="lazy">
 					</a>
-					<ul class="dropdown-menu dropdown-menu-end" role="menu">
+					<ul class="dropdown-menu dropdown-menu-end" style="right: 0;">
 						{% if request.user.is_authenticated %}
 							{% if request.user.student.pk %}
 								<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>&nbsp Mon Profil</a></li>

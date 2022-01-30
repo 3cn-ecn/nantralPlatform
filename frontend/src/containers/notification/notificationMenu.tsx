@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Spinner} from "react-bootstrap";
 import {SentNotification} from "./interfaces";
@@ -13,10 +13,10 @@ declare const notifications_url: string;
  * @returns Le code html à afficher
  */
 function NotificationMenu(props): JSX.Element {
-  const [showPanel, setShowPanel] = useState(false);
   const [nbSubNotifs, setNbSubNotifs] = useState <number> (null);
   const [nbAllNotifs, setNbAllNotifs] = useState <number> (null);
   const [listNotifs, setListNotifs] = useState <SentNotification[]> (null);
+  const bell_button = useRef(null);
   const nbMaxDefault = 20;
   var nbMax = nbMaxDefault;  
   const csrfToken = getCookie('csrftoken');
@@ -68,19 +68,22 @@ function NotificationMenu(props): JSX.Element {
       return fetch(urlToRequest, requestOptions);
     }
 
-    function updateListNotifsWith(newVal:boolean) {
+    function updateSeenPropertyInList(newVal:boolean) {
       var newList = JSON.parse(JSON.stringify(listNotifs));
       newList[index]['seen'] = newVal;
       setListNotifs(newList);
     }
 
     function updateSeen() {
-      updateListNotifsWith(null);
+      // put the focus on the bell button for keeping the menu open
+      bell_button.current.focus();
+      // update the seen property
+      updateSeenPropertyInList(null);
       makeRequest()
         .then(resp => resp.json())
         .then(data => {
           // mettre à jour la liste des notifs
-          updateListNotifsWith(data);
+          updateSeenPropertyInList(data);
           // mettre à jour le compteur
           if (data) {
             if (sn.subscribed) setNbSubNotifs(nbSubNotifs - 1);
@@ -94,7 +97,10 @@ function NotificationMenu(props): JSX.Element {
     }
 
     function openItem() {
-      updateListNotifsWith(null);
+      // put the focus on the bell button for keeping the menu open
+      bell_button.current.focus();
+      // update the seen property
+      updateSeenPropertyInList(null);
       if (sn.seen) {
         window.open(n.url, "_self");
       } else {
@@ -105,8 +111,9 @@ function NotificationMenu(props): JSX.Element {
     return (
       <li>
         <span className="dropdown-item d-flex p-0 ps-1">
-          <span 
+          <a 
             className={`text-${sn.seen ? "light" : "danger"} read-button`}
+            href="javascript:void(0);"
             onClick={()=>updateSeen()}
           >
             { sn.seen == null ?
@@ -120,9 +127,10 @@ function NotificationMenu(props): JSX.Element {
             :
               "●"
             }
-          </span>
-          <span 
-            className="text-wrap d-flex p-1 ps-0 w-100" style={{alignItems: "center"}}
+          </a>
+          <a 
+            className="dropdown-item text-wrap d-flex p-1 ps-0 w-100" style={{alignItems: "center"}}
+            href="javascript:void(0);"
             onClick={()=>openItem()}
           >
             { n.icon_url ?
@@ -131,7 +139,7 @@ function NotificationMenu(props): JSX.Element {
               <img src="/static/img/logo.svg" loading="lazy" />
             }
             <small className="ms-2"><strong>{n.title}</strong><br/>{n.body}</small>
-          </span>
+          </a>
         </span>
       </li>
     );
@@ -155,19 +163,19 @@ function NotificationMenu(props): JSX.Element {
       </>
     );
   }
-
+  
   // open the menu
   function openMenu() {
-    setShowPanel(!showPanel);
     if (listNotifs == null) getListNotifs(true);
     if (nbAllNotifs == null) getNbAllNotifs();
   }
-  
+
   return (
     <>
       <a 
-        className={`nav-link ${showPanel ? "show" : ""}`} href="#"
+        className="nav-link" href="javascript:void(0);"
         onClick={openMenu}
+        ref={bell_button}
       >
         <img 
           src = '/static/icon/notification.svg'
@@ -186,7 +194,7 @@ function NotificationMenu(props): JSX.Element {
         }
       </a>
       <ul 
-        className={`dropdown-menu dropdown-menu-end overflow-auto ${showPanel ? "show" : ""}`}
+        className="dropdown-menu dropdown-menu-end overflow-auto"
         style={{width: "18rem", maxWidth: "90vw", right: "-42px", maxHeight: "70vh"}}
       >
         <NotificationPanel></NotificationPanel>
