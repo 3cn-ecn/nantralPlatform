@@ -71,23 +71,13 @@
 							<img src='{% static "/icon/roommates.svg" %}' class="align-middle" loading="lazy">
 							Carte des Colocs
 						</a></li>
+						<li><a class="dropdown-item" href="{% url 'family:home' %}">
+							<img src='{% static "/icon/family.svg" %}' class="align-middle" loading="lazy">
+							Parrainage
+						</a></li>
 						<li><a class="dropdown-item" href="{% url 'liste:index' %}">
 							<img src='{% static "/icon/campaign.svg" %}' class="align-middle" loading="lazy">
 							Listes BDX
-						</a></li>
-						{% if navbar_family_show %}
-							<li><a class="dropdown-item" href="{% url 'family:home' %}">
-								<img src='{% static "/icon/family.svg" %}' class="align-middle" loading="lazy">
-								Parrainage
-							</a></li>
-						{% endif %}
-						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">
-							<img src='{% static "/icon/sign.svg" %}' class="align-middle" loading="lazy">
-							Signature ECN
-						</a></li>
-						<li><a class="dropdown-item" href="{% url 'student:list' %}">
-							<img src='{% static "/icon/list.svg" %}' class="align-middle" loading="lazy">
-							Annuaire Nantralien
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'academic:index' %}">
 							<img src='{% static "/icon/academic.svg" %}' class="align-middle" loading="lazy">
@@ -96,6 +86,14 @@
 						<li><a class="dropdown-item" href="{% url 'administration:index' %}">
 							<img src='{% static "/icon/admin.svg" %}' class="align-middle" loading="lazy">
 							Administration
+						</a></li>
+						<li><a class="dropdown-item" href="{% url 'student:list' %}">
+							<img src='{% static "/icon/list.svg" %}' class="align-middle" loading="lazy">
+							Annuaire Étudiant
+						</a></li>
+						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">
+							<img src='{% static "/icon/sign.svg" %}' class="align-middle" loading="lazy">
+							Signature ECN
 						</a></li>
 					</ul>
 				</li>

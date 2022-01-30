@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls.base import reverse
 
 from .forms import PostForm, PostFormSet
 from .models import Post
@@ -22,6 +23,16 @@ class PostDetailView(LoginRequiredMixin, TemplateView):
         self.object = Post.get_post_by_slug(self.kwargs.get('post_slug'))
         context['object'] = self.object
         context['group'] = self.object.get_group
+        context['ariane'] = [
+            {
+                'target': reverse('home:home'), 
+                'label': "Posts"
+            },
+            {
+                'target': '#', 
+                'label': self.object.title
+            },
+        ]
         return context
 
 

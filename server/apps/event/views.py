@@ -7,6 +7,7 @@ from django.views.generic import UpdateView, FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import resolve
+from django.urls.base import reverse
 from django.db.utils import IntegrityError
 
 from .models import *
@@ -30,6 +31,16 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
         context['is_participating'] = self.object.is_participating(
             self.request.user)
         context['is_admin'] = context['group'].is_admin(self.request.user)
+        context['ariane'] = [
+            {
+                'target': reverse('home:home'), 
+                'label': "Évènements"
+            },
+            {
+                'target': '#', 
+                'label': self.object.title
+            },
+        ]
         return context
 
 

@@ -31,11 +31,11 @@ class HousingMap(LoginRequiredMixin, TemplateView):
                 context['CURRENT_COLOC_URL'] = roommate.first().get_absolute_url()
         context['ariane'] = [
             {
-                'target': reverse('roommates:housing-list'), 
+                'target': '#', 
                 'label': 'Colocs'
             },
             {
-                'target': "#", 
+                'target': '#', 
                 'label': 'Carte'
             }
         ]
@@ -50,8 +50,12 @@ class HousingList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['ariane'] = [
             {
-                'target': '#', 
+                'target': reverse('roommates:housing-map'), 
                 'label': 'Colocs'
+            },
+            {
+                'target': "#", 
+                'label': 'Liste'
             }
         ]
         return context
