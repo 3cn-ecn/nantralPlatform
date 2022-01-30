@@ -1,5 +1,6 @@
 export interface Notification {
   id: number;
+  title: string;
   body: string;
   url: string;
   icon_url: string;

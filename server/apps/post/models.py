@@ -47,6 +47,8 @@ class AbstractPost(models.Model, SlugModel):
         max_length=200, verbose_name='Visibilité de l\'annonce', choices=VISIBILITY)
     image = models.ImageField(verbose_name="Une image, une affiche en lien ?",
                               upload_to=path_and_rename, null=True, blank=True)
+    notification = models.ForeignKey(
+        to=Notification, on_delete=models.SET_NULL, blank=True, null=True)
 
     class Meta:
         abstract = True
@@ -75,22 +77,29 @@ class AbstractPost(models.Model, SlugModel):
 class Post(AbstractPost):
 
     def save(self, *args, **kwargs):
+        d = self.publication_date
         self.set_slug(
-            str(self.publication_date.year) + "-" + 
-            str(self.publication_date.month) + "-" + 
-            str(self.publication_date.day) + "-" + 
-            self.title
+            f'{d.year}-{d.month}-{d.day}-{self.title}'
         )
-        created = self.id is None
         super(Post, self).save(*args, **kwargs)
-        if created:
-            Notification.objects.create(
-                body = f'Nouveau post de {self.get_group_name} : {self.title}',
-                url = self.get_absolute_url(),
-                owner = self.group,
-                publicity = self.publicity,
-                date = self.publication_date
-            )
+        # save the notification
+        if not self.notification:
+            self.notification = Notification()
+        self.notification.title = self.title
+        self.notification.body = f'{self.get_group_name} a publié un post !'
+        self.notification.url = self.get_absolute_url()
+        self.notification.owner = self.group
+        self.notification.publicity = self.publicity
+        self.notification.date = self.publication_date
+        if self.image:
+            self.notification.image = self.image
+        try:
+            icon_path = get_object_from_full_slug(self.group).logo.url
+            self.notification.icon = icon_path
+        except:
+            pass
+        self.notification.save()
+        super(Post, self).save(*args, **kwargs)
 
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).

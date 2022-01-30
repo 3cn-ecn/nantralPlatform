@@ -83,6 +83,7 @@ class NotificationAPIView(APIView):
         """Mark a notifications as read"""
         student = request.user.student
         notif_id = request.query_params.get('notif_id', None)
+        mark_read = request.query_params.get('mark_read', None)
         if notif_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
@@ -90,7 +91,10 @@ class NotificationAPIView(APIView):
                 student=student,
                 notification=notif_id
             )
-            obj.seen = not(obj.seen)
+            if mark_read is None:
+                obj.seen = not(obj.seen)
+            else:
+                obj.seen = (mark_read.lower() == "true")
             obj.save()
             return Response(status=status.HTTP_202_ACCEPTED, data=obj.seen)
         except SentNotification.DoesNotExist:

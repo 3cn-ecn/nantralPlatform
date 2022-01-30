@@ -12,20 +12,12 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    icon_url = serializers.SerializerMethodField("get_icon_url")
-
     class Meta:
         model = Notification
         fields = [
-            'id', 'body', 'url', 'icon_url', 'date', 'high_priority',
+            'id', 'title', 'body', 'url', 'icon_url', 'date',
             'action1_label', 'action1_url', 'action2_label', 'action2_url'
         ]
-    
-    def get_icon_url(self, obj):
-        icon = obj.get_logo()
-        if icon:
-            return icon.url
-        return static('img/logo.svg')
 
 
 class SentNotificationSerializer(serializers.ModelSerializer):

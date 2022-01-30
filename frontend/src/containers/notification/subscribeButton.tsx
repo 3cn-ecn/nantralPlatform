@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Button, Spinner} from "react-bootstrap";
-import {getCookie} from "./utils";
+import getCookie from "../utils/getCookie";
 
 declare const subscriptionURL: string;
 

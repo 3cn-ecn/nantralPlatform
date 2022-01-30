@@ -151,16 +151,16 @@
 	<br><br><br>
 	</div>
 
+
+	<script>
+		const notifications_url = "{% url 'notification_api:my_notifications' %}";
+	</script>
+	<script type = "text/javascript" src="{% static 'js/notifications.js' %}?v=1"></script>
+	<!--script src="{% static 'js/goBackButton.js' %}?v=1"></script-->
+	<script type = "text/javascript" src="{% static 'js/registerSw.js' %}?v=1"></script>
+
+	{% block script %}
+	{% endblock %}
 </body>
-
-<script>
-    const notifications_url = "{% url 'notification_api:my_notifications' %}";
-</script>
-<script src="{% static 'js/notifications.js' %}?v=1"></script>
-<!--script src="{% static 'js/goBackButton.js' %}?v=1"></script-->
-<script src="{% static 'js/registerSw.js' %}?v=1"></script>
-
-{% block script %}
-{% endblock %}
 
 </html>

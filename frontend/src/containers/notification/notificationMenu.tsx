@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Spinner} from "react-bootstrap";
 import {SentNotification} from "./interfaces";
-import {getCookie, merge} from "./utils";
+import merge from "./utils";
+import getCookie from "../utils/getCookie";
 
 declare const notifications_url: string;
 
@@ -127,9 +128,9 @@ function NotificationMenu(props): JSX.Element {
             { n.icon_url ?
               <img src={n.icon_url} loading="lazy" />
             :
-              <img src="static/img/logo.svg" loading="lazy" />
+              <img src="/static/img/logo.svg" loading="lazy" />
             }
-            <small className="ms-2">{n.body}</small>
+            <small className="ms-2"><strong>{n.title}</strong><br/>{n.body}</small>
           </span>
         </span>
       </li>

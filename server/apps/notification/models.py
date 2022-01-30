@@ -67,15 +67,6 @@ class Notification(models.Model):
     def __str__(self):
         return f'{self.body[:20]}...'
     
-    def get_logo(self):
-        page = get_object_from_full_slug(self.owner)
-        while not(isinstance(page, Group)):
-            page = get_object_from_full_slug(page.owner)
-        if hasattr(page, "logo"):
-            return page.logo
-        else:
-            return None
-
     def addReveiversMember(self, owner):
         """Ajouter les membres de groupes en tant que destinataires"""
         page = get_object_from_full_slug(owner)
@@ -104,14 +95,15 @@ class Notification(models.Model):
     def save(self, *args, **kwargs):
         """Sauver la notif et ajouter des destinataires"""
         super().save(*args, **kwargs)
-        if self.publicity == 'Pub':
-            self.addAllUsers()
-        elif self.publicity == 'Mem':
-            self.addReveiversMember(self.owner)
-            self.high_priority = True
-        elif self.publicity == 'Adm':
-            self.addReceiverAdmin(self.owner)
-            self.high_priority = True            
+        if not self.id:
+            if self.publicity == 'Pub':
+                self.addAllUsers()
+            elif self.publicity == 'Mem':
+                self.addReveiversMember(self.owner)
+                self.high_priority = True
+            elif self.publicity == 'Adm':
+                self.addReceiverAdmin(self.owner)
+                self.high_priority = True
 
 
 

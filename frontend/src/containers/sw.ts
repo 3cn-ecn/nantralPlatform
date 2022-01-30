@@ -1,4 +1,4 @@
-import { registerRoute, setCatchHandler } from 'workbox-routing';
+import { registerRoute, setCatchHandler, setDefaultHandler } from 'workbox-routing';
 import {
   NetworkFirst,
   StaleWhileRevalidate,
@@ -6,7 +6,9 @@ import {
 } from 'workbox-strategies';
 import {CacheableResponsePlugin} from 'workbox-cacheable-response';
 import {ExpirationPlugin} from 'workbox-expiration';
+import getCookie from "./utils/getCookie";
 
+self.__WB_DISABLE_DEV_LOGS = true;
 
 // Cache the external fonts, stylesheets and plugins
 registerRoute(
@@ -147,15 +149,36 @@ self.addEventListener('push', function (event) {
 });
 
 
+// use the notification url
+declare const notifications_url: string;
+
 // react to clicking on a notification
 self.addEventListener('notificationclick', function(event) {
+  const notif = event.notification;
+  // open the notification
   if (event.action === 'action1') {
-    clients.openWindows(event.notification.data.action1_url);
+    clients.openWindows(notif.data.action1_url);
   } else if (event.action == 'action2') {
-    clients.openWindows(event.notification.data.action2_url);
+    clients.openWindows(notif.data.action2_url);
   } else {
     // User selected (e.g., clicked in) the main body of notification.
-    clients.openWindow(event.notification.data.url);
+    clients.openWindow(notif.data.url);
   }
+
+  // mark it as read
+  var urlToRequest = notifications_url
+  urlToRequest += "?notif_id=" + notif.tag;
+  urlToRequest += "&mark_read=true";
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({ title: 'Mark a notification as read' })
+  };
+  fetch(urlToRequest, requestOptions);
+
+  // close the notification
   event.notification.close();
 }, false);

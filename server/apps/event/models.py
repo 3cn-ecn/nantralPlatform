@@ -8,6 +8,7 @@ from apps.post.models import AbstractPost
 from apps.student.models import Student
 from apps.notification.models import Notification
 from apps.utils.upload import PathAndRename
+from apps.utils.slug import get_object_from_full_slug
 
 
 path_and_rename = PathAndRename("events/pictures")
@@ -21,9 +22,12 @@ class BaseEvent(AbstractPost):
         max_length=200, verbose_name='Titre de l\'événement')
     description = CKEditor5Field(
         verbose_name='Description de l\'événement', blank=True)
-    date = models.DateTimeField(verbose_name='Date de l\'événement')
-    location = models.CharField(max_length=200, verbose_name='Lieu')
-    group = models.SlugField(verbose_name='Groupe organisateur')
+    date = models.DateTimeField(
+        verbose_name='Date de l\'événement')
+    location = models.CharField(
+        max_length=200, verbose_name='Lieu')
+    group = models.SlugField(
+        verbose_name='Groupe organisateur')
     slug = models.SlugField(
         verbose_name='Slug de l\'événement', unique=True, null=True)
     participants = models.ManyToManyField(
@@ -40,19 +44,33 @@ class BaseEvent(AbstractPost):
         return student in self.participants.all()
 
     def save(self, *args, **kwargs):
+        # we save first the event, in case the notification don't work
         self.set_slug(
-            str(self.date.year) + "-" + str(self.date.month) + "-" + str(self.date.day) + "-" + self.title
+            f'{self.date.year}-{self.date.month}-{self.date.day}-{self.title}'
         )
-        created = self.id is None
         super(BaseEvent, self).save(*args, **kwargs)
-        if created:
-            Notification.objects.create(
-                body = f'Nouvel event de {self.get_group_name} : {self.title}',
-                url = self.get_absolute_url(),
-                owner = self.group,
-                publicity = self.publicity,
-                date = self.publication_date
-            )
+        # save the notification
+        if not self.notification:
+            self.notification = Notification()
+        self.notification.title = self.title
+        self.notification.body = f'{self.get_group_name} a ajouté un évènement !'
+        self.notification.url = self.get_absolute_url()
+        self.notification.owner = self.group
+        self.notification.publicity = self.publicity
+        self.notification.date = self.publication_date
+        print("COUCOUCOUCOUCOUCOUCOUCOUCOUCOUCOCUOUCOCUOUCOCU")
+        if self.image:
+            self.notification.image_url = self.image.url
+        try:
+            print("try")
+            icon_path = get_object_from_full_slug(self.group).logo.url
+            print(icon_path)
+            self.notification.icon_url = icon_path
+        except:
+            pass
+        self.notification.save()
+        super(BaseEvent, self).save(*args, **kwargs)
+
 
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
