@@ -4,7 +4,7 @@ from .models import Notification, SentNotification, Subscription
 # Register your models here.
 
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ['body', 'owner', 'date']
+    list_display = ['title', 'owner', 'date']
 
 class SentNotificationAdmin(admin.ModelAdmin):
     list_display = ['student', 'notification']

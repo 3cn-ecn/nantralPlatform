@@ -65,7 +65,7 @@ class Notification(models.Model):
     high_priority = models.BooleanField('Prioritaire', default=False)
 
     def __str__(self):
-        return f'{self.body[:20]}...'
+        return self.title
     
     def addReveiversMember(self, owner):
         """Ajouter les membres de groupes en tant que destinataires"""
