@@ -26,7 +26,7 @@ class StudentList(LoginRequiredMixin, ListView):
         context['ariane'] = [
             {
                 'target': '#',
-                'label': "Annuaire Nantralien"
+                'label': "Annuaire Étudiant"
             }
         ]
         return context

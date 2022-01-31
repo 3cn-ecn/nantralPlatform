@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import ReactDOM, { render } from "react-dom";
-import {Spinner} from "react-bootstrap";
+import {Spinner, Tabs, Tab} from "react-bootstrap";
 import {SentNotification} from "./interfaces";
 import merge from "./utils";
 import getCookie from "../utils/getCookie";
@@ -158,8 +158,15 @@ function NotificationMenu(props): JSX.Element {
     return(
       <>
         <li><h5 className="dropdown-item-text">Notifications</h5></li>
-        <li><hr className="dropdown-divider" /></li>
-        {content}
+        {/* <li><hr className="dropdown-divider" /></li> */}
+        <Tabs defaultActiveKey="sub" id="notifpanel" className="tab-justified">
+          <Tab eventKey="sub" title="Abonné" onClick={()=>bell_button.current.focus()}>
+            {content}
+          </Tab>
+          <Tab eventKey="all" title="Tous" onClick={()=>bell_button.current.focus()}>
+            <p>Rien ici 😛</p>
+          </Tab>
+        </Tabs>
       </>
     );
   }

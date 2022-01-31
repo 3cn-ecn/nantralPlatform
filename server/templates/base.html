@@ -42,8 +42,8 @@
 			<div id="goBackButton" class="d-inline-block"></div>
 			<div id="fil-dariane" class="navbar-brand">
 				{# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
-				<a class="ariane-link" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;"><!--
-					--><img src="{% static '/img/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="logo" loading="lazy"><!--
+				<a class="ariane-link" href="{% url 'home:home' %}" style="font-weight: 900;"><!--
+					--><img src="{% static '/img/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="" loading="lazy"><!--
 					--><span class="ms-0">Nantral Platform.</span><!--
 				--></a><!--
 				-->{% for link in ariane %}<!--
@@ -60,39 +60,39 @@
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" style="right:-84px;">
 						<li><a class="dropdown-item" href="{% url 'home:home' %}">
-							<img src='{% static "/icon/event.svg" %}' class="align-middle" loading="lazy">
+							<img src='{% static "/icon/event.svg" %}' class="align-middle" loading="lazy" alt="">
 							Posts et Évènements
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'club:index' %}">
-							<img src='{% static "/icon/club.svg" %}' class="align-middle" loading="lazy">
+							<img src='{% static "/icon/club.svg" %}' class="align-middle" loading="lazy" alt="">
 							Clubs &amp; Assos
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'roommates:housing-map' %}">
-							<img src='{% static "/icon/roommates.svg" %}' class="align-middle" loading="lazy">
+							<img src='{% static "/icon/roommates.svg" %}' class="align-middle" loading="lazy" alt="">
 							Carte des Colocs
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'family:home' %}">
-							<img src='{% static "/icon/family.svg" %}' class="align-middle" loading="lazy">
+							<img src='{% static "/icon/family.svg" %}' class="align-middle" loading="lazy" alt="">
 							Parrainage
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'liste:index' %}">
-							<img src='{% static "/icon/campaign.svg" %}' class="align-middle" loading="lazy">
+							<img src='{% static "/icon/campaign.svg" %}' class="align-middle" loading="lazy" alt="">
 							Listes BDX
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'academic:index' %}">
-							<img src='{% static "/icon/academic.svg" %}' class="align-middle" loading="lazy">
+							<img src='{% static "/icon/academic.svg" %}' class="align-middle" loading="lazy" alt="">
 							Cours et Formations
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'administration:index' %}">
-							<img src='{% static "/icon/admin.svg" %}' class="align-middle" loading="lazy">
+							<img src='{% static "/icon/admin.svg" %}' class="align-middle" loading="lazy" alt="">
 							Administration
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'student:list' %}">
-							<img src='{% static "/icon/list.svg" %}' class="align-middle" loading="lazy">
+							<img src='{% static "/icon/list.svg" %}' class="align-middle" loading="lazy" alt="">
 							Annuaire Étudiant
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">
-							<img src='{% static "/icon/sign.svg" %}' class="align-middle" loading="lazy">
+							<img src='{% static "/icon/sign.svg" %}' class="align-middle" loading="lazy" alt="">
 							Signature ECN
 						</a></li>
 					</ul>
@@ -109,20 +109,20 @@
 					<ul class="dropdown-menu dropdown-menu-end" style="right: 0;">
 						{% if request.user.is_authenticated %}
 							{% if request.user.student.pk %}
-								<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>&nbsp Mon Profil</a></li>
+								<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>&nbsp; Mon Profil</a></li>
 								{% if request.user.is_staff %}
-									<li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-shield-alt"></i>&nbsp Interface Admin</a></li>
+									<li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-shield-alt"></i>&nbsp; Interface Admin</a></li>
 								{% endif %}
-								<li><a class="dropdown-item" href="{% url 'account:logout' %}" onclick="caches.delete('main-pages');"><i class="fas fa-sign-out-alt"></i>&nbsp Me déconnecter</a></li>
+								<li><a class="dropdown-item" href="{% url 'account:logout' %}" onclick="caches.delete('main-pages');"><i class="fas fa-sign-out-alt"></i>&nbsp; Me déconnecter</a></li>
 							{% else %}
 								<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
 							{% endif  %}
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>&nbsp Suggestion / Bug</a></li>
+							<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>&nbsp; Suggestion / Bug</a></li>
 						{% else %}
 							<li><a class="dropdown-item" href="{% url 'account:login' %}"><i class="fas fa-sign-in-alt"></i>&nbsp; Connexion</a></li>
 						{% endif %}
-						<li><a class="dropdown-item" href="{% url 'home:mentions' %}"><i class="fas fa-gavel"></i>&nbsp Mentions Légales</a></li>
+						<li><a class="dropdown-item" href="{% url 'home:mentions' %}"><i class="fas fa-gavel"></i>&nbsp; Mentions Légales</a></li>
 					</ul>
 				</li>
 			</ul>

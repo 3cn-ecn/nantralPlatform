@@ -82,18 +82,18 @@ table.table-sort th {
 }
 
 
-#menuSet .dropdown .nav-link {
+#menuSet > .dropdown > .nav-link {
   border-radius: 50%;
   padding: .2rem;
 }
-#menuSet .dropdown .nav-link:hover {
+#menuSet > .dropdown > .nav-link:hover {
   background-color: #eee;
 }
-#menuSet .dropdown .nav-link img {
+#menuSet > .dropdown > .nav-link img {
   width: 35px;
   height: 35px;
 }
-#menuSet .dropdown:focus-within .dropdown-menu {
+#menuSet > .dropdown:focus-within > .dropdown-menu {
   display: block;
 }
 #menuSet .dropdown-menu {
