@@ -14,7 +14,11 @@ function GoBackMain(): JSX.Element {
   }
 }
 
-render(
-  <GoBackMain />,
-  document.getElementById("goBackButton")
-);
+function loadBackButton() {
+  render(
+    <GoBackMain />,
+    document.getElementById("goBackButton")
+  );
+}
+
+export default loadBackButton;

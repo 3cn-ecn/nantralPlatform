@@ -52,13 +52,12 @@ class BaseEvent(AbstractPost):
         # save the notification
         if not self.notification:
             self.notification = Notification()
-        self.notification.title = self.title
-        self.notification.body = f'{self.get_group_name} a ajouté un évènement !'
+        self.notification.title = self.get_group_name
+        self.notification.body = f'Nouvel event : {self.title}'
         self.notification.url = self.get_absolute_url()
         self.notification.owner = self.group
         self.notification.publicity = self.publicity
         self.notification.date = self.publication_date
-        print("COUCOUCOUCOUCOUCOUCOUCOUCOUCOUCOCUOUCOCUOUCOCU")
         if self.image:
             self.notification.image_url = self.image.url
         try:

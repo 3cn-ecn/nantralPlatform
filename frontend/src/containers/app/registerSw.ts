@@ -18,7 +18,7 @@ const initialiseState = (reg) => {
       showNotAllowed('You prevented us from showing notifications ☹️🤔');
       return
   }
-  if (!'PushManager' in window) {
+  if (!('PushManager' in window)) {
       showNotAllowed("Push isn't allowed in your browser 🤔");
       return
   }
@@ -55,7 +55,7 @@ const subscribe = async (reg) => {
       return;
   }
 
-  const vapidMeta = document.querySelector('meta[name="vapid-key"]');
+  const vapidMeta = document.querySelector('meta[name="vapid-key"]') as HTMLMetaElement;
   const key = vapidMeta.content;
   const options = {
       userVisibleOnly: true,
@@ -90,11 +90,9 @@ const sendSubData = async (subscription) => {
 
 // log results
 const handleResponse = (res) => {
-  console.log(res.status);
+  console.log("Service worker registration result: " + res.status);
 };
 
-registerSw();
 
 
-
-
+export default registerSw;

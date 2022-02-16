@@ -7,16 +7,21 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse
 from django.utils import timezone
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+
 from apps.post.models import Post
 from apps.student.models import Student
 from apps.roommates.models import Roommates
 from apps.utils.github import create_issue
+from apps.utils.accessMixins import userIsConnected
 from apps.account.models import TemporaryAccessRequest
 
 from .forms import SuggestionForm
@@ -48,6 +53,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
         return context
 
 
+
 class SuggestionView(LoginRequiredMixin, FormView):
     template_name = 'home/suggestions.html'
     form_class = SuggestionForm
@@ -72,6 +78,8 @@ class SuggestionView(LoginRequiredMixin, FormView):
         ]
         return context
 
+
+
 class LegalMentionsView(TemplateView):
     template_name = 'home/mentions.html'
 
@@ -85,12 +93,17 @@ class LegalMentionsView(TemplateView):
         ]
         return context
 
+
+
+
 @login_required
 def currentUserPageView(request):
     """A view to redirect the user to his own page"""
     student = get_object_or_404(Student, pk=request.user.student.pk)
     response = redirect('student:detail', student.pk)
     return response
+
+
 
 @login_required
 def currentUserRoommatesView(request):
@@ -113,7 +126,6 @@ def currentUserRoommatesView(request):
 
 
 
-
 def service_worker(request):
     """A view to serve the service worker"""
     sw_path = settings.BASE_DIR + "/static/js/sw.js"
@@ -126,6 +138,8 @@ def service_worker(request):
 def offline_view(request):
     response = render(request, 'home/offline.html')
     return response
+
+
 
 # ERROR PAGES VIEWS
 
@@ -144,3 +158,23 @@ def handler413(request, *args, **argv):
 def handler500(request, *args, **argv):
     response = render(request, 'errors/500.html', context={}, status=500)
     return response
+
+
+
+# API VIEWS 
+from django.urls import resolve
+from django.conf import settings
+
+class DoIHaveToLoginView(APIView):
+    """API endpoint to check if user has to login to see a page"""
+    def get(self, request, format=None):
+        path = request.GET.get("path")
+        try:
+            view, args, kwargs = resolve(path)
+            kwargs['request'] = request
+            kwargs['request'].path = path
+            v=view(*args, **kwargs)
+            haveToLogin = (v.url.split('?')[0] == settings.LOGIN_URL)
+            return Response(data = haveToLogin)
+        except Exception:
+            return Response(data=False)

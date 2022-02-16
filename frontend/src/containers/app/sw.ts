@@ -3,11 +3,14 @@ import {
   NetworkFirst,
   StaleWhileRevalidate,
   CacheFirst,
+  NetworkOnly
 } from 'workbox-strategies';
 import {CacheableResponsePlugin} from 'workbox-cacheable-response';
 import {ExpirationPlugin} from 'workbox-expiration';
-import getCookie from "./utils/getCookie";
+import getCookie from "../utils/getCookie";
 
+declare var self: ServiceWorkerGlobalScope;
+declare global {interface ServiceWorkerGlobalScope {__WB_DISABLE_DEV_LOGS: boolean;}}
 self.__WB_DISABLE_DEV_LOGS = true;
 
 // Cache the external fonts, stylesheets and plugins
@@ -21,7 +24,7 @@ registerRoute(
     cacheName: 'external-files',
     plugins: [
       new CacheableResponsePlugin({
-        statuses: [0, 200, 304],   // on cache uniquement les renvois non-erreurs
+        statuses: [200, 304],   // on cache uniquement les renvois non-erreurs
       }),
       new ExpirationPlugin({
         maxAgeSeconds: 60 * 60 * 24 * 30,  // le cache expire après 30 jours
@@ -77,8 +80,8 @@ registerRoute(
              url.pathname === '/liste/' ||
              url.pathname === '/signature/' ||
              url.pathname === '/student/' ||
-             url.pathname === '/academic/liste/' ||
-             url.pathname === '/adminsitration',
+             url.pathname === '/academic/liste' ||
+             url.pathname === '/administration/',
   new StaleWhileRevalidate({
     cacheName: 'main-pages',
     plugins: [
@@ -92,6 +95,11 @@ registerRoute(
   })
 )
 
+// pages à ne surtout pas cacher
+registerRoute(
+  ({url}) => url.pathname === '/amiconnected',
+  new NetworkOnly({})
+)
 
 // par défaut privilégier le réseau, mais utiliser le cache si hors-connexion
 setDefaultHandler(
@@ -112,25 +120,23 @@ setDefaultHandler(
 const CACHE_NAME = 'offline-html';
 const FALLBACK_HTML_URL = '/offline.html';
 
-self.addEventListener('install', async (event) => {
+self.addEventListener('install', async (event:ExtendableEvent) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => cache.add(FALLBACK_HTML_URL))
   );
 });
 
-setCatchHandler(async ({event}) => {
-  if (event.request.destination == 'document') {
+setCatchHandler(async ({request}) => {
+  if (request.destination == 'document') {
     return caches.match(FALLBACK_HTML_URL);
   }
   // If we don't have a fallback, just return an error response.
   return Response.error();
 });
 
-
-
 // Receiving notifications
-self.addEventListener('push', function (event) {
+self.addEventListener('push', function (event:PushEvent) {
   // Retrieve the textual payload from event.data (a PushMessageData object).
   // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
   // on https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData.
@@ -141,7 +147,7 @@ self.addEventListener('push', function (event) {
   event.waitUntil(
       self.registration.showNotification(data.title, {
           body: data.body,
-          icon: data.icon || 'https://i.imgur.com/MZM3K5w.png',
+          icon: data.icon || '/static/img/logo.svg',
           image: data.image,
           data: data.data
       })
@@ -157,12 +163,12 @@ self.addEventListener('notificationclick', function(event) {
   const notif = event.notification;
   // open the notification
   if (event.action === 'action1') {
-    clients.openWindows(notif.data.action1_url);
+    self.clients.openWindow(notif.data.action1_url);
   } else if (event.action == 'action2') {
-    clients.openWindows(notif.data.action2_url);
+    self.clients.openWindow(notif.data.action2_url);
   } else {
     // User selected (e.g., clicked in) the main body of notification.
-    clients.openWindow(notif.data.url);
+    self.clients.openWindow(notif.data.url);
   }
 
   // mark it as read

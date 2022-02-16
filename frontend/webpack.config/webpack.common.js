@@ -3,9 +3,8 @@ var apps_dir = path.join(__dirname, "../src/containers")
 
 module.exports = {
   entry: {
-    goBackButton:           path.join(apps_dir, "goBackButton.tsx"),
-    registerSw:             path.join(apps_dir, "registerSw.js"),
-    sw:                     path.join(apps_dir, "sw.ts"),
+    sw:                     path.join(apps_dir, "app/sw.ts"),
+    app:                    path.join(apps_dir, "app/app.ts"),
     clubsList:              path.join(apps_dir, "club/clubsList.tsx"),
     eventsGroupListUpdate:  path.join(apps_dir, "group/eventsGroupListUpdate.tsx"),
     postsGroupListUpdate:   path.join(apps_dir, "group/postsGroupListUpdate.tsx"),
@@ -15,8 +14,7 @@ module.exports = {
     cowlocathlonCard:       path.join(apps_dir, "roommates/cowlocathlonCard.tsx"),
     housingMap:             path.join(apps_dir, "roommates/housingMap.tsx"),
     createHousing:          path.join(apps_dir, "roommates/createHousing.tsx"),
-    subscribeButton:        path.join(apps_dir, "notification/subscribeButton.tsx"),
-    notifications:          path.join(apps_dir, "notification/notificationMenu.tsx")
+    subscribeButton:        path.join(apps_dir, "notification/subscribeButton.tsx")
   },
   output: {
     path: path.join(__dirname, "../../server/static/js"),

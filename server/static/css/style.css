@@ -22,7 +22,8 @@ body {
 h1, .h1,
 h2, .h2,
 h4, .h4,
-.student h5 {
+.student h5,
+.bold {
   font-family: "Heebo", sans-serif;
   font-weight: 900;
 }
@@ -93,9 +94,9 @@ table.table-sort th {
   width: 35px;
   height: 35px;
 }
-#menuSet > .dropdown:focus-within > .dropdown-menu {
+/* #menuSet > .dropdown:focus-within > .dropdown-menu {
   display: block;
-}
+} */
 #menuSet .dropdown-menu {
   box-shadow: 3px 3px 6px #AAA;
 }
@@ -257,4 +258,22 @@ a.rs:hover span {
 }
 .container .events .card-subtitle {
   color: #333;
+}
+
+
+/* PIED DE PAGE HORS-CONNEXION */
+/*-----------------------------*/
+
+#offline-alert footer {
+  font-weight: 400;
+  font-family: "Heebo";
+  font-size: 1.1rem;
+  padding: 1rem 0;
+  margin: 0;
+  text-align: center;
+  background-color: black;
+  color: white;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }

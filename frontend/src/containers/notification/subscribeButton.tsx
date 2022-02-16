@@ -20,8 +20,9 @@ function SubscribeButton(props): JSX.Element {
    */
   async function getSubscription(): Promise<void> {
     await fetch(subscriptionURL)
-      .then(resp => resp.json())
-      .then(data => {setSubscribed(data); setIsLoading(false);})
+      .then(resp => resp.json().then(
+        data => {setSubscribed(data); setIsLoading(false);}
+      ))
       .catch(err => getSubscription());
   }
 

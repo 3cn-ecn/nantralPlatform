@@ -16,7 +16,6 @@ function NotificationMenu(props): JSX.Element {
   const [nbSubNotifs, setNbSubNotifs] = useState <number> (null);
   const [nbAllNotifs, setNbAllNotifs] = useState <number> (null);
   const [listNotifs, setListNotifs] = useState <SentNotification[]> (null);
-  const bell_button = useRef(null);
   const nbMaxDefault = 20;
   var nbMax = nbMaxDefault;  
   const csrfToken = getCookie('csrftoken');
@@ -28,8 +27,9 @@ function NotificationMenu(props): JSX.Element {
 
   async function getNbSubNotifs(): Promise<void> {
     fetch(api_url+"?count=sub")
-      .then(resp => resp.json())
-      .then(data => setNbSubNotifs(data))
+      .then(resp => resp.json().then(
+        data => setNbSubNotifs(data)
+      ))
       .catch(err => setNbSubNotifs(null));
   }
 
@@ -75,8 +75,6 @@ function NotificationMenu(props): JSX.Element {
     }
 
     function updateSeen() {
-      // put the focus on the bell button for keeping the menu open
-      bell_button.current.focus();
       // update the seen property
       updateSeenPropertyInList(null);
       makeRequest()
@@ -93,12 +91,10 @@ function NotificationMenu(props): JSX.Element {
             setNbAllNotifs(nbAllNotifs + 1);
           }
         })
-        .catch(err => {});
+        .catch(err => updateSeenPropertyInList(sn.seen));
     }
 
     function openItem() {
-      // put the focus on the bell button for keeping the menu open
-      bell_button.current.focus();
       // update the seen property
       updateSeenPropertyInList(null);
       if (sn.seen) {
@@ -109,11 +105,11 @@ function NotificationMenu(props): JSX.Element {
     }
 
     return (
-      <li>
+      <div>
         <span className="dropdown-item d-flex p-0 ps-1">
           <a 
             className={`text-${sn.seen ? "light" : "danger"} read-button`}
-            href="javascript:void(0);"
+            href="#"
             onClick={()=>updateSeen()}
           >
             { sn.seen == null ?
@@ -130,7 +126,7 @@ function NotificationMenu(props): JSX.Element {
           </a>
           <a 
             className="dropdown-item text-wrap d-flex p-1 ps-0 w-100" style={{alignItems: "center"}}
-            href="javascript:void(0);"
+            href="#"
             onClick={()=>openItem()}
           >
             { n.icon_url ?
@@ -141,7 +137,7 @@ function NotificationMenu(props): JSX.Element {
             <small className="ms-2"><strong>{n.title}</strong><br/>{n.body}</small>
           </a>
         </span>
-      </li>
+      </div>
     );
   }
   
@@ -158,15 +154,16 @@ function NotificationMenu(props): JSX.Element {
     return(
       <>
         <li><h5 className="dropdown-item-text">Notifications</h5></li>
-        {/* <li><hr className="dropdown-divider" /></li> */}
-        <Tabs defaultActiveKey="sub" id="notifpanel" className="tab-justified">
-          <Tab eventKey="sub" title="Abonné" onClick={()=>bell_button.current.focus()}>
+        <li><hr className="dropdown-divider" /></li>
+        {/* <Tabs defaultActiveKey="sub" id="notifpanel" className="tab-justified">
+          <Tab eventKey="sub" title="Abonné">
             {content}
           </Tab>
-          <Tab eventKey="all" title="Tous" onClick={()=>bell_button.current.focus()}>
+          <Tab eventKey="all" title="Tous">
             <p>Rien ici 😛</p>
           </Tab>
-        </Tabs>
+        </Tabs> */}
+        { content }
       </>
     );
   }
@@ -175,43 +172,68 @@ function NotificationMenu(props): JSX.Element {
   function openMenu() {
     if (listNotifs == null) getListNotifs(true);
     if (nbAllNotifs == null) getNbAllNotifs();
-  }
+  } 
+  var icon = document.querySelector('#notification-icon');
+  icon.addEventListener('click', openMenu);
+  showNotificationIcon(nbSubNotifs);
+  return (<NotificationPanel></NotificationPanel>)
 
-  return (
-    <>
-      <a 
-        className="nav-link" href="javascript:void(0);"
-        onClick={openMenu}
-        ref={bell_button}
+  // return (
+  //   <>
+  //     <a 
+  //       className="nav-link dropdown-toggler" 
+  //       href="#" 
+  //       role="button" 
+  //       data-bs-toggle="dropdown" 
+  //       onClick={openMenu}
+  //     >
+  //       <img 
+  //         src = '/static/icon/notification.svg'
+  //         className="d-inline-block align-top" 
+  //         alt="notifications" 
+  //         loading="lazy"
+  //       />
+  //       { nbSubNotifs > 0 ?
+  //         <span 
+  //           className="position-absolute translate-middle badge rounded-pill bg-danger" 
+  //           style={{left:'80%', top:'20%', zIndex:5}}
+  //         >
+  //           { nbSubNotifs }
+  //           <span className="visually-hidden">{ nbSubNotifs } nouvelles notifications</span>
+  //         </span> : <></>
+  //       }
+  //     </a>
+  //     <div 
+  //       className="dropdown-menu dropdown-menu-end overflow-auto"
+  //       style={{width: "18rem", maxWidth: "90vw", right: "-42px", maxHeight: "70vh"}}
+  //       onClick={stopPropagation} aria-labelledby="triggerId"
+  //     >
+  //       <ul><NotificationPanel></NotificationPanel></ul>
+  //     </div>
+  //   </>
+  // );
+}
+
+function showNotificationIcon(nb:number) {
+  render(
+    <>{ nb > 0 ?
+      <span 
+        className="position-absolute translate-middle badge rounded-pill bg-danger" 
+        style={{left:'80%', top:'20%', zIndex:5}}
       >
-        <img 
-          src = '/static/icon/notification.svg'
-          className="d-inline-block align-top" 
-          alt="notifications" 
-          loading="lazy"
-        />
-        { nbSubNotifs > 0 ?
-          <span 
-            className="position-absolute translate-middle badge rounded-pill bg-danger" 
-            style={{left:'80%', top:'20%', zIndex:5}}
-          >
-            { nbSubNotifs }
-            <span className="visually-hidden">{ nbSubNotifs } nouvelles notifications</span>
-          </span> : <></>
-        }
-      </a>
-      <ul 
-        className="dropdown-menu dropdown-menu-end overflow-auto"
-        style={{width: "18rem", maxWidth: "90vw", right: "-42px", maxHeight: "70vh"}}
-      >
-        <NotificationPanel></NotificationPanel>
-      </ul>
-    </>
+        { nb }
+        <span className="visually-hidden">{ nb } nouvelles notifications</span>
+      </span> : <></>
+    }</>,
+    document.getElementById("notification-badge")
+  )
+}
+
+function loadNotificationMenu() {
+  render(
+    <NotificationMenu />, 
+    document.getElementById("notification-panel")
   );
 }
 
-
-render(
-  <NotificationMenu />, 
-  document.getElementById("notificationPanel")
-);
+export default loadNotificationMenu;

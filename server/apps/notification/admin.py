@@ -4,10 +4,10 @@ from .models import Notification, SentNotification, Subscription
 # Register your models here.
 
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ['title', 'owner', 'date']
+    list_display = ['__str__', 'date', 'nbTargets']
 
 class SentNotificationAdmin(admin.ModelAdmin):
-    list_display = ['student', 'notification']
+    list_display = ['student', 'notification', 'date']
 
 class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ['student', 'page']

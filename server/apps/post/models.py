@@ -85,8 +85,8 @@ class Post(AbstractPost):
         # save the notification
         if not self.notification:
             self.notification = Notification()
-        self.notification.title = self.title
-        self.notification.body = f'{self.get_group_name} a publié un post !'
+        self.notification.title = self.get_group_name
+        self.notification.body = self.title
         self.notification.url = self.get_absolute_url()
         self.notification.owner = self.group
         self.notification.publicity = self.publicity

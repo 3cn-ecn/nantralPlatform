@@ -7,7 +7,7 @@ from apps.group.urls import makeGroupUrlpatterns
 app_name = 'academic'
 
 urlpatterns = [
-    path('liste/', CoursesList.as_view(), name='index')
+    path('liste', CoursesList.as_view(), name='index')
 ] + makeGroupUrlpatterns(
     detail_view=DetailCourseView.as_view()
 )

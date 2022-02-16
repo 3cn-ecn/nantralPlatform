@@ -65,7 +65,7 @@ class Notification(models.Model):
     high_priority = models.BooleanField('Prioritaire', default=False)
 
     def __str__(self):
-        return self.title
+        return f'{self.title} - {self.body}'[:100]
     
     def addReveiversMember(self, owner):
         """Ajouter les membres de groupes en tant que destinataires"""
@@ -94,8 +94,9 @@ class Notification(models.Model):
     
     def save(self, *args, **kwargs):
         """Sauver la notif et ajouter des destinataires"""
+        is_created = not self.id
         super().save(*args, **kwargs)
-        if not self.id:
+        if is_created:
             if self.publicity == 'Pub':
                 self.addAllUsers()
             elif self.publicity == 'Mem':
@@ -104,6 +105,10 @@ class Notification(models.Model):
             elif self.publicity == 'Adm':
                 self.addReceiverAdmin(self.owner)
                 self.high_priority = True
+    
+    @property
+    def nbTargets(self, *args, **kwargs):
+        return self.sentnotification_set.count()
 
 
 
@@ -126,7 +131,7 @@ class SentNotification(models.Model):
         payload = {
             'title': self.notification.title,
             'body': self.notification.body,
-            'icon': self.notification.get_logo().url,
+            'icon': self.notification.icon_url,
             'image': self.notification.image_url,
             'data': {
                 'url': self.notification.url,
@@ -145,3 +150,7 @@ class SentNotification(models.Model):
             self.subscribed = True
             self.sendPushNotification()
         super(SentNotification, self).save(*args, **kwargs)
+    
+    @property
+    def date(self, *args, **kwargs):
+        return self.notification.date
