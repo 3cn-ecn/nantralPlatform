@@ -154,16 +154,15 @@ function NotificationMenu(props): JSX.Element {
     return(
       <>
         <li><h5 className="dropdown-item-text">Notifications</h5></li>
-        <li><hr className="dropdown-divider" /></li>
-        {/* <Tabs defaultActiveKey="sub" id="notifpanel" className="tab-justified">
-          <Tab eventKey="sub" title="Abonné">
-            {content}
+        {/* <li><hr className="dropdown-divider" /></li> */}
+        <Tabs defaultActiveKey="sub" id="notifpanel" className="tab-justified">
+          <Tab eventKey="sub" title="Abonné" className="overflow-auto" style={{maxHeight:'60vh'}}>
+            {content}{content}
           </Tab>
-          <Tab eventKey="all" title="Tous">
+          <Tab eventKey="all" title="Tous" className="overflow-auto">
             <p>Rien ici 😛</p>
           </Tab>
-        </Tabs> */}
-        { content }
+        </Tabs>
       </>
     );
   }
@@ -176,7 +175,7 @@ function NotificationMenu(props): JSX.Element {
   }
 
   return (
-    <Dropdown onToggle={toggleMenu}>
+    <Dropdown onToggle={toggleMenu} align="end" >
       <Dropdown.Toggle 
         as="a"
         id="notification-icon"
@@ -199,10 +198,7 @@ function NotificationMenu(props): JSX.Element {
           </span> : <></>
         }
       </Dropdown.Toggle>
-      <Dropdown.Menu 
-        as="ul"
-        className="overflow-auto"
-      >
+      <Dropdown.Menu as="ul">
         <NotificationPanel></NotificationPanel>
       </Dropdown.Menu>
     </Dropdown>

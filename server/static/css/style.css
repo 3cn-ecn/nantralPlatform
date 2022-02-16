@@ -101,7 +101,7 @@ table.table-sort th {
   right: -42px !important;
   width: 20rem;
   max-width: 90vw;
-  max-height: 70vh;
+  padding-bottom: 0;
 }
 #menuSet .dropdown-menu {
   box-shadow: 3px 3px 6px #AAA;
