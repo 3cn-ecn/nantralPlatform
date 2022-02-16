@@ -83,20 +83,26 @@ table.table-sort th {
 }
 
 
-#menuSet > .dropdown > .nav-link {
+#menuSet .dropdown > .nav-link {
   border-radius: 50%;
   padding: .2rem;
 }
-#menuSet > .dropdown > .nav-link:hover {
+#menuSet .dropdown > .nav-link:hover {
   background-color: #eee;
 }
-#menuSet > .dropdown > .nav-link img {
+#menuSet .dropdown > .nav-link img {
   width: 35px;
   height: 35px;
 }
-/* #menuSet > .dropdown:focus-within > .dropdown-menu {
-  display: block;
-} */
+#menuSet .dropdown-toggle::after {
+  display: none;
+}
+#menuSet #notificationPanel .dropdown-menu {
+  right: -42px !important;
+  width: 20rem;
+  max-width: 90vw;
+  max-height: 70vh;
+}
 #menuSet .dropdown-menu {
   box-shadow: 3px 3px 6px #AAA;
 }

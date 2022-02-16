@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import ReactDOM, { render } from "react-dom";
-import {Spinner, Tabs, Tab} from "react-bootstrap";
+import {Spinner, Tabs, Tab, Dropdown} from "react-bootstrap";
 import {SentNotification} from "./interfaces";
 import merge from "./utils";
 import getCookie from "../utils/getCookie";
@@ -74,8 +74,9 @@ function NotificationMenu(props): JSX.Element {
       setListNotifs(newList);
     }
 
-    function updateSeen() {
+    function updateSeen(event: React.MouseEvent<HTMLLinkElement>) {
       // update the seen property
+      event.stopPropagation();
       updateSeenPropertyInList(null);
       makeRequest()
         .then(resp => resp.json())
@@ -92,6 +93,7 @@ function NotificationMenu(props): JSX.Element {
           }
         })
         .catch(err => updateSeenPropertyInList(sn.seen));
+      return true;
     }
 
     function openItem() {
@@ -105,12 +107,11 @@ function NotificationMenu(props): JSX.Element {
     }
 
     return (
-      <div>
-        <span className="dropdown-item d-flex p-0 ps-1">
-          <a 
+      <li>
+        <a className="dropdown-item d-flex p-0">
+          <span 
             className={`text-${sn.seen ? "light" : "danger"} read-button`}
-            href="#"
-            onClick={()=>updateSeen()}
+            onClick={updateSeen}
           >
             { sn.seen == null ?
               <Spinner
@@ -123,10 +124,9 @@ function NotificationMenu(props): JSX.Element {
             :
               "●"
             }
-          </a>
-          <a 
+          </span>
+          <span
             className="dropdown-item text-wrap d-flex p-1 ps-0 w-100" style={{alignItems: "center"}}
-            href="#"
             onClick={()=>openItem()}
           >
             { n.icon_url ?
@@ -135,9 +135,9 @@ function NotificationMenu(props): JSX.Element {
               <img src="/static/img/logo.svg" loading="lazy" />
             }
             <small className="ms-2"><strong>{n.title}</strong><br/>{n.body}</small>
-          </a>
-        </span>
-      </div>
+          </span>
+        </a>
+      </li>
     );
   }
   
@@ -169,70 +169,50 @@ function NotificationMenu(props): JSX.Element {
   }
   
   // open the menu
-  function openMenu() {
+  function toggleMenu(nextShow: boolean, meta: any) {
+    console.log("Load...");
     if (listNotifs == null) getListNotifs(true);
     if (nbAllNotifs == null) getNbAllNotifs();
-  } 
-  var icon = document.querySelector('#notification-icon');
-  icon.addEventListener('click', openMenu);
-  showNotificationIcon(nbSubNotifs);
-  return (<NotificationPanel></NotificationPanel>)
+  }
 
-  // return (
-  //   <>
-  //     <a 
-  //       className="nav-link dropdown-toggler" 
-  //       href="#" 
-  //       role="button" 
-  //       data-bs-toggle="dropdown" 
-  //       onClick={openMenu}
-  //     >
-  //       <img 
-  //         src = '/static/icon/notification.svg'
-  //         className="d-inline-block align-top" 
-  //         alt="notifications" 
-  //         loading="lazy"
-  //       />
-  //       { nbSubNotifs > 0 ?
-  //         <span 
-  //           className="position-absolute translate-middle badge rounded-pill bg-danger" 
-  //           style={{left:'80%', top:'20%', zIndex:5}}
-  //         >
-  //           { nbSubNotifs }
-  //           <span className="visually-hidden">{ nbSubNotifs } nouvelles notifications</span>
-  //         </span> : <></>
-  //       }
-  //     </a>
-  //     <div 
-  //       className="dropdown-menu dropdown-menu-end overflow-auto"
-  //       style={{width: "18rem", maxWidth: "90vw", right: "-42px", maxHeight: "70vh"}}
-  //       onClick={stopPropagation} aria-labelledby="triggerId"
-  //     >
-  //       <ul><NotificationPanel></NotificationPanel></ul>
-  //     </div>
-  //   </>
-  // );
-}
-
-function showNotificationIcon(nb:number) {
-  render(
-    <>{ nb > 0 ?
-      <span 
-        className="position-absolute translate-middle badge rounded-pill bg-danger" 
-        style={{left:'80%', top:'20%', zIndex:5}}
+  return (
+    <Dropdown onToggle={toggleMenu}>
+      <Dropdown.Toggle 
+        as="a"
+        id="notification-icon"
+        className="nav-link dropdown-toggler"
+        role="button"
       >
-        { nb }
-        <span className="visually-hidden">{ nb } nouvelles notifications</span>
-      </span> : <></>
-    }</>,
-    document.getElementById("notification-badge")
-  )
+        <img 
+          src = '/static/icon/notification.svg'
+          className="d-inline-block align-top" 
+          alt="notifications" 
+          loading="lazy"
+        />
+        { nbSubNotifs > 0 ?
+          <span 
+            className="position-absolute translate-middle badge rounded-pill bg-danger" 
+            style={{left:'80%', top:'20%', zIndex:5}}
+          >
+            { nbSubNotifs }
+            <span className="visually-hidden">{ nbSubNotifs } nouvelles notifications</span>
+          </span> : <></>
+        }
+      </Dropdown.Toggle>
+      <Dropdown.Menu 
+        as="ul"
+        className="overflow-auto"
+      >
+        <NotificationPanel></NotificationPanel>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
 }
 
 function loadNotificationMenu() {
   render(
     <NotificationMenu />, 
-    document.getElementById("notification-panel")
+    document.getElementById("notificationPanel")
   );
 }
 

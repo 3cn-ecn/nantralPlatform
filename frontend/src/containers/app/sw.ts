@@ -74,13 +74,13 @@ registerRoute(
 
 // cache the home and main pages to accelerate navigation
 registerRoute(
-  ({url}) => url.pathname === '/' ||
+  ({url}) => url.pathname === '' ||
              url.pathname === '/club/' ||
-             url.pathname === '/colocs/map' ||
+             url.pathname === '/colocs/' ||
              url.pathname === '/liste/' ||
-             url.pathname === '/signature/' ||
+             url.pathname === '/services/signature' ||  
              url.pathname === '/student/' ||
-             url.pathname === '/academic/liste' ||
+             url.pathname === '/academic/' ||
              url.pathname === '/administration/',
   new StaleWhileRevalidate({
     cacheName: 'main-pages',
