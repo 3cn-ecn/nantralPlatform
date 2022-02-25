@@ -4,6 +4,8 @@ import {Spinner, Dropdown, Button} from "react-bootstrap";
 import {SentNotification} from "./interfaces";
 import merge from "./utils";
 import getCookie from "../utils/getCookie";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCog } from '@fortawesome/free-solid-svg-icons'
 
 declare const notifications_url: string;
 
@@ -157,7 +159,12 @@ function NotificationMenu(props): JSX.Element {
     }
     return(
       <>
-        <li><h5 className="dropdown-item-text mb-0">Notifications</h5></li>
+        <li>
+          <h5 className="dropdown-item-text mb-0 d-flex">
+            Notifications
+            <a href="/notification/settings" className="ms-auto text-secondary"><FontAwesomeIcon icon={faCog}/></a>
+          </h5>
+        </li>
         <li>
           <span className="dropdown-item-text">
             <Button 
