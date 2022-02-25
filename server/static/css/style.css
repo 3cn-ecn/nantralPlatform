@@ -119,7 +119,7 @@ table.table-sort th {
 #menuSet .dropdown-item .read-button {
   display: flex;
   flex-shrink: 0;
-  width: 1.5rem;
+  width: 2rem;
   justify-content: center;
   align-items: center;
 }

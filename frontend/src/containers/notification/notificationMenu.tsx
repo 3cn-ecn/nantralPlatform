@@ -21,7 +21,7 @@ function NotificationMenu(props): JSX.Element {
   const [unseenFilter, setUnseenFilter] = useState <boolean> (false);
   const [allLoaded, setAllLoaded] = useState <boolean> (false);
   const csrfToken = getCookie('csrftoken');
-  const step:number = 5;
+  const step:number = 10;
 
   if (nbNotifs === null) {
     getNbNotifs();
@@ -105,8 +105,19 @@ function NotificationMenu(props): JSX.Element {
     }
 
     return (
-      <li>
+      <li className={sn.seen ? "" : "bg-light"}>
         <a className="dropdown-item d-flex p-0">
+          <span
+            className="dropdown-item text-wrap d-flex pe-0 w-100" style={{alignItems: "center"}}
+            onClick={openItem}
+          >
+            { n.icon_url ?
+              <img src={n.icon_url} loading="lazy" />
+            :
+              <img src="/static/img/logo.svg" loading="lazy" />
+            }
+            <small className="ms-2"><strong>{n.title}</strong><br/>{n.body}</small>
+          </span>
           <span 
             className={`text-${sn.seen ? "light" : "danger"} read-button`}
             onClick={updateSeen}
@@ -122,17 +133,6 @@ function NotificationMenu(props): JSX.Element {
             :
               "●"
             }
-          </span>
-          <span
-            className="dropdown-item text-wrap d-flex p-1 ps-0 w-100" style={{alignItems: "center"}}
-            onClick={openItem}
-          >
-            { n.icon_url ?
-              <img src={n.icon_url} loading="lazy" />
-            :
-              <img src="/static/img/logo.svg" loading="lazy" />
-            }
-            <small className="ms-2"><strong>{n.title}</strong><br/>{n.body}</small>
           </span>
         </a>
       </li>
