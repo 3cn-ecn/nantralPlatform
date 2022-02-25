@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import ReactDOM, { render } from "react-dom";
-import {Spinner, Tabs, Tab, Dropdown} from "react-bootstrap";
+import {Spinner, Dropdown, Button} from "react-bootstrap";
 import {SentNotification} from "./interfaces";
 import merge from "./utils";
 import getCookie from "../utils/getCookie";
@@ -13,50 +13,52 @@ declare const notifications_url: string;
  * @returns Le code html à afficher
  */
 function NotificationMenu(props): JSX.Element {
-  const [nbSubNotifs, setNbSubNotifs] = useState <number> (null);
-  const [nbAllNotifs, setNbAllNotifs] = useState <number> (null);
-  const [listNotifs, setListNotifs] = useState <SentNotification[]> (null);
-  const nbMaxDefault = 20;
-  var nbMax = nbMaxDefault;  
+  const [onLoad, setOnLoad] = useState <boolean> (true);
+  const [notifOnLoad, setNotifOnLoad] = useState <boolean> (false);
+  const [nbNotifs, setNbNotifs] = useState <number> (null);
+  const [listNotifs, setListNotifs] = useState <SentNotification[]> ([]);
+  const [subscribeFilter, setSubscribeFilter] = useState <boolean> (false);
+  const [unseenFilter, setUnseenFilter] = useState <boolean> (false);
+  const [allLoaded, setAllLoaded] = useState <boolean> (false);
   const csrfToken = getCookie('csrftoken');
-  const api_url = notifications_url;
+  const step:number = 5;
 
-  if (nbSubNotifs === null) {
-    getNbSubNotifs();
+  if (nbNotifs === null) {
+    getNbNotifs();
   }
 
-  async function getNbSubNotifs(): Promise<void> {
-    fetch(api_url+"?count=sub")
+  async function getNbNotifs(): Promise<void> {
+    fetch(notifications_url+"?count=true")
       .then(resp => resp.json().then(
-        data => setNbSubNotifs(data)
+        data => setNbNotifs(data)
       ))
-      .catch(err => setNbSubNotifs(null));
+      .catch(err => setNbNotifs(null));
   }
 
-  async function getNbAllNotifs(): Promise<void> {
-    fetch(api_url+"?count=all")
-      .then(resp => resp.json())
-      .then(data => setNbAllNotifs(data))
-      .catch(err => setNbAllNotifs(null));
-  }
-
-  async function getListNotifs(subOnly:boolean): Promise<void> {
-    const urlToRequest = api_url + "?sub=" + subOnly + "&nb=" + nbMax;
+  async function getListNotifs(): Promise<void> {
+    setOnLoad(true);
+    const start = listNotifs.length;
+    const end = start + step;
+    const urlToRequest = notifications_url + "?start=" + start + "&end=" + end;
     fetch(urlToRequest)
-      .then(resp => resp.json())
-      .then(data => setListNotifs(merge(data, listNotifs)))
-      .catch(err => {});
+      .then(resp => resp.json()
+      .then(data => {
+        let merging = merge(listNotifs, data);
+        setListNotifs(merging);
+        setOnLoad(false);
+        if (merging.length < end) setAllLoaded(true);
+      }))
+      .catch(err => {setOnLoad(false)});
   }
 
 
   // component for one notification in the list
   function NotificationItem(props): JSX.Element {
-    const index = props.index;
-    const sn = listNotifs[index];
-    const n = sn.notification;
+    let sn = props.sn;
+    let n = sn.notification;
 
     function makeRequest() {
-      const urlToRequest = api_url + "?notif_id=" + n.id;
+      const urlToRequest = notifications_url + "?notif_id=" + n.id;
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -68,37 +70,33 @@ function NotificationMenu(props): JSX.Element {
       return fetch(urlToRequest, requestOptions);
     }
 
-    function updateSeenPropertyInList(newVal:boolean) {
-      var newList = JSON.parse(JSON.stringify(listNotifs));
-      newList[index]['seen'] = newVal;
-      setListNotifs(newList);
-    }
-
     function updateSeen(event: React.MouseEvent<HTMLLinkElement>) {
       // update the seen property
       event.stopPropagation();
-      updateSeenPropertyInList(null);
+      var previous = sn.seen;
+      sn.seen = null;
+      setNotifOnLoad(true);
       makeRequest()
-        .then(resp => resp.json())
+        .then(resp => resp.json()
         .then(data => {
           // mettre à jour la liste des notifs
-          updateSeenPropertyInList(data);
+          sn.seen = data;
           // mettre à jour le compteur
           if (data) {
-            if (sn.subscribed) setNbSubNotifs(nbSubNotifs - 1);
-            setNbAllNotifs(nbAllNotifs - 1);
+            setNbNotifs(nbNotifs - 1);
           } else {
-            if (sn.subscribed) setNbSubNotifs(nbSubNotifs + 1);
-            setNbAllNotifs(nbAllNotifs + 1);
+            setNbNotifs(nbNotifs + 1);
           }
-        })
-        .catch(err => updateSeenPropertyInList(sn.seen));
+          setNotifOnLoad(false);
+        }))
+        .catch(err => sn.seen = previous);
       return true;
     }
 
     function openItem() {
       // update the seen property
-      updateSeenPropertyInList(null);
+      setNotifOnLoad(true);
+      sn.seen = null;
       if (sn.seen) {
         window.open(n.url, "_self");
       } else {
@@ -127,7 +125,7 @@ function NotificationMenu(props): JSX.Element {
           </span>
           <span
             className="dropdown-item text-wrap d-flex p-1 ps-0 w-100" style={{alignItems: "center"}}
-            onClick={()=>openItem()}
+            onClick={openItem}
           >
             { n.icon_url ?
               <img src={n.icon_url} loading="lazy" />
@@ -144,38 +142,70 @@ function NotificationMenu(props): JSX.Element {
   // component for the list of all notifications
   function NotificationPanel(props) : JSX.Element {
     let content;
-    if (listNotifs == null) {
-      content = <li><small className="dropdown-item-text">Chargement...</small></li>;
-    } else if (listNotifs.length == 0) {
-      content = <li><small className="dropdown-item-text">Aucune notification ! Abonnez-vous à des pages pour en recevoir 😉</small></li>;
+    let listToShow = listNotifs.filter((sn:SentNotification) => {
+      let res = true;
+      if (unseenFilter) res = res && !sn.seen;
+      if (subscribeFilter) res = res && sn.subscribed;
+      return res;
+    });
+    if (listToShow.length == 0) {
+      if (!onLoad) {
+        content = <li><small className="dropdown-item-text">Aucune notification ! Abonnez-vous à des pages pour en recevoir 😉</small></li>;
+      }
     } else {
-      content = listNotifs.map((item, key) => <NotificationItem key={key} index={key}/>)
+      content = listToShow.map((sn) => <NotificationItem key={sn.notification.id} sn={sn}/>)
     }
     return(
       <>
-        <li><h5 className="dropdown-item-text">Notifications</h5></li>
-        {/* <li><hr className="dropdown-divider" /></li> */}
-        <Tabs defaultActiveKey="sub" id="notifpanel" className="tab-justified">
-          <Tab eventKey="sub" title="Abonné" className="overflow-auto" style={{maxHeight:'60vh'}}>
-            {content}{content}
-          </Tab>
-          <Tab eventKey="all" title="Tous" className="overflow-auto">
-            <p>Rien ici 😛</p>
-          </Tab>
-        </Tabs>
+        <li><h5 className="dropdown-item-text mb-0">Notifications</h5></li>
+        <li>
+          <span className="dropdown-item-text">
+            <Button 
+              variant={subscribeFilter ? "danger" : "outline-danger"} 
+              size="sm" 
+              className="rounded-pill"
+              onClick={() => setSubscribeFilter(!subscribeFilter)}>
+                Abonné
+            </Button>
+            &nbsp;
+            <Button 
+              variant={unseenFilter ? "danger" : "outline-danger"} 
+              size="sm" 
+              className="rounded-pill"
+              onClick={() => setUnseenFilter(!unseenFilter)}>
+                Non lu
+            </Button>
+          </span>
+        </li>
+        {content}
+        {onLoad ?
+          <li><small className="dropdown-item-text">Chargement... <Spinner animation="border" size="sm"/></small></li>
+          : <></>
+        }
+        {allLoaded ? <></> :
+          <li>
+            <span className="dropdown-item-text">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={getListNotifs}
+              >
+                Charger plus
+              </Button>
+            </span>
+          </li>
+        }
       </>
     );
   }
   
-  // open the menu
-  function toggleMenu(nextShow: boolean, meta: any) {
-    console.log("Load...");
-    if (listNotifs == null) getListNotifs(true);
-    if (nbAllNotifs == null) getNbAllNotifs();
+  // to do when the we open the menu
+  async function loadNotifications(nextShow: boolean, meta: any) {
+    if (onLoad) getListNotifs();
   }
 
   return (
-    <Dropdown onToggle={toggleMenu} align="end" >
+    <Dropdown onToggle={loadNotifications} align="end" >
       <Dropdown.Toggle 
         as="a"
         id="notification-icon"
@@ -188,13 +218,13 @@ function NotificationMenu(props): JSX.Element {
           alt="notifications" 
           loading="lazy"
         />
-        { nbSubNotifs > 0 ?
+        { nbNotifs > 0 ?
           <span 
             className="position-absolute translate-middle badge rounded-pill bg-danger" 
             style={{left:'80%', top:'20%', zIndex:5}}
           >
-            { nbSubNotifs }
-            <span className="visually-hidden">{ nbSubNotifs } nouvelles notifications</span>
+            { nbNotifs }
+            <span className="visually-hidden">{ nbNotifs } nouvelles notifications</span>
           </span> : <></>
         }
       </Dropdown.Toggle>
@@ -205,7 +235,7 @@ function NotificationMenu(props): JSX.Element {
   );
 }
 
-function loadNotificationMenu() {
+async function loadNotificationMenu() {
   render(
     <NotificationMenu />, 
     document.getElementById("notificationPanel")

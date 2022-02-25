@@ -14,7 +14,7 @@ function GoBackMain(): JSX.Element {
   }
 }
 
-function loadBackButton() {
+async function loadBackButton() {
   render(
     <GoBackMain />,
     document.getElementById("goBackButton")

@@ -56,26 +56,25 @@ class NotificationAPIView(APIView):
     def get(self, request, format=None):
         """Get the notifications themselves or the number of them"""
         student = request.user.student
-        # if we ask to count, we count
-        count = request.query_params.get('count', None)
-        if count is not None:
-            if count=="sub" or count=="all":
-                nbNotifs = SentNotification.objects.filter(
-                    student=student,
-                    subscribed=(count=="sub"),
-                    seen=False,
-                ).count()
-                return Response(data=nbNotifs)
-            else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-        # else we load all notifications
-        subscribedOnly = (request.query_params.get('sub', "").lower() == "true")
-        nbMax = int(request.query_params.get('nb', 0))
+        # firstly we get parameters
+        count = request.query_params.get('count', '').lower() == "true"
+        subOnly = request.query_params.get('sub', '').lower() == "true"
+        # then we make the query
         query = SentNotification.objects.filter(student=student).order_by('-notification__date')
-        if subscribedOnly: 
+        if subOnly: 
             query = query.filter(subscribed=True)
-        if nbMax:
-            query = query[:nbMax]
+        # if we only have to count, we count
+        if count:
+            n = query.filter(seen=False).count()
+            return Response(data=n)
+        # then we count the number of results
+        nbStart = int(request.query_params.get('start', 0))
+        nbEnd   = int(request.query_params.get('end', 20))
+        n = query.count()
+        if nbEnd > n: nbEnd = n
+        if nbStart > nbEnd: nbStart = nbEnd
+        # we take the ones we will send and send them
+        query = query[nbStart:nbEnd]
         serializer = SentNotificationSerializer(query, many=True)
         return Response(serializer.data)
     
