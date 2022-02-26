@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Button, Spinner} from "react-bootstrap";
-import getCookie from "../utils/getCookie";
+import axios from "axios";
 
 declare const subscriptionURL: string;
 
@@ -13,7 +13,6 @@ declare const subscriptionURL: string;
 function SubscribeButton(props): JSX.Element {
   const [subscribed, setSubscribed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const csrfToken = getCookie('csrftoken');
 
   /**
    * Load the state of the subscription
@@ -31,17 +30,15 @@ function SubscribeButton(props): JSX.Element {
    */
   function changeSubscription(): void {
     setIsLoading(true);
-    const requestOptions = {
-      method: (subscribed ? 'DELETE' : 'POST'), //Delete the sub if already subscribed, else create it
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken              //important ! cookie for authentification
-      },
-      body: JSON.stringify({ title: 'Change the subscription' })
-    };
-    fetch(subscriptionURL, requestOptions)
-      .then(resp => {setSubscribed(!subscribed); setIsLoading(false);})
-      .catch(err => {getSubscription();});
+    if (subscribed) {
+      axios.post(subscriptionURL, {})
+        .then(resp => {setSubscribed(!subscribed); setIsLoading(false);})
+        .catch(err => {getSubscription();});
+    } else {
+      axios.delete(subscriptionURL, {})
+        .then(resp => {setSubscribed(!subscribed); setIsLoading(false);})
+        .catch(err => {getSubscription();});
+    }
   }
 
   // call the state loader in a parallel process

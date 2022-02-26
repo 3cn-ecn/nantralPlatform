@@ -34,6 +34,7 @@ class Subscription(models.Model):
     
     @classmethod
     def hasSubscribed(cls, page, student):
+        """Vérifie si un utilisateur est inscrit en remontant aux pages parentes si besoin"""
         if cls.objects.filter(page=page, student=student).exists():
             return True
         page_object = get_object_from_full_slug(page)

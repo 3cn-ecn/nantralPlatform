@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Spinner, Dropdown, Button} from "react-bootstrap";
-import {SentNotification} from "./interfaces";
-import merge from "./utils";
-import getCookie from "../utils/getCookie";
+import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons'
+import {SentNotification} from "./interfaces";
+import merge from "./utils";
 
 declare const notifications_url: string;
 
@@ -22,7 +22,6 @@ function NotificationMenu(props): JSX.Element {
   const [subscribeFilter, setSubscribeFilter] = useState <boolean> (false);
   const [unseenFilter, setUnseenFilter] = useState <boolean> (false);
   const [allLoaded, setAllLoaded] = useState <boolean> (false);
-  const csrfToken = getCookie('csrftoken');
   const step:number = 10;
 
   if (nbNotifs === null) {
@@ -59,38 +58,29 @@ function NotificationMenu(props): JSX.Element {
     let sn = props.sn;
     let n = sn.notification;
 
-    function makeRequest() {
+    async function makeRequest() {
       const urlToRequest = notifications_url + "?notif_id=" + n.id;
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({ title: 'Mark a notification as read' })
-      };
-      return fetch(urlToRequest, requestOptions);
+      return axios.post(urlToRequest, {});
     }
 
-    function updateSeen(event: React.MouseEvent<HTMLLinkElement>) {
+    async function updateSeen(event: React.MouseEvent<HTMLLinkElement>) {
       // update the seen property
       event.stopPropagation();
       var previous = sn.seen;
       sn.seen = null;
       setNotifOnLoad(true);
       makeRequest()
-        .then(resp => resp.json()
-        .then(data => {
+        .then(resp => {
           // mettre à jour la liste des notifs
-          sn.seen = data;
+          sn.seen = resp.data;
           // mettre à jour le compteur
-          if (data) {
+          if (resp.data) {
             setNbNotifs(nbNotifs - 1);
           } else {
             setNbNotifs(nbNotifs + 1);
           }
           setNotifOnLoad(false);
-        }))
+        })
         .catch(err => sn.seen = previous);
       return true;
     }
@@ -152,7 +142,7 @@ function NotificationMenu(props): JSX.Element {
     });
     if (listToShow.length == 0) {
       if (!onLoad) {
-        content = <li><small className="dropdown-item-text">Aucune notification ! Abonnez-vous à des pages pour en recevoir 😉</small></li>;
+        content = <li><small className="dropdown-item-text">Vous avez tout lu, bravo ! 👏</small></li>;
       }
     } else {
       content = listToShow.map((sn) => <NotificationItem key={sn.notification.id} sn={sn}/>)
@@ -186,10 +176,9 @@ function NotificationMenu(props): JSX.Element {
         </li>
         {content}
         {onLoad ?
-          <li><small className="dropdown-item-text">Chargement... <Spinner animation="border" size="sm"/></small></li>
-          : <></>
-        }
-        {allLoaded ? <></> :
+          <li><small className="dropdown-item-text mb-3">Chargement... <Spinner animation="border" size="sm"/></small></li>
+          :
+          allLoaded ? <></> :
           <li>
             <span className="dropdown-item-text">
               <Button

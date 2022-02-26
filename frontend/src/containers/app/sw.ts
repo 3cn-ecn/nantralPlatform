@@ -7,7 +7,7 @@ import {
 } from 'workbox-strategies';
 import {CacheableResponsePlugin} from 'workbox-cacheable-response';
 import {ExpirationPlugin} from 'workbox-expiration';
-import getCookie from "../utils/getCookie";
+import axios from 'axios';
 
 declare var self: ServiceWorkerGlobalScope;
 declare global {interface ServiceWorkerGlobalScope {__WB_DISABLE_DEV_LOGS: boolean;}}
@@ -175,15 +175,7 @@ self.addEventListener('notificationclick', function(event) {
   var urlToRequest = notifications_url
   urlToRequest += "?notif_id=" + notif.tag;
   urlToRequest += "&mark_read=true";
-  const requestOptions = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRFToken': getCookie('csrftoken')
-    },
-    body: JSON.stringify({ title: 'Mark a notification as read' })
-  };
-  fetch(urlToRequest, requestOptions);
+  axios.post(urlToRequest, {});
 
   // close the notification
   event.notification.close();

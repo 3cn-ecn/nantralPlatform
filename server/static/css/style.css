@@ -102,6 +102,8 @@ table.table-sort th {
   width: 20rem;
   max-width: 90vw;
   padding-bottom: 0;
+  max-height: calc(calc(100vh - 43px - 8px) * 0.9);
+  overflow: auto;
 }
 #menuSet .dropdown-menu {
   box-shadow: 3px 3px 6px #AAA;
