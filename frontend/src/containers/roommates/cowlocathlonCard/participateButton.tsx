@@ -27,8 +27,6 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
     <>
       <Button
         variant={props.isAdmin ? "success" : error ? "danger" : "primary"}
-        // Do not listen to the linter here, "" works just fine...
-        size=""
         style={{ width: "max-content" }}
         onClick={() => {
           if (props.isAdmin) {

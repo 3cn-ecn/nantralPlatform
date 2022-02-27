@@ -1,5 +1,6 @@
 /**
- * Function for the reading of a cookie
+ * Function for the reading of a cookie.
+ * Fot the csrf-token, use axios instead of fetch (you don't have to use the cookie this way)
  * @param name Name of the cookie
  * @returns Value of the cookie
  */
