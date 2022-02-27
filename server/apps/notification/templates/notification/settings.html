@@ -1,7 +1,19 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load i18n %}
 
 {% block content %}
 
 <h1>Paramètres des Notifications</h1>
+<br>
+<h2>Mes abonnements</h2>
+<p>Retrouve ici toutes les pages auxquelles tu es abonné⋅e ! Tu peux en décocher certaines
+    si tu ne souhaites plus les suivre. Être abonné à une page te permet de recevoir les
+    notifications liées à cette page directement sur ton appareil !</p>
+<form method='POST'>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-success">{% translate "Valider" %}</button>
+</form>
 
 {% endblock %}
