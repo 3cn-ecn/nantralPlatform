@@ -74,6 +74,7 @@ COMMON_APPS = [
     'apps.sociallink',
     'apps.family',
     'apps.administration',
+    'apps.search_bar'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS

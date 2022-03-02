@@ -1,0 +1,21 @@
+<h1> Bonjour vous êtes bien sur la page de la searchBar </h1>
+
+<form method="post" action="{% url 'recherche:index' %}">
+    {% csrf_token %}
+    <input type = 'search' placeholder="Search" aria-label="Search" name="saisie">
+    <button type="submit">Search</button>
+</form>
+
+{% if saisie %}
+<p>{{saisie}}</p>
+{% else %}
+<p>Nope</p>
+{% endif%}
+
+{% if result %}
+<ul>
+{% for student in result %}
+    <li><a href="{% url 'student:detail' student.pk %}">{{student.name}}</a></li>
+{% endfor %}
+</ul>
+{% endif %}

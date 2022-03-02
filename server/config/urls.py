@@ -68,6 +68,7 @@ urlpatterns = [
          include('apps.family.admin_urls', namespace='family-admin')),
 
     path('', include('apps.home.urls', namespace='home')),
+    path('recherche/', include('apps.search_bar.urls', namespace = 'recherche'))
 ]
 
 handler403 = 'apps.home.views.handler403'
