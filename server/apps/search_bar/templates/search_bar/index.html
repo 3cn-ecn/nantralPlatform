@@ -1,21 +1,29 @@
-<h1> Bonjour vous êtes bien sur la page de la searchBar </h1>
+{% extends 'base.html' %}
 
-<form method="post" action="{% url 'recherche:index' %}">
-    {% csrf_token %}
-    <input type = 'search' placeholder="Search" aria-label="Search" name="saisie">
-    <button type="submit">Search</button>
-</form>
+{% block content %}
+    {% if saisie %}
+        <h1>Résultat pour la recherche : {{saisie}}</h1>
+    {% else %}
+        <h1>Veuillez entrer une recherche</h1>
+    {% endif%}
 
-{% if saisie %}
-<p>{{saisie}}</p>
-{% else %}
-<p>Nope</p>
-{% endif%}
-
-{% if result %}
-<ul>
-{% for student in result %}
-    <li><a href="{% url 'student:detail' student.pk %}">{{student.name}}</a></li>
-{% endfor %}
-</ul>
-{% endif %}
+    {% if not empty %}
+        <ul>
+            {% for student in students %}
+                <li><a href="{% url 'student:detail' student.pk %}">{{student.name}}</a></li>
+            {% endfor %}
+        </ul>
+        <ul>
+            {% for club in clubs %}
+                <li><a href="{{ club.get_absolute_url }}">{{club.name}}</a></li>
+            {% endfor %}
+        </ul>
+        <ul>
+            {% for coloc in colocs %}
+                <li><a href="{{ coloc.get_absolute_url }}">{{coloc.name}}</a></li>
+            {% endfor %}
+        </ul>
+    {% elif saisie %}
+        <p>La recherche n'a malheureusement pas abouti ...</p>
+    {% endif %}
+{% endblock %}

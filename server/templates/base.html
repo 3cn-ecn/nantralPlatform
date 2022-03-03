@@ -81,6 +81,13 @@
 									<li><a class="dropdown-item" href="{% url 'administration:index' %}">Administration</a></li>
 								</ul>
 							</li>
+							<li>
+								<form method="post" action="{% url 'recherche:index' %}">
+									{% csrf_token %}
+									<input type = 'search' placeholder="Search" aria-label="Search" name="saisie">
+									<button type="submit">Search</button>
+								</form>
+							</li>
 						</ul>
 						<ul class="navbar-nav ml-auto ">
 							<li class="nav-item dropdown">
