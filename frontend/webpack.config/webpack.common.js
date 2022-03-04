@@ -14,7 +14,8 @@ module.exports = {
     cowlocathlonCard:       path.join(apps_dir, "roommates/cowlocathlonCard.tsx"),
     housingMap:             path.join(apps_dir, "roommates/housingMap.tsx"),
     createHousing:          path.join(apps_dir, "roommates/createHousing.tsx"),
-    subscribeButton:        path.join(apps_dir, "notification/subscribeButton.tsx")
+    subscribeButton:        path.join(apps_dir, "notification/subscribeButton.tsx"),
+    deviceSubscribeButton:  path.join(apps_dir, "notification/deviceSubscribeButton.tsx")
   },
   output: {
     path: path.join(__dirname, "../../server/static/js"),
