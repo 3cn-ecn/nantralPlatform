@@ -27,16 +27,43 @@
 	
 	<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
 		<div class="container">
-			<a class="navbar-brand" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;">
-				<img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
-				Nantral Platform.
-			</a>
 			{% block navbar %}
 				{% if request.user.is_authenticated %}
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
+					<form method="post" action="{% url 'recherche:index' %}" class="search-container">
+						{% csrf_token %}
+						<input id="search-box2" type = 'search' placeholder="Search" aria-label="Search" name="saisie" class="search-box">
+						<label for="search-box2"><img class = 'search-icon' src = '{% static "/img/search_icon.svg" %}' /></label>
+						<input type="submit" id="search-submit" />
+					</form>
 					<div class="collapse navbar-collapse" id="navbarText">
+						<ul class="navbar-nav ml-auto ">
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									{{ request.user.student.name }}    <i class="fas fa-cog"></i>
+								</a>
+								<ul class="dropdown-menu dropdown-menu-end" role="menu">
+									{% if request.user.student.pk %}
+										<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
+										<li><a class="dropdown-item" href="{% url 'student:update' request.user.student.pk %}"><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
+										<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
+									{% else %}
+										<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
+									{% endif  %}
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
+								</ul>
+							</li>
+						</ul>
+						<form method="post" action="{% url 'recherche:index' %}" class="search-container">
+							{% csrf_token %}
+							<input id="search-box" type = 'search' placeholder="Search" aria-label="Search" name="saisie" class="search-box">
+							<label for="search-box"><img class = 'search-icon' src = '{% static "/img/search_icon.svg" %}' /></label>
+							<input type="submit" id="search-submit" />
+						</form>
+						
 						<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 							<li class="nav-item">
 								<a class="nav-link" href="{% url 'home:home' %}">Actualités</a>
@@ -81,32 +108,8 @@
 									<li><a class="dropdown-item" href="{% url 'administration:index' %}">Administration</a></li>
 								</ul>
 							</li>
-							<li>
-								<form method="post" action="{% url 'recherche:index' %}">
-									{% csrf_token %}
-									<input type = 'search' placeholder="Search" aria-label="Search" name="saisie">
-									<button type="submit">Search</button>
-								</form>
-							</li>
 						</ul>
-						<ul class="navbar-nav ml-auto ">
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									{{ request.user.student.name }}    <i class="fas fa-cog"></i>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-end" role="menu">
-									{% if request.user.student.pk %}
-										<li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>  Voir mon profil</a></li>
-										<li><a class="dropdown-item" href="{% url 'student:update' request.user.student.pk %}"><i class="fas fa-edit"></i>  Modifier mon profil</a></li>
-										<li><a class="dropdown-item" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i>  Me déconnecter</a></li>
-									{% else %}
-										<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
-									{% endif  %}
-									<li><hr class="dropdown-divider"></li>
-									<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>  Faire une suggestion</a></li>
-								</ul>
-							</li>
-						</ul>
+						
 					</div>
 				{% else %}
 					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,6 +125,10 @@
 					</div>
 				{% endif %}
 			{% endblock %}
+			<a class="navbar-brand" href="{% url 'home:home' %}" style="font: 'Heebo'; font-weight: 900;">
+				<img src='{% static "/img/logo.svg" %}' width="30" height="30" class="d-inline-block align-top" alt="logo" loading="lazy">
+				Nantral Platform.
+			</a>
 		</div>
 	</nav>
 	

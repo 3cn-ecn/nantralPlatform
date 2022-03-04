@@ -43,6 +43,10 @@ table.table-sort th {
 /* BARRE DE NAVIGATION */
 /* ------------------- */
 
+.navbar > .container {
+  flex-direction: row-reverse;
+}
+
 @media all and (min-width: 992px) {
   .navbar .nav-item .dropdown-menu {
     display: none;
@@ -55,9 +59,129 @@ table.table-sort th {
   }
   .navbar .nav-item .dropdown-menu-end {
     right: 0;
-  }
+  } 
 }
 
+.navbar > .container > .search-container{
+  display: none;
+}
+.navbar #navbarText {
+  flex-direction: row-reverse;
+}
+.navbar > .container > .show > .navbar-nav {
+  align-self: flex-start;
+}
+
+/* BARRE DE RECHERCHE */
+#navbarText .search-container {
+  transform: translateX(-240px);
+}
+.search-container:focus-within + ul {
+  display: none;
+}
+.search-container:focus-within {
+  transform: translateX(-50px); 
+  width: auto;
+  height: auto;
+}
+
+.search-container label {
+  width: 0;
+}
+.search-container {
+  width: 40px;
+  height: 40px;
+}
+.search-box {
+  transition: width 0.6s, border-radius 0.6s, background 0.6s, box-shadow 0.6s;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  background: #ebebeb;
+}
+.navbar-collapse .search-box + label .search-icon {
+  transform: translateX(36px) translateY(-36px);
+}
+
+.search-box:focus + label .search-icon{
+  transform: translateX(-9px) translateY(-2px);
+}
+
+.search-box:hover {
+  color: white;
+  background: #c8c8c8;
+  box-shadow: 0 0 0 3px #3d4752;
+}
+.search-box:hover + label .search-icon {
+  filter: brightness(0) invert(1);
+}
+.search-box:focus {
+  transition: width 0.6s cubic-bezier(0, 1.22, 0.66, 1.39), border-radius 0.6s, background 0.6s;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding-left: 15px;
+  cursor: text;
+  width: 400px;
+  border-radius: auto;
+  background: #ebebeb;
+  color: black;
+}
+.search-box:not(:focus) {
+  text-indent: -5000px;
+}
+
+#search-submit {
+  position: relative;
+  left: -5000px;
+}
+
+.search-icon {
+  position: relative;
+  left: -30px;
+  color: white;
+  cursor: pointer;
+}
+@media screen and (max-width: 1200px) {
+  #navbarText .search-container{
+    transform: translateX(0);
+  }
+  #navbarText .search-container:focus-within{
+    transform: translateX(-100px);
+  }
+}
+@media screen and (max-width: 992px){
+  .navbar > .container > .search-container{
+    display: flex;
+  } 
+  .navbar-collapse .search-container{
+    display: none;
+  }
+  .navbar > .container > .navbar-collapse {
+    flex-direction: column-reverse!important;
+  }
+  .navbar > .container > .show {
+    display: flex;
+  }
+  .search-box + label .search-icon {
+    transform: translateX(-4px) translateY(4px)!important;
+  }
+  .search-container:focus-within {
+    transform: translateX(-200px);
+  }
+  .navbar > .container > .search-container:focus-within ~ .navbar-brand {
+    display: none;
+  }
+  .navbar > .container > .search-container:focus-within{
+    width: 80%;
+    transform: translateX(20px);
+  }
+  .navbar > .container >.search-container > .search-box:focus {
+    width: 100%;
+  }
+}
 /* MODULE DE GRILLE */
 /* ---------------- */
 
