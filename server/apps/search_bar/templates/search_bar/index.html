@@ -1,28 +1,118 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load file_url %}
 
 {% block content %}
+<style>
+    .container {
+        margin: 0;
+        width: 100%;
+        max-width:100%;
+    }
+    .cards {
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        display: flex;
+        align-items: baseline;
+        flex-flow: row wrap;
+        justify-content: space-around;
+      }
+      .card2 {
+        display: flex;
+        width : min(40%,300px);
+        border: solid 1px;
+        margin : 20px;
+        text-decoration: none;
+        color: black;
+        border-radius:3%;
+        background-color: #f8f9fa;
+        justify-content: space-between;
+        transition: 0.6s transform;
+      }
+      .card2:hover {
+        transform: scale(1.15);
+        color: black;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+      }
+      .card2 img {
+        width: 75px;
+        height: 75px;
+        border: solid 1px;
+        border-radius: 50%;
+        vertical-align: middle;
+        margin: 10px;
+      }
+      .card2 .annee {
+        vertical-align:top;
+        white-space:nowrap;
+      }
+      .card2 .annee p {
+        border: solid;
+        border-width: 0 0 1px 1px ;
+        padding: 2px;
+        margin: 0;
+        background-color: rgb(254,205,165);
+        font-size:0.5em;
+      }
+      .cards .name {
+        padding-top: 10px;
+        font-size: 1.5em;
+      }
+</style>
+
     {% if saisie %}
         <h1>Résultat pour la recherche : {{saisie}}</h1>
     {% else %}
         <h1>Veuillez entrer une recherche</h1>
-    {% endif%}
+    {% endif %}
 
     {% if not empty %}
-        <ul>
-            {% for student in students %}
-                <li><a href="{% url 'student:detail' student.pk %}">{{student.name}}</a></li>
-            {% endfor %}
-        </ul>
-        <ul>
-            {% for club in clubs %}
-                <li><a href="{{ club.get_absolute_url }}">{{club.name}}</a></li>
-            {% endfor %}
-        </ul>
-        <ul>
-            {% for coloc in colocs %}
-                <li><a href="{{ coloc.get_absolute_url }}">{{coloc.name}}</a></li>
-            {% endfor %}
-        </ul>
+        <div class = 'cards'>
+            {% if students %}
+                {% for student in students %}
+                    <a href="{% url 'student:detail' student.pk %}" class = 'card2'>
+                        {% if student.picture %}
+                            <img src='{{student.picture|file_url}}'/>
+                        {% else %}
+                            <img src='{% static "img/logo.svg" %}'/>
+                        {% endif%}
+                        <h3 class = 'name'>{{student.name}}</h3>
+                        <span class = 'annee'><p> PROMO {{student.promo}}</p></span>
+                    </a>
+                {% endfor %}
+            {% endif %}
+            {% if clubs %}
+                {% for club in clubs %}
+                <a href="{{ club.get_absolute_url }}" class = 'card2'>
+                    {% if club.logo %}
+                        <img src='{{club.logo|file_url}}'/>
+                    {% else %}
+                       <img src='{% static "img/logo.svg" %}'/>
+                    {% endif%}
+                    <h3 class = 'name'>{{club.name}}</h3>
+                    {% if club.bdx_type %}
+                        <span class = 'annee'><p> CLUB {{club.bdx_type}}</p></span>
+                    {% else %}
+                        <span class = 'annee'><p> ASSO</p></span>
+                    {% endif %}
+                </a>
+                {% endfor %}
+            {% endif %}
+            {% if colocs %}
+                {% for coloc in colocs %}
+                <a href="{{ coloc.get_absolute_url }}" class = 'card2'>
+                    {% if coloc.logo %}
+                        <img src='{{coloc.logo|file_url}}'/>
+                    {% else %}
+                        <img src='{% static "img/logo.svg" %}'/>
+                    {% endif%}
+                    <h3 class = 'name'>{{coloc.name}}</h3>
+                    <span class = 'annee'><p>COLOC'</p></span>
+                </a>
+                {% endfor %}
+            {% endif %}
+        </div>
     {% elif saisie %}
         <p>La recherche n'a malheureusement pas abouti ...</p>
     {% endif %}

@@ -34,7 +34,7 @@
 					</button>
 					<form method="post" action="{% url 'recherche:index' %}" class="search-container">
 						{% csrf_token %}
-						<input id="search-box2" type = 'search' placeholder="Search" aria-label="Search" name="saisie" class="search-box">
+						<input id="search-box2" type = 'text' placeholder="Search" aria-label="Search" name="saisie" class="search-box">
 						<label for="search-box2"><img class = 'search-icon' src = '{% static "/img/search_icon.svg" %}' /></label>
 						<input type="submit" id="search-submit" />
 					</form>
@@ -59,7 +59,7 @@
 						</ul>
 						<form method="post" action="{% url 'recherche:index' %}" class="search-container">
 							{% csrf_token %}
-							<input id="search-box" type = 'search' placeholder="Search" aria-label="Search" name="saisie" class="search-box">
+							<input id="search-box" type = 'text' placeholder="Search" aria-label="Search" name="saisie" class="search-box">
 							<label for="search-box"><img class = 'search-icon' src = '{% static "/img/search_icon.svg" %}' /></label>
 							<input type="submit" id="search-submit" />
 						</form>
