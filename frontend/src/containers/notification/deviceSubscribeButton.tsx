@@ -23,16 +23,16 @@ function DeviceSubscribeButton(props): JSX.Element {
     }
 
     if (notificationState === "granted") {
-        return <p>Les notifications sont activées ! 🥳 Abonnez-vous
-                à des pages pour recevoir leurs notifications !</p>;
+        return <p>Les notifications sont activées&nbsp;!&nbsp;🥳 Abonnez-vous
+                à des pages pour recevoir leurs notifications&nbsp;!</p>;
     } else if (notificationState === "default") {
-        return <p><span>Les notifications sont désactivées 😢  </span>
-                  <Button size="sm" onClick={askForNotifications}>Activer !</Button></p>;
+        return <p><span>Les notifications sont désactivées&nbsp;😢&nbsp; </span>
+                  <Button size="sm" onClick={askForNotifications}>Activer&nbsp;!</Button></p>;
     } else if (notificationState === "denied") {
-        return <p>Vous avez bloqué les notifications... 😢 Activez-les dans vos paramètres !</p>
+        return <p>Vous avez bloqué les notifications...&nbsp;😢 Activez-les dans vos paramètres&nbsp;</p>
     } else {
-        return <p>Votre appareil ne peut pas supporter les notifications pour Nantral 
-                Platform, toutes nos excuses... 😢</p>
+        return <p>Votre appareil/navigateur n'est pas compatible avec les notifications 
+                pour Nantral Platform...&nbsp;😢</p>
     }
 
 }
