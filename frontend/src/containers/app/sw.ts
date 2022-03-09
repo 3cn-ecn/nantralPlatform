@@ -9,9 +9,13 @@ import {CacheableResponsePlugin} from 'workbox-cacheable-response';
 import {ExpirationPlugin} from 'workbox-expiration';
 import axios from 'axios';
 
+// disable dev logs
 declare var self: ServiceWorkerGlobalScope;
 declare global {interface ServiceWorkerGlobalScope {__WB_DISABLE_DEV_LOGS: boolean;}}
 self.__WB_DISABLE_DEV_LOGS = true;
+
+// badge
+let unreadCount = 0;
 
 // Cache the external fonts, stylesheets and plugins
 registerRoute(
@@ -152,6 +156,15 @@ self.addEventListener('push', function (event:PushEvent) {
           data: data.data
       })
   );
+
+  // set a badge
+  let nav = navigator as any;
+  unreadCount++;
+  if (nav.setAppBadge) {
+    nav.setAppBadge(unreadCount).catch((error) => {
+      console.log("Error in setting app badge");
+    })
+}
 });
 
 

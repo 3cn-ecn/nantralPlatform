@@ -6,6 +6,13 @@ const registerSw = async () => {
   } else {
       showNotAllowed("You can't send push notifications ☹️😢")
   }
+  // delete the badge
+  let nav = navigator as any;
+  if (nav.clearAppBadge) {
+    nav.clearAppBadge().catch((error) => {
+      console.log("Cannot clear badge.");
+    });
+  }
 };
 
 // show status of notifications
