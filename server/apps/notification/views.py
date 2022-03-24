@@ -1,14 +1,14 @@
-from django.views.generic import FormView, View, TemplateView, UpdateView
+from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
-# Create your views here.
-from apps.utils.slug import SLUG_GROUPS, get_model
 from .models import Subscription
 from .forms import SubscriptionForm
 
 
 class SettingsView(LoginRequiredMixin, TemplateView):
+    """Define the view for the notifications settings page."""
+
     template_name = "notification/settings.html"
 
     def get_pages(self):
@@ -42,3 +42,5 @@ class SettingsView(LoginRequiredMixin, TemplateView):
             messages.error(request, "Oups, une erreur c'est produite !")
         context={'form':form}
         return self.render_to_response(context)
+
+

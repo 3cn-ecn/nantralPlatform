@@ -1,12 +1,13 @@
-from django.http.response import HttpResponse
 from django.db.utils import IntegrityError
+from django.http import JsonResponse
 
+from push_notifications.models import GCMDevice
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import SentNotification, Subscription
-from .serializers import SentNotificationSerializer, SubscriptionSerializer
+from .serializers import SentNotificationSerializer
 
 
 class SubscriptionAPIView(APIView):
@@ -100,3 +101,18 @@ class NotificationAPIView(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+
+class ReisterAPIView(APIView):
+    """View to register a user for notifications."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        GCMDevice.objects.create(
+            registration_id = request.data.get('registration_id'),
+            cloud_message_type = 'FCM',
+            user = request.user,
+        )
+        data = {
+            'result': True
+        }
+        return JsonResponse(data)

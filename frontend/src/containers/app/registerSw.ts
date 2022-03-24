@@ -1,47 +1,102 @@
-// saving the service worker
+import axios from 'axios';
+
+declare const register_url: string;
+
+/**
+ * Main function to register the service worker, and some other stuff 
+ * associated, like subscribe to the notifications and clear the badge counter
+ */
 const registerSw = async () => {
+
   if ('serviceWorker' in navigator) {
-      const reg = await navigator.serviceWorker.register('/sw.js');
-      initialiseState(reg);
+
+    // register the serice worker
+    const reg = await navigator.serviceWorker.register('/sw.js');
+
+    // try to subscribe to notifications
+    if (!reg.showNotification) {
+      console.log('Showing notifications isn\'t supported');
+    } else if (Notification.permission === 'denied') {
+      console.log('Permission denied for notifications');
+    } else if (!('PushManager' in window)) {
+      console.log("Push isn't allowed in your browser 🤔");
+    } else {
+      subscribe(reg);
+    }
+
+    // clear the badge since we just opened the app
+    if ('clearAppBadge' in navigator) {
+      (navigator as any).clearAppBadge().catch((error) => {
+        console.log("Cannot clear badge.");
+      });
+    }
+
   } else {
-      showNotAllowed("You can't send push notifications ☹️😢")
-  }
-  // delete the badge
-  let nav = navigator as any;
-  if (nav.clearAppBadge) {
-    nav.clearAppBadge().catch((error) => {
-      console.log("Cannot clear badge.");
-    });
+    // if service workers are not supported
+    console.log("Navigator doesn't support service worker.")
   }
 };
 
-// show status of notifications
-const initialiseState = (reg) => {
-  if (!reg.showNotification) {
-      showNotAllowed('Showing notifications isn\'t supported ☹️😢');
-      return
-  }
-  if (Notification.permission === 'denied') {
-      showNotAllowed('You prevented us from showing notifications ☹️🤔');
-      return
-  }
-  if (!('PushManager' in window)) {
-      showNotAllowed("Push isn't allowed in your browser 🤔");
-      return
-  }
-  subscribe(reg);
-}
 
-// show the message
-const showNotAllowed = (message) => {
-  console.log(message);
-  // const button = document.querySelector('form>button');
-  // button.innerHTML = `${message}`;
-  // button.setAttribute('disabled', 'true');
+
+
+/**
+ * Asynchronous function to subscribe to notifications
+ * @param reg The registration of the service worker
+ * @returns None
+//  */
+const subscribe = async (reg) => {
+  // check if already subscribed
+  const subscription = await reg.pushManager.getSubscription();
+  if (subscription) {
+      sendSubData(subscription);
+      return;
+  }
+  // else create the subscription
+  const key = "BOmXcqrHbWJVHuO25dHxU8KPGC34pBZCzCh80KQFLTproeb5BvwcbSz8bxEnWWK2vw4F_6tE6OWc3BP-eEi8qzg";
+  const options = {
+      userVisibleOnly: true,
+      // if key exists, create applicationServerKey property
+      ...(key && {applicationServerKey: urlBase64ToUint8Array(key)})
+  };
+
+  const sub = await reg.pushManager.subscribe(options);
+  sendSubData(sub);
 };
 
-// function to hash a string
-function urlB64ToUint8Array(base64String) {
+
+
+/**
+ * Send the subscription to server
+ * @param subscription The subscription object
+ */
+const sendSubData = async (subscription) => {
+  const browser = loadVersionBrowser();
+  console.log(subscription);
+  console.log(subscription.endpoint)
+  var endpointParts = subscription.endpoint.split('/');
+  console.log(endpointParts);
+  var registration_id = endpointParts[endpointParts.length - 1];
+  console.log(registration_id);
+  var data = {
+    'browser': browser.name.toUpperCase(),
+    'p256dh': btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')))),
+    'auth': btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth')))),
+    'registration_id': registration_id
+  };
+  axios.post(register_url, data).then((res) =>
+    console.log("Service worker registration result: " + res. status)
+  );
+};
+
+
+
+/**
+ * function to hash a string
+ * @param base64String A string not hashed
+ * @returns A hashed string
+ */
+ function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding)
       .replace(/\-/g, '+')
@@ -54,50 +109,73 @@ function urlB64ToUint8Array(base64String) {
   return outputData;
 }
 
-// function to subscribe to notifications
-const subscribe = async (reg) => {
-  const subscription = await reg.pushManager.getSubscription();
-  if (subscription) {
-      sendSubData(subscription);
-      return;
+
+
+/**
+ * Load the version of browser
+ * @returns A dict with name and version of the browser
+ */
+function loadVersionBrowser () {
+  if ("userAgentData" in navigator) {
+    // navigator.userAgentData is not available in
+    // Firefox and Safari
+    const uaData = (navigator as any).userAgentData;
+    // Outputs of navigator.userAgentData.brands[n].brand are e.g.
+    // Chrome: 'Google Chrome'
+    // Edge: 'Microsoft Edge'
+    // Opera: 'Opera'
+    let browsername;
+    let browserversion;
+    let chromeVersion = null;
+    for (var i = 0; i < uaData.brands.length; i++) {
+      let brand = uaData.brands[i].brand;
+      browserversion = uaData.brands[i].version;
+      if (brand.match(/opera|chrome|edge|safari|firefox|msie|trident/i) !== null) {
+        // If we have a chrome match, save the match, but try to find another match
+        // E.g. Edge can also produce a false Chrome match.
+        if (brand.match(/chrome/i) !== null) {
+          chromeVersion = browserversion;
+        }
+        // If this is not a chrome match return immediately
+        else {
+          browsername = brand.substr(brand.indexOf(' ')+1);
+          return {
+            name: browsername,
+            version: browserversion
+          }
+        }
+      }
+    }
+    // No non-Chrome match was found. If we have a chrome match, return it.
+    if (chromeVersion !== null) {
+      return {
+        name: "chrome",
+        version: chromeVersion
+      }
+    }
   }
-
-  const vapidMeta = document.querySelector('meta[name="vapid-key"]') as HTMLMetaElement;
-  const key = vapidMeta.content;
-  const options = {
-      userVisibleOnly: true,
-      // if key exists, create applicationServerKey property
-      ...(key && {applicationServerKey: urlB64ToUint8Array(key)})
+  // If no userAgentData is not present, or if no match via userAgentData was found,
+  // try to extract the browser name and version from userAgent
+  const userAgent = navigator.userAgent;
+  var ua = userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+  if (/trident/i.test(M[1])) {
+    tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+    return {name: 'IE', version: (tem[1] || '')};
+  }
+  if (M[1] === 'Chrome') {
+    tem = ua.match(/\bOPR\/(\d+)/);
+    if (tem != null) {
+      return {name: 'Opera', version: tem[1]};
+    }
+  }
+  M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+  if ((tem = ua.match(/version\/(\d+)/i)) != null) {
+    M.splice(1, 1, tem[1]);
+  }
+  return {
+    name: M[0],
+    version: M[1]
   };
-
-  const sub = await reg.pushManager.subscribe(options);
-  sendSubData(sub)
-};
-
-// send the subscription to server
-const sendSubData = async (subscription) => {
-  const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
-  const data = {
-      status_type: 'subscribe',
-      subscription: subscription.toJSON(),
-      browser: browser,
-  };
-
-  const res = await fetch('/webpush/save_information', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-          'content-type': 'application/json'
-      },
-      credentials: "include"
-  });
-
-  handleResponse(res);
-};
-
-// log results
-const handleResponse = (res) => {
-  console.log("Service worker registration result: " + res.status);
 };
 
 

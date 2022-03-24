@@ -9,6 +9,10 @@ import {CacheableResponsePlugin} from 'workbox-cacheable-response';
 import {ExpirationPlugin} from 'workbox-expiration';
 import axios from 'axios';
 
+// configure axios
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+
 // disable dev logs
 declare var self: ServiceWorkerGlobalScope;
 declare global {interface ServiceWorkerGlobalScope {__WB_DISABLE_DEV_LOGS: boolean;}}
@@ -145,15 +149,15 @@ self.addEventListener('push', function (event:PushEvent) {
   // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
   // on https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData.
   const eventInfo = event.data.text();
-  const data = JSON.parse(eventInfo);
+  const message = JSON.parse(eventInfo);
 
   // Keep the service worker alive until the notification is created.
   event.waitUntil(
-      self.registration.showNotification(data.title, {
-          body: data.body,
-          icon: data.icon || '/static/img/logo.svg',
-          image: data.image,
-          data: data.data
+      self.registration.showNotification(message.title, {
+          body: message.body,
+          icon: message.icon || '/static/img/logo.svg',
+          image: message.image,
+          data: message.data
       })
   );
 
@@ -164,7 +168,7 @@ self.addEventListener('push', function (event:PushEvent) {
     nav.setAppBadge(unreadCount).catch((error) => {
       console.log("Error in setting app badge");
     })
-}
+  }
 });
 
 

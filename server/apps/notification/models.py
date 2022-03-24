@@ -1,11 +1,12 @@
+import json
+
 from django.db import models
 from django.utils import timezone
 
-import webpush
+from push_notifications.models import GCMDevice
 
 from apps.utils.slug import get_object_from_full_slug
 from apps.student.models import Student
-from apps.group.models import Group
 
 
 # Fonctionnement des notifications :
@@ -25,7 +26,7 @@ VISIBILITY = [
 
 class Subscription(models.Model):
     """Groupes auxquels un utilisateur est abonné."""
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name="subscription_set")
     page = models.SlugField('Page', max_length=50)
 
     class Meta:
@@ -37,9 +38,6 @@ class Subscription(models.Model):
         """Vérifie si un utilisateur est inscrit en remontant aux pages parentes si besoin"""
         if cls.objects.filter(page=page, student=student).exists():
             return True
-        page_object = get_object_from_full_slug(page)
-        if hasattr(page_object, "owner"):
-            return cls.hasSubscribed(page_object.owner, student)
         return False
 
 
@@ -64,48 +62,68 @@ class Notification(models.Model):
         max_length=3, verbose_name='Visibilité de la notification')
     date = models.DateTimeField('Date de création', default=timezone.now)
     high_priority = models.BooleanField('Prioritaire', default=False)
+    receivers = models.ManyToManyField(
+        Student, related_name='notification_set', through='SentNotification')
+
 
     def __str__(self):
         return f'{self.title} - {self.body}'[:100]
     
-    def addReveiversMember(self, owner):
-        """Ajouter les membres de groupes en tant que destinataires"""
-        page = get_object_from_full_slug(owner)
-        if isinstance(page, Group):
-            for s in page.members.all():
-                SentNotification.objects.create(student=s, notification=self)
-        elif hasattr(page, "owner"):
-            self.addReceiversMember(page.owner)
-    
-    def addReceiverAdmin(self, owner):
-        """Ajouter les admins de groupes en tant que destinataires"""
-        page = get_object_from_full_slug(owner)
-        if isinstance(page, Group):
-            admins = page.members.through.objects.filter(group=page, admin=True)
-            for s in admins.all():
-                SentNotification.objects.create(student=s, notification=self)
-        elif hasattr(page, "owner"):
-            self.addReceiverAdmin(page.owner)
-
-    def addAllUsers(self):
-        """Ajouter tous les utilisateurs dans les destinataires"""
-        all_users = Student.objects.all()
-        for s in all_users:
-            SentNotification.objects.create(student=s, notification=self)
     
     def save(self, *args, **kwargs):
         """Sauver la notif et ajouter des destinataires"""
         is_created = not self.id
         super().save(*args, **kwargs)
+        # if the notification is just created
         if is_created:
+            # get the page object
+            page = get_object_from_full_slug(self.owner)
+            receivers = Student.objects.none()
+            # add receivers
             if self.publicity == 'Pub':
-                self.addAllUsers()
+                receivers = Student.objects.all()
             elif self.publicity == 'Mem':
-                self.addReveiversMember(self.owner)
                 self.high_priority = True
+                if hasattr(page, "members"):
+                    receivers = page.members.all()
             elif self.publicity == 'Adm':
-                self.addReceiverAdmin(self.owner)
                 self.high_priority = True
+                if hasattr(page, "members"):
+                    receivers = page.members.through.objects.filter(
+                        group=page, admin=True
+                    )
+            self.receivers.add(*receivers)
+            # select the receivers who have subscribed and will receive the notif
+            if self.high_priority:
+                sub_receivers = receivers
+            else: 
+                sub_receivers = receivers.filter(
+                    subscription_set__page = self.owner
+                )
+                # sub_receivers = Subscription.objects.filter(
+                #     page = self.owner,
+                #     student__in = receivers
+                # ).student
+            SentNotification.objects.filter(
+                student__in = sub_receivers,
+                notification = self
+            ).update(subscribed=True)
+            # then send the notification to users' devices
+            devices = GCMDevice.objects.filter(
+                user__student__in = sub_receivers
+            )
+            message = json.dumps({
+                'title': self.title,
+                'body': self.body,
+                'icon': self.icon_url,
+                'image': self.image_url,
+                'data': {
+                    'url': self.url,
+                    'action1_url': self.action1_url,
+                    'action2_url': self.action2_url
+                }
+            })
+            devices.send_message(message)
     
     @property
     def nbTargets(self, *args, **kwargs):
@@ -125,32 +143,6 @@ class SentNotification(models.Model):
         verbose_name = "Notification envoyée"
         verbose_name_plural = "Notifications envoyées"
         unique_together = ['student', 'notification']
-    
-    def sendPushNotification(self):
-        """Send the notification to the device."""
-        user = self.student.user
-        payload = {
-            'title': self.notification.title,
-            'body': self.notification.body,
-            'icon': self.notification.icon_url,
-            'image': self.notification.image_url,
-            'data': {
-                'url': self.notification.url,
-                'action1_url': self.notification.action1_url,
-                'action2_url': self.notification.action2_url
-            }
-        }
-        # try to send a notification to a user during 12h
-        webpush.send_user_notification(user=user, payload=payload, ttl=12*3600)
-    
-    def save(self, *args, **kwargs):
-        """Save object and send notifications to devices if needed"""
-        if (not self.id and
-            (self.notification.high_priority or 
-            Subscription.hasSubscribed(self.notification.owner, self.student))):
-            self.subscribed = True
-            self.sendPushNotification()
-        super(SentNotification, self).save(*args, **kwargs)
     
     @property
     def date(self, *args, **kwargs):
