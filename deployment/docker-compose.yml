@@ -84,6 +84,7 @@ services:
       - ../server:/var/app
       - static_volume:/var/app/staticfiles/
       - /etc/letsencrypt:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot/:ro
     depends_on:
       - server
 
