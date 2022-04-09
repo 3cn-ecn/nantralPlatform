@@ -78,8 +78,22 @@ class UpdateGroupCreatePostView(UserIsAdmin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object'] = get_object_from_slug(
+        context['object'] = group = get_object_from_slug(
             self.get_app(), self.get_slug())
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def form_valid(self, form, **kwargs):
@@ -102,11 +116,25 @@ class UpdateGroupPostsView(UserIsAdmin, View):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = get_object_from_slug(
+        context['object'] = group = get_object_from_slug(
             self.get_app(), self.get_slug())
         context['posts'] = Post.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()))
         context['form'] = PostFormSet(queryset=context['posts'])
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def get(self, request, **kwargs):
