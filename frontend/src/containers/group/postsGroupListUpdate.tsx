@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
-import axios from "axios";
+import axios from "../utils/axios";
 import { Button, Card, Modal } from "react-bootstrap";
 var dayjs = require("dayjs");
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 
-axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
+
 
 declare const GROUP_SLUG: string;
 declare const STATIC_URL_PREFIX: string;

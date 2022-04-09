@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Button, Spinner} from "react-bootstrap";
-import axios from "axios";
 
-declare const subscriptionURL: string;
+import axios from "../utils/axios";
+import formatUrl from "../utils/formatUrl";
+
+import {subscriptionUrl} from "./api_urls";
+
+const page_slug = (document.querySelector('meta[name="page"]') as HTMLMetaElement).content;
+const subscriptionPageUrl = formatUrl(subscriptionUrl, [page_slug]);
+
 
 /**
  * Load the Subscribe Button and update it when clicked
@@ -18,11 +24,11 @@ function SubscribeButton(props): JSX.Element {
    * Load the state of the subscription
    */
   async function getSubscription(): Promise<void> {
-    await fetch(subscriptionURL)
+    await fetch(subscriptionPageUrl)
       .then(resp => resp.json().then(
         data => {setSubscribed(data); setIsLoading(false);}
       ))
-      .catch(err => getSubscription());
+      .catch(err => setIsLoading(false));
   }
 
   /**
@@ -31,13 +37,13 @@ function SubscribeButton(props): JSX.Element {
   function changeSubscription(): void {
     setIsLoading(true);
     if (subscribed) {
-      axios.post(subscriptionURL, {})
-        .then(resp => {setSubscribed(!subscribed); setIsLoading(false);})
-        .catch(err => {getSubscription();});
+      axios.delete(subscriptionPageUrl, {})
+        .then(resp => {setSubscribed(false); setIsLoading(false);})
+        .catch(err => getSubscription());
     } else {
-      axios.delete(subscriptionURL, {})
-        .then(resp => {setSubscribed(!subscribed); setIsLoading(false);})
-        .catch(err => {getSubscription();});
+      axios.post(subscriptionPageUrl, {})
+        .then(resp => {setSubscribed(true); setIsLoading(false);})
+        .catch(err => getSubscription());
     }
   }
 

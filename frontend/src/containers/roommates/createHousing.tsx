@@ -1,10 +1,10 @@
 import React, { useState, ChangeEvent } from "react";
-import axios from "axios";
+import axios from "../utils/axios";
 import { render } from "react-dom";
 import { Form, Button, ListGroup } from "react-bootstrap";
 
-axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
+
 
 declare const API_URL: string;
 declare const CHECK_URL: string;

@@ -1,4 +1,4 @@
-﻿import axios from "axios";
+﻿import axios from "../../utils/axios";
 import { Housing } from "./interfaces";
 
 export async function getRoommates(

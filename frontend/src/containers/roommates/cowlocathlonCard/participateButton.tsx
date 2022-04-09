@@ -7,8 +7,8 @@ import { ParticipantsModal } from "./participantsModal";
 import { ParticipateButtonProps } from "./interfaces";
 import { spinnerStyle } from "./styles";
 
-axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
+
 
 export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
   const [isParticipating, setIsParticipating] = useState(props.isParticipating);

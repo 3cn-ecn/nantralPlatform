@@ -12,7 +12,7 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
 import { arrayMoveImmutable } from "array-move";
-import axios from "axios";
+import axios from "../utils/axios";
 
 import { spinnerDivStyle, spinnerStyle } from "../club/clubsList/styles";
 import { loaderStyle } from "./groupMembers/styles";
@@ -22,8 +22,8 @@ import { SortableStudentCard } from "./groupMembers/sortableStudentCard";
 import { StudentCard } from "./groupMembers/studentCard";
 import { getMembers, sendNewOrder } from "./groupMembers/utils";
 
-axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
+
 
 declare const membersURL: string;
 declare const isAdmin: string;

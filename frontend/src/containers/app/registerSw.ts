@@ -1,6 +1,22 @@
-import axios from 'axios';
+import {initializeApp} from "firebase/app";
+import messaging from "firebase/messaging";
 
-declare const register_url: string;
+import axios from "../utils/axios";
+import {registerUrl} from "../notification/api_urls";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBBbDS1ijUYrVvmICiWloPZEkMQgqy20-k",
+  authDomain: "nantral-platform.firebaseapp.com",
+  projectId: "nantral-platform",
+  storageBucket: "nantral-platform.appspot.com",
+  messagingSenderId: "1087095901919",
+  appId: "1:1087095901919:web:d941ee535d9e974d09636a"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
 
 /**
  * Main function to register the service worker, and some other stuff 
@@ -48,10 +64,7 @@ const registerSw = async () => {
 const subscribe = async (reg) => {
   // check if already subscribed
   const subscription = await reg.pushManager.getSubscription();
-  if (subscription) {
-      sendSubData(subscription);
-      return;
-  }
+  if (subscription) return;
   // else create the subscription
   const key = "BOmXcqrHbWJVHuO25dHxU8KPGC34pBZCzCh80KQFLTproeb5BvwcbSz8bxEnWWK2vw4F_6tE6OWc3BP-eEi8qzg";
   const options = {
@@ -61,7 +74,11 @@ const subscribe = async (reg) => {
   };
 
   const sub = await reg.pushManager.subscribe(options);
-  sendSubData(sub);
+  
+  messaging.getToken({vapidKey: key}).then(currentToken =>
+    sendSubData(sub, currentToken)
+  );
+
 };
 
 
@@ -70,21 +87,15 @@ const subscribe = async (reg) => {
  * Send the subscription to server
  * @param subscription The subscription object
  */
-const sendSubData = async (subscription) => {
+const sendSubData = async (subscription, currentToken) => {
   const browser = loadVersionBrowser();
-  console.log(subscription);
-  console.log(subscription.endpoint)
-  var endpointParts = subscription.endpoint.split('/');
-  console.log(endpointParts);
-  var registration_id = endpointParts[endpointParts.length - 1];
-  console.log(registration_id);
   var data = {
     'browser': browser.name.toUpperCase(),
     'p256dh': btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('p256dh')))),
     'auth': btoa(String.fromCharCode.apply(null, new Uint8Array(subscription.getKey('auth')))),
-    'registration_id': registration_id
+    'registration_id': currentToken
   };
-  axios.post(register_url, data).then((res) =>
+  axios.post(registerUrl, data).then((res) =>
     console.log("Service worker registration result: " + res. status)
   );
 };

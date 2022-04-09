@@ -9,9 +9,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="manifest" href="{% static 'manifest.webmanifest' %}">
 	<meta name="vapid-key" content="{{ vapid_key }}">
-    {% if user.id %}
-        <meta name="user_id" content="{{ user.id }}">
-    {% endif %}
 	<!-- css -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 	<link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
@@ -158,10 +155,6 @@
 
 	<div id="offline-alert"></div>
 
-	<script>
-		const notifications_url = "{% url 'notification_api:my_notifications' %}";
-		const register_url = "{% url 'notification_api:register' %}";
-	</script>
 	<script type = "text/javascript" src="{% static 'js/app.js' %}?v=1"></script>
 
 	{% block script %}

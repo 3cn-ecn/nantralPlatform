@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import ReactDOM, { render } from "react-dom";
 import {Spinner, Dropdown, Button} from "react-bootstrap";
-import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons'
+
+import axios from "../utils/axios";
+import formatUrl from "../utils/formatUrl";
+
 import {SentNotification} from "./interfaces";
 import merge from "./utils";
+import {getNotificationsUrl, manageNotificationUrl} from "./api_urls";
 
-declare const notifications_url: string;
 
 /**
  * Fonction principale de chargement des notifications
@@ -29,7 +32,8 @@ function NotificationMenu(props): JSX.Element {
   }
 
   async function getNbNotifs(): Promise<void> {
-    fetch(notifications_url+"?count=true")
+    const url = formatUrl(getNotificationsUrl, [], {mode: 1});
+    fetch(url)
       .then(resp => resp.json().then(
         data => setNbNotifs(data)
       ))
@@ -40,8 +44,8 @@ function NotificationMenu(props): JSX.Element {
     setOnLoad(true);
     const start = listNotifs.length;
     const end = start + step;
-    const urlToRequest = notifications_url + "?start=" + start + "&end=" + end;
-    fetch(urlToRequest)
+    const url = formatUrl(getNotificationsUrl, [], {mode: 2, start: start, end: end});
+    fetch(url)
       .then(resp => resp.json()
       .then(data => {
         let merging = merge(listNotifs, data);
@@ -58,18 +62,14 @@ function NotificationMenu(props): JSX.Element {
     let sn = props.sn;
     let n = sn.notification;
 
-    async function makeRequest() {
-      const urlToRequest = notifications_url + "?notif_id=" + n.id;
-      return axios.post(urlToRequest, {});
-    }
-
     async function updateSeen(event: React.MouseEvent<HTMLLinkElement>) {
       // update the seen property
       event.stopPropagation();
       var previous = sn.seen;
       sn.seen = null;
       setNotifOnLoad(true);
-      makeRequest()
+      const url = formatUrl(manageNotificationUrl, [n.id]);
+      axios.post(url, {})
         .then(resp => {
           // mettre à jour la liste des notifs
           sn.seen = resp.data;
@@ -92,7 +92,8 @@ function NotificationMenu(props): JSX.Element {
       if (sn.seen) {
         window.open(n.url, "_self");
       } else {
-        makeRequest().finally(() => window.open(n.url, "_self"));
+        const url = formatUrl(manageNotificationUrl, [n.id]);
+        axios.post(url, {}).finally(() => window.open(n.url, "_self"));
       }
     }
 

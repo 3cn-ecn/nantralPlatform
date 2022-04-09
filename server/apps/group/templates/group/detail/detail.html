@@ -6,6 +6,7 @@
 
 {% block head %}
     <meta name="description" CONTENT="{{object.summary}} - {{object.name}} ({{object.alt_name}}) - Centrale Nantes">
+    <meta name="page" content="{{object.full_slug}}">
 {% endblock %}
 
 {% block banniere %}
@@ -185,7 +186,6 @@
     const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
     const isAdmin = {{ is_admin|yesno:"true,false,false" }};
     const membersURL = "{% url object.app|add:'_api:list-members' %}?slug={{ object.slug }}";
-    const subscriptionURL = "{% url 'notification_api:subscription' %}?slug={{ object.full_slug }}";
 </script>
 <script src='{% static "js/eventsView.js" %}'></script>
 <script src='{% static "js/groupMembers.js" %}'></script>

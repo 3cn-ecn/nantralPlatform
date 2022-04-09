@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import { Spinner, Button } from "react-bootstrap";
-import axios from "axios";
+import axios from "../utils/axios";
 
 import { spinnerDivStyle, spinnerStyle } from "../club/clubsList/styles";
 import { Member } from "./groupMembers/interfaces";
@@ -9,8 +9,8 @@ import { EditGroupMembersModal } from "./editGroupMembers/editGroupMembersModal"
 import { AddGroupMembersModal } from "./editGroupMembers/addGroupMembersModal";
 import { getMembers } from "./groupMembers/utils";
 
-axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
+
 
 declare const membersURL: string;
 declare const studentsURL: string;

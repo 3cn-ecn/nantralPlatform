@@ -7,17 +7,22 @@ app_name = 'notification_api'
 urlpatterns = [
 	path(
 		'register', 
-		ReisterAPIView.as_view(), 
+		RegisterAPIView.as_view(), 
 		name='register'
 	),
 	path(
-		'subscription', 
+		'subscription/<slug:page>', 
 		SubscriptionAPIView.as_view(), 
 		name='subscription'
 	),
 	path(
-		'my_notifications', 
-		NotificationAPIView.as_view(),
-		name='my_notifications'
+		'get_notifications', 
+		GetNotificationsAPIView.as_view(),
+		name='get_notifications'
+	),
+	path(
+		'notification/<int:notif_id>',
+		ManageNotificationAPIView.as_view(),
+		name="manage_notification"
 	)
 ]
