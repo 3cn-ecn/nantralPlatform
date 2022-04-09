@@ -50,6 +50,12 @@ class HomeView(LoginRequiredMixin, TemplateView):
             publication_date__gte=publication_date).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
+        context['ariane'] = [
+            {
+                'target': '#',
+                'label': 'Accueil'
+            }
+        ]
         return context
 
 
