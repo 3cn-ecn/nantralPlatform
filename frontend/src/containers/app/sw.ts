@@ -9,10 +9,6 @@ import {CacheableResponsePlugin} from 'workbox-cacheable-response';
 import {ExpirationPlugin} from 'workbox-expiration';
 import axios from "../utils/axios";
 
-// configure axios
-
-
-
 // disable dev logs
 declare var self: ServiceWorkerGlobalScope;
 declare global {interface ServiceWorkerGlobalScope {__WB_DISABLE_DEV_LOGS: boolean;}}

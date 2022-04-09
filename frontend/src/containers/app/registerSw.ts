@@ -1,5 +1,5 @@
 import {initializeApp} from "firebase/app";
-import messaging from "firebase/messaging";
+import {getMessaging, getToken} from "firebase/messaging";
 
 import axios from "../utils/axios";
 import {registerUrl} from "../notification/api_urls";
@@ -16,6 +16,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
 
 
 /**
@@ -75,9 +76,13 @@ const subscribe = async (reg) => {
 
   const sub = await reg.pushManager.subscribe(options);
   
-  messaging.getToken({vapidKey: key}).then(currentToken =>
-    sendSubData(sub, currentToken)
-  );
+  getToken(messaging, {vapidKey: key}).then(currentToken => {
+    if (currentToken) {
+      sendSubData(sub, currentToken);
+    } else {
+      console.log("No registration token available");
+    }
+  });
 
 };
 

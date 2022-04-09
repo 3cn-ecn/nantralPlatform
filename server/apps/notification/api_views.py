@@ -14,9 +14,9 @@ from .serializers import SentNotificationSerializer
 class SubscriptionAPIView(APIView):
     """API endpoint to get, add or delete subscriptions.
 
-    Attributes
-    ----------
-    page : slug (in URL)
+    Path Parameters
+    ---------------
+    page : slug
         The page we want to manage the subscription.
 
     Methods
@@ -71,16 +71,18 @@ class SubscriptionAPIView(APIView):
 
 
 class GetNotificationsAPIView(APIView):
-    """API endpoint to get all sent notifications of a user.
+    """API endpoint to get all notifications sent to a user.
     
-    Attributes
-    ----------
-    mode : int (as GET attribute)
+    Query Paramaters
+    ----------------
+    mode : int
         Indicate the mode: 1 for counting notifications, 2 for getting content
-    sub : boolean (as GET attribute, optional)
+    sub : boolean (optional)
         Indicate if we get only the notifications from pages user has subscribed
+        or from all pages.
         Default to False
-    nbStart : int AND nbEnd : int (as GET attributes, optionals)
+    nbStart : int (optional)
+    nbEnd : int (optional)
         For mode 2 only. Indicate the range of notifications we want to load.
         Default to [0, 20].
     
@@ -130,11 +132,14 @@ class GetNotificationsAPIView(APIView):
 class ManageNotificationAPIView(APIView):
     """API endpoint to mark or unmark a SentNotification of a user as seen.
     
-    Attributes
-    ----------
-    id : int (in URL)
+    Path Parameters
+    ---------------
+    id : int
         The id of the notification object to mark
-    markAsSeen : boolean (as GET attribute, optional)
+    
+    Query Parameters
+    ----------------
+    markAsSeen : boolean (optional)
         Indicate if we must force the notifications to be marked as seen
         Default to false
     

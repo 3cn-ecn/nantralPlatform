@@ -15,6 +15,7 @@ urlpatterns = [
     path('413', handler413),
     path('500', handler500),
     path('sw.js', service_worker),
+    path('firebase-messaging-sw.js', firebase_service_worker),
     path('offline.html', offline_view),
     path('doihavetologin', DoIHaveToLoginView.as_view())
 ]
