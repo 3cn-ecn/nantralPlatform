@@ -146,8 +146,8 @@ class ManageNotificationAPIView(APIView):
     Methods
     -------
     POST
-        Mark if not marked or unmarked if already marked a notification as seen 
-        for the authentificated user.
+        Mark if not marked (or unmarked if already marked and markAsSeen is
+        false) a notification as seen by the authentificated user.
     """
     permission_classes = [permissions.IsAuthenticated]
 
