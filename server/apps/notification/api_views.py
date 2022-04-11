@@ -1,7 +1,7 @@
 from django.db.utils import IntegrityError
 from django.http import JsonResponse
 
-from push_notifications.models import GCMDevice
+from push_notifications.models import WebPushDevice
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -180,9 +180,9 @@ class RegisterAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
-        object, created = GCMDevice.objects.get_or_create(
+        object, created = WebPushDevice.objects.get_or_create(
             registration_id = request.data.get('registration_id'),
-            cloud_message_type = 'FCM',
+            cloud_message_type = 'WP',
             user = request.user,
         )
         data = {

@@ -3,7 +3,7 @@ import json
 from django.db import models
 from django.utils import timezone
 
-from push_notifications.models import GCMDevice
+from push_notifications.models import WebPushDevice
 
 from apps.utils.slug import get_object_from_full_slug
 from apps.student.models import Student
@@ -100,16 +100,12 @@ class Notification(models.Model):
                 sub_receivers = receivers.filter(
                     subscription_set__page = self.owner
                 )
-                # sub_receivers = Subscription.objects.filter(
-                #     page = self.owner,
-                #     student__in = receivers
-                # ).student
             SentNotification.objects.filter(
                 student__in = sub_receivers,
                 notification = self
             ).update(subscribed=True)
             # then send the notification to users' devices
-            devices = GCMDevice.objects.filter(
+            devices = WebPushDevice.objects.filter(
                 user__student__in = sub_receivers
             )
             message = json.dumps({
