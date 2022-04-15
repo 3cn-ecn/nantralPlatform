@@ -180,26 +180,27 @@ self.addEventListener('push', function (event: PushEvent) {
   }
 });
 
+
 // react to click on a notification
-self.addEventListener('notificationclick', function(event) {
+self.addEventListener('notificationclick', async function(event) {
   const notif = event.notification;
-  // open the notification
-  if (event.action === 'action1') {
-    self.clients.openWindow(notif.data.action1_url);
-  } else if (event.action == 'action2') {
-    self.clients.openWindow(notif.data.action2_url);
+  // check if we click on an action button
+  const action = event.action.match(/^action_(\d)$/);
+  if (action != null) {
+    const id = action[1];
+    self.clients.openWindow(notif.data.actions_url[id]);
   } else {
     // User selected (e.g., clicked in) the main body of notification.
     self.clients.openWindow(notif.data.url);
   }
 
-  // mark it as read
+  // mark the notification as read
   var urlToRequest = formatUrl(
     MANAGE_NOTIFICATION_URL, 
     [notif.tag], 
     {markAsSeen: true}
   );
-  axios.post(urlToRequest, {});
+  await axios.post(urlToRequest, {});
 
   // close the notification
   event.notification.close();

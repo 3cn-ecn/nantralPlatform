@@ -78,17 +78,21 @@ class Notification(models.Model):
                 'body': self.body,
                 'data': {
                     'url': self.url,
+                    'actions_url': [
+                        action.url
+                        for action in self.actions
+                    ]
                 },
                 'icon': self.icon_url,
                 'image': self.image_url,
                 'tag': self.id,
                 'actions': [
                     {
-                        'action': action.url,
+                        'action': f'action_{i}',
                         'title': action.title,
                         'icon': action.icon
                     }
-                    for action in self.actions
+                    for i, action in enumerate(self.actions)
                 ],
                 'timestamp': self.date
             }

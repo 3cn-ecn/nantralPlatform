@@ -22,6 +22,9 @@ def send_webpush_notification(students: QuerySet, message: dict) -> None:
         https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification
         Please note that title must be placed in the same dict as options in our
         case, for simplicity.
+        You can also use the key "hidden": if true, you can send a notification
+        to a user but it won't be shown to him (useful for incrementing the
+        badge for example).
     
     Returns
     -------
