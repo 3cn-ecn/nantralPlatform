@@ -44,30 +44,15 @@ class BaseEvent(AbstractPost):
         return student in self.participants.all()
 
     def save(self, *args, **kwargs):
-        # we save first the event, in case the notification don't work
+        # create the slug
         self.set_slug(
             f'{self.date.year}-{self.date.month}-{self.date.day}-{self.title}'
         )
-        super(BaseEvent, self).save(*args, **kwargs)
         # save the notification
-        if not self.notification:
-            self.notification = Notification()
-        self.notification.title = self.get_group_name
-        self.notification.body = f'Nouvel event : {self.title}'
-        self.notification.url = self.get_absolute_url()
-        self.notification.owner = self.group
-        self.notification.publicity = self.publicity
-        self.notification.date = self.publication_date
-        if self.image:
-            self.notification.image_url = self.image.url
-        try:
-            print("try")
-            icon_path = get_object_from_full_slug(self.group).logo.url
-            print(icon_path)
-            self.notification.icon_url = icon_path
-        except:
-            pass
-        self.notification.save()
+        self.set_notification(
+            title = self.get_group_name,
+            body = f'Nouvel event : {self.title}')
+        # save again the event
         super(BaseEvent, self).save(*args, **kwargs)
 
 

@@ -183,7 +183,6 @@ class RegisterAPIView(APIView):
         already_registered = WebPushDevice.objects.filter(
             registration_id = request.data.get('registration_id')).exists()
         data = {'result': False}
-        print(already_registered)
         if not already_registered:
             WebPushDevice.objects.create(
                 registration_id=request.data.get('registration_id'),

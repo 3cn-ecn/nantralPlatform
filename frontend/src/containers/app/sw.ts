@@ -148,8 +148,8 @@ setCatchHandler(async ({request}) => {
 /// MANAGE NOTIFICATION RECEPTION ///
 /////////////////////////////////////
 
-// listen to knew notifications
-self.addEventListener('push', function (event:PushEvent) {
+// listen to new notifications
+self.addEventListener('push', function (event: PushEvent) {
   console.log("Received a new message! ");
   console.log(event.data);
   try {
@@ -162,15 +162,13 @@ self.addEventListener('push', function (event:PushEvent) {
     } as any;
   }
 
-  // Keep the service worker alive until the notification is created.
-  event.waitUntil(
-      self.registration.showNotification(message.title, {
-          body: message.body,
-          icon: message.icon || '/static/img/logo.svg',
-          image: message.image,
-          data: message.data
-      })
-  );
+  // send a notification, except if we explicitly say it must not be sent
+  if (!message.hidden) {
+    // Keep the service worker alive until the notification is created.
+    event.waitUntil(
+      self.registration.showNotification(message.title, message)
+    );
+  }
 
   // set a badge
   let nav = navigator as any;

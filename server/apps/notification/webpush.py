@@ -12,21 +12,20 @@ def send_webpush_notification(students: QuerySet, message: dict) -> None:
     
     Parameters
     ----------
+
     students : QuerySet<Student>
         A list of students
+    
     message : dict
-        A message to send, as a dict, with the following structure:
-        {
-            'title': <string>,
-            'body': <string>,
-            'icon': <string>,
-            'image': <string>,
-            'data': {
-                'url': <string>,
-                'action1_url': <string>,
-                'action2_url': <string>
-            }
-        }
+        A message to send, as a dict, with the structure of the "options"
+        parameter of a notification:
+        https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration/showNotification
+        Please note that title must be placed in the same dict as options in our
+        case, for simplicity.
+    
+    Returns
+    -------
+    None
     """
     
     # get devices from studends
