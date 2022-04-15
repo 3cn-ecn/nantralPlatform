@@ -180,14 +180,17 @@ class RegisterAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
-        object, created = WebPushDevice.objects.create(
-            registration_id=request.GET.get('registration_id'),
-            p256dh=request.GET.get('p256dh'),
-            auth=request.GET.get('auth'),
-            browser=request.GET.get('browser'),
-            user=request.user,
-        )
-        data = {
-            'result': created
-        }
+        already_registered = WebPushDevice.objects.filter(
+            registration_id = request.data.get('registration_id')).exists()
+        data = {'result': False}
+        print(already_registered)
+        if not already_registered:
+            WebPushDevice.objects.create(
+                registration_id=request.data.get('registration_id'),
+                p256dh=request.data.get('p256dh'),
+                auth=request.data.get('auth'),
+                browser=request.data.get('browser'),
+                user=request.user,
+            )
+            data ['result'] = True
         return JsonResponse(data)

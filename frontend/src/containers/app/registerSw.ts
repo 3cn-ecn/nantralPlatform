@@ -10,7 +10,7 @@ export default function registerSw() {
     // The service worker has to store in the root of the app
     // http://stackoverflow.com/questions/29874068/navigator-serviceworker-is-never-ready
     var browser = loadVersionBrowser();
-    navigator.serviceWorker.register('navigatorPush.service.js?version=1.0.0').then(function (reg) {
+    navigator.serviceWorker.register('/sw.js').then(function (reg) {
       reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(WP_PUBLIC_KEY)
@@ -21,7 +21,6 @@ export default function registerSw() {
           'browser': browser.name.toUpperCase(),
           'p256dh': btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('p256dh')))),
           'auth': btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('auth')))),
-          'name': 'XXXXX',
           'registration_id': registration_id
         };
         sendSubscriptionData(data);

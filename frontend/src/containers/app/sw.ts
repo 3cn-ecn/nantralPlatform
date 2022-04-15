@@ -150,16 +150,17 @@ setCatchHandler(async ({request}) => {
 
 // listen to knew notifications
 self.addEventListener('push', function (event:PushEvent) {
-  // only for tests
-  event.waitUntil(
-    self.registration.showNotification("Nouvelle notif test !!!", {})
-  );
-  // Retrieve the textual payload from event.data (a PushMessageData object).
-  // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
-  // on https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData.
-  const eventInfo = event.data.text();
-  console.log(eventInfo);
-  const message = JSON.parse(eventInfo);
+  console.log("Received a new message! ");
+  console.log(event.data);
+  try {
+    // Push is a JSON
+    var message = event.data.json();
+  } catch (err) {
+    // Push is a simple text
+    var message = {
+      'title': event.data.text(),
+    } as any;
+  }
 
   // Keep the service worker alive until the notification is created.
   event.waitUntil(

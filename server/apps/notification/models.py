@@ -1,10 +1,7 @@
-import json
-
 from django.db import models
 from django.utils import timezone
 
-from push_notifications.models import WebPushDevice
-
+from apps.notification.utils import send_webpush_notification
 from apps.utils.slug import get_object_from_full_slug
 from apps.student.models import Student
 
@@ -105,10 +102,7 @@ class Notification(models.Model):
                 notification = self
             ).update(subscribed=True)
             # then send the notification to users' devices
-            devices = WebPushDevice.objects.filter(
-                user__student__in = sub_receivers
-            )
-            message = json.dumps({
+            message = {
                 'title': self.title,
                 'body': self.body,
                 'icon': self.icon_url,
@@ -118,8 +112,8 @@ class Notification(models.Model):
                     'action1_url': self.action1_url,
                     'action2_url': self.action2_url
                 }
-            })
-            devices.send_message(message)
+            }
+            send_webpush_notification(sub_receivers, message)
     
     @property
     def nbTargets(self, *args, **kwargs):
