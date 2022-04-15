@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import ReactDOM, { render } from "react-dom";
-import {Spinner, Dropdown, Button} from "react-bootstrap";
+import { Spinner, Dropdown, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons'
 
 import axios from "../utils/axios";
 import formatUrl from "../utils/formatUrl";
 
-import {SentNotification} from "./interfaces";
+import { SentNotification } from "./interfaces";
 import merge from "./utils";
-import {getNotificationsUrl, manageNotificationUrl} from "./api_urls";
+import { GET_NOTIFICATIONS_URL, MANAGE_NOTIFICATION_URL } from "./api_urls";
 
 
 /**
@@ -32,7 +32,7 @@ function NotificationMenu(props): JSX.Element {
   }
 
   async function getNbNotifs(): Promise<void> {
-    const url = formatUrl(getNotificationsUrl, [], {mode: 1});
+    const url = formatUrl(GET_NOTIFICATIONS_URL, [], {mode: 1});
     fetch(url)
       .then(resp => resp.json().then(
         data => setNbNotifs(data)
@@ -44,7 +44,7 @@ function NotificationMenu(props): JSX.Element {
     setOnLoad(true);
     const start = listNotifs.length;
     const end = start + step;
-    const url = formatUrl(getNotificationsUrl, [], {mode: 2, start: start, end: end});
+    const url = formatUrl(GET_NOTIFICATIONS_URL, [], {mode: 2, start: start, end: end});
     fetch(url)
       .then(resp => resp.json()
       .then(data => {
@@ -68,7 +68,7 @@ function NotificationMenu(props): JSX.Element {
       var previous = sn.seen;
       sn.seen = null;
       setNotifOnLoad(true);
-      const url = formatUrl(manageNotificationUrl, [n.id]);
+      const url = formatUrl(MANAGE_NOTIFICATION_URL, [n.id]);
       axios.post(url, {})
         .then(resp => {
           // mettre à jour la liste des notifs
@@ -92,7 +92,7 @@ function NotificationMenu(props): JSX.Element {
       if (sn.seen) {
         window.open(n.url, "_self");
       } else {
-        const url = formatUrl(manageNotificationUrl, [n.id]);
+        const url = formatUrl(MANAGE_NOTIFICATION_URL, [n.id]);
         axios.post(url, {}).finally(() => window.open(n.url, "_self"));
       }
     }

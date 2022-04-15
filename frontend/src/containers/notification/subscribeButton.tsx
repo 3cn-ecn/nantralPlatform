@@ -5,10 +5,10 @@ import {Button, Spinner} from "react-bootstrap";
 import axios from "../utils/axios";
 import formatUrl from "../utils/formatUrl";
 
-import {subscriptionUrl} from "./api_urls";
+import { SUBSCRIPTION_URL } from "./api_urls";
 
 const page_slug = (document.querySelector('meta[name="page"]') as HTMLMetaElement).content;
-const subscriptionPageUrl = formatUrl(subscriptionUrl, [page_slug]);
+const subscriptionPageUrl = formatUrl(SUBSCRIPTION_URL, [page_slug]);
 
 
 /**
