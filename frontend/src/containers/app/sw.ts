@@ -150,6 +150,10 @@ setCatchHandler(async ({request}) => {
 
 // listen to knew notifications
 self.addEventListener('push', function (event:PushEvent) {
+  // only for tests
+  event.waitUntil(
+    self.registration.showNotification("Nouvelle notif test !!!", {})
+);
   // Retrieve the textual payload from event.data (a PushMessageData object).
   // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
   // on https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData.
