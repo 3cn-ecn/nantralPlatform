@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 
 from apps.notification.webpush import send_webpush_notification
-from apps.utils.slug import get_object_from_full_slug
 from apps.student.models import Student
 
 
@@ -44,6 +43,7 @@ class Notification(models.Model):
     title = models.CharField('Titre', max_length=255)
     body = models.CharField('Corps', max_length=512)
     url = models.CharField('Cible', max_length=512)
+    sender = models.SlugField('Expéditeur', max_length=50)
     icon_url = models.CharField(max_length=512, blank=True, null=True)
     image_url = models.CharField(max_length=512, blank=True, null=True)
     date = models.DateTimeField('Date de création', default=timezone.now)
@@ -54,7 +54,7 @@ class Notification(models.Model):
     def __str__(self):
         return f'{self.title} - {self.body}'[:100]
     
-    def save(self, *args, **kwargs):
+    def save(self, receivers, *args, **kwargs):
         """Sauver la notif et ajouter des destinataires"""
         is_created = not self.id
         super().save(*args, **kwargs)
@@ -62,11 +62,12 @@ class Notification(models.Model):
         if is_created:
             # select the receivers who have subscribed and will receive the
             # notification
+            self.receivers.add(*receivers)
             if self.high_priority:
                 sub_receivers = self.receivers
             else: 
                 sub_receivers = self.receivers.filter(
-                    subscription_set__page = self.owner
+                    subscription_set__page = self.sender
                 )
             SentNotification.objects.filter(
                 student__in = sub_receivers,
@@ -80,11 +81,12 @@ class Notification(models.Model):
                     'url': self.url,
                     'actions_url': [
                         action.url
-                        for action in self.actions
+                        for action in self.actions.all()
                     ]
                 },
                 'icon': self.icon_url,
                 'image': self.image_url,
+                'badge': '/static/favicon/monochrome/96.png',
                 'tag': self.id,
                 'actions': [
                     {
@@ -92,9 +94,8 @@ class Notification(models.Model):
                         'title': action.title,
                         'icon': action.icon
                     }
-                    for i, action in enumerate(self.actions)
-                ],
-                'timestamp': self.date
+                    for i, action in enumerate(self.actions.all())
+                ]
             }
             send_webpush_notification(sub_receivers, message)
     

@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 
-from django.utils.text import slugify
 from django.shortcuts import get_object_or_404, reverse
 from django.contrib.auth.models import User
 
@@ -39,8 +38,8 @@ class AbstractPost(models.Model, SlugModel):
     description = CKEditor5Field(
         verbose_name='Texte de l\'annonce', blank=True)
     group = models.SlugField(verbose_name='Groupe publiant l\'annonce')
-    slug = models.SlugField(
-        verbose_name='Slug de l\'annonce', unique=True, null=True)
+    slug = models.SlugField(verbose_name='Slug de l\'annonce', 
+        unique=True, null=True)
     color = models.CharField(max_length=200, verbose_name='Couleur de fond',
                              choices=COLORS, null=True, default='primary')
     publicity = models.CharField(
@@ -111,13 +110,13 @@ class AbstractPost(models.Model, SlugModel):
         n.title = title
         n.body = body
         n.url = self.get_absolute_url()
-        n.receivers.add(*self.get_receivers())
+        n.sender = self.group
         n.date = self.publication_date
         if self.image: n.image_url = self.image.url
         try: n.icon_url = self.get_group.logo.url
         except Exception: pass
-        # save the notification
-        n.save()
+        # save the notification with receivers
+        n.save(self.get_receivers())
         # add actions to the notification
         NotificationAction.objects.create(
             notification = n,
