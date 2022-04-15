@@ -4,7 +4,6 @@ var apps_dir = path.join(__dirname, "../src/containers")
 module.exports = {
   entry: {
     sw:                     path.join(apps_dir, "app/sw.ts"),
-    'firebase-messaging-sw':path.join(apps_dir, "app/firebase-messaging-sw.ts"),
     app:                    path.join(apps_dir, "app/app.ts"),
     clubsList:              path.join(apps_dir, "club/clubsList.tsx"),
     eventsGroupListUpdate:  path.join(apps_dir, "group/eventsGroupListUpdate.tsx"),

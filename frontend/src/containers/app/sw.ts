@@ -5,9 +5,17 @@ import {
   CacheFirst,
   NetworkOnly
 } from 'workbox-strategies';
-import {CacheableResponsePlugin} from 'workbox-cacheable-response';
-import {ExpirationPlugin} from 'workbox-expiration';
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
+import { ExpirationPlugin } from 'workbox-expiration';
+
+import { MANAGE_NOTIFICATION_URL } from '../notification/api_urls';
+import formatUrl from '../utils/formatUrl';
 import axios from "../utils/axios";
+
+
+//////////////////////////////////
+/// CACHE MANAGER WITH WORKBOX ///
+//////////////////////////////////
 
 // disable dev logs
 declare var self: ServiceWorkerGlobalScope;
@@ -75,7 +83,6 @@ registerRoute(
   })
 );
 
-
 // cache the home and main pages to accelerate navigation
 registerRoute(
   ({url}) => url.pathname === '' ||
@@ -99,13 +106,13 @@ registerRoute(
   })
 )
 
-// pages à ne surtout pas cacher
+// pages we do NOT want to be cached
 registerRoute(
   ({url}) => url.pathname === '/amiconnected',
   new NetworkOnly({})
 )
 
-// par défaut privilégier le réseau, mais utiliser le cache si hors-connexion
+// default settings: always use the network first, and then the cache if offline
 setDefaultHandler(
   new NetworkFirst({
     cacheName: "default-cache",
@@ -118,19 +125,15 @@ setDefaultHandler(
   })
 );
 
-
-
-// Page Hors-Connexion
+// Save offline page when installing the app
 const CACHE_NAME = 'offline-html';
 const FALLBACK_HTML_URL = '/offline.html';
-
 self.addEventListener('install', async (event:ExtendableEvent) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => cache.add(FALLBACK_HTML_URL))
   );
 });
-
 setCatchHandler(async ({request}) => {
   if (request.destination == 'document') {
     return caches.match(FALLBACK_HTML_URL);
@@ -139,7 +142,13 @@ setCatchHandler(async ({request}) => {
   return Response.error();
 });
 
-// Receiving notifications
+
+
+/////////////////////////////////////
+/// MANAGE NOTIFICATION RECEPTION ///
+/////////////////////////////////////
+
+// listen to knew notifications
 self.addEventListener('push', function (event:PushEvent) {
   // Retrieve the textual payload from event.data (a PushMessageData object).
   // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
@@ -168,11 +177,7 @@ self.addEventListener('push', function (event:PushEvent) {
   }
 });
 
-
-// use the notification url
-declare const notifications_url: string;
-
-// react to clicking on a notification
+// react to click on a notification
 self.addEventListener('notificationclick', function(event) {
   const notif = event.notification;
   // open the notification
@@ -186,9 +191,11 @@ self.addEventListener('notificationclick', function(event) {
   }
 
   // mark it as read
-  var urlToRequest = notifications_url
-  urlToRequest += "?notif_id=" + notif.tag;
-  urlToRequest += "&mark_read=true";
+  var urlToRequest = formatUrl(
+    MANAGE_NOTIFICATION_URL, 
+    [notif.tag], 
+    {markAsSeen: true}
+  );
   axios.post(urlToRequest, {});
 
   // close the notification
