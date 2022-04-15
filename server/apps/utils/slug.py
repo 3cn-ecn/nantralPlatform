@@ -32,7 +32,6 @@ gérées automatiquement mais peuvent être réécrites si besoin.
 
 """
 
-from typing import Union
 from importlib import import_module
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
