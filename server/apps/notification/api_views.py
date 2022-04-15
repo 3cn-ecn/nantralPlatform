@@ -180,10 +180,12 @@ class RegisterAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
-        object, created = WebPushDevice.objects.get_or_create(
-            registration_id = request.data.get('registration_id'),
-            cloud_message_type = 'WP',
-            user = request.user,
+        object, created = WebPushDevice.objects.create(
+            registration_id=request.GET.get('registration_id'),
+            p256dh=request.GET.get('p256dh'),
+            auth=request.GET.get('auth'),
+            browser=request.GET.get('browser'),
+            user=request.user,
         )
         data = {
             'result': created
