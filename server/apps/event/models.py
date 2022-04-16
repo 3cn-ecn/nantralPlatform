@@ -49,7 +49,7 @@ class BaseEvent(AbstractPost):
             f'{self.date.year}-{self.date.month}-{self.date.day}-{self.title}'
         )
         # save the notification
-        self.set_notification(
+        self.create_notification(
             title = self.get_group_name,
             body = f'Nouvel event : {self.title}')
         # save again the event

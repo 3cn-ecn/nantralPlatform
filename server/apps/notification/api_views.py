@@ -84,7 +84,7 @@ class GetNotificationsAPIView(APIView):
     nbStart : int (optional)
     nbEnd : int (optional)
         For mode 2 only. Indicate the range of notifications we want to load.
-        Default to [0, 20].
+        Default to [0, 20[].
     
     Methods
     -------

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from apps.notification.webpush import send_webpush_notification
+from .webpush import send_webpush_notification
 from apps.student.models import Student
 
 
@@ -43,54 +43,52 @@ class Notification(models.Model):
     high_priority = models.BooleanField('Prioritaire', default=False)
     receivers = models.ManyToManyField(
         Student, related_name='notification_set', through='SentNotification')
+    sent = models.BooleanField('Envoyé', default=False)
 
     def __str__(self):
         return f'{self.title} - {self.body}'[:100]
     
-    def save(self, receivers, *args, **kwargs):
+    def send(self):
         """Sauver la notif et ajouter des destinataires"""
-        is_created = not self.id
-        super().save(*args, **kwargs)
-        # if the notification is just created, then send it
-        if is_created:
-            # select the receivers who have subscribed and will receive the
-            # notification
-            self.receivers.add(*receivers)
-            if self.high_priority:
-                sub_receivers = self.receivers
-            else: 
-                sub_receivers = self.receivers.filter(
-                    subscription_set__page = self.sender
-                )
-            SentNotification.objects.filter(
-                student__in = sub_receivers,
-                notification = self
-            ).update(subscribed=True)
-            # then send the notification to users' devices
-            message = {
-                'title': self.title,
-                'body': self.body,
-                'data': {
-                    'url': self.url,
-                    'actions_url': [
-                        action.url
-                        for action in self.actions.all()
-                    ]
-                },
-                'icon': self.icon_url,
-                'image': self.image_url,
-                'badge': '/static/favicon/monochrome/96.png',
-                'tag': self.id,
-                'actions': [
-                    {
-                        'action': f'action_{i}',
-                        'title': action.title,
-                        'icon': action.icon
-                    }
-                    for i, action in enumerate(self.actions.all())
+        # select the receivers who have subscribed and will receive the
+        # notification
+        if self.high_priority:
+            sub_receivers = self.receivers
+        else: 
+            sub_receivers = self.receivers.filter(
+                subscription_set__page = self.sender
+            )
+        SentNotification.objects.filter(
+            student__in = sub_receivers,
+            notification = self
+        ).update(subscribed=True)
+        # then send the notification to users' devices
+        message = {
+            'title': self.title,
+            'body': self.body,
+            'data': {
+                'url': self.url,
+                'actions_url': [
+                    action.url
+                    for action in self.actions.all()
                 ]
-            }
-            send_webpush_notification(sub_receivers, message)
+            },
+            'icon': self.icon_url,
+            'image': self.image_url,
+            'badge': '/static/favicon/monochrome/96.png',
+            'tag': self.id,
+            'actions': [
+                {
+                    'action': f'action_{i}',
+                    'title': action.title,
+                    'icon': action.icon
+                }
+                for i, action in enumerate(self.actions.all())
+            ]
+        }
+        send_webpush_notification(sub_receivers, message)
+        self.sent = True
+        self.save()
     
     @property
     def nbTargets(self, *args, **kwargs):

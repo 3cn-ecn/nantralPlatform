@@ -99,35 +99,34 @@ class AbstractPost(models.Model, SlugModel):
         return Student.objects.none()
     
 
-    def set_notification(self, title, body):
-        """Create or update the notification"""
+    def create_notification(self, title, body):
+        """Create a new notification for this post"""
         # create or get the notification linked to this post
-        if not self.notification:
-            self.notification = n = Notification()
-        else: 
-            n = self.notification
-        # fill the fields
-        n.title = title
-        n.body = body
-        n.url = self.get_absolute_url()
-        n.sender = self.group
-        n.date = self.publication_date
-        if self.image: n.image_url = self.image.url
-        try: n.icon_url = self.get_group.logo.url
-        except Exception: pass
-        # save the notification with receivers
-        n.save(self.get_receivers())
+        if self.notification: return
+        self.notification = Notification.objects.create(
+            title = title,
+            body = body,
+            url = self.get_absolute_url(),
+            sender = self.group,
+            date = self.publication_date,
+            image_url = self.image.url if self.image else None,
+            icon_url = self.get_group.logo.url if self.get_group.logo else None
+        )
+        # add receivers
+        self.notification.receivers.add(*self.get_receivers())
         # add actions to the notification
         NotificationAction.objects.create(
-            notification = n,
+            notification = self.notification,
             title = "Ouvrir",
-            url = n.url
+            url = self.notification.url
         )
         NotificationAction.objects.create(
-            notification = n,
+            notification = self.notification,
             title = "Gérer",
             url = reverse("notification:settings")
         )
+        # send the notification
+        self.notification.send()
 
 
 
@@ -141,7 +140,7 @@ class Post(AbstractPost):
             f'{d.year}-{d.month}-{d.day}-{self.title}'
         )
         # save the notification
-        self.set_notification(
+        self.create_notification(
             title = self.get_group_name, 
             body = self.title)
         # save agin the post
