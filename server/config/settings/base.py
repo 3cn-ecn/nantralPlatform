@@ -223,6 +223,7 @@ TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
 
 # Push notifications settings - see django-push-notifications on github
 PUSH_NOTIFICATIONS_SETTINGS = {
+    'WP_PUBLIC_KEY': env('WP_PUBLIC_KEY', default=''),
     'WP_PRIVATE_KEY': env('WP_PRIVATE_KEY', default=''),
     'WP_CLAIMS': {'sub': 'mailto:' + env('WP_ADMIN_EMAIL', default='')}
 }

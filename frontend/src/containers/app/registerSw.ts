@@ -2,10 +2,9 @@ import axios from "../utils/axios";
 import { REGISTER_URL } from "../notification/api_urls";
 import { urlBase64ToUint8Array, loadVersionBrowser } from "./utils";
 
-const WP_PUBLIC_KEY = "BJoJqOyJq9p7WNxjnLUEhE4qIRoGLfl-OV4Kcbf2vFp0mHgiOxGBZ46eB8M4HNCvshh4mzGyQpInzBByLffl1lI";
-
 // In your ready listener
 export default function registerSw() {
+  const WP_PUBLIC_KEY = getPublicKey();
   if ('serviceWorker' in navigator) {
     // The service worker has to store in the root of the app
     // http://stackoverflow.com/questions/29874068/navigator-serviceworker-is-never-ready
@@ -19,8 +18,14 @@ export default function registerSw() {
         var registration_id = endpointParts[endpointParts.length - 1];
         var data = {
           'browser': browser.name.toUpperCase(),
-          'p256dh': btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('p256dh')))),
-          'auth': btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('auth')))),
+          'p256dh': btoa(String.fromCharCode.apply(
+            null, 
+            new Uint8Array(sub.getKey('p256dh'))
+          )),
+          'auth': btoa(String.fromCharCode.apply(
+            null, 
+            new Uint8Array(sub.getKey('auth'))
+          )),
           'registration_id': registration_id
         };
         sendSubscriptionData(data);
@@ -42,4 +47,14 @@ function sendSubscriptionData(data) {
   ).catch((err) => 
     console.log("Fail to register subscription:" + err)
   );
+}
+
+/**
+ * Get the WebPush Public Key from template (base.html)
+ * @returns The VAPID Public Key for WebPush
+ */
+function getPublicKey() {
+  const vapidMeta = document.querySelector('meta[name="vapid-key"]') as HTMLMetaElement;
+  const key = vapidMeta.content;
+  return key;
 }
