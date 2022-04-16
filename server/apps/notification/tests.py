@@ -15,17 +15,10 @@ class TestSubscription(TransactionTestCase, TestMixin):
     def setUp(self):
         self.user_setup()
         self.slug = Club.objects.create(name="Club de test").full_slug
-        self.url = reverse('notification_api:subscription') + "?slug=" + self.slug
+        self.url = reverse('notification_api:subscription', args=self.slug)
         
     def tearDown(self):
         self.user_teardown()
-
-    def test_model_creation(self):
-        "test saving in the database"
-        Subscription.objects.create(
-            student=self.u2.student, page=self.slug)
-        self.assertTrue(Subscription.hasSubscribed(self.slug, self.u2.student))
-        self.assertFalse(Subscription.hasSubscribed(self.slug, self.u3.student))
     
     def test_reading_api(self):
         "test to read subscription states in database"

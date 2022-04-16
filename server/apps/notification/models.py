@@ -28,13 +28,6 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = "Abonnement"
         unique_together = ['student', 'page']
-    
-    @classmethod
-    def hasSubscribed(cls, page, student):
-        """Vérifie si un utilisateur est inscrit en remontant aux pages parentes si besoin"""
-        if cls.objects.filter(page=page, student=student).exists():
-            return True
-        return False
 
 
 
