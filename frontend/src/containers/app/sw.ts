@@ -108,7 +108,7 @@ registerRoute(
 
 // pages we do NOT want to be cached
 registerRoute(
-  ({url}) => url.pathname === '/amiconnected',
+  ({url}) => url.pathname === '/doihavetologin',
   new NetworkOnly({})
 )
 

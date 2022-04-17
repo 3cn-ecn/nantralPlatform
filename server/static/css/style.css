@@ -272,16 +272,25 @@ a.rs:hover span {
 /* PIED DE PAGE HORS-CONNEXION */
 /*-----------------------------*/
 
-#offline-alert footer {
+footer div {
   font-weight: 400;
   font-family: "Heebo";
   font-size: 1.1rem;
-  padding: 1rem 0;
-  margin: 0;
-  text-align: center;
-  background-color: black;
-  color: white;
   position: fixed;
   width: 100%;
   bottom: 0;
+  margin: 0;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+footer div.offline {
+  background-color: black;
+  color: white;
+}
+
+footer div.app-install {
+  background-color: #f3f0f0;
+  color: black;
+  box-shadow: 1px -1px 7px #999;
 }

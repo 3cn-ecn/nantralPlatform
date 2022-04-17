@@ -1,7 +1,7 @@
-import axios from "../utils/axios";
 import registerSw from "./registerSw";
-import loadNotificationMenu from "../notification/notificationMenu";
 import redirectToLoginPage from "./redirectToLoginPage";
+import addAppInstallListener from "./appInstallBanner";
+import loadNotificationMenu from "../notification/notificationMenu";
 //import loadBackButton from "./backButton";
 
 // configure axios
@@ -9,6 +9,7 @@ import redirectToLoginPage from "./redirectToLoginPage";
 
 // load all components
 registerSw();
-loadNotificationMenu();
 redirectToLoginPage();
+addAppInstallListener();
+loadNotificationMenu();
 //loadBackButton();
