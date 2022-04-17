@@ -120,9 +120,9 @@ class Notification(models.Model):
         }
         # finally send the message to the subscribed receivers and get the 
         # success value to know if the task has been successfully launched
-        success = send_webpush_notification(sub_receivers, message)
+        send_webpush_notification(sub_receivers, message)
         # update the notification to register it has been sent
-        self.sent = success
+        self.sent = True
         self.save()
     
     @property

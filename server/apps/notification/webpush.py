@@ -1,10 +1,13 @@
 import kombu
+import logging
 from django.db.models.query import QuerySet
 
 from .tasks import send_webpush_notification_task
 
 
-def send_webpush_notification(students: QuerySet, message: dict) -> bool:
+logger = logging.getLogger(__name__)
+
+def send_webpush_notification(students: QuerySet, message: dict):
     """Send a notification on devices, to several students, with one message,
     by creating a celery task in background.
     
@@ -39,9 +42,11 @@ def send_webpush_notification(students: QuerySet, message: dict) -> bool:
     try:
         send_webpush_notification_task.delay(student_ids, message)
     except kombu.exceptions.OperationalError as err:
-        # if the celery task does not work, send notifications in sync mode
-        print("WARNING: cannot send notifications through celery")
-        print("Celery might not be configured on this machine.")
-        print("Error code:", err)
+        # if the celery task does not work, send notifications in normal mode
+        logger.warning(
+            "WARNING: cannot send notifications through celery. " +
+            "Celery might not be configured on this machine.\n" +
+            "Error code: " + str(err)
+        )
         send_webpush_notification_task(student_ids, message)
 
