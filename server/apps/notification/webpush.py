@@ -36,7 +36,7 @@ def send_webpush_notification(students: QuerySet, message: dict):
 
     # we first convert the queryset of student to a list, because we cannot
     # pass a queryset for an async function with celery
-    student_ids = list(students.values_list('id', flat=True))
+    student_ids = list(students.all().values_list('id', flat=True))
     # then we try to launch the celery task for sending notifications in async
     # mode, so as to continue the process without waiting we have send all
     try:

@@ -15,7 +15,7 @@ class TestSubscription(TransactionTestCase, TestMixin):
     def setUp(self):
         self.user_setup()
         self.slug = Club.objects.create(name="Club de test").full_slug
-        self.url = reverse('notification_api:subscription', kwargs={'slug': self.slug})
+        self.url = reverse('notification_api:subscription', kwargs={'page': self.slug})
         
     def tearDown(self):
         self.user_teardown()
@@ -42,7 +42,7 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.assertTrue(self.client.get(self.url).data)
         # try to subscribe again and check the fail
         resp = self.client.post(self.url)
-        self.assertEqual(resp.status_code, 400)
+        self.assertEqual(resp.status_code, 405)
 
     def test_delete_api(self):
         "test to unsubscribe"
@@ -81,7 +81,7 @@ class TestNotification(TransactionTestCase, TestMixin):
             url = '/', 
             sender = self.club2,
         )
-        Notification.objects.create(
+        n = Notification.objects.create(
             body="Notif de test 2", 
             url = '/', 
             sender = self.club1,
@@ -98,6 +98,6 @@ class TestNotification(TransactionTestCase, TestMixin):
         self.assertEqual(len(resp.data), 1)
         self.assertEqual(resp.data[0]['notification']['body'], "Notif de test 2")
         # test all notifs with limit of 2
-        url = reverse('notification_api:get_notifications') + "?mode=2&sub=False&nbStart=0&nbEnd=2"
+        url = reverse('notification_api:get_notifications') + "?mode=2&sub=False&start=0&nb=2"
         resp = self.client.get(url)
         self.assertEqual(len(resp.data), 2)

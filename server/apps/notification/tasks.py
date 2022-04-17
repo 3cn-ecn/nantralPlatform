@@ -17,7 +17,6 @@ def send_webpush_notification_task(student_ids: List[int], message: dict):
     devices = WebPushDevice.objects.filter(
         user__student__id__in = student_ids
     )
-    print("Devices: ", devices)
     # convert the message in json
     data = json.dumps(message)
     # send the message for each device
@@ -26,7 +25,6 @@ def send_webpush_notification_task(student_ids: List[int], message: dict):
             device.send_message(message=data)
         except WebPushError as e:
             # retrive the server response
-            print(e.args[0])
             result = re.search('Push failed: ([\d]+) ', e.args[0])
             error = int(result.group(1))
             # if device is no longer subscribed, delete it

@@ -53,12 +53,9 @@ class Notification(models.Model):
         return f'{self.title} - {self.body}'[:100]
     
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.add_receivers()
-
-    def add_receivers(self): 
-        """Get the list of all profiles who can see the post, and
+        """Save, and then get the list of all profiles who can see the post, and
         update high_priority field for notification"""
+        super().save(*args, **kwargs)
         # initiate
         page = get_object_from_full_slug(self.sender)
         receivers = Student.objects.none()
@@ -78,12 +75,7 @@ class Notification(models.Model):
                     group=page, admin=True
                 )
         self.receivers.add(*receivers)
-        
-    
-    def send(self):
-        """Sauver la notif et ajouter des destinataires"""
-        # select the receivers who have subscribed and will receive the
-        # notification
+        # then we update the subscribed field for receivers who habe subscribed
         if self.high_priority:
             sub_receivers = self.receivers
         else: 
@@ -94,6 +86,15 @@ class Notification(models.Model):
             student__in = sub_receivers,
             notification = self
         ).update(subscribed=True)
+        # finally we save again because we updated the high_priority field
+        super().save()
+        
+    
+    def send(self):
+        """Sauver la notif et ajouter des destinataires"""
+        # select the receivers who have subscribed and will receive the
+        # notification
+        sub_receivers = self.receivers.filter(sentnotification__subscribed=True)
         # then create the message
         message = {
             'title': self.title,
