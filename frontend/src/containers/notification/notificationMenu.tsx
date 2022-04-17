@@ -25,6 +25,9 @@ function NotificationMenu(props): JSX.Element {
   const [subscribeFilter, setSubscribeFilter] = useState <boolean> (false);
   const [unseenFilter, setUnseenFilter] = useState <boolean> (false);
   const [allLoaded, setAllLoaded] = useState <boolean> (false);
+  const [askPermissionBanner, setAskPermissionBanner] = useState <boolean> (
+    'Notification' in window && Notification.permission === "default" ? true : false
+  )
   const step:number = 10;
 
   if (nbNotifs === null) {
@@ -55,6 +58,11 @@ function NotificationMenu(props): JSX.Element {
       .catch(err => {setOnLoad(false)});
   }
 
+  function askPermission(event): void {
+    Notification.requestPermission().then(() => {
+      setAskPermissionBanner(Notification.permission === "default")
+    });
+  }
 
   // component for one notification in the list
   function NotificationItem(props): JSX.Element {
@@ -142,7 +150,7 @@ function NotificationMenu(props): JSX.Element {
     });
     if (listToShow.length == 0) {
       if (!onLoad) {
-        content = <li><small className="dropdown-item-text">Vous avez tout lu, bravo ! 👏</small></li>;
+        content = <li><small className="dropdown-item-text">Aucune notification 😢</small></li>;
       }
     } else {
       content = listToShow.map((sn) => <NotificationItem key={sn.notification.id} sn={sn}/>)
@@ -155,6 +163,21 @@ function NotificationMenu(props): JSX.Element {
             <a href="/notification/settings" className="ms-auto text-secondary"><FontAwesomeIcon icon={faCog}/></a>
           </h5>
         </li>
+        { askPermissionBanner ?
+          <li className="">
+            <span className="dropdown-item-text bg-dark text-light text-center mt-1 mb-1">
+              <small>Les notifications sont désactivées&nbsp;😢</small>
+              <Button 
+                variant="light" 
+                size="sm" 
+                className="m-1"
+                onClick={askPermission}>
+                Activer
+              </Button>
+            </span>
+          </li>
+          : <></>
+        }
         <li>
           <span className="dropdown-item-text">
             <Button 
