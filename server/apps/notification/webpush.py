@@ -1,11 +1,7 @@
-import json
-import re
-from typing import List
-from celery import shared_task
-from django.db.models.query import QuerySet
-from push_notifications.models import WebPushDevice
-from push_notifications.webpush import WebPushError
 import kombu
+from django.db.models.query import QuerySet
+
+from .tasks import send_webpush_notification_task
 
 
 def send_webpush_notification(students: QuerySet, message: dict) -> bool:
@@ -38,37 +34,14 @@ def send_webpush_notification(students: QuerySet, message: dict) -> bool:
     # we first convert the queryset of student to a list, because we cannot
     # pass a queryset for an async function with celery
     student_ids = list(students.values_list('id', flat=True))
-    # then we execute the async function, so as to not wait the result
+    # then we try to launch the celery task for sending notifications in async
+    # mode, so as to continue the process without waiting we have send all
     try:
-        _send_webpush_notification_async.delay(student_ids, message)
-        return True
+        send_webpush_notification_task.delay(student_ids, message)
     except kombu.exceptions.OperationalError as err:
-        print("WARNING: cannot send notifications")
+        # if the celery task does not work, send notifications in sync mode
+        print("WARNING: cannot send notifications through celery")
         print("Celery might not be configured on this machine.")
         print("Error code:", err)
-        return False
+        send_webpush_notification_task(student_ids, message)
 
-
-@shared_task
-def _send_webpush_notification_async(students_ids: List[int], message: dict):
-    """The celery task for sending notifications to studends."""
-    
-    # get devices from students
-    devices = WebPushDevice.objects.filter(
-        user__student__id__in = students_ids
-    )
-    print("Devices: ", devices)
-    # convert the message in json
-    data = json.dumps(message)
-    # send the message for each device
-    for device in devices:
-        try:
-            device.send_message(message=data)
-        except WebPushError as e:
-            # retrive the server response
-            print(e.args[0])
-            result = re.search('Push failed: ([\d]+) ', e.args[0])
-            error = int(result.group(1))
-            # if device is no longer subscribed, delete it
-            if error in [404, 410]:
-                device.delete()

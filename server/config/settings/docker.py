@@ -96,13 +96,18 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Paris'
 
+# make the cron tasks be executed every monday at 4am
 CELERY_BEAT_SCHEDULE = {
     'remove-inactive-accounts': {
         'task': 'apps.account.tasks.remove_inactive_accounts',
-        'schedule': crontab(minute=0, hour=4),
+        'schedule': crontab(minute=0, hour=4, day_of_week=1)
     },
     'remove-temp-access': {
         'task': 'apps.account.tasks.remove_temporary_access',
-        'schedule': crontab(minute=0, hour=4)
+        'schedule': crontab(minute=0, hour=4, day_of_week=1)
+    },
+    'clean-notifications': {
+        'task': 'apps.notification.tasks.clean_notifications',
+        'schedule': crontab(minute=0, hour=4, day_of_week=1)
     }
 }
