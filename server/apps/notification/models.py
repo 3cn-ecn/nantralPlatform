@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+from apps.utils.slug import get_object_from_full_slug
+
 from .webpush import send_webpush_notification
 from apps.student.models import Student
 
@@ -41,12 +43,42 @@ class Notification(models.Model):
     image_url = models.CharField(max_length=512, blank=True, null=True)
     date = models.DateTimeField('Date de création', default=timezone.now)
     high_priority = models.BooleanField('Prioritaire', default=False)
+    publicity = models.CharField(choices=VISIBILITY, default='Pub',
+        max_length=3, verbose_name='Visibilité de la notification')
     receivers = models.ManyToManyField(
         Student, related_name='notification_set', through='SentNotification')
     sent = models.BooleanField('Envoyé', default=False)
 
     def __str__(self):
         return f'{self.title} - {self.body}'[:100]
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.add_receivers()
+
+    def add_receivers(self): 
+        """Get the list of all profiles who can see the post, and
+        update high_priority field for notification"""
+        # initiate
+        page = get_object_from_full_slug(self.sender)
+        receivers = Student.objects.none()
+        # if receivers are everyone
+        if self.publicity == 'Pub':
+            receivers = Student.objects.all()
+        # if receivers are only members
+        elif self.publicity == 'Mem':
+            self.high_priority = True
+            if hasattr(page, "members"):
+                receivers = page.members.all()
+        # if receivers are only administrators
+        elif self.publicity == 'Adm':
+            self.high_priority = True
+            if hasattr(page, "members"):
+                receivers = page.members.through.objects.filter(
+                    group=page, admin=True
+                )
+        self.receivers.add(*receivers)
+        
     
     def send(self):
         """Sauver la notif et ajouter des destinataires"""
@@ -81,7 +113,7 @@ class Notification(models.Model):
                 {
                     'action': f'action_{i}',
                     'title': action.title,
-                    'icon': action.icon
+                    'icon': action.icon_url
                 }
                 for i, action in enumerate(self.actions.all())
             ]

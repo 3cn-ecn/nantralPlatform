@@ -66,37 +66,14 @@ class AbstractPost(models.Model, SlugModel):
         self.image = compressModelImage(
             self, 'image', size=(1320, 492), contains=False)
         super(AbstractPost, self).save(*args, **kwargs)
+        # send the notification
+        self.notification.send()
 
 
     def can_view(self, user: User) -> bool:
         if self.publicity == VISIBILITY[0][0]:
             return True
         return self.get_group.is_member(user)
-    
-
-    def get_receivers(self, n: Notification = None): 
-        """Get the list of all profiles who can see the post, and
-        update high_priority field for notification"""
-        # initiate
-        from apps.student.models import Student
-        page = self.get_group
-        # if receivers are everyone
-        if self.publicity == 'Pub':
-            return Student.objects.all()
-        # if receivers are only members
-        if self.publicity == 'Mem':
-            if n: n.high_priority = True
-            if hasattr(page, "members"):
-                return page.members.all()
-        # if receivers are only administrators
-        if self.publicity == 'Adm':
-            if n: n.high_priority = True
-            if hasattr(page, "members"):
-                return page.members.through.objects.filter(
-                    group=page, admin=True
-                )
-        # else return nobody
-        return Student.objects.none()
     
 
     def create_notification(self, title, body):
@@ -110,10 +87,9 @@ class AbstractPost(models.Model, SlugModel):
             sender = self.group,
             date = self.publication_date,
             image_url = self.image.url if self.image else None,
-            icon_url = self.get_group.logo.url if self.get_group.logo else None
+            icon_url = self.get_group.logo.url if self.get_group.logo else None,
+            publicity = self.publicity
         )
-        # add receivers
-        self.notification.receivers.add(*self.get_receivers())
         # add actions to the notification
         NotificationAction.objects.create(
             notification = self.notification,
@@ -125,8 +101,6 @@ class AbstractPost(models.Model, SlugModel):
             title = "Gérer",
             url = reverse("notification:settings")
         )
-        # send the notification
-        self.notification.send()
 
 
 

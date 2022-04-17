@@ -4,6 +4,9 @@ from celery import Celery
 from celery.app import shared_task
 from celery.schedules import crontab
 
+from django.conf import settings
+
+
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.base')
 
@@ -16,7 +19,8 @@ app = Celery('core')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Load task modules from all registered Django apps.
-app.autodiscover_tasks()
+print("autodiscover")
+app.autodiscover_tasks(settings.COMMON_APPS)
 
 
 @app.on_after_finalize.connect

@@ -99,9 +99,10 @@ CELERY_TIMEZONE = 'Europe/Paris'
 CELERY_BEAT_SCHEDULE = {
     'remove-inactive-accounts': {
         'task': 'apps.account.tasks.remove_inactive_accounts',
-        'schedule': crontab(hour='4'),
+        'schedule': crontab(minute=0, hour=4),
     },
     'remove-temp-access': {
         'task': 'apps.account.tasks.remove_temporary_access',
-        'schedule': crontab(hour='4')}
+        'schedule': crontab(minute=0, hour=4)
+    }
 }
