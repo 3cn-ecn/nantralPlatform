@@ -81,10 +81,11 @@ class GetNotificationsAPIView(APIView):
         Indicate if we get only the notifications from pages user has subscribed
         or from all pages.
         Default to False
-    nbStart : int (optional)
-    nbEnd : int (optional)
-        For mode 2 only. Indicate the range of notifications we want to load.
-        Default to [0, 20[].
+    start : int (optional)
+        For mode 2 only. In the list of notifications, index of the first item
+        to get. Default to 0.
+    nb : int (optional)
+        For mode 2 only. Indicate the number of notifications to get.
     
     Methods
     -------
@@ -118,12 +119,12 @@ class GetNotificationsAPIView(APIView):
         # else for mode 2
         # we define the range of notifications we want to send
         n = query.count()
-        nb_start = int(request.query_params.get('start', 0))
-        nb_end   = int(request.query_params.get('end', 20))
-        if nb_end > n: nb_end = n
-        if nb_start > nb_end: nb_start = nb_end
+        start = int(request.query_params.get('start', 0))
+        nb    = int(request.query_params.get('nb', 20))
+        if start > n: start = n
+        if start + nb > n: nb = n - start
         # we select the ones in the range and send them
-        query = query[nb_start:nb_end]
+        query = query[start:start+nb]
         serializer = SentNotificationSerializer(query, many=True)
         return Response(serializer.data)
 

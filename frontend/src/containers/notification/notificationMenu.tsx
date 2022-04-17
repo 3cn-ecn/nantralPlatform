@@ -43,15 +43,14 @@ function NotificationMenu(props): JSX.Element {
   async function getListNotifs(): Promise<void> {
     setOnLoad(true);
     const start = listNotifs.length;
-    const end = start + step;
-    const url = formatUrl(GET_NOTIFICATIONS_URL, [], {mode: 2, start: start, end: end});
+    const url = formatUrl(GET_NOTIFICATIONS_URL, [], {mode: 2, start: start, nb: step});
     fetch(url)
       .then(resp => resp.json()
       .then(data => {
         let merging = merge(listNotifs, data);
         setListNotifs(merging);
         setOnLoad(false);
-        if (merging.length < end) setAllLoaded(true);
+        if (merging.length < start + step) setAllLoaded(true);
       }))
       .catch(err => {setOnLoad(false)});
   }
