@@ -94,7 +94,7 @@ class Notification(models.Model):
             student__in = sub_receivers,
             notification = self
         ).update(subscribed=True)
-        # then send the notification to users' devices
+        # then create the message
         message = {
             'title': self.title,
             'body': self.body,
@@ -118,8 +118,11 @@ class Notification(models.Model):
                 for i, action in enumerate(self.actions.all())
             ]
         }
-        send_webpush_notification(sub_receivers, message)
-        self.sent = True
+        # finally send the message to the subscribed receivers and get the 
+        # success value to know if the task has been successfully launched
+        success = send_webpush_notification(sub_receivers, message)
+        # update the notification to register it has been sent
+        self.sent = success
         self.save()
     
     @property

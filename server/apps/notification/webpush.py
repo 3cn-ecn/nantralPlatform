@@ -5,11 +5,12 @@ from celery import shared_task
 from django.db.models.query import QuerySet
 from push_notifications.models import WebPushDevice
 from push_notifications.webpush import WebPushError
+import kombu
 
 
-def send_webpush_notification(students: QuerySet, message: dict) -> None:
-    """Send a notification on devices, to several students, with one message.
-    Call with send_webpush_notification.delay(students, message)
+def send_webpush_notification(students: QuerySet, message: dict) -> bool:
+    """Send a notification on devices, to several students, with one message,
+    by creating a celery task in background.
     
     Parameters
     ----------
@@ -29,20 +30,30 @@ def send_webpush_notification(students: QuerySet, message: dict) -> None:
     
     Returns
     -------
-    None
+    task_launched : bool
+        Return True if the celery task has been created successfully,
+        else False
     """
 
     # we first convert the queryset of student to a list, because we cannot
     # pass a queryset for an async function with celery
     student_ids = list(students.values_list('id', flat=True))
     # then we execute the async function, so as to not wait the result
-    _send_webpush_notification_async.delay(student_ids, message)
+    try:
+        _send_webpush_notification_async.delay(student_ids, message)
+        return True
+    except kombu.exceptions.OperationalError as err:
+        print("WARNING: cannot send notifications")
+        print("Celery might not be configured on this machine.")
+        print("Error code:", err)
+        return False
 
 
 @shared_task
 def _send_webpush_notification_async(students_ids: List[int], message: dict):
+    """The celery task for sending notifications to studends."""
     
-    # get devices from studends
+    # get devices from students
     devices = WebPushDevice.objects.filter(
         user__student__id__in = students_ids
     )
