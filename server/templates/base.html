@@ -20,7 +20,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap" rel="stylesheet">
 	<script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
 	<!-- favicon -->
-	<link rel="shortcut icon" href="{% static '/img/logo.svg' %}">
+	<link rel="shortcut icon" href="{% static '/img/logo/scalable/logo.svg' %}">
 	{% block head %}
 		<meta name="description" CONTENT="Bienvenue sur Nantral Platform, le site des clubs et assos de Centrale Nantes !">
 	{% endblock %}
@@ -40,7 +40,7 @@
 			<div id="fil-dariane" class="navbar-brand">
 				{# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
 				<a class="ariane-link" href="{% url 'home:home' %}" style="font-weight: 900;"><!--
-					--><img src="{% static '/img/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="" loading="lazy"><!--
+					--><img src="{% static '/img/logo/scalable/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="" loading="lazy"><!--
 					--><span class="ms-0">Nantral Platform.</span><!--
 				--></a><!--
 				-->{% for link in ariane %}<!--
@@ -53,50 +53,50 @@
 			<ul id="menuSet" class="navbar-nav ms-auto">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown" >
-						<img src='{% static "/icon/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">
+						<img src='{% static "/img/icons/scalable/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" onclick="event.stopPropagation()" style="right:-84px;">
 						<li><a class="dropdown-item" href="{% url 'home:home' %}">
-							<img src='{% static "/icon/event.svg" %}' class="align-middle" loading="lazy" alt="">
+							<img src='{% static "/img/icons/scalable/event.svg" %}' class="align-middle" loading="lazy" alt="">
 							Posts et Évènements
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'club:index' %}">
-							<img src='{% static "/icon/club.svg" %}' class="align-middle" loading="lazy" alt="">
+							<img src='{% static "/img/icons/scalable/club.svg" %}' class="align-middle" loading="lazy" alt="">
 							Clubs &amp; Assos
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'roommates:index' %}">
-							<img src='{% static "/icon/roommates.svg" %}' class="align-middle" loading="lazy" alt="">
+							<img src='{% static "/img/icons/scalable/roommates.svg" %}' class="align-middle" loading="lazy" alt="">
 							Carte des Colocs
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'family:home' %}">
-							<img src='{% static "/icon/family.svg" %}' class="align-middle" loading="lazy" alt="">
+							<img src='{% static "/img/icons/scalable/family.svg" %}' class="align-middle" loading="lazy" alt="">
 							Parrainage
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'liste:index' %}">
-							<img src='{% static "/icon/campaign.svg" %}' class="align-middle" loading="lazy" alt="">
+							<img src='{% static "/img/icons/scalable/campaign.svg" %}' class="align-middle" loading="lazy" alt="">
 							Listes BDX
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'academic:index' %}">
-							<img src='{% static "/icon/academic.svg" %}' class="align-middle" loading="lazy" alt="">
+							<img src='{% static "/img/icons/scalable/academic.svg" %}' class="align-middle" loading="lazy" alt="">
 							Cours et Formations
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'administration:index' %}">
-							<img src='{% static "/icon/admin.svg" %}' class="align-middle" loading="lazy" alt="">
+							<img src='{% static "/img/icons/scalable/admin.svg" %}' class="align-middle" loading="lazy" alt="">
 							Administration
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'student:list' %}">
-							<img src='{% static "/icon/list.svg" %}' class="align-middle" loading="lazy" alt="">
+							<img src='{% static "/img/icons/scalable/list.svg" %}' class="align-middle" loading="lazy" alt="">
 							Annuaire Étudiant
 						</a></li>
 						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">
-							<img src='{% static "/icon/sign.svg" %}' class="align-middle" loading="lazy" alt="">
+							<img src='{% static "/img/icons/scalable/sign.svg" %}' class="align-middle" loading="lazy" alt="">
 							Signature ECN
 						</a></li>
 					</ul>
 				</li>
 				<li id="notificationPanel" class="nav-item">
 					<a id="notification-icon" class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown">
-						<img src='{% static "/icon/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
+						<img src='{% static "/img/icons/scalable/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
 						<div id="notification-badge"></div>
 					</a>
 					<div class="dropdown-menu dropdown-menu-end overflow-auto"
@@ -108,7 +108,7 @@
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown">
-						<img src='{% static "/icon/people.svg" %}' class="d-inline-block align-top" alt="compte personnel" loading="lazy">
+						<img src='{% static "/img/icons/scalable/people.svg" %}' class="d-inline-block align-top" alt="compte personnel" loading="lazy">
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end" style="right: 0;" onclick="event.stopPropagation()" aria-labelledby="triggerId">
 						{% if request.user.is_authenticated %}

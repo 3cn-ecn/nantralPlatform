@@ -17,7 +17,7 @@ class ClubSerializer(serializers.ModelSerializer):
     def get_logo_url(self, obj):
         if(obj.logo):
             return obj.logo.url
-        return static('img/logo.svg')
+        return static('img/logo/scalable/logo.svg')
 
     def get_opacity(self, obj):
         if(obj.logo):

@@ -108,7 +108,7 @@ class Notification(models.Model):
             },
             'icon': self.icon_url,
             'image': self.image_url,
-            'badge': '/static/favicon/monochrome/96.png',
+            'badge': '/static/img/logo/monochrome/96.png',
             'tag': self.id,
             'actions': [
                 {
