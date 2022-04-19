@@ -67,7 +67,8 @@ class AbstractPost(models.Model, SlugModel):
             self, 'image', size=(1320, 492), contains=False)
         super(AbstractPost, self).save(*args, **kwargs)
         # send the notification
-        self.notification.send()
+        if not self.notification.sent:
+            self.notification.send()
 
 
     def can_view(self, user: User) -> bool:
