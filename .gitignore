@@ -149,3 +149,7 @@ server/static/upload/*
 
 # Do not push celerybeat db
 */celerybeat-schedule
+
+# sonarqube
+sonar-project.properties
+.scannerwork

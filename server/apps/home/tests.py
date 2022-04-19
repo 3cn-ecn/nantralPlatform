@@ -72,3 +72,4 @@ class TestHomeView(TestCase, TestMixin):
         self.today.delete()
         self.tomorrow.delete()
         self.future.delete()
+        self.user_teardown()

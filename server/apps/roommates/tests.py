@@ -11,6 +11,9 @@ class TestHousing(TestCase, TestMixin):
     def setUp(self):
         self.user_setup()
 
+    def tearDown(self):
+        self.user_teardown()
+    
     def test_create_housing(self):
         Housing.objects.create(
             address='Place royale, Nantes 44000')

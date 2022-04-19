@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls.base import reverse
 
 from .forms import PostForm, PostFormSet
 from .models import Post
@@ -22,6 +23,16 @@ class PostDetailView(LoginRequiredMixin, TemplateView):
         self.object = Post.get_post_by_slug(self.kwargs.get('post_slug'))
         context['object'] = self.object
         context['group'] = self.object.get_group
+        context['ariane'] = [
+            {
+                'target': reverse('home:home'), 
+                'label': "Posts"
+            },
+            {
+                'target': '#', 
+                'label': self.object.title
+            },
+        ]
         return context
 
 
@@ -67,8 +78,22 @@ class UpdateGroupCreatePostView(UserIsAdmin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object'] = get_object_from_slug(
+        context['object'] = group = get_object_from_slug(
             self.get_app(), self.get_slug())
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def form_valid(self, form, **kwargs):
@@ -91,11 +116,25 @@ class UpdateGroupPostsView(UserIsAdmin, View):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = get_object_from_slug(
+        context['object'] = group = get_object_from_slug(
             self.get_app(), self.get_slug())
         context['posts'] = Post.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()))
         context['form'] = PostFormSet(queryset=context['posts'])
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def get(self, request, **kwargs):

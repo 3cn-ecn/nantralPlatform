@@ -1,6 +1,11 @@
 /* GENERAL */
 /* ------- */
 
+::selection {
+  background: var(--bs-red) !important;
+  color: white !important;
+} 
+
 html {
   margin: 0px;
   height: 100%;
@@ -17,7 +22,8 @@ body {
 h1, .h1,
 h2, .h2,
 h4, .h4,
-.student h5 {
+.student h5,
+.bold {
   font-family: "Heebo", sans-serif;
   font-weight: 900;
 }
@@ -31,9 +37,11 @@ h6, .h6 {
 
 a {
   text-decoration: none;
+  color: var(--bs-red);
 }
 a:hover {
   text-decoration: none;
+  color: #99242f;
 }
 
 table.table-sort th {
@@ -43,19 +51,83 @@ table.table-sort th {
 /* BARRE DE NAVIGATION */
 /* ------------------- */
 
-@media all and (min-width: 992px) {
-  .navbar .nav-item .dropdown-menu {
+#fil-dariane {
+  overflow: hidden;
+  text-overflow: "...";
+}
+#fil-dariane a.ariane-link {
+  margin-right: 0;
+  color: rgba(0, 0, 0, .9);
+  padding-top: .3125rem;
+  padding-bottom: .3125rem;
+  border-radius: .5rem;
+}
+#fil-dariane a.ariane-link span {
+  margin: 0 .3rem;
+}
+#fil-dariane a.ariane-link:hover {
+  background-color: #eee;
+}
+#fil-dariane i {
+  margin: 0 .3rem;
+}
+@media all and (max-width: 768px) {
+  #fil-dariane a.ariane-link span,
+  #fil-dariane i {
     display: none;
   }
-  .navbar .nav-item:hover .dropdown-menu {
-    display: block;
+  #fil-dariane a.ariane-link:nth-last-child(3) span,
+  #fil-dariane i:nth-last-child(4) {
+    display: inline !important;
   }
-  .navbar .nav-item .dropdown-menu {
-    margin-top: 0;
-  }
-  .navbar .nav-item .dropdown-menu-end {
-    right: 0;
-  }
+}
+
+
+#menuSet .dropdown > .nav-link {
+  border-radius: 50%;
+  padding: .2rem;
+}
+#menuSet .dropdown > .nav-link:hover {
+  background-color: #eee;
+}
+#menuSet .dropdown > .nav-link img {
+  width: 35px;
+  height: 35px;
+}
+#menuSet .dropdown-toggle::after {
+  display: none;
+}
+#menuSet #notificationPanel .dropdown-menu {
+  right: -42px !important;
+  width: 20rem;
+  max-width: 90vw;
+  padding-bottom: 0;
+  max-height: calc(calc(100vh - 43px - 8px) * 0.9);
+  overflow: auto;
+}
+#menuSet .dropdown-menu {
+  box-shadow: 3px 3px 6px #AAA;
+}
+#menuSet .dropdown-menu img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 20%;
+  object-fit: contain;
+}
+#menuSet .dropdown-item:hover {
+  cursor: pointer;
+}
+/* bouton pour mettre en lu les notifications */
+#menuSet .dropdown-item .read-button {
+  display: flex;
+  flex-shrink: 0;
+  width: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+#goBackButton:hover {
+  cursor: pointer;
 }
 
 /* MODULE DE GRILLE */
@@ -194,4 +266,31 @@ a.rs:hover span {
 }
 .container .events .card-subtitle {
   color: #333;
+}
+
+
+/* PIED DE PAGE HORS-CONNEXION */
+/*-----------------------------*/
+
+footer div {
+  font-weight: 400;
+  font-family: "Heebo";
+  font-size: 1.1rem;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  margin: 0;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+footer div.offline {
+  background-color: black;
+  color: white;
+}
+
+footer div.app-install {
+  background-color: #f3f0f0;
+  color: black;
+  box-shadow: 1px -1px 7px #999;
 }

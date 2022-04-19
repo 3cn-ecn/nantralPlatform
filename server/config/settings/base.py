@@ -56,6 +56,7 @@ THIRD_PARTY_APPS = [
     'debug_toolbar',
     'django_celery_beat',
     'extra_settings',
+    'push_notifications'
 ]
 
 COMMON_APPS = [
@@ -73,6 +74,7 @@ COMMON_APPS = [
     'apps.roommates',
     'apps.sociallink',
     'apps.family',
+    'apps.notification',
     'apps.administration',
 ]
 
@@ -218,3 +220,10 @@ SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
 TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
     env('TEMPORARY_ACCOUNTS_DATE_LIMIT', default='2000-12-31'))
+
+# Push notifications settings - see django-push-notifications on github
+PUSH_NOTIFICATIONS_SETTINGS = {
+    'WP_PUBLIC_KEY': env('WP_PUBLIC_KEY', default=''),
+    'WP_PRIVATE_KEY': env('WP_PRIVATE_KEY', default=''),
+    'WP_CLAIMS': {'sub': 'mailto:' + env('WP_ADMIN_EMAIL', default='')}
+}

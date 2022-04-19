@@ -1,20 +1,27 @@
 from datetime import timedelta
-from django.utils import timezone
 from typing import List
-from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import Q
-from django.urls import reverse
-from django.views.generic import TemplateView, FormView
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseNotFound
+from django.contrib.sites.shortcuts import get_current_site
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseNotFound, HttpRequest
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import TemplateView, FormView
+from django.urls import reverse
+from django.utils import timezone
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 
 from apps.post.models import Post
 from apps.student.models import Student
 from apps.roommates.models import Roommates
 from apps.utils.github import create_issue
+from apps.utils.accessMixins import userIsConnected
 from apps.account.models import TemporaryAccessRequest
 
 from .forms import SuggestionForm
@@ -43,7 +50,14 @@ class HomeView(LoginRequiredMixin, TemplateView):
             publication_date__gte=publication_date).order_by('-publication_date')
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
+        context['ariane'] = [
+            {
+                'target': '#',
+                'label': 'Accueil'
+            }
+        ]
         return context
+
 
 
 class SuggestionView(LoginRequiredMixin, FormView):
@@ -59,6 +73,34 @@ class SuggestionView(LoginRequiredMixin, FormView):
         messages.success(
             self.request, 'Votre suggestion a été enregistrée merci')
         return redirect('home:home')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Suggestions & Bugs'
+            }
+        ]
+        return context
+
+
+
+class LegalMentionsView(TemplateView):
+    template_name = 'home/mentions.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Mentions Légales'
+            }
+        ]
+        return context
+
+
+
 
 @login_required
 def currentUserPageView(request):
@@ -66,6 +108,8 @@ def currentUserPageView(request):
     student = get_object_or_404(Student, pk=request.user.student.pk)
     response = redirect('student:detail', student.pk)
     return response
+
+
 
 @login_required
 def currentUserRoommatesView(request):
@@ -88,6 +132,30 @@ def currentUserRoommatesView(request):
 
 
 
+def service_worker(request):
+    """A view to serve the service worker"""
+    sw_path = settings.BASE_DIR + "/static/js/sw.js"
+    file = open(sw_path)
+    response = HttpResponse(file.read(), content_type='application/javascript')
+    file.close()
+    return response
+
+
+def firebase_service_worker(request):
+    """A view to serve the firebase service worker"""
+    sw_path = settings.BASE_DIR + "/static/js/firebase-messaging-sw.js"
+    file = open(sw_path)
+    response = HttpResponse(file.read(), content_type='application/javascript')
+    file.close()
+    return response
+
+
+def offline_view(request):
+    response = render(request, 'home/offline.html')
+    return response
+
+
+
 # ERROR PAGES VIEWS
 
 def handler403(request, *args, **argv):
@@ -105,3 +173,23 @@ def handler413(request, *args, **argv):
 def handler500(request, *args, **argv):
     response = render(request, 'errors/500.html', context={}, status=500)
     return response
+
+
+
+# API VIEWS 
+from django.urls import resolve
+from django.conf import settings
+
+class DoIHaveToLoginView(APIView):
+    """API endpoint to check if user has to login to see a page"""
+    def get(self, request, format=None):
+        path = request.GET.get("path")
+        try:
+            view, args, kwargs = resolve(path)
+            kwargs['request'] = request
+            kwargs['request'].path = path
+            v=view(*args, **kwargs)
+            haveToLogin = (v.url.split('?')[0] == settings.LOGIN_URL)
+            return Response(data = haveToLogin)
+        except Exception:
+            return Response(data=False)

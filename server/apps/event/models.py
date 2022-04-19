@@ -6,7 +6,9 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.post.models import AbstractPost
 from apps.student.models import Student
+from apps.notification.models import Notification
 from apps.utils.upload import PathAndRename
+from apps.utils.slug import get_object_from_full_slug
 
 
 path_and_rename = PathAndRename("events/pictures")
@@ -20,9 +22,12 @@ class BaseEvent(AbstractPost):
         max_length=200, verbose_name='Titre de l\'événement')
     description = CKEditor5Field(
         verbose_name='Description de l\'événement', blank=True)
-    date = models.DateTimeField(verbose_name='Date de l\'événement')
-    location = models.CharField(max_length=200, verbose_name='Lieu')
-    group = models.SlugField(verbose_name='Groupe organisateur')
+    date = models.DateTimeField(
+        verbose_name='Date de l\'événement')
+    location = models.CharField(
+        max_length=200, verbose_name='Lieu')
+    group = models.SlugField(
+        verbose_name='Groupe organisateur')
     slug = models.SlugField(
         verbose_name='Slug de l\'événement', unique=True, null=True)
     participants = models.ManyToManyField(
@@ -39,10 +44,17 @@ class BaseEvent(AbstractPost):
         return student in self.participants.all()
 
     def save(self, *args, **kwargs):
+        # create the slug
         self.set_slug(
-            str(self.date.year) + "-" + str(self.date.month) + "-" + str(self.date.day) + "-" + self.title
+            f'{self.date.year}-{self.date.month}-{self.date.day}-{self.title}'
         )
+        # save the notification
+        self.create_notification(
+            title = self.get_group_name,
+            body = f'Nouvel event : {self.title}')
+        # save again the event
         super(BaseEvent, self).save(*args, **kwargs)
+
 
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
