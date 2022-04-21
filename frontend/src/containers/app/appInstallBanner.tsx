@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM, { render } from "react-dom";
 import { Button, CloseButton } from "react-bootstrap";
+import { useCookies } from "react-cookie";
 
 
 
@@ -23,19 +24,22 @@ export default function addAppInstallListener(): void {
  * for installing the application
  */
 function AppInstallBanner(): JSX.Element {
-  // declare conditions 
+  // declare constants
   const [defferredPrompt, setDefferredPrompt] = useState(null);
+  const [cookies, setCookie, removeCookie] = useCookies(["app-install-closed"]);
+  // declare conditions 
   const visitInApp: boolean = window.matchMedia('(display-mode: standalone)').matches;
-  const appUnsupportedOrInstalled = defferredPrompt == null;
-  const closed = window.sessionStorage.getItem('app-banner-closed') == "true";
+  const appUnsupportedOrInstalled: boolean = defferredPrompt == null;
+  const bannerClosed: boolean = cookies["app-install-closed"] || false;
   
   // initiate the event listener
   window.addEventListener('beforeinstallprompt', (e) => {
     setDefferredPrompt(e);
+    e.preventDefault();
   });
 
   // test if we must not show the banner
-  if (visitInApp || appUnsupportedOrInstalled || closed) {
+  if (visitInApp || appUnsupportedOrInstalled || bannerClosed) {
     return <></>
   }
 
@@ -73,8 +77,12 @@ function AppInstallBanner(): JSX.Element {
         title="Fermer" 
         style={{verticalAlign: "middle"}} 
         onClick={() => {
-          window.sessionStorage.setItem('app-banner-closed', 'true');
+          window.localStorage.setItem('app-banner-closed', 'true');
           setDefferredPrompt(null);
+          setCookie("app-install-closed", true, {
+            path: '/',
+            maxAge: 60*60*24*10   // cookie expires in 10 days
+          });
         }}
       />
     </div>

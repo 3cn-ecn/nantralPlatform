@@ -10,7 +10,7 @@ export function StudentCardPicture(props: StudentCardBodyProps): JSX.Element {
   const picture =
     member.student.picture !== null
       ? member.student.picture
-      : "/static/img/logo.svg";
+      : "/static/img/logo/scalable/logo.svg";
 
   if (editMode) {
     return (
