@@ -9,6 +9,7 @@ from django.urls.base import reverse
 from .forms import PostForm, PostFormSet
 from .models import Post
 
+from apps.notification.models import Notification, SentNotification
 from apps.utils.slug import *
 from apps.utils.accessMixins import UserIsAdmin
 
@@ -20,7 +21,14 @@ class PostDetailView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # get the post
         self.object = Post.get_post_by_slug(self.kwargs.get('post_slug'))
+        # mark it as read
+        SentNotification.objects.filter(
+            student = self.request.user.student,
+            notification = self.object.notification
+        ).update(seen = True)
+        # get context
         context['object'] = self.object
         context['group'] = self.object.get_group
         context['ariane'] = [

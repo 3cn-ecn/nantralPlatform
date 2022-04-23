@@ -87,10 +87,11 @@ class AbstractPost(models.Model, SlugModel):
             url = self.get_absolute_url(),
             sender = self.group,
             date = self.publication_date,
-            image_url = self.image.url if self.image else None,
             icon_url = self.get_group.logo.url if self.get_group.logo else None,
             publicity = self.publicity
         )
+        # add image
+        if self.image: self.notification.update(image_url = self.image.url)
         # add actions to the notification
         NotificationAction.objects.create(
             notification = self.notification,
