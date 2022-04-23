@@ -35,7 +35,7 @@ class BaseEventTestCase(TestCase, TestMixin):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
-        self.client.login(username=self.u1, password="pass")
+        self.client.login(username=self.u2, password="pass")
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 

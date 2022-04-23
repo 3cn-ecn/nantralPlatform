@@ -7,8 +7,7 @@ class UpdateClubForm(ModelForm):
     class Meta:
         model = Club
         fields = ['name', 'alt_name', 'email', 'meeting_place', 'meeting_hour', 
-                  'summary', 'logo', 'banniere', 'video1', 'video2', 'description',
-                  'bdx_type']
+                  'summary', 'logo', 'banniere', 'video1', 'video2', 'description']
 
 
 class UpdateBDXForm(ModelForm):
