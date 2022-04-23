@@ -37,6 +37,9 @@ services:
       - DISCORD_TOKEN
       - DISCORD_CHANNEL_ID
       - TEMPORARY_ACCOUNTS_DATE_LIMIT
+      - WP_PUBLIC_KEY
+      - WP_PRIVATE_KEY
+      - WP_ADMIN_EMAIL
 
   celery-beat:
     build:
@@ -63,6 +66,9 @@ services:
       - DISCORD_TOKEN
       - DISCORD_CHANNEL_ID
       - TEMPORARY_ACCOUNTS_DATE_LIMIT
+      - WP_PUBLIC_KEY
+      - WP_PRIVATE_KEY
+      - WP_ADMIN_EMAIL
 
   workers-dashboard:
     build:
@@ -93,6 +99,9 @@ services:
       - DISCORD_TOKEN
       - DISCORD_CHANNEL_ID
       - TEMPORARY_ACCOUNTS_DATE_LIMIT
+      - WP_PUBLIC_KEY
+      - WP_PRIVATE_KEY
+      - WP_ADMIN_EMAIL
 
   redis:
     image: redis:latest
@@ -128,6 +137,9 @@ services:
       - DISCORD_TOKEN
       - DISCORD_CHANNEL_ID
       - TEMPORARY_ACCOUNTS_DATE_LIMIT
+      - WP_PUBLIC_KEY
+      - WP_PRIVATE_KEY
+      - WP_ADMIN_EMAIL
 
   nginx:
     build: ./containers/nginx_http
