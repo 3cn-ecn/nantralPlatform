@@ -25,6 +25,9 @@ class BaseEventTestCase(TestCase, TestMixin):
             title="TestEvent", group=self.club.full_slug, date=timezone.now(),
             description="Test Desc", location="Amphi A")
         self.assertEqual(len(BaseEvent.objects.all()), 1)
+    
+    def tearDown(self):
+        self.user_teardown()
 
     def test_event_detail_view(self):
         url = reverse('event:detail', args=[self.event.slug])
@@ -32,7 +35,7 @@ class BaseEventTestCase(TestCase, TestMixin):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
-        self.client.login(username=self.u1, password="pass")
+        self.client.login(username=self.u2, password="pass")
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 

@@ -1,27 +1,7 @@
-# context processor for objects and
-# variables needed in the navbar
-
-from datetime import date
-from django.core.cache import cache
-
-from apps.club.models import BDX
-from apps.family.utils import read_phase
-
+from django.conf import settings
 
 def navbar_context(request):
-    """Loads context for the navbar."""
-    # BDX
-    bdx = cache.get('BDX')
-    if not bdx:
-        bdx = BDX.objects.all()
-        cache.set('BDX', bdx, 10000)
-    # Phase pour Parrainage
-    phase = read_phase()
-    if phase == 1:
-        try:
-            show = request.user.student.promo < date.today().year
-        except Exception:
-            show = False
-    else:
-        show = (phase != 0)
-    return {'navbar_bdx': bdx, 'navbar_family_show': show}
+    """Loads context on all pages."""
+    webpush_settings = getattr(settings, 'PUSH_NOTIFICATIONS_SETTINGS', {})
+    vapid_key = webpush_settings.get('WP_PUBLIC_KEY', '')
+    return {'vapid_key': vapid_key}

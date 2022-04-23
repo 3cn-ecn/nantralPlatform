@@ -31,6 +31,12 @@ class ListClubView(TemplateView):
                     clubList.setdefault(
                         f'Clubs {club.bdx_type.name}', []).append(club)
             context['club_list'] = clubList
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Clubs & Assos'
+            }
+        ]
         return context
 
 

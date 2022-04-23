@@ -24,4 +24,10 @@ class ListListeView(LoginRequiredMixin, TemplateView):
                         'grouper': f'Campagnes {year-1}-{year}',
                         'list': Liste.objects.filter(year=year),
                     })
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Listes BDX'
+            }
+        ]
         return context

@@ -39,31 +39,31 @@ def makeGroupUrlpatterns(
     
     urlpatterns = [
         # vue generale du groupe
-        path(url_base+'<slug:slug>/', 
+        path(url_base+'<slug:slug>', 
             detail_view, name='detail'),
-        path(url_base+'<slug:slug>/members/add/', 
+        path(url_base+'<slug:slug>/members/add', 
             add_member_view, name='add-member'),
 
         # edition (réservée aux admins)
-        path(url_base+'<slug:slug>/edit/', 
+        path(url_base+'<slug:slug>/edit', 
             update_view, name='update'),
-        path(url_base+'<slug:slug>/edit/members/', 
+        path(url_base+'<slug:slug>/edit/members', 
             update_members_view, name='update-members'),
-        path(url_base+'<slug:slug>/edit/socialnetworks/', 
+        path(url_base+'<slug:slug>/edit/socialnetworks', 
             update_sociallinks_view, name='update-sociallinks'),
-        path(url_base+'<slug:slug>/edit/events/', 
+        path(url_base+'<slug:slug>/edit/events', 
             update_events_view, name='update-events'),
-        path(url_base+'<slug:slug>/edit/events/create/', 
+        path(url_base+'<slug:slug>/edit/events/create', 
             create_event_view, name='create-event'),
-        path(url_base+'<slug:slug>/edit/events/archives/', 
+        path(url_base+'<slug:slug>/edit/events/archives', 
             archived_events_view, name='archived-events'),
-        path(url_base+'<slug:slug>/edit/posts/', 
+        path(url_base+'<slug:slug>/edit/posts', 
             update_posts_view, name='update-posts'),
-        path(url_base+'<slug:slug>/edit/posts/create/', 
+        path(url_base+'<slug:slug>/edit/posts/create', 
             create_post_view, name='create-post'),
         
         # formulaire de demande d'admin
-        path(url_base+'<slug:slug>/admin-request/',
+        path(url_base+'<slug:slug>/admin-request',
             RequestAdminRightsView.as_view(), name='admin-req'),
         path(url_base+'<slug:slug>/admin-request/<int:id>/accept',
             AcceptAdminRequestView.as_view(), name='accept-admin-req'),

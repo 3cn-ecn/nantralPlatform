@@ -22,9 +22,7 @@ class Test_Account(TestCase, TestMixin):
         pass
 
     def tearDown(self):
-        # Delete everything you created
         self.user_teardown()
-        User.objects.all().delete()
 
     @freeze_time("2021-09-01")
     @override_settings(TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2))
@@ -54,7 +52,7 @@ class Test_Account(TestCase, TestMixin):
         self.assertEqual(student.user, User.objects.all().last())
         assert len(mail.outbox) == 1
         extract = re.search(
-            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
+            r"<a href='http:\/\/testserver/account/activate/([\w\d-]*)/([\w\d-]*)'", mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
@@ -94,7 +92,7 @@ class Test_Account(TestCase, TestMixin):
         self.assertEqual(student.user, User.objects.all().last())
         assert len(mail.outbox) == 1
         extract = re.search(
-            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
+            r"<a href='http:\/\/testserver/account/activate/([\w\d-]*)/([\w\d-]*)'", mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
@@ -160,10 +158,10 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         temp_req: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
             user=user.id)
         self.assertFalse(temp_req.approved)
-
+        
         assert len(mail.outbox) == 1
         extract = re.search(
-            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
+            r"<a href='http:\/\/testserver/account/activate/([\w\d-]*)/([\w\d-]*)/temporary'", mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
@@ -247,7 +245,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         self.assertEqual(resp.status_code, 302)
         assert len(mail.outbox) == 3
         extract = re.search(
-            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[2].body)
+            r"<a href='http:\/\/testserver/account/activate/([\w\d-]*)/([\w\d-]*)'", mail.outbox[2].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
         url = reverse('account:confirm', kwargs={
@@ -373,7 +371,7 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
         user: User = User.objects.get(email='test@not-ec-nantes.fr')
         assert len(mail.outbox) == 1
         extract = re.search(
-            "<a href='http:\/\/testserver/account/activate/([^/]*)/([^/]*)", mail.outbox[0].body)
+            r"<a href='http:\/\/testserver/account/activate/([\w\d-]*)/([\w\d-]*)/temporary'", mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
@@ -422,7 +420,7 @@ class TestForgottenPass(TestCase, TestMixin):
         self.assertEqual(response.status_code, 302)
         assert len(mail.outbox) == 1
         extract = re.search(
-            "<a href='http:\/\/testserver/account/reset_pass/([^/]*)/([^/]*)", mail.outbox[0].body)
+            r"<a href='http:\/\/testserver/account/reset_pass/([\w\d-]*)/([\w\d-]*)'", mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
         url = reverse('account:reset_pass', kwargs={

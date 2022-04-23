@@ -36,6 +36,7 @@ def compressImage(image, size=(500,500), contains=False):
     # create a django-friendly Files object
     new_image = InMemoryUploadedFile(im_io, 'ImageField', image.name, 'image/'+format,
                                         sys.getsizeof(im_io), None)
+    im.close()
     return new_image
 
 

@@ -1,27 +1,21 @@
 var path = require("path");
+var apps_dir = path.join(__dirname, "../src/containers")
+
 module.exports = {
   entry: {
-    clubsList: path.join(__dirname, "../src/containers/clubsList.tsx"),
-    eventsGroupListUpdate: path.join(
-      __dirname,
-      "../src/containers/eventsGroupListUpdate.tsx"
-    ),
-    postsGroupListUpdate: path.join(
-      __dirname,
-      "../src/containers/postsGroupListUpdate.tsx"
-    ),
-    eventsView: path.join(__dirname, "../src/containers/eventsView.tsx"),
-    cowlocathlonCard: path.join(
-      __dirname,
-      "../src/containers/cowlocathlonCard.tsx"
-    ),
-    housingMap: path.join(__dirname, "../src/containers/housingMap.tsx"),
-    createHousing: path.join(__dirname, "../src/containers/createHousing.tsx"),
-    groupMembers: path.join(__dirname, "../src/containers/groupMembers.tsx"),
-    editGroupMembers: path.join(
-      __dirname,
-      "../src/containers/editGroupMembers.tsx"
-    ),
+    sw:                     path.join(apps_dir, "app/sw.ts"),
+    app:                    path.join(apps_dir, "app/app.ts"),
+    clubsList:              path.join(apps_dir, "club/clubsList.tsx"),
+    eventsGroupListUpdate:  path.join(apps_dir, "group/eventsGroupListUpdate.tsx"),
+    postsGroupListUpdate:   path.join(apps_dir, "group/postsGroupListUpdate.tsx"),
+    groupMembers:           path.join(apps_dir, "group/groupMembers.tsx"),
+    editGroupMembers:       path.join(apps_dir, "group/editGroupMembers.tsx"),
+    eventsView:             path.join(apps_dir, "event/eventsView.tsx"),
+    cowlocathlonCard:       path.join(apps_dir, "roommates/cowlocathlonCard.tsx"),
+    housingMap:             path.join(apps_dir, "roommates/housingMap.tsx"),
+    createHousing:          path.join(apps_dir, "roommates/createHousing.tsx"),
+    subscribeButton:        path.join(apps_dir, "notification/subscribeButton.tsx"),
+    deviceSubscribeButton:  path.join(apps_dir, "notification/deviceSubscribeButton.tsx")
   },
   output: {
     path: path.join(__dirname, "../../server/static/js"),

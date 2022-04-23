@@ -7,11 +7,13 @@ from django.views.generic import UpdateView, FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import resolve
+from django.urls.base import reverse
 from django.db.utils import IntegrityError
 
 from .models import *
 from .forms import EventForm, EventFormSet
 
+from apps.notification.models import SentNotification
 from apps.utils.slug import *
 from apps.utils.accessMixins import UserIsAdmin
 
@@ -23,13 +25,29 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.object = BaseEvent.get_event_by_slug(
-            self.kwargs.get('event_slug'))
+        # get the event
+        self.object = BaseEvent.get_event_by_slug(self.kwargs.get('event_slug'))
+        # mark it as read
+        SentNotification.objects.filter(
+            student = self.request.user.student,
+            notification = self.object.notification
+        ).update(seen = True)
+        # get context
         context['object'] = self.object
         context['group'] = self.object.get_group
         context['is_participating'] = self.object.is_participating(
             self.request.user)
         context['is_admin'] = context['group'].is_admin(self.request.user)
+        context['ariane'] = [
+            {
+                'target': reverse('home:home'), 
+                'label': "Évènements"
+            },
+            {
+                'target': '#', 
+                'label': self.object.title
+            },
+        ]
         return context
 
 
@@ -48,8 +66,22 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object'] = get_object_from_slug(
+        context['object'] = group = get_object_from_slug(
             self.get_app(), self.get_slug())
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def form_valid(self, form, **kwargs):
@@ -81,7 +113,21 @@ class EventUpdateView(UserIsAdmin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['event'] = self.object
-        context['object'] = get_object_from_full_slug(self.object.group)
+        context['object'] = group = get_object_from_full_slug(self.object.group)
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def get_object(self, **kwargs):
@@ -108,13 +154,27 @@ class UpdateGroupEventsView(UserIsAdmin, View):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = get_object_from_slug(
+        context['object'] = group = get_object_from_slug(
             self.get_app(), self.get_slug())
         date_gte = timezone.make_aware(timezone.now().today())
         context['events'] = BaseEvent.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
             date__gte=date_gte)
         context['form'] = EventFormSet(queryset=context['events'])
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def get(self, request, **kwargs):
@@ -138,13 +198,27 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['object'] = get_object_from_slug(
+        context['object'] = group = get_object_from_slug(
             self.get_app(), self.get_slug())
         date_lte = timezone.make_aware(timezone.now().today())
         context['events'] = BaseEvent.objects.filter(
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
             date__lte=date_lte)
         context['form'] = EventFormSet(queryset=context['events'])
+        context['ariane'] = [
+            {
+                'target': reverse(group.app+':index'), 
+                'label': group.app_name
+            },
+            {
+                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'label': group.name
+            },
+            {
+                'target': '#',
+                'label': 'Modifier'
+            }
+        ]
         return context
 
     def get(self, request, **kwargs):

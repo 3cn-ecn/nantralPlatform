@@ -6,16 +6,7 @@
 
 {% block head %}
     <meta name="description" CONTENT="{{object.summary}} - {{object.name}} ({{object.alt_name}}) - Centrale Nantes">
-{% endblock %}
-
-{% block title %}{{ object.name }} - {% endblock %}
-
-{% block favicon %}
-    {% if object.logo %}
-        {{object.logo|file_url}}
-    {% else %}
-        {% static '/img/logo.svg' %}
-    {%endif%}
+    <meta name="page" content="{{object.full_slug}}">
 {% endblock %}
 
 {% block banniere %}
@@ -42,37 +33,38 @@
         <!-- description du club : nom, infos... -->
         <div class="col">
             {% block object_name %}<h1>{{object.name}}</h1>{% endblock %}
+            
             <p>
-            {% if request.user.is_authenticated %}
+            {% if connected %}
                 {% if is_member and is_admin %}
-                    <div class="btn-group" role="group">
+                    <span class="btn-group" role="group">
                         <button class='btn btn-light btn-sm disabled border'>
-                            <i class="fa fa-crown"></i>
-                            Vous êtes admin !
+                            <i class="fa fa-crown"></i>&nbsp; Vous êtes admin !
                         </button>
                         <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                             Modifier
                         </button>
-                    </div>
+                    </span>
                 {% elif is_member %}
-                    <div class="btn-group" role="group">
+                    <span class="btn-group" role="group">
                         <button class='btn btn-light btn-sm disabled'>
-                            <i class="fa fa-user"></i>
-                            Vous êtes membre !
+                            <i class="fa fa-user"></i>&nbsp; Vous êtes membre !
                         </button>
                         <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                             Modifier
                         </button>
-                    </div>
+                    </span>
                 {% else %}
                     <button id='show-add-group' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
-                        <i class="fa fa-user-plus"></i>
-                        Devenir membre
+                        <i class="fa fa-user-plus"></i>&nbsp; Devenir membre
                     </button>
                 {% endif %}
                 {% if is_admin %}
-                    <a href='{%url object.app|add:":update" object.slug %}' class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier la page</a>
-                {%endif%}
+                    <a href='{%url object.app|add:":update" object.slug %}' class="btn btn-dark btn-sm">
+                        <i class="fa fa-pencil"></i>&nbsp; Modifier la page
+                    </a>
+                {% endif %}
+                    <span id="subscription_button"></span>
             {% endif %}
             </p>
             {% block infos %}
@@ -92,7 +84,7 @@
     {% if has_events %}
         <br>   
         <h2>Évènements</h2>
-        {% if request.user.is_authenticated %}
+        {% if connected %}
             <div id="root"></div>
         {%else%}
             <p>Veuillez vous connecter pour voir les évènements à venir.</p>
@@ -158,7 +150,7 @@
         <!-- Liste des membres -->
         <br />
         <h2>Membres</h2>
-        <div id=root2></div>
+        <div id="root2"></div>
     {% endblock %}
 
     {# Ajout possible de contenus pour certaines pages #}
@@ -197,5 +189,6 @@
 </script>
 <script src='{% static "js/eventsView.js" %}'></script>
 <script src='{% static "js/groupMembers.js" %}'></script>
+<script src='{% static "js/subscribeButton.js" %}'></script>
 {% endblock %}
 

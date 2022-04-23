@@ -33,6 +33,12 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
             if family:
                 context['form_family_complete'] = family.form_complete()
                 context['1A_members'] = family.memberships.filter(role='1A')
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Parrainage'
+            }
+        ]
         return context
 
 
@@ -70,6 +76,16 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
                 }
                 for m in memberships.filter(role='1A', group__isnull=False)
             ]
+        context['ariane'] = [
+            {
+                'target': reverse('family:home'), 
+                'label': 'Parrainage'
+            },
+            {
+                'target': '#',
+                'label': 'Liste'
+            }
+        ]
         return context
 
 
@@ -127,6 +143,20 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
         context['parrains'] = family.memberships.filter(role='2A+')
         context['filleuls'] = family.memberships.filter(role='1A')
         context['phase'] = read_phase()
+        context['ariane'] = [
+            {
+                'target': reverse('family:home'), 
+                'label': 'Parrainage'
+            },
+            {
+                'target': reverse('family:family-list'),
+                'label': 'Liste'
+            },
+            {
+                'target': '#',
+                'label': family.name
+            }
+        ]
         return context
 
 

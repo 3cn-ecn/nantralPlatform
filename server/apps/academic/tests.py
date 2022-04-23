@@ -8,6 +8,9 @@ class TestCourses(TestCase, TestMixin):
     def setUp(self):
         self.user_setup()
     
+    def tearDown(self):
+        self.user_teardown()
+    
     def test_create_course(self):
         Course.objects.create(name='testCourse', type='OD')
 

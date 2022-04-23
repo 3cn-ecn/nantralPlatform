@@ -11,6 +11,16 @@ class CoursesList(LoginRequiredMixin, ListView):
     template_name = 'academic/list.html'
     ordering = ['type', 'name']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': '#', 
+                'label': 'Formations'
+            }
+        ]
+        return context
+
 
 class DetailCourseView(DetailGroupView):
     template_name = 'academic/detail.html'
