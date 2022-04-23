@@ -42,6 +42,9 @@ services:
       - DISCORD_CHANNEL_ID
       - DISCORD_ADMIN_MODERATION_WEBHOOK
       - TEMPORARY_ACCOUNTS_DATE_LIMIT
+      - WP_PUBLIC_KEY
+      - WP_PRIVATE_KEY
+      - WP_ADMIN_EMAIL
 
   server-staging:
     build:
@@ -74,6 +77,9 @@ services:
       - DISCORD_CHANNEL_ID
       - DISCORD_ADMIN_MODERATION_WEBHOOK
       - TEMPORARY_ACCOUNTS_DATE_LIMIT
+      - WP_PUBLIC_KEY
+      - WP_PRIVATE_KEY
+      - WP_ADMIN_EMAIL
 
   nginx:
     build: ./containers/nginx
@@ -121,6 +127,9 @@ services:
       - DISCORD_TOKEN
       - DISCORD_CHANNEL_ID
       - TEMPORARY_ACCOUNTS_DATE_LIMIT
+      - WP_PUBLIC_KEY
+      - WP_PRIVATE_KEY
+      - WP_ADMIN_EMAIL
 
   celery-beat:
     build:
@@ -147,6 +156,9 @@ services:
       - DISCORD_TOKEN
       - DISCORD_CHANNEL_ID
       - TEMPORARY_ACCOUNTS_DATE_LIMIT
+      - WP_PUBLIC_KEY
+      - WP_PRIVATE_KEY
+      - WP_ADMIN_EMAIL
 
   # Core services
   front:
