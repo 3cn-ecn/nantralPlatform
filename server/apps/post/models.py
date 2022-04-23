@@ -91,7 +91,9 @@ class AbstractPost(models.Model, SlugModel):
             publicity = self.publicity
         )
         # add image
-        if self.image: self.notification.update(image_url = self.image.url)
+        if self.image: 
+            self.notification.image_url = self.image.url
+            self.notification.save()
         # add actions to the notification
         NotificationAction.objects.create(
             notification = self.notification,
