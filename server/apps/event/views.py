@@ -13,6 +13,7 @@ from django.db.utils import IntegrityError
 from .models import *
 from .forms import EventForm, EventFormSet
 
+from apps.notification.models import SentNotification
 from apps.utils.slug import *
 from apps.utils.accessMixins import UserIsAdmin
 
@@ -24,8 +25,14 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.object = BaseEvent.get_event_by_slug(
-            self.kwargs.get('event_slug'))
+        # get the event
+        self.object = BaseEvent.get_event_by_slug(self.kwargs.get('event_slug'))
+        # mark it as read
+        SentNotification.objects.filter(
+            student = self.request.user.student,
+            notification = self.object.notification
+        ).update(seen = True)
+        # get context
         context['object'] = self.object
         context['group'] = self.object.get_group
         context['is_participating'] = self.object.is_participating(

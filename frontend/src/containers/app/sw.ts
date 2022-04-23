@@ -194,14 +194,7 @@ self.addEventListener('notificationclick', async function(event) {
     self.clients.openWindow(notif.data.url);
   }
 
-  // mark the notification as read
-  var urlToRequest = formatUrl(
-    MANAGE_NOTIFICATION_URL, 
-    [notif.tag], 
-    {markAsSeen: true}
-  );
-  await axios.post(urlToRequest, {});
-
   // close the notification
   event.notification.close();
+
 }, false);

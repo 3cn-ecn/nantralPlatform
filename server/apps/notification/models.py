@@ -123,8 +123,7 @@ class Notification(models.Model):
         # success value to know if the task has been successfully launched
         send_webpush_notification(sub_receivers, message)
         # update the notification to register it has been sent
-        self.sent = True
-        self.save()
+        self.update(sent = True)
     
     @property
     def nbTargets(self, *args, **kwargs):
