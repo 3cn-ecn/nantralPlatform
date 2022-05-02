@@ -107,8 +107,6 @@ jobs:
           script: |
             cd nantralPlatform/deployment
             git pull
-            sudo cp certbot-renew.sh /etc/letsencrypt/renewal-hooks/post/certbot-renew.sh
-            sudo chmod +x /etc/letsencrypt/renewal-hooks/post/certbot-renew.sh
             sudo cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPlatform/deployment/certs/key.pem
             sudo cp /etc/letsencrypt/live/nantral-platform.fr/fullchain.pem /home/ubuntu/nantralPlatform/deployment/certs/cert.pem
             sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx server
