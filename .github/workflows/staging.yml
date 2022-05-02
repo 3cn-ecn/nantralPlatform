@@ -106,5 +106,5 @@ jobs:
             cd nantralPlatform-staging/deployment
             git checkout staging && git pull origin staging
             cd ~/nantralPlatform/deployment
-            sudo docker-compose build server-staging
-            docker-compose up  -d
+            sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build server-staging
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
