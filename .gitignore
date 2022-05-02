@@ -151,8 +151,8 @@ static/webapp
 deployment/backups/*
 
 # Do not push compiled static js from front because it will be compiled by the server
-server/static/js/*.js
-server/static/upload/*
+backend/static/js/*.js
+backend/static/upload/*
 
 # Do not push celerybeat db
 */celerybeat-schedule

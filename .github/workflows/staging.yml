@@ -36,7 +36,7 @@ jobs:
           host: ${{ secrets.INSTANCE_ADDRESS }}
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
-          source: "server/static/js/*.js"
+          source: "backend/static/js/*.js"
           target: "nantralPlatform-staging"
 
   test:
@@ -53,7 +53,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Testing
-        working-directory: ./server
+        working-directory: ./backend
         env:
           AWS_ACCESS_KEY_ID: test
           AWS_SECRET_ACCESS_KEY: test
@@ -106,5 +106,5 @@ jobs:
             cd nantralPlatform-staging/deployment
             git checkout staging && git pull origin staging
             cd ~/nantralPlatform/deployment
-            sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build server-staging
+            sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build backend-staging
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d

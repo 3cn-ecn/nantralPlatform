@@ -2,7 +2,7 @@ version: "2.1"
 
 services:
 
-  server-staging:
+  backend-staging:
     build:
       context: ../../nantralPlatform-staging/
       dockerfile: ./deployment/containers/web_staging/Dockerfile
@@ -10,7 +10,7 @@ services:
       - 8001
     command: sh run_server_staging.sh
     volumes:
-      - ../../nantralPlatform-staging/server:/var/app
+      - ../../nantralPlatform-staging/backend:/var/app
       - static_volume:/var/app/staticfiles/
     depends_on:
       - database

@@ -12,12 +12,14 @@
 ```
 |-.github 
     Contains the definitions for github actions
+|-backend
+    Contains source files for the backend
+|-deployment
+    The docker files for deployment
 |-frontend
     Contains source files to be compiled for the frontend
-|-server
-    Contains source files for the backend
-|-static
-    Contains static files to be served by the server
+|-scripts
+    Custom scripts to manage server operations
  ```
 
 ### Frontend
@@ -26,8 +28,8 @@ source files are compiled using babel and webpack
 when files from this folder are compiled they are sent
 to static/webapp
 
-### Server
-The server is a django application.
+### Backend
+The backend is a django application.
 ```
 |-apps (Contains all the applications)
 |-config (General config folder)

@@ -18,7 +18,7 @@ module.exports = {
     deviceSubscribeButton:  path.join(apps_dir, "notification/deviceSubscribeButton.tsx")
   },
   output: {
-    path: path.join(__dirname, "../../server/static/js"),
+    path: path.join(__dirname, "../../backend/static/js"),
     filename: "[name].js",
   },
   module: {

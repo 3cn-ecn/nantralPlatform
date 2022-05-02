@@ -2,10 +2,10 @@ version: "2.1"
 
 services:
   database:
-    env_file: ../server/config/settings/.env
+    env_file: ../backend/config/settings/.env
   
-  server:
-    env_file: ../server/config/settings/.env
+  backend:
+    env_file: ../backend/config/settings/.env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.docker
 
@@ -15,10 +15,10 @@ services:
     build: ./containers/nginx_http
   
   celery:
-    env_file: ../server/config/settings/.env
+    env_file: ../backend/config/settings/.env
   
   celery-beat:
-    env_file: ../server/config/settings/.env
+    env_file: ../backend/config/settings/.env
 
   workers-dashboard:
     build:
@@ -28,10 +28,10 @@ services:
     ports:
       - 5555:5555
     depends_on:
-      - server
+      - backend
       - redis
       - celery
-    env_file: ../server/config/settings/.env
+    env_file: ../backend/config/settings/.env
     environment:
       - CELERY_BROKER=redis://redis:6379/0
       - CELERY_BACKEND=redis://redis:6379/0

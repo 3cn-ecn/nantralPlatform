@@ -9,7 +9,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file: backend.env
 
-  server:
+  backend:
     build:
       context: ../
       dockerfile: deployment/containers/web/Dockerfile
@@ -17,7 +17,7 @@ services:
       - 8000
     command: sh run_server.sh
     volumes:
-      - ../server:/var/app
+      - ../backend:/var/app
       - static_volume:/var/app/staticfiles/
     depends_on:
       - database
@@ -30,10 +30,10 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ../server:/var/app
+      - ../backend:/var/app
       - static_volume:/var/app/staticfiles/
     depends_on:
-      - server
+      - backend
 
   # External dependencies
   redis:
@@ -48,7 +48,7 @@ services:
       dockerfile: deployment/containers/web/Dockerfile
     command: celery -A apps.celery worker -l info
     volumes:
-      - ../server:/var/app
+      - ../backend:/var/app
     depends_on:
       - celery-beat
       - redis
@@ -62,7 +62,7 @@ services:
       dockerfile: deployment/containers/web/Dockerfile
     command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
-      - ../server:/var/app
+      - ../backend:/var/app
     depends_on:
       - redis
     env_file: backend.env
