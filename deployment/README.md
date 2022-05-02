@@ -5,7 +5,7 @@
 1. Install docker-desktop from the official website: 
     [docs.docker.com/get-docker](https://docs.docker.com/get-docker/)
 2. Add the *"docker needed"* variables in your environment file (see the
-    `sample_env.txt` example). Your environment file must be at this place: `server/config/settings/.env`
+    `sample_env.txt` example). Your environment file must be at this place: `backend/config/settings/.env`
 2. Go to the `deployment` directory: `cd deployment/`
 3. Create an empty file `backend.env` in this directory
 3. Build the containers: `docker-compose build`
@@ -55,7 +55,7 @@ Useful tips:
 > time we want to make an update. To do so, we can indicate which service 
 > we want to restart. For example, to restart only the backend:
 > ```
-> $ docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx server
+> $ docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx backend
 > $ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 > ```
 > The `--no-cache` option allowed to delete the cache and be sure that 

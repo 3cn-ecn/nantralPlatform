@@ -1,34 +1,34 @@
 # Python part of the project
 unix-env:
-	cd server && \
+	cd backend && \
 		./install.sh
 
 windows-env:
 	python3 -m pip install virtualenv
-	cd server && python3 -m virtualenv env
-	server\env\Scripts\activate.bat
-	cd server && python3 -m pip install -r requirements.txt
-	python3 server/manage.py migrate
+	cd backend && python3 -m virtualenv env
+	backend\env\Scripts\activate.bat
+	cd backend && python3 -m pip install -r requirements.txt
+	python3 backend/manage.py migrate
 
 # Run the tests
 run-tests:
-	cd server && \
+	cd backend && \
 		python manage.py test
 
-# Init and run the server
-init-server:
-	cd server && \
+# Init and run the backend
+init-backend:
+	cd backend && \
 		python manage.py createsuperuser
 
-run-server:
+run-backend:
 	python -c 'import webbrowser; webbrowser.open("localhost:8000")'
-	cd server && \
+	cd backend && \
 		python manage.py runserver
 
 quality:
-	flake8 --config server/flake8.cfg ./server
+	flake8 --config backend/flake8.cfg ./backend
 
-.PHONY: unix-env windows-env run-tests init-server run-runserver quality
+.PHONY: unix-env windows-env run-tests init-backend run-runbackend quality
 
 
 # Front-end part of the project
