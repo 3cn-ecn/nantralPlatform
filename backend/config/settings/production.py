@@ -15,9 +15,9 @@ DEBUG = False
 SECRET_KEY = env('SECRET_KEY')
 
 if STAGING:
-    ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
-else:
     ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS_STAGING").split(" ")
+else:
+    ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp'
