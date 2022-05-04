@@ -59,3 +59,13 @@ LOGGING = {
     },
 }
 
+
+######################################
+### THIRD PARTY LIBRARIES SETTINGS ###
+######################################
+
+# Debug toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": (lambda _: DEBUG),
+}
+
