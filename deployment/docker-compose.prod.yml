@@ -17,8 +17,7 @@ services:
       - redis
     env_file: backend.env
     environment:
-      - DB_NAME=${DB_NAME_STAGING}
-      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS_STAGING}
+      - STAGING=True
 
   nginx:
     volumes:

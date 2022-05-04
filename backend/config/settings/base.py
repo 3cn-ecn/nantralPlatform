@@ -14,30 +14,54 @@ from datetime import datetime
 import os
 import environ
 from django.urls import reverse_lazy
-env = environ.Env()
-# reading .env file
+
+# import all the environment variables, defining their type and default value
+env = environ.Env(
+    # optional
+    GITHUB_USER=(str, ''),
+    GITHUB_TOKEN=(str, ''),
+    MAPBOX_API_KEY=(str, ''),
+    DISCORD_TOKEN=(str, ''),
+    DISCORD_CHANNEL_ID=(str, ''),
+    DISCORD_ADMIN_MODERATION_WEBHOOK=(str, ''),
+    WP_ADMIN_EMAIL=(str, ''),
+    WP_PUBLIC_KEY=(str, ''),
+    WP_PRIVATE_KEY=(str, ''),
+    TEMPORARY_ACCOUNTS_DATE_LIMIT=(str, '2000-12-31'),
+    STAGING=(bool, False),
+    # docker needed
+    DB_HOSTNAME=(str, ''),
+    DB_PORT=(int, 0),
+    POSTGRES_USER=(str, ''),
+    POSTGRES_PASSWORD=(str, ''),
+    DB_NAME=(str, ''),
+    DB_NAME_STAGING=(str, ''),
+    AWS_ACCESS_KEY_ID=(str, ''),
+    AWS_SECRET_ACCESS_KEY=(str, ''),
+    S3_BUCKET=(str, ''),
+    AWS_SES_REGION=(str, ''),
+    # prod needed
+    SECRET_KEY=(str, ''),
+    DJANGO_ALLOWED_HOSTS=(str, ''),
+    DJANGO_ALLOWED_HOSTS_STAGING=(str, ''),
+    EMAIL_HOST_USER=(str, ''),
+    EMAIL_HOST_PASSWORD=(str, ''),
+    DB_CONTAINER=(str, ''),
+    ERROR_RECIPIENT=(str, ''))
 environ.Env.read_env()
+
+
+#######################
+### DJANGO SETTINGS ###
+#######################
+
+DEBUG = True
 
 # Build paths inside the project like this: join(BASE_DIR, "directory")
 BASE_PATH = environ.Path(__file__) - 3
 BASE_DIR = str(BASE_PATH)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-
-
-secret = environ.Env(
-    GOOGLE_API_KEY=(str, ""),
-    DB_HOSTNAME=(str, ""),
-    DB_PORT=(str, ""),
-    POSTGRES_USER=(str, ""),
-    POSTGRES_PASSWORD=(str, ""),
-    DB_NAME=(str, "")
-)
-
-
-# Application definition
-
+# Applications definition
 DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,7 +70,6 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-
 THIRD_PARTY_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
@@ -58,7 +81,6 @@ THIRD_PARTY_APPS = [
     'extra_settings',
     'push_notifications'
 ]
-
 COMMON_APPS = [
     'apps.account',
     'apps.student',
@@ -77,7 +99,6 @@ COMMON_APPS = [
     'apps.notification',
     'apps.administration',
 ]
-
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
@@ -97,16 +118,11 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 ROOT_URLCONF = 'config.urls'
 LOGIN_REDIRECT_URL = 'None'
 LOGIN_URL = reverse_lazy('account:login')
-
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-
-CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 TEMPLATES = [
     {
@@ -127,8 +143,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Choose default type for primary keys in models
-
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
@@ -136,17 +150,48 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'fr-fr'
-
 TIME_ZONE = 'Europe/Paris'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
-# Richtext config
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# Less origin restrictive for Youtube embed videos
+SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
+
+
+#######################
+### CUSTOM SETTINGS ###
+#######################
+
+TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
+    env('TEMPORARY_ACCOUNTS_DATE_LIMIT'))
+
+STAGING = env('STAGING')
+
+
+######################################
+### THIRD PARTY LIBRARIES SETTINGS ###
+######################################
+
+# Cripsy Forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# CKeditor config
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': [
@@ -194,36 +239,33 @@ CKEDITOR_5_CONFIGS = {
     }
 }
 
+# Push notifications
+PUSH_NOTIFICATIONS_SETTINGS = {
+    'WP_PUBLIC_KEY': env('WP_PUBLIC_KEY'),
+    'WP_PRIVATE_KEY': env('WP_PRIVATE_KEY'),
+    'WP_CLAIMS': {'sub': 'mailto:' + env('WP_ADMIN_EMAIL')}
+}
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Discord connection
-DISCORD_TOKEN = env('DISCORD_TOKEN', default='')
-DISCORD_SERVER = env('DISCORD_SERVER', default='')
-DISCORD_CHANNEL_ID = env('DISCORD_CHANNEL_ID', default='')
+# Debug toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": (lambda _: DEBUG),
+}
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+##############################
+### THIRD PARTY CONNEXIONS ###
+##############################
+
+# Discord
+DISCORD_TOKEN = env('DISCORD_TOKEN')
+DISCORD_CHANNEL_ID = env('DISCORD_CHANNEL_ID')
+DISCORD_ADMIN_MODERATION_WEBHOOK = env('DISCORD_ADMIN_MODERATION_WEBHOOK')
+
+# Github
+GITHUB_USER = env('GITHUB_USER')
+GITHUB_TOKEN = env('GITHUB_TOKEN')
 GITHUB_REPO = 'nantral-platform/nantralPlatform'
 
-# Less origin restrictive for Youtube embed videos
-SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
-
-TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
-    env('TEMPORARY_ACCOUNTS_DATE_LIMIT', default='2000-12-31'))
-
-# Push notifications settings - see django-push-notifications on github
-PUSH_NOTIFICATIONS_SETTINGS = {
-    'WP_PUBLIC_KEY': env('WP_PUBLIC_KEY', default=''),
-    'WP_PRIVATE_KEY': env('WP_PRIVATE_KEY', default=''),
-    'WP_CLAIMS': {'sub': 'mailto:' + env('WP_ADMIN_EMAIL', default='')}
-}
+# Mapbox
+MAPBOX_API_KEY = env('MAPBOX_API_KEY')
