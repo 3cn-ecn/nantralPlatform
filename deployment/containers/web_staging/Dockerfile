@@ -20,7 +20,7 @@ RUN mkdir -p /var/app/logs
 RUN mkdir var/app/staticfiles
 WORKDIR  /var/app
 
-ADD server/requirements.txt ./requirements.txt
+ADD backend/requirements.txt ./requirements.txt
 RUN pip install -U pip && \
     pip install -r requirements.txt
 
@@ -29,10 +29,10 @@ RUN pip install -U pip && \
 
 # Copy stuff in rarest-to-most-often order
 # Files that should basically never change
-COPY server/manage.py \
-    server/run_server_staging.sh
+COPY backend/manage.py \
+    backend/run_server_staging.sh
 # Files that will change rarely
-COPY server/templates ./templates
-COPY server/config ./config
+COPY backend/templates ./templates
+COPY backend/config ./config
 # Files that will change often
-COPY server/apps ./apps
+COPY backend/apps ./apps

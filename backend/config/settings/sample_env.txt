@@ -1,0 +1,62 @@
+# This is a basic env model.
+# Please create your own .env file by copying this content and provid your own 
+# credentials
+
+################
+### OPTIONAL ###
+################
+
+# Github features (eg create issues from website)
+GITHUB_USER=
+GITHUB_TOKEN=
+
+# Mapbox key (eg roommates map)
+MAPBOX_API_KEY=
+
+# Discord features (eg admin requests)
+DISCORD_TOKEN=
+DISCORD_CHANNEL_ID=
+DISCORD_ADMIN_MODERATION_WEBHOOK=
+
+# Webpush notifications
+WP_ADMIN_EMAIL=
+WP_PUBLIC_KEY=
+WP_PRIVATE_KEY=
+
+# Custom settings
+TEMPORARY_ACCOUNTS_DATE_LIMIT=2021-09-30
+
+
+#####################
+### DOCKER NEEDED ###
+#####################
+
+# Postgres database settings
+DB_HOSTNAME=database
+DB_PORT=5432
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+DB_NAME=
+DB_NAME_STAGING=
+
+# AWS credentials for media files server
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+S3_BUCKET=
+AWS_SES_REGION=
+
+
+###################
+### PROD NEEDED ###
+###################
+
+# Django settings
+SECRET_KEY=
+DJANGO_ALLOWED_HOSTS=
+DJANGO_ALLOWED_HOSTS_STAGING=
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+
+# Database operations infos (for backup, copy...)
+DB_CONTAINER=
+ERROR_RECIPIENT=
