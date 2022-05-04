@@ -111,3 +111,14 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute=0, hour=4, day_of_week=1)
     }
 }
+
+
+######################################
+### THIRD PARTY LIBRARIES SETTINGS ###
+######################################
+
+# Debug toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": (lambda _: DEBUG),
+}
+

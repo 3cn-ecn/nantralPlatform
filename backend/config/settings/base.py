@@ -246,12 +246,6 @@ PUSH_NOTIFICATIONS_SETTINGS = {
     'WP_CLAIMS': {'sub': 'mailto:' + env('WP_ADMIN_EMAIL')}
 }
 
-# Debug toolbar
-DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK": (lambda _: DEBUG),
-}
-
-
 
 ##############################
 ### THIRD PARTY CONNEXIONS ###
