@@ -6,5 +6,5 @@ from .views import *
 app_name = 'notification'
 
 urlpatterns = [
-    path('settings', SettingsView.as_view(), name='settings')
+    path('settings/', SettingsView.as_view(), name='settings')
 ]

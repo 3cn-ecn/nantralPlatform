@@ -6,13 +6,13 @@ from apps.group.urls import makeGroupUrlpatterns
 app_name = 'roommates'
 
 urlpatterns = [
-    path('create/housing', CreateHousingView.as_view(), name='create-housing'),
-    path('create/<int:housing_pk>/roommates',
+    path('create/housing/', CreateHousingView.as_view(), name='create-housing'),
+    path('create/<int:housing_pk>/roommates/',
          CreateRoommatesView.as_view(), name='create-roommates'),
-    path('map', HousingMap.as_view(), name='housing-map'),
-    path('liste', HousingList.as_view(), name='housing-list'),
+    path('map/', HousingMap.as_view(), name='housing-map'),
+    path('liste/', HousingList.as_view(), name='housing-list'),
     path('', HousingMap.as_view(), name='index'),
-    path('coloc/<slug:slug>/edit/colocathlon',
+    path('coloc/<slug:slug>/edit/colocathlon/',
          ColocathlonFormView.as_view(), name='colocathlon-edit'),
 ] + makeGroupUrlpatterns(
     url_base='coloc',
