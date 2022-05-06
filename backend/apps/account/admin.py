@@ -33,7 +33,6 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
             email = mail.EmailMultiAlternatives(
                 subject="[Nantral-Platform] Rappel votre accès temporaire va expirer!",
                 body=email_html,
-                from_email='accounts@nantral-platform.fr',
                 to=[tempAccessReq.user.email]
             )
             email.attach_alternative(content=email_html, mimetype="text/html")

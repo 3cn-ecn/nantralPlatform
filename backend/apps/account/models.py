@@ -64,7 +64,7 @@ class TemporaryAccessRequest(models.Model):
             'email_valid': self.mail_valid
         })
         user.email_user(
-            subject=subject, message=message, from_email='accounts@nantral-platform.fr', html_message=message)
+            subject=subject, message=message, html_message=message)
 
     def deny(self):
         user: User = self.user
@@ -74,6 +74,6 @@ class TemporaryAccessRequest(models.Model):
             'domain': self.domain
         })
         user.email_user(
-            subject=subject, message=message, from_email='accounts@nantral-platform.fr', html_message=message)
+            subject=subject, message=message, html_message=message)
         self.user.delete()
         self.delete()

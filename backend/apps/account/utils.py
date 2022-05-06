@@ -58,11 +58,11 @@ def send_email_confirmation(user: User, request: HttpRequest, temporary_access: 
         'token': account_activation_token.make_token(user),
     })
     if send_to is not None:
-        send_mail(subject, message, 'registration@nantral-platform.fr',
+        send_mail(subject, message,
                   html_message=message, recipient_list=[send_to])
     else:
         user.email_user(
-            subject, message, 'registration@nantral-platform.fr', html_message=message)
+            subject, message, html_message=message)
     if temporary_access:
         messages.success(
             request, 'Un mail vous a été envoyé pour confirmer votre adresse mail personnelle.')

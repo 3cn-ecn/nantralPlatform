@@ -197,7 +197,7 @@ class ForgottenPassView(FormView):
                     'token': account_activation_token.make_token(user),
                 })
                 user.email_user(
-                    subject, message, 'accounts@nantral-platform.fr', html_message=message)
+                    subject, message, html_message=message)
         except User.DoesNotExist:
             pass
         messages.success(

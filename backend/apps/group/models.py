@@ -102,7 +102,7 @@ class Group(models.Model, SlugModel):
     @property
     def app_name(self):
         return self.modelName.title()
-    
+
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
@@ -187,7 +187,7 @@ class AdminRightsRequest(models.Model):
             'user': self.student.user
         })
         self.student.user.email_user(f'Vous êtes admin de {group}', mail,
-                                     'group-manager@nantral-platform.fr', html_message=mail)
+                                     from_email=None, html_message=mail)
         webhook = DiscordWebhook(
             url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été acceptée.',
@@ -223,7 +223,7 @@ class AdminRightsRequest(models.Model):
 #                     'user': user
 #                 })
 #                 user.email_user(f'Vous êtes admin de {instance}', mail,
-#                                 'group-manager@nantral-platform.fr', html_message=mail)
+#                                 from_email=None, html_message=mail)
 #         elif action == "post_remove":
 #             for pk in pk_set:
 #                 user = User.objects.get(pk=pk)
@@ -232,4 +232,4 @@ class AdminRightsRequest(models.Model):
 #                     'user': user
 #                 })
 #                 user.email_user(
-#                     f'Vous n\'êtes plus membre de {instance}', mail, 'group-manager@nantral-platform.fr', html_message=mail)
+#                     f'Vous n\'êtes plus membre de {instance}', mail, from_email=None, html_message=mail)
