@@ -12,13 +12,45 @@ on:
 # This workflow contains 3 jobs.
 # webpack and test can run side by side
 jobs:
-  webpack:
+  webpack-check:
+    name: Check for frontend changes
+    outputs:
+      run_job: ${{ steps.check_files.outputs.run_job }}
     # Specify which OS we are running our job on
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # A step can use a GitHub action which is available on the marketplace or simply run a command in the runner's shell.
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Pull latest commit
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Look for modified files
+        id: check_files
+        run: |
+          echo "=============== List modified files ==============="
+          git diff --name-only HEAD^ HEAD
+
+          echo "========== Check paths of modified files =========="
+          git diff --name-only HEAD^ HEAD > files.txt
+          while IFS= read -r file
+          do
+            echo $file
+            if [[ $file == frontend/* ]]; then
+              echo "This modified file is under the 'frontend' folder."
+              echo "::set-output name=run_job::true"
+              break
+            else
+              echo "::set-output name=run_job::false"
+            fi
+          done < files.txt
+  webpack:
+    name: Build React bundles
+    needs: webpack-check
+    if: needs.webpack-check.outputs.run_job == 'true'
+    runs-on: ubuntu-latest
+    steps:
       - name: Pull latest commit
         uses: actions/checkout@v2
       - name: Setup Node
