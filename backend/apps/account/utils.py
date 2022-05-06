@@ -58,7 +58,7 @@ def send_email_confirmation(user: User, request: HttpRequest, temporary_access: 
         'token': account_activation_token.make_token(user),
     })
     if send_to is not None:
-        send_mail(subject, message,
+        send_mail(subject, message, None,
                   html_message=message, recipient_list=[send_to])
     else:
         user.email_user(
