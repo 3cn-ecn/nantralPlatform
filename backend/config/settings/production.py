@@ -25,6 +25,9 @@ EMAIL_PORT = '25'
 # No need to authenticate on localhost
 EMAIL_HOST_USER = None
 EMAIL_HOST_PASSWORD = None
+# Specify default sender emails
+DEFAULT_FROM_EMAIL = "Webmaster Nantral-Platform <webmaster@nantral-platform.fr>"
+SERVER_EMAIL = "Admin Nantral-Platform <admin@nantral-platform.fr>"
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
