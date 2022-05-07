@@ -158,7 +158,8 @@ class AuthView(FormView):
                         return redirect('account:login')
                 else:
                     messages.warning(
-                        self.request, 'Votre compte n\'est pas encore actif. Veuillez cliquer sur le lien dans \'email.')
+                        self.request,
+                        'Votre compte n\'est pas encore actif. Veuillez cliquer sur le lien dans \'email.')
             login(self.request, user,
                   backend='apps.account.emailAuthBackend.EmailBackend')
             # we send back the user to where he wanted to go or to home page
