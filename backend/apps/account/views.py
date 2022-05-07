@@ -120,7 +120,7 @@ class AuthView(FormView):
         message = f'Veuillez vous connecter avec votre adresse mail ECN.'
         messages.warning(self.request, message)
         return redirect('account:login')
-
+ 
     def form_valid(self, form):
         username = form.cleaned_data['email']
         password = form.cleaned_data['password']
