@@ -36,7 +36,7 @@ function Root(props: {}): JSX.Element {
   const [editMembersOrderMode, setEditMembersOrderMode] = useState(false);
 
   const handleEditMembersOrderMode = (e) => {
-    setEditMembersOrderMode(e);
+    setEditMembersOrderMode(e.target.checked);
   };
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));

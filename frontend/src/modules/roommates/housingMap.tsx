@@ -1,6 +1,5 @@
 ﻿import React, { useState, useEffect, useRef, useMemo } from "react";
 import { render } from "react-dom";
-import { easeCubic } from "react-d3-library";
 import { Popup, Marker, FlyToInterpolator } from "react-map-gl";
 import { useCookies, CookiesProvider } from "react-cookie";
 
@@ -28,7 +27,6 @@ function Root(props: {}): JSX.Element {
     zoom: 12,
     transitionDuration: 500,
     transitionInterpolator: new FlyToInterpolator(),
-    transitionEasing: easeCubic,
     bearing: 0,
     pitch: 0,
   });
@@ -42,9 +40,9 @@ function Root(props: {}): JSX.Element {
   const [colocathlonParticipantsOnly, setColocathlonParticipantsOnly] =
     useState(colocathlonCookieValue);
 
-  const handleColocathlonParticipants = (e: boolean) => {
-    setColocathlonParticipantsOnly(e);
-    setCookie("colocathlon-cookie", e);
+  const handleColocathlonParticipants = (e) => {
+    setColocathlonParticipantsOnly(e.target.checked);
+    setCookie("colocathlon-cookie", e.target.checked);
   };
 
   const mapRef = useRef(null);
@@ -68,7 +66,6 @@ function Root(props: {}): JSX.Element {
               latitude: housing.latitude,
               transitionDuration: 500,
               transitionInterpolator: new FlyToInterpolator(),
-              transitionEasing: easeCubic,
               bearing: 0,
               pitch: 0,
             });

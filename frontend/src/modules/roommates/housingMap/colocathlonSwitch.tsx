@@ -1,5 +1,5 @@
 import * as React from "react";
-import Switch from "react-switch";
+import Switch from "@mui/material/Switch";
 
 import {
   colocathlonSwitchDivStyle,
@@ -16,8 +16,6 @@ export function ColocathlonSwitch(props: ColocathlonSwitchProps) {
         <Switch
           checked={status}
           onChange={handle}
-          uncheckedIcon={false}
-          checkedIcon={false}
         />
       </div>
       <span style={colocathlonSwitchChildStyle}>Mode Colocathlon</span>

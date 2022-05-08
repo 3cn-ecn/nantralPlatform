@@ -1,10 +1,10 @@
 var path = require("path");
-var apps_dir = path.join(__dirname, "../src/containers")
+var apps_dir = path.join(__dirname, "../src/modules")
 
 module.exports = {
   entry: {
     sw:                     path.join(apps_dir, "app/sw.ts"),
-    app:                    path.join(apps_dir, "app/app.ts"),
+    launchApp:              path.join(apps_dir, "app/app.ts"),
     clubsList:              path.join(apps_dir, "club/clubsList.tsx"),
     eventsGroupListUpdate:  path.join(apps_dir, "group/eventsGroupListUpdate.tsx"),
     postsGroupListUpdate:   path.join(apps_dir, "group/postsGroupListUpdate.tsx"),
@@ -15,7 +15,8 @@ module.exports = {
     housingMap:             path.join(apps_dir, "roommates/housingMap.tsx"),
     createHousing:          path.join(apps_dir, "roommates/createHousing.tsx"),
     subscribeButton:        path.join(apps_dir, "notification/subscribeButton.tsx"),
-    deviceSubscribeButton:  path.join(apps_dir, "notification/deviceSubscribeButton.tsx")
+    deviceSubscribeButton:  path.join(apps_dir, "notification/deviceSubscribeButton.tsx"),
+    reactApp:               path.join(__dirname, "../src/index.tsx")
   },
   output: {
     path: path.join(__dirname, "../../backend/static/js"),

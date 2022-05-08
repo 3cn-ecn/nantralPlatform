@@ -3,7 +3,6 @@ import { Form } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import { Popup, FlyToInterpolator } from "react-map-gl";
-import { easeCubic } from "react-d3-library";
 
 import { Housing } from "./interfaces";
 import { ColocInfo } from "./colocInfo";
@@ -32,8 +31,7 @@ export function MapForm(props): JSX.Element {
               longitude: housing.longitude,
               latitude: housing.latitude,
               transitionDuration: 500,
-              transitionInterpolator: new FlyToInterpolator(),
-              transitionEasing: easeCubic,
+              transitionInterpolator: new FlyToInterpolator()
             });
             setPopUpinfo(
               <Popup

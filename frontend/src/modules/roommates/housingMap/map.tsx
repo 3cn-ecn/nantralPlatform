@@ -4,7 +4,6 @@ import MapGL, {
   FlyToInterpolator,
   NavigationControl,
 } from "react-map-gl";
-import { easeCubic } from "react-d3-library";
 
 import { geolocateStyle, navControlStyle } from "./styles";
 import { ClusterMarker } from "./clusterMarker";
@@ -50,8 +49,7 @@ export function Map(props): JSX.Element {
                       longitude: longitude,
                       latitude: latitude,
                       transitionDuration: 500,
-                      transitionInterpolator: new FlyToInterpolator(),
-                      transitionEasing: easeCubic,
+                      transitionInterpolator: new FlyToInterpolator()
                     });
                   }}
                 />

@@ -141,17 +141,13 @@ def service_worker(request):
     return response
 
 
-def firebase_service_worker(request):
-    """A view to serve the firebase service worker"""
-    sw_path = settings.BASE_DIR + "/static/js/firebase-messaging-sw.js"
-    file = open(sw_path)
-    response = HttpResponse(file.read(), content_type='application/javascript')
-    file.close()
+def offline_view(request):
+    response = render(request, 'home/offline.html')
     return response
 
 
-def offline_view(request):
-    response = render(request, 'home/offline.html')
+def react_app_view(request):
+    response = render(request, 'base_empty.html')
     return response
 
 
