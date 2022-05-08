@@ -1,7 +1,7 @@
 {
-  "name": "nantralplatform",
-  "version": "1.0.0",
-  "description": "Frontend of the nantral platform with react",
+  "name": "nantralplatform-frontend",
+  "version": "2.0.0-alpha",
+  "description": "Frontend of the nantral platform application",
   "main": "index.js",
   "mode": "production",
   "scripts": {
@@ -11,8 +11,17 @@
     "watch": "webpack --config webpack.config/webpack.dev.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Robin TROESCH",
+  "author": {
+    "name": "Nantral Platform Club of Centrale Nantes",
+    "email": "contact@nantral-platform.fr",
+    "url": "https://nantral-platform.fr"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "github:nantral-platform/nantralPlatform",
+    "directory": "frontend/"
+  },
   "devDependencies": {
     "@babel/cli": "^7.15.0",
     "@babel/core": "^7.15.0",

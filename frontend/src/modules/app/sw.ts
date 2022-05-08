@@ -8,10 +8,6 @@ import {
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { ExpirationPlugin } from 'workbox-expiration';
 
-import { MANAGE_NOTIFICATION_URL } from '../notification/api_urls';
-import formatUrl from '../utils/formatUrl';
-import axios from "../utils/axios";
-
 
 //////////////////////////////////
 /// CACHE MANAGER WITH WORKBOX ///
