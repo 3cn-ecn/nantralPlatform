@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM, { render } from "react-dom";
 import { Spinner, Dropdown, Button } from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons'
+import { Settings, SettingsOutlined } from '@mui/icons-material';
 
 import axios from "../utils/axios";
 import formatUrl from "../utils/formatUrl";
@@ -10,6 +9,7 @@ import formatUrl from "../utils/formatUrl";
 import { SentNotification } from "./interfaces";
 import merge from "./utils";
 import { GET_NOTIFICATIONS_URL, MANAGE_NOTIFICATION_URL } from "./api_urls";
+import { IconButton } from "@mui/material";
 
 
 /**
@@ -158,10 +158,14 @@ function NotificationMenu(props): JSX.Element {
     return(
       <>
         <li>
-          <h5 className="dropdown-item-text mb-0 d-flex">
-            Notifications
-            <a href="/notification/settings" className="ms-auto text-secondary"><FontAwesomeIcon icon={faCog}/></a>
-          </h5>
+          <div className="d-flex dropdown-item-text mb-0">
+            <h5 className="pt-2">
+              Notifications
+            </h5>
+            <IconButton href="/notification/settings" className="ms-auto text-secondary">
+              <SettingsOutlined />
+            </IconButton>
+          </div>
         </li>
         { askPermissionBanner ?
           <li className="">

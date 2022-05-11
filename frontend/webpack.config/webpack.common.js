@@ -1,5 +1,5 @@
 var path = require("path");
-var apps_dir = path.join(__dirname, "../src/modules")
+var apps_dir = path.join(__dirname, "../src/components")
 
 module.exports = {
   entry: {

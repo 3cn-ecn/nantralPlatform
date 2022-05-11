@@ -17,5 +17,5 @@ urlpatterns = [
     path('sw.js/', service_worker),
     path('offline.html/', offline_view),
     path('doihavetologin', DoIHaveToLoginView.as_view()),
-    re_path('.*', react_app_view),
+    re_path('^.*/$', react_app_view),
 ]
