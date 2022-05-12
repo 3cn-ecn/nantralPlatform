@@ -12,9 +12,8 @@ import docker
 import gzip
 import os
 from environs import Env
-# import boto3
-# from botocore.utils import fix_s3_host
-import subprocess
+import boto3
+from botocore.config import Config
 from datetime import datetime
 import logging
 from discord_webhook import DiscordWebhook, DiscordEmbed
@@ -73,26 +72,11 @@ def upload_file(file_name: str, bucket: str, object_name: str, access_key_id: st
 
     """
     log(logging.debug, "Uploading to S3.")
-    # Waiting for endpoint_url to be implemented to use below.
-    # if False:
-    #     s3 = boto3.resource(service_name="s3", aws_access_key_id=access_key_id,
-    #                         aws_secret_access_key=access_secret_key, endpoint_url="https://s3.gra.cloud.ovh.net/")
-    #     s3.meta.client.meta.events.unregister('before-sign.s3', fix_s3_host)
-    #     s3.meta.client.upload_file(file_name, bucket, object_name)
-
-    path = os.path.join(DIR_PATH, file_name)
-    bucket_uri = f"s3://{bucket}"
-    subprocess.run(["aws", "configure", "set", "aws_access_key_id", access_key_id])
-    subprocess.run(["aws", "configure", "set", "aws_secret_access_key", access_secret_key])
-    subprocess.run(["aws", "configure", "set", "plugins.endpoint", "awscli_plugin_endpoint"])
-    subprocess.run(["aws", "configure", "set", "s3.endpoint_url", "https://s3.gra.cloud.ovh.net/"])
-    subprocess.run(["aws", "configure", "set", "s3.signature_version", "s3v4"])
-    subprocess.run(["aws", "configure", "set", "s3.addressing_style", "virtual"])
-    subprocess.run(["aws", "configure", "set", "s3api.endpoint_url", "https://s3.gra.cloud.ovh.net/"])
-
-    subprocess.run(
-        ['aws', 's3', 'cp', path, bucket_uri, "--endpoint-url", "https://s3.gra.cloud.ovh.net/"],
-        capture_output=True, text=True, check=True)
+    s3_client = boto3.client('s3', endpoint_url="https://s3.gra.cloud.ovh.net/",
+                             aws_access_key_id=access_key_id,
+                             aws_secret_access_key=access_secret_key,
+                             config=Config(s3={"addressing_style": "virtual"}))
+    s3_client.upload_file(file_name, bucket, object_name)
     log(logging.debug, "Done uploading to S3.")
 
 
@@ -108,13 +92,13 @@ def send_status(url: str, file_name: str = None):
     embed = DiscordEmbed(title="**Database Backup Status**")
     embed.description = ""
     if file_name is not None:
-        embed.add_embed_field(name="Status", value="🟢 Success 🟢", inline=True)
-        embed.add_embed_field(name="File Name", value=file_name, inline=True)
+        embed.add_embed_field(name="Status", value="Success 🟢", inline=True)
+        embed.add_embed_field(name="File Name", value=f"`{file_name}`", inline=True)
         log(logging.info, "Sending success notification.")
     else:
-        embed.add_embed_field(name="Status", value="🔴 Error 🔴", inline=True)
+        embed.add_embed_field(name="Status", value="Error 🔴", inline=True)
         embed.add_embed_field(name="File Name", value="None", inline=True)
-        log(logging.info, "Sending success notification.")
+        log(logging.info, "Sending error notification.")
     webhook.add_embed(embed)
     webhook.execute()
 
@@ -145,7 +129,6 @@ if __name__ == "__main__":
     AWS_SECRET_ACCESS_KEY = env.str("OVH_SECRET_ACCESS_KEY")
     DISCORD_WEBHOOK = env.str("DISCORD_BACKUP_STATUS_WEBHOOK")
     log(logging.debug, "Done getting environment variables.")
-
     try:
         main()
         log(logging.info, "Success.")
