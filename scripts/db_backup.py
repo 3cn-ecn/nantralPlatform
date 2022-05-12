@@ -70,7 +70,7 @@ def upload_file(file_name: str, bucket: str, object_name: str, access_key_id: st
     """
     log(logging.debug, "Uploading to S3.")
     s3_client = boto3.client('s3', aws_access_key_id=access_key_id,
-                             aws_secret_access_key=access_secret_key, endpoint_url="https://s3.gra.cloud.ovh.net")
+                             aws_secret_access_key=access_secret_key, endpoint_url="https://s3.gra.cloud.ovh.net/")
     s3_client.upload_file(file_name, bucket, object_name)
     log(logging.debug, "Done uploading to S3.")
 
