@@ -33,7 +33,7 @@ def upload_file(file_name: str, bucket: str, object_name: str, access_key_id: st
     :return: True if file was uploaded, else False
     """
     s3_client = boto3.client('s3', aws_access_key_id=access_key_id,
-                             aws_secret_access_key=access_secret_key)
+                             aws_secret_access_key=access_secret_key,endpoint_url="https://s3.gra.cloud.ovh.net")
     s3_client.upload_file(file_name, bucket, object_name)
 
 
@@ -74,8 +74,8 @@ try:
     DB_NAME = env.str("DB_NAME")
     DB_CONTAINER = env.str("DB_CONTAINER")
     BUCKET = env.str("S3_BUCKET")
-    AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
+    AWS_ACCESS_KEY_ID = env.str("OVH_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = env.str("OVH_SECRET_ACCESS_KEY")
     AWS_REGION = env.str("AWS_SES_REGION")
     ERROR_RECIPIENT = env.str("ERROR_RECIPIENT")
     try:
