@@ -80,24 +80,28 @@ def upload_file(file_name: str, bucket: str, object_name: str, access_key_id: st
     log(logging.debug, "Done uploading to S3.")
 
 
-def send_status(url: str, file_name: str = None):
+def send_status(url: str, file_path: str = None, size: int = None):
     """Send a status update to Discord.
 
     Args:
         url (str): The url of the webhook.
-        file_name (str, optional): The name of the uploaded file, if it exists. Defaults to None.
+        file_path (str, optional): The name of the uploaded file, if it exists. Defaults to None.
+        size (int, optional): The size of the uploaded file, if it exists. Defaults to None.
 
     """
     webhook = DiscordWebhook(url=url)
     embed = DiscordEmbed(title="**Database Backup Status**")
     embed.description = ""
-    if file_name is not None:
+    if file_path is not None:
         embed.add_embed_field(name="Status", value="Success 🟢", inline=True)
-        embed.add_embed_field(name="File Name", value=f"`{file_name}`", inline=True)
+        embed.add_embed_field(name="File Name", value=f"`{file_path}`", inline=True)
+        embed.set_footer(text=f"File size: {size}")
+        embed.set_timestamp()
         log(logging.info, "Sending success notification.")
     else:
         embed.add_embed_field(name="Status", value="Error 🔴", inline=True)
         embed.add_embed_field(name="File Name", value="None", inline=True)
+        embed.set_timestamp()
         log(logging.info, "Sending error notification.")
     webhook.add_embed(embed)
     webhook.execute()
@@ -111,8 +115,9 @@ def main() -> None:
     upload_file("output.sql.gz", bucket=BUCKET,
                 object_name=f"backups/{object_name}{object_extension}",
                 access_key_id=AWS_ACCESS_KEY_ID, access_secret_key=AWS_SECRET_ACCESS_KEY)
+    size = os.path.getsize("output.sql.gz")
     os.remove("output.sql.gz")
-    send_status(DISCORD_WEBHOOK, object_name+object_extension)
+    send_status(DISCORD_WEBHOOK, object_name+object_extension, size)
 
 
 if __name__ == "__main__":
