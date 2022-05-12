@@ -21,6 +21,6 @@
   "python.linting.flake8Enabled": true,
   "python.linting.flake8Args": ["--max-line-length=120"],
   "python.linting.pydocstyleEnabled": true,
-  "python.linting.pydocstyleArgs": ["--ignore=D400,D100,D102"],
+  "python.linting.pydocstyleArgs": ["--ignore=D400,D100,D102,D213"],
   "autoDocstring.docstringFormat": "numpy"
 }

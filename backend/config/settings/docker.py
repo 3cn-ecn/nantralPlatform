@@ -1,5 +1,8 @@
 """A configuration for local docker use in development.
-DO NOT USE IN PRODUCTION."""
+
+DO NOT USE IN PRODUCTION.
+"""
+
 # flake8: noqa: F405
 from celery.schedules import crontab
 
