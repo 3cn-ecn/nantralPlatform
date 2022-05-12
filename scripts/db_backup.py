@@ -95,7 +95,8 @@ def send_status(url: str, file_path: str = None, size: int = None):
     if file_path is not None:
         embed.add_embed_field(name="Status", value="Success 🟢", inline=True)
         embed.add_embed_field(name="File Name", value=f"`{file_path}`", inline=True)
-        embed.set_footer(text=f"File size: {size}")
+        size = round(size/(10**6), 3)
+        embed.set_footer(text=f"File size: {size} Mo")
         embed.set_timestamp()
         log(logging.info, "Sending success notification.")
     else:
