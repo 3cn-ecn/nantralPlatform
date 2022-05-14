@@ -1,9 +1,10 @@
-name: Test Docs
+name: Testing Docs
 
 on:
   pull_request:
     branches:
       - master
+      - staging
     paths:
       - docs/**
       - .github/workflows/test-docs.yml
