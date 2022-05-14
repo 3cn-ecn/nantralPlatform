@@ -22,7 +22,7 @@ print("Using docker config")
 DATABASES = {
     'default': {
         'ENGINE':       'django.db.backends.postgresql',
-        'NAME':         env('DB_NAME_STAGING') if STAGING else env('DB_NAME'),
+        'NAME':         env('POSTGRES_DB_STAGING') if STAGING else env('POSTGRES_DB'),
         'USER':         env('POSTGRES_USER'),
         'PASSWORD':     env('POSTGRES_PASSWORD'),
         'HOST':         env('DB_HOSTNAME'),
@@ -46,10 +46,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "test"
-
 ALLOWED_HOSTS = ["django", "localhost"]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -65,27 +61,6 @@ CACHES = {
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
-
-
-##################################
-### OVH MEDIA STORAGE SETTINGS ###
-##################################
-
-AWS_ACCESS_KEY_ID = env('OVH_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('OVH_SECRET_ACCESS_KEY')
-
-AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET')
-AWS_S3_REGION_NAME = 'gra'
-AWS_SES_REGION = 'gra'
-AWS_S3_CUSTOM_DOMAIN = f'storage.{AWS_S3_REGION_NAME}.cloud.ovh.net/v1/AUTH_f872c5d9108a481eafb02f903c46dbf0/{AWS_STORAGE_BUCKET_NAME}'
-AWS_S3_ENDPOINT_URL = "https://s3.gra.cloud.ovh.net"
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-    'ACL': 'public-read'
-}
 
 
 #######################

@@ -28,4 +28,4 @@ cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPla
 cp /etc/letsencrypt/live/nantral-platform.fr/fullchain.pem /home/ubuntu/nantralPlatform/deployment/certs/cert.pem || exit 1
 
 # Reload nginx
-docker exec -it deployment_nginx_1 nginx -s reload
+docker-compose exec nginx nginx -s reload

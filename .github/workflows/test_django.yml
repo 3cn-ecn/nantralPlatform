@@ -1,8 +1,9 @@
-name: Testing
+name: Testing Django
 
 on:
   pull_request:
     branches: [master]
+    paths: [backend/**]
 
 jobs:
   build:
@@ -13,13 +14,13 @@ jobs:
         python-version: ["3.10"]
     env:
       working-directory: ./backend
-      AWS_ACCESS_KEY_ID: test
-      AWS_SECRET_ACCESS_KEY: test
-      GITHUB_USER: unitrium
-      GITHUB_TOKEN: test
-      S3_BUCKET: test
-      MAPBOX_API_KEY: test
-      DISCORD_ADMIN_MODERATION_WEBHOOK: test
+      # AWS_ACCESS_KEY_ID: test
+      # AWS_SECRET_ACCESS_KEY: test
+      # GITHUB_USER: unitrium
+      # GITHUB_TOKEN: test
+      # S3_BUCKET: test
+      # MAPBOX_API_KEY: test
+      # DISCORD_ADMIN_MODERATION_WEBHOOK: test
 
     steps:
       - uses: actions/checkout@v2
@@ -32,12 +33,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Run flake8
-        uses: suo/flake8-github-action@releases/v1
-        with:
-          checkName: "build" # NOTE: this needs to be the same as the job name
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Run flake8
+      #   uses: suo/flake8-github-action@releases/v1
+      #   with:
+      #     checkName: "build" # NOTE: this needs to be the same as the job name
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Tests
         working-directory: ${{ env.working-directory }}
         run: |
