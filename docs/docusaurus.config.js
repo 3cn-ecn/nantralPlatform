@@ -66,10 +66,9 @@ const config = {
         },
         items: [
           {
-            type: "doc",
-            docId: "intro",
+            to: "/docs",
+            label: "Docs",
             position: "left",
-            label: "Tutorial",
           },
           {
             to: "/blog",
@@ -96,7 +95,7 @@ const config = {
             items: [
               {
                 label: "Tutorial",
-                to: "/docs/intro",
+                to: "/docs/index",
               },
             ],
           },
