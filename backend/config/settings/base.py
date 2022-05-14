@@ -36,10 +36,9 @@ env = environ.Env(
     POSTGRES_PASSWORD=(str, ''),
     DB_NAME=(str, ''),
     DB_NAME_STAGING=(str, ''),
-    AWS_ACCESS_KEY_ID=(str, ''),
-    AWS_SECRET_ACCESS_KEY=(str, ''),
+    OVH_ACCESS_KEY_ID=(str, ''),
+    OVH_SECRET_ACCESS_KEY=(str, ''),
     S3_BUCKET=(str, ''),
-    AWS_SES_REGION=(str, ''),
     # prod needed
     SECRET_KEY=(str, ''),
     DJANGO_ALLOWED_HOSTS=(str, ''),
