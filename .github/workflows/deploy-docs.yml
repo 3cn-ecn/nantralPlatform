@@ -9,8 +9,11 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to GitHub Pages
+    name: Deploy docs to GitHub Pages
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
@@ -19,9 +22,9 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: cd docs && npm ci
+        run: npm ci
       - name: Build website
-        run: cd docs && npm run build
+        run: npm run build
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
