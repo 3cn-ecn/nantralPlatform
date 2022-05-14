@@ -6,7 +6,6 @@ from apps.utils.slug import get_slug_from_full_slug
 
 
 def simplify_slug(model):
-    print(type(model))
     for object in model.objects.all():
         object.slug = get_slug_from_full_slug(object.slug)
         if not object.slug:
@@ -18,6 +17,7 @@ def simplify_slug(model):
                 slug = f'{slug}-{id}'
             object.slug = slug
         object.save()
+
 
 def main_simplify_slug(apps, schema_editor):
     Club = apps.get_model('club', 'Club')
