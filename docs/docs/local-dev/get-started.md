@@ -175,7 +175,7 @@ In django, all functionnalities are separeted in "apps". Each "app" correspond t
 
 ## 5. Developp the frontend
 
-For the frontend part, all informations are explained on the dedicated page: [Frontend with React](./react).
+For the frontend part, all informations are explained on the dedicated page: [Frontend with React](../react).
 
 ## 6. Manage your virtualenv
 

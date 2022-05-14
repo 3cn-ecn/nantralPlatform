@@ -78,7 +78,7 @@ dateCreated: 2021-10-14T22:39:30.630Z
 
 - Keep Django applications as small as possible.
 - Every new feature has to be implemented in a new Django application. Fo instance, the club application should only be used to manage clubs. Furthermore, the news application, even though it's being used by clubs, should not be a function of clubs but a standalone app. This ensures atomicity and easy unittesting.
-- When developping localy, do use a virtual environment. See [our getting started](./get-started#h-2-server) for more details.
+- When developping localy, do use a virtual environment. See [our getting started](../get-started#h-2-server) for more details.
 - Write (at least) one unittest per Django view.
 - Make sure to also test incorrect data inputs. For exemple you can test that no club manager can publish on another club's page.
 

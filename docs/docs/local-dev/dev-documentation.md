@@ -25,7 +25,7 @@ This page regroups all documentation about frameworks, plugins and dependencies 
 ## React
 
 - [React documentation](https://reactjs.org/docs/getting-started.html) - the official documentation for React
-- [React on Nantral Platform](./react) - how we use React with Nantral Platform
+- [React on Nantral Platform](../react) - how we use React with Nantral Platform
 - [Bootstrap for React](https://react-bootstrap.github.io/components/alerts) - documentation of the Bootstrap components for React
 
 ## Some other plugins
