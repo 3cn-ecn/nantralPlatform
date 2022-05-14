@@ -1,5 +1,8 @@
 """A configuration for local docker use in development.
-DO NOT USE IN PRODUCTION."""
+
+DO NOT USE IN PRODUCTION.
+"""
+
 # flake8: noqa: F405
 from celery.schedules import crontab
 
@@ -65,14 +68,17 @@ INTERNAL_IPS = [
 
 
 ##################################
-### AWS MEDIA STORAGE SETTINGS ###
+### OVH MEDIA STORAGE SETTINGS ###
 ##################################
 
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_ACCESS_KEY_ID = env('OVH_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('OVH_SECRET_ACCESS_KEY')
 
 AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET')
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_REGION_NAME = 'gra'
+AWS_SES_REGION = 'gra'
+AWS_S3_CUSTOM_DOMAIN = f'storage.{AWS_S3_REGION_NAME}.cloud.ovh.net/v1/AUTH_f872c5d9108a481eafb02f903c46dbf0/{AWS_STORAGE_BUCKET_NAME}'
+AWS_S3_ENDPOINT_URL = "https://s3.gra.cloud.ovh.net"
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
@@ -80,9 +86,6 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
     'ACL': 'public-read'
 }
-AWS_S3_REGION_NAME = 'eu-west-3'
-
-AWS_SES_REGION = 'eu-central-1'
 
 
 #######################
@@ -121,4 +124,3 @@ CELERY_BEAT_SCHEDULE = {
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": (lambda _: DEBUG),
 }
-
