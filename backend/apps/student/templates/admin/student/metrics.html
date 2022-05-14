@@ -1,9 +1,0 @@
-{% extends "admin/base_site.html" %}
-{% block content %}
-<h2>Metrics étudiants:</h2>
-<p>Total: {{nb_students}}</p>
-<h3>Total par promo:</h3>
-{% for promo in promos%}
-<p>{{promo.promo}}: {{promo.count}}</p>
-{%endfor%}
-{% endblock %}
