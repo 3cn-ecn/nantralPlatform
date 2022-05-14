@@ -9,7 +9,7 @@ const config = {
   title: "Nantral Platform Docs",
   tagline: "The offical documentation for Nantral Platform!",
   url: "https://your-docusaurus-test-site.com",
-  baseUrl: "/",
+  baseUrl: "/nantralPlatform/",
   trailingSlash: true,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
