@@ -6,12 +6,19 @@ name: Deploy Staging
 # events but only for the master branch
 on:
   push:
-    branches: [staging]
-    paths-ignore: [docs/**]
+    branches:
+      - master
+    paths:
+      - backend/**
+      - deployment/**
+      - frontend/**
+      - scripts/**
+      - .github/workflows/**
+      - !.github/workflows/*docs.yml
+        # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+        # This workflow contains 3 jobs.
+        # webpack and test can run side by side
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-# This workflow contains 3 jobs.
-# webpack and test can run side by side
 jobs:
   webpack:
     # Specify which OS we are running our job on
