@@ -128,7 +128,7 @@ if __name__ == "__main__":
     env = Env()
     env.read_env("../deployment/backend.env")
     DB_USER = env.str("POSTGRES_USER")
-    DB_NAME = env.str("DB_NAME")
+    DB_NAME = env.str("POSTGRES_DB")
     DB_CONTAINER = env.str("DB_CONTAINER")
     BUCKET = env.str("S3_BUCKET")
     AWS_ACCESS_KEY_ID = env.str("OVH_ACCESS_KEY_ID")

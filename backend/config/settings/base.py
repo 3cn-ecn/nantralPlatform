@@ -15,7 +15,8 @@ import os
 import environ
 from django.urls import reverse_lazy
 
-# import all the environment variables, defining their type and default value
+# import all the environment variables, defining their type and their default 
+# value if they are missing in .env file
 env = environ.Env(
     # optional
     GITHUB_USER=(str, ''),
@@ -34,19 +35,18 @@ env = environ.Env(
     DB_PORT=(int, 0),
     POSTGRES_USER=(str, ''),
     POSTGRES_PASSWORD=(str, ''),
-    DB_NAME=(str, ''),
-    DB_NAME_STAGING=(str, ''),
-    OVH_ACCESS_KEY_ID=(str, ''),
-    OVH_SECRET_ACCESS_KEY=(str, ''),
-    S3_BUCKET=(str, ''),
+    POSTGRES_DB=(str, ''),
+    POSTGRES_DB_STAGING=(str, ''),
     # prod needed
     SECRET_KEY=(str, ''),
     DJANGO_ALLOWED_HOSTS=(str, ''),
     DJANGO_ALLOWED_HOSTS_STAGING=(str, ''),
     EMAIL_HOST_USER=(str, ''),
     EMAIL_HOST_PASSWORD=(str, ''),
-    DB_CONTAINER=(str, ''),
-    ERROR_RECIPIENT=(str, ''))
+    OVH_ACCESS_KEY_ID=(str, ''),
+    OVH_SECRET_ACCESS_KEY=(str, ''),
+    S3_BUCKET=(str, '')
+)
 environ.Env.read_env()
 
 
@@ -55,6 +55,9 @@ environ.Env.read_env()
 #######################
 
 DEBUG = True
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'dev-key'
 
 # Build paths inside the project like this: join(BASE_DIR, "directory")
 BASE_PATH = environ.Path(__file__) - 3
@@ -166,6 +169,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 
 # Less origin restrictive for Youtube embed videos
