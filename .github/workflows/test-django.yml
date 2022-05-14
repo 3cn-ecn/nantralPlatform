@@ -2,8 +2,11 @@ name: Testing Django
 
 on:
   pull_request:
-    branches: [master]
-    paths: [backend/**]
+    branches:
+      - master
+    paths:
+      - backend/**
+      - .github/workflows/test-django.yml
 
 jobs:
   build:

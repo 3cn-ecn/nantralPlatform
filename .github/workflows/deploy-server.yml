@@ -6,12 +6,16 @@ name: Deploy Server
 # events but only for the master branch
 on:
   push:
-    branches: [master]
-    paths-ignore: [docs/**]
+    branches:
+      - master
+    paths:
+      - backend/**
+      - deployment/**
+      - frontend/**
+      - scripts/**
+      - .github/workflows/**
+      - !.github/workflows/*docs.yml
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-# This workflow contains 3 jobs.
-# webpack and test can run side by side
 jobs:
   webpack-check:
     name: Check for frontend changes

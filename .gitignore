@@ -137,7 +137,6 @@ tags
 # Node
 node_modules
 webpack-stats.json
-package-lock.json
 
 # MacOS
 .DS_Store
