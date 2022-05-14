@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunknantralplatform_docs=self.webpackChunknantralplatform_docs||[]).push([[7202],{9634:function(a){a.exports=JSON.parse('{"label":"facebook","permalink":"/nantralPlatform/blog/tags/facebook","allTagsPath":"/nantralPlatform/blog/tags","count":1}')}}]);
