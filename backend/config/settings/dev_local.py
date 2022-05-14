@@ -23,13 +23,7 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = []
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'dev_key'
-
-
 ALLOWED_HOSTS = []
-
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 INTERNAL_IPS = [
     '127.0.0.1',

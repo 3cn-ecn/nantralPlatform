@@ -10,6 +10,13 @@
 3. Create an empty file `backend.env` in this directory
 3. Build the containers: `docker-compose build`
 4. Start the services: `docker-compose up`
+5. Try to connect to `http://localhost` in your browser. 
+
+If you can access the login page, congratulations everything is ok! Let's create
+a superuser account now, so that you can connect :
+
+8. In another terminal, go again into `deployment` directory, and run 
+    `docker-compose exec backend python3 manage.py createsuperuser`
 
 Useful tips:
 * You can stop docker by pressing `CTRL+C` in the console if docker 
@@ -18,6 +25,7 @@ Useful tips:
     `-d` argument on the up command. 
 * If you want to be faster, you can run both command at once by 
     using `docker-compose up --build`
+
 
 > **What does it do?**
 >

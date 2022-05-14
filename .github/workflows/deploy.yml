@@ -1,12 +1,13 @@
 # This is a basic workflow to help you get started with Actions
 
-name: OVH Deploy
+name: Deploy Server
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
     branches: [master]
+    paths-ignore: [docs/**]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 # This workflow contains 3 jobs.
@@ -87,14 +88,6 @@ jobs:
 
       - name: Testing
         working-directory: ./backend
-        env:
-          AWS_ACCESS_KEY_ID: test
-          AWS_SECRET_ACCESS_KEY: test
-          GITHUB_USER: unitrium
-          GITHUB_TOKEN: test
-          S3_BUCKET: test
-          MAPBOX_API_KEY: test
-          DISCORD_ADMIN_MODERATION_WEBHOOK: test
         run: python manage.py test
 
   deploy:
@@ -112,7 +105,7 @@ jobs:
       - name: Pull latest commit
         uses: actions/checkout@v2
       - name: Backup before deploy
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.INSTANCE_ADDRESS }}
           username: "ubuntu"
