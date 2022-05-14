@@ -14,13 +14,6 @@ jobs:
         python-version: ["3.10"]
     env:
       working-directory: ./backend
-      # AWS_ACCESS_KEY_ID: test
-      # AWS_SECRET_ACCESS_KEY: test
-      # GITHUB_USER: unitrium
-      # GITHUB_TOKEN: test
-      # S3_BUCKET: test
-      # MAPBOX_API_KEY: test
-      # DISCORD_ADMIN_MODERATION_WEBHOOK: test
 
     steps:
       - uses: actions/checkout@v2
