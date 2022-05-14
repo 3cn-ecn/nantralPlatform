@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunknantralplatform_docs=self.webpackChunknantralplatform_docs||[]).push([[4664],{5588:function(a){a.exports=JSON.parse('{"permalink":"/nantralPlatform/blog/tags/hello","page":1,"postsPerPage":10,"totalPages":1,"totalCount":2,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);

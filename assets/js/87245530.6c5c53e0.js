@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunknantralplatform_docs=self.webpackChunknantralplatform_docs||[]).push([[2458],{6005:function(a){a.exports=JSON.parse('{"label":"docusaurus","permalink":"/nantralPlatform/blog/tags/docusaurus","allTagsPath":"/nantralPlatform/blog/tags","count":4}')}}]);
