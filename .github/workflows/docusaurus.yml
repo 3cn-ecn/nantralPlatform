@@ -1,0 +1,39 @@
+# .github/workflows/gh-pages.yml
+
+name: Deploy docusaurus
+
+on:
+  push:
+    branches:
+      - documentation
+    paths:
+      - ".github/workflows/docusaurus.yml"
+      - "docs/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2.0.0
+        with:
+          node-version: "16.x"
+
+      - run: npm ci
+      - run: npm run build
+
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v1
+      #   with:
+      #     start: npm run cy:start
+      #     wait-on: 'http://localhost:3030'
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build
