@@ -9,7 +9,7 @@ const config = {
   title: "Nantral Platform Docs",
   tagline: "The offical documentation for Nantral Platform!",
   url: "https://your-docusaurus-test-site.com",
-  baseUrl: "/nantralPlatform/",
+  baseUrl: "/",
   trailingSlash: true,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -39,14 +39,14 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/nantral-platform/nantralPlatform/tree/master/docs/docs/",
+            "https://github.com/nantral-platform/nantralPlatform/tree/master/docs/",
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/nantral-platform/nantralPlatform/tree/master/docs/blog/",
+            "https://github.com/nantral-platform/nantralPlatform/tree/master/docs/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
