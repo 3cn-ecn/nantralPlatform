@@ -1,0 +1,23 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=827846 to learn about workspace recommendations.
+	// Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
+
+	// List of extensions which should be recommended for users of this workspace.
+	"recommendations": [
+		// global
+		"visualstudioexptteam.vscodeintellicode",
+		// python and django
+		"ms-python.python",
+		"batisteo.vscode-django",
+		"ecmel.vscode-html-css",
+		"njpwerner.autodocstring",
+		// npm and react
+		"eg2.vscode-npm-script",
+		"dbaeumer.vscode-eslint",
+		"msjsdiag.vscode-react-native",
+	],
+	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
+	"unwantedRecommendations": [
+		
+	]
+}

@@ -9,9 +9,6 @@ venv.bak/
 
 # Visual Studio Code #
 .vscode/settings.json
-.vscode/tasks.json
-.vscode/launch.json
-.vscode/extensions.json
 .history
 
 # If you are using PyCharm #
