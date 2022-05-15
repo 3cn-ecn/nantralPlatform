@@ -1,27 +1,35 @@
 {
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "editor.insertSpaces": true,
-  "editor.tabSize": 4,
+  "editor.rulers": [120],
   "files.associations": {
-    "**/*.html": "html",
-    "**/templates/**/*.html": "django-html",
-    "**/templates/**/*": "django-txt",
-    "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+    "*.html": "html",
+    "**/backend/**/*.html": "django-html",
+    "requirements.txt": "pip-requirements",
+    "**/*.py": "python",
+    "**/*.js": "javascript",
+    "**/*.jsx": "javascript",
+    "**/src/**/*.js": "javascriptreact",
+    "**/src/**/*.jsx": "javascriptreact",
+    "**/*.ts": "typescript",
+    "**/*.tsx": "typescript",
+    "**/src/**/*.ts": "typescriptreact",
+    "**/src/**/*.tsx": "typescriptreact",
+    "**/*.json": "jsonc"
   },
-  "[django-html]": {
-    "editor.formatOnSave": false,
-    "editor.formatOnPaste": false
+  "[python]": {
+    "editor.tabSize": 4
   },
+  "[django-html][html][javascript][javascriptreact][typescript][typescriptreact][json]": {
+    "editor.tabSize": 2
+  },
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/env/bin",
+  "python.envFile": "${workspaceFolder}/backend/config/settings/.env",
   "python.formatting.provider": "autopep8",
-  "python.formatting.autopep8Args": [
-    "--max-line-length",
-    "120",
-    "--experimental"
-  ],
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
-  "python.linting.flake8Args": ["--max-line-length=120"],
   "python.linting.pydocstyleEnabled": true,
   "python.linting.pydocstyleArgs": ["--ignore=D100,D102,D213,D400,D407"],
-  "autoDocstring.docstringFormat": "google"
+  "autoDocstring.docstringFormat": "numpy",
+  "docwriter.style": "NumPy"
 }

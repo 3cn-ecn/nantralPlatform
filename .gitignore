@@ -1,17 +1,15 @@
-# Django #
-*.log
-*.pot
-*.pyc
-__pycache__
-db.sqlite3
-media
+# Environments
+*.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
-
-# Compiled translation
-*.mo
-# Backup files #
-*.bak
-*.gz
+# Visual Studio Code #
+.vscode/settings.json
+.history
 
 # If you are using PyCharm #
 .idea/**/workspace.xml
@@ -28,79 +26,8 @@ media
 .idea/**/libraries
 *.iws /out/
 
-# Python #
-*.py[cod]
-*$py.class
-
-# Distribution / packaging
-.Python build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-.pytest_cache/
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-
 # Jupyter Notebook
 .ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# celery
-celerybeat-schedule.*
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-*.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Config folders
-dav/
-dkim/
-certs/
-data/
-filter/
-redis/
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
 
 # Sublime Text #
 *.tmlanguage.cache
@@ -119,13 +46,6 @@ Control.ca-bundle
 Control.system-ca-bundle
 GitHub.sublime-settings
 
-# Visual Studio Code #
-.vscode/settings.json
-.vscode/tasks.json
-.vscode/launch.json
-.vscode/extensions.json
-.history
-
 # Vim, emacs and ctags
 tags
 *.swp
@@ -134,26 +54,5 @@ tags
 \#*\#
 .\$*
 
-# Node
-node_modules
-webpack-stats.json
-
 # MacOS
 .DS_Store
-
-# Do not push the compiled js from the webapp
-static/webapp
-
-# Do not push backups
-deployment/backups/*
-
-# Do not push compiled static js from front because it will be compiled by the server
-backend/static/js/*.js
-backend/static/upload/*
-
-# Do not push celerybeat db
-*/celerybeat-schedule
-
-# sonarqube
-sonar-project.properties
-.scannerwork
