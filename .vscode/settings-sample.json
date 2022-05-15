@@ -15,7 +15,8 @@
     "**/*.tsx": "typescript",
     "**/src/**/*.ts": "typescriptreact",
     "**/src/**/*.tsx": "typescriptreact",
-    "**/*.json": "jsonc"
+    "**/*.json": "jsonc",
+    "**/docs/**/*.md": "mdx"
   },
   "[python]": {
     "editor.tabSize": 4

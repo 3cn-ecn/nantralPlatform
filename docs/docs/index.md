@@ -1,15 +1,11 @@
 ---
 title: Home
-published: true
-date: 2021-10-24T10:03:11.093Z
-editor: markdown
-dateCreated: 2021-09-27T21:15:45.533Z
 sidebar_position: 1
 ---
 
 # Home
 
-Welcome to the official wiki of Nantral Platform!
+Welcome to the official documentation of Nantral Platform!
 
 You can find various informations in the different pages. To navigate between them, please use the menu on your left!
 

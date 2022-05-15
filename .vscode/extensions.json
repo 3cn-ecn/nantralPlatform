@@ -6,6 +6,7 @@
 	"recommendations": [
 		// global
 		"visualstudioexptteam.vscodeintellicode",
+		"esbenp.prettier-vscode",
 		// python and django
 		"ms-python.python",
 		"batisteo.vscode-django",

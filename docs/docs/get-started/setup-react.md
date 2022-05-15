@@ -1,10 +1,6 @@
 ---
-title: React Frontend
-description: "Informations regarding the frontend of Nantral Platform with React"
-published: true
-date: 2022-02-14T11:18:40.291Z
-editor: markdown
-dateCreated: 2021-09-27T21:35:19.714Z
+title: Setup React
+sidebar_position: 5
 ---
 
 # Frontend with React
