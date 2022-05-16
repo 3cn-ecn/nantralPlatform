@@ -7,8 +7,8 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Nantral Platform Docs",
-  tagline: "The offical documentation for Nantral Platform!",
-  url: "https://your-docusaurus-test-site.com",
+  tagline: "The offical documentation of Nantral Platform!",
+  url: "https://docs.nantral-platform.fr",
   baseUrl: "/",
   trailingSlash: true,
   onBrokenLinks: "throw",

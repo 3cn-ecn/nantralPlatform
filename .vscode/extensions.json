@@ -6,6 +6,7 @@
 	"recommendations": [
 		// global
 		"visualstudioexptteam.vscodeintellicode",
+		"esbenp.prettier-vscode",
 		// python and django
 		"ms-python.python",
 		"batisteo.vscode-django",
@@ -15,6 +16,8 @@
 		"eg2.vscode-npm-script",
 		"dbaeumer.vscode-eslint",
 		"msjsdiag.vscode-react-native",
+		// docs
+		"silvenon.mdx"
 	],
 	// List of extensions recommended by VS Code that should not be recommended for users of this workspace.
 	"unwantedRecommendations": [
