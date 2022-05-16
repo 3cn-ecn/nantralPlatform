@@ -1,0 +1,50 @@
+---
+title: Make your first commit
+sidebar_position: 4
+---
+
+# Make your first commit
+
+Now that you're ready, it's time to make your first commit!
+
+## Create a new branch
+
+* In Github Desktop, create a new branch from `master`, and give it a name.
+
+![Create new branch](./img/new-branch-button-win.png)
+
+:::info
+We recommand you to create a new branch before writing new changes to the code. Indeed, the default selected branch
+is `master`, which is the branch directly linked to the server. This branch is therefore protected, so you cannot
+push changes on it.
+:::
+
+* Then publish your new branch to Github:
+
+![Publish a branch](./img/publish-branch-button.png)
+
+## Create your changes
+
+* In VS Code, open the `README.md` file in the main directory.
+* Add your name and a link to your github account under the `Contributors` section, at the end of the file
+* Save the file
+
+## Publish your changes
+
+* Now go back to Github Desktop, give a name to the commit and create it:
+
+![Create commit](./img/commit-button.png)
+
+* Then push your commit on the github server:
+
+![Push a commit](./img/push-origin-button.png)
+
+* Finally create a pull request:
+
+![Create pull request](./img/create-pull-request.png)
+
+* Now the github website should open in your browser. Click the *"Create pull request"* button, and then 
+*"Merge pull request"*.
+
+* Congratulations, you're done! 🥳 You can now see your name on the home page of the repository: 
+    [github.com/nantral-platform/nantralPlatform](https://github.com/nantral-platform/nantralPlatform)
