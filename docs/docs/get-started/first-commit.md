@@ -5,7 +5,9 @@ sidebar_position: 4
 
 # Make your first commit
 
-Now that you're ready, it's time to make your first commit!
+Now that you're ready, it's time to make your first commit! This page explains how to do it with Github Desktop,
+fpr beginners. If you use another git interface or the git cli, we suppose that you are able to transpose the
+actions with your git interface.
 
 ## Create a new branch
 
@@ -23,7 +25,13 @@ push changes on it.
 
 ![Publish a branch](./img/publish-branch-button.png)
 
-## Create your changes
+:::info
+If you cannot publish the branch, that means that you do not have the right to write on the repository.
+You can ask one of the administators of the repository (for example the president of the club) to grant you 
+this access by adding you to the nantral-platform organization.
+:::
+
+## Make your changes
 
 * In VS Code, open the `README.md` file in the main directory.
 * Add your name and a link to your github account under the `Contributors` section, at the end of the file

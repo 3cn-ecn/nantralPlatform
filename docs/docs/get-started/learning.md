@@ -8,7 +8,7 @@ import TabItem from '@theme/TabItem';
 
 # Learning
 
-Before make your first steps on Nantral Platform, you might need to learn how to use the different frameworks we use
+Before doing your first steps on Nantral Platform, you might need to learn how to use the different frameworks we use
 on the Nantral Platform project. Let's follow the steps!
 
 ## The basics of the web: backend and frontend
@@ -73,14 +73,14 @@ Then, activate the virtualenv:
 <TabItem value="ps1" label="With Powershell">
 
 ```bash
-source venv\bin\activate.ps1
+venv\bin\activate.ps1
 ```
 
 </TabItem>
 <TabItem value="cmd" label="With CMD">
 
 ```bash
-source venv\bin\activate.bat
+venv\bin\activate.bat
 ```
 
 </TabItem>
@@ -123,7 +123,7 @@ deactivate
 
 ## Learn React
 
-You get the basis of django? Now, it's time to learn **React**!
+Did you get the basis of django? Now, it's time to learn **React**!
 
 <details>
     <summary>Discover React in 100s 🎬</summary>
@@ -137,7 +137,34 @@ You get the basis of django? Now, it's time to learn **React**!
     </iframe>
 </details>
 
-Now follow their [official tutorial](https://reactjs.org/tutorial/tutorial.html) to get the basis of the framework!
+React is a framework for the javascript language. In our case, we will use it with the typescript language,
+which is a variant of javascript (see the videos below).
+
+<details>
+    <summary>Discover Javascript in 100s 🎬</summary>
+    <iframe 
+        class="youtube"
+        src="https://www.youtube-nocookie.com/embed/DHjqpvDnNGE" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+    </iframe>
+</details>
+<details>
+    <summary>Discover Typescript in 100s 🎬</summary>
+    <iframe 
+        class="youtube"
+        src="https://www.youtube-nocookie.com/embed/zQnBQ4tB3ZA" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+    </iframe>
+</details>
+
+Now, you can follow the [official tutorial of React](https://reactjs.org/tutorial/tutorial.html) to get the basis of 
+the framework!
 
 > Note: for the *Setup* section, choose the option 2: *Local development environment*.
 
@@ -158,9 +185,13 @@ Now that you know how to make the backend and the frontend, it's time to put the
     </iframe>
 </details>
 
-To learn this concept, you will create your own application with React, django, and REST API.
-[Follow this tutorial!](https://blog.logrocket.com/creating-an-app-with-react-and-django/)
+To learn this concept, you will create your own application with React, django, and REST API:
+[follow this tutorial!](https://blog.logrocket.com/creating-an-app-with-react-and-django/)
 
+:::caution
+This tutorial is the most important of all of the tutorials proposed on this page, but also the quickest,
+so be sure to complete it before contributing!
+:::
 
 ## The youtube player mini-project
 
