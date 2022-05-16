@@ -313,7 +313,8 @@ the installation did not work. You can also have to restart your computer to mak
 
 :::note Create a github Account
 If you don't have a Github account yet, it's time to create one! Go to [github.com](https://github.com/),
-anc click **Sign up**. 
+anc click **Sign up**.
+:::
 
 ## Github Desktop
 
