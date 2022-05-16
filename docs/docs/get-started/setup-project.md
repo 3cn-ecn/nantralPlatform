@@ -90,7 +90,7 @@ The backend is a django application. The main files are organised like this:
 At this point, the project must be opened in VS Code. In the `.vscode` directory, create a copy of the file named
 `settings-sample.json`, and rename it `settings.json`. This will import all the needed settings for VS Code !
 
-And voilà, it's already done! It's easy, no? 😁
+And voilà, it's already done! Easy, no? 😁
 
 ### Install the extensions
 
@@ -103,7 +103,7 @@ Click the *"Install all"* button, and you're ready!
 :::note Oops, I decline the pop-up...
 Don't worry, you can find all the recommended extensions in the extensions menu.
 Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>, and search **Extensions: Show Recommended Extensions**.
-The list of all recommended extensions will appear in the left panel, and you can then click the download
+The list of all recommended extensions will appear on the left panel, and you can then click the download
 button to install them:
 
 ![Download all recommended extensions](./img/install-extensions.png)

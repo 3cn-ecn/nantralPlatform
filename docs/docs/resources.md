@@ -1,11 +1,11 @@
 ---
-title: External Documentations
+title: 😎 Resources
 sidebar_position: 8
 ---
 
-# Dev Documentation
+# Resources
 
-This page regroups all documentation about frameworks, plugins and dependencies used in nantral platform project.
+This page regroups all the resources for framework, plugin or dependency of the project.
 
 ## Django
 

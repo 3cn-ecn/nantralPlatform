@@ -3,46 +3,114 @@ title: Set up Django
 sidebar_position: 4
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Setup Django
 
-_Things to do the first time you want to develop!_
+Now that your computer is ready, let's start with django! Be sure you installed all the programs before
+(see [Install Party](install-party.md)) and set up them (see [Set up the project](setup-project.md)).
 
-## 3. Set up your Python's virtual environment
+:::note
+In this tutorial, we will use the `python3` command for python. You might need to replace it by `python`, `py`,
+or `py -3` (see the [Python Installation](install-party.md#python)).
+The same thing applies to the `pip` command (see the [Pip Installation](install-party.md#pip)).
 
-> Depending on how you installed Python, you might not invoke it the same way as in this tutorial. We will use `python3`, but you might need to change it to `py`, `py3` or even `python`. To check which one works for you, run `py --v`, `python3 --v`, `py3 --v` or `python --v` in your terminal and see which one works for you. The same applies to the `pip` or `pip3` command.
-> {.is-warning}
+We also suppose that you know how to use a terminal and espacially how to change the directory. If it is not the case,
+you can read the introduction of the [Install Party](install-party.md).
+:::
 
-> In this tutorial, you will often use the <kbd>cd</kbd> command in your terminal. To move to a directory, you simply have to indicate the folder name, for example <kbd>cd&nbsp;server</kbd>. If you want to go back to the parent directory, you can use <kbd>cd&nbsp;..</kbd>. The name <kbd>.</kbd> represents the current directory and <kbd>..</kbd> the parent one.
-> {.is-success}
+## Create a virtual environment
 
-### Server {.tabset}
+<Tabs groupId="os">
+<TabItem value="win" label="Windows">
 
-#### Windows
+1. In VSCode, click on the **Terminal** tab, then on **New Terminal**.
+2. In the terminal, change your directory to the **backend** directory:
+  ```bash
+  cd backend
+  ```
+3. Create a virtualenv named `env` by running:
+  ```bash
+  python3 -m virtualenv env
+  ```
+4. Activate the virtulenv:
+    * If you use CMD, run
+      ```bash
+      env\Scripts\activate.bat
+      ```
+    * If you use Powershell, run
+      ```bash
+      env\Scripts\activate.ps1
+      ```
+      *If you have an error, run `Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser`.*
 
-1. In VSCode, click on the _Terminal_ tab, then on _New Terminal_.
-2. In the terminal, type `cd backend` to change your directory to the `backend` directory.
-3. Install virtualenv by running `python3 -m pip install virtualenv`.
-4. Create a virtualenv with `python3 -m virtualenv env`.
-5. Activate your venv with `env\Scripts\activate.bat` with CMD or `env\Scripts\activate.ps1` with PowerShell. _(With Powershell, if you have an error run `Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser`.)_ If the activation succeds, you would notice the `(env)` at the first left of the command prompt.
-6. Install the dependencies with `python3 -m pip install -r requirements.txt`.
-7. Run `python3 manage.py migrate` to setup your database.
-8. If you don't see any errors, you can move on to the next step.
+:::success Check the activation
+If the activation succeds, you will notice a `(env)` indicator at the beginning of the command prompt.
+:::
 
-#### MacOS/Linux
+5. Install all the dependencies of the nantral platform project:
+  ```bash
+  pip install -r requirements.txt
+  ```
+6. Create the database:
+  ```bash
+  python3 manage.py migrate
+  ```
 
-1. In VSCode, click on the _Terminal_ tab, then on _New Terminal_.
-2. In the terminal, type `cd backend` to change your directory to the `backend` directory.
-3. Run `./install.sh` to run the installation process.
-4. If the activation succeeds, you will notice a `(env)` at the far left of the command prompt.
-5. If you don't see any errors, you can move on to the next step.
+If you don't see any errors, you're done. Congratulations! 🥳 You can move on to the next step.
 
-## 4. Create the .env file
+</TabItem>
+<TabItem value="mac-lin" label="MacOS/Linux">
 
-> On the server, we need some passwords in our code. But for security issues, these passwords can't be synchronized on Github. That's why you have to add these settings yourself, with your own passwords. Don't panic if you don't have ones: you can let them blank if you do not want to developp the corresponding function.
-> {.is-info}
+:::info For more advanced users
+You can skip all the following steps by using the `install.sh` script in the `backend` directory.
+It will execute for you all of the following steps to create the virtual environment.
+To achieve this, open a new terminal in VS Code, and run
+```bash
+cd backend/ && ./install.sh
+```
+The virtualenv should be activated at the end of the script.
+:::
 
-1. In VSCode, create a file named `.env` inside the folder `backend/config/settings`.
-2. Inside it, copy and paste the contents of the `env.example` file located in `backend/config/settings`.
+1. In VSCode, click on the **Terminal** tab, then on **New Terminal**.
+2. In the terminal, change your directory to the **backend** directory:
+  ```bash
+  cd backend
+  ```
+3. Create a virtualenv named `env` by running:
+  ```bash
+  python3 -m virtualenv env
+  ```
+4. Activate the virtulenv:
+  ```bash
+  source env/scripts/activate
+  ```
+:::success Check the activation
+If the activation succeds, you will notice a `(env)` indicator at the beginning of the command prompt.
+:::
+6. Install all the dependencies of the nantral platform project:
+  ```bash
+  pip install -r requirements.txt
+  ```
+7. Create the database:
+  ```bash
+  python3 manage.py migrate
+  ```
+
+If you don't see any errors, you're done. Congratulations! 🥳 You can move on to the next step.
+
+</TabItem>
+</Tabs>
+
+## Create the *.env* file
+
+On the server, we need some passwords in our code. But for security issues, these passwords can't be synchronized on
+Github. That's why you have to add these settings yourself, with your own passwords. Don't panic if you don't have ones:
+you can let them blank if you do not want to developp the corresponding functions.
+
+1. In VSCode, create a new file named `.env` inside the folder `backend/config/settings`.
+2. Inside it, copy and paste the content of the `.env.example` file located in `backend/config/settings`.
 
 ## 5. Compiling the React code
 

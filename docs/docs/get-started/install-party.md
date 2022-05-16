@@ -256,7 +256,8 @@ sudo snap install code --classic
 
 :::info
 If you prefere, Visual Studio Code is also available as a 
-[flatpak package](https://flathub.org/apps/details/com.visualstudio.code).
+[flatpak package](https://flathub.org/apps/details/com.visualstudio.code), 
+or as a `.deb` package on the [official website](https://code.visualstudio.com/download).
 :::
 
 </TabItem>
@@ -313,7 +314,7 @@ the installation did not work. You can also have to restart your computer to mak
 
 :::note Create a github Account
 If you don't have a Github account yet, it's time to create one! Go to [github.com](https://github.com/),
-anc click **Sign up**.
+anc click **Sign up**. Then follow the instructions to create your account.
 :::
 
 ## Github Desktop
