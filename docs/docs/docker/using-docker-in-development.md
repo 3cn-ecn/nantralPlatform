@@ -1,10 +1,6 @@
 ---
 title: Using Docker in development
-description: "How to use Docker in development"
-published: true
-date: 2021-10-24T09:55:40.216Z
-editor: markdown
-dateCreated: 2021-10-12T12:56:37.960Z
+sidebar_position: 1
 ---
 
 > This section doesn't work at the moment, as some dependencies seem to be missing.

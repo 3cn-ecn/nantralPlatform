@@ -1,10 +1,6 @@
 ---
-title: Dev Documentation
-description: "Documentation of frameworks, plugins and packages used in this project"
-published: true
-date: 2022-02-13T22:17:57.804Z
-editor: markdown
-dateCreated: 2022-02-13T22:17:54.036Z
+title: External Documentations
+sidebar_position: 8
 ---
 
 # Dev Documentation
