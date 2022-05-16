@@ -1,11 +1,11 @@
 ---
-title: Setup your dev tools
+title: Set up the project
 sidebar_position: 3
 ---
 
-# Setup your dev tools
+# Set up the project
 
-_Things to do the first time you want to develop!_
+Let's set up the project, with git and vs code!
 
 ## 1. Cloning the repository
 

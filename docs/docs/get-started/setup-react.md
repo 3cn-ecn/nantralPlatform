@@ -1,5 +1,5 @@
 ---
-title: Setup React
+title: Set up React
 sidebar_position: 5
 ---
 

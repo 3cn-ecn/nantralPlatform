@@ -1,5 +1,5 @@
 ---
-title: Setup Django
+title: Set up Django
 sidebar_position: 4
 ---
 

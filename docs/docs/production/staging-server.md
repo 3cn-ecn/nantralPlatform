@@ -33,7 +33,7 @@ Note that each time you deploy a new version on the staging server, the database
 Sometimes, you might want to remove the modifications you have pushed on the staging server (but not on the main server). You have two ways to do this:
 
 1. Create new commits which revert your previous commits, and merge them on the staging branch
-2. If you have way too much commits, you may prefer to reset the staging branch (see bellow).
+2. If you have way too much commits, you may prefer to reset the staging branch (see below).
 
 ### How to reset the staging branch (advanced)
 
