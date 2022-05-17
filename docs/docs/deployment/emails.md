@@ -19,11 +19,13 @@ By default, all emails (except the ones sent to ADMINS and MANAGERS) are sent fr
 
 There is no authentification between Django and the SMTP server as they both operate on the same host. This means that any email adress ending in `@nantral-platform.fr` is valid (`foo@nantral-platform.fr`, `bar@nantral-platform.fr`, etc). You do not need to create it in order to use it.
 
-> We have chosen to use `no-reply@nantral-platform.fr` wherever possible in order to avoid a possible confusion with pishing adresses from our users.
-> {.is-info}
+:::info
+We have chosen to use `no-reply@nantral-platform.fr` wherever possible in order to avoid a possible confusion with pishing adresses from our users.
+:::
 
-> In order to avoid being flagged as SPAM, we should avoid sending more than 30-50 emails at once, especially to `@ec-nantes.fr`, which is more restrictive than big email providers such as Google.
-> {.is-warning}
+:::caution
+In order to avoid being flagged as SPAM, we should avoid sending more than 30-50 emails at once, especially to `@ec-nantes.fr`, which is more restrictive than big email providers such as Google.
+:::
 
 ## Accessing the webmail
 

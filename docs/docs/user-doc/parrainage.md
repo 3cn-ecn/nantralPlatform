@@ -21,8 +21,9 @@ On distingue deux types de personnes :
 - **les 1A :** ce terme regroupe les étudiants effectuant leur première année à Centrale Nantes, plus souvent dénommés les fillots. Le terme regroupe donc les EI1, mais aussi les ITII de 1ère année, ainsi que les étudiants étrangers en Double Diplôme en EI1 (DD) et les étudiants en mobilité intercentrale (qui sont donc en EI3).
 - **les 2A+ :** ce terme regroupe les étudiants ayant déjà effectué une année à Centrale Nantes. Ceux-ci se réunissent en groupes de 2A+, appelés "familles".
 
-> Actuellement (en 2021), seules les filières ingénieurs généraliste et de spécialité sont concernées par le parrainage. Les masters, bachelors et doctorants sont considérés "à part" et ne sont pas parrainés.
-> {.is-info}
+:::info
+Actuellement (en 2021), seules les filières ingénieurs généraliste et de spécialité sont concernées par le parrainage. Les masters, bachelors et doctorants sont considérés "à part" et ne sont pas parrainés.
+:::
 
 ### 1.2 Déroulement
 
@@ -53,11 +54,12 @@ D'autre part, le fait de basculer cette procédure sur Nantral Platform permet d
 
 Si vous devez participer à l'organisation du parrainage, vous pouvez faire une demande auprès des administrateurs de Nantral Platform (en cas de doutes, adressez-vous au DSI du BDE) pour avoir accès à l'interface admin du parrainage.
 
-> Note aux admins de Nantral Platform : les droits d'accès sont accordés en ajoutant l'utilisateur dans le groupe `admin-family` et en lui accordant le **statut équipe** dans l'interface administrateur de Django.
-> {.is-warning}
+:::caution Note aux admins de Nantral Platform
+Les droits d'accès sont accordés en ajoutant l'utilisateur dans le groupe `admin-family` et en lui accordant le **statut équipe** dans l'interface administrateur de Django.
+:::
 
 L'interface admin se présente ainsi :
-![parrainage_admin.png](/parrainage_admin.png){.radius-7}
+![parrainage_admin.png](/parrainage_admin.png)
 
 Cette page est accessible via le lien suivant : [nantral-platform.fr/parrainage/admin](https://nantral-platform.fr/parrainage/admin/). Vous avez accès à :
 

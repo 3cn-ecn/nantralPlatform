@@ -17,8 +17,9 @@ L'organisation du colocathlon se déroule en 3 phases :
 - **Phase 1 :** Chaque coloc indique si elle souhaite participer ou non au colocathlon
 - **Phase 2 :** Les EI1 s'inscrivent sur une coloc pour le début de la soirée
 
-> Ces 3 phases sont représentées par le paramètre `PHASE_COLOCATHLON`, modifiable via l'interface admin : https://nantral-platform.fr/admin/extra_settings/setting/
-> {.is-info}
+:::info
+Ces 3 phases sont représentées par le paramètre `PHASE_COLOCATHLON`, modifiable via l'interface admin : https://nantral-platform.fr/admin/extra_settings/setting/
+:::
 
 ## Phase 1 : Inscription des colocs
 
@@ -29,8 +30,9 @@ Pendant la phase 1, les colocs sont invitées à indiquer leur choix de particip
 - se conecter à la carte des colocs
 - aller sur la page de sa propre coloc ou la créer si elle n'existe pas
 
-  > Astuce : pour aller plus vite, on peut partager le lien [www.nantral-platform.fr/my_coloc](https://nantral-platform.fr/my_coloc) qui redirige directement vers la page de la coloc de l'utilisateur connecté.
-  > {.is-success}
+  :::success Astuce
+  Pour aller plus vite, on peut partager le lien [www.nantral-platform.fr/my_coloc](https://nantral-platform.fr/my_coloc) qui redirige directement vers la page de la coloc de l'utilisateur connecté.
+  :::
 
 - ce message s'affiche alors :
   ![colocathlon_1_details.png](/colocathlon_1_details.png)
@@ -38,8 +40,9 @@ Pendant la phase 1, les colocs sont invitées à indiquer leur choix de particip
 - en cliquant sur le bouton, on peut alors remplir le formulaire suivant :
   ![colcoathlon_1_form.png](/colcoathlon_1_form.png)
 
-> Point de vigilance : pour accéder au formulaire, il suffit d'être membre (et non admin comme c'est le cas pour les autres formulaires du site), donc n'importe qui peut modifier les données d'une autre coloc en s'ajoutant puis s'enlevant des membres.
-> {.is-warning}
+:::caution Point de vigilance
+Pour accéder au formulaire, il suffit d'être membre (et non admin comme c'est le cas pour les autres formulaires du site), donc n'importe qui peut modifier les données d'une autre coloc en s'ajoutant puis s'enlevant des membres.
+:::
 
 ## Phase 2 : Inscription des EI1
 
