@@ -18,6 +18,8 @@ The same thing applies to the `pip` command (see the [Pip Installation](install-
 
 We also suppose that you know how to use a terminal and espacially how to change the directory. If it is not the case,
 you can read the introduction of the [Install Party](install-party.md).
+
+Finally, all the commands of this page must be run in the `backend` directory, which is the directory for django. 
 :::
 
 ## Create a virtual environment
@@ -52,10 +54,6 @@ If the activation succeds, you will notice a `(env)` indicator at the beginning 
 5. Install all the dependencies of the nantral platform project:
   ```bash
   pip install -r requirements.txt
-  ```
-6. Create the database:
-  ```bash
-  python3 manage.py migrate
   ```
 
 If you don't see any errors, you're done. Congratulations! 🥳 You can move on to the next step.
@@ -93,10 +91,6 @@ If the activation succeds, you will notice a `(env)` indicator at the beginning 
   ```bash
   pip install -r requirements.txt
   ```
-7. Create the database:
-  ```bash
-  python3 manage.py migrate
-  ```
 
 If you don't see any errors, you're done. Congratulations! 🥳 You can move on to the next step.
 
@@ -112,115 +106,92 @@ you can let them blank if you do not want to developp the corresponding function
 1. In VSCode, create a new file named `.env` inside the folder `backend/config/settings`.
 2. Inside it, copy and paste the content of the `.env.example` file located in `backend/config/settings`.
 
-## 5. Compiling the React code
+## Create the database
 
-1. Inside VSCode, open another terminal using the _Terminal_ tab.
-2. In this terminal, type `cd frontend` to change your directory to the `frontend` directory.
-3. Run `npm install` to install dependencies. This might take a minute.
-4. Then run `npm run dev` to compile the code into the `backend/static/js` folder.
-5. If you don't see any errors, you can close the terminal.
+All the source code of the database is already written in Django. All you use to do to set it up is
+to run the following command, in the `backend` folder:
 
-## 6. Running the backend
+```bash
+python3 manage.py migrate
+```
 
-1. Go back to the VScode terminal in the `backend` folder.
-2. Your virtualenv should have automatically been activated (notice the `(env)` at the far left of the command prompt). If you don't see it, activate your virtualenv using the instructions in the dedicated section at the end of this page.
-3. Create an administrator account with `python3 manage.py createsuperuser`.
-4. Run `python3 manage.py runserver`.
-5. Congratulations ! You can now access the website at [http://localhost:8000](http://localhost:8000) 🥳
-6. Press <kbd>CTRL</kbd> + <kbd>C</kbd> in the terminal to stop the backend.
+The database created is in SQLite format: you will see a new file in the `backend` directory, named
+`db.sqlite3`: this file contains **your** database, you can delete it if you want to reset your database.
 
-# Commands you will use everyday
+:::note
+This database is yours, and is totally different of the database of the server. This allows you to make plainty
+of tests on a database, without making errors on the real one.
+:::
 
-_Now that Nantral Platform development environment is installed, we'll take a closer look to the commands you will have to use each time you developp something on the application._
+## Launch the server!
 
-## 1. Launch the server
+In the `backend` directory, run the following command to launch the server:
+```bash
+python3 manage.py runserver
+```
 
-Suppose that during your coffee break, Windows made an update an restarted your computer. How to run the server again whitout reinstalling erveything like above ?
+If everything is ok, you should see the following text:
+```js
+Running dev settings
+Watching for file changes with StatReloader
+Performing system checks...
 
-1. If you use Github Desktop, open it, then open the repository in VScode. Else, directly open the directory in VScode.
-2. Open a new terminal in VScode if there is no one (_Terminal_ tab > _New terminal_)
-3. Go into the `backend` folder with `cd` command
-4. Activate your virtualenv (see the dedicated section below, at the end)
-5. Visit your local website at [http://localhost:8000](http://localhost:8000), or shutdown the server with <kbd>CTRL</kbd> + <kbd>C</kbd>.
+System check identified no issues (0 silenced).
+May 17, 2022 - 21:38:32
+Django version 3.2.13, using settings 'config.settings.dev_local'
+// highlight-next-line
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+```
 
-## 2. Pull last updates
+Now you can go in your browser and open [http://localhost:8000](http://localhost:8000): congratulations, 
+django is running on your computer! 🥳🥳
 
-When someone else make some updates, you make a `pull` with git to update your local copy of nantral platform (e.g. with Github Desktop, or git in VScode, or git in command line). When you pull last updates, you will probably have to:
+You can stop it by pressing <kbd>CTRL</kbd>+<kbd>C</kbd>.
 
-- **update your python dependencies:** in the `backend` folder, run `pip3 install -r requirements.txt`
-- **update your database:** in the `backend` folder, run `python3 manage.py migrate`
-- **update your React dependencies:** in the `frontend` folder, run `npm install`
-- **update your compiled React files:** in the `frontend` folder, run `npm run dev`
+## Create your account
 
-## 3. Migrations
+Since the database is newly created, you don't have an account yet on the site. Let's create one!
 
-- Whenever you make a change to your database's structure (basically each time you modify one of the `models.py` file), you need to save the modifications of your database in a file so as to other users can know the database modifications. In the `backend` folder, run `python3 manage.py makemigrations` to automatically create these files
-- Then, you can apply these modifications to your own database by running `python3 manage.py migrate`
+1. First, we will create an admin account. Run
+  ```bash
+  python3 manage.py createsuperuser
+  ```
+  It will then ask you the following fields:
+    * `username`: enter `admin`
+    * `email`: left empty
+    * `password`: enter `admin`
 
-Some good practices:
+2. Next, let's create your personal account: in your browser, open the site on the localhost and go to the login
+  page. The, create an account as you can do on the real website.
+  :::note
+  For the email, you must enter an email which ends by `.ec-nantes.fr`, but it does need to be a real one:
+  in facts, the verification email will not be sent, but will be prompted to the console.
+  Once your account is created, you can then go into the console and copy the verification link 
+  to activate the account.
 
-- The migration files are saved in the `migrations` folder in each app. Try to rename the migrations scripts to something more understandable for a human. Example : rename `migration01.py` to `create_news_model_alter_clubs.py`
-- Try also to merge migrations into one migration as much as possible.
-- Be careful: you can't change your migration files once you migrate your database. If you want to merge them before pushing your updates to the server for example, you'll have to destroy your database (simply delete the `db.sqlite3` file).
+  With this method, you can create as many accounts as you wish.
+  :::
 
-## 4. Creating a new server app
+3. Finally, we will make your new account an admin account:
+    1. On the local website, **log out** from your account
+    2. Open [http://localhost:8000/admin](http://localhost:8000/admin), and connect yourself with the username and
+      the password `admin / admin` (the one we created at first)
+    3. You have now access to the *Administration Panel of Django*. In the **Authentification and authorisation** section,
+      select **Users**
+    4. You now have access to the list of all users. Note that some users already exists: they are fake accounts,
+      just there to simulate the students. **Search** for your account and open it.
+    5. In the *Permissions* section, check **Staff status** and **Superuser status** and then click on the **Save** button.
+    6. That's it! 🥳 You are now a superuser, you can disconnect from the admin account and connect with your own account
+      on the login page of the website. 
 
-In django, all functionnalities are separeted in "apps". Each "app" correspond to a directory in the `server/apps` folder.
+:::info Why not using the first command to create my account with admin privileges?
 
-- To create a new app in the django server, use `python manage.py startapp app_name`. This will create a new folder with the app name you chose.
-- Then move the app folder to the main `apps` folder, so as to have all apps in the same place.
-- **In your new app folder:**
-  - Create or update a `urls.py` script inside the folder. Base this script on other `urls.py` you can find in other apps
-  - Update the `apps.py` script, by replacing `name = 'app_name'` by `name = 'apps.app_name'`
-- **Then in the `server/config` folder:**
-  _ In the `urls.py` script, add a namespace for your app like this: `url('app_name/', include('apps.app_name.urls', namespace='app_name')),`. This will link the url router to your urls.py script in the app you created.
-  _ Finally add the app in `settings/base.py`:
-  `COMMON_APPS = [ 'apps.app_name', ]`
-  Some defaults tables have been added in your database: run the migrations (see section 3), and then run the server!
+In facts, on Nantral Platform, we have 2 tables in our database for representing a user: the first one
+is called *User*, and the second one *Students*. The *User* table is made for the authentification and permissions
+processes, and the *Students* one is made for the profile of the user.
 
-## 5. Developp the frontend
-
-For the frontend part, all informations are explained on the dedicated page: [Frontend with React](../setup-react).
-
-## 6. Manage your virtualenv
-
-A virtualenv allow you to have certain requirements versions for a project which are differents from the ones you have on your computer.
-
-### a) Create a virtualenv
-
-First you have to enable the functionnality by installing the package `virtualenv` whith pip: `python3 -m pip install virtualenv`. Then you can create a virtualenv in a folder by running `python3 -m virtualenv env`, where `env` is your virtualenv name. For this project, we create the virtualenv in the `server` directory.
-
-### b) Activate a virtualenv
-
-You need to activate your virtualenv before doing anything using Python about the project. Once the virtualenv is activated, you will notice the `(env)` at the far left of the command prompt.
-
-#### Activate a virtualenv {.tabset}
-
-##### MacOS/Linux
-
-- Go to the folder which contains your virtualenv: `cd backend`
-- Run `source env/bin/activate`
-
-##### Windows (with CMD)
-
-- Go to the folder which contains your virtualenv: `cd backend`
-- Run `env\Scripts\activate.bat`
-
-##### Windows (with Powershell)
-
-- Go to the folder which contains your virtualenv: `cd backend`
-- Run `env\Scripts\activate.ps1`
-
-### c) Deactivate a virtualenv
-
-Close your virtualenv with `deactivate` anywhere.
-
-### d) Alternative: virtualenvwrapper
-
-Alternatively, you can use `virtualenvwrapper` to easily manage several virtualenv. Follow the [instructions here](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/development_environment#using_django_inside_a_python_virtual_environment) to install it. Once installed, you can use:
-
-- `mkvirtualenv env_name` to create a virtual env
-- `workon env_name` to activate a virtual env (it doesn't depends on the current folder you're in)
-- `deactivate` to close the virtual env
-
-Since the installation is a little more tricky, we do not recommand this for beginners; however, if you succeed to install it before (for example doing the MDN tutorial), you can use it if you prefere.
+When you create an acount with the `createsuperuser` command, it only creates a new element in the `User` table,
+and not in the `Students` table: that's why you need to create your account with the login page, to have both 
+enabled.
+:::

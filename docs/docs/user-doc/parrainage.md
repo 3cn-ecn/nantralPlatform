@@ -11,9 +11,9 @@ dateCreated: 2021-10-12T16:15:59.459Z
 
 Cette page se destine à fournir des explications sur l'algorithme de parrainage pour Centrale Nantes, utilisé et mis en place par le BDE. Elle pourra notamment servir au pôle inté ou aux futurs DSI de l'association.
 
-# 1. Contexte
+## 1. Contexte
 
-## 1.1 Lexique
+### 1.1 Lexique
 
 Chaque année, le BDE organise "le parrainage", c'est-à-dire que des nouveaux étudiants sont parrainés par les plus anciens afin de s'intégrer plus facilement dans l'école.
 On distingue deux types de personnes :
@@ -24,7 +24,7 @@ On distingue deux types de personnes :
 > Actuellement (en 2021), seules les filières ingénieurs généraliste et de spécialité sont concernées par le parrainage. Les masters, bachelors et doctorants sont considérés "à part" et ne sont pas parrainés.
 > {.is-info}
 
-## 1.2 Déroulement
+### 1.2 Déroulement
 
 Le parrainage s'effctue généralement en plusieurs phases :
 
@@ -35,9 +35,9 @@ Le parrainage s'effctue généralement en plusieurs phases :
 - **Phase 5 : Questionnaires ITII (début octobre)** - Les ITII faisant leur rentrée début octobre, une nouvelle phase de parrainage est mise en place. Il s'agit ici de seulement récolter leurs questionnaires pour ensuite les placer dans les familles déjà existantes
 - **Phase 6 : Attibution des ITII aux familles (mi-octobre)** - On place les ITII dans des familles. Fin du processus de parrainage.
 
-# 2. Utilisation de Nantral Platform pour le parrainage
+## 2. Utilisation de Nantral Platform pour le parrainage
 
-## 2.1 Pourquoi utiliser Nantral Platform ?
+### 2.1 Pourquoi utiliser Nantral Platform ?
 
 Avant d'utiliser Nantral Platform, les questionnaires étaient conçus sous Google Form, et les réponses étaient ensuite récupérées puis entrées dans un script Python pour faire les attributions. Ce mode de fonctionnement, simple à mettre en place, présentait néanmoins quelques inconvénients :
 
@@ -49,7 +49,7 @@ D'autre part, le fait de basculer cette procédure sur Nantral Platform permet d
 - **un contrôle total des données et du processus :** on ne vend plus nos données à Google !
 - **une motivation pour les 1A pour s'inscrire sur Nantral Platform :** cela permet d'être sûr qu'ils recevront bien ensuite toutes les infos sur les clubs et assos de l'école et facilitera la suite de leur scolarité !
 
-## 2.2 Interface Admin
+### 2.2 Interface Admin
 
 Si vous devez participer à l'organisation du parrainage, vous pouvez faire une demande auprès des administrateurs de Nantral Platform (en cas de doutes, adressez-vous au DSI du BDE) pour avoir accès à l'interface admin du parrainage.
 
@@ -68,14 +68,14 @@ Cette page est accessible via le lien suivant : [nantral-platform.fr/parrainage/
   - **Voir les affectations** : permet de voir les attributions 1A-2A+ enregistrées dans la base de données.
   - **Modifier les questions et l'affichage** : permet d'accéder à l'interface de gestion de la base de données pour modifier la **phase** en cours d'exécution et les différentes questions des questionnaires.
 
-## 2.3 Changer la phase
+### 2.3 Changer la phase
 
-## 2.4 Ajouter ou modifier des questions
+### 2.4 Ajouter ou modifier des questions
 
-# 3. Fonctionnement des algorithmes et choix de conceptions
+## 3. Fonctionnement des algorithmes et choix de conceptions
 
-## Algorithme initial
+### Algorithme initial
 
-## Algorithme delta
+### Algorithme delta
 
-## Algorithme ITII
+### Algorithme ITII
