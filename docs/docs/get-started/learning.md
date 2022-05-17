@@ -69,7 +69,7 @@ Notice that a new directory named `venv` has been created in your folder: it wil
 we will install in this virtual environment.
 
 Then, activate the virtualenv:
-<Tabs>
+<Tabs groupId="win">
 <TabItem value="ps1" label="With Powershell">
 
 ```bash

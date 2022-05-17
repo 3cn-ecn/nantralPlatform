@@ -22,8 +22,10 @@ The deployment pipeline is split into two parts:
 
 We will see how to debug both processes.
 
-> In the following section, all `docker-compose` commands **in production** are replaced with the alias `dcf` which stands for `docker-compose -f docker-compose.yml -f docker-compose.prod.yml`
-> {.is-info}
+:::info
+In the following section, all `docker-compose` commands **in production** are replaced with the 
+alias `dcf` which stands for `docker-compose -f docker-compose.yml -f docker-compose.prod.yml`
+:::
 
 ### Errors while building
 

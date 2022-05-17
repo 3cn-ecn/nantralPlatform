@@ -15,10 +15,10 @@ Available at [dev.nantral-platform.fr](https://dev.nantral-platform.fr).
 
 The purpose of this staging server is to test modifications (and especially database modifications) before adding them to the main server. This is organised that way:
 
-| Github branch | Address                 | Purpose                  |
-| :------------ | :---------------------- | :----------------------- |
-| master        | www.nantral-platform.fr | The main site for users  |
-| staging       | dev.nantral-platform.fr | The dev site for testing |
+| Github branch | Address                                                    | Purpose                  |
+| :------------ | :----------------------------------------------------------| :----------------------- |
+| master        | [www.nantral-platform.fr](https://www.nantral-platform.fr) | The main site for users  |
+| staging       | [dev.nantral-platform.fr](https://dev.nantral-platform.fr) | The dev site for testing |
 
 ## 2. How to test my code on the staging server
 

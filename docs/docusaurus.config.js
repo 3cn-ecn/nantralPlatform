@@ -94,25 +94,29 @@ const config = {
             title: "Docs",
             items: [
               {
-                label: "Tutorial",
-                to: "/docs/index",
+                label: "Get started",
+                to: "/docs/category/get-started",
               },
+              {
+                label: "Contribute",
+                to: "/docs/category/contribute"
+              }
             ],
           },
           {
             title: "Community",
             items: [
               {
-                label: "Stack Overflow",
-                href: "https://stackoverflow.com/questions/tagged/docusaurus",
+                label: "Facebook",
+                href: "https://www.facebook.com/nantral.platform.ecn",
               },
               {
                 label: "Discord",
-                href: "https://discordapp.com/invite/docusaurus",
+                href: "https://discord.gg/BH42GYNZ8Z",
               },
               {
-                label: "Twitter",
-                href: "https://twitter.com/docusaurus",
+                label: "Nantral Platform",
+                href: "https://nantral-platform.fr/club/nantral-platform/",
               },
             ],
           },
@@ -125,12 +129,12 @@ const config = {
               },
               {
                 label: "GitHub",
-                href: "https://github.com/facebook/docusaurus",
+                href: "https://github.com/nantral-platform/nantralPlatform",
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Nantral Platform, AECN. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
