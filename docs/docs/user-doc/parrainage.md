@@ -72,6 +72,19 @@ Cette page est accessible via le lien suivant : [nantral-platform.fr/parrainage/
 
 ### 2.3 Changer la phase
 
+Pour changer la phase, connectez-vous à l'interface admin du site en ligne.
+Puis, dans la section **EXTRA SETTINGS**, sélectionnez **Paramètres**. Vous
+pouvez alors changez la valeur du paramètre `PHASE_PARRAINAGE` d'après le
+code suivant (cf la section 1.2) :
+
+* `0`: Tout masquer
+* `1`: Questionnaires 2A+
+* `2`: Questionnaires 1A et 2A+
+* `3`: Soirée de parrainage
+* `4`: Résultats du parrainage
+* `5`: Questionnaires ITII
+* `6`: Résultats ITII
+
 ### 2.4 Ajouter ou modifier des questions
 
 ## 3. Fonctionnement des algorithmes et choix de conceptions

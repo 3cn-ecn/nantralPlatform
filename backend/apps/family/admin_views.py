@@ -2,10 +2,11 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.db.models import Q
 from django.contrib import messages
+from extra_settings.models import Setting
 
 from apps.utils.accessMixins import UserIsInGroup
-from .models import Family, MembershipFamily, QuestionFamily
-from .utils import read_phase, scholar_year
+from .models import Family, MembershipFamily
+from .utils import scholar_year
 from .algorithm.main import main_algorithm
 from .algorithm.delta import delta_algorithm
 from .algorithm.itii import itii_algorithm, reset_itii
@@ -21,7 +22,7 @@ class HomeAdminView(UserIsInGroup, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['phase'] = read_phase()
+        context['phase'] = Setting.get('PHASE_PARRAINAGE')
         ## FAMILIES
         # family - general
         families = Family.objects.filter(year=scholar_year())
@@ -95,7 +96,7 @@ class ResultsView(UserIsInGroup, TemplateView):
         except Exception as e:
             messages.error(self.request, e)
         context['families'] = families
-        context['phase'] = read_phase()
+        context['phase'] = Setting.get('PHASE_PARRAINAGE')
         return context
 
 
@@ -139,6 +140,6 @@ class ResultsSavedView(UserIsInGroup, TemplateView):
             members_1A = f.memberships.filter(role='1A')
             families.append({'A1':members_1A, 'A2':members_2A, 'A2plus':members_2A_plus, 'family':f})
         context['families'] = families
-        context['phase'] = read_phase()
+        context['phase'] = Setting.get('PHASE_PARRAINAGE')
         return context
 
