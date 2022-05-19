@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content%}
+    <h1>Mentions Légales</h1>
+    <h2>Identité du site</h2>
+    <p>Nom du site web : <i>Nantral Platform</i><br>
+    Adresse : <a href="{% url 'home:home' %}">https://www.nantral-platform.fr</a><br>
+    Propriétaire : Association des Étudiants de l'École Centrale de Nantes</p>
+    <h2>L'association</h2>
+    <p>ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES<br>
+    École Centrale de Nantes, 1 rue de la Noë, 44300 Nantes<br>
+    SIREN : 790 010 078<br>
+    APE : 9499Z<br>
+    N° TVA Intra : FR 49 79 00 10 07 8<br>
+    Mail : <a href = "mailto:bde@ec-nantes.fr">bde@ec-nantes.fr</a></p>
+    <h2>Conception et réalisation</h2>
+    <p>CLUB NANTRAL PLATFORM</p>
+    <h2>Hébergement</h2>
+    <p>OVH<br>
+    SAS au capital de 10 069 020 €<br>
+    RCS Lille Métropole 424 761 419 00045<br> 
+    Code APE : 2620Z<br>
+    N° TVA : FR 22 42 47 61 41 9<br>
+    Siège social : 2 rue Kellermann - 59100 Roubaix - France</p>
+    <h2>Propriété intellectuelle</h2>
+    <p>Sauf mention contraire, tous les éléments accessibles sur 
+        le site (textes, images, logo, icônes, sons, logiciels, 
+        etc.) restent la propriété exclusive de leurs auteurs, en 
+        ce qui concerne les droits de propriété intellectuelle ou 
+        les droits d’usage.</p>
+    <p>Toute reproduction, représentation, modification, 
+        publication, adaptation de tout ou partie des éléments du 
+        site, quel que soit le moyen ou le procédé utilisé, est 
+        interdite, sauf autorisation écrite préalable 
+        de l’auteur.</p>
+    <p>Toute exploitation non autorisée du site ou d'un 
+        quelconque élément qu’il contient est considérée comme 
+        constitutive d’une contrefaçon et poursuivie.</p>
+    <p>Les marques et logos reproduits sur le site 
+        sont déposés par les sociétés qui en sont propriétaires.</p>
+    <h2>Cookies</h2>
+    <p>Seul un cookie de session est utilisé sur le site et expire 
+        après 14 jours.</p>
+    <h2>Contenu embarqué depuis d'autres sites</h2>
+    <p>Les contenus de ce site peuvent inclure du contenu 
+        provenant de sources extérieures (par exemple les vidéos, 
+        images, etc…). Ces contenus embarqués agissent de la même 
+        manière que si le visiteur avait visité le site original 
+        où repose ce contenu. Ces sites peuvent donc utiliser des 
+        cookies supplémentaires.</p>
+    <h2>Traitement des données personnelles</h2>
+    <p>Lors de votre inscription sur le site, les données 
+        personnelles que vous nous transmettez seront stockées et 
+        conservées par l’Association des Étudiants de l’École 
+        Centrale de Nantes jusqu’à demande de suppression de votre 
+        compte utilisateur à l’aide du
+        <a href = "{% url 'home:sugestions' %}"> formulaire de contact</a></p>
+{% endblock %}

@@ -1,4 +1,4 @@
-FROM python:3.7-slim-buster
+FROM python:3.10-slim-buster
 
 ENV C_FORCE_ROOT 1
 ENV DOCKER True
@@ -10,7 +10,7 @@ RUN adduser --disabled-password --gecos '' myuser
 # Install PostgreSQL dependencies
 # We have to install GCC as the slim and alpine base images do not come with gcc built in
 RUN apt-get update && \
-    apt-get install -y postgresql-client libpq-dev supervisor netcat gcc memcached
+  apt-get install -y postgresql-client libpq-dev supervisor netcat gcc memcached git
 
 # Step 1: Install any Python packages
 # ----------------------------------------
@@ -20,19 +20,19 @@ RUN mkdir -p /var/app/logs
 RUN mkdir var/app/staticfiles
 WORKDIR  /var/app
 
-ADD server/requirements.txt ./requirements.txt
+ADD backend/requirements.txt ./requirements.txt
 RUN pip install -U pip && \
-    pip install -r requirements.txt
+  pip install -r requirements.txt
 
 # Step 2: Copy Django Code
 # ----------------------------------------
 
 # Copy stuff in rarest-to-most-often order
 # Files that should basically never change
-COPY server/manage.py \
-    server/run_server_staging.sh
+COPY backend/manage.py \
+  backend/run_server_staging.sh
 # Files that will change rarely
-COPY server/templates ./templates
-COPY server/config ./config
+COPY backend/templates ./templates
+COPY backend/config ./config
 # Files that will change often
-COPY server/apps ./apps
+COPY backend/apps ./apps

@@ -1,0 +1,138 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy Server
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - backend/**
+      - deployment/**
+      - frontend/**
+      - scripts/**
+      - .github/workflows/deploy-server.yml
+
+jobs:
+  webpack-check:
+    name: Check for frontend changes
+    outputs:
+      run_job: ${{ steps.check_files.outputs.run_job }}
+    # Specify which OS we are running our job on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # A step can use a GitHub action which is available on the marketplace or simply run a command in the runner's shell.
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Pull latest commit
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: Look for modified files
+        id: check_files
+        run: |
+          echo "=============== List modified files ==============="
+          git diff --name-only HEAD^ HEAD
+
+          echo "========== Check paths of modified files =========="
+          git diff --name-only HEAD^ HEAD > files.txt
+          while IFS= read -r file
+          do
+            echo $file
+            if [[ $file == frontend/* ]]; then
+              echo "This modified file is under the 'frontend' folder."
+              echo "::set-output name=run_job::true"
+              break
+            else
+              echo "::set-output name=run_job::false"
+            fi
+          done < files.txt
+  webpack:
+    name: Build React bundles
+    needs: webpack-check
+    if: needs.webpack-check.outputs.run_job == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull latest commit
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14.16.0"
+      - name: Build React
+        run: |
+          cd frontend
+          npm install
+          npm run start
+      - name: Upload files to the VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: "ubuntu"
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          source: "backend/static/js/*.js"
+          target: "nantralPlatform"
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull latest commit
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+          cache: "pip"
+      - name: Install dependencies
+        working-directory: ./backend
+        run: pip install -r requirements.txt
+
+      - name: Testing
+        working-directory: ./backend
+        run: python manage.py test
+
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs: [webpack, test]
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Pull latest commit
+        uses: actions/checkout@v2
+      - name: Backup before deploy
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: "ubuntu"
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          script: |
+            cd nantralPlatform
+            cd scripts
+            git pull
+            python3 -m venv env
+            source env/bin/activate
+            pip install -r requirements.txt
+            python3 db_backup.py
+            deactivate
+            rm -r env
+      - name: Deploy to the VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: "ubuntu"
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          script: |
+            cd nantralPlatform/deployment
+            git pull
+            sudo cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPlatform/deployment/certs/key.pem
+            sudo cp /etc/letsencrypt/live/nantral-platform.fr/fullchain.pem /home/ubuntu/nantralPlatform/deployment/certs/cert.pem
+            sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx backend
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d

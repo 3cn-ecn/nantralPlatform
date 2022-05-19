@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content%}
+
+	<div class="card border-danger mb-3">
+		<div class="card-body text-danger">
+			<h1 class="card-title">Erreur 404 - Page introuvable</h1>
+			<p class="card-text">Désolé, il semblerait que cette page n'existe pas...</p>
+		</div>
+	</div>
+	<br>
+	<p>
+		Ce que vous pouvez faire maintenant :
+		<ul>
+			<li>Si vous pensez que c'est un bug, vous pouvez <a href="{% url 'home:sugestions' %}">nous le signaler ici</a></li>
+			<li>Sinon, retournez à la page d'accueil en cliquant sur le mouton :</li>
+		</ul>
+	</p>
+	<a class="btn btn-light" href="{% url 'home:home' %}">
+		<img src='{% static "/img/sheep.png" %}' style=" width:40%;max-width:150px;}">
+	</a>
+
+{% endblock%}
