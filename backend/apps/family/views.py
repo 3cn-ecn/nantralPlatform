@@ -3,11 +3,12 @@ from django.urls.base import reverse
 from django.views.generic import TemplateView, CreateView, DetailView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from extra_settings.models import Setting
 
 from apps.utils.accessMixins import UserIsAdmin
 from .models import Family, MembershipFamily, QuestionPage
 from .forms import CreateFamilyForm, UpdateFamilyForm, Member2AFormset, FamilyQuestionsForm, MemberQuestionsForm, FamilyQuestionItiiForm
-from .utils import read_phase, get_membership, is_1A, show_sensible_data, scholar_year
+from .utils import get_membership, is_1A, show_sensible_data, scholar_year
 
 
 # Create your views here.
@@ -21,7 +22,7 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
         # by default all functions call data for the current year only
         membership = get_membership(self.request.user)
         context = {}
-        context['phase'] = read_phase()
+        context['phase'] = Setting.get('PHASE_PARRAINAGE')
         context['is_2Aplus'] = not is_1A(self.request.user, membership)
         context['show_sensible_data'] = show_sensible_data(self.request.user, membership)
         context['is_itii'] = self.request.user.student.faculty == 'Iti'
@@ -46,7 +47,7 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
     template_name = 'family/list.html'
 
     def get_context_data(self, *args, **kwargs):
-        phase = read_phase()
+        phase = Setting.get('PHASE_PARRAINAGE')
         show_data = show_sensible_data(self.request.user)
         context = {}
         context['list_family'] = [
@@ -142,7 +143,7 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
         context['is_admin'] = family.is_admin(self.request.user)
         context['parrains'] = family.memberships.filter(role='2A+')
         context['filleuls'] = family.memberships.filter(role='1A')
-        context['phase'] = read_phase()
+        context['phase'] = Setting.get('PHASE_PARRAINAGE')
         context['ariane'] = [
             {
                 'target': reverse('family:home'), 

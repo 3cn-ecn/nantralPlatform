@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from apps.utils import extraSettings
+from extra_settings.models import Setting
 from .models import MembershipFamily, Family
 
 
@@ -12,11 +12,6 @@ def scholar_year(date=timezone.now()):
     if month < 7:
         year -= 1
     return year
-
-
-def read_phase():
-    """Lis la phase de parrainage où on est rendus."""
-    return extraSettings.get_or_create('PHASE_PARRAINAGE', 'int', 0)
 
 
 def get_membership(user:User, year=scholar_year()) -> MembershipFamily:
@@ -69,7 +64,7 @@ def show_sensible_data(user:User, membership:MembershipFamily=None) -> bool:
     les 2A+ et pour les 1A après la chasse aux parrains (phase > 3)."""
     if not membership:
         membership = get_membership(user)
-    phase = read_phase()
+    phase = Setting.get('PHASE_PARRAINAGE')
     if membership:
         first_year = is_1A(user, membership)
         return (not first_year) or (phase >= 4)
