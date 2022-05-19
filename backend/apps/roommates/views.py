@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.views.generic import TemplateView, CreateView, ListView, UpdateView
 
-from extra_settings.models import Setting
+from apps.utils import extraSettings
 from apps.utils.accessMixins import UserIsMember
 from apps.group.views import UpdateGroupView, DetailGroupView
 
@@ -20,8 +20,8 @@ class HousingMap(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['MAPBOX_API_KEY'] = settings.MAPBOX_API_KEY
-        PHASE_COLOCATHLON = Setting.get(
-            'PHASE_COLOCATHLON', default=0)
+        PHASE_COLOCATHLON = extraSettings.get_or_create(
+            'PHASE_COLOCATHLON', 'int', 0)
         context['colocathlon'] = PHASE_COLOCATHLON
         if PHASE_COLOCATHLON == 2:
             roommate = Roommates.objects.filter(
@@ -148,7 +148,7 @@ class DetailRoommatesView(DetailGroupView):
         context['roommates_list'] = Roommates.objects.filter(
             housing=context['housing']
         ).exclude(pk=self.object.pk).order_by('-begin_date')
-        context['colocathlon'] = Setting.get('PHASE_COLOCATHLON', default=0)
+        context['colocathlon'] = extraSettings.get('PHASE_COLOCATHLON')
         context['nb_participants'] = self.object.colocathlon_participants.count()
         return context
 

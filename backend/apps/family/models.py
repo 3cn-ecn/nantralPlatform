@@ -1,30 +1,9 @@
 from django.db import models
 from django.urls.base import reverse
-from django.core.cache import cache
 from django.utils import timezone
 
 from apps.group.models import Group, NamedMembership
 from apps.student.models import Student
-
-
-class Affichage(models.Model):
-    phase = models.IntegerField(
-        choices = [
-            (0, 'Tout masquer'),
-            (1, 'Questionnaires 2A+'),
-            (2, 'Questionnaires 1A et 2A+'),
-            (3, 'Soirée de parrainage'),
-            (4, 'Résultats du parrainage'),
-            (5, 'Questionnaires ITII'),
-            (6, 'Résultats ITII'),
-        ],
-        default=0
-    )
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        cache.set('family_phase', self.phase, 3600)
-    
 
 
 class Family(Group):

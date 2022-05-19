@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
-from django.core.cache import cache
 from django.utils import timezone
 
-from .models import MembershipFamily, Family, Affichage
+from apps.utils import extraSettings
+from .models import MembershipFamily, Family
 
 
 def scholar_year(date=timezone.now()):
@@ -15,16 +15,8 @@ def scholar_year(date=timezone.now()):
 
 
 def read_phase():
-    """Lis la phase de parrainage où on est rendus depuis le cache."""
-    phase = cache.get('family_phase')
-    if not phase:
-        try:
-            phase = Affichage.objects.first().phase
-        except Exception:
-            Affichage().save()
-            phase = Affichage.objects.first().phase
-        cache.set('family_phase', phase, 3600)
-    return phase
+    """Lis la phase de parrainage où on est rendus."""
+    return extraSettings.get_or_create('PHASE_PARRAINAGE', 'int', 0)
 
 
 def get_membership(user:User, year=scholar_year()) -> MembershipFamily:
