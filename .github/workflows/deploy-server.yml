@@ -1,16 +1,20 @@
 # This is a basic workflow to help you get started with Actions
 
-name: OVH Deploy
+name: Deploy Server
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
   push:
-    branches: [master]
+    branches:
+      - master
+    paths:
+      - backend/**
+      - deployment/**
+      - frontend/**
+      - scripts/**
+      - .github/workflows/deploy-server.yml
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
-# This workflow contains 3 jobs.
-# webpack and test can run side by side
 jobs:
   webpack-check:
     name: Check for frontend changes
@@ -79,7 +83,7 @@ jobs:
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
-          python-version: "3.7"
+          python-version: "3.10"
           cache: "pip"
       - name: Install dependencies
         working-directory: ./backend
@@ -87,14 +91,6 @@ jobs:
 
       - name: Testing
         working-directory: ./backend
-        env:
-          AWS_ACCESS_KEY_ID: test
-          AWS_SECRET_ACCESS_KEY: test
-          GITHUB_USER: unitrium
-          GITHUB_TOKEN: test
-          S3_BUCKET: test
-          MAPBOX_API_KEY: test
-          DISCORD_ADMIN_MODERATION_WEBHOOK: test
         run: python manage.py test
 
   deploy:
@@ -104,7 +100,7 @@ jobs:
     needs: [webpack, test]
     strategy:
       matrix:
-        python-version: [3.7]
+        python-version: ["3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -112,7 +108,7 @@ jobs:
       - name: Pull latest commit
         uses: actions/checkout@v2
       - name: Backup before deploy
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.INSTANCE_ADDRESS }}
           username: "ubuntu"

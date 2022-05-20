@@ -1,0 +1,10 @@
+# Environments
+*.env
+
+# Config folders
+dav/
+dkim/
+certs/
+data/
+filter/
+redis/

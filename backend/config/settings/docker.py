@@ -1,5 +1,8 @@
 """A configuration for local docker use in development.
-DO NOT USE IN PRODUCTION."""
+
+DO NOT USE IN PRODUCTION.
+"""
+
 # flake8: noqa: F405
 from celery.schedules import crontab
 
@@ -19,7 +22,7 @@ print("Using docker config")
 DATABASES = {
     'default': {
         'ENGINE':       'django.db.backends.postgresql',
-        'NAME':         env('DB_NAME_STAGING') if STAGING else env('DB_NAME'),
+        'NAME':         env('POSTGRES_DB_STAGING') if STAGING else env('POSTGRES_DB'),
         'USER':         env('POSTGRES_USER'),
         'PASSWORD':     env('POSTGRES_PASSWORD'),
         'HOST':         env('DB_HOSTNAME'),
@@ -43,10 +46,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "test"
-
 ALLOWED_HOSTS = ["django", "localhost"]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -62,27 +61,6 @@ CACHES = {
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
-
-
-##################################
-### AWS MEDIA STORAGE SETTINGS ###
-##################################
-
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-
-AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET')
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-    'ACL': 'public-read'
-}
-AWS_S3_REGION_NAME = 'eu-west-3'
-
-AWS_SES_REGION = 'eu-central-1'
 
 
 #######################
@@ -121,4 +99,3 @@ CELERY_BEAT_SCHEDULE = {
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": (lambda _: DEBUG),
 }
-

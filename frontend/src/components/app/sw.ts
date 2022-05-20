@@ -45,7 +45,7 @@ registerRoute(
 // cache images
 registerRoute(
   ({url, request}) => request.destination === 'image' ||
-                      url.origin === 'https://nantral-platform-prod.s3.amazonaws.com' ||
+                      url.origin === 'https://storage.gra.cloud.ovh.net' ||
                       url.origin === 'https://avatars.dicebear.com',
   new CacheFirst({
     cacheName: 'images',
