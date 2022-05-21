@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AnswerFamily, MembershipFamily, Family, AnswerMember, Option, QuestionMember, QuestionFamily, GroupQuestion, QuestionPage, Affichage
+from .models import AnswerFamily, MembershipFamily, Family, AnswerMember, Option, QuestionMember, QuestionFamily, GroupQuestion, QuestionPage
 
 #familles
 class AnswerFamilyInline(admin.TabularInline):
@@ -50,7 +50,4 @@ class QuestionGroupInline(admin.TabularInline):
 class QuestionPageAdmin(admin.ModelAdmin):
     inlines=[QuestionGroupInline, QuestionMemberInline]
 admin.site.register(QuestionPage, QuestionPageAdmin)
-
-
-admin.site.register(Affichage)
 

@@ -191,6 +191,9 @@ STAGING = env('STAGING')
 ### THIRD PARTY LIBRARIES SETTINGS ###
 ######################################
 
+# Extra Settings
+EXTRA_SETTINGS_CACHE_NAME = "extra_settings"
+
 # Cripsy Forms
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
