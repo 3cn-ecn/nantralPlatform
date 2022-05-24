@@ -1,26 +1,28 @@
 var path = require("path");
-var apps_dir = path.join(__dirname, "../src/components")
+var base_dir = path.join(__dirname, '..');
+var apps_dir = path.join(base_dir, "src/components");
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    sw:                     path.join(apps_dir, "app/sw.ts"),
-    launchApp:              path.join(apps_dir, "app/app.ts"),
-    clubsList:              path.join(apps_dir, "club/clubsList.tsx"),
-    eventsGroupListUpdate:  path.join(apps_dir, "group/eventsGroupListUpdate.tsx"),
-    postsGroupListUpdate:   path.join(apps_dir, "group/postsGroupListUpdate.tsx"),
-    groupMembers:           path.join(apps_dir, "group/groupMembers.tsx"),
-    editGroupMembers:       path.join(apps_dir, "group/editGroupMembers.tsx"),
-    eventsView:             path.join(apps_dir, "event/eventsView.tsx"),
-    cowlocathlonCard:       path.join(apps_dir, "roommates/cowlocathlonCard.tsx"),
-    housingMap:             path.join(apps_dir, "roommates/housingMap.tsx"),
-    createHousing:          path.join(apps_dir, "roommates/createHousing.tsx"),
-    subscribeButton:        path.join(apps_dir, "notification/subscribeButton.tsx"),
-    deviceSubscribeButton:  path.join(apps_dir, "notification/deviceSubscribeButton.tsx"),
-    reactApp:               path.join(__dirname, "../src/index.tsx")
+    'sw.js':                     path.join(apps_dir, "app/sw.ts"),
+    'launchApp.js':              path.join(apps_dir, "app/app.ts"),
+    'clubsList.js':              path.join(apps_dir, "club/clubsList.tsx"),
+    'eventsGroupListUpdate.js':  path.join(apps_dir, "group/eventsGroupListUpdate.tsx"),
+    'postsGroupListUpdate.js':   path.join(apps_dir, "group/postsGroupListUpdate.tsx"),
+    'groupMembers.js':           path.join(apps_dir, "group/groupMembers.tsx"),
+    'editGroupMembers.js':       path.join(apps_dir, "group/editGroupMembers.tsx"),
+    'eventsView.js':             path.join(apps_dir, "event/eventsView.tsx"),
+    'cowlocathlonCard.js':       path.join(apps_dir, "roommates/cowlocathlonCard.tsx"),
+    'housingMap.js':             path.join(apps_dir, "roommates/housingMap.tsx"),
+    'createHousing.js':          path.join(apps_dir, "roommates/createHousing.tsx"),
+    'subscribeButton.js':        path.join(apps_dir, "notification/subscribeButton.tsx"),
+    'deviceSubscribeButton.js':  path.join(apps_dir, "notification/deviceSubscribeButton.tsx"),
+    'reactApp.js':               path.join(base_dir, "src/index.tsx"),
   },
   output: {
-    path: path.join(__dirname, "../../backend/static/js"),
-    filename: "[name].js",
+    path: path.join(base_dir, "../backend/static/js"),
+    filename: "[name]",
   },
   module: {
     rules: [
