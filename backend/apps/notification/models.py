@@ -77,7 +77,7 @@ class Notification(models.Model):
         self.receivers.add(*receivers)
         # then we update the subscribed field for receivers who habe subscribed
         if self.high_priority:
-            sub_receivers = self.receivers
+            sub_receivers = self.receivers.all()
         else: 
             sub_receivers = self.receivers.filter(
                 subscription_set__page = self.sender
