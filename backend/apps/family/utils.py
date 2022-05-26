@@ -9,7 +9,7 @@ def scholar_year(date=timezone.now()):
     """Retourne l'année scolaire au lieu de l'année civile"""
     year = date.year
     month = date.month
-    if month < 7:
+    if month < 5:
         year -= 1
     return year
 
