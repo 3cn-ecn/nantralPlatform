@@ -95,9 +95,8 @@ class ListFamilyJoinView(ListFamilyView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        for list in context:
-            for object in context[list]:
-                object['url'] += '/join'
+        for family in context['list_family']:
+            family['url'] += 'join'
         return context
 
 
