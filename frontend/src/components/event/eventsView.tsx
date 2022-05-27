@@ -11,6 +11,11 @@ declare const eventsRemoveParticipant: string;
 declare const eventsAddParticipant: string;
 declare const eventListParticipants: string;
 
+// const eventsApiUrl: string = "api/event/";
+// const eventsRemoveParticipant: string = "api/event/participating/1";
+// const eventsAddParticipant: string = "/event/1/participants/delete/";
+// const eventListParticipants: string = "/event/1/participants/add";
+
 function Root(props: {}): JSX.Element {
   const [eventInfos, setEventInfos] = useState(new Map());
   const [isLoading, setIsLoading] = useState(true);
@@ -84,3 +89,5 @@ function Root(props: {}): JSX.Element {
 }
 
 render(<Root />, document.getElementById("root"));
+
+// export default EventList;
