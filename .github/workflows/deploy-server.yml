@@ -12,7 +12,6 @@ on:
       - backend/**
       - deployment/**
       - frontend/**
-      - scripts/**
       - .github/workflows/deploy-server.yml
 
 jobs:
@@ -115,7 +114,7 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             cd nantralPlatform
-            cd scripts
+            cd deployment/scripts
             git pull
             python3 -m venv env
             source env/bin/activate

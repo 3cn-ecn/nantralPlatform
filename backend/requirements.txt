@@ -20,7 +20,7 @@ django-celery-beat==2.2.1
 git+https://github.com/nantral-platform/django-ckeditor-5.git
 django-crispy-forms==1.11.2
 django-debug-toolbar==3.2.2
-django-environ==0.4.5
+django-environ==0.8.1
 django-extra-settings==0.3.2
 django-storages==1.11.1
 django-timezone-field==4.2.1
