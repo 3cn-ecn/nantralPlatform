@@ -70,7 +70,7 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
-            cd nantralPlatform/scripts
+            cd nantralPlatform/deployment/scripts
             sudo apt-get install python3-psycopg2 -y
             python3 -m venv env
             source env/bin/activate

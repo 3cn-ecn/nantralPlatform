@@ -15,7 +15,7 @@ This page is about backups of the database on the server. It requires you to hav
 
 - Backups of the database are made every day at 05:00 AM and stored on our S3 bucket.
 - They are stored for 30 days. (There is currently nothing to delete them automatically).
-- To make a backup manually: `cd /home/ubuntu/nantralPlatform/scripts && source env/bin/activate && python3 db_backup.py && deactivate`.
+- To make a backup manually: `cd /home/ubuntu/nantralPlatform/deployment/scripts && source env/bin/activate && python3 db_backup.py && deactivate`.
 
 - A simple restore script is provided. You need to specify some environment variables first:
   ```

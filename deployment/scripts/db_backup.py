@@ -8,11 +8,11 @@ Author: Charles Zablit - Mai 2022
 """
 
 from typing import Callable
-from environs import Env
 from datetime import datetime
 from botocore.config import Config
 from discord_webhook import DiscordWebhook, DiscordEmbed
 import docker
+import environ
 import gzip
 import os
 import boto3
@@ -125,7 +125,7 @@ def send_status(url: str, file_path: str = None, size: int = None):
         embed.add_embed_field(name="Status", value="Success 🟢", inline=True)
         embed.add_embed_field(
             name="File Name", value=f"`{file_path}`", inline=True)
-        size = round(size/(10**6), 3)
+        size = round(size / (10**6), 3)
         embed.set_footer(text=f"File size: {size} Mo")
         embed.set_timestamp()
         log(logging.info, "Sending success notification.")
@@ -149,15 +149,15 @@ def main() -> None:
                 access_secret_key=AWS_SECRET_ACCESS_KEY)
     size = os.path.getsize("output.sql.gz")
     os.remove("output.sql.gz")
-    send_status(DISCORD_WEBHOOK, object_name+object_extension, size)
+    send_status(DISCORD_WEBHOOK, object_name + object_extension, size)
 
 
 if __name__ == "__main__":
     log(logging.info, "Starting database backup.")
 
     log(logging.debug, "Getting environment variables.")
-    env = Env()
-    env.read_env("../deployment/backend.env")
+    env = environ.Env()
+    env.read_env("../backend.env")
     DB_USER = env.str("POSTGRES_USER")
     DB_NAME = env.str("POSTGRES_DB")
     DB_CONTAINER = env.str("DB_CONTAINER")
