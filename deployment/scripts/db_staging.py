@@ -150,7 +150,7 @@ if __name__ == "__main__":
 
     log(logging.debug, "Getting environment variables.")
     env = environ.Env()
-    env.read_env("../../nantralPlatform/deployment/backend.env")
+    env.read_env("../backend.env")
     DB_USER = env.str("POSTGRES_USER")
     DB_PASSWORD = env.str("POSTGRES_PASSWORD")
     DB_NAME_PROD = env.str("POSTGRES_DB")
