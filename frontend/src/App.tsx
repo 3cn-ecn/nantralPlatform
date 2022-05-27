@@ -1,15 +1,13 @@
 import React from "react";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import { styled } from "@mui/material/styles";
-import Sidebar from "./components/navbar/sidebar";
 import {Route,Routes} from 'react-router-dom';
+import Home from "./apps/home/home";
 import Test1 from "./apps/test1/test1";
 import Test2 from "./apps/test2/test2";
+import Sidebar from "./components/navbar/sidebar";
 import Upbar from "./components/navbar/upBar"
 import NotFound from "./components/notFound";
-import RedirectToDjango from "./components/redirectToDjango";
-import Home from "./apps/home/home";
+import { Box, CssBaseline } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",

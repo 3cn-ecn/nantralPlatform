@@ -1,18 +1,22 @@
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import MuiAppBar from "@mui/material/AppBar";
+import * as React from "react";
+import {
+  IconButton,
+  AppBar as MuiAppBar,
+  Typography,
+  InputBase,
+  Box,
+  Badge,
+  Toolbar,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Search as SearchIcon,
+  Notifications as NotificationsIcon,
+  AccountCircle,
+  MoreVert as MoreIcon,
+} from "@mui/icons-material";
 import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import { styled, alpha } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import Box from "@mui/material/Box";
-import Badge from "@mui/material/Badge";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import Toolbar from "@mui/material/Toolbar";
-import * as React from "react";
 
 const drawerWidth = 240;
 
