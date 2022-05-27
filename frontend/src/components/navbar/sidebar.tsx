@@ -1,42 +1,67 @@
-import MuiDrawer from "@mui/material/Drawer";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import { CSSObject, IconButton, SvgIcon, Theme } from "@mui/material";
-import { styled, useTheme } from "@mui/material/styles";
-import { Link } from "react-router-dom";
 import React from "react";
 import { useTranslation } from 'react-i18next';
-
-import EventIcon from "@mui/icons-material/Event";
-import ColocIcon from "@mui/icons-material/Map";
-import ClubIcon from "@mui/icons-material/Groups";
+import { 
+  CSSObject, 
+  IconButton, 
+  SvgIcon, 
+  Theme,
+  Drawer as MuiDrawer,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import {
+  InsertLink as InsertLinkIcon, 
+  ChevronLeft as ChevronLeftIcon, 
+  ChevronRight as ChevronRightIcon,
+  Event as EventIcon,
+  Map as ColocIcon,
+  Groups as ClubIcon,
+} from '@mui/icons-material';
+import { styled, useTheme } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 
 interface buttonInterface {
   text: string;
   url: string;
-  ImageSVG: any;
+  icon?: any;
+  onBackend?: boolean;
 }
 
 const buttons: buttonInterface[] = [
   {
     text: "post",
     url: "/home/",
-    ImageSVG: EventIcon,
+    icon: EventIcon,
+    onBackend: true,
   },
-  { text: "club", url: "/club/", ImageSVG: ClubIcon },
+  { 
+    text: "club", 
+    url: "/club/", 
+    icon: ClubIcon,
+    onBackend: true,
+  },
   {
     text: "coloc",
     url: "/colocs/",
-    ImageSVG: ColocIcon,
+    icon: ColocIcon,
+    onBackend: true,
   },
+  {
+    text: "jsp",
+    url: "/test1",
+  },
+  {
+    text: "trop bi1",
+    url: "/test2",
+  },
+  {
+    text: "ok",
+    url: "/",
+  }
 ];
 
 const drawerWidth = 240;
@@ -112,6 +137,7 @@ function Sidebar(props) {
             sx={{ display: "block" }}
             component={Link}
             to={button.url}
+            reloadDocument={button.onBackend}
           >
             <ListItemButton
               sx={{
@@ -127,47 +153,15 @@ function Sidebar(props) {
                   justifyContent: "center",
                 }}
               >
-                <button.ImageSVG />
+                { button.icon
+                  ? <button.icon />
+                  : <InsertLinkIcon />
+                }
               </ListItemIcon>
               <ListItemText
                 primary={t('navbar.'+ button.text)}
                 sx={{ opacity: open ? 1 : 0 }}
               />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {[
-          ["jsp", "/test1"],
-          ["trop bi1", "/test2"],
-          ["ok", "/"],
-        ].map(([text, url], index) => (
-          <ListItem
-            key={text}
-            disablePadding
-            sx={{ display: "block" }}
-            component={Link}
-            to={url}
-          >
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
         ))}

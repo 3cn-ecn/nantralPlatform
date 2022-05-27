@@ -37,9 +37,6 @@ function App() {
           <Route path="/" element = {<Home/>}/>
           <Route path = '/test1' element = {<Test1/>}/>
           <Route path = '/test2' element = {<Test2/>}/>
-          <Route path = '/club' element = {<RedirectToDjango/>}/>
-          <Route path = '/home' element = {<RedirectToDjango/>}/>
-          <Route path = '/colocs' element = {<RedirectToDjango/>}/>
           <Route path = '*' element = {<NotFound/>}/>
         </Routes>
       </Box>
