@@ -1,8 +1,7 @@
 import React from 'react';
 
 function NotFound () {
-    window.location.reload();
-    return <h1>Bug?</h1>
+    return <h1>Page 404 NOT FOUND</h1>
 }
 
 export default NotFound;

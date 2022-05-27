@@ -8,6 +8,7 @@ import Test1 from "./components/navbar/test1";
 import Test2 from "./components/navbar/test2";
 import Upbar from "./components/navbar/upBar"
 import NotFound from "./components/notFound";
+import RedirectToDjango from "./components/redirectToDjango";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -35,6 +36,9 @@ function App() {
           <Route path="/" element = {<h1>Bonjour, page d'accueil</h1>}/>
           <Route path = '/test1' element = {<Test1/>}/>
           <Route path = '/test2' element = {<Test2/>}/>
+          <Route path = '/club' element = {<RedirectToDjango/>}/>
+          <Route path = '/home' element = {<RedirectToDjango/>}/>
+          <Route path = '/colocs' element = {<RedirectToDjango/>}/>
           <Route path = '*' element = {<NotFound/>}/>
         </Routes>
       </Box>
