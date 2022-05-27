@@ -13,6 +13,7 @@ import { CSSObject, IconButton, SvgIcon, Theme } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 import EventIcon from "@mui/icons-material/Event";
 import ColocIcon from "@mui/icons-material/Map";
@@ -25,9 +26,17 @@ interface buttonInterface {
 }
 
 const buttons: buttonInterface[] = [
-  { text: "Posts et Evenements", url: "/home/", ImageSVG: EventIcon },
-  { text: "Clubs et assos", url: "/club/", ImageSVG: ClubIcon },
-  { text: "Carte des colocs", url: "/colocs/", ImageSVG: ColocIcon },
+  {
+    text: "post",
+    url: "/home/",
+    ImageSVG: EventIcon,
+  },
+  { text: "club", url: "/club/", ImageSVG: ClubIcon },
+  {
+    text: "coloc",
+    url: "/colocs/",
+    ImageSVG: ColocIcon,
+  },
 ];
 
 const drawerWidth = 240;
@@ -81,6 +90,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 function Sidebar(props) {
   const theme = useTheme();
+  const { t } = useTranslation('translation');
 
   return (
     <Drawer variant="permanent" open={props.open}>
@@ -120,7 +130,7 @@ function Sidebar(props) {
                 <button.ImageSVG />
               </ListItemIcon>
               <ListItemText
-                primary={button.text}
+                primary={t('navbar.'+ button.text)}
                 sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>

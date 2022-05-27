@@ -1,12 +1,13 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Sidebar from "./components/navbar/sidebar";
 import {Route,Routes} from 'react-router-dom';
 import Test1 from "./components/navbar/test1";
 import Test2 from "./components/navbar/test2";
 import Upbar from "./components/navbar/upBar"
+import NotFound from "./components/notFound";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -34,6 +35,7 @@ function App() {
           <Route path="/" element = {<h1>Bonjour, page d'accueil</h1>}/>
           <Route path = '/test1' element = {<Test1/>}/>
           <Route path = '/test2' element = {<Test2/>}/>
+          <Route path = '*' element = {<NotFound/>}/>
         </Routes>
       </Box>
     </Box>

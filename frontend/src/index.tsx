@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import './index.scss';
-// import '../nantralPlatform/frontend/src/languages/config';
+import './languages/config';
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
