@@ -8,15 +8,15 @@ Author: Charles Zablit - Mai 2022
 """
 
 from typing import Callable
+from environs import Env
+from datetime import datetime
+from botocore.config import Config
+from discord_webhook import DiscordWebhook, DiscordEmbed
 import docker
 import gzip
 import os
-from environs import Env
 import boto3
-from botocore.config import Config
-from datetime import datetime
 import logging
-from discord_webhook import DiscordWebhook, DiscordEmbed
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -30,25 +30,38 @@ logging.basicConfig(filename='db_backup.log',
 def log(fn: Callable, msg: str) -> None:
     """Log and print a message.
 
-    Args:
-        fn (Callable): The logging function to call.
-        msg (str): The message to log.
-
+    Parameters
+    ----------
+    fn : Callable
+        The logging function to call.
+    msg : str
+        The message to log.
     """
+
     print(msg)
     fn(msg)
 
 
-def docker_db_dump(filename: str, db_user: str, db_name: str, container_name: str) -> None:
+def docker_db_dump(
+    filename: str,
+    db_user: str,
+    db_name: str,
+    container_name: str
+) -> None:
     """Generate a dump of a database given its credentials.
 
-    Args:
-        filename (str): The name of the dump.
-        db_user (str): The database's user.
-        db_name (str): The database's name.
-        container_name (str): The Docker container's name.
-
+    Parameters
+    ----------
+    filename : str
+        The name of the dump.
+    db_user : str
+        The database's user.
+    db_name : str
+        The database's name.
+    container_name : str
+        The Docker container's name.
     """
+
     log(logging.debug, "Dumping db.")
     client = docker.from_env()
     db_container = client.containers.get(container_name)
@@ -60,17 +73,29 @@ def docker_db_dump(filename: str, db_user: str, db_name: str, container_name: st
     log(logging.debug, "Done dumping db.")
 
 
-def upload_file(file_name: str, bucket: str, object_name: str, access_key_id: str, access_secret_key: str) -> None:
+def upload_file(
+    file_name: str,
+    bucket: str,
+    object_name: str,
+    access_key_id: str,
+    access_secret_key: str
+) -> None:
     """Upload a file to an S3 bucket.
 
-    Args:
-        file_name (str): The name of the file to upload.
-        bucket (str): The name of the bucket to upload to.
-        object_name (str): The name of the S3 object to create.
-        access_key_id (str): The access key id of the user.
-        access_secret_key (str): The access key secret of the user.
-
+    Parameters
+    ----------
+    file_name : str
+        The name of the file to upload.
+    bucket : str
+        The name of the bucket to upload to.
+    object_name : str
+        The name of the S3 object to create.
+    access_key_id : str
+        The access key id of the user.
+    access_secret_key : str
+        The access key secret of the user.
     """
+
     log(logging.debug, "Uploading to S3.")
     s3_client = boto3.client('s3', endpoint_url="https://s3.gra.cloud.ovh.net/",
                              aws_access_key_id=access_key_id,
@@ -83,18 +108,23 @@ def upload_file(file_name: str, bucket: str, object_name: str, access_key_id: st
 def send_status(url: str, file_path: str = None, size: int = None):
     """Send a status update to Discord.
 
-    Args:
-        url (str): The url of the webhook.
-        file_path (str, optional): The name of the uploaded file, if it exists. Defaults to None.
-        size (int, optional): The size of the uploaded file, if it exists. Defaults to None.
-
+    Parameters
+    ----------
+    url : str
+        The url of the webhook.
+    file_path : str, optional
+        The name of the uploaded file, if it exists, by default None
+    size : int, optional
+        The size of the uploaded file, if it exists, by default None
     """
+
     webhook = DiscordWebhook(url=url)
     embed = DiscordEmbed(title="**Database Backup Status**")
     embed.description = ""
     if file_path is not None:
         embed.add_embed_field(name="Status", value="Success 🟢", inline=True)
-        embed.add_embed_field(name="File Name", value=f"`{file_path}`", inline=True)
+        embed.add_embed_field(
+            name="File Name", value=f"`{file_path}`", inline=True)
         size = round(size/(10**6), 3)
         embed.set_footer(text=f"File size: {size} Mo")
         embed.set_timestamp()
@@ -115,7 +145,8 @@ def main() -> None:
     object_extension = ".sql.gz"
     upload_file("output.sql.gz", bucket=BUCKET,
                 object_name=f"backups/{object_name}{object_extension}",
-                access_key_id=AWS_ACCESS_KEY_ID, access_secret_key=AWS_SECRET_ACCESS_KEY)
+                access_key_id=AWS_ACCESS_KEY_ID,
+                access_secret_key=AWS_SECRET_ACCESS_KEY)
     size = os.path.getsize("output.sql.gz")
     os.remove("output.sql.gz")
     send_status(DISCORD_WEBHOOK, object_name+object_extension, size)
