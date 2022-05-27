@@ -1,23 +1,23 @@
 var path = require("path");
 var base_dir = path.join(__dirname, '..');
-var apps_dir = path.join(base_dir, "src/components");
+var legacy = path.join(base_dir, "src/components/legacy");
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    'sw.js':                     path.join(apps_dir, "app/sw.ts"),
-    'launchApp.js':              path.join(apps_dir, "app/app.ts"),
-    'clubsList.js':              path.join(apps_dir, "club/clubsList.tsx"),
-    'eventsGroupListUpdate.js':  path.join(apps_dir, "group/eventsGroupListUpdate.tsx"),
-    'postsGroupListUpdate.js':   path.join(apps_dir, "group/postsGroupListUpdate.tsx"),
-    'groupMembers.js':           path.join(apps_dir, "group/groupMembers.tsx"),
-    'editGroupMembers.js':       path.join(apps_dir, "group/editGroupMembers.tsx"),
-    'eventsView.js':             path.join(apps_dir, "event/eventsView.tsx"),
-    'cowlocathlonCard.js':       path.join(apps_dir, "roommates/cowlocathlonCard.tsx"),
-    'housingMap.js':             path.join(apps_dir, "roommates/housingMap.tsx"),
-    'createHousing.js':          path.join(apps_dir, "roommates/createHousing.tsx"),
-    'subscribeButton.js':        path.join(apps_dir, "notification/subscribeButton.tsx"),
-    'deviceSubscribeButton.js':  path.join(apps_dir, "notification/deviceSubscribeButton.tsx"),
+    'sw.js':                     path.join(legacy, "app/sw.ts"),
+    'launchApp.js':              path.join(legacy, "app/app.ts"),
+    'clubsList.js':              path.join(legacy, "club/clubsList.tsx"),
+    'eventsGroupListUpdate.js':  path.join(legacy, "group/eventsGroupListUpdate.tsx"),
+    'postsGroupListUpdate.js':   path.join(legacy, "group/postsGroupListUpdate.tsx"),
+    'groupMembers.js':           path.join(legacy, "group/groupMembers.tsx"),
+    'editGroupMembers.js':       path.join(legacy, "group/editGroupMembers.tsx"),
+    'eventsView.js':             path.join(legacy, "event/eventsView.tsx"),
+    'cowlocathlonCard.js':       path.join(legacy, "roommates/cowlocathlonCard.tsx"),
+    'housingMap.js':             path.join(legacy, "roommates/housingMap.tsx"),
+    'createHousing.js':          path.join(legacy, "roommates/createHousing.tsx"),
+    'subscribeButton.js':        path.join(legacy, "notification/subscribeButton.tsx"),
+    'deviceSubscribeButton.js':  path.join(legacy, "notification/deviceSubscribeButton.tsx"),
     'reactApp.js':               path.join(base_dir, "src/index.tsx"),
   },
   output: {

@@ -4,12 +4,12 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { styled } from "@mui/material/styles";
 import Sidebar from "./components/navbar/sidebar";
 import {Route,Routes} from 'react-router-dom';
-import Test1 from "./components/navbar/test1";
-import Test2 from "./components/navbar/test2";
+import Test1 from "./apps/test1/test1";
+import Test2 from "./apps/test2/test2";
 import Upbar from "./components/navbar/upBar"
 import NotFound from "./components/notFound";
 import RedirectToDjango from "./components/redirectToDjango";
-import Home from "./components/home/home";
+import Home from "./apps/home/home";
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
