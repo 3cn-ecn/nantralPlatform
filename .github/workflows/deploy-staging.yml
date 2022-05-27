@@ -12,7 +12,6 @@ on:
       - backend/**
       - deployment/**
       - frontend/**
-      - scripts/**
       - .github/workflows/deploy-staging.yml
 
 jobs:
