@@ -15,7 +15,7 @@ import os
 import environ
 from django.urls import reverse_lazy
 
-# import all the environment variables, defining their type and their default 
+# import all the environment variables, defining their type and their default
 # value if they are missing in .env file
 env = environ.Env(
     # optional
@@ -47,7 +47,7 @@ env = environ.Env(
     OVH_SECRET_ACCESS_KEY=(str, ''),
     S3_BUCKET=(str, '')
 )
-environ.Env.read_env()
+env.read_env()
 
 
 #######################
@@ -202,17 +202,20 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': [
-            'heading', '|', '|',
-            'bold', 'italic', 'underline', 'strikethrough', 
-            'subscript', 'superscript', 'fontColor', 'fontBackgroundColor', 'removeFormat', '|',
-            'alignment', 'bulletedList', 'numberedList', '|',
-            'code', 'blockQuote', '|',
-            'link', 'imageUpload', 'insertTable', 'sourceEditing',
+            'heading', '|', '|', 'bold', 'italic', 'underline', 'strikethrough',
+            'subscript', 'superscript', 'fontColor', 'fontBackgroundColor',
+            'removeFormat', '|', 'alignment', 'bulletedList', 'numberedList',
+            '|', 'code', 'blockQuote', '|', 'link', 'imageUpload',
+            'insertTable', 'sourceEditing',
         ],
         'language': 'fr',
         'image': {
-            'toolbar': ['imageTextAlternative', 'imageTitle', '|', 'imageStyle:alignLeft', 'imageStyle:full',
-                        'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
+            'toolbar': [
+                'imageTextAlternative', 'imageTitle', '|',
+                'imageStyle:alignLeft', 'imageStyle:full',
+                'imageStyle:alignRight', 'imageStyle:alignCenter',
+                'imageStyle:side', '|'
+            ],
             'styles': [
                 'full',
                 'side',
