@@ -49,7 +49,7 @@ The backend is a django application.
 
 ### Nantral Platform sites
 * [Nantral Platform](https://nantral-platform.fr)
-* [Nantral Platform wiki](https://wiki.nantral-platform.fr)
+* [Nantral Platform Docs](https://docs.nantral-platform.fr)
 
 ### Django
 * [Django - MDN Tutorial](https://developer.mozilla.org/fr/docs/Learn/Server-side/Django)
