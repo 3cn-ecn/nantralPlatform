@@ -12,7 +12,7 @@ echo -e "${YELLOW}======== ${ORANGE}Checking on Python${NC}"
   echo -e ${GREEN}Python 3 is installed
 
 } || {
-  echo -e ${RED}[ERROR]${ORANGE}Python 3 is not installed, check https://wiki.nantral-platform.fr to see how to install it.
+  echo -e ${RED}[ERROR]${ORANGE}Python 3 is not installed, check https://docs.nantral-platform.fr to see how to install it.
   exit 1;
 }
 echo -e "${YELLOW}========= ${GREEN}DONE ${YELLOW}========${NC}"

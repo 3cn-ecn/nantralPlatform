@@ -54,7 +54,6 @@ background tasks).
 2. Create the environment files at the root of this directory:
     * `backend.env` for all environment variables related to django
     * `mailu.env` for those related to the mail server
-    * `wiki.env` for those related to the wiki
     * `frontend.env` for those related to the react frontend
 3. Build and run the docker-compose files:
     ```bash
@@ -78,4 +77,3 @@ This will run:
 * the postgresql server (for the database)
 * the celery tasks
 * the mail server
-* the wiki of nantral platform
