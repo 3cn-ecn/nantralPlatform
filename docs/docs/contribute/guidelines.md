@@ -1,15 +1,14 @@
 ---
 title: Guidelines
-description: "List of contribution guidelines"
-published: true
-date: 2022-05-07T22:56:59.475Z
-editor: markdown
-dateCreated: 2021-10-14T22:39:30.630Z
+sidebar_position: 1
 ---
 
 # Guidelines
 
-**_Every major open-source project has its own style guide: a set of conventions (sometimes arbitrary) about how to write code for that project. It is much easier to understand a large codebase when all the code in it has a consistent style._**
+Every major open-source project has its own style guide: a set of conventions
+(sometimes arbitrary) about how to write code for that project. It is much
+easier to understand a large codebase when all the code in it has a consistent
+style.
 
 ## Git
 
@@ -24,7 +23,6 @@ dateCreated: 2021-10-14T22:39:30.630Z
 
 - Use the [provided VSCode configuration](https://github.com/nantral-platform/nantralPlatform/blob/master/.vscode/settings-sample.json) to enforce a unified coding style.
 - Add docstrings to every class based view, using the [autoDocstring extension](https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring) for VSCode.
-- Use the `.get()` method instead of simple `[]` to access dictionnaries' keys. See [this SO question](https://stackoverflow.com/questions/11041405/why-dict-getkey-instead-of-dictkey) as to why.
 - Use the following naming convention (which follows the [PEP8](https://peps.python.org/pep-0008/) guidelines for Python):
 
 <table class="table table-hover">

@@ -1,9 +1,9 @@
 ---
-title: "React"
-sidebar_position: 2
+title: How to use React
+sidebar_position: 5
 ---
 
-# Frontend with React
+# How to use React
 
 ## Why we need it
 

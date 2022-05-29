@@ -1,12 +1,12 @@
 ---
-title: Learning
-sidebar_position: 2
+title: Tutorials
+sidebar_position: 1
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Learning
+# Tutorials
 
 Before doing your first steps on Nantral Platform, you might need to learn how to use the different frameworks we use
 on the Nantral Platform project. Let's follow the steps!
@@ -28,7 +28,7 @@ For the nantral platform project, we use two main languages and frameworks for t
 * **on the backend**: we use [Python](https://www.python.org/), with the framework [django](https://www.djangoproject.com/)
 * **on the frontend**: we use [TypeScript](https://www.typescriptlang.org/), with the framework [React](https://reactjs.org/)
 
-:::success What is a framework?
+:::info What is a framework?
 A framework is a module, or a library, with a set of predefined useful functions to achieve a certain goal.
 For instance, django gives functions to connect to the database or to manage the http protocol, so as we don't have
 to implement these functions ourselves.
@@ -41,85 +41,16 @@ Firts, let's begin with django!
 Follow this tutorial to learn how to use django and what it can do for you: [Django Web Framework (Python) - 
 Learn Web Development | MDN](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django).
 
+:::tip Steps to skip
 In this tutorial, you can skip some steps:
-* [Setting up a Django development environment](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/development_environment):
-    you can skip the *Install Python 3* section, and the *Using Django inside a Python virtual environment*. Instead,
-    create a virtual environment with the easier method described below.
-* You can also skip the *Sessions framework*, *Working with forms*, and *Deploying Django to production* pages.
-
-:::note Using Python virtualenv
-
-This note explains how to create and use a virtual environment for python. You can use also the method described in
-the previous tutorial, but it is more difficult to install when you start coding.
-
-<Tabs groupId="os">
-<TabItem value="win" label="Windows">
-
-First, open a terminal and go into the directory when you want to create a virtual environment:
-```bash
-cd .\Documents\dev\my_project
-```
-
-Then create your virtual environment, named `venv` for example:
-```bash
-python3 -m virtualenv venv
-```
-
-Notice that a new directory named `venv` has been created in your folder: it will contain all the python packages
-we will install in this virtual environment.
-
-Then, activate the virtualenv:
-<Tabs groupId="win">
-<TabItem value="ps1" label="With Powershell">
-
-```bash
-venv\bin\activate.ps1
-```
-
-</TabItem>
-<TabItem value="cmd" label="With CMD">
-
-```bash
-venv\bin\activate.bat
-```
-
-</TabItem>
-</Tabs>
-
-</TabItem>
-<TabItem value="mac-lin" label="MacOS/Linux">
-
-First, open a terminal and go into the directory when you want to create a virtual environment:
-```bash
-cd ./dev/my_project
-```
-
-Then create your virtual environment, named `venv` for example:
-```bash
-python3 -m virtualenv venv
-```
-
-Notice that a new directory named `venv` has been created in your folder: it will contain all the python packages
-we will install in this virtual environment.
-
-Then, activate the virtualenv:
-```bash
-source venv/bin/activate
-```
-
-</TabItem>
-</Tabs>
-
-Now you should see an indicator `(venv)` at the beginning of the command line: that confirms that it works, 
-congratulations! 🥳
-
-When you have finished to work on your virtual environment, you can deactivate your virtual environment by simply running:
-```bash
-deactivate
-```
-
+* In the **Setting up a Django development environment** page, you can skip the
+    **Install Python 3** section, and the 
+    **Using Django inside a Python virtual environment**. Instead, create a
+    virtual environment with the easier method described in the
+    *[How to use Python Virtualenv](/docs/learning/virtualenv)* page.
+* You can also skip the **Sessions framework**, **Working with forms**, and
+    **Deploying Django to production** pages.
 :::
-
 
 ## Learn React
 
@@ -163,13 +94,20 @@ which is a variant of javascript (see the videos below).
     </iframe>
 </details>
 
-Now, you can follow the [official tutorial of React](https://reactjs.org/tutorial/tutorial.html) to get the basis of 
-the framework!
+Now, you can follow the **[official tutorial of React](https://reactjs.org/tutorial/tutorial.html)**
+to get the basis of the framework!
 
-> Note: for the *Setup* section, choose the option 2: *Local development environment*.
-
+:::note
+For the *Setup* section, choose the option 2: *Local development environment*.
+:::
 
 ## The REST API: make React and django work together
+
+:::warning JUST DO IT!
+This tutorial gather all the core principles of Django and React and show 
+how they can work together. It is also very fast to do, so be sure to do
+at least this tutorial if you are hurry!
+:::
 
 Now that you know how to make the backend and the frontend, it's time to put them together, using REST API.
 
@@ -188,10 +126,6 @@ Now that you know how to make the backend and the frontend, it's time to put the
 To learn this concept, you will create your own application with React, django, and REST API:
 [follow this tutorial!](https://blog.logrocket.com/creating-an-app-with-react-and-django/)
 
-:::caution
-This tutorial is the most important of all of the tutorials proposed on this page, but also the quickest,
-so be sure to complete it before contributing!
-:::
 
 ## The youtube player mini-project
 

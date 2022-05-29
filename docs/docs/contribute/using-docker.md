@@ -1,9 +1,26 @@
 ---
 title: Using Docker
-sidebar_position: 1
+sidebar_position: 6
 ---
 
 # Using Docker
+
+## Why using docker on local development?
+
+Docker is used to manage the code on our server. By using it on your local
+machine, you will be able to reproduce an environment very close to the
+deployment one, and so it will be easier to track issues before they appear.
+
+In practice, using Docker on your local machine will allow you to:
+* **Use the cache system**: Django comes with a cachin system, that you can
+    only use with Docker
+* **Use the Postgres database**: by default the database uses SQLite, but
+    the deployment database uses postgresql, and so Docker does
+* **Use the celery service**: the celery service allow you to run asynchronous
+    tasks on the server from the backend
+* **Uses more debug tools**: with Docker, you can for instance access directly
+    your database using PgAdmin for example, or use the Workers Dashboard for
+    celery tasks
 
 ## How to run docker for local dev
 
@@ -48,7 +65,21 @@ an instance of postgresql (the database), and the celery services (for
 background tasks).
 :::
 
-## How to run docker for production
+## Which services are launch?
+
+These services are launch when you run Docker on your local machine:
+
+| Service | Description | Access |
+| -- | -- | -- |
+| database | The postgresql database for the website | You can read it by connecting to the port 5432 on localhost with [PgAdmin4](https://www.pgadmin.org/download/), and using the credentials defined in your `.env` file |
+| backend | The django server which serve files | Open [http://localhost](http://localhost) in your browser |
+| nginx | Used to serve the backend and the static files | - |
+| redis | Used for the django cache system | - |
+| celery | Used for asynchronous tasks runned in background | - |
+| celery-beat | Used for linking celery to the backend with django | - |
+| workers-dashboard | A dashboard to see all the celery tasks | Open [http://localhost:5555](http://localhost:5555) in your browser |
+
+## How to run docker for production server
 
 1. Go to the `deployment` directory.
 2. Create the environment files at the root of this directory:
@@ -72,8 +103,3 @@ The `--no-cache` option allowed to delete the cache and be sure that
 all files are really updated.
 :::
 
-This will run:
-* the django server (for the backend)
-* the postgresql server (for the database)
-* the celery tasks
-* the mail server
