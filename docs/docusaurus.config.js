@@ -71,6 +71,16 @@ const config = {
             position: "left",
           },
           {
+            to: "/resources",
+            label: "Resources",
+            position: "left",
+          },
+          {
+            to: "/changelog",
+            label: "Changelog",
+            position: "left",
+          },
+          {
             to: "/blog",
             label: "Blog",
             position: "left",
@@ -91,16 +101,41 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Docs",
+            title: "Documentation",
             items: [
               {
-                label: "Get started",
-                to: "/docs/category/get-started",
+                label: "Docs",
+                to: "/docs",
               },
               {
-                label: "Contribute",
-                to: "/docs/category/contribute"
+                label: "Resources",
+                to: "/resources",
+              },
+              {
+                label: "Changelog",
+                to: "/changelog",
+              },
+              {
+                label: "Blog",
+                to: "/blog",
               }
+            ],
+          },
+          {
+            title: "Dev tools",
+            items: [
+              {
+                label: "GitHub",
+                href: "https://github.com/nantral-platform/nantralPlatform",
+              },
+              {
+                label: "SonarCloud",
+                href: "https://sonarcloud.io/organizations/nantral-platform",
+              },
+              {
+                label: "Staging Server",
+                href: "https://dev.nantral-platform.fr",
+              },
             ],
           },
           {
@@ -120,21 +155,8 @@ const config = {
               },
             ],
           },
-          {
-            title: "More",
-            items: [
-              {
-                label: "Blog",
-                to: "/blog",
-              },
-              {
-                label: "GitHub",
-                href: "https://github.com/nantral-platform/nantralPlatform",
-              },
-            ],
-          },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Nantral Platform, AECN. Built with Docusaurus.`,
+        copyright: `Copyright ©${new Date().getFullYear()} Nantral Platform, AECN. Built with Docusaurus.`,
       },
       prism: {
         theme: lightCodeTheme,
