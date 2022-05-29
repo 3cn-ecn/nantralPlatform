@@ -1,9 +1,6 @@
 ---
 title: Database
-published: true
-date: 2021-10-29T10:14:05.500Z
-editor: markdown
-dateCreated: 2021-10-09T07:36:32.432Z
+sidebar_position: 5
 ---
 
 # Database

@@ -46,8 +46,10 @@ By default, you are in your home directory. You can deplace to other directories
 <TabItem value="lin" label="Linux">
 
 The name of your terminal depends on your distribution. For example, it is "Terminal" for Ubuntu, or "Konsole" 
-for Kubuntu.
-By default, you are in your home directory. You can deplace to other directories with:
+for Kubuntu. Anyway, on most distros you can open it with the keyboard 
+shotcut <kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>T</kbd>.
+
+By default, you are in your home directory. You can change to other directories with:
 * `cd "./my_subdirectory/"`: go into the subdirectory `my_subdirectory`. The `.` in this command represents the 
     current directory. Note that the `"` are optionals (they are required only if your path contains spaces).
 * `cd ..`: go to the parent directory

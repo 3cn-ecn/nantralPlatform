@@ -1,6 +1,6 @@
 ---
-title: Django
-sidebar_position: 1
+title: How to use Django
+sidebar_position: 4
 ---
 
 import Tabs from '@theme/Tabs';
@@ -55,50 +55,3 @@ In django, all functionnalities are separeted in "apps". Each "app" correspond t
   _ Finally add the app in `settings/base.py`:
   `COMMON_APPS = [ 'apps.app_name', ]`
   Some defaults tables have been added in your database: run the migrations (see section 3), and then run the server!
-
-## 5. Manage your virtualenv
-
-A virtualenv allow you to have certain requirements versions for a project which are differents from the ones you have on your computer.
-
-### a) Create a virtualenv
-
-First you have to enable the functionnality by installing the package `virtualenv` whith pip: `python3 -m pip install virtualenv`. Then you can create a virtualenv in a folder by running `python3 -m virtualenv env`, where `env` is your virtualenv name. For this project, we create the virtualenv in the `server` directory.
-
-### b) Activate a virtualenv
-
-You need to activate your virtualenv before doing anything using Python about the project. Once the virtualenv is activated, you will notice the `(env)` at the far left of the command prompt.
-
-<Tabs>
-<TabItem value="mac-lin" label="MacOS/Linux">
-
-- Go to the folder which contains your virtualenv: `cd backend`
-- Run `source env/bin/activate`
-
-</TabItem>
-<TabItem value="win-cmd" label="Windows (CMD)">
-
-- Go to the folder which contains your virtualenv: `cd backend`
-- Run `env\Scripts\activate.bat`
-
-</TabItem>
-<TabItem value="win-ps1" label="Windows (Powershell)">
-
-- Go to the folder which contains your virtualenv: `cd backend`
-- Run `env\Scripts\activate.ps1`
-
-</TabItem>
-</Tabs>
-
-### c) Deactivate a virtualenv
-
-Close your virtualenv with `deactivate` anywhere.
-
-### d) Alternative: virtualenvwrapper
-
-Alternatively, you can use `virtualenvwrapper` to easily manage several virtualenv. Follow the [instructions here](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/development_environment#using_django_inside_a_python_virtual_environment) to install it. Once installed, you can use:
-
-- `mkvirtualenv env_name` to create a virtual env
-- `workon env_name` to activate a virtual env (it doesn't depends on the current folder you're in)
-- `deactivate` to close the virtual env
-
-Since the installation is a little more tricky, we do not recommand this for beginners; however, if you succeed to install it before (for example doing the MDN tutorial), you can use it if you prefere.

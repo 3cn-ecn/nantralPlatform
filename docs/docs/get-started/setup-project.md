@@ -1,6 +1,6 @@
 ---
 title: Set up the project
-sidebar_position: 3
+sidebar_position: 2
 ---
 
 import Tabs from '@theme/Tabs';
@@ -57,7 +57,6 @@ In VSCode, in the left panel, you can see the folder structure of the repository
 📁docs       //Contains source files of the documentation
 // highlight-next-line
 📁frontend   //Contains source files to be compiled for the frontend
-📁scripts    //Contains some scripts for the deployment
 ```
 
 #### Frontend

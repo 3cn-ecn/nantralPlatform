@@ -1,15 +1,20 @@
 ---
-title: Make your first commit
-sidebar_position: 4
+title: How to use Git
+sidebar_position: 2
 ---
 
-# Make your first commit
+# How to use Git
 
-Now that you're ready, it's time to make your first commit! This page explains how to do it with Github Desktop,
-fpr beginners. If you use another git interface or the git cli, we suppose that you are able to transpose the
-actions with your git interface.
+Let's learn git and github by a simple example: you will try to add your
+name on the README.md page of the github project.
 
-## Create a new branch
+## Make your first commit
+
+It's time to make your first commit! This page explains how to do it with Github
+Desktop, for beginners. If you use another git interface or the git cli, we
+suppose that you are able to transpose the actions with your git interface.
+
+### 1. Create a new branch
 
 * In Github Desktop, create a new branch from `master`, and give it a name.
 
@@ -31,13 +36,13 @@ You can ask one of the administators of the repository (for example the presiden
 this access by adding you to the nantral-platform organization.
 :::
 
-## Make your changes
+### 2. Make your changes
 
 * In VS Code, open the `README.md` file in the main directory.
 * Add your name and a link to your github account under the `Contributors` section, at the end of the file
 * Save the file
 
-## Publish your changes
+### 3. Publish your changes
 
 * Now go back to Github Desktop, give a name to the commit and create it:
 
@@ -56,3 +61,14 @@ this access by adding you to the nantral-platform organization.
 
 * Congratulations, you're done! 🥳 You can now see your name on the home page of the repository: 
     [github.com/nantral-platform/nantralPlatform](https://github.com/nantral-platform/nantralPlatform)
+
+
+## Daily use
+
+As a conclusion, just remember this: each time you want to contribute,
+always start by creating a new branch. Then you can make your changes,
+commit them and sync them on your branch.
+
+Once you are satisfied with your changes, you can merge your branch into
+the main one: this will automatically update the website! You can even follow
+the deployment of your modifications in the **Actions** tab on Github.
