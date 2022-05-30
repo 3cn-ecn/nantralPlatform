@@ -1,10 +1,9 @@
-from datetime import date, datetime, timedelta
-from django.test import TestCase
-from apps.utils.utest import TestMixin
-from django.urls import reverse
 from rest_framework import status
+from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
+from apps.utils.utest import TestMixin
 from .models import Club, NamedMembershipClub
 
 

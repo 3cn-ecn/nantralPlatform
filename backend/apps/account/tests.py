@@ -24,6 +24,13 @@ PAYLOAD_TEMPLATE = {
     'path': 'Cla'
 }
 
+REGEX_ACTIVATE_URL = (
+    r"href='http://testserver/account/activate/([\w-]*)/([\w-]*)/'")
+REGEX_ACTIVATE_TEMP_URL = (
+    r"href='http://testserver/account/activate/([\w-]*)/([\w-]*)/temporary/'")
+REGEX_RESET_PASS_URL = (
+    r"href='http://testserver/account/reset_pass/([\w-]*)/([\w-]*)/'")
+
 
 class TestAccount(TestCase, TestMixin):
     """Test class for account related methods."""
@@ -57,9 +64,7 @@ class TestAccount(TestCase, TestMixin):
         student = Student.objects.get(user__first_name='test_name')
         self.assertEqual(student.user, User.objects.all().last())
         assert len(mail.outbox) == 1
-        extract = re.search(
-            r"href='http://testserver/account/activate/([\w\d-]*)/([\w\d-]*)/'",
-            mail.outbox[0].body)
+        extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
@@ -90,9 +95,7 @@ class TestAccount(TestCase, TestMixin):
         student = Student.objects.get(user__first_name='test_name')
         self.assertEqual(student.user, User.objects.all().last())
         assert len(mail.outbox) == 1
-        extract = re.search(
-            r"href='http://testserver/account/activate/([\w\d-]*)/([\w\d-]*)/'",
-            mail.outbox[0].body)
+        extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
@@ -157,10 +160,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         self.assertFalse(temp_req.approved)
 
         assert len(mail.outbox) == 1
-        extract = re.search(
-            r"href='http://testserver/account/activate/"
-            r"([\w\d-]*)/([\w\d-]*)/temporary/'",
-            mail.outbox[0].body)
+        extract = re.search(REGEX_ACTIVATE_TEMP_URL, mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
@@ -243,9 +243,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, 302)
         assert len(mail.outbox) == 3
-        extract = re.search(
-            r"href='http://testserver/account/activate/([\w\d-]*)/([\w\d-]*)/'",
-            mail.outbox[2].body)
+        extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[2].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
         url = reverse(
@@ -343,10 +341,7 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
         self.assertEqual(response.status_code, 302)
         user: User = User.objects.get(email='test@not-ec-nantes.fr')
         assert len(mail.outbox) == 1
-        extract = re.search(
-            r"href='http://testserver/account/activate/"
-            r"([\w\d-]*)/([\w\d-]*)/temporary/'",
-            mail.outbox[0].body)
+        extract = re.search(REGEX_ACTIVATE_TEMP_URL, mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
@@ -397,10 +392,7 @@ class TestForgottenPass(TestCase, TestMixin):
         response = self.client.post(url, data=payload)
         self.assertEqual(response.status_code, 302)
         assert len(mail.outbox) == 1
-        extract = re.search(
-            r"href='http://testserver/account/reset_pass/"
-            r"([\w\d-]*)/([\w\d-]*)/'",
-            mail.outbox[0].body)
+        extract = re.search(REGEX_RESET_PASS_URL, mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
         url = reverse(

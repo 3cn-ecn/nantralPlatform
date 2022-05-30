@@ -1,10 +1,11 @@
 from datetime import date
-from django.test import TestCase
-from apps.utils.utest import TestMixin
-from django.urls import reverse
 from rest_framework import status
 
-from .models import Housing, Roommates, NamedMembershipRoommates
+from django.test import TestCase
+from django.urls import reverse
+
+from apps.utils.utest import TestMixin
+from .models import Housing, Roommates
 
 
 class TestHousing(TestCase, TestMixin):
@@ -13,7 +14,7 @@ class TestHousing(TestCase, TestMixin):
 
     def tearDown(self):
         self.user_teardown()
-    
+
     def test_create_housing(self):
         Housing.objects.create(
             address='Place royale, Nantes 44000')
