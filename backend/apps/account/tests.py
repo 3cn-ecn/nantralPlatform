@@ -25,11 +25,11 @@ PAYLOAD_TEMPLATE = {
 }
 
 REGEX_ACTIVATE_URL = (
-    r"href='http://testserver/account/activate/([\w-]*)/([\w-]*)/'")
+    r"href='https://testserver/account/activate/([\w-]*)/([\w-]*)/'")
 REGEX_ACTIVATE_TEMP_URL = (
-    r"href='http://testserver/account/activate/([\w-]*)/([\w-]*)/temporary/'")
+    r"href='https://testserver/account/activate/([\w-]*)/([\w-]*)/temporary/'")
 REGEX_RESET_PASS_URL = (
-    r"href='http://testserver/account/reset_pass/([\w-]*)/([\w-]*)/'")
+    r"href='https://testserver/account/reset_pass/([\w-]*)/([\w-]*)/'")
 
 
 class TestAccount(TestCase, TestMixin):

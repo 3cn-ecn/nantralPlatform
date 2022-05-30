@@ -88,7 +88,8 @@ class TestStudent(TestCase, TestMixin):
             url, data=password_change, follow_redirects=True)
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
-        ok = self.client.login(username=self.u2.username, password='new')
+        ok = self.client.login(
+            username=self.u2.username, password=self.NEW_PASSWORD)
         self.assertTrue(ok)
 
     def tearDown(self):

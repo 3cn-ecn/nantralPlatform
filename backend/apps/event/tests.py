@@ -33,7 +33,7 @@ class BaseEventTestCase(TestCase, TestMixin):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
-        self.client.login(username=self.u2, password="pass")
+        self.client.login(username=self.u2, password=self.PASSWORD)
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
@@ -44,7 +44,7 @@ class BaseEventTestCase(TestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(self.event.number_of_participants, 0)
 
-        self.client.login(username=self.u2, password="pass")
+        self.client.login(username=self.u2, password=self.PASSWORD)
         # You get redirected at the end of the function
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
@@ -65,6 +65,6 @@ class BaseEventTestCase(TestCase, TestMixin):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
-        self.client.login(username=self.u2, password="pass")
+        self.client.login(username=self.u2, password=self.PASSWORD)
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
