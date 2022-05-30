@@ -1,15 +1,18 @@
+from datetime import timedelta
+from rest_framework import status
+
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework import status
-from datetime import timedelta
 from django.utils import timezone
 
+from apps.club.models import Club
 from apps.event.models import BaseEvent
 from apps.post.models import VISIBILITY
-from apps.club.models import Club
 from apps.utils.utest import TestMixin
 
+
 class TestHomeView(TestCase, TestMixin):
+
     def setUp(self):
         self.user_setup()
         self.test_club = Club.objects.create(name='TestClub')
@@ -61,11 +64,13 @@ class TestHomeView(TestCase, TestMixin):
         url = reverse("event_api:list-home-events")
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        #self.assertEqual(len(resp.context["events"]), 3)
+        # self.assertEqual(len(resp.context["events"]), 3)
         # self.assertEqual(
-        #    resp.context["events"]["Aujourd'hui"][0][0].title, "An Event today")
+        #    resp.context["events"]["Aujourd'hui"][0][0].title, "An Event today"
+        # )
         # self.assertEqual(
-        #    resp.context["events"]["Demain"][0][0].title, "An Event tomorrow")
+        #    resp.context["events"]["Demain"][0][0].title, "An Event tomorrow"
+        # )
 
     def tearDown(self):
         self.past.delete()

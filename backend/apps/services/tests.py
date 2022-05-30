@@ -3,6 +3,7 @@ from django.urls import reverse
 from apps.utils.utest import TestMixin
 from rest_framework import status
 
+
 class TestSignature(TestCase, TestMixin):
     def setUp(self):
         self.user_setup()
