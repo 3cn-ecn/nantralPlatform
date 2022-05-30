@@ -41,7 +41,7 @@ class TestGroups(TestCase, TestMixin):
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
-        self.client.login(username=self.u2.username, password='pass')
+        self.client.login(username=self.u2.username, password=self.PASSWORD)
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(NamedMembershipClub.objects.filter(
