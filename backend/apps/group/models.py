@@ -162,12 +162,12 @@ class AdminRightsRequest(models.Model):
     @ property
     def accept_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
-        return f"http://{self.domain}{reverse(app+':accept-admin-req', kwargs={'slug': slug,'id': self.id})}"
+        return f"https://{self.domain}{reverse(app+':accept-admin-req', kwargs={'slug': slug,'id': self.id})}"
 
     @ property
     def deny_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
-        return f"http://{self.domain}{reverse(app+':deny-admin-req', kwargs={'slug': slug, 'id': self.id})}"
+        return f"https://{self.domain}{reverse(app+':deny-admin-req', kwargs={'slug': slug, 'id': self.id})}"
 
     def accept(self):
         group = get_object_from_full_slug(self.group)

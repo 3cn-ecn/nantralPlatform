@@ -55,7 +55,7 @@ class TestHomeView(TestCase, TestMixin):
         )
         self.assertEqual(len(BaseEvent.objects.all()), 4)
 
-        self.client.login(username=self.u1.username, password="pass")
+        self.client.login(username=self.u1.username, password=self.PASSWORD)
         # Test if / loads
         url = reverse("home:home")
         resp = self.client.get(url)

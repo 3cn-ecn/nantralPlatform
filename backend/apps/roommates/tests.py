@@ -21,7 +21,7 @@ class TestHousing(TestCase, TestMixin):
         self.assertEqual(len(Housing.objects.all()), 1)
 
     def test_housing_views(self):
-        self.client.login(username=self.u1.username, password="pass")
+        self.client.login(username=self.u1.username, password=self.PASSWORD)
         Housing.objects.create(
             address='Place royale, Nantes 44000')
         house = Housing.objects.all().first()
@@ -56,7 +56,7 @@ class TestHousing(TestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_housing_api_views(self):
-        self.client.login(username=self.u1.username, password="pass")
+        self.client.login(username=self.u1.username, password=self.PASSWORD)
         url = reverse('roommates_api:housing')
         resp = self.client.get(f'{url}?colocathlonParticipants=0')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
