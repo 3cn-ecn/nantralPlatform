@@ -1,10 +1,6 @@
 ---
-title: Staging (or dev) server
-description: "How to manage the staging server (available at dev.nantral-platform.fr)"
-published: true
-date: 2022-04-19T19:36:28.931Z
-editor: markdown
-dateCreated: 2022-04-19T19:35:46.747Z
+title: Staging server
+sidebar_position: 4
 ---
 
 # Staging server

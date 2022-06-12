@@ -80,5 +80,4 @@ static/upload/*
 */celerybeat-schedule
 
 # sonarqube
-sonar-project.properties
 .scannerwork

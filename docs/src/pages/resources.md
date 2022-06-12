@@ -1,6 +1,5 @@
 ---
-title: 😎 Resources
-sidebar_position: 8
+title: Resources
 ---
 
 # Resources
