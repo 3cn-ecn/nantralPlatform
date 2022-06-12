@@ -9,10 +9,12 @@
     "analyse": "webpack --config webpack.config/webpack.analyser.js",
     "dev": "webpack --config webpack.config/webpack.dev.js",
     "watch": "webpack --config webpack.config/webpack.dev.js --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
+    "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
   },
   "author": {
-    "name": "Nantral Platform Club of Centrale Nantes",
+    "name": "3CN, a club of Centrale Nantes",
     "email": "contact@nantral-platform.fr",
     "url": "https://nantral-platform.fr"
   },
@@ -36,10 +38,18 @@
     "@types/node": "^17.0.31",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
     "babel-loader": "^8.2.2",
     "babel-plugin-import": "^1.13.3",
     "babel-register": "^6.26.0",
     "css-loader": "^6.7.1",
+    "eslint": "^8.17.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
     "npm": "^8.10.0",
     "sass": "^1.52.1",
     "sass-loader": "^13.0.0",
