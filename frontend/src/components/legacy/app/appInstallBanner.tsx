@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import ReactDOM, { render } from "react-dom";
+import { render } from "react-dom";
 import { Button, CloseButton } from "react-bootstrap";
 import { useCookies } from "react-cookie";
-
 
 
 /**
