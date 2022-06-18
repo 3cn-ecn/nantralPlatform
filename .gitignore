@@ -7,11 +7,10 @@ ENV/
 env.bak/
 venv.bak/
 
-# Visual Studio Code #
-.vscode/settings.json
+# Visual Studio Code
 .history
 
-# If you are using PyCharm #
+# If you are using PyCharm
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries

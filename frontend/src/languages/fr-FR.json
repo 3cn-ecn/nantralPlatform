@@ -1,8 +1,8 @@
 {
-    "navbar": {
-        "post": "Posts et évenements",
-        "club": "Clubs et assos",
-        "home": "Page d'accueil",
-        "coloc": "Carte des colocs"
-    }
+  "navbar": {
+    "post": "Posts et évenements",
+    "club": "Clubs et assos",
+    "home": "Page d'accueil",
+    "coloc": "Carte des colocs"
+  }
 }
