@@ -1,10 +1,10 @@
-﻿import * as React from "react";
-import { useState } from "react";
-import ReactDOM from "react-dom";
-import { Modal, Button, Form } from "react-bootstrap";
+﻿import * as React from 'react';
+import { useState } from 'react';
+import ReactDOM from 'react-dom';
+import { Modal, Button, Form } from 'react-bootstrap';
 
-import { EditGroupMembersModalProps } from "./interfaces";
-import { updateMember, deleteMember } from "./utils";
+import { EditGroupMembersModalProps } from './interfaces';
+import { updateMember, deleteMember } from './utils';
 
 export function EditGroupMembersModal(
   props: EditGroupMembersModalProps
@@ -25,12 +25,12 @@ export function EditGroupMembersModal(
   const [role, setRole] = useState(selectedMember.function);
   const [beginDate, setBeginDate] = useState(
     selectedMember.date_begin
-      ? selectedMember.date_begin.replaceAll("/", "-")
+      ? selectedMember.date_begin.replaceAll('/', '-')
       : null
   );
   const [endDate, setEndDate] = useState(
     selectedMember.date_end
-      ? selectedMember.date_end.replaceAll("/", "-")
+      ? selectedMember.date_end.replaceAll('/', '-')
       : null
   );
   const [admin, setAdmin] = useState(selectedMember.admin);
@@ -61,7 +61,7 @@ export function EditGroupMembersModal(
         <Modal.Title>{selectedMember.student.name}</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body style={isUpdateLoading ? { opacity: "0.4" } : null}>
+      <Modal.Body style={isUpdateLoading ? { opacity: '0.4' } : null}>
         <Form>
           <Form.Group className="mb-3" controlId="formRole">
             <Form.Label>Rôle</Form.Label>
@@ -100,13 +100,13 @@ export function EditGroupMembersModal(
               }}
             />
           </Form.Group>
-          <div style={{ float: "right" }}>
+          <div style={{ float: 'right' }}>
             <Button variant="primary" type="submit">
               Mettre à jour
             </Button>
 
             <Button
-              style={{ marginLeft: "0.5rem" }}
+              style={{ marginLeft: '0.5rem' }}
               variant="danger"
               onClick={() =>
                 deleteMember(

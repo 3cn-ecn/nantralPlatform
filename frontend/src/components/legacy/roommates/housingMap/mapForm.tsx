@@ -1,11 +1,11 @@
-﻿import * as React from "react";
-import { Form } from "react-bootstrap";
-import { Typeahead } from "react-bootstrap-typeahead";
-import "react-bootstrap-typeahead/css/Typeahead.css";
-import { Popup, FlyToInterpolator } from "react-map-gl";
+﻿import * as React from 'react';
+import { Form } from 'react-bootstrap';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { Popup, FlyToInterpolator } from 'react-map-gl';
 
-import { Housing } from "./interfaces";
-import { ColocInfo } from "./colocInfo";
+import { Housing } from './interfaces';
+import { ColocInfo } from './colocInfo';
 
 export function MapForm(props): JSX.Element {
   const { colocs, data, setViewPort, setPopUpinfo } = props;
@@ -18,20 +18,20 @@ export function MapForm(props): JSX.Element {
           options={colocs}
           placeholder="Recherche"
           onChange={(coloc) => {
-            if (typeof coloc[0] === "undefined") {
+            if (typeof coloc[0] === 'undefined') {
               return;
             }
             let housings: Housing[] = data.filter(
               (housing) => housing.id === coloc[0].housing.id
             );
-            if (typeof housings[0] === "undefined") return;
+            if (typeof housings[0] === 'undefined') return;
             let housing: Housing = housings[0];
             setViewPort({
               zoom: 16,
               longitude: housing.longitude,
               latitude: housing.latitude,
               transitionDuration: 500,
-              transitionInterpolator: new FlyToInterpolator()
+              transitionInterpolator: new FlyToInterpolator(),
             });
             setPopUpinfo(
               <Popup

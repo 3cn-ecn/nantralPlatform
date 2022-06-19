@@ -1,12 +1,12 @@
-﻿import * as React from "react";
-import { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
-import { Modal, Button, Form, Spinner } from "react-bootstrap";
-import { Typeahead } from "react-bootstrap-typeahead";
+﻿import * as React from 'react';
+import { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import { Typeahead } from 'react-bootstrap-typeahead';
 
-import { MemberAdd, Student } from "../groupMembers/interfaces";
-import { addMember, getStudents } from "./utils";
-import { spinnerDivStyle, spinnerStyle } from "../../club/clubsList/styles";
+import { MemberAdd, Student } from '../groupMembers/interfaces';
+import { addMember, getStudents } from './utils';
+import { spinnerDivStyle, spinnerStyle } from '../../club/clubsList/styles';
 
 export function AddGroupMembersModal(props): JSX.Element {
   const { showModal, setShowModal, membersURL, setIsLoading, setMembers } =
@@ -18,7 +18,7 @@ export function AddGroupMembersModal(props): JSX.Element {
 
   const [formData, setFormData] = useState<MemberAdd>({
     id: 0,
-    function: "Membre",
+    function: 'Membre',
     admin: false,
   });
   const [students, setStudents] = useState<Student[]>([]);
@@ -71,7 +71,7 @@ export function AddGroupMembersModal(props): JSX.Element {
         <Modal.Title>Ajout d'un.e membre</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body style={isAddLoading ? { opacity: "0.4" } : null}>
+      <Modal.Body style={isAddLoading ? { opacity: '0.4' } : null}>
         <Form>
           <Form.Group className="mb-3" controlId="formRole">
             <Form.Label>Etudiant.e</Form.Label>
@@ -82,11 +82,11 @@ export function AddGroupMembersModal(props): JSX.Element {
               })}
               placeholder="Recherche"
               onChange={(student) => {
-                if (typeof student[0] === "undefined") {
+                if (typeof student[0] === 'undefined') {
                   return;
                 }
                 let newFormData = formData;
-                newFormData["id"] = student[0].id;
+                newFormData['id'] = student[0].id;
                 setFormData(newFormData);
               }}
             />
@@ -96,10 +96,10 @@ export function AddGroupMembersModal(props): JSX.Element {
             <Form.Label>Rôle</Form.Label>
             <Form.Control
               type="text"
-              defaultValue={"Membre"}
+              defaultValue={'Membre'}
               onChange={({ target: { value } }) => {
                 let newFormData = formData;
-                newFormData["role"] = value;
+                newFormData['role'] = value;
                 setFormData(newFormData);
               }}
             />
@@ -111,7 +111,7 @@ export function AddGroupMembersModal(props): JSX.Element {
               type="date"
               onChange={({ target: { value } }) => {
                 let newFormData = formData;
-                newFormData["begin_date"] = value;
+                newFormData['begin_date'] = value;
                 setFormData(newFormData);
               }}
             />
@@ -123,7 +123,7 @@ export function AddGroupMembersModal(props): JSX.Element {
               type="date"
               onChange={({ target: { value } }) => {
                 let newFormData = formData;
-                newFormData["end_date"] = value;
+                newFormData['end_date'] = value;
                 setFormData(newFormData);
               }}
             />
@@ -136,12 +136,12 @@ export function AddGroupMembersModal(props): JSX.Element {
               defaultChecked={false}
               onChange={({ target: { value } }) => {
                 let newFormData = formData;
-                newFormData["admin"] = value === "on";
+                newFormData['admin'] = value === 'on';
                 setFormData(newFormData);
               }}
             />
           </Form.Group>
-          <div style={{ float: "right" }}>
+          <div style={{ float: 'right' }}>
             <Button variant="primary" type="submit">
               Ajouter
             </Button>

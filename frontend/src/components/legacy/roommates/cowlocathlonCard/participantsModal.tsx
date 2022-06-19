@@ -1,9 +1,9 @@
-import * as React from "react";
-import { Modal } from "react-bootstrap";
+import * as React from 'react';
+import { Modal } from 'react-bootstrap';
 
-import { ParticipantsModalProps } from "./interfaces";
-import { ExportButton } from "../../event/eventsView/exportButton";
-import { Student } from "../../event/eventsView/interfaces";
+import { ParticipantsModalProps } from './interfaces';
+import { ExportButton } from '../../event/eventsView/exportButton';
+import { Student } from '../../event/eventsView/interfaces';
 
 export function ParticipantsModal(props: ParticipantsModalProps): JSX.Element {
   return (
@@ -15,7 +15,7 @@ export function ParticipantsModal(props: ParticipantsModalProps): JSX.Element {
             participants={props.participants.map((e): Student => {
               return { name: e.name, get_absolute_url: e.absolute_url };
             })}
-            title={""}
+            title={''}
           />
         }
       </Modal.Header>

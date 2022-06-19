@@ -1,6 +1,6 @@
-﻿import * as React from "react";
+﻿import * as React from 'react';
 
-import { clusterMarkerStyle, clusterMarkerContainerStyle } from "./styles";
+import { clusterMarkerStyle, clusterMarkerContainerStyle } from './styles';
 
 export function ClusterMarker(props): JSX.Element {
   const { cluster, onClick } = props;

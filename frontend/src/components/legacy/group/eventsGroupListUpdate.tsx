@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
-import axios from "../utils/axios";
-import { Button, Card, Modal } from "react-bootstrap";
-var dayjs = require("dayjs");
-var relativeTime = require("dayjs/plugin/relativeTime");
+import React, { useState, useEffect } from 'react';
+import { render } from 'react-dom';
+import axios from '../utils/axios';
+import { Button, Card, Modal } from 'react-bootstrap';
+var dayjs = require('dayjs');
+var relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
-
-
-
 
 declare const API_URL: string;
 declare const STATIC_URL_PREFIX: string;
@@ -47,8 +44,8 @@ function Root(props: {}) {
                 <Card.Body>
                   <Card.Subtitle>Lieu : {event.location}</Card.Subtitle>
                   <Card.Subtitle>
-                    Date :{" "}
-                    {dayjs(event.date).format("dddd, MMMM Do YYYY, HH:mm")}
+                    Date :{' '}
+                    {dayjs(event.date).format('dddd, MMMM Do YYYY, HH:mm')}
                   </Card.Subtitle>
                   <Card.Subtitle>Publicite : {event.publicity}</Card.Subtitle>
                   <Card.Subtitle>Description :</Card.Subtitle>
@@ -81,7 +78,7 @@ function Root(props: {}) {
         <Modal.Header closeButton>
           <Modal.Title>Doucement ! On supprime ?</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{currentEvent["title"]}</Modal.Body>
+        <Modal.Body>{currentEvent['title']}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Enfait non
@@ -89,7 +86,7 @@ function Root(props: {}) {
           <Button
             variant="danger"
             onClick={() => {
-              axios.delete(`/api/event/${currentEvent["slug"]}`).then(() => {
+              axios.delete(`/api/event/${currentEvent['slug']}`).then(() => {
                 handleClose();
                 getEvents();
               });
@@ -103,4 +100,4 @@ function Root(props: {}) {
   );
 }
 
-render(<Root />, document.getElementById("root"));
+render(<Root />, document.getElementById('root'));

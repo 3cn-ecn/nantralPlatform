@@ -2,7 +2,7 @@
  * WARNING
  * This document is voudou magic from https://github.com/ats1999/rahul-react-map-gl-cluster
  * Please do not attempt to edit it thinking your understand it, you don't.
-*/
+ */
 
 import Supercluster from 'supercluster';
 import { point } from '@turf/helpers';
@@ -11,7 +11,8 @@ import PropTypes from 'prop-types';
 
 import { Marker } from 'react-map-gl';
 
-const childrenKeys = (children) => Children.toArray(children).map((child) => child.key);
+const childrenKeys = (children) =>
+  Children.toArray(children).map((child) => child.key);
 
 const shallowCompareChildren = (prevChildren, newChildren) => {
   if (Children.count(prevChildren) !== Children.count(newChildren)) {
@@ -21,7 +22,8 @@ const shallowCompareChildren = (prevChildren, newChildren) => {
   const prevKeys = childrenKeys(prevChildren);
   const newKeys = new Set(childrenKeys(newChildren));
   return (
-    prevKeys.length === newKeys.size && prevKeys.every((key) => newKeys.has(key))
+    prevKeys.length === newKeys.size &&
+    prevKeys.every((key) => newKeys.has(key))
   );
 };
 
@@ -55,13 +57,13 @@ class Cluster extends PureComponent {
   }
 
   componentWillReceiveProps(newProps) {
-    const shouldUpdate = (
+    const shouldUpdate =
       newProps.minZoom !== this.props.minZoom ||
       newProps.maxZoom !== this.props.maxZoom ||
       newProps.radius !== this.props.radius ||
       newProps.extent !== this.props.extent ||
       newProps.nodeSize !== this.props.nodeSize ||
-      !shallowCompareChildren(this.props.children, newProps.children));
+      !shallowCompareChildren(this.props.children, newProps.children);
 
     if (shouldUpdate) {
       this.createCluster(newProps);
@@ -70,15 +72,8 @@ class Cluster extends PureComponent {
   }
 
   createCluster(props) {
-    const {
-      minZoom,
-      maxZoom,
-      radius,
-      extent,
-      nodeSize,
-      children,
-      innerRef,
-    } = props;
+    const { minZoom, maxZoom, radius, extent, nodeSize, children, innerRef } =
+      props;
 
     const cluster = new Supercluster({
       minZoom,

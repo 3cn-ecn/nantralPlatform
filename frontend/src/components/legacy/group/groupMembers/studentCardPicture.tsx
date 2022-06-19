@@ -1,8 +1,8 @@
-﻿import * as React from "react";
-import { makeNiceDate } from "./utils";
+﻿import * as React from 'react';
+import { makeNiceDate } from './utils';
 
-import { StudentCardBodyProps } from "./interfaces";
-import { iconStyle, centerWrapper } from "./styles";
+import { StudentCardBodyProps } from './interfaces';
+import { iconStyle, centerWrapper } from './styles';
 
 export function StudentCardPicture(props: StudentCardBodyProps): JSX.Element {
   const { editMode, member } = props;
@@ -10,7 +10,7 @@ export function StudentCardPicture(props: StudentCardBodyProps): JSX.Element {
   const picture =
     member.student.picture !== null
       ? member.student.picture
-      : "/static/img/logo/scalable/logo.svg";
+      : '/static/img/logo/scalable/logo.svg';
 
   if (editMode) {
     return (
@@ -20,7 +20,7 @@ export function StudentCardPicture(props: StudentCardBodyProps): JSX.Element {
             <img
               // TODO: Enlever le nom de domaine ici
               src={
-                picture.includes("https://")
+                picture.includes('https://')
                   ? picture
                   : `https://nantral-platform.fr${picture}`
               }
@@ -39,7 +39,7 @@ export function StudentCardPicture(props: StudentCardBodyProps): JSX.Element {
             <img
               // TODO: Enlever le nom de domaine ici
               src={
-                picture.includes("https://")
+                picture.includes('https://')
                   ? picture
                   : `https://nantral-platform.fr${picture}`
               }

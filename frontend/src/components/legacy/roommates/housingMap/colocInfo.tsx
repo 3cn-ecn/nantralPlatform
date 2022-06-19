@@ -1,20 +1,20 @@
-﻿import * as React from "react";
-import { Button } from "react-bootstrap";
+﻿import * as React from 'react';
+import { Button } from 'react-bootstrap';
 
-import { ColocInfoProps } from "./interfaces";
+import { ColocInfoProps } from './interfaces';
 
 export function ColocInfo(props: ColocInfoProps): JSX.Element {
   const { housing, colocathlonOnly } = props;
-  let roommatesList: string = "";
+  let roommatesList: string = '';
   if (
-    typeof housing.roommates != "undefined" &&
-    typeof housing.roommates.members != "undefined" &&
+    typeof housing.roommates != 'undefined' &&
+    typeof housing.roommates.members != 'undefined' &&
     !colocathlonOnly
   ) {
     roommatesList = housing.roommates.members
       .map((e) => e.name)
-      .join(", ")
-      .replace(/(,\s*)$/, "");
+      .join(', ')
+      .replace(/(,\s*)$/, '');
   }
   return (
     <div>
@@ -35,7 +35,7 @@ export function ColocInfo(props: ColocInfoProps): JSX.Element {
             variant="secondary"
             size="sm"
             href={housing.roommates.url}
-            style={{ marginRight: "1rem" }}
+            style={{ marginRight: '1rem' }}
           >
             Détails
           </Button>

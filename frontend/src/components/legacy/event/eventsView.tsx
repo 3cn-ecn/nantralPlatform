@@ -1,10 +1,10 @@
-﻿import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
-import { Row, Col } from "react-bootstrap";
+﻿import React, { useState, useEffect } from 'react';
+import { render } from 'react-dom';
+import { Row, Col } from 'react-bootstrap';
 
-import { getGroupDate } from "./eventsView/utils";
-import { Event } from "./eventsView/event";
-import { EventInfos } from "./eventsView/interfaces";
+import { getGroupDate } from './eventsView/utils';
+import { Event } from './eventsView/event';
+import { EventInfos } from './eventsView/interfaces';
 
 declare const eventsApiUrl: string;
 declare const eventsRemoveParticipant: string;
@@ -57,7 +57,7 @@ function Root(props: {}): JSX.Element {
     <>
       {Array.from(eventInfos, (events, key) => {
         return (
-          <div key={key + "outerdiv"}>
+          <div key={key + 'outerdiv'}>
             <h3>{events[0]}</h3>
             <Row className="gx-2 mb-3 events">
               {events[1].map((el, i) => {
@@ -66,7 +66,7 @@ function Root(props: {}): JSX.Element {
                     xs={12}
                     md={6}
                     xl={4}
-                    key={key + i.toString() + "innerdiv"}
+                    key={key + i.toString() + 'innerdiv'}
                   >
                     <Event
                       key={key + i.toString()}
@@ -88,6 +88,6 @@ function Root(props: {}): JSX.Element {
   );
 }
 
-render(<Root />, document.getElementById("root"));
+render(<Root />, document.getElementById('root'));
 
 // export default EventList;

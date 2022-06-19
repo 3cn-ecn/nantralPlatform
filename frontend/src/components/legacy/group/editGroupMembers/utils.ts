@@ -1,7 +1,7 @@
-﻿import axios from "../../utils/axios";
+﻿import axios from '../../utils/axios';
 
-import { Member, MemberAdd } from "../groupMembers/interfaces";
-import { getMembers } from "../groupMembers/utils";
+import { Member, MemberAdd } from '../groupMembers/interfaces';
+import { getMembers } from '../groupMembers/utils';
 
 export function updateMember(
   membersUrl: string,
@@ -29,7 +29,7 @@ export function updateMember(
       if (resp.status !== 200) {
         console.error(
           "Le membre n'a pas pu être mis à jour.",
-          "ERR:",
+          'ERR:',
           resp.status
         );
       }
@@ -62,7 +62,7 @@ export function deleteMember(
       if (resp.status !== 200) {
         console.error(
           "Le membre n'a pas pu être supprimé.",
-          "ERR:",
+          'ERR:',
           resp.status
         );
       }
@@ -97,7 +97,7 @@ export function addMember(
     })
     .then((resp) => {
       if (resp.status !== 200) {
-        console.error("Le membre n'a pas pu être ajouté.", "ERR:", resp.status);
+        console.error("Le membre n'a pas pu être ajouté.", 'ERR:', resp.status);
       }
     })
     .catch((e) => {
@@ -122,7 +122,7 @@ export function getStudents(
       if (resp.status !== 200) {
         console.error(
           "Les etudiants n'ont pas pu être récupérés.",
-          "ERR:",
+          'ERR:',
           resp.status
         );
       }

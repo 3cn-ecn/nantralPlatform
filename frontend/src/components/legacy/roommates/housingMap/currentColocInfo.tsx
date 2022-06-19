@@ -1,15 +1,17 @@
-﻿import * as React from "react";
+﻿import * as React from 'react';
 
-import { currentColocInfoStyles } from "./styles";
-import { CurrentColocInfoProps } from "./interfaces";
+import { currentColocInfoStyles } from './styles';
+import { CurrentColocInfoProps } from './interfaces';
 
 export function CurrentColocInfo(props: CurrentColocInfoProps) {
   const { colocName, colocUrl } = props;
 
-  if (colocName === "") {
+  if (colocName === '') {
     return (
       <div className="col-12 col-sm-6" style={currentColocInfoStyles}>
-        <p className="mb-0">Tu n'es inscrit·e à aucune coloc. Choisis-en une sur la carte !</p>
+        <p className="mb-0">
+          Tu n'es inscrit·e à aucune coloc. Choisis-en une sur la carte !
+        </p>
       </div>
     );
   }

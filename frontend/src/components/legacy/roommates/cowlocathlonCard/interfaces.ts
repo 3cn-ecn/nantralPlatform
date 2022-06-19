@@ -1,4 +1,4 @@
-﻿import { ColocathlonParticipant } from "../housingMap/interfaces";
+﻿import { ColocathlonParticipant } from '../housingMap/interfaces';
 
 export interface ParticipateButtonProps {
   API_URL: string;

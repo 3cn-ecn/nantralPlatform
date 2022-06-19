@@ -1,15 +1,15 @@
-﻿import { Member } from "./interfaces";
-import axios from "../../utils/axios";
+﻿import { Member } from './interfaces';
+import axios from '../../utils/axios';
 
-var dayjs = require("dayjs");
-require("dayjs/locale/fr");
-dayjs.locale("fr");
+var dayjs = require('dayjs');
+require('dayjs/locale/fr');
+dayjs.locale('fr');
 
 export function makeNiceDate(date: string): string {
   if (date === null) {
     return null;
   }
-  return dayjs(date, "YYYY-MM-DD").format("D MMMM YYYY");
+  return dayjs(date, 'YYYY-MM-DD').format('D MMMM YYYY');
 }
 
 export function sendNewOrder(
@@ -39,7 +39,7 @@ export function sendNewOrder(
       if (resp.status !== 200) {
         console.error(
           "L'ordre des membres n'a pas pu être mis à jour.",
-          "ERR:",
+          'ERR:',
           resp.status
         );
       }

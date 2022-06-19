@@ -1,10 +1,7 @@
-import React, { useState, ChangeEvent } from "react";
-import axios from "../utils/axios";
-import { render } from "react-dom";
-import { Form, Button, ListGroup } from "react-bootstrap";
-
-
-
+import React, { useState, ChangeEvent } from 'react';
+import axios from '../utils/axios';
+import { render } from 'react-dom';
+import { Form, Button, ListGroup } from 'react-bootstrap';
 
 declare const API_URL: string;
 declare const CHECK_URL: string;
@@ -42,7 +39,7 @@ function Root(props: {}) {
 
   function updateDetails(details: string) {
     updateCurrentHousing({
-      address: currentHousing["address"],
+      address: currentHousing['address'],
       details: details,
     });
   }
@@ -51,7 +48,7 @@ function Root(props: {}) {
     e.preventDefault();
     axios.post(API_URL, currentHousing).then((resp) => {
       updateAlreadyExists(resp.data);
-      location.href = CREATE_URL.replace("0", resp.data.id);
+      location.href = CREATE_URL.replace('0', resp.data.id);
     });
   }
 
@@ -80,10 +77,10 @@ function Root(props: {}) {
             ))}
         </ListGroup>
       </Form>
-      {currentHousing["address"] != null && (
+      {currentHousing['address'] != null && (
         <div>
           <br />
-          <h5>{currentHousing["address"]}</h5>
+          <h5>{currentHousing['address']}</h5>
           {alreadyExists.length > 0 && (
             <div>
               <p>
@@ -95,7 +92,7 @@ function Root(props: {}) {
                 {alreadyExists.map((housing) => (
                   <ListGroup.Item
                     action
-                    href={CREATE_URL.replace("0", housing.pk)}
+                    href={CREATE_URL.replace('0', housing.pk)}
                   >
                     {housing.name}
                   </ListGroup.Item>
@@ -127,4 +124,4 @@ function Root(props: {}) {
   );
 }
 
-render(<Root />, document.getElementById("root"));
+render(<Root />, document.getElementById('root'));

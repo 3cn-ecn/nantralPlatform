@@ -1,6 +1,6 @@
-﻿import * as React from "react";
-import { Club } from "./interfaces";
-import { clubStyle } from "./styles";
+﻿import * as React from 'react';
+import { Club } from './interfaces';
+import { clubStyle } from './styles';
 
 export function ClubIcon(props): JSX.Element {
   const club: Club = props.club;

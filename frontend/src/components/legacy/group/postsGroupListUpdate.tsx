@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
-import axios from "../utils/axios";
-import { Button, Card, Modal } from "react-bootstrap";
-var dayjs = require("dayjs");
-var relativeTime = require("dayjs/plugin/relativeTime");
+import React, { useState, useEffect } from 'react';
+import { render } from 'react-dom';
+import axios from '../utils/axios';
+import { Button, Card, Modal } from 'react-bootstrap';
+var dayjs = require('dayjs');
+var relativeTime = require('dayjs/plugin/relativeTime');
 dayjs.extend(relativeTime);
-
-
-
 
 declare const GROUP_SLUG: string;
 declare const STATIC_URL_PREFIX: string;
@@ -47,9 +44,9 @@ function Root(props: {}) {
                 )}
                 <Card.Body>
                   <Card.Subtitle>
-                    Date :{" "}
+                    Date :{' '}
                     {dayjs(post.publication_date).format(
-                      "dddd, MMMM Do YYYY, HH:mm"
+                      'dddd, MMMM Do YYYY, HH:mm'
                     )}
                   </Card.Subtitle>
                   <Card.Subtitle>Visibilité : {post.publicity}</Card.Subtitle>
@@ -83,7 +80,7 @@ function Root(props: {}) {
         <Modal.Header closeButton>
           <Modal.Title>Doucement ! On supprime ?</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{currentPost["title"]}</Modal.Body>
+        <Modal.Body>{currentPost['title']}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Enfait non
@@ -91,7 +88,7 @@ function Root(props: {}) {
           <Button
             variant="danger"
             onClick={() => {
-              axios.delete(`/api/post/${currentPost["slug"]}`).then(() => {
+              axios.delete(`/api/post/${currentPost['slug']}`).then(() => {
                 handleClose();
                 getPosts();
               });
@@ -105,4 +102,4 @@ function Root(props: {}) {
   );
 }
 
-render(<Root />, document.getElementById("root"));
+render(<Root />, document.getElementById('root'));

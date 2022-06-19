@@ -1,10 +1,10 @@
-﻿import { CSSProperties } from "react";
+﻿import { CSSProperties } from 'react';
 
 export const spinnerDivStyle: CSSProperties = {
-  display: "flex",
-  justifyContent: "center",
-  alignContent: "center",
-  fontSize: "1.5rem",
+  display: 'flex',
+  justifyContent: 'center',
+  alignContent: 'center',
+  fontSize: '1.5rem',
 };
 
 export const spinnerStyle: CSSProperties = {

@@ -1,11 +1,11 @@
-﻿import * as React from "react";
-import { useState } from "react";
-import { Button, Modal } from "react-bootstrap";
-import { faIconStyle } from "./styles";
-import { Spinner } from "react-bootstrap";
-import { EventInfos, Urls, Student } from "./interfaces";
-import { spinnerDivStyle, spinnerStyle } from "./styles";
-import { ExportButton } from "./exportButton";
+﻿import * as React from 'react';
+import { useState } from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { faIconStyle } from './styles';
+import { Spinner } from 'react-bootstrap';
+import { EventInfos, Urls, Student } from './interfaces';
+import { spinnerDivStyle, spinnerStyle } from './styles';
+import { ExportButton } from './exportButton';
 
 export function ParticipateButton(props): JSX.Element {
   const urls: Urls = props.urls;
@@ -38,8 +38,8 @@ export function ParticipateButton(props): JSX.Element {
           setLoading(true);
           fetch(
             isParticipating
-              ? urls.remove.replace("1", eventInfos.slug)
-              : urls.add.replace("1", eventInfos.slug)
+              ? urls.remove.replace('1', eventInfos.slug)
+              : urls.add.replace('1', eventInfos.slug)
           )
             .then((resp) => {
               let offset = isParticipating ? -1 : 1;
@@ -54,14 +54,14 @@ export function ParticipateButton(props): JSX.Element {
             return (
               <>
                 <i className="fas fa-times" style={faIconStyle}></i>
-                {isLoading ? "Chargement..." : "Je ne participe plus"}
+                {isLoading ? 'Chargement...' : 'Je ne participe plus'}
               </>
             );
           }
           return (
             <>
               <i className="fas fa-check" style={faIconStyle}></i>
-              {isLoading ? "Chargement..." : "Je participe"}
+              {isLoading ? 'Chargement...' : 'Je participe'}
             </>
           );
         })()}
@@ -76,7 +76,7 @@ export function ParticipateButton(props): JSX.Element {
                 onClick={() => {
                   setIsParticipantsLoading(true);
                   handleOpen();
-                  fetch(urls.participants.replace("1", eventInfos.slug))
+                  fetch(urls.participants.replace('1', eventInfos.slug))
                     .then((res) => {
                       res.json().then((data) => {
                         setParticipants(data);
@@ -89,7 +89,7 @@ export function ParticipateButton(props): JSX.Element {
                 }}
               >
                 <i className="fas fa-list" style={faIconStyle}></i>
-                {"Liste des participant.e.s"}
+                {'Liste des participant.e.s'}
               </Button>
             </>
           );

@@ -1,16 +1,13 @@
-﻿import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
-import { Spinner, Button } from "react-bootstrap";
-import axios from "../utils/axios";
+﻿import React, { useState, useEffect } from 'react';
+import { render } from 'react-dom';
+import { Spinner, Button } from 'react-bootstrap';
+import axios from '../utils/axios';
 
-import { spinnerDivStyle, spinnerStyle } from "../club/clubsList/styles";
-import { Member } from "./groupMembers/interfaces";
-import { EditGroupMembersModal } from "./editGroupMembers/editGroupMembersModal";
-import { AddGroupMembersModal } from "./editGroupMembers/addGroupMembersModal";
-import { getMembers } from "./groupMembers/utils";
-
-
-
+import { spinnerDivStyle, spinnerStyle } from '../club/clubsList/styles';
+import { Member } from './groupMembers/interfaces';
+import { EditGroupMembersModal } from './editGroupMembers/editGroupMembersModal';
+import { AddGroupMembersModal } from './editGroupMembers/addGroupMembersModal';
+import { getMembers } from './groupMembers/utils';
 
 declare const membersURL: string;
 declare const studentsURL: string;
@@ -69,7 +66,7 @@ function Root(props: {}): JSX.Element {
             <tbody>
               {members.map((e, i) => (
                 <tr
-                  style={{ transform: "rotate(0)" }}
+                  style={{ transform: 'rotate(0)' }}
                   key={i}
                   onClick={() => {
                     setSelectedMember(e);
@@ -94,4 +91,4 @@ function Root(props: {}): JSX.Element {
   );
 }
 
-render(<Root />, document.getElementById("root2"));
+render(<Root />, document.getElementById('root2'));

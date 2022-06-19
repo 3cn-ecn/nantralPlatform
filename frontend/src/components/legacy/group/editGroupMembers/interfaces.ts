@@ -1,4 +1,4 @@
-﻿import { Member } from "../groupMembers/interfaces";
+﻿import { Member } from '../groupMembers/interfaces';
 
 export interface EditGroupMembersModalProps {
   showModal: boolean;

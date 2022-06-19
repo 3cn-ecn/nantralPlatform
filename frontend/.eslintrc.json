@@ -43,18 +43,9 @@
     "import/no-unresolved": "off",
     "react/self-closing-comp": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".jsx"] }],
-    "no-plusplus": [
-      "error",
-      { "allowForLoopAfterthoughts": true }
-    ],
-    "no-param-reassign": [
-      "error",
-      { "props": false }
-    ],
-    "no-use-before-define": [
-      "error",
-      "nofunc"
-    ]
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "no-param-reassign": ["error", { "props": false }],
+    "no-use-before-define": ["error", "nofunc"]
   },
   "settings": {
     "react": {

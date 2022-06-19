@@ -1,13 +1,13 @@
-﻿import * as React from "react";
+﻿import * as React from 'react';
 import MapGL, {
   GeolocateControl,
   FlyToInterpolator,
   NavigationControl,
-} from "react-map-gl";
+} from 'react-map-gl';
 
-import { geolocateStyle, navControlStyle } from "./styles";
-import { ClusterMarker } from "./clusterMarker";
-import Cluster from "./cluster";
+import { geolocateStyle, navControlStyle } from './styles';
+import { ClusterMarker } from './clusterMarker';
+import Cluster from './cluster';
 
 export function Map(props): JSX.Element {
   const {
@@ -49,7 +49,7 @@ export function Map(props): JSX.Element {
                       longitude: longitude,
                       latitude: latitude,
                       transitionDuration: 500,
-                      transitionInterpolator: new FlyToInterpolator()
+                      transitionInterpolator: new FlyToInterpolator(),
                     });
                   }}
                 />

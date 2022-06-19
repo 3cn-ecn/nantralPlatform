@@ -1,10 +1,10 @@
-﻿import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
+﻿import React, { useState, useEffect } from 'react';
+import { render } from 'react-dom';
 
-import { cardStyle, cardH2Style } from "./cowlocathlonCard/styles";
-import { Roommates } from "./housingMap/interfaces";
-import { getRoommatesDetails } from "./cowlocathlonCard/utils";
-import { ParticipateButton } from "./cowlocathlonCard/participateButton";
+import { cardStyle, cardH2Style } from './cowlocathlonCard/styles';
+import { Roommates } from './housingMap/interfaces';
+import { getRoommatesDetails } from './cowlocathlonCard/utils';
+import { ParticipateButton } from './cowlocathlonCard/participateButton';
 
 declare const API_URL: string;
 declare const ROOMMATES_SLUG: string;
@@ -14,7 +14,7 @@ declare const PHASE: number;
 declare const USER_ID: number;
 
 function Root(props: {}): JSX.Element {
-  const isAdmin = IS_ADMIN === "True";
+  const isAdmin = IS_ADMIN === 'True';
   const [roommates, setRoommates] = useState<Roommates>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -35,8 +35,8 @@ function Root(props: {}): JSX.Element {
           <p>Remplissez le form pour participer au colocathlon !</p>
           <a
             className="btn btn-primary"
-            style={{ width: "max-content" }}
-            href={EDIT_URL.replace("1", ROOMMATES_SLUG)}
+            style={{ width: 'max-content' }}
+            href={EDIT_URL.replace('1', ROOMMATES_SLUG)}
           >
             Formulaire Cowlocathlon
           </a>
@@ -67,8 +67,8 @@ function Root(props: {}): JSX.Element {
           />
           <a
             className="btn btn-secondary"
-            style={{ width: "max-content", marginLeft: "0.2rem" }}
-            href={EDIT_URL.replace("1", ROOMMATES_SLUG)}
+            style={{ width: 'max-content', marginLeft: '0.2rem' }}
+            href={EDIT_URL.replace('1', ROOMMATES_SLUG)}
           >
             Modifier
           </a>
@@ -101,4 +101,4 @@ function Root(props: {}): JSX.Element {
   }
 }
 
-render(<Root />, document.getElementById("root"));
+render(<Root />, document.getElementById('root'));

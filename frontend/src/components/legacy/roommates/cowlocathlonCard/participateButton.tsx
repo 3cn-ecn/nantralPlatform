@@ -1,14 +1,11 @@
-﻿import * as React from "react";
-import { useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
-import axios, { AxiosError, AxiosResponse } from "axios";
+﻿import * as React from 'react';
+import { useState } from 'react';
+import { Button, Spinner } from 'react-bootstrap';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
-import { ParticipantsModal } from "./participantsModal";
-import { ParticipateButtonProps } from "./interfaces";
-import { spinnerStyle } from "./styles";
-
-
-
+import { ParticipantsModal } from './participantsModal';
+import { ParticipateButtonProps } from './interfaces';
+import { spinnerStyle } from './styles';
 
 export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
   const [isParticipating, setIsParticipating] = useState(props.isParticipating);
@@ -26,8 +23,8 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
   return (
     <>
       <Button
-        variant={props.isAdmin ? "success" : error ? "danger" : "primary"}
-        style={{ width: "max-content" }}
+        variant={props.isAdmin ? 'success' : error ? 'danger' : 'primary'}
+        style={{ width: 'max-content' }}
         onClick={() => {
           if (props.isAdmin) {
             handleOpen();
@@ -64,17 +61,17 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
         {error ? (
           // I am sorry for this
           <>
-            {"Vous êtes déjà inscrit.e à "}
+            {'Vous êtes déjà inscrit.e à '}
             <a href={currentColoc[1]}>{currentColoc[0]}</a>
           </>
         ) : isParticipating ? (
-          "Libérer ma place"
+          'Libérer ma place'
         ) : numberOfParticipants < props.quota ? (
-          "Réserver ma place !"
+          'Réserver ma place !'
         ) : (
-          "Complet"
+          'Complet'
         )}
-        {"    "}
+        {'    '}
 
         <span className="badge bg-light text-primary">
           {isLoading ? (

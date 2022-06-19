@@ -1,10 +1,10 @@
-﻿import * as React from "react";
+﻿import * as React from 'react';
 
-import { StudentCardBody } from "./studentCardBody";
+import { StudentCardBody } from './studentCardBody';
 
-import { Member } from "./interfaces";
-import { centerWrapper } from "./styles";
-import { StudentCardPicture } from "./studentCardPicture";
+import { Member } from './interfaces';
+import { centerWrapper } from './styles';
+import { StudentCardPicture } from './studentCardPicture';
 
 export function StudentCard(props): JSX.Element {
   const member: Member = props.member;

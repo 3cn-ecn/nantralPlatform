@@ -85,7 +85,7 @@ declare const self: ServiceWorkerGlobalScope;
 //              url.pathname === '/club/' ||
 //              url.pathname === '/colocs/' ||
 //              url.pathname === '/liste/' ||
-//              url.pathname === '/services/signature' ||  
+//              url.pathname === '/services/signature' ||
 //              url.pathname === '/student/' ||
 //              url.pathname === '/academic/' ||
 //              url.pathname === '/administration/',
@@ -138,8 +138,6 @@ declare const self: ServiceWorkerGlobalScope;
 //   return Response.error();
 // });
 
-
-
 /////////////////////////////////////
 /// MANAGE NOTIFICATION RECEPTION ///
 /////////////////////////////////////
@@ -148,7 +146,7 @@ let unreadCount = 0;
 
 // listen to new notifications
 self.addEventListener('push', function (event: PushEvent) {
-  console.log("Received a new message! ");
+  console.log('Received a new message! ');
   console.log(event.data);
   try {
     // Push is a JSON
@@ -156,16 +154,14 @@ self.addEventListener('push', function (event: PushEvent) {
   } catch (err) {
     // Push is a simple text
     var message = {
-      'title': event.data.text(),
+      title: event.data.text(),
     } as any;
   }
 
   // send a notification, except if we explicitly say it must not be sent
   if (!message.hidden) {
     // Keep the service worker alive until the notification is created.
-    event.waitUntil(
-      self.registration.showNotification(message.title, message)
-    );
+    event.waitUntil(self.registration.showNotification(message.title, message));
   }
 
   // set a badge
@@ -173,26 +169,28 @@ self.addEventListener('push', function (event: PushEvent) {
   unreadCount++;
   if (nav.setAppBadge) {
     nav.setAppBadge(unreadCount).catch((error) => {
-      console.log("Error in setting app badge");
-    })
+      console.log('Error in setting app badge');
+    });
   }
 });
 
-
 // react to click on a notification
-self.addEventListener('notificationclick', async function(event) {
-  const notif = event.notification;
-  // check if we click on an action button
-  const action = event.action.match(/^action_(\d)$/);
-  if (action != null) {
-    const id = action[1];
-    self.clients.openWindow(notif.data.actions_url[id]);
-  } else {
-    // User selected (e.g., clicked in) the main body of notification.
-    self.clients.openWindow(notif.data.url);
-  }
+self.addEventListener(
+  'notificationclick',
+  async function (event) {
+    const notif = event.notification;
+    // check if we click on an action button
+    const action = event.action.match(/^action_(\d)$/);
+    if (action != null) {
+      const id = action[1];
+      self.clients.openWindow(notif.data.actions_url[id]);
+    } else {
+      // User selected (e.g., clicked in) the main body of notification.
+      self.clients.openWindow(notif.data.url);
+    }
 
-  // close the notification
-  event.notification.close();
-
-}, false);
+    // close the notification
+    event.notification.close();
+  },
+  false
+);

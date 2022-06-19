@@ -1,8 +1,8 @@
-﻿import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
+﻿import React, { useState, useEffect } from 'react';
+import { render } from 'react-dom';
 
-import { Club } from "./clubsList/interfaces";
-import { ClubIcon } from "./clubsList/clubIcon";
+import { Club } from './clubsList/interfaces';
+import { ClubIcon } from './clubsList/clubIcon';
 
 declare const myClubsURL: string;
 
@@ -41,4 +41,4 @@ function Root(props: {}): JSX.Element {
   );
 }
 
-render(<Root />, document.getElementById("root"));
+render(<Root />, document.getElementById('root'));

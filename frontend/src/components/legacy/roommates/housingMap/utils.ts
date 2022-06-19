@@ -35,8 +35,8 @@ export async function getRoommates(
       setColocs(
         dataBuffer.map((housing: Housing) => {
           housing.address = housing.address.replace(
-            ", 44100 Nantes, France",
-            ""
+            ', 44100 Nantes, France',
+            ''
           );
           return { label: housing.roommates.name, housing: housing };
         })

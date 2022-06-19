@@ -1,5 +1,5 @@
-﻿import axios, { AxiosError, AxiosResponse } from "axios";
-import { Roommates } from "../housingMap/interfaces";
+﻿import axios, { AxiosError, AxiosResponse } from 'axios';
+import { Roommates } from '../housingMap/interfaces';
 
 export function getRoommatesDetails(
   api_url: string,

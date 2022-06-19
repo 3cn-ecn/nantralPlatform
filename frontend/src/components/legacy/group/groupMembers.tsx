@@ -1,6 +1,6 @@
-﻿import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
-import { Spinner } from "react-bootstrap";
+﻿import React, { useState, useEffect } from 'react';
+import { render } from 'react-dom';
+import { Spinner } from 'react-bootstrap';
 import {
   DndContext,
   closestCenter,
@@ -9,21 +9,18 @@ import {
   DragEndEvent,
   MouseSensor,
   TouchSensor,
-} from "@dnd-kit/core";
-import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
-import { arrayMoveImmutable } from "array-move";
-import axios from "../utils/axios";
+} from '@dnd-kit/core';
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
+import { arrayMoveImmutable } from 'array-move';
+import axios from '../utils/axios';
 
-import { spinnerDivStyle, spinnerStyle } from "../club/clubsList/styles";
-import { loaderStyle } from "./groupMembers/styles";
-import { Member } from "./groupMembers/interfaces";
-import { EditGroupMembersSwitch } from "./groupMembers/groupMembersEditSwitch";
-import { SortableStudentCard } from "./groupMembers/sortableStudentCard";
-import { StudentCard } from "./groupMembers/studentCard";
-import { getMembers, sendNewOrder } from "./groupMembers/utils";
-
-
-
+import { spinnerDivStyle, spinnerStyle } from '../club/clubsList/styles';
+import { loaderStyle } from './groupMembers/styles';
+import { Member } from './groupMembers/interfaces';
+import { EditGroupMembersSwitch } from './groupMembers/groupMembersEditSwitch';
+import { SortableStudentCard } from './groupMembers/sortableStudentCard';
+import { StudentCard } from './groupMembers/studentCard';
+import { getMembers, sendNewOrder } from './groupMembers/utils';
 
 declare const membersURL: string;
 declare const isAdmin: string;
@@ -139,4 +136,4 @@ function Root(props: {}): JSX.Element {
   );
 }
 
-render(<Root />, document.getElementById("root2"));
+render(<Root />, document.getElementById('root2'));
