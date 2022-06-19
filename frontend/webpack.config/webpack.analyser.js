@@ -1,9 +1,8 @@
-const { merge } = require('webpack-merge');
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import { merge } from 'webpack-merge';
+// eslint-disable-next-line import/extensions
+import prod from './webpack.prod.js';
 
-const prod = require('./webpack.prod.js');
-const BundleAnalyzerPlugin =
-  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-module.exports = merge(prod, {
+export default merge(prod, {
   plugins: [new BundleAnalyzerPlugin()],
 });

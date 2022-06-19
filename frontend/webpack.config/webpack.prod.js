@@ -1,10 +1,16 @@
-const { merge } = require('webpack-merge');
-const TerserPlugin = require('terser-webpack-plugin');
-const common = require('./webpack.common.js');
-var BundleTracker = require('webpack-bundle-tracker');
-var webpack = require('webpack');
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import TerserPlugin from 'terser-webpack-plugin';
+import BundleTracker from 'webpack-bundle-tracker';
+import webpack from 'webpack';
+import { merge } from 'webpack-merge';
+// eslint-disable-next-line import/extensions
+import common from './webpack.common.js';
 
-module.exports = merge(common, {
+// eslint-disable-next-line no-underscore-dangle
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+export default merge(common, {
   mode: 'production',
   optimization: {
     minimize: true,

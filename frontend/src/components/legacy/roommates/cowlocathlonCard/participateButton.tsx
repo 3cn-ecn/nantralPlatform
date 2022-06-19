@@ -50,14 +50,13 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
               if (axios.isAxiosError(err) && err.response.data !== undefined) {
                 setError(true);
                 setCurrentColoc([
-                  err.response.data.name,
-                  err.response.data.url,
+                  (err.response.data as any).name,
+                  (err.response.data as any).url,
                 ]);
               }
             })
             .finally(() => setIsLoading(false));
-        }}
-      >
+        }}>
         {error ? (
           // I am sorry for this
           <>

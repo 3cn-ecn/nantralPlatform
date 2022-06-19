@@ -83,7 +83,10 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-function Upbar(props) {
+function Upbar(props: {
+  open: boolean;
+  handleDrawerOpen: React.MouseEventHandler<HTMLButtonElement>;
+}) {
   return (
     <AppBar position="fixed" open={props.open}>
       <Toolbar>
@@ -94,8 +97,7 @@ function Upbar(props) {
           edge="start"
           sx={{
             marginRight: 5,
-          }}
-        >
+          }}>
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap component="div">
@@ -116,8 +118,7 @@ function Upbar(props) {
           <IconButton
             size="large"
             aria-label="show 17 new notifications"
-            color="inherit"
-          >
+            color="inherit">
             <Badge badgeContent={17} color="error">
               <NotificationsIcon />
             </Badge>
@@ -127,8 +128,7 @@ function Upbar(props) {
             edge="end"
             aria-label="account of current user"
             aria-haspopup="true"
-            color="inherit"
-          >
+            color="inherit">
             <AccountCircle />
           </IconButton>
         </Box>
@@ -137,8 +137,7 @@ function Upbar(props) {
             size="large"
             aria-label="show more"
             aria-haspopup="true"
-            color="inherit"
-          >
+            color="inherit">
             <MoreIcon />
           </IconButton>
         </Box>

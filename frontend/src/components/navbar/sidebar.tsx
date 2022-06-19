@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import {
   CSSObject,
   IconButton,
-  SvgIcon,
   Theme,
   Drawer as MuiDrawer,
   Divider,
@@ -130,33 +129,30 @@ function Sidebar(props) {
       </DrawerHeader>
       <Divider />
       <List>
-        {buttons.map((button, index) => (
+        {buttons.map((button) => (
           <ListItem
             key={button.text}
             disablePadding
             sx={{ display: 'block' }}
             component={Link}
             to={button.url}
-            reloadDocument={button.onBackend}
-          >
+            reloadDocument={button.onBackend}>
             <ListItemButton
               sx={{
                 minHeight: 48,
                 justifyContent: open ? 'initial' : 'center',
                 px: 2.5,
-              }}
-            >
+              }}>
               <ListItemIcon
                 sx={{
                   minWidth: 0,
                   mr: open ? 3 : 'auto',
                   justifyContent: 'center',
-                }}
-              >
+                }}>
                 {button.icon ? <button.icon /> : <InsertLinkIcon />}
               </ListItemIcon>
               <ListItemText
-                primary={t('navbar.' + button.text)}
+                primary={t(`navbar.${button.text}`)}
                 sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>

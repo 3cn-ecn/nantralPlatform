@@ -69,29 +69,26 @@ export function ParticipateButton(props): JSX.Element {
       {(() => {
         if (eventInfos.is_member) {
           return (
-            <>
-              <Button
-                variant={eventInfos.color}
-                size="sm"
-                onClick={() => {
-                  setIsParticipantsLoading(true);
-                  handleOpen();
-                  fetch(urls.participants.replace('1', eventInfos.slug))
-                    .then((res) => {
-                      res.json().then((data) => {
-                        setParticipants(data);
-                      });
-                    })
-                    .catch((err) => {
-                      setParticipants([]);
-                    })
-                    .finally(() => setIsParticipantsLoading(false));
-                }}
-              >
-                <i className="fas fa-list" style={faIconStyle}></i>
-                {'Liste des participant.e.s'}
-              </Button>
-            </>
+            <Button
+              variant={eventInfos.color}
+              size="sm"
+              onClick={() => {
+                setIsParticipantsLoading(true);
+                handleOpen();
+                fetch(urls.participants.replace('1', eventInfos.slug))
+                  .then((res) => {
+                    res.json().then((data) => {
+                      setParticipants(data);
+                    });
+                  })
+                  .catch((err) => {
+                    setParticipants([]);
+                  })
+                  .finally(() => setIsParticipantsLoading(false));
+              }}>
+              <i className="fas fa-list" style={faIconStyle}></i>
+              {'Liste des participant.e.s'}
+            </Button>
           );
         }
       })()}

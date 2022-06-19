@@ -1,36 +1,39 @@
-var path = require('path');
-var base_dir = path.join(__dirname, '..');
-var legacy = path.join(base_dir, 'src/components/legacy');
-// const CopyWebpackPlugin = require('copy-webpack-plugin');
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports = {
+// eslint-disable-next-line no-underscore-dangle
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const baseDir = dirname(__dirname);
+const legacyDir = join(baseDir, 'src/components/legacy');
+
+export default {
   entry: {
-    'sw.js': path.join(legacy, 'app/sw.ts'),
-    'launchApp.js': path.join(legacy, 'app/app.ts'),
-    'clubsList.js': path.join(legacy, 'club/clubsList.tsx'),
-    'eventsGroupListUpdate.js': path.join(
-      legacy,
+    'sw.js': join(legacyDir, 'app/sw.ts'),
+    'launchApp.js': join(legacyDir, 'app/app.ts'),
+    'clubsList.js': join(legacyDir, 'club/clubsList.tsx'),
+    'eventsGroupListUpdate.js': join(
+      legacyDir,
       'group/eventsGroupListUpdate.tsx'
     ),
-    'postsGroupListUpdate.js': path.join(
-      legacy,
+    'postsGroupListUpdate.js': join(
+      legacyDir,
       'group/postsGroupListUpdate.tsx'
     ),
-    'groupMembers.js': path.join(legacy, 'group/groupMembers.tsx'),
-    'editGroupMembers.js': path.join(legacy, 'group/editGroupMembers.tsx'),
-    'eventsView.js': path.join(legacy, 'event/eventsView.tsx'),
-    'cowlocathlonCard.js': path.join(legacy, 'roommates/cowlocathlonCard.tsx'),
-    'housingMap.js': path.join(legacy, 'roommates/housingMap.tsx'),
-    'createHousing.js': path.join(legacy, 'roommates/createHousing.tsx'),
-    'subscribeButton.js': path.join(legacy, 'notification/subscribeButton.tsx'),
-    'deviceSubscribeButton.js': path.join(
-      legacy,
+    'groupMembers.js': join(legacyDir, 'group/groupMembers.tsx'),
+    'editGroupMembers.js': join(legacyDir, 'group/editGroupMembers.tsx'),
+    'eventsView.js': join(legacyDir, 'event/eventsView.tsx'),
+    'cowlocathlonCard.js': join(legacyDir, 'roommates/cowlocathlonCard.tsx'),
+    'housingMap.js': join(legacyDir, 'roommates/housingMap.tsx'),
+    'createHousing.js': join(legacyDir, 'roommates/createHousing.tsx'),
+    'subscribeButton.js': join(legacyDir, 'notification/subscribeButton.tsx'),
+    'deviceSubscribeButton.js': join(
+      legacyDir,
       'notification/deviceSubscribeButton.tsx'
     ),
-    'reactApp.js': path.join(base_dir, 'src/index.tsx'),
+    'reactApp.js': join(baseDir, 'src/index.tsx'),
   },
   output: {
-    path: path.join(base_dir, '../backend/static/js'),
+    path: join(baseDir, '../backend/static/js'),
     filename: '[name]',
   },
   module: {

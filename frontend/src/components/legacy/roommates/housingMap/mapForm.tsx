@@ -47,7 +47,7 @@ export function MapForm(props): JSX.Element {
               >
                 <ColocInfo
                   housing={housing}
-                  housingDetailsUrl={housing.roommates.url}
+                  colocathlonOnly={false}
                 />
               </Popup>
             );

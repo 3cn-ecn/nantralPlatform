@@ -12,17 +12,22 @@
  * $ var url = formatUrl(url, pathParams, queryParams);
  * url -> /club/bde/member/2?id=5&mode=true&details=something
  */
-function formatUrl(path: string, pathParams: any[] = [], queryParams: {} = {}) {
+function formatUrl(
+  path: string,
+  pathParams: (string | number | boolean)[] = [],
+  queryParams: Record<string, unknown> = {}
+) {
   // first we complete the path with the path parameters
   let url = path.replace(/{(\d+)}/g, (match, index) =>
     pathParams[index].toString()
   );
   // then we add the query parameters to the url
-  let first = true;
-  for (const key in queryParams) {
-    url += first ? '?' : '&'; // add "?" if it is the first loop, else "&"
-    url += key + '=' + queryParams[key];
-    if (first) first = false;
+  if (queryParams) {
+    url += Object.entries(queryParams).reduce(
+      (query, [key, value]) =>
+        query ? `${query}&${key}=${value}` : `?${key}=${value}`,
+      ''
+    );
   }
   return url;
 }
