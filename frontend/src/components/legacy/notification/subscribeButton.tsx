@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM, { render } from 'react-dom';
 import { Button, Spinner } from 'react-bootstrap';
 
-import axios from '../utils/axios';
-import formatUrl from '../utils/formatUrl';
+import axios from '../../../utils/axios';
+import formatUrl from '../../../utils/formatUrl';
 
 import { SUBSCRIPTION_URL } from './api_urls';
 

@@ -7,6 +7,7 @@ const baseDir = dirname(__dirname);
 const legacyDir = join(baseDir, 'src/components/legacy');
 
 export default {
+  context: baseDir,
   entry: {
     'sw.js': join(legacyDir, 'app/sw.ts'),
     'launchApp.js': join(legacyDir, 'app/app.ts'),

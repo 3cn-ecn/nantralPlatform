@@ -44,7 +44,7 @@ urlpatterns = [
         'apps.family.admin_urls', namespace='family-admin')),
     path('post/', include('apps.post.urls', namespace='post')),
     path('event/', include('apps.event.urls', namespace='event')),
-    path('services/', include('apps.services.urls', namespace='services')),
+    path('tools/', include('apps.tools.urls', namespace='services')),
     path('notification/', include(
         'apps.notification.urls', namespace='notification')),
     # path('exchange/', include('apps.exchange.urls', namespace='exchange')),

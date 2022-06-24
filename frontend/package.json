@@ -7,9 +7,9 @@
   "type": "module",
   "scripts": {
     "start": "webpack --config webpack.config/webpack.prod.js",
-    "analyse": "webpack --config webpack.config/webpack.analyser.js",
     "dev": "webpack --config webpack.config/webpack.dev.js",
-    "watch": "webpack --config webpack.config/webpack.dev.js --watch",
+    "dev:watch": "webpack --config webpack.config/webpack.dev.js --watch",
+    "analyse": "webpack --config webpack.config/webpack.analyser.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"

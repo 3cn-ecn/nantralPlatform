@@ -5,8 +5,8 @@ import { styled } from '@mui/material/styles';
 import Home from './apps/home/home';
 import Test1 from './apps/test1/test1';
 import Test2 from './apps/test2/test2';
-import Sidebar from './components/navbar/sidebar';
-import Upbar from './components/navbar/upBar';
+import Sidebar from './components/navbar/sideBar/sidebar';
+import TopBar from './components/navbar/topBar';
 import NotFound from './components/notFound';
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -27,8 +27,8 @@ function App() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <Upbar handleDrawerOpen={handleDrawerToggle} open={open} />
-      <Sidebar handleDrawerClose={handleDrawerToggle} open={open} />
+      <TopBar handleDrawerOpen={handleDrawerToggle} />
+      {/* <Sidebar handleDrawerClose={handleDrawerToggle} open={open} /> */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Routes>

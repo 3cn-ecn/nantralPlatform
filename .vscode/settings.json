@@ -1,7 +1,11 @@
 {
   "editor.formatOnSave": false,
   "editor.insertSpaces": true,
+  "editor.tabSize": 2,
   "editor.rulers": [80],
+  "[python]": {
+    "editor.tabSize": 4
+  },
   "files.associations": {
     "*.html": "html",
     "**/backend/**/*.html": "django-html",
@@ -17,12 +21,6 @@
     "**/src/**/*.tsx": "typescriptreact",
     "**/*.json": "jsonc",
     "**/docs/**/*.md": "mdx"
-  },
-  "[python]": {
-    "editor.tabSize": 4
-  },
-  "[django-html][html][javascript][javascriptreact][typescript][typescriptreact][json]": {
-    "editor.tabSize": 2
   },
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/env/bin",
   "python.envFile": "${workspaceFolder}/backend/config/settings/.env",

@@ -3,8 +3,8 @@ import ReactDOM, { render } from 'react-dom';
 import { Spinner, Dropdown, Button } from 'react-bootstrap';
 import { Settings, SettingsOutlined } from '@mui/icons-material';
 
-import axios from '../utils/axios';
-import formatUrl from '../utils/formatUrl';
+import axios from '../../../utils/axios';
+import formatUrl from '../../../utils/formatUrl';
 
 import { SentNotification } from './interfaces';
 import merge from './utils';
