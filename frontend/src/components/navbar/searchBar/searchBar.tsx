@@ -1,9 +1,10 @@
 import * as React from 'react';
 import {
-  TextField,
   Autocomplete,
   AutocompleteChangeReason,
   AutocompleteInputChangeReason,
+  InputAdornment,
+  TextField,
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -33,6 +34,8 @@ export function SearchBar(): JSX.Element {
    * has changed
    *
    * @param event The event sent when the user change the value
+   * @param value The new input value
+   * @param reason The reason why the value has changed
    */
   const updateOptions = (
     event: React.SyntheticEvent,
@@ -43,7 +46,7 @@ export function SearchBar(): JSX.Element {
       return;
     }
     axios
-      .post<any[]>(SEARCH_API, { searchInput: value })
+      .post<Option[]>(SEARCH_API, { searchInput: value })
       .then((res) => {
         // when we get the answer to our request, update the options
         setOptions(res.data);
@@ -96,27 +99,36 @@ export function SearchBar(): JSX.Element {
       options={options}
       filterOptions={(x) => x}
       clearOnBlur
-      sx={{ flexGrow: 1 }}
+      className="search-box"
       getOptionLabel={(option) =>
         isString(option) ? option : `${option.app}:${option.doc}`
       }
-      renderInput={(params) => (
-        // component used for the input
-        <TextField
-          {...params}
-          label="Search"
-          InputProps={{
-            ...params.InputProps,
-            type: 'search',
-          }}
-        />
-      )}
       renderOption={(params, option: Option) => (
         // component used for each option
         <li {...params}>
           <span>{option.doc}</span>
           <span className="secondary-text">&nbsp;({option.app})</span>
         </li>
+      )}
+      renderInput={(params) => (
+        // component used for the input
+        <TextField
+          {...params}
+          hiddenLabel
+          variant="standard"
+          size="small"
+          InputProps={{
+            ...params.InputProps,
+            type: 'search',
+            placeholder: 'Search',
+            className: 'search-input',
+            startAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
       )}
       onInputChange={updateOptions}
       onChange={onValidation}

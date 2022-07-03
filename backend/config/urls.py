@@ -33,11 +33,11 @@ urlpatterns = [
     # apps
     path('account/', include('apps.account.urls', namespace='account')),
     path('student/', include('apps.student.urls', namespace='student')),
-    path('club/', include('apps.club.urls',  namespace='club')),
-    path('liste/', include('apps.liste.urls',  namespace='liste')),
+    path('club/', include('apps.club.urls', namespace='club')),
+    path('liste/', include('apps.liste.urls', namespace='liste')),
     path('colocs/', include('apps.roommates.urls', namespace='roommates')),
     path('administration/', include(
-        'apps.administration.urls',  namespace='administration')),
+        'apps.administration.urls', namespace='administration')),
     path('academic/', include('apps.academic.urls', namespace='academic')),
     path('parrainage/', include('apps.family.urls', namespace='family')),
     path('parrainage/admin/', include(
@@ -52,12 +52,12 @@ urlpatterns = [
     # api
     path('api/student/', include(
         'apps.student.api_urls', namespace='student_api')),
-    path('api/club/',  include('apps.club.api_urls', namespace='club_api')),
-    path('api/liste/', include('apps.liste.api_urls',  namespace='liste_api')),
+    path('api/club/', include('apps.club.api_urls', namespace='club_api')),
+    path('api/liste/', include('apps.liste.api_urls', namespace='liste_api')),
     path('api/colocs/', include(
         'apps.roommates.api_urls', namespace='roommates_api')),
     path('api/administration/', include(
-        'apps.administration.api_urls',  namespace='administration_api')),
+        'apps.administration.api_urls', namespace='administration_api')),
     path('api/academic/', include(
         'apps.academic.api_urls', namespace='academic_api')),
     path('api/post/', include('apps.post.api_urls', namespace='post_api')),
