@@ -95,10 +95,6 @@
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-bundle-tracker": "^1.2.0",
     "webpack-merge": "^5.8.0",
-    "workbox-cacheable-response": "^6.4.2",
-    "workbox-expiration": "^6.4.2",
-    "workbox-routing": "^6.4.2",
-    "workbox-strategies": "^6.4.2"
   },
   "browserslist": {
     "production": [
