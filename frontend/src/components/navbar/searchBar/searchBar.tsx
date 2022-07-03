@@ -1,9 +1,23 @@
 import * as React from 'react';
-import { TextField, Autocomplete } from '@mui/material';
+import {
+  TextField,
+  Autocomplete,
+  AutocompleteChangeReason,
+  AutocompleteInputChangeReason,
+} from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { isString } from 'lodash';
 import { SEARCH_API } from '../../../api';
 import axios from '../../../utils/axios';
+import './searchBar.scss';
+
+/** Interface for the options */
+interface Option {
+  app: string;
+  doc: string;
+  link: string;
+}
 
 /**
  * The Search Bar component, for the global search feature
@@ -11,7 +25,8 @@ import axios from '../../../utils/axios';
  * @returns The search component
  */
 export function SearchBar(): JSX.Element {
-  const [options, setOptions] = React.useState([]);
+  const [options, setOptions] = React.useState<Option[]>([]);
+  const navigate = useNavigate();
 
   /**
    * A function to update the options when the input value in the search field
@@ -19,23 +34,59 @@ export function SearchBar(): JSX.Element {
    *
    * @param event The event sent when the user change the value
    */
-  const updateOptions = (event) => {
+  const updateOptions = (
+    event: React.SyntheticEvent,
+    value: string,
+    reason: AutocompleteInputChangeReason
+  ): void => {
+    if (reason !== 'input') {
+      return;
+    }
     axios
-      .post<any[]>(SEARCH_API, { searchInput: event.target.value })
+      .post<any[]>(SEARCH_API, { searchInput: value })
       .then((res) => {
         // when we get the answer to our request, update the options
         setOptions(res.data);
       })
       .catch(() => {
-        // if the request fails, use mock data (with a delay to simulate the request)
+        // If the request fails, use mock data (with a delay to simulate the request).
+        // Only used for tests, delete it when api will be implemented.
         setTimeout(() => {
           setOptions([
-            { value: 'abc', link: '/abc' },
-            { value: 'def', link: '/def' },
-            { value: 'ghi', link: '/ghi' },
+            { app: 'group', doc: 'BDE', link: '/group/bde' },
+            { app: 'wiki', doc: 'Stages', link: '/wiki/stages' },
+            { app: 'event', doc: "Week-end d'intégration", link: '/event/123' },
+            { app: '', doc: 'Test page', link: '/test2' },
           ]);
         }, 500);
       });
+  };
+
+  /**
+   * Action to do when the user validate the search (ie by pressing enter,
+   * or by selecting an option).
+   *
+   * @param event The event of the action
+   * @param value The value selected
+   * @param reason How the user has validated the form
+   */
+  const onValidation = (
+    event: React.SyntheticEvent,
+    value: string | Option,
+    reason: AutocompleteChangeReason
+  ): void => {
+    switch (reason) {
+      case 'createOption':
+        // the user did'nt select an option but typed a custom text
+        navigate(`search/${value as string}`);
+        break;
+      case 'selectOption':
+        // the user select an option
+        navigate((value as Option).link);
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -44,12 +95,15 @@ export function SearchBar(): JSX.Element {
       id="search"
       options={options}
       filterOptions={(x) => x}
+      clearOnBlur
       sx={{ flexGrow: 1 }}
+      getOptionLabel={(option) =>
+        isString(option) ? option : `${option.app}:${option.doc}`
+      }
       renderInput={(params) => (
         // component used for the input
         <TextField
           {...params}
-          onChange={updateOptions}
           label="Search"
           InputProps={{
             ...params.InputProps,
@@ -57,13 +111,15 @@ export function SearchBar(): JSX.Element {
           }}
         />
       )}
-      renderOption={(params, option) => (
-        // component used for each result
-        // TODO: the link does not work because of the params on <li>
+      renderOption={(params, option: Option) => (
+        // component used for each option
         <li {...params}>
-          <Link to={option.link}>{option.value}</Link>
+          <span>{option.doc}</span>
+          <span className="secondary-text">&nbsp;({option.app})</span>
         </li>
       )}
+      onInputChange={updateOptions}
+      onChange={onValidation}
     />
   );
 }
