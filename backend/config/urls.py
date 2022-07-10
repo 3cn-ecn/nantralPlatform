@@ -29,7 +29,7 @@ urlpatterns = [
 
     # apps
     path('account/', 
-        include('apps.account.urls', namespace='account')),
+        include('apps._archived.account.urls', namespace='account')),
     path('student/', 
         include('apps.student.urls', namespace='student')),
     path('club/', 
@@ -54,7 +54,6 @@ urlpatterns = [
         include('apps.services.urls', namespace='services')),
     path('notification/', 
         include('apps.notification.urls', namespace='notification')),
-    # path('exchange/', include('apps.exchange.urls', namespace='exchange')),
 
     # api
     path('api/student/', 

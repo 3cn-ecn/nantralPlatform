@@ -22,7 +22,7 @@ from apps.student.models import Student
 from apps.roommates.models import Roommates
 from apps.utils.github import create_issue
 from apps.utils.accessMixins import userIsConnected
-from apps.account.models import TemporaryAccessRequest
+from apps._archived.account.models import TemporaryAccessRequest
 
 from .forms import SuggestionForm
 

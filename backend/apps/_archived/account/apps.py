@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class NotificationConfig(AppConfig):
-    name = 'apps.account'
+    name = 'apps._archived.account'

@@ -4,7 +4,7 @@ from celery.utils.log import get_task_logger
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from apps.account.models import TemporaryAccessRequest
+from apps._archived.account.models import TemporaryAccessRequest
 
 
 logger = get_task_logger(__name__)

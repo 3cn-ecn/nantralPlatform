@@ -99,7 +99,7 @@ class ConfirmUser(View):
                     'connecter.')
             user.save()
             login(self.request, user,
-                  backend='apps.account.emailAuthBackend.EmailBackend')
+                  backend='apps._archived.account.emailAuthBackend.EmailBackend')
             messages.success(request, 'Votre compte est désormais actif !')
             return redirect('home:home')
         else:
@@ -181,7 +181,7 @@ class AuthView(FormView):
                         'Votre compte n\'est pas encore actif. Veuillez '
                         'cliquer sur le lien dans \'email.')
             login(self.request, user,
-                  backend='apps.account.emailAuthBackend.EmailBackend')
+                  backend='apps._archived.account.emailAuthBackend.EmailBackend')
             # we send back the user to where he wanted to go or to home page
             url = self.request.GET.get('next', '/')
             parsed_uri = urlparse(url)
@@ -234,7 +234,7 @@ class ForgottenPassView(FormView):
 class PasswordResetConfirmCustomView(PasswordResetConfirmView):
     template_name = 'account/reset_password.html'
     post_reset_login = True
-    post_reset_login_backend = 'apps.account.emailAuthBackend.EmailBackend'
+    post_reset_login_backend = 'apps._archived.account.emailAuthBackend.EmailBackend'
     form_class = SetPasswordForm
     token_generator = account_activation_token
     success_url = reverse_lazy('home:home')

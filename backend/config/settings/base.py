@@ -84,7 +84,7 @@ THIRD_PARTY_APPS = [
     'push_notifications'
 ]
 COMMON_APPS = [
-    'apps.account',
+    'apps._archived.account',
     'apps.student',
     'apps.home',
     'apps.group',
@@ -93,7 +93,6 @@ COMMON_APPS = [
     'apps.academic',
     'apps.event',
     'apps.services',
-    'apps.exchange',
     'apps.post',
     'apps.roommates',
     'apps.sociallink',
@@ -101,7 +100,10 @@ COMMON_APPS = [
     'apps.notification',
     'apps.administration',
 ]
-INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS
+ARCHIVED_APPS = [
+    'apps._archived.exchange',
+]
+INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS + ARCHIVED_APPS
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -116,7 +118,7 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'apps.account.emailAuthBackend.EmailBackend',
+    'apps._archived.account.emailAuthBackend.EmailBackend',
     "django.contrib.auth.backends.ModelBackend",
 ]
 

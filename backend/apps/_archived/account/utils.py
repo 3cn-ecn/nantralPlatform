@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from django.contrib.auth.models import User
 from django.contrib import messages
 
-from apps.account.models import TemporaryAccessRequest
+from apps._archived.account.models import TemporaryAccessRequest
 from .forms import SignUpForm, TemporaryRequestSignUpForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
