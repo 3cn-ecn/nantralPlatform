@@ -68,53 +68,53 @@ DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sessions',
     'django.contrib.staticfiles',
 ]
 THIRD_PARTY_APPS = [
-    'crispy_forms',
     'crispy_bootstrap5',
-    'storages',
-    'rest_framework',
-    'django_ckeditor_5',
+    'crispy_forms',
     'debug_toolbar',
     'django_celery_beat',
+    'django_ckeditor_5',
     'extra_settings',
-    'push_notifications'
+    'push_notifications',
+    'rest_framework',
+    'storages',
 ]
 COMMON_APPS = [
-    'apps._archived.account',
-    'apps.student',
-    'apps.home',
-    'apps.group',
-    'apps.liste',
-    'apps.club',
     'apps.academic',
+    'apps.administration',
+    'apps.club',
     'apps.event',
-    'apps.services',
+    'apps.family',
+    'apps.group',
+    'apps.home',
+    'apps.liste',
+    'apps.notification',
     'apps.post',
     'apps.roommates',
+    'apps.services',
     'apps.sociallink',
-    'apps.family',
-    'apps.notification',
-    'apps.administration',
+    'apps.student',
 ]
 ARCHIVED_APPS = [
+    'apps._archived.account',
     'apps._archived.exchange',
 ]
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS + ARCHIVED_APPS
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
