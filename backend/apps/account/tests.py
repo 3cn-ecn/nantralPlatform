@@ -9,7 +9,7 @@ from django.core import mail
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
-from apps._archived.account.models import TemporaryAccessRequest
+from apps.account.models import TemporaryAccessRequest
 from apps.student.models import Student
 from apps.utils.utest import TestMixin
 from apps.utils.testing.mocks import discord_mock_message_post

@@ -87,7 +87,7 @@ def change_password(request, pk):
     if form.is_valid():
         user = form.save()
         update_session_auth_hash(request, user)
-        login(request, user, backend='apps._archived.account.emailAuthBackend.EmailBackend')
+        login(request, user, backend='apps.account.emailAuthBackend.EmailBackend')
         messages.success(request, 'Mot de passge changé !')
         return redirect('student:update', pk)
     else:

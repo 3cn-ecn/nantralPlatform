@@ -29,7 +29,7 @@ urlpatterns = [
 
     # apps
     path('account/', 
-        include('apps._archived.account.urls', namespace='account')),
+        include('apps.account.urls', namespace='account')),
     path('student/', 
         include('apps.student.urls', namespace='student')),
     path('club/', 

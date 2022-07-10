@@ -85,6 +85,7 @@ THIRD_PARTY_APPS = [
 ]
 COMMON_APPS = [
     'apps.academic',
+    'apps.account',
     'apps.administration',
     'apps.club',
     'apps.event',
@@ -100,7 +101,6 @@ COMMON_APPS = [
     'apps.student',
 ]
 ARCHIVED_APPS = [
-    'apps._archived.account',
     'apps._archived.exchange',
 ]
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS + ARCHIVED_APPS
@@ -118,7 +118,7 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'apps._archived.account.emailAuthBackend.EmailBackend',
+    'apps.account.emailAuthBackend.EmailBackend',
     "django.contrib.auth.backends.ModelBackend",
 ]
 
