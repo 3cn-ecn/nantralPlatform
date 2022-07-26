@@ -30,6 +30,7 @@
     "babel-loader": "^8.2.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-register": "^6.26.0",
+    "esbuild": "^0.14.50",
     "terser-webpack-plugin": "^5.1.3",
     "webpack": "^5.51.1",
     "webpack-bundle-analyzer": "^4.4.2",
