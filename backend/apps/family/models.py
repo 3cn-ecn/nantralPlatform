@@ -152,11 +152,12 @@ class Option(models.Model):
 class QuestionMember(BaseQuestion):
     page = models.ForeignKey(QuestionPage, on_delete=models.CASCADE)
     coeff = models.IntegerField("Coeficient")
-    group = models.ForeignKey(GroupQuestion, verbose_name="Groupe",
-                              help_text="Renseignez si cette question fait partie d'un \
+    group = models.ForeignKey(
+        GroupQuestion, verbose_name="Groupe", null=True, blank=True,
+        on_delete=models.SET_NULL,
+        help_text="Renseignez si cette question fait partie d'un \
             groupe de questions similaires. Tous les champs sont alors \
-            remplis automatiquement, sauf le nom de la question.",
-                              null=True, blank=True, on_delete=models.SET_NULL)
+            remplis automatiquement, sauf le nom de la question.")
 
     class Meta:
         verbose_name = "Question Membres"
