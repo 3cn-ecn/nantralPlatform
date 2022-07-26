@@ -28,7 +28,7 @@
 
 ### Frontend
 The frontend is an npm application using react
-source files are compiled using babel and webpack
+source files are compiled using esbuild
 when files from this folder are compiled they are sent
 to static/webapp
 
