@@ -8,6 +8,7 @@ start = "python manage.py runserver"
 test = "python manage.py test"
 makemigrations = "python manage.py makemigrations"
 migrate = "python manage.py migrate"
+createsuperuser = "python manage.py createsuperuser"
 format = "autopep8 -r --in-place ."
 
 [packages]

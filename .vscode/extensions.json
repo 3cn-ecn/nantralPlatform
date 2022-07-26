@@ -13,7 +13,6 @@
 		"ecmel.vscode-html-css",
 		"njpwerner.autodocstring",
 		// npm and react
-		"eg2.vscode-npm-script",
 		"dbaeumer.vscode-eslint",
 		"msjsdiag.vscode-react-native",
 		// docs
