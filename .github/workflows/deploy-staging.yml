@@ -72,7 +72,7 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             cd nantralPlatform-staging
-            cd frontend && npm run i && npm run start
+            cd frontend && npm i && npm run start
             cd ../deployment
             git checkout staging && git pull origin staging
             cd ~/nantralPlatform/deployment
