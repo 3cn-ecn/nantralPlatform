@@ -23,12 +23,12 @@ class HomeAdminView(UserIsInGroup, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['phase'] = Setting.get('PHASE_PARRAINAGE')
-        ## FAMILIES
+        # FAMILIES
         # family - general
         families = Family.objects.filter(year=scholar_year())
         context['nb_families'] = len(families)
         # family - bad number of members
-        bad_nb_families = [f for f in families if f.count_members2A()<3]
+        bad_nb_families = [f for f in families if f.count_members2A() < 3]
         context['bad_nb_families'] = bad_nb_families
         context['nb_bad_nb_families'] = len(bad_nb_families)
         # family - not finish to complete all answers
@@ -36,9 +36,13 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         context['nb_non_complete_families'] = len(non_completed_families)
         if context['nb_non_complete_families'] < 10:
             context['non_complete_families'] = non_completed_families
-        ## MEMBERS
-        members = MembershipFamily.objects.filter(Q(group__isnull=True) | Q(group__year=scholar_year())).order_by('group__name')
-        ## MEMBERS 1A
+        # MEMBERS
+        members = (
+            MembershipFamily.objects
+            .filter(Q(group__isnull=True) | Q(group__year=scholar_year()))
+            .order_by('group__name')
+        )
+        # MEMBERS 1A
         members1A = members.filter(role='1A')
         context['nb_1A'] = members1A.count()
         context['nb_itii'] = members1A.filter(student__faculty='Iti').count()
@@ -51,7 +55,7 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         non_complete_1A = [m for m in members1A if not m.form_complete()]
         context['nb_non_complete_1A'] = len(non_complete_1A)
         context['non_complete_1A'] = non_complete_1A
-        ## MEMBERS 2A+
+        # MEMBERS 2A+
         members2A = members.filter(role='2A+')
         context['nb_2A'] = members2A.count()
         # 2A n'ayant pas fini leur questionnaire
@@ -63,11 +67,11 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         for f in families:
             if f.non_subscribed_members:
                 for m in f.non_subscribed_members.split(','):
-                    if m: non_subscribed_2A.append((m, f))
+                    if m:
+                        non_subscribed_2A.append((m, f))
         context['non_subscribed_2A'] = non_subscribed_2A
         context['nb_non_subscribed_2A'] = len(non_subscribed_2A)
         return context
-
 
 
 class ResultsView(UserIsInGroup, TemplateView):
@@ -78,27 +82,37 @@ class ResultsView(UserIsInGroup, TemplateView):
         if request.POST['action_family'] == 'reset':
             reset()
         return redirect('family-admin:home')
-    
+
     def resolve(self):
-        if MembershipFamily.objects.filter(role='1A', group__year=scholar_year()).exists():
-            raise Exception('Some 1A members are already placed in families this year. The algorithm has already been executed!')
+        if (MembershipFamily.objects
+                .filter(role='1A', group__year=scholar_year())
+                .exists()):
+            raise Exception(
+                'Some 1A members are already placed in families this year. \
+                The algorithm has already been executed!')
         return main_algorithm()
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         families = []
         try:
             member1A_list, member2A_list, family_list = self.resolve()
             for f in family_list:
-                members_2A = [m for m in member2A_list if m['family']==f['family']]
-                members_1A = [m for m in member1A_list if m['family']==f['family']]
-                if members_2A or members_1A: families.append({'A1':members_1A, 'A2':members_2A, 'family':f['family']})
+                members_2A = [
+                    m for m in member2A_list if m['family'] == f['family']]
+                members_1A = [
+                    m for m in member1A_list if m['family'] == f['family']]
+                if members_2A or members_1A:
+                    families.append({
+                        'A1': members_1A,
+                        'A2': members_2A,
+                        'family': f['family']
+                    })
         except Exception as e:
             messages.error(self.request, e)
         context['families'] = families
         context['phase'] = Setting.get('PHASE_PARRAINAGE')
         return context
-
 
 
 class ResultsDeltasView(ResultsView):
@@ -115,7 +129,7 @@ class ResultsItiiView(ResultsView):
         if request.POST['action_family'] == 'reset':
             reset_itii()
         return redirect('family-admin:home')
-    
+
     def resolve(self):
         return itii_algorithm()
 
@@ -130,16 +144,17 @@ class ResultsSavedView(UserIsInGroup, TemplateView):
         elif request.POST['action_family'] == 'reset_itii':
             reset_itii()
         return redirect('family-admin:home')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         families = []
         for f in Family.objects.filter(year=scholar_year()):
             members_2A = f.memberships.filter(role='2A+')
-            members_2A_plus = f.non_subscribed_members.split(',') if f.non_subscribed_members else []
+            members_2A_plus = f.non_subscribed_members.split(
+                ',') if f.non_subscribed_members else []
             members_1A = f.memberships.filter(role='1A')
-            families.append({'A1':members_1A, 'A2':members_2A, 'A2plus':members_2A_plus, 'family':f})
+            families.append({'A1': members_1A, 'A2': members_2A,
+                            'A2plus': members_2A_plus, 'family': f})
         context['families'] = families
         context['phase'] = Setting.get('PHASE_PARRAINAGE')
         return context
-

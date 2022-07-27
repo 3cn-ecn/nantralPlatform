@@ -1,6 +1,11 @@
 from django.urls import path
 
-from .admin_views import HomeAdminView, ResultsDeltasView, ResultsSavedView, ResultsView, ResultsItiiView
+from .admin_views import (
+    HomeAdminView,
+    ResultsDeltasView,
+    ResultsSavedView,
+    ResultsView,
+    ResultsItiiView)
 
 app_name = 'family-admin'
 
