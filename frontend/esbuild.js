@@ -24,7 +24,7 @@
 
 const path = require("path");
 
-const appsdir = path.join(__dirname, "src/containers");
+const appsdir = path.join(__dirname, "src/components/legacy");
 
 const entryPoints = [
   "app/sw.ts",
