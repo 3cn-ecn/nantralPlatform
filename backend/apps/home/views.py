@@ -134,7 +134,7 @@ def currentUserRoommatesView(request):
 
 def service_worker(request):
     """A view to serve the service worker"""
-    sw_path = settings.BASE_DIR + "/static/js/sw.js"
+    sw_path = settings.BASE_DIR + "/static/js/app/sw.js"
     file = open(sw_path)
     response = HttpResponse(file.read(), content_type='application/javascript')
     file.close()
