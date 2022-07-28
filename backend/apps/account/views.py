@@ -42,6 +42,11 @@ class RegistrationView(FormView):
             settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today())
         return context
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update(id=self.request.GET.get('id',''))
+        return kwargs
+
     def form_valid(self, form):
         user_creation(form, self.request)
         return redirect('home:home')

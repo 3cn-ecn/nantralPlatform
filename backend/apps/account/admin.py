@@ -4,11 +4,15 @@ from django.core import mail
 from django.template.loader import render_to_string
 from .models import TemporaryAccessRequest
 from django.conf import settings
+
+
+from .models import IdRegistration
 # Register your models here.
 
 
 class UserAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["key"]
+admin.site.register(IdRegistration, UserAdmin)
 
 
 class TemporaryAccessRequestAdmin(admin.ModelAdmin):

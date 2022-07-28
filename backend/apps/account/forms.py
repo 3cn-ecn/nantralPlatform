@@ -9,6 +9,19 @@ from apps.student.models import FACULTIES, PATHS
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
+from .models import IdRegistration
+
+
+def check_id(id):
+    if len(IdRegistration.objects.all().filter(key = id))>0:
+        return True
+    elif id != '':
+        raise ValidationError('Lien de création de compte plus valide : entrez une adresse en ec-nantes.fr on contactez directement 3CN')
+    return False
+
+def check_mail(mail:str,id:str):
+    if not check_id(id):
+        check_ecn_mail(mail)
 
 def check_ecn_mail(mail: str):
     if not 'ec-nantes.fr' in mail:
@@ -20,7 +33,7 @@ def check_ecn_mail_login(mail: str):
     """A wrapper around the login check to disable during periods where all emails can be used."""
     if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
         return
-    check_ecn_mail(mail)
+    # check_ecn_mail(mail)
 
 
 def check_passwords(pass1, pass2):
@@ -30,8 +43,7 @@ def check_passwords(pass1, pass2):
 
 
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(max_length=200, validators=[
-                             check_ecn_mail], required=True, help_text=_('Votre adresse mail ec-nantes.fr'))
+    email = forms.EmailField(max_length=200, validators=[], required=True, help_text=_('Votre adresse mail ec-nantes.fr'))
     confirm_email = forms.EmailField(
         max_length=200, required=True, help_text=_('Confirmez votre adresse.'))
     promo = forms.IntegerField(min_value=1919, required=True)
@@ -41,8 +53,9 @@ class SignUpForm(UserCreationForm):
     path = forms.ChoiceField(
         choices=PATHS, help_text=_('Vous pourrez modifier cela plus tard'), required=False)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,id:str = None, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
+        self.fields['email'].validators.append(lambda x : check_mail(x,id))
         self.fields['email'].label = _("Adresse mail")
         self.fields['confirm_email'].label = _(
             "Confirmation de l'adresse mail")

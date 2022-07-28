@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from apps.utils.discord import send_message, react_message
 
+class IdRegistration(models.Model):
+    key = models.CharField(max_length=30)
 
 class TemporaryAccessRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
