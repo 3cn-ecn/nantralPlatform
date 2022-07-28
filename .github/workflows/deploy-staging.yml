@@ -39,7 +39,7 @@ jobs:
           host: ${{ secrets.INSTANCE_ADDRESS }}
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
-          source: "backend/static/js/*.js"
+          source: "backend/static/js/*/**.js"
           target: "nantralPlatform-staging"
 
   test:

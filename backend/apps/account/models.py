@@ -43,11 +43,11 @@ class TemporaryAccessRequest(models.Model):
 
     @property
     def approve_url(self):
-        return f"http://{self.domain}{reverse('account:temp-req-approve', kwargs={'id': self.id})}"
+        return f"https://{self.domain}{reverse('account:temp-req-approve', kwargs={'id': self.id})}"
 
     @property
     def deny_url(self):
-        return f"http://{self.domain}{reverse('account:temp-req-deny', kwargs={'id': self.id})}"
+        return f"https://{self.domain}{reverse('account:temp-req-deny', kwargs={'id': self.id})}"
 
     def approve(self):
         self.approved_until = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT

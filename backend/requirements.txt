@@ -14,7 +14,7 @@ click-plugins==1.1.1
 click-repl==0.2.0
 crispy-bootstrap5==0.4
 discord-webhook==0.14.0
-Django==3.2.13
+Django==3.2.14
 django-amazon-ses==4.0.0
 django-celery-beat==2.2.1
 git+https://github.com/nantral-platform/django-ckeditor-5.git
@@ -48,7 +48,7 @@ pep8-naming==0.12.1
 pluggy==0.13.1
 prometheus-client==0.11.0
 prompt-toolkit==3.0.20
-psycopg2-binary==2.8.6
+psycopg2-binary==2.9.3
 py==1.10.0
 pycodestyle==2.8.0
 pydocstyle==6.1.1

@@ -1,14 +1,11 @@
-from django.utils import timezone
-
 from django.test import TestCase
-
+from django.utils import timezone
 from django.urls import reverse
 from rest_framework import status
 
 from .models import BaseEvent
-
-from apps.utils.utest import TestMixin
 from apps.club.models import Club
+from apps.utils.utest import TestMixin
 
 
 class BaseEventTestCase(TestCase, TestMixin):
@@ -25,17 +22,18 @@ class BaseEventTestCase(TestCase, TestMixin):
             title="TestEvent", group=self.club.full_slug, date=timezone.now(),
             description="Test Desc", location="Amphi A")
         self.assertEqual(len(BaseEvent.objects.all()), 1)
-    
+
     def tearDown(self):
         self.user_teardown()
 
     def test_event_detail_view(self):
         url = reverse('event:detail', args=[self.event.slug])
-        # Une personne non connectée ne doit pas pouvoir voir l'event et doit être redirigée vers la page de login
+        # Une personne non connectée ne doit pas pouvoir voir l'event et doit
+        # être redirigée vers la page de login
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
-        self.client.login(username=self.u2, password="pass")
+        self.client.login(username=self.u2, password=self.PASSWORD)
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
@@ -46,7 +44,7 @@ class BaseEventTestCase(TestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(self.event.number_of_participants, 0)
 
-        self.client.login(username=self.u2, password="pass")
+        self.client.login(username=self.u2, password=self.PASSWORD)
         # You get redirected at the end of the function
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
@@ -67,6 +65,6 @@ class BaseEventTestCase(TestCase, TestMixin):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
-        self.client.login(username=self.u2, password="pass")
+        self.client.login(username=self.u2, password=self.PASSWORD)
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)

@@ -1,10 +1,9 @@
-from datetime import date, datetime, timedelta
-from django.test import TestCase
-from apps.utils.utest import TestMixin
-from django.urls import reverse
 from rest_framework import status
+from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
+from apps.utils.utest import TestMixin
 from .models import Club, NamedMembershipClub
 
 
@@ -41,7 +40,7 @@ class TestGroups(TestCase, TestMixin):
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
-        self.client.login(username=self.u2.username, password='pass')
+        self.client.login(username=self.u2.username, password=self.PASSWORD)
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(NamedMembershipClub.objects.filter(
