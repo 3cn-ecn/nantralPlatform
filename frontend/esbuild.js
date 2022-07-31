@@ -28,7 +28,7 @@ import { fileURLToPath } from 'url';
 
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const appsdir = path.join(__dirname, 'src/components/legacy');
+const appsdir = path.join(__dirname, 'src/legacy');
 
 const entryPoints = [
   'app/sw.ts',
@@ -44,6 +44,7 @@ const entryPoints = [
   'roommates/createHousing.tsx',
   'notification/subscribeButton.tsx',
   'notification/deviceSubscribeButton.tsx',
+  '../index.tsx',
 ];
 
 // Parse arguments

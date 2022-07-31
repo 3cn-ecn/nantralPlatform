@@ -1,5 +1,5 @@
 ﻿import { Member } from './interfaces';
-import axios from '../../../../utils/axios';
+import axios from '../../../utils/axios';
 
 var dayjs = require('dayjs');
 require('dayjs/locale/fr');

@@ -1,4 +1,4 @@
-import axios from '../../../utils/axios';
+import axios from '../../utils/axios';
 import { REGISTER_URL } from '../notification/api_urls';
 import { urlBase64ToUint8Array, loadVersionBrowser } from './utils';
 

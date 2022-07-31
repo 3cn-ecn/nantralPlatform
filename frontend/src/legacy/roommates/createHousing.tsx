@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent } from 'react';
-import axios from '../../../utils/axios';
+import axios from '../../utils/axios';
 import { render } from 'react-dom';
 import { Form, Button, ListGroup } from 'react-bootstrap';
 

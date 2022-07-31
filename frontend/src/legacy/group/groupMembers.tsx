@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import { arrayMoveImmutable } from 'array-move';
-import axios from '../../../utils/axios';
+import axios from '../../utils/axios';
 
 import { spinnerDivStyle, spinnerStyle } from '../club/clubsList/styles';
 import { loaderStyle } from './groupMembers/styles';
