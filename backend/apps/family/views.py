@@ -7,8 +7,18 @@ from extra_settings.models import Setting
 
 from apps.utils.accessMixins import UserIsAdmin
 from .models import Family, MembershipFamily, QuestionPage
-from .forms import CreateFamilyForm, UpdateFamilyForm, Member2AFormset, FamilyQuestionsForm, MemberQuestionsForm, FamilyQuestionItiiForm
-from .utils import get_membership, is_1A, show_sensible_data, scholar_year
+from .forms import (
+    CreateFamilyForm,
+    UpdateFamilyForm,
+    Member2AFormset,
+    FamilyQuestionsForm,
+    MemberQuestionsForm,
+    FamilyQuestionItiiForm)
+from .utils import (
+    get_membership,
+    is_first_year,
+    show_sensible_data,
+    scholar_year)
 
 
 # Create your views here.
@@ -23,8 +33,9 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
         membership = get_membership(self.request.user)
         context = {}
         context['phase'] = Setting.get('PHASE_PARRAINAGE')
-        context['is_2Aplus'] = not is_1A(self.request.user, membership)
-        context['show_sensible_data'] = show_sensible_data(self.request.user, membership)
+        context['is_2Aplus'] = not is_first_year(self.request.user, membership)
+        context['show_sensible_data'] = show_sensible_data(
+            self.request.user, membership)
         context['is_itii'] = self.request.user.student.faculty == 'Iti'
         context['membership'] = membership
         if membership:
@@ -36,7 +47,7 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
                 context['1A_members'] = family.memberships.filter(role='1A')
         context['ariane'] = [
             {
-                'target': '#', 
+                'target': '#',
                 'label': 'Parrainage'
             }
         ]
@@ -52,17 +63,18 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
         context = {}
         context['list_family'] = [
             {
-                'name':f.name if show_data else f'Famille n°{f.id}', 
-                'url':f.get_absolute_url(),
-                'id':f.id,
-            } 
+                'name': f.name if show_data else f'Famille n°{f.id}',
+                'url': f.get_absolute_url(),
+                'id': f.id,
+            }
             for f in Family.objects.all()
         ]
-        memberships = MembershipFamily.objects.all().select_related('student__user', 'group')
+        memberships = MembershipFamily.objects.all().select_related(
+            'student__user', 'group')
         if show_data:
             context['list_2A'] = [
                 {
-                    'name': m.student.alphabetical_name, 
+                    'name': m.student.alphabetical_name,
                     'family': m.group.name,
                     'url': m.group.get_absolute_url(),
                 }
@@ -71,15 +83,17 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
         if phase >= 3:
             context['list_1A'] = [
                 {
-                    'name': m.student.alphabetical_name, 
-                    'family': m.group.name if show_data and phase > 3 else f'Famille n°{m.group.id}',
+                    'name': m.student.alphabetical_name,
+                    'family': (m.group.name
+                               if show_data and phase > 3
+                               else f'Famille n°{m.group.id}'),
                     'url': m.group.get_absolute_url(),
                 }
                 for m in memberships.filter(role='1A', group__isnull=False)
             ]
         context['ariane'] = [
             {
-                'target': reverse('family:home'), 
+                'target': reverse('family:home'),
                 'label': 'Parrainage'
             },
             {
@@ -88,7 +102,6 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
             }
         ]
         return context
-
 
 
 class ListFamilyJoinView(ListFamilyView):
@@ -100,14 +113,16 @@ class ListFamilyJoinView(ListFamilyView):
         return context
 
 
-
 class CreateFamilyView(LoginRequiredMixin, CreateView):
     """Vue pour créer une nouvelle famille"""
     template_name = 'family/family/create.html'
     form_class = CreateFamilyForm
 
     def can_create(self):
-        return get_membership(self.request.user) is None and not is_1A(self.request.user)
+        return (
+            get_membership(self.request.user) is None
+            and not is_first_year(self.request.user)
+        )
 
     def form_valid(self, form):
         if self.can_create():
@@ -121,12 +136,11 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
             return redirect('family:update', self.object.pk)
         else:
             return redirect('family:create')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['can_create'] = self.can_create()
         return context
-    
 
 
 class DetailFamilyView(LoginRequiredMixin, DetailView):
@@ -134,18 +148,21 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         return Family.objects.get(pk=self.kwargs['pk'])
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         family = self.get_object()
-        context['show_name'] = show_sensible_data(self.request.user)
+        show_data = show_sensible_data(self.request.user)
+        if not show_data:
+            family.name = f'Famille n°{family.id}'
+        context['show_data'] = show_data
         context['is_admin'] = family.is_admin(self.request.user)
         context['parrains'] = family.memberships.filter(role='2A+')
         context['filleuls'] = family.memberships.filter(role='1A')
         context['phase'] = Setting.get('PHASE_PARRAINAGE')
         context['ariane'] = [
             {
-                'target': reverse('family:home'), 
+                'target': reverse('family:home'),
                 'label': 'Parrainage'
             },
             {
@@ -160,17 +177,18 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
         return context
 
 
-
-
 class JoinFamilyView(LoginRequiredMixin, DetailView):
     template_name = 'family/family/join.html'
 
     def get_object(self):
         return Family.objects.get(pk=self.kwargs['pk'])
-        
+
     def can_join(self):
-        return get_membership(self.request.user) is None and not is_1A(self.request.user)
-    
+        return (
+            get_membership(self.request.user) is None
+            and not is_first_year(self.request.user)
+        )
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         family = self.get_object()
@@ -179,7 +197,7 @@ class JoinFamilyView(LoginRequiredMixin, DetailView):
         if non_subscribed_list:
             context['names_list'] = non_subscribed_list.split(',')
         return context
-    
+
     def post(self, request, *args, **kwargs):
         if self.can_join():
             family = self.get_object()
@@ -189,10 +207,10 @@ class JoinFamilyView(LoginRequiredMixin, DetailView):
             for name in names_list:
                 if name == selected_name:
                     MembershipFamily.objects.create(
-                        student = request.user.student,
-                        group = family,
-                        role = '2A+',
-                        admin = True,
+                        student=request.user.student,
+                        group=family,
+                        role='2A+',
+                        admin=True,
                     )
                 else:
                     new_list.append(name)
@@ -212,7 +230,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
     def test_func(self):
         self.kwargs['slug'] = self.get_family().slug
         return super().test_func()
-    
+
     def get_context_data(self, *args, **kwargs):
         context = {}
         context['update_form'] = UpdateFamilyForm(
@@ -221,51 +239,78 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
             instance=self.get_family(),
             queryset=MembershipFamily.objects.filter(role='2A+'))
         context['question_form'] = FamilyQuestionsForm(
-            initial = self.get_family().get_answers_dict())
+            initial=self.get_family().get_answers_dict())
         return context
-    
+
     def post(self, request, *args, **kwargs):
         forms = [
             UpdateFamilyForm(request.POST, instance=self.get_family()),
-            Member2AFormset(request.POST, instance=self.get_family(), queryset=MembershipFamily.objects.filter(role='2A+')),
-            FamilyQuestionsForm(data=request.POST)]
+            Member2AFormset(
+                request.POST,
+                instance=self.get_family(),
+                queryset=MembershipFamily.objects.filter(role='2A+')
+            ),
+            FamilyQuestionsForm(data=request.POST)
+        ]
         if forms[0].is_valid() and forms[1].is_valid() and forms[2].is_valid():
             # on vérifie le nb de membres
-            non_subscribed_list = forms[0].cleaned_data['non_subscribed_members']
+            non_subscribed_list = forms[0].cleaned_data[
+                'non_subscribed_members']
             if non_subscribed_list:
                 nb_non_subscribed = len((non_subscribed_list).split(','))
             else:
                 nb_non_subscribed = 0
             nb_subscribed = 0
             for form in forms[1]:
-                if hasattr(form.instance,'student'): nb_subscribed += 1
+                if hasattr(form.instance, 'student'):
+                    nb_subscribed += 1
             nb_tot = nb_subscribed + nb_non_subscribed
             if nb_tot <= 7 and nb_tot >= 3:
                 # on vérifie que les membres ne sont pas déjà dans une famille
                 membres_doublon = []
                 for form in forms[1]:
-                    if hasattr(form.instance,'student'):
-                        if form.instance.student.family_set.filter(year=scholar_year()).exclude(pk=self.get_family().pk):
-                            membres_doublon.append(form.instance.student.alphabetical_name)
+                    if hasattr(form.instance, 'student'):
+                        if (form.instance.student.family_set
+                                .filter(year=scholar_year())
+                                .exclude(pk=self.get_family().pk)):
+                            membres_doublon.append(
+                                form.instance.student.alphabetical_name)
                 if not membres_doublon:
                     # c'est bon on sauvegarde !
-                    for form in forms[1]: 
+                    for form in forms[1]:
                         form.instance.role = '2A+'
                         form.instance.admin = True
                     forms[0].save()
                     forms[1].save()
                     forms[2].save(self.get_family())
-                    messages.success(request, "Les informations ont bien été enregistrées ! <a href='"+reverse("family:home")+"'>Compléter mon questionnaire perso</a>")
+                    messages.success(
+                        request,
+                        "Les informations ont bien été enregistrées ! <a href='"
+                        + reverse("family:home")
+                        + "'>Compléter mon questionnaire perso</a>"
+                    )
                     return redirect('family:update', self.get_family().pk)
                 else:
-                    messages.error(request, "Erreur : les membres suivants sont déjà dans une famille : "
-                        + ', '.join(membres_doublon))
+                    messages.error(
+                        request,
+                        "Erreur : les membres suivants sont déjà dans une "
+                        + "famille : "
+                        + ', '.join(membres_doublon)
+                    )
             else:
-                messages.error(request, 'Erreur : une famille doit avoir minimum 3 membres \
-                    et maximum 7 membres (vérifiez les noms du champ "Autres parrains")')
+                messages.error(
+                    request,
+                    'Erreur : une famille doit avoir minimum 3 membres \
+                    et maximum 7 membres (vérifiez les noms du champ \
+                    "Autres parrains")'
+                )
         else:
             messages.error(request, "OOOOUPS !!! Il y a une erreur...")
-        context={'update_form':forms[0], 'members_form':forms[1], 'question_form':forms[2]}
+        context = {
+            'update_form': forms[0],
+            'members_form': forms[1],
+            'question_form': forms[2]
+        }
         return self.render_to_response(context)
 
 
@@ -278,21 +323,20 @@ class ItiiQuestionFamilyView(UserIsAdmin, TemplateView):
     def test_func(self):
         self.kwargs['slug'] = self.get_family().slug
         return super().test_func()
-    
+
     def get_context_data(self, *args, **kwargs):
         context = {}
         context['question_form'] = FamilyQuestionItiiForm()
         return context
-    
+
     def post(self, request, *args, **kwargs):
         form = FamilyQuestionItiiForm(data=request.POST)
         if form.is_valid():
             form.save(self.get_family())
             messages.success(request, "Votre choix a bien été enregistré !")
             return redirect('family:home')
-        context={'question_form':form}
+        context = {'question_form': form}
         return self.render_to_response(context)
-
 
 
 class QuestionnaryPageView(LoginRequiredMixin, FormView):
@@ -302,7 +346,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
     def get_member(self):
         membership = get_membership(self.request.user)
         if membership is None:
-            if is_1A(self.request.user):
+            if is_first_year(self.request.user):
                 membership = MembershipFamily.objects.create(
                     student=self.request.user.student,
                     role='1A'
@@ -310,39 +354,44 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
             else:
                 membership = None
         return membership
-    
+
     def get_page(self):
         return QuestionPage.objects.get(order=self.kwargs['id'])
-    
+
     def get_initial(self):
         self.intial = self.get_member().get_answers_dict(self.get_page())
         return self.intial
-    
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs.update({
             'page': self.get_page(),
             'is_2Aplus': self.get_member().role == '2A+',
-            })
+        })
         return kwargs
-    
+
     def form_valid(self, form):
         form.save(self.get_member())
         try:
-            next_page = QuestionPage.objects.get(order=self.get_page().order + 1)
+            next_page = QuestionPage.objects.get(
+                order=self.get_page().order + 1)
             return redirect('family:questionnary', next_page.order)
         except QuestionPage.DoesNotExist:
-            messages.success(self.request, "🥳 Merci beaucoup ! Vos réponses ont bien été enregistrées !")
+            messages.success(
+                self.request,
+                "🥳 Merci beaucoup ! Vos réponses ont bien été enregistrées !"
+            )
             return redirect('family:home')
-    
+
     def form_invalid(self, form):
         messages.error(self.request, "OOOOUPS !!! Il y a une erreur...")
         return super().form_invalid(form)
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['page'] = self.get_page()
-        context['percent'] = int(100*self.get_page().order/QuestionPage.objects.all().count())
+        context['percent'] = int(
+            100 * self.get_page().order / QuestionPage.objects.all().count())
         member = self.get_member()
         if member:
             context['is_2Aplus'] = member.role == '2A+'
