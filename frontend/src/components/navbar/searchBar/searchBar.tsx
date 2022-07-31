@@ -9,8 +9,8 @@ import {
 import { Search as SearchIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { isString } from 'lodash';
-import { SEARCH_API } from '../../../api';
-import axios from '../../../utils/axios';
+import api from '../../../api';
+import fetchAPI from '../../../utils/fetch-api';
 import './searchBar.scss';
 
 /** Interface for the options */
@@ -45,8 +45,8 @@ export function SearchBar(): JSX.Element {
     if (reason !== 'input') {
       return;
     }
-    axios
-      .post<Option[]>(SEARCH_API, { searchInput: value })
+    fetchAPI
+      .get<Option[]>(api.GET_SEARCH, { query: value })
       .then((res) => {
         // when we get the answer to our request, update the options
         setOptions(res.data);

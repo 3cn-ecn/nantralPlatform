@@ -1,4 +1,7 @@
 // File definition for all APIs of Nantral Platform
-
-// search app
-export const SEARCH_API = 'api/search';
+export default {
+  // search app
+  GET_SEARCH: 'api/search',
+  // events
+  GET_EVENT: (slug: string) => `api/event/${slug}`,
+};

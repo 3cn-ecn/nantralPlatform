@@ -1,3 +1,5 @@
+// DO NOT USE ANYMORE !!! REPLACE BY FETCH API
+
 /**
  * Format an url with path, path parameters and query parameters
  * @param path The path of the url with {0}, {1}, etc...

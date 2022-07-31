@@ -1,6 +1,8 @@
 /**
  * This module modify axios to set by default the csrftoken,
  * which is necessary to post requests.
+ *
+ * DO NOT USE ANYMORE !!! REPLACE BY fetchAPi
  */
 
 import axios from 'axios';
