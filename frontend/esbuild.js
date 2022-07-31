@@ -22,9 +22,10 @@
  * @date July 2022
  */
 
-import path from 'path';
 import esbuild from 'esbuild';
+import path from 'path';
 import { fileURLToPath } from 'url';
+import { sassPlugin } from 'esbuild-sass-plugin';
 
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -44,22 +45,27 @@ const entryPoints = [
   'roommates/createHousing.tsx',
   'notification/subscribeButton.tsx',
   'notification/deviceSubscribeButton.tsx',
-  '../index.tsx',
 ];
 
 // Parse arguments
 const watch = process.argv[2] === 'watch';
-const dev = process.argv[2] === 'dev';
+const dev = process.argv[2] === 'dev' || watch;
 
 esbuild
   .build({
-    entryPoints: entryPoints.map((e) => path.join(appsdir, e)),
+    entryPoints: {
+      main: path.join(__dirname, 'src/index.tsx'),
+      ...Object.fromEntries(
+        entryPoints.map((e) => [e.split('.')[0], path.join(appsdir, e)])
+      ),
+    },
     bundle: true,
-    sourcemap: dev || watch,
-    minify: !dev && !watch,
+    minify: !dev,
+    sourcemap: dev,
+    watch: watch,
     outdir: path.join(__dirname, '../backend/static/js'),
     logLevel: 'info',
-    watch: watch,
+    plugins: [sassPlugin({ type: 'style' })],
   })
   .catch((err) => {
     console.error(err);
