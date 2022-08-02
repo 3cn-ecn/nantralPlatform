@@ -16,8 +16,7 @@
     "@types/jest": "^26.0.24",
     "@types/node": "^14.17.12",
     "@types/react": "^17.0.19",
-    "@types/react-dom": "^17.0.9",
-    "esbuild": "^0.14.50"
+    "@types/react-dom": "^17.0.9"
   },
   "dependencies": {
     "@dnd-kit/core": "^4.0.1",
@@ -32,6 +31,7 @@
     "array-move": "^4.0.0",
     "axios": "^0.21.4",
     "dayjs": "^1.10.6",
+    "esbuild": "^0.14.50",
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "firebase": "^9.6.10",
