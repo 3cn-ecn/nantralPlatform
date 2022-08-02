@@ -12,6 +12,7 @@
 		"batisteo.vscode-django",
 		"ecmel.vscode-html-css",
 		"njpwerner.autodocstring",
+		"tamasfe.even-better-toml",
 		// npm and react
 		"dbaeumer.vscode-eslint",
 		"msjsdiag.vscode-react-native",

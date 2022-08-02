@@ -5,9 +5,9 @@
   "main": "index.js",
   "mode": "production",
   "scripts": {
-    "start": "node esbuild.js",
-    "dev": "node esbuild.js dev",
-    "watch": "node esbuild.js watch",
+    "start": "node esbuild.js watch",
+    "build": "node esbuild.js",
+    "build:dev": "node esbuild.js dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Robin TROESCH",

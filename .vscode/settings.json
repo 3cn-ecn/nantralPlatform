@@ -5,7 +5,6 @@
   "files.associations": {
     "*.html": "html",
     "**/backend/**/*.html": "django-html",
-    "requirements.txt": "pip-requirements",
     "**/*.py": "python",
     "**/*.js": "javascript",
     "**/*.jsx": "javascript",
@@ -15,7 +14,9 @@
     "**/*.tsx": "typescript",
     "**/src/**/*.ts": "typescriptreact",
     "**/src/**/*.tsx": "typescriptreact",
-    "**/docs/**/*.md": "mdx"
+    "**/docs/**/*.md": "mdx",
+    "requirements.txt": "pip-requirements",
+    "Pipfile": "toml"
   },
   "[python]": {
     "editor.tabSize": 4
