@@ -25,7 +25,6 @@
 import esbuild from 'esbuild';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { sassPlugin } from 'esbuild-sass-plugin';
 
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -53,19 +52,13 @@ const dev = process.argv[2] === 'dev' || watch;
 
 esbuild
   .build({
-    entryPoints: {
-      main: path.join(__dirname, 'src/index.tsx'),
-      ...Object.fromEntries(
-        entryPoints.map((e) => [e.split('.')[0], path.join(appsdir, e)])
-      ),
-    },
+    entryPoints: entryPoints.map((e) => path.join(appsdir, e)),
     bundle: true,
     minify: !dev,
     sourcemap: dev,
     watch: watch,
     outdir: path.join(__dirname, '../backend/static/js'),
     logLevel: 'info',
-    plugins: [sassPlugin({ type: 'style' })],
   })
   .catch((err) => {
     console.error(err);
