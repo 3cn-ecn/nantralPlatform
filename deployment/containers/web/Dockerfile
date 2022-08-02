@@ -20,9 +20,9 @@ RUN mkdir -p /var/app/logs
 RUN mkdir var/app/staticfiles
 WORKDIR  /var/app
 
-ADD backend/requirements.txt ./requirements.txt
-RUN pip install -U pip && \
-  pip install -r requirements.txt
+ADD backend/Pipfile backend/Pipfile.lock ./
+RUN pip install -U pipenv && \
+  pipenv sync --system
 
 # Step 2: Copy Django Code
 # ----------------------------------------

@@ -8,7 +8,7 @@
     "start": "node esbuild.js watch",
     "build": "node esbuild.js",
     "build:dev": "node esbuild.js dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Oops 🤭 The tests are not yet implemented...\" && exit 1"
   },
   "author": "Robin TROESCH",
   "license": "MIT",
