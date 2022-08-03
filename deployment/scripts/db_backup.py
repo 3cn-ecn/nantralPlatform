@@ -161,7 +161,7 @@ if __name__ == "__main__":
     DB_USER = env.str("POSTGRES_USER")
     DB_NAME = env.str("POSTGRES_DB")
     DB_CONTAINER = env.str("DB_CONTAINER")
-    BUCKET = env.str("S3_BUCKET")
+    BUCKET = env.str("S3_BUCKET_PRIVATE")
     AWS_ACCESS_KEY_ID = env.str("OVH_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = env.str("OVH_SECRET_ACCESS_KEY")
     DISCORD_WEBHOOK = env.str("DISCORD_BACKUP_STATUS_WEBHOOK")
