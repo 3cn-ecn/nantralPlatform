@@ -87,7 +87,7 @@ Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 
 To close the virtualenv, simply run this command anywhere (you don't need to be
 in the same folder as your virtualenv):
-```
+```bash
 deactivate
 ```
 

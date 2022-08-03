@@ -39,7 +39,7 @@ If you can access the login page, congratulations everything is ok! 🥳
 Let's create a superuser account now, so that you can connect. For this, follow the
 tutorial [here](../get-started/setup-django.md#create-your-account). You only have to replace
 the command for creating a superuser by:
-``` 
+```bash
 docker-compose exec backend python3 manage.py createsuperuser
 ```
 You can run this command in another terminal (but always in the `deployment` directory).

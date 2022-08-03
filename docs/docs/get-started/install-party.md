@@ -19,7 +19,7 @@ Don't worry, we will explain you the basics 😉
 <TabItem value="win" label="Windows">
 
 On Windows, you have two terminals: `CMD`, the oldest one, and `Powershell`, the new one. We recommend you to
-use Powershell.
+always use **Powershell**, wich has less issues.
 
 To open a terminal, simply type `Powershell` or `CMD` in the search bar of your system, and open it like any 
 application. There you are! A new window with some white lines should appear.
@@ -57,17 +57,37 @@ By default, you are in your home directory. You can change to other directories 
 
 </TabItem>
 </Tabs>
+
+In general, all the commands have the same syntax:
+```bash
+program --option1 --option2 arg1 arg2
+```
+Some explanations:
+* `program` is the name of the program you want to use. It could be `python`
+    for example, or `cd` (for `Change Directory`), etc...
+* `--option` is an option you can pass to the program, which is most of the time
+    optional. They always have the `--` at the begingging which indicates it is an option.
+    You can also find shortcuts for options, with one dash (for example `-o`).
+* `arg` is the main arument you pass to the program. For example, for the `cd`
+    program, you pass the name of the directory where you want to go as an argument.
+* the space ` ` is used to separate the differents options and arguments of the 
+    command. So never put a space inside an option or an argument!
+
+**Tip:** all programs have in general the `--help` option to show all the options
+    and arguments possible, and the `--version` option to check the version.
+    Remember it, they are very useful! 🤩
+
 </details>
 
 ## Python
 
-Python is the program corresponding to the famous language. We recommend to use Python `3.10` since it is the latest 
-stable version, but you can use other versions (minimum `3.7`).
+First let's install Python. Nantral Platform runs on **Python 3.10**, but you
+can use another version if you prefere, just be sure to use at least **Python3**.
 
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
-Download and install Python from the [Windows Store](https://www.microsoft.com/store/productId/9PJPW5LDXLZ5).
+Download and installf Python from the [Windows Store](https://www.microsoft.com/store/productId/9PJPW5LDXLZ5).
 
 :::info
 You can also download Python from the [official website](https://www.python.org/downloads/). In this case, be careful
@@ -94,21 +114,19 @@ Open a terminal and run
 sudo apt update && sudo apt install python3 python3-pip -y
 ```
 
-:::caution
-Some Linux distributions come with `Python` already installed. In this case, try to check your python version: 
-if your version is belowed `3.7`, you might need to upgrade your distribution.
-::: 
-
 </TabItem>
 </Tabs>
 
 After the installation, check that it works properly:
 * Open a new terminal
-* Type the command `python --version` and press <kbd>ENTER</kbd> to run it.
+* Type this command and press <kbd>ENTER</kbd> to run it:
+    ```bash
+    python --version
+    ```
 * You should see the Python version on a new line: `Python 3.10`
 
-<details>
-    <summary>The command does not work or the version is incorrect, what can I do?</summary>
+<details class="caution">
+    <summary>The command does not work or the version is lower than <em>python3</em>, what can I do? 😭</summary>
 
 Sometimes you can have multiple versions of python installed on your system: in this case, using `python` can refer to
 another version of python (for instance, it refers by default to python2 if it is installed). 
@@ -120,19 +138,23 @@ Also notice that on Windows, `python` is sometimes replaced by `py` only: in thi
 by runnning `py -3` for example.
 
 **Once you have found the command that works for you, memorize it: in the following, we will always use `python` or 
-`python3` but you might need to replace it by the versionned command that works for you.**
+`python3` but you might need to replace it by the command which works for you.**
+
+If the command is still not recognized, try to close and reopen your terminal,
+or try to reboot your computer to refresh the available commands.
 
 </details>
 
 ### Pip
 
-Pip should have been installed with Python. To verify this, run `pip --version`. It should produce a line like this:
+Pip should have been installed with Python. To verify this, run:
 ```bash
-pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.10)
+pip --version
 ```
+It should produce a line like this: `pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.10)`
 
-Check that the python version indicated at the end of the line is correct. If not, you can try to run `pip3` instead
-to force pip to use python3.
+**Check the python version at the end of the line!**
+If it is lower than `python3`, try to run `pip3` instead of `pip`.
 
 <details>
 <summary>I have the error <em>"command pip not found"</em>, what can I do?</summary>
@@ -140,8 +162,7 @@ to force pip to use python3.
 First, pip is maybe not installed on your system. To install it, run
 ```bash
 python -m ensurepip --upgrade
-```
-
+```bash
 Then, you should get pip through this command:
 ```bash
 python -m pip --version
@@ -156,24 +177,67 @@ Finally, try to launch the pip command directly:
 pip --version
 ```
 
-If this last command does not work, that means that pip is not installed in your PATH. You can easily find
-how to install it by a search, or you can replace `pip` by `python -m pip` if it does not bother you.
+If this last command does not work, that means that pip is not installed in your PATH.
+Try to close and reopen your terminal, or reboot your computer if you still don't get
+`pip`.
+If the error persists, add `pip` to your PATH manually (check the internet!),
+or replace `pip` by `python -m pip` if it does not bother you.
+
 </details>
 
-### Virtualenv
+### Pipenv
 
-Finally we will install the virtualenv module. This module allows us to to install all dependencies for a project in
-a python virtual environment so as to not have conflicts between the dependencies of multiple projects.
+Finally, we will install `pipenv` to replace `pip`. *But why did you ask to
+intall `pip` so?*, you will ask me! Well, the answer is pretty simple: we need
+`pip` to install `pipenv`.
 
-Install it by running:
+Run this command to install `pipenv`:
 ```bash
-pip install virtualenv
+pip install --user pipenv
 ```
 
-:::note
-If you used `pip3` or `python -m pip` instead of `pip` in the previous section, make sure to replace it again for this
-command. In the following, we will only use `pip` for simplicity, but you still have to replace it each time we use it.
-:::
+Then add the `pipenv` command to your PATH:
+
+<Tabs groupId="os">
+<TabItem value="win" label="Windows">
+
+1. Run this command to get the path of the directory to add:
+    ```bash
+    python -m site --user-site
+    ```
+    A sample output could be: ` C:\Users\jetbrains\AppData\Roaming\Python\Python37\site-packages`
+2. Replace `site-packages` with `Scripts` in the output and add it to the PATH variable, for example:
+    ```bash
+    setx PATH "%PATH%;C:\Users\jetbrains\AppData\Roaming\Python\Python37\Scripts"
+    ```
+3. You could need to close and reopen your terminal after.
+
+</TabItem>
+<TabItem value="mac-lin" label="MacOS/Linux">
+
+1. Run the following command to find the user base's binary directory:
+    ```bash
+    python -m site --user-base
+    ```
+    An example of output can be: `/home/jetbrains/.local`
+2. Add **bin** to this path and run this command to add it to your PATH:
+    ```bash
+    export PATH="$PATH:/home/jetbrains/.local/bin"
+    ```
+3. Refresh the PATH in your terminal:
+    ```bash
+    source ~/.bashrc
+    ```
+
+</TabItem>
+</Tabs>
+
+Now you can test if `pipenv` works for you:
+```bash
+pipenv --version
+```
+*You could get some warnings, but if the last line show the name **pipenv** with
+a number version, it's all good!*
 
 That's it! You finished to install python, congratulations 🥳
 
@@ -236,6 +300,39 @@ As you saw, node.js comes with two different commands:
         allowfullscreen>
     </iframe>
 </details>
+
+## Make
+
+It's time to install `make`! 
+
+<Tabs groupId="os">
+<TabItem value="win" label="Windows">
+
+1. Open Powershell and run:
+    ```bash
+    winget install gnuwin32.make
+    ```
+2. Add `make` to your PATH:
+    ```bash
+    setx PATH "%PATH%;C:\Program Files(x86)\GnuWin32\bin\make.exe"
+    ```
+3. Relaunch your terminal (or computer if needed) and try to run `make`:
+    ```bash
+    make --version
+    ```
+
+</TabItem>
+<TabItem value="mac-lin" label="MacOS/Linux">
+
+Make is already installed on your system! You have nothing to do 😁
+
+Try it with:
+```bash
+make --version
+```
+
+</TabItem>
+</Tabs>
 
 ## Visual Studio Code
 
