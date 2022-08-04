@@ -1,11 +1,19 @@
 #!/usr/bin/env python
 
 """
-Make a dump of the database and upload it to the S3.
+Manage the backups of the production database.
 
-Send the status of the backup to a Discord channel.
+Without passing any argument, the script will make a backup
+of the production database and upload it to a private S3
+bucket. It will send the status of the backup to a Discord
+channel using webhooks.
 
-Author: Charles Zablit - Mai 2022
+If the `--cleanup` argument is passed, the script will delete
+all the backups that are older than 30 days, while making sure
+to keep at least 1. It will send the status of the cleanup
+to the same Discord channel.
+
+Author: Charles Zablit - May 2022
 """
 
 from typing import Callable, Dict
