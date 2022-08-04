@@ -1,5 +1,5 @@
 # Install the project for windows
-install-win:
+win-install:
 	python3 -m pip install -U --user pipenv
 	cd deployment && \
 		copy NUL backend.env
@@ -15,7 +15,7 @@ install-win:
 		npm run build:dev
 
 # Install the project for unix-systems: linux and macos
-install-unix:
+unix-install:
 	python3 -m pip install -U --user pipenv
 	cd deployment && \
 		touch backend.env
@@ -32,23 +32,28 @@ install-unix:
 
 # Update after pull
 update:
-	cd backend && \
-		python3 -m pipenv sync --dev && \
-		python3 -m pipenv run migrate
 	cd frontend && \
 		npm install && \
 		npm run build:dev
+	cd backend && \
+		python3 -m pipenv sync --dev && \
+		python3 -m pipenv run migrate
 
 # Run the tests
 test:
 	cd backend && \
 		python3 -m pipenv run test
 
-# Run the server
-runserver:
+# Run the backend server
+start-backend:
 	python -c 'import webbrowser && webbrowser.open("localhost:8000")'
 	cd backend && \
 		python3 -m pipenv run start
+
+# Run the frontend
+start-frontend:
+	cd frontend && \
+		npm run start
 
 # Test the quality of code
 quality:

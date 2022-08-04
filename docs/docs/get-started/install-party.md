@@ -191,35 +191,44 @@ Finally, we will install `pipenv` to replace `pip`. *But why did you ask to
 intall `pip` so?*, you will ask me! Well, the answer is pretty simple: we need
 `pip` to install `pipenv`.
 
-Run this command to install `pipenv`:
-```bash
-pip install --user pipenv
-```
-
-Then add the `pipenv` command to your PATH:
-
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
-1. Run this command to get the path of the directory to add:
+1. First, run this command to install `pipenv`:
+    ```bash
+    pip install --user pipenv
+    ```
+2. Then we will add the `pipenv` command to your PATH. Run this command to get the directory path of pipenv:
     ```bash
     python -m site --user-site
     ```
-    A sample output could be: ` C:\Users\jetbrains\AppData\Roaming\Python\Python37\site-packages`
-2. Replace `site-packages` with `Scripts` in the output and add it to the PATH variable, for example:
+    *A sample output could be: ` C:\Users\jetbrains\AppData\Roaming\Python\Python37\site-packages`*
+
+3. Replace `site-packages` with `Scripts` in the output and add it to the PATH variable, for example:
     ```bash
     setx PATH "%PATH%;C:\Users\jetbrains\AppData\Roaming\Python\Python37\Scripts"
     ```
-3. You could need to close and reopen your terminal after.
+4. Close and reopen your terminal to refresh the PATH. (If it is not enough, reboot your computer !)
+5. Finally let's test the installation:
+    ```bash
+    pipenv --version
+    ```
+    *You could get some warnings, but if the last line show the name **pipenv** with
+    a number version, it's all good!*
 
 </TabItem>
 <TabItem value="mac-lin" label="MacOS/Linux">
 
-1. Run the following command to find the user base's binary directory:
+1. First, run this command to install `pipenv`:
+    ```bash
+    pip install --user pipenv
+    ```
+2. Then we will add the `pipenv` command to your PATH. Run this command to get the directory path of pipenv:
     ```bash
     python -m site --user-base
     ```
-    An example of output can be: `/home/jetbrains/.local`
+    *An example of output can be: `/home/jetbrains/.local`*.
+
 2. Add **bin** to this path and run this command to add it to your PATH:
     ```bash
     export PATH="$PATH:/home/jetbrains/.local/bin"
@@ -228,16 +237,16 @@ Then add the `pipenv` command to your PATH:
     ```bash
     source ~/.bashrc
     ```
+4. Finally let's test the installation:
+    ```bash
+    pipenv --version
+    ```
+    *You could get some warnings, but if the last line show the name **pipenv** with
+    a number version, it's all good!*
+
 
 </TabItem>
 </Tabs>
-
-Now you can test if `pipenv` works for you:
-```bash
-pipenv --version
-```
-*You could get some warnings, but if the last line show the name **pipenv** with
-a number version, it's all good!*
 
 That's it! You finished to install python, congratulations 🥳
 
@@ -303,7 +312,8 @@ As you saw, node.js comes with two different commands:
 
 ## Make
 
-It's time to install `make`! 
+Now it's time to install `make`! It is a small command-line tool which will be very
+helpful in the following, trust me ;)
 
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
@@ -445,5 +455,4 @@ by installing the [GitLens](https://marketplace.visualstudio.com/items?itemName=
 
 ## Congratulations 🥳
 
-You installed all the programs! Now let's try some exercices and tutorials so as to learn the different concepts
-of the Nantral Platform project.
+You installed all the programs! Now let's set up the Nantral Platform project.

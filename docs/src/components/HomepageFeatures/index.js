@@ -4,32 +4,32 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    title: 'News & Events',
+    Svg: require('@site/static/img/icons/post.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Create and share your news and events with the student community
+        of Centrale Nantes!
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Groups',
+    Svg: require('@site/static/img/icons/club.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Create a group for your club, association, roommate or more, and
+        customize it!
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'Roommates Map',
+    Svg: require('@site/static/img/icons/roommates.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Find all the roommates of the school on this map,
+        and discover your predecessors!
       </>
     ),
   },

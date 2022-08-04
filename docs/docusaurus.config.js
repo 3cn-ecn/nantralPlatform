@@ -156,7 +156,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright ©${new Date().getFullYear()} Nantral Platform, AECN. Built with Docusaurus.`,
+        copyright: `A project from 3CN, the dev club of Centrale Nantes. ©${new Date().getFullYear()} 3CN-AECN`,
       },
       prism: {
         theme: lightCodeTheme,
