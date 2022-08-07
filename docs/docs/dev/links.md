@@ -1,8 +1,8 @@
 ---
-title: Resources
+sidebar_position: 999
 ---
 
-# Resources
+# Links
 
 This page regroups all the resources for framework, plugin or dependency of the project.
 

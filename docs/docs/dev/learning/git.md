@@ -1,12 +1,23 @@
 ---
-title: How to use Git
+title: Git
 sidebar_position: 2
 ---
 
-# How to use Git
+# Git
 
 Let's learn git and github by a simple example: you will try to add your
 name on the README.md page of the github project.
+
+## Presentation
+
+<iframe 
+    class="youtube"
+    src="https://www.youtube-nocookie.com/embed/hwP7WQkmECE" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+</iframe>
 
 ## Make your first commit
 

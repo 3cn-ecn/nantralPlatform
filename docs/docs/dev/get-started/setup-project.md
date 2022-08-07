@@ -1,138 +1,158 @@
 ---
-title: Set up the project
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Set up the project
+# Setup the project
 
-Let's set up the project, with git and vs code!
+## Install dependencies
 
-## Clone the repository
+Open a terminal in the `nantralPlatform` directory (for convenience, you can
+open this terminal inside of VS Code but it also works if you use your regular
+terminal), and run:
 
-<Tabs>
-<TabItem value="git-desk" label="Using Github Desktop">
+<Tabs groupId="os">
+<TabItem value="win" label="Windows">
 
-1. Start **Github Desktop** 
-2. Select *"Clone a repository from the internet"* (if you don't see the button, select `File > Clone repository`)
-3. Paste the repository url: `https://github.com/nantral-platform/nantralPlatform.git`, or only 
-    `nantral-platform/nantralPlatform`, and clone the repository!
-4. Wait during the download, and then click the *"Open in Visual Studio Code"* button (if you see another text editor, 
-    open the Github Desktop preferences and set the text editor to VS Code)
+```bash
+make win-install
+```
 
 </TabItem>
-<TabItem value="git-code" label="Using VS Code">
+<TabItem value="mac-lin" label="MacOS/Linux">
 
-1. Start by opening VSCode.
-2. Once your folder is opened, press <kbd>CTRL</kbd> + <kbd>SHIFT</kbd> + <kbd>P</kbd> (for Mac users: <kbd>CMD</kbd> + <kbd>SHIFT</kbd> + <kbd>P</kbd>), then type `Clone` and press <kbd>ENTER</kbd>.
-3. In the prompt window, paste `https://github.com/nantral-platform/nantralPlatform.git`.
-4. When prompted, select a folder where you want to clone the repository. This will create a folder named `nantralPlatform` where everything will be stored.
-5. Open the `nantralPlatform` folder in VSCode once the repository has ben cloned.
-
-:::info
-A detailed tutorial with screenshots is available [here](https://code.visualstudio.com/docs/editor/versioncontrol#_cloning-a-repository).
-:::
+```bash
+make unix-install
+```
 
 </TabItem>
 </Tabs>
 
-
-## Set up VS Code
-
-### Install the extensions
-
-The first time you open the project in VS Code, you should see this pop-up:
-
-![Install recommended extensions pop-up](./img/install-extensions-popup.png)
-
-Click the *"Install all"* button, and you're ready!
+That's done! Everything should be installed.
 
 <details>
-    <summary>Oops, I decline the pop-up...</summary>
+    <summary>Help! The <code>make</code> command does not work with me! 😥</summary>
 
-Don't worry, you can find all the recommended extensions in the extensions menu.
-Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>, and search **Extensions: Show Recommended Extensions**.
-The list of all recommended extensions will appear on the left panel, and you can then click the download
-button to install them:
+Well, sorry you're not lucky! But don't worry, here are all the steps you can do
+to install everything.
 
-![Download all recommended extensions](./img/install-extensions.png)
+1. Go into the `backend` directory:
+    ```bash
+    cd backend/
+    ```
+
+2. In the `backend/config/settings` directory, copy the file named `.env.example`
+    and rename it `.env` only.
+
+3. Install dependencies and create a virtuel environment for python:
+    ```bash
+    pipenv install --dev
+    ```
+
+4. Create your database for django:
+    ```bash
+    pipenv run migrate
+    ```
+
+5. Create an administrator acount on this database:
+    ```bash
+    pipenv run createsuperuser
+    ```
+    When asked, complete as follow:
+    - username: `admin`
+    - email: `admin@ec-nantes.fr`
+    - password: `admin`
+
+6. Now, change your working directory to the `frontend` one:
+    ```bash
+    cd ../frontend
+    ```
+
+7. Install the dependencies:
+    ```bash
+    npm install
+    ```
+
+8. Compile the source code for the first time:
+    ```bash
+    npm run build:dev
+    ```
+
+Congratulations, you did it all 🥳
 
 </details>
 
+## Launch the website
 
-## Discover the project structure
+Now it's time to launch the website! To do this:
+1. Go into the backend directory:
+    ```bash
+    cd backend/
+    ```
+2. Launch the backend server (django):
+    ```bash
+    pipenv run start
+    ```
+3. Open this address in your browser: [http://localhost:8000](http://localhost:8000)
 
-In VSCode, in the left panel, you can see the folder structure of the repository.
-Here are a few explanations about the purpose of the main folders.
+And that's it! You should now see the login page of Nantral Platform:
 
-```js title=".../nantralplatform/"
-📁 .github    // definitions of github actions
-📁 .vscode    // configuration of vs code
-// highlight-next-line
-📁 backend    // source files of the backend (django)
-    📁 apps
-    📁 config
-    📁 static
-    📁 templates
-    📄 manage.py
-    📄 Pipfile
-📁 deployment // configuration for the deployment on the real server
-// highlight-next-line
-📁 docs       // source files of the documentation (docusaurus)
-    📁 docs
-    📁 static
-    📄 package.json
-// highlight-next-line
-📁 frontend   // source files of the frontend (react)
-    📁 src
-    📄 package.json
-📄 Makefile   // global scripts for installation and other things
-📄 README.md  // the description file of the project
-```
+![The login page](/login-page.png)
 
-### The Backend
+## Create your account
 
-The backend is a django application. The most important files and directories are:
-* **apps**: in this folder are stored the *apps*, i.e. a part of the website
-    (for example we have an app for the clubs, another one for the rommates map, etc.)
-* **config**: in this folder are stored the root urls and the configuration of django. 
-* **static**: in this folder are stored the *static* files of django, that is to say
-    the files that are not part of the source code and should be not compiled
-    by the server (for examples images, fonts, etc.)
-* **templates**: this folder is about the main template of django, that is to summary
-    the HTML page which is used as a base for every page
-* **manage.py**: this file contains the main commands of django. For example,
-    you can use `python3 manage.py runserver` to run the server.
-* **Pipfile**: this file contains the dependencies of the project,
-    and some shortcuts for everyday commands (for example we have the shortcut
-    `pipenv run start` for `python3 manage.py runserver`). All shortcuts begin
-    with `pipenv run`.
+The website that you just launched does not use the real database of
+Nantral Platform. Instead, for security reasons, an empty database has been
+created during the installation process.
+As a consequence, you have to **create an account** on your **local database**:
 
-### The Frontend
+1. On the login page, click the *"Pas de compte ?"* button, and fill your info
+    as you would do on the real website.
 
-The frontend is an **node.js** application which uses **React.js**. 
+:::tip Remarks
+- Your password will be only stored on your computer: hence, it will not be
+really protected, so do not use a password similar to your real online
+accounts. You can instead use a dummy password like `password`, as you want!
+- The email will not really be checked, so you can use a dummy one too.
+Just be sure that it finishes with `ec-nantes.fr`! This allows you to create
+multiple accounts, to test your code later 😉
+:::
 
-It is supposed to contain all the user interface, but for the moment we only
-have some pieces of interface defined in the frontend (like the notification
-panel or the roommates map for example). All the rest of the interface is
-defined in django, but in the future everything will be defined in the frontend.
+2. Once your account is created, the validation email is sent... to the console!
+    So go back to your terminal, and try to find the **validation link** in the
+    logs. Copy and paste this link into your browser, and *voilà*, your account
+    is validated! *(You may also need to remove the `s` of `https` in the link to make
+    it work, depending of your browser.)*
 
-The main structure is like this:
-* **src**: contains all the source files of the react application
-* **package.json**: contains the dependencies of the project, and also some shortcuts
-    (for example `npm run start` to compile the source code in live). All
-    shortcuts begin with `npm run`.
 
-### The documentation website
+3. Finally, we will make your new account an *administrator* account:
+    1. On the local website and **log out** from your account
+    2. Open [http://localhost:8000/admin](http://localhost:8000/admin), and
+    connect yourself with username and password `admin / admin`
+    3. You have now access to the *Administration Panel of Django*. In the
+    **Authentification and authorisation** section, select **Users**
+    4. You now have access to the list of all users. Note that some users
+    already exists: they are fake accounts, just there to simulate some students.
+    **Search** for your account and open it.
+    5. In the *Permissions* section, check **Staff status** and
+    **Superuser status** and then click on the **Save** button.
+    6. That's it! 🥳 You are now a superuser, you can **log out** from the admin
+    account, go back to [http://localhost:8000](http://localhost:8000), and log
+    in with you own account!
 
-The documentation website is a **docusaurus** application, also built with
-*node.js*.
 
-* **docs**: this sub-directory contains all the pages of the doc website,
-    in the markdown format. You can also use React component inside the pages!
-* **static**: this folder contains all the static files of the documentation
-    website, like images for example.
-* **package.json**: contains the dependencies of the project, and some shortcuts
-    like `npm run start` to compile and open the doc website on your computer.
+
+:::info Why can I not directly use the *admin* account?
+
+In facts, on Nantral Platform, we have 2 tables in our database for representing
+a user: the first one is called `User`, and the second one `Student`. The
+`User` table is made for the authentification and permissions processes, and the
+`Student` one is made for the profile of the user.
+
+The *admin* account is only created during the installation process as an
+element of the `User` table, and has no equivalent in the `Student` table:
+hence, the *admin* account will not really work on Nantral Platform. That's why
+you need to create your account with the login page, to have both enabled.
+:::

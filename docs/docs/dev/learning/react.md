@@ -1,42 +1,51 @@
 ---
-title: How to use React
+title: React
 sidebar_position: 5
 ---
 
-# How to use React
+# React
+
+
+## Tutorial
+
+Did you get the basis of django? Now, it's time to learn **React**!
+You can follow the **[official tutorial of React here](https://reactjs.org/tutorial/tutorial.html)**
+to get the basis of the framework.
+
+:::note
+For the *Setup* section, choose the option 2: *Local development environment*.
+:::
 
 ## Why we need it
 
 The framework we use for our backend can generate static html pages at runtime, on the server and serve it to the client. While this is desirable for performance reasons, this approach is not very modern, as a user expects to be able to interact with the website, like they would with a mobile application. Our server has to generate a new template everytime the user does something on the website, meaning the page has to be refreshed.
 
 Imagine that you want to play a game of tic-tac-toe, but everytime you place an X or an O, the page has to be refreshed.
-
 We can use a frontend framework like React.js to solve this problem for us.
 
 ## How our frontend is made
 
 ### React
 
-To build the frontend of Nantral-Platform, we use [React.js](https://reactjs.org/), a declarative, component based, JavaScript library for building user interfaces.
+To build the frontend of Nantral-Platform, we use [React.js](https://reactjs.org/),
+a declarative, component based, JavaScript library for building user interfaces.
+React (optionaly, but mostly) uses a language called JSX, which allows to organise
+the frontend code in the form of components, that represents logical, reusable parts of the UI.
+You can pass arguments to components, which you can then display in its body (like
+the number of participants to an event). If the value changes, React will react and re-render the component.
 
-React (optionaly, but mostly) uses a language called JSX, which allows to organise the frontend code in the form of components, that represents logical, reusable parts of the UI.
-
-You can pass arguments to components, which you can then display in its body (like the number of participants to an event). If the value changes, React will react and re-render the component.
-
-To learn more about React.js in 100 seconds, watch this video:
-[![React in 100 Seconds](https://res.cloudinary.com/marcomontalbano/image/upload/v1632607714/video_to_markdown/images/youtube--Tn6-PIqc4UM-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=Tn6-PIqc4UM "React in 100 Seconds")
-
-### Babel
-
-Web browsers can't understand JSX code, so we have to use [Babel](https://babeljs.io/) to convert that code into native JavaScript code.
-
-It is configured through the `.babelrc` file in the `frontend/` folder.
-
-As this part of the codebase has already been configured, we won't go into further details on how Babel works, as we do not need to worry about it anymore.
+<iframe 
+    class="youtube"
+    src="https://www.youtube-nocookie.com/embed/Tn6-PIqc4UM" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+</iframe>
 
 ### TypeScript
 
-[TypeScript](https://www.typescriptlang.org/) is a superset of JavaScript, meaning that JavaScript code is valid TypeScript code, but not the other way around.
+[TypeScript](https://www.typescriptlang.org/) is a superset of **JavaScript**, meaning that JavaScript code is valid TypeScript code, but not the other way around.
 
 JavaScript is an interpreted, dynamic language, meaning that there is no compilation, and that broken code won't be detected until runtime. When dealing with APIs, it becomes very easy to reference a non-existent property on an object. For reference, if you open up your browser console with F12 and type:
 `"1"==1` you will see that this boolean expression is evaluated as true, even though we are comparing two objects which have different types.
@@ -49,8 +58,28 @@ It is configured through the `tsconfig.json` file in the `frontend/` folder.
 
 As this part of the codebase has already been configured, we won't go into further details on how TypeScript works, as we do not need to worry about it anymore.
 
-To learn more about TypeScript in 100 seconds, watch this video:
-[![TypeScript in 100 Seconds](https://res.cloudinary.com/marcomontalbano/image/upload/v1632608531/video_to_markdown/images/youtube--zQnBQ4tB3ZA-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=zQnBQ4tB3ZA "TypeScript in 100 Seconds")
+<details>
+    <summary>Discover Javascript in 100s 🎬</summary>
+    <iframe 
+        class="youtube"
+        src="https://www.youtube-nocookie.com/embed/DHjqpvDnNGE" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+    </iframe>
+</details>
+<details>
+    <summary>Discover Typescript in 100s 🎬</summary>
+    <iframe 
+        class="youtube"
+        src="https://www.youtube-nocookie.com/embed/zQnBQ4tB3ZA" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+    </iframe>
+</details>
 
 ### Node.js
 
@@ -63,18 +92,6 @@ To learn more about TypeScript in 100 seconds, watch this video:
 It can be configured using the `package.json` file in the `frontend/` folder.
 
 All the modules we talked about above can be installed using NPM.
-
-### Webpack
-
-[Webpack.js](https://webpack.js.org/) is a JavaScript module bundler.
-
-As we have seen, a Node.js application is usually built using NPM packages, like React.js, which itself is built using other NPM packages, and so on. This creates many dependencies which can be long to install for a client. Furthermore, a project does not usually use all of a package's code, meaning that some part of the package could be downloaded for nothing. Lastly, since JavaScript is an interpreted language, the smaller the file size, the faster the execution time.
-
-Modules bundlers such as Webpack allow to combine all your project into a single minified JavaScript file, meaning that the file is only one line long, and that variables' name are shrunk down to their minimum.
-
-This greatly improves loading times for the client, as well as general performances.
-
-To read more on the topic of minifization, visit [this CloudFlare article](https://www.cloudflare.com/fr-fr/learning/performance/why-minify-javascript-code/).
 
 ## Implementation in Nantral-Platform
 

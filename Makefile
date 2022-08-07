@@ -9,7 +9,7 @@ win-install:
 		python3 -m pipenv sync --dev && \
 		python3 -m pipenv run migrate && \
 		SET DJANGO_SUPERUSER_PASSWORD=admin && \
-		python3 -m pipenv run createsuperuser --noinput --username admin --email admin@ec-nantes.fr
+		python3 -m pipenv run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
 	cd frontend && \
 		npm install && \
 		npm run build:dev
@@ -25,7 +25,7 @@ unix-install:
 		python3 -m pipenv sync --dev && \
 		python3 -m pipenv run migrate && \
 		export DJANGO_SUPERUSER_PASSWORD=admin && \
-		python3 -m pipenv run createsuperuser --noinput --username admin --email admin@ec-nantes.fr
+		python3 -m pipenv run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
 	cd frontend && \
 		npm install && \
 		npm run build:dev
