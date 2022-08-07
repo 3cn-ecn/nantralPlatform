@@ -8,7 +8,6 @@ env.bak/
 venv.bak/
 
 # Visual Studio Code #
-.vscode/settings.json
 .history
 
 # If you are using PyCharm #

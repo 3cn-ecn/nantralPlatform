@@ -15,7 +15,7 @@ on:
       - .github/workflows/deploy-staging.yml
 
 jobs:
-  webpack:
+  build-frontend:
     # Specify which OS we are running our job on
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -31,8 +31,8 @@ jobs:
       - name: Build React
         run: |
           cd frontend
-          npm install
-          npm run start
+          npm install --omit=dev
+          npm run build
       - name: Upload files to the VPS
         uses: appleboy/scp-action@master
         with:
@@ -42,7 +42,7 @@ jobs:
           source: "backend/static/js/*/**.js"
           target: "nantralPlatform-staging"
 
-  test:
+  test-backend:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -58,8 +58,9 @@ jobs:
       - name: Testing
         working-directory: ./backend
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install --user pipenv
+          python3 -m pipenv verify
+          python3 -m pipenv sync --system
           python manage.py test
 
       - name: Clone before staging
@@ -81,7 +82,7 @@ jobs:
   deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    needs: [webpack, test]
+    needs: [build-frontend, test-backend]
     strategy:
       matrix:
         python-version: ["3.10"]
