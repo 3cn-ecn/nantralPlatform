@@ -14,13 +14,7 @@ Follow this tutorial to learn how to use django and what it can do for you: [Dja
 Learn Web Development | MDN](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django).
 
 :::tip Tips!
-In this tutorial, you can skip some steps:
-* In the **Setting up a Django development environment** page, you can skip the
-    **Install Python 3** section, and the 
-    **Using Django inside a Python virtual environment**. Instead, create a
-    virtual environment with the easier method described in the
-    *[How to use Python Virtualenv](/docs/learning/virtualenv)* page.
-* You can also skip the **Sessions framework**, **Working with forms**, and
+You can skip the **Sessions framework**, **Working with forms**, and
     **Deploying Django to production** pages.
 :::
 
