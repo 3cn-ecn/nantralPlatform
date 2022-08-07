@@ -24,6 +24,7 @@
   "[django-html][html][javascript][javascriptreact][typescript][typescriptreact][json]": {
     "editor.tabSize": 2
   },
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/",
   "python.envFile": "${workspaceFolder}/backend/config/settings/.env",
   "python.terminal.activateEnvironment": false,
   "python.formatting.provider": "autopep8",

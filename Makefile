@@ -6,6 +6,7 @@ win-install:
 	cd backend/config/settings && \
 		copy .env.example .env
 	cd backend && \
+		SET PIPENV_VENV_IN_PROJECT=1 && \
 		python3 -m pipenv sync --dev && \
 		python3 -m pipenv run migrate && \
 		SET DJANGO_SUPERUSER_PASSWORD=admin && \
@@ -22,6 +23,7 @@ unix-install:
 	cd backend/config/settings && \
 		cp .env.example .env
 	cd backend && \
+		export PIPENV_VENV_IN_PROJECT=1 && \
 		python3 -m pipenv sync --dev && \
 		python3 -m pipenv run migrate && \
 		export DJANGO_SUPERUSER_PASSWORD=admin && \
