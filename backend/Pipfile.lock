@@ -26,10 +26,10 @@
         },
         "apns2": {
             "hashes": [
-                "sha256:4f2dae8c608961d1768f734acb1d0809a60ac71a0cdcca60f46529b73f20fb34",
-                "sha256:f64a50181d0206a02943c835814a34fc1b1e12914931b74269a0f0fb4f39fd45"
+                "sha256:360bcd1f1d6308348adcb317c0192d1631fe01a2b9b73ce95f57c708de2bb88a",
+                "sha256:8c24207aa96dff4687f8d7c9149fc42086f3506b0a76da1f5bf48d74e5569567"
             ],
-            "version": "==0.7.2"
+            "version": "==0.7.1"
         },
         "asgiref": {
             "hashes": [
@@ -734,10 +734,11 @@
         },
         "pyjwt": {
             "hashes": [
-                "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e",
-                "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"
+                "sha256:72d1d253f32dbd4f5c88eaf1fdc62f3a19f676ccbadb9dbc5d07e951b2b26daf",
+                "sha256:d42908208c699b3b973cbeb01a969ba6a96c821eefb1c5bfe4c390c01d67abba"
             ],
-            "version": "==1.7.1"
+            "index": "pypi",
+            "version": "==2.4.0"
         },
         "pymemcache": {
             "hashes": [
