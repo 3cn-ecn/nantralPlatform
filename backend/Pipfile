@@ -39,7 +39,7 @@ django-timezone-field = "~=4.2.1"
 django-push-notifications = {version = "~=3.0.0", extras = ["apns", "wp"]}
 djangorestframework = "~=3.12.4"
 docutils = "~=0.17.1"
-flower = "~=1.0.0"
+flower = "~=1.2.0"
 freezegun = "~=1.1.0"
 gunicorn = "~=20.1.0"
 humanize = "~=3.11.0"
