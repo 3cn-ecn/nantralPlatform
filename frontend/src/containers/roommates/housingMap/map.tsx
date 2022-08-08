@@ -68,7 +68,7 @@ export function Map(props): JSX.Element {
               enableHighAccuracy: true,
             }}
             trackUserLocation
-            auto
+            // auto
           />
           <NavigationControl showCompass={false} style={navControlStyle} />
         </MapGL>
