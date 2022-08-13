@@ -1,5 +1,6 @@
 FROM python:3.10-slim-buster
 
+ENV PYTHONUNBUFFERED 1
 ENV C_FORCE_ROOT 1
 ENV DOCKER True
 ENV DJANGO_SETTINGS_MODULE=config.settings.production
@@ -15,14 +16,15 @@ RUN apt-get update && \
 # Step 1: Install any Python packages
 # ----------------------------------------
 
-ENV PYTHONUNBUFFERED 1
 RUN mkdir -p /var/app/logs
 RUN mkdir var/app/staticfiles
 WORKDIR  /var/app
 
-ADD backend/Pipfile backend/Pipfile.lock ./
-RUN pip install -U pipenv && \
-  pipenv sync --system
+COPY backend/Pipfile* /tmp
+RUN pip install -U pip
+RUN pip install pipenv
+RUN cd /tmp && pipenv requirements > requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
 # Step 2: Copy Django Code
 # ----------------------------------------
