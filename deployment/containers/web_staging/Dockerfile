@@ -20,7 +20,7 @@ RUN mkdir -p /var/app/logs
 RUN mkdir var/app/staticfiles
 WORKDIR  /var/app
 
-COPY backend/Pipfile* /tmp
+COPY backend/Pipfile* /tmp/
 RUN pip install -U pip
 RUN pip install pipenv
 RUN cd /tmp && pipenv requirements > requirements.txt
