@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import Any, Dict, Union
 from urllib.parse import urlparse
 
+import uuid
+from xml.dom import ValidationErr
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -28,6 +30,7 @@ from .forms import (
     SignUpForm, LoginForm, ForgottenPassForm,
     TemporaryRequestSignUpForm, UpgradePermanentAccountForm)
 from .models import TemporaryAccessRequest
+from .models import IdRegistration
 from .tokens import account_activation_token
 from .utils import user_creation, send_email_confirmation
 
@@ -42,11 +45,6 @@ class RegistrationView(FormView):
             settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today())
         return context
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs.update(id=self.request.GET.get('id',''))
-        return kwargs
-
     def form_valid(self, form):
         user_creation(form, self.request)
         return redirect('home:home')
@@ -60,7 +58,12 @@ class TemporaryRegistrationView(FormView):
         """Do not allow to use this view outside of allowed temporary accounts
         windows.
         """
-        if not settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
+        RequestId = self.request.GET.get('id','')
+        try:
+            goodId = len(IdRegistration.objects.all().filter(id = RequestId))>0
+        except:
+           goodId = False
+        if  timezone.now().today() > settings.TEMPORARY_ACCOUNTS_DATE_LIMIT  or not goodId:
             return redirect('account:registration')
         return super().dispatch(request, *args, **kwargs)
 

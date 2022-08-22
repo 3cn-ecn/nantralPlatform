@@ -1,3 +1,4 @@
+from xmlrpc.client import boolean
 from django.utils import timezone
 from django.template.loader import render_to_string
 from django.db import models
@@ -5,9 +6,10 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.urls import reverse
 from apps.utils.discord import send_message, react_message
+import uuid
 
 class IdRegistration(models.Model):
-    key = models.CharField(max_length=30)
+    id = models.UUIDField(primary_key= True, default = uuid.uuid4, editable=True)
 
 class TemporaryAccessRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -30,8 +32,9 @@ class TemporaryAccessRequest(models.Model):
                 self.approved_until = timezone.now()
             if domain is not None:
                 self.domain = domain
+            self.approved_until = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
             super(TemporaryAccessRequest, self).save()
-            if self.message_id is None:
+            if False : #self.message_id is None:
                 message = f'{self.user.first_name} {self.user.last_name} demande à rejoindre Nantral Platform.\n'
                 embeds = [
                     {"title": "Accepter",

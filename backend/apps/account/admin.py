@@ -11,7 +11,7 @@ from .models import IdRegistration
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ["key"]
+    list_display = ["id"]
 admin.site.register(IdRegistration, UserAdmin)
 
 

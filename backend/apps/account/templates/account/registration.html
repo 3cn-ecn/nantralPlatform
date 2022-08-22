@@ -13,12 +13,12 @@
         <p>
            {% translate "Pour vous inscrire sur Nantral Platform, vous devez être affilié à Centrale Nantes. Votre affiliation est determinée en utilisant votre adresse mail Centrale Nantes @eleves.ec-nantes.fr ou @ec-nantes.fr." %}
         </p>
-        {% if temporary_registration %}
+        {% comment %} {% if temporary_registration %}
             <p>
                 {% translate "Si vous ne disposez pas encore de votre addresse, vous pouvez demander un accès temporaire :"%}</br>
                 <a class="btn btn-success" href="{% url 'account:temporary-registration' %}">{% translate "Demande d'accès temporaire."%}</a>
             </p>
-        {% endif %}
+        {% endif %} {% endcomment %}
 
         <form method='POST' class="text-start">
             {% csrf_token %}
