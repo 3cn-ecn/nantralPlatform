@@ -66,18 +66,13 @@ const config = {
         },
         items: [
           {
-            to: "/docs",
-            label: "Docs",
+            to: "/docs/user",
+            label: "User Docs",
             position: "left",
           },
           {
-            to: "/resources",
-            label: "Resources",
-            position: "left",
-          },
-          {
-            to: "/changelog",
-            label: "Changelog",
+            to: "/docs/dev",
+            label: "Dev Docs",
             position: "left",
           },
           {
@@ -104,16 +99,12 @@ const config = {
             title: "Documentation",
             items: [
               {
-                label: "Docs",
-                to: "/docs",
+                label: "User Docs",
+                to: "/docs/user",
               },
               {
-                label: "Resources",
-                to: "/resources",
-              },
-              {
-                label: "Changelog",
-                to: "/changelog",
+                label: "Dev Docs",
+                to: "/docs/dev",
               },
               {
                 label: "Blog",
@@ -156,7 +147,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright ©${new Date().getFullYear()} Nantral Platform, AECN. Built with Docusaurus.`,
+        copyright: `A project from 3CN, the dev club of Centrale Nantes. ©${new Date().getFullYear()} 3CN-AECN`,
       },
       prism: {
         theme: lightCodeTheme,

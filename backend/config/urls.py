@@ -54,7 +54,6 @@ urlpatterns = [
         include('apps.services.urls', namespace='services')),
     path('notification/', 
         include('apps.notification.urls', namespace='notification')),
-    # path('exchange/', include('apps.exchange.urls', namespace='exchange')),
 
     # api
     path('api/student/', 

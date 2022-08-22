@@ -12,8 +12,8 @@
 		"batisteo.vscode-django",
 		"ecmel.vscode-html-css",
 		"njpwerner.autodocstring",
+		"tamasfe.even-better-toml",
 		// npm and react
-		"eg2.vscode-npm-script",
 		"dbaeumer.vscode-eslint",
 		"msjsdiag.vscode-react-native",
 		// docs

@@ -5,10 +5,10 @@
   "main": "index.js",
   "mode": "production",
   "scripts": {
-    "start": "node esbuild.js",
-    "dev": "node esbuild.js dev",
-    "watch": "node esbuild.js watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node esbuild.js watch",
+    "build": "node esbuild.js",
+    "build:dev": "node esbuild.js dev",
+    "test": "echo \"Oops 🤭 The tests are not implemented yet...\" && exit 1"
   },
   "author": "Robin TROESCH",
   "license": "MIT",
@@ -16,8 +16,7 @@
     "@types/jest": "^26.0.24",
     "@types/node": "^14.17.12",
     "@types/react": "^17.0.19",
-    "@types/react-dom": "^17.0.9",
-    "esbuild": "^0.14.50"
+    "@types/react-dom": "^17.0.9"
   },
   "dependencies": {
     "@dnd-kit/core": "^4.0.1",
@@ -32,6 +31,7 @@
     "array-move": "^4.0.0",
     "axios": "^0.21.4",
     "dayjs": "^1.10.6",
+    "esbuild": "^0.14.50",
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "firebase": "^9.6.10",
@@ -42,7 +42,7 @@
     "react-cookie": "^4.1.1",
     "react-d3-library": "^1.1.8",
     "react-dom": "^17.0.2",
-    "react-map-gl": "^6.1.18",
+    "react-map-gl": "^6.1.19",
     "react-router": "^5.2.1",
     "react-router-dom": "^5.2.1",
     "react-switch": "^6.0.0",
