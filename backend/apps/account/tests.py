@@ -26,8 +26,6 @@ PAYLOAD_TEMPLATE = {
 
 REGEX_ACTIVATE_URL = (
     r"href='https://testserver/account/activate/([\w-]*)/([\w-]*)/'")
-REGEX_ACTIVATE_TEMP_URL = (
-    r"href='https://testserver/account/activate/([\w-]*)/([\w-]*)/temporary/'")
 REGEX_RESET_PASS_URL = (
     r"href='https://testserver/account/reset_pass/([\w-]*)/([\w-]*)/'")
 
@@ -159,29 +157,18 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         # Check that a temporary access request has been created
         temp_req: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
             user=user.id)
-        self.assertTrue(temp_req.approved)
 
         self.assertEqual(len(mail.outbox), 1)
-        extract = re.search(REGEX_ACTIVATE_TEMP_URL, mail.outbox[0].body)
+        extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
-        # Check that the user cannot use the link to activate the account
-        url = reverse('account:confirm', kwargs={
-                      'uidb64': uidb64, 'token': token})
-        response = self.client.get(url)
-
-        self.assertContains(response, text='Ce lien n\'existe pas !')
-        user: User = User.objects.get(email='test@not-ec-nantes.fr')
-        self.assertFalse(user.is_active)
-
         # Confirm the temporary email
-        url = reverse('account:confirm-temporary', kwargs={
+        url = reverse('account:confirm', kwargs={
                       'uidb64': uidb64, 'token': token})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         temp_req.refresh_from_db()
-        self.assertFalse(temp_req.approved)
 
         # Check that you can login
         url = reverse('account:login')
@@ -241,6 +228,7 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
             'password1': self.PASSWORD,
             'password2': self.PASSWORD,
         }
+        self.invite_id = IdRegistration.objects.create()
 
     def test_temp_registration_not_available(self):
         url = reverse('account:temporary-registration')
@@ -272,22 +260,23 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
         mock_post.return_value = discord_mock_message_post()
 
         url = reverse('account:temporary-registration')
+        url += f'?id={self.invite_id.id}'
 
         response = self.client.post(url, self.PAYLOAD_NOT_EC_NANTES)
         self.assertEqual(response.status_code, 302)
-        user: User = User.objects.get(email='test@not-ec-nantes.fr')
+        self.assertTrue(
+            User.objects.filter(email='test@not-ec-nantes.fr').exists())
         self.assertEqual(len(mail.outbox), 1)
-        extract = re.search(REGEX_ACTIVATE_TEMP_URL, mail.outbox[0].body)
+        extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
 
         # Check that the user cannot use the link to activate the account
         url = reverse(
-            'account:confirm-temporary',
+            'account:confirm',
             kwargs={'uidb64': uidb64, 'token': token})
         response = self.client.get(url)
 
-        TemporaryAccessRequest.objects.get(user=user).approve()
         with freeze_time("2021-09-03"):
             # Check that you still cannot login
             url = reverse('account:login')

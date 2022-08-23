@@ -10,9 +10,8 @@ from .models import IdRegistration
 # Register your models here.
 
 
-class UserAdmin(admin.ModelAdmin):
+class IdRegistrationAdmin(admin.ModelAdmin):
     list_display = ["id"]
-admin.site.register(IdRegistration, UserAdmin)
 
 
 class TemporaryAccessRequestAdmin(admin.ModelAdmin):
@@ -35,7 +34,7 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
                 }
             )
             email = mail.EmailMultiAlternatives(
-                subject="[Nantral-Platform] Rappel votre accès temporaire va expirer!",
+                subject="[Nantral Platform] Votre compte expire bientôt !",
                 body=email_html,
                 to=[tempAccessReq.user.email]
             )
@@ -44,4 +43,5 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
         connection.send_messages(mails)
 
 
+admin.site.register(IdRegistration, IdRegistrationAdmin)
 admin.site.register(TemporaryAccessRequest, TemporaryAccessRequestAdmin)

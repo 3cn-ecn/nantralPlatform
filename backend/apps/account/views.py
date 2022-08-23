@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, Union
+from typing import Any, Dict
 from urllib.parse import urlparse
 
 from django.conf import settings
@@ -81,25 +81,22 @@ class TemporaryRegistrationView(FormView):
 
 class ConfirmUser(View):
     def get(self, request, uidb64, token):
-        temp_access_req: Union[TemporaryAccessRequest, None] = None
+        # get the user
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             return render(self.request, 'account/activation_invalid.html')
-        # checking if the user is not a temporary one
+        # get the associated temporary object if it exists
         try:
-            temp_access_req: TemporaryAccessRequest = (
-                TemporaryAccessRequest.objects.get(user=user.pk))
-            if not temp_access_req.approved:
-                return render(self.request, 'account/activation_invalid.html')
+            temp_access_req = TemporaryAccessRequest.objects.get(user=user.pk)
         except TemporaryAccessRequest.DoesNotExist:
             temp_access_req = None
         # checking if the token is valid.
         if account_activation_token.check_token(user, token):
             # if valid set active true
             user.is_active = True
-            if temp_access_req is not None:
+            if temp_access_req and temp_access_req.final_email:
                 user.email = temp_access_req.final_email
                 temp_access_req.delete()
                 messages.warning(
@@ -253,34 +250,6 @@ def redirect_to_student(request, user_id):
     user = User.objects.get(id=user_id)
     student = Student.objects.get(user=user)
     return redirect('student:update', student.pk)
-
-
-class ConfirmUserTemporary(View):
-    def get(self, request, uidb64, token):
-        try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-        # checking if the user exists, if the token is valid.
-        if user is not None and account_activation_token.check_token(
-                user, token):
-            try:
-                temp_req: TemporaryAccessRequest = (
-                    TemporaryAccessRequest.objects.get(user=user))
-                temp_req.mail_valid = True
-                temp_req.save()
-            except TemporaryAccessRequest.DoesNotExist:
-                return render(self.request, 'account/activation_invalid.html')
-            messages.success(
-                request,
-                'Votre addresse mail est confirmée !\n Comme vous n\'avez pas '
-                'utilisé votre adresse Centrale, vous devez encore attendre '
-                'qu\'un administrateur vérifie votre inscription.\n On vous '
-                'prévient par mail dès que c\'est bon!.')
-            return redirect('home:home')
-        else:
-            return render(self.request, 'account/activation_invalid.html')
 
 
 class PermanentAccountUpgradeView(LoginRequiredMixin, FormView):
