@@ -21,7 +21,7 @@ def check_id(id):
 
 
 def check_ecn_mail(mail: str):
-    if 'ec-nantes.fr' not in mail:
+    if not ('@ec-nantes.fr' in mail or '.ec-nantes.fr' in mail):
         raise ValidationError(_(
             "Vous devez avoir une adresse mail de Centrale Nantes finissant "
             " par ec-nantes.fr"))
