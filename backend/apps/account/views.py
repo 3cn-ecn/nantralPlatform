@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Any, Dict
 from urllib.parse import urlparse
+import uuid
 
 from django.conf import settings
 from django.contrib import messages
@@ -51,22 +52,23 @@ class TemporaryRegistrationView(FormView):
     form_class = TemporaryRequestSignUpForm
     template_name = 'account/temporary_registration.html'
 
-    def dispatch(self, request, *args: Any, **kwargs: Any):
+    def get(self, request, invite_id: uuid.UUID, *args, **kwargs):
         """Do not allow to use this view outside of allowed temporary accounts
         windows.
         """
-        request_id = self.request.GET.get('id', '')
-        try:
-            good_id = IdRegistration.objects.filter(id=request_id).exists()
-        except Exception:
-            good_id = False
+        good_id = IdRegistration.objects.filter(id=invite_id).exists()
         if (timezone.now().today() > settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
                 or not good_id):
             messages.error(
-                self.request,
+                request,
                 "Invitation invalide : le lien d'invitation a expiré.")
             return redirect('account:registration-choice')
-        return super().dispatch(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
+
+    def get_initial(self) -> Dict[str, Any]:
+        initial = super().get_initial()
+        initial['invite_id'] = self.kwargs['invite_id']
+        return initial
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)

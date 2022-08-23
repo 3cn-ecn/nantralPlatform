@@ -2,6 +2,7 @@ from datetime import datetime
 from freezegun import freeze_time
 from unittest import mock
 import re
+import uuid
 
 from django.contrib.auth import get_user
 from django.contrib.auth.models import User
@@ -118,6 +119,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
     """Check that temporary accounts work within the correct time frame."""
 
     def setUp(self):
+        self.invite_id = IdRegistration.objects.create().id
         self.PAYLOAD = {
             **PAYLOAD_TEMPLATE,
             'password1': self.PASSWORD,
@@ -127,8 +129,8 @@ class TestTemporaryAccounts(TestCase, TestMixin):
             **self.PAYLOAD,
             'email': 'test@not-ec-nantes.fr',
             'confirm_email': 'test@not-ec-nantes.fr',
+            'invite_id': self.invite_id,
         }
-        self.invite_id = IdRegistration.objects.create()
 
     @mock.patch('apps.utils.discord.requests.post')
     def test_temporary_registration_process(self, mock_post):
@@ -136,8 +138,8 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         # Define response for the fake API
         mock_post.return_value = discord_mock_message_post()
 
-        url = reverse('account:temporary-registration')
-        url += f'?id={self.invite_id.id}'
+        url = reverse('account:temporary-registration', args=[self.invite_id])
+
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(url, self.PAYLOAD_NOT_EC_NANTES)
@@ -228,15 +230,15 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
             'password1': self.PASSWORD,
             'password2': self.PASSWORD,
         }
-        self.invite_id = IdRegistration.objects.create()
+        self.invite_id = IdRegistration.objects.create().id
 
     def test_temp_registration_not_available(self):
-        url = reverse('account:temporary-registration')
+        url = reverse('account:temporary-registration', args=[uuid.uuid4()])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
 
         response = self.client.post(url, self.PAYLOAD_NOT_EC_NANTES)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         with self.assertRaises(User.DoesNotExist):
             User.objects.get(email='test@not-ec-nantes.fr')
 
@@ -259,23 +261,12 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
         # Define response for the fake API
         mock_post.return_value = discord_mock_message_post()
 
-        url = reverse('account:temporary-registration')
-        url += f'?id={self.invite_id.id}'
+        url = reverse('account:temporary-registration', args=[self.invite_id])
 
         response = self.client.post(url, self.PAYLOAD_NOT_EC_NANTES)
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(
             User.objects.filter(email='test@not-ec-nantes.fr').exists())
-        self.assertEqual(len(mail.outbox), 1)
-        extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
-        uidb64 = extract.group(1)
-        token = extract.group(2)
-
-        # Check that the user cannot use the link to activate the account
-        url = reverse(
-            'account:confirm',
-            kwargs={'uidb64': uidb64, 'token': token})
-        response = self.client.get(url)
 
         with freeze_time("2021-09-03"):
             # Check that you still cannot login

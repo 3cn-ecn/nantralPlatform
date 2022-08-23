@@ -13,19 +13,11 @@ from .models import IdRegistration
 
 
 def check_id(id):
-    if len(IdRegistration.objects.all().filter(id=id)) > 0:
-        return True
-    elif id != '':
+    if not IdRegistration.objects.filter(id=id).exists():
         raise ValidationError(_(
             "Invitation invalide : le lien d'invitation a expiré. Veuillez "
             "entrer une adresse en ec-nantes.fr, ou contactez un "
             "administrateur."))
-    return False
-
-
-def check_mail(mail: str, id: str):
-    if not check_id(id):
-        check_ecn_mail(mail)
 
 
 def check_ecn_mail(mail: str):
@@ -41,7 +33,7 @@ def check_ecn_mail_login(mail: str):
     """
     if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
         return
-    # check_ecn_mail(mail)
+    check_ecn_mail(mail)
 
 
 def check_passwords(pass1, pass2):
@@ -92,7 +84,6 @@ class SignUpForm(UserCreationForm):
                 if email != confirm_email:
                     raise forms.ValidationError(
                         _("Les emails ne correspondent pas."))
-
             return cleaned_data
 
     def clean_email(self) -> str:
@@ -170,6 +161,9 @@ class TemporaryRequestSignUpForm(SignUpForm):
         max_length=200,
         required=True,
         help_text=_('Votre adresse mail personnelle.'))
+    invite_id = forms.UUIDField(
+        validators=[check_id],
+        widget=forms.HiddenInput())
 
 
 class UpgradePermanentAccountForm(forms.Form):

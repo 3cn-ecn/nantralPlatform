@@ -22,7 +22,7 @@ urlpatterns = [
          RegistrationChoice.as_view(),
          name='registration-choice'),
     path('registration/', RegistrationView.as_view(), name='registration'),
-    path('registration/temporary/',
+    path('registration/<uuid:invite_id>/',
          TemporaryRegistrationView.as_view(),
          name='temporary-registration'),
     path('activate/<slug:uidb64>/<slug:token>/',
