@@ -65,7 +65,7 @@ class TemporaryRegistrationView(FormView):
             messages.error(
                 self.request,
                 "Invitation invalide : le lien d'invitation a expiré.")
-            return redirect('account:login')
+            return redirect('account:registration-choice')
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
