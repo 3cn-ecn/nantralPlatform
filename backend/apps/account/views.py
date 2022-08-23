@@ -2,8 +2,6 @@ from datetime import datetime
 from typing import Any, Dict, Union
 from urllib.parse import urlparse
 
-import uuid
-from xml.dom import ValidationErr
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -20,10 +18,9 @@ from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
-from django.views.generic.edit import FormView
+from django.views.generic import FormView, TemplateView
 
 from apps.student.models import Student
-from apps.utils.accessMixins import UserIsSuperAdmin
 
 from .emailAuthBackend import EmailBackend
 from .forms import (
@@ -58,13 +55,17 @@ class TemporaryRegistrationView(FormView):
         """Do not allow to use this view outside of allowed temporary accounts
         windows.
         """
-        RequestId = self.request.GET.get('id','')
+        request_id = self.request.GET.get('id', '')
         try:
-            goodId = len(IdRegistration.objects.all().filter(id = RequestId))>0
-        except:
-           goodId = False
-        if  timezone.now().today() > settings.TEMPORARY_ACCOUNTS_DATE_LIMIT  or not goodId:
-            return redirect('account:registration')
+            good_id = IdRegistration.objects.filter(id=request_id).exists()
+        except Exception:
+            good_id = False
+        if (timezone.now().today() > settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
+                or not good_id):
+            messages.error(
+                self.request,
+                "Invitation invalide : le lien d'invitation a expiré.")
+            return redirect('account:login')
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -254,38 +255,6 @@ def redirect_to_student(request, user_id):
     return redirect('student:update', student.pk)
 
 
-class ABCApprovalTemporaryResgistrationView(UserIsSuperAdmin, View):
-    def get(self, request, id):
-        self.temp_req: TemporaryAccessRequest = get_object_or_404(
-            TemporaryAccessRequest, id=id)
-
-        if self.temp_req.approved:
-            messages.warning(request, 'Cette requête a déjà été approuvée.')
-            return redirect('home:home')
-
-
-class ApproveTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
-    def get(self, request, id):
-        super().get(request, id)
-        self.temp_req.approve()
-        messages.success(
-            request,
-            f'Vous avez accepté la demande de {self.temp_req.user.first_name} '
-            f'{self.temp_req.user.last_name}')
-        return redirect('home:home')
-
-
-class DenyTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
-    def get(self, request, id):
-        super().get(request, id)
-        messages.success(
-            request,
-            f'Vous avez refusé la demande de {self.temp_req.user.first_name} '
-            f'{self.temp_req.user.last_name}')
-        self.temp_req.deny()
-        return redirect('home:home')
-
-
 class ConfirmUserTemporary(View):
     def get(self, request, uidb64, token):
         try:
@@ -336,3 +305,7 @@ class PermanentAccountUpgradeView(LoginRequiredMixin, FormView):
         send_email_confirmation(
             self.request.user, self.request, send_to=form.cleaned_data['email'])
         return super().form_valid(form)
+
+
+class RegistrationChoice(TemplateView):
+    template_name = 'account/registration-choice.html'
