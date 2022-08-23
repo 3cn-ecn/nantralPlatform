@@ -24,7 +24,7 @@ class TemporaryAccessRequest(models.Model):
             if self.mail_valid is None:
                 self.mail_valid = False
             if self.approved is None:
-                self.approved = False
+                self.approved = True
             self.date = timezone.now()
             if self.approved_until is None:
                 self.approved_until = timezone.now()

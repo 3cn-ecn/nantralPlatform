@@ -9,7 +9,7 @@ from django.core import mail
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
-from apps.account.models import TemporaryAccessRequest
+from apps.account.models import IdRegistration, TemporaryAccessRequest
 from apps.student.models import Student
 from apps.utils.utest import TestMixin
 from apps.utils.testing.mocks import discord_mock_message_post
@@ -130,6 +130,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
             'email': 'test@not-ec-nantes.fr',
             'confirm_email': 'test@not-ec-nantes.fr',
         }
+        self.invite_id = IdRegistration.objects.create()
 
     @mock.patch('apps.utils.discord.requests.post')
     def test_temporary_registration_process(self, mock_post):
@@ -138,6 +139,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         mock_post.return_value = discord_mock_message_post()
 
         url = reverse('account:temporary-registration')
+        url += f'?id={self.invite_id.id}'
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         response = self.client.post(url, self.PAYLOAD_NOT_EC_NANTES)
@@ -157,9 +159,9 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         # Check that a temporary access request has been created
         temp_req: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
             user=user.id)
-        self.assertFalse(temp_req.approved)
+        self.assertTrue(temp_req.approved)
 
-        assert len(mail.outbox) == 1
+        self.assertEqual(len(mail.outbox), 1)
         extract = re.search(REGEX_ACTIVATE_TEMP_URL, mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
@@ -181,41 +183,6 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         temp_req.refresh_from_db()
         self.assertFalse(temp_req.approved)
 
-        # Check that you still cannot login
-        url = reverse('account:login')
-        payload = {
-            'email': 'test@not-ec-nantes.fr',
-            'password': self.PASSWORD
-        }
-        response = self.client.post(url, payload)
-        self.assertEqual(response.status_code, 302)
-        self.assertFalse(get_user(self.client).is_authenticated)
-
-        # Check that not any anyone can approve the request
-        url = reverse('account:temp-req-approve', kwargs={'id': temp_req.id})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 302)
-        temp_req.refresh_from_db()
-        self.assertFalse(temp_req.approved)
-
-        # Check that a regular user cannot approve
-        user = self.create_user('user1', 'test@test.fr')
-        self.assertTrue(self.client.login(
-            username=user.username, password=self.PASSWORD))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 403)
-        temp_req.refresh_from_db()
-        self.assertFalse(temp_req.approved)
-
-        # Check that an admin can approve the request
-        user.is_superuser = True
-        user.save()
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 302)
-        temp_req.refresh_from_db()
-        self.assertTrue(temp_req.approved)
-        self.client.logout()
-
         # Check that you can login
         url = reverse('account:login')
         payload = {
@@ -230,7 +197,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response, 'Votre compte n\'est pas encore définitif.')
-        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(len(mail.outbox), 1)
 
         # Check make account permanent
         url = reverse('account:upgrade-permanent')
@@ -242,8 +209,8 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         }
         resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, 302)
-        assert len(mail.outbox) == 3
-        extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[2].body)
+        self.assertEqual(len(mail.outbox), 2)
+        extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[1].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
         url = reverse(
@@ -257,37 +224,6 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         url = reverse('account:upgrade-permanent')
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 404)
-
-    @mock.patch('apps.utils.discord.requests.post')
-    def test_deny_temporary_req(self, mock_post):
-
-        # Define response for the fake API
-        mock_post.return_value = discord_mock_message_post()
-
-        url = reverse('account:temporary-registration')
-        response = self.client.post(url, self.PAYLOAD)
-        self.assertEqual(response.status_code, 302)
-        user: User = User.objects.get(email='test@ec-nantes.fr')
-        self.assertEqual(user.is_active, False)
-
-        temp_req: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
-            user=user)
-        resp = self.client.get(temp_req.deny_url)
-        self.assertEqual(resp.status_code, 302)
-        user = self.create_user('user1', 'test@test.fr')
-        self.assertTrue(self.client.login(
-            username=user.username, password=self.PASSWORD))
-        response = self.client.get(temp_req.deny_url)
-        self.assertEqual(response.status_code, 403)
-        user.is_superuser = True
-        user.save()
-        self.client.get(temp_req.deny_url)
-        self.assertEqual(len(mail.outbox), 2)
-        self.assertEqual(TemporaryAccessRequest.objects.all().count(), 0)
-        try:
-            User.objects.get(email='test@ec-nantes.fr')
-        except User.DoesNotExist:
-            pass
 
 
 @freeze_time("2021-09-03")
@@ -340,7 +276,7 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
         response = self.client.post(url, self.PAYLOAD_NOT_EC_NANTES)
         self.assertEqual(response.status_code, 302)
         user: User = User.objects.get(email='test@not-ec-nantes.fr')
-        assert len(mail.outbox) == 1
+        self.assertEqual(len(mail.outbox), 1)
         extract = re.search(REGEX_ACTIVATE_TEMP_URL, mail.outbox[0].body)
         uidb64 = extract.group(1)
         token = extract.group(2)
