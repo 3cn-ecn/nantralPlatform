@@ -19,6 +19,7 @@ from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
+from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, TemplateView
 
 from apps.student.models import Student
@@ -248,6 +249,7 @@ class PasswordResetConfirmCustomView(PasswordResetConfirmView):
     success_url = reverse_lazy('home:home')
 
 
+@require_http_methods(["GET"])
 def redirect_to_student(request, user_id):
     user = User.objects.get(id=user_id)
     student = Student.objects.get(user=user)
