@@ -10,6 +10,7 @@ from .views import (
     ForgottenPassView,
     PasswordResetConfirmCustomView,
     RegistrationChoice,
+    TemporaryRegistrationChoice,
     redirect_to_student
 )
 
@@ -21,6 +22,9 @@ urlpatterns = [
     path('registration/choice/',
          RegistrationChoice.as_view(),
          name='registration-choice'),
+    path('registration/choice/<uuid:invite_id>/',
+         TemporaryRegistrationChoice.as_view(),
+         name='temp-registration-choice'),
     path('registration/', RegistrationView.as_view(), name='registration'),
     path('registration/<uuid:invite_id>/',
          TemporaryRegistrationView.as_view(),

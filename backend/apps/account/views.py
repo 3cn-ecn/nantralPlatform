@@ -282,3 +282,12 @@ class PermanentAccountUpgradeView(LoginRequiredMixin, FormView):
 
 class RegistrationChoice(TemplateView):
     template_name = 'account/registration-choice.html'
+
+
+class TemporaryRegistrationChoice(TemplateView):
+    template_name = 'account/temp-registration-choice.html'
+
+    def get_context_data(self, invite_id, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['invite_id'] = invite_id
+        return context
