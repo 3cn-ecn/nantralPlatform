@@ -1,14 +1,14 @@
+import re
+
 from django.utils import timezone
 from django import forms
 from django.conf import settings
 from django.utils.translation import gettext as _
-
 from django.contrib.auth.models import User
-from apps.student.models import FACULTIES, PATHS
-
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
+from apps.student.models import FACULTIES, PATHS
 from .models import IdRegistration
 
 
@@ -21,10 +21,10 @@ def check_id(id):
 
 
 def check_ecn_mail(mail: str):
-    if not ('@ec-nantes.fr' in mail or '.ec-nantes.fr' in mail):
+    if re.search(r"@([\w\-\.]+\.)?ec-nantes.fr$", mail) is None:
         raise ValidationError(_(
-            "Vous devez avoir une adresse mail de Centrale Nantes finissant "
-            " par ec-nantes.fr"))
+            "Vous devez utiliser une adresse mail de Centrale Nantes finissant "
+            "par ec-nantes.fr"))
 
 
 def check_ecn_mail_login(mail: str):
