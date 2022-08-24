@@ -30,8 +30,7 @@ def user_creation(form: Union[SignUpForm, TemporaryRequestSignUpForm], request: 
     # user can't login until link confirmed
     user.is_active = False
     user.save()
-    if isinstance(
-            form, TemporaryRequestSignUpForm):
+    if isinstance(form, TemporaryRequestSignUpForm):
         temporaryAccessRequest = TemporaryAccessRequest(
             user=user
         )

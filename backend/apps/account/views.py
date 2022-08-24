@@ -1,6 +1,7 @@
 from datetime import datetime
-from typing import Any, Dict, Union
+from typing import Any, Dict
 from urllib.parse import urlparse
+import uuid
 
 from django.conf import settings
 from django.contrib import messages
@@ -18,16 +19,17 @@ from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
-from django.views.generic.edit import FormView
+from django.views.decorators.http import require_http_methods
+from django.views.generic import FormView, TemplateView
 
 from apps.student.models import Student
-from apps.utils.accessMixins import UserIsSuperAdmin
 
 from .emailAuthBackend import EmailBackend
 from .forms import (
     SignUpForm, LoginForm, ForgottenPassForm,
     TemporaryRequestSignUpForm, UpgradePermanentAccountForm)
 from .models import TemporaryAccessRequest
+from .models import IdRegistration
 from .tokens import account_activation_token
 from .utils import user_creation, send_email_confirmation
 
@@ -51,13 +53,23 @@ class TemporaryRegistrationView(FormView):
     form_class = TemporaryRequestSignUpForm
     template_name = 'account/temporary_registration.html'
 
-    def dispatch(self, request, *args: Any, **kwargs: Any):
+    def get(self, request, invite_id: uuid.UUID, *args, **kwargs):
         """Do not allow to use this view outside of allowed temporary accounts
         windows.
         """
-        if not settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
-            return redirect('account:registration')
-        return super().dispatch(request, *args, **kwargs)
+        good_id = IdRegistration.objects.filter(id=invite_id).exists()
+        if (timezone.now().today() > settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
+                or not good_id):
+            messages.error(
+                request,
+                "Invitation invalide : le lien d'invitation a expiré.")
+            return redirect('account:registration-choice')
+        return super().get(request, *args, **kwargs)
+
+    def get_initial(self) -> Dict[str, Any]:
+        initial = super().get_initial()
+        initial['invite_id'] = self.kwargs['invite_id']
+        return initial
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -72,25 +84,22 @@ class TemporaryRegistrationView(FormView):
 
 class ConfirmUser(View):
     def get(self, request, uidb64, token):
-        temp_access_req: Union[TemporaryAccessRequest, None] = None
+        # get the user
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             return render(self.request, 'account/activation_invalid.html')
-        # checking if the user is not a temporary one
+        # get the associated temporary object if it exists
         try:
-            temp_access_req: TemporaryAccessRequest = (
-                TemporaryAccessRequest.objects.get(user=user.pk))
-            if not temp_access_req.approved:
-                return render(self.request, 'account/activation_invalid.html')
+            temp_access_req = TemporaryAccessRequest.objects.get(user=user.pk)
         except TemporaryAccessRequest.DoesNotExist:
             temp_access_req = None
         # checking if the token is valid.
         if account_activation_token.check_token(user, token):
             # if valid set active true
             user.is_active = True
-            if temp_access_req is not None:
+            if temp_access_req and temp_access_req.final_email:
                 user.email = temp_access_req.final_email
                 temp_access_req.delete()
                 messages.warning(
@@ -240,70 +249,11 @@ class PasswordResetConfirmCustomView(PasswordResetConfirmView):
     success_url = reverse_lazy('home:home')
 
 
+@require_http_methods(["GET"])
 def redirect_to_student(request, user_id):
     user = User.objects.get(id=user_id)
     student = Student.objects.get(user=user)
     return redirect('student:update', student.pk)
-
-
-class ABCApprovalTemporaryResgistrationView(UserIsSuperAdmin, View):
-    def get(self, request, id):
-        self.temp_req: TemporaryAccessRequest = get_object_or_404(
-            TemporaryAccessRequest, id=id)
-
-        if self.temp_req.approved:
-            messages.warning(request, 'Cette requête a déjà été approuvée.')
-            return redirect('home:home')
-
-
-class ApproveTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
-    def get(self, request, id):
-        super().get(request, id)
-        self.temp_req.approve()
-        messages.success(
-            request,
-            f'Vous avez accepté la demande de {self.temp_req.user.first_name} '
-            f'{self.temp_req.user.last_name}')
-        return redirect('home:home')
-
-
-class DenyTemporaryRegistrationView(ABCApprovalTemporaryResgistrationView):
-    def get(self, request, id):
-        super().get(request, id)
-        messages.success(
-            request,
-            f'Vous avez refusé la demande de {self.temp_req.user.first_name} '
-            f'{self.temp_req.user.last_name}')
-        self.temp_req.deny()
-        return redirect('home:home')
-
-
-class ConfirmUserTemporary(View):
-    def get(self, request, uidb64, token):
-        try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(pk=uid)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            user = None
-        # checking if the user exists, if the token is valid.
-        if user is not None and account_activation_token.check_token(
-                user, token):
-            try:
-                temp_req: TemporaryAccessRequest = (
-                    TemporaryAccessRequest.objects.get(user=user))
-                temp_req.mail_valid = True
-                temp_req.save()
-            except TemporaryAccessRequest.DoesNotExist:
-                return render(self.request, 'account/activation_invalid.html')
-            messages.success(
-                request,
-                'Votre addresse mail est confirmée !\n Comme vous n\'avez pas '
-                'utilisé votre adresse Centrale, vous devez encore attendre '
-                'qu\'un administrateur vérifie votre inscription.\n On vous '
-                'prévient par mail dès que c\'est bon!.')
-            return redirect('home:home')
-        else:
-            return render(self.request, 'account/activation_invalid.html')
 
 
 class PermanentAccountUpgradeView(LoginRequiredMixin, FormView):
@@ -328,3 +278,7 @@ class PermanentAccountUpgradeView(LoginRequiredMixin, FormView):
         send_email_confirmation(
             self.request.user, self.request, send_to=form.cleaned_data['email'])
         return super().form_valid(form)
+
+
+class RegistrationChoice(TemplateView):
+    template_name = 'account/registration-choice.html'

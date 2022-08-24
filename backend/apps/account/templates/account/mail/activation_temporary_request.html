@@ -1,10 +1,8 @@
 <small>English version bellow</small>
 <h2>On y est presque !</h2>
 <p>Bonjour {{ user.first_name|title }}, vous avez demandé la creation d'un compte sur la plateforme Nantralienne et nous vous en remercions.</p>
-<p>Pour activer votre compte, il ne reste plus qu'à cliquer sur ce <a href='https://{{ domain }}{% url "account:confirm-temporary" uid token %}'>lien</a>.</p>
-<p>Note: Comme vous avez demandé une activation sans compte Centrale, il vous faudra patienter qu'un admin examine votre demande.</p>
+<p>Pour activer votre compte, il ne reste plus qu'à cliquer sur ce <a href='https://{{ domain }}{% url "account:confirm" uid token %}'>lien</a>.</p>
 
 <h2>You're almost there !</h2>
 <p>Hi {{ user.first_name|title }}, Thank you for signing up to Nantral Platform.</p>
-<p>To confirm your account, just simply click on this <a href='https://{{ domain }}{% url "account:confirm-temporary" uid token %}'>link</a>.</p>
-<p>Note: Since you have asked for an account without a Centrale email, you will have to wait until an admin approves your request.</p>
+<p>To confirm your account, just simply click on this <a href='https://{{ domain }}{% url "account:confirm" uid token %}'>link</a>.</p>

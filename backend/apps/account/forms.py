@@ -1,23 +1,36 @@
+import re
+
 from django.utils import timezone
 from django import forms
 from django.conf import settings
 from django.utils.translation import gettext as _
-
 from django.contrib.auth.models import User
-from apps.student.models import FACULTIES, PATHS
-
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
+from apps.student.models import FACULTIES, PATHS
+from .models import IdRegistration
+
+
+def check_id(id):
+    if not IdRegistration.objects.filter(id=id).exists():
+        raise ValidationError(_(
+            "Invitation invalide : le lien d'invitation a expiré. Veuillez "
+            "entrer une adresse en ec-nantes.fr, ou contactez un "
+            "administrateur."))
+
 
 def check_ecn_mail(mail: str):
-    if not 'ec-nantes.fr' in mail:
-        raise ValidationError(
-            _('Vous devez avoir une adresse mail de Centrale Nantes finissant par ec-nantes.fr'))
+    if re.search(r"@([\w\-\.]+\.)?ec-nantes.fr$", mail) is None:
+        raise ValidationError(_(
+            "Vous devez utiliser une adresse mail de Centrale Nantes finissant "
+            "par ec-nantes.fr"))
 
 
 def check_ecn_mail_login(mail: str):
-    """A wrapper around the login check to disable during periods where all emails can be used."""
+    """A wrapper around the login check to disable during periods where all 
+    emails can be used.
+    """
     if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
         return
     check_ecn_mail(mail)
@@ -30,8 +43,9 @@ def check_passwords(pass1, pass2):
 
 
 class SignUpForm(UserCreationForm):
-    email = forms.EmailField(max_length=200, validators=[
-                             check_ecn_mail], required=True, help_text=_('Votre adresse mail ec-nantes.fr'))
+    email = forms.EmailField(
+        max_length=200, validators=[check_ecn_mail],
+        required=True, help_text=_('Votre adresse mail ec-nantes.fr'))
     confirm_email = forms.EmailField(
         max_length=200, required=True, help_text=_('Confirmez votre adresse.'))
     promo = forms.IntegerField(min_value=1919, required=True)
@@ -39,7 +53,9 @@ class SignUpForm(UserCreationForm):
     last_name = forms.CharField(max_length=200, required=True)
     faculty = forms.ChoiceField(required=True, choices=FACULTIES)
     path = forms.ChoiceField(
-        choices=PATHS, help_text=_('Vous pourrez modifier cela plus tard'), required=False)
+        choices=PATHS,
+        help_text=_('Vous pourrez modifier cela plus tard'),
+        required=False)
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
@@ -68,7 +84,6 @@ class SignUpForm(UserCreationForm):
                 if email != confirm_email:
                     raise forms.ValidationError(
                         _("Les emails ne correspondent pas."))
-
             return cleaned_data
 
     def clean_email(self) -> str:
@@ -86,15 +101,20 @@ class SignUpForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(max_length=200, validators=[
-                             check_ecn_mail_login], required=True, help_text=_('Votre adresse mail ec-nantes.fr'))
+    email = forms.EmailField(
+        max_length=200,
+        validators=[check_ecn_mail_login],
+        required=True,
+        help_text=_('Votre adresse mail ec-nantes.fr'))
     password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
         self.fields['password'].label = _("Mot de passe")
-        self.fields[
-            'password'].help_text = f"<a class='text-muted' href='/account/forgotten'>{_('Mot de passe oublié  ?')}</a>"
+        self.fields['password'].help_text = (
+            f"<a class='text-muted' href='/account/forgotten'>"
+            f"{_('Mot de passe oublié  ?')}</a>"
+        )
 
     def clean_email(self) -> str:
         data: str = self.cleaned_data['email']
@@ -102,8 +122,10 @@ class LoginForm(forms.Form):
 
 
 class ForgottenPassForm(forms.Form):
-    email = forms.EmailField(max_length=200, required=True,
-                             help_text=_('Entrez l\'adresse mail associée au compte'))
+    email = forms.EmailField(
+        max_length=200,
+        required=True,
+        help_text=_('Entrez l\'adresse mail associée au compte'))
 
     def clean_email(self) -> str:
         data: str = self.cleaned_data['email']
@@ -136,11 +158,19 @@ class TemporaryRequestSignUpForm(SignUpForm):
     The user will have to confirm the school mail address later.
     '''
     email = forms.EmailField(
-        max_length=200, required=True, help_text=_('Votre adresse mail personnelle.'))
+        max_length=200,
+        required=True,
+        help_text=_('Votre adresse mail personnelle.'))
+    invite_id = forms.UUIDField(
+        validators=[check_id],
+        widget=forms.HiddenInput())
 
 
 class UpgradePermanentAccountForm(forms.Form):
     """Form to get the school mail of the user for verification."""
     email = forms.EmailField(
-        max_length=200, required=True, help_text=_('Votre adresse mail Centrale Nantes.'), validators=[check_ecn_mail]
+        max_length=200,
+        required=True,
+        help_text=_('Votre adresse mail Centrale Nantes.'),
+        validators=[check_ecn_mail]
     )
