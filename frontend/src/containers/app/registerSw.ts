@@ -11,7 +11,7 @@ export default function registerSw() {
   if ('serviceWorker' in navigator) {
     // The service worker has to store in the root of the app
     // http://stackoverflow.com/questions/29874068/navigator-serviceworker-is-never-ready
-    navigator.serviceWorker.register('/sw.js/').then(function (reg) {
+    navigator.serviceWorker.register('/sw.js').then(function (reg) {
       if (Notification.permission === "granted") {
         subscribePushNotifications(reg);
       } else {
