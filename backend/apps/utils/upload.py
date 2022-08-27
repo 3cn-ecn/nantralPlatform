@@ -11,7 +11,6 @@ class PathAndRename(object):
         self.path = sub_path
 
     def __call__(self, instance, filename):
-        print(filename)
         ext = filename.split('.')[-1]
         from apps.group.models import Group
         if isinstance(instance, Group):
