@@ -7,16 +7,17 @@ from .tasks import send_webpush_notification_task
 
 logger = logging.getLogger(__name__)
 
+
 def send_webpush_notification(students: QuerySet, message: dict):
     """Send a notification on devices, to several students, with one message,
     by creating a celery task in background.
-    
+
     Parameters
     ----------
 
     students : QuerySet<Student>
         A queryset of student objects
-    
+
     message : dict
         A message to send, as a dict, with the structure of the "options"
         parameter of a notification:
@@ -26,7 +27,7 @@ def send_webpush_notification(students: QuerySet, message: dict):
         You can also use the key "hidden": if true, you can send a notification
         to a user but it won't be shown to him (useful for incrementing the
         badge for example).
-    
+
     Returns
     -------
     task_launched : bool
@@ -44,9 +45,8 @@ def send_webpush_notification(students: QuerySet, message: dict):
     except kombu.exceptions.OperationalError as err:
         # if the celery task does not work, send notifications in normal mode
         logger.warning(
-            "WARNING: cannot send notifications through celery. " +
-            "Celery might not be configured on this machine.\n" +
+            "WARNING: cannot send notifications through celery. "
+            "Celery might not be configured on this machine.\n"
             "Error code: " + str(err)
         )
         send_webpush_notification_task(student_ids, message)
-
