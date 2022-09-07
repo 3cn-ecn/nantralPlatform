@@ -43,7 +43,6 @@ django-ckeditor-5 = {git = "https://github.com/nantral-platform/django-ckeditor-
 # docutils = "~=0.17.1"
 # importlib-metadata = "~=4.0.1"
 # iniconfig = "~=1.1.1"
-# mccabe = "~=0.6.1"
 # more-itertools = "~=8.8.0"
 # pluggy = "~=0.13.1"
 # py = "~=1.10.0"
