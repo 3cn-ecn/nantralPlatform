@@ -1,7 +1,6 @@
 {
   "editor.formatOnSave": false,
   "editor.insertSpaces": true,
-  "editor.tabSize": 2,
   "editor.rulers": [80],
   "files.associations": {
     "*.html": "html",
@@ -34,5 +33,5 @@
   "python.linting.pydocstyleEnabled": true,
   "python.linting.pydocstyleArgs": ["--ignore=D100,D102,D213,D400,D407"],
   "autoDocstring.docstringFormat": "numpy",
-  "docwriter.style": "Auto-detect"
+  "docwriter.style": "NumPy"
 }
