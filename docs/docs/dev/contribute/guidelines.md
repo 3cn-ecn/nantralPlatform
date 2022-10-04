@@ -21,7 +21,7 @@ style.
 
 ### Python
 
-- Use the [provided VSCode configuration](https://github.com/nantral-platform/nantralPlatform/blob/master/.vscode/settings-sample.json) to enforce a unified coding style.
+- Use the [provided VSCode configuration](https://github.com/3cn-ecn/nantralPlatform/blob/master/.vscode/settings-sample.json) to enforce a unified coding style.
 - Add docstrings to every class based view, using the [autoDocstring extension](https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring) for VSCode.
 - Use the following naming convention (which follows the [PEP8](https://peps.python.org/pep-0008/) guidelines for Python):
 
@@ -85,6 +85,6 @@ style.
 - Use TypeScript to its maximum. Every API call should expect a specific JSON format, and therefore a JavaScript object with a clear interface. Use [this website](https://quicktype.io/typescript) to convert JSON to a TypeScript interface.
 - While React supports class based components, the future of React is functional, thus use functions as much as possible.
 - Split components as much as possible.
-- Keep one component per module. Use [clubsList](https://github.com/nantral-platform/nantralPlatform/blob/master/frontend/src/containers/clubsList.tsx) for reference.
+- Keep one component per module. Use [clubsList](https://github.com/3cn-ecn/nantralPlatform/blob/master/frontend/src/containers/clubsList.tsx) for reference.
 - Only use axios when dealing with PUT, POST and DELETE. Use fetch otherwise (this results in smaller bundle sizes).
 - Only use one UI framework at a time to reduce bundle size.

@@ -13,7 +13,7 @@ There are several failure points that we can look into to try and find the cause
 
 ## Deployment logs
 
-If a problem happens during deployment, you can check the status of the GitHub Action responsible for deploying the latest pull request to production [here](https://github.com/nantral-platform/nantralPlatform/actions). This should provide enough informations for deployment related issues.
+If a problem happens during deployment, you can check the status of the GitHub Action responsible for deploying the latest pull request to production [here](https://github.com/3cn-ecn/nantralPlatform/actions). This should provide enough informations for deployment related issues.
 
 The deployment pipeline is split into two parts:
 

@@ -272,7 +272,7 @@ DISCORD_ADMIN_MODERATION_WEBHOOK = env('DISCORD_ADMIN_MODERATION_WEBHOOK')
 # Github
 GITHUB_USER = env('GITHUB_USER')
 GITHUB_TOKEN = env('GITHUB_TOKEN')
-GITHUB_REPO = 'nantral-platform/nantralPlatform'
+GITHUB_REPO = '3cn-ecn/nantralPlatform'
 
 # Mapbox
 MAPBOX_API_KEY = env('MAPBOX_API_KEY')

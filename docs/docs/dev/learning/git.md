@@ -71,7 +71,7 @@ this access by adding you to the nantral-platform organization.
 *"Merge pull request"*.
 
 * Congratulations, you're done! 🥳 You can now see your name on the home page of the repository: 
-    [github.com/nantral-platform/nantralPlatform](https://github.com/nantral-platform/nantralPlatform)
+    [github.com/3cn-ecn/nantralPlatform](https://github.com/3cn-ecn/nantralPlatform)
 
 
 ## Daily use

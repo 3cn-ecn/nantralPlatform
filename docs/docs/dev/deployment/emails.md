@@ -11,7 +11,7 @@ dateCreated: 2022-05-06T16:30:52.545Z
 
 ## Sending emails in Django
 
-The prefered method for sending mails to user is the [`email_user`](https://docs.djangoproject.com/fr/4.0/ref/contrib/auth/#django.contrib.auth.models.User.email_user) method of the [`User`](https://docs.djangoproject.com/fr/4.0/ref/contrib/auth/#user-model) model. An example can be found [here](https://github.com/nantral-platform/nantralPlatform/blob/019a4f2516de157150bd1be09d1bcfda902f9e09/backend/apps/account/models.py#L66-L67).
+The prefered method for sending mails to user is the [`email_user`](https://docs.djangoproject.com/fr/4.0/ref/contrib/auth/#django.contrib.auth.models.User.email_user) method of the [`User`](https://docs.djangoproject.com/fr/4.0/ref/contrib/auth/#user-model) model. An example can be found [here](https://github.com/3cn-ecn/nantralPlatform/blob/019a4f2516de157150bd1be09d1bcfda902f9e09/backend/apps/account/models.py#L66-L67).
 
 If you need to send an email without having the user object, you can use Django's built-in [`send_mail`](https://docs.djangoproject.com/fr/4.0/topics/email/#send-mail) method. A detailed example is available [here](https://docs.djangoproject.com/fr/4.0/topics/email/).
 
@@ -56,6 +56,6 @@ We use [Mailu 1.9](https://mailu.io/) with Docker to handle our emails. This inc
 - fetchmail
 - webmail
 
-The SSL certificates are the ones used by our entire platform. We pass them to the container [when they are updated with Certbot](https://github.com/nantral-platform/nantralPlatform/blob/da9649ad35d4379293d7ee0dbc6e921c490596dd/deployment/certbot-renew.sh#L27-L28) and [during deployment](https://github.com/nantral-platform/nantralPlatform/blob/da9649ad35d4379293d7ee0dbc6e921c490596dd/.github/workflows/deploy.yml#L139-L140).
+The SSL certificates are the ones used by our entire platform. We pass them to the container [when they are updated with Certbot](https://github.com/3cn-ecn/nantralPlatform/blob/da9649ad35d4379293d7ee0dbc6e921c490596dd/deployment/certbot-renew.sh#L27-L28) and [during deployment](https://github.com/3cn-ecn/nantralPlatform/blob/da9649ad35d4379293d7ee0dbc6e921c490596dd/.github/workflows/deploy.yml#L139-L140).
 
 The emails and accounts are stored on our Postgresql database.
