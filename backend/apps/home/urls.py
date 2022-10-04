@@ -7,8 +7,8 @@ app_name = 'home'
 urlpatterns = [
     path('suggestions/', views.SuggestionView.as_view(), name='suggestions'),
     path('legal_mentions/', views.LegalMentionsView.as_view(), name='mentions'),
-    path('me/', views.currentUserPageView, name='me'),
-    path('my_coloc/', views.currentUserRoommatesView, name='my_coloc'),
+    path('me/', views.current_user_page_view, name='me'),
+    path('my_coloc/', views.current_user_roommates_view, name='my_coloc'),
     path('', views.HomeView.as_view(), name='home'),
     path('404/', views.handler404),
     path('403/', views.handler403),
