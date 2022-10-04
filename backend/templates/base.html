@@ -88,7 +88,7 @@
 							<img src='{% static "/img/icons/scalable/list.svg" %}' class="align-middle" loading="lazy" alt="">
 							Annuaire Étudiant
 						</a></li>
-						<li><a class="dropdown-item" href="{% url 'services:signature-gen' %}">
+						<li><a class="dropdown-item" href="{% url 'tools:signature-gen' %}">
 							<img src='{% static "/img/icons/scalable/sign.svg" %}' class="align-middle" loading="lazy" alt="">
 							Signature ECN
 						</a></li>
@@ -122,7 +122,7 @@
 								<li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
 							{% endif  %}
 							<li><hr class="dropdown-divider"></li>
-							<li><a class="dropdown-item" href="{% url 'home:sugestions' %}"><i class="fa fa-exclamation-circle"></i>&nbsp; Suggestion / Bug</a></li>
+							<li><a class="dropdown-item" href="{% url 'home:suggestions' %}"><i class="fa fa-exclamation-circle"></i>&nbsp; Suggestion / Bug</a></li>
 						{% else %}
 							<li><a class="dropdown-item" href="{% url 'account:login' %}"><i class="fas fa-sign-in-alt"></i>&nbsp; Connexion</a></li>
 						{% endif %}
