@@ -16,8 +16,8 @@ Now that's every softwares are installed, let's set up them!
 
 1. Start **Github Desktop** 
 2. Select *"Clone a repository from the internet"* (if you don't see the button, select `File > Clone repository`)
-3. Paste the repository url: `https://github.com/nantral-platform/nantralPlatform.git`, or only 
-    `nantral-platform/nantralPlatform`, and clone the repository!
+3. Paste the repository url: `https://github.com/3cn-ecn/nantralPlatform.git`, or only 
+    `3cn-ecn/nantralPlatform`, and clone the repository!
 4. Wait during the download, and then click the *"Open in Visual Studio Code"* button (if you see another text editor, 
     open the Github Desktop preferences and set the text editor to VS Code)
 
@@ -26,7 +26,7 @@ Now that's every softwares are installed, let's set up them!
 
 1. Start by opening VSCode.
 2. Once your folder is opened, press <kbd>CTRL</kbd> + <kbd>SHIFT</kbd> + <kbd>P</kbd> (for Mac users: <kbd>CMD</kbd> + <kbd>SHIFT</kbd> + <kbd>P</kbd>), then type `Clone` and press <kbd>ENTER</kbd>.
-3. In the prompt window, paste `https://github.com/nantral-platform/nantralPlatform.git`.
+3. In the prompt window, paste `https://github.com/3cn-ecn/nantralPlatform.git`.
 4. When prompted, select a folder where you want to clone the repository. This will create a folder named `nantralPlatform` where everything will be stored.
 5. Open the `nantralPlatform` folder in VSCode once the repository has ben cloned.
 
