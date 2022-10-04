@@ -53,8 +53,8 @@ urlpatterns = [
         include('apps.post.urls', namespace='post')),
     path('event/', 
         include('apps.event.urls', namespace='event')),
-    path('services/', 
-        include('apps.services.urls', namespace='services')),
+    path('tools/', 
+        include('apps.tools.urls', namespace='tools')),
     path('notification/', 
         include('apps.notification.urls', namespace='notification')),
 

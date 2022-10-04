@@ -3,7 +3,7 @@ from django.urls import path
 
 from .views import *
 
-app_name = 'services'
+app_name = 'tools'
 
 urlpatterns = [
     path('signature/', SignatureGenerationView.as_view(), name='signature-gen'),

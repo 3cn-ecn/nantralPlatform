@@ -89,7 +89,6 @@ COMMON_APPS = [
     'apps.administration',
     'apps.club',
     'apps.event',
-    'apps.tools',
     'apps.family',
     'apps.group',
     'apps.home',
@@ -97,12 +96,13 @@ COMMON_APPS = [
     'apps.notification',
     'apps.post',
     'apps.roommates',
-    'apps.services',
     'apps.sociallink',
     'apps.student',
+    'apps.tools',
 ]
 ARCHIVED_APPS = [
     'apps._archived.exchange',
+    'apps._archived.services',
 ]
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS + ARCHIVED_APPS
 
