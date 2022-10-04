@@ -99,7 +99,6 @@ COMMON_APPS = [
     'apps.tools',
     'apps.sociallink',
     'apps.student',
-    'apps.tools',
 ]
 ARCHIVED_APPS = [
     'apps._archived.exchange',
