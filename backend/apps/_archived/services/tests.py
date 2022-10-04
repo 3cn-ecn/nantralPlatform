@@ -9,7 +9,7 @@ class TestSignature(TestCase, TestMixin):
         self.user_setup()
 
     def test_signature_gen(self):
-        url = reverse('tools:signature-gen')
+        url = reverse('services:signature-gen')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
