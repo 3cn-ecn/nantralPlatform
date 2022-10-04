@@ -4,11 +4,14 @@ from django.core import mail
 from django.template.loader import render_to_string
 from .models import TemporaryAccessRequest
 from django.conf import settings
+
+
+from .models import IdRegistration
 # Register your models here.
 
 
-class UserAdmin(admin.ModelAdmin):
-    pass
+class IdRegistrationAdmin(admin.ModelAdmin):
+    list_display = ["id"]
 
 
 class TemporaryAccessRequestAdmin(admin.ModelAdmin):
@@ -31,7 +34,7 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
                 }
             )
             email = mail.EmailMultiAlternatives(
-                subject="[Nantral-Platform] Rappel votre accès temporaire va expirer!",
+                subject="[Nantral Platform] Votre compte expire bientôt !",
                 body=email_html,
                 to=[tempAccessReq.user.email]
             )
@@ -40,4 +43,5 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
         connection.send_messages(mails)
 
 
+admin.site.register(IdRegistration, IdRegistrationAdmin)
 admin.site.register(TemporaryAccessRequest, TemporaryAccessRequestAdmin)

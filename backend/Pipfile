@@ -1,0 +1,64 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[scripts]
+start = "python manage.py runserver"
+test = "python manage.py test"
+makemigrations = "python manage.py makemigrations"
+migrate = "python manage.py migrate"
+django = "python manage.py"
+format = "autopep8 -r --in-place ."
+
+[packages]
+celery = "~=5.2.2"
+crispy-bootstrap5 = "~=0.4"
+discord-webhook = "~=0.14.0"
+django = "~=3.2.14"
+django-celery-beat = "~=2.2.1"
+django-crispy-forms = "~=1.11.2"
+django-debug-toolbar = "~=3.2.2"
+django-environ = "~=0.8.1"
+django-extra-settings = "~=0.3.2"
+django-storages = {version = "~=1.11.1", extras = ["boto3"]}
+django-push-notifications = {version = "~=3.0.0", extras = ["apns", "wp"]}
+djangorestframework = "~=3.12.4"
+flower = "~=1.2.0"
+freezegun = "~=1.1.0"
+gunicorn = "~=20.1.0"
+matching = "~=1.4"
+numpy = ">=1.21.2"
+pillow = "~=9.0.1"
+psycopg2-binary = "~=2.9.3"
+pymemcache = "~=3.5.0"
+pywebpush = "~=1.14.0"
+redis = "~=3.5.3"
+requests = "~=2.25.1"
+six = "~=1.16.0"
+django-ckeditor-5 = {git = "https://github.com/nantral-platform/django-ckeditor-5.git"}
+# REMOVED PACKAGES
+# attrs = "~=21.2.0"
+# django-amazon-ses = "~=4.0.0"
+# docutils = "~=0.17.1"
+# importlib-metadata = "~=4.0.1"
+# iniconfig = "~=1.1.1"
+# more-itertools = "~=8.8.0"
+# pluggy = "~=0.13.1"
+# py = "~=1.10.0"
+# pyparsing = "~=2.4.7"
+# pytest = "~=6.2.4"
+# toml = "~=0.10.2"
+# zipp = "~=3.4.1"
+
+[dev-packages]
+autopep8 = "~=1.6.0"
+flake8 = "~=4.0.1"
+mccabe = "~=0.6.1"
+pep8-naming = "~=0.12.1"
+pycodestyle = "~=2.8.0"
+pydocstyle = "~=6.1.1"
+pyflakes = "~=2.4.0"
+
+[requires]
+python_version = "3.10"

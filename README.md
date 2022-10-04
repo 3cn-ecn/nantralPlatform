@@ -46,7 +46,7 @@ The backend is a django application.
     |-wsgi.py
 |-templates (Genral template folder)
 |-manage.py (General script to launch and make migrations)
-|-requirements.txt (Contains python requirements)
+|-Pipfile (Contains python requirements)
 ```
 
 ## Useful Links

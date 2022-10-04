@@ -3,6 +3,7 @@ FROM python:3.10-slim-buster
 ENV C_FORCE_ROOT 1
 ENV DOCKER True
 ENV DJANGO_SETTINGS_MODULE=config.settings.production
+ENV PYTHONUNBUFFERED 1
 
 # create unprivileged user
 RUN adduser --disabled-password --gecos '' myuser
@@ -15,14 +16,15 @@ RUN apt-get update && \
 # Step 1: Install any Python packages
 # ----------------------------------------
 
-ENV PYTHONUNBUFFERED 1
 RUN mkdir -p /var/app/logs
 RUN mkdir var/app/staticfiles
 WORKDIR  /var/app
 
-ADD backend/requirements.txt ./requirements.txt
-RUN pip install -U pip && \
-  pip install -r requirements.txt
+COPY backend/Pipfile* /tmp/
+RUN pip install -U pip
+RUN pip install pipenv
+RUN cd /tmp && pipenv requirements > requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
 # Step 2: Copy Django Code
 # ----------------------------------------

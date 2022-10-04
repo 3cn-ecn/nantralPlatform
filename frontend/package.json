@@ -6,13 +6,13 @@
   "mode": "production",
   "type": "module",
   "scripts": {
-    "start": "node esbuild.js",
-    "dev-leg": "node esbuild.js dev",
-    "watch": "node esbuild.js watch",
-    "dev": "vite",
+    "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:leg": "node esbuild.js watch",
+    "build:leg": "node esbuild.js",
+    "build:dev:leg": "node esbuild.js dev",
+    "test": "echo \"Oops 🤭 The tests are not implemented yet...\" && exit 1",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
   },

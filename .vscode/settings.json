@@ -3,13 +3,9 @@
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
   "editor.rulers": [80],
-  "[python]": {
-    "editor.tabSize": 4
-  },
   "files.associations": {
     "*.html": "html",
     "**/backend/**/*.html": "django-html",
-    "requirements.txt": "pip-requirements",
     "**/*.py": "python",
     "**/*.js": "javascript",
     "**/*.jsx": "javascript",
@@ -19,11 +15,19 @@
     "**/*.tsx": "typescript",
     "**/src/**/*.ts": "typescriptreact",
     "**/src/**/*.tsx": "typescriptreact",
-    "**/*.json": "jsonc",
-    "**/docs/**/*.md": "mdx"
+    "**/docs/**/*.md": "mdx",
+    "requirements.txt": "pip-requirements",
+    "Pipfile": "toml"
   },
-  "python.defaultInterpreterPath": "${workspaceFolder}/backend/env/bin",
+  "[python]": {
+    "editor.tabSize": 4
+  },
+  "[django-html][html][javascript][javascriptreact][typescript][typescriptreact][json]": {
+    "editor.tabSize": 2
+  },
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/",
   "python.envFile": "${workspaceFolder}/backend/config/settings/.env",
+  "python.terminal.activateEnvironment": false,
   "python.formatting.provider": "autopep8",
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
