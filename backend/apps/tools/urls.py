@@ -1,10 +1,12 @@
-from django.conf.urls import url
 from django.urls import path
 
-from .views import *
+from . import views
 
 app_name = 'tools'
 
 urlpatterns = [
-    path('signature/', SignatureGenerationView.as_view(), name='signature-gen'),
+    path(
+        'signature/',
+        views.SignatureGenerationView.as_view(),
+        name='signature-gen'),
 ]

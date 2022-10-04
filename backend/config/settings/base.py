@@ -96,6 +96,7 @@ COMMON_APPS = [
     'apps.notification',
     'apps.post',
     'apps.roommates',
+    'apps.tools',
     'apps.sociallink',
     'apps.student',
     'apps.tools',
