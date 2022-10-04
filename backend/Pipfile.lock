@@ -249,7 +249,7 @@
             "version": "==2.2.1"
         },
         "django-ckeditor-5": {
-            "git": "https://github.com/nantral-platform/django-ckeditor-5.git",
+            "git": "https://github.com/3cn-ecn/django-ckeditor-5.git",
             "ref": "7937d6571b5374f051b515d5a3e8e2f89e995cd3"
         },
         "django-crispy-forms": {
