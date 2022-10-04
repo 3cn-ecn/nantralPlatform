@@ -154,25 +154,25 @@ def offline_view(request):
 
 # ERROR PAGES VIEWS
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST", "PUT", "DELETE"])
 def handler403(request, *args, **argv):
     response = render(request, 'errors/403.html', context={}, status=403)
     return response
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST", "PUT", "DELETE"])
 def handler404(request, *args, **argv):
     response = render(request, 'errors/404.html', context={}, status=404)
     return response
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST", "PUT", "DELETE"])
 def handler413(request, *args, **argv):
     response = render(request, 'errors/413.html', context={}, status=404)
     return response
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST", "PUT", "DELETE"])
 def handler500(request, *args, **argv):
     response = render(request, 'errors/500.html', context={}, status=500)
     return response
