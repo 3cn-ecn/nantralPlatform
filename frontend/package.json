@@ -9,9 +9,9 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start:leg": "node esbuild.js watch",
-    "build:leg": "node esbuild.js",
-    "build:dev:leg": "node esbuild.js dev",
+    "leg:start": "node esbuild.js watch",
+    "leg:build": "node esbuild.js",
+    "leg:build:dev": "node esbuild.js dev",
     "test": "echo \"Oops 🤭 The tests are not implemented yet...\" && exit 1",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix"
@@ -74,6 +74,7 @@
     "react-i18next": "^11.16.9",
     "react-map-gl": "^6.1.18",
     "react-router-dom": "^6.3.0",
+    "sass": "^1.55.0",
     "supercluster": "^7.1.3",
     "typescript": "^4.4.2",
     "vite": "^3.0.3"
