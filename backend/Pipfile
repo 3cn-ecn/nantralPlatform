@@ -9,7 +9,7 @@ test = "python manage.py test"
 makemigrations = "python manage.py makemigrations"
 migrate = "python manage.py migrate"
 django = "python manage.py"
-format = "autopep8 -r --in-place ."
+format = "autopep8 -r --global-config ../setup.cfg --in-place ."
 
 [packages]
 celery = "~=5.2.2"
@@ -39,13 +39,13 @@ six = "~=1.16.0"
 django-ckeditor-5 = {git = "https://github.com/3cn-ecn/django-ckeditor-5.git"}
 
 [dev-packages]
-autopep8 = "~=1.6.0"
-flake8 = "~=4.0.1"
-mccabe = "~=0.6.1"
-pep8-naming = "~=0.12.1"
-pycodestyle = "~=2.8.0"
-pydocstyle = "~=6.1.1"
-pyflakes = "~=2.4.0"
+autopep8 = ">=1.7.0"
+flake8 = ">=5.0.4"
+mccabe = ">=0.7.0"
+pep8-naming = ">=0.13.2"
+pycodestyle = ">=2.9.1"
+pydocstyle = ">=6.1.1"
+pyflakes = ">=2.5.0"
 
 [requires]
 python_version = "3.10"
