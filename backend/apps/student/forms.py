@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import PasswordChangeForm
 
+
 class ChangePassForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super(ChangePassForm, self).__init__(*args, **kwargs)

@@ -29,9 +29,9 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
         self.object = BaseEvent.get_event_by_slug(self.kwargs.get('event_slug'))
         # mark it as read
         SentNotification.objects.filter(
-            student = self.request.user.student,
-            notification = self.object.notification
-        ).update(seen = True)
+            student=self.request.user.student,
+            notification=self.object.notification
+        ).update(seen=True)
         # get context
         context['object'] = self.object
         context['group'] = self.object.get_group
@@ -40,11 +40,11 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
         context['is_admin'] = context['group'].is_admin(self.request.user)
         context['ariane'] = [
             {
-                'target': reverse('home:home'), 
+                'target': reverse('home:home'),
                 'label': "Évènements"
             },
             {
-                'target': '#', 
+                'target': '#',
                 'label': self.object.title
             },
         ]
@@ -70,11 +70,11 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
             self.get_app(), self.get_slug())
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
                 'label': group.name
             },
             {
@@ -91,7 +91,7 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
             event.save()
             messages.success(
                 self.request, f'Vous avez programé {event.title}, le {event.date}.')
-            return redirect(self.get_app()+':update-events', self.get_slug())
+            return redirect(self.get_app() + ':update-events', self.get_slug())
         except IntegrityError as e:
             messages.error(
                 self.request, f"L'événement {event.title} existe déjà. Veuillez modifier l'événement existant ou changer le nom de l'événement que vous tentez d'ajouter.")
@@ -116,11 +116,11 @@ class EventUpdateView(UserIsAdmin, UpdateView):
         context['object'] = group = get_object_from_full_slug(self.object.group)
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
                 'label': group.name
             },
             {
@@ -163,11 +163,11 @@ class UpdateGroupEventsView(UserIsAdmin, View):
         context['form'] = EventFormSet(queryset=context['events'])
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
                 'label': group.name
             },
             {
@@ -181,7 +181,7 @@ class UpdateGroupEventsView(UserIsAdmin, View):
         context = self.get_context_data()
         return render(request, self.template_name, context)
 
-    def post(self, request,  **kwargs):
+    def post(self, request, **kwargs):
         object = get_object_from_slug(self.get_app(), self.get_slug())
         return edit_events(request, object)
 
@@ -207,11 +207,11 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
         context['form'] = EventFormSet(queryset=context['events'])
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
                 'label': group.name
             },
             {
@@ -225,7 +225,7 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
         context = self.get_context_data()
         return render(request, self.template_name, context)
 
-    def post(self, request,  **kwargs):
+    def post(self, request, **kwargs):
         object = get_object_from_slug(self.get_app(), self.get_slug())
         return edit_events(request, object)
 
@@ -265,4 +265,4 @@ def edit_events(request, group):
         messages.success(request, 'Évènements modifiés !')
     else:
         messages.error(request, form.errors)
-    return redirect(group.app+':update-events', group.slug)
+    return redirect(group.app + ':update-events', group.slug)

@@ -17,22 +17,22 @@ class SubscriptionForm(forms.Form):
             return f'{name} (<a href="{url}" target="_blank">voir la page</a>)'
         except Exception:
             return page
-    
+
     def __init__(self, pages=[], initial=None, *args, **kwargs):
         super().__init__(initial=initial, *args, **kwargs)
-        if initial is None: initial = {}
+        if initial is None:
+            initial = {}
         for page in pages:
             self.fields[page] = forms.BooleanField(
-                label = self.display_page(page),
-                required = False
+                label=self.display_page(page),
+                required=False
             )
-    
+
     def save(self, student):
         if self.is_valid():
             for page, choice in self.cleaned_data.items():
                 if not choice:
                     Subscription.objects.get(
-                        page = page,
-                        student = student
+                        page=page,
+                        student=student
                     ).delete()
-

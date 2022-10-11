@@ -16,7 +16,7 @@ from apps.academic.forms import *
 from apps.administration.forms import *
 
 
-#NB : Les BDX sont aussi des instances de Club
+# NB : Les BDX sont aussi des instances de Club
 
 def UpdateGroupForm(group):
     if isinstance(group, BDX):
@@ -50,7 +50,6 @@ def NamedMembershipAddGroup(group):
         return None
 
 
-
 def NamedMembershipGroupFormset(group):
     if isinstance(group, Club):
         return NamedMembershipClubFormset
@@ -66,14 +65,12 @@ def NamedMembershipGroupFormset(group):
         return None
 
 
-
 SocialLinkGroupFormset = modelformset_factory(
     SocialLink,
     fields=['network', 'url', 'label'],
     extra=1,
     can_delete=True,
 )
-
 
 
 class AdminRightsRequestForm(ModelForm):

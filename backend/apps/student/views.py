@@ -20,7 +20,7 @@ class StudentList(LoginRequiredMixin, ListView):
     model = Student
     template_name = 'student/list.html'
     ordering = ['user__last_name', 'user__first_name']
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ariane'] = [
@@ -40,11 +40,13 @@ class StudentProfile(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['clubs'] = NamedMembershipClub.objects.filter(
             student=self.object)
-        context['courses'] = NamedMembershipCourse.objects.filter(student=self.object).order_by('year')
-        context['colocs'] = NamedMembershipRoommates.objects.filter(student=self.object)
+        context['courses'] = NamedMembershipCourse.objects.filter(
+            student=self.object).order_by('year')
+        context['colocs'] = NamedMembershipRoommates.objects.filter(
+            student=self.object)
         context['ariane'] = [
             {
-                'target': reverse('student:list'), 
+                'target': reverse('student:list'),
                 'label': 'Annuaire'
             },
             {
@@ -69,7 +71,7 @@ class StudentProfileEdit(UserPassesTestMixin, UpdateView):
         context['password_form'] = ChangePassForm(self.object.user)
         context['ariane'] = [
             {
-                'target': reverse('home:me'), 
+                'target': reverse('home:me'),
                 'label': 'Profil'
             },
             {

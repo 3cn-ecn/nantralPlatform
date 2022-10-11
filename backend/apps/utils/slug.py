@@ -116,7 +116,7 @@ class SlugModel:
 
     def set_slug(self, text, max_length=50):
         if not self.slug:
-            slug = slugify(text)[:max_length-5]
+            slug = slugify(text)[:max_length - 5]
             model = type(self)
             if model.objects.filter(slug=slug).exists():
                 id = 1

@@ -25,19 +25,19 @@ class PostDetailView(LoginRequiredMixin, TemplateView):
         self.object = Post.get_post_by_slug(self.kwargs.get('post_slug'))
         # mark it as read
         SentNotification.objects.filter(
-            student = self.request.user.student,
-            notification = self.object.notification
-        ).update(seen = True)
+            student=self.request.user.student,
+            notification=self.object.notification
+        ).update(seen=True)
         # get context
         context['object'] = self.object
         context['group'] = self.object.get_group
         context['ariane'] = [
             {
-                'target': reverse('home:home'), 
+                'target': reverse('home:home'),
                 'label': "Posts"
             },
             {
-                'target': '#', 
+                'target': '#',
                 'label': self.object.title
             },
         ]
@@ -90,11 +90,11 @@ class UpdateGroupCreatePostView(UserIsAdmin, FormView):
             self.get_app(), self.get_slug())
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
                 'label': group.name
             },
             {
@@ -109,7 +109,7 @@ class UpdateGroupCreatePostView(UserIsAdmin, FormView):
         post.group = get_full_slug_from_slug(self.get_app(), self.get_slug())
         post.save()
         messages.success(self.request, 'Votre annonce a été enregistrée.')
-        return redirect(self.get_app()+':update-posts', self.get_slug())
+        return redirect(self.get_app() + ':update-posts', self.get_slug())
 
 
 class UpdateGroupPostsView(UserIsAdmin, View):
@@ -131,11 +131,11 @@ class UpdateGroupPostsView(UserIsAdmin, View):
         context['form'] = PostFormSet(queryset=context['posts'])
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
                 'label': group.name
             },
             {
@@ -149,7 +149,7 @@ class UpdateGroupPostsView(UserIsAdmin, View):
         context = self.get_context_data()
         return render(request, self.template_name, context)
 
-    def post(self, request,  **kwargs):
+    def post(self, request, **kwargs):
         object = get_object_from_slug(self.get_app(), self.get_slug())
         return edit_posts(request, object)
 
@@ -169,4 +169,4 @@ def edit_posts(request, group):
         messages.success(request, 'Annonces modifiées')
     else:
         messages.error(request, form.errors)
-    return redirect(group.app+':update-posts', group.slug)
+    return redirect(group.app + ':update-posts', group.slug)

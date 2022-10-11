@@ -24,7 +24,7 @@ def remove_inactive_accounts():
                 user.delete()
     else:
         User.objects.filter(
-            is_active=False, date_joined__lt=(datetime.now()-timedelta(hours=1))).delete()
+            is_active=False, date_joined__lt=(datetime.now() - timedelta(hours=1))).delete()
 
 
 @shared_task

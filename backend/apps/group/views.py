@@ -42,7 +42,8 @@ class BaseDetailGroupView(DetailView):
         # seuement si connecté
         context['connected'] = userIsConnected(self.request.user)
         if userIsConnected(self.request.user):
-            publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
+            publication_date = timezone.make_aware(
+                timezone.now().today() - timedelta(days=10))
             posts = Post.objects.filter(
                 group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
             context['posts'] = [
@@ -68,11 +69,11 @@ class BaseDetailGroupView(DetailView):
             context['admin_req_form'] = AdminRightsRequestForm()
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': '#', 
+                'target': '#',
                 'label': group.name
             },
         ]
@@ -115,17 +116,21 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         if not self.object.pk:
             self.object.save()
             messages.success(self.request, 'Bienvenue dans le groupe !')
-            try: Subscription.objects.create(
+            try:
+                Subscription.objects.create(
                     page=self.object.group.full_slug,
                     student=self.object.student)
-            except IntegrityError: pass
+            except IntegrityError:
+                pass
         elif self.request.POST.get('delete'):
             self.object.delete()
             messages.success(self.request, 'Membre supprimé.')
-            try: Subscription.objects.get(
-                page=self.object.group.full_slug,
-                student=self.object.student).delete()
-            except Subscription.DoesNotExist: pass
+            try:
+                Subscription.objects.get(
+                    page=self.object.group.full_slug,
+                    student=self.object.student).delete()
+            except Subscription.DoesNotExist:
+                pass
         else:
             self.object.save()
             messages.success(
@@ -156,11 +161,11 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
             context['form'] = UpdateForm(instance=context['object'])
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
                 'label': group.name
             },
             {
@@ -180,7 +185,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
                 messages.success(request, 'Informations modifiées !')
             else:
                 messages.error(request, form.errors)
-        return redirect(group.app+':update', group.slug)
+        return redirect(group.app + ':update', group.slug)
 
 
 class UpdateGroupMembersView(UserIsAdmin, TemplateView):
@@ -199,11 +204,11 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
         context['object'] = group
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
                 'label': group.name
             },
             {
@@ -240,7 +245,7 @@ def edit_named_memberships(request, group):
             messages.success(request, 'Membres modifiés')
         else:
             messages.error(request, form.errors)
-    return redirect(group.app+':update-members', group.slug)
+    return redirect(group.app + ':update-members', group.slug)
 
 
 class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
@@ -263,11 +268,11 @@ class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
         context['sociallinks'] = form
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
+                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
                 'label': group.name
             },
             {
@@ -296,7 +301,7 @@ def edit_sociallinks(request, group):
         messages.success(request, 'Liens modifiés')
     else:
         messages.error(request, form.errors)
-    return redirect(group.app+':update-sociallinks', group.slug)
+    return redirect(group.app + ':update-sociallinks', group.slug)
 
 
 class RequestAdminRightsView(LoginRequiredMixin, FormView):
@@ -324,7 +329,7 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 
     def get_success_url(self) -> str:
         group = self.get_group()
-        return reverse(group.app+':detail', kwargs={'slug': group.slug})
+        return reverse(group.app + ':detail', kwargs={'slug': group.slug})
 
 
 class AcceptAdminRequestView(UserIsAdmin, View):
@@ -332,7 +337,8 @@ class AcceptAdminRequestView(UserIsAdmin, View):
         app = resolve(request.path_info).app_name
         group: Group = get_object_from_slug(app, slug)
         try:
-            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
+            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
+                id=id)
             if group.full_slug == admin_req.group:
                 # Checking whether the url is legit
                 messages.success(
@@ -351,7 +357,8 @@ class DenyAdminRequestView(UserIsAdmin, View):
         app = resolve(request.path_info).app_name
         group: Group = get_object_from_slug(app, slug)
         try:
-            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
+            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
+                id=id)
             if group.full_slug == admin_req.group:
                 # Checking whether the url is legit
                 messages.success(

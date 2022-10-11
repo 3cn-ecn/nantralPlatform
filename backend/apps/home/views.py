@@ -182,6 +182,7 @@ def handler500(request, *args, **argv):
 
 class DoIHaveToLoginView(APIView):
     """API endpoint to check if user has to login to see a page"""
+
     def get(self, request, format=None):
         path = request.GET.get("path")
         try:

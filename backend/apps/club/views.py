@@ -33,7 +33,7 @@ class ListClubView(TemplateView):
             context['club_list'] = clubList
         context['ariane'] = [
             {
-                'target': '#', 
+                'target': '#',
                 'label': 'Clubs & Assos'
             }
         ]

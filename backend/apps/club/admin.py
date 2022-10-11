@@ -37,7 +37,7 @@ class ClubAdmin(admin.ModelAdmin):
     def metrics_view(self, request):
         no_admins = []
         for club in Club.objects.all():
-            date_begin = timezone.now().year-1
+            date_begin = timezone.now().year - 1
             if NamedMembershipClub.objects.filter(
                     group=club.id, admin=True,
                     date_begin__year__gte=date_begin).count() == 0:

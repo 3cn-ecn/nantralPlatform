@@ -18,13 +18,15 @@ class SocialNetwork(models.Model):
 
 class SocialLink(models.Model):
     url = models.URLField(verbose_name='URL', max_length=200)
-    label = models.CharField(verbose_name='Étiquette', max_length=20, null=True, blank=True)
-    network = models.ForeignKey(SocialNetwork, on_delete=models.CASCADE, verbose_name="Type du lien")
+    label = models.CharField(verbose_name='Étiquette',
+                             max_length=20, null=True, blank=True)
+    network = models.ForeignKey(
+        SocialNetwork, on_delete=models.CASCADE, verbose_name="Type du lien")
     slug = models.SlugField(verbose_name='Slug du groupe', null=True)
 
     class Meta:
         verbose_name = "Lien de Réseau Social"
         verbose_name_plural = "Liens des Réseaux Sociaux"
-    
+
     def __str__(self):
         return self.url

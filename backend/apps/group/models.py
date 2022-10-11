@@ -106,7 +106,7 @@ class Group(models.Model, SlugModel):
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
-        return reverse(self.app+':detail', kwargs={'slug': self.slug})
+        return reverse(self.app + ':detail', kwargs={'slug': self.slug})
 
     @property
     def modelName(self):
@@ -151,7 +151,7 @@ class AdminRightsRequest(models.Model):
                 name='Accepter', value=f"[Accepter]({self.accept_url})", inline=True)
             embed.add_embed_field(
                 name='Refuser', value=f"[Refuser]({self.deny_url})", inline=True)
-            if(self.student.picture):
+            if (self.student.picture):
                 embed.thumbnail = {"url": self.student.picture.url}
             webhook.add_embed(embed)
             webhook.execute()
