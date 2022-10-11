@@ -27,121 +27,121 @@
 		  	"name": "Évènements",
 		  	"url": "/",
 		  	"description": "Liste des prochains évènememts !",
-			"icons": [
-				{
-					"src": "/static/img/icons/round/event_ldpi.png",
-					"sizes": "48x48",
-					"type": "image/png"
-		  		},
-				{
-					"src": "/static/img/icons/round/event_hdpi.png",
-					"sizes": "72x72",
-					"type": "image/png"
-				},
-				{
-					"src": "/static/img/icons/round/event_xhdpi.png",
-					"sizes": "96x96",
-					"type": "image/png"
-				},
-				{
-					"src": "/static/img/icons/maskable/event_ldpi.png",
-					"sizes": "48x48",
-					"type": "image/png",
-					"purpose": "maskable"
-		  		},
-				{
-					"src": "/static/img/icons/maskable/event_hdpi.png",
-					"sizes": "72x72",
-					"type": "image/png",
-					"purpose": "maskable"
-				},
-				{
-					"src": "/static/img/icons/maskable/event_xhdpi.png",
-					"sizes": "96x96",
-					"type": "image/png",
-					"purpose": "maskable"
-				}
-			]
+				"icons": [
+					{
+						"src": "/static/img/icons/round/event_ldpi.png",
+						"sizes": "48x48",
+						"type": "image/png"
+						},
+					{
+						"src": "/static/img/icons/round/event_hdpi.png",
+						"sizes": "72x72",
+						"type": "image/png"
+					},
+					{
+						"src": "/static/img/icons/round/event_xhdpi.png",
+						"sizes": "96x96",
+						"type": "image/png"
+					},
+					{
+						"src": "/static/img/icons/maskable/event_ldpi.png",
+						"sizes": "48x48",
+						"type": "image/png",
+						"purpose": "maskable"
+						},
+					{
+						"src": "/static/img/icons/maskable/event_hdpi.png",
+						"sizes": "72x72",
+						"type": "image/png",
+						"purpose": "maskable"
+					},
+					{
+						"src": "/static/img/icons/maskable/event_xhdpi.png",
+						"sizes": "96x96",
+						"type": "image/png",
+						"purpose": "maskable"
+					}
+				]
 	  	},
 	  	{
 		  	"name": "Clubs & Assos",
 		  	"url": "/club/",
 		  	"description": "Liste des Clubs & Assos",
-			"icons": [
-				{
-					"src": "/static/img/icons/round/club_ldpi.png",
-					"sizes": "48x48",
-					"type": "image/png"
-		  		},
-				{
-					"src": "/static/img/icons/round/club_hdpi.png",
-					"sizes": "72x72",
-					"type": "image/png"
-				},
-				{
-					"src": "/static/img/icons/round/club_xhdpi.png",
-					"sizes": "96x96",
-					"type": "image/png"
-				},
-				{
-					"src": "/static/img/icons/maskable/club_ldpi.png",
-					"sizes": "48x48",
-					"type": "image/png",
-					"purpose": "maskable"
-		  		},
-				{
-					"src": "/static/img/icons/maskable/club_hdpi.png",
-					"sizes": "72x72",
-					"type": "image/png",
-					"purpose": "maskable"
-				},
-				{
-					"src": "/static/img/icons/maskable/club_xhdpi.png",
-					"sizes": "96x96",
-					"type": "image/png",
-					"purpose": "maskable"
-				}
-			]
+				"icons": [
+					{
+						"src": "/static/img/icons/round/club_ldpi.png",
+						"sizes": "48x48",
+						"type": "image/png"
+						},
+					{
+						"src": "/static/img/icons/round/club_hdpi.png",
+						"sizes": "72x72",
+						"type": "image/png"
+					},
+					{
+						"src": "/static/img/icons/round/club_xhdpi.png",
+						"sizes": "96x96",
+						"type": "image/png"
+					},
+					{
+						"src": "/static/img/icons/maskable/club_ldpi.png",
+						"sizes": "48x48",
+						"type": "image/png",
+						"purpose": "maskable"
+						},
+					{
+						"src": "/static/img/icons/maskable/club_hdpi.png",
+						"sizes": "72x72",
+						"type": "image/png",
+						"purpose": "maskable"
+					},
+					{
+						"src": "/static/img/icons/maskable/club_xhdpi.png",
+						"sizes": "96x96",
+						"type": "image/png",
+						"purpose": "maskable"
+					}
+				]
 	  	},
 	  	{
 		  	"name": "Carte des Colocs",
 		  	"url": "/colocs/map",			  
 		  	"description": "Découvre la carte des colocations centraliennes !",
-			"icons": [
-				{
-					"src": "/static/img/icons/round/roommates_ldpi.png",
-					"sizes": "48x48",
-					"type": "image/png"
-		  		},
-				{
-					"src": "/static/img/icons/round/roommates_hdpi.png",
-					"sizes": "72x72",
-					"type": "image/png"
-				},
-				{
-					"src": "/static/img/icons/round/roommates_xhdpi.png",
-					"sizes": "96x96",
-					"type": "image/png"
-				},
-				{
-					"src": "/static/img/icons/maskable/roommates_ldpi.png",
-					"sizes": "48x48",
-					"type": "image/png",
-					"purpose": "maskable"
-		  		},
-				{
-					"src": "/static/img/icons/maskable/roommates_hdpi.png",
-					"sizes": "72x72",
-					"type": "image/png",
-					"purpose": "maskable"
-				},
-				{
-					"src": "/static/img/icons/maskable/roommates_xhdpi.png",
-					"sizes": "96x96",
-					"type": "image/png",
-					"purpose": "maskable"
-				}
-			]
+				"icons": [
+					{
+						"src": "/static/img/icons/round/roommates_ldpi.png",
+						"sizes": "48x48",
+						"type": "image/png"
+						},
+					{
+						"src": "/static/img/icons/round/roommates_hdpi.png",
+						"sizes": "72x72",
+						"type": "image/png"
+					},
+					{
+						"src": "/static/img/icons/round/roommates_xhdpi.png",
+						"sizes": "96x96",
+						"type": "image/png"
+					},
+					{
+						"src": "/static/img/icons/maskable/roommates_ldpi.png",
+						"sizes": "48x48",
+						"type": "image/png",
+						"purpose": "maskable"
+						},
+					{
+						"src": "/static/img/icons/maskable/roommates_hdpi.png",
+						"sizes": "72x72",
+						"type": "image/png",
+						"purpose": "maskable"
+					},
+					{
+						"src": "/static/img/icons/maskable/roommates_xhdpi.png",
+						"sizes": "96x96",
+						"type": "image/png",
+						"purpose": "maskable"
+					}
+				]
 	  	}
   	],
 	"icons": [

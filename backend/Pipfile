@@ -37,19 +37,6 @@ redis = "~=3.5.3"
 requests = "~=2.25.1"
 six = "~=1.16.0"
 django-ckeditor-5 = {git = "https://github.com/3cn-ecn/django-ckeditor-5.git"}
-# REMOVED PACKAGES
-# attrs = "~=21.2.0"
-# django-amazon-ses = "~=4.0.0"
-# docutils = "~=0.17.1"
-# importlib-metadata = "~=4.0.1"
-# iniconfig = "~=1.1.1"
-# more-itertools = "~=8.8.0"
-# pluggy = "~=0.13.1"
-# py = "~=1.10.0"
-# pyparsing = "~=2.4.7"
-# pytest = "~=6.2.4"
-# toml = "~=0.10.2"
-# zipp = "~=3.4.1"
 
 [dev-packages]
 autopep8 = "~=1.6.0"
