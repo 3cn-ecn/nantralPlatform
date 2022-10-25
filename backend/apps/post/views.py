@@ -1,10 +1,11 @@
-from django.views.generic import FormView, View, TemplateView, UpdateView
-from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.urls import resolve
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, render
+from django.urls import resolve
 from django.urls.base import reverse
+from django.views.decorators.http import require_http_methods
+from django.views.generic import FormView, View, TemplateView, UpdateView
 
 from .forms import PostForm, PostFormSet
 from .models import Post
@@ -145,6 +146,7 @@ class UpdateGroupPostsView(UserIsAdmin, View):
         return edit_posts(request, object)
 
 
+@require_http_methods(['POST'])
 @login_required
 def edit_posts(request, group):
     form = PostFormSet(request.POST)

@@ -1,14 +1,15 @@
 from django.utils import timezone
 
-from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.views.generic.base import TemplateView, View
-from django.views.generic import UpdateView, FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.utils import IntegrityError
+from django.shortcuts import redirect, render
 from django.urls import resolve
 from django.urls.base import reverse
-from django.db.utils import IntegrityError
+from django.views.decorators.http import require_http_methods
+from django.views.generic import UpdateView, FormView
+from django.views.generic.base import TemplateView, View
 
 from .models import BaseEvent, EatingEvent
 from .forms import EventForm, EventFormSet
@@ -211,6 +212,7 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
         return edit_events(request, object)
 
 
+@require_http_methods(['GET'])
 @login_required
 def add_participant(request, event_slug):
     """Adds the user to the list of participants."""
@@ -221,6 +223,7 @@ def add_participant(request, event_slug):
     return redirect(event.get_absolute_url())
 
 
+@require_http_methods(['GET'])
 @login_required
 def remove_participant(request, event_slug):
     """Removes the user from the list of participants."""
@@ -231,6 +234,7 @@ def remove_participant(request, event_slug):
     return redirect(event.get_absolute_url())
 
 
+@require_http_methods(['POST'])
 @login_required
 def edit_events(request, group):
     form = EventFormSet(request.POST)

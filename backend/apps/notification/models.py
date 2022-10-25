@@ -129,7 +129,7 @@ class Notification(models.Model):
         self.save()
 
     @property
-    def nb_targets(self, *args, **kwargs):
+    def nb_targets(self):
         return self.sentnotification_set.count()
 
 

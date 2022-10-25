@@ -2,7 +2,7 @@
 
 from typing import Type
 
-from django.forms import ModelForm, modelformset_factory
+from django.forms import ModelForm, BaseModelFormSet, modelformset_factory
 
 from apps.academic.models import Course
 from apps.administration.models import Administration
@@ -21,7 +21,7 @@ from .models import AdminRightsRequest
 
 # NB : Les BDX sont aussi des instances de Club
 
-def UpdateGroupForm(group: object) -> Type[ModelForm]:  # noqa: N802
+def UpdateGroupForm(group: object) -> Type[ModelForm] | None:  # noqa: N802
     if isinstance(group, BDX):
         return clubforms.UpdateBDXForm
     elif isinstance(group, Club):
@@ -38,7 +38,9 @@ def UpdateGroupForm(group: object) -> Type[ModelForm]:  # noqa: N802
         return None
 
 
-def NamedMembershipAddGroup(group: object) -> Type[ModelForm]:  # noqa: N802
+def NamedMembershipAddGroup(  # noqa: N802
+    group: object
+) -> Type[ModelForm] | None:
     if isinstance(group, Club):
         return clubforms.NamedMembershipAddClub
     elif isinstance(group, Liste):
@@ -53,7 +55,9 @@ def NamedMembershipAddGroup(group: object) -> Type[ModelForm]:  # noqa: N802
         return None
 
 
-def NamedMembershipGroupFormset(group: object) -> Type[ModelForm]:  # noqa: N802
+def NamedMembershipGroupFormset(  # noqa: N802
+    group: object
+) -> Type[BaseModelFormSet] | None:
     if isinstance(group, Club):
         return clubforms.NamedMembershipClubFormset
     elif isinstance(group, Liste):
