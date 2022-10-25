@@ -1,5 +1,6 @@
 from django.conf import settings
 
+
 def navbar_context(request):
     """Loads context on all pages."""
     webpush_settings = getattr(settings, 'PUSH_NOTIFICATIONS_SETTINGS', {})

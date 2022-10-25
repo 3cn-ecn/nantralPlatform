@@ -12,21 +12,21 @@ class ListListeView(LoginRequiredMixin, TemplateView):
     template_name = 'liste/list.html'
 
     def get_context_data(self, **kwargs):
-        context = {'liste_list': [] }
+        context = {'liste_list': []}
         key = make_template_fragment_key('liste_list')
         cached = cache.get(key)
         if cached is None:
             min_year = Liste.objects.all().aggregate(Min('year'))['year__min']
             max_year = timezone.now().today().year
             if min_year:
-                for year in range(max_year+1, min_year-1, -1):
+                for year in range(max_year + 1, min_year - 1, -1):
                     context['liste_list'].append({
                         'grouper': f'Campagnes {year-1}-{year}',
                         'list': Liste.objects.filter(year=year),
                     })
         context['ariane'] = [
             {
-                'target': '#', 
+                'target': '#',
                 'label': 'Listes BDX'
             }
         ]

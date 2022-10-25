@@ -12,11 +12,11 @@ class StudentAdmin(admin.ModelAdmin):
 
     def get_urls(self) -> List[URLPattern]:
         urls = super().get_urls()
-        customUrls = [
+        custom_urls = [
             path('metrics/', self.admin_site.admin_view(self.metrics_view),
                  name='student-metrics')
         ]
-        return customUrls + urls
+        return custom_urls + urls
 
     def metrics_view(self, request):
         context = dict(
@@ -25,8 +25,10 @@ class StudentAdmin(admin.ModelAdmin):
                 count=Count('promo')).order_by(),
             nb_students=Student.objects.all().count()
         )
-        return TemplateResponse(request=request, template='admin/student/metrics.html', context=context)
+        return TemplateResponse(
+            request=request,
+            template='admin/student/metrics.html',
+            context=context)
 
 
-adminst = StudentAdmin(Student, admin.site)
 admin.site.register(Student, StudentAdmin)

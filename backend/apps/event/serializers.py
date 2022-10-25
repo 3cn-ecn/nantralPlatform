@@ -13,8 +13,21 @@ class BaseEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BaseEvent
-        fields = ['title', 'description', 'location',
-                  'date', 'publicity', 'color', 'image', 'slug', 'number_of_participants', 'get_absolute_url', 'group', 'get_group_name', 'is_participating', 'is_member']
+        fields = [
+            'title',
+            'description',
+            'location',
+            'date',
+            'publicity',
+            'color',
+            'image',
+            'slug',
+            'number_of_participants',
+            'get_absolute_url',
+            'group',
+            'get_group_name',
+            'is_participating',
+            'is_member']
 
     def get_is_participating(self, obj):
         user = self.context['request'].user

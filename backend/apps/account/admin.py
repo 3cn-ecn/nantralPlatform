@@ -23,12 +23,12 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
         connection = mail.get_connection()
         current_site = get_current_site(request)
         mails = []
-        for tempAccessReq in queryset:
-            tempAccessReq: TemporaryAccessRequest
+        for temp_access_request in queryset:
+            temp_access_request: TemporaryAccessRequest
             email_html = render_to_string(
                 'account/mail/reminder_upgrade.html',
                 context={
-                    'tempAccess': tempAccessReq.user,
+                    'tempAccess': temp_access_request.user,
                     'deadline': settings.TEMPORARY_ACCOUNTS_DATE_LIMIT,
                     'domain': current_site.domain
                 }
@@ -36,7 +36,7 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
             email = mail.EmailMultiAlternatives(
                 subject="[Nantral Platform] Votre compte expire bientôt !",
                 body=email_html,
-                to=[tempAccessReq.user.email]
+                to=[temp_access_request.user.email]
             )
             email.attach_alternative(content=email_html, mimetype="text/html")
             mails.append(email)

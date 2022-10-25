@@ -1,3 +1,5 @@
+# spell-checker: words notif
+
 from django.db.utils import IntegrityError
 from django.http import JsonResponse
 
@@ -5,9 +7,12 @@ from push_notifications.models import WebPushDevice
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import ValidationError, NotFound, MethodNotAllowed
+from rest_framework.exceptions import (
+    ValidationError,
+    NotFound,
+    MethodNotAllowed)
 
-from .models import Notification, SentNotification, Subscription
+from .models import SentNotification, Subscription
 from .serializers import SentNotificationSerializer
 
 
@@ -24,16 +29,15 @@ class SubscriptionAPIView(APIView):
     GET
         Search if the subscription exists
     POST
-        Subscribe the authentificated user to the given page
+        Subscribe the authenticated user to the given page
     DELETE
-        Unsubscribe the authentificated user to the given page
-    
+        Unsubscribe the authenticated user to the given page
+
     Returns
     -------
     A boolean : True if the user has subscribed to the page, else False.
     """
     permission_classes = [permissions.IsAuthenticated]
-
 
     def get(self, request, page, format=None):
         """Get the state of the subscription of current user to a page."""
@@ -41,7 +45,6 @@ class SubscriptionAPIView(APIView):
         student = request.user.student
         res = Subscription.objects.filter(page=page, student=student).exists()
         return Response(data=res)
-
 
     def post(self, request, page, *args, **kwargs):
         """Register the subscription of a user to a page"""
@@ -52,10 +55,9 @@ class SubscriptionAPIView(APIView):
             return Response(status=status.HTTP_201_CREATED, data=True)
         except IntegrityError:
             raise MethodNotAllowed(
-                method="POST", 
+                method="POST",
                 detail="User has already subscribed! Use DELETE to unsubscribe."
             )
-    
 
     def delete(self, request, page, *args, **kwargs):
         """Delete the subscription of a user to a page"""
@@ -66,13 +68,13 @@ class SubscriptionAPIView(APIView):
             obj.delete()
             return Response(status=status.HTTP_204_NO_CONTENT, data=False)
         except Subscription.DoesNotExist:
-            raise NotFound("Cannot delete the subscription: user did not subscribed")
-
+            raise NotFound(
+                "Cannot delete the subscription: user did not subscribed")
 
 
 class GetNotificationsAPIView(APIView):
     """API endpoint to get all notifications sent to a user.
-    
+
     Query Paramaters
     ----------------
     mode : int
@@ -86,7 +88,7 @@ class GetNotificationsAPIView(APIView):
         to get. Default to 0.
     nb : int (optional)
         For mode 2 only. Indicate the number of notifications to get.
-    
+
     Methods
     -------
     GET
@@ -103,14 +105,16 @@ class GetNotificationsAPIView(APIView):
             mode = int(request.query_params.get('mode'))
         except ValueError:
             raise ValidationError(
-                "Please indicate a correct mode : 1 (count only) or 2 (get content)")
+                "Please indicate a correct mode : "
+                "1 (count only) or 2 (get content)")
         sub_only_str = request.query_params.get('sub', 'false').lower()
         if sub_only_str != "true" and sub_only_str != "false":
             raise ValidationError("The 'sub' attribute must be a boolean")
         sub_only = (sub_only_str == "true")
         # then we make the query
-        query = SentNotification.objects.filter(student=student).order_by('-notification__date')
-        if sub_only: 
+        query = SentNotification.objects.filter(
+            student=student).order_by('-notification__date')
+        if sub_only:
             query = query.filter(subscribed=True)
         # if we are in mode 1, we count
         if mode == 1:
@@ -120,44 +124,47 @@ class GetNotificationsAPIView(APIView):
         # we define the range of notifications we want to send
         n = query.count()
         start = int(request.query_params.get('start', 0))
-        nb    = int(request.query_params.get('nb', 20))
-        if start > n: start = n
-        if start + nb > n: nb = n - start
+        nb = int(request.query_params.get('nb', 20))
+        if start > n:
+            start = n
+        if start + nb > n:
+            nb = n - start
         # we select the ones in the range and send them
-        query = query[start:start+nb]
+        query = query[start:start + nb]
         serializer = SentNotificationSerializer(query, many=True)
         return Response(serializer.data)
 
 
-
 class ManageNotificationAPIView(APIView):
-    """API endpoint to mark or unmark a SentNotification of a user as seen.
-    
+    """API endpoint to mark or un-mark a SentNotification of a user as seen.
+
     Path Parameters
     ---------------
     id : int
         The id of the notification object to mark
-    
+
     Query Parameters
     ----------------
     markAsSeen : boolean (optional)
         Indicate if we must force the notifications to be marked as seen
         Default to false
-    
+
     Methods
     -------
     POST
         Mark if not marked (or unmarked if already marked and markAsSeen is
-        false) a notification as seen by the authentificated user.
+        false) a notification as seen by the authenticated user.
     """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, notif_id, format=None):
-        """Mark or unmark a notification as read"""
+        """Mark or un-mark a notification as read"""
         student = request.user.student
-        mark_as_seen_str = request.query_params.get('markAsSeen', "false").lower()
+        mark_as_seen_str = request.query_params.get(
+            'markAsSeen', "false").lower()
         if mark_as_seen_str != "true" and mark_as_seen_str != "false":
-            raise ValidationError("The 'markAsSeen' attribute must be a boolean")
+            raise ValidationError(
+                "The 'markAsSeen' attribute must be a boolean")
         mark_as_seen = (mark_as_seen_str == "true")
         try:
             obj = SentNotification.objects.get(
@@ -167,13 +174,13 @@ class ManageNotificationAPIView(APIView):
             if mark_as_seen:
                 obj.seen = True
             else:
-                obj.seen = not(obj.seen)
+                obj.seen = not (obj.seen)
             obj.save()
             return Response(status=status.HTTP_202_ACCEPTED, data=obj.seen)
         except SentNotification.DoesNotExist:
-            raise NotFound(f"The requested notification {notif_id} does not \
-                            exist in database or has not been sent to the user.")
-
+            raise NotFound(f"The requested notification {notif_id} does not "
+                           "exist in database or has not been sent to the "
+                           "user.")
 
 
 class RegisterAPIView(APIView):
@@ -182,7 +189,7 @@ class RegisterAPIView(APIView):
 
     def post(self, request, format=None):
         already_registered = WebPushDevice.objects.filter(
-            registration_id = request.data.get('registration_id')).exists()
+            registration_id=request.data.get('registration_id')).exists()
         data = {'result': False}
         if not already_registered:
             WebPushDevice.objects.create(
@@ -192,5 +199,5 @@ class RegisterAPIView(APIView):
                 browser=request.data.get('browser'),
                 user=request.user,
             )
-            data ['result'] = True
+            data['result'] = True
         return JsonResponse(data)

@@ -19,10 +19,16 @@ from apps.event.models import BaseEvent
 from apps.post.models import Post
 from apps.notification.models import Subscription
 
-from .forms import *
+from .forms import (
+    NamedMembershipAddGroup,
+    NamedMembershipGroupFormset,
+    AdminRightsRequestForm,
+    UpdateGroupForm,
+    SocialLinkGroupFormset,
+    AdminRightsRequest)
 
-from apps.utils.accessMixins import UserIsAdmin, userIsConnected
-from apps.utils.slug import *
+from apps.utils.accessMixins import UserIsAdmin, user_is_connected
+from apps.utils.slug import get_object_from_slug
 
 
 class BaseDetailGroupView(DetailView):
@@ -39,12 +45,15 @@ class BaseDetailGroupView(DetailView):
         group = self.object
         # réseaux sociaux
         context['sociallinks'] = SocialLink.objects.filter(slug=group.full_slug)
-        # seuement si connecté
-        context['connected'] = userIsConnected(self.request.user)
-        if userIsConnected(self.request.user):
-            publication_date = timezone.make_aware(timezone.now().today()-timedelta(days=10))
+        # seulement si connecté
+        context['connected'] = user_is_connected(self.request.user)
+        if user_is_connected(self.request.user):
+            publication_date = timezone.make_aware(
+                timezone.now().today() - timedelta(days=10))
             posts = Post.objects.filter(
-                group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
+                group=group.full_slug,
+                publication_date__gte=publication_date
+            ).order_by('-publication_date')
             context['posts'] = [
                 post for post in posts if post.can_view(self.request.user)]
             date_gte = timezone.make_aware(timezone.now().today())
@@ -68,11 +77,11 @@ class BaseDetailGroupView(DetailView):
             context['admin_req_form'] = AdminRightsRequestForm()
         context['ariane'] = [
             {
-                'target': reverse(group.app+':index'), 
+                'target': reverse(group.app + ':index'),
                 'label': group.app_name
             },
             {
-                'target': '#', 
+                'target': '#',
                 'label': group.name
             },
         ]
@@ -115,17 +124,21 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         if not self.object.pk:
             self.object.save()
             messages.success(self.request, 'Bienvenue dans le groupe !')
-            try: Subscription.objects.create(
+            try:
+                Subscription.objects.create(
                     page=self.object.group.full_slug,
                     student=self.object.student)
-            except IntegrityError: pass
+            except IntegrityError:
+                pass
         elif self.request.POST.get('delete'):
             self.object.delete()
             messages.success(self.request, 'Membre supprimé.')
-            try: Subscription.objects.get(
-                page=self.object.group.full_slug,
-                student=self.object.student).delete()
-            except Subscription.DoesNotExist: pass
+            try:
+                Subscription.objects.get(
+                    page=self.object.group.full_slug,
+                    student=self.object.student).delete()
+            except Subscription.DoesNotExist:
+                pass
         else:
             self.object.save()
             messages.success(
@@ -151,28 +164,21 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['object'] = self.get_object()
         group = self.get_object()
-        UpdateForm = UpdateGroupForm(context['object'])
+        UpdateForm = UpdateGroupForm(context['object'])  # noqa: N806
         if UpdateForm:
             context['form'] = UpdateForm(instance=context['object'])
-        context['ariane'] = [
-            {
-                'target': reverse(group.app+':index'), 
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         return context
 
     def post(self, request, **kwargs):
         group = self.get_object()
-        UpdateForm = UpdateGroupForm(group)
+        UpdateForm = UpdateGroupForm(group)  # noqa: N806
         if UpdateForm:
             form = UpdateForm(request.POST, request.FILES, instance=group)
             if form.is_valid():
@@ -180,7 +186,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
                 messages.success(request, 'Informations modifiées !')
             else:
                 messages.error(request, form.errors)
-        return redirect(group.app+':update', group.slug)
+        return redirect(group.app + ':update', group.slug)
 
 
 class UpdateGroupMembersView(UserIsAdmin, TemplateView):
@@ -197,20 +203,13 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
         context = {}
         group = self.get_object()
         context['object'] = group
-        context['ariane'] = [
-            {
-                'target': reverse(group.app+':index'), 
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         # memberships = context['object'].members.through.objects.filter(
         #     group=context['object'])
         # MembersFormset = NamedMembershipGroupFormset(
@@ -227,7 +226,7 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
 @ require_http_methods(['POST'])
 @ login_required
 def edit_named_memberships(request, group):
-    MembersFormset = NamedMembershipGroupFormset(group)
+    MembersFormset = NamedMembershipGroupFormset(group)  # noqa: N806
     if MembersFormset:
         form = MembersFormset(request.POST)
         if form.is_valid():
@@ -240,7 +239,7 @@ def edit_named_memberships(request, group):
             messages.success(request, 'Membres modifiés')
         else:
             messages.error(request, form.errors)
-    return redirect(group.app+':update-members', group.slug)
+    return redirect(group.app + ':update-members', group.slug)
 
 
 class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
@@ -261,20 +260,13 @@ class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
             slug=context['object'].full_slug)
         form = SocialLinkGroupFormset(queryset=sociallinks)
         context['sociallinks'] = form
-        context['ariane'] = [
-            {
-                'target': reverse(group.app+':index'), 
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         return context
 
     def post(self, request, **kwargs):
@@ -296,7 +288,7 @@ def edit_sociallinks(request, group):
         messages.success(request, 'Liens modifiés')
     else:
         messages.error(request, form.errors)
-    return redirect(group.app+':update-sociallinks', group.slug)
+    return redirect(group.app + ':update-sociallinks', group.slug)
 
 
 class RequestAdminRightsView(LoginRequiredMixin, FormView):
@@ -315,7 +307,9 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         messages.success(
-            self.request, 'Votre demande a bien été enregistrée ! Vous recevrez la réponse par mail.')
+            self.request,
+            ('Votre demande a bien été enregistrée ! Vous recevrez la réponse '
+             'par mail.'))
         object = form.save(commit=False)
         object.student = self.request.user.student
         object.group = self.get_group().full_slug
@@ -324,7 +318,7 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 
     def get_success_url(self) -> str:
         group = self.get_group()
-        return reverse(group.app+':detail', kwargs={'slug': group.slug})
+        return reverse(group.app + ':detail', kwargs={'slug': group.slug})
 
 
 class AcceptAdminRequestView(UserIsAdmin, View):
@@ -332,17 +326,20 @@ class AcceptAdminRequestView(UserIsAdmin, View):
         app = resolve(request.path_info).app_name
         group: Group = get_object_from_slug(app, slug)
         try:
-            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
+            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
+                id=id)
             if group.full_slug == admin_req.group:
                 # Checking whether the url is legit
                 messages.success(
-                    request, message=f"Vous avez accepté la demande de {admin_req.student}")
+                    request,
+                    message=(
+                        f"Vous avez accepté la demande de {admin_req.student}"))
                 admin_req.accept()
             else:
                 messages.error(request, message="L'URL est invalide !!!")
         except AdminRightsRequest.DoesNotExist:
             messages.error(
-                request, message=f"La demande a déjà été traitée !")
+                request, message="La demande a déjà été traitée !")
         return redirect(group.get_absolute_url())
 
 
@@ -351,15 +348,18 @@ class DenyAdminRequestView(UserIsAdmin, View):
         app = resolve(request.path_info).app_name
         group: Group = get_object_from_slug(app, slug)
         try:
-            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(id=id)
+            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
+                id=id)
             if group.full_slug == admin_req.group:
                 # Checking whether the url is legit
                 messages.success(
-                    request, message=f"Vous avez refusé la demande de {admin_req.student}")
+                    request,
+                    message=(
+                        f"Vous avez refusé la demande de {admin_req.student}"))
                 admin_req.deny()
             else:
                 messages.error(request, message="L'URL est invalide !!!")
         except AdminRightsRequest.DoesNotExist:
             messages.error(
-                request, message=f"La demande a déjà été traitée !")
+                request, message="La demande a déjà été traitée !")
         return redirect(group.get_absolute_url())

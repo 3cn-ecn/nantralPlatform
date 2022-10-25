@@ -28,7 +28,7 @@ def check_ecn_mail(mail: str):
 
 
 def check_ecn_mail_login(mail: str):
-    """A wrapper around the login check to disable during periods where all 
+    """A wrapper around the login check to disable during periods where all
     emails can be used.
     """
     if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():

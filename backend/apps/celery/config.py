@@ -1,8 +1,8 @@
 import os
 
 from celery import Celery
-from celery.app import shared_task
-from celery.schedules import crontab
+# from celery.app import shared_task
+# from celery.schedules import crontab
 
 from django.conf import settings
 

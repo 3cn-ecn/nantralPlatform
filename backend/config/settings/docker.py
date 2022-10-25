@@ -3,10 +3,8 @@
 DO NOT USE IN PRODUCTION.
 """
 
-# flake8: noqa: F405
 from celery.schedules import crontab
-
-from .base import *  # noqa: F403
+from .base import *
 
 print("Using docker config")
 
@@ -21,12 +19,12 @@ print("Using docker config")
 
 DATABASES = {
     'default': {
-        'ENGINE':       'django.db.backends.postgresql',
-        'NAME':         env('POSTGRES_DB_STAGING') if STAGING else env('POSTGRES_DB'),
-        'USER':         env('POSTGRES_USER'),
-        'PASSWORD':     env('POSTGRES_PASSWORD'),
-        'HOST':         env('DB_HOSTNAME'),
-        'PORT':         env('DB_PORT'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('POSTGRES_DB_STAGING') if STAGING else env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': env('DB_HOSTNAME'),
+        'PORT': env('DB_PORT'),
         'CONN_MAX_AGE': 600,
     },
 }
@@ -35,15 +33,12 @@ DATABASES = {
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.'
+        + 'UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.'
+        + 'CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.'
+        + 'NumericPasswordValidator'},
 ]
 
 ALLOWED_HOSTS = ["django", "localhost"]

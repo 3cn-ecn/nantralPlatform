@@ -7,67 +7,49 @@
 
 # Nantral Platform
 
-1. Project structure
-2. Useful Links
-3. Contributors
+* Nantral Platform Website: [nantral-platform.fr](https://nantral-platform.fr)
+* Documentation: [docs.nantral-platform.fr](https://docs.nantral-platform.fr)
 
-## Project structure
-### Description
-```
-|-.github 
-    Contains the definitions for github actions
-|-backend
-    Contains source files for the backend
-|-deployment
-    The docker files for deployment
-|-frontend
-    Contains source files to be compiled for the frontend
-|-scripts
-    Custom scripts to manage server operations
- ```
+## Get started
 
-### Frontend
-The frontend is an npm application using react
-source files are compiled using esbuild
-when files from this folder are compiled they are sent
-to static/webapp
+* Requirements: `python3`, `pipenv`, and `nodejs`
+* Set up the project (for *Windows* users, replace `unix` by `win`):
+    ```
+    make unix-install
+    ```
+* Start the server:
+    ```
+    cd backend/ && pipenv run start
+    ```
+    The server is launch on [http://localhost:8000](http://localhost:8000). The administration panel is available at [http://localhost:8000/admin](http://localhost:8000/admin), with the default account `admin/admin`.
 
-### Backend
-The backend is a django application.
-```
-|-apps (Contains all the applications)
-|-config (General config folder)
-    |-settings
-        |-base.py (Base settings)
-        |-dev-local.py (Settings for local dev)
-        |-production.py (Settings for production)
-    |-asgi.py
-    |-urls.py (General url config)
-    |-wsgi.py
-|-templates (Genral template folder)
-|-manage.py (General script to launch and make migrations)
-|-Pipfile (Contains python requirements)
-```
+## Contribute
 
-## Useful Links
+* Before pushing new changes, create a new branch linked to the issue you have worked on and then create a pull request. Explain in your PR what your changes are about.
+* When you pull changes from the repository, update your local instance with:
+    ```
+    make update
+    ```
+* Test your code:
+    ```
+    make test
+    ```
+### For the back end
 
-### Nantral Platform sites
-* [Nantral Platform](https://nantral-platform.fr)
-* [Nantral Platform Docs](https://docs.nantral-platform.fr)
+All these commands are done from the `backend` directory. Please first move into it with `cd ./backend/`.
+* `pipenv run start`: launch the backend server
+* `pipenv run django`: execute django operations from `manage.py` (equivalent to `pipenv run python manage.py`)
+* Some shortcuts:
+    * `pipenv run test`: run the django tests
+    * `pipenv run makemigrations`: create migration scripts for the database (run it after making changes to the models)
+    * `pipenv run migrate`: apply the migrations scripts to your database
+* `pipenv run flake8 ./` : show all code smells in the given directory.
+* `pipenv run autopep8`: autocorrect all code smells in the backend directory
+* `pipenv install [--dev] <package_name>`: add a package to the (dev) dependencies
 
-### Django
-* [Django - MDN Tutorial](https://developer.mozilla.org/fr/docs/Learn/Server-side/Django)
-* [Django Documentation](https://docs.djangoproject.com/en/3.2/)
+### For the front end
 
-### Design Documentation
-* [Bootstrap for HTML](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
-* [Bootstrap for React](https://react-bootstrap.github.io/components/alerts)
-* Icons: [Font Awesome](https://fontawesome.com/v5.15/icons?d=gallery&p=2&m=free)
-
-
-## Contributors
-* [Robin TROESCH](https://github.com/unitrium) - founder of Nantral Platform
-* [Charles ZABLIT](https://github.com/charles-zablit) - president of Nantral Platform dev club
-* [Alexis DELAGE](https://github.com/hydrielax) - random member
-
-    
+All these commands are done from the `frontend` directory. Please first move into it with `cd ./frontend/`.
+* `npm run start`: start the live compilation in dev mode of the files. Each time you edit a file, the new file is automatically compiled.
+* `npm run build`: build the production compilation of the files. This is useful to check the weight of the files.
+* `npm run build:dev`: compile the files in dev mode (like the start option, except that it doesn't refresh when you edit a file).

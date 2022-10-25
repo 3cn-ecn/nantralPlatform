@@ -3,15 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-from django.conf import settings
 
 from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressModelImage
+from apps.utils.compress import compress_model_image
 
 
 FACULTIES = [
     ('Gen', 'Élève Ingénieur Généraliste'),
-    ('Iti', 'Élève Ingénieur de Specialité (ITII)'),
+    ('Iti', 'Élève Ingénieur de Spécialité (ITII)'),
     ('Mas', 'Élève en Master'),
     ('Doc', 'Doctorant')
 ]
@@ -35,17 +34,25 @@ class Student(models.Model):
     promo = models.IntegerField(
         verbose_name='Année de promotion entrante', null=True, blank=True)
     picture = models.ImageField(
-        verbose_name='Photo de profil', upload_to=path_and_rename, null=True, blank=True)
+        verbose_name='Photo de profil',
+        upload_to=path_and_rename,
+        null=True,
+        blank=True)
     faculty = models.CharField(
         max_length=200, verbose_name='Filière', choices=FACULTIES)
     path = models.CharField(
-        max_length=200, verbose_name='Cursus', choices=PATHS, null=True, blank=True)
+        max_length=200,
+        verbose_name='Cursus',
+        choices=PATHS,
+        null=True,
+        blank=True)
 
     @property
     def name(self):
         '''Renvoie le nom de l'utilisateur au format Prénom NOM.'''
         if self.user.first_name and self.user.last_name:
-            return f'{self.user.first_name.title()} {self.user.last_name.upper()}'
+            return (
+                f'{self.user.first_name.title()} {self.user.last_name.upper()}')
         elif self.user.first_name:
             return self.user.first_name.title()
         elif self.user.last_name:
@@ -57,7 +64,8 @@ class Student(models.Model):
     def alphabetical_name(self):
         '''Renvoie le nom de l'utilisateur au format NOM Prénom.'''
         if self.user.first_name and self.user.last_name:
-            return f'{self.user.last_name.upper()} {self.user.first_name.title()}'
+            return (
+                f'{self.user.last_name.upper()} {self.user.first_name.title()}')
         else:
             return self.name
 
@@ -74,7 +82,7 @@ class Student(models.Model):
         return self.get_absolute_url()
 
     def save(self, *args, **kwargs):
-        self.picture = compressModelImage(self, 'picture')
+        self.picture = compress_model_image(self, 'picture')
         super(Student, self).save(*args, **kwargs)
 
     class Meta:

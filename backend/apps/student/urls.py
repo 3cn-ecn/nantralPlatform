@@ -1,6 +1,10 @@
 from django.urls import path
 
-from .views import *
+from .views import (
+    StudentProfile,
+    StudentProfileEdit,
+    change_password,
+    StudentList)
 
 app_name = 'student'
 
