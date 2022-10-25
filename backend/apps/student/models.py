@@ -35,11 +35,18 @@ class Student(models.Model):
     promo = models.IntegerField(
         verbose_name='Année de promotion entrante', null=True, blank=True)
     picture = models.ImageField(
-        verbose_name='Photo de profil', upload_to=path_and_rename, null=True, blank=True)
+        verbose_name='Photo de profil',
+        upload_to=path_and_rename,
+        null=True,
+        blank=True)
     faculty = models.CharField(
         max_length=200, verbose_name='Filière', choices=FACULTIES)
     path = models.CharField(
-        max_length=200, verbose_name='Cursus', choices=PATHS, null=True, blank=True)
+        max_length=200,
+        verbose_name='Cursus',
+        choices=PATHS,
+        null=True,
+        blank=True)
 
     @property
     def name(self):

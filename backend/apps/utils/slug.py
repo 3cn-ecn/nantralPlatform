@@ -3,7 +3,7 @@ LES SLUGS ET LES GROUPES
 ------------------------
 
 ->  Certaines applis sont des applis "groupes". ex : Club, Liste, Roommates
-->  Pour chaque instance de modèle hérité de groupe, 
+->  Pour chaque instance de modèle hérité de groupe,
     on a un slug qui sert à 2 choses :
         *   enregistrer le nom du groupe de l'url de la page du groupe
         *   référencer un groupe quelconque depuis une autre table SQL
@@ -12,12 +12,12 @@ LES SLUGS ET LES GROUPES
 Attention, il faut bien distinguer les propriétés suivantes des groupes :
 ->  .slug renvoie uniquement le nom du groupe slugifié pour l'url
 ->  .app  renvoie le nom de l'application du groupe
-->  .full_slug renvoie le texte "app--slug" qui sera enregistré dans les 
+->  .full_slug renvoie le texte "app--slug" qui sera enregistré dans les
     autres tables SQL (events, ...) pour pouvoir retrouver le bon modèle
     ensuite
 
 Les fonctions ci-dessous permettent de convertir les full_slug en couple
-(app, slug), et aussi de récupérer directement l'instance de groupe avec 
+(app, slug), et aussi de récupérer directement l'instance de groupe avec
 l'un ou l'autre des paramètres.
 
 

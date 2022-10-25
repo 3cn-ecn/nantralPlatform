@@ -12,13 +12,20 @@ from apps.student.models import Student
 class Club(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
     bdx_type = models.ForeignKey(
-        'BDX', on_delete=models.SET_NULL, verbose_name='Type de club BDX', null=True, blank=True)
+        'BDX',
+        on_delete=models.SET_NULL,
+        verbose_name='Type de club BDX',
+        null=True,
+        blank=True)
     email = models.EmailField(
         "Email de l'asso", max_length=50, null=True, blank=True)
     meeting_place = models.CharField(
         "Local / Lieu de réunion", max_length=50, null=True, blank=True)
     meeting_hour = models.CharField(
-        "Heure et jour de réunion périodique", max_length=50, null=True, blank=True)
+        "Heure et jour de réunion périodique",
+        max_length=50,
+        null=True,
+        blank=True)
 
     class Meta:
         ordering = [F('bdx_type').asc(nulls_first=True), 'name']
@@ -76,6 +83,6 @@ class NamedMembershipClub(NamedMembership):
     def get_or_create(self, **kwargs):
         defaults = kwargs.pop('defaults', {})  # popping defaults from values
         for key, value in kwargs.items():
-            if value == None:
+            if value is None:
                 kwargs[key] = defaults.get(key)
         return super(NamedMembershipClub, self).get_or_create(**kwargs)

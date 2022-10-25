@@ -43,7 +43,9 @@ class AbstractPost(models.Model, SlugModel):
     color = models.CharField(max_length=200, verbose_name='Couleur de fond',
                              choices=COLORS, null=True, default='primary')
     publicity = models.CharField(
-        max_length=200, verbose_name='Visibilité de l\'annonce', choices=VISIBILITY)
+        max_length=200,
+        verbose_name='Visibilité de l\'annonce',
+        choices=VISIBILITY)
     image = models.ImageField(verbose_name="Une image, une affiche en lien ?",
                               upload_to=path_and_rename, null=True, blank=True)
     notification = models.ForeignKey(

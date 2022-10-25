@@ -71,8 +71,11 @@ class ListClubMembersAPIView(APIView):
             endDate = parse_date(request.data.get("endDate")) if request.data.get(
                 "endDate") is not None else None
             admin = request.data.get("admin")
-            NamedMembershipClub.objects.filter(
-                id=id).update(function=role, admin=admin, date_begin=beginDate, date_end=endDate)
+            NamedMembershipClub.objects.filter(id=id).update(
+                function=role,
+                admin=admin,
+                date_begin=beginDate,
+                date_end=endDate)
             return HttpResponse(status=200)
 
         elif editMode == 3:

@@ -45,7 +45,9 @@ class BaseDetailGroupView(DetailView):
             publication_date = timezone.make_aware(
                 timezone.now().today() - timedelta(days=10))
             posts = Post.objects.filter(
-                group=group.full_slug, publication_date__gte=publication_date).order_by('-publication_date')
+                group=group.full_slug,
+                publication_date__gte=publication_date
+            ).order_by('-publication_date')
             context['posts'] = [
                 post for post in posts if post.can_view(self.request.user)]
             date_gte = timezone.make_aware(timezone.now().today())
@@ -159,20 +161,13 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
         UpdateForm = UpdateGroupForm(context['object'])
         if UpdateForm:
             context['form'] = UpdateForm(instance=context['object'])
-        context['ariane'] = [
-            {
-                'target': reverse(group.app + ':index'),
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         return context
 
     def post(self, request, **kwargs):
@@ -202,20 +197,13 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
         context = {}
         group = self.get_object()
         context['object'] = group
-        context['ariane'] = [
-            {
-                'target': reverse(group.app + ':index'),
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         # memberships = context['object'].members.through.objects.filter(
         #     group=context['object'])
         # MembersFormset = NamedMembershipGroupFormset(
@@ -266,20 +254,13 @@ class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
             slug=context['object'].full_slug)
         form = SocialLinkGroupFormset(queryset=sociallinks)
         context['sociallinks'] = form
-        context['ariane'] = [
-            {
-                'target': reverse(group.app + ':index'),
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         return context
 
     def post(self, request, **kwargs):
@@ -320,7 +301,9 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         messages.success(
-            self.request, 'Votre demande a bien été enregistrée ! Vous recevrez la réponse par mail.')
+            self.request,
+            ('Votre demande a bien été enregistrée ! Vous recevrez la réponse '
+             'par mail.'))
         object = form.save(commit=False)
         object.student = self.request.user.student
         object.group = self.get_group().full_slug

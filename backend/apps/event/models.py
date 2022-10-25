@@ -33,7 +33,10 @@ class BaseEvent(AbstractPost):
     participants = models.ManyToManyField(
         to=Student, verbose_name='Participants', blank=True)
     ticketing = models.CharField(
-        verbose_name='Lien vers la billeterie', blank=True, max_length=200, null=True)
+        verbose_name='Lien vers la billeterie',
+        blank=True,
+        max_length=200,
+        null=True)
 
     @property
     def number_of_participants(self) -> int:

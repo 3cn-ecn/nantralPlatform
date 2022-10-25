@@ -6,7 +6,11 @@ import sys
 
 def compressModelImage(object, field, size=(500, 500), contains=False):
     imageField = getattr(object, field)
-    if not object.pk or imageField != getattr(type(object).objects.get(pk=object.pk), field):
+    if (not object.pk
+            or imageField != getattr(
+                type(object).objects.get(pk=object.pk),
+                field
+            )):
         imageField = compressImage(imageField, size, contains)
     return imageField
 
@@ -36,8 +40,13 @@ def compressImage(image, size=(500, 500), contains=False):
     # save image to BytesIO object
     im.save(im_io, format=format, quality=90, optimize=True)
     # create a django-friendly Files object
-    new_image = InMemoryUploadedFile(im_io, 'ImageField', image.name, 'image/' + format,
-                                     sys.getsizeof(im_io), None)
+    new_image = InMemoryUploadedFile(
+        im_io,
+        'ImageField',
+        image.name,
+        'image/' + format,
+        sys.getsizeof(im_io),
+        None)
     im.close()
     return new_image
 

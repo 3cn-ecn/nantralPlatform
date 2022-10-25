@@ -25,7 +25,10 @@ class StudentAdmin(admin.ModelAdmin):
                 count=Count('promo')).order_by(),
             nb_students=Student.objects.all().count()
         )
-        return TemplateResponse(request=request, template='admin/student/metrics.html', context=context)
+        return TemplateResponse(
+            request=request,
+            template='admin/student/metrics.html',
+            context=context)
 
 
 adminst = StudentAdmin(Student, admin.site)

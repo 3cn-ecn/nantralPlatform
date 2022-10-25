@@ -24,7 +24,9 @@ class UpdateHousingForm(ModelForm):
 class NamedMembershipAddRoommates(ModelForm):
     """Form for a club page to add one self to roommates."""
     nickname = CharField(
-        max_length=100, label='Avez-vous un surnom ? (facultatif)', required=False)
+        max_length=100,
+        label='Avez-vous un surnom ? (facultatif)',
+        required=False)
 
     class Meta:
         model = NamedMembershipRoommates

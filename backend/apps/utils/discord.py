@@ -8,7 +8,11 @@ AUTH_HEADER = {
     'Authorization': f'Bot {settings.DISCORD_TOKEN}'}
 
 
-def send_message(channel_id: int, message: str, embeds: List[dict] = None) -> str:
+def send_message(
+    channel_id: int,
+    message: str,
+    embeds: List[dict] = None
+) -> str:
     payload = {
         'content': message
     }

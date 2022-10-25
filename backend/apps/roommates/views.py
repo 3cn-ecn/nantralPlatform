@@ -120,20 +120,13 @@ class ColocathlonFormView(UserIsMember, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         group = self.get_object()
-        context['ariane'] = [
-            {
-                'target': reverse(group.app + ':index'),
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Colocathlon'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Colocathlon'}]
         return context
 
 

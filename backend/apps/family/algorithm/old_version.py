@@ -1,3 +1,4 @@
+# flake8: noqa
 # this is the first version of the algorithm !
 # it was made to use datas from a csv file,
 # extracted from a google form
@@ -205,7 +206,8 @@ def readFamilies(filepath, students):
         next(reader)
         id_neg = 1
         for i, row in enumerate(reader):
-            # Create family from name COLONNE 8 CORRESPOND A LA REPONSE NOM DE FAMILLE APRES LES 7 NOMS DES PARRAINS
+            # Create family from name COLONNE 8 CORRESPOND A LA REPONSE NOM DE
+            # FAMILLE APRES LES 7 NOMS DES PARRAINS
             f = Family(row[8], i + 1)
             #print(type(Family(row[7], i+1)))
             # print(row[0])
@@ -213,7 +215,8 @@ def readFamilies(filepath, students):
             # print(f.name)
             f.answers = readlineAnswers(row, questions_family)
 
-            # Per family, number of persons who did not answer to the individual form.
+            # Per family, number of persons who did not answer to the individual
+            # form.
             numberToDuplicate = 0
             for i in range(6):
                 personName = row[i + 1].strip().lower()
@@ -240,7 +243,8 @@ def readFamilies(filepath, students):
                     numberToDuplicate += 1
 
             print(f.name, numberToDuplicate)
-            # Replace persons who did not answers to the individual form by someone who answered
+            # Replace persons who did not answers to the individual form by
+            # someone who answered
             if numberToDuplicate:
                 random.shuffle(f)
 
@@ -295,7 +299,8 @@ families = readFamilies(FILE_FAMILIES, students_secondYear)
 # -- Make sure both lists have the same lenght --
 delta_len = len(students_firstYear) - len(students_secondYear)
 if delta_len > 0:  # more first year than second year
-    # Duplicate some secondYear in big families ?? SMALL FAMILIES ? (sans le reverse=true)
+    # Duplicate some secondYear in big families ?? SMALL FAMILIES ? (sans le
+    # reverse=true)
     families.sort(key=len)  # families.sort(key=len, reverse=True)
 
     for i in range(delta_len):
@@ -321,7 +326,8 @@ N = len(students_firstYear)
 
 # -- Create preferences lists based on loveScore --
 logging.debug('Création du classement pour chaque étudiant')
-# Etabli pour chaque première année, la liste ordonnée de ses préférences parmi les deuxièmes années
+# Etabli pour chaque première année, la liste ordonnée de ses préférences
+# parmi les deuxièmes années
 firstYear_prefs = {}
 secondYear_prefs = {}
 for i in range(N):
@@ -404,7 +410,7 @@ for family in families:
 	s = ' - <a href="%s" target="_blank">Voir les indices</a>' % links[family.name]
 	out_str_1 += s
 	out_str_2 += s
-	
+
 	out_str_1 += '<ul>'
 	out_str_2 += '<ul>'
 	"""

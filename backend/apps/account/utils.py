@@ -13,7 +13,10 @@ from django.utils.encoding import force_bytes
 from .tokens import account_activation_token
 
 
-def user_creation(form: Union[SignUpForm, TemporaryRequestSignUpForm], request: HttpRequest) -> User:
+def user_creation(
+    form: Union[SignUpForm, TemporaryRequestSignUpForm],
+    request: HttpRequest
+) -> User:
     user: User = form.save()
     user.student.promo = form.cleaned_data.get('promo')
     user.student.faculty = form.cleaned_data.get('faculty')
@@ -41,7 +44,12 @@ def user_creation(form: Union[SignUpForm, TemporaryRequestSignUpForm], request: 
     return user
 
 
-def send_email_confirmation(user: User, request: HttpRequest, temporary_access: bool = False, send_to: str = None):
+def send_email_confirmation(
+    user: User,
+    request: HttpRequest,
+    temporary_access: bool = False,
+    send_to: str = None
+) -> None:
     subject = 'Activation de votre compte Nantral Platform'
     current_site = get_current_site(request)
     # load a template like get_template()
@@ -64,8 +72,12 @@ def send_email_confirmation(user: User, request: HttpRequest, temporary_access: 
             subject, message, html_message=message)
     if temporary_access:
         messages.success(
-            request, 'Un mail vous a été envoyé pour confirmer votre adresse mail personnelle.')
+            request,
+            ('Un mail vous a été envoyé pour confirmer '
+             'votre adresse mail personnelle.'))
     else:
         messages.success(
-            request, 'Un mail vous a été envoyé pour confirmer votre adresse mail Centrale Nantes.\n\
-                Vous pouvez accéder à votre boîte mail école <a href="https://webmail.ec-nantes.fr">ici</a>.')
+            request,
+            ('Un mail vous a été envoyé pour confirmer votre adresse mail '
+             'Centrale Nantes.\nVous pouvez accéder à votre boîte mail école '
+             '<a href="https://webmail.ec-nantes.fr">ici</a>.'))

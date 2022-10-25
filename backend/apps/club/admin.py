@@ -47,7 +47,10 @@ class ClubAdmin(admin.ModelAdmin):
             no_admins=no_admins,
             total_clubs=Club.objects.all().count()
         )
-        return TemplateResponse(request=request, template='admin/club/metrics.html', context=context)
+        return TemplateResponse(
+            request=request,
+            template='admin/club/metrics.html',
+            context=context)
 
 
 class BDXAdmin(admin.ModelAdmin):

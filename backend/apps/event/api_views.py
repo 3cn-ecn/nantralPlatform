@@ -74,11 +74,13 @@ class ListEventsGroupAPIView(generics.ListAPIView):
         if self.request.method == 'GET':
             if self.request.GET.get('view') == 'archives':
                 date_lt = timezone.make_aware(timezone.now().today())
-                return BaseEvent.objects.filter(group=self.kwargs['group'], date__lt=date_lt)
+                return BaseEvent.objects.filter(
+                    group=self.kwargs['group'], date__lt=date_lt)
             elif self.request.GET.get('view') == 'all':
                 return BaseEvent.objects.filter(group=self.kwargs['group'])
         date_gte = timezone.make_aware(timezone.now().today())
-        return BaseEvent.objects.filter(group=self.kwargs['group'], date__gte=date_gte)
+        return BaseEvent.objects.filter(
+            group=self.kwargs['group'], date__gte=date_gte)
 
 
 class UpdateEventAPIView(generics.RetrieveDestroyAPIView):

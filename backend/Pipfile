@@ -9,7 +9,7 @@ test = "python manage.py test"
 makemigrations = "python manage.py makemigrations"
 migrate = "python manage.py migrate"
 django = "python manage.py"
-autoformat = "bash -c 'cd .. && autopep8 -r --in-place ./backend/'"
+autoformat = "bash -c 'cd .. && autopep8 -raaa --in-place ./backend/'"
 
 [packages]
 celery = "~=5.2.2"

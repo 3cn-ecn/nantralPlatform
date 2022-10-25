@@ -5,15 +5,35 @@ from .models import NamedMembershipClub, Club, BDX
 class UpdateClubForm(ModelForm):
     class Meta:
         model = Club
-        fields = ['name', 'alt_name', 'email', 'meeting_place', 'meeting_hour',
-                  'summary', 'logo', 'banniere', 'video1', 'video2', 'description']
+        fields = [
+            'name',
+            'alt_name',
+            'email',
+            'meeting_place',
+            'meeting_hour',
+            'summary',
+            'logo',
+            'banniere',
+            'video1',
+            'video2',
+            'description']
 
 
 class UpdateBDXForm(ModelForm):
     class Meta:
         model = BDX
-        fields = ['name', 'alt_name', 'email', 'meeting_place', 'meeting_hour',
-                  'summary', 'logo', 'banniere', 'video1', 'video2', 'description']
+        fields = [
+            'name',
+            'alt_name',
+            'email',
+            'meeting_place',
+            'meeting_hour',
+            'summary',
+            'logo',
+            'banniere',
+            'video1',
+            'video2',
+            'description']
 
 
 class NamedMembershipAddClub(ModelForm):

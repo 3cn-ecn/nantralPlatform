@@ -68,20 +68,13 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
         context = super().get_context_data(**kwargs)
         context['object'] = group = get_object_from_slug(
             self.get_app(), self.get_slug())
-        context['ariane'] = [
-            {
-                'target': reverse(group.app + ':index'),
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         return context
 
     def form_valid(self, form, **kwargs):
@@ -90,11 +83,15 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
         try:
             event.save()
             messages.success(
-                self.request, f'Vous avez programé {event.title}, le {event.date}.')
+                self.request,
+                f'Vous avez programé {event.title}, le {event.date}.')
             return redirect(self.get_app() + ':update-events', self.get_slug())
-        except IntegrityError as e:
+        except IntegrityError:
             messages.error(
-                self.request, f"L'événement {event.title} existe déjà. Veuillez modifier l'événement existant ou changer le nom de l'événement que vous tentez d'ajouter.")
+                self.request,
+                (f"L'événement {event.title} existe déjà. Veuillez modifier "
+                 "l'événement existant ou changer le nom de l'événement que "
+                 "vous tentez d'ajouter."))
             return self.form_invalid(self.request)
 
 
@@ -114,20 +111,13 @@ class EventUpdateView(UserIsAdmin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['event'] = self.object
         context['object'] = group = get_object_from_full_slug(self.object.group)
-        context['ariane'] = [
-            {
-                'target': reverse(group.app + ':index'),
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         return context
 
     def get_object(self, **kwargs):
@@ -161,20 +151,13 @@ class UpdateGroupEventsView(UserIsAdmin, View):
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
             date__gte=date_gte)
         context['form'] = EventFormSet(queryset=context['events'])
-        context['ariane'] = [
-            {
-                'target': reverse(group.app + ':index'),
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         return context
 
     def get(self, request, **kwargs):
@@ -205,20 +188,13 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
             group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
             date__lte=date_lte)
         context['form'] = EventFormSet(queryset=context['events'])
-        context['ariane'] = [
-            {
-                'target': reverse(group.app + ':index'),
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app + ':detail', kwargs={'slug': group.slug}),
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Modifier'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Modifier'}]
         return context
 
     def get(self, request, **kwargs):

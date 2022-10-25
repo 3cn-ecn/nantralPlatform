@@ -43,8 +43,11 @@ class Notification(models.Model):
     image_url = models.CharField(max_length=512, blank=True, null=True)
     date = models.DateTimeField('Date de création', default=timezone.now)
     high_priority = models.BooleanField('Prioritaire', default=False)
-    publicity = models.CharField(choices=VISIBILITY, default='Pub',
-                                 max_length=3, verbose_name='Visibilité de la notification')
+    publicity = models.CharField(
+        choices=VISIBILITY,
+        default='Pub',
+        max_length=3,
+        verbose_name='Visibilité de la notification')
     receivers = models.ManyToManyField(
         Student, related_name='notification_set', through='SentNotification')
     sent = models.BooleanField('Envoyé', default=False)
@@ -135,8 +138,10 @@ class SentNotification(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
     seen = models.BooleanField('Vu', default=False)
-    subscribed = models.BooleanField('Abonné', default=False,
-                                     help_text="Vrai si on la montre dans les abonnements")
+    subscribed = models.BooleanField(
+        'Abonné',
+        default=False,
+        help_text="Vrai si on la montre dans les abonnements")
 
     class Meta:
         verbose_name = "Notification envoyée"
@@ -150,8 +155,10 @@ class SentNotification(models.Model):
 
 class NotificationAction(models.Model):
     """An action for a notification."""
-    notification = models.ForeignKey(Notification,
-                                     on_delete=models.CASCADE, related_name="actions")
+    notification = models.ForeignKey(
+        Notification,
+        on_delete=models.CASCADE,
+        related_name="actions")
     title = models.CharField('Titre', max_length=50)
     url = models.CharField('Cible', max_length=512)
     icon_url = models.CharField('Url of the icon for the action',

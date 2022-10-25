@@ -1,8 +1,10 @@
 ﻿# ---- Description ----
 # This file generates the fixtures for the BaseEvent model.
 # It generates 50 events with dummy data.
-# Run it from the fixtures directory to generate fixtures.json, which is then used in the initial migrations.
-# If changes are made to the required fields of the BaseEvent model, this file WILL HAVE TO BE EDITED accordingly.
+# Run it from the fixtures directory to generate fixtures.json, which is then
+# used in the initial migrations.
+# If changes are made to the required fields of the BaseEvent model, this
+# file WILL HAVE TO BE EDITED accordingly.
 
 import json
 import copy

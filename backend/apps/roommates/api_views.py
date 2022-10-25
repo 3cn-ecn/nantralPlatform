@@ -27,7 +27,14 @@ class HousingView(generics.ListCreateAPIView):
     def get_queryset(self):
         now = timezone.now()
         query = Housing.objects.filter(
-            Q(Q(roommates__begin_date__lte=now) & (Q(roommates__end_date__gte=now) | Q(roommates__end_date=None))) | Q(roommates__members=None)).distinct()
+            Q(
+                Q(roommates__begin_date__lte=now)
+                & (
+                    Q(roommates__end_date__gte=now)
+                    | Q(roommates__end_date=None)
+                )
+            ) | Q(roommates__members=None)
+        ).distinct()
         return query
 
 
@@ -73,9 +80,13 @@ class RoommatesDetails(APIView):
                     object.colocathlon_participants.add(request.user.student)
                     return Response(status=200)
                 else:
-                    return Response(data=RoommatesSerializer(roommates.first()).data, status=403)
+                    return Response(
+                        data=RoommatesSerializer(roommates.first()).data,
+                        status=403)
             return Response(status=403)
-        if Roommates.objects.filter(colocathlon_participants=request.user.student).exists():
+        if Roommates.objects.filter(
+                colocathlon_participants=request.user.student
+            ).exists():
             object.colocathlon_participants.remove(request.user.student)
             return Response(status=200)
         return Response(status=500)

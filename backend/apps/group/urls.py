@@ -26,12 +26,12 @@ def makeGroupUrlpatterns(
     create_post_view=UpdateGroupCreatePostView.as_view()
 ):
     '''
-    Fonction créant toutes les urls pour un groupe 
+    Fonction créant toutes les urls pour un groupe
     (ex: clubs, listes, colocs, cours...).
-        ->  url_base est l'url qui peut être ajoutée 
+        ->  url_base est l'url qui peut être ajoutée
             devant les slugs, sans aucun slash
-        ->  *_view permet de remplacer la vue générale de 
-            group par une vue personnalisée pour le groupe 
+        ->  *_view permet de remplacer la vue générale de
+            group par une vue personnalisée pour le groupe
     '''
 
     if url_base:

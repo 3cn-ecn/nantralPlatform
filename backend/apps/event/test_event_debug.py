@@ -34,8 +34,7 @@ def createEvents(apps, schema_editor):
         newEvent.save()
 
 
-migrations_files = os.listdir('apps/event/migrations')
-migrations_files.sort()
+migrations_files = sorted(os.listdir('apps/event/migrations'))
 migrations_files = [
     migrations_file for migrations_file in migrations_files if migrations_file[0:3].isnumeric()]
 latest_migration_file = migrations_files[-1][: -3]

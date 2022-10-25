@@ -11,13 +11,19 @@ class Housing(models.Model):
     address = models.CharField(
         max_length=250, verbose_name='Adresse')
     details = models.CharField(
-        max_length=100, verbose_name='Complément d\'adresse', null=True, blank=True)
+        max_length=100,
+        verbose_name='Complément d\'adresse',
+        null=True,
+        blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         coordinates = geocode(self.address)[0]
-        if not self.latitude or not self.longitude or abs(self.latitude - coordinates['lat']) > 5e-3 or abs(self.longitude - coordinates['long']) > 5e-3:
+        if (not self.latitude
+                or not self.longitude
+                or abs(self.latitude - coordinates['lat']) > 5e-3
+                or abs(self.longitude - coordinates['long']) > 5e-3):
             self.latitude = coordinates['lat']
             self.longitude = coordinates['long']
         super(Housing, self).save(*args, **kwargs)
@@ -65,7 +71,8 @@ class Roommates(Group):
 
     def occupied(self):
         td = timezone.now().today
-        if self.begin_date <= td and (self.end_date is None or self.end_date >= td):
+        if (self.begin_date <= td
+                and (self.end_date is None or self.end_date >= td)):
             return True
         return False
 
