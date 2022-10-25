@@ -46,6 +46,7 @@ pep8-naming = ">=0.13.2"
 pycodestyle = ">=2.9.1"
 pydocstyle = ">=6.1.1"
 pyflakes = ">=2.5.0"
+names = "*"
 
 [requires]
 python_version = "3.10"

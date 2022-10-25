@@ -10,7 +10,7 @@ import json
 import copy
 import names
 
-studentTemp = {
+STUDENT_TEMP = {
     "is_superuser": False,
     "is_staff": False,
     "is_active": True,
@@ -21,22 +21,22 @@ L = []
 
 def generate():
     for i in range(1, 200):
-        newStudent = copy.deepcopy(studentTemp)
+        new_student = copy.deepcopy(STUDENT_TEMP)
         if i != 1:
-            firstName = names.get_first_name().lower()
-            lastName = names.get_last_name().lower()
-            newStudent["email"] = f'{firstName}.{lastName}@ec-nantes.fr'
+            first_name = names.get_first_name().lower()
+            last_name = names.get_last_name().lower()
+            new_student["email"] = f'{first_name}.{last_name}@ec-nantes.fr'
         else:
-            firstName = "robin"
-            lastName = "test"
-            newStudent["is_superuser"] = True
-            newStudent["is_staff"] = True
-            newStudent["email"] = 'robin@ec-nantes.fr'
-        newStudent["username"] = f'{firstName}{lastName}-{i}'
-        newStudent["first_name"] = f'{firstName}'
-        newStudent["last_name"] = f'{lastName}'
+            first_name = "robin"
+            last_name = "test"
+            new_student["is_superuser"] = True
+            new_student["is_staff"] = True
+            new_student["email"] = 'robin@ec-nantes.fr'
+        new_student["username"] = f'{first_name}{last_name}-{i}'
+        new_student["first_name"] = f'{first_name}'
+        new_student["last_name"] = f'{last_name}'
 
-        L.append(newStudent)
+        L.append(new_student)
     with open('fixtures.json', 'w') as outfile:
         json.dump(L, outfile)
 

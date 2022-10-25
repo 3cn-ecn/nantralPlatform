@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 
 from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressModelImage
+from apps.utils.compress import compress_model_image
 
 
 FACULTIES = [
@@ -81,7 +81,7 @@ class Student(models.Model):
         return self.get_absolute_url()
 
     def save(self, *args, **kwargs):
-        self.picture = compressModelImage(self, 'picture')
+        self.picture = compress_model_image(self, 'picture')
         super(Student, self).save(*args, **kwargs)
 
     class Meta:

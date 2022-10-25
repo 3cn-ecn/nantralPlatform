@@ -16,7 +16,7 @@ def remove_inactive_accounts():
         for user in User.objects.filter(is_active=False):
             user: User
             try:
-                authorization: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
+                authorization = TemporaryAccessRequest.objects.get(
                     user=user)
                 if not authorization.mail_valid:
                     user.delete()

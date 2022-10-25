@@ -1,6 +1,6 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.utils.text import slugify
 from django.urls.base import reverse
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -9,9 +9,11 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressModelImage
-from apps.utils.slug import get_object_from_full_slug, get_tuple_from_full_slug, SlugModel
-from django.conf import settings
+from apps.utils.compress import compress_model_image
+from apps.utils.slug import (
+    get_object_from_full_slug,
+    get_tuple_from_full_slug,
+    SlugModel)
 
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
@@ -89,9 +91,9 @@ class Group(models.Model, SlugModel):
         # cration du slug si non-existant ou corrompu
         self.set_slug(self.name, 40)
         # compression des images
-        self.logo = compressModelImage(
+        self.logo = compress_model_image(
             self, 'logo', size=(500, 500), contains=True)
-        self.banniere = compressModelImage(
+        self.banniere = compress_model_image(
             self, 'banniere', size=(1320, 492), contains=False)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
@@ -172,12 +174,18 @@ class AdminRightsRequest(models.Model):
     @ property
     def accept_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
-        return f"https://{self.domain}{reverse(app+':accept-admin-req', kwargs={'slug': slug,'id': self.id})}"
+        url_path = reverse(
+            app + ':accept-admin-req',
+            kwargs={'slug': slug, 'id': self.id})
+        return f"https://{self.domain}{url_path}"
 
     @ property
     def deny_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
-        return f"https://{self.domain}{reverse(app+':deny-admin-req', kwargs={'slug': slug, 'id': self.id})}"
+        url_path = reverse(
+            app + ':deny-admin-req',
+            kwargs={'slug': slug, 'id': self.id})
+        return f"https://{self.domain}{url_path}"
 
     def accept(self):
         group = get_object_from_full_slug(self.group)

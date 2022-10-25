@@ -34,11 +34,11 @@ def user_creation(
     user.is_active = False
     user.save()
     if isinstance(form, TemporaryRequestSignUpForm):
-        temporaryAccessRequest = TemporaryAccessRequest(
+        temporary_access_request = TemporaryAccessRequest(
             user=user
         )
         domain = get_current_site(request).domain
-        temporaryAccessRequest.save(domain=domain)
+        temporary_access_request.save(domain=domain)
     send_email_confirmation(user, request, isinstance(
         form, TemporaryRequestSignUpForm))
     return user

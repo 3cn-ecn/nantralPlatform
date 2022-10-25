@@ -6,9 +6,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.post.models import AbstractPost
 from apps.student.models import Student
-from apps.notification.models import Notification
 from apps.utils.upload import PathAndRename
-from apps.utils.slug import get_object_from_full_slug
 
 
 path_and_rename = PathAndRename("events/pictures")
@@ -33,7 +31,7 @@ class BaseEvent(AbstractPost):
     participants = models.ManyToManyField(
         to=Student, verbose_name='Participants', blank=True)
     ticketing = models.CharField(
-        verbose_name='Lien vers la billeterie',
+        verbose_name='Lien vers la billetterie',
         blank=True,
         max_length=200,
         null=True)

@@ -8,7 +8,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.utils.slug import SlugModel, get_object_from_full_slug
 from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressModelImage
+from apps.utils.compress import compress_model_image
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
 
@@ -64,7 +64,7 @@ class AbstractPost(models.Model, SlugModel):
 
     def save(self, *args, **kwargs):
         # compression des images
-        self.image = compressModelImage(
+        self.image = compress_model_image(
             self, 'image', size=(1320, 492), contains=False)
         super(AbstractPost, self).save(*args, **kwargs)
         # send the notification

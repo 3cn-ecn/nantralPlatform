@@ -33,5 +33,14 @@
   "python.linting.pydocstyleEnabled": true,
   "python.linting.pydocstyleArgs": ["--ignore=D100,D102,D213,D400,D407"],
   "autoDocstring.docstringFormat": "numpy",
-  "docwriter.style": "NumPy"
+  "docwriter.style": "NumPy",
+  "cSpell.language": "en,fr",
+  "cSpell.words": [
+    "banniere",
+    "colocathlon",
+    "colocathlons",
+    "nantes",
+    "nantral",
+    "Nantral"
+  ]
 }

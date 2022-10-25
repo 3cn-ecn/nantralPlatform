@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import ListClubView, DetailClubView, DetailGroupMembersView
-from apps.group.urls import makeGroupUrlpatterns
+from apps.group.urls import make_group_url_patterns
 
 
 app_name = 'club'
@@ -13,6 +13,6 @@ urlpatterns = [
         '<slug:slug>/members/',
         DetailGroupMembersView.as_view(),
         name='members'),
-] + makeGroupUrlpatterns(
+] + make_group_url_patterns(
     detail_view=DetailClubView.as_view()
 )

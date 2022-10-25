@@ -1,7 +1,18 @@
 from django.urls import path
 
-from .views import DetailGroupView, AddToGroupView, UpdateGroupView, UpdateGroupMembersView, RequestAdminRightsView, AcceptAdminRequestView, DenyAdminRequestView, UpdateGroupSocialLinksView
-from apps.event.views import UpdateGroupCreateEventView, UpdateGroupArchivedEventsView, UpdateGroupEventsView
+from .views import (
+    DetailGroupView,
+    AddToGroupView,
+    UpdateGroupView,
+    UpdateGroupMembersView,
+    RequestAdminRightsView,
+    AcceptAdminRequestView,
+    DenyAdminRequestView,
+    UpdateGroupSocialLinksView)
+from apps.event.views import (
+    UpdateGroupCreateEventView,
+    UpdateGroupArchivedEventsView,
+    UpdateGroupEventsView)
 from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
 
 app_name = 'group'
@@ -9,10 +20,10 @@ app_name = 'group'
 # note : les vues de l'app groupe servent uniquement de modèle
 # pour celles des autres modèles de groupe
 # pour créer un nouveau groupe, utilisez
-# urlpatterns = makeGroupUrlpatterns("nom_du_groupe_dans_slug")
+# urlpatterns = make_group_url_patterns("nom_du_groupe_dans_slug")
 
 
-def makeGroupUrlpatterns(
+def make_group_url_patterns(
     url_base='',
     detail_view=DetailGroupView.as_view(),
     add_member_view=AddToGroupView.as_view(),

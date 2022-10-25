@@ -25,7 +25,7 @@ AJOUTER UN NOUVEAU GROUPE
 -------------------------
 
 Si vous ajoutez un nouveau type de groupe, créez une appli dédiée. Déclarez
-les urls avec la fonction makeGroupUrlpatterns de apps.groups.urls, et ajoutez
+les urls avec la fonction make_group_url_patterns de apps.groups.urls, et ajoutez
 ensuite ce nouveau groupe dans la liste SLUG_MODELS ci-dessous.
 Il vous faudra aussi ajouter vos formulaires dans group/forms.py. Les vues sont
 gérées automatiquement mais peuvent être réécrites si besoin.

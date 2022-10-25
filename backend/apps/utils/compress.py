@@ -1,28 +1,30 @@
+# spell-checker: words LANCZOS getsizeof pyaccess
+
 from io import BytesIO
 from PIL import Image
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
 
 
-def compressModelImage(object, field, size=(500, 500), contains=False):
-    imageField = getattr(object, field)
+def compress_model_image(object, field, size=(500, 500), contains=False):
+    image_field = getattr(object, field)
     if (not object.pk
-            or imageField != getattr(
+            or image_field != getattr(
                 type(object).objects.get(pk=object.pk),
                 field
             )):
-        imageField = compressImage(imageField, size, contains)
-    return imageField
+        image_field = compress_image(image_field, size, contains)
+    return image_field
 
 
-def compressImage(image, size=(500, 500), contains=False):
+def compress_image(image, size=(500, 500), contains=False):
     '''Compresse une image'''
     # exception null
     if not image:
         return image
     # find the format
     format = find_format(image)
-    # pas de compression pour les gifs, pour conserver l'animation
+    # pas de compression pour les gif, pour conserver l'animation
     if format == 'GIF':
         return image
     # open the image
