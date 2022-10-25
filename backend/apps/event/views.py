@@ -10,11 +10,16 @@ from django.urls import resolve
 from django.urls.base import reverse
 from django.db.utils import IntegrityError
 
-from .models import *
+from .models import BaseEvent, EatingEvent
 from .forms import EventForm, EventFormSet
 
 from apps.notification.models import SentNotification
-from apps.utils.slug import *
+from apps.utils.slug import (
+    get_object_from_slug,
+    get_full_slug_from_slug,
+    get_app_from_full_slug,
+    get_slug_from_full_slug,
+    get_object_from_full_slug)
 from apps.utils.accessMixins import UserIsAdmin
 
 

@@ -1,9 +1,8 @@
 from rest_framework import generics, permissions
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
 
 from .models import Liste
-from .serializers import *
+from .serializers import ListeMemberSerializer
 
 
 class ListListeMembersAPIView(generics.ListAPIView):

@@ -9,8 +9,13 @@ from django.urls.base import reverse
 from .forms import PostForm, PostFormSet
 from .models import Post
 
-from apps.notification.models import Notification, SentNotification
-from apps.utils.slug import *
+from apps.notification.models import SentNotification
+from apps.utils.slug import (
+    get_app_from_full_slug,
+    get_full_slug_from_slug,
+    get_slug_from_full_slug,
+    get_object_from_full_slug,
+    get_object_from_slug)
 from apps.utils.accessMixins import UserIsAdmin
 
 # Application Post

@@ -1,6 +1,10 @@
 from django.urls import path
 
-from .api_views import *
+from .api_views import (
+    RegisterAPIView,
+    SubscriptionAPIView,
+    GetNotificationsAPIView,
+    ManageNotificationAPIView)
 
 app_name = 'notification_api'
 

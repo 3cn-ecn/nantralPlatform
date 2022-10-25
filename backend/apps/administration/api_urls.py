@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .api_views import *
+from .api_views import ListAdministrationMembersAPIView
 
 app_name = 'administration'
 

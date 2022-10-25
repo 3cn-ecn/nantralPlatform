@@ -1,6 +1,11 @@
 from django.urls import path
 
-from .api_views import *
+from .api_views import (
+    ListEventsHomeAPIView,
+    ListAllEventsGroupAPIView,
+    ListEventsGroupAPIView,
+    ListEventsParticipantsAPIView,
+    UpdateEventAPIView)
 
 app_name = 'event'
 

@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, modelformset_factory
 
 from .models import AdminRightsRequest
 from apps.sociallink.models import SocialLink
@@ -9,58 +9,58 @@ from apps.roommates.models import Roommates
 from apps.academic.models import Course
 from apps.administration.models import Administration
 
-from apps.club.forms import *
-from apps.liste.forms import *
-from apps.roommates.forms import *
-from apps.academic.forms import *
-from apps.administration.forms import *
+import apps.club.forms as clubforms
+import apps.liste.forms as listeforms
+import apps.roommates.forms as roommatesforms
+import apps.academic.forms as academicforms
+import apps.administration.forms as adminforms
 
 
 # NB : Les BDX sont aussi des instances de Club
 
 def UpdateGroupForm(group):
     if isinstance(group, BDX):
-        return UpdateBDXForm
+        return clubforms.UpdateBDXForm
     elif isinstance(group, Club):
-        return UpdateClubForm
+        return clubforms.UpdateClubForm
     elif isinstance(group, Liste):
-        return UpdateListeForm
+        return listeforms.UpdateListeForm
     elif isinstance(group, Roommates):
-        return UpdateRoommatesForm
+        return roommatesforms.UpdateRoommatesForm
     elif isinstance(group, Course):
-        return UpdateCourseForm
+        return academicforms.UpdateCourseForm
     elif isinstance(group, Administration):
-        return UpdateAdministrationForm
+        return adminforms.UpdateAdministrationForm
     else:
         return None
 
 
 def NamedMembershipAddGroup(group):
     if isinstance(group, Club):
-        return NamedMembershipAddClub
+        return clubforms.NamedMembershipAddClub
     elif isinstance(group, Liste):
-        return NamedMembershipAddListe
+        return listeforms.NamedMembershipAddListe
     elif isinstance(group, Roommates):
-        return NamedMembershipAddRoommates
+        return roommatesforms.NamedMembershipAddRoommates
     elif isinstance(group, Course):
-        return NamedMembershipAddCourse
+        return academicforms.NamedMembershipAddCourse
     elif isinstance(group, Administration):
-        return NamedMembershipAddAdministration
+        return adminforms.NamedMembershipAddAdministration
     else:
         return None
 
 
 def NamedMembershipGroupFormset(group):
     if isinstance(group, Club):
-        return NamedMembershipClubFormset
+        return clubforms.NamedMembershipClubFormset
     elif isinstance(group, Liste):
-        return NamedMembershipListeFormset
+        return listeforms.NamedMembershipListeFormset
     elif isinstance(group, Roommates):
-        return NamedMembershipRoommatesFormset
+        return roommatesforms.NamedMembershipRoommatesFormset
     elif isinstance(group, Course):
-        return NamedMembershipCourseFormset
+        return academicforms.NamedMembershipCourseFormset
     elif isinstance(group, Administration):
-        return NamedMembershipAdministrationFormset
+        return adminforms.NamedMembershipAdministrationFormset
     else:
         return None
 

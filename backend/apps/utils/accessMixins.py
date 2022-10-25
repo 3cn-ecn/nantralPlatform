@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.urls import resolve
 
-from apps.utils.slug import *
+from apps.utils.slug import get_object_from_slug
 
 
 def userIsConnected(user: User):

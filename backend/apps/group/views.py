@@ -19,10 +19,16 @@ from apps.event.models import BaseEvent
 from apps.post.models import Post
 from apps.notification.models import Subscription
 
-from .forms import *
+from .forms import (
+    NamedMembershipAddGroup,
+    NamedMembershipGroupFormset,
+    AdminRightsRequestForm,
+    UpdateGroupForm,
+    SocialLinkGroupFormset,
+    AdminRightsRequest)
 
 from apps.utils.accessMixins import UserIsAdmin, userIsConnected
-from apps.utils.slug import *
+from apps.utils.slug import get_object_from_slug
 
 
 class BaseDetailGroupView(DetailView):
@@ -325,13 +331,15 @@ class AcceptAdminRequestView(UserIsAdmin, View):
             if group.full_slug == admin_req.group:
                 # Checking whether the url is legit
                 messages.success(
-                    request, message=f"Vous avez accepté la demande de {admin_req.student}")
+                    request,
+                    message=(
+                        f"Vous avez accepté la demande de {admin_req.student}"))
                 admin_req.accept()
             else:
                 messages.error(request, message="L'URL est invalide !!!")
         except AdminRightsRequest.DoesNotExist:
             messages.error(
-                request, message=f"La demande a déjà été traitée !")
+                request, message="La demande a déjà été traitée !")
         return redirect(group.get_absolute_url())
 
 
@@ -345,11 +353,13 @@ class DenyAdminRequestView(UserIsAdmin, View):
             if group.full_slug == admin_req.group:
                 # Checking whether the url is legit
                 messages.success(
-                    request, message=f"Vous avez refusé la demande de {admin_req.student}")
+                    request,
+                    message=(
+                        f"Vous avez refusé la demande de {admin_req.student}"))
                 admin_req.deny()
             else:
                 messages.error(request, message="L'URL est invalide !!!")
         except AdminRightsRequest.DoesNotExist:
             messages.error(
-                request, message=f"La demande a déjà été traitée !")
+                request, message="La demande a déjà été traitée !")
         return redirect(group.get_absolute_url())

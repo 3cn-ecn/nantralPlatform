@@ -3,7 +3,7 @@ from django.utils import timezone
 from rest_framework import generics, permissions
 
 from .models import BaseEvent
-from .serializers import *
+from .serializers import BaseEventSerializer, EventParticipatingSerializer
 
 
 class ListEventsHomeAPIView(generics.ListAPIView):

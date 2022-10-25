@@ -4,7 +4,7 @@ from django.template.response import TemplateResponse
 from django.urls.conf import path
 from django.urls.resolvers import URLPattern
 from django.utils import timezone
-from .models import *
+from .models import BDX, NamedMembershipClub, Club
 
 
 @admin.action(description='Modifier vers BDA')

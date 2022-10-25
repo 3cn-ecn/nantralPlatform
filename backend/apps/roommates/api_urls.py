@@ -1,6 +1,10 @@
 from django.urls import path
 
-from .api_views import *
+from .api_views import (
+    SearchGeocodingView,
+    HousingView,
+    CheckAddressView,
+    RoommatesDetails)
 
 app_name = 'roommates_api'
 

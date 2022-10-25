@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 
 from .models import Club, NamedMembershipClub
 from apps.student.models import Student
-from .serializers import *
+from .serializers import ClubSerializer, ClubMemberSerializer
 
 
 class ListMyClubAPIView(generics.ListAPIView):
@@ -34,7 +34,8 @@ class ListClubMembersAPIView(APIView):
         club = get_object_or_404(Club, slug=clubSlug)
         date_end = timezone.make_aware(timezone.now().today())
         namedMemberships = club.members.through.objects.filter(
-            Q(group=club) & (Q(date_end__isnull=True) | Q(date_end__gt=date_end))
+            Q(group=club)
+            & (Q(date_end__isnull=True) | Q(date_end__gt=date_end))
         ).order_by('student__user__first_name')
         serializer = ClubMemberSerializer(namedMemberships, many=True)
         return Response(data=serializer.data)
@@ -66,10 +67,14 @@ class ListClubMembersAPIView(APIView):
         elif editMode == 2:
             id = request.data.get("id")
             role = request.data.get("role")
-            beginDate = parse_date(request.data.get("beginDate")) if request.data.get(
-                "beginDate") is not None else None
-            endDate = parse_date(request.data.get("endDate")) if request.data.get(
-                "endDate") is not None else None
+            beginDate = (
+                parse_date(request.data.get("beginDate"))
+                if request.data.get("beginDate") is not None
+                else None)
+            endDate = (
+                parse_date(request.data.get("endDate"))
+                if request.data.get("endDate") is not None
+                else None)
             admin = request.data.get("admin")
             NamedMembershipClub.objects.filter(id=id).update(
                 function=role,
@@ -92,13 +97,19 @@ class ListClubMembersAPIView(APIView):
                 return HttpResponse(status=403)
             admin = request.data.get("admin")
             function = request.data.get("function")
-            beginDate = parse_date(request.data.get("date_begin")) if request.data.get(
-                "beginDate") is not None else None
-            endDate = parse_date(request.data.get("date_end")) if request.data.get(
-                "endDate") is not None else None
+            beginDate = (
+                parse_date(request.data.get("date_begin"))
+                if request.data.get("beginDate") is not None
+                else None)
+            endDate = (
+                parse_date(request.data.get("date_end"))
+                if request.data.get("endDate") is not None
+                else None)
 
             # Check if dates are valid
-            if beginDate is not None and endDate is not None and beginDate > endDate:
+            if (beginDate is not None
+                    and endDate is not None
+                    and beginDate > endDate):
                 return HttpResponse(status=500)
 
             if beginDate is not None:

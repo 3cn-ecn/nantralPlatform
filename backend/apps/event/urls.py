@@ -1,6 +1,10 @@
 from django.urls import path
 
-from .views import *
+from .views import (
+    EventUpdateView,
+    EventDetailView,
+    add_participant,
+    remove_participant)
 
 app_name = 'event'
 

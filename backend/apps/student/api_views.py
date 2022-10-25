@@ -34,7 +34,7 @@ class StudentEditNamedMembershipCourse(generics.DestroyAPIView):
         return NamedMembershipCourse.objects.filter(id=self.kwargs['pk'])
 
 
-class StudentList(generics.ListAPIView):
+class StudentListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = StudentSerializer
 

@@ -1,6 +1,13 @@
 ﻿from django.urls import path
 
-from .views import *
+from .views import (
+    CreateHousingView,
+    CreateRoommatesView,
+    HousingMap,
+    HousingList,
+    ColocathlonFormView,
+    DetailRoommatesView,
+    UpdateRoommatesView)
 from apps.group.urls import makeGroupUrlpatterns
 
 app_name = 'roommates'

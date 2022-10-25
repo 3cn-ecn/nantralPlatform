@@ -10,7 +10,7 @@ from django.utils import timezone
 from apps.club.models import Club
 from apps.group.views import BaseDetailGroupView
 
-from apps.utils.slug import *
+from apps.utils.slug import get_object_from_slug
 
 
 class ListClubView(TemplateView):
@@ -50,7 +50,8 @@ class DetailClubView(BaseDetailGroupView):
         group = context['object']
         date_end = timezone.make_aware(timezone.now().today())
         context['members'] = group.members.through.objects.filter(
-            Q(group=group) & (Q(date_end__isnull=True) | Q(date_end__gt=date_end))
+            Q(group=group)
+            & (Q(date_end__isnull=True) | Q(date_end__gt=date_end))
         ).order_by('student__user__first_name')
         return context
 
