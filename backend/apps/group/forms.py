@@ -1,24 +1,27 @@
+# spell-checker: words listeforms
+
+from typing import Type
+
 from django.forms import ModelForm, modelformset_factory
 
-from .models import AdminRightsRequest
-from apps.sociallink.models import SocialLink
-
+from apps.academic.models import Course
+from apps.administration.models import Administration
 from apps.club.models import Club, BDX
 from apps.liste.models import Liste
 from apps.roommates.models import Roommates
-from apps.academic.models import Course
-from apps.administration.models import Administration
-
+from apps.sociallink.models import SocialLink
+import apps.academic.forms as academicforms
+import apps.administration.forms as adminforms
 import apps.club.forms as clubforms
 import apps.liste.forms as listeforms
 import apps.roommates.forms as roommatesforms
-import apps.academic.forms as academicforms
-import apps.administration.forms as adminforms
+
+from .models import AdminRightsRequest
 
 
 # NB : Les BDX sont aussi des instances de Club
 
-def UpdateGroupForm(group):
+def UpdateGroupForm(group: object) -> Type[ModelForm]:  # noqa: N802
     if isinstance(group, BDX):
         return clubforms.UpdateBDXForm
     elif isinstance(group, Club):
@@ -35,7 +38,7 @@ def UpdateGroupForm(group):
         return None
 
 
-def NamedMembershipAddGroup(group):
+def NamedMembershipAddGroup(group: object) -> Type[ModelForm]:  # noqa: N802
     if isinstance(group, Club):
         return clubforms.NamedMembershipAddClub
     elif isinstance(group, Liste):
@@ -50,7 +53,7 @@ def NamedMembershipAddGroup(group):
         return None
 
 
-def NamedMembershipGroupFormset(group):
+def NamedMembershipGroupFormset(group: object) -> Type[ModelForm]:  # noqa: N802
     if isinstance(group, Club):
         return clubforms.NamedMembershipClubFormset
     elif isinstance(group, Liste):

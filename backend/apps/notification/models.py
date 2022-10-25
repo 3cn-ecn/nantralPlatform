@@ -17,8 +17,8 @@ from apps.student.models import Student
 
 VISIBILITY = [
     ('Pub', 'Public - Visible par tous'),
-    ('Mem', 'Membres uniquement - Visible uniquement par les membres du groupe'),
-    ('Adm', 'Administeurs de la page')
+    ('Mem', 'Membres - Visible uniquement par les membres du groupe'),
+    ('Adm', 'Administrateurs de la page')
 ]
 
 
@@ -78,7 +78,7 @@ class Notification(models.Model):
                     group=page, admin=True
                 )
         self.receivers.add(*receivers)
-        # then we update the subscribed field for receivers who habe subscribed
+        # then we update the subscribed field for receivers who have subscribed
         if self.high_priority:
             sub_receivers = self.receivers.all()
         else:
@@ -93,7 +93,7 @@ class Notification(models.Model):
         super().save()
 
     def send(self):
-        """Sauver la notif et ajouter des destinataires"""
+        """Save the notification and add recipients"""
         # select the receivers who have subscribed and will receive the
         # notification
         sub_receivers = self.receivers.filter(sentnotification__subscribed=True)
@@ -129,7 +129,7 @@ class Notification(models.Model):
         self.save()
 
     @property
-    def nbTargets(self, *args, **kwargs):
+    def nb_targets(self, *args, **kwargs):
         return self.sentnotification_set.count()
 
 

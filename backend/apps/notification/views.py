@@ -13,8 +13,8 @@ class SettingsView(LoginRequiredMixin, TemplateView):
 
     def get_pages(self):
         student = self.request.user.student
-        listOfSub = Subscription.objects.filter(student=student).values('page')
-        pages = [s['page'] for s in listOfSub]
+        list_subs = Subscription.objects.filter(student=student).values('page')
+        pages = [s['page'] for s in list_subs]
         return pages
 
     def get_context_data(self, **kwargs):

@@ -11,9 +11,9 @@ class ListListeMembersAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        listeSlug = self.request.query_params.get('slug')
-        liste = get_object_or_404(Liste, slug=listeSlug)
-        namedMemberships = liste.members.through.objects.filter(
+        liste_slug = self.request.query_params.get('slug')
+        liste = get_object_or_404(Liste, slug=liste_slug)
+        named_memberships = liste.members.through.objects.filter(
             group=liste,
         ).order_by('student__user__first_name')
-        return namedMemberships
+        return named_memberships

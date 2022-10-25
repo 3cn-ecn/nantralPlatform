@@ -27,7 +27,7 @@ from .forms import (
     SocialLinkGroupFormset,
     AdminRightsRequest)
 
-from apps.utils.accessMixins import UserIsAdmin, userIsConnected
+from apps.utils.accessMixins import UserIsAdmin, user_is_connected
 from apps.utils.slug import get_object_from_slug
 
 
@@ -45,9 +45,9 @@ class BaseDetailGroupView(DetailView):
         group = self.object
         # réseaux sociaux
         context['sociallinks'] = SocialLink.objects.filter(slug=group.full_slug)
-        # seuement si connecté
-        context['connected'] = userIsConnected(self.request.user)
-        if userIsConnected(self.request.user):
+        # seulement si connecté
+        context['connected'] = user_is_connected(self.request.user)
+        if user_is_connected(self.request.user):
             publication_date = timezone.make_aware(
                 timezone.now().today() - timedelta(days=10))
             posts = Post.objects.filter(
@@ -164,7 +164,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['object'] = self.get_object()
         group = self.get_object()
-        UpdateForm = UpdateGroupForm(context['object'])
+        UpdateForm = UpdateGroupForm(context['object'])  # noqa: N806
         if UpdateForm:
             context['form'] = UpdateForm(instance=context['object'])
         context['ariane'] = [{'target': reverse(group.app + ':index'),
@@ -178,7 +178,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
 
     def post(self, request, **kwargs):
         group = self.get_object()
-        UpdateForm = UpdateGroupForm(group)
+        UpdateForm = UpdateGroupForm(group)  # noqa: N806
         if UpdateForm:
             form = UpdateForm(request.POST, request.FILES, instance=group)
             if form.is_valid():
@@ -226,7 +226,7 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
 @ require_http_methods(['POST'])
 @ login_required
 def edit_named_memberships(request, group):
-    MembersFormset = NamedMembershipGroupFormset(group)
+    MembersFormset = NamedMembershipGroupFormset(group)  # noqa: N806
     if MembersFormset:
         form = MembersFormset(request.POST)
         if form.is_valid():

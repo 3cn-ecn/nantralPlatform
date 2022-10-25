@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-from django.conf import settings
 
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
@@ -11,7 +10,7 @@ from apps.utils.compress import compress_model_image
 
 FACULTIES = [
     ('Gen', 'Élève Ingénieur Généraliste'),
-    ('Iti', 'Élève Ingénieur de Specialité (ITII)'),
+    ('Iti', 'Élève Ingénieur de Spécialité (ITII)'),
     ('Mas', 'Élève en Master'),
     ('Doc', 'Doctorant')
 ]
@@ -52,7 +51,8 @@ class Student(models.Model):
     def name(self):
         '''Renvoie le nom de l'utilisateur au format Prénom NOM.'''
         if self.user.first_name and self.user.last_name:
-            return f'{self.user.first_name.title()} {self.user.last_name.upper()}'
+            return (
+                f'{self.user.first_name.title()} {self.user.last_name.upper()}')
         elif self.user.first_name:
             return self.user.first_name.title()
         elif self.user.last_name:
@@ -64,7 +64,8 @@ class Student(models.Model):
     def alphabetical_name(self):
         '''Renvoie le nom de l'utilisateur au format NOM Prénom.'''
         if self.user.first_name and self.user.last_name:
-            return f'{self.user.last_name.upper()} {self.user.first_name.title()}'
+            return (
+                f'{self.user.last_name.upper()} {self.user.first_name.title()}')
         else:
             return self.name
 

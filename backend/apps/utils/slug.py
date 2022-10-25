@@ -10,7 +10,7 @@ LES SLUGS ET LES GROUPES
             (ex: events, posts, liens de réseaux sociaux...)
 
 Attention, il faut bien distinguer les propriétés suivantes des groupes :
-->  .slug renvoie uniquement le nom du groupe slugifié pour l'url
+->  .slug renvoie uniquement le nom du groupe sous forme de slug pour l'url
 ->  .app  renvoie le nom de l'application du groupe
 ->  .full_slug renvoie le texte "app--slug" qui sera enregistré dans les
     autres tables SQL (events, ...) pour pouvoir retrouver le bon modèle
@@ -25,14 +25,16 @@ AJOUTER UN NOUVEAU GROUPE
 -------------------------
 
 Si vous ajoutez un nouveau type de groupe, créez une appli dédiée. Déclarez
-les urls avec la fonction make_group_url_patterns de apps.groups.urls, et ajoutez
-ensuite ce nouveau groupe dans la liste SLUG_MODELS ci-dessous.
+les urls avec la fonction make_group_url_patterns de apps.groups.urls, et
+ajoutez ensuite ce nouveau groupe dans la liste SLUG_MODELS ci-dessous.
 Il vous faudra aussi ajouter vos formulaires dans group/forms.py. Les vues sont
 gérées automatiquement mais peuvent être réécrites si besoin.
 
 """
 
 from importlib import import_module
+from typing import Type
+
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 
@@ -54,16 +56,31 @@ SLUG_MODELS = {
 SLUG_MODELS.update(SLUG_GROUPS)
 
 
-def get_model(app_name: str):
+class SlugModel:
+    """ A class to define a method to create and update slugs"""
+
+    def set_slug(self, text: str, max_length=50) -> None:
+        if not self.slug:
+            slug = slugify(text)[:max_length - 5]
+            model = type(self)
+            if model.objects.filter(slug=slug).exists():
+                id = 1
+                while model.objects.filter(slug=f'{slug}-{id}'):
+                    id += 1
+                slug = f'{slug}-{id}'
+            self.slug = slug
+
+
+def get_model(app_name: str) -> Type[SlugModel]:
     try:
         package = import_module(SLUG_MODELS[app_name][0])
-        Model = getattr(package, SLUG_MODELS[app_name][1])
+        Model = getattr(package, SLUG_MODELS[app_name][1])  # noqa: N806
         return Model
     except KeyError:
         raise Exception(f'Unknown application : {app_name}')
 
 
-def get_object_from_slug(app_name: str, slug: str):
+def get_object_from_slug(app_name: str, slug: str) -> SlugModel:
     """Get a model object from a slug and an app."""
 
     if app_name == 'club':
@@ -76,28 +93,28 @@ def get_object_from_slug(app_name: str, slug: str):
         return object
     else:
         try:
-            Model = get_model(app_name)
+            Model = get_model(app_name)  # noqa: N806
             return get_object_or_404(Model, slug=slug)
         except KeyError:
             raise Exception(f'Unknown application : {app_name}')
 
 
-def get_full_slug_from_slug(app: str, slug: str):
+def get_full_slug_from_slug(app: str, slug: str) -> str:
     """Get the full slug from a slug and an app."""
     return f'{app}--{slug}'
 
 
-def get_app_from_full_slug(full_slug: str):
+def get_app_from_full_slug(full_slug: str) -> str:
     """Get the model object app name from a full slug."""
     return full_slug.split('--')[0]
 
 
-def get_slug_from_full_slug(full_slug: str):
+def get_slug_from_full_slug(full_slug: str) -> str:
     """Get the slug from a full slug."""
     return '--'.join(full_slug.split('--')[1:])
 
 
-def get_tuple_from_full_slug(full_slug: str):
+def get_tuple_from_full_slug(full_slug: str) -> tuple[str, str]:
     """Get a tuple (app, slug) from a full slug."""
     slug_list = full_slug.split('--')
     app_name = slug_list[0]
@@ -105,22 +122,7 @@ def get_tuple_from_full_slug(full_slug: str):
     return (app_name, slug)
 
 
-def get_object_from_full_slug(full_slug: str):
+def get_object_from_full_slug(full_slug: str) -> SlugModel:
     """Get a model object from a full slug."""
     app_name, slug = get_tuple_from_full_slug(full_slug)
     return get_object_from_slug(app_name, slug)
-
-
-class SlugModel:
-    """ A class to define a method to create and update slugs"""
-
-    def set_slug(self, text, max_length=50):
-        if not self.slug:
-            slug = slugify(text)[:max_length - 5]
-            model = type(self)
-            if model.objects.filter(slug=slug).exists():
-                id = 1
-                while model.objects.filter(slug=f'{slug}-{id}'):
-                    id += 1
-                slug = f'{slug}-{id}'
-            self.slug = slug

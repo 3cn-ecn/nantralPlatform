@@ -88,7 +88,7 @@ class Group(models.Model, SlugModel):
         return user.student in self.members.all()
 
     def save(self, *args, **kwargs):
-        # cration du slug si non-existant ou corrompu
+        # creation du slug si non-existant ou corrompu
         self.set_slug(self.name, 40)
         # compression des images
         self.logo = compress_model_image(
@@ -108,7 +108,7 @@ class Group(models.Model, SlugModel):
 
     @property
     def app_name(self):
-        return self.modelName.title()
+        return self.model_name.title()
 
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
@@ -116,7 +116,7 @@ class Group(models.Model, SlugModel):
         return reverse(self.app + ':detail', kwargs={'slug': self.slug})
 
     @property
-    def modelName(self):
+    def model_name(self):
         '''Plural Model name, used in templates'''
         return self.__class__._meta.verbose_name_plural
 
@@ -231,12 +231,14 @@ class AdminRightsRequest(models.Model):
         self.delete()
 
 
-# FIXME Broken since the move of admins inside of members, nice to fix
+# # FIXME Broken since the move of admins inside of members, nice to fix
 # @receiver(m2m_changed, sender=Group.members.through)
-# def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
+# def admins_changed(
+#     sender, instance, action, pk_set, reverse, model, **kwargs):
 #     if isinstance(instance, Group):
-#         # FIXME temporary fix because this signal shotguns m2m_changed which other can't
-#         # use. To avoid this we check the instance before to make sure it's a group.
+#         # FIXME temporary fix because this signal shotguns m2m_changed which
+#         # other can't use. To avoid this we check the instance before to make
+#         # sure it's a group.
 #         if action == "post_add":
 #             for pk in pk_set:
 #                 user = User.objects.get(pk=pk)

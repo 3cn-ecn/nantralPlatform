@@ -1,4 +1,3 @@
-from django.http.response import HttpResponse
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -39,15 +38,17 @@ class HousingView(generics.ListCreateAPIView):
 
 
 class CheckAddressView(APIView):
-    """An API view to check whether a housing already exists at the selected address.
-    Returns the pk if it does, None otherwise"""
+    """An API view to check whether a housing already exists at the selected
+    address. Returns the pk if it does, None otherwise"""
+
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         query = Housing.objects.filter(address=request.data.get("address"))
         data = [{
             'pk': housing.pk,
-            'name': f'{housing.address} - {housing.details} ({housing.current_roommates})'
+            'name': (f'{housing.address} - {housing.details} '
+                     f'({housing.current_roommates})')
         } for housing in query]
         return Response(data=data)
 
@@ -68,12 +69,13 @@ class RoommatesDetails(APIView):
             Roommates, slug=request.data.get("slug"))
         if not object.colocathlon_agree:
             return Response(status=403)
-        addOrDelete = int(request.data.get("addOrDelete"))
+        add_or_delete = int(request.data.get("addOrDelete"))
 
-        # addOrDelete == 1 --> Delete user
-        # addOrDelete == 0 --> Add user
-        if addOrDelete == 0:
-            if object.colocathlon_quota > object.colocathlon_participants.count():
+        # add_or_delete == 1 --> Delete user
+        # add_or_delete == 0 --> Add user
+        if add_or_delete == 0:
+            if (object.colocathlon_quota
+                    > object.colocathlon_participants.count()):
                 roommates = Roommates.objects.filter(
                     colocathlon_participants=request.user.student)
                 if not roommates.exists():
@@ -84,9 +86,9 @@ class RoommatesDetails(APIView):
                         data=RoommatesSerializer(roommates.first()).data,
                         status=403)
             return Response(status=403)
-        if Roommates.objects.filter(
-                colocathlon_participants=request.user.student
-            ).exists():
+        if (Roommates.objects
+                .filter(colocathlon_participants=request.user.student)
+                .exists()):
             object.colocathlon_participants.remove(request.user.student)
             return Response(status=200)
         return Response(status=500)

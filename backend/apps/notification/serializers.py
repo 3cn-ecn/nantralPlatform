@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from django.templatetags.static import static
 
 from .models import Subscription, Notification, SentNotification
-from apps.student.serializers import StudentSerializer
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

@@ -1,5 +1,3 @@
-from email.policy import default
-from webbrowser import get
 from django import forms
 
 from apps.notification.models import Subscription
@@ -11,9 +9,9 @@ class SubscriptionForm(forms.Form):
 
     def display_page(self, page):
         try:
-            pageObject = get_object_from_full_slug(page)
-            name = pageObject.name
-            url = pageObject.get_absolute_url()
+            page_object = get_object_from_full_slug(page)
+            name = page_object.name
+            url = page_object.get_absolute_url()
             return f'{name} (<a href="{url}" target="_blank">voir la page</a>)'
         except Exception:
             return page

@@ -1,3 +1,5 @@
+# spell-checker: words notif
+
 from django.db.utils import IntegrityError
 from django.http import JsonResponse
 
@@ -5,9 +7,12 @@ from push_notifications.models import WebPushDevice
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import ValidationError, NotFound, MethodNotAllowed
+from rest_framework.exceptions import (
+    ValidationError,
+    NotFound,
+    MethodNotAllowed)
 
-from .models import Notification, SentNotification, Subscription
+from .models import SentNotification, Subscription
 from .serializers import SentNotificationSerializer
 
 
@@ -24,9 +29,9 @@ class SubscriptionAPIView(APIView):
     GET
         Search if the subscription exists
     POST
-        Subscribe the authentificated user to the given page
+        Subscribe the authenticated user to the given page
     DELETE
-        Unsubscribe the authentificated user to the given page
+        Unsubscribe the authenticated user to the given page
 
     Returns
     -------
@@ -100,7 +105,8 @@ class GetNotificationsAPIView(APIView):
             mode = int(request.query_params.get('mode'))
         except ValueError:
             raise ValidationError(
-                "Please indicate a correct mode : 1 (count only) or 2 (get content)")
+                "Please indicate a correct mode : "
+                "1 (count only) or 2 (get content)")
         sub_only_str = request.query_params.get('sub', 'false').lower()
         if sub_only_str != "true" and sub_only_str != "false":
             raise ValidationError("The 'sub' attribute must be a boolean")
@@ -130,7 +136,7 @@ class GetNotificationsAPIView(APIView):
 
 
 class ManageNotificationAPIView(APIView):
-    """API endpoint to mark or unmark a SentNotification of a user as seen.
+    """API endpoint to mark or un-mark a SentNotification of a user as seen.
 
     Path Parameters
     ---------------
@@ -147,12 +153,12 @@ class ManageNotificationAPIView(APIView):
     -------
     POST
         Mark if not marked (or unmarked if already marked and markAsSeen is
-        false) a notification as seen by the authentificated user.
+        false) a notification as seen by the authenticated user.
     """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, notif_id, format=None):
-        """Mark or unmark a notification as read"""
+        """Mark or un-mark a notification as read"""
         student = request.user.student
         mark_as_seen_str = request.query_params.get(
             'markAsSeen', "false").lower()
@@ -172,8 +178,9 @@ class ManageNotificationAPIView(APIView):
             obj.save()
             return Response(status=status.HTTP_202_ACCEPTED, data=obj.seen)
         except SentNotification.DoesNotExist:
-            raise NotFound(f"The requested notification {notif_id} does not \
-                            exist in database or has not been sent to the user.")
+            raise NotFound(f"The requested notification {notif_id} does not "
+                           "exist in database or has not been sent to the "
+                           "user.")
 
 
 class RegisterAPIView(APIView):

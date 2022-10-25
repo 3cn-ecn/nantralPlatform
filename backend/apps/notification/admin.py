@@ -5,7 +5,7 @@ from .models import Notification, SentNotification, Subscription
 
 
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'date', 'nbTargets']
+    list_display = ['__str__', 'date', 'nb_targets']
 
 
 class SentNotificationAdmin(admin.ModelAdmin):

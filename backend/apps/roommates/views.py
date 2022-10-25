@@ -20,14 +20,14 @@ class HousingMap(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['MAPBOX_API_KEY'] = settings.MAPBOX_API_KEY
-        PHASE_COLOCATHLON = Setting.get('PHASE_COLOCATHLON')
-        context['colocathlon'] = PHASE_COLOCATHLON
-        if PHASE_COLOCATHLON == 2:
+        phase_colocathlon = Setting.get('PHASE_COLOCATHLON')
+        context['colocathlon'] = phase_colocathlon
+        if phase_colocathlon == 2:
             roommate = Roommates.objects.filter(
-                colocathlon_participants=self.request.user.student)
-            if roommate.exists():
-                context['CURRENT_COLOC'] = roommate.first().name
-                context['CURRENT_COLOC_URL'] = roommate.first().get_absolute_url()
+                colocathlon_participants=self.request.user.student).first()
+            if roommate:
+                context['CURRENT_COLOC'] = roommate.name
+                context['CURRENT_COLOC_URL'] = roommate.get_absolute_url()
         context['ariane'] = [
             {
                 'target': '#',
@@ -141,7 +141,8 @@ class DetailRoommatesView(DetailGroupView):
             housing=context['housing']
         ).exclude(pk=self.object.pk).order_by('-begin_date')
         context['colocathlon'] = Setting.get('PHASE_COLOCATHLON')
-        context['nb_participants'] = self.object.colocathlon_participants.count()
+        context['nb_participants'] = (
+            self.object.colocathlon_participants.count())
         return context
 
 
