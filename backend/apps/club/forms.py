@@ -1,4 +1,4 @@
-from django.forms import ModelForm, modelformset_factory, CharField
+from django.forms import ModelForm, modelformset_factory
 from .models import NamedMembershipClub, Club, BDX
 
 

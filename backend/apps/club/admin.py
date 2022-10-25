@@ -8,17 +8,17 @@ from .models import BDX, NamedMembershipClub, Club
 
 
 @admin.action(description='Modifier vers BDA')
-def make_BDA(modeladmin, request, queryset):
+def make_BDA(modeladmin, request, queryset):  # noqa: N802
     queryset.update(bdx_type=BDX.objects.get(name='BDA'))
 
 
 @admin.action(description='Modifier vers BDE')
-def make_BDE(modeladmin, request, queryset):
+def make_BDE(modeladmin, request, queryset):  # noqa: N802
     queryset.update(bdx_type=BDX.objects.get(name='BDE'))
 
 
 @admin.action(description='Modifier vers BDS')
-def make_BDS(modeladmin, request, queryset):
+def make_BDS(modeladmin, request, queryset):  # noqa: N802
     queryset.update(bdx_type=BDX.objects.get(name='BDS'))
 
 
@@ -28,11 +28,11 @@ class ClubAdmin(admin.ModelAdmin):
 
     def get_urls(self) -> List[URLPattern]:
         urls = super().get_urls()
-        customUrls = [
+        custom_urls = [
             path('metrics/', self.admin_site.admin_view(self.metrics_view),
                  name='club-metrics')
         ]
-        return customUrls + urls
+        return custom_urls + urls
 
     def metrics_view(self, request):
         no_admins = []

@@ -44,12 +44,12 @@ class ListCourseMembersAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        courseID = self.request.query_params.get('id')
-        course = get_object_or_404(Course, id=courseID)
+        course_id = self.request.query_params.get('id')
+        course = get_object_or_404(Course, id=course_id)
         this_year = timezone.now().year
         if timezone.now().month < 8:
             this_year -= 1
-        namedMemberships = course.members.through.objects.filter(
+        named_memberships = course.members.through.objects.filter(
             group=course, year=this_year
         ).order_by('student__user__first_name')
-        return namedMemberships
+        return named_memberships

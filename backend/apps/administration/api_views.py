@@ -13,7 +13,7 @@ class ListAdministrationMembersAPIView(generics.ListAPIView):
     def get_queryset(self):
         slug = self.request.query_params.get('slug')
         administration = get_object_or_404(Administration, slug=slug)
-        namedMemberships = administration.members.through.objects.filter(
+        named_memberships = administration.members.through.objects.filter(
             group=administration,
         ).order_by('student__user__first_name')
-        return namedMemberships
+        return named_memberships

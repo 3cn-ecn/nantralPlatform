@@ -1,18 +1,20 @@
+# spell-checker: words dtype
+
 import numpy as np
 
 from ..models import MembershipFamily
 from ..utils import scholar_year
 from .utils import (
     get_question_list,
-    get_member1A_list,
-    get_member2A_list,
-    loveScore,
+    get_member_1A_list,
+    get_member_2A_list,
+    love_score,
     save
 )
 
 
 def delta_algorithm():
-    """Atribute 1A members to families after the first algorithm"""
+    """Attribute 1A members to families after the first algorithm"""
 
     # get the questionnary
     print('Get questions...')
@@ -21,19 +23,21 @@ def delta_algorithm():
 
     # get the members list with their answers for each question
     print('Get new 1A answers...')
-    member1A_list = get_member1A_list(question_list)
+    member1A_list = get_member_1A_list(question_list)  # noqa: N806
     print('Get 2A answers...')
-    member2A_list, family_list = get_member2A_list(question_list)
+    member2A_list, family_list = get_member_2A_list(question_list)  # noqa: N806
 
     # count number of members per family
     print('Calculate the deltas...')
-    placed_1A = MembershipFamily.objects.filter(
+    placed_1A = MembershipFamily.objects.filter(  # noqa: N806
         role='1A',
         group__year=scholar_year()
     ).prefetch_related('group')
     for f in family_list:
-        nb_1A = len([m for m in placed_1A if m.group == f['family']])
-        nb_2A = f['nb']
+        nb_1A = len([  # noqa: N806
+            m for m in placed_1A
+            if m.group == f['family']])
+        nb_2A = f['nb']  # noqa: N806
         f['delta'] = nb_1A - nb_2A
 
     # pour chaque membre 1A non attribué, on lui cherche une famille
@@ -49,7 +53,7 @@ def delta_algorithm():
         # on cherche la meilleure famille
         m['family'] = min(
             little_family_list,
-            key=lambda f: loveScore(m['answers'], f['answers'], coeff_list)
+            key=lambda f: love_score(m['answers'], f['answers'], coeff_list)
         )['family']
 
     print('Saving...')

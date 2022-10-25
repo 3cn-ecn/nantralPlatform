@@ -192,7 +192,7 @@ def readlineAnswers(line, questions):
     return answers
 
 
-def loveScore(answersA, answersB, coeffs=questionsCoeff):
+def love_score(answersA, answersB, coeffs=questionsCoeff):
     res = np.sum(np.abs(answersA - answersB) * coeffs)
     return res
 
@@ -324,22 +324,22 @@ random.shuffle(students_secondYear)
 
 N = len(students_firstYear)
 
-# -- Create preferences lists based on loveScore --
+# -- Create preferences lists based on love_score --
 logging.debug('Création du classement pour chaque étudiant')
 # Etabli pour chaque première année, la liste ordonnée de ses préférences
 # parmi les deuxièmes années
-firstYear_prefs = {}
-secondYear_prefs = {}
+first_year_pref = {}
+second_year_pref = {}
 for i in range(N):
 
-    firstYear_prefs[i] = sorted(
+    first_year_pref[i] = sorted(
         range(N),
-        key=lambda n: loveScore(
+        key=lambda n: love_score(
             students_secondYear[n].answers, students_firstYear[i].answers)
     )
-    secondYear_prefs[i] = sorted(
+    second_year_pref[i] = sorted(
         range(N),
-        key=lambda n: loveScore(
+        key=lambda n: love_score(
             students_secondYear[i].answers, students_firstYear[n].answers)
     )
 
@@ -348,7 +348,7 @@ for i in range(N):
 # -- Solve the problem --
 
 game = StableMarriage.create_from_dictionaries(
-    firstYear_prefs, secondYear_prefs
+    first_year_pref, second_year_pref
 )
 dict_solved = game.solve()
 # -- --
@@ -366,7 +366,7 @@ for fillot_id, parrain_id in dict_solved.items():
     parrain.fillot = fillot
 
     out_str = parrain.name + ' + ' + fillot.name + ' : ' + \
-        str(loveScore(fillot.answers, parrain.answers))
+        str(love_score(fillot.answers, parrain.answers))
     # print(out_str)
     f.write(out_str + '\n')
 

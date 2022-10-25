@@ -21,16 +21,16 @@ class ListClubView(TemplateView):
         key = make_template_fragment_key('club_list')
         cached = cache.get(key)
         if cached is None:
-            clubList = {}
-            allClubs = Club.objects.all().select_related(
+            club_list = {}
+            all_clubs = Club.objects.all().select_related(
                 "bdx_type").only('name', 'slug', 'logo', 'bdx_type')
-            for club in allClubs:
+            for club in all_clubs:
                 if club.bdx_type is None:
-                    clubList.setdefault("Associations", []).append(club)
+                    club_list.setdefault("Associations", []).append(club)
                 else:
-                    clubList.setdefault(
+                    club_list.setdefault(
                         f'Clubs {club.bdx_type.name}', []).append(club)
-            context['club_list'] = clubList
+            context['club_list'] = club_list
         context['ariane'] = [
             {
                 'target': '#',
