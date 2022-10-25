@@ -393,12 +393,12 @@ out_str_2 = out_str_1
 """
 links = {}
 with open('liens-photos.csv', 'r') as csvfile:
-	reader = csv.reader(csvfile, delimiter=';', quotechar='"')
-	next(reader)
-	for row in reader:
-		print(row[1])
-		print(row[2])
-		links[row[1]] = row[2]
+    reader = csv.reader(csvfile, delimiter=';', quotechar='"')
+    next(reader)
+    for row in reader:
+        print(row[1])
+        print(row[2])
+        links[row[1]] = row[2]
 """
 
 for family in families:
@@ -407,13 +407,13 @@ for family in families:
     # print(out_str_1)
     # print(out_str_2)
     """
-	s = ' - <a href="%s" target="_blank">Voir les indices</a>' % links[family.name]
-	out_str_1 += s
-	out_str_2 += s
+    s = ' - <a href="%s" target="_blank">Voir les indices</a>' % links[family.name]
+    out_str_1 += s
+    out_str_2 += s
 
-	out_str_1 += '<ul>'
-	out_str_2 += '<ul>'
-	"""
+    out_str_1 += '<ul>'
+    out_str_2 += '<ul>'
+    """
     for parrain in family:
         li = '<li>%s</li>' % parrain.fillot.name
 
