@@ -1,10 +1,10 @@
 ﻿import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 
-import { cardStyle, cardH2Style } from "./cowlocathlonCard/styles";
+import { cardStyle, cardH2Style } from "./colocathlonCard/styles";
 import { Roommates } from "./housingMap/interfaces";
-import { getRoommatesDetails } from "./cowlocathlonCard/utils";
-import { ParticipateButton } from "./cowlocathlonCard/participateButton";
+import { getRoommatesDetails } from "./colocathlonCard/utils";
+import { ParticipateButton } from "./colocathlonCard/participateButton";
 
 declare const API_URL: string;
 declare const ROOMMATES_SLUG: string;
@@ -15,7 +15,7 @@ declare const USER_ID: number;
 
 function Root(props: {}): JSX.Element {
   const isAdmin = IS_ADMIN === "True";
-  const [roommates, setRoommates] = useState<Roommates>();
+  const [roommates, setRoommates] = useState<Roommates | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -24,28 +24,28 @@ function Root(props: {}): JSX.Element {
     }
   }, []);
 
-  if (isLoading) {
+  if (isLoading || !roommates) {
     return <></>;
   }
   if (isAdmin) {
     if (!roommates.colocathlon_agree) {
       return (
         <div className="card" style={cardStyle}>
-          <h2 style={cardH2Style}>Cowlocathlon</h2>
+          <h2 style={cardH2Style}>Colocathlon</h2>
           <p>Remplissez le form pour participer au colocathlon !</p>
           <a
             className="btn btn-primary"
             style={{ width: "max-content" }}
             href={EDIT_URL.replace("1", ROOMMATES_SLUG)}
           >
-            Formulaire Cowlocathlon
+            Formulaire Colocathlon
           </a>
         </div>
       );
     }
     return (
       <div className="card" style={cardStyle}>
-        <h2 style={cardH2Style}>Cowlocathlon</h2>
+        <h2 style={cardH2Style}>Colocathlon</h2>
 
         <p>
           Horaires d'ouverture : {roommates.colocathlon_hours}
@@ -78,7 +78,7 @@ function Root(props: {}): JSX.Element {
   } else if (PHASE == 2) {
     return (
       <div className="card" style={cardStyle}>
-        <h2 style={cardH2Style}>Cowlocathlon</h2>
+        <h2 style={cardH2Style}>Colocathlon</h2>
 
         <p>
           Horaires d'ouverture : {roommates.colocathlon_hours}
@@ -98,6 +98,8 @@ function Root(props: {}): JSX.Element {
         />
       </div>
     );
+  } else {
+    return <></>;
   }
 }
 

@@ -35,7 +35,7 @@ const entryPoints = [
   "group/groupMembers.tsx",
   "group/editGroupMembers.tsx",
   "event/eventsView.tsx",
-  "roommates/cowlocathlonCard.tsx",
+  "roommates/colocathlonCard.tsx",
   "roommates/housingMap.tsx",
   "roommates/createHousing.tsx",
   "notification/subscribeButton.tsx",

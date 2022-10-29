@@ -4,7 +4,7 @@ import { Roommates } from "../housingMap/interfaces";
 export function getRoommatesDetails(
   api_url: string,
   ROOMMATES_SLUG: string,
-  setRoommates: React.Dispatch<React.SetStateAction<Roommates>>,
+  setRoommates: React.Dispatch<React.SetStateAction<Roommates | undefined>>,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ): void {
   setIsLoading(true);
