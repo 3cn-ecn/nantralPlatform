@@ -20,7 +20,7 @@ class StudentList(LoginRequiredMixin, ListView):
     model = Student
     template_name = 'student/list.html'
     ordering = ['user__last_name', 'user__first_name']
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ariane'] = [
@@ -40,11 +40,13 @@ class StudentProfile(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['clubs'] = NamedMembershipClub.objects.filter(
             student=self.object)
-        context['courses'] = NamedMembershipCourse.objects.filter(student=self.object).order_by('year')
-        context['colocs'] = NamedMembershipRoommates.objects.filter(student=self.object)
+        context['courses'] = NamedMembershipCourse.objects.filter(
+            student=self.object).order_by('year')
+        context['colocs'] = NamedMembershipRoommates.objects.filter(
+            student=self.object)
         context['ariane'] = [
             {
-                'target': reverse('student:list'), 
+                'target': reverse('student:list'),
                 'label': 'Annuaire'
             },
             {
@@ -62,14 +64,15 @@ class StudentProfileEdit(UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         self.object = self.get_object()
-        return self.object.user == self.request.user or self.request.user.is_superuser
+        return (self.object.user == self.request.user
+                or self.request.user.is_superuser)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['password_form'] = ChangePassForm(self.object.user)
         context['ariane'] = [
             {
-                'target': reverse('home:me'), 
+                'target': reverse('home:me'),
                 'label': 'Profil'
             },
             {
@@ -87,8 +90,11 @@ def change_password(request, pk):
     if form.is_valid():
         user = form.save()
         update_session_auth_hash(request, user)
-        login(request, user, backend='apps.account.emailAuthBackend.EmailBackend')
-        messages.success(request, 'Mot de passge changé !')
+        login(
+            request,
+            user,
+            backend='apps.account.emailAuthBackend.EmailBackend')
+        messages.success(request, 'Mot de passe changé !')
         return redirect('student:update', pk)
     else:
         messages.error(request, form.errors)

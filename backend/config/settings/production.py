@@ -1,6 +1,4 @@
-# flake8: noqa: F405
-
-from .docker import *  # noqa: F403
+from .docker import *
 
 print("Running prod config")
 
@@ -74,8 +72,10 @@ AWS_SECRET_ACCESS_KEY = env('OVH_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = env('S3_BUCKET')
 AWS_S3_REGION_NAME = 'gra'
 AWS_SES_REGION = 'gra'
-AWS_S3_CUSTOM_DOMAIN = f'storage.{AWS_S3_REGION_NAME}.cloud.ovh.net/v1/AUTH_f872c5d9108a481eafb02f903c46dbf0/{AWS_STORAGE_BUCKET_NAME}'
-AWS_S3_ENDPOINT_URL = "https://s3.gra.cloud.ovh.net"
+AWS_S3_ENDPOINT_URL = 'https://s3.gra.cloud.ovh.net'
+AWS_S3_CUSTOM_DOMAIN = (
+    f'storage.{AWS_S3_REGION_NAME}.cloud.ovh.net/v1/'
+    f'AUTH_f872c5d9108a481eafb02f903c46dbf0/{AWS_STORAGE_BUCKET_NAME}')
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 

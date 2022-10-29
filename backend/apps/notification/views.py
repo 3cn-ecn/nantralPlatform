@@ -13,8 +13,8 @@ class SettingsView(LoginRequiredMixin, TemplateView):
 
     def get_pages(self):
         student = self.request.user.student
-        listOfSub = Subscription.objects.filter(student=student).values('page')
-        pages = [s['page'] for s in listOfSub]
+        list_subs = Subscription.objects.filter(student=student).values('page')
+        pages = [s['page'] for s in list_subs]
         return pages
 
     def get_context_data(self, **kwargs):
@@ -26,10 +26,10 @@ class SettingsView(LoginRequiredMixin, TemplateView):
             }
         ]
         pages = self.get_pages()
-        initial = {p:True for p in pages}
+        initial = {p: True for p in pages}
         context['form'] = SubscriptionForm(pages=pages, initial=initial)
         return context
-    
+
     def post(self, request, *args, **kwargs):
         pages = self.get_pages()
         form = SubscriptionForm(pages=pages, data=request.POST)
@@ -40,7 +40,5 @@ class SettingsView(LoginRequiredMixin, TemplateView):
             form = SubscriptionForm(new_pages, request.POST)
         else:
             messages.error(request, "Oups, une erreur c'est produite !")
-        context={'form':form}
+        context = {'form': form}
         return self.render_to_response(context)
-
-

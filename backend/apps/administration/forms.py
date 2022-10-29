@@ -5,7 +5,8 @@ from .models import NamedMembershipAdministration, Administration
 class UpdateAdministrationForm(ModelForm):
     class Meta:
         model = Administration
-        fields = ['name', 'summary', 'video1', 'video2', 'description', 'logo', 'banniere']
+        fields = ['name', 'summary', 'video1',
+                  'video2', 'description', 'logo', 'banniere']
 
 
 class NamedMembershipAddAdministration(ModelForm):

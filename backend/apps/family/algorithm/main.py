@@ -1,11 +1,13 @@
+# spell-checker: words dtype
+
 import numpy as np
 
 from .utils import (
     get_question_list,
-    get_member1A_list,
-    get_member2A_list,
+    get_member_1A_list,
+    get_member_2A_list,
     make_same_length,
-    solveProblem,
+    solve_problem,
     prevent_lonelyness,
     save
 )
@@ -19,17 +21,18 @@ def main_algorithm():
 
     # get the members list with their answers for each question
     print('Get 1A answers...')
-    member1A_list = get_member1A_list(question_list)
+    member1A_list = get_member_1A_list(question_list)  # noqa: N806
     print('Get 2A answers...')
-    member2A_list, family_list = get_member2A_list(question_list)
+    member2A_list, family_list = get_member_2A_list(question_list)  # noqa: N806
 
     # Add or delete 2A members so as to have the same length as 1A members
     print('Checking the length...')
-    member2A_list_plus = make_same_length(
+    member2A_list_plus = make_same_length(  # noqa: N806
         member1A_list, member2A_list, family_list)
 
     # Solve the matching problem
-    member1A_list = solveProblem(member1A_list, member2A_list_plus, coeff_list)
+    member1A_list = solve_problem(  # noqa: N806
+        member1A_list, member2A_list_plus, coeff_list)
 
     # prevent lonely foreign students
     print("Checking that no international student is alone")
@@ -38,7 +41,7 @@ def main_algorithm():
         if question_list[i]['code_name'] == 'International'
     ][0]
     question_value = 0
-    member1A_list = prevent_lonelyness(
+    member1A_list = prevent_lonelyness(  # noqa: N806
         member1A_list,
         member2A_list,
         family_list,
@@ -55,7 +58,7 @@ def main_algorithm():
         if question_list[i]['code_name'] == 'Genre'
     ][0]
     question_value = 1
-    member1A_list = prevent_lonelyness(
+    member1A_list = prevent_lonelyness(  # noqa: N806
         member1A_list,
         member2A_list,
         family_list,

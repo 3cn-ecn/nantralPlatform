@@ -32,7 +32,7 @@ class Family(Group):
             initial[f'question-{ans.question.pk}'] = ans.answer
         return initial
 
-    def count_members2A(self) -> int:
+    def count_members_2A(self) -> int:  # noqa: N802
         nb_subscribed = self.memberships.filter(role='2A+').count()
         # test if field is not None or is different to ""
         if self.non_subscribed_members:
@@ -49,7 +49,7 @@ class Family(Group):
     def form_complete(self):
         nb_done = self.answerfamily_set.all().count()
         nb_tot = QuestionFamily.objects.all().count()
-        nb_members = self.count_members2A()
+        nb_members = self.count_members_2A()
         return (nb_done >= nb_tot and nb_members >= 3 and nb_members <= 7)
 
 
@@ -89,10 +89,14 @@ class MembershipFamily(NamedMembership):
 class QuestionPage(models.Model):
     name = models.CharField("Nom de la page", max_length=100)
     name_en = models.CharField("Nom (en)", max_length=100)
-    details1A = models.TextField("Infos 1A", null=True, blank=True)
-    details1A_en = models.TextField("Infos 1A (en)", null=True, blank=True)
-    details2A = models.TextField("Infos 2A+", null=True, blank=True)
-    details2A_en = models.TextField("Infos 2A+ (en)", null=True, blank=True)
+    details1A = models.TextField(  # noqa: N815
+        "Infos 1A", null=True, blank=True)
+    details1A_en = models.TextField(  # noqa: N815
+        "Infos 1A (en)", null=True, blank=True)
+    details2A = models.TextField(  # noqa: N815
+        "Infos 2A+", null=True, blank=True)
+    details2A_en = models.TextField(  # noqa: N815
+        "Infos 2A+ (en)", null=True, blank=True)
     order = models.IntegerField(
         "Ordre", unique=True,
         help_text="Ordre d'apparition de la page dans le questionnaire")
@@ -131,7 +135,7 @@ class BaseQuestion(models.Model):
 
 class GroupQuestion(BaseQuestion):
     page = models.ForeignKey(QuestionPage, on_delete=models.CASCADE)
-    coeff = models.IntegerField("Coeficient")
+    coeff = models.IntegerField("Coefficient")
 
     class Meta:
         verbose_name = "Groupe de Questions"
@@ -151,7 +155,7 @@ class Option(models.Model):
 
 class QuestionMember(BaseQuestion):
     page = models.ForeignKey(QuestionPage, on_delete=models.CASCADE)
-    coeff = models.IntegerField("Coeficient")
+    coeff = models.IntegerField("Coefficient")
     group = models.ForeignKey(
         GroupQuestion, verbose_name="Groupe", null=True, blank=True,
         on_delete=models.SET_NULL,

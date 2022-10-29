@@ -123,7 +123,7 @@ After the installation, check that it works properly:
     ```bash
     python --version
     ```
-* You should see the Python version on a new line: `Python 3.10`
+* You should see the Python version on a new line: `Python 3.xx`
 
 <details class="caution">
     <summary>The command does not work or the version is lower than <em>python3</em>, what can I do? 😭</summary>
@@ -132,7 +132,7 @@ Sometimes you can have multiple versions of python installed on your system: in 
 another version of python (for instance, it refers by default to python2 if it is installed). 
 
 To avoid this, you can precise which version you want to use by adding the version to the command: try to run 
-`python3 --version` or `python3.10 --version` for example, to get the correct version.
+`python3` instead of `python`, to get the correct version.
 
 Also notice that on Windows, `python` is sometimes replaced by `py` only: in this case, you can precise the version
 by runnning `py -3` for example.
@@ -143,6 +143,17 @@ by runnning `py -3` for example.
 If the command is still not recognized, try to close and reopen your terminal,
 or try to reboot your computer to refresh the available commands.
 
+</details>
+<details>
+    <summary>Discover Python in 100s 🎬</summary>
+    <iframe 
+        class="youtube"
+        src="https://www.youtube-nocookie.com/embed/x7X9w_GIm1s" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+    </iframe>
 </details>
 
 ### Pip
@@ -162,7 +173,7 @@ If it is lower than `python3`, try to run `pip3` instead of `pip`.
 First, pip is maybe not installed on your system. To install it, run
 ```bash
 python -m ensurepip --upgrade
-```bash
+```
 Then, you should get pip through this command:
 ```bash
 python -m pip --version
@@ -250,18 +261,6 @@ intall `pip` so?*, you will ask me! Well, the answer is pretty simple: we need
 
 That's it! You finished to install python, congratulations 🥳
 
-<details>
-    <summary>Discover Python in 100s 🎬</summary>
-    <iframe 
-        class="youtube"
-        src="https://www.youtube-nocookie.com/embed/x7X9w_GIm1s" 
-        title="YouTube video player" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-    </iframe>
-</details>
-
 ## Node.js
 
 We recommend you to use the latest stable version of Node (also called the "LTS" version). Currently, it is the
@@ -331,6 +330,13 @@ helpful in the following, trust me ;)
     make --version
     ```
 
+<details>
+<summary>In case it doesn't work... 😓</summary>
+
+Try to install `make` by folloing this tutorial:
+[technewstoday.com/install-and-use-make-in-windows](https://www.technewstoday.com/install-and-use-make-in-windows/).
+
+</details>
 </TabItem>
 <TabItem value="mac-lin" label="MacOS/Linux">
 

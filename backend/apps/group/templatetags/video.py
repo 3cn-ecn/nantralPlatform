@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.inclusion_tag('group/included/video.html')
 def video(video_url):
     try:
@@ -21,4 +22,3 @@ def video(video_url):
         video_type = None
         video_id = None
     return {'video_type': video_type, 'video_id': video_id}
-

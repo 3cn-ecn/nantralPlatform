@@ -1,3 +1,5 @@
+# spell-checker: words vect vecthasnan vectisnan ndarray
+
 import numpy as np
 import random
 import sys
@@ -82,7 +84,7 @@ def get_answers(member: MembershipFamily, question_list):
     return np.array(answers)
 
 
-def get_member1A_list(question_list, itii=False):
+def get_member_1A_list(question_list, itii=False):  # noqa: N802
     """Get the list of 1A students with their answers"""
     data = (
         MembershipFamily.objects
@@ -96,18 +98,18 @@ def get_member1A_list(question_list, itii=False):
         data = data.filter(student__faculty='Iti')
     else:
         data = data.exclude(student__faculty='Iti')
-    member1A_list = []
+    member_1A_list = []  # noqa: N806
     for membership in data:
         if len(membership.answermember_set.all()) >= len(question_list):
             answers = get_answers(membership, question_list)
-            member1A_list.append({
+            member_1A_list.append({
                 'member': membership,
                 'answers': answers
             })
-    return member1A_list
+    return member_1A_list
 
 
-def get_member2A_list(question_list):
+def get_member_2A_list(question_list):  # noqa: N802
     """Get the list of 2A+ students with their answers"""
 
     # add all membershipFamily students
@@ -119,7 +121,7 @@ def get_member2A_list(question_list):
             'group__answerfamily_set__question'
         )
     )
-    member2A_list = []
+    member2A_list = []  # noqa: N806
     for membership in data:
         member2A_list.append({
             'member': membership,
@@ -156,7 +158,7 @@ def get_member2A_list(question_list):
     return member2A_list, family_list
 
 
-def get_family_list(member2A_list):
+def get_family_list(member2A_list):  # noqa: N803
     """return a list of families with the average answer
     based of all his members who completed the form"""
     family_list = []
@@ -171,27 +173,27 @@ def get_family_list(member2A_list):
         family_list.append({
             'family': fam,
             'answers': answers_mean,
-            'nb': fam.count_members2A(),
+            'nb': fam.count_members_2A(),
         })
     return family_list
 
 
-def loveScore(answersA, answersB, coeff_list):
+def love_score(answers_a, answers_b, coeff_list):
     """Calculate the lovescore between two students.
     The lower the score is, the best it is."""
 
-    somme = np.nansum(np.abs(answersA - answersB) * coeff_list)
-    somme_coeff = np.sum((1 - np.isnan(answersA + answersB)) * coeff_list)
+    somme = np.nansum(np.abs(answers_a - answers_b) * coeff_list)
+    somme_coeff = np.sum((1 - np.isnan(answers_a + answers_b)) * coeff_list)
 
     if somme_coeff:
         # if we can calculate the score
         return somme / somme_coeff
     else:
-        # if one of the students has not answered to any coefficiented question
+        # if one of the students has not answered to any question
         return np.inf
 
 
-def make_same_length(member1A_list, member2A_list, family_list):
+def make_same_length(member1A_list, member2A_list, family_list):  # noqa: N803
     '''Add or delete 2A students so as to have the same number
     than 1A students'''
 
@@ -227,14 +229,14 @@ def make_same_length(member1A_list, member2A_list, family_list):
                 raise Exception(
                     "Erreur : pas encore assez de 1A pour faire tourner l'algo."
                 )
-            member2A_list = np.delete(member2A_list, index)
+            member2A_list = np.delete(member2A_list, index)  # noqa: N806
             i += 1
 
     return member2A_list
 
 
 def prevent_lonelyness(
-    member1A_list,
+    member1A_list,  # noqa: N803
     member2A_list,
     family_list,
     q_id,
@@ -252,17 +254,17 @@ def prevent_lonelyness(
         m[q_name] = m['answers'][q_id] == q_val
     # on compte le nombre de personnes avec ce critère par famille
     for f in family_list:
-        f['nb_critery_1A'] = len([
+        f['nb_criteria_1A'] = len([
             m for m in member1A_list
             if m[q_name] and m['family'] == f['family']
         ])
-        f['nb_critery_2A'] = len([
+        f['nb_criteria_2A'] = len([
             m for m in member2A_list
             if m[q_name] and m['family'] == f['family']
         ])
     # on cherche les familles avec une personne seule pour le critère
     for f in family_list:
-        if f['nb_critery_1A'] == 1 and f['nb_critery_2A'] == 0:
+        if f['nb_criteria_1A'] == 1 and f['nb_criteria_2A'] == 0:
             # on récupère le membre seul dans la famille et son id
             lonely_member_id = [
                 i
@@ -279,7 +281,7 @@ def prevent_lonelyness(
             for g in family_list:
                 if (
                     g != f
-                    and (g['nb_critery_1A'] >= 1 or g['nb_critery_2A'] >= 1)
+                    and (g['nb_criteria_1A'] >= 1 or g['nb_criteria_2A'] >= 1)
                 ):
                     members = [m for m in member1A_list if not m[q_name]
                                and m['family'] == g['family']]
@@ -289,7 +291,7 @@ def prevent_lonelyness(
                 # on cherche le membre candidat avec le score le plus proche
                 candidate_member = min(
                     candidate_member_list,
-                    key=lambda m: loveScore(
+                    key=lambda m: love_score(
                         m['answers'], lonely_member['answers'], coeff_list)
                 )
                 # on récupère l'index du candidat dans la liste member1A_list
@@ -307,12 +309,12 @@ def prevent_lonelyness(
                 member1A_list[candidate_member_id]['family'] = f['family']
                 # on met à jour le nb de personnes avec critère dans ces
                 # familles
-                f['nb_critery_1A'] -= 1
-                family_list[candidate_family_id]['nb_critery_1A'] += 1
+                f['nb_criteria_1A'] -= 1
+                family_list[candidate_family_id]['nb_criteria_1A'] += 1
     return member1A_list
 
 
-def solveProblem(member_list1, member_list2, coeff_list):
+def solve_problem(member_list1, member_list2, coeff_list):
     """Solve the matching problem"""
 
     # randomize lists in order to avoid unwanted effects
@@ -322,20 +324,19 @@ def solveProblem(member_list1, member_list2, coeff_list):
 
     # creating the dicts
     print('Creating the dicts for solving...')
-    N = len(member_list1)
-    firstYear_prefs = {}
-    secondYear_prefs = {}
-    for i in range(N):
-        firstYear_prefs[i] = sorted(
-            range(N),
-            key=lambda n: loveScore(
+    first_year_pref = {}
+    second_year_pref = {}
+    for i in range(len(member_list1)):
+        first_year_pref[i] = sorted(
+            range(len(member_list1)),
+            key=lambda n: love_score(
                 member_list2[n]['answers'],
                 member_list1[i]['answers'],
                 coeff_list)
         )
-        secondYear_prefs[i] = sorted(
-            range(N),
-            key=lambda n: loveScore(
+        second_year_pref[i] = sorted(
+            range(len(member_list1)),
+            key=lambda n: love_score(
                 member_list2[i]['answers'],
                 member_list1[n]['answers'],
                 coeff_list)
@@ -345,23 +346,23 @@ def solveProblem(member_list1, member_list2, coeff_list):
     # leurs préférences
     print('Solving...')
     game = StableMarriage.create_from_dictionaries(
-        firstYear_prefs, secondYear_prefs
+        first_year_pref, second_year_pref
     )
     dict_solved = game.solve()
 
     # get the family for each 1A
     print('Add families to 1A members')
-    for player_1A, player_2A in dict_solved.items():
-        id_1A = player_1A.name
-        id_2A = player_2A.name
+    for player_1A, player_2A in dict_solved.items():  # noqa: N806
+        id_1A = player_1A.name  # noqa: N806
+        id_2A = player_2A.name  # noqa: N806
         member_list1[id_1A]['family'] = member_list2[id_2A]['family']
 
     return member_list1
 
 
-def save(member1A_list):
+def save(member1A_list):  # noqa: N803
     '''Save the families for 1A students in the database'''
-    for member1A in member1A_list:
+    for member1A in member1A_list:  # noqa: N806
         member1A['member'].group = member1A['family']
         member1A['member'].save()
 

@@ -15,7 +15,7 @@ class CoursesList(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['ariane'] = [
             {
-                'target': '#', 
+                'target': '#',
                 'label': 'Formations'
             }
         ]
@@ -24,7 +24,7 @@ class CoursesList(LoginRequiredMixin, ListView):
 
 class DetailCourseView(DetailGroupView):
     template_name = 'academic/detail.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         group = context['object']
@@ -34,4 +34,3 @@ class DetailCourseView(DetailGroupView):
         context['members'] = group.members.through.objects.filter(
             group=group, year=this_year).order_by('student__user__first_name')
         return context
-    

@@ -1,7 +1,6 @@
-from django.conf.urls import url
 from django.urls import path
 
-from .views import *
+from .views import SignatureGenerationView
 
 app_name = 'services'
 

@@ -1,6 +1,13 @@
 from django.urls import path
 
-from .api_views import *
+from .api_views import (
+    CourseODList,
+    CourseOPList,
+    CourseITIIList,
+    CourseMasterList,
+    CourseTypeList,
+    ListCourseMembersAPIView
+)
 
 app_name = 'academic'
 
