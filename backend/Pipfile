@@ -38,6 +38,8 @@ redis = "~=3.5.3"
 requests = "~=2.25.1"
 six = "~=1.16.0"
 django-ckeditor-5 = {git = "https://github.com/3cn-ecn/django-ckeditor-5.git"}
+# force update of a sub-package
+pyjwt = ">=2.4.0"
 
 [dev-packages]
 autopep8 = ">=1.7.0"
