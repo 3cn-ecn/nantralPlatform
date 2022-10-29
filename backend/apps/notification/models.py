@@ -149,7 +149,7 @@ class SentNotification(models.Model):
         unique_together = ['student', 'notification']
 
     @property
-    def date(self, *args, **kwargs):
+    def date(self):
         return self.notification.date
 
 

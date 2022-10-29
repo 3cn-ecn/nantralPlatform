@@ -70,7 +70,7 @@ class NamedMembershipClub(NamedMembership):
     order = models.IntegerField(verbose_name='Hiérarchie', default=0)
 
     @property
-    def year(self, **kwargs):
+    def year(self):
         '''Renvoie l'année scolaire où l'étudiant est devenu membre.
            On renvoie seulement la 2eme année de l'année scolaire.'''
         y = self.date_begin.year
