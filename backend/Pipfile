@@ -25,6 +25,7 @@ django-extra-settings = "~=0.3.2"
 django-storages = {version = "~=1.11.1", extras = ["boto3"]}
 django-push-notifications = {version = "~=3.0.0", extras = ["apns", "wp"]}
 djangorestframework = "~=3.12.4"
+docutils = "*"
 flower = "~=1.2.0"
 freezegun = "~=1.1.0"
 gunicorn = "~=20.1.0"
