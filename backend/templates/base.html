@@ -113,27 +113,51 @@
           <ul class="dropdown-menu dropdown-menu-end" style="right: 0;" onclick="event.stopPropagation()" aria-labelledby="triggerId">
             {% if request.user.is_authenticated %}
               {% if request.user.student.pk %}
-                <li><a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}"><i class="fas fa-user"></i>&nbsp; Mon Profil</a></li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}">
+                    <i class="fas fa-user" aria-hidden="true"></i>&nbsp; Mon Profil
+                  </a>
+                </li>
                 {% if request.user.is_staff %}
-                  <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="fas fa-shield-alt"></i>&nbsp; Interface Admin</a></li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">
+                      <i class="fas fa-shield-alt" aria-hidden="true"></i>&nbsp; Interface Admin
+                    </a>
+                  </li>
                 {% endif %}
-                <li><a class="dropdown-item" href="{% url 'account:logout' %}" {# onclick="caches.delete('main-pages');" #}><i class="fas fa-sign-out-alt"></i>&nbsp; Me déconnecter</a></li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'account:logout' %}" {# onclick="caches.delete('main-pages');" #}>
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>&nbsp; Me déconnecter
+                  </a>
+                </li>
               {% else %}
-                <li><a class="dropdown-item disabled" href="">Oooups ! Votre compte est corrompu. Contactez un admin !</a></li>
+                <li>
+                  <a class="dropdown-item disabled" href="">
+                    Oooups ! Votre compte est corrompu. Contactez un admin !
+                  </a>
+                </li>
               {% endif  %}
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="{% url 'home:suggestions' %}"><i class="fa fa-exclamation-circle"></i>&nbsp; Suggestion / Bug</a></li>
+              <li>
+                <a class="dropdown-item" href="{% url 'home:suggestions' %}">
+                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp; Suggestion / Bug
+                </a>
+              </li>
             {% else %}
-              <li><a class="dropdown-item" href="{% url 'account:login' %}"><i class="fas fa-sign-in-alt"></i>&nbsp; Connexion</a></li>
+              <li>
+                <a class="dropdown-item" href="{% url 'account:login' %}">
+                  <i class="fas fa-sign-in-alt" aria-hidden="true"></i>&nbsp; Connexion
+                </a>
+              </li>
             {% endif %}
             <li>
               <a class="dropdown-item" href="https://docs.nantral-platform.fr" target="_blank" rel="noopener noreferrer">
-                <i class="fas fa-question-circle"></i>&nbsp; Documentation
+                <i class="fas fa-question-circle" aria-hidden="true"></i>&nbsp; Documentation
               </a>
             </li>
             <li>
               <a class="dropdown-item" href="{% url 'home:mentions' %}">
-                <i class="fas fa-gavel"></i>&nbsp; Mentions Légales
+                <i class="fas fa-gavel" aria-hidden="true"></i>&nbsp; Mentions Légales
               </a>
             </li>
           </ul>
