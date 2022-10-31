@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load file_url %}
-{% load ckeditor5 %}
 
 {% block banniere %}
     {% if object.image %}
@@ -34,6 +33,6 @@
     {% endif %}
 
     </br>
-    {% ckeditor5 object.description %}
+    {{ object.description | safe }}
 
 {% endblock %}

@@ -50,7 +50,8 @@ class TestStudent(TestCase, TestMixin):
         ok = self.client.login(
             username=self.u3.username, password=self.PASSWORD)
         self.assertTrue(ok)
-        response = self.client.get(url)
+        with self.assertLogs('django.request', level='WARNING'):
+            response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.client.logout()
         ok = self.client.login(
