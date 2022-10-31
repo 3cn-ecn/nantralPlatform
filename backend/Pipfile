@@ -16,7 +16,7 @@ autopep8 = "bash -c 'cd .. && autopep8 -raaa --in-place ./backend/'"
 celery = "~=5.2"
 crispy-bootstrap5 = "~=0.6"
 discord-webhook = "~=0.17"
-django = "~=3.2"  # outdated
+django = "~=4.1.2"
 django-celery-beat = "~=2.4"
 django-ckeditor-5 = "~=0.2"
 django-crispy-forms = "~=1.14"
