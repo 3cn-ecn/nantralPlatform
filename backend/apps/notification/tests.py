@@ -1,3 +1,4 @@
+from rest_framework import status
 from django.test import TransactionTestCase
 from django.urls import reverse
 
@@ -37,11 +38,12 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.client.login(username=self.u2.username, password=self.PASSWORD)
         resp = self.client.post(self.url)
         # check subscription is ok
-        self.assertEqual(resp.status_code, 201)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertTrue(self.client.get(self.url).data)
         # try to subscribe again and check the fail
-        resp = self.client.post(self.url)
-        self.assertEqual(resp.status_code, 405)
+        with self.assertLogs('django.request', level='WARNING'):
+            resp = self.client.post(self.url)
+        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_delete_api(self):
         "test to unsubscribe"
@@ -52,11 +54,12 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.client.login(username=self.u2.username, password=self.PASSWORD)
         resp = self.client.delete(self.url)
         # check deletion is ok
-        self.assertEqual(resp.status_code, 204)
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(self.client.get(self.url).data)
         # try to delete again and check the fail
-        resp = self.client.delete(self.url)
-        self.assertEqual(resp.status_code, 404)
+        with self.assertLogs('django.request', level='WARNING'):
+            resp = self.client.delete(self.url)
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class TestNotification(TransactionTestCase, TestMixin):

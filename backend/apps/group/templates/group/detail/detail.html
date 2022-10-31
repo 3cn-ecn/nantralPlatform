@@ -2,7 +2,6 @@
 {% load static %}
 {% load file_url %}
 {% load video %}
-{% load ckeditor5 %}
 
 {% block head %}
     <meta name="description" CONTENT="{{object.summary}} - {{object.name}} ({{object.alt_name}}) - Centrale Nantes">
@@ -141,7 +140,7 @@
             </div>
             {% endif %}
             {% if object.description %}
-                {% ckeditor5 object.description %}
+                {{ object.description | safe }}
             {% endif %}
         </div>
     {% endif %}

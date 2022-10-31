@@ -5,6 +5,7 @@ from freezegun import freeze_time
 from unittest import mock
 import re
 import uuid
+from rest_framework import status
 
 from django.contrib.auth import get_user
 from django.contrib.auth.models import User
@@ -193,13 +194,13 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         # Check make account permanent
         url = reverse('account:upgrade-permanent')
         resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         payload = {
             'email': 'test@ec-nantes.fr'
         }
         resp = self.client.post(url, payload)
-        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
         self.assertEqual(len(mail.outbox), 2)
         extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[1].body)
         uidb64 = extract.group(1) if extract else None
@@ -213,8 +214,9 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         self.assertTrue(user.is_active)
         self.assertEqual(TemporaryAccessRequest.objects.all().count(), 0)
         url = reverse('account:upgrade-permanent')
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 404)
+        with self.assertLogs('django.request', level='WARNING'):
+            resp = self.client.get(url)
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
 
 @freeze_time("2021-09-03")
