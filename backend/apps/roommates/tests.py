@@ -36,7 +36,8 @@ class TestHousing(TestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         url = reverse('roommates:update', args=[coloc.slug])
-        resp = self.client.get(url)
+        with self.assertLogs('django.request', level='WARNING'):
+            resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
         url = reverse('roommates:create-housing')

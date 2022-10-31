@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='club',
-            options={'ordering': [django.db.models.expressions.OrderBy(django.db.models.expressions.F('bdx_type'), nulls_last=False), 'name']},
+            options={'ordering': [django.db.models.expressions.OrderBy(django.db.models.expressions.F('bdx_type'), nulls_first=True), 'name']},
         ),
     ]

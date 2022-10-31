@@ -9,6 +9,7 @@ from apps.utils.utest import TestMixin
 
 
 class BaseEventTestCase(TestCase, TestMixin):
+
     def setUp(self) -> None:
         self.user_setup()
         self.club = Club.objects.create(
