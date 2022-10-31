@@ -37,7 +37,8 @@ class TestGroups(TestCase, TestMixin):
             'date_begin': timezone.now().today().date(),
         }
         url = reverse('club:add-member', args=[club.slug])
-        resp = self.client.post(url, payload)
+        with self.assertLogs('django.request', level='WARNING'):
+            resp = self.client.post(url, payload)
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
         self.client.login(username=self.u2.username, password=self.PASSWORD)
