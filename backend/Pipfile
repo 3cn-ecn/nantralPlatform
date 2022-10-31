@@ -17,13 +17,14 @@ celery = "~=5.2.2"
 crispy-bootstrap5 = "~=0.6"
 discord-webhook = "~=0.17.0"
 django = "~=3.2.14"  # outdated
-django-celery-beat = "~=2.3.0"
+django-celery-beat = "~=2.4.0"
+django-ckeditor-5 = "*"
 django-crispy-forms = "~=1.14.0"
 django-debug-toolbar = "~=3.6.0"
 django-environ = "~=0.9.0"
 django-extra-settings = "~=0.5.1"
-django-storages = {version = "~=1.13.1", extras = ["boto3"]}
 django-push-notifications = {version = "~=3.0.0", extras = ["apns", "wp"]}
+django-storages = {version = "~=1.13.1", extras = ["boto3"]}
 djangorestframework = "~=3.13.1"
 flower = "~=1.2.0"
 freezegun = "~=1.2.0"
@@ -37,7 +38,6 @@ pywebpush = "~=1.14.0"
 redis = "~=3.5.3"  # outdated
 requests = "~=2.28.1"
 six = "~=1.16.0"
-django-ckeditor-5 = {git = "https://github.com/3cn-ecn/django-ckeditor-5.git"}
 # force update of a sub-package
 pyjwt = ">=2.4.0"
 
