@@ -77,7 +77,7 @@ def crop_ratio(image, ratio):
     return new_image
 
 
-def thumbnail_cover(image, size, resample=Image.BICUBIC):
+def thumbnail_cover(image, size, resample=Image.Resampling.BICUBIC):
     """
     Make the image as a thumbnail, but crop the image to match
     the given size instead of reducing it.
