@@ -10,7 +10,7 @@ from django.utils import timezone
 from apps.club.models import Club
 from apps.group.views import BaseDetailGroupView
 
-from apps.utils.slug import *
+from apps.utils.slug import get_object_from_slug
 
 
 class ListClubView(TemplateView):
@@ -21,19 +21,19 @@ class ListClubView(TemplateView):
         key = make_template_fragment_key('club_list')
         cached = cache.get(key)
         if cached is None:
-            clubList = {}
-            allClubs = Club.objects.all().select_related(
+            club_list = {}
+            all_clubs = Club.objects.all().select_related(
                 "bdx_type").only('name', 'slug', 'logo', 'bdx_type')
-            for club in allClubs:
+            for club in all_clubs:
                 if club.bdx_type is None:
-                    clubList.setdefault("Associations", []).append(club)
+                    club_list.setdefault("Associations", []).append(club)
                 else:
-                    clubList.setdefault(
+                    club_list.setdefault(
                         f'Clubs {club.bdx_type.name}', []).append(club)
-            context['club_list'] = clubList
+            context['club_list'] = club_list
         context['ariane'] = [
             {
-                'target': '#', 
+                'target': '#',
                 'label': 'Clubs & Assos'
             }
         ]
@@ -50,7 +50,8 @@ class DetailClubView(BaseDetailGroupView):
         group = context['object']
         date_end = timezone.make_aware(timezone.now().today())
         context['members'] = group.members.through.objects.filter(
-            Q(group=group) & (Q(date_end__isnull=True) | Q(date_end__gt=date_end))
+            Q(group=group)
+            & (Q(date_end__isnull=True) | Q(date_end__gt=date_end))
         ).order_by('student__user__first_name')
         return context
 

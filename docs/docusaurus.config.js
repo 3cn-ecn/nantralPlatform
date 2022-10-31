@@ -39,14 +39,14 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/nantral-platform/nantralPlatform/tree/master/docs/",
+            "https://github.com/3cn-ecn/nantralPlatform/tree/master/docs/",
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/nantral-platform/nantralPlatform/tree/master/docs/",
+            "https://github.com/3cn-ecn/nantralPlatform/tree/master/docs/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -86,7 +86,7 @@ const config = {
             position: "right",
           },
           {
-            href: "https://github.com/nantral-platform/nantralPlatform",
+            href: "https://github.com/3cn-ecn/nantralPlatform",
             label: "GitHub",
             position: "right",
           },
@@ -117,7 +117,7 @@ const config = {
             items: [
               {
                 label: "GitHub",
-                href: "https://github.com/nantral-platform/nantralPlatform",
+                href: "https://github.com/3cn-ecn/nantralPlatform",
               },
               {
                 label: "SonarCloud",

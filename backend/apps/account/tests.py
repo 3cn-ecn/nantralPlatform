@@ -1,3 +1,5 @@
+# spell-checker: words utest uidb
+
 from datetime import datetime
 from freezegun import freeze_time
 from unittest import mock
@@ -64,8 +66,8 @@ class TestAccount(TestCase, TestMixin):
         self.assertEqual(student.user, User.objects.all().last())
         assert len(mail.outbox) == 1
         extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
-        uidb64 = extract.group(1)
-        token = extract.group(2)
+        uidb64 = extract.group(1) if extract else None
+        token = extract.group(2) if extract else None
 
         # Check that the user cannot use the link to activate the account
         url = reverse('account:confirm', kwargs={
@@ -95,8 +97,8 @@ class TestAccount(TestCase, TestMixin):
         self.assertEqual(student.user, User.objects.all().last())
         assert len(mail.outbox) == 1
         extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
-        uidb64 = extract.group(1)
-        token = extract.group(2)
+        uidb64 = extract.group(1) if extract else None
+        token = extract.group(2) if extract else None
 
         # Check that the user cannot use the link to activate the account
         url = reverse('account:confirm', kwargs={
@@ -158,12 +160,12 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         self.assertFalse(get_user(self.client).is_authenticated)
         # Check that a temporary access request has been created
         temp_req: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
-            user=user.id)
+            user=user.pk)
 
         self.assertEqual(len(mail.outbox), 1)
         extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
-        uidb64 = extract.group(1)
-        token = extract.group(2)
+        uidb64 = extract.group(1) if extract else None
+        token = extract.group(2) if extract else None
 
         # Confirm the temporary email
         url = reverse('account:confirm', kwargs={
@@ -200,8 +202,8 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(len(mail.outbox), 2)
         extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[1].body)
-        uidb64 = extract.group(1)
-        token = extract.group(2)
+        uidb64 = extract.group(1) if extract else None
+        token = extract.group(2) if extract else None
         url = reverse(
             'account:confirm',
             kwargs={'uidb64': uidb64, 'token': token})
@@ -297,7 +299,7 @@ class TestForgottenPass(TestCase, TestMixin):
         payload = {
             'email': 'not@ec-nantes.fr'
         }
-        # Check that you cannot send email to unexisting email.
+        # Check that you cannot send email to un-existing email.
         response = self.client.post(url, data=payload)
         self.assertEqual(response.status_code, 302)
         assert len(mail.outbox) == 0
@@ -309,8 +311,8 @@ class TestForgottenPass(TestCase, TestMixin):
         self.assertEqual(response.status_code, 302)
         assert len(mail.outbox) == 1
         extract = re.search(REGEX_RESET_PASS_URL, mail.outbox[0].body)
-        uidb64 = extract.group(1)
-        token = extract.group(2)
+        uidb64 = extract.group(1) if extract else None
+        token = extract.group(2) if extract else None
         url = reverse(
             'account:reset_pass',
             kwargs={'uidb64': uidb64, 'token': 'token'})

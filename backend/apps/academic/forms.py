@@ -16,7 +16,6 @@ class NamedMembershipAddCourse(ModelForm):
         fields = ['year']
 
 
-
 NamedMembershipCourseFormset = modelformset_factory(
     NamedMembershipCourse,
     fields=['student', 'year', 'admin'],

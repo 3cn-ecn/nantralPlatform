@@ -19,7 +19,7 @@ class TemporaryAccessRequest(models.Model):
     mail_valid = models.BooleanField()
     final_email = models.EmailField(blank=True, null=True)
 
-    def save(self, domain: str = None, *args, **kwargs):
+    def save(self, domain: str | None = None, *args, **kwargs):
         if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT > timezone.now().today():
             if self.mail_valid is None:
                 self.mail_valid = False

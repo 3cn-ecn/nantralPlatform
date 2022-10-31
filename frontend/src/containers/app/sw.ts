@@ -89,7 +89,7 @@ registerRoute(
              url.pathname === '/club/' ||
              url.pathname === '/colocs/' ||
              url.pathname === '/liste/' ||
-             url.pathname === '/services/signature' ||  
+             url.pathname === '/tools/signature' ||  
              url.pathname === '/student/' ||
              url.pathname === '/academic/' ||
              url.pathname === '/administration/',

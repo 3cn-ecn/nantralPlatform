@@ -5,6 +5,8 @@ from django.conf import settings
 
 
 class EmailBackend(ModelBackend):
+
+    @staticmethod
     def authenticate(username=None, password=None, **kwargs) -> User:
         try:
             user = User.objects.get(email=username)

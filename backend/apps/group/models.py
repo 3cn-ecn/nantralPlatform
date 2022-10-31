@@ -1,6 +1,6 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
-from django.utils.text import slugify
 from django.urls.base import reverse
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -9,9 +9,11 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
-from apps.utils.compress import compressModelImage
-from apps.utils.slug import get_object_from_full_slug, get_tuple_from_full_slug, SlugModel
-from django.conf import settings
+from apps.utils.compress import compress_model_image
+from apps.utils.slug import (
+    get_object_from_full_slug,
+    get_tuple_from_full_slug,
+    SlugModel)
 
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
@@ -51,7 +53,10 @@ class Group(models.Model, SlugModel):
 
     # paramètres techniques
     members = models.ManyToManyField(
-        Student, verbose_name='Membres du groupe', related_name='%(class)s_members', through='NamedMembership')
+        Student,
+        verbose_name='Membres du groupe',
+        related_name='%(class)s_members',
+        through='NamedMembership')
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     modified_date = models.DateTimeField(auto_now=True)
 
@@ -63,7 +68,8 @@ class Group(models.Model, SlugModel):
 
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
-        if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
+        if user.is_anonymous or not user.is_authenticated or not hasattr(
+                user, 'student'):
             return False
         student = Student.objects.filter(user=user).first()
         if user.is_superuser:
@@ -76,17 +82,18 @@ class Group(models.Model, SlugModel):
 
     def is_member(self, user: User) -> bool:
         """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated or not hasattr(user, 'student'):
+        if user.is_anonymous or not user.is_authenticated or not hasattr(
+                user, 'student'):
             return False
         return user.student in self.members.all()
 
     def save(self, *args, **kwargs):
-        # cration du slug si non-existant ou corrompu
+        # creation du slug si non-existant ou corrompu
         self.set_slug(self.name, 40)
         # compression des images
-        self.logo = compressModelImage(
+        self.logo = compress_model_image(
             self, 'logo', size=(500, 500), contains=True)
-        self.banniere = compressModelImage(
+        self.banniere = compress_model_image(
             self, 'banniere', size=(1320, 492), contains=False)
         # enregistrement
         super(Group, self).save(*args, **kwargs)
@@ -101,15 +108,15 @@ class Group(models.Model, SlugModel):
 
     @property
     def app_name(self):
-        return self.modelName.title()
+        return self.model_name.title()
 
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
-        return reverse(self.app+':detail', kwargs={'slug': self.slug})
+        return reverse(self.app + ':detail', kwargs={'slug': self.slug})
 
     @property
-    def modelName(self):
+    def model_name(self):
         '''Plural Model name, used in templates'''
         return self.__class__._meta.verbose_name_plural
 
@@ -144,14 +151,19 @@ class AdminRightsRequest(models.Model):
         try:
             webhook = DiscordWebhook(
                 url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-            embed = DiscordEmbed(title=f'{self.student} demande à devenir admin de {group}',
-                                 description=self.reason,
-                                 color=242424)
+            embed = DiscordEmbed(
+                title=f'{self.student} demande à devenir admin de {group}',
+                description=self.reason,
+                color=242424)
             embed.add_embed_field(
-                name='Accepter', value=f"[Accepter]({self.accept_url})", inline=True)
+                name='Accepter',
+                value=f"[Accepter]({self.accept_url})",
+                inline=True)
             embed.add_embed_field(
-                name='Refuser', value=f"[Refuser]({self.deny_url})", inline=True)
-            if(self.student.picture):
+                name='Refuser',
+                value=f"[Refuser]({self.deny_url})",
+                inline=True)
+            if (self.student.picture):
                 embed.thumbnail = {"url": self.student.picture.url}
             webhook.add_embed(embed)
             webhook.execute()
@@ -162,12 +174,18 @@ class AdminRightsRequest(models.Model):
     @ property
     def accept_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
-        return f"https://{self.domain}{reverse(app+':accept-admin-req', kwargs={'slug': slug,'id': self.id})}"
+        url_path = reverse(
+            app + ':accept-admin-req',
+            kwargs={'slug': slug, 'id': self.id})
+        return f"https://{self.domain}{url_path}"
 
     @ property
     def deny_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
-        return f"https://{self.domain}{reverse(app+':deny-admin-req', kwargs={'slug': slug, 'id': self.id})}"
+        url_path = reverse(
+            app + ':deny-admin-req',
+            kwargs={'slug': slug, 'id': self.id})
+        return f"https://{self.domain}{url_path}"
 
     def accept(self):
         group = get_object_from_full_slug(self.group)
@@ -190,9 +208,11 @@ class AdminRightsRequest(models.Model):
                                      from_email=None, html_message=mail)
         webhook = DiscordWebhook(
             url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été acceptée.',
-                             description="",
-                             color=00000)
+        embed = DiscordEmbed(
+            title=(f'La demande de {self.student} pour rejoindre {group} '
+                   'a été acceptée.'),
+            description="",
+            color=00000)
         webhook.add_embed(embed)
         webhook.execute()
         self.delete()
@@ -201,20 +221,24 @@ class AdminRightsRequest(models.Model):
         group = get_object_from_full_slug(self.group)
         webhook = DiscordWebhook(
             url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(title=f'La demande de {self.student} pour rejoindre {group} a été refusée.',
-                             description="",
-                             color=00000)
+        embed = DiscordEmbed(
+            title=(f'La demande de {self.student} pour rejoindre {group} '
+                   'a été refusée.'),
+            description="",
+            color=00000)
         webhook.add_embed(embed)
         webhook.execute()
         self.delete()
 
 
-# FIXME Broken since the move of admins inside of members, nice to fix
+# # FIXME Broken since the move of admins inside of members, nice to fix
 # @receiver(m2m_changed, sender=Group.members.through)
-# def admins_changed(sender, instance, action, pk_set, reverse, model, **kwargs):
+# def admins_changed(
+#     sender, instance, action, pk_set, reverse, model, **kwargs):
 #     if isinstance(instance, Group):
-#         # FIXME temporary fix because this signal shotguns m2m_changed which other can't
-#         # use. To avoid this we check the instance before to make sure it's a group.
+#         # FIXME temporary fix because this signal shotguns m2m_changed which
+#         # other can't use. To avoid this we check the instance before to make
+#         # sure it's a group.
 #         if action == "post_add":
 #             for pk in pk_set:
 #                 user = User.objects.get(pk=pk)
@@ -232,4 +256,7 @@ class AdminRightsRequest(models.Model):
 #                     'user': user
 #                 })
 #                 user.email_user(
-#                     f'Vous n\'êtes plus membre de {instance}', mail, from_email=None, html_message=mail)
+#                     f'Vous n\'êtes plus membre de {instance}',
+#                     mail,
+#                     from_email=None,
+#                     html_message=mail)

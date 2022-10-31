@@ -1,7 +1,14 @@
 ﻿from django.urls import path
 
-from .views import *
-from apps.group.urls import makeGroupUrlpatterns
+from .views import (
+    CreateHousingView,
+    CreateRoommatesView,
+    HousingMap,
+    HousingList,
+    ColocathlonFormView,
+    DetailRoommatesView,
+    UpdateRoommatesView)
+from apps.group.urls import make_group_url_patterns
 
 app_name = 'roommates'
 
@@ -14,7 +21,7 @@ urlpatterns = [
     path('', HousingMap.as_view(), name='index'),
     path('coloc/<slug:slug>/edit/colocathlon/',
          ColocathlonFormView.as_view(), name='colocathlon-edit'),
-] + makeGroupUrlpatterns(
+] + make_group_url_patterns(
     url_base='coloc',
     detail_view=DetailRoommatesView.as_view(),
     update_view=UpdateRoommatesView.as_view(),

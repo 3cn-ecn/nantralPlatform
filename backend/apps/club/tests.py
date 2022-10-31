@@ -10,7 +10,7 @@ from .models import Club, NamedMembershipClub
 class TestGroups(TestCase, TestMixin):
     def setUp(self):
         self.user_setup()
-    
+
     def tearDown(self):
         self.user_teardown()
 

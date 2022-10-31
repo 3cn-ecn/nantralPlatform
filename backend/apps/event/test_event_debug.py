@@ -12,32 +12,33 @@ from datetime import timedelta
 from django.utils import timezone
 
 
-def createEvents(apps, schema_editor):
+def create_events(apps, schema_editor):
     with open(Path(__file__).parent / "../fixtures/fixtures.json") as f:
-        dummyEvents = json.load(f)
+        dummy_events = json.load(f)
 
-    for event in dummyEvents:
+    for event in dummy_events:
         clubs = Club.objects.all()[:]
-        clubID = random.randint(0, len(clubs))
-        randomDate = timezone.now() + timedelta(days=random.randint(1, 20))
+        club_id = random.randint(0, len(clubs))
+        random_date = timezone.now() + timedelta(days=random.randint(1, 20))
         # For some reason, slugs are appended with a '-1'
         # so we have to add it manually or it won't find anything
-        newEvent = BaseEvent.objects.create(
-            group=f'{clubs[clubID].full_slug}-1',
-            date=randomDate,
+        new_event = BaseEvent.objects.create(
+            group=f'{clubs[club_id].full_slug}-1',
+            date=random_date,
             **event
         )
         students = Student.objects.all()[:]
-        nbOfParticipants = random.randint(1, len(students))
-        for id in random.sample(range(0, len(students)), nbOfParticipants):
-            newEvent.participants.add(students[id].id)
-        newEvent.save()
+        nb_participants = random.randint(1, len(students))
+        for id in random.sample(range(0, len(students)), nb_participants):
+            new_event.participants.add(students[id].id)
+        new_event.save()
 
 
-migrations_files = os.listdir('apps/event/migrations')
-migrations_files.sort()
+migrations_files = sorted(os.listdir('apps/event/migrations'))
 migrations_files = [
-    migrations_file for migrations_file in migrations_files if migrations_file[0:3].isnumeric()]
+    migrations_file
+    for migrations_file in migrations_files
+    if migrations_file[0:3].isnumeric()]
 latest_migration_file = migrations_files[-1][: -3]
 
 
@@ -50,7 +51,7 @@ if settings.DEBUG:
         ]
 
         operations = [
-            migrations.RunPython(createEvents)
+            migrations.RunPython(create_events)
         ]
 else:
     class Migration(migrations.Migration):

@@ -11,7 +11,8 @@ class CreateRoommatesForm(ModelForm):
 class UpdateRoommatesForm(ModelForm):
     class Meta:
         model = Roommates
-        fields = ['name', 'begin_date', 'end_date', 'banniere', 'video1', 'video2', 'description']
+        fields = ['name', 'begin_date', 'end_date',
+                  'banniere', 'video1', 'video2', 'description']
 
 
 class UpdateHousingForm(ModelForm):
@@ -23,7 +24,10 @@ class UpdateHousingForm(ModelForm):
 class NamedMembershipAddRoommates(ModelForm):
     """Form for a club page to add one self to roommates."""
     nickname = CharField(
-        max_length=100, label='Avez-vous un surnom ? (facultatif)', required=False)
+        max_length=100,
+        label='Avez-vous un surnom ? (facultatif)',
+        required=False)
+
     class Meta:
         model = NamedMembershipRoommates
         fields = ['nickname']

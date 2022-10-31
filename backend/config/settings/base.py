@@ -96,12 +96,13 @@ COMMON_APPS = [
     'apps.notification',
     'apps.post',
     'apps.roommates',
-    'apps.services',
+    'apps.tools',
     'apps.sociallink',
     'apps.student',
 ]
 ARCHIVED_APPS = [
     'apps._archived.exchange',
+    'apps._archived.services',
 ]
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS + ARCHIVED_APPS
 
@@ -271,7 +272,7 @@ DISCORD_ADMIN_MODERATION_WEBHOOK = env('DISCORD_ADMIN_MODERATION_WEBHOOK')
 # Github
 GITHUB_USER = env('GITHUB_USER')
 GITHUB_TOKEN = env('GITHUB_TOKEN')
-GITHUB_REPO = 'nantral-platform/nantralPlatform'
+GITHUB_REPO = '3cn-ecn/nantralPlatform'
 
 # Mapbox
 MAPBOX_API_KEY = env('MAPBOX_API_KEY')

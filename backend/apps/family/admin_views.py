@@ -28,7 +28,7 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         families = Family.objects.filter(year=scholar_year())
         context['nb_families'] = len(families)
         # family - bad number of members
-        bad_nb_families = [f for f in families if f.count_members2A() < 3]
+        bad_nb_families = [f for f in families if f.count_members_2A() < 3]
         context['bad_nb_families'] = bad_nb_families
         context['nb_bad_nb_families'] = len(bad_nb_families)
         # family - not finish to complete all answers
@@ -43,27 +43,32 @@ class HomeAdminView(UserIsInGroup, TemplateView):
             .order_by('group__name')
         )
         # MEMBERS 1A
-        members1A = members.filter(role='1A')
-        context['nb_1A'] = members1A.count()
-        context['nb_itii'] = members1A.filter(student__faculty='Iti').count()
-        context['nb_1A_unplaced'] = members1A.filter(group__isnull=True).count()
-        context['nb_1A_placed'] = members1A.filter(group__isnull=False).count()
+        members_1A = members.filter(role='1A')  # noqa: N806
+        context['nb_1A'] = members_1A.count()
+        context['nb_itii'] = members_1A.filter(student__faculty='Iti').count()
+        context['nb_1A_unplaced'] = (
+            members_1A.filter(group__isnull=True).count())
+        context['nb_1A_placed'] = members_1A.filter(group__isnull=False).count()
         # 1A pas encore dans une famille
         if context['nb_1A_unplaced'] < 10:
-            context['unplaced_1A'] = members1A.filter(group__isnull=True)
+            context['unplaced_1A'] = members_1A.filter(group__isnull=True)
         # 1A n'ayant pas fini le questionnaire
-        non_complete_1A = [m for m in members1A if not m.form_complete()]
+        non_complete_1A = [  # noqa: N806
+            m for m in members_1A
+            if not m.form_complete()]
         context['nb_non_complete_1A'] = len(non_complete_1A)
         context['non_complete_1A'] = non_complete_1A
         # MEMBERS 2A+
-        members2A = members.filter(role='2A+')
+        members2A = members.filter(role='2A+')  # noqa: N806
         context['nb_2A'] = members2A.count()
         # 2A n'ayant pas fini leur questionnaire
-        non_complete_2A = [m for m in members2A if not m.form_complete()]
+        non_complete_2A = [  # noqa: N806
+            m for m in members2A
+            if not m.form_complete()]
         context['non_complete_2A'] = non_complete_2A
         context['nb_non_complete_2A'] = len(non_complete_2A)
         # membres non inscrits
-        non_subscribed_2A = []
+        non_subscribed_2A = []  # noqa: N806
         for f in families:
             if f.non_subscribed_members:
                 for m in f.non_subscribed_members.split(','):
@@ -96,12 +101,13 @@ class ResultsView(UserIsInGroup, TemplateView):
         context = super().get_context_data(**kwargs)
         families = []
         try:
-            member1A_list, member2A_list, family_list = self.resolve()
+            members_1A_list, members_2A_list, family_list = (  # noqa: N806
+                self.resolve())
             for f in family_list:
-                members_2A = [
-                    m for m in member2A_list if m['family'] == f['family']]
-                members_1A = [
-                    m for m in member1A_list if m['family'] == f['family']]
+                members_2A = [  # noqa: N806
+                    m for m in members_2A_list if m['family'] == f['family']]
+                members_1A = [  # noqa: N806
+                    m for m in members_1A_list if m['family'] == f['family']]
                 if members_2A or members_1A:
                     families.append({
                         'A1': members_1A,
@@ -149,10 +155,10 @@ class ResultsSavedView(UserIsInGroup, TemplateView):
         context = super().get_context_data(**kwargs)
         families = []
         for f in Family.objects.filter(year=scholar_year()):
-            members_2A = f.memberships.filter(role='2A+')
-            members_2A_plus = f.non_subscribed_members.split(
+            members_2A = f.memberships.filter(role='2A+')  # noqa: N806
+            members_2A_plus = f.non_subscribed_members.split(  # noqa: N806
                 ',') if f.non_subscribed_members else []
-            members_1A = f.memberships.filter(role='1A')
+            members_1A = f.memberships.filter(role='1A')  # noqa: N806
             families.append({'A1': members_1A, 'A2': members_2A,
                             'A2plus': members_2A_plus, 'family': f})
         context['families'] = families

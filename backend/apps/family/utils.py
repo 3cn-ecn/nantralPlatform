@@ -159,8 +159,8 @@ def show_sensible_data(user: User, membership: MembershipFamily = None) -> bool:
 
     if not membership:
         membership = get_membership(user)
-    is_1A = is_first_year(user, membership)
-    is_2A = not is_1A
+    is_1A = is_first_year(user, membership)  # noqa: N806
+    is_2A = not is_1A  # noqa: N806
     phase = Setting.get('PHASE_PARRAINAGE')
     if membership:
         # if membership exists, we are sure of the 1A/2A property

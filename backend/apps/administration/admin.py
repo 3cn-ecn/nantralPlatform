@@ -10,5 +10,6 @@ class NamedMembershipAdministrationAdmin(admin.ModelAdmin):
     list_display = ['student', 'group', 'function']
 
 
-admin.site.register(NamedMembershipAdministration, NamedMembershipAdministrationAdmin)
+admin.site.register(NamedMembershipAdministration,
+                    NamedMembershipAdministrationAdmin)
 admin.site.register(Administration, AdministrationAdmin)

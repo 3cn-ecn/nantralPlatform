@@ -16,12 +16,12 @@ class Liste(Group):
     members = models.ManyToManyField(Student, through='NamedMembershipList')
 
     app_name = "Listes BDX"
-    
+
     class Meta:
         ordering = ['-year', 'liste_type', 'name']
         verbose_name = "Liste BDX"
         verbose_name_plural = "Listes BDX"
-        
+
     def save(self, *args, **kwargs):
         # mise à jour du cache de la liste des listes
         key = make_template_fragment_key('liste_list')

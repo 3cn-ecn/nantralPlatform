@@ -15,15 +15,16 @@ TYPE = [
 
 
 class Course(Group):
-    type = models.CharField(verbose_name='Type de cours', max_length=10, choices=TYPE)
+    type = models.CharField(verbose_name='Type de cours',
+                            max_length=10, choices=TYPE)
     members = models.ManyToManyField(Student, through='NamedMembershipCourse')
     archived = models.BooleanField("Formation archivée", default=False)
-    
+
     class Meta:
         verbose_name = "formation"
 
 
 class NamedMembershipCourse(NamedMembership):
     group = models.ForeignKey(Course, on_delete=models.CASCADE)
-    year = models.IntegerField("Année où cette formation a été suivie", default=timezone.now().year)
-
+    year = models.IntegerField(
+        "Année où cette formation a été suivie", default=timezone.now().year)

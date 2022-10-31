@@ -1,6 +1,6 @@
 # Install the project for windows
 win-install:
-	python3 -m pip install -U --user pipenv
+	python3 -m pip install --upgrade --user pipenv
 	cd deployment && \
 		copy NUL backend.env
 	cd backend/config/settings && \
@@ -17,7 +17,7 @@ win-install:
 
 # Install the project for unix-systems: linux and macos
 unix-install:
-	python3 -m pip install -U --user pipenv
+	python3 -m pip install --upgrade --user pipenv
 	cd deployment && \
 		touch backend.env
 	cd backend/config/settings && \
@@ -34,6 +34,7 @@ unix-install:
 
 # Update after pull
 update:
+	python3 -m pip install --upgrade --user pipenv
 	cd frontend && \
 		npm install && \
 		npm run build:dev

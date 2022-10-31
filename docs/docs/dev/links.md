@@ -24,4 +24,4 @@ This page regroups all the resources for framework, plugin or dependency of the 
 
 ## Some other plugins
 
-- [CKEDitor5](https://ckeditor.com/docs/ckeditor5/latest/features/index.html) - Documentation of the CKEditor plugin, that we use for group, event and post descriptions. Be careful, we use it through a python package, on another Github repository: [github.com/nantral-platform/django-ckeditor-5](https://github.com/nantral-platform/django-ckeditor-5)
+- [CKEDitor5](https://ckeditor.com/docs/ckeditor5/latest/features/index.html) - Documentation of the CKEditor plugin, that we use for group, event and post descriptions. Be careful, we use it through a python package, on another Github repository: [github.com/3cn-ecn/django-ckeditor-5](https://github.com/3cn-ecn/django-ckeditor-5)

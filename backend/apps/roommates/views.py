@@ -20,21 +20,21 @@ class HousingMap(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['MAPBOX_API_KEY'] = settings.MAPBOX_API_KEY
-        PHASE_COLOCATHLON = Setting.get('PHASE_COLOCATHLON')
-        context['colocathlon'] = PHASE_COLOCATHLON
-        if PHASE_COLOCATHLON == 2:
+        phase_colocathlon = Setting.get('PHASE_COLOCATHLON')
+        context['colocathlon'] = phase_colocathlon
+        if phase_colocathlon == 2:
             roommate = Roommates.objects.filter(
-                colocathlon_participants=self.request.user.student)
-            if roommate.exists():
-                context['CURRENT_COLOC'] = roommate.first().name
-                context['CURRENT_COLOC_URL'] = roommate.first().get_absolute_url()
+                colocathlon_participants=self.request.user.student).first()
+            if roommate:
+                context['CURRENT_COLOC'] = roommate.name
+                context['CURRENT_COLOC_URL'] = roommate.get_absolute_url()
         context['ariane'] = [
             {
-                'target': '#', 
+                'target': '#',
                 'label': 'Colocs'
             },
             {
-                'target': '#', 
+                'target': '#',
                 'label': 'Carte'
             }
         ]
@@ -44,16 +44,16 @@ class HousingMap(LoginRequiredMixin, TemplateView):
 class HousingList(LoginRequiredMixin, ListView):
     model = Housing
     template_name = 'roommates/list.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ariane'] = [
             {
-                'target': reverse('roommates:housing-map'), 
+                'target': reverse('roommates:housing-map'),
                 'label': 'Colocs'
             },
             {
-                'target': "#", 
+                'target': "#",
                 'label': 'Liste'
             }
         ]
@@ -67,7 +67,7 @@ class CreateHousingView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['ariane'] = [
             {
-                'target': reverse('roommates:index'), 
+                'target': reverse('roommates:index'),
                 'label': 'Colocs'
             },
             {
@@ -95,12 +95,12 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
         member.admin = True
         member.save()
         return redirect('roommates:detail', roommates.slug)
-        
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ariane'] = [
             {
-                'target': reverse('roommates:index'), 
+                'target': reverse('roommates:index'),
                 'label': 'Colocs'
             },
             {
@@ -116,24 +116,17 @@ class ColocathlonFormView(UserIsMember, UpdateView):
     model = Roommates
     fields = ['colocathlon_agree', 'colocathlon_quota',
               'colocathlon_hours', 'colocathlon_activities']
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         group = self.get_object()
-        context['ariane'] = [
-            {
-                'target': reverse(group.app+':index'), 
-                'label': group.app_name
-            },
-            {
-                'target': reverse(group.app+':detail', kwargs={'slug': group.slug}), 
-                'label': group.name
-            },
-            {
-                'target': '#',
-                'label': 'Colocathlon'
-            }
-        ]
+        context['ariane'] = [{'target': reverse(group.app + ':index'),
+                              'label': group.app_name},
+                             {'target': reverse(group.app + ':detail',
+                                                kwargs={'slug': group.slug}),
+                              'label': group.name},
+                             {'target': '#',
+                              'label': 'Colocathlon'}]
         return context
 
 
@@ -148,7 +141,8 @@ class DetailRoommatesView(DetailGroupView):
             housing=context['housing']
         ).exclude(pk=self.object.pk).order_by('-begin_date')
         context['colocathlon'] = Setting.get('PHASE_COLOCATHLON')
-        context['nb_participants'] = self.object.colocathlon_participants.count()
+        context['nb_participants'] = (
+            self.object.colocathlon_participants.count())
         return context
 
 

@@ -6,9 +6,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.post.models import AbstractPost
 from apps.student.models import Student
-from apps.notification.models import Notification
 from apps.utils.upload import PathAndRename
-from apps.utils.slug import get_object_from_full_slug
 
 
 path_and_rename = PathAndRename("events/pictures")
@@ -33,7 +31,10 @@ class BaseEvent(AbstractPost):
     participants = models.ManyToManyField(
         to=Student, verbose_name='Participants', blank=True)
     ticketing = models.CharField(
-        verbose_name='Lien vers la billeterie', blank=True, max_length=200, null=True)
+        verbose_name='Lien vers la billetterie',
+        blank=True,
+        max_length=200,
+        null=True)
 
     @property
     def number_of_participants(self) -> int:
@@ -50,14 +51,14 @@ class BaseEvent(AbstractPost):
         )
         # save the notification
         self.create_notification(
-            title = self.get_group_name,
-            body = f'Nouvel event : {self.title}')
+            title=self.get_group_name,
+            body=f'Nouvel event : {self.title}')
         # save again the event
         super(BaseEvent, self).save(*args, **kwargs)
 
-
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
+
     def get_absolute_url(self):
         return reverse('event:detail', args=[self.slug])
 

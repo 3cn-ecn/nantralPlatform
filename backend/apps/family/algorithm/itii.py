@@ -1,12 +1,14 @@
+# spell-checker: words dtype
+
 import numpy as np
 
 from ..models import MembershipFamily, QuestionFamily
 from ..utils import scholar_year
 from .utils import (
     get_question_list,
-    get_member1A_list,
-    get_member2A_list,
-    solveProblem,
+    get_member_1A_list,
+    get_member_2A_list,
+    solve_problem,
     save
 )
 
@@ -41,23 +43,25 @@ def itii_algorithm():
 
     # get the members list with their answers for each question
     print('Get 1A itii answers...')
-    itii_list = get_member1A_list(question_list, itii=True)
+    itii_list = get_member_1A_list(question_list, itii=True)
 
     # get the family who have said yes to itii question
     print('Get family answers...')
-    member2A_list, family_list = get_member2A_list(question_list)
+    member2A_list, family_list = get_member_2A_list(question_list)  # noqa: N806
     family_list = check_itii_answers(family_list)
 
     # count difference of number of members per family
     print('Calculate the deltas...')
-    placed_1A = MembershipFamily.objects.filter(
+    placed_1A = MembershipFamily.objects.filter(  # noqa: N806
         role='1A', group__year=scholar_year()).prefetch_related('group')
     for f in family_list:
-        nb_1A = len([m for m in placed_1A if m.group == f['family']])
-        nb_2A = f['nb']
+        nb_1A = len([  # noqa: N806
+            m for m in placed_1A
+            if m.group == f['family']])
+        nb_2A = f['nb']  # noqa: N806
         f['delta'] = nb_1A - nb_2A
 
-    # match the correct number : we add families and priorize the little ones
+    # match the correct number : we add families and priorise the little ones
     family_list.sort(key=lambda f: f['nb'])
     family_list.sort(key=lambda f: f['delta'])
     # duplicate families
@@ -68,7 +72,7 @@ def itii_algorithm():
         family_list = family_list[:len(itii_list)]
 
     # Solve the matching problem
-    itii_result_list = solveProblem(itii_list, family_list, coeff_list)
+    itii_result_list = solve_problem(itii_list, family_list, coeff_list)
 
     # saving in database
     print('Saving...')

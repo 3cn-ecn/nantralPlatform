@@ -5,7 +5,8 @@ from .models import NamedMembershipList, Liste
 class UpdateListeForm(ModelForm):
     class Meta:
         model = Liste
-        fields = ['name', 'year', 'summary', 'video1', 'video2', 'description', 'logo', 'banniere', 'liste_type']
+        fields = ['name', 'year', 'summary', 'video1', 'video2',
+                  'description', 'logo', 'banniere', 'liste_type']
 
 
 class NamedMembershipAddListe(ModelForm):

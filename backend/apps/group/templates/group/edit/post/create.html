@@ -33,8 +33,8 @@
         locale: {
           format: 'YYYY-MM-DD HH:mm'
         },
-        minYear: 2020,
-        maxYear: parseInt(moment().format('YYYY'), 10)
+        minYear: parseInt(moment().format('YYYY'), 10)-1,
+        maxYear: parseInt(moment().format('YYYY'), 10)+1
       });
     });
   </script>
