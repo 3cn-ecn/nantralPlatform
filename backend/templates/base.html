@@ -126,7 +126,16 @@
             {% else %}
               <li><a class="dropdown-item" href="{% url 'account:login' %}"><i class="fas fa-sign-in-alt"></i>&nbsp; Connexion</a></li>
             {% endif %}
-            <li><a class="dropdown-item" href="{% url 'home:mentions' %}"><i class="fas fa-gavel"></i>&nbsp; Mentions Légales</a></li>
+            <li>
+              <a class="dropdown-item" href="https://docs.nantral-platform.fr" target="_blank" ref="noopener noreferrer">
+                <i class="fas fa-question-circle"></i>&nbsp; Documentation
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="{% url 'home:mentions' %}">
+                <i class="fas fa-gavel"></i>&nbsp; Mentions Légales
+              </a>
+            </li>
           </ul>
         </li>
       </ul>
