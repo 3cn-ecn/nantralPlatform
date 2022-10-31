@@ -71,6 +71,7 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'django.contrib.admindocs'
 ]
 THIRD_PARTY_APPS = [
     'crispy_bootstrap5',
