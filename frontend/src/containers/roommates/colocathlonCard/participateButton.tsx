@@ -2,6 +2,8 @@
 import { useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import axios, { AxiosError, AxiosResponse } from "axios";
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
 
 import { ParticipantsModal } from "./participantsModal";
 import { ParticipateButtonProps } from "./interfaces";
