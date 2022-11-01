@@ -53,3 +53,4 @@ All these commands are done from the `frontend` directory. Please first move int
 * `npm run start`: start the live compilation in dev mode of the files. Each time you edit a file, the new file is automatically compiled.
 * `npm run build`: build the production compilation of the files. This is useful to check the weight of the files.
 * `npm run build:dev`: compile the files in dev mode (like the start option, except that it doesn't refresh when you edit a file).
+* `npm install --save[-dev] <package_name>`: add a package to the (dev) dependencies

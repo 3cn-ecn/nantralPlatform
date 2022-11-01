@@ -1,11 +1,7 @@
-import kombu
-import logging
+from django.conf import settings
 from django.db.models.query import QuerySet
 
 from .tasks import send_webpush_notification_task
-
-
-logger = logging.getLogger(__name__)
 
 
 def send_webpush_notification(students: QuerySet, message: dict):
@@ -38,15 +34,11 @@ def send_webpush_notification(students: QuerySet, message: dict):
     # we first convert the queryset of student to a list, because we cannot
     # pass a queryset for an async function with celery
     student_ids = list(students.all().values_list('id', flat=True))
-    # then we try to launch the celery task for sending notifications in async
-    # mode, so as to continue the process without waiting we have send all
-    try:
+    # check if celery is launched with a docker instance
+    if hasattr(settings, "CELERY_BROKER_URL"):
+        # launch the celery task for sending notifications in async
+        # mode, so as to continue the process without waiting we have send all
         send_webpush_notification_task.delay(student_ids, message)
-    except kombu.exceptions.OperationalError as err:
+    else:
         # if the celery task does not work, send notifications in normal mode
-        logger.warning(
-            "WARNING: cannot send notifications through celery. "
-            "Celery might not be configured on this machine.\n"
-            "Error code: " + str(err)
-        )
         send_webpush_notification_task(student_ids, message)
