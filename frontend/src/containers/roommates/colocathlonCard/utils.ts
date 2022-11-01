@@ -1,5 +1,7 @@
-﻿import axios, { AxiosError, AxiosResponse } from "axios";
+﻿import { AxiosError, AxiosResponse } from "axios";
+import axios from "../../utils/axios";
 import { Roommates } from "../housingMap/interfaces";
+
 
 export function getRoommatesDetails(
   api_url: string,
