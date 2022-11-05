@@ -1,13 +1,12 @@
 ﻿import * as React from "react";
 import { useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
+import axios from "../../utils/axios";
 import { ParticipantsModal } from "./participantsModal";
 import { ParticipateButtonProps } from "./interfaces";
 import { spinnerStyle } from "./styles";
-
-
 
 
 export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
