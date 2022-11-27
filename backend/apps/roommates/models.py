@@ -72,7 +72,7 @@ class Roommates(Group):
         verbose_name="Activités proposées",
         max_length=250, null=True, blank=True)
     colocathlon_participants = models.ManyToManyField(
-        to=Student, related_name="colocathlons_in"
+        to=Student, related_name="colocathlons_in", blank = True
     )
 
     class Meta:

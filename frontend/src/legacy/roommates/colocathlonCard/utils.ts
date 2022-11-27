@@ -1,10 +1,12 @@
-﻿import axios, { AxiosError, AxiosResponse } from 'axios';
+﻿import { AxiosError, AxiosResponse } from 'axios';
+import axios from '../../../utils/axios';
 import { Roommates } from '../housingMap/interfaces';
+
 
 export function getRoommatesDetails(
   api_url: string,
   ROOMMATES_SLUG: string,
-  setRoommates: React.Dispatch<React.SetStateAction<Roommates>>,
+  setRoommates: React.Dispatch<React.SetStateAction<Roommates | undefined>>,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>
 ): void {
   setIsLoading(true);
