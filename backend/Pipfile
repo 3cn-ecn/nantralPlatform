@@ -41,6 +41,7 @@ requests = "~=2.28"
 six = "~=1.16"
 # force update of a sub-package
 pyjwt = ">=2.4"
+django-vite = "*"
 
 [dev-packages]
 autopep8 = ">=1.7.0"

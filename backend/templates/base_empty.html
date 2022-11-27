@@ -1,4 +1,5 @@
 {% load static %}
+{% load django_vite %}
 
 
 <!DOCTYPE html>
@@ -8,6 +9,16 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="manifest" href="{% static 'manifest.webmanifest' %}">
 	<meta name="vapid-key" content="{{ vapid_key }}">
+	
+	<script type="module">
+		import RefreshRuntime from 'http://localhost:5173/@react-refresh'
+		RefreshRuntime.injectIntoGlobalHook(window)
+		window.$RefreshReg$ = () => {}
+		window.$RefreshSig$ = () => (type) => type
+		window.__vite_plugin_react_preamble_installed__ = true
+	</script>
+	{% vite_hmr_client %}
+
 	<!-- favicon -->
 	<link rel="shortcut icon" href="{% static '/img/logo/scalable/logo.svg' %}">
 	<meta name="description" CONTENT="Bienvenue sur Nantral Platform, le site des étudiant⋅e⋅s de Centrale Nantes !">
@@ -21,7 +32,7 @@
 		Loading...
 	</div>
 
-	<script type = "text/javascript" src="{% static 'js/main.js' %}"></script>
+	{% vite_asset 'src/index.tsx' %}
 
 </body>
 

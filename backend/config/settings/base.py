@@ -83,6 +83,7 @@ THIRD_PARTY_APPS = [
     'push_notifications',
     'rest_framework',
     'storages',
+    'django_vite'
 ]
 COMMON_APPS = [
     'apps.academic',
@@ -162,12 +163,19 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Compile frontend with VITE
+DJANGO_VITE_ASSETS_PATH = os.path.join(BASE_DIR, 'static/front')
+DJANGO_VITE_DEV_MODE = True
+DJANGO_VITE_DEV_SERVER_PORT = 5173
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
+    DJANGO_VITE_ASSETS_PATH,
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
