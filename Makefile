@@ -37,7 +37,7 @@ update:
 	python3 -m pip install --upgrade --user pipenv
 	cd frontend && \
 		npm install && \
-		npm run build:dev
+		npm run leg:build:dev
 	cd backend && \
 		python3 -m pipenv sync --dev && \
 		python3 -m pipenv run migrate
