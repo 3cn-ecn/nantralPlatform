@@ -152,6 +152,7 @@ def offline_view(request):
     return response
 
 
+@login_required
 @require_http_methods(["GET"])
 def react_app_view(request):
     response = render(request, 'base_empty.html')

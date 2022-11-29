@@ -21,7 +21,7 @@
   "[python]": {
     "editor.tabSize": 4
   },
-  "[django-html][html][javascript][javascriptreact][typescript][typescriptreact][json]": {
+  "[django-html][html][javascript][javascriptreact][typescript][typescriptreact][json][css][scss]": {
     "editor.tabSize": 2
   },
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/",

@@ -1,5 +1,5 @@
 ﻿import { AxiosError, AxiosResponse } from 'axios';
-import axios from '../../../utils/axios';
+import axios from '../../utils/axios';
 import { Roommates } from '../housingMap/interfaces';
 
 

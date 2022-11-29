@@ -1,4 +1,4 @@
-﻿import axios from '../../../utils/axios';
+﻿import axios from '../../utils/axios';
 
 import { Member, MemberAdd } from '../groupMembers/interfaces';
 import { getMembers } from '../groupMembers/utils';

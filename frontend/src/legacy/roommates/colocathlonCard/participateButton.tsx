@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import { AxiosError, AxiosResponse } from 'axios';
 
-import axios from '../../../utils/axios';
+import axios from '../../utils/axios';
 import { ParticipantsModal } from './participantsModal';
 import { ParticipateButtonProps } from './interfaces';
 import { spinnerStyle } from './styles';

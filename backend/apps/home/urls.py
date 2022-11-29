@@ -19,5 +19,5 @@ urlpatterns = [
     path('doihavetologin/', views.DoIHaveToLoginView.as_view()),
     # use the react router if nothing match
     path('', views.react_app_view),
-    re_path(r'^.*/$', views.react_app_view),
+    re_path(r'^(?!api).*/$', views.react_app_view),
 ]

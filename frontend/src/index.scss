@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+@import './theme.scss';
 
 body {
   margin: 0;
@@ -15,6 +16,6 @@ code {
 }
 
 ::selection {
-  background: #dc3545 !important;
-  color: white !important;
+  background: $primary-red-color;
+  color: white;
 } 
