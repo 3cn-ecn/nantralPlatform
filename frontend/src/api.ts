@@ -1,5 +1,6 @@
 /**
- * List of all API endpoints to pull and push data from and to the Django server.
+ * List of all API endpoints to pull and push data from and to the Django
+ * server.
  */
 import formatQuery from './utils/formatQuery';
 
