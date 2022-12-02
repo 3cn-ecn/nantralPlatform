@@ -68,7 +68,7 @@
                             {% if membership.group.logo %}
                                 <img src="{{ membership.group.logo|file_url }}" />
                             {% else %}
-                                <img src="{% static 'img/logo/scalable/logo.svg' %}" style="opacity: 0.3" />
+                                <img src="https://avatars.dicebear.com/api/initials/{{membership.group.slug}}.svg" />
                             {% endif %}
                         </div>
                     </a>

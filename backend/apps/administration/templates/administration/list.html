@@ -21,7 +21,7 @@
             {% if group.logo %}
               <img src="{{ group.logo|file_url }}">
             {% else %}
-              <img src="{% static 'img/logo/scalable/logo.svg' %}" style="opacity:0.3">
+              <img src="https://avatars.dicebear.com/api/initials/{{group.slug}}.svg" />
             {% endif %}
           </div>
         </a>
