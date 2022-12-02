@@ -27,7 +27,7 @@
                 {% if liste.logo %}
                   <img src="{{ liste.logo|file_url }}">
                 {% else %}
-                  <img src="{% static 'img/logo/scalable/logo.svg' %}" style="opacity:0.3">
+                  <img src="https://avatars.dicebear.com/api/initials/{{liste.slug}}.svg" />
                 {% endif %}
               </div>
             </a>
