@@ -1,10 +1,10 @@
 from django.db import models
 
 from apps.student.models import Student
-from apps.group.models import Group, NamedMembership
+from apps.group.models import AbstractGroup, NamedMembership
 
 
-class Administration(Group):
+class Administration(AbstractGroup):
     members = models.ManyToManyField(
         Student, through='NamedMembershipAdministration')
 

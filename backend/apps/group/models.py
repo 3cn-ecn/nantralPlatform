@@ -21,11 +21,126 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-path_and_rename_group = PathAndRename("groups/logo")
-path_and_rename_group_banniere = PathAndRename("groups/banniere")
+path_and_rename_group = PathAndRename('groups/logo')
+path_and_rename_group_banniere = PathAndRename('groups/banniere')
+
+
+class GroupType(models.Model):
+    name = models.CharField(
+        verbose_name="Nom du type",
+        unique=True,
+        max_length=20
+    )
+    slug = models.SlugField(
+        verbose_name="Abréviation du type",
+        primary_key=True,
+        max_length=10
+    )
 
 
 class Group(models.Model, SlugModel):
+    """Database of all groups, with different types: clubs, flatshares..."""
+
+    # General data
+    name = models.CharField(
+        verbose_name="Nom du groupe",
+        unique=True,
+        max_length=100)
+    short_name = models.CharField(
+        verbose_name="Nom abrégé",
+        max_length=20,
+        null=True,
+        blank=True)
+    members = models.ManyToManyField(
+        Student,
+        verbose_name="Membres du groupe",
+        related_name='groups',
+        through='Membership')
+    parent_group = models.ForeignKey(
+        'Group',
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE)
+
+    # Profile
+    summary = models.CharField("Résumé", max_length=500, null=True, blank=True)
+    description = CKEditor5Field(
+        verbose_name="Description du groupe", blank=True)
+    icon = models.ImageField(
+        verbose_name="Logo du groupe", blank=True, null=True,
+        upload_to=path_and_rename_group,
+        help_text="Votre logo sera affiché au format 306x306 pixels.")
+    banner = models.ImageField(
+        verbose_name="Bannière", blank=True, null=True,
+        upload_to=path_and_rename_group_banniere,
+        help_text="Votre bannière sera affichée au format 1320x492 pixels.")
+    video1 = models.URLField(
+        "Lien vidéo 1", max_length=200, null=True, blank=True)
+    video2 = models.URLField(
+        "Lien vidéo 2", max_length=200, null=True, blank=True)
+
+    # Technical Stuff
+    slug = models.SlugField(max_length=40, unique=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    created_by = models.ForeignKey(
+        Student, blank=True, null=True, on_delete=models.SET_NULL)
+    last_modified_at = models.DateTimeField(auto_now=True)
+    last_modified_by = models.ForeignKey(
+        Student, blank=True, null=True, on_delete=models.SET_NULL)
+
+    class Meta:
+        ordering = ['type', 'parent', 'name']
+        verbose_name = "Groupe"
+
+    def __str__(self):
+        return self.name
+
+    def is_admin(self, user: User) -> bool:
+        """Indicates if a user is admin."""
+        if user.is_anonymous or not user.is_authenticated or not hasattr(
+                user, 'student'):
+            return False
+        if user.is_superuser:
+            return True
+        return user.student.groups.through.objects.filter(group=self).admin
+
+    def is_member(self, user: User) -> bool:
+        """Indicates if a user is member."""
+        if user.is_anonymous or not user.is_authenticated or not hasattr(
+                user, 'student'):
+            return False
+        return self.members.contains(user.student)
+
+    def save(self, *args, **kwargs):
+        # creation du slug si non-existant ou corrompu
+        self.set_slug(self.name, 40)
+        # compression des images
+        self.icon = compress_model_image(
+            self, 'icon', size=(500, 500), contains=True)
+        self.banner = compress_model_image(
+            self, 'banner', size=(1320, 492), contains=False)
+        # enregistrement
+        super(AbstractGroup, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('group:detail', kwargs={'slug': self.slug})
+
+
+class Membership(models.Model):
+    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
+    group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
+    admin = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('student', 'group')
+
+    def __str__(self):
+        return self.student.__str__()
+
+
+### OLD GROUPS TABLES
+
+class AbstractGroup(models.Model, SlugModel):
     '''Modèle abstrait servant de modèle pour tous les types de Groupes.'''
 
     # Nom du groupe
@@ -96,7 +211,7 @@ class Group(models.Model, SlugModel):
         self.banniere = compress_model_image(
             self, 'banniere', size=(1320, 492), contains=False)
         # enregistrement
-        super(Group, self).save(*args, **kwargs)
+        super(AbstractGroup, self).save(*args, **kwargs)
 
     @property
     def app(self):
@@ -124,7 +239,7 @@ class Group(models.Model, SlugModel):
 class NamedMembership(models.Model):
     admin = models.BooleanField(default=False)
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
-    group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(to=AbstractGroup, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
@@ -232,10 +347,10 @@ class AdminRightsRequest(models.Model):
 
 
 # # FIXME Broken since the move of admins inside of members, nice to fix
-# @receiver(m2m_changed, sender=Group.members.through)
+# @receiver(m2m_changed, sender=AbstractGroup.members.through)
 # def admins_changed(
 #     sender, instance, action, pk_set, reverse, model, **kwargs):
-#     if isinstance(instance, Group):
+#     if isinstance(instance, AbstractGroup):
 #         # FIXME temporary fix because this signal shotguns m2m_changed which
 #         # other can't use. To avoid this we check the instance before to make
 #         # sure it's a group.

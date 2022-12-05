@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from apps.group.models import Group, NamedMembership
+from apps.group.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
 from django.db.models import Q
@@ -47,7 +47,7 @@ class Housing(models.Model):
             .last())
 
 
-class Roommates(Group):
+class Roommates(AbstractGroup):
     name = models.CharField(verbose_name='Nom du groupe',
                             max_length=100)
     begin_date = models.DateField(

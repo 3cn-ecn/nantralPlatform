@@ -5,11 +5,11 @@ from django.utils import timezone
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 
-from apps.group.models import Group, NamedMembership
+from apps.group.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
 
 
-class Club(Group):
+class Club(AbstractGroup):
     members = models.ManyToManyField(Student, through='NamedMembershipClub')
     bdx_type = models.ForeignKey(
         'BDX',

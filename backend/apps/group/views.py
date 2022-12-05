@@ -13,7 +13,7 @@ from django.urls import resolve
 from django.views.decorators.http import require_http_methods
 from django.views.generic import View, FormView, TemplateView, DetailView
 
-from apps.group.models import Group
+from apps.group.models import AbstractGroup
 from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
@@ -324,7 +324,7 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 class AcceptAdminRequestView(UserIsAdmin, View):
     def get(self, request: HttpRequest, slug, id):
         app = resolve(request.path_info).app_name
-        group: Group = get_object_from_slug(app, slug)
+        group: AbstractGroup = get_object_from_slug(app, slug)
         try:
             admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
                 id=id)
@@ -346,7 +346,7 @@ class AcceptAdminRequestView(UserIsAdmin, View):
 class DenyAdminRequestView(UserIsAdmin, View):
     def get(self, request: HttpRequest, slug, id):
         app = resolve(request.path_info).app_name
-        group: Group = get_object_from_slug(app, slug)
+        group: AbstractGroup = get_object_from_slug(app, slug)
         try:
             admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
                 id=id)

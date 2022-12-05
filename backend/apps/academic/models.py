@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from apps.group.models import Group, NamedMembership
+from apps.group.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
 
 
@@ -14,7 +14,7 @@ TYPE = [
 ]
 
 
-class Course(Group):
+class Course(AbstractGroup):
     type = models.CharField(verbose_name='Type de cours',
                             max_length=10, choices=TYPE)
     members = models.ManyToManyField(Student, through='NamedMembershipCourse')

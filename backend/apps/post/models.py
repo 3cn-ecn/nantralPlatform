@@ -9,7 +9,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 from apps.utils.slug import SlugModel, get_object_from_full_slug
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
-from apps.group.models import Group
+from apps.group.models import AbstractGroup
 from apps.notification.models import Notification, NotificationAction
 
 
@@ -55,11 +55,11 @@ class AbstractPost(models.Model, SlugModel):
         abstract = True
 
     @property
-    def get_group(self) -> Group:
+    def get_group(self) -> AbstractGroup:
         return get_object_from_full_slug(self.group)
 
     @property
-    def get_group_name(self) -> Group:
+    def get_group_name(self) -> AbstractGroup:
         return get_object_from_full_slug(self.group).name
 
     def save(self, *args, **kwargs):

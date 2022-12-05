@@ -4,11 +4,11 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 
 from apps.student.models import Student
-from apps.group.models import Group, NamedMembership
+from apps.group.models import AbstractGroup, NamedMembership
 from apps.club.models import BDX
 
 
-class Liste(Group):
+class Liste(AbstractGroup):
     liste_type = models.ForeignKey(
         BDX, on_delete=models.SET_NULL, null=True, blank=True)
     year = models.IntegerField(

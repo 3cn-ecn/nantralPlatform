@@ -57,7 +57,7 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
         return context
 
 
-# Application Group
+# Application AbstractGroup
 
 class UpdateGroupCreateEventView(UserIsAdmin, FormView):
     """In the context of edit group, create event view."""

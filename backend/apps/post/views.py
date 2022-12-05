@@ -77,7 +77,7 @@ class PostUpdateView(UserIsAdmin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-# Application Group
+# Application AbstractGroup
 
 class UpdateGroupCreatePostView(UserIsAdmin, FormView):
     """In the context of a group, create a post view."""
