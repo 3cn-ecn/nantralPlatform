@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.http import HttpRequest
 from django.urls.base import reverse
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -127,15 +128,64 @@ class Group(models.Model, SlugModel):
 
 
 class Membership(models.Model):
+    """A class for memberships of each group."""
+
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
     group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
     admin = models.BooleanField(default=False)
+    summary = models.CharField("Résumé", max_length=50, null=True, blank=True)
+    description = models.TextField(verbose_name="Description", blank=True)
+    asked_admin = models.BooleanField(
+        "A demandé à devenir admin", default=False)
+    asked_admin_message = models.TextField(
+        "Raison de la demande à devenir admin", blank=True)
 
     class Meta:
         unique_together = ('student', 'group')
 
     def __str__(self):
         return self.student.__str__()
+
+    def ask_admin_rights(self, message: str, request: HttpRequest) -> None:
+        """A method for a member to ask for admin rights.
+
+        Parameters
+        ----------
+        message : str
+            A message from the member explaining why he/she wants the admin
+            rights on the group.
+        request : HttpRequest
+            The request associated with the view from which we ask for admin
+            rights (in order to get the full url)
+        """
+
+        self.asked_admin = True
+        self.asked_admin_message = message
+        self.save()
+        accept_uri = request.build_absolute_uri(
+            reverse('group:accept-admin-req', kwargs={'member': self.id}))
+        deny_uri = request.build_absolute_uri(
+            reverse('group:deny-admin-req', kwargs={'member': self.id}))
+        webhook = DiscordWebhook(
+            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(
+            title=(
+                f"{self.student} ({self.summary}) demande à devenir admin "
+                f"de {self.group}"),
+            description=self.reason,
+            color=242424)
+        embed.add_embed_field(
+            name='Accepter',
+            value=f"[Accepter]({accept_uri})",
+            inline=True)
+        embed.add_embed_field(
+            name='Refuser',
+            value=f"[Refuser]({deny_uri})",
+            inline=True)
+        if (self.student.picture):
+            embed.thumbnail = {"url": self.student.picture.url}
+        webhook.add_embed(embed)
+        webhook.execute()
 
 
 ### OLD GROUPS TABLES
