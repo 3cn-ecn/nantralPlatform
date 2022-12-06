@@ -1,11 +1,12 @@
-from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.db import models
 from django.http import HttpRequest
-from django.urls.base import reverse
 from django.template.loader import render_to_string
+from django.urls.base import reverse
 from django.utils import timezone
 
+from datetime import timedelta
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
@@ -27,20 +28,28 @@ path_and_rename_group_banniere = PathAndRename('groups/banniere')
 
 
 class GroupType(models.Model):
+    """
+    The type of a group: club, flatshare, etc... with all the group type
+    settings.
+    """
+
     name = models.CharField(
         verbose_name="Nom du type",
         unique=True,
-        max_length=20
-    )
+        max_length=20)
     slug = models.SlugField(
         verbose_name="Abréviation du type",
         primary_key=True,
-        max_length=10
-    )
+        max_length=10)
 
 
 class Group(models.Model, SlugModel):
     """Database of all groups, with different types: clubs, flatshares..."""
+
+    type = models.ForeignKey(
+        to='GroupType',
+        verbose_name="Type de groupe",
+        on_delete=models.CASCADE)
 
     # General data
     name = models.CharField(
@@ -80,8 +89,14 @@ class Group(models.Model, SlugModel):
     video2 = models.URLField(
         "Lien vidéo 2", max_length=200, null=True, blank=True)
 
+    # Map data
+    address = models.CharField("Adresse", max_length=250, blank=True)
+    latitude = models.FloatField("Latitude", null=True, blank=True)
+    longitude = models.FloatField("Longitude", null=True, blank=True)
+
     # Technical Stuff
     slug = models.SlugField(max_length=40, unique=True, blank=True)
+    order = models.IntegerField("Ordre", default=0)
     created_at = models.DateTimeField(default=timezone.now)
     created_by = models.ForeignKey(
         Student, blank=True, null=True, on_delete=models.SET_NULL)
@@ -90,40 +105,74 @@ class Group(models.Model, SlugModel):
         Student, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
-        ordering = ['type', 'parent', 'name']
+        ordering = ['type', 'parent', 'order', 'name']
         verbose_name = "Groupe"
 
     def __str__(self):
         return self.name
 
     def is_admin(self, user: User) -> bool:
-        """Indicates if a user is admin."""
-        if user.is_anonymous or not user.is_authenticated or not hasattr(
-                user, 'student'):
-            return False
-        if user.is_superuser:
-            return True
-        return user.student.groups.through.objects.filter(group=self).admin
+        """Check if a user has the admin rights for this group.
+
+        Parameters
+        ----------
+        user : User
+            The user to check for.
+
+        Returns
+        -------
+        bool
+            True if the user has admin rights.
+        """
+
+        return (
+            (not user.is_anonymous)
+            and user.is_authenticated
+            and hasattr(user, 'student')
+            and (
+                user.is_superuser
+                or user.student.groups.through.objects.filter(group=self).admin
+            )
+        )
 
     def is_member(self, user: User) -> bool:
-        """Indicates if a user is member."""
-        if user.is_anonymous or not user.is_authenticated or not hasattr(
-                user, 'student'):
-            return False
-        return self.members.contains(user.student)
+        """Check if a user is a member for this group.
 
-    def save(self, *args, **kwargs):
-        # creation du slug si non-existant ou corrompu
+        Parameters
+        ----------
+        user : User
+            The user to check for.
+
+        Returns
+        -------
+        bool
+            True if the user is a member of this group.
+        """
+
+        return (
+            (not user.is_anonymous)
+            and user.is_authenticated
+            and hasattr(user, 'student')
+            and self.members.contains(user.student)
+        )
+
+    def save(self, *args, **kwargs) -> None:
+        """Save an instance of the model in the database."""
         self.set_slug(self.name, 40)
-        # compression des images
         self.icon = compress_model_image(
             self, 'icon', size=(500, 500), contains=True)
         self.banner = compress_model_image(
             self, 'banner', size=(1320, 492), contains=False)
-        # enregistrement
         super(AbstractGroup, self).save(*args, **kwargs)
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
+        """Get the absolute url of the model object.
+
+        Returns
+        -------
+        str
+            The absolute url of the model object.
+        """
         return reverse('group:detail', kwargs={'slug': self.slug})
 
 
@@ -135,18 +184,30 @@ class Membership(models.Model):
     admin = models.BooleanField(default=False)
     summary = models.CharField("Résumé", max_length=50, null=True, blank=True)
     description = models.TextField(verbose_name="Description", blank=True)
-    asked_admin = models.BooleanField(
+    admin_request = models.BooleanField(
         "A demandé à devenir admin", default=False)
-    asked_admin_message = models.TextField(
+    admin_request_messsage = models.TextField(
         "Raison de la demande à devenir admin", blank=True)
+    order = models.IntegerField("Ordre", default=0)
+    begin_date = models.DateField(
+        verbose_name='Date de début',
+        default=timezone.now().today,
+        blank=True,
+        null=True)
+    end_date = models.DateField(
+        verbose_name='Date de fin',
+        default=(timezone.now() + timedelta(year=1)).today,
+        blank=True,
+        null=True)
 
     class Meta:
         unique_together = ('student', 'group')
+        ordering = ['group', 'order', 'student']
 
     def __str__(self):
         return self.student.__str__()
 
-    def ask_admin_rights(self, message: str, request: HttpRequest) -> None:
+    def create_admin_request(self, message: str, request: HttpRequest) -> None:
         """A method for a member to ask for admin rights.
 
         Parameters
@@ -159,9 +220,10 @@ class Membership(models.Model):
             rights (in order to get the full url)
         """
 
-        self.asked_admin = True
-        self.asked_admin_message = message
+        self.admin_request = True
+        self.admin_request_messsage = message
         self.save()
+        # send a message on the discord channel
         accept_uri = request.build_absolute_uri(
             reverse('group:accept-admin-req', kwargs={'member': self.id}))
         deny_uri = request.build_absolute_uri(
@@ -187,8 +249,53 @@ class Membership(models.Model):
         webhook.add_embed(embed)
         webhook.execute()
 
+    def accept_admin_request(self) -> None:
+        """Accept an admin request."""
+        self.admin = True
+        self.save()
+        mail = render_to_string('group/mail/new_admin.html', {
+            'group': self.group,
+            'user': self.student.user
+        })
+        self.student.user.email_user(f'Vous êtes admin de {self.group}', mail,
+                                     from_email=None, html_message=mail)
+        webhook = DiscordWebhook(
+            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(
+            title=(f'La demande de {self.student} pour rejoindre {self.group} '
+                   'a été acceptée.'),
+            description="",
+            color=00000)
+        webhook.add_embed(embed)
+        webhook.execute()
 
-### OLD GROUPS TABLES
+    def deny_admin_request(self) -> None:
+        """Deny an admin request."""
+        self.admin_request = False
+        self.admin_request_messsage = ""
+        self.save()
+        webhook = DiscordWebhook(
+            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(
+            title=(f'La demande de {self.student} pour rejoindre {self.group} '
+                   'a été refusée.'),
+            description="",
+            color=00000)
+        webhook.add_embed(embed)
+        webhook.execute()
+
+    def save(self, *args, **kwargs) -> None:
+        """Save the membership object."""
+        # if member becomes admin, remove the admin request
+        if self.admin and self.admin_request:
+            self.admin_request = False
+            self.admin_request_messsage = ""
+        super(Membership, self).save(*args, **kwargs)
+
+
+################################################################################
+################################################################################
+# OLD GROUPS TABLES
 
 class AbstractGroup(models.Model, SlugModel):
     '''Modèle abstrait servant de modèle pour tous les types de Groupes.'''
