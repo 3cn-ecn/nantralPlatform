@@ -171,13 +171,9 @@ class Group(models.Model, SlugModel):
         """
 
         return (
-            (not user.is_anonymous)
-            and user.is_authenticated
-            and hasattr(user, 'student')
-            and (
-                user.is_superuser
-                or user.student.groups.through.objects.filter(group=self).admin
-            )
+            self.is_member(user)
+            and Membership.objects.get(group=self, student=user.student).admin
+            or user.is_superuser
         )
 
     def is_member(self, user: User) -> bool:
