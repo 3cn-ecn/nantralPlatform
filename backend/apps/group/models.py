@@ -10,7 +10,9 @@ from datetime import timedelta
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
+
 from apps.utils.upload import PathAndRename
+from apps.utils.geocoding import geocode
 from apps.utils.compress import compress_model_image
 from apps.utils.slug import (
     get_object_from_full_slug,
@@ -33,6 +35,7 @@ class GroupType(models.Model):
     settings.
     """
 
+    # Type infos
     name = models.CharField(
         verbose_name="Nom du type",
         unique=True,
@@ -42,14 +45,31 @@ class GroupType(models.Model):
         primary_key=True,
         max_length=10)
 
+    # Settings of this type
+    has_map = models.BooleanField("Type lié à une carte", default=False)
+    slug_is_name = models.BooleanField("Slug déduit du nom", default=True)
+    members_must_have_dates = models.BooleanField(
+        "Les membres doivent avoir des dates",
+        default=True)
+    anyone_can_join = models.BooleanField(
+        "N'importe qui peut s'ajouter par défaut",
+        default=True)
+    is_year_group = models.BooleanField(
+        "Les groupes n'existent que sur une année scolaire.",
+        default=False)
+    group_by_field = models.CharField(
+        "Grouper en catégories selon le champ",
+        max_length=30)
+    group_by_label = models.CharField(
+        "Label des catégories",
+        max_length=100,
+        help_text=("Utiliser la syntaxe Python pour formater le texte avec le "
+                   "champ (cf https://docs.python.org/3/library/stdtypes.html#"
+                   "str.format)"))
+
 
 class Group(models.Model, SlugModel):
     """Database of all groups, with different types: clubs, flatshares..."""
-
-    type = models.ForeignKey(
-        to='GroupType',
-        verbose_name="Type de groupe",
-        on_delete=models.CASCADE)
 
     # General data
     name = models.CharField(
@@ -66,11 +86,38 @@ class Group(models.Model, SlugModel):
         verbose_name="Membres du groupe",
         related_name='groups',
         through='Membership')
+
+    # Technical data
+    type = models.ForeignKey(
+        to='GroupType',
+        verbose_name="Type de groupe",
+        on_delete=models.CASCADE)
     parent_group = models.ForeignKey(
         'Group',
         blank=True,
         null=True,
         on_delete=models.CASCADE)
+    order = models.IntegerField("Ordre", default=0)
+    year = models.IntegerField(
+        "Année du groupe",
+        null=True,
+        blank=True,
+        help_text=("Pour les années scolaires, indiquez seulement la première "
+                   "année (de septembre à décembre)"))
+    slug = models.SlugField(max_length=40, unique=True, blank=True)
+    private = models.BooleanField(
+        "Groupe privé",
+        default=False,
+        help_text=("Un groupe privé n'est visible que par les membres du "
+                   "groupe."))
+    anyone_can_join = models.BooleanField(
+        "N'importe qui peut devenir membre",
+        blank=True)
+    archived = models.BooleanField(
+        "Groupe archivé",
+        default=False,
+        help_text=("Un groupe archivé ne peut plus avoir de nouveaux membres "
+                   "et est masqué des résultats."))
 
     # Profile
     summary = models.CharField("Résumé", max_length=500, null=True, blank=True)
@@ -94,10 +141,8 @@ class Group(models.Model, SlugModel):
     latitude = models.FloatField("Latitude", null=True, blank=True)
     longitude = models.FloatField("Longitude", null=True, blank=True)
 
-    # Technical Stuff
-    slug = models.SlugField(max_length=40, unique=True, blank=True)
-    order = models.IntegerField("Ordre", default=0)
-    created_at = models.DateTimeField(default=timezone.now)
+    # Log infos
+    created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         Student, blank=True, null=True, on_delete=models.SET_NULL)
     last_modified_at = models.DateTimeField(auto_now=True)
@@ -157,12 +202,34 @@ class Group(models.Model, SlugModel):
         )
 
     def save(self, *args, **kwargs) -> None:
-        """Save an instance of the model in the database."""
-        self.set_slug(self.name, 40)
+        """Save an instance of the model in the database.
+
+        * It creates a slug from the name if it does not already exists.
+        * It compresses the icon and banner images
+        * It computes the longitude and latitude coordinates if there
+          is an address
+        * It defines some args to default values set in the type
+        """
+
+        self.set_slug(
+            self.name if self.type.slug_is_name else f'family-{self.pk}',
+            max_length=40)
         self.icon = compress_model_image(
             self, 'icon', size=(500, 500), contains=True)
         self.banner = compress_model_image(
             self, 'banner', size=(1320, 492), contains=False)
+        if (
+            self.type.has_map
+            and self.address
+            and not (self.latitude and self.longitude)
+        ):
+            adresses = geocode(self.address, limit=1)
+            if len(adresses) >= 1:
+                coordinates = adresses[0]
+                self.latitude = coordinates['lat']
+                self.longitude = coordinates['long']
+        if self.anyone_can_join is None:
+            self.anyone_can_join = self.type.anyone_can_join
         super(AbstractGroup, self).save(*args, **kwargs)
 
     def get_absolute_url(self) -> str:
@@ -190,12 +257,12 @@ class Membership(models.Model):
         "Raison de la demande à devenir admin", blank=True)
     order = models.IntegerField("Ordre", default=0)
     begin_date = models.DateField(
-        verbose_name='Date de début',
+        verbose_name="Date de début",
         default=timezone.now().today,
         blank=True,
         null=True)
     end_date = models.DateField(
-        verbose_name='Date de fin',
+        verbose_name="Date de fin",
         default=(timezone.now() + timedelta(year=1)).today,
         blank=True,
         null=True)
