@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils import timezone
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
@@ -27,6 +27,28 @@ logger = logging.getLogger(__name__)
 
 path_and_rename_group = PathAndRename('groups/logo')
 path_and_rename_group_banniere = PathAndRename('groups/banniere')
+
+
+def today() -> datetime:
+    """Returns the date of today.
+
+    Returns
+    -------
+    datetime
+        The current date.
+    """
+    return timezone.now().today()
+
+
+def one_year_later() -> datetime:
+    """Returns the day of today but one year later.
+
+    Returns
+    -------
+    datetime
+        Returns the date in one year.
+    """
+    return (timezone.now() + timedelta(days=365)).today()
 
 
 class GroupType(models.Model):
@@ -67,6 +89,13 @@ class GroupType(models.Model):
                    "champ (cf https://docs.python.org/3/library/stdtypes.html#"
                    "str.format)"))
 
+    class Meta:
+        verbose_name = "Type de groupe"
+        verbose_name_plural = "Types de groupes"
+
+    def __str__(self):
+        return self.name
+
 
 class Group(models.Model, SlugModel):
     """Database of all groups, with different types: clubs, flatshares..."""
@@ -92,7 +121,7 @@ class Group(models.Model, SlugModel):
         to='GroupType',
         verbose_name="Type de groupe",
         on_delete=models.CASCADE)
-    parent_group = models.ForeignKey(
+    parent = models.ForeignKey(
         'Group',
         blank=True,
         null=True,
@@ -144,17 +173,18 @@ class Group(models.Model, SlugModel):
     # Log infos
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        Student, blank=True, null=True, on_delete=models.SET_NULL)
+        Student, blank=True, null=True,
+        on_delete=models.SET_NULL, related_name='+')
     last_modified_at = models.DateTimeField(auto_now=True)
     last_modified_by = models.ForeignKey(
-        Student, blank=True, null=True, on_delete=models.SET_NULL)
+        Student, blank=True, null=True,
+        on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
-        ordering = ['type', 'parent', 'order', 'name']
         verbose_name = "Groupe"
 
     def __str__(self):
-        return self.name
+        return self.short_name
 
     def is_admin(self, user: User) -> bool:
         """Check if a user has the admin rights for this group.
@@ -224,9 +254,11 @@ class Group(models.Model, SlugModel):
                 coordinates = adresses[0]
                 self.latitude = coordinates['lat']
                 self.longitude = coordinates['long']
-        if self.anyone_can_join is None:
+        if self.pk is None:
             self.anyone_can_join = self.type.anyone_can_join
-        super(AbstractGroup, self).save(*args, **kwargs)
+        if self.pk is None:
+            self.created_by = self.last_modified_by
+        super(Group, self).save(*args, **kwargs)
 
     def get_absolute_url(self) -> str:
         """Get the absolute url of the model object.
@@ -254,18 +286,19 @@ class Membership(models.Model):
     order = models.IntegerField("Ordre", default=0)
     begin_date = models.DateField(
         verbose_name="Date de début",
-        default=timezone.now().today,
+        default=today,
         blank=True,
         null=True)
     end_date = models.DateField(
         verbose_name="Date de fin",
-        default=(timezone.now() + timedelta(year=1)).today,
+        default=one_year_later,
         blank=True,
         null=True)
 
     class Meta:
         unique_together = ('student', 'group')
         ordering = ['group', 'order', 'student']
+        verbose_name = "Membre"
 
     def __str__(self):
         return self.student.__str__()
@@ -297,7 +330,7 @@ class Membership(models.Model):
             title=(
                 f"{self.student} ({self.summary}) demande à devenir admin "
                 f"de {self.group}"),
-            description=self.reason,
+            description=self.admin_request_messsage,
             color=242424)
         embed.add_embed_field(
             name='Accepter',
