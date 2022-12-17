@@ -202,7 +202,7 @@ class Group(models.Model, SlugModel):
 
         return (
             self.is_member(user)
-            and Membership.objects.get(group=self, student=user.student).admin
+            and self.membership_set.filter(student=user.student).admin
             or user.is_superuser
         )
 
@@ -254,7 +254,7 @@ class Group(models.Model, SlugModel):
                 coordinates = adresses[0]
                 self.latitude = coordinates['lat']
                 self.longitude = coordinates['long']
-        if self.pk is None:
+        if self.anyone_can_join is None:
             self.anyone_can_join = self.type.anyone_can_join
         if self.pk is None:
             self.created_by = self.last_modified_by
