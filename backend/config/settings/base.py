@@ -94,6 +94,7 @@ COMMON_APPS = [
     'apps.group',
     'apps.home',
     'apps.liste',
+    'apps.maps',
     'apps.notification',
     'apps.post',
     'apps.roommates',
