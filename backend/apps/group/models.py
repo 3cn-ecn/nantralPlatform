@@ -81,17 +81,19 @@ class GroupType(models.Model):
         default=False)
     group_by_field = models.CharField(
         "Grouper en catégories selon le champ",
-        max_length=30)
+        max_length=30,
+        blank=True)
     group_by_label = models.CharField(
         "Label des catégories",
         max_length=100,
+        blank=True,
         help_text=("Utiliser la syntaxe Python pour formater le texte avec le "
                    "champ (cf https://docs.python.org/3/library/stdtypes.html#"
                    "str.format)"))
 
     class Meta:
-        verbose_name = "Type de groupe"
-        verbose_name_plural = "Types de groupes"
+        verbose_name = "type de groupe"
+        verbose_name_plural = "types de groupes"
 
     def __str__(self):
         return self.name
@@ -117,7 +119,7 @@ class Group(models.Model, SlugModel):
         through='Membership')
 
     # Technical data
-    type = models.ForeignKey(
+    group_type = models.ForeignKey(
         to='GroupType',
         verbose_name="Type de groupe",
         on_delete=models.CASCADE)
@@ -181,7 +183,7 @@ class Group(models.Model, SlugModel):
         on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
-        verbose_name = "Groupe"
+        verbose_name = "groupe"
 
     def __str__(self):
         return self.short_name
@@ -238,14 +240,14 @@ class Group(models.Model, SlugModel):
         """
 
         self.set_slug(
-            self.name if self.type.slug_is_name else f'family-{self.pk}',
+            self.name if self.group_type.slug_is_name else f'family-{self.pk}',
             max_length=40)
         self.icon = compress_model_image(
             self, 'icon', size=(500, 500), contains=True)
         self.banner = compress_model_image(
             self, 'banner', size=(1320, 492), contains=False)
         if (
-            self.type.has_map
+            self.group_type.has_map
             and self.address
             and not (self.latitude and self.longitude)
         ):
@@ -255,7 +257,7 @@ class Group(models.Model, SlugModel):
                 self.latitude = coordinates['lat']
                 self.longitude = coordinates['long']
         if self.anyone_can_join is None:
-            self.anyone_can_join = self.type.anyone_can_join
+            self.anyone_can_join = self.group_type.anyone_can_join
         if self.pk is None:
             self.created_by = self.last_modified_by
         super(Group, self).save(*args, **kwargs)
@@ -298,7 +300,7 @@ class Membership(models.Model):
     class Meta:
         unique_together = ('student', 'group')
         ordering = ['group', 'order', 'student']
-        verbose_name = "Membre"
+        verbose_name = "membre"
 
     def __str__(self):
         return self.student.__str__()
