@@ -1,11 +1,11 @@
 name: Sonar Frontend
 on:
   push:
-    branches: [master]
+    branches: [master, react-app]
     paths: [frontend/**]
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [master]
+    branches: [master, react-app]
     paths: [frontend/**]
 
 jobs:
