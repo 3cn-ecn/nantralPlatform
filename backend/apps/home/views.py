@@ -75,7 +75,7 @@ class SuggestionView(LoginRequiredMixin, FormView):
             body=(
                 f'{form.cleaned_data["description"]} <br/> '
                 + '[Clique pour découvrir qui propose ça.]'
-                + f'(https://"{get_current_site(self.request)}'
+                + f'(https://{get_current_site(self.request)}'
                 + f'{self.request.user.student.get_absolute_url()})'),
         )
         messages.success(
