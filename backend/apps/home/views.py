@@ -73,14 +73,13 @@ class SuggestionView(LoginRequiredMixin, FormView):
             title=form.cleaned_data['title'],
             label=form.cleaned_data['suggestionOrBug'],
             body=(
-                f'{form.cleaned_data["description"]} <br/> '
-                + '[Clique pour découvrir qui propose ça.]'
-                + f'(https://{get_current_site(self.request)}'
-                + f'{self.request.user.student.get_absolute_url()})'),
+                f"{form.cleaned_data['description']} <br/> "
+                "[Clique pour découvrir qui propose ça.]"
+                f"(https://{get_current_site(self.request)}"
+                f"{self.request.user.student.get_absolute_url()})"),
         )
         messages.success(
-            self.request,
-            'Votre suggestion a été enregistrée merci')
+            self.request, "Votre suggestion a été enregistrée merci")
         return redirect('home:home')
 
     def get_context_data(self, **kwargs):
@@ -88,7 +87,7 @@ class SuggestionView(LoginRequiredMixin, FormView):
         context['ariane'] = [
             {
                 'target': '#',
-                'label': 'Suggestions & Bugs'
+                'label': "Suggestions & Bugs"
             }
         ]
         return context
