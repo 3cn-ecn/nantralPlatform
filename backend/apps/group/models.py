@@ -9,10 +9,10 @@ from django.utils import timezone
 from datetime import timedelta, datetime
 from django_ckeditor_5.fields import CKEditor5Field
 
+from apps.maps.models import Place, Map
 from apps.student.models import Student
 
 from apps.utils.upload import PathAndRename
-from apps.utils.geocoding import geocode
 from apps.utils.compress import compress_model_image
 from apps.utils.slug import (
     get_object_from_full_slug,
@@ -67,18 +67,25 @@ class GroupType(models.Model):
         primary_key=True,
         max_length=10)
 
-    # Settings of this type
-    has_map = models.BooleanField("Type lié à une carte", default=False)
+    # Maps settings
+    map = models.ForeignKey(
+        to=Map,
+        verbose_name="Carte liée",
+        default=False,
+        on_delete=models.SET_NULL)
+    place_required = models.BooleanField(default=False)
     slug_is_name = models.BooleanField("Slug déduit du nom", default=True)
-    members_must_have_dates = models.BooleanField(
-        "Les membres doivent avoir des dates",
-        default=True)
+
+    # Members settings
     anyone_can_join = models.BooleanField(
         "N'importe qui peut s'ajouter par défaut",
         default=True)
     is_year_group = models.BooleanField(
         "Les groupes n'existent que sur une année scolaire.",
-        default=False)
+        default=False,
+        help_text="Si vrai, les membres n'ont pas de dates.")
+    
+    # Group list display settings
     group_by_field = models.CharField(
         "Grouper en catégories selon le champ",
         max_length=30,
@@ -168,9 +175,7 @@ class Group(models.Model, SlugModel):
         "Lien vidéo 2", max_length=200, null=True, blank=True)
 
     # Map data
-    address = models.CharField("Adresse", max_length=250, blank=True)
-    latitude = models.FloatField("Latitude", null=True, blank=True)
-    longitude = models.FloatField("Longitude", null=True, blank=True)
+    place = models.ForeignKey(Place, on_delete=models.SET_NULL)
 
     # Log infos
     created_at = models.DateTimeField(auto_now_add=True)
@@ -246,16 +251,6 @@ class Group(models.Model, SlugModel):
             self, 'icon', size=(500, 500), contains=True)
         self.banner = compress_model_image(
             self, 'banner', size=(1320, 492), contains=False)
-        if (
-            self.group_type.has_map
-            and self.address
-            and not (self.latitude and self.longitude)
-        ):
-            adresses = geocode(self.address, limit=1)
-            if len(adresses) >= 1:
-                coordinates = adresses[0]
-                self.latitude = coordinates['lat']
-                self.longitude = coordinates['long']
         if self.anyone_can_join is None:
             self.anyone_can_join = self.group_type.anyone_can_join
         if self.pk is None:
