@@ -73,7 +73,9 @@ class GroupType(models.Model):
         verbose_name="Carte liée",
         default=False,
         on_delete=models.SET_NULL)
-    place_required = models.BooleanField(default=False)
+    place_required = models.BooleanField(
+        default=False,
+        help_text="Le lieu est disponible seulement si une carte est liée.")
     slug_is_name = models.BooleanField("Slug déduit du nom", default=True)
 
     # Members settings
@@ -84,7 +86,7 @@ class GroupType(models.Model):
         "Les groupes n'existent que sur une année scolaire.",
         default=False,
         help_text="Si vrai, les membres n'ont pas de dates.")
-    
+
     # Group list display settings
     group_by_field = models.CharField(
         "Grouper en catégories selon le champ",
@@ -104,6 +106,9 @@ class GroupType(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("group:list", kwargs={"slug": self.slug})
 
 
 class Group(models.Model, SlugModel):
@@ -127,7 +132,7 @@ class Group(models.Model, SlugModel):
 
     # Technical data
     group_type = models.ForeignKey(
-        to='GroupType',
+        to=GroupType,
         verbose_name="Type de groupe",
         on_delete=models.CASCADE)
     parent = models.ForeignKey(
@@ -300,6 +305,18 @@ class Membership(models.Model):
     def __str__(self):
         return self.student.__str__()
 
+    def save(self, *args, **kwargs) -> None:
+        """Save the membership object."""
+        # default dates for year groups
+        if self.group_type.is_year_group:
+            self.begin_date = timezone.date(self.group.year, 8, 1)
+            self.end_date = timezone.date(self.group.year + 1, 7, 31)
+        # if member becomes admin, remove the admin request
+        if self.admin and self.admin_request:
+            self.admin_request = False
+            self.admin_request_messsage = ""
+        super(Membership, self).save(*args, **kwargs)
+
     def create_admin_request(self, message: str, request: HttpRequest) -> None:
         """A method for a member to ask for admin rights.
 
@@ -376,14 +393,6 @@ class Membership(models.Model):
             color=00000)
         webhook.add_embed(embed)
         webhook.execute()
-
-    def save(self, *args, **kwargs) -> None:
-        """Save the membership object."""
-        # if member becomes admin, remove the admin request
-        if self.admin and self.admin_request:
-            self.admin_request = False
-            self.admin_request_messsage = ""
-        super(Membership, self).save(*args, **kwargs)
 
 
 ################################################################################

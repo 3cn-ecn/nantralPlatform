@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from apps.utils.geocoding import geocode
 from apps.group.models import Group
@@ -25,39 +26,78 @@ class Place(models.Model):
     """
 
     place_type = models.ForeignKey(to=Map, on_delete=models.CASCADE)
-    name = models.CharField("Nom du lieu", max_length=50, blank=True)
-    summary = models.CharField("Résumé", max_length=500, null=True, blank=True)
-    address = models.CharField("Adresse", max_length=250, blank=True)
+    address = models.CharField("Adresse", max_length=250)
     latitude = models.FloatField("Latitude", null=True, blank=True)
     longitude = models.FloatField("Longitude", null=True, blank=True)
 
-    def get_most_recent_group(self) -> Group:
-        pass
+    most_recent_group = models.ForeignKey(Group, on_delete=models.SET_NULL)
+    _name = models.CharField("Nom du lieu", max_length=50, blank=True)
+    _summary = models.CharField("Résumé", max_length=200, null=True, blank=True)
 
-    def update_group_data(self) -> None:
-        group = self.get_most_recent_group()
-        if group:
-            self.name = (
-                group.name[:50] if len(group.name) <= 50
-                else group.name[:47] + '...')
-            self.summary = (
-                group.summary[:50] if len(group.summary) <= 50
-                else group.summary[:47] + '...')
+    @property
+    def name(self):
+        if self._name:
+            return self._name
+        elif self.most_recent_group:
+            return self.most_recent_group.name
+        else:
+            return self.address
+
+    @property
+    def summary(self):
+        if self._summary:
+            return self._summary
+        elif self.most_recent_group:
+            return self.most_recent_group.summary
+        else:
+            return ""
+
+    def update_most_recent_group(self) -> None:
+        """Get the most recent group linked to this place. The most recent group
+        is the group with the member who has the most recent begin_date.
+
+        Returns
+        -------
+        Group | None
+            The most recent group.
+        """
+        default_date = timezone.date(1987, 1, 1)
+        today = timezone.now().today()
+        self.most_recent_group = max(
+            (self.group_set
+                .prefetch_related('membership_set')
+                .values('membership_set__begin_date')),
+            default=None,
+            key=lambda g: max(
+                g.membership_set.values('begin_date'),
+                default=default_date,
+                key=lambda m: (m.begin_date
+                               if m.begin_date < today
+                               else default_date)
+            ).begin_date)
+        self.save()
 
     def save(self, *args, **kwargs) -> None:
-        if (
-            self.address
-            and not (self.latitude and self.longitude)
-        ):
+        """Find the geo coordinates and save the instance."""
+        if self.address and not (self.latitude and self.longitude):
             adresses = geocode(self.address, limit=1)
             if len(adresses) >= 1:
                 coordinates = adresses[0]
                 self.latitude = coordinates['lat']
                 self.longitude = coordinates['long']
+        super(Place, self).save(*args, **kwargs)
 
     def get_absolute_url(self) -> str | None:
-        group = self.get_most_recent_group()
-        if group:
-            return group.get_absolute_url()
+        """Get the url to display for this place, i.e. the url of the
+        most recent group linked to this place.
+
+        Returns
+        -------
+        str | None
+            The url of the most recent group linked to this place, or None
+            if no group is linked.
+        """
+        if self.most_recent_group:
+            return self.most_recent_group.get_absolute_url()
         else:
             return None
