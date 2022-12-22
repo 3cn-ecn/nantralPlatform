@@ -74,7 +74,7 @@ def NamedMembershipGroupFormset(  # noqa: N802
 
 SocialLinkGroupFormset = modelformset_factory(
     SocialLink,
-    fields=['network', 'url', 'label'],
+    fields=['network', 'uri', 'label'],
     extra=1,
     can_delete=True,
 )
