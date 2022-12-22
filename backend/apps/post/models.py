@@ -9,7 +9,7 @@ from django_ckeditor_5.fields import CKEditor5Field
 from apps.utils.slug import SlugModel, get_object_from_full_slug
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
-from apps.group.models import AbstractGroup
+from apps.group.abstract.models import AbstractGroup
 from apps.notification.models import Notification, NotificationAction
 
 

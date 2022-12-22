@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import CoursesList, DetailCourseView
-from apps.group.urls import make_group_url_patterns
+from apps.group.abstract.urls import make_group_url_patterns
 
 app_name = 'academic'
 

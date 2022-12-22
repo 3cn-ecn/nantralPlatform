@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
-{% include 'group/included/navbar_edit.html' with open='events' %}
+{% include 'abstract_group/included/navbar_edit.html' with open='events' %}
 <form method='POST' enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.media }}

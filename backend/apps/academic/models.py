@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from apps.group.models import AbstractGroup, NamedMembership
+from apps.group.abstract.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
 
 

@@ -8,7 +8,7 @@ from django.core.cache.utils import make_template_fragment_key
 from django.utils import timezone
 
 from apps.club.models import Club
-from apps.group.views import BaseDetailGroupView
+from apps.group.abstract.views import BaseDetailGroupView
 
 from apps.utils.slug import get_object_from_slug
 

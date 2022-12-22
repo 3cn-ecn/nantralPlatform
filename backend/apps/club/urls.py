@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import ListClubView, DetailClubView, DetailGroupMembersView
-from apps.group.urls import make_group_url_patterns
+from apps.group.abstract.urls import make_group_url_patterns
 
 
 app_name = 'club'

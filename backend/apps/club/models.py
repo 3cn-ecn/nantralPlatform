@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 
-from apps.group.models import AbstractGroup, NamedMembership
+from apps.group.abstract.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
 
 

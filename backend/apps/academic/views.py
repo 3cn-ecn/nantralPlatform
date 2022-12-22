@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 
 from .models import Course
-from apps.group.views import DetailGroupView
+from apps.group.abstract.views import DetailGroupView
 
 
 class CoursesList(LoginRequiredMixin, ListView):

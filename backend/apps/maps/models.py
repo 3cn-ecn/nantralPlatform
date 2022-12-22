@@ -2,7 +2,6 @@ from django.db import models
 from django.utils import timezone
 
 from apps.utils.geocoding import geocode
-from apps.group.models import Group
 
 
 class Map(models.Model):
@@ -30,7 +29,12 @@ class Place(models.Model):
     latitude = models.FloatField("Latitude", null=True, blank=True)
     longitude = models.FloatField("Longitude", null=True, blank=True)
 
-    most_recent_group = models.ForeignKey(Group, on_delete=models.SET_NULL)
+    most_recent_group = models.ForeignKey(
+        'group.Group',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='+')
     _name = models.CharField("Nom du lieu", max_length=50, blank=True)
     _summary = models.CharField("Résumé", max_length=200, null=True, blank=True)
 

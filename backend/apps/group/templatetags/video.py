@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 
-@register.inclusion_tag('group/included/video.html')
+@register.inclusion_tag('abstract_group/included/video.html')
 def video(video_url):
     try:
         if 'youtube' in video_url:

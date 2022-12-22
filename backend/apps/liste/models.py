@@ -4,7 +4,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 
 from apps.student.models import Student
-from apps.group.models import AbstractGroup, NamedMembership
+from apps.group.abstract.models import AbstractGroup, NamedMembership
 from apps.club.models import BDX
 
 

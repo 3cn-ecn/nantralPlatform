@@ -81,7 +81,7 @@ class PostUpdateView(UserIsAdmin, UpdateView):
 
 class UpdateGroupCreatePostView(UserIsAdmin, FormView):
     """In the context of a group, create a post view."""
-    template_name = 'group/edit/post/create.html'
+    template_name = 'abstract_group/edit/post/create.html'
     form_class = PostForm
 
     def get_app(self, **kwargs):
@@ -113,7 +113,7 @@ class UpdateGroupCreatePostView(UserIsAdmin, FormView):
 
 class UpdateGroupPostsView(UserIsAdmin, View):
     """In the context of a group, list and update the posts."""
-    template_name = 'group/edit/post/last_30_d.html'
+    template_name = 'abstract_group/edit/post/last_30_d.html'
 
     def get_app(self, **kwargs):
         return resolve(self.request.path).app_name

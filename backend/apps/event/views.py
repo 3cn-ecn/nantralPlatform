@@ -61,7 +61,7 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
 
 class UpdateGroupCreateEventView(UserIsAdmin, FormView):
     """In the context of edit group, create event view."""
-    template_name = 'group/edit/event/create.html'
+    template_name = 'abstract_group/edit/event/create.html'
     form_class = EventForm
 
     def get_app(self, **kwargs):
@@ -140,7 +140,7 @@ class EventUpdateView(UserIsAdmin, UpdateView):
 
 class UpdateGroupEventsView(UserIsAdmin, View):
     '''In the context of edit group, show planned events'''
-    template_name = 'group/edit/event/planned_edit.html'
+    template_name = 'abstract_group/edit/event/planned_edit.html'
 
     def get_app(self, **kwargs):
         return resolve(self.request.path).app_name
@@ -177,7 +177,7 @@ class UpdateGroupEventsView(UserIsAdmin, View):
 
 class UpdateGroupArchivedEventsView(UserIsAdmin, View):
     '''In the context of edit group, show archived events'''
-    template_name = 'group/edit/event/archived_edit.html'
+    template_name = 'abstract_group/edit/event/archived_edit.html'
 
     def get_app(self, **kwargs):
         return resolve(self.request.path).app_name

@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, CreateView, ListView, UpdateView
 from extra_settings.models import Setting
 
 from apps.utils.accessMixins import UserIsMember
-from apps.group.views import UpdateGroupView, DetailGroupView
+from apps.group.abstract.views import UpdateGroupView, DetailGroupView
 
 from .models import Housing, Roommates
 from .forms import UpdateHousingForm

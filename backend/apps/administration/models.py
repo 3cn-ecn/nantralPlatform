@@ -1,7 +1,7 @@
 from django.db import models
 
 from apps.student.models import Student
-from apps.group.models import AbstractGroup, NamedMembership
+from apps.group.abstract.models import AbstractGroup, NamedMembership
 
 
 class Administration(AbstractGroup):

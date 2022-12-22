@@ -165,13 +165,13 @@
     {# Bouton pour faire une demande pour devenir admin #}
     {% block admin_req %}
         {% if is_member and not is_admin %}
-            {% include 'group/included/request-admin.html' %}
+            {% include 'abstract_group/included/request-admin.html' %}
         {%endif%}
     {% endblock %}
 
     {# popup pour devenir membre du groupe #}
     {% block add_member %}
-        {% include 'group/included/add-member.html' %}
+        {% include 'abstract_group/included/add-member.html' %}
     {% endblock %}
 
     <br>
