@@ -2,7 +2,7 @@
 {% if sociallinks %}
     <div class="grille-rs">
         {% for sociallink in sociallinks %}
-            <a href="{{ sociallink.url }}" target="_blank" class="rs" style="--color-rs: {{ sociallink.network.color }}">
+            <a href="{{ sociallink.uri }}" target="_blank" class="rs" style="--color-rs: {{ sociallink.network.color }}" rel="nofollow noopener">
                 <div><i class="{{ sociallink.network.icon_name }}"></i></div>
                 <span>
                     {% if sociallink.label %}
