@@ -71,7 +71,7 @@ class SuggestionView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         create_issue(
             title=form.cleaned_data['title'],
-            label=form.cleaned_data['suggestionOrBug'],
+            label=form.cleaned_data['suggestion_or_bug'],
             body=(
                 f"{form.cleaned_data['description']} <br/> "
                 "[Clique pour découvrir qui propose ça.]"

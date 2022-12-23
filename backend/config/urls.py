@@ -37,7 +37,9 @@ urlpatterns = [
     path('club/', include('apps.club.urls', namespace='club')),
     path('liste/', include('apps.liste.urls', namespace='liste')),
     path('colocs/', include('apps.roommates.urls', namespace='roommates')),
-    path('colocs/admin', include('apps.roommates.admin_urls', namespace='roommates-admin')),
+    path(
+        'colocs/admin',
+        include('apps.roommates.admin_urls', namespace='roommates-admin')),
     path(
         'administration/',
         include('apps.administration.urls', namespace='administration')),
