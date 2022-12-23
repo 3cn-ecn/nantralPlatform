@@ -10,7 +10,7 @@ export function StudentCardPicture(props: StudentCardBodyProps): JSX.Element {
   const picture =
     member.student.picture !== null
       ? member.student.picture
-      : `https://avatars.dicebear.com/api/avataaars/${member.student.name}}.svg`;
+      : `https://avatars.dicebear.com/api/avataaars/${member.student.name}.svg?style=circle`;
 
   if (editMode) {
     return (
