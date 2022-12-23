@@ -39,7 +39,15 @@ class Place(models.Model):
     _summary = models.CharField("Résumé", max_length=200, null=True, blank=True)
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """Get the name of the place, following the most recent group name or
+        the _name field.
+
+        Returns
+        -------
+        str
+            The name of the place
+        """
         if self._name:
             return self._name
         elif self.most_recent_group:
@@ -47,8 +55,27 @@ class Place(models.Model):
         else:
             return self.address
 
+    @name.setter
+    def name(self, value: str) -> None:
+        """Set the name of the place. Alias for the _name field.
+
+        Parameters
+        ----------
+        value : str
+            The new value for _name
+        """
+        self._name = value
+
     @property
-    def summary(self):
+    def summary(self) -> str:
+        """Get the summary for this place, following the _summary field or
+        the summary of the most recent group.
+
+        Returns
+        -------
+        str
+            The summary of the place.
+        """
         if self._summary:
             return self._summary
         elif self.most_recent_group:
@@ -56,14 +83,22 @@ class Place(models.Model):
         else:
             return ""
 
-    def update_most_recent_group(self) -> None:
-        """Get the most recent group linked to this place. The most recent group
-        is the group with the member who has the most recent begin_date.
+    @summary.setter
+    def summary(self, value: str) -> None:
+        """Set a new value for the summary. Alias for the _summary field.
 
-        Returns
-        -------
-        Group | None
-            The most recent group.
+        Parameters
+        ----------
+        value : str
+            The new value for summary.
+        """
+        self._summary = value
+
+    def update_most_recent_group(self) -> None:
+        """
+        Update the most_recent_group field linked to this place. The most
+        recent group is the group with the member who has the most recent
+        begin_date (lower than the date of today).
         """
         default_date = timezone.date(1987, 1, 1)
         today = timezone.now().today()
