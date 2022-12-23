@@ -18,26 +18,25 @@ jobs:
         python-version: ["3.10"]
     env:
       working-directory: ./backend
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Pull latest commit
+        uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Dependencies
+          cache: "pipenv"
+      - name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+      - name: Install dependencies
         working-directory: ${{ env.working-directory }}
-        run: |
-          pip install --user pipenv
-          python -m pipenv verify
-          python -m pipenv sync --system
+        run: pipenv verify && pipenv sync
       # - name: Run flake8
       #   uses: suo/flake8-github-action@releases/v1
       #   with:
       #     checkName: "build" # NOTE: this needs to be the same as the job name
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run Tests
+      - name: Testing
         working-directory: ${{ env.working-directory }}
-        run: |
-          python manage.py test
+        run: pipenv test
