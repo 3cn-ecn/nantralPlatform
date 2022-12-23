@@ -56,7 +56,7 @@ jobs:
         run: pipenv verify && pipenv sync
       - name: Testing
         working-directory: ./backend
-        run: pipenv test
+        run: pipenv run test
 
   clone-database:
     runs-on: ubuntu-latest

@@ -39,4 +39,4 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Testing
         working-directory: ${{ env.working-directory }}
-        run: pipenv test
+        run: pipenv run test

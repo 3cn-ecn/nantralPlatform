@@ -92,7 +92,7 @@ jobs:
         run: pipenv verify && pipenv sync
       - name: Testing
         working-directory: ./backend
-        run: pipenv test
+        run: pipenv run test
 
   deploy:
     # The type of runner that the job will run on
