@@ -1,4 +1,6 @@
 # spell-checker: words listeforms
+from django.forms import ModelForm, modelformset_factory
+from .models import Group, Membership, GroupType
 
 # from typing import Type
 
@@ -17,6 +19,53 @@
 # import apps.roommates.forms as roommatesforms
 
 # from .models import AdminRightsRequest
+
+
+class UpdateGroupForm(ModelForm):
+    """Form to update an existing group."""
+    class Meta:
+        model = Group
+        fields = [
+            'name',
+            'short_name',
+            'summary',
+            'icon',
+            'banner',
+            'description',
+            'video1',
+            'video2',
+            'year',
+            'anyone_can_join',
+            'archived']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance.group_type.is_year_group:
+            del self.fields['year']
+
+
+class AddMembershipForm(ModelForm):
+    """Form for a club page to add one self to a club."""
+
+    class Meta:
+        model = Membership
+        fields = ['summary', 'begin_date', 'end_date', 'description']
+
+    def __init__(self, group_type: GroupType, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if group_type.is_year_group:
+            del self.fields['begin_date']
+            del self.fields['end_date']
+
+
+MembershipFormset = modelformset_factory(
+    Membership,
+    fields=[
+        'student', 'summary', 'begin_date', 'end_date', 'admin', 'order',
+        'description'],
+    extra=1,
+    can_delete=True,
+)
 
 
 # # NB : Les BDX sont aussi des instances de Club

@@ -6,17 +6,18 @@ from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils import timezone
 
-from datetime import timedelta, datetime
+from datetime import timedelta, date
 from django_ckeditor_5.fields import CKEditor5Field
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
 from apps.maps.models import Place, Map
 from apps.student.models import Student
+from apps.sociallink.models import SocialLink
 
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
 from apps.utils.slug import SlugModel
 
-from discord_webhook import DiscordWebhook, DiscordEmbed
 
 import logging
 logger = logging.getLogger(__name__)
@@ -26,7 +27,7 @@ path_and_rename_group = PathAndRename('groups/logo')
 path_and_rename_group_banniere = PathAndRename('groups/banniere')
 
 
-def today() -> datetime:
+def today() -> date:
     """Returns the date of today.
 
     Returns
@@ -34,10 +35,10 @@ def today() -> datetime:
     datetime
         The current date.
     """
-    return timezone.now().today()
+    return timezone.now().date()
 
 
-def one_year_later() -> datetime:
+def one_year_later() -> date:
     """Returns the day of today but one year later.
 
     Returns
@@ -45,7 +46,7 @@ def one_year_later() -> datetime:
     datetime
         Returns the date in one year.
     """
-    return (timezone.now() + timedelta(days=365)).today()
+    return (timezone.now() + timedelta(days=365)).date()
 
 
 class GroupType(models.Model):
@@ -78,9 +79,6 @@ class GroupType(models.Model):
     slug_is_name = models.BooleanField("Slug déduit du nom", default=True)
 
     # Members settings
-    anyone_can_join = models.BooleanField(
-        "N'importe qui peut s'ajouter par défaut",
-        default=True)
     is_year_group = models.BooleanField(
         "Les groupes n'existent que sur une année scolaire.",
         default=False,
@@ -107,7 +105,7 @@ class GroupType(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("group:list", kwargs={"slug": self.slug})
+        return reverse("group:type_index", kwargs={"slug": self.slug})
 
 
 class Group(models.Model, SlugModel):
@@ -146,19 +144,28 @@ class Group(models.Model, SlugModel):
         help_text=("Pour les années scolaires, indiquez seulement la première "
                    "année (de septembre à décembre)"))
     slug = models.SlugField(max_length=40, unique=True, blank=True)
+    archived = models.BooleanField(
+        "Groupe archivé",
+        default=False,
+        help_text=("Un groupe archivé ne peut plus avoir de nouveaux membres "
+                   "et est masqué des résultats par défaut."))
+
+    # Permissions
     private = models.BooleanField(
         "Groupe privé",
         default=False,
         help_text=("Un groupe privé n'est visible que par les membres du "
                    "groupe."))
-    anyone_can_join = models.BooleanField(
-        "N'importe qui peut devenir membre",
-        blank=True)
-    archived = models.BooleanField(
-        "Groupe archivé",
+    public = models.BooleanField(
+        "Public",
         default=False,
-        help_text=("Un groupe archivé ne peut plus avoir de nouveaux membres "
-                   "et est masqué des résultats."))
+        help_text=("Si coché, la page du groupe sera accessible publiquement, "
+                   "y compris à des utilisateurs non-connectés. Les membres, "
+                   "évènements et posts restent toutefois masqués."))
+    anyone_can_join = models.BooleanField(
+        "Adhésion libre",
+        default=True,
+        help_text="Affiche le bouton 'Devenir membre' pour tout le monde.")
 
     # Profile
     summary = models.CharField("Résumé", max_length=500, null=True, blank=True)
@@ -176,6 +183,10 @@ class Group(models.Model, SlugModel):
         "Lien vidéo 1", max_length=200, null=True, blank=True)
     video2 = models.URLField(
         "Lien vidéo 2", max_length=200, null=True, blank=True)
+    social_links = models.ManyToManyField(
+        to=SocialLink,
+        verbose_name="Réseaux Sociaux",
+        related_name='+')
 
     # Map data
     place = models.ForeignKey(
@@ -193,6 +204,29 @@ class Group(models.Model, SlugModel):
     last_modified_by = models.ForeignKey(
         Student, blank=True, null=True,
         on_delete=models.SET_NULL, related_name='+')
+
+    @property
+    def scholar_year(self) -> str:
+        """Returns the year of the group in scholar year format, i.e. with
+        the following year.
+
+        Returns
+        -------
+        str
+            The scholar year of the group, or an empty string if there is no
+            year.
+
+        Example
+        -------
+        >>> group.year = 2019
+        >>> group.scholar_year
+        '2019-2020'
+        """
+
+        if self.year:
+            return f"{self.year}-{self.year+1}"
+        else:
+            return ""
 
     class Meta:
         verbose_name = "groupe"
@@ -216,7 +250,7 @@ class Group(models.Model, SlugModel):
 
         return (
             self.is_member(user)
-            and self.membership_set.filter(student=user.student).admin
+            and self.membership_set.get(student=user.student).admin
             or user.is_superuser
         )
 
@@ -259,8 +293,6 @@ class Group(models.Model, SlugModel):
             self, 'icon', size=(500, 500), contains=True)
         self.banner = compress_model_image(
             self, 'banner', size=(1320, 492), contains=False)
-        if self.anyone_can_join is None:
-            self.anyone_can_join = self.group_type.anyone_can_join
         if self.pk is None:
             self.created_by = self.last_modified_by
         super(Group, self).save(*args, **kwargs)

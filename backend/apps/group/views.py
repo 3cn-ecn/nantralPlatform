@@ -1,9 +1,9 @@
-# from datetime import timedelta
-# from django.utils import timezone
+from datetime import timedelta
+from django.utils import timezone
 
 # from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # from django.contrib.sites.shortcuts import get_current_site
 # from django.db.utils import IntegrityError
 # from django.http.request import HttpRequest
@@ -11,12 +11,12 @@
 # from django.urls.base import reverse
 # from django.urls import resolve
 # from django.views.decorators.http import require_http_methods
-# from django.views.generic import View, FormView, TemplateView, DetailView
+from django.views.generic import DetailView  # View, FormView, TemplateView
 
 # from apps.group.abstract.models import AbstractGroup
-# from apps.sociallink.models import SocialLink
-# from apps.event.models import BaseEvent
-# from apps.post.models import Post
+from apps.sociallink.models import SocialLink
+from apps.event.models import BaseEvent
+from apps.post.models import Post
 # from apps.notification.models import Subscription
 
 # from .forms import (
@@ -27,74 +27,81 @@
 #     SocialLinkGroupFormset,
 #     AdminRightsRequest)
 
+from .models import Group
+from .forms import UpdateGroupForm, AddMembershipForm, MembershipFormset
+
 # from apps.utils.accessMixins import UserIsAdmin, user_is_connected
 # from apps.utils.slug import get_object_from_slug
 
 
-# class BaseDetailGroupView(DetailView):
-#     '''Vue de détails d'un groupe générique, sans protection.'''
-#     template_name = 'abstract_group/detail/detail.html'
+class DetailGroupView(DetailView, UserPassesTestMixin):
+    """Main view for a group."""
 
-#     def get_object(self, **kwargs):
-#         app = resolve(self.request.path).app_name
-#         slug = self.kwargs.get("slug")
-#         return get_object_from_slug(app, slug)
+    template_name = 'group/detail/detail.html'
+    model = Group
+    slug_field = 'slug'
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         group = self.object
-#         # réseaux sociaux
-#         context['sociallinks'] = SocialLink.objects.filter(
-#               slug=group.full_slug)
-#         # seulement si connecté
-#         context['connected'] = user_is_connected(self.request.user)
-#         if user_is_connected(self.request.user):
-#             publication_date = timezone.make_aware(
-#                 timezone.now().today() - timedelta(days=10))
-#             posts = Post.objects.filter(
-#                 group=group.full_slug,
-#                 publication_date__gte=publication_date
-#             ).order_by('-publication_date')
-#             context['posts'] = [
-#                 post for post in posts if post.can_view(self.request.user)]
-#             date_gte = timezone.make_aware(timezone.now().today())
-#             context['has_events'] = BaseEvent.objects.filter(
-#                 group=group.full_slug, date__gte=date_gte).exists()
-#             # members
-#             context['members'] = group.members.through.objects.filter(
-#                 group=group).order_by('student__user__first_name')
-#             context['is_member'] = group.is_member(self.request.user)
-#             if context['is_member']:
-#                 membership = group.members.through.objects.get(
-#                     student=self.request.user.student,
-#                     group=group,
-#                 )
-#                 context['form'] = NamedMembershipAddGroup(
-#                     group)(instance=membership)
-#             else:
-#                 context['form'] = NamedMembershipAddGroup(group)()
-#             # admin
-#             context['is_admin'] = group.is_admin(self.request.user)
-#             context['admin_req_form'] = AdminRightsRequestForm()
-#         context['ariane'] = [
-#             {
-#                 'target': reverse(group.app + ':index'),
-#                 'label': group.app_name
-#             },
-#             {
-#                 'target': '#',
-#                 'label': group.name
-#             },
-#         ]
-#         return context
+    def test_func(self) -> bool:
+        """Test if the user is allowed to see this view."""
+        group: Group = self.get_object()
+        user = self.request.user
+        if group.public:
+            return True
+        elif group.private:
+            return group.is_member(user)
+        else:
+            return user.is_authenticated
+
+    def get_context_data(self, **kwargs):
+        """Get the context data to send to the template."""
+        context = super().get_context_data(**kwargs)
+        group: Group = self.object
+        user = self.request.user
+
+        # hide sensitive data if not connected
+        show_sensitive_data = user.is_authenticated
+        context['show_sensitive_data'] = show_sensitive_data
+        if show_sensitive_data:
+            # show the posts from last 6 months (3 maximum)
+            all_posts = Post.objects.filter(
+                group=group.slug,
+                publication_date__gte=timezone.now() - timedelta(days=6 * 30),
+                publication_date__lte=timezone.now()
+            ).order_by('-publication_date')
+            context['posts'] = [p for p in all_posts if p.can_view(user)][:3]
+            # check if there are some events planned for this group
+            context['has_events'] = BaseEvent.objects.filter(
+                group=group.slug,
+                date__gte=timezone.now()
+            ).exists()
+            # members
+            context['is_member'] = group.is_member(user)
+            context['is_admin'] = group.is_admin(user)
+            # member form
+            if context['is_member']:
+                membership = group.membership_set.get(
+                    student=user.student,
+                    group=group)
+                context['form'] = AddMembershipForm(
+                    group_type=group.group_type,
+                    instance=membership)
+            else:
+                context['form'] = AddMembershipForm(group.group_type)
+            # context['admin_req_form'] = AdminRightsRequestForm()
+        context['ariane'] = [
+            {
+                'target': group.group_type.get_absolute_url(),
+                'label': group.group_type.name
+            },
+            {
+                'target': '#',
+                'label': group.name
+            },
+        ]
+        return context
 
 
-# class DetailGroupView(LoginRequiredMixin, BaseDetailGroupView):
-#     '''Vue de détail d'un groupe protégée.'''
-#     pass
-
-
-# class AddToGroupView(LoginRequiredMixin, FormView):
+# class AddToGroupView( , FormView):
 #     '''Vue pour le bouton "Devenir Membre".'''
 
 #     raise_exception = True
