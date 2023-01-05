@@ -16,6 +16,8 @@ terminal), and run:
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
+Run on **PowerShell**:
+
 ```bash
 make win-install
 ```
