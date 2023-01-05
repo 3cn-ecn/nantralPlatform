@@ -1,20 +1,3 @@
-# Install the project for windows
-win-install:
-	python3 -m pip install --upgrade --user pipenv
-	cd deployment && \
-		copy NUL backend.env
-	cd backend/config/settings && \
-		copy .env.example .env
-	cd backend && \
-		SET PIPENV_VENV_IN_PROJECT=1 && \
-		python3 -m pipenv sync --dev && \
-		python3 -m pipenv run migrate && \
-		SET DJANGO_SUPERUSER_PASSWORD=admin && \
-		python3 -m pipenv run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
-	cd frontend && \
-		npm install && \
-		npm run build:dev
-
 # Install the project for unix-systems: linux and macos
 unix-install:
 	python3 -m pip install --upgrade --user pipenv
@@ -27,6 +10,23 @@ unix-install:
 		python3 -m pipenv sync --dev && \
 		python3 -m pipenv run migrate && \
 		export DJANGO_SUPERUSER_PASSWORD=admin && \
+		python3 -m pipenv run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
+	cd frontend && \
+		npm install && \
+		npm run build:dev
+
+# Install the project for windows on PowerShell
+win-install:
+	python3 -m pip install --upgrade --user pipenv
+	cd deployment && \
+		copy NUL backend.env
+	cd backend/config/settings && \
+		copy .env.example .env
+	cd backend && \
+		$env:PIPENV_VENV_IN_PROJECT=1 && \
+		python3 -m pipenv sync --dev && \
+		python3 -m pipenv run migrate && \
+		$env:DJANGO_SUPERUSER_PASSWORD=admin && \
 		python3 -m pipenv run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
 	cd frontend && \
 		npm install && \
