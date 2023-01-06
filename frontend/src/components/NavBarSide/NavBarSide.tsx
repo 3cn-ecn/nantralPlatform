@@ -66,12 +66,34 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
       isOnBackend: true,
     },
     {
-      text: 'test1',
-      url: '/test1/',
+      text: t('navbar.patronage'),
+      url: '/parrainage/',
+      isOnBackend: true,
     },
     {
-      text: 'Lien',
-      url: '/lien/',
+      text: t('navbar.bdx'),
+      url: '/liste/',
+      isOnBackend: true,
+    },
+    {
+      text: t('navbar.academics'),
+      url: '/academics/',
+      isOnBackend: true,
+    },
+    {
+      text: t('navbar.administration'),
+      url: '/administration/',
+      isOnBackend: true,
+    },
+    {
+      text: t('navbar.student'),
+      url: '/student/',
+      isOnBackend: true,
+    },
+    {
+      text: t('navbar.signature'),
+      url: '/tools/signature/',
+      isOnBackend: true,
     },
   ];
 

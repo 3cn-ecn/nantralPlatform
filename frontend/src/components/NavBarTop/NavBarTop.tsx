@@ -6,7 +6,9 @@ import {
   Box,
   Badge,
   Toolbar,
+  SvgIcon,
 } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import {
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
@@ -41,7 +43,9 @@ function NavBarTop(props: {
           aria-label="menu"
           sx={{ mr: 2 }}
         >
-          <MenuIcon />
+          <SvgIcon {...props}>
+            <path d="./assets/scalable/menu.svg" />
+          </SvgIcon>
         </IconButton>
         <Typography variant="h6" component="div">
           Nantral Platform
