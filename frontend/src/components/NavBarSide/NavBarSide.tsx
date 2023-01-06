@@ -69,6 +69,10 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
       text: 'test1',
       url: '/test1/',
     },
+    {
+      text: 'Lien',
+      url: '/lien/',
+    },
   ];
 
   return (

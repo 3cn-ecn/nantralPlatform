@@ -46,17 +46,23 @@ function NavBarTop(props: {
         <Typography variant="h6" component="div">
           Nantral Platform
         </Typography>
-        <Box sx={{ flexGrow: 0.8 }} />
+        <Box sx={{ flexGrow: 0.4 }} />
         <SearchBar />
-        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{ flexGrow: 0.4 }} />
+        <Badge badgeContent={10} color="error">
+          <Typography variant="h6" component="div">
+            Random Texte
+          </Typography>
+        </Badge>
+        <Box sx={{ flexGrow: 0.4 }} />
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <IconButton
             size="large"
             aria-label="show 17 new notifications"
             color="inherit"
           >
-            <Badge badgeContent={17} color="error">
-              <NotificationsIcon />
+            <Badge badgeContent={1} color="error">
+              <AccountCircle />
             </Badge>
           </IconButton>
           <IconButton

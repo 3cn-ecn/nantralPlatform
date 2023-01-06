@@ -8,14 +8,9 @@ function Home() {
   return (
     <>
       <h1>Home</h1>
+      <p>J`ai tout cassé</p>
       <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
+        Ex fugiat `llamco mollit deserunt in. Magna elit cillum nostrud ullamco
         Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
         cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
         incididunt aliqua fugiat excepteur fugiat quis elit duis.
