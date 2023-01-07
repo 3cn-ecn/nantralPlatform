@@ -145,7 +145,7 @@ def current_user_roommates_view(request):
 @require_http_methods(["GET"])
 def service_worker(request):
     """A view to serve the service worker"""
-    file_path = join(settings.BASE_DIR, "/static/js/app/sw.js")
+    file_path = join(settings.BASE_DIR, "static/js/app/sw.js")
     with open(file_path) as file:
         return HttpResponse(file.read(), content_type='application/javascript')
 
@@ -156,7 +156,7 @@ def assetlinks(request):
     A view to serve the assetlinks file, for the PWA application on Play Store,
     to ensure to Google we own the website.
     """
-    file_path = join(settings.BASE_DIR, "/static/assetlinks.json")
+    file_path = join(settings.BASE_DIR, "static/assetlinks.json")
     with open(file_path) as file:
         return HttpResponse(file.read())
 
