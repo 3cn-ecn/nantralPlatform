@@ -205,7 +205,7 @@ intall `pip` so?*, you will ask me! Well, the answer is pretty simple: we need
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
-1. First, run this command to install `pipenv`:
+1. First, run this command in **PowerShell** to install `pipenv`:
     ```bash
     pip install --user pipenv
     ```
@@ -217,7 +217,7 @@ intall `pip` so?*, you will ask me! Well, the answer is pretty simple: we need
 
 3. Replace `site-packages` with `Scripts` in the output and add it to the PATH variable, for example:
     ```bash
-    setx PATH "%PATH%;C:\Users\jetbrains\AppData\Roaming\Python\Python37\Scripts"
+    $env:PATH="%PATH%;C:\Users\jetbrains\AppData\Roaming\Python\Python37\Scripts"
     ```
 4. Close and reopen your terminal to refresh the PATH. (If it is not enough, reboot your computer !)
 5. Finally let's test the installation:
@@ -317,13 +317,13 @@ helpful in the following, trust me ;)
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
-1. Open Powershell and run:
+1. Open **Powershell** and run:
     ```bash
     winget install gnuwin32.make
     ```
 2. Add `make` to your PATH:
     ```bash
-    setx PATH "%PATH%;C:\Program Files(x86)\GnuWin32\bin\make.exe"
+    $env:PATH="%PATH%;C:\Program Files (x86)\GnuWin32\bin\make.exe"
     ```
 3. Relaunch your terminal (or computer if needed) and try to run `make`:
     ```bash

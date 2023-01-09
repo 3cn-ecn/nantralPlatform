@@ -9,6 +9,5 @@ TYPE_CHOICES = (
 class SuggestionForm(forms.Form):
     title = forms.CharField(max_length=50, required=True)
     description = forms.CharField(widget=forms.Textarea)
-    suggestionOrBug = forms.ChoiceField(label="Type",
-                                        choices=TYPE_CHOICES,
-                                        required=True)
+    suggestion_or_bug = forms.ChoiceField(
+        label="Type", choices=TYPE_CHOICES, required=True)

@@ -16,6 +16,8 @@ terminal), and run:
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
+Run on **PowerShell**:
+
 ```bash
 make win-install
 ```
@@ -58,10 +60,10 @@ to install everything.
 
 5. Create an administrator acount on this database:
     ```bash
-    pipenv run createsuperuser
+    pipenv run django createsuperuser
     ```
     When asked, complete as follow:
-    - username: `admin`
+    - username: `admin` (or `admin2` if already used)
     - email: `admin@ec-nantes.fr`
     - password: `admin`
 
