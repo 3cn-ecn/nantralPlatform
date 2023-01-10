@@ -6,17 +6,24 @@ import {
   Box,
   Badge,
   Toolbar,
-  SvgIcon,
+  Icon,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import {
   Menu as MenuIcon,
   Notifications as NotificationsIcon,
   AccountCircle,
   MoreVert as MoreIcon,
 } from '@mui/icons-material';
+import { createSvgIcon } from '@mui/material/utils';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
+
+const HomeIcon = createSvgIcon(
+  <path d="M11,17.8h5a.8.8,0,0,0,0-1.6H11a.8.8,0,0,0,0,1.6Z" />,
+  'Home'
+);
 
 /**
  * The top bar for navigation
@@ -43,9 +50,7 @@ function NavBarTop(props: {
           aria-label="menu"
           sx={{ mr: 2 }}
         >
-          <SvgIcon {...props}>
-            <path d="./assets/scalable/menu.svg" />
-          </SvgIcon>
+          <HomeIcon />
         </IconButton>
         <Typography variant="h6" component="div">
           Nantral Platform
