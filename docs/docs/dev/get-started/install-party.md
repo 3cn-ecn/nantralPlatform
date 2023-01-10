@@ -144,7 +144,7 @@ After the installation, check that it works properly:
 * You should see the Python version on a new line: `Python 3.xx`
 
 <details class="caution">
-    <summary>The command does not work or the version is lower than <em>python3.7</em>, what can I do? 😭</summary>
+    <summary>The command does not work or the version is not <em>python3.10</em>, what can I do? 😭</summary>
 
 Sometimes you can have multiple versions of python installed on your system: in this case, using `python` can refer to
 another version of python (for instance, it refers by default to python2 if it is installed). 
@@ -192,11 +192,6 @@ python3 -m ensurepip --upgrade
 or on Linux:
 ```
 sudo apt-get install python3-pip
-```
-
-Then, you can test the installation with this command:
-```bash
-python3 -m pip --version
 ```
 
 :::note
