@@ -1,3 +1,5 @@
+from datetime import timedelta, date
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
@@ -6,14 +8,12 @@ from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils import timezone
 
-from datetime import timedelta, date
 from django_ckeditor_5.fields import CKEditor5Field
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 from apps.maps.models import Place, Map
-from apps.student.models import Student
 from apps.sociallink.models import SocialLink
-
+from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
 from apps.utils.slug import SlugModel
@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 path_and_rename_group = PathAndRename('groups/logo')
 path_and_rename_group_banniere = PathAndRename('groups/banniere')
+path_and_rename_group_type = PathAndRename('groups/types')
 
 
 def today() -> date:
@@ -64,6 +65,10 @@ class GroupType(models.Model):
         verbose_name="Abréviation du type",
         primary_key=True,
         max_length=10)
+    icon = models.ImageField(
+        verbose_name="Logo du type de groupe", blank=True, null=True,
+        upload_to=path_and_rename_group,
+        help_text="Votre logo sera affiché au format 306x306 pixels.")
 
     # Maps settings
     map = models.ForeignKey(

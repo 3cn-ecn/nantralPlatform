@@ -34,7 +34,7 @@ urlpatterns = [
     # apps
     path('account/', include('apps.account.urls', namespace='account')),
     path('student/', include('apps.student.urls', namespace='student')),
-    path('groups/', include('apps.group.urls', namespace='group')),
+    path('group/', include('apps.group.urls', namespace='group')),
     path('club/', include('apps.club.urls', namespace='club')),
     path('liste/', include('apps.liste.urls', namespace='liste')),
     path('colocs/', include('apps.roommates.urls', namespace='roommates')),

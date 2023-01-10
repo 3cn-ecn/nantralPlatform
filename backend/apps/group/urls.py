@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .views import (
+    GroupTypeListView,
     DetailGroupView,
     # AddToGroupView,
     # UpdateGroupView,
@@ -17,14 +18,15 @@ from .views import (
 # from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
 
 app_name = 'group'
+
 urlpatterns = [
     # vue generale du groupe
-    path('', DetailGroupView.as_view(), name='index'),
+    path('', GroupTypeListView.as_view(), name='index'),
     path('<slug:slug>/', DetailGroupView.as_view(), name='type_index'),
-    path('g/<slug:slug>/', DetailGroupView.as_view(), name='detail'),
-    path('g/<slug:slug>/update', DetailGroupView.as_view(), name='update'),
+    path('@<slug:slug>/', DetailGroupView.as_view(), name='detail'),
+    path('@<slug:slug>/update', DetailGroupView.as_view(), name='update'),
     path(
-        'g/<slug:slug>/members/add/',
+        '@<slug:slug>/members/add/',
         DetailGroupView.as_view(),
         name='add-member'),
 

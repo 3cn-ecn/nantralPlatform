@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # from django.urls.base import reverse
 # from django.urls import resolve
 # from django.views.decorators.http import require_http_methods
-from django.views.generic import DetailView  # View, FormView, TemplateView
+from django.views.generic import DetailView, ListView # View, FormView, TemplateView
 
 # from apps.group.abstract.models import AbstractGroup
 from apps.sociallink.models import SocialLink
@@ -27,11 +27,18 @@ from apps.post.models import Post
 #     SocialLinkGroupFormset,
 #     AdminRightsRequest)
 
-from .models import Group
+from .models import Group, GroupType
 from .forms import UpdateGroupForm, AddMembershipForm, MembershipFormset
 
 # from apps.utils.accessMixins import UserIsAdmin, user_is_connected
 # from apps.utils.slug import get_object_from_slug
+
+
+class GroupTypeListView(ListView, LoginRequiredMixin):
+    """List of GroupTypes view."""
+
+    model = GroupType
+    template_name = 'group/group_type_list.html'
 
 
 class DetailGroupView(DetailView, UserPassesTestMixin):

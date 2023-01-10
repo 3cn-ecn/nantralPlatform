@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cache %}
+{% load file_url %}
+
+{% block head %}
+    <style>
+      .loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+
+  <h1>Groupes</h1>
+  <br />
+
+  {% cache None group_type_list %}
+    {% for group_type in object_list %}
+      <div class="grille">
+          <div class="grille-icon text-center" style="transform: rotate(0)">
+            <a href="{{ group_type.get_absolute_url }}" class="stretched-link">
+              <div class="ratio ratio-1x1">
+                {% if group_type.icon %}
+                  <img src="{{ group_type.icon|file_url }}" />
+                {% else %}
+                  <img src="https://avatars.dicebear.com/api/initials/{{group_type.slug}}.svg" />
+                {% endif %}
+              </div>
+            </a>
+            <h6>{{ group_type.name }}</h6>
+          </div>
+      </div>
+    {% endfor %}
+  {% endcache %}
+{% endblock %}
