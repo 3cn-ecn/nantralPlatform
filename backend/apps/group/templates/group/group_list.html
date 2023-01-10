@@ -16,11 +16,11 @@
 
 {% block content %}
 
-  <h1>Groupes</h1>
+  <h1>{{ group_type.name }}</h1>
   <br />
 
   {% cache None group_type_list %}
-    {% for group_type in grouptype_list %}
+    {% for group_type in group_list %}
       <div class="grille">
           <div class="grille-icon text-center" style="transform: rotate(0)">
             <a href="{{ group_type.get_absolute_url }}" class="stretched-link">

@@ -110,7 +110,7 @@ class GroupType(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("group:type_index", kwargs={"slug": self.slug})
+        return reverse("group:type_index", kwargs={"type": self.slug})
 
 
 class Group(models.Model, SlugModel):

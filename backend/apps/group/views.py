@@ -1,5 +1,4 @@
 from datetime import timedelta
-from django.utils import timezone
 
 # from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
@@ -11,7 +10,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # from django.urls.base import reverse
 # from django.urls import resolve
 # from django.views.decorators.http import require_http_methods
-from django.views.generic import DetailView, ListView # View, FormView, TemplateView
+from django.db.models import QuerySet
+from django.views.generic import DetailView, ListView  # View, FormView, TemplateView
+from django.utils import timezone
 
 # from apps.group.abstract.models import AbstractGroup
 from apps.sociallink.models import SocialLink
@@ -41,7 +42,23 @@ class GroupTypeListView(ListView, LoginRequiredMixin):
     template_name = 'group/group_type_list.html'
 
 
-class DetailGroupView(DetailView, UserPassesTestMixin):
+class GroupListView(ListView, LoginRequiredMixin):
+    """List of Groups view, filtered by group_type."""
+
+    model = Group
+    template_name = 'group/group_list.html'
+
+    def get_queryset(self) -> QuerySet[Group]:
+        return Group.objects.filter(group_type=self.kwargs.get('type'))
+
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        context['group_type'] = GroupType.objects.get(
+            slug=self.kwargs.get('type'))
+        return context
+
+
+class GroupDetailView(DetailView, UserPassesTestMixin):
     """Main view for a group."""
 
     template_name = 'group/detail/detail.html'
