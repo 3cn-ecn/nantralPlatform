@@ -86,9 +86,8 @@ Some explanations:
 
 ## Python
 
-First let's install Python. You need to have at least the **Python 3.7** version
-installed on your system (if you can, we reccommend you to install the last
-version, which is currently Python 3.10).
+First let's install Python! For Nantral Platform, we need to install the
+**Python 3.10** version. Be sure to select the correct version!! ⚠️
 
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
@@ -115,13 +114,23 @@ Internet to solve it.
 </TabItem>
 <TabItem value="lin" label="Linux">
 
-Python should be already installed on your system, you can check that it is
-the case with the command below. 
-
-If it is not the case, you can run in a terminal:
+Python should be already installed on your system, you can check that you have
+the correct version with:
 ```bash
-sudo apt update && sudo apt install python3 python3-pip -y
+python3 --version
 ```
+
+> If Python is not installed, you can run in a terminal:
+> ```bash
+> sudo apt update && sudo apt install python3 python3-pip -y
+> ```
+> 
+> If you don't have the correct version, install `pyenv`:
+> ```bash
+> curl https://pyenv.run | bash
+> ```
+> (`pipenv` will then automatically install the correct version using `pyenv`,
+> so don't worry to install the correct python version now.)
 
 </TabItem>
 </Tabs>
