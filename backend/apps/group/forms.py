@@ -1,6 +1,6 @@
 # spell-checker: words listeforms
 from django.forms import ModelForm, modelformset_factory
-from .models import Group, Membership, GroupType
+from .models import Group, Membership
 
 # from typing import Type
 
@@ -12,6 +12,7 @@ from .models import Group, Membership, GroupType
 # from apps.liste.models import Liste
 # from apps.roommates.models import Roommates
 # from apps.sociallink.models import SocialLink
+from apps.student.models import Student
 # import apps.academic.forms as academicforms
 # import apps.administration.forms as adminforms
 # import apps.club.forms as clubforms
@@ -44,18 +45,45 @@ class UpdateGroupForm(ModelForm):
             del self.fields['year']
 
 
-class AddMembershipForm(ModelForm):
+class MembershipForm(ModelForm):
     """Form for a club page to add one self to a club."""
 
     class Meta:
         model = Membership
         fields = ['summary', 'begin_date', 'end_date', 'description']
 
-    def __init__(self, group_type: GroupType, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if group_type.is_year_group:
+    def __init__(
+        self,
+        group: Group = None,
+        student: Student = None,
+        instance: Membership = None,
+        *args,
+        **kwargs
+    ):
+        if not (instance or (group and student)):
+            raise ValueError("AddMembershipForm.__init__() required both "
+                             "'group' and 'student' arguments or 'instance'")
+        super().__init__(*args, instance=instance, **kwargs)
+        # manually add the group or the student to the instance
+        if not instance:
+            self.instance.group = group
+            self.instance.student = student
+        # customize the form
+        if self.instance.group.group_type.is_year_group:
             del self.fields['begin_date']
             del self.fields['end_date']
+
+
+class AdminRequestForm(ModelForm):
+    """Form to ask for admin rights"""
+
+    class Meta:
+        model = Membership
+        fields = ['admin_request_messsage']
+
+    def save(self, *args, **kwargs) -> any:
+        self.instance.admin_request = True
+        return super().save(*args, **kwargs)
 
 
 MembershipFormset = modelformset_factory(
@@ -128,8 +156,3 @@ MembershipFormset = modelformset_factory(
 #     can_delete=True,
 # )
 
-
-# class AdminRightsRequestForm(ModelForm):
-#     class Meta:
-#         model = AdminRightsRequest
-#         fields = ['reason']

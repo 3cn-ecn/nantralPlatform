@@ -13,9 +13,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>        
                 <div class="modal-body">
-                    <form method="post" action="{% url 'group:add-member' object.slug %}">
-                        {% csrf_token %}      
-                        {{form | crispy}}
+                    <form method="post" action="{% url 'group:edit-member' object.slug %}">
+                        {% csrf_token %}
+                        {{member_form | crispy}}
                         {% if is_member %}
                             <button type="submit" value="Submit" class="btn btn-success">Valider</button>
                             <button type="submit" value="Submit" name="delete" class="btn btn-danger">Supprimer</button>

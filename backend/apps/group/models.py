@@ -3,7 +3,6 @@ from datetime import timedelta, date
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils import timezone
@@ -110,7 +109,7 @@ class GroupType(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("group:type_index", kwargs={"type": self.slug})
+        return reverse("group:sub_index", kwargs={"type": self.slug})
 
 
 class Group(models.Model, SlugModel):
@@ -233,6 +232,17 @@ class Group(models.Model, SlugModel):
         else:
             return ""
 
+    @property
+    def prefixed_slug(self) -> str:
+        """Get the slug prefixed by "group"
+
+        Returns
+        -------
+        str
+            The slug prefixed
+        """
+        return f"group--{self.slug}"
+
     class Meta:
         verbose_name = "groupe"
 
@@ -348,7 +358,7 @@ class Membership(models.Model):
     def save(self, *args, **kwargs) -> None:
         """Save the membership object."""
         # default dates for year groups
-        if self.group_type.is_year_group:
+        if self.group.group_type.is_year_group:
             self.begin_date = timezone.date(self.group.year, 8, 1)
             self.end_date = timezone.date(self.group.year + 1, 7, 31)
         # if member becomes admin, remove the admin request
@@ -356,48 +366,6 @@ class Membership(models.Model):
             self.admin_request = False
             self.admin_request_messsage = ""
         super(Membership, self).save(*args, **kwargs)
-
-    def create_admin_request(self, message: str, request: HttpRequest) -> None:
-        """A method for a member to ask for admin rights.
-
-        Parameters
-        ----------
-        message : str
-            A message from the member explaining why he/she wants the admin
-            rights on the group.
-        request : HttpRequest
-            The request associated with the view from which we ask for admin
-            rights (in order to get the full url)
-        """
-
-        self.admin_request = True
-        self.admin_request_messsage = message
-        self.save()
-        # send a message on the discord channel
-        accept_uri = request.build_absolute_uri(
-            reverse('group:accept-admin-req', kwargs={'member': self.id}))
-        deny_uri = request.build_absolute_uri(
-            reverse('group:deny-admin-req', kwargs={'member': self.id}))
-        webhook = DiscordWebhook(
-            url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(
-            title=(
-                f"{self.student} ({self.summary}) demande à devenir admin "
-                f"de {self.group}"),
-            description=self.admin_request_messsage,
-            color=242424)
-        embed.add_embed_field(
-            name='Accepter',
-            value=f"[Accepter]({accept_uri})",
-            inline=True)
-        embed.add_embed_field(
-            name='Refuser',
-            value=f"[Refuser]({deny_uri})",
-            inline=True)
-        if (self.student.picture):
-            embed.thumbnail = {"url": self.student.picture.url}
-        webhook.add_embed(embed)
-        webhook.execute()
 
     def accept_admin_request(self) -> None:
         """Accept an admin request."""

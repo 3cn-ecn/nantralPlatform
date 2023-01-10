@@ -1,24 +1,27 @@
 from datetime import timedelta
 
-# from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 # from django.contrib.sites.shortcuts import get_current_site
 # from django.db.utils import IntegrityError
-# from django.http.request import HttpRequest
-# from django.shortcuts import redirect
-# from django.urls.base import reverse
 # from django.urls import resolve
 # from django.views.decorators.http import require_http_methods
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import QuerySet
-from django.views.generic import DetailView, ListView  # View, FormView, TemplateView
+from django.http import HttpResponse  # , HttpRequest
+from django.shortcuts import redirect
+from django.urls.base import reverse
 from django.utils import timezone
+from django.views.generic import DetailView, ListView, FormView  # TemplateView
+
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
 # from apps.group.abstract.models import AbstractGroup
-from apps.sociallink.models import SocialLink
+# from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
-# from apps.notification.models import Subscription
+from apps.notification.models import Subscription
 
 # from .forms import (
 #     NamedMembershipAddGroup,
@@ -28,24 +31,33 @@ from apps.post.models import Post
 #     SocialLinkGroupFormset,
 #     AdminRightsRequest)
 
-from .models import Group, GroupType
-from .forms import UpdateGroupForm, AddMembershipForm, MembershipFormset
+from .models import GroupType, Group
+from .forms import MembershipForm, AdminRequestForm
 
 # from apps.utils.accessMixins import UserIsAdmin, user_is_connected
 # from apps.utils.slug import get_object_from_slug
 
 
 class GroupTypeListView(ListView, LoginRequiredMixin):
-    """List of GroupTypes view."""
+    """List of GroupTypes."""
 
     model = GroupType
-    template_name = 'group/group_type_list.html'
+    template_name = 'group/roup_type_list.html'
+
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': '#',
+                'label': "Groupes"
+            }
+        ]
+        return context
 
 
 class GroupListView(ListView, LoginRequiredMixin):
-    """List of Groups view, filtered by group_type."""
+    """List of Groups, filtered by type."""
 
-    model = Group
     template_name = 'group/group_list.html'
 
     def get_queryset(self) -> QuerySet[Group]:
@@ -53,15 +65,25 @@ class GroupListView(ListView, LoginRequiredMixin):
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
-        context['group_type'] = GroupType.objects.get(
-            slug=self.kwargs.get('type'))
+        group_type = GroupType.objects.get(slug=self.kwargs.get('type'))
+        context['group_type'] = group_type
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': "Groupes"
+            },
+            {
+                'target': '#',
+                'label': group_type.name
+            }
+        ]
         return context
 
 
 class GroupDetailView(DetailView, UserPassesTestMixin):
-    """Main view for a group."""
+    """The page for details on a group."""
 
-    template_name = 'group/detail/detail.html'
+    template_name = 'group/detail.html'
     model = Group
     slug_field = 'slug'
 
@@ -106,13 +128,15 @@ class GroupDetailView(DetailView, UserPassesTestMixin):
                 membership = group.membership_set.get(
                     student=user.student,
                     group=group)
-                context['form'] = AddMembershipForm(
-                    group_type=group.group_type,
-                    instance=membership)
+                context['member_form'] = MembershipForm(instance=membership)
+                context['admin_form'] = AdminRequestForm(instance=membership)
             else:
-                context['form'] = AddMembershipForm(group.group_type)
-            # context['admin_req_form'] = AdminRightsRequestForm()
+                context['member_form'] = MembershipForm(group, user.student)
         context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': "Groupes"
+            },
             {
                 'target': group.group_type.get_absolute_url(),
                 'label': group.group_type.name
@@ -125,61 +149,102 @@ class GroupDetailView(DetailView, UserPassesTestMixin):
         return context
 
 
-# class AddToGroupView( , FormView):
-#     '''Vue pour le bouton "Devenir Membre".'''
+class MembershipFormView(FormView, LoginRequiredMixin):
+    """View for the user to add himself as a member of a group."""
 
-#     raise_exception = True
+    http_method_names = ['post']
 
-#     def get_group(self, **kwargs):
-#         app = resolve(self.request.path).app_name
-#         slug = self.kwargs.get("slug")
-#         return get_object_from_slug(app, slug)
+    def get_group(self) -> Group:
+        if not hasattr(self, 'group'):
+            self.group = Group.objects.get(slug=self.kwargs.get('slug'))
+        return self.group
 
-#     def get_form_class(self):
-#         group = self.get_group()
-#         self.form_class = NamedMembershipAddGroup(group)
-#         return NamedMembershipAddGroup(group)
+    def get_form(self) -> MembershipForm:
+        return MembershipForm(
+            group=self.get_group(),
+            student=self.request.user.student,
+            instance=(self.get_group()
+                      .membership_set
+                      .filter(student=self.request.user.student)
+                      .first()),
+            **self.get_form_kwargs())
 
-#     def get_form(self, form_class=None):
-#         if form_class is None:
-#             form_class = self.get_form_class()
-#         student = self.request.user.student
-#         group = self.get_group()
-#         membership = group.members.through.objects.filter(
-#             group=group, student=student).first()
-#         return form_class(instance=membership, **self.get_form_kwargs())
+    def form_valid(self, form: MembershipForm) -> HttpResponse:
+        if self.request.POST.get('delete'):
+            # delete the membership
+            form.instance.delete()
+            messages.success(self.request, 'Membre supprimé.')
+            Subscription.objects.filter(
+                page=self.get_group().prefixed_slug,
+                student=self.request.user.student).delete()
+        else:
+            # create or update the membership
+            created = form.instance.pk is None
+            form.save()
+            if created:
+                messages.success(self.request, 'Bienvenue dans le groupe !')
+                Subscription.objects.get_or_create(
+                    page=self.get_group().prefixed_slug,
+                    student=self.request.user.student)
+            else:
+                messages.success(
+                    self.request,
+                    'Les modifications ont bien été enregistrées !')
+        # return to the page
+        return redirect(self.get_group().get_absolute_url())
 
-#     def form_valid(self, form):
-#         self.object = form.save(commit=False)
-#         self.object.student = self.request.user.student
-#         self.object.group = self.get_group()
-#         if not self.object.pk:
-#             self.object.save()
-#             messages.success(self.request, 'Bienvenue dans le groupe !')
-#             try:
-#                 Subscription.objects.create(
-#                     page=self.object.group.full_slug,
-#                     student=self.object.student)
-#             except IntegrityError:
-#                 pass
-#         elif self.request.POST.get('delete'):
-#             self.object.delete()
-#             messages.success(self.request, 'Membre supprimé.')
-#             try:
-#                 Subscription.objects.get(
-#                     page=self.object.group.full_slug,
-#                     student=self.object.student).delete()
-#             except Subscription.DoesNotExist:
-#                 pass
-#         else:
-#             self.object.save()
-#             messages.success(
-#                 self.request, 'Les modifications ont bien été enregistrées !')
-#         return redirect(self.object.group.get_absolute_url())
+    def form_invalid(self, form: MembershipForm):
+        messages.error(self.request, 'Modification refusée... 😥')
+        return redirect(self.get_group().get_absolute_url())
 
-#     def form_invalid(self, form):
-#         messages.error(self.request, 'Modification refusée... 😥')
-#         return redirect(self.get_group().get_absolute_url())
+
+class AdminRequestFormView(FormView, LoginRequiredMixin):
+    """View for ask for admin rights."""
+
+    http_method_names = ['post']
+
+    def get_group(self) -> Group:
+        if not hasattr(self, 'group'):
+            self.group = Group.objects.get(slug=self.kwargs.get('slug'))
+        return self.group
+
+    def get_form(self) -> AdminRequestForm:
+        return AdminRequestForm(
+            instance=(self.get_group()
+                      .membership_set
+                      .get(student=self.request.user.student)),
+            **self.get_form_kwargs())
+
+    def form_valid(self, form: AdminRequestForm) -> HttpResponse:
+        membership = form.save()
+        messages.success(
+            self.request,
+            ("Votre demande a bien été enregistrée ! Vous recevrez la "
+             "réponse par mail."))
+        # send a message to the discord channel for administrators
+        accept_url = self.request.build_absolute_uri(
+            reverse('group:accept-admin-req', kwargs={'member': membership.id}))
+        deny_url = self.request.build_absolute_uri(
+            reverse('group:deny-admin-req', kwargs={'member': membership.id}))
+        webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(
+            title=(f"{membership.student} ({membership.summary}) demande à "
+                   f"devenir admin de {membership.group}"),
+            description=membership.admin_request_messsage,
+            color=242424)
+        embed.add_embed_field(
+            name='Accepter', value=f"[Accepter]({accept_url})", inline=True)
+        embed.add_embed_field(
+            name='Refuser', value=f"[Refuser]({deny_url})", inline=True)
+        if membership.student.picture:
+            embed.thumbnail = {"url": membership.student.picture.url}
+        webhook.add_embed(embed)
+        webhook.execute()
+        return redirect(self.get_group().get_absolute_url())
+
+    def form_invalid(self, form: AdminRequestForm):
+        messages.error(self.request, "Une erreur s'est produit... 😥")
+        return redirect(self.get_group().get_absolute_url())
 
 
 # class UpdateGroupView(UserIsAdmin, TemplateView):
@@ -321,36 +386,6 @@ class GroupDetailView(DetailView, UserPassesTestMixin):
 #     else:
 #         messages.error(request, form.errors)
 #     return redirect(group.app + ':update-sociallinks', group.slug)
-
-
-# class RequestAdminRightsView(LoginRequiredMixin, FormView):
-#     raise_exception = True
-#     form_class = AdminRightsRequestForm
-
-#     def get_group(self, **kwargs):
-#         app = resolve(self.request.path).app_name
-#         slug = self.kwargs.get("slug")
-#         return get_object_from_slug(app, slug)
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['object'] = self.get_group()
-#         return context
-
-#     def form_valid(self, form):
-#         messages.success(
-#             self.request,
-#             ('Votre demande a bien été enregistrée ! Vous recevrez la '
-#              'réponse par mail.'))
-#         object = form.save(commit=False)
-#         object.student = self.request.user.student
-#         object.group = self.get_group().full_slug
-#         object.save(domain=get_current_site(self.request).domain)
-#         return super().form_valid(form)
-
-#     def get_success_url(self) -> str:
-#         group = self.get_group()
-#         return reverse(group.app + ':detail', kwargs={'slug': group.slug})
 
 
 # class AcceptAdminRequestView(UserIsAdmin, View):
