@@ -1,5 +1,6 @@
 from datetime import timedelta
 from typing import List
+from os.path import join
 
 from django.conf import settings
 from django.contrib import messages
@@ -25,6 +26,8 @@ from apps.utils.github import create_issue
 
 from .forms import SuggestionForm
 
+
+# PAGES VIEWS
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home/home.html'
@@ -107,6 +110,15 @@ class LegalMentionsView(TemplateView):
         return context
 
 
+@login_required
+@require_http_methods(["GET"])
+def react_app_view(request):
+    response = render(request, 'base_empty.html')
+    return response
+
+
+# SHORTCUT AND REDIRECT VIEWS
+
 @require_http_methods(["GET"])
 @login_required
 def current_user_page_view(request):
@@ -135,26 +147,32 @@ def current_user_roommates_view(request):
         return redirect('roommates:housing-map')
 
 
+# SPECIAL FILE VIEWS THAT HAVE TO BE SERVED FROM ROOT
+
 @require_http_methods(["GET"])
 def service_worker(request):
     """A view to serve the service worker"""
-    sw_path = settings.BASE_DIR + "/static/js/app/sw.js"
-    file = open(sw_path)
-    response = HttpResponse(file.read(), content_type='application/javascript')
-    file.close()
-    return response
+    file_path = join(settings.BASE_DIR, "static/js/app/sw.js")
+    with open(file_path) as file:
+        return HttpResponse(file.read(), content_type='application/javascript')
 
+
+@require_http_methods(["GET"])
+def assetlinks(request):
+    """
+    A view to serve the assetlinks file, for the PWA application on Play Store,
+    to ensure to Google we own the website.
+    """
+    file_path = join(settings.BASE_DIR, "static/assetlinks.json")
+    with open(file_path) as file:
+        return HttpResponse(file.read())
+
+
+# ERROR PAGES VIEWS
 
 @require_http_methods(["GET"])
 def offline_view(request):
     response = render(request, 'home/offline.html')
-    return response
-
-
-@login_required
-@require_http_methods(["GET"])
-def react_app_view(request):
-    response = render(request, 'base_empty.html')
     return response
 
 

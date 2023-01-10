@@ -1,65 +1,71 @@
-# Install the project for unix-systems: linux and macos
-unix-install:
-	python3 -m pip install --upgrade --user pipenv
+# COMMANDS FOR UNIX
+CREATE := touch
+PYTHON := python3
+COPY := cp
+EXPORT := export
+PIPENV := $(PYTHON) -m pipenv
+
+# MODIFY COMMANDS FOR WINDOWS
+ifeq '$(findstring ;,$(PATH))' ';'
+	CREATE := copy NUL
+	PYTHON := python
+	COPY := copy
+	EXPORT := set
+	PIPENV := $(PYTHON) -m pipenv
+endif
+
+
+# Install the project
+install:
+	$(PYTHON) -m pip install --upgrade --user pipenv
 	cd deployment && \
-		touch backend.env
+		$(CREATE) backend.env
 	cd backend/config/settings && \
-		cp .env.example .env
+		$(COPY) .env.example .env
 	cd backend && \
-		export PIPENV_VENV_IN_PROJECT=1 && \
-		python3 -m pipenv sync --dev && \
-		python3 -m pipenv run migrate && \
-		export DJANGO_SUPERUSER_PASSWORD=admin && \
-		python3 -m pipenv run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
+		$(EXPORT) PIPENV_VENV_IN_PROJECT=1 && \
+		$(PIPENV) sync --dev && \
+		$(PIPENV) run migrate && \
+		$(EXPORT) DJANGO_SUPERUSER_PASSWORD=admin && \
+		$(PIPENV) run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
 	cd frontend && \
 		npm install && \
 		npm run build:dev
 
-# Install the project for windows on PowerShell
-win-install:
-	python3 -m pip install --upgrade --user pipenv
-	cd deployment && \
-		copy NUL backend.env
-	cd backend/config/settings && \
-		copy .env.example .env
-	cd backend && \
-		$env:PIPENV_VENV_IN_PROJECT=1 && \
-		python3 -m pipenv sync --dev && \
-		python3 -m pipenv run migrate && \
-		$env:DJANGO_SUPERUSER_PASSWORD=admin && \
-		python3 -m pipenv run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
-	cd frontend && \
-		npm install && \
-		npm run build:dev
 
 # Update after pull
 update:
-	python3 -m pip install --upgrade --user pipenv
+	$(PYTHON) -m pip install --upgrade --user pipenv
 	cd frontend && \
 		npm install && \
 		npm run leg:build:dev
 	cd backend && \
-		python3 -m pipenv sync --dev && \
-		python3 -m pipenv run migrate
+		$(PIPENV) sync --dev && \
+		$(PIPENV) run migrate
+
 
 # Run the tests
 test:
 	cd backend && \
-		python3 -m pipenv run test
+		$(PIPENV) run test
+
 
 # Run the backend server
 start-backend:
 	python -c 'import webbrowser && webbrowser.open("localhost:8000")'
 	cd backend && \
-		python3 -m pipenv run start
+		$(PIPENV) run start
+
 
 # Run the frontend
 start-frontend:
 	cd frontend && \
 		npm run start
 
+
 # Test the quality of code
 quality:
 	flake8 --config setup.cfg ./backend
 
-.PHONY: install-win install-unix test runserver quality
+
+.PHONY: install update test quality

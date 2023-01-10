@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "org.ecn_3cn.nantral_platform",
+                     "sha256_cert_fingerprints": ["F0:75:F7:12:09:12:84:35:6A:A0:30:E8:5E:2B:E2:68:27:DD:C2:C7:2E:C2:55:9A:EF:BD:C1:17:78:C1:58:0E"] }
+      }
+]
