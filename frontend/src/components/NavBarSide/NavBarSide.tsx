@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIcon,
+  createSvgIcon,
 } from '@mui/material';
 import {
   InsertLink as InsertLinkIcon,
@@ -22,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
 import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
 
+const LustIcon = createSvgIcon(<SvgIcon component={ListIcon} inheritViewBox />)
 /** Interface for all links */
 interface linksInterface {
   text: string; // the text of the link
@@ -71,7 +73,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
       text: t('navbar.patronage'),
       url: '/parrainage/',
       isOnBackend: true,
-      icon: ColocIcon,
+      icon: <ListIcon />,
     },
     {
       text: t('navbar.bdx'),
