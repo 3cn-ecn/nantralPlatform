@@ -11,7 +11,6 @@ import {
 import { ThemeProvider } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import {
-  Menu as MenuIcon,
   Notifications as NotificationsIcon,
   AccountCircle,
   MoreVert as MoreIcon,
@@ -19,7 +18,7 @@ import {
 import { createSvgIcon } from '@mui/material/utils';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
-import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
+import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 
@@ -53,20 +52,14 @@ function NavBarTop(props: {
           aria-label="menu"
           sx={{ mr: 2 }}
         >
-          <SvgIcon component={ListIcon} inheritViewBox />
+          <SvgIcon component={MenuIcon} inheritViewBox />
         </IconButton>
         <Typography variant="h6" component="div">
           Nantral Platform
         </Typography>
-        <Box sx={{ flexGrow: 0.4 }} />
+        <Box sx={{ flexGrow: 0.9 }} />
         <SearchBar />
-        <Box sx={{ flexGrow: 0.4 }} />
-        <Badge badgeContent={10} color="error">
-          <Typography variant="h6" component="div">
-            Random Texte
-          </Typography>
-        </Badge>
-        <Box sx={{ flexGrow: 0.4 }} />
+        <Box sx={{ flexGrow: 1.0 }} />
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <IconButton
             size="large"

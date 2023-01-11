@@ -11,17 +11,21 @@ import {
   SvgIcon,
   createSvgIcon,
 } from '@mui/material';
-import {
-  InsertLink as InsertLinkIcon,
-  Event as EventIcon,
-  Map as ColocIcon,
-  Groups as ClubIcon,
-  Home as HomeIcon,
-} from '@mui/icons-material';
+import { InsertLink as InsertLinkIcon } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
+import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
+import { ReactComponent as EventIcon } from '../../assets/scalable/event.svg';
+import { ReactComponent as ClubIcon } from '../../assets/scalable/club.svg';
+import { ReactComponent as MapIcon } from '../../assets/scalable/roommates.svg';
+import { ReactComponent as FamilyIcon } from '../../assets/scalable/family.svg';
+import { ReactComponent as CampaignIcon } from '../../assets/scalable/campaign.svg';
+import { ReactComponent as LibraryIcon } from '../../assets/scalable/library.svg';
+import { ReactComponent as AdminIcon } from '../../assets/scalable/admin.svg';
 import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
+import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
+import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
 
 /** Interface for all links */
 interface linksInterface {
@@ -48,7 +52,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
     {
       text: t('navbar.home'),
       url: '/',
-      icon: HomeIcon,
+      icon: MenuIcon,
     },
     {
       text: t('navbar.events'),
@@ -65,37 +69,43 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
     {
       text: t('navbar.flatshare'),
       url: '/colocs/',
-      icon: ColocIcon,
+      icon: MapIcon,
       isOnBackend: true,
     },
     {
       text: t('navbar.patronage'),
       url: '/parrainage/',
+      icon: FamilyIcon,
       isOnBackend: true,
     },
     {
       text: t('navbar.bdx'),
       url: '/liste/',
+      icon: CampaignIcon,
       isOnBackend: true,
     },
     {
       text: t('navbar.academics'),
       url: '/academics/',
+      icon: LibraryIcon,
       isOnBackend: true,
     },
     {
       text: t('navbar.administration'),
       url: '/administration/',
+      icon: AdminIcon,
       isOnBackend: true,
     },
     {
       text: t('navbar.student'),
       url: '/student/',
+      icon: ListIcon,
       isOnBackend: true,
     },
     {
       text: t('navbar.signature'),
       url: '/tools/signature/',
+      icon: SignIcon,
       isOnBackend: true,
     },
   ];
@@ -129,7 +139,11 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
             >
               <ListItemButton>
                 <ListItemIcon>
-                  {link.icon ? <link.icon /> : <InsertLinkIcon />}
+                  {link.icon ? (
+                    <SvgIcon component={link.icon} inheritViewBox />
+                  ) : (
+                    <SvgIcon component={LinkIcon} inheritViewBox />
+                  )}
                 </ListItemIcon>
                 <ListItemText primary={link.text} />
               </ListItemButton>
