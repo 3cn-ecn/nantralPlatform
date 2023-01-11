@@ -6,15 +6,27 @@ import {
   Box,
   Badge,
   Toolbar,
+  Icon,
 } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import {
-  Menu as MenuIcon,
   Notifications as NotificationsIcon,
   AccountCircle,
   MoreVert as MoreIcon,
 } from '@mui/icons-material';
+import { createSvgIcon } from '@mui/material/utils';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
+import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
+import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
+import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
+import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/monochrome.svg';
+
+const HomeIcon = createSvgIcon(
+  <path d="M11,17.8h5a.8.8,0,0,0,0-1.6H11a.8.8,0,0,0,0,1.6Z" />,
+  'Home'
+);
 
 /**
  * The top bar for navigation
@@ -41,22 +53,24 @@ function NavBarTop(props: {
           aria-label="menu"
           sx={{ mr: 2 }}
         >
-          <MenuIcon />
+          <SvgIcon component={MenuIcon} inheritViewBox />
         </IconButton>
+        <SvgIcon component={NantralIcon} inheritViewBox />
+        <Box sx={{ flexGrow: 0.02 }} />
         <Typography variant="h6" component="div">
           Nantral Platform
         </Typography>
-        <Box sx={{ flexGrow: 0.8 }} />
+        <Box sx={{ flexGrow: 0.9 }} />
         <SearchBar />
-        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{ flexGrow: 1.0 }} />
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <IconButton
             size="large"
             aria-label="show 17 new notifications"
             color="inherit"
           >
-            <Badge badgeContent={17} color="error">
-              <NotificationsIcon />
+            <Badge badgeContent={1} color="error">
+              <SvgIcon component={NotifIcon} inheritViewBox />
             </Badge>
           </IconButton>
           <IconButton
@@ -66,7 +80,7 @@ function NavBarTop(props: {
             aria-haspopup="true"
             color="inherit"
           >
-            <AccountCircle />
+            <SvgIcon component={PeopleIcon} inheritViewBox />
           </IconButton>
         </Box>
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
