@@ -19,6 +19,9 @@ import {
 import { createSvgIcon } from '@mui/material/utils';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
+import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
+import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
+import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 
 const HomeIcon = createSvgIcon(
   <path d="M11,17.8h5a.8.8,0,0,0,0-1.6H11a.8.8,0,0,0,0,1.6Z" />,
@@ -50,7 +53,7 @@ function NavBarTop(props: {
           aria-label="menu"
           sx={{ mr: 2 }}
         >
-          <img src="../assets/scalable/list.svg" alt="" />
+          <SvgIcon component={ListIcon} inheritViewBox />
         </IconButton>
         <Typography variant="h6" component="div">
           Nantral Platform
@@ -71,7 +74,7 @@ function NavBarTop(props: {
             color="inherit"
           >
             <Badge badgeContent={1} color="error">
-              <AccountCircle />
+              <SvgIcon component={NotifIcon} inheritViewBox />
             </Badge>
           </IconButton>
           <IconButton
@@ -81,7 +84,7 @@ function NavBarTop(props: {
             aria-haspopup="true"
             color="inherit"
           >
-            <AccountCircle />
+            <SvgIcon component={PeopleIcon} inheritViewBox />
           </IconButton>
         </Box>
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>

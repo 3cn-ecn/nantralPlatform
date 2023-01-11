@@ -8,6 +8,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  SvgIcon,
 } from '@mui/material';
 import {
   InsertLink as InsertLinkIcon,
@@ -19,6 +20,7 @@ import {
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
+import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
 
 /** Interface for all links */
 interface linksInterface {
@@ -69,6 +71,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
       text: t('navbar.patronage'),
       url: '/parrainage/',
       isOnBackend: true,
+      icon: ColocIcon,
     },
     {
       text: t('navbar.bdx'),
