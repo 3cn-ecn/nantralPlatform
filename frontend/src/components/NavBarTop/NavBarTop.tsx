@@ -50,7 +50,7 @@ function NavBarTop(props: {
           aria-label="menu"
           sx={{ mr: 2 }}
         >
-          <HomeIcon />
+          <img src="../assets/scalable/list.svg" alt="" />
         </IconButton>
         <Typography variant="h6" component="div">
           Nantral Platform
