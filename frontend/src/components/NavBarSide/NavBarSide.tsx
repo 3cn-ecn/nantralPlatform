@@ -26,6 +26,7 @@ import { ReactComponent as AdminIcon } from '../../assets/scalable/admin.svg';
 import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
 import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
 import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
+import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 
 /** Interface for all links */
 interface linksInterface {
@@ -52,7 +53,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
     {
       text: t('navbar.home'),
       url: '/',
-      icon: MenuIcon,
+      icon: NantralIcon,
     },
     {
       text: t('navbar.events'),

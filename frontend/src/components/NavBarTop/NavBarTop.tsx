@@ -21,6 +21,7 @@ import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
+import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/monochrome.svg';
 
 const HomeIcon = createSvgIcon(
   <path d="M11,17.8h5a.8.8,0,0,0,0-1.6H11a.8.8,0,0,0,0,1.6Z" />,
@@ -54,6 +55,8 @@ function NavBarTop(props: {
         >
           <SvgIcon component={MenuIcon} inheritViewBox />
         </IconButton>
+        <SvgIcon component={NantralIcon} inheritViewBox />
+        <Box sx={{ flexGrow: 0.02 }} />
         <Typography variant="h6" component="div">
           Nantral Platform
         </Typography>
