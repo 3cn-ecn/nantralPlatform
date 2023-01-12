@@ -7,6 +7,15 @@ import Test1 from './pages/Test1/Test1';
 import NavBarTop from './components/NavBarTop/NavBarTop';
 import NavBarSide from './components/NavBarSide/NavBarSide';
 import NotFound from './pages/NotFound/NotFound';
+import Event from './pages/Event/Event';
+import Academics from './pages/Academics/Academics';
+import Admin from './pages/Admin/Admin';
+import BDX from './pages/BDX/BDX';
+import Club from './pages/Club/Club';
+import Family from './pages/Family/Family';
+import Map from './pages/Map/Map';
+import Sign from './pages/Sign/Sign';
+import Student from './pages/Student/Student';
 import './App.scss';
 
 /**
@@ -49,8 +58,16 @@ function App() {
         <Toolbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/test1" element={<Test1 />} />
+          <Route path="/club" element={<Club />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/event" element={<Event />} />
+          <Route path="/academics" element={<Academics />} />
+          <Route path="/administration" element={<Admin />} />
+          <Route path="/liste" element={<BDX />} />
+          <Route path="/parrainage" element={<Family />} />
+          <Route path="/colocs" element={<Map />} />
+          <Route path="/student" element={<Student />} />
+          <Route path="/tools/signature" element={<Sign />} />
         </Routes>
       </Box>
     </Box>

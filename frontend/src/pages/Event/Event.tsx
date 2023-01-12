@@ -3,13 +3,13 @@ import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 
 /**
- * Home Page, with Welcome message, next events, etc...
- * @returns Home page component
+ * Event Page, with Welcome message, next events, etc...
+ * @returns Evente page component
  */
-function Home() {
+function Event() {
   return (
     <>
-      <h1>Home</h1>
+      <h1>Event</h1>
       <p>Bienvenue sur Nantral Plateform</p>
       <SvgIcon component={NantralIcon} inheritViewBox />
       <p>
@@ -142,4 +142,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Event;
