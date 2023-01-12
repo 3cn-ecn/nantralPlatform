@@ -13,7 +13,6 @@ import axios from 'axios';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../../theme';
 import formatQuery, { searchApi } from '../../../api';
-import './SearchBar.scss';
 
 /** Interface for the options */
 interface Option {
