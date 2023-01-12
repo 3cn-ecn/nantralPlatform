@@ -20,7 +20,7 @@ import theme from '../../theme';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
-import { ReactComponent as NotifIcon } from '../../assets/scalable/notification-new.svg';
+import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 
