@@ -15,10 +15,6 @@ const theme = createTheme({
     info: {
       main: '#0d6efd',
     },
-    text: {
-      primary: 'rgba(255,0,0,0.87)',
-      secondary: 'rgba(10,0,0,0.54)',
-    },
   },
 });
 

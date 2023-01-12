@@ -1,4 +1,6 @@
 import React from 'react';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 
 /**
  * Home Page, with Welcome message, next events, etc...
@@ -9,6 +11,7 @@ function Home() {
     <>
       <h1>Home</h1>
       <p>Bienvenue sur Nantral Plateform</p>
+      <SvgIcon component={NantralIcon} inheritViewBox />
       <p>
         Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
         Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip

@@ -22,7 +22,7 @@ import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification-new.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/monochrome.svg';
+import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 
 const HomeIcon = createSvgIcon(
   <path d="M11,17.8h5a.8.8,0,0,0,0-1.6H11a.8.8,0,0,0,0,1.6Z" />,

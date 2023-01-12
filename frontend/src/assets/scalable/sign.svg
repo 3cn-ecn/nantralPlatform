@@ -3,21 +3,21 @@
 <svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#DC3545;}
-	.st1{fill:url(#SVGID_1_);}
-	.st2{fill:url(#SVGID_2_);}
+	.signst0{fill:#DC3545;}
+	.signst1{fill:url(#SVGID_1_);}
+	.signst2{fill:url(#SVGID_2_);}
 </style>
-<rect x="5.7" y="11.7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -5.6123 11.7344)" class="st0" width="11.3" height="1.9"/>
-<rect x="10.6" y="8.9" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -2.5514 11.8593)" class="st0" width="5" height="0.3"/>
+<rect x="5.7" y="11.7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -5.6123 11.7344)" class="signst0" width="11.3" height="1.9"/>
+<rect x="10.6" y="8.9" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -2.5514 11.8593)" class="signst0" width="5" height="0.3"/>
 <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="37.3544" y1="-25.3575" x2="38.6944" y2="-24.0175" gradientTransform="matrix(-3.535530e-02 -0.9687 -0.9687 -3.535530e-02 -6.2416 43.6301)">
 	<stop  offset="0" style="stop-color:#B6B7B7"/>
 	<stop  offset="1" style="stop-color:#E0E0DF"/>
 </linearGradient>
-<polygon class="st1" points="14.9,7.7 16.4,6.2 17.8,7.6 16.2,9.1 "/>
-<rect x="17" y="5.9" transform="matrix(0.7071 -0.7071 0.7071 0.7071 0.772 14.3805)" class="st0" width="1.5" height="0.7"/>
+<polygon class="signst1" points="14.9,7.7 16.4,6.2 17.8,7.6 16.2,9.1 "/>
+<rect x="17" y="5.9" transform="matrix(0.7071 -0.7071 0.7071 0.7071 0.772 14.3805)" class="signst0" width="1.5" height="0.7"/>
 <linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="-6.9823" y1="18.9253" x2="-5.6423" y2="20.2653" gradientTransform="matrix(6.123234e-17 -1 -1 -6.123234e-17 26 11.28)">
 	<stop  offset="0" style="stop-color:#B6B7B7"/>
 	<stop  offset="1" style="stop-color:#E0E0DF"/>
 </linearGradient>
-<polygon class="st2" points="6.6,16.1 5.5,18.3 5.7,18.5 7.9,17.4 "/>
+<polygon class="signst2" points="6.6,16.1 5.5,18.3 5.7,18.5 7.9,17.4 "/>
 </svg>
