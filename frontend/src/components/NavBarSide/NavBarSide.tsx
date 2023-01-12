@@ -59,57 +59,48 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
     },
     {
       text: t('navbar.events'),
-      url: '/home/',
+      url: '/event/',
       icon: EventIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.clubs'),
       url: '/club/',
       icon: ClubIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.flatshare'),
       url: '/colocs/',
       icon: MapIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.patronage'),
       url: '/parrainage/',
       icon: FamilyIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.bdx'),
       url: '/liste/',
       icon: CampaignIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.academics'),
       url: '/academics/',
       icon: LibraryIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.administration'),
       url: '/administration/',
       icon: AdminIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.student'),
       url: '/student/',
       icon: ListIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.signature'),
       url: '/tools/signature/',
       icon: SignIcon,
-      isOnBackend: true,
     },
   ];
 
