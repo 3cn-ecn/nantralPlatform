@@ -15,7 +15,6 @@ class HomeAdminView(UserIsInGroup, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['phase'] = Setting.get('PHASE_COLOCATHLON')
-        context['phase'] = Setting.get('PHASE_COLOCATHLON')
         # Colocathlon
         # Colocs - general
         nb_colocs = 0
