@@ -8,7 +8,6 @@ urlpatterns = [
     # pages
     path('suggestions/', views.SuggestionView.as_view(), name='suggestions'),
     path('legal_mentions/', views.LegalMentionsView.as_view(), name='mentions'),
-    path('', views.HomeView.as_view(), name='home'),
 
     # shortcuts
     path('me/', views.current_user_page_view, name='me'),
