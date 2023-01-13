@@ -1,6 +1,13 @@
-[{
-        "relation": ["delegate_permission/common.handle_all_urls"],
-        "target" : { "namespace": "android_app", "package_name": "org.ecn_3cn.nantral_platform",
-                     "sha256_cert_fingerprints": ["F0:75:F7:12:09:12:84:35:6A:A0:30:E8:5E:2B:E2:68:27:DD:C2:C7:2E:C2:55:9A:EF:BD:C1:17:78:C1:58:0E"] }
-      }
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "org.ecn_3cn.nantral_platform",
+      "sha256_cert_fingerprints": [
+        "F0:75:F7:12:09:12:84:35:6A:A0:30:E8:5E:2B:E2:68:27:DD:C2:C7:2E:C2:55:9A:EF:BD:C1:17:78:C1:58:0E",
+        "00:1D:DE:7C:89:A5:A1:79:08:0B:39:EC:EC:96:4F:69:F3:EA:20:49:C7:18:CD:CD:03:C2:F7:1A:8D:72:7E:EF"
+      ]
+    }
+  }
 ]
