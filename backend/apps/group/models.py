@@ -62,7 +62,6 @@ class GroupType(models.Model):
         unique=True,
         max_length=20)
     slug = models.SlugField(
-        verbose_name=_("Abréviation du type"),
         primary_key=True,
         max_length=10)
     icon = models.ImageField(
@@ -93,7 +92,7 @@ class GroupType(models.Model):
 
     # Members settings
     is_year_group = models.BooleanField(
-        _("Groupes annuels."),
+        _("Groupes annuels"),
         default=False,
         help_text=_("Les groupes sont liés à une année scolaire. "
                     "Aucunes dates ne sont demandées aux membres."))

@@ -24,7 +24,10 @@ from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 
-urlpatterns = [
+
+urlpatterns = i18n_patterns(
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
+    path('admin/', admin.site.urls),
     # default and third-party apps
     path('__debug__/', include(debug_toolbar.urls)),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
@@ -79,12 +82,8 @@ urlpatterns = [
     path('api/group', include('apps.group.urls', namespace='group_api')),
 
     # homepage
-    path('', include('apps.home.urls', namespace='home'))
-]
+    path('', include('apps.home.urls', namespace='home')),
 
-urlpatterns += i18n_patterns(
-    path('admin/doc/', include('django.contrib.admindocs.urls')),
-    path('admin/', admin.site.urls),
     prefix_default_language=False
 )
 
