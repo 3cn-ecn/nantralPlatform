@@ -6,6 +6,7 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from django_ckeditor_5.fields import CKEditor5Field
 from discord_webhook import DiscordWebhook, DiscordEmbed
@@ -57,44 +58,55 @@ class GroupType(models.Model):
 
     # Type infos
     name = models.CharField(
-        verbose_name="Nom du type",
+        verbose_name=_("Nom du type"),
         unique=True,
         max_length=20)
     slug = models.SlugField(
-        verbose_name="Abréviation du type",
+        verbose_name=_("Abréviation du type"),
         primary_key=True,
         max_length=10)
     icon = models.ImageField(
-        verbose_name="Logo du type de groupe", blank=True, null=True,
-        upload_to=path_and_rename_group,
-        help_text="Votre logo sera affiché au format 306x306 pixels.")
+        verbose_name=_("Logo"),
+        blank=True,
+        null=True,
+        upload_to=path_and_rename_group_type)
 
     # Maps settings
     map = models.ForeignKey(
         to=Map,
-        verbose_name="Carte liée",
+        verbose_name=_("Carte liée"),
         default=False,
         on_delete=models.SET_NULL,
         null=True,
-        blank=True)
+        blank=True,
+        help_text=_("Les groupes peuvent avoir un lieu uniquement si une carte "
+                    "est liée."))
     place_required = models.BooleanField(
+        verbose_name=_("Lieu obligatoire"),
         default=False,
-        help_text="Le lieu est disponible seulement si une carte est liée.")
-    slug_is_name = models.BooleanField("Slug déduit du nom", default=True)
+        help_text=_("Uniquement si une carte est liée."))
+    slug_is_name = models.BooleanField(
+        verbose_name=_("Slug basé sur le nom"),
+        default=True,
+        help_text=_("Par défaut, le nom du groupe est utilisé pour construire "
+                    "le slug."))
 
     # Members settings
     is_year_group = models.BooleanField(
-        "Les groupes n'existent que sur une année scolaire.",
+        _("Groupes annuels."),
         default=False,
-        help_text="Si vrai, les membres n'ont pas de dates.")
+        help_text=_("Les groupes sont liés à une année scolaire. "
+                    "Aucunes dates ne sont demandées aux membres."))
 
     # Group list display settings
-    group_by_field = models.CharField(
-        "Grouper en catégories selon le champ",
+    category_field = models.CharField(
+        verbose_name=_("Catégoriser par"),
         max_length=30,
-        blank=True)
-    group_by_label = models.CharField(
-        "Label des catégories",
+        blank=True,
+        help_text=_("Nom du champ pour catégoriser les groupes "
+                    "dans la liste des groupes."))
+    category_label = models.CharField(
+        verbose_name=_("Label des catégories"),
         max_length=100,
         blank=True,
         help_text=("Utiliser la syntaxe Python pour formater le texte avec le "
@@ -102,8 +114,8 @@ class GroupType(models.Model):
                    "str.format)"))
 
     class Meta:
-        verbose_name = "type de groupe"
-        verbose_name_plural = "types de groupes"
+        verbose_name = _("type de groupe")
+        verbose_name_plural = _("types de groupes")
 
     def __str__(self):
         return self.name
@@ -117,84 +129,99 @@ class Group(models.Model, SlugModel):
 
     # General data
     name = models.CharField(
-        verbose_name="Nom du groupe",
+        verbose_name=_("Nom du groupe"),
         unique=True,
         max_length=100)
     short_name = models.CharField(
-        verbose_name="Nom abrégé",
+        verbose_name=_("Nom raccourci"),
         max_length=20,
-        blank=True)
+        blank=True,
+        help_text=_("Ce nom sera affiché dans la liste des groupes."))
     members = models.ManyToManyField(
-        Student,
-        verbose_name="Membres du groupe",
+        to=Student,
+        verbose_name=_("Membres du groupe"),
         related_name='groups',
         through='Membership')
 
     # Technical data
     group_type = models.ForeignKey(
         to=GroupType,
-        verbose_name="Type de groupe",
+        verbose_name=_("Type de groupe"),
         on_delete=models.CASCADE)
     parent = models.ForeignKey(
-        'Group',
+        to='Group',
+        verbose_name=_("Groupe parent"),
         blank=True,
         null=True,
         on_delete=models.CASCADE)
-    order = models.IntegerField("Ordre", default=0)
+    order = models.IntegerField(
+        verbose_name=_("Ordre"),
+        default=0)
     year = models.IntegerField(
-        "Année du groupe",
+        verbose_name=_("Année du groupe"),
         null=True,
         blank=True,
-        help_text=("Pour les années scolaires, indiquez seulement la première "
-                   "année (de septembre à décembre)"))
+        help_text=_("Pour les années scolaires, indiquez seulement la première "
+                    "année (de septembre à décembre)"))
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     archived = models.BooleanField(
-        "Groupe archivé",
+        verbose_name=_("Groupe archivé"),
         default=False,
         help_text=("Un groupe archivé ne peut plus avoir de nouveaux membres "
                    "et est masqué des résultats par défaut."))
 
     # Permissions
     private = models.BooleanField(
-        "Groupe privé",
+        verbose_name=_("Groupe privé"),
         default=False,
-        help_text=("Un groupe privé n'est visible que par les membres du "
-                   "groupe."))
+        help_text=_("Un groupe privé n'est visible que par les membres du "
+                    "groupe."))
     public = models.BooleanField(
-        "Public",
+        verbose_name=_("Groupe public"),
         default=False,
-        help_text=("Si coché, la page du groupe sera accessible publiquement, "
-                   "y compris à des utilisateurs non-connectés. Les membres, "
-                   "évènements et posts restent toutefois masqués."))
+        help_text=_("Si coché, la page du groupe sera accessible publiquement, "
+                    "y compris à des utilisateurs non-connectés. Les membres, "
+                    "évènements et posts restent toutefois masqués."))
     anyone_can_join = models.BooleanField(
-        "Adhésion libre",
+        verbose_name=_("Adhésion libre"),
         default=True,
-        help_text="Affiche le bouton 'Devenir membre' pour tout le monde.")
+        help_text=_("Affiche le bouton 'Devenir membre' pour tout le monde. "
+                    "Si décoché, seuls les admins pourront ajouter de nouveaux "
+                    "membres."))
 
     # Profile
-    summary = models.CharField("Résumé", max_length=500, null=True, blank=True)
+    summary = models.CharField(
+        verbose_name=_("Résumé"),
+        max_length=500,
+        blank=True)
     description = CKEditor5Field(
-        verbose_name="Description du groupe", blank=True)
+        verbose_name=_("Description du groupe"),
+        blank=True)
     icon = models.ImageField(
-        verbose_name="Logo du groupe", blank=True, null=True,
+        verbose_name=_("Logo du groupe"),
+        blank=True,
+        null=True,
         upload_to=path_and_rename_group,
-        help_text="Votre logo sera affiché au format 306x306 pixels.")
+        help_text=_("Votre logo sera affiché au format 306x306 pixels."))
     banner = models.ImageField(
-        verbose_name="Bannière", blank=True, null=True,
+        verbose_name=_("Bannière"),
+        blank=True,
+        null=True,
         upload_to=path_and_rename_group_banniere,
-        help_text="Votre bannière sera affichée au format 1320x492 pixels.")
+        help_text=_("Votre bannière sera affichée au format 1320x492 pixels."))
     video1 = models.URLField(
-        "Lien vidéo 1", max_length=200, null=True, blank=True)
+        verbose_name=_("Lien vidéo 1"), max_length=200, null=True, blank=True)
     video2 = models.URLField(
-        "Lien vidéo 2", max_length=200, null=True, blank=True)
+        verbose_name=_("Lien vidéo 2"), max_length=200, null=True, blank=True)
     social_links = models.ManyToManyField(
         to=SocialLink,
-        verbose_name="Réseaux Sociaux",
+        verbose_name=_("Réseaux Sociaux"),
         related_name='+')
 
     # Map data
     place = models.ForeignKey(
         to=Place,
+        verbose_name=_("Lieu lié au groupe"),
         on_delete=models.SET_NULL,
         null=True,
         blank=True)
@@ -328,21 +355,26 @@ class Membership(models.Model):
 
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
     group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
-    admin = models.BooleanField(default=False)
-    summary = models.CharField("Résumé", max_length=50, null=True, blank=True)
-    description = models.TextField(verbose_name="Description", blank=True)
+    admin = models.BooleanField(_("Admin"), default=False)
+    summary = models.CharField(
+        verbose_name=_("Résumé"),
+        max_length=50,
+        blank=True)
+    description = models.TextField(
+        verbose_name=_("Description"),
+        blank=True)
     admin_request = models.BooleanField(
-        "A demandé à devenir admin", default=False)
+        _("A demandé à devenir admin"), default=False)
     admin_request_messsage = models.TextField(
-        "Raison de la demande à devenir admin", blank=True)
-    order = models.IntegerField("Ordre", default=0)
+        _("Raison de la demande à devenir admin"), blank=True)
+    order = models.IntegerField(_("Ordre"), default=0)
     begin_date = models.DateField(
-        verbose_name="Date de début",
+        verbose_name=_("Date de début"),
         default=today,
         blank=True,
         null=True)
     end_date = models.DateField(
-        verbose_name="Date de fin",
+        verbose_name=_("Date de fin"),
         default=one_year_later,
         blank=True,
         null=True)

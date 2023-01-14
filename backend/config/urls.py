@@ -19,15 +19,13 @@ Including another URLconf
 import debug_toolbar
 from django.contrib import admin
 from django.urls import path, include
-
 # pour importer les fichiers en dev local
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 
 urlpatterns = [
     # default and third-party apps
-    path('admin/doc/', include('django.contrib.admindocs.urls')),
-    path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 
@@ -83,6 +81,12 @@ urlpatterns = [
     # homepage
     path('', include('apps.home.urls', namespace='home'))
 ]
+
+urlpatterns += i18n_patterns(
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
+    path('admin/', admin.site.urls),
+    prefix_default_language=False
+)
 
 urlpatterns += static(
     settings.MEDIA_URL,
