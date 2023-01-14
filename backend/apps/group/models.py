@@ -111,6 +111,10 @@ class GroupType(models.Model):
         help_text=("Utiliser la syntaxe Python pour formater le texte avec le "
                    "champ (cf https://docs.python.org/3/library/stdtypes.html#"
                    "str.format)"))
+    category_label_default = models.CharField(
+        verbose_name=_("Label de la catégorie par défaut"),
+        max_length=30,
+        blank=True)
 
     class Meta:
         verbose_name = _("type de groupe")
@@ -120,7 +124,18 @@ class GroupType(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("group:sub_index", kwargs={"type": self.slug})
+        return reverse('group:sub_index', kwargs={'type': self.slug})
+
+    def get_admin_url(self) -> str:
+        """Get the url of the corresponding page in the admin interface.
+
+        Returns
+        -------
+        str
+            The url of the admin form of the object.
+        """
+        return reverse('admin:group_grouptype_change',
+                       kwargs={'object_id': self.pk})
 
 
 class Group(models.Model, SlugModel):
@@ -215,7 +230,8 @@ class Group(models.Model, SlugModel):
     social_links = models.ManyToManyField(
         to=SocialLink,
         verbose_name=_("Réseaux Sociaux"),
-        related_name='+')
+        related_name='+',
+        blank=True)
 
     # Map data
     place = models.ForeignKey(
@@ -269,11 +285,19 @@ class Group(models.Model, SlugModel):
         """
         return f"group--{self.slug}"
 
+    def get_category(self):
+        field = self.group_type.category_field
+        value_field = getattr(self, field)
+        if value_field:
+            return self.group_type.category_label.format(value_field)
+        else:
+            return self.group_type.category_label_default
+
     class Meta:
         verbose_name = "groupe"
 
     def __str__(self):
-        return self.short_name if self.short_name else self.name
+        return self.short_name
 
     def is_admin(self, user: User) -> bool:
         """Check if a user has the admin rights for this group.
@@ -336,6 +360,8 @@ class Group(models.Model, SlugModel):
             self, 'banner', size=(1320, 492), contains=False)
         if self.pk is None:
             self.created_by = self.last_modified_by
+        if not self.short_name:
+            self.short_name = self.name
         super(Group, self).save(*args, **kwargs)
 
     def get_absolute_url(self) -> str:
@@ -347,6 +373,17 @@ class Group(models.Model, SlugModel):
             The absolute url of the model object.
         """
         return reverse('group:detail', kwargs={'slug': self.slug})
+
+    def get_admin_url(self) -> str:
+        """Get the url of the corresponding page in the admin interface.
+
+        Returns
+        -------
+        str
+            The url of the admin form of the object.
+        """
+        return reverse('admin:group_group_change',
+                       kwargs={'object_id': self.pk})
 
 
 class Membership(models.Model):

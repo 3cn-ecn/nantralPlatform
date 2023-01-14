@@ -3,38 +3,39 @@
 {% load cache %}
 {% load file_url %}
 
-{% block head %}
-    <style>
-      .loader {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    </style>
-{% endblock %}
-
-
 {% block content %}
 
   <h1>{{ group_type.name }}</h1>
+  {% if user.is_superuser %}
+    <a href="{{ group_type.get_admin_url }}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+      <i class="fas fa-shield-alt"></i>&nbsp; Modifier le type
+    </a>
+    <a href="{% url 'admin:group_group_changelist' %}?group_type__exact={{ group_type.pk}}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+      <i class="fas fa-shield-alt"></i>&nbsp; Voir la liste
+    </a>
+    <br />
+  {% endif %}
   <br />
 
-  {% cache None group_type_list %}
-    {% for group_type in group_list %}
-      <div class="grille">
-          <div class="grille-icon text-center" style="transform: rotate(0)">
-            <a href="{{ group_type.get_absolute_url }}" class="stretched-link">
-              <div class="ratio ratio-1x1">
-                {% if group_type.icon %}
-                  <img src="{{ group_type.icon|file_url }}" />
-                {% else %}
-                  <img src="https://avatars.dicebear.com/api/initials/{{group_type.slug}}.svg" />
-                {% endif %}
-              </div>
-            </a>
-            <h6>{{ group_type.name }}</h6>
-          </div>
-      </div>
-    {% endfor %}
-  {% endcache %}
+  {% regroup group_list by get_category as groups_by_category %}
+
+  {% for category in groups_by_category %}
+    <h2>{{ category.grouper }}</h2>
+    <div class="grille">
+      {% for group in category.list %}
+        <div class="grille-icon text-center" style="transform: rotate(0)">
+          <a href="{{ group.get_absolute_url }}" class="stretched-link">
+            <div class="ratio ratio-1x1">
+              {% if group.icon %}
+                <img src="{{ group.icon|file_url }}" />
+              {% else %}
+                <img src="https://avatars.dicebear.com/api/initials/{{group.slug}}.svg" />
+              {% endif %}
+            </div>
+          </a>
+          <h6>{{ group.short_name }}</h6>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
 {% endblock %}

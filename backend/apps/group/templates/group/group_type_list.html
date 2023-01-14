@@ -3,20 +3,15 @@
 {% load cache %}
 {% load file_url %}
 
-{% block head %}
-    <style>
-      .loader {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    </style>
-{% endblock %}
-
-
 {% block content %}
 
   <h1>Groupes</h1>
+  {% if user.is_superuser %}
+    <a href="{% url 'admin:group_grouptype_changelist' %}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+      <i class="fas fa-shield-alt"></i>&nbsp; Voir la liste
+    </a>
+    <br />
+  {% endif %}
   <br />
 
   {% cache None group_type_list %}

@@ -40,4 +40,4 @@ class SocialLink(models.Model):
         verbose_name_plural = "Liens des Réseaux Sociaux"
 
     def __str__(self):
-        return self.url
+        return self.uri

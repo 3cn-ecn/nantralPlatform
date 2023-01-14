@@ -63,7 +63,12 @@
                         <i class="fa fa-pencil"></i>&nbsp; Modifier la page
                     </a>
                 {% endif %}
-                    <span id="subscription_button"></span>
+                {% if user.is_superuser %}
+                    <a href="{{ group.get_admin_url }}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-shield-alt"></i>&nbsp; Page Admin
+                    </a>
+                {% endif %}
+                <span id="subscription_button"></span>
             {% endif %}
             </p>
             {% block infos %}

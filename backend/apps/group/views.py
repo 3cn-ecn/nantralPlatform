@@ -61,7 +61,14 @@ class GroupListView(ListView, LoginRequiredMixin):
     template_name = 'group/group_list.html'
 
     def get_queryset(self) -> QuerySet[Group]:
-        return Group.objects.filter(group_type=self.kwargs.get('type'))
+        category_field = (
+            GroupType.objects
+            .get(slug=self.kwargs.get('type'))
+            .category_field)
+        return (Group.objects
+                .filter(group_type=self.kwargs.get('type'))
+                .prefetch_related('group_type', 'parent')
+                .order_by(category_field, 'order', 'short_name'))
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
