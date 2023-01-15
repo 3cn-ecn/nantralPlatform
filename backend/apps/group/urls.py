@@ -4,6 +4,7 @@ from .views import (
     GroupTypeListView,
     GroupListView,
     GroupDetailView,
+    UpdateSubscriptionView,
     MembershipFormView,
     AdminRequestFormView
     # AddToGroupView,
@@ -28,6 +29,8 @@ urlpatterns = [
     path('<slug:type>/', GroupListView.as_view(), name='sub_index'),
     path('@<slug:slug>', GroupDetailView.as_view(), name='detail'),
     path('@<slug:slug>/update', GroupDetailView.as_view(), name='update'),
+    path('@<slug:slug>/edit-subscription/', UpdateSubscriptionView.as_view(),
+         name='edit-subscription'),
     path('@<slug:slug>/edit-membership/', MembershipFormView.as_view(),
          name='edit-member'),
     path('@<slug:slug>/admin-request/', AdminRequestFormView.as_view(),

@@ -156,6 +156,10 @@ class Group(models.Model, SlugModel):
         verbose_name=_("Membres du groupe"),
         related_name='groups',
         through='Membership')
+    subscribers = models.ManyToManyField(
+        to=Student,
+        verbose_name=_("Abonnés"),
+        related_name='subscriptions')
 
     # Technical data
     group_type = models.ForeignKey(
@@ -273,17 +277,6 @@ class Group(models.Model, SlugModel):
             return f"{self.year}-{self.year+1}"
         else:
             return ""
-
-    @property
-    def prefixed_slug(self) -> str:
-        """Get the slug prefixed by "group"
-
-        Returns
-        -------
-        str
-            The slug prefixed
-        """
-        return f"group--{self.slug}"
 
     def get_category(self):
         field = self.group_type.category_field

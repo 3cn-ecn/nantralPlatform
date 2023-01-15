@@ -13,7 +13,7 @@ from django.http import HttpResponse  # , HttpRequest
 from django.shortcuts import redirect
 from django.urls.base import reverse
 from django.utils import timezone
-from django.views.generic import DetailView, ListView, FormView  # TemplateView
+from django.views.generic import DetailView, ListView, FormView, View
 
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
@@ -21,7 +21,6 @@ from discord_webhook import DiscordWebhook, DiscordEmbed
 # from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
-from apps.notification.models import Subscription
 
 # from .forms import (
 #     NamedMembershipAddGroup,
@@ -111,10 +110,7 @@ class GroupDetailView(DetailView, UserPassesTestMixin):
         group: Group = self.object
         user = self.request.user
 
-        # hide sensitive data if not connected
-        show_sensitive_data = user.is_authenticated
-        context['show_sensitive_data'] = show_sensitive_data
-        if show_sensitive_data:
+        if user.is_authenticated:
             # show the posts from last 6 months (3 maximum)
             all_posts = Post.objects.filter(
                 group=group.slug,
@@ -130,6 +126,7 @@ class GroupDetailView(DetailView, UserPassesTestMixin):
             # members
             context['is_member'] = group.is_member(user)
             context['is_admin'] = group.is_admin(user)
+            context['has_subscribed'] = group.subscribers.contains(user.student)
             # member form
             if context['is_member']:
                 membership = group.membership_set.get(
@@ -156,6 +153,20 @@ class GroupDetailView(DetailView, UserPassesTestMixin):
         return context
 
 
+class UpdateSubscriptionView(View):
+    """Call this view to subscribe to a group, or unsubscribe if the user has
+    already subscribed."""
+
+    def get(self, request, slug) -> HttpResponse:
+        group = Group.objects.get(slug=slug)
+        student = request.user.student
+        if group.subscribers.contains(student):
+            group.subscribers.remove(student)
+        else:
+            group.subscribers.add(student)
+        return redirect(group.get_absolute_url())
+
+
 class MembershipFormView(FormView, LoginRequiredMixin):
     """View for the user to add himself as a member of a group."""
 
@@ -177,22 +188,19 @@ class MembershipFormView(FormView, LoginRequiredMixin):
             **self.get_form_kwargs())
 
     def form_valid(self, form: MembershipForm) -> HttpResponse:
+        student = self.request.user.student
         if self.request.POST.get('delete'):
             # delete the membership
+            self.get_group().subscribers.remove(student)
             form.instance.delete()
             messages.success(self.request, 'Membre supprimé.')
-            Subscription.objects.filter(
-                page=self.get_group().prefixed_slug,
-                student=self.request.user.student).delete()
         else:
             # create or update the membership
             created = form.instance.pk is None
             form.save()
             if created:
+                self.get_group().subscribers.add(student)
                 messages.success(self.request, 'Bienvenue dans le groupe !')
-                Subscription.objects.get_or_create(
-                    page=self.get_group().prefixed_slug,
-                    student=self.request.user.student)
             else:
                 messages.success(
                     self.request,

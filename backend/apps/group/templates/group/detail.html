@@ -4,37 +4,36 @@
 {% load video %}
 
 {% block head %}
-    <meta name="description" CONTENT="{{object.summary}} - {{object.name}} ({{object.alt_name}}) - Centrale Nantes">
-    <meta name="page" content="{{object.full_slug}}">
+    <meta name="description" CONTENT="{{group.summary}} - {{group.name}} - Centrale Nantes">
 {% endblock %}
 
 {% block banniere %}
-    {% if object.banniere %}
+    {% if group.banner %}
         <div class="ratio ratio-banniere container-xl">
-            <img class="banniere" src='{{ object.banniere|file_url }}'>
+            <img class="banniere" src="{{ group.banner|file_url }}">
         </div>
     {% endif %}
 {% endblock %}
 
 {% block content %}
-    <!-- En-tête de la page -->
+    {% comment %} Header of the page {% endcomment %}
     <div class="row">
-        <!-- logo -->
-        {%if object.logo %}
+        {% comment %} Icon {% endcomment %}
+        {% if group.icon %}
             <div class="col-12 col-sm-3">
-                <a href="{{object.logo|file_url}}">
+                <a href="{{group.icon|file_url}}">
                     <div class="ratio ratio-1x1 logo-div mb-4">
-                        <img class="logo" src="{{object.logo|file_url}}">
+                        <img class="logo" src="{{group.icon|file_url}}">
                     </div>
                 </a>
             </div>
         {% endif %}
-        <!-- description du club : nom, infos... -->
+        {% comment %} Description of the club {% endcomment %}
         <div class="col">
-            {% block object_name %}<h1>{{object.name}}</h1>{% endblock %}
-            
+            <h1>{{group.name}}</h1>
             <p>
-            {% if show_sensitive_data %}
+            {% if user.is_authenticated %}
+                {% comment %} Membership {% endcomment %}
                 {% if is_member and is_admin %}
                     <span class="btn-group" role="group">
                         <button class='btn btn-light btn-sm disabled border'>
@@ -58,22 +57,28 @@
                         <i class="fa fa-user-plus"></i>&nbsp; Devenir membre
                     </button>
                 {% endif %}
+                {% comment %} Edition of the page {% endcomment %}
                 {% if is_admin %}
-                    <a href='{%url "group:update" object.slug %}' class="btn btn-dark btn-sm">
+                    <a href='{%url "group:update" group.slug %}' class="btn btn-dark btn-sm">
                         <i class="fa fa-pencil"></i>&nbsp; Modifier la page
                     </a>
                 {% endif %}
+                {% comment %} Admin link {% endcomment %}
                 {% if user.is_superuser %}
                     <a href="{{ group.get_admin_url }}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-shield-alt"></i>&nbsp; Page Admin
                     </a>
                 {% endif %}
-                <span id="subscription_button"></span>
+                {% comment %} Subscription {% endcomment %}
+                <a href="{% url 'group:edit-subscription' group.slug %}" class="btn btn-dark btn-sm">
+                    <i class="{{ has_subscribed | yesno:"fas,far"}} fa-bell"></i>&nbsp;
+                    {{ has_subscribed | yesno:"Abonné !,S'abonner" }}
+                </a>
             {% endif %}
             </p>
             {% block infos %}
-                {% if object.summary %}
-                    <p>{{ object.summary }}</p>
+                {% if group.summary %}
+                    <p>{{ group.summary }}</p>
                 {% endif %}
             {% endblock %}
             {% include "sociallink/liste.html" with sociallinks=group.social_links.all %}
@@ -115,18 +120,18 @@
     {% endif %}
 
     <!-- Vidéos s'il y en a 2 -->
-    {% if object.video1 and object.video2 or object.video1 and not object.description %}
+    {% if group.video1 and group.video2 or group.video1 and not group.description %}
         <br />
         <div class="row gy-3">
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
-                    {% video object.video1 %}
+                    {% video group.video1 %}
                 </div>
             </div>
-            {% if object.video2 %}
+            {% if group.video2 %}
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
-                    {% video object.video2 %}
+                    {% video group.video2 %}
                 </div>
             </div>
             {% endif %}
@@ -134,18 +139,18 @@
     {% endif %}
 
     <!-- Description avec vidéo dans le coin s'il y en a une seulement-->
-    {% if object.description %}
+    {% if group.description %}
         <br>
         <div class="clearfix">
-            {% if object.video1 and not object.video2 %}
+            {% if group.video1 and not group.video2 %}
             <div class="col-md-6 float-md-end mb-3 ms-md-3">
                 <div class="ratio ratio-16x9">
-                    {% video object.video1 %}
+                    {% video group.video1 %}
                 </div>
             </div>
             {% endif %}
-            {% if object.description %}
-                {{ object.description | safe }}
+            {% if group.description %}
+                {{ group.description | safe }}
             {% endif %}
         </div>
     {% endif %}
@@ -163,7 +168,7 @@
 
     {% block go_to_list %}
         <br><br>
-        <p><a href="{% url "group:index" %}">← Retour à la liste des {{object.model_name|title}}</a></p>
+        <p><a href="{% url "group:index" %}">← Retour à la liste des {{group.model_name|title}}</a></p>
         <br>
     {% endblock %}
     
@@ -184,15 +189,14 @@
 
 {% block script %}
 <script>
-    const eventsApiUrl = "{% url 'event_api:list-all-group-events' object.slug %}";
+    const eventsApiUrl = "{% url 'event_api:list-all-group-events' group.slug %}";
     const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
     const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
     const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
     const isAdmin = {{ is_admin|yesno:"true,false,false" }};
-    {% comment %} const membersURL = "{% url 'group_api:list-members' %}?slug={{ object.slug }}"; {% endcomment %}
+    {% comment %} const membersURL = "{% url 'group_api:list-members' %}?slug={{ group.slug }}"; {% endcomment %}
 </script>
 <script src='{% static "js/event/eventsView.js" %}'></script>
 <script src='{% static "js/group/groupMembers.js" %}'></script>
-<script src='{% static "js/notification/subscribeButton.js" %}'></script>
 {% endblock %}
 
