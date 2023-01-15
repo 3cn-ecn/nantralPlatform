@@ -42,7 +42,7 @@ class GroupTypeListView(ListView, LoginRequiredMixin):
 
     model = GroupType
     template_name = 'group/group_type_list.html'
-    ordering = ['-order', 'name']
+    # ordering = ['-order', 'name']
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
