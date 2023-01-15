@@ -30,24 +30,12 @@ path_and_rename_group_type = PathAndRename('groups/types')
 
 
 def today() -> date:
-    """Returns the date of today.
-
-    Returns
-    -------
-    datetime
-        The current date.
-    """
+    """Returns the date of today."""
     return timezone.now().date()
 
 
 def one_year_later() -> date:
-    """Returns the day of today but one year later.
-
-    Returns
-    -------
-    datetime
-        Returns the date in one year.
-    """
+    """Returns the day of today but one year later."""
     return (timezone.now() + timedelta(days=365)).date()
 
 
@@ -127,20 +115,15 @@ class GroupType(models.Model):
         verbose_name = _("type de groupe")
         verbose_name_plural = _("types de groupes")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def get_absolute_url(self):
+    def get_absolute_url(self) -> str:
+        """Get the url of the object."""
         return reverse('group:sub_index', kwargs={'type': self.slug})
 
     def get_admin_url(self) -> str:
-        """Get the url of the corresponding page in the admin interface.
-
-        Returns
-        -------
-        str
-            The url of the admin form of the object.
-        """
+        """Get the url to edit the object in the admin interface."""
         return reverse('admin:group_grouptype_change',
                        kwargs={'object_id': self.pk})
 
@@ -289,7 +272,7 @@ class Group(models.Model, SlugModel):
     class Meta:
         verbose_name = "groupe"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.short_name
 
     def clean(self) -> None:
@@ -302,28 +285,22 @@ class Group(models.Model, SlugModel):
                                     "'private' properties to True."))
 
     def save(self, *args, **kwargs) -> None:
-        """Save an instance of the model in the database.
-
-        * It creates a slug from the name if it does not already exists.
-        * It compresses the icon and banner images
-        * It computes the longitude and latitude coordinates if there
-          is an address
-        * It defines some args to default values set in the type
-        """
-
-        self.set_slug(
-            (self.short_name if self.short_name else self.name),
-            max_length=40)
+        """Save an instance of the model in the database."""
+        # fill default values
+        if not self.short_name:
+            self.short_name = self.name
+        if self.pk is None:
+            self.created_by = self.last_modified_by
+        if self.pk is None and self.group_type.private_by_default:
+            self.private = True
+        # create the slug
+        self.set_slug(self.short_name, max_length=40)
+        # compress images
         self.icon = compress_model_image(
             self, 'icon', size=(500, 500), contains=True)
         self.banner = compress_model_image(
             self, 'banner', size=(1320, 492), contains=False)
-        if self.pk is None:
-            self.created_by = self.last_modified_by
-        if not self.short_name:
-            self.short_name = self.name
-        if self.group_type.private_by_default:
-            self.private = True
+        # save the instance
         super(Group, self).save(*args, **kwargs)
 
     def is_admin(self, user: User) -> bool:
@@ -378,23 +355,11 @@ class Group(models.Model, SlugModel):
             return self.group_type.category_label_default
 
     def get_absolute_url(self) -> str:
-        """Get the absolute url of the model object.
-
-        Returns
-        -------
-        str
-            The absolute url of the model object.
-        """
+        """Get the url of the object."""
         return reverse('group:detail', kwargs={'slug': self.slug})
 
     def get_admin_url(self) -> str:
-        """Get the url of the corresponding page in the admin interface.
-
-        Returns
-        -------
-        str
-            The url of the admin form of the object.
-        """
+        """Get the url to edit the object in the admin interface."""
         return reverse('admin:group_group_change',
                        kwargs={'object_id': self.pk})
 
@@ -433,7 +398,7 @@ class Membership(models.Model):
         ordering = ['group', 'order', 'student']
         verbose_name = "membre"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.student.__str__()
 
     def save(self, *args, **kwargs) -> None:
