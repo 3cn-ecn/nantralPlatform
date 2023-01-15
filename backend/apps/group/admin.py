@@ -3,10 +3,17 @@ from django.contrib import admin
 from .models import Group, GroupType, Membership
 
 
+class GroupTypeAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug']
+    autocomplete_fields = ['extra_parents']
+
+
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ['name', 'short_name', 'group_type']
     search_fields = ['name', 'short_name']
+    list_display = ['name', 'short_name', 'group_type']
     list_filter = ['group_type', 'year', 'private', 'archived']
+    exclude = ['members', 'subscribers']
+    raw_id_fields = ['social_links']
     readonly_fields = [
         'created_by',
         'created_at',
@@ -19,19 +26,15 @@ class GroupAdmin(admin.ModelAdmin):
 
 
 class MembershipAdmin(admin.ModelAdmin):
-    list_display = ['student', 'group', 'admin']
-    list_filter = ['admin', 'group__group_type']
     search_fields = [
         'student__user__first_name',
         'student__user__last_name',
         'group__name',
         'group__short_name']
+    list_display = ['student', 'group', 'admin']
+    list_filter = ['admin', 'group__group_type']
 
 
-class GroupTypeAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
-
-
+admin.site.register(GroupType, GroupTypeAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Membership, MembershipAdmin)
-admin.site.register(GroupType, GroupTypeAdmin)

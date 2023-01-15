@@ -2,6 +2,7 @@ from datetime import timedelta, date
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.loader import render_to_string
 from django.urls.base import reverse
@@ -84,11 +85,6 @@ class GroupType(models.Model):
         verbose_name=_("Lieu obligatoire"),
         default=False,
         help_text=_("Uniquement si une carte est liée."))
-    slug_is_name = models.BooleanField(
-        verbose_name=_("Slug basé sur le nom"),
-        default=True,
-        help_text=_("Par défaut, le nom du groupe est utilisé pour construire "
-                    "le slug."))
 
     # Members settings
     is_year_group = models.BooleanField(
@@ -96,6 +92,10 @@ class GroupType(models.Model):
         default=False,
         help_text=_("Les groupes sont liés à une année scolaire. "
                     "Aucunes dates ne sont demandées aux membres."))
+    private_by_default = models.BooleanField(
+        _("Privés par défaut"),
+        default=False,
+        help_text=_("Les nouveaux groupes créés sont privés par défaut."))
 
     # Group list display settings
     category_field = models.CharField(
@@ -115,6 +115,13 @@ class GroupType(models.Model):
         verbose_name=_("Label de la catégorie par défaut"),
         max_length=30,
         blank=True)
+    extra_parents = models.ManyToManyField(
+        to='Group',
+        verbose_name=_("Parents supplémentaires"),
+        related_name='+',
+        blank=True,
+        help_text=_("Les enfants de ces groupes seront affichés dans la "
+                    "liste des groupes."))
 
     class Meta:
         verbose_name = _("type de groupe")
@@ -155,11 +162,13 @@ class Group(models.Model, SlugModel):
         to=Student,
         verbose_name=_("Membres du groupe"),
         related_name='groups',
-        through='Membership')
+        through='Membership',
+        blank=True)
     subscribers = models.ManyToManyField(
         to=Student,
         verbose_name=_("Abonnés"),
-        related_name='subscriptions')
+        related_name='subscriptions',
+        blank=True)
 
     # Technical data
     group_type = models.ForeignKey(
@@ -200,12 +209,11 @@ class Group(models.Model, SlugModel):
         help_text=_("Si coché, la page du groupe sera accessible publiquement, "
                     "y compris à des utilisateurs non-connectés. Les membres, "
                     "évènements et posts restent toutefois masqués."))
-    anyone_can_join = models.BooleanField(
-        verbose_name=_("Adhésion libre"),
-        default=True,
-        help_text=_("Affiche le bouton 'Devenir membre' pour tout le monde. "
-                    "Si décoché, seuls les admins pourront ajouter de nouveaux "
-                    "membres."))
+    restrict_membership = models.BooleanField(
+        verbose_name=_("Adhésion restreinte"),
+        default=False,
+        help_text=_("Masque le bouton 'Devenir membre'. Seuls les admins "
+                    "pourront ajouter de nouveaux membres."))
 
     # Profile
     summary = models.CharField(
@@ -278,19 +286,45 @@ class Group(models.Model, SlugModel):
         else:
             return ""
 
-    def get_category(self):
-        field = self.group_type.category_field
-        value_field = getattr(self, field)
-        if value_field:
-            return self.group_type.category_label.format(value_field)
-        else:
-            return self.group_type.category_label_default
-
     class Meta:
         verbose_name = "groupe"
 
     def __str__(self):
         return self.short_name
+
+    def clean(self) -> None:
+        """Method to test if the object is valid (no incompatibility between
+        fields."""
+        if self.group_type.is_year_group and self.year is None:
+            raise ValidationError(_("You must provides a year."))
+        if self.public and self.private:
+            raise ValidationError(_("You cannot set both 'public' and "
+                                    "'private' properties to True."))
+
+    def save(self, *args, **kwargs) -> None:
+        """Save an instance of the model in the database.
+
+        * It creates a slug from the name if it does not already exists.
+        * It compresses the icon and banner images
+        * It computes the longitude and latitude coordinates if there
+          is an address
+        * It defines some args to default values set in the type
+        """
+
+        self.set_slug(
+            (self.short_name if self.short_name else self.name),
+            max_length=40)
+        self.icon = compress_model_image(
+            self, 'icon', size=(500, 500), contains=True)
+        self.banner = compress_model_image(
+            self, 'banner', size=(1320, 492), contains=False)
+        if self.pk is None:
+            self.created_by = self.last_modified_by
+        if not self.short_name:
+            self.short_name = self.name
+        if self.group_type.private_by_default:
+            self.private = True
+        super(Group, self).save(*args, **kwargs)
 
     def is_admin(self, user: User) -> bool:
         """Check if a user has the admin rights for this group.
@@ -306,11 +340,9 @@ class Group(models.Model, SlugModel):
             True if the user has admin rights.
         """
 
-        return (
-            self.is_member(user)
-            and self.membership_set.get(student=user.student).admin
-            or user.is_superuser
-        )
+        return (self.is_member(user)
+                and self.membership_set.get(student=user.student).admin
+                or user.is_superuser)
 
     def is_member(self, user: User) -> bool:
         """Check if a user is a member for this group.
@@ -326,36 +358,24 @@ class Group(models.Model, SlugModel):
             True if the user is a member of this group.
         """
 
-        return (
-            (not user.is_anonymous)
-            and user.is_authenticated
-            and hasattr(user, 'student')
-            and self.members.contains(user.student)
-        )
+        return (user.is_authenticated
+                and hasattr(user, 'student')
+                and self.members.contains(user.student))
 
-    def save(self, *args, **kwargs) -> None:
-        """Save an instance of the model in the database.
+    def get_category(self) -> str:
+        """Get the category label for list display.
 
-        * It creates a slug from the name if it does not already exists.
-        * It compresses the icon and banner images
-        * It computes the longitude and latitude coordinates if there
-          is an address
-        * It defines some args to default values set in the type
+        Returns
+        -------
+        str
+            The formatted label of the category of the group.
         """
-
-        self.set_slug(
-            (self.short_name if self.short_name else self.name)
-            if self.group_type.slug_is_name else f'family-{self.pk}',
-            max_length=40)
-        self.icon = compress_model_image(
-            self, 'icon', size=(500, 500), contains=True)
-        self.banner = compress_model_image(
-            self, 'banner', size=(1320, 492), contains=False)
-        if self.pk is None:
-            self.created_by = self.last_modified_by
-        if not self.short_name:
-            self.short_name = self.name
-        super(Group, self).save(*args, **kwargs)
+        field = self.group_type.category_field
+        value_field = getattr(self, field)
+        if value_field:
+            return self.group_type.category_label.format(value_field)
+        else:
+            return self.group_type.category_label_default
 
     def get_absolute_url(self) -> str:
         """Get the absolute url of the model object.
@@ -384,7 +404,6 @@ class Membership(models.Model):
 
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
     group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
-    admin = models.BooleanField(_("Admin"), default=False)
     summary = models.CharField(
         verbose_name=_("Résumé"),
         max_length=50,
@@ -392,11 +411,6 @@ class Membership(models.Model):
     description = models.TextField(
         verbose_name=_("Description"),
         blank=True)
-    admin_request = models.BooleanField(
-        _("A demandé à devenir admin"), default=False)
-    admin_request_messsage = models.TextField(
-        _("Raison de la demande à devenir admin"), blank=True)
-    order = models.IntegerField(_("Ordre"), default=0)
     begin_date = models.DateField(
         verbose_name=_("Date de début"),
         default=today,
@@ -407,6 +421,12 @@ class Membership(models.Model):
         default=one_year_later,
         blank=True,
         null=True)
+    order = models.IntegerField(_("Ordre"), default=0)
+    admin = models.BooleanField(_("Admin"), default=False)
+    admin_request = models.BooleanField(
+        _("A demandé à devenir admin"), default=False)
+    admin_request_messsage = models.TextField(
+        _("Raison de la demande à devenir admin"), blank=True)
 
     class Meta:
         unique_together = ('student', 'group')

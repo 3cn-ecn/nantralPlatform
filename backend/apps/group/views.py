@@ -8,7 +8,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 from django.http import HttpResponse  # , HttpRequest
 from django.shortcuts import redirect
 from django.urls.base import reverse
@@ -42,6 +42,7 @@ class GroupTypeListView(ListView, LoginRequiredMixin):
 
     model = GroupType
     template_name = 'group/group_type_list.html'
+    ordering = ['-order', 'name']
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
@@ -54,20 +55,31 @@ class GroupTypeListView(ListView, LoginRequiredMixin):
         return context
 
 
-class GroupListView(ListView, LoginRequiredMixin):
+class GroupListView(ListView):
     """List of Groups, filtered by type."""
 
     template_name = 'group/group_list.html'
 
     def get_queryset(self) -> QuerySet[Group]:
-        category_field = (
-            GroupType.objects
-            .get(slug=self.kwargs.get('type'))
-            .category_field)
+        user = self.request.user
+        group_type = GroupType.objects.get(slug=self.kwargs.get('type'))
         return (Group.objects
-                .filter(group_type=self.kwargs.get('type'))
+                # filter by group_type
+                .filter(group_type=group_type)
+                # remove the sub-groups to keep only parent groups
+                .filter(Q(parent=None)
+                        | Q(parent__in=group_type.extra_parents.all()))
+                # hide archived groups
+                .filter(archived=False)
+                # hide private groups unless user is member
+                # and hide non-public group if user is not authenticated
+                .filter(Q(private=False) | Q(members=user.student)
+                        if user.is_authenticated
+                        else Q(public=True))
+                # prefetch type and parent group for better performances
                 .prefetch_related('group_type', 'parent')
-                .order_by(category_field, 'order', 'short_name'))
+                # order by category, order and then name
+                .order_by(group_type.category_field, '-order', 'short_name'))
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)

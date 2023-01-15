@@ -36,7 +36,7 @@ class UpdateGroupForm(ModelForm):
             'video1',
             'video2',
             'year',
-            'anyone_can_join',
+            'restrict_membership',
             'archived']
 
     def __init__(self, *args, **kwargs):
