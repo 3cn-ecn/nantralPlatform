@@ -85,22 +85,6 @@ class GroupType(models.Model):
         help_text=_("New groups are private by default."))
 
     # Group list display settings
-    category_field = models.CharField(
-        verbose_name=_("Category Field"),
-        max_length=30,
-        blank=True,
-        help_text=_("Field to categorise groups in the list of groups."))
-    category_label = models.CharField(
-        verbose_name=_("Category Label"),
-        max_length=100,
-        blank=True,
-        help_text=_("Utiliser la syntaxe Python pour formater le texte avec le "
-                    "champ (cf https://docs.python.org/3/library/stdtypes.html#"
-                    "str.format)"))
-    category_label_default = models.CharField(
-        verbose_name=_("Category default label"),
-        max_length=30,
-        blank=True)
     extra_parents = models.ManyToManyField(
         to='Group',
         verbose_name=_("Additional parent groups"),
@@ -108,6 +92,22 @@ class GroupType(models.Model):
         blank=True,
         help_text=_("Children groups of these groups will be displayed in the "
                     "list of all groups."))
+    sort_fields = models.CharField(
+        verbose_name=_("Sort Fields"),
+        max_length=30,
+        default='-order, short_name',
+        help_text=_("Fields used to sort groups in the list. If categories "
+                    "are defined, you must reflect them here."))
+    category_expr = models.CharField(
+        verbose_name=_("Category expression"),
+        max_length=200,
+        default="''",
+        help_text=_("A python expression to get the category label."))
+    sub_category_expr = models.CharField(
+        verbose_name=_("Sub category expression"),
+        max_length=200,
+        default="''",
+        help_text=_("A python expression to get the sub-category label."))
 
     class Meta:
         verbose_name = _("group type")
@@ -344,12 +344,17 @@ class Group(models.Model, SlugModel):
         str
             The formatted label of the category of the group.
         """
-        field = self.group_type.category_field
-        value_field = getattr(self, field)
-        if value_field:
-            return self.group_type.category_label.format(value_field)
-        else:
-            return self.group_type.category_label_default
+        return eval(self.group_type.category_expr, {'group': self})
+
+    def get_sub_category(self) -> str:
+        """Get the sub category label for list display.
+
+        Returns
+        -------
+        str
+            The formatted label of the category of the group.
+        """
+        return eval(self.group_type.sub_category_expr, {'group': self})
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""

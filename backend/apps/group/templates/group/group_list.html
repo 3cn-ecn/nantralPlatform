@@ -33,7 +33,13 @@
               {% endif %}
             </div>
           </a>
-          <h6>{{ group.short_name }}</h6>
+          <h6>
+            {{ group.short_name }}
+            {% if group.get_sub_category %}
+              <br>
+              <small class="text-secondary">{{ group.get_sub_category }}</small>
+            {% endif %}
+          </h6>
         </div>
       {% endfor %}
     </div>
