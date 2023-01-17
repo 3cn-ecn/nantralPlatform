@@ -20,10 +20,6 @@ from apps.utils.compress import compress_model_image
 from apps.utils.slug import SlugModel
 
 
-import logging
-logger = logging.getLogger(__name__)
-
-
 path_and_rename_group = PathAndRename('groups/logo')
 path_and_rename_group_banniere = PathAndRename('groups/banniere')
 path_and_rename_group_type = PathAndRename('groups/types')
@@ -49,7 +45,7 @@ class GroupType(models.Model):
     name = models.CharField(
         verbose_name=_("Type name"),
         unique=True,
-        max_length=20)
+        max_length=30)
     slug = models.SlugField(
         primary_key=True,
         max_length=10)
@@ -94,7 +90,7 @@ class GroupType(models.Model):
                     "list of all groups."))
     sort_fields = models.CharField(
         verbose_name=_("Sort Fields"),
-        max_length=30,
+        max_length=100,
         default='-order, short_name',
         help_text=_("Fields used to sort groups in the list, separated by ',' "
                     "and without spaces. If categories are defined, you must "

@@ -37,6 +37,23 @@ from .forms import MembershipForm, AdminRequestForm
 # from apps.utils.slug import get_object_from_slug
 
 
+class UserCanSeeGroupMixin(UserPassesTestMixin):
+    """A mixin class to test if a user has the rights to see a group."""
+
+    def test_func(self) -> bool:
+        group = Group.objects.get(slug=self.kwargs.get('slug'))
+        user = self.request.user
+        if group.public:
+            # public group: everyone can see
+            return True
+        elif group.private:
+            # private group: only members (and admins of course)
+            return group.is_member(user) or user.is_superuser
+        else:
+            # normal group: every authenticated users
+            return user.is_authenticated
+
+
 class GroupTypeListView(ListView, LoginRequiredMixin):
     """List of GroupTypes."""
 
@@ -105,23 +122,12 @@ class GroupListView(ListView):
         return context
 
 
-class GroupDetailView(DetailView, UserPassesTestMixin):
+class GroupDetailView(UserCanSeeGroupMixin, DetailView):
     """The page for details on a group."""
 
     template_name = 'group/detail.html'
     model = Group
     slug_field = 'slug'
-
-    def test_func(self) -> bool:
-        """Test if the user is allowed to see this view."""
-        group: Group = self.get_object()
-        user = self.request.user
-        if group.public:
-            return True
-        elif group.private:
-            return group.is_member(user)
-        else:
-            return user.is_authenticated
 
     def get_context_data(self, **kwargs):
         """Get the context data to send to the template."""
@@ -172,9 +178,11 @@ class GroupDetailView(DetailView, UserPassesTestMixin):
         return context
 
 
-class UpdateSubscriptionView(View):
-    """Call this view to subscribe to a group, or unsubscribe if the user has
-    already subscribed."""
+class UpdateSubscriptionView(UserCanSeeGroupMixin, View):
+    """
+    SUBSCRIBE BUTTON: call this view to subscribe to a group, or unsubscribe
+    if the user has already subscribed.
+    """
 
     def get(self, request, slug) -> HttpResponse:
         group = Group.objects.get(slug=slug)
@@ -186,22 +194,25 @@ class UpdateSubscriptionView(View):
         return redirect(group.get_absolute_url())
 
 
-class MembershipFormView(FormView, LoginRequiredMixin):
-    """View for the user to add himself as a member of a group."""
+class MembershipFormView(UserCanSeeGroupMixin, FormView):
+    """
+    MEMBERSHIP BUTTON: View for the user to add himself as a member of a group,
+    and to edit its membership.
+    """
 
     http_method_names = ['post']
 
-    def get_group(self) -> Group:
-        if not hasattr(self, 'group'):
-            self.group = Group.objects.get(slug=self.kwargs.get('slug'))
-        return self.group
+    @property
+    def group(self) -> Group:
+        if not hasattr(self, '_group'):
+            self._group = Group.objects.get(slug=self.kwargs.get('slug'))
+        return self._group
 
     def get_form(self) -> MembershipForm:
         return MembershipForm(
-            group=self.get_group(),
+            group=self.group,
             student=self.request.user.student,
-            instance=(self.get_group()
-                      .membership_set
+            instance=(self.group.membership_set
                       .filter(student=self.request.user.student)
                       .first()),
             **self.get_form_kwargs())
@@ -210,7 +221,7 @@ class MembershipFormView(FormView, LoginRequiredMixin):
         student = self.request.user.student
         if self.request.POST.get('delete'):
             # delete the membership
-            self.get_group().subscribers.remove(student)
+            self.group.subscribers.remove(student)
             form.instance.delete()
             messages.success(self.request, 'Membre supprimé.')
         else:
@@ -218,22 +229,22 @@ class MembershipFormView(FormView, LoginRequiredMixin):
             created = form.instance.pk is None
             form.save()
             if created:
-                self.get_group().subscribers.add(student)
+                self.group.subscribers.add(student)
                 messages.success(self.request, 'Bienvenue dans le groupe !')
             else:
                 messages.success(
                     self.request,
                     'Les modifications ont bien été enregistrées !')
         # return to the page
-        return redirect(self.get_group().get_absolute_url())
+        return redirect(self.group.get_absolute_url())
 
     def form_invalid(self, form: MembershipForm):
         messages.error(self.request, 'Modification refusée... 😥')
-        return redirect(self.get_group().get_absolute_url())
+        return redirect(self.group.get_absolute_url())
 
 
-class AdminRequestFormView(FormView, LoginRequiredMixin):
-    """View for ask for admin rights."""
+class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
+    """ADMIN BUTTON: View to ask for admin rights."""
 
     http_method_names = ['post']
 
@@ -253,7 +264,7 @@ class AdminRequestFormView(FormView, LoginRequiredMixin):
         membership = form.save()
         messages.success(
             self.request,
-            ("Votre demande a bien été enregistrée ! Vous recevrez la "
+            ("Votre demande a bien été envoyée ! Vous recevrez la "
              "réponse par mail."))
         # send a message to the discord channel for administrators
         accept_url = self.request.build_absolute_uri(
