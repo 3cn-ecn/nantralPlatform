@@ -135,5 +135,5 @@ jobs:
             git pull
             sudo cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPlatform/deployment/certs/key.pem
             sudo cp /etc/letsencrypt/live/nantral-platform.fr/fullchain.pem /home/ubuntu/nantralPlatform/deployment/certs/cert.pem
-            sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx backend
+            sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx backend celery celery-beat
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
