@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - staging
+      - react-app
     paths:
       - backend/**
       - .github/workflows/test-django.yml
