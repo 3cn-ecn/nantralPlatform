@@ -53,8 +53,6 @@ services:
       - celery-beat
       - redis
     env_file: backend.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.docker
 
   celery-beat:
     build:
@@ -66,8 +64,6 @@ services:
     depends_on:
       - redis
     env_file: backend.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.docker
 
 volumes:
   postgres_data:

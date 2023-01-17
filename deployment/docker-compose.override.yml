@@ -18,9 +18,13 @@ services:
   
   celery:
     env_file: ../backend/config/settings/.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
   
   celery-beat:
     env_file: ../backend/config/settings/.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
 
   workers-dashboard:
     build:
