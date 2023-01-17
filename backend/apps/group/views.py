@@ -8,7 +8,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import QuerySet, Q
+from django.db.models import QuerySet, Q, Count
 from django.http import HttpResponse  # , HttpRequest
 from django.shortcuts import redirect
 from django.urls.base import reverse
@@ -76,6 +76,13 @@ class GroupListView(ListView):
                 .filter(Q(private=False) | Q(members=user.student)
                         if user.is_authenticated
                         else Q(public=True))
+                # hide groups without active members (ie end_date > today)
+                .annotate(num_active_members=Count(
+                    'membership_set',
+                    filter=Q(membership_set__end_date__gte=timezone.now())))
+                .filter(Q(num_active_members__gt=0)
+                        if group_type.hide_no_active_members
+                        else Q())
                 # prefetch type and parent group for better performances
                 .prefetch_related('group_type', 'parent')
                 # order by category, order and then name

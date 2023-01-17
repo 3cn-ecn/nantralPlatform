@@ -96,8 +96,9 @@ class GroupType(models.Model):
         verbose_name=_("Sort Fields"),
         max_length=30,
         default='-order, short_name',
-        help_text=_("Fields used to sort groups in the list. If categories "
-                    "are defined, you must reflect them here."))
+        help_text=_("Fields used to sort groups in the list, separated by ',' "
+                    "and without spaces. If categories are defined, you must "
+                    "also reflect them here."))
     category_expr = models.CharField(
         verbose_name=_("Category expression"),
         max_length=200,
@@ -108,6 +109,10 @@ class GroupType(models.Model):
         max_length=200,
         default="''",
         help_text=_("A python expression to get the sub-category label."))
+    hide_no_active_members = models.BooleanField(
+        verbose_name=_("Hide groups without active members"),
+        default=False,
+        help_text=_("Hide groups where all 'end_date' from members are past."))
 
     class Meta:
         verbose_name = _("group type")
@@ -369,8 +374,14 @@ class Group(models.Model, SlugModel):
 class Membership(models.Model):
     """A class for memberships of each group."""
 
-    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
-    group = models.ForeignKey(to=Group, on_delete=models.CASCADE)
+    student = models.ForeignKey(
+        to=Student,
+        on_delete=models.CASCADE,
+        related_name='membership_set')
+    group = models.ForeignKey(
+        to=Group,
+        on_delete=models.CASCADE,
+        related_name='membership_set')
     summary = models.CharField(
         verbose_name=_("Summary"),
         max_length=50,

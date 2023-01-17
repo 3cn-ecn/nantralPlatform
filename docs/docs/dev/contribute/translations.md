@@ -22,7 +22,7 @@ be translated:
 from django.utils.translation import gettext as _
 
 def get_welcome_text(request):
-    return _("Bienvenue sur Nantral Platform !")
+    return _("Welcome to Nantral Platform!")
 ```
 
 For texts that are NOT inside a function or a method, you have to call 
@@ -33,7 +33,7 @@ only once on the website start up.
 from django.utils.translation import gettext_lazy as _
 
 class Group(models.Model):
-    name = models.CharField(_("Nom du groupe"))
+    name = models.CharField(_("Group Name"))
 ```
 
 ## Write the Translations
@@ -45,9 +45,9 @@ First, create the `.po` file:
     ```
 * Create the `.po` files for the English translations:
     ```bash
-    pipenv run django-admin makmessages -l en
+    pipenv run django-admin makmessages -l fr
     ```
-* Open the `.po` file created in `locale/en/LC_MESSAGES`,
+* Open the `.po` file created in `locale/fr/LC_MESSAGES`,
     and fill in all the translations.
 
 ## Compile the translations
