@@ -15,6 +15,8 @@ import { InsertLink as InsertLinkIcon } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../../theme';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as EventIcon } from '../../assets/scalable/event.svg';
 import { ReactComponent as ClubIcon } from '../../assets/scalable/club.svg';
@@ -57,102 +59,95 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
     },
     {
       text: t('navbar.events'),
-      url: '/home/',
+      url: '/event/',
       icon: EventIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.clubs'),
       url: '/club/',
       icon: ClubIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.flatshare'),
       url: '/colocs/',
       icon: MapIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.patronage'),
       url: '/parrainage/',
       icon: FamilyIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.bdx'),
       url: '/liste/',
       icon: CampaignIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.academics'),
       url: '/academics/',
       icon: LibraryIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.administration'),
       url: '/administration/',
       icon: AdminIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.student'),
       url: '/student/',
       icon: ListIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.signature'),
       url: '/tools/signature/',
       icon: SignIcon,
-      isOnBackend: true,
     },
   ];
 
   return (
-    <Drawer
-      variant="persistent"
-      open={menuOpen}
-      anchor="left"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
+    <ThemeProvider theme={theme}>
+      <Drawer
+        variant="persistent"
+        open={menuOpen}
+        anchor="left"
+        sx={{
           width: drawerWidth,
-          boxSizing: 'border-box',
-        },
-        zIndex: '1000',
-      }}
-    >
-      <Toolbar />
-      <Box sx={{ overflow: 'auto' }}>
-        <List>
-          {links.map((link) => (
-            <ListItem
-              key={link.text}
-              disablePadding
-              component={NavLink}
-              to={link.url}
-              reloadDocument={link.isOnBackend}
-              className="navlink"
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  {link.icon ? (
-                    <SvgIcon component={link.icon} inheritViewBox />
-                  ) : (
-                    <SvgIcon component={LinkIcon} inheritViewBox />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={link.text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    </Drawer>
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+          zIndex: '1000',
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+          <List>
+            {links.map((link) => (
+              <ListItem
+                key={link.text}
+                disablePadding
+                component={NavLink}
+                to={link.url}
+                reloadDocument={link.isOnBackend}
+                className="navlink"
+              >
+                <ListItemButton>
+                  <ListItemIcon>
+                    {link.icon ? (
+                      <SvgIcon component={link.icon} inheritViewBox />
+                    ) : (
+                      <SvgIcon component={LinkIcon} inheritViewBox />
+                    )}
+                  </ListItemIcon>
+                  <ListItemText primary={link.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+    </ThemeProvider>
   );
 }
 

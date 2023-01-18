@@ -1,8 +1,4 @@
-import { Button } from '@mui/material';
 import React from 'react';
-import CheckIcon from '@mui/icons-material/Check';
-import Person from '@mui/icons-material/PermIdentity';
-import CheckboxListSecondary from './list';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 
@@ -10,12 +6,12 @@ import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.s
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
-function Home() {
+function Map() {
   return (
     <>
-      {/* <CheckboxListSecondary /> */}
-      <h1>Home</h1>
-      <p>Bienvenue sur Nantral Plateforme</p>
+      <h1>Carte des colocs</h1>
+      <p>Bienvenue sur Nantral Plateform</p>
+      <SvgIcon component={NantralIcon} inheritViewBox />
       <p>
         Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
         Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
@@ -146,4 +142,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Map;
