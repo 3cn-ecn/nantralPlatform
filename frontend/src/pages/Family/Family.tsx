@@ -6,10 +6,10 @@ import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.s
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
-function Home() {
+function Family() {
   return (
     <>
-      <h1>Home</h1>
+      <h1>Family</h1>
       <p>Bienvenue sur Nantral Plateform</p>
       <SvgIcon component={NantralIcon} inheritViewBox />
       <p>
@@ -142,4 +142,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Family;
