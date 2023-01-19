@@ -3,7 +3,7 @@ import {
   AddCircle as PlusIcon,
   CheckCircle as CheckIcon,
   LinkOutlined as LinkIcon,
-  Bolt as ShotgunIcon,
+  LocalFireDepartment as ShotgunIcon,
   Cancel as Cross,
 } from '@mui/icons-material';
 import {
@@ -13,6 +13,8 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  Theme,
+  SxProps,
 } from '@mui/material';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +25,7 @@ interface JoinButtonProps {
   maxPerson?: number;
   shotgunClosed?: boolean;
   person: number;
+  sx?: SxProps<Theme>;
 }
 
 function JoinButton({
@@ -31,6 +34,7 @@ function JoinButton({
   maxPerson,
   person,
   shotgunClosed,
+  sx,
 }: JoinButtonProps): JSX.Element {
   const [selected, setSelected] = React.useState(false);
   const [people, setPeople] = React.useState(person);
@@ -45,7 +49,8 @@ function JoinButton({
       setPeople(people - 1);
     }
   };
-  const onClick = () => {
+  const onClick = (e) => {
+    e.stopPropagation();
     switch (variant) {
       case 'normal':
         if (selected) {
@@ -111,11 +116,12 @@ function JoinButton({
   return (
     <>
       <Button
-        onClick={onClick}
+        onClick={(e) => onClick(e)}
         variant="contained"
         startIcon={getFirstIcon()}
         color={color}
         endIcon={getSecondIcon()}
+        sx={sx}
       >
         {getText()}
       </Button>
@@ -150,6 +156,7 @@ JoinButton.defaultProps = {
   link: '',
   maxPerson: 0,
   shotgunClosed: false,
+  sx: {},
 };
 
 export default JoinButton;

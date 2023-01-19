@@ -4,5 +4,11 @@
     "coloc": "Flatshares Map",
     "home": "Home",
     "post": "Events"
+  },
+  "button": {
+    "joinButton" : {
+      "register": "register",
+      "title": "Do you want to unsubscribe from this event?"
+    }
   }
 }
