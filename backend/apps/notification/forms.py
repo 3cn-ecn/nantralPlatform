@@ -1,4 +1,5 @@
 from django import forms
+from django.template.defaultfilters import safe
 
 from apps.notification.models import Subscription
 from apps.utils.slug import get_object_from_full_slug
@@ -12,7 +13,8 @@ class SubscriptionForm(forms.Form):
             page_object = get_object_from_full_slug(page)
             name = page_object.name
             url = page_object.get_absolute_url()
-            return f'{name} (<a href="{url}" target="_blank">voir la page</a>)'
+            return safe(f"{name} (<a href=\"{url}\" target=\"_blank\">voir "
+                        "la page</a>)")
         except Exception:
             return page
 

@@ -2,9 +2,6 @@ name: Testing Django
 
 on:
   pull_request:
-    branches:
-      - master
-      - staging
     paths:
       - backend/**
       - .github/workflows/test-django.yml
