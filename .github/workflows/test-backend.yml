@@ -43,7 +43,7 @@ jobs:
       - name: Coverage
         working-directory: ${{ env.working-directory }}
         run: |
-          pipenv run coverage-run
+          pipenv run coverage-test
           pipenv run coverage xml
       
       - name: SonarCloud Scan
