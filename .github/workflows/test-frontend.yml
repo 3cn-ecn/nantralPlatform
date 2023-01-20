@@ -1,13 +1,16 @@
-name: Sonar Frontend
+name: Test Frontend
 on:
   push:
     paths: [frontend/**]
+    branches:
+      - master
+      - react-app
   pull_request:
     types: [opened, synchronize, reopened]
     paths: [frontend/**]
 
 jobs:
-  sonarcloud:
+  tests-on-frontend:
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:
