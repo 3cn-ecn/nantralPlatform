@@ -11,6 +11,7 @@ migrate = "python manage.py migrate"
 django = "python manage.py"
 flake8 = "flake8 --config ../setup.cfg"
 autopep8 = "bash -c 'cd .. && autopep8 -raaa --in-place ./backend/'"
+coverage-run = "coverage run --source='.' manage.py test"
 
 [packages]
 celery = "~=5.2.2"
@@ -51,6 +52,7 @@ pycodestyle = "*"
 pydocstyle = "*"
 pyflakes = "*"
 names = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.10"

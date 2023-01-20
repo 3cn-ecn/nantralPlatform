@@ -7,6 +7,36 @@ on:
     paths: [backend/**]
 
 jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: ["3.10"]
+    env:
+      working-directory: ./backend
+    steps:
+      - name: Pull latest commit
+        uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pipenv"
+      - name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+      - name: Install dependencies
+        working-directory: ${{ env.working-directory }}
+        run: |
+          pipenv verify
+          pipenv sync
+          pipenv run pip install coverage
+      - name: Coverage
+        working-directory: ${{ env.working-directory }}
+        run: |
+          pipenv run coverage-run
+          pipenv run coverage xml
+
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
