@@ -56,7 +56,7 @@ class TestAccount(TestCase, TestMixin):
 
         url = reverse('account:registration')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         url = reverse('account:registration')
         response = self.client.post(url, data=self.PAYLOAD)
         self.assertEqual(response.status_code, 302)
