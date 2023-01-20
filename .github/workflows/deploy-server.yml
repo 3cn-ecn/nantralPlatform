@@ -26,7 +26,7 @@ jobs:
       # A step can use a GitHub action which is available on the marketplace or simply run a command in the runner's shell.
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Pull latest commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 2
       - name: Look for modified files
@@ -42,10 +42,10 @@ jobs:
             echo $file
             if [[ $file == frontend/* ]]; then
               echo "This modified file is under the 'frontend' folder."
-              echo "::set-output name=run_job::true"
+              echo "run_job=true" >> $GITHUB_OUTPUT
               break
             else
-              echo "::set-output name=run_job::false"
+              echo "run_job=false" >> $GITHUB_OUTPUT
             fi
           done < files.txt
 
@@ -56,9 +56,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Pull latest commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: "14.16.0"
       - name: Build React
@@ -79,21 +79,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Pull latest commit
-        uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-          cache: "pip"
+          cache: "pipenv"
+      - name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
       - name: Install dependencies
         working-directory: ./backend
-        run: |
-          pip install --user pipenv
-          python3 -m pipenv verify
-          python3 -m pipenv sync --system
+        run: pipenv verify && pipenv sync
       - name: Testing
         working-directory: ./backend
-        run: python manage.py test
+        run: pipenv run test
 
   deploy:
     # The type of runner that the job will run on
@@ -108,7 +107,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Pull latest commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Backup before deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
@@ -136,5 +135,5 @@ jobs:
             git pull
             sudo cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPlatform/deployment/certs/key.pem
             sudo cp /etc/letsencrypt/live/nantral-platform.fr/fullchain.pem /home/ubuntu/nantralPlatform/deployment/certs/cert.pem
-            sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx backend
+            sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx backend celery celery-beat
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d

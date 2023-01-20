@@ -1,5 +1,7 @@
 from django.db import models
 
+from .validators import validate_uri
+
 
 class SocialNetwork(models.Model):
     name = models.CharField(verbose_name='Nom', max_length=20, unique=True)
@@ -17,12 +19,21 @@ class SocialNetwork(models.Model):
 
 
 class SocialLink(models.Model):
-    url = models.URLField(verbose_name='URL', max_length=200)
-    label = models.CharField(verbose_name='Étiquette',
-                             max_length=20, null=True, blank=True)
+    uri = models.CharField(
+        verbose_name='URI',
+        max_length=200,
+        validators=[validate_uri])
+    label = models.CharField(
+        verbose_name='Étiquette',
+        max_length=20,
+        blank=True)
     network = models.ForeignKey(
-        SocialNetwork, on_delete=models.CASCADE, verbose_name="Type du lien")
-    slug = models.SlugField(verbose_name='Slug du groupe', null=True)
+        SocialNetwork,
+        on_delete=models.CASCADE,
+        verbose_name="Type du lien")
+    slug = models.SlugField(
+        verbose_name='Slug du groupe',
+        null=True)
 
     class Meta:
         verbose_name = "Lien de Réseau Social"

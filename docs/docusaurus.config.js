@@ -121,7 +121,7 @@ const config = {
               },
               {
                 label: "SonarCloud",
-                href: "https://sonarcloud.io/organizations/nantral-platform",
+                href: "https://sonarcloud.io/organizations/3cn-ecn",
               },
               {
                 label: "Staging Server",
@@ -152,6 +152,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+        additionalLanguages: ['powershell', 'django', 'docker'],
       },
     }),
 };

@@ -17,8 +17,21 @@ class HomeAdminView(UserIsInGroup, TemplateView):
         context['phase'] = Setting.get('PHASE_COLOCATHLON')
         # Colocathlon
         # Colocs - general
-        colocs = Roommates.objects.filter(colocathlon_agree=True)
-        context['nb_colocs'] = len(colocs)
+        nb_participants = 0
+        participants = Roommates.objects.filter(colocathlon_agree=True)
+        context['nb_colocs'] = len(participants)
+        colocs_liste = []
+        for participant in participants:
+            coloc = {}
+            coloc['name'] = participant.name
+            coloc['quota'] = participant.colocathlon_quota
+            membres = list(participant.colocathlon_participants.all())
+            coloc['places'] = len(membres)
+            nb_participants += coloc['places']
+            coloc['membres'] = [membre.name for membre in membres]
+            colocs_liste.append(coloc)
+        context['nb_participants'] = nb_participants
+        context['colocs'] = colocs_liste
         return context
 
 

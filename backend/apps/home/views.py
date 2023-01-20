@@ -1,5 +1,6 @@
 from datetime import timedelta
 from typing import List
+from os.path import join
 
 from django.conf import settings
 from django.contrib import messages
@@ -25,6 +26,8 @@ from apps.utils.github import create_issue
 
 from .forms import SuggestionForm
 
+
+# PAGES VIEWS
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'home/home.html'
@@ -71,16 +74,15 @@ class SuggestionView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         create_issue(
             title=form.cleaned_data['title'],
-            label=form.cleaned_data['suggestionOrBug'],
+            label=form.cleaned_data['suggestion_or_bug'],
             body=(
-                f'{form.cleaned_data["description"]} <br/> '
-                + '[Clique pour découvrir qui propose ça.]'
-                + f'(https://"{get_current_site(self.request)}'
-                + f'{self.request.user.student.get_absolute_url()})'),
+                f"{form.cleaned_data['description']} <br/> "
+                "[Clique pour découvrir qui propose ça.]"
+                f"(https://{get_current_site(self.request)}"
+                f"{self.request.user.student.get_absolute_url()})"),
         )
         messages.success(
-            self.request,
-            'Votre suggestion a été enregistrée merci')
+            self.request, "Votre suggestion a été enregistrée merci")
         return redirect('home:home')
 
     def get_context_data(self, **kwargs):
@@ -88,7 +90,7 @@ class SuggestionView(LoginRequiredMixin, FormView):
         context['ariane'] = [
             {
                 'target': '#',
-                'label': 'Suggestions & Bugs'
+                'label': "Suggestions & Bugs"
             }
         ]
         return context
@@ -107,6 +109,8 @@ class LegalMentionsView(TemplateView):
         ]
         return context
 
+
+# SHORTCUT AND REDIRECT VIEWS
 
 @require_http_methods(["GET"])
 @login_required
@@ -136,23 +140,34 @@ def current_user_roommates_view(request):
         return redirect('roommates:housing-map')
 
 
+# SPECIAL FILE VIEWS THAT HAVE TO BE SERVED FROM ROOT
+
 @require_http_methods(["GET"])
 def service_worker(request):
     """A view to serve the service worker"""
-    sw_path = settings.BASE_DIR + "/static/js/app/sw.js"
-    file = open(sw_path)
-    response = HttpResponse(file.read(), content_type='application/javascript')
-    file.close()
-    return response
+    file_path = join(settings.BASE_DIR, "static/js/app/sw.js")
+    with open(file_path) as file:
+        return HttpResponse(file.read(), content_type='application/javascript')
 
+
+@require_http_methods(["GET"])
+def assetlinks(request):
+    """
+    A view to serve the assetlinks file, for the PWA application on Play Store,
+    to ensure to Google we own the website.
+    """
+    file_path = join(settings.BASE_DIR, "static/assetlinks.json")
+    with open(file_path) as file:
+        return HttpResponse(file.read())
+
+
+# ERROR PAGES VIEWS
 
 @require_http_methods(["GET"])
 def offline_view(request):
     response = render(request, 'home/offline.html')
     return response
 
-
-# ERROR PAGES VIEWS
 
 @require_http_methods(["GET", "POST", "PUT", "DELETE"])
 def handler403(request, *args, **argv):

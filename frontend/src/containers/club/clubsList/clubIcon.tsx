@@ -8,7 +8,7 @@ export function ClubIcon(props): JSX.Element {
     <div className="grille-icon text-center" style={clubStyle}>
       <a href={club.get_absolute_url} className="stretched-link">
         <div className="ratio ratio-1x1">
-          <img src={club.logo_url} style={{ opacity: club.opacity }} />
+          <img src={club.logo_url}/>
         </div>
       </a>
       <h6>{club.name}</h6>

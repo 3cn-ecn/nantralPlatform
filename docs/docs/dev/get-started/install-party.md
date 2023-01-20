@@ -19,10 +19,15 @@ Don't worry, we will explain you the basics 😉
 <TabItem value="win" label="Windows">
 
 On Windows, you have two terminals: `CMD`, the oldest one, and `Powershell`, the new one. We recommend you to
-always use **Powershell**, wich has less issues.
+**only use Powershell**, wich has less issues.
 
-To open a terminal, simply type `Powershell` or `CMD` in the search bar of your system, and open it like any 
+To open a terminal, simply type `Powershell` in the search bar of your system, and open it like any 
 application. There you are! A new window with some white lines should appear.
+
+:::info 
+You can also open *PowerShell* from a right click on the Start Menu, but be
+careful to select the *"PowerShell"* and not *"PowerShell (Admin)"* !
+:::
 
 The directory where you are is shown on the last line. By default, it should be your user directory, so 
 something like `C:\Users\michel\`. You can deplace to other directories with:
@@ -81,13 +86,13 @@ Some explanations:
 
 ## Python
 
-First let's install Python. Nantral Platform runs on **Python 3.10**, but you
-can use another version if you prefere, just be sure to use at least **Python3**.
+First let's install Python! For Nantral Platform, we need to install the
+**Python 3.10** version. Be sure to select the correct version!! ⚠️
 
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
-Download and installf Python from the [Windows Store](https://www.microsoft.com/store/productId/9PJPW5LDXLZ5).
+Download and install Python from the **[Windows Store](https://apps.microsoft.com/store/search/python)**.
 
 :::info
 You can also download Python from the [official website](https://www.python.org/downloads/). In this case, be careful
@@ -101,7 +106,7 @@ Download and install Python from the [official website](https://www.python.org/d
 to check the **"Add python to the PATH"** option during the installation!
 
 :::caution
-MacOS has already python installed, but the Python 2 version. Unfortunately, it is not compatible with Python 3,
+MacOS has already python installed, but sometimes it is the Python2 version. Unfortunately, it is not compatible with Python3,
 so you have to install both versions side by side. If it does not work the first time, you can find tutorials on
 Internet to solve it.
 :::
@@ -109,10 +114,23 @@ Internet to solve it.
 </TabItem>
 <TabItem value="lin" label="Linux">
 
-Open a terminal and run
+Python should be already installed on your system, you can check that you have
+the correct version with:
 ```bash
-sudo apt update && sudo apt install python3 python3-pip -y
+python3 --version
 ```
+
+> If Python is not installed, you can run in a terminal:
+> ```bash
+> sudo apt update && sudo apt install python3 python3-pip -y
+> ```
+> 
+> If you don't have the correct version, install `pyenv`:
+> ```bash
+> curl https://pyenv.run | bash
+> ```
+> (`pipenv` will then automatically install the correct version using `pyenv`,
+> so don't worry to install the correct python version now.)
 
 </TabItem>
 </Tabs>
@@ -121,18 +139,18 @@ After the installation, check that it works properly:
 * Open a new terminal
 * Type this command and press <kbd>ENTER</kbd> to run it:
     ```bash
-    python --version
+    python3 --version
     ```
 * You should see the Python version on a new line: `Python 3.xx`
 
 <details class="caution">
-    <summary>The command does not work or the version is lower than <em>python3</em>, what can I do? 😭</summary>
+    <summary>The command does not work or the version is not <em>python3.10</em>, what can I do? 😭</summary>
 
 Sometimes you can have multiple versions of python installed on your system: in this case, using `python` can refer to
 another version of python (for instance, it refers by default to python2 if it is installed). 
 
 To avoid this, you can precise which version you want to use by adding the version to the command: try to run 
-`python3` instead of `python`, to get the correct version.
+`python` instead of `python3`, to get the correct version, or `python3.7` for example.
 
 Also notice that on Windows, `python` is sometimes replaced by `py` only: in this case, you can precise the version
 by runnning `py -3` for example.
@@ -156,105 +174,81 @@ or try to reboot your computer to refresh the available commands.
     </iframe>
 </details>
 
-### Pip
+### Package installer for Python (pip)
 
 Pip should have been installed with Python. To verify this, run:
 ```bash
-pip --version
+python3 -m pip --version
 ```
 It should produce a line like this: `pip 20.0.2 from /usr/lib/python3/dist-packages/pip (python 3.10)`
-
-**Check the python version at the end of the line!**
-If it is lower than `python3`, try to run `pip3` instead of `pip`.
 
 <details>
 <summary>I have the error <em>"command pip not found"</em>, what can I do?</summary>
 
 First, pip is maybe not installed on your system. To install it, run
 ```bash
-python -m ensurepip --upgrade
+python3 -m ensurepip --upgrade
 ```
-Then, you should get pip through this command:
-```bash
-python -m pip --version
+or on Linux:
+```
+sudo apt-get install python3-pip
 ```
 
 :::note
 Don't forget to replace `python` by `python3` or `py` if needed, as we have seen previsouly.
 :::
 
-Finally, try to launch the pip command directly: 
-```bash
-pip --version
-```
-
-If this last command does not work, that means that pip is not installed in your PATH.
-Try to close and reopen your terminal, or reboot your computer if you still don't get
-`pip`.
-If the error persists, add `pip` to your PATH manually (check the internet!),
-or replace `pip` by `python -m pip` if it does not bother you.
-
 </details>
+
+If you are a more advanced user, you can also add `pip` to your PATH to run
+directly `pip3` instead of `python3 -m pip`. In most cases it will be already
+added to your PATH!
 
 ### Pipenv
 
-Finally, we will install `pipenv` to replace `pip`. *But why did you ask to
+Finally, we will install `pipenv` to replace `pip`. *But why did you ask me to
 intall `pip` so?*, you will ask me! Well, the answer is pretty simple: we need
 `pip` to install `pipenv`.
 
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
-1. First, run this command to install `pipenv`:
-    ```bash
-    pip install --user pipenv
+1. First, run this command into **PowerShell** to install `pipenv`:
+    ```powershell
+    python3 -m pip install --user pipenv
     ```
-2. Then we will add the `pipenv` command to your PATH. Run this command to get the directory path of pipenv:
-    ```bash
-    python -m site --user-site
+2. Add the `pipenv` command to your PATH:
+    ```powershell
+    [Environment]::SetEnvironmentVariable("PATH", $Env:PATH + ";$($(get-item $(python -m site --user-site)).parent.FullName)\Scripts", [EnvironmentVariableTarget]::User)
     ```
-    *A sample output could be: ` C:\Users\jetbrains\AppData\Roaming\Python\Python37\site-packages`*
-
-3. Replace `site-packages` with `Scripts` in the output and add it to the PATH variable, for example:
-    ```bash
-    setx PATH "%PATH%;C:\Users\jetbrains\AppData\Roaming\Python\Python37\Scripts"
-    ```
-4. Close and reopen your terminal to refresh the PATH. (If it is not enough, reboot your computer !)
+4. Close and reopen your terminal to refresh the PATH.
 5. Finally let's test the installation:
     ```bash
     pipenv --version
     ```
-    *You could get some warnings, but if the last line show the name **pipenv** with
-    a number version, it's all good!*
 
 </TabItem>
 <TabItem value="mac-lin" label="MacOS/Linux">
 
 1. First, run this command to install `pipenv`:
     ```bash
-    pip install --user pipenv
+    python3 -m pip install --user pipenv
     ```
-2. Then we will add the `pipenv` command to your PATH. Run this command to get the directory path of pipenv:
-    ```bash
-    python -m site --user-base
-    ```
-    *An example of output can be: `/home/jetbrains/.local`*.
-
-2. Add **bin** to this path and run this command to add it to your PATH:
-    ```bash
-    export PATH="$PATH:/home/jetbrains/.local/bin"
-    ```
-3. Refresh the PATH in your terminal:
-    ```bash
-    source ~/.bashrc
-    ```
-4. Finally let's test the installation:
+2. Test the installation:
     ```bash
     pipenv --version
+    ````
+3. If it does not work, you might need to add `pipenv` to your PATH. To do this,
+    you will edit your profile configuration file `~/.bashrc`, or `~/.zshrc`.
+    At the end of the file, add this line:
+    ```bash
+    export PATH="$PATH:$(python3 -m site --user-base)/bin"
     ```
-    *You could get some warnings, but if the last line show the name **pipenv** with
-    a number version, it's all good!*
-
+    Close and restart your terminal, and test again to run `pipenv`.
+    If it still doesn't work, replace the previous line by this one:
+    ```bash
+    export PATH="$PATH:$(python3 -m site --user-site)"
+    ```
 
 </TabItem>
 </Tabs>
@@ -317,16 +311,17 @@ helpful in the following, trust me ;)
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
 
-1. Open Powershell and run:
-    ```bash
-    winget install gnuwin32.make
+1. Open **Powershell** and run:
+    ```powershell
+    winget install GnuWin32.make
     ```
+    If the `winget` command does not work, install it from the [Windows Store](https://www.microsoft.com/p/app-installer/9nblggh4nns1#activetab=pivot:overviewtab).
 2. Add `make` to your PATH:
-    ```bash
-    setx PATH "%PATH%;C:\Program Files(x86)\GnuWin32\bin\make.exe"
+    ```powershell
+    [Environment]::SetEnvironmentVariable("PATH", $Env:PATH + ";C:\Program Files (x86)\GnuWin32\bin\", [EnvironmentVariableTarget]::User)
     ```
-3. Relaunch your terminal (or computer if needed) and try to run `make`:
-    ```bash
+3. Close and restart your terminal, then test the command:
+    ```powershell
     make --version
     ```
 

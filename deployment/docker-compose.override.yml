@@ -18,14 +18,18 @@ services:
   
   celery:
     env_file: ../backend/config/settings/.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
   
   celery-beat:
     env_file: ../backend/config/settings/.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.docker
 
   workers-dashboard:
     build:
-      context: ../
-      dockerfile: deployment/containers/web/Dockerfile
+      context: ../backend/
+      dockerfile: ../deployment/containers/web/Dockerfile
     command: celery -A apps.celery --broker=redis://redis:6379/0 flower --port=5555
     ports:
       - 5555:5555

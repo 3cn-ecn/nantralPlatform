@@ -10,7 +10,7 @@ export function StudentCardPicture(props: StudentCardBodyProps): JSX.Element {
   const picture =
     member.student.picture !== null
       ? member.student.picture
-      : "/static/img/logo/scalable/logo.svg";
+      : `https://avatars.dicebear.com/api/avataaars/${member.student.name}.svg`;
 
   if (editMode) {
     return (
@@ -18,12 +18,7 @@ export function StudentCardPicture(props: StudentCardBodyProps): JSX.Element {
         <div style={centerWrapper}>
           <div className="ratio ratio-1x1">
             <img
-              // TODO: Enlever le nom de domaine ici
-              src={
-                picture.includes("https://")
-                  ? picture
-                  : `https://nantral-platform.fr${picture}`
-              }
+              src={picture}
               style={iconStyle}
             />
           </div>

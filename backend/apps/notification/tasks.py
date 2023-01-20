@@ -37,7 +37,7 @@ def clean_notifications():
     """A simple celery task to delete the old notifications"""
 
     # we decide to delete all notifications older than 60 days
-    timeperiod = datetime.timedelta(day=60)
+    timeperiod = datetime.timedelta(days=60)
     # then get the day of today
     today = timezone.now()
     # import the Notification model

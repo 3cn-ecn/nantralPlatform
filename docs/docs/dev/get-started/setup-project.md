@@ -13,24 +13,11 @@ Open a terminal in the `nantralPlatform` directory (for convenience, you can
 open this terminal inside of VS Code but it also works if you use your regular
 terminal), and run:
 
-<Tabs groupId="os">
-<TabItem value="win" label="Windows">
-
 ```bash
-make win-install
+make install
 ```
 
-</TabItem>
-<TabItem value="mac-lin" label="MacOS/Linux">
-
-```bash
-make unix-install
-```
-
-</TabItem>
-</Tabs>
-
-That's done! Everything should be installed.
+That's done! If you don't get any error message, everything should be installed.
 
 <details>
     <summary>Help! The <code>make</code> command does not work with me! 😥</summary>
@@ -50,18 +37,19 @@ to install everything.
     ```bash
     pipenv install --dev
     ```
+    If you get an error with the Python version, install [pyenv](https://github.com/pyenv/pyenv).
 
 4. Create your database for django:
     ```bash
-    pipenv run migrate
+    pipenv run django migrate
     ```
 
 5. Create an administrator acount on this database:
     ```bash
-    pipenv run createsuperuser
+    pipenv run django createsuperuser
     ```
     When asked, complete as follow:
-    - username: `admin`
+    - username: `admin` (or `admin2` if already used)
     - email: `admin@ec-nantes.fr`
     - password: `admin`
 

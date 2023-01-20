@@ -20,7 +20,7 @@ RUN mkdir -p /var/app/logs
 RUN mkdir var/app/staticfiles
 WORKDIR  /var/app
 
-COPY backend/Pipfile* /tmp/
+COPY ./Pipfile* /tmp/
 RUN pip install -U pip
 RUN pip install pipenv
 RUN cd /tmp && pipenv requirements > requirements.txt
@@ -31,10 +31,9 @@ RUN pip install -r /tmp/requirements.txt
 
 # Copy stuff in rarest-to-most-often order
 # Files that should basically never change
-COPY backend/manage.py \
-  backend/run_server.sh
+COPY ./manage.py ./run_server.sh ./
 # Files that will change rarely
-COPY backend/templates ./templates
-COPY backend/config ./config
+COPY ./templates ./templates
+COPY ./config ./config
 # Files that will change often
-COPY backend/apps ./apps
+COPY ./apps ./apps
