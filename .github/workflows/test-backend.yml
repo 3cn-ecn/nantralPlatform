@@ -1,13 +1,16 @@
-name: Sonar Backend
+name: Test Backend
 on:
   push:
     paths: [backend/**]
+    branches:
+      - master
+      - react-app
   pull_request:
     types: [opened, synchronize, reopened]
     paths: [backend/**]
 
 jobs:
-  sonarcloud:
+  tests-on-backend:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -29,12 +32,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: "pipenv"
       
-      - name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-      
       - name: Install dependencies
         working-directory: ${{ env.working-directory }}
         run: |
+          curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
           pipenv verify
           pipenv sync
           pipenv run pip install coverage
