@@ -59,7 +59,7 @@ function AppInstallBanner(): JSX.Element {
   }
 
   // finally show the banner
-  const isAndroid = false; // /Android/i.test(navigator.userAgent);
+  const isAndroid = /Android/i.test(navigator.userAgent);
   return (
     <div className="app-install">
       <span className="me-4">
@@ -68,7 +68,9 @@ function AppInstallBanner(): JSX.Element {
       {isAndroid ? (
         <Button
           variant="danger"
-          onClick={(e) => window.open('url of play store', '_self')}
+          onClick={() => window.open(
+            'https://play.google.com/store/apps/details?id=org.ecn_3cn.nantral_platform',
+            '_self')}
         >
           Télécharger
         </Button>
