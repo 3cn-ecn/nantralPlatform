@@ -4,8 +4,8 @@ services:
 
   backend-staging:
     build:
-      context: ../../nantralPlatform-staging/
-      dockerfile: ./deployment/containers/web_staging/Dockerfile
+      context: ../../nantralPlatform-staging/backend/
+      dockerfile: ../deployment/containers/web_staging/Dockerfile
     expose:
       - 8001
     command: sh run_server_staging.sh
