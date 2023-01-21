@@ -8,12 +8,11 @@ urlpatterns = [
     # pages
     path('suggestions/', views.SuggestionView.as_view(), name='suggestions'),
     path('legal_mentions/', views.LegalMentionsView.as_view(), name='mentions'),
-    path('', views.HomeView.as_view(), name='home'),
+    path('home/', views.HomeView.as_view(), name='home'),
 
     # shortcuts
     path('me/', views.current_user_page_view, name='me'),
     path('my_coloc/', views.current_user_roommates_view, name='my_coloc'),
-    path('home/', views.HomeView.as_view(), name='home'),
 
     # errors pages
     path('404/', views.handler404),
