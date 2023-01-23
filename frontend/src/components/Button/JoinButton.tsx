@@ -61,7 +61,7 @@ function JoinButton({
         }
         break;
       case 'shotgun':
-        if (people >= maxPerson || shotgunClosed) return;
+        if (person >= maxPerson || shotgunClosed) return;
         if (selected) {
           setOpen(true);
         } else {
@@ -88,7 +88,8 @@ function JoinButton({
   const getSecondIcon = () => {
     if (variant === 'normal') return selected ? <CheckIcon /> : <PlusIcon />;
     if (variant === 'shotgun') {
-      if (people >= maxPerson || shotgunClosed) return <Cross />;
+      if (person >= maxPerson || shotgunClosed) return <Cross />;
+      if (people === maxPerson) return <CheckIcon />;
       return selected ? <CheckIcon /> : <PlusIcon />;
     }
     return null;

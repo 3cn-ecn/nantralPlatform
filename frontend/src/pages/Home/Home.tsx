@@ -11,9 +11,9 @@ function Home() {
     <>
       {/* <CheckboxListSecondary /> */}
       <h1>Home</h1>
-      <div style={{ flexDirection: 'column', display: 'flex' }}>
+      <div style={{ flexDirection: 'column' }}>
         <JoinButton variant="normal" person={5} maxPerson={10} />
-        <JoinButton variant="shotgun" person={10} maxPerson={10} />
+        <JoinButton variant="shotgun" person={9} maxPerson={10} />
         <JoinButton
           variant="form"
           person={5}
