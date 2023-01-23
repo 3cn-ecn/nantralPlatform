@@ -9,8 +9,8 @@ const theme = createTheme({
     secondary: {
       main: '#efefef',
     },
-    button: {
-      main: '0d6efd',
+    info: {
+      main: 'dc3545',
     },
     warning: {
       main: '#dc3545',
