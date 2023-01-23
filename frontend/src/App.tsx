@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Box, CssBaseline, Toolbar } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import Home from './pages/Home/Home';
 import Test1 from './pages/Test1/Test1';
 import NavBarTop from './components/NavBarTop/NavBarTop';
@@ -16,6 +16,7 @@ import Family from './pages/Family/Family';
 import Map from './pages/Map/Map';
 import Sign from './pages/Sign/Sign';
 import Student from './pages/Student/Student';
+import theme from './theme';
 import './App.scss';
 
 /**
@@ -26,51 +27,52 @@ import './App.scss';
  * @returns The App Component
  */
 function App() {
-  const [menuOpen, setMenuOpen] = React.useState(true);
+  const [menuOpen, setMenuOpen] = React.useState(false);
   const drawerWidth = 240; // the width of the lateral navbar
-  const theme = useTheme(); // use properties from the MUI theme
   const count = 0;
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <NavBarTop menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-      <NavBarSide menuOpen={menuOpen} drawerWidth={drawerWidth} />
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          padding: theme.spacing(3),
-          paddingTop: 0,
-          transition: theme.transitions.create('margin', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-          marginLeft: `-${drawerWidth}px`,
-          ...(menuOpen && {
+    <ThemeProvider theme={theme}>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <NavBarTop menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <NavBarSide menuOpen={menuOpen} drawerWidth={drawerWidth} />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            padding: theme.spacing(3),
+            paddingTop: 0,
             transition: theme.transitions.create('margin', {
-              easing: theme.transitions.easing.easeOut,
-              duration: theme.transitions.duration.enteringScreen,
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.leavingScreen,
             }),
-            marginLeft: 0,
-          }),
-        }}
-      >
-        <Toolbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/club" element={<Club />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/event" element={<Event />} />
-          <Route path="/academics" element={<Academics />} />
-          <Route path="/administration" element={<Admin />} />
-          <Route path="/liste" element={<BDX />} />
-          <Route path="/parrainage" element={<Family />} />
-          <Route path="/colocs" element={<Map />} />
-          <Route path="/student" element={<Student />} />
-          <Route path="/tools/signature" element={<Sign />} />
-        </Routes>
+            marginLeft: `-${drawerWidth}px`,
+            ...(menuOpen && {
+              transition: theme.transitions.create('margin', {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+              }),
+              marginLeft: 0,
+            }),
+          }}
+        >
+          <Toolbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/club" element={<Club />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/event" element={<Event />} />
+            <Route path="/academics" element={<Academics />} />
+            <Route path="/administration" element={<Admin />} />
+            <Route path="/liste" element={<BDX />} />
+            <Route path="/parrainage" element={<Family />} />
+            <Route path="/colocs" element={<Map />} />
+            <Route path="/student" element={<Student />} />
+            <Route path="/tools/signature" element={<Sign />} />
+          </Routes>
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 }
 

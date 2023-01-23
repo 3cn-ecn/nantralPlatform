@@ -1,1 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,20,5,12A4.81,4.81,0,0,1,5,6a4.87,4.87,0,0,1,7,0,4.87,4.87,0,0,1,7,0,4.82,4.82,0,0,1,0,6l-7,8" style="fill:#dc3545"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg584"
+   sodipodi:docname="love.svg"
+   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs588" />
+  <sodipodi:namedview
+     id="namedview586"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="2.5423729"
+     inkscape:cy="12"
+     inkscape:window-width="1440"
+     inkscape:window-height="872"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg584" />
+  <path
+     d="M 12.002076,23.54237 1.5657466,11.615137 a 7.1712492,7.1712492 0 0 1 0,-8.9454246 7.2607034,7.2607034 0 0 1 10.4363294,0 7.2607034,7.2607034 0 0 1 10.436329,0 7.1861582,7.1861582 0 0 1 0,8.9454246 L 12.002076,23.54237"
+     style="fill:#dc3545;stroke-width:1.49091"
+     id="path582" />
+</svg>

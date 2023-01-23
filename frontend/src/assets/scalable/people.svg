@@ -1,1 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24"><defs><linearGradient id="a" x1="5" y1="15.96" x2="19" y2="15.96" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#b6b7b7"/><stop offset="1" stop-color="#e0e0df"/></linearGradient></defs><path d="M16,8a4,4,0,1,1-4-4,4,4,0,0,1,4,4" style="fill:#dc3545"/><path d="M19,20c0-4.42-3.13-8-7-8s-7,3.58-7,8Z" style="fill:url(#a)"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg945"
+   sodipodi:docname="people.svg"
+   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview947"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="9.8644068"
+     inkscape:cy="12"
+     inkscape:window-width="1440"
+     inkscape:window-height="872"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg945" />
+  <defs
+     id="defs939">
+    <linearGradient
+       id="a"
+       x1="5"
+       y1="15.96"
+       x2="19"
+       y2="15.96"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#b6b7b7"
+         id="stop934" />
+      <stop
+         offset="1"
+         stop-color="#e0e0df"
+         id="stop936" />
+    </linearGradient>
+  </defs>
+  <g
+     id="g1068"
+     transform="matrix(1.5,0,0,1.5,-6,-6)">
+    <path
+       d="M 16,8 A 4,4 0 1 1 12,4 4,4 0 0 1 16,8"
+       style="fill:#dc3545"
+       id="path941" />
+    <path
+       d="m 19,20 c 0,-4.42 -3.13,-8 -7,-8 -3.87,0 -7,3.58 -7,8 z"
+       style="fill:url(#a)"
+       id="path943" />
+  </g>
+</svg>

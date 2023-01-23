@@ -114,7 +114,7 @@ function JoinButton({
   } else if (selected) {
     color = 'success';
   } else {
-    color = 'primary';
+    color = 'info';
   }
   return (
     <>

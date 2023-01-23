@@ -1,1 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24"><defs><linearGradient id="a" x1="8.29" y1="16.44" x2="13.09" y2="8.11" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#b6b7b7"/><stop offset="1" stop-color="#e0e0df"/></linearGradient></defs><path d="M6,18H17c2,0,4.24-10,2-10-3,0-2,7-4,7-2.24,0-6,1-9,1S2,18,6,18Z" style="fill:#dc3545"/><path d="M15.5,15c0-1.88.13-4.1-1-5.7S10.86,7.28,9,7.59a4.49,4.49,0,0,0-3.12,7c1.86,2.54,7.28,2.81,7.81-1,.42-3-3.86-6-5.94-3.06a2.48,2.48,0,0,0,1.17,3.74c1.64.61,3.1-.41,2-2.06-.34-.55-1.21,0-.86.5.5.8-.48.87-1.07.52a1.46,1.46,0,0,1-.45-2.14c1-1.37,3.27-.44,3.88.85,1.65,3.48-3.54,4.42-5.5,2.37A3.48,3.48,0,0,1,9.06,8.58c1.72-.31,4,0,4.85,1.73.73,1.39.59,3.17.59,4.69a.5.5,0,0,0,1,0Z" style="fill:url(#a)"/><path d="M18,10.5c0-1.13.05-2.77.85-3.65.44-.47-.27-1.18-.7-.7C17.14,7.25,17,9.07,17,10.5a.5.5,0,0,0,1,0Z" style="fill:#fec111"/><path d="M20,9.5a4,4,0,0,1,.85-2.65c.44-.47-.26-1.18-.7-.7A5,5,0,0,0,19,9.5a.5.5,0,0,0,1,0Z" style="fill:#fec111"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg10652"
+   sodipodi:docname="admin.svg"
+   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview10654"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="8.3389831"
+     inkscape:cy="12"
+     inkscape:window-width="1440"
+     inkscape:window-height="872"
+     inkscape:window-x="0"
+     inkscape:window-y="28"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g11137" />
+  <defs
+     id="defs10642">
+    <linearGradient
+       id="a"
+       x1="8.29"
+       y1="16.44"
+       x2="13.09"
+       y2="8.11"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#b6b7b7"
+         id="stop10637" />
+      <stop
+         offset="1"
+         stop-color="#e0e0df"
+         id="stop10639" />
+    </linearGradient>
+  </defs>
+  <g
+     id="g11137"
+     transform="matrix(1.3614648,0,0,1.3614648,-4.5768918,-4.2160503)">
+    <path
+       d="m 6,18 h 11 c 2,0 4.24,-10 2,-10 -3,0 -2,7 -4,7 -2.24,0 -6,1 -9,1 -3,0 -4,2 0,2 z"
+       style="fill:#dc3545"
+       id="path10644" />
+    <path
+       d="m 15.5,15 c 0,-1.88 0.13,-4.1 -1,-5.7 C 13.37,7.7 10.86,7.28 9,7.59 a 4.49,4.49 0 0 0 -3.12,7 c 1.86,2.54 7.28,2.81 7.81,-1 0.42,-3 -3.86,-6 -5.94,-3.06 a 2.48,2.48 0 0 0 1.17,3.74 c 1.64,0.61 3.1,-0.41 2,-2.06 -0.34,-0.55 -1.21,0 -0.86,0.5 0.5,0.8 -0.48,0.87 -1.07,0.52 A 1.46,1.46 0 0 1 8.54,11.09 c 1,-1.37 3.27,-0.44 3.88,0.85 1.65,3.48 -3.54,4.42 -5.5,2.37 A 3.48,3.48 0 0 1 9.06,8.58 c 1.72,-0.31 4,0 4.85,1.73 0.73,1.39 0.59,3.17 0.59,4.69 a 0.5,0.5 0 0 0 1,0 z"
+       style="fill:url(#a)"
+       id="path10646" />
+    <path
+       d="M 18,10.5 C 18,9.37 18.05,7.73 18.85,6.85 19.29,6.38 18.58,5.67 18.15,6.15 17.14,7.25 17,9.07 17,10.5 a 0.5,0.5 0 0 0 1,0 z"
+       style="fill:#fec111"
+       id="path10648" />
+    <path
+       d="M 20,9.5 A 4,4 0 0 1 20.85,6.85 C 21.29,6.38 20.59,5.67 20.15,6.15 A 5,5 0 0 0 19,9.5 a 0.5,0.5 0 0 0 1,0 z"
+       style="fill:#fec111"
+       id="path10650" />
+  </g>
+</svg>

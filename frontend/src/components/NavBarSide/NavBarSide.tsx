@@ -29,6 +29,7 @@ import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
 import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
 import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
+import { ReactComponent as AcademicIcon } from '../../assets/scalable/academic.svg';
 
 /** Interface for all links */
 interface linksInterface {
@@ -55,7 +56,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
     {
       text: t('navbar.home'),
       url: '/',
-      icon: NantralIcon,
+      icon: AcademicIcon,
     },
     {
       text: t('navbar.events'),
@@ -118,7 +119,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
             width: drawerWidth,
             boxSizing: 'border-box',
           },
-          zIndex: '1000',
+          zIndex: '0',
         }}
       >
         <Toolbar />

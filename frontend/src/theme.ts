@@ -4,16 +4,29 @@ const theme = createTheme({
   palette: {
     type: 'light',
     primary: {
-      main: '#f3f3f3',
-    },
-    secondary: {
       main: '#dc3545',
     },
+    secondary: {
+      main: '#efefef',
+    },
     warning: {
-      main: '#ffc107',
+      main: '#dc3545',
     },
     info: {
       main: '#0d6efd',
+    },
+  },
+  overrides: {
+    MuiAppBar: {
+      colorInherit: {
+        backgroundColor: '#689f38',
+        color: '#fff',
+      },
+    },
+  },
+  props: {
+    MuiAppBar: {
+      color: 'secondary',
     },
   },
 });
