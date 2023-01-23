@@ -9,9 +9,6 @@ const theme = createTheme({
     secondary: {
       main: '#efefef',
     },
-    info: {
-      main: 'dc3545',
-    },
     warning: {
       main: '#dc3545',
     },
