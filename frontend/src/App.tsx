@@ -29,7 +29,7 @@ function App() {
   const [menuOpen, setMenuOpen] = React.useState(true);
   const drawerWidth = 240; // the width of the lateral navbar
   const theme = useTheme(); // use properties from the MUI theme
-
+  const count = 0;
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />

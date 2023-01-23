@@ -10,5 +10,11 @@
     "administration": "Administration",
     "student": "Annuaire Étudiant",
     "signature": "Signature ECN"
+  },
+  "button": {
+    "joinButton": {
+      "register": "s'inscrire",
+      "title": "Voulez vous désinscrire de cet événements ?"
+    }
   }
 }
