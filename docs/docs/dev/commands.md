@@ -36,6 +36,9 @@ Here are the main commands to deal with the backend and django.
 - `pipenv run makemigrations`: create the migration files
 - `pipenv run migrate`: apply the new migration files
 - `pipenv run format`: format all python code according to Pep8 style
+- `pipenv run coverage-test`: do the same thing as `pipenv run test` but using the `coverage` package
+- `pipenv run coverage report`: see a report about the coverage of tests (works only if run after `cover-test`)
+
 
 Need more commands? You should find what you want here!
 

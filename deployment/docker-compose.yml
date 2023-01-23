@@ -11,8 +11,8 @@ services:
 
   backend:
     build:
-      context: ../
-      dockerfile: deployment/containers/web/Dockerfile
+      context: ../backend/
+      dockerfile: ../deployment/containers/web/Dockerfile
     expose:
       - 8000
     command: sh run_server.sh
@@ -44,8 +44,8 @@ services:
 
   celery:
     build:
-      context: ../
-      dockerfile: deployment/containers/web/Dockerfile
+      context: ../backend/
+      dockerfile: ../deployment/containers/web/Dockerfile
     command: celery -A apps.celery worker -l info
     volumes:
       - ../backend:/var/app
@@ -53,21 +53,17 @@ services:
       - celery-beat
       - redis
     env_file: backend.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.docker
 
   celery-beat:
     build:
-      context: ../
-      dockerfile: deployment/containers/web/Dockerfile
+      context: ../backend/
+      dockerfile: ../deployment/containers/web/Dockerfile
     command: celery -A apps.celery beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - ../backend:/var/app
     depends_on:
       - redis
     env_file: backend.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=config.settings.docker
 
 volumes:
   postgres_data:
