@@ -16,8 +16,13 @@ import {
   AccountCircle,
   MoreVert as MoreIcon,
 } from '@mui/icons-material';
+import Divider from '@mui/material/Divider';
 import GavelIcon from '@mui/icons-material/Gavel';
 import PersonIcon from '@mui/icons-material/Person';
+import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
+import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { createSvgIcon } from '@mui/material/utils';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme';
@@ -108,28 +113,29 @@ function NavBarTop(props: {
               MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             >
               <MenuItem onClick={handleClose}>
-                <SvgIcon component={PersonIcon} />
-                <ListItemText>My Profile</ListItemText>
+                <SvgIcon component={PersonIcon}/>
+                <ListItemText className="menuItem">My Profile</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <SvgIcon component={PeopleIcon} />
-                <ListItemText>Log Out</ListItemText>
+                <SvgIcon component={LogoutRoundedIcon} />
+                <ListItemText className="menuItem">Log Out</ListItemText>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={ErrorRoundedIcon} />
+                <ListItemText className="menuItem">Suggest / Bug</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <SvgIcon component={PeopleIcon} />
-                <ListItemText>Suggest / Bug</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <SvgIcon component={PeopleIcon} />
-                <ListItemText>Documentation</ListItemText>
+                <SvgIcon component={HelpRoundedIcon} />
+                <ListItemText className="menuItem">Documentation</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleClose}>
                 <SvgIcon component={GavelIcon} />
-                <ListItemText>Legal Mentions</ListItemText>
+                <ListItemText className="menuItem">Legal Mentions</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <SvgIcon component={PeopleIcon} />
-                <ListItemText>Language</ListItemText>
+                <SvgIcon component={PublicRoundedIcon} />
+                <ListItemText className="menuItem">Language</ListItemText>
               </MenuItem>
             </Menu>
           </Box>
