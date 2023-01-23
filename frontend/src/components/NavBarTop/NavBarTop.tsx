@@ -8,7 +8,7 @@ import {
   Toolbar,
   Menu,
   MenuItem,
-  Icon,
+  ListItemText,
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import {
@@ -16,6 +16,8 @@ import {
   AccountCircle,
   MoreVert as MoreIcon,
 } from '@mui/icons-material';
+import GavelIcon from '@mui/icons-material/Gavel';
+import PersonIcon from '@mui/icons-material/Person';
 import { createSvgIcon } from '@mui/material/utils';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme';
@@ -103,12 +105,32 @@ function NavBarTop(props: {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
+              MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>Language</MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={PersonIcon} />
+                <ListItemText>My Profile</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={PeopleIcon} />
+                <ListItemText>Log Out</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={PeopleIcon} />
+                <ListItemText>Suggest / Bug</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={PeopleIcon} />
+                <ListItemText>Documentation</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={GavelIcon} />
+                <ListItemText>Legal Mentions</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={PeopleIcon} />
+                <ListItemText>Language</ListItemText>
+              </MenuItem>
             </Menu>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
