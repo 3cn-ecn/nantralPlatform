@@ -108,7 +108,14 @@ function JoinButton({
         return people;
     }
   };
-  let color: 'error' | 'success' | 'primary';
+  let color:
+    | 'inherit'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'error'
+    | 'info'
+    | 'warning';
   if ((people >= maxPerson || shotgunClosed) && variant === 'shotgun') {
     color = 'error';
   } else if (selected) {
