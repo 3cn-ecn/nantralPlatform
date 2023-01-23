@@ -1,143 +1,50 @@
 import React from 'react';
-import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
+import { Box, Tab } from '@mui/material';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import './Event.scss';
 
 /**
  * Event Page, with Welcome message, next events, etc...
- * @returns Evente page component
+ * @returns Event page component
  */
+
+function EventList() {
+  return <p>Ceci est une liste.</p>;
+}
+
+function EventCalendar() {
+  return <p>Ceci est un calendrier.</p>;
+}
+
+function EventView() {
+  const [value, setValue] = React.useState('1');
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+  return (
+    <TabContext value={value}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <TabList onChange={handleChange} aria-label="lab API tabs example">
+          <Tab label="Liste" value="1" />
+          <Tab label="Calendrier" value="2" />
+        </TabList>
+      </Box>
+      <TabPanel value="1">
+        <EventList></EventList>
+      </TabPanel>
+      <TabPanel value="2">
+        <EventCalendar></EventCalendar>
+      </TabPanel>
+    </TabContext>
+  );
+}
+
 function Event() {
   return (
     <>
-      <h1>Event</h1>
-      <p>Bienvenue sur Nantral Plateform</p>
-      <SvgIcon component={NantralIcon} inheritViewBox />
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
+      <h1>Évènements</h1>
+      <p>Ceci est la page des events</p>
+      <EventView />
     </>
   );
 }
