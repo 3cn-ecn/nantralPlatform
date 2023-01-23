@@ -3,10 +3,10 @@
 {% load static %}
 
 {% block content %}
-{% include 'abstract_group/included/navbar_edit.html' with open='members' %}
+{% include 'group/included/navbar_edit.html' with open='members' %}
 
 <h2>Membres</h2>
-<!--<form method='POST' action="{% url object.app|add:':update-members' object.slug %}">
+{% comment %} <form method='POST' action="{% url object.app|add:':update-members' object.slug %}">
     {% csrf_token %}
     {{ members.management_form }}
     {% for member in members %}
@@ -18,12 +18,13 @@
     {% endfor %}
     </br>
     <button class='btn btn-dark'>Modifier les membres</button>
-</form>-->
+</form> {% endcomment %}
 <div id="root2"></div>
 {% endblock %}
+
 {% block script %}
 <script>
-  const membersURL = "{% url object.app|add:'_api:list-members' %}?slug={{ object.slug }}";
+  const membersURL = "{% url 'group_api:list-members' %}?slug={{ group.slug }}";
   const studentsURL = "{% url 'student_api:list' %}";
 </script>
 <script src='{% static "js/group/editGroupMembers.js" %}'></script>

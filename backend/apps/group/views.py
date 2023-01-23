@@ -6,14 +6,20 @@ from datetime import timedelta
 # from django.urls import resolve
 # from django.views.decorators.http import require_http_methods
 # from django.conf import settings
-# from django.contrib import messages
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import QuerySet, Q, Count
 # from django.http import HttpResponse  # , HttpRequest
-# from django.shortcuts import redirect
+from django.shortcuts import redirect
 from django.urls.base import reverse
 from django.utils import timezone
-from django.views.generic import DetailView, ListView  #, FormView, View
+from django.views.generic import (
+    DetailView,
+    ListView,
+    UpdateView,
+    TemplateView,
+    # View
+)
 
 # from discord_webhook import DiscordWebhook, DiscordEmbed
 
@@ -31,7 +37,11 @@ from apps.post.models import Post
 #     AdminRightsRequest)
 
 from .models import GroupType, Group
-from .forms import MembershipForm, AdminRequestForm
+from .forms import (
+    MembershipForm,
+    AdminRequestForm,
+    UpdateGroupForm,
+    MembershipFormset)
 
 # from apps.utils.accessMixins import UserIsAdmin, user_is_connected
 # from apps.utils.slug import get_object_from_slug
@@ -52,6 +62,15 @@ class UserCanSeeGroupMixin(UserPassesTestMixin):
         else:
             # normal group: every authenticated users
             return user.is_authenticated
+
+
+class UserIsGroupAdminMixin(UserPassesTestMixin):
+    """A mixin class to test if a user has the rights to see a group."""
+
+    def test_func(self) -> bool:
+        group = Group.objects.get(slug=self.kwargs.get('slug'))
+        user = self.request.user
+        return group.is_admin(user)
 
 
 class GroupTypeListView(ListView, LoginRequiredMixin):
@@ -178,96 +197,82 @@ class GroupDetailView(UserCanSeeGroupMixin, DetailView):
         return context
 
 
-# class UpdateGroupView(UserIsAdmin, TemplateView):
-#     '''Vue pour modifier les infos générales sur un groupe.'''
+class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
+    """Edit general data of a group."""
 
-#     template_name = 'abstract_group/edit/update.html'
+    template_name = 'group/edit/update.html'
+    form_class = UpdateGroupForm
+    model = Group
 
-#     def get_object(self, **kwargs):
-#         app = resolve(self.request.path).app_name
-#         slug = self.kwargs.get("slug")
-#         return get_object_from_slug(app, slug)
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['object'] = self.get_object()
-#         group = self.get_object()
-#         UpdateForm = UpdateGroupForm(context['object'])  # noqa: N806
-#         if UpdateForm:
-#             context['form'] = UpdateForm(instance=context['object'])
-#         context['ariane'] = [{'target': reverse(group.app + ':index'),
-#                               'label': group.app_name},
-#                              {'target': reverse(group.app + ':detail',
-#                                                 kwargs={'slug': group.slug}),
-#                               'label': group.name},
-#                              {'target': '#',
-#                               'label': 'Modifier'}]
-#         return context
-
-#     def post(self, request, **kwargs):
-#         group = self.get_object()
-#         UpdateForm = UpdateGroupForm(group)  # noqa: N806
-#         if UpdateForm:
-#             form = UpdateForm(request.POST, request.FILES, instance=group)
-#             if form.is_valid():
-#                 form.save()
-#                 messages.success(request, 'Informations modifiées !')
-#             else:
-#                 messages.error(request, form.errors)
-#         return redirect(group.app + ':update', group.slug)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': "Groupes"
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.name
+            },
+            {
+                'target': '#',
+                'label': "Modifier"
+            }
+        ]
+        return context
 
 
-# class UpdateGroupMembersView(UserIsAdmin, TemplateView):
-#     '''Vue pour modifier les membres d'un groupe.'''
+class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
+    """Vue pour modifier les membres d'un groupe."""
 
-#     template_name = 'abstract_group/edit/members_edit.html'
+    template_name = 'group/edit/members_edit.html'
 
-#     def get_object(self, **kwargs):
-#         app = resolve(self.request.path).app_name
-#         slug = self.kwargs.get("slug")
-#         return get_object_from_slug(app, slug)
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
 
-#     def get_context_data(self, **kwargs):
-#         context = {}
-#         group = self.get_object()
-#         context['object'] = group
-#         context['ariane'] = [{'target': reverse(group.app + ':index'),
-#                               'label': group.app_name},
-#                              {'target': reverse(group.app + ':detail',
-#                                                 kwargs={'slug': group.slug}),
-#                               'label': group.name},
-#                              {'target': '#',
-#                               'label': 'Modifier'}]
-#         # memberships = context['object'].members.through.objects.filter(
-#         #     group=context['object'])
-#         # MembersFormset = NamedMembershipGroupFormset(
-#         #     context['object'])
-#         # if MembersFormset:
-#         #     context['members'] = MembersFormset(queryset=memberships)
-#         return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': "Groupes"
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.name
+            },
+            {
+                'target': '#',
+                'label': "Modifier"
+            }
+        ]
+        return context
 
-#     def post(self, request, **kwargs):
-#         group = self.get_object()
-#         return edit_named_memberships(request, group)
-
-
-# @ require_http_methods(['POST'])
-# @ login_required
-# def edit_named_memberships(request, group):
-#     MembersFormset = NamedMembershipGroupFormset(group)  # noqa: N806
-#     if MembersFormset:
-#         form = MembersFormset(request.POST)
-#         if form.is_valid():
-#             members = form.save(commit=False)
-#             for member in members:
-#                 member.group = group
-#                 member.save()
-#             for member in form.deleted_objects:
-#                 member.delete()
-#             messages.success(request, 'Membres modifiés')
-#         else:
-#             messages.error(request, form.errors)
-#     return redirect(group.app + ':update-members', group.slug)
+    def post(self, request, **kwargs):
+        group = self.get_object()
+        form = MembershipFormset(request.POST)
+        if form.is_valid():
+            members = form.save(commit=False)
+            for member in members:
+                member.group = group
+                member.save()
+            for member in form.deleted_objects:
+                member.delete()
+            messages.success(request, 'Membres modifiés')
+        else:
+            messages.error(request, form.errors)
+        return redirect('group:update-members', group.slug)
 
 
 # class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):

@@ -13,10 +13,9 @@ export interface Member {
   id: number;
   student: Student;
   admin: boolean;
-  function?: string;
-  date_begin?: string;
-  date_end?: string;
-  year?: string;
+  summary?: string;
+  begin_date?: string;
+  end_date?: string;
   order?: number;
   group: number;
 }
@@ -24,9 +23,9 @@ export interface Member {
 export interface MemberAdd {
   id: number;
   admin: boolean;
-  function: string;
-  date_begin?: string;
-  date_end?: string;
+  summary: string;
+  begin_date?: string;
+  end_date?: string;
 }
 
 export interface StudentCardBodyProps {

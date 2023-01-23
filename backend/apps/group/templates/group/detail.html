@@ -97,14 +97,14 @@
     </div>
 
     {# Events #}
-    {% if has_events and show_sensitive_data%}
+    {% if has_events and user.is_authenticated %}
         <br/>   
         <h2>Évènements</h2>
         <div id="events-root"></div>
     {% endif %}
     
     {# Anonces #}
-    {% if posts and show_sensitive_data %}
+    {% if posts and user.is_authenticated %}
         <br/>
         <h2>Annonces</h2>
         {% for post in posts %}
@@ -159,7 +159,7 @@
     {% endif %}
 
     {# Liste des membres #}
-    {% if show_sensitive_data %}
+    {% if user.is_authenticated %}
         <br/>
         <h2>Membres</h2>
         <div id="members-root"></div>

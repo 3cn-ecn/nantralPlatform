@@ -1,15 +1,25 @@
 from django.conf import settings
 from django.contrib import messages
+from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls.base import reverse
+from django.utils import timezone
+from django.utils.dateparse import parse_date
 from django.views.generic import FormView, View
 
+
+from rest_framework import permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
+from apps.student.models import Student
+
 from .views import UserCanSeeGroupMixin
-from .models import Group
+from .models import Group, Membership
 from .forms import MembershipForm, AdminRequestForm
+from .serializers import MembershipSerializer
 
 
 class UpdateSubscriptionView(UserCanSeeGroupMixin, View):
@@ -124,3 +134,71 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
     def form_invalid(self, form: AdminRequestForm):
         messages.error(self.request, "Une erreur s'est produit... 😥")
         return redirect(self.get_group().get_absolute_url())
+
+
+class UpdateMembershipsAPIView(APIView):
+    """API endpoint to interact with the members of a club."""
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        group_slug = request.query_params.get('slug')
+        group = get_object_or_404(Group, slug=group_slug)
+        end_date = timezone.now()
+        memberships = group.membership_set.filter(
+            Q(end_date__isnull=True) | Q(end_date__gt=end_date)
+        ).order_by('student__user__first_name')
+        serializer = MembershipSerializer(memberships, many=True)
+        return Response(data=serializer.data)
+
+    def post(self, request, *args, **kwargs):
+        # Check if group's admin
+        user = self.request.user
+        group = get_object_or_404(Group, slug=request.query_params.get('slug'))
+        if not group.is_admin(user):
+            return HttpResponse(status=403)
+
+        edit_mode = request.data.get("editMode")
+        # edit_mode == 1 -> Edit the order of the members
+        # edit_mode == 2 -> Edit a member
+        # edit_mode == 3 -> Delete a member
+        # edit_mode == 4 -> Add a member
+        if edit_mode == 1:
+            new_ordered_members = request.data.get("orderedMembers")
+            for member in new_ordered_members:
+                (Membership.objects
+                 .filter(id=member.get("id"))
+                 .update(order=member.get("order")))
+            return HttpResponse(status=200)
+
+        elif edit_mode == 2:
+            id = request.data.get("id")
+            summary = request.data.get("summary")
+            begin_date = parse_date(request.data.get("beginDate"))
+            end_date = parse_date(request.data.get("endDate"))
+            admin = request.data.get("admin")
+            Membership.objects.get(id).update(
+                summary=summary,
+                admin=admin,
+                begin_date=begin_date,
+                end_date=end_date)
+            return HttpResponse(status=200)
+
+        elif edit_mode == 3:
+            id = request.data.get("id")
+            Membership.objects.get(id).delete()
+            return HttpResponse(status=200)
+
+        elif edit_mode == 4:
+            student = Student.objects.get(id=request.data.get("id"))
+            # Check if student already exists
+            membership = Membership(
+                student=student,
+                group=group,
+                admin=request.data.get("admin"),
+                function=request.data.get("function"),
+                begin_date=parse_date(request.data.get("beginDate")),
+                end_date=parse_date(request.data.get("endDate"))
+            )
+            membership.full_clean()
+            membership.save()
+            return HttpResponse(status=200)

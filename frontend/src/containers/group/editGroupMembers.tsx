@@ -77,8 +77,8 @@ function Root(props: {}): JSX.Element {
                   }}
                 >
                   <td className="d-none d-sm-table-cell">{e.student.name}</td>
-                  <td className="d-none d-sm-table-cell">{e.date_begin}</td>
-                  <td className="d-none d-sm-table-cell">{e.function}</td>
+                  <td className="d-none d-sm-table-cell">{e.begin_date}</td>
+                  <td className="d-none d-sm-table-cell">{e.summary}</td>
                 </tr>
               ))}
             </tbody>

@@ -79,7 +79,7 @@ urlpatterns = i18n_patterns(
     path(
         'api/notification/',
         include('apps.notification.api_urls', namespace='notification_api')),
-    path('api/group', include('apps.group.api_urls', namespace='group_api')),
+    path('api/group/', include('apps.group.api_urls', namespace='group_api')),
 
     # homepage
     path('', include('apps.home.urls', namespace='home')),

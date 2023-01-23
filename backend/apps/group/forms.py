@@ -30,12 +30,16 @@ class UpdateGroupForm(ModelForm):
             'name',
             'short_name',
             'summary',
+            'description',
+            'meeting_place',
+            'meeting_hour',
             'icon',
             'banner',
-            'description',
             'video1',
             'video2',
             'year',
+            'private',
+            'public',
             'restrict_membership',
             'archived']
 
@@ -89,7 +93,12 @@ class AdminRequestForm(ModelForm):
 MembershipFormset = modelformset_factory(
     Membership,
     fields=[
-        'student', 'summary', 'begin_date', 'end_date', 'admin', 'order',
+        'student',
+        'summary',
+        'begin_date',
+        'end_date',
+        'admin',
+        'order',
         'description'],
     extra=1,
     can_delete=True,
@@ -97,39 +106,6 @@ MembershipFormset = modelformset_factory(
 
 
 # # NB : Les BDX sont aussi des instances de Club
-
-# def UpdateGroupForm(group: object) -> Type[ModelForm] | None:  # noqa: N802
-#     if isinstance(group, BDX):
-#         return clubforms.UpdateBDXForm
-#     elif isinstance(group, Club):
-#         return clubforms.UpdateClubForm
-#     elif isinstance(group, Liste):
-#         return listeforms.UpdateListeForm
-#     elif isinstance(group, Roommates):
-#         return roommatesforms.UpdateRoommatesForm
-#     elif isinstance(group, Course):
-#         return academicforms.UpdateCourseForm
-#     elif isinstance(group, Administration):
-#         return adminforms.UpdateAdministrationForm
-#     else:
-#         return None
-
-
-# def NamedMembershipAddGroup(  # noqa: N802
-#     group: object
-# ) -> Type[ModelForm] | None:
-#     if isinstance(group, Club):
-#         return clubforms.NamedMembershipAddClub
-#     elif isinstance(group, Liste):
-#         return listeforms.NamedMembershipAddListe
-#     elif isinstance(group, Roommates):
-#         return roommatesforms.NamedMembershipAddRoommates
-#     elif isinstance(group, Course):
-#         return academicforms.NamedMembershipAddCourse
-#     elif isinstance(group, Administration):
-#         return adminforms.NamedMembershipAddAdministration
-#     else:
-#         return None
 
 
 # def NamedMembershipGroupFormset(  # noqa: N802
@@ -155,4 +131,3 @@ MembershipFormset = modelformset_factory(
 #     extra=1,
 #     can_delete=True,
 # )
-
