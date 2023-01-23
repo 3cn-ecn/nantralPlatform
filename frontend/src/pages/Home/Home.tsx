@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { EventProps } from 'pages/Props/Event';
 import React from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../theme';
 import JoinButton from '../../components/Button/JoinButton';
 
 /**
@@ -25,7 +23,7 @@ function Home() {
     <>
       {/* <CheckboxListSecondary /> */}
       <h1>Home</h1>
-      <h3>Exemple des boutons d'events. Ajouter des events pour tester</h3>
+      <h3>Exemple des boutons d&apos;events. Ajouter des events pour tester</h3>
       <div style={{ flexDirection: 'column' }}>
         {events.length > 0 &&
           events.map((event) => (
