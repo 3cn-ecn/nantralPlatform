@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>        
             <div class="modal-body">
-                <form method='POST' action="{% url 'group:admin-request' object.slug %}">
+                <form method='POST' action="{% url 'group_api:admin-request' object.slug %}">
                     {% csrf_token %}
                     {{admin_form | crispy}}
                     </br>
