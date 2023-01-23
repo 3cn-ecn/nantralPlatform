@@ -102,6 +102,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
       text: t('navbar.signature'),
       url: '/tools/signature/',
       icon: SignIcon,
+      isOnBackend: true,
     },
   ];
 

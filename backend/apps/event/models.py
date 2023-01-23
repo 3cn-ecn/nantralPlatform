@@ -35,6 +35,16 @@ class BaseEvent(AbstractPost):
         blank=True,
         max_length=200,
         null=True)
+    max_participant = models.IntegerField(
+        verbose_name='Nombre de places maximal',
+        blank=True,
+        null=True
+    )
+    end_inscription = models.DateTimeField(
+        verbose_name='Date de fin de l\'inscription',
+        blank=True,
+        null=True
+    )
 
     @property
     def number_of_participants(self) -> int:
