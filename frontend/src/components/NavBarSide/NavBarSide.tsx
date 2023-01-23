@@ -8,17 +8,27 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  SvgIcon,
+  createSvgIcon,
 } from '@mui/material';
-import {
-  InsertLink as InsertLinkIcon,
-  Event as EventIcon,
-  Map as ColocIcon,
-  Groups as ClubIcon,
-  Home as HomeIcon,
-} from '@mui/icons-material';
+import { InsertLink as InsertLinkIcon } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../../theme';
+import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
+import { ReactComponent as EventIcon } from '../../assets/scalable/event.svg';
+import { ReactComponent as ClubIcon } from '../../assets/scalable/club.svg';
+import { ReactComponent as MapIcon } from '../../assets/scalable/roommates.svg';
+import { ReactComponent as FamilyIcon } from '../../assets/scalable/family.svg';
+import { ReactComponent as CampaignIcon } from '../../assets/scalable/campaign.svg';
+import { ReactComponent as LibraryIcon } from '../../assets/scalable/library.svg';
+import { ReactComponent as AdminIcon } from '../../assets/scalable/admin.svg';
+import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
+import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
+import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
+import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 
 /** Interface for all links */
 interface linksInterface {
@@ -45,70 +55,99 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
     {
       text: t('navbar.home'),
       url: '/',
-      icon: HomeIcon,
+      icon: NantralIcon,
     },
     {
       text: t('navbar.events'),
-      url: '/home/',
+      url: '/event/',
       icon: EventIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.clubs'),
       url: '/club/',
       icon: ClubIcon,
-      isOnBackend: true,
     },
     {
       text: t('navbar.flatshare'),
       url: '/colocs/',
-      icon: ColocIcon,
-      isOnBackend: true,
+      icon: MapIcon,
     },
     {
-      text: 'test1',
-      url: '/test1/',
+      text: t('navbar.patronage'),
+      url: '/parrainage/',
+      icon: FamilyIcon,
+    },
+    {
+      text: t('navbar.bdx'),
+      url: '/liste/',
+      icon: CampaignIcon,
+    },
+    {
+      text: t('navbar.academics'),
+      url: '/academics/',
+      icon: LibraryIcon,
+    },
+    {
+      text: t('navbar.administration'),
+      url: '/administration/',
+      icon: AdminIcon,
+    },
+    {
+      text: t('navbar.student'),
+      url: '/student/',
+      icon: ListIcon,
+    },
+    {
+      text: t('navbar.signature'),
+      url: '/tools/signature/',
+      icon: SignIcon,
     },
   ];
 
   return (
-    <Drawer
-      variant="persistent"
-      open={menuOpen}
-      anchor="left"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
+    <ThemeProvider theme={theme}>
+      <Drawer
+        variant="persistent"
+        open={menuOpen}
+        anchor="left"
+        sx={{
           width: drawerWidth,
-          boxSizing: 'border-box',
-        },
-        zIndex: '1000',
-      }}
-    >
-      <Toolbar />
-      <Box sx={{ overflow: 'auto' }}>
-        <List>
-          {links.map((link) => (
-            <ListItem
-              key={link.text}
-              disablePadding
-              component={NavLink}
-              to={link.url}
-              reloadDocument={link.isOnBackend}
-              className="navlink"
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  {link.icon ? <link.icon /> : <InsertLinkIcon />}
-                </ListItemIcon>
-                <ListItemText primary={link.text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    </Drawer>
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+          zIndex: '1000',
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+          <List>
+            {links.map((link) => (
+              <ListItem
+                key={link.text}
+                disablePadding
+                component={NavLink}
+                to={link.url}
+                reloadDocument={link.isOnBackend}
+                className="navlink"
+              >
+                <ListItemButton>
+                  <ListItemIcon>
+                    {link.icon ? (
+                      <SvgIcon component={link.icon} inheritViewBox />
+                    ) : (
+                      <SvgIcon component={LinkIcon} inheritViewBox />
+                    )}
+                  </ListItemIcon>
+                  <ListItemText primary={link.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+    </ThemeProvider>
   );
 }
 

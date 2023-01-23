@@ -1,4 +1,6 @@
+import { Button } from '@mui/material';
 import React from 'react';
+import JoinButton from '../../components/Button/JoinButton';
 
 /**
  * Home Page, with Welcome message, next events, etc...
@@ -7,139 +9,18 @@ import React from 'react';
 function Home() {
   return (
     <>
+      {/* <CheckboxListSecondary /> */}
       <h1>Home</h1>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
-      <p>
-        Ex fugiat ullamco mollit deserunt in. Magna elit cillum nostrud ullamco
-        Lorem commodo qui officia minim amet est quis minim. Fugiat aliquip
-        cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
-        incididunt aliqua fugiat excepteur fugiat quis elit duis.
-      </p>
+      <div style={{ flexDirection: 'column' }}>
+        <JoinButton variant="normal" person={5} maxPerson={10} />
+        <JoinButton variant="shotgun" person={9} maxPerson={10} />
+        <JoinButton
+          variant="form"
+          person={5}
+          maxPerson={10}
+          link="https://lerush.fr/edition2022"
+        />
+      </div>
     </>
   );
 }
