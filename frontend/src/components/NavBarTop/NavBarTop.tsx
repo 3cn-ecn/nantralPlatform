@@ -6,6 +6,8 @@ import {
   Box,
   Badge,
   Toolbar,
+  Menu,
+  MenuItem,
   Icon,
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
@@ -40,9 +42,20 @@ const HomeIcon = createSvgIcon(
  */
 function NavBarTop(props: {
   menuOpen: boolean;
+  peopleMenuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { menuOpen, setMenuOpen } = props;
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="fixed" color="secondary">
@@ -81,9 +94,22 @@ function NavBarTop(props: {
               aria-label="account of current user"
               aria-haspopup="true"
               color="inherit"
+              onClick={handleClick}
             >
               <SvgIcon component={PeopleIcon} inheritViewBox />
             </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>Language</MenuItem>
+            </Menu>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
