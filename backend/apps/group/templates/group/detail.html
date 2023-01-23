@@ -16,9 +16,9 @@
 {% endblock %}
 
 {% block content %}
-    {% comment %} Header of the page {% endcomment %}
+    {# Header of the page #}
     <div class="row">
-        {% comment %} Icon {% endcomment %}
+        {# Icon #}
         {% if group.icon %}
             <div class="col-12 col-sm-3">
                 <a href="{{group.icon|file_url}}">
@@ -28,12 +28,12 @@
                 </a>
             </div>
         {% endif %}
-        {% comment %} Description of the club {% endcomment %}
+        {# Description of the club #}
         <div class="col">
             <h1>{{group.name}}</h1>
             <p>
             {% if user.is_authenticated %}
-                {% comment %} Membership {% endcomment %}
+                {# Membership #}
                 {% if is_member and is_admin %}
                     <span class="btn-group" role="group">
                         <button class='btn btn-light btn-sm disabled border'>
@@ -52,57 +52,60 @@
                             Modifier
                         </button>
                     </span>
-                {% else %}
+                {% elif not group.restrict_membership %}
                     <button id='show-add-group' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                         <i class="fa fa-user-plus"></i>&nbsp; Devenir membre
                     </button>
                 {% endif %}
-                {% comment %} Edition of the page {% endcomment %}
+                {# Edition of the page #}
                 {% if is_admin %}
                     <a href='{%url "group:update" group.slug %}' class="btn btn-dark btn-sm">
                         <i class="fa fa-pencil"></i>&nbsp; Modifier la page
                     </a>
                 {% endif %}
-                {% comment %} Admin link {% endcomment %}
+                {# Admin link #}
                 {% if user.is_superuser %}
                     <a href="{{ group.get_admin_url }}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-shield-alt"></i>&nbsp; Page Admin
                     </a>
                 {% endif %}
-                {% comment %} Subscription {% endcomment %}
-                <a href="{% url 'group:edit-subscription' group.slug %}" class="btn btn-dark btn-sm">
+                {# Subscription #}
+                <a href="{% url 'group_api:edit-subscription' group.slug %}" class="btn btn-dark btn-sm">
                     <i class="{{ has_subscribed | yesno:"fas,far"}} fa-bell"></i>&nbsp;
                     {{ has_subscribed | yesno:"Abonné !,S'abonner" }}
                 </a>
             {% endif %}
             </p>
-            {% block infos %}
-                {% if group.summary %}
-                    <p>{{ group.summary }}</p>
-                {% endif %}
-            {% endblock %}
+            {# Hours and place meetings #}
+            {% if group.meeting_place or group.meeting_hour %}
+                <p class="infos">
+                    {% if group.meeting_place %}
+                        <span class="text-nowrap"><span><i class="fas fa-map-marker-alt"></i></span> {{ group.meeting_place }}</span>
+                    {% endif %}
+                    {% if group.meeting_hour %}
+                        <span class="text-nowrap"><span><i class="far fa-clock"></i></span> {{ group.meeting_hour }}</span>
+                    {% endif %}
+                </p>
+            {% endif %}
+            {# Summary #}
+            {% if group.summary %}
+                <p>{{ group.summary }}</p>
+            {% endif %}
+            {# Social links #}
             {% include "sociallink/liste.html" with sociallinks=group.social_links.all %}
         </div>
     </div>
 
-    {# Ajout possible de contenus pour certaines pages #}
-    {% block before_content %}
-    {% endblock %}
-
-    <!-- Events -->
-    {% if has_events %}
-        <br>   
+    {# Events #}
+    {% if has_events and show_sensitive_data%}
+        <br/>   
         <h2>Évènements</h2>
-        {% if show_sensitive_data %}
-            <div id="root"></div>
-        {%else%}
-            <p>Veuillez vous connecter pour voir les évènements à venir.</p>
-        {%endif%}
+        <div id="events-root"></div>
     {% endif %}
     
-    <!-- Anonces -->
-    {% if posts %}
-        <br>
+    {# Anonces #}
+    {% if posts and show_sensitive_data %}
+        <br/>
         <h2>Annonces</h2>
         {% for post in posts %}
         <a href="{{post.get_absolute_url }}" style='color:white;' class="mb-1">
@@ -115,13 +118,13 @@
               </div>
             </div>
           </a>
-          <br \>
+          <br/>
         {% endfor %}
     {% endif %}
 
-    <!-- Vidéos s'il y en a 2 -->
+    {# Vidéos s'il y en a 2 #}
     {% if group.video1 and group.video2 or group.video1 and not group.description %}
-        <br />
+        <br/>
         <div class="row gy-3">
             <div class="col-12 col-md-6">
                 <div class="ratio ratio-16x9">
@@ -138,9 +141,9 @@
         </div>
     {% endif %}
 
-    <!-- Description avec vidéo dans le coin s'il y en a une seulement-->
+    {# Description avec vidéo dans le coin s'il y en a une seulement#}
     {% if group.description %}
-        <br>
+        <br/>
         <div class="clearfix">
             {% if group.video1 and not group.video2 %}
             <div class="col-md-6 float-md-end mb-3 ms-md-3">
@@ -155,36 +158,24 @@
         </div>
     {% endif %}
 
-    {% block members %}
-        <!-- Liste des membres -->
-        <br />
+    {# Liste des membres #}
+    {% if show_sensitive_data %}
+        <br/>
         <h2>Membres</h2>
-        <div id="root2"></div>
-    {% endblock %}
+        <div id="members-root"></div>
+    {% endif %}
 
-    {# Ajout possible de contenus pour certaines pages #}
-    {% block after_content %}
-    {% endblock %}
-
-    {% block go_to_list %}
-        <br><br>
-        <p><a href="{% url "group:index" %}">← Retour à la liste des {{group.model_name|title}}</a></p>
-        <br>
-    {% endblock %}
-    
     {# Bouton pour faire une demande pour devenir admin #}
-    {% block admin_req %}
-        {% if is_member and not is_admin %}
-            {% include 'group/included/request-admin.html' %}
-        {%endif%}
-    {% endblock %}
+    {% if is_member and not is_admin %}
+        {% include 'group/included/request-admin.html' %}
+    {% endif %}
 
     {# popup pour devenir membre du groupe #}
-    {% block add_member %}
+    {% if is_member or not group.restrict_membership %}
         {% include 'group/included/edit-member.html' %}
-    {% endblock %}
+    {% endif %}
 
-    <br>
+    <br/>
 {% endblock %}
 
 {% block script %}
@@ -194,7 +185,7 @@
     const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
     const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
     const isAdmin = {{ is_admin|yesno:"true,false,false" }};
-    {% comment %} const membersURL = "{% url 'group_api:list-members' %}?slug={{ group.slug }}"; {% endcomment %}
+    {# const membersURL = "{% url 'group_api:list-members' %}?slug={{ group.slug }}"; #}
 </script>
 <script src='{% static "js/event/eventsView.js" %}'></script>
 <script src='{% static "js/group/groupMembers.js" %}'></script>

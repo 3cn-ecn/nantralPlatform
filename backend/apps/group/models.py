@@ -204,6 +204,14 @@ class Group(models.Model, SlugModel):
     description = CKEditor5Field(
         verbose_name=_("Description"),
         blank=True)
+    meeting_place = models.CharField(
+        verbose_name=_("Meeting place"),
+        max_length=50,
+        blank=True)
+    meeting_hour = models.CharField(
+        verbose_name=_("Meeting hours"),
+        max_length=50,
+        blank=True)
     icon = models.ImageField(
         verbose_name=_("Icon"),
         blank=True,
