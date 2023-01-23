@@ -45,7 +45,7 @@ function NavBarTop(props: {
   const { menuOpen, setMenuOpen } = props;
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" color="secondary">
         <Toolbar>
           <IconButton
             color="inherit"
