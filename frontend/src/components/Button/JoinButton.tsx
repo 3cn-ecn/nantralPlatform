@@ -26,6 +26,7 @@ interface JoinButtonProps {
   shotgunClosed?: boolean;
   person: number;
   sx?: SxProps<Theme>;
+  participating: boolean;
 }
 
 function JoinButton({
@@ -35,8 +36,9 @@ function JoinButton({
   person,
   shotgunClosed,
   sx,
+  participating,
 }: JoinButtonProps): JSX.Element {
-  const [selected, setSelected] = React.useState(false);
+  const [selected, setSelected] = React.useState(participating);
   const [people, setPeople] = React.useState(person);
   const [open, setOpen] = React.useState(false);
 
@@ -107,7 +109,7 @@ function JoinButton({
     }
   };
   let color: 'error' | 'success' | 'primary';
-  if (people >= maxPerson || shotgunClosed) {
+  if ((people >= maxPerson || shotgunClosed) && variant === 'shotgun') {
     color = 'error';
   } else if (selected) {
     color = 'success';
@@ -123,6 +125,7 @@ function JoinButton({
         color={color}
         endIcon={getSecondIcon()}
         sx={sx}
+        title="test"
       >
         {getText()}
       </Button>

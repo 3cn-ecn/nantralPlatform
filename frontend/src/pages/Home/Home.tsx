@@ -1,4 +1,5 @@
-import { Button } from '@mui/material';
+import axios from 'axios';
+import { EventProps } from 'pages/Props/Event';
 import React from 'react';
 import JoinButton from '../../components/Button/JoinButton';
 
@@ -7,18 +8,40 @@ import JoinButton from '../../components/Button/JoinButton';
  * @returns Home page component
  */
 function Home() {
+  const [events, setEvents] = React.useState<Array<EventProps>>([]);
+  React.useEffect(() => {
+    getEvent();
+  }, []);
+
+  async function getEvent() {
+    const response = await axios.get('api/event');
+    setEvents(response.data);
+    console.log(response);
+  }
+
   return (
     <>
       {/* <CheckboxListSecondary /> */}
       <h1>Home</h1>
+      <h3>Exemple des boutons d'events. Ajouter des events pour tester</h3>
       <div style={{ flexDirection: 'column' }}>
-        <JoinButton variant="normal" person={5} maxPerson={10} />
-        <JoinButton variant="shotgun" person={9} maxPerson={10} />
+        {events.length > 0 &&
+          events.map((event) => (
+            <JoinButton
+              variant={event.max_participant === null ? 'normal' : 'shotgun'}
+              person={event.number_of_participants}
+              maxPerson={event.max_participant}
+              participating={event.is_participating}
+              key={event.slug}
+            />
+          ))}
+        <JoinButton variant="shotgun" person={9} maxPerson={10} participating />
         <JoinButton
           variant="form"
           person={5}
           maxPerson={10}
-          link="https://lerush.fr/edition2022"
+          link="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          participating={false}
         />
       </div>
     </>
