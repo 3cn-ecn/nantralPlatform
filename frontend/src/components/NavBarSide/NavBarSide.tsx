@@ -105,49 +105,47 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
   ];
 
   return (
-    <ThemeProvider theme={theme}>
-      <Drawer
-        variant="persistent"
-        open={menuOpen}
-        anchor="left"
-        sx={{
+    <Drawer
+      variant="persistent"
+      open={menuOpen}
+      anchor="left"
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: {
           width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-          zIndex: '0',
-        }}
-      >
-        <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
-            {links.map((link) => (
-              <ListItem
-                key={link.text}
-                disablePadding
-                component={NavLink}
-                to={link.url}
-                reloadDocument={link.isOnBackend}
-                className="navlink"
-              >
-                <ListItemButton>
-                  <ListItemIcon>
-                    {link.icon ? (
-                      <SvgIcon component={link.icon} inheritViewBox />
-                    ) : (
-                      <SvgIcon component={LinkIcon} inheritViewBox />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText primary={link.text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Drawer>
-    </ThemeProvider>
+          boxSizing: 'border-box',
+        },
+        zIndex: '0',
+      }}
+    >
+      <Toolbar />
+      <Box sx={{ overflow: 'auto' }}>
+        <List>
+          {links.map((link) => (
+            <ListItem
+              key={link.text}
+              disablePadding
+              component={NavLink}
+              to={link.url}
+              reloadDocument={link.isOnBackend}
+              className="navlink"
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  {link.icon ? (
+                    <SvgIcon component={link.icon} inheritViewBox />
+                  ) : (
+                    <SvgIcon component={LinkIcon} inheritViewBox />
+                  )}
+                </ListItemIcon>
+                <ListItemText primary={link.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    </Drawer>
   );
 }
 

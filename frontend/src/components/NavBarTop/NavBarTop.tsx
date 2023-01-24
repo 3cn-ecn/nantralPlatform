@@ -9,6 +9,8 @@ import {
   Menu,
   MenuItem,
   ListItemText,
+  Switch,
+  Button,
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import {
@@ -20,6 +22,8 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import PersonIcon from '@mui/icons-material/Person';
 import { createSvgIcon } from '@mui/material/utils';
 import { ThemeProvider } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import theme from '../../theme';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
@@ -44,10 +48,11 @@ const HomeIcon = createSvgIcon(
  */
 function NavBarTop(props: {
   menuOpen: boolean;
-  peopleMenuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  themeApp: boolean;
+  setThemeApp: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { menuOpen, setMenuOpen } = props;
+  const { menuOpen, setMenuOpen, themeApp, setThemeApp } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -57,95 +62,110 @@ function NavBarTop(props: {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleSwitchChange = () => {
+    setThemeApp('dark');
+  };
 
   return (
-    <ThemeProvider theme={theme}>
-      <AppBar position="fixed" color="secondary">
-        <Toolbar>
+    <AppBar position="fixed" color="secondary">
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          onClick={() => setMenuOpen(!menuOpen)}
+          size="large"
+          edge="start"
+          aria-label="menu"
+          sx={{ mr: 2 }}
+        >
+          <SvgIcon component={MenuIcon} inheritViewBox />
+        </IconButton>
+        <SvgIcon component={NantralIcon} inheritViewBox />
+        <Box sx={{ flexGrow: 0.02 }} />
+        <Typography variant="h6" component="div" color="TextPrimary">
+          Nantral Platform
+        </Typography>
+        <Box sx={{ flexGrow: 0.9 }} />
+        <SearchBar />
+        <Box sx={{ flexGrow: 1.0 }} />
+        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <IconButton
-            color="inherit"
-            onClick={() => setMenuOpen(!menuOpen)}
             size="large"
-            edge="start"
-            aria-label="menu"
-            sx={{ mr: 2 }}
+            aria-label="show 17 new notifications"
+            color="inherit"
           >
-            <SvgIcon component={MenuIcon} inheritViewBox />
+            <Badge badgeContent={1} color="error">
+              <SvgIcon component={NotifIcon} inheritViewBox />
+            </Badge>
           </IconButton>
-          <SvgIcon component={NantralIcon} inheritViewBox />
-          <Box sx={{ flexGrow: 0.02 }} />
-          <Typography variant="h6" component="div" color="TextPrimary">
-            Nantral Platform
-          </Typography>
-          <Box sx={{ flexGrow: 0.9 }} />
-          <SearchBar />
-          <Box sx={{ flexGrow: 1.0 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={1} color="error">
-                <SvgIcon component={NotifIcon} inheritViewBox />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-haspopup="true"
-              color="inherit"
-              onClick={handleClick}
-            >
-              <SvgIcon component={PeopleIcon} inheritViewBox />
-            </IconButton>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{ 'aria-labelledby': 'basic-button' }}
-            >
-              <MenuItem onClick={handleClose}>
-                <SvgIcon component={PersonIcon} />
-                <ListItemText>My Profile</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <SvgIcon component={PeopleIcon} />
-                <ListItemText>Log Out</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <SvgIcon component={PeopleIcon} />
-                <ListItemText>Suggest / Bug</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <SvgIcon component={PeopleIcon} />
-                <ListItemText>Documentation</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <SvgIcon component={GavelIcon} />
-                <ListItemText>Legal Mentions</ListItemText>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <SvgIcon component={PeopleIcon} />
-                <ListItemText>Language</ListItemText>
-              </MenuItem>
-            </Menu>
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </ThemeProvider>
+          <IconButton
+            size="large"
+            edge="end"
+            aria-label="account of current user"
+            aria-haspopup="true"
+            color="inherit"
+            onClick={handleClick}
+          >
+            <SvgIcon component={PeopleIcon} inheritViewBox />
+          </IconButton>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+          >
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={PersonIcon} />
+              <ListItemText>My Profile</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={PeopleIcon} />
+              <ListItemText>Log Out</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={PeopleIcon} />
+              <ListItemText>Suggest / Bug</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={PeopleIcon} />
+              <ListItemText>Documentation</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={GavelIcon} />
+              <ListItemText>Legal Mentions</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={PeopleIcon} />
+              <ListItemText>Language</ListItemText>
+            </MenuItem>
+            <MenuItem>
+              <Button
+                onClick={() => setThemeApp(!themeApp)}
+                color={themeApp ? 'info' : 'primary'}
+              >
+                {themeApp ? <Brightness7Icon /> : <Brightness4Icon />}
+                <ListItemText sx={{ marginLeft: 1 }}>
+                  {!themeApp ? 'Dark' : 'Light'} Mode{' '}
+                </ListItemText>
+              </Button>
+            </MenuItem>
+            <MenuItem>
+              <Button onClick={() => setThemeApp(!themeApp)}>Dark Mode</Button>
+            </MenuItem>
+          </Menu>
+        </Box>
+        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <IconButton
+            size="large"
+            aria-label="show more"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <MoreIcon />
+          </IconButton>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }
 
