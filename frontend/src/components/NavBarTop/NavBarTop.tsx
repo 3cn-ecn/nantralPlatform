@@ -6,7 +6,9 @@ import {
   Box,
   Badge,
   Toolbar,
-  Icon,
+  Menu,
+  MenuItem,
+  ListItemText,
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import {
@@ -14,6 +16,13 @@ import {
   AccountCircle,
   MoreVert as MoreIcon,
 } from '@mui/icons-material';
+import Divider from '@mui/material/Divider';
+import GavelIcon from '@mui/icons-material/Gavel';
+import PersonIcon from '@mui/icons-material/Person';
+import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
+import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { createSvgIcon } from '@mui/material/utils';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme';
@@ -40,9 +49,20 @@ const HomeIcon = createSvgIcon(
  */
 function NavBarTop(props: {
   menuOpen: boolean;
+  peopleMenuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { menuOpen, setMenuOpen } = props;
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="fixed" color="secondary">
@@ -81,9 +101,43 @@ function NavBarTop(props: {
               aria-label="account of current user"
               aria-haspopup="true"
               color="inherit"
+              onClick={handleClick}
             >
               <SvgIcon component={PeopleIcon} inheritViewBox />
             </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            >
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={PersonIcon}/>
+                <ListItemText className="menuItem">My Profile</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={LogoutRoundedIcon} />
+                <ListItemText className="menuItem">Log Out</ListItemText>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={ErrorRoundedIcon} />
+                <ListItemText className="menuItem">Suggest / Bug</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={HelpRoundedIcon} />
+                <ListItemText className="menuItem">Documentation</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={GavelIcon} />
+                <ListItemText className="menuItem">Legal Mentions</ListItemText>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={PublicRoundedIcon} />
+                <ListItemText className="menuItem">Language</ListItemText>
+              </MenuItem>
+            </Menu>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
