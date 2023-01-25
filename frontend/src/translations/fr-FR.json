@@ -4,12 +4,22 @@
     "flatshare": "Carte des colocs",
     "home": "Accueil",
     "events": "Évènements",
-    "patronage": "Parrainage",
+    "family": "Parrainage",
     "bdx": "Listes BDX",
     "academics": "Cours et Formations",
     "administration": "Administration",
     "student": "Annuaire Étudiant",
     "signature": "Signature ECN"
+  },
+  "user_menu": {
+    "profile": "Mon Profil",
+    "logout": "Se déconnecter",
+    "bug": "Suggestion / Bug",
+    "doc": "Documentation",
+    "legal": "Mentions Légales",
+    "langage": "Langage",
+    "english": "Anglais",
+    "french": "Français"
   },
   "button": {
     "joinButton": {
