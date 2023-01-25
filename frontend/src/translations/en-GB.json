@@ -1,9 +1,25 @@
 {
   "navbar": {
-    "club": "Clubs and Assos",
-    "coloc": "Flatshares Map",
+    "clubs": "Clubs and Assos",
+    "flatshare": "Flatshares Map",
     "home": "Home",
-    "post": "Events"
+    "events": "Events",
+    "family": "Family",
+    "bdx": "BDX Lists",
+    "academics": "Academics",
+    "administration": "Administration",
+    "student": "Student List",
+    "signature": "Signature"
+  },
+  "user_menu": {
+    "profile": "My Profile",
+    "logout": "Log Out",
+    "bug": "Suggest / Bug",
+    "doc": "Documentation",
+    "legal": "Legal Mentions",
+    "langage": "Langage",
+    "english": "English",
+    "french": "French"
   },
   "button": {
     "joinButton" : {

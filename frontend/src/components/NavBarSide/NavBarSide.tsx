@@ -71,7 +71,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
       icon: MapIcon,
     },
     {
-      text: t('navbar.patronage'),
+      text: t('navbar.family'),
       url: '/parrainage/',
       icon: FamilyIcon,
     },

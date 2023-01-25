@@ -1,4 +1,9 @@
 import * as React from 'react';
+import i18next from 'i18next';
+import InputLabel from '@mui/material/InputLabel';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
+import { useTranslation } from 'react-i18next';
 import {
   IconButton,
   AppBar,
@@ -45,14 +50,11 @@ import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.s
  */
 function NavBarTop(props: {
   menuOpen: boolean;
-  peopleMenuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   themeApp: boolean;
   setThemeApp: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-
   const { menuOpen, setMenuOpen, themeApp, setThemeApp } = props;
-
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -61,6 +63,18 @@ function NavBarTop(props: {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const changeLanguage = (lng) => {
+    i18next.changeLanguage(lng);
+  };
+
+  const { t } = useTranslation('translation');
+
+  const [langue, setLangue] = React.useState('');
+
+  const handleChangeLangue = (event: SelectChangeEvent) => {
+    setLangue(event.target.value as string);
+    changeLanguage(event.target.value);
   };
 
   return (
@@ -113,27 +127,39 @@ function NavBarTop(props: {
           >
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PersonIcon} />
-              <ListItemText className="menuItem">My Profile</ListItemText>
+              <ListItemText className="menuItem">
+                {t('user_menu.profile')}
+              </ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={LogoutRoundedIcon} />
-              <ListItemText className="menuItem">Log Out</ListItemText>
+              <ListItemText className="menuItem">
+                {t('user_menu.logout')}
+              </ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={ErrorRoundedIcon} />
-              <ListItemText className="menuItem">Suggest / Bug</ListItemText>
+              <ListItemText className="menuItem">
+                {t('user_menu.bug')}
+              </ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={HelpRoundedIcon} />
-              <ListItemText className="menuItem">Documentation</ListItemText>
+              <ListItemText className="menuItem">
+                {t('user_menu.doc')}
+              </ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={GavelIcon} />
-              <ListItemText className="menuItem">Legal Mentions</ListItemText>
+              <ListItemText className="menuItem">
+                {t('user_menu.legal')}
+              </ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PublicRoundedIcon} />
-              <ListItemText className="menuItem">Language</ListItemText>
+              <ListItemText className="menuItem">
+                {t('user_menu.langage')}
+              </ListItemText>
             </MenuItem>
             <MenuItem onClick={() => setThemeApp(!themeApp)}>
               <SvgIcon
@@ -142,6 +168,21 @@ function NavBarTop(props: {
               <ListItemText className="menuItem">
                 {!themeApp ? 'Dark' : 'Light'} Mode
               </ListItemText>
+            </MenuItem>
+            <MenuItem>
+              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-label">Langue</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={langue}
+                  label="Langue"
+                  onChange={handleChangeLangue}
+                >
+                  <MenuItem value="en-GB">{t('user_menu.english')}</MenuItem>
+                  <MenuItem value="fr-FR">{t('user_menu.french')}</MenuItem>
+                </Select>
+              </FormControl>
             </MenuItem>
           </Menu>
         </Box>
