@@ -1,0 +1,74 @@
+$radius: 15px;
+$width: 400px;
+$height: 250px;
+
+$margin: 10px;
+
+$mainBackground: rgb(201, 201, 201);
+$secondaryBackground: rgb(250, 250, 250);
+
+.eventContainer{
+  margin: $margin;
+  display: flex;
+  flex-flow: column;
+  background-color: $mainBackground;
+  border-radius: $radius;
+  height: $height;
+  width: $width;
+}
+
+.topContainer{
+  position: relative;
+  height: $height/2;
+}
+
+.bottomContainer{
+  position: relative;
+  flex: 1;
+}
+
+.eventBanner{
+  object-fit: cover;
+  border-top-left-radius: $radius;
+  border-top-right-radius: $radius;
+  width: $width;
+  height: $height / 2;
+}
+
+.favIcon {
+  margin: $margin;
+  position: absolute;
+  top:0px;
+  right: 0px;
+}
+
+.joinButton {
+  margin: $margin;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.title {
+  text-align: left;
+  margin: $margin;
+}
+
+.infoContainer {
+  display: flex;
+  position: absolute;
+  left: $margin;
+}
+
+.groupIcon {
+  border-radius: 50%;
+  background-color: $secondaryBackground;
+  width: 60px;
+  height: 60px;
+}
+
+.infos {
+  text-align: left;
+  font-size: 13px;
+  margin-left: $margin;
+}
