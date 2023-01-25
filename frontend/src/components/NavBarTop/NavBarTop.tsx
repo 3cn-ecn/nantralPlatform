@@ -13,29 +13,17 @@ import {
   Button,
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import {
-  Notifications as NotificationsIcon,
-  AccountCircle,
-  MoreVert as MoreIcon,
-} from '@mui/icons-material';
+import { MoreVert as MoreIcon } from '@mui/icons-material';
 import GavelIcon from '@mui/icons-material/Gavel';
 import PersonIcon from '@mui/icons-material/Person';
-import { createSvgIcon } from '@mui/material/utils';
-import { ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import theme from '../../theme';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
-
-const HomeIcon = createSvgIcon(
-  <path d="M11,17.8h5a.8.8,0,0,0,0-1.6H11a.8.8,0,0,0,0,1.6Z" />,
-  'Home'
-);
 
 /**
  * The top bar for navigation
@@ -61,9 +49,6 @@ function NavBarTop(props: {
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-  const handleSwitchChange = () => {
-    setThemeApp('dark');
   };
 
   return (

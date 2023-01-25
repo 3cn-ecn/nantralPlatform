@@ -9,15 +9,11 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIcon,
-  createSvgIcon,
 } from '@mui/material';
 import { InsertLink as InsertLinkIcon } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../theme';
-import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as EventIcon } from '../../assets/scalable/event.svg';
 import { ReactComponent as ClubIcon } from '../../assets/scalable/club.svg';
 import { ReactComponent as MapIcon } from '../../assets/scalable/roommates.svg';
