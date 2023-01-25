@@ -9,6 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIcon,
+  Typography,
 } from '@mui/material';
 import { InsertLink as InsertLinkIcon } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
@@ -135,7 +136,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
                     <SvgIcon component={LinkIcon} inheritViewBox />
                   )}
                 </ListItemIcon>
-                <ListItemText primary={link.text} />
+                <Typography color="TextPrimary">{link.text}</Typography>
               </ListItemButton>
             </ListItem>
           ))}

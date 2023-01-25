@@ -18,6 +18,13 @@ const darktheme = createTheme({
     info: {
       main: '#0d6efd',
     },
+    background: {
+      default: '#696969',
+      paper: '#696767',
+    },
+    text: {
+      primary: '#fff',
+    },
   },
   overrides: {
     MuiAppBar: {
