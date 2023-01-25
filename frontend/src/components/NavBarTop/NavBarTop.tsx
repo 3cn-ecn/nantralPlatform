@@ -108,41 +108,35 @@ function NavBarTop(props: {
           >
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PersonIcon} />
-              <ListItemText>My Profile</ListItemText>
+              <ListItemText className="menuItem">My Profile</ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <SvgIcon component={PeopleIcon} />
-              <ListItemText>Log Out</ListItemText>
+              <SvgIcon component={LogoutRoundedIcon} />
+              <ListItemText className="menuItem">Log Out</ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <SvgIcon component={PeopleIcon} />
-              <ListItemText>Suggest / Bug</ListItemText>
+              <SvgIcon component={ErrorRoundedIcon} />
+              <ListItemText className="menuItem">Suggest / Bug</ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <SvgIcon component={PeopleIcon} />
-              <ListItemText>Documentation</ListItemText>
+              <SvgIcon component={HelpRoundedIcon} />
+              <ListItemText className="menuItem">Documentation</ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={GavelIcon} />
-              <ListItemText>Legal Mentions</ListItemText>
+              <ListItemText className="menuItem">Legal Mentions</ListItemText>
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <SvgIcon component={PeopleIcon} />
-              <ListItemText>Language</ListItemText>
+              <SvgIcon component={PublicRoundedIcon} />
+              <ListItemText className="menuItem">Language</ListItemText>
             </MenuItem>
-            <MenuItem>
-              <Button
-                onClick={() => setThemeApp(!themeApp)}
-                color={themeApp ? 'info' : 'primary'}
-              >
-                {themeApp ? <Brightness7Icon /> : <Brightness4Icon />}
-                <ListItemText sx={{ marginLeft: 1 }}>
-                  {!themeApp ? 'Dark' : 'Light'} Mode{' '}
-                </ListItemText>
-              </Button>
-            </MenuItem>
-            <MenuItem>
-              <Button onClick={() => setThemeApp(!themeApp)}>Dark Mode</Button>
+            <MenuItem onClick={() => setThemeApp(!themeApp)}>
+              <SvgIcon
+                component={themeApp ? Brightness7Icon : Brightness4Icon}
+              />
+              <ListItemText className="menuItem">
+                {!themeApp ? 'Dark' : 'Light'} Mode
+              </ListItemText>
             </MenuItem>
           </Menu>
         </Box>
