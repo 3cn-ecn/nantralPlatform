@@ -29,12 +29,43 @@
       "7": "Contenu embarqué depuis d'autres sites",
       "8": "Traitement des données personnelles"
     },
-    "texts": {
-      "1": "Nom du site web : Nantral Platform\nAdresse : https://www.nantral-platform.fr\nPropriétaire : Association des Étudiants de l'École Centrale de Nantes",
-      "2": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES\nÉcole Centrale de Nantes, 1 rue de la Noë, 44300 Nantes\nSIREN : 790 010 078\nAPE : 9499Z\nN° TVA Intra : FR 49 79 00 10 07 8\nMail : bde@ec-nantes.fr",
+    "paragraphs": {
+      "1": {
+        "lines": {
+          "1": "Nom du site web : Nantral Platform",
+          "2": "Adresse : https://www.nantral-platform.fr",
+          "3": "Propriétaire : Association des Étudiants de l'École Centrale de Nantes"
+        }
+      },
+      "2": {
+        "lines": {
+          "1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
+          "2": "École Centrale de Nantes, 1 rue de la Noë, 44300 Nantes",
+          "3": "SIREN : 790 010 078",
+          "4": "APE : 9499Z",
+          "5": "N° TVA Intra : FR 49 79 00 10 07 8",
+          "6": "Mail : bde@ec-nantes.fr"
+        }
+      },
       "3": "CLUB NANTRAL PLATFORM",
-      "4": "OVH\nSAS au capital de 10 069 020 €\nRCS Lille Métropole 424 761 419 00045\nCode APE : 2620Z\nN° TVA : FR 22 42 47 61 41 9\nSiège social : 2 rue Kellermann - 59100 Roubaix - France",
-      "5": "Sauf mention contraire, tous les éléments accessibles sur le site (textes, images, logo, icônes, sons, logiciels, etc.) restent la propriété exclusive de leurs auteurs, en ce qui concerne les droits de propriété intellectuelle ou les droits d’usage.\n\nToute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de l’auteur.\n\nToute exploitation non autorisée du site ou d'un quelconque élément qu’il contient est considérée comme constitutive d’une contrefaçon et poursuivie.\n\nLes marques et logos reproduits sur le site sont déposés par les sociétés qui en sont propriétaires.",
+      "4": {
+        "lines": {
+          "1": "OVH",
+          "2": "SAS au capital de 10 069 020 €",
+          "3": "RCS Lille Métropole 424 761 419 00045",
+          "4": "Code APE : 2620Z",
+          "5": "N° TVA : FR 22 42 47 61 41 9",
+          "6": "Siège social : 2 rue Kellermann - 59100 Roubaix - France"
+        }
+      },
+      "5": {
+        "lines": {
+          "1": "Sauf mention contraire, tous les éléments accessibles sur le site (textes, images, logo, icônes, sons, logiciels, etc.) restent la propriété exclusive de leurs auteurs, en ce qui concerne les droits de propriété intellectuelle ou les droits d’usage.",
+          "2": "Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de l’auteur.",
+          "3": "Toute exploitation non autorisée du site ou d'un quelconque élément qu’il contient est considérée comme constitutive d’une contrefaçon et poursuivie.",
+          "4": "Les marques et logos reproduits sur le site sont déposés par les sociétés qui en sont propriétaires."
+        }
+      },
       "6": "Seul un cookie de session est utilisé sur le site et expire après 14 jours.",
       "7": "Les contenus de ce site peuvent inclure du contenu provenant de sources extérieures (par exemple les vidéos, images, etc…). Ces contenus embarqués agissent de la même manière que si le visiteur avait visité le site original où repose ce contenu. Ces sites peuvent donc utiliser des cookies supplémentaires.",
       "8": "Lors de votre inscription sur le site, les données personnelles que vous nous transmettez seront stockées et conservées par l’Association des Étudiants de l’École Centrale de Nantes jusqu’à demande de suppression de votre compte utilisateur à l’aide du formulaire de contact"
