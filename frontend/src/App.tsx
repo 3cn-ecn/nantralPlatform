@@ -16,6 +16,7 @@ import Family from './pages/Family/Family';
 import Map from './pages/Map/Map';
 import Sign from './pages/Sign/Sign';
 import Student from './pages/Student/Student';
+import LegalNotice from './pages/LegalNotice/Legal';
 import theme from './theme';
 import darktheme from './darktheme';
 import './App.scss';
@@ -75,6 +76,7 @@ function App() {
             <Route path="/parrainage" element={<Family />} />
             <Route path="/colocs" element={<Map />} />
             <Route path="/student" element={<Student />} />
+            <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="/tools/signature" element={<Sign />} />
           </Routes>
         </Box>
