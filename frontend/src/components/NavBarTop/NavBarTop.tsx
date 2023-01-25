@@ -49,7 +49,6 @@ const HomeIcon = createSvgIcon(
  */
 function NavBarTop(props: {
   menuOpen: boolean;
-  peopleMenuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { menuOpen, setMenuOpen } = props;
