@@ -17,6 +17,7 @@ import Map from './pages/Map/Map';
 import Sign from './pages/Sign/Sign';
 import Student from './pages/Student/Student';
 import theme from './theme';
+import darktheme from './darktheme';
 import './App.scss';
 
 /**
@@ -27,14 +28,20 @@ import './App.scss';
  * @returns The App Component
  */
 function App() {
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(true);
+  const [themeApp, setThemeApp] = React.useState(true);
   const drawerWidth = 240; // the width of the lateral navbar
   const count = 0;
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={themeApp ? theme : darktheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <NavBarTop menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <NavBarTop
+          menuOpen={menuOpen}
+          setMenuOpen={setMenuOpen}
+          themeApp={themeApp}
+          setThemeApp={setThemeApp}
+        />
         <NavBarSide menuOpen={menuOpen} drawerWidth={drawerWidth} />
         <Box
           component="main"

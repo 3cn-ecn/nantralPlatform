@@ -9,15 +9,12 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIcon,
-  createSvgIcon,
+  Typography,
 } from '@mui/material';
 import { InsertLink as InsertLinkIcon } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../theme';
-import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as EventIcon } from '../../assets/scalable/event.svg';
 import { ReactComponent as ClubIcon } from '../../assets/scalable/club.svg';
 import { ReactComponent as MapIcon } from '../../assets/scalable/roommates.svg';
@@ -107,49 +104,47 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
   ];
 
   return (
-    <ThemeProvider theme={theme}>
-      <Drawer
-        variant="persistent"
-        open={menuOpen}
-        anchor="left"
-        sx={{
+    <Drawer
+      variant="persistent"
+      open={menuOpen}
+      anchor="left"
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: {
           width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-          zIndex: '0',
-        }}
-      >
-        <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
-            {links.map((link) => (
-              <ListItem
-                key={link.text}
-                disablePadding
-                component={NavLink}
-                to={link.url}
-                reloadDocument={link.isOnBackend}
-                className="navlink"
-              >
-                <ListItemButton>
-                  <ListItemIcon>
-                    {link.icon ? (
-                      <SvgIcon component={link.icon} inheritViewBox />
-                    ) : (
-                      <SvgIcon component={LinkIcon} inheritViewBox />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText primary={link.text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Drawer>
-    </ThemeProvider>
+          boxSizing: 'border-box',
+        },
+        zIndex: '0',
+      }}
+    >
+      <Toolbar />
+      <Box sx={{ overflow: 'auto' }}>
+        <List>
+          {links.map((link) => (
+            <ListItem
+              key={link.text}
+              disablePadding
+              component={NavLink}
+              to={link.url}
+              reloadDocument={link.isOnBackend}
+              className="navlink"
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  {link.icon ? (
+                    <SvgIcon component={link.icon} inheritViewBox />
+                  ) : (
+                    <SvgIcon component={LinkIcon} inheritViewBox />
+                  )}
+                </ListItemIcon>
+                <Typography color="TextPrimary">{link.text}</Typography>
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    </Drawer>
   );
 }
 
