@@ -9,11 +9,13 @@ import {
   Menu,
   MenuItem,
   ListItemText,
-  Switch,
-  Button,
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { MoreVert as MoreIcon } from '@mui/icons-material';
+import {
+  Notifications as NotificationsIcon,
+  AccountCircle,
+  MoreVert as MoreIcon,
+} from '@mui/icons-material';
 import Divider from '@mui/material/Divider';
 import GavelIcon from '@mui/icons-material/Gavel';
 import PersonIcon from '@mui/icons-material/Person';
@@ -43,11 +45,14 @@ import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.s
  */
 function NavBarTop(props: {
   menuOpen: boolean;
+  peopleMenuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   themeApp: boolean;
   setThemeApp: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+
   const { menuOpen, setMenuOpen, themeApp, setThemeApp } = props;
+
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);

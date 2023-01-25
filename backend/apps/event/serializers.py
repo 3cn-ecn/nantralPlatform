@@ -27,7 +27,9 @@ class BaseEventSerializer(serializers.ModelSerializer):
             'group',
             'get_group_name',
             'is_participating',
-            'is_member']
+            'is_member',
+            'max_participant',
+            'end_inscription']
 
     def get_is_participating(self, obj):
         user = self.context['request'].user
