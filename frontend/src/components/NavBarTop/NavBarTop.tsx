@@ -14,8 +14,15 @@ import {
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { MoreVert as MoreIcon } from '@mui/icons-material';
+import Divider from '@mui/material/Divider';
 import GavelIcon from '@mui/icons-material/Gavel';
 import PersonIcon from '@mui/icons-material/Person';
+import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
+import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { createSvgIcon } from '@mui/material/utils';
+import { ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { SearchBar } from './SearchBar/SearchBar';
