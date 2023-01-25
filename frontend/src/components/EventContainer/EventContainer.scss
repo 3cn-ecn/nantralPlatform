@@ -1,6 +1,6 @@
 $radius: 15px;
-$width: 400px;
-$height: 250px;
+$width: 450px;
+$height: 300px;
 
 $margin: 10px;
 
@@ -44,20 +44,36 @@ $secondaryBackground: rgb(250, 250, 250);
 
 .joinButton {
   margin: $margin;
-  position: absolute;
+  position: relative;
   top: 0px;
   right: 0px;
 }
 
 .title {
   text-align: left;
-  margin: $margin;
+  left: $margin;
+  line-height: 25px;
+  margin: 0px;
 }
 
-.infoContainer {
+.infoMain {
   display: flex;
-  position: absolute;
   left: $margin;
+  top: $margin
+}
+
+.infoContainer{
+  margin: $margin;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.infoDetails{
+  justify-content: space-around;
+  display: flex;
+  position: relative;
+  margin: $margin;
 }
 
 .groupIcon {
@@ -65,10 +81,29 @@ $secondaryBackground: rgb(250, 250, 250);
   background-color: $secondaryBackground;
   width: 60px;
   height: 60px;
+  margin: 0;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+
+}
+
+.iconContainer {
+
 }
 
 .infos {
   text-align: left;
   font-size: 13px;
   margin-left: $margin;
+  width: 100%;
+}
+
+.infoItem {
+  display: flex;
+  
+}
+
+.infoItemText {
+  margin-left: 5px;
 }

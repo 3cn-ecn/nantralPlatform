@@ -26,20 +26,11 @@ function Home() {
     <>
       {/* <CheckboxListSecondary /> */}
       <h1>Home</h1>
-      <EventContainer />
-      <EventContainer variant='shotgun'/>
-      <EventContainer variant='form'/>
       <h3>Exemple des boutons d'events. Ajouter des events pour tester</h3>
       <div style={{ flexDirection: 'column' }}>
         {events.length > 0 &&
           events.map((event) => (
-            <JoinButton
-              variant={event.max_participant === null ? 'normal' : 'shotgun'}
-              person={event.number_of_participants}
-              maxPerson={event.max_participant}
-              participating={event.is_participating}
-              key={event.slug}
-            />
+            <EventContainer event={event} key={event.slug} />
           ))}
         <JoinButton variant="shotgun" person={9} maxPerson={10} participating />
         <JoinButton
