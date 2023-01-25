@@ -1,7 +1,11 @@
 import React from 'react';
 import { Box, Tab } from '@mui/material';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { CalendarPicker, TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
+import axios from 'axios';
+import { getEventApi } from 'api';
+import { CalendarMonth, CalendarToday, CalendarViewDay } from '@mui/icons-material';
+import Calendar from './Calendar';
 
 /**
  * Event Page, with Welcome message, next events, etc...
@@ -9,11 +13,27 @@ import './Event.scss';
  */
 
 function EventList() {
+  // React.useEffect(() => {
+  //   const test = axios.get('api/event');
+  //   console.log(test);
+  // });
+
+  axios.get('api/event').then((value) => {
+    console.log(value);
+    console.log("c'est bon");
+  });
+  
   return <p>Ceci est une liste.</p>;
 }
 
 function EventCalendar() {
-  return <p>Ceci est un calendrier.</p>;
+  return (
+    <>
+      <p>Ceci est un calendrier.</p>
+      <CalendarMonth></CalendarMonth>
+      <Calendar></Calendar>
+    </>
+  );
 }
 
 function EventView() {
@@ -34,6 +54,10 @@ function EventView() {
       </TabPanel>
       <TabPanel value="2">
         <EventCalendar></EventCalendar>
+        <CalendarMonth></CalendarMonth>
+        <CalendarPicker></CalendarPicker>
+        <CalendarViewDay></CalendarViewDay>
+        <CalendarToday></CalendarToday>
       </TabPanel>
     </TabContext>
   );
