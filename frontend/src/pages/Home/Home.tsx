@@ -27,7 +27,7 @@ function Home() {
     <>
       {/* <CheckboxListSecondary /> */}
       <h1>Home</h1>
-      <h3>Exemple des boutons d'events. Ajouter des events pour tester</h3>
+      <h3>Exemple des boutons d&apos;events. Ajouter des events pour tester</h3>
       <div style={{ flexDirection: 'column' }}>
         {events.length > 0 &&
           events.map((event) => (
