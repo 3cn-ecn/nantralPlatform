@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Tab } from '@mui/material';
+import { Box, Button, Tab } from '@mui/material';
 import { CalendarPicker, TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
+
 import {
   CalendarMonth,
   CalendarToday,
@@ -12,6 +13,7 @@ import { EventProps } from 'pages/Props/Event';
 import { getEventApi } from '../../api';
 import Calendar from './Calendar/Calendar';
 import { formatDate } from '../../utils/date';
+import FilterBar from './FilterBar/FilterBar';
 
 /**
  * Event Page, with Welcome message, next events, etc...
@@ -36,6 +38,11 @@ function EventList(props: { events: any }) {
   //     console.log(a.getFullYear());
   //   });
   // }, []);
+  axios.get('api/event').then((value) => {
+    console.log(value);
+    console.log("c'est bon");
+  });
+
   return <p>Ceci est une liste.</p>;
 }
 
@@ -101,6 +108,9 @@ function Event() {
     <>
       <h1>Évènements</h1>
       <p>Ceci est la page des events</p>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <FilterBar />
+      </div>
       <EventView events={events} />
     </>
   );
