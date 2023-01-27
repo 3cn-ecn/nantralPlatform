@@ -16,6 +16,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import Collapse from '@mui/material/Collapse';
 import {
   Notifications as NotificationsIcon,
   AccountCircle,
@@ -26,6 +27,7 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import PersonIcon from '@mui/icons-material/Person';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { createSvgIcon } from '@mui/material/utils';
@@ -71,6 +73,7 @@ function NavBarTop(props: {
   };
   const handleCloseL = () => {
     setAnchorElLangue(null);
+    setAnchorEl(spanRef.current);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -83,8 +86,7 @@ function NavBarTop(props: {
 
   const [langue, setLangue] = React.useState('');
 
-  const handleChangeLangue = (event: SelectChangeEvent) => {
-    setLangue(event.target.value as string);
+  const handleChangeLangue = (event: React.MouseEvent<HTMLButtonElement>) => {
     changeLanguage(event.target.value);
   };
 
@@ -137,6 +139,7 @@ function NavBarTop(props: {
             open={open}
             onClose={handleClose}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            TransitionComponent={Collapse}
           >
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PersonIcon} />
@@ -182,21 +185,6 @@ function NavBarTop(props: {
                 {!themeApp ? 'Dark' : 'Light'} Mode
               </ListItemText>
             </MenuItem>
-            <MenuItem>
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-label">Langue</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={langue}
-                  label="Langue"
-                  onChange={handleChangeLangue}
-                >
-                  <MenuItem value="en-GB">{t('user_menu.english')}</MenuItem>
-                  <MenuItem value="fr-FR">{t('user_menu.french')}</MenuItem>
-                </Select>
-              </FormControl>
-            </MenuItem>
           </Menu>
           <Menu
             id="basic-menu"
@@ -204,26 +192,32 @@ function NavBarTop(props: {
             open={openL}
             onClose={handleCloseL}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            TransitionComponent={Collapse}
           >
-            <SvgIcon component={PersonIcon} />
-            <Typography> Choix du Langage </Typography>
-            <MenuItem onClick={handleClose}>
-              <SvgIcon component={PersonIcon} />
-              <ListItemText className="menuItem">
-                {t('user_menu.profile')}
-              </ListItemText>
+            <MenuItem disableRipple="true">
+              <IconButton
+                aria-label="account of current user"
+                aria-haspopup="true"
+                color="inherit"
+                onClick={handleCloseL}
+              >
+                <SvgIcon component={ArrowBackIcon} inheritViewBox />
+              </IconButton>
+              <Typography className="menuTitle" variant="h6">
+                Choix du langage
+              </Typography>
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <SvgIcon component={LogoutRoundedIcon} />
-              <ListItemText className="menuItem">
-                {t('user_menu.logout')}
-              </ListItemText>
+            <MenuItem
+              value="fr-FR"
+              onClick={() => i18next.changeLanguage('fr-FR')}
+            >
+              Français
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <SvgIcon component={ErrorRoundedIcon} />
-              <ListItemText className="menuItem">
-                {t('user_menu.bug')}
-              </ListItemText>
+            <MenuItem
+              value="en-GB"
+              onClick={() => i18next.changeLanguage('en-GB')}
+            >
+              English
             </MenuItem>
           </Menu>
         </Box>
