@@ -4,6 +4,10 @@ import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
+import { Link } from "react-router-dom";
+
+import Legal from 'pages/LegalNotice/Legal';
 import {
   IconButton,
   AppBar,
@@ -13,7 +17,8 @@ import {
   Toolbar,
   Menu,
   MenuItem,
-  ListItemText,
+  ListItem,
+  ListItemText
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import {
@@ -127,40 +132,62 @@ function NavBarTop(props: {
           >
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PersonIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                component={Link}
+                to="/profile/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.profile')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={LogoutRoundedIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                component={Link}
+                to="/logout/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.logout')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
+            <Divider />
             <MenuItem onClick={handleClose}>
               <SvgIcon component={ErrorRoundedIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                component={Link}
+                to="/bug/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.bug')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={HelpRoundedIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                key={t('user_menu.doc')}
+                component={Link}
+                to="https://docs.nantral-platform.fr/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.doc')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={GavelIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                component={Link}
+                to="/legal-notice/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.legal')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <SvgIcon component={PublicRoundedIcon} />
-              <ListItemText className="menuItem">
-                {t('user_menu.langage')}
-              </ListItemText>
-            </MenuItem>
+            <Divider />
             <MenuItem onClick={() => setThemeApp(!themeApp)}>
               <SvgIcon
                 component={themeApp ? Brightness7Icon : Brightness4Icon}
@@ -171,7 +198,7 @@ function NavBarTop(props: {
             </MenuItem>
             <MenuItem>
               <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-label">Langue</InputLabel>
+                <InputLabel id="demo-simple-select-label">{t('user_menu.language')}</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
