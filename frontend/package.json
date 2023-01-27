@@ -52,6 +52,7 @@
     "@dnd-kit/utilities": "^3.0.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mui/x-date-pickers": "^5.0.15",
     "@mui/icons-material": "^5.11.0",
     "@mui/lab": "^5.0.0-alpha.116",
     "@mui/material": "^5.11.6",

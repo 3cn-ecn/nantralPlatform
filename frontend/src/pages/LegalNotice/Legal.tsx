@@ -1,9 +1,4 @@
-import axios from 'axios';
-import { EventProps } from 'pages/Props/Event';
-import React from 'react';
-import JoinButton from '../../components/Button/JoinButton';
 import { useTranslation } from 'react-i18next';
-import { Block } from '@mui/icons-material';
 
 /**
  * Legal Notice, like the name and owner of the site, etc.

@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { EventProps } from 'pages/Props/Event';
 import React from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import EventContainer from '../../components/EventContainer/EventContainer';
+import EventCard from '../../components/EventCard/EventCard';
+import theme from '../../theme';
 import JoinButton from '../../components/Button/JoinButton';
 
 /**
@@ -27,13 +31,7 @@ function Home() {
       <div style={{ flexDirection: 'column' }}>
         {events.length > 0 &&
           events.map((event) => (
-            <JoinButton
-              variant={event.max_participant === null ? 'normal' : 'shotgun'}
-              person={event.number_of_participants}
-              maxPerson={event.max_participant}
-              participating={event.is_participating}
-              key={event.slug}
-            />
+            <EventCard event={event} key={event.slug} />
           ))}
         <JoinButton variant="shotgun" person={9} maxPerson={10} participating />
         <JoinButton

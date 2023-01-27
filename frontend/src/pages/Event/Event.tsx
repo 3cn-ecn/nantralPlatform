@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { Box, Button, Tab } from '@mui/material';
 import { CalendarPicker, TabContext, TabList, TabPanel } from '@mui/lab';
@@ -22,26 +23,6 @@ import FilterBar from './FilterBar/FilterBar';
 
 function EventList(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
-  // console.log(getEventApi);
-
-  // React.useEffect(() => {
-  //   axios.get('../api/event').then((eventsData) => {
-  //     setEvents(eventsData.data);
-  //     // console.log(events[0].date);
-  //     console.log(eventsData.data[0].date);
-  //     const a = new Date(eventsData.data[0].date);
-  //     console.log(a);
-  //     console.log(a.getDay());
-  //     console.log(a.getDate());
-  //     console.log(a.getMonth());
-  //     console.log(a.getFullYear());
-  //   });
-  // }, []);
-  // axios.get('api/event').then((value) => {
-  //   console.log(value);
-  //   console.log("c'est bon");
-  // });
 
   return <p>Ceci est une liste.</p>;
 }
