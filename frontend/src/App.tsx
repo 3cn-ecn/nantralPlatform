@@ -16,7 +16,9 @@ import Family from './pages/Family/Family';
 import Map from './pages/Map/Map';
 import Sign from './pages/Sign/Sign';
 import Student from './pages/Student/Student';
+import LegalNotice from './pages/LegalNotice/Legal';
 import theme from './theme';
+import darktheme from './darktheme';
 import './App.scss';
 
 /**
@@ -27,14 +29,20 @@ import './App.scss';
  * @returns The App Component
  */
 function App() {
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = React.useState(true);
+  const [themeApp, setThemeApp] = React.useState(true);
   const drawerWidth = 240; // the width of the lateral navbar
   const count = 0;
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={themeApp ? theme : darktheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <NavBarTop menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <NavBarTop
+          menuOpen={menuOpen}
+          setMenuOpen={setMenuOpen}
+          themeApp={themeApp}
+          setThemeApp={setThemeApp}
+        />
         <NavBarSide menuOpen={menuOpen} drawerWidth={drawerWidth} />
         <Box
           component="main"
@@ -68,6 +76,7 @@ function App() {
             <Route path="/parrainage" element={<Family />} />
             <Route path="/colocs" element={<Map />} />
             <Route path="/student" element={<Student />} />
+            <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="/tools/signature" element={<Sign />} />
           </Routes>
         </Box>
