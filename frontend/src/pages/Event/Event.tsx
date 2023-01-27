@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
@@ -9,11 +10,11 @@ import './Event.scss';
  */
 
 function EventList() {
-  return <p>Ceci est une liste.</p>;
+  return <p> ceci est la liste </p>;
 }
 
 function EventCalendar() {
-  return <p>Ceci est un calendrier.</p>;
+  return <p> ceci est le calendrier </p>;
 }
 
 function EventView() {
