@@ -58,6 +58,7 @@ function NavBarTop(props: {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const openL = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -183,6 +184,32 @@ function NavBarTop(props: {
                   <MenuItem value="fr-FR">{t('user_menu.french')}</MenuItem>
                 </Select>
               </FormControl>
+            </MenuItem>
+          </Menu>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+          >
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={PersonIcon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.profile')}
+              </ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={LogoutRoundedIcon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.logout')}
+              </ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={ErrorRoundedIcon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.bug')}
+              </ListItemText>
             </MenuItem>
           </Menu>
         </Box>
