@@ -57,10 +57,20 @@ function NavBarTop(props: {
   const { menuOpen, setMenuOpen, themeApp, setThemeApp } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorElLangue, setAnchorElLangue] =
+    React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const openL = Boolean(anchorEl);
+  const openL = Boolean(anchorElLangue);
+  const spanRef = React.useRef();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleClickL = () => {
+    setAnchorElLangue(spanRef.current);
+    setAnchorEl(null);
+  };
+  const handleCloseL = () => {
+    setAnchorElLangue(null);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -116,6 +126,8 @@ function NavBarTop(props: {
             aria-haspopup="true"
             color="inherit"
             onClick={handleClick}
+            component="span"
+            ref={spanRef}
           >
             <SvgIcon component={PeopleIcon} inheritViewBox />
           </IconButton>
@@ -156,7 +168,7 @@ function NavBarTop(props: {
                 {t('user_menu.legal')}
               </ListItemText>
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleClickL}>
               <SvgIcon component={PublicRoundedIcon} />
               <ListItemText className="menuItem">
                 {t('user_menu.langage')}
@@ -188,11 +200,13 @@ function NavBarTop(props: {
           </Menu>
           <Menu
             id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
+            anchorEl={anchorElLangue}
+            open={openL}
+            onClose={handleCloseL}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
           >
+            <SvgIcon component={PersonIcon} />
+            <Typography> Choix du Langage </Typography>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PersonIcon} />
               <ListItemText className="menuItem">
