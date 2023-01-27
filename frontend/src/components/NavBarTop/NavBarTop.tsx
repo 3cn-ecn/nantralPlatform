@@ -4,9 +4,8 @@ import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
-import { Link } from "react-router-dom";
-
+import { NavLink, Link } from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Legal from 'pages/LegalNotice/Legal';
 import {
   IconButton,
@@ -39,6 +38,8 @@ import { createSvgIcon } from '@mui/material/utils';
 import { ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
+import PaletteIcon from '@mui/icons-material/Palette';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
@@ -66,8 +67,12 @@ function NavBarTop(props: {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElLangue, setAnchorElLangue] =
     React.useState<null | HTMLElement>(null);
+  const [anchorElDark, setAnchorElDark] = React.useState<null | HTMLElement>(
+    null
+  );
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
+  const openD = Boolean(anchorElDark);
   const spanRef = React.useRef();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -87,6 +92,15 @@ function NavBarTop(props: {
     i18next.changeLanguage(lng);
   };
 
+  const handleClickD = () => {
+    setAnchorElDark(spanRef.current);
+    setAnchorEl(null);
+  };
+  const handleCloseD = () => {
+    setAnchorElDark(null);
+    setAnchorEl(spanRef.current);
+  };
+
   const { t } = useTranslation('translation');
 
   const [langue, setLangue] = React.useState('');
@@ -94,6 +108,7 @@ function NavBarTop(props: {
   const handleChangeLangue = (event: React.MouseEvent<HTMLButtonElement>) => {
     changeLanguage(event.target.value);
   };
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   return (
     <AppBar position="fixed" color="secondary">
@@ -210,13 +225,9 @@ function NavBarTop(props: {
               </ListItemText>
             </MenuItem>
             <Divider />
-            <MenuItem onClick={() => setThemeApp(!themeApp)}>
-              <SvgIcon
-                component={themeApp ? Brightness7Icon : Brightness4Icon}
-              />
-              <ListItemText className="menuItem">
-                {!themeApp ? 'Dark' : 'Light'} Mode
-              </ListItemText>
+            <MenuItem onClick={handleClickD}>
+              <SvgIcon component={PaletteIcon} />
+              <ListItemText className="menuItem">Thème</ListItemText>
             </MenuItem>
           </Menu>
           <Menu
@@ -253,6 +264,46 @@ function NavBarTop(props: {
               selected={i18next.language === 'en-GB'}
             >
               English
+            </MenuItem>
+          </Menu>
+          <Menu
+            id="menu-dark-mode"
+            anchorEl={anchorElDark}
+            open={openD}
+            onClose={handleCloseD}
+            MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            TransitionComponent={Collapse}
+          >
+            <MenuItem disableRipple="true">
+              <IconButton
+                aria-label="account of current user"
+                aria-haspopup="true"
+                color="inherit"
+                onClick={handleCloseD}
+              >
+                <SvgIcon component={ArrowBackIcon} inheritViewBox />
+              </IconButton>
+              <Typography className="menuTitle" variant="h6">
+                Choix du Thème
+              </Typography>
+            </MenuItem>
+            <MenuItem
+              onClick={() => setThemeApp(true)}
+              selected={themeApp === true}
+            >
+              <SvgIcon component={Brightness7Icon} />
+              <ListItemText className="menuItem">Light Theme</ListItemText>
+            </MenuItem>
+            <MenuItem
+              onClick={() => setThemeApp(false)}
+              selected={themeApp === false}
+            >
+              <SvgIcon component={Brightness4Icon} />
+              <ListItemText className="menuItem">Dark Theme</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={() => setThemeApp(!prefersDarkMode)}>
+              <SvgIcon component={BrightnessMediumIcon} />
+              <ListItemText className="menuItem">Automatic</ListItemText>
             </MenuItem>
           </Menu>
         </Box>
