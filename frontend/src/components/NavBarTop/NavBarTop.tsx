@@ -21,6 +21,7 @@ import {
   ListItemText
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import Collapse from '@mui/material/Collapse';
 import {
   Notifications as NotificationsIcon,
   AccountCircle,
@@ -31,6 +32,7 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import PersonIcon from '@mui/icons-material/Person';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { createSvgIcon } from '@mui/material/utils';
@@ -62,9 +64,21 @@ function NavBarTop(props: {
   const { menuOpen, setMenuOpen, themeApp, setThemeApp } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorElLangue, setAnchorElLangue] =
+    React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const openL = Boolean(anchorElLangue);
+  const spanRef = React.useRef();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleClickL = () => {
+    setAnchorElLangue(spanRef.current);
+    setAnchorEl(null);
+  };
+  const handleCloseL = () => {
+    setAnchorElLangue(null);
+    setAnchorEl(spanRef.current);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -77,8 +91,7 @@ function NavBarTop(props: {
 
   const [langue, setLangue] = React.useState('');
 
-  const handleChangeLangue = (event: SelectChangeEvent) => {
-    setLangue(event.target.value as string);
+  const handleChangeLangue = (event: React.MouseEvent<HTMLButtonElement>) => {
     changeLanguage(event.target.value);
   };
 
@@ -120,6 +133,8 @@ function NavBarTop(props: {
             aria-haspopup="true"
             color="inherit"
             onClick={handleClick}
+            component="span"
+            ref={spanRef}
           >
             <SvgIcon component={PeopleIcon} inheritViewBox />
           </IconButton>
@@ -129,6 +144,7 @@ function NavBarTop(props: {
             open={open}
             onClose={handleClose}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            TransitionComponent={Collapse}
           >
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PersonIcon} />
@@ -187,6 +203,12 @@ function NavBarTop(props: {
                 {t('user_menu.legal')}
               </ListItem>
             </MenuItem>
+            <MenuItem onClick={handleClickL}>
+              <SvgIcon component={PublicRoundedIcon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.language')}
+              </ListItemText>
+            </MenuItem>
             <Divider />
             <MenuItem onClick={() => setThemeApp(!themeApp)}>
               <SvgIcon
@@ -196,20 +218,41 @@ function NavBarTop(props: {
                 {!themeApp ? 'Dark' : 'Light'} Mode
               </ListItemText>
             </MenuItem>
-            <MenuItem>
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-label">{t('user_menu.language')}</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={langue}
-                  label="Langue"
-                  onChange={handleChangeLangue}
-                >
-                  <MenuItem value="en-GB">{t('user_menu.english')}</MenuItem>
-                  <MenuItem value="fr-FR">{t('user_menu.french')}</MenuItem>
-                </Select>
-              </FormControl>
+          </Menu>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorElLangue}
+            open={openL}
+            onClose={handleCloseL}
+            MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            TransitionComponent={Collapse}
+          >
+            <MenuItem disableRipple="true">
+              <IconButton
+                aria-label="account of current user"
+                aria-haspopup="true"
+                color="inherit"
+                onClick={handleCloseL}
+              >
+                <SvgIcon component={ArrowBackIcon} inheritViewBox />
+              </IconButton>
+              <Typography className="menuTitle" variant="h6">
+                Choix du langage
+              </Typography>
+            </MenuItem>
+            <MenuItem
+              value="fr-FR"
+              onClick={() => i18next.changeLanguage('fr-FR')}
+              selected={i18next.language === 'fr-FR'}
+            >
+              Français
+            </MenuItem>
+            <MenuItem
+              value="en-GB"
+              onClick={() => i18next.changeLanguage('en-GB')}
+              selected={i18next.language === 'en-GB'}
+            >
+              English
             </MenuItem>
           </Menu>
         </Box>
