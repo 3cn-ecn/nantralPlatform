@@ -9,4 +9,4 @@ export default formatQuery;
 
 // export API endpoints
 export const searchApi = '/api/search/';
-export const getEventApi = '/api/event/';
+export const getEventApi = '../api/event';
