@@ -12,7 +12,7 @@ import {
 } from '@mui/icons-material';
 import { EventProps } from 'pages/Props/Event';
 import { getEventApi } from '../../api';
-import Calendar from './Calendar/Calendar';
+import Calendar from '../../components/Calendar/Calendar';
 import { formatDate } from '../../utils/date';
 import FilterBar from './FilterBar/FilterBar';
 
@@ -23,26 +23,6 @@ import FilterBar from './FilterBar/FilterBar';
 
 function EventList(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
-  // console.log(getEventApi);
-
-  // React.useEffect(() => {
-  //   axios.get('../api/event').then((eventsData) => {
-  //     setEvents(eventsData.data);
-  //     // console.log(events[0].date);
-  //     console.log(eventsData.data[0].date);
-  //     const a = new Date(eventsData.data[0].date);
-  //     console.log(a);
-  //     console.log(a.getDay());
-  //     console.log(a.getDate());
-  //     console.log(a.getMonth());
-  //     console.log(a.getFullYear());
-  //   });
-  // }, []);
-  axios.get('api/event').then((value) => {
-    console.log(value);
-    console.log("c'est bon");
-  });
 
   return <p>Ceci est une liste.</p>;
 }
