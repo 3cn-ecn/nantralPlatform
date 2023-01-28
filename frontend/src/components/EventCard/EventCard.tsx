@@ -121,7 +121,6 @@ function EventCard(props: { event: EventProps }) {
                   maxPerson={max_participant}
                   participating={is_participating}
                   eventSlug={slug}
-                  link={link}
                 />
               </div>
             </div>

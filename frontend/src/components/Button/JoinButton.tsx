@@ -50,34 +50,32 @@ function JoinButton({
   const { t } = useTranslation('translation');
 
   const participate = async () => {
-    try {
-      const response = await axios.post(`api/event/${eventSlug}/participate`);
-      if (response.data.success) {
-        setPeople(people + 1);
-        setSelected(true);
-      } else {
-        console.error('could not subscribe to event');
-      }
-    } catch (error) {
-      console.error('could not subscribe to event');
-    }
+    axios
+      .post(`api/event/${eventSlug}/participate`)
+      .then((res) => {
+        if (res.data.success) {
+          setPeople(people + 1);
+          setSelected(true);
+        } else {
+          console.error('could not subscribe to event');
+        }
+      })
+      .catch((err) => console.error(err));
     setLoading(false);
   };
 
   const quit = async () => {
-    try {
-      const response: any = await axios.delete(
-        `api/event/${eventSlug}/participate`
-      );
-      if (response.data.success) {
-        setSelected(false);
-        setPeople(people - 1);
-      } else {
-        console.error('could not unsuscribe from event');
-      }
-    } catch (error) {
-      console.error('could not unsuscribe from event');
-    }
+    axios
+      .delete(`api/event/${eventSlug}/participate`)
+      .then((res) => {
+        if (res.data.success) {
+          setSelected(false);
+          setPeople(people - 1);
+        } else {
+          console.error('could not unsuscribe from event');
+        }
+      })
+      .catch((err) => console.error(err));
     setLoading(false);
   };
 

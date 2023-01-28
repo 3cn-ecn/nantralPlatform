@@ -31,7 +31,9 @@ function Home() {
       <SectionTitle title="myEvents" />
       <Grid spacing={0} container className="upcoming-event">
         {events.length > 0
-          ? events.map((event) => <EventCard event={event} key={event.slug} />)
+          ? events
+              .slice(0, 3)
+              .map((event) => <EventCard event={event} key={event.slug} />)
           : [0, 1, 2].map((item, key) => (
               <Skeleton
                 variant="rectangular"
