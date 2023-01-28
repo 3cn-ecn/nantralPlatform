@@ -80,5 +80,11 @@
       "7": "The contents on this site may include contents from external sources (for instance videos, images, ...). These embedded contents act in the same way as if the visitor had visited the original site from where this content is based. These sites may therefore use additional cookies.",
       "8": "When you register on the site, the personal data you send us will be stored and kept by the Association des Étudiants de l'École Centrale de Nantes until you request the deletion of your user account using the contact form."
     }
+  },
+  "home" : {
+    "myEvents": "My events",
+    "upcomingEvents": "Upcoming Events",
+    "seeMore": "see more",
+    "welcomeTo": "Welcome to"
   }
 }

@@ -1,6 +1,8 @@
 from django.utils import timezone
 
 from rest_framework import generics, permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from .models import BaseEvent
 from .serializers import BaseEventSerializer, EventParticipatingSerializer
@@ -91,3 +93,39 @@ class UpdateEventAPIView(generics.RetrieveDestroyAPIView):
 
     def get_queryset(self):
         return BaseEvent.objects.filter(slug=self.kwargs['event_slug'])
+
+
+class ParticipateAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    # lookup_field = 'slug'
+    # lookup_url_kwarg = 'event_slug'
+
+    def post(self, request, *args, **kwargs):
+        event = BaseEvent.objects.get(slug=self.kwargs['event_slug'])
+        if event.max_participant is None:
+            event.participants.add(request.user.student)
+            return Response(
+                status='200',
+                data={"success": True,
+                      "message": "You have been added to this event"})
+        else:
+            if event.max_participant <= event.number_of_participants:
+                return Response(
+                    status='401',
+                    data={"success": False,
+                          "message": "Shotgun full or finished"})
+            else:
+                event.participants.add(request.user.student)
+                return Response(
+                    status='200',
+                    data={"success": True,
+                          "message": "You have been added to this event"})
+
+    def delete(self, request, *args, **kwargs):
+        event = BaseEvent.get_event_by_slug(slug=self.kwargs['event_slug'])
+        event.participants.remove(request.user.student)
+        return Response(status='200',
+                        data={
+                            "success": True,
+                            "message": "You have been removed from this event"
+                        })
