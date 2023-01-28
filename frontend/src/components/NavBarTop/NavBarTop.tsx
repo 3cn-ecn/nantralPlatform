@@ -4,6 +4,10 @@ import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
+import { Link } from "react-router-dom";
+
+import Legal from 'pages/LegalNotice/Legal';
 import {
   IconButton,
   AppBar,
@@ -13,9 +17,11 @@ import {
   Toolbar,
   Menu,
   MenuItem,
-  ListItemText,
+  ListItem,
+  ListItemText
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import Collapse from '@mui/material/Collapse';
 import {
   Notifications as NotificationsIcon,
   AccountCircle,
@@ -26,6 +32,7 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import PersonIcon from '@mui/icons-material/Person';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { createSvgIcon } from '@mui/material/utils';
@@ -57,9 +64,21 @@ function NavBarTop(props: {
   const { menuOpen, setMenuOpen, themeApp, setThemeApp } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorElLangue, setAnchorElLangue] =
+    React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const openL = Boolean(anchorElLangue);
+  const spanRef = React.useRef();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleClickL = () => {
+    setAnchorElLangue(spanRef.current);
+    setAnchorEl(null);
+  };
+  const handleCloseL = () => {
+    setAnchorElLangue(null);
+    setAnchorEl(spanRef.current);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -72,8 +91,7 @@ function NavBarTop(props: {
 
   const [langue, setLangue] = React.useState('');
 
-  const handleChangeLangue = (event: SelectChangeEvent) => {
-    setLangue(event.target.value as string);
+  const handleChangeLangue = (event: React.MouseEvent<HTMLButtonElement>) => {
     changeLanguage(event.target.value);
   };
 
@@ -115,6 +133,8 @@ function NavBarTop(props: {
             aria-haspopup="true"
             color="inherit"
             onClick={handleClick}
+            component="span"
+            ref={spanRef}
           >
             <SvgIcon component={PeopleIcon} inheritViewBox />
           </IconButton>
@@ -124,43 +144,72 @@ function NavBarTop(props: {
             open={open}
             onClose={handleClose}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            TransitionComponent={Collapse}
           >
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PersonIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                component={Link}
+                to="/profile/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.profile')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={LogoutRoundedIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                component={Link}
+                to="/logout/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.logout')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
+            <Divider />
             <MenuItem onClick={handleClose}>
               <SvgIcon component={ErrorRoundedIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                component={Link}
+                to="/bug/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.bug')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={HelpRoundedIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                key={t('user_menu.doc')}
+                component={Link}
+                to="https://docs.nantral-platform.fr/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.doc')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <SvgIcon component={GavelIcon} />
-              <ListItemText className="menuItem">
+              <ListItem
+                component={Link}
+                to="/legal-notice/"
+                className="menuItem"
+                disablePadding
+              >
                 {t('user_menu.legal')}
-              </ListItemText>
+              </ListItem>
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleClickL}>
               <SvgIcon component={PublicRoundedIcon} />
               <ListItemText className="menuItem">
-                {t('user_menu.langage')}
+                {t('user_menu.language')}
               </ListItemText>
             </MenuItem>
+            <Divider />
             <MenuItem onClick={() => setThemeApp(!themeApp)}>
               <SvgIcon
                 component={themeApp ? Brightness7Icon : Brightness4Icon}
@@ -169,20 +218,41 @@ function NavBarTop(props: {
                 {!themeApp ? 'Dark' : 'Light'} Mode
               </ListItemText>
             </MenuItem>
-            <MenuItem>
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-label">Langue</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={langue}
-                  label="Langue"
-                  onChange={handleChangeLangue}
-                >
-                  <MenuItem value="en-GB">{t('user_menu.english')}</MenuItem>
-                  <MenuItem value="fr-FR">{t('user_menu.french')}</MenuItem>
-                </Select>
-              </FormControl>
+          </Menu>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorElLangue}
+            open={openL}
+            onClose={handleCloseL}
+            MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            TransitionComponent={Collapse}
+          >
+            <MenuItem disableRipple="true">
+              <IconButton
+                aria-label="account of current user"
+                aria-haspopup="true"
+                color="inherit"
+                onClick={handleCloseL}
+              >
+                <SvgIcon component={ArrowBackIcon} inheritViewBox />
+              </IconButton>
+              <Typography className="menuTitle" variant="h6">
+                Choix du langage
+              </Typography>
+            </MenuItem>
+            <MenuItem
+              value="fr-FR"
+              onClick={() => i18next.changeLanguage('fr-FR')}
+              selected={i18next.language === 'fr-FR'}
+            >
+              Français
+            </MenuItem>
+            <MenuItem
+              value="en-GB"
+              onClick={() => i18next.changeLanguage('en-GB')}
+              selected={i18next.language === 'en-GB'}
+            >
+              English
             </MenuItem>
           </Menu>
         </Box>
