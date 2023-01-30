@@ -58,7 +58,7 @@ function InfoItem(props: { name: string; value: string }) {
   return (
     <div className={"infoItem " + specificClass}>
       {icon}
-      <div className="infoItemElement" style={{paddingLeft : "10px"}} >{text}</div>
+      <div className="infoItemElement" style={{paddingLeft : "7px"}} >{text}</div>
     </div>
   );
 }
@@ -76,7 +76,7 @@ function EventCard(props: { event: EventProps }) {
   } = event;
 
   const variant = max_participant === null ? 'normal' : 'shotgun';
-  const bannerDescription = 'AMOG';
+  const bannerDescription = 'Banner';
 
   const dateValue = new Date(date);
   const dateText = `${dateValue.getDate()} ${monthNames[dateValue.getMonth()]} ${dateValue.getFullYear()}`;
