@@ -48,7 +48,7 @@ function App() {
           component="main"
           sx={{
             flexGrow: 1,
-            padding: theme.spacing(3),
+            padding: 0,
             paddingTop: 0,
             transition: theme.transitions.create('margin', {
               easing: theme.transitions.easing.sharp,

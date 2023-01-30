@@ -5,6 +5,7 @@ from .api_views import (
     ListAllEventsGroupAPIView,
     ListEventsGroupAPIView,
     ListEventsParticipantsAPIView,
+    ParticipateAPIView,
     UpdateEventAPIView)
 
 app_name = 'event'
@@ -30,4 +31,8 @@ urlpatterns = [
         '<slug:event_slug>',
         UpdateEventAPIView.as_view(),
         name='update-event'),
+    path(
+        '<slug:event_slug>/participate',
+        ParticipateAPIView.as_view(),
+        name='participate-to-event'),
 ]

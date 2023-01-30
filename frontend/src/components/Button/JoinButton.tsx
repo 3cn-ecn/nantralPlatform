@@ -15,7 +15,9 @@ import {
   Button,
   Theme,
   SxProps,
+  CircularProgress,
 } from '@mui/material';
+import axios from 'axios';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -27,6 +29,7 @@ interface JoinButtonProps {
   person: number;
   sx?: SxProps<Theme>;
   participating: boolean;
+  eventSlug: string;
 }
 
 function JoinButton({
@@ -37,29 +40,60 @@ function JoinButton({
   shotgunClosed,
   sx,
   participating,
+  eventSlug,
 }: JoinButtonProps): JSX.Element {
   const [selected, setSelected] = React.useState(participating);
   const [people, setPeople] = React.useState(person);
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const { t } = useTranslation('translation');
+
+  const participate = async () => {
+    axios
+      .post(`api/event/${eventSlug}/participate`)
+      .then((res) => {
+        if (res.data.success) {
+          setPeople(people + 1);
+          setSelected(true);
+        } else {
+          console.error('could not subscribe to event');
+        }
+      })
+      .catch((err) => console.error(err));
+    setLoading(false);
+  };
+
+  const quit = async () => {
+    axios
+      .delete(`api/event/${eventSlug}/participate`)
+      .then((res) => {
+        if (res.data.success) {
+          setSelected(false);
+          setPeople(people - 1);
+        } else {
+          console.error('could not unsuscribe from event');
+        }
+      })
+      .catch((err) => console.error(err));
+    setLoading(false);
+  };
 
   const handleClose = (unsuscribe: boolean) => {
     setOpen(false);
     if (unsuscribe) {
-      setSelected(false);
-      setPeople(people - 1);
+      setLoading(true);
+      quit();
     }
   };
-  const onClick = (e) => {
-    e.stopPropagation();
+  const onClick = () => {
     switch (variant) {
       case 'normal':
         if (selected) {
           setOpen(true);
         } else {
-          setPeople(people + 1);
-          setSelected(true);
+          setLoading(true);
+          participate();
         }
         break;
       case 'shotgun':
@@ -67,8 +101,8 @@ function JoinButton({
         if (selected) {
           setOpen(true);
         } else {
-          setPeople(people + 1);
-          setSelected(true);
+          setLoading(true);
+          participate();
         }
         break;
       case 'form':
@@ -77,6 +111,7 @@ function JoinButton({
       default:
     }
   };
+
   const getFirstIcon = () => {
     switch (variant) {
       case 'shotgun':
@@ -126,7 +161,8 @@ function JoinButton({
   return (
     <>
       <Button
-        onClick={(e) => onClick(e)}
+        disabled={loading}
+        onClick={() => onClick()}
         variant="contained"
         startIcon={getFirstIcon()}
         color={color}
@@ -135,6 +171,9 @@ function JoinButton({
         title="test"
       >
         {getText()}
+        {loading && (
+          <CircularProgress size={25} style={{ position: 'absolute' }} />
+        )}
       </Button>
       <Dialog
         open={open}

@@ -76,6 +76,8 @@ function EventCard(props: { event: EventProps }) {
     date,
     image,
     get_group_name,
+    is_participating,
+    slug,
   } = event;
 
   const variant = max_participant === null ? 'normal' : 'shotgun';
@@ -117,7 +119,8 @@ function EventCard(props: { event: EventProps }) {
                   variant={variant}
                   person={number_of_participants}
                   maxPerson={max_participant}
-                  participating={false}
+                  participating={is_participating}
+                  eventSlug={slug}
                 />
               </div>
             </div>
