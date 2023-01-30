@@ -10,7 +10,7 @@ import {
   CalendarViewDay,
 } from '@mui/icons-material';
 import Calendar from './Calendar';
-import FilterBar from './FilterBar/FilterBar';
+import FilterBar from '../../components/FilterBar/FilterBar';
 
 /**
  * Event Page, with Welcome message, next events, etc...
