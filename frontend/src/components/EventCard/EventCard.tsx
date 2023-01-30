@@ -14,7 +14,6 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
-import { Margin } from '@mui/icons-material';
 
 const monthNames = [
   'Janvier',
@@ -42,26 +41,24 @@ function InfoItem(props: { name: string; value: string }) {
   let icon = null;
   const { name, value } = props;
   const text = value;
-  let minimumWidth = "0px";
+  const specificClass = (name === 'location') ? 'infoItemShrinkable' : 'infoItemMaxSize';
   switch (name) {
     case 'date':
       icon = <CalendarTodayIcon className='infoItemElement'/>;
-      minimumWidth = "max-content"; // To prevent the date to be displayed on multiple lines.
       break;
     case 'time':
       icon = <AccessTimeIcon className='infoItemElement'/>;
       break;
-    case 'position':
+    case 'location':
       icon = <LocationOnIcon className='infoItemElement'/>;
 
       break;
     default:
   }
-  console.log({minimumWidth})
   return (
-    <div className="infoItem">
+    <div className={"infoItem " + specificClass}>
       {icon}
-      <div className="infoItemElement" style={{paddingLeft : "10px", minWidth: minimumWidth}} >{text}</div>
+      <div className="infoItemElement" style={{paddingLeft : "7px"}} >{text}</div>
     </div>
   );
 }
@@ -81,7 +78,7 @@ function EventCard(props: { event: EventProps }) {
   } = event;
 
   const variant = max_participant === null ? 'normal' : 'shotgun';
-  const bannerDescription = 'AMOG';
+  const bannerDescription = 'Banner';
 
   const dateValue = new Date(date);
   const dateText = `${dateValue.getDate()} ${monthNames[dateValue.getMonth()]} ${dateValue.getFullYear()}`;
@@ -91,7 +88,7 @@ function EventCard(props: { event: EventProps }) {
     'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Aperture_Science_Logo.svg/480px-Aperture_Science_Logo.svg.png';
   return (
     <Card className="eventCard">
-      <CardActionArea>
+      <CardActionArea disableRipple>
         <CardMedia
           className="banner"
           component="img"
@@ -127,7 +124,7 @@ function EventCard(props: { event: EventProps }) {
             <div className="infoDetails">
               <InfoItem name="date" value={dateText} />
               <InfoItem name="time" value={hourText} />
-              <InfoItem name="position" value={location} />
+              <InfoItem name="location" value={location} />
             </div>
           </div>
         </CardContent>
