@@ -19,7 +19,13 @@
     "legal": "Mentions Légales",
     "language": "Langue",
     "english": "Anglais",
-    "french": "Français"
+    "french": "Français",
+    "light": "Thème clair",
+    "dark": "Thème sombre",
+    "automatic": "Mode Automatique",
+    "title_theme": "Choix du thème",
+    "title_language": "Choix du langage",
+    "theme": "Thème"
   },
   "button": {
     "joinButton": {
