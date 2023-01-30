@@ -138,7 +138,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
                     <SvgIcon component={LinkIcon} inheritViewBox />
                   )}
                 </ListItemIcon>
-                <Typography color="TextPrimary">{link.text}</Typography>
+                <Typography>{link.text}</Typography>
               </ListItemButton>
             </ListItem>
           ))}
