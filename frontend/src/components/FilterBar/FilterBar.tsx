@@ -4,7 +4,7 @@ import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -38,7 +38,7 @@ function FilterBar() {
     },
     {
       name: 'Favoris',
-      icon: <FavoriteBorderIcon />,
+      icon: <FavoriteIcon />,
       isMenu: false,
       content: null,
     },
