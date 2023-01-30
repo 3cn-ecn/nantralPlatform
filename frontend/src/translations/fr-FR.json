@@ -24,7 +24,8 @@
     "dark": "Thème sombre",
     "automatic": "Mode Automatique",
     "title_theme": "Choix du thème",
-    "title_language": "Choix du langage"
+    "title_language": "Choix du langage",
+    "theme": "Thème"
   },
   "button": {
     "joinButton": {

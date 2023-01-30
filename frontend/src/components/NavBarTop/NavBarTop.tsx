@@ -236,7 +236,9 @@ function NavBarTop(props: {
             <Divider />
             <MenuItem onClick={handleClickD}>
               <SvgIcon component={PaletteIcon} />
-              <ListItemText className="menuItem">Thème</ListItemText>
+              <ListItemText className="menuItem">
+                {t('user_menu.theme')}
+              </ListItemText>
             </MenuItem>
           </Menu>
           <Menu

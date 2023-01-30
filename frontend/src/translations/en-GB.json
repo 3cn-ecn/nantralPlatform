@@ -24,7 +24,8 @@
     "dark": "Dark Theme",
     "automatic": "Automatic",
     "title_theme": "Theme",
-    "title_language": "Language"
+    "title_language": "Language",
+    "theme": "Theme"
   },
   "button": {
     "joinButton" : {
