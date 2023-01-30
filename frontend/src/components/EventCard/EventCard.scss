@@ -100,8 +100,7 @@ Bottom half
   overflow-wrap: break-word;
   text-overflow: ellipsis;
   display: -webkit-box;
-   -webkit-line-clamp: 2; // Allow the title on 2 lines maximum
-           line-clamp: 2; 
+   -webkit-line-clamp: 2; // Allow the title on 2 lines maximums
    -webkit-box-orient: vertical;
 
 }
@@ -117,7 +116,6 @@ Bottom half
   display: flex;
   margin: $margin;
   min-height: 57px;
-  top: 50%;
 }
 
 // Div with 2 elements (icon and text)
@@ -138,6 +136,13 @@ Bottom half
   text-overflow: ellipsis;
   display: -webkit-box;
    -webkit-line-clamp: 3; // Allow the title on 3 lines maximum
-           line-clamp: 3; 
    -webkit-box-orient: vertical;
+}
+
+.infoItemMaxSize { // Prevent the item to be displayed on multiple lines.
+  min-width: max-content;
+}
+
+.infoItemShrinkable {
+  min-width: 0;
 }
