@@ -1,0 +1,148 @@
+// Variables
+$radius: 15px;
+$width: 450px;
+$height: 300px;
+
+$margin: 10px;
+
+$mainBackground: rgb(201, 201, 201);
+$secondaryBackground: rgb(250, 250, 250);
+
+/* 
+==============
+Main component 
+==============
+*/
+.eventCard {
+  width: $width;
+  height: $height;
+  margin: $margin;
+}
+
+/* 
+========
+Top half  
+========
+*/
+.banner {
+  height: $height/2;
+}
+
+// Heart icon
+.favIcon {
+  margin: $margin;
+  position: absolute;
+  top:0px;
+  right: 0px;
+}
+
+/* 
+===========
+Bottom half 
+===========
+*/
+
+.infoContainer{
+  height: $height/2;
+  margin: 0;
+  padding: $margin;
+}
+
+/* Main information
+    - Group
+    - Title
+    - Join button
+*/
+
+// Main div
+.infoMain {
+  display: flex;
+  left: $margin;
+  top: $margin
+}
+
+// Div to store the group's icon
+.groupIcon {
+  position: relative;
+  border-radius: 50%;
+  background-color: $secondaryBackground;
+  width: 60px;
+  height: 60px;
+  margin: 0;
+  
+  top: 50%;
+  transform: translateY(-50%);
+
+}
+
+.joinButton {
+  margin: $margin;
+  top: 0px;
+  right: 0px;
+}
+
+// Div to display the title and the group's name
+.infos {
+  text-align: left;
+  font-size: 13px;
+  margin-left: $margin;
+  width: 100%;
+  overflow: hidden;
+
+}
+
+.title {
+  text-align: left;
+  line-height: 25px;
+  margin: 0px;
+  width: 100%;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+   -webkit-line-clamp: 2; // Allow the title on 2 lines maximums
+   -webkit-box-orient: vertical;
+
+}
+
+/* Details information
+    - Date and time
+    - Position
+*/
+
+// Main div
+.infoDetails{
+  justify-content: flex-start;
+  display: flex;
+  margin: $margin;
+  min-height: 57px;
+}
+
+// Div with 2 elements (icon and text)
+.infoItem {
+  display: flex;
+  padding-left: 15px;
+  margin: 0;
+}
+
+// An element
+.infoItemElement {
+  text-align: left;
+  align-self: center;
+  margin: 0 auto;
+  overflow: hidden;
+  line-height: 16px;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+   -webkit-line-clamp: 3; // Allow the title on 3 lines maximum
+   -webkit-box-orient: vertical;
+}
+
+.infoItemMaxSize { // Prevent the item to be displayed on multiple lines.
+  min-width: max-content;
+}
+
+.infoItemShrinkable {
+  min-width: 0;
+}

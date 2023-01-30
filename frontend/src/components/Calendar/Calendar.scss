@@ -1,0 +1,24 @@
+#Calendar
+{
+  text-align: center;
+  border-top: 1px solid rgb(216, 17, 17);
+  width : 10px;
+} 
+
+.TimeBlockEven {
+  border: 1px solid gray;
+  border-bottom: 0px;
+  // width : 10px;
+  width: 120px;
+  height: 20px;
+  // border: 1px solid gray;
+}
+
+.TimeBlockOdd {
+  border: 1px solid gray;
+  // border-top:  1px thick double;
+  // width : 10px;
+  width: 120px;
+  height: 20px;
+  // border: 1px solid gray;
+}
