@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Box, CssBaseline, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Home from './pages/Home/Home';
 import Test1 from './pages/Test1/Test1';
 import NavBarTop from './components/NavBarTop/NavBarTop';
@@ -31,10 +32,13 @@ import './App.scss';
 function App() {
   const [menuOpen, setMenuOpen] = React.useState(true);
   const [themeApp, setThemeApp] = React.useState(true);
+  const [isAutomatic, setIsAutomatic] = React.useState(true);
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const choixTheme = isAutomatic ? !prefersDarkMode : themeApp;
   const drawerWidth = 240; // the width of the lateral navbar
   const count = 0;
   return (
-    <ThemeProvider theme={themeApp ? theme : darktheme}>
+    <ThemeProvider theme={choixTheme ? theme : darktheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <NavBarTop
@@ -42,13 +46,15 @@ function App() {
           setMenuOpen={setMenuOpen}
           themeApp={themeApp}
           setThemeApp={setThemeApp}
+          isAutomatic={isAutomatic}
+          setIsAutomatic={setIsAutomatic}
         />
         <NavBarSide menuOpen={menuOpen} drawerWidth={drawerWidth} />
         <Box
           component="main"
           sx={{
             flexGrow: 1,
-            padding: theme.spacing(3),
+            padding: 0,
             paddingTop: 0,
             transition: theme.transitions.create('margin', {
               easing: theme.transitions.easing.sharp,

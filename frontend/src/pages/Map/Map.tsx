@@ -1,7 +1,6 @@
 import React from 'react';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
-import DarkModeButton from '../../components/Button/DarkModeButton/DarkModeButton';
 
 /**
  * Home Page, with Welcome message, next events, etc...

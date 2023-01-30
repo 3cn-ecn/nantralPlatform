@@ -17,9 +17,15 @@
     "bug": "Suggestion / Bug",
     "doc": "Documentation",
     "legal": "Mentions Légales",
-    "langage": "Langage",
+    "language": "Langue",
     "english": "Anglais",
-    "french": "Français"
+    "french": "Français",
+    "light": "Thème clair",
+    "dark": "Thème sombre",
+    "automatic": "Mode Automatique",
+    "title_theme": "Choix du thème",
+    "title_language": "Choix du langage",
+    "theme": "Thème"
   },
   "button": {
     "joinButton": {
@@ -80,5 +86,11 @@
       "7": "Les contenus de ce site peuvent inclure du contenu provenant de sources extérieures (par exemple les vidéos, images, etc…). Ces contenus embarqués agissent de la même manière que si le visiteur avait visité le site original où repose ce contenu. Ces sites peuvent donc utiliser des cookies supplémentaires.",
       "8": "Lors de votre inscription sur le site, les données personnelles que vous nous transmettez seront stockées et conservées par l’Association des Étudiants de l’École Centrale de Nantes jusqu’à demande de suppression de votre compte utilisateur à l’aide du formulaire de contact"
     }
+  },
+  "home" : {
+    "myEvents": "Mes événements",
+    "upcomingEvents": "Événements à venir",
+    "seeMore": "voir plus",
+    "welcomeTo": "Bienvenue sur"
   }
 }
