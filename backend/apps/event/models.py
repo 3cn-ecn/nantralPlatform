@@ -22,6 +22,10 @@ class BaseEvent(AbstractPost):
         verbose_name='Description de l\'événement', blank=True)
     date = models.DateTimeField(
         verbose_name='Date de l\'événement')
+    end_date = models.DateTimeField(
+        verbose_name='Date de fin de l\'événement',
+        blank=True,
+        null=True)
     location = models.CharField(
         max_length=200, verbose_name='Lieu')
     group = models.SlugField(
@@ -37,6 +41,11 @@ class BaseEvent(AbstractPost):
         null=True)
     max_participant = models.IntegerField(
         verbose_name='Nombre de places maximal',
+        blank=True,
+        null=True
+    )
+    begin_inscription = models.DateTimeField(
+        verbose_name='Date de début de l\'inscription',
         blank=True,
         null=True
     )

@@ -29,7 +29,10 @@ class BaseEventSerializer(serializers.ModelSerializer):
             'is_participating',
             'is_member',
             'max_participant',
-            'end_inscription']
+            'end_inscription',
+            'begin_inscription',
+            'end_date',
+            'ticketing']
 
     def get_is_participating(self, obj):
         user = self.context['request'].user
