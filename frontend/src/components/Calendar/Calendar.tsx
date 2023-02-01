@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import './Calendar.scss';
+import { rest } from 'lodash';
 
 function EventBlock(props: { day: number; event: any }) {
   const { day, event } = props;
@@ -34,15 +35,22 @@ function EventBlock(props: { day: number; event: any }) {
       endDate.getSeconds() / 3600;
   }
   // console.log(typeof(event.size));
-  console.log(`l'event ${event.title} a une taille de ${120 / event.size}px`);
+  console.log(
+    `l'event ${event.title} a une taille de ${
+      (120 * event.effectiveSize) / event.globalSize
+    }px et un decalage de ${event.position}`
+  );
   return (
     <Button
       variant="contained"
       style={{
         position: 'absolute',
-        width: `${120 / event.size}px`,
+        minWidth: `1px`,
+        width: `${(120 * event.effectiveSize) / event.globalSize}px`,
         height: `${Math.min(duration, startTime) * 20}px`,
-        transform: `translate(-60px, -${startTime * 20}px)`,
+        transform: `translate(${
+          -60 + (120 * event.position) / event.globalSize
+        }px, -${startTime * 20}px)`,
       }}
     >
       {event.title}
@@ -134,31 +142,32 @@ function getEventWithDate(events: Array<any>, beginDate: Date, endDate: Date) {
           eventDate.getDate() <= endDate.getDate()
         ) {
           // console.log(event.date);
+          eventSorted = true;
           sortEvents.push(event);
         }
       }
     }
 
     // // Pour trier par rapport à la fin d'event quand elle existera
-    // if (!eventSorted) {
-    //   eventDate = new Date(event.endDate);
-    //   if (
-    //     beginDate.getFullYear() <= eventDate.getFullYear() &&
-    //     eventDate.getFullYear() <= endDate.getFullYear()
-    //   ) {
-    //     if (
-    //       beginDate.getMonth() <= eventDate.getMonth() &&
-    //       eventDate.getMonth() <= endDate.getMonth()
-    //     ) {
-    //       if (
-    //         beginDate.getDate() <= eventDate.getDate() &&
-    //         eventDate.getDate() <= endDate.getDate()
-    //       ) {
-    //         sortEvents.push(event);
-    //       }
-    //     }
-    //   }
-    // }
+    if (!eventSorted) {
+      eventDate = new Date(event.endDate);
+      if (
+        beginDate.getFullYear() <= eventDate.getFullYear() &&
+        eventDate.getFullYear() <= endDate.getFullYear()
+      ) {
+        if (
+          beginDate.getMonth() <= eventDate.getMonth() &&
+          eventDate.getMonth() <= endDate.getMonth()
+        ) {
+          if (
+            beginDate.getDate() <= eventDate.getDate() &&
+            eventDate.getDate() <= endDate.getDate()
+          ) {
+            sortEvents.push(event);
+          }
+        }
+      }
+    }
   });
   return sortEvents;
 }
@@ -191,6 +200,22 @@ function sameTime(event, event2Compare) {
   return false;
 }
 
+function pgcd(a, b) {
+  let dividende = a;
+  let reste = b;
+  let temp;
+  while (reste !== 0) {
+    temp = dividende % reste;
+    dividende = reste;
+    reste = temp;
+  }
+  return dividende;
+}
+
+function ppcm(a, b) {
+  return (a * b) / pgcd(a, b);
+}
+
 function allSameTime(key, eventsList, eventsData) {
   let areSameTime = true;
   let iterator = 0;
@@ -205,7 +230,6 @@ function allSameTime(key, eventsList, eventsData) {
 function isInArray(ar1, ar2) {
   let same = true;
   let iterator = 0;
-  console.log(ar1, ar2);
   while (same && iterator < ar1.length) {
     same = ar2.includes(ar1[iterator]);
     iterator += 1;
@@ -213,9 +237,72 @@ function isInArray(ar1, ar2) {
   return same;
 }
 
+function placeEvents(events, chain, eventsBlockedChain, position) {
+  if (eventsBlockedChain.length === 0) {
+    return true;
+  }
+  if (eventsBlockedChain[0].length === 0) {
+    return true;
+  }
+
+  let select = 0;
+  let change = false;
+  let eventPlaced;
+  let chainPlaced = false;
+  let allPlaced = false;
+  let tempEventBlockedChain;
+  while (!allPlaced) {
+    while (!chainPlaced && select < eventsBlockedChain[0].length) {
+      eventPlaced = true;
+      if (!events[eventsBlockedChain[0][select]].placed) {
+        change = true;
+        events[eventsBlockedChain[0][select]].placed = true;
+        events[eventsBlockedChain[0][select]].position = position;
+      } else if (events[eventsBlockedChain[0][select]].position !== position) {
+        select += 1;
+        eventPlaced = false;
+      }
+      if (eventPlaced) {
+        tempEventBlockedChain = eventsBlockedChain.slice();
+        tempEventBlockedChain[0] = eventsBlockedChain[0]
+          .slice(0, select)
+          .concat(eventsBlockedChain[0].slice(select + 1));
+        if (
+          !placeEvents(
+            events,
+            chain,
+            tempEventBlockedChain,
+            position + events[eventsBlockedChain[0][select]].effectiveSize
+          )
+        ) {
+          if (change) {
+            change = false;
+            events[eventsBlockedChain[0][select]].placed = false;
+          }
+          select += 1;
+        } else {
+          chainPlaced = true;
+        }
+      }
+    }
+    if (!chainPlaced) {
+      return false;
+    }
+    if (
+      placeEvents(events, eventsBlockedChain[1], eventsBlockedChain.slice(1), 0)
+    ) {
+      allPlaced = true;
+    } else {
+      return false;
+    }
+  }
+  return true;
+}
+
 function setSameTimeEvents(events: Array<any>) {
   const eventsData = new Array<any>();
   for (let i = 0; i < events.length; i++) {
+    events[i].placed = false;
     eventsData.push({
       key: i,
       beginDate: new Date(events[i].date),
@@ -231,21 +318,15 @@ function setSameTimeEvents(events: Array<any>) {
   for (let i = 0; i < events.length; i++) {
     eventsData.forEach((eventData) => {
       if (sameTime(eventsData[i], eventData)) {
-        console.log(
-          `J'ajoute l'event ${eventData.key} à l'event ${eventsData[i].key}`
-        );
         eventsData[i].sameTimeEvent.push(eventData.key);
       }
     });
   }
 
-  console.log('Affichage des eventsData', eventsData);
-
   // Parcours des events
   let eventData;
   let coupleEventsLength;
   for (let i = 0; i < eventsData.length; i++) {
-    console.log(` L'event en cours est le ${i}`);
     eventData = eventsData[i];
 
     // Parcours des events en meme temps (foreach nan ?)
@@ -261,7 +342,6 @@ function setSameTimeEvents(events: Array<any>) {
       }
       eventData.coupleEvents.push([eventData.sameTimeEvent[j]]);
     }
-    console.log("ses couples d'event sont ", eventData.coupleEvents);
   }
 
   const currentSizeObject = {
@@ -270,6 +350,7 @@ function setSameTimeEvents(events: Array<any>) {
   };
   let previousMaxSize;
   const blockedEventsChain = [];
+  let partSize = 1;
   for (let i = 0; i < events.length; i++) {
     currentSizeObject.maxSize = 0;
     for (
@@ -295,9 +376,7 @@ function setSameTimeEvents(events: Array<any>) {
       }
     }
     currentSizeObject.blockedChains.forEach((chain) => {
-      console.log(blockedEventsChain);
       let j = 0;
-      console.log('je commence mon test entre ', blockedEventsChain, chain);
       while (
         j < blockedEventsChain.length &&
         !isInArray(chain, blockedEventsChain[j])
@@ -305,24 +384,65 @@ function setSameTimeEvents(events: Array<any>) {
         j += 1;
       }
       if (j >= blockedEventsChain.length) {
-        console.log(chain);
         blockedEventsChain.push(chain);
       }
     });
-    console.log(`Les events blockants sont`, blockedEventsChain);
-    events[i].size = currentSizeObject.maxSize;
-    console.log(
-      `La taille max des couples de l'event ${i} est de ${currentSizeObject.maxSize}`
-    );
+    eventsData[i].size = currentSizeObject.maxSize;
+    partSize = ppcm(currentSizeObject.maxSize, partSize);
   }
+
+  // effectiveSize
+
+  eventsData.forEach((currentEventData) => {
+    events[currentEventData.key].globalSize = partSize;
+    events[currentEventData.key].effectiveSize =
+      partSize / currentEventData.size;
+  });
+
+  // ajout des attributs blockants
+  let sizeUsed;
+  blockedEventsChain.forEach((eventChain) => {
+    sizeUsed = 0;
+    eventChain.forEach((eventKey) => {
+      sizeUsed += events[eventKey].effectiveSize;
+    });
+    if (sizeUsed === partSize) {
+      eventChain.forEach((eventKey) => {
+        eventsData[eventKey].blocked = true;
+      });
+    }
+  });
+
+  // ajustement effective size
+  let event2reajust;
+  let size2Add;
+  blockedEventsChain.forEach((eventChain) => {
+    sizeUsed = 0;
+    event2reajust = [];
+    eventChain.forEach((eventKey) => {
+      sizeUsed += events[eventKey].effectiveSize;
+      if (!eventsData[eventKey].blocked) {
+        event2reajust.push(eventKey);
+      }
+    });
+    if (event2reajust.length !== 0) {
+      size2Add = (partSize - sizeUsed) / event2reajust.length;
+      event2reajust.forEach((eventKey) => {
+        events[eventKey].effectiveSize += size2Add;
+        eventsData[eventKey].blocked = true;
+      });
+    }
+  });
+
+  // algo de placement
+  placeEvents(events, blockedEventsChain[0], blockedEventsChain, 0);
+  console.log(eventsData);
+  console.log(events);
 }
 
 function sortInWeek(oldSortEvents: Array<any>) {
   // Ajustement taille
-  for (let i = 0; i < oldSortEvents.length; i++) {
-    console.log('Affichage des events avant ajustement taille ', oldSortEvents);
-    setSameTimeEvents(oldSortEvents);
-  }
+  setSameTimeEvents(oldSortEvents);
 
   const sortEvents = new Array<any>();
   for (let i = 0; i < 7; i++) {
