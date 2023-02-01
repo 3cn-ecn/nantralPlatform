@@ -19,7 +19,13 @@
     "legal": "Legal Notice",
     "language": "Language",
     "english": "English",
-    "french": "French"
+    "french": "French",
+    "light": "Light Theme",
+    "dark": "Dark Theme",
+    "automatic": "Automatic",
+    "title_theme": "Theme",
+    "title_language": "Language",
+    "theme": "Theme"
   },
   "button": {
     "joinButton" : {
