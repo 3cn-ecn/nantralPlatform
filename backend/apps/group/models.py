@@ -395,14 +395,10 @@ class Membership(models.Model):
         blank=True)
     begin_date = models.DateField(
         verbose_name=_("Begin date"),
-        default=today,
-        blank=True,
-        null=True)
+        default=today)
     end_date = models.DateField(
         verbose_name=_("End date"),
-        default=one_year_later,
-        blank=True,
-        null=True)
+        default=one_year_later,)
     order = models.IntegerField(_("Order"), default=0)
     admin = models.BooleanField(_("Admin"), default=False)
     admin_request = models.BooleanField(

@@ -1,12 +1,21 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from .api_views import (
     UpdateSubscriptionView,
     MembershipFormView,
     AdminRequestFormView,
-    UpdateMembershipsAPIView
-)
+    UpdateMembershipsAPIView,
+    MembershipViewSet)
+
 app_name = 'api_group'
+
+
+# rooter for API: it creates all urls for a viewSet at once
+# see https://www.django-rest-framework.org/api-guide/routers/#simplerouter
+router = DefaultRouter()
+router.register('membership', MembershipViewSet, basename='membership')
+
 
 urlpatterns = [
     # used by django forms
@@ -20,4 +29,4 @@ urlpatterns = [
     # used by react
     path('club-members', UpdateMembershipsAPIView.as_view(),
          name='list-members'),
-]
+] + router.urls

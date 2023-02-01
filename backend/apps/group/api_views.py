@@ -1,17 +1,19 @@
 from django.conf import settings
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.urls.base import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_date
+from django.utils.translation import gettext as _
 from django.views.generic import FormView, View
 
-
-from rest_framework import permissions
-from rest_framework.views import APIView
+from rest_framework import permissions, serializers, exceptions
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
+
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 from apps.student.models import Student
@@ -19,7 +21,7 @@ from apps.student.models import Student
 from .views import UserCanSeeGroupMixin
 from .models import Group, Membership
 from .forms import MembershipForm, AdminRequestForm
-from .serializers import MembershipSerializer
+from .serializers import MembershipSerializer, NewMembershipSerializer
 
 
 class UpdateSubscriptionView(UserCanSeeGroupMixin, View):
@@ -202,3 +204,89 @@ class UpdateMembershipsAPIView(APIView):
             membership.full_clean()
             membership.save()
             return HttpResponse(status=200)
+
+
+class MembershipViewSet(ModelViewSet):
+    """An API viewset to get memberships of a group. This viewset ignore all
+    logic related with admin requests.
+
+    Query Params
+    ------------
+    student: id
+        The student id
+    group: str (required)
+        The group slug
+    from: Date
+        The date from which we want to filter the member list
+    to: Date
+        The date to which we want to filter the member list
+
+    List Actions (/api/group/membership)
+    ------------
+    list (GET): list all memberships objects, filtered by query params
+    create (POST): create a new membership object
+
+    Detail Actions (/api/group/membership/<id>)
+    --------------
+    retrieve (GET): get the membership object by id
+    update (UPDATE) : replace the membership object by a new membership object
+    partial_update (PATCH): update some fields of the membership object
+    destroy (DELETE): delete the membership object
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self) -> serializers.ModelSerializer:
+        if self.action == 'create':
+            return NewMembershipSerializer
+        else:
+            return MembershipSerializer
+
+    def get_query_param(self, param: str, default=None) -> any:
+        return self.request.query_params.get(param, default)
+
+    def get_queryset(self) -> QuerySet:
+        """
+        Get list of memberships filtered by query params.
+        Used by list, retrieve, update, partial_update and destroy actions.
+        """
+        if self.queryset:
+            return self.queryset
+        user = self.request.user
+        # parse params
+        from_date = parse_date(self.get_query_param('from', ''))
+        to_date = parse_date(self.get_query_param('to', ''))
+        group_slug = self.get_query_param('group')
+        student_id = self.get_query_param('student')
+        # make queryset
+        self.queryset = (
+            Membership.objects
+            # filter by memberships you are allowed to see
+            .filter(
+                Q(group__private=False)
+                | Q(group__members=user.student)
+                if not user.is_superuser else Q())
+            # filter by params
+            .filter(
+                Q(group__slug=group_slug) if group_slug else Q(),
+                Q(student__id=student_id) if student_id else Q(),
+                Q(end_date__gte=from_date) if from_date else Q(),
+                Q(begin_date__lt=to_date) if to_date else Q())
+            # order fields
+            .order_by('order',
+                      'student__user__first_name',
+                      'student__user__last_name')
+            .prefetch_related('student__user'))
+        return self.queryset
+
+    def list(self, request, *args, **kwargs):
+        """
+        LIST view to list memberships. Overridden to avoid getting all
+        memberships (request must provide a group or a student)
+        """
+        group = self.get_query_param('group')
+        student = self.get_query_param('student')
+        if group is None and student is None:
+            raise exceptions.ParseError(
+                detail=_("Provides either 'group' or 'student' as params."))
+        return super().list(request, *args, **kwargs)
