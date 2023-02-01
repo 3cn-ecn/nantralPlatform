@@ -41,24 +41,27 @@ function InfoItem(props: { name: string; value: string }) {
   let icon = null;
   const { name, value } = props;
   const text = value;
-  const specificClass = (name === 'location') ? 'infoItemShrinkable' : 'infoItemMaxSize';
+  const specificClass =
+    name === 'location' ? 'infoItemShrinkable' : 'infoItemMaxSize';
   switch (name) {
     case 'date':
-      icon = <CalendarTodayIcon className='infoItemElement'/>;
+      icon = <CalendarTodayIcon className="infoItemElement" />;
       break;
     case 'time':
-      icon = <AccessTimeIcon className='infoItemElement'/>;
+      icon = <AccessTimeIcon className="infoItemElement" />;
       break;
     case 'location':
-      icon = <LocationOnIcon className='infoItemElement'/>;
+      icon = <LocationOnIcon className="infoItemElement" />;
 
       break;
     default:
   }
   return (
-    <div className={"infoItem " + specificClass}>
+    <div className={'infoItem ' + specificClass}>
       {icon}
-      <div className="infoItemElement" style={{paddingLeft : "7px"}} >{text}</div>
+      <div className="infoItemElement" style={{ paddingLeft: '7px' }}>
+        {text}
+      </div>
     </div>
   );
 }
@@ -75,13 +78,19 @@ function EventCard(props: { event: EventProps }) {
     get_group_name,
     is_participating,
     slug,
+    ticketing,
   } = event;
 
-  const variant = max_participant === null ? 'normal' : 'shotgun';
+  let variant; //= max_participant === null ? 'normal' : 'shotgun';
+  if (ticketing !== null) variant = 'form';
+  else if (max_participant === null) variant = 'normal';
+  else variant = 'shotgun';
   const bannerDescription = 'Banner';
 
   const dateValue = new Date(date);
-  const dateText = `${dateValue.getDate()} ${monthNames[dateValue.getMonth()]} ${dateValue.getFullYear()}`;
+  const dateText = `${dateValue.getDate()} ${
+    monthNames[dateValue.getMonth()]
+  } ${dateValue.getFullYear()}`;
   const hourText = `${dateValue.getHours()}:${dateValue.getMinutes()}`;
 
   const groupIcon =
@@ -118,6 +127,7 @@ function EventCard(props: { event: EventProps }) {
                   maxPerson={max_participant}
                   participating={is_participating}
                   eventSlug={slug}
+                  link={ticketing}
                 />
               </div>
             </div>

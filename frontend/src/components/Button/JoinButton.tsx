@@ -60,8 +60,8 @@ function JoinButton({
           console.error('could not subscribe to event');
         }
       })
-      .catch((err) => console.error(err));
-    setLoading(false);
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   const quit = async () => {
@@ -75,8 +75,8 @@ function JoinButton({
           console.error('could not unsuscribe from event');
         }
       })
-      .catch((err) => console.error(err));
-    setLoading(false);
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   const handleClose = (unsuscribe: boolean) => {
