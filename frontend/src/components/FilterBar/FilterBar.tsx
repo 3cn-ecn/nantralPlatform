@@ -16,7 +16,7 @@ import SimpleAccordion from '../Accordion/SimpleAccordion';
 import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
 
-interface filterInterface {
+interface FilterInterface {
   name: string;
   icon: any;
   isMenu?: boolean;
@@ -29,7 +29,7 @@ function FilterBar() {
   const [state, setState] = React.useState({
     right: false,
   });
-  const filters: filterInterface[] = [
+  const filters: FilterInterface[] = [
     {
       name: 'Date',
       icon: <DateRangeIcon />,
