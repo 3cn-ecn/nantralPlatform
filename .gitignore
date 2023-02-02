@@ -55,4 +55,3 @@ tags
 
 # MacOS
 .DS_Store
-backend/apps/event/models.py
