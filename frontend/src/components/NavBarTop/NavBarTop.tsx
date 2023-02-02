@@ -4,9 +4,8 @@ import InputLabel from '@mui/material/InputLabel';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
-import { Link } from "react-router-dom";
-
+import { NavLink, Link } from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Legal from 'pages/LegalNotice/Legal';
 import {
   IconButton,
@@ -18,7 +17,7 @@ import {
   Menu,
   MenuItem,
   ListItem,
-  ListItemText
+  ListItemText,
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
@@ -39,6 +38,8 @@ import { createSvgIcon } from '@mui/material/utils';
 import { ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
+import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
+import PaletteIcon from '@mui/icons-material/Palette';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
@@ -60,14 +61,27 @@ function NavBarTop(props: {
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   themeApp: boolean;
   setThemeApp: React.Dispatch<React.SetStateAction<boolean>>;
+  isAutomatic: boolean;
+  setIsAutomatic: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { menuOpen, setMenuOpen, themeApp, setThemeApp } = props;
+  const {
+    menuOpen,
+    setMenuOpen,
+    themeApp,
+    setThemeApp,
+    isAutomatic,
+    setIsAutomatic,
+  } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElLangue, setAnchorElLangue] =
     React.useState<null | HTMLElement>(null);
+  const [anchorElDark, setAnchorElDark] = React.useState<null | HTMLElement>(
+    null
+  );
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
+  const openD = Boolean(anchorElDark);
   const spanRef = React.useRef();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -87,6 +101,15 @@ function NavBarTop(props: {
     i18next.changeLanguage(lng);
   };
 
+  const handleClickD = () => {
+    setAnchorElDark(spanRef.current);
+    setAnchorEl(null);
+  };
+  const handleCloseD = () => {
+    setAnchorElDark(null);
+    setAnchorEl(spanRef.current);
+  };
+
   const { t } = useTranslation('translation');
 
   const [langue, setLangue] = React.useState('');
@@ -94,6 +117,7 @@ function NavBarTop(props: {
   const handleChangeLangue = (event: React.MouseEvent<HTMLButtonElement>) => {
     changeLanguage(event.target.value);
   };
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   return (
     <AppBar position="fixed" color="secondary">
@@ -210,12 +234,10 @@ function NavBarTop(props: {
               </ListItemText>
             </MenuItem>
             <Divider />
-            <MenuItem onClick={() => setThemeApp(!themeApp)}>
-              <SvgIcon
-                component={themeApp ? Brightness7Icon : Brightness4Icon}
-              />
+            <MenuItem onClick={handleClickD}>
+              <SvgIcon component={PaletteIcon} />
               <ListItemText className="menuItem">
-                {!themeApp ? 'Dark' : 'Light'} Mode
+                {t('user_menu.theme')}
               </ListItemText>
             </MenuItem>
           </Menu>
@@ -237,7 +259,7 @@ function NavBarTop(props: {
                 <SvgIcon component={ArrowBackIcon} inheritViewBox />
               </IconButton>
               <Typography className="menuTitle" variant="h6">
-                Choix du langage
+                {t('user_menu.title_language')}
               </Typography>
             </MenuItem>
             <MenuItem
@@ -253,6 +275,61 @@ function NavBarTop(props: {
               selected={i18next.language === 'en-GB'}
             >
               English
+            </MenuItem>
+          </Menu>
+          <Menu
+            id="menu-dark-mode"
+            anchorEl={anchorElDark}
+            open={openD}
+            onClose={handleCloseD}
+            MenuListProps={{ 'aria-labelledby': 'basic-button' }}
+            TransitionComponent={Collapse}
+          >
+            <MenuItem disableRipple="true">
+              <IconButton
+                aria-label="account of current user"
+                aria-haspopup="true"
+                color="inherit"
+                onClick={handleCloseD}
+              >
+                <SvgIcon component={ArrowBackIcon} inheritViewBox />
+              </IconButton>
+              <Typography className="menuTitle" variant="h6">
+                {t('user_menu.title_theme')}
+              </Typography>
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setThemeApp(true);
+                setIsAutomatic(false);
+              }}
+              selected={themeApp === true && isAutomatic === false}
+            >
+              <SvgIcon component={Brightness7Icon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.light')}
+              </ListItemText>
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setThemeApp(false);
+                setIsAutomatic(false);
+              }}
+              selected={themeApp === false && isAutomatic === false}
+            >
+              <SvgIcon component={Brightness4Icon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.dark')}
+              </ListItemText>
+            </MenuItem>
+            <MenuItem
+              onClick={() => setIsAutomatic(true)}
+              selected={isAutomatic === true}
+            >
+              <SvgIcon component={BrightnessMediumIcon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.automatic')}
+              </ListItemText>
             </MenuItem>
           </Menu>
         </Box>

@@ -1,0 +1,17 @@
+@import './../../index.scss';
+
+#center {
+  text-align: center;
+}
+
+#auto-fit {
+  width: 90vw;
+  margin-top: 0%;
+  border-radius: 3px;
+  display: list-item;
+
+  /* Use display property as grid*/
+  gap: 5px;
+  grid-template-columns: repeat(
+      auto-fit, minmax(200px, 1fr));
+}

@@ -19,12 +19,22 @@
     "legal": "Mentions Légales",
     "language": "Langue",
     "english": "Anglais",
-    "french": "Français"
+    "french": "Français",
+    "light": "Thème clair",
+    "dark": "Thème sombre",
+    "automatic": "Mode Automatique",
+    "title_theme": "Choix du thème",
+    "title_language": "Choix du langage",
+    "theme": "Thème"
   },
   "button": {
+    "cancel" : "annuler",
     "joinButton": {
       "register": "s'inscrire",
-      "title": "Voulez vous désinscrire de cet événements ?"
+      "registerLink": "lien d'inscription",
+      "unsuscribe" : "se désinscrire",
+      "shotgunClosed" : "shotgun fermé",
+      "title": "Voulez-vous vous désinscrire de cet événements ?"
     }
   },
   "legalNotice": {
@@ -85,6 +95,7 @@
     "myEvents": "Mes événements",
     "upcomingEvents": "Événements à venir",
     "seeMore": "voir plus",
-    "welcomeTo": "Bienvenue sur"
+    "welcomeTo": "Bienvenue sur",
+    "myClubs": "Mes Clubs & Assos"
   }
 }

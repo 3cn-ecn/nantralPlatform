@@ -19,10 +19,20 @@
     "legal": "Legal Notice",
     "language": "Language",
     "english": "English",
-    "french": "French"
+    "french": "French",
+    "light": "Light Theme",
+    "dark": "Dark Theme",
+    "automatic": "Automatic",
+    "title_theme": "Theme",
+    "title_language": "Language",
+    "theme": "Theme"
   },
   "button": {
+    "cancel" : "cancel",
     "joinButton" : {
+      "unsuscribe" : "unsuscribe",
+      "registerLink" : "register link",
+      "shotgunClosed" : "shotgun closed",
       "register": "register",
       "title": "Do you want to unsubscribe from this event?"
     }
@@ -85,6 +95,7 @@
     "myEvents": "My events",
     "upcomingEvents": "Upcoming Events",
     "seeMore": "see more",
-    "welcomeTo": "Welcome to"
+    "welcomeTo": "Welcome to",
+    "myClubs": "My clubs & Assos"
   }
 }

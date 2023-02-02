@@ -11,10 +11,10 @@ import {
   CalendarViewDay,
 } from '@mui/icons-material';
 import { EventProps } from 'pages/Props/Event';
+import FilterBar from '../../components/FilterBar/FilterBar';
 import { getEventApi } from '../../api';
 import Calendar from '../../components/Calendar/Calendar';
 import { formatDate } from '../../utils/date';
-import FilterBar from './FilterBar/FilterBar';
 
 /**
  * Event Page, with Welcome message, next events, etc...
