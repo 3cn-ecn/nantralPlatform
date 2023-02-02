@@ -22,9 +22,7 @@ interface EventDataProps {
 function EventBlock(props: { day: number; event: EventProps }) {
   const { day, event } = props;
   const beginDate = new Date(event.date);
-  // Modifier quand date de fin dispo
   const endDate = new Date(event.end_date);
-  // const endDate = new Date('June 10, 2023 19:10:34');
   let todayBegin = false;
   let startTime = 24;
 
@@ -294,6 +292,77 @@ function isInArray(ar1: Array<number>, ar2: Array<number>) {
   return same;
 }
 
+function blockedChains(events, eventsData) {
+  const currentSizeObject = {
+    maxSize: 0,
+    blockedChains: [],
+  };
+  let previousMaxSize;
+  const blockedEventsChain = [];
+  let globalSize = 1;
+  eventsData.forEach((eventData) => {
+    currentSizeObject.maxSize = 0;
+    eventData.coupleEvents.forEach((eventList) => {
+      currentSizeObject.maxSize = Math.max(
+        eventList.length,
+        currentSizeObject.maxSize
+      );
+      if (currentSizeObject.maxSize !== previousMaxSize) {
+        currentSizeObject.blockedChains = [];
+        previousMaxSize = currentSizeObject.maxSize;
+      }
+      if (eventList.length === currentSizeObject.maxSize) {
+        currentSizeObject.blockedChains.push(eventList);
+      }
+    });
+    currentSizeObject.blockedChains.forEach((chain) => {
+      let j = 0;
+      while (
+        j < blockedEventsChain.length &&
+        !isInArray(chain, blockedEventsChain[j])
+      ) {
+        j += 1;
+      }
+      if (j >= blockedEventsChain.length) {
+        blockedEventsChain.push(chain);
+      }
+    });
+    eventData.size = currentSizeObject.maxSize;
+    globalSize = ppcm(currentSizeObject.maxSize, globalSize);
+  });
+
+  eventsData.forEach((currentEventData) => {
+    events[currentEventData.key].globalSize = globalSize;
+    events[currentEventData.key].effectiveSize =
+      globalSize / currentEventData.size;
+  });
+
+  return blockedEventsChain;
+}
+
+function eventSizeReajust(blockedEventsChain, events, eventsData) {
+  let event2reajust;
+  let size2Add;
+  let sizeUsed;
+  blockedEventsChain.forEach((eventChain) => {
+    sizeUsed = 0;
+    event2reajust = [];
+    eventChain.forEach((eventKey) => {
+      sizeUsed += events[eventKey].effectiveSize;
+      if (!eventsData[eventKey].blocked) {
+        event2reajust.push(eventKey);
+      }
+    });
+    if (event2reajust.length !== 0) {
+      size2Add = (events[0].globalSize - sizeUsed) / event2reajust.length;
+      event2reajust.forEach((eventKey) => {
+        events[eventKey].effectiveSize += size2Add;
+        eventsData[eventKey].blocked = true;
+      });
+    }
+  });
+}
+
 /**
  * Recursive function that set an event horizontal position (when multiples events occur in same time).
  * @param events List of events.
@@ -427,59 +496,7 @@ function setSameTimeEvents(events: Array<EventProps>) {
   }
 
   // Get couples of events with maximal events foreach event and set the size of each event with it.
-  const currentSizeObject = {
-    maxSize: 0,
-    blockedChains: [],
-  };
-  let previousMaxSize;
-  const blockedEventsChain = [];
-  let globalSize = 1;
-  for (let i = 0; i < events.length; i++) {
-    currentSizeObject.maxSize = 0;
-    for (
-      let eventList = 0;
-      eventList < eventsData[i].coupleEvents.length;
-      eventList++
-    ) {
-      currentSizeObject.maxSize = Math.max(
-        eventsData[i].coupleEvents[eventList].length,
-        currentSizeObject.maxSize
-      );
-      if (currentSizeObject.maxSize !== previousMaxSize) {
-        currentSizeObject.blockedChains = [];
-        previousMaxSize = currentSizeObject.maxSize;
-      }
-      if (
-        eventsData[i].coupleEvents[eventList].length ===
-        currentSizeObject.maxSize
-      ) {
-        currentSizeObject.blockedChains.push(
-          eventsData[i].coupleEvents[eventList]
-        );
-      }
-    }
-    currentSizeObject.blockedChains.forEach((chain) => {
-      let j = 0;
-      while (
-        j < blockedEventsChain.length &&
-        !isInArray(chain, blockedEventsChain[j])
-      ) {
-        j += 1;
-      }
-      if (j >= blockedEventsChain.length) {
-        blockedEventsChain.push(chain);
-      }
-    });
-    eventsData[i].size = currentSizeObject.maxSize;
-    globalSize = ppcm(currentSizeObject.maxSize, globalSize);
-  }
-
-  // Set the size attributes of each events corresponding to the length of his maximal couple chain.
-  eventsData.forEach((currentEventData) => {
-    events[currentEventData.key].globalSize = globalSize;
-    events[currentEventData.key].effectiveSize =
-      globalSize / currentEventData.size;
-  });
+  const blockedEventsChain = blockedChains(events, eventsData);
 
   // Set the blocked attribute to true for all events that take part of a couple chain that takes all horizontal space.
   let sizeUsed;
@@ -488,7 +505,7 @@ function setSameTimeEvents(events: Array<EventProps>) {
     eventChain.forEach((eventKey) => {
       sizeUsed += events[eventKey].effectiveSize;
     });
-    if (sizeUsed === globalSize) {
+    if (sizeUsed === events[0].globalSize) {
       eventChain.forEach((eventKey) => {
         eventsData[eventKey].blocked = true;
       });
@@ -496,25 +513,7 @@ function setSameTimeEvents(events: Array<EventProps>) {
   });
 
   // Reajust the size of events to use all the horizontal space
-  let event2reajust;
-  let size2Add;
-  blockedEventsChain.forEach((eventChain) => {
-    sizeUsed = 0;
-    event2reajust = [];
-    eventChain.forEach((eventKey) => {
-      sizeUsed += events[eventKey].effectiveSize;
-      if (!eventsData[eventKey].blocked) {
-        event2reajust.push(eventKey);
-      }
-    });
-    if (event2reajust.length !== 0) {
-      size2Add = (globalSize - sizeUsed) / event2reajust.length;
-      event2reajust.forEach((eventKey) => {
-        events[eventKey].effectiveSize += size2Add;
-        eventsData[eventKey].blocked = true;
-      });
-    }
-  });
+  eventSizeReajust(blockedEventsChain, events, eventsData);
 
   // Try to place the events optimally
   if (!placeEvents(events, blockedEventsChain[0], blockedEventsChain, 0)) {
@@ -579,13 +578,6 @@ function Calendar(props: { events: Array<EventProps> }) {
     }
   });
   //
-
-  // sortEvents[2].end_date = 'June 10, 2023 19:10:34';
-  // sortEvents[1].end_date = 'June 10, 2023 18:50:34';
-  // sortEvents[3].end_date = 'June 10, 2023 23:10:34';
-  // sortEvents[0].end_date = 'June 10, 2023 15:30:34';
-  // sortEvents[4].end_date = 'June 10, 2023 19:30:34';
-  // sortEvents[5].end_date = 'June 10, 2023 22:30:34';
 
   sortEvents = sortInWeek(sortEvents);
   return (
