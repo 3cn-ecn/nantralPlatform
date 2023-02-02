@@ -1,17 +1,23 @@
 import React from 'react';
 import { Box, Button } from '@mui/material';
 import './Calendar.scss';
-import { rest } from 'lodash';
 
+/**
+ * The EventBlock component, which is an event in the calendar display.
+ * @param day The number of the day in the week.
+ * @param event The event object with the event data.
+ * @returns The button to display, already placed and resized.
+ */
 function EventBlock(props: { day: number; event: any }) {
   const { day, event } = props;
-  // console.log(event, event.size, day);
   const beginDate = new Date(event.date);
   // Modifier quand date de fin dispo
   const endDate = new Date(event.endDate);
   // const endDate = new Date('June 10, 2023 19:10:34');
   let todayBegin = false;
   let startTime = 24;
+
+  // Set the time when the event begins in the day.
   if (
     beginDate.getDay() === day &&
     (beginDate.getHours() !== 0 ||
@@ -25,6 +31,8 @@ function EventBlock(props: { day: number; event: any }) {
       (60 - beginDate.getSeconds()) / 3600;
     todayBegin = true;
   }
+
+  // Set the duration of the event.
   let duration;
   if (todayBegin) {
     duration = (endDate.getTime() - beginDate.getTime()) / 3600000;
@@ -34,12 +42,6 @@ function EventBlock(props: { day: number; event: any }) {
       endDate.getMinutes() / 60 +
       endDate.getSeconds() / 3600;
   }
-  // console.log(typeof(event.size));
-  console.log(
-    `l'event ${event.title} a une taille de ${
-      (120 * event.effectiveSize) / event.globalSize
-    }px et un decalage de ${event.position}`
-  );
   return (
     <Button
       variant="contained"
@@ -48,6 +50,7 @@ function EventBlock(props: { day: number; event: any }) {
         minWidth: `1px`,
         width: `${(120 * event.effectiveSize) / event.globalSize}px`,
         height: `${Math.min(duration, startTime) * 20}px`,
+        padding: '0px',
         transform: `translate(${
           -60 + (120 * event.position) / event.globalSize
         }px, -${startTime * 20}px)`,
@@ -58,7 +61,12 @@ function EventBlock(props: { day: number; event: any }) {
   );
 }
 
-function TimeBlock(props: { startTime: any }) {
+/**
+ * Function that creates the TimeBlock component, which are the backround lines in the calendar.
+ * @param startTime The hour value, to set where and how the component has to be placed.
+ * @returns The TimeBlock component.
+ */
+function TimeBlock(props: { startTime: number }) {
   const { startTime } = props;
 
   if (startTime % 2 === 0) {
@@ -68,6 +76,10 @@ function TimeBlock(props: { startTime: any }) {
   return <Box className="TimeBlockOdd"></Box>;
 }
 
+/**
+ * Function that creates the DayInfos component, which display the hours in the day.
+ * @return The DayInfos component.
+ */
 function DayInfos() {
   return (
     <div style={{ display: 'block' }}>
@@ -87,24 +99,17 @@ function DayInfos() {
   );
 }
 
-// function sortInDay(oldSortEvents: Array<any>) {
-//   const sortEvents = new Array<any>();
-//   for (let i = 0; i < 24; i++) {
-//     sortEvents.push(new Array<any>());
-//   }
-//   let eventDate;
-//   oldSortEvents.forEach((event) => {
-//     eventDate = new Date(event.date);
-//     sortEvents[eventDate.getHours()].push(event);
-//     console.log(sortEvents);
-//   });
-//   return sortEvents;
-// }
-
+/**
+ * The Day component which contains all the TimeBlocks and EventBlocks of this day.
+ * @param dayValue The value of the day in the week.
+ * @param day The day in the week.
+ * @param events The list of events in corresponding day.
+ * @returns The Day component.
+ */
 function Day(props: { dayValue: number; day: string; events: any }) {
   const { dayValue, day, events } = props;
-  const dayChain = [];
 
+  const dayChain = [];
   for (let hour = 0; hour < 24; hour++) {
     dayChain.push(<TimeBlock key={hour} startTime={hour}></TimeBlock>);
   }
@@ -120,13 +125,18 @@ function Day(props: { dayValue: number; day: string; events: any }) {
   );
 }
 
+/**
+ * Function that sort event date-wise.
+ * @param events The list of the events to sort.
+ * @param beginDate The minimal date.
+ * @param endDate The maximal date.
+ * @returns The list of events which take place between the beginDate and the Date.
+ */
 function getEventWithDate(events: Array<any>, beginDate: Date, endDate: Date) {
-  const sortEvents = new Array<any>();
+  const sortedEvents = new Array<any>();
   let eventDate;
   let eventSorted;
-  // console.log(events);
   events.forEach((event) => {
-    // console.log(event);
     eventSorted = false;
     eventDate = new Date(event.date);
     if (
@@ -141,14 +151,13 @@ function getEventWithDate(events: Array<any>, beginDate: Date, endDate: Date) {
           beginDate.getDate() <= eventDate.getDate() &&
           eventDate.getDate() <= endDate.getDate()
         ) {
-          // console.log(event.date);
           eventSorted = true;
-          sortEvents.push(event);
+          sortedEvents.push(event);
         }
       }
     }
 
-    // // Pour trier par rapport à la fin d'event quand elle existera
+    // Pour trier par rapport à la fin d'event quand elle existera
     if (!eventSorted) {
       eventDate = new Date(event.endDate);
       if (
@@ -163,17 +172,22 @@ function getEventWithDate(events: Array<any>, beginDate: Date, endDate: Date) {
             beginDate.getDate() <= eventDate.getDate() &&
             eventDate.getDate() <= endDate.getDate()
           ) {
-            sortEvents.push(event);
+            sortedEvents.push(event);
           }
         }
       }
     }
   });
-  return sortEvents;
+  return sortedEvents;
 }
 
-function sameTime(event, event2Compare) {
-  // console.log(event);
+/**
+ * Function to get if the events take place in same time.
+ * @param event The first event.
+ * @param event2Compare The second event, to compare with the first one.
+ * @returns If the events are ocurring in same time.
+ */
+function sameTime(event: any, event2Compare: any) {
   if (
     (event.beginDate < event2Compare.beginDate &&
       event2Compare.beginDate < event.endDate) ||
@@ -187,20 +201,16 @@ function sameTime(event, event2Compare) {
     return true;
   }
 
-  // const endDate = new Date('June 10, 2023 19:10:34');
-  // if (
-  //   event.beginDate < event2Compare.beginDate < endDate ||
-  //   event.beginDate < endDate < endDate ||
-  //   event2Compare.beginDate < event.beginDate < endDate ||
-  //   event2Compare.beginDate < endDate < endDate
-  // ) {
-  //   return true;
-  // }
-
   return false;
 }
 
-function pgcd(a, b) {
+/**
+ * A function that returns the pgcd between 2 numbers.
+ * @param a The first number.
+ * @param b The second number.
+ * @returns The pgcd of the 2 numbers.
+ */
+function pgcd(a: number, b: number) {
   let dividende = a;
   let reste = b;
   let temp;
@@ -212,22 +222,44 @@ function pgcd(a, b) {
   return dividende;
 }
 
-function ppcm(a, b) {
+/**
+ * A function that returns the ppcm between 2 numbers.
+ * @param a The first number.
+ * @param b The second number.
+ * @returns The ppcm of the 2 numbers.
+ */
+function ppcm(a: number, b: number) {
   return (a * b) / pgcd(a, b);
 }
 
-function allSameTime(key, eventsList, eventsData) {
+/**
+ * Function that returns if an event have a common time area with a list of events that have a common time area.
+ * @param key The key of the event to check.
+ * @param eventsList The list of event which with the event has to be checked.
+ * @param eventsData The list of all eventData.
+ * @returns If all the events have a common time area.
+ */
+function allSameTime(
+  key: number,
+  eventsList: Array<any>,
+  eventsData: Array<any>
+) {
   let areSameTime = true;
   let iterator = 0;
   while (areSameTime && iterator < eventsList.length) {
-    // console.log(key);
     areSameTime = sameTime(eventsData[key], eventsData[eventsList[iterator]]);
     iterator += 1;
   }
   return areSameTime;
 }
 
-function isInArray(ar1, ar2) {
+/**
+ * Function that returns if all the value of an array are in another one.
+ * @param ar1 The array to check if the values are in the other.
+ * @param ar2 The array to check if it contains the values.
+ * @returns If the values of the first array are in the second.
+ */
+function isInArray(ar1: Array<any>, ar2: Array<any>) {
   let same = true;
   let iterator = 0;
   while (same && iterator < ar1.length) {
@@ -237,10 +269,26 @@ function isInArray(ar1, ar2) {
   return same;
 }
 
-function placeEvents(events, chain, eventsBlockedChain, position) {
+/**
+ * Recursive function that set an event horizontal position (when multiples events occur in same time).
+ * @param events List of events.
+ * @param chain List of keys of current simultaneous events that are placed.
+ * @param eventsBlockedChain List of chains with simultaneous events that have to be placed.
+ * @param position The position where the event has to be placed.
+ * @returns If an event has been able to be placed.
+ */
+function placeEvents(
+  events: Array<any>,
+  chain: Array<number>,
+  eventsBlockedChain: Array<Array<number>>,
+  position: number
+) {
+  // If all the events have been rightfully placed, return true
   if (eventsBlockedChain.length === 0) {
     return true;
   }
+
+  // If the first chain of events has been rightfully placed, return true
   if (eventsBlockedChain[0].length === 0) {
     return true;
   }
@@ -254,6 +302,8 @@ function placeEvents(events, chain, eventsBlockedChain, position) {
   while (!allPlaced) {
     while (!chainPlaced && select < eventsBlockedChain[0].length) {
       eventPlaced = true;
+      // If the event has not been already placed yet
+      // Then checked if the event can be placed
       if (!events[eventsBlockedChain[0][select]].placed) {
         change = true;
         events[eventsBlockedChain[0][select]].placed = true;
@@ -262,6 +312,8 @@ function placeEvents(events, chain, eventsBlockedChain, position) {
         select += 1;
         eventPlaced = false;
       }
+
+      // Only if the current event has been able to be placed, while the event placed doesn't able a good placement for all events, change the event which is placed in position.
       if (eventPlaced) {
         tempEventBlockedChain = eventsBlockedChain.slice();
         tempEventBlockedChain[0] = eventsBlockedChain[0]
@@ -288,6 +340,8 @@ function placeEvents(events, chain, eventsBlockedChain, position) {
     if (!chainPlaced) {
       return false;
     }
+
+    // When all following events have been rightfully placed, according to simultaneous events chain, enable the end of the placement phase.
     if (
       placeEvents(events, eventsBlockedChain[1], eventsBlockedChain.slice(1), 0)
     ) {
@@ -299,15 +353,20 @@ function placeEvents(events, chain, eventsBlockedChain, position) {
   return true;
 }
 
+/**
+ * Function that will handle the placement process of the events in a day.
+ * @param events List of the events.
+ */
 function setSameTimeEvents(events: Array<any>) {
   const eventsData = new Array<any>();
   for (let i = 0; i < events.length; i++) {
     events[i].placed = false;
+
+    // Create an eventData object which will be used to treat simultaneous events.
     eventsData.push({
       key: i,
       beginDate: new Date(events[i].date),
       endDate: new Date(events[i].endDate),
-      // endDate: new Date('June 10, 2023 19:10:34'),
       blocked: false,
       size: 1,
       sameTimeEvent: [],
@@ -315,6 +374,7 @@ function setSameTimeEvents(events: Array<any>) {
     });
   }
 
+  // Set all same time events foreach events.
   for (let i = 0; i < events.length; i++) {
     eventsData.forEach((eventData) => {
       if (sameTime(eventsData[i], eventData)) {
@@ -323,15 +383,12 @@ function setSameTimeEvents(events: Array<any>) {
     });
   }
 
-  // Parcours des events
+  // Create list of couples of events that occurs in same time and store them in eventData.
   let eventData;
   let coupleEventsLength;
   for (let i = 0; i < eventsData.length; i++) {
     eventData = eventsData[i];
-
-    // Parcours des events en meme temps (foreach nan ?)
     for (let j = 0; j < eventData.sameTimeEvent.length; j++) {
-      // parcours des couples d'events
       coupleEventsLength = eventData.coupleEvents.length;
       for (let k = 0; k < coupleEventsLength; k++) {
         if (allSameTime(j, eventData.coupleEvents[k], eventsData)) {
@@ -344,13 +401,14 @@ function setSameTimeEvents(events: Array<any>) {
     }
   }
 
+  // Get couples of events with maximal events foreach event and set the size of each event with it.
   const currentSizeObject = {
     maxSize: 0,
     blockedChains: [],
   };
   let previousMaxSize;
   const blockedEventsChain = [];
-  let partSize = 1;
+  let globalSize = 1;
   for (let i = 0; i < events.length; i++) {
     currentSizeObject.maxSize = 0;
     for (
@@ -388,32 +446,31 @@ function setSameTimeEvents(events: Array<any>) {
       }
     });
     eventsData[i].size = currentSizeObject.maxSize;
-    partSize = ppcm(currentSizeObject.maxSize, partSize);
+    globalSize = ppcm(currentSizeObject.maxSize, globalSize);
   }
 
-  // effectiveSize
-
+  // Set the size attributes of each events corresponding to the length of his maximal couple chain.
   eventsData.forEach((currentEventData) => {
-    events[currentEventData.key].globalSize = partSize;
+    events[currentEventData.key].globalSize = globalSize;
     events[currentEventData.key].effectiveSize =
-      partSize / currentEventData.size;
+      globalSize / currentEventData.size;
   });
 
-  // ajout des attributs blockants
+  // Set the blocked attribute to true for all events that take part of a couple chain that takes all horizontal space.
   let sizeUsed;
   blockedEventsChain.forEach((eventChain) => {
     sizeUsed = 0;
     eventChain.forEach((eventKey) => {
       sizeUsed += events[eventKey].effectiveSize;
     });
-    if (sizeUsed === partSize) {
+    if (sizeUsed === globalSize) {
       eventChain.forEach((eventKey) => {
         eventsData[eventKey].blocked = true;
       });
     }
   });
 
-  // ajustement effective size
+  // Reajust the size of events to use all the horizontal space
   let event2reajust;
   let size2Add;
   blockedEventsChain.forEach((eventChain) => {
@@ -426,7 +483,7 @@ function setSameTimeEvents(events: Array<any>) {
       }
     });
     if (event2reajust.length !== 0) {
-      size2Add = (partSize - sizeUsed) / event2reajust.length;
+      size2Add = (globalSize - sizeUsed) / event2reajust.length;
       event2reajust.forEach((eventKey) => {
         events[eventKey].effectiveSize += size2Add;
         eventsData[eventKey].blocked = true;
@@ -434,14 +491,18 @@ function setSameTimeEvents(events: Array<any>) {
     }
   });
 
-  // algo de placement
-  placeEvents(events, blockedEventsChain[0], blockedEventsChain, 0);
-  console.log(eventsData);
-  console.log(events);
+  // Try to place the events optimally
+  if (!placeEvents(events, blockedEventsChain[0], blockedEventsChain, 0)) {
+    console.warn("Some events haven't been rightfully placed");
+  }
 }
 
+/**
+ * Function that sorted event in days of the week.
+ * @param oldSortEvents The list of events to sort.
+ * @returns The list of events, sorted by day.
+ */
 function sortInWeek(oldSortEvents: Array<any>) {
-  // Ajustement taille
   setSameTimeEvents(oldSortEvents);
 
   const sortEvents = new Array<any>();
@@ -451,37 +512,39 @@ function sortInWeek(oldSortEvents: Array<any>) {
   let eventDate;
   oldSortEvents.forEach((event) => {
     eventDate = new Date(event.date);
-    // event.size = 1;
     sortEvents[eventDate.getDay() - 1].push(event);
   });
-
-  console.log(sortEvents);
   return sortEvents;
 }
 
+/**
+ * The calendar component which will contains all the day and events components.
+ * @param event The list of events.
+ * @returns The calendar component.
+ */
 function Calendar(props: { events: any }) {
-  // console.log([1, 2, 3].includes(2));
-  // console.log([1, 4, 3].includes(2));
-  // console.log([[5], [4], [3]].includes(5));
-  // console.log([[5], [4], [3]].includes([5]));
-
   const { events } = props;
+
+  // Selection day to implement
+  console.log('implémenter la sélection des jours');
   let sortEvents = getEventWithDate(
     events,
     new Date('June 07, 2023 03:24:00'),
     new Date('June 13, 2023 03:24:00')
   );
 
+  // Delete when endDate added
   console.log('endDate à virer');
-  // sortEvents.forEach((event) => {
-  //   event.endDate = 'June 10, 2023 19:10:34';
-  // });
-
-  sortEvents[2].endDate = 'June 10, 2023 19:10:34';
-  sortEvents[1].endDate = 'June 10, 2023 18:50:34';
-  sortEvents[3].endDate = 'June 10, 2023 23:10:34';
-  sortEvents[0].endDate = 'June 10, 2023 15:30:34';
+  sortEvents.forEach((event) => {
+    event.endDate = 'June 10, 2023 19:10:34';
+  });
   //
+
+  // sortEvents[2].endDate = 'June 10, 2023 19:10:34';
+  // sortEvents[1].endDate = 'June 10, 2023 18:50:34';
+  // sortEvents[3].endDate = 'June 10, 2023 23:10:34';
+  // sortEvents[0].endDate = 'June 10, 2023 15:30:34';
+  // sortEvents[4].endDate = 'June 10, 2023 19:30:34';
 
   sortEvents = sortInWeek(sortEvents);
   return (
