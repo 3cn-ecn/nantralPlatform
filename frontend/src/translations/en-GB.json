@@ -28,7 +28,11 @@
     "theme": "Theme"
   },
   "button": {
+    "cancel" : "cancel",
     "joinButton" : {
+      "unsuscribe" : "unsuscribe",
+      "registerLink" : "register link",
+      "shotgunClosed" : "shotgun closed",
       "register": "register",
       "title": "Do you want to unsubscribe from this event?"
     }

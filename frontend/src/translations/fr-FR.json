@@ -28,9 +28,13 @@
     "theme": "Thème"
   },
   "button": {
+    "cancel" : "annuler",
     "joinButton": {
       "register": "s'inscrire",
-      "title": "Voulez vous désinscrire de cet événements ?"
+      "registerLink": "lien d'inscription",
+      "unsuscribe" : "se désinscrire",
+      "shotgunClosed" : "shotgun fermé",
+      "title": "Voulez-vous vous désinscrire de cet événements ?"
     }
   },
   "legalNotice": {

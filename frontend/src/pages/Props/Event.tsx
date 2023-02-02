@@ -18,4 +18,6 @@ export interface EventProps {
   begin_inscripion: Date | null; // date of the beginning of inscription
   end_date: Date | null; // end date of the event
   ticketing: string | null; // url of inscription form
+  effectiveSize?: number;
+  globalSize?: number;
 }
