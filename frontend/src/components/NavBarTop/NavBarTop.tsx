@@ -41,6 +41,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
 import PaletteIcon from '@mui/icons-material/Palette';
 import { SearchBar } from './SearchBar/SearchBar';
+import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
@@ -141,15 +142,7 @@ function NavBarTop(props: {
         <SearchBar />
         <Box sx={{ flexGrow: 1.0 }} />
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <IconButton
-            size="large"
-            aria-label="show 17 new notifications"
-            color="inherit"
-          >
-            <Badge badgeContent={1} color="error">
-              <SvgIcon component={NotifIcon} inheritViewBox />
-            </Badge>
-          </IconButton>
+          <NotificationMenu />
           <IconButton
             size="large"
             edge="end"
