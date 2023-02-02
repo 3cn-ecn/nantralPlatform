@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, selectClasses } from '@mui/material';
 import './Calendar.scss';
 import { EventProps } from 'pages/Props/Event';
 
@@ -139,6 +139,32 @@ function Day(props: {
 }
 
 /**
+ * Function that check if a date is between two others.
+ * @param eventDate The date to check.
+ * @param beginDate The minimal date.
+ * @param endDate The maximal date.
+ * @returns The boolean that tells whether the date is between the others
+ */
+function getEventWithEndDate(eventDate: Date, beginDate: Date, endDate: Date) {
+    beginDate.getFullYear() <= eventDate.getFullYear() &&
+    eventDate.getFullYear() <= endDate.getFullYear()
+  ) {
+    if (
+      beginDate.getMonth() <= eventDate.getMonth() &&
+      eventDate.getMonth() <= endDate.getMonth()
+    ) {
+      if (
+        beginDate.getDate() <= eventDate.getDate() &&
+        eventDate.getDate() <= endDate.getDate()
+      ) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
  * Function that sort event date-wise.
  * @param events The list of the events to sort.
  * @param beginDate The minimal date.
@@ -151,48 +177,16 @@ function getEventWithDate(
   endDate: Date
 ) {
   const sortedEvents = new Array<EventProps>();
-  let eventDate;
   let eventSorted;
   events.forEach((event) => {
-    eventSorted = false;
-    eventDate = new Date(event.date);
-    if (
-      beginDate.getFullYear() <= eventDate.getFullYear() &&
-      eventDate.getFullYear() <= endDate.getFullYear()
+    eventSorted = getEventWithEndDate(new Date(event.date), beginDate, endDate);
+    if (eventSorted) {
+      sortedEvents.push(event);
+    } else if (
+      getEventWithEndDate(new Date(event.end_date), beginDate, endDate)
     ) {
-      if (
-        beginDate.getMonth() <= eventDate.getMonth() &&
-        eventDate.getMonth() <= endDate.getMonth()
-      ) {
-        if (
-          beginDate.getDate() <= eventDate.getDate() &&
-          eventDate.getDate() <= endDate.getDate()
-        ) {
-          eventSorted = true;
-          sortedEvents.push(event);
-        }
-      }
-    }
-
-    // Pour trier par rapport à la fin d'event quand elle existera
-    if (!eventSorted) {
-      eventDate = new Date(event.end_date);
-      if (
-        beginDate.getFullYear() <= eventDate.getFullYear() &&
-        eventDate.getFullYear() <= endDate.getFullYear()
-      ) {
-        if (
-          beginDate.getMonth() <= eventDate.getMonth() &&
-          eventDate.getMonth() <= endDate.getMonth()
-        ) {
-          if (
-            beginDate.getDate() <= eventDate.getDate() &&
-            eventDate.getDate() <= endDate.getDate()
-          ) {
-            sortedEvents.push(event);
-          }
-        }
-      }
+      // To sort with end date too.
+      sortedEvents.push(event);
     }
   });
   return sortedEvents;
@@ -292,7 +286,16 @@ function isInArray(ar1: Array<number>, ar2: Array<number>) {
   return same;
 }
 
-function blockedChains(events, eventsData) {
+/**
+ * Get couples of events with maximal events foreach event and set the size of each event with it.
+ * @param events List of events.
+ * @param eventsData List of events data.
+ * @returns The couples of events with maximal size foreach events.
+ */
+function blockedChains(
+  events: Array<EventProps>,
+  eventsData: Array<EventDataProps>
+) {
   const currentSizeObject = {
     maxSize: 0,
     blockedChains: [],
@@ -340,7 +343,38 @@ function blockedChains(events, eventsData) {
   return blockedEventsChain;
 }
 
-function eventSizeReajust(blockedEventsChain, events, eventsData) {
+/**
+ * Create list of couples of events that occurs in same time and store them in eventData.
+ * @param eventsData List of events data.
+ */
+function createCoupleEvents(eventsData: Array<EventDataProps>) {
+  let coupleEventsLength;
+  eventsData.forEach((eventData) => {
+    for (let j = 0; j < eventData.sameTimeEvent.length; j++) {
+      coupleEventsLength = eventData.coupleEvents.length;
+      for (let k = 0; k < coupleEventsLength; k++) {
+        if (allSameTime(j, eventData.coupleEvents[k], eventsData)) {
+          eventData.coupleEvents.push(
+            eventData.coupleEvents[k].concat([eventData.sameTimeEvent[j]])
+          );
+        }
+      }
+      eventData.coupleEvents.push([eventData.sameTimeEvent[j]]);
+    }
+  });
+}
+
+/**
+ * Function that resizes all events to take the maximal horizontal space.
+ * @param blockedEventsChain List of events chain that have to take all horizontal space.
+ * @param events List of events.
+ * @param eventsData List of events data.
+ */
+function eventSizeReajust(
+  blockedEventsChain: Array<Array<number>>,
+  events: Array<EventProps>,
+  eventsData: Array<EventDataProps>
+) {
   let event2reajust;
   let size2Add;
   let sizeUsed;
@@ -361,6 +395,63 @@ function eventSizeReajust(blockedEventsChain, events, eventsData) {
       });
     }
   });
+}
+
+/**
+ * A function that check if the placement of an event corresponds with an event chain. If the event is not already placed, this function places it.
+ * @param events List of events.
+ * @param chain List of keys of current simultaneous events that are placed.
+ * @param eventsBlockedChain List of chains with simultaneous events that have to be placed.
+ * @param position The position where the event has to be placed.
+ * @param select The current index in eventsBlockedChain[0] of the key of the event that is placed.
+ * @returns Then next index in eventsBlockedChain[0] of the key of the event that will be placed and a boolean to tell if the chain is totally placed
+ */
+function placeChainEvent(
+  events: Array<EventProps>,
+  chain: Array<number>,
+  eventsBlockedChain: Array<Array<number>>,
+  position: number,
+  select: number
+) {
+  let newSelect = select;
+  let chainPlaced = false;
+  let change = false;
+  let eventPlaced = true;
+  let tempEventBlockedChain;
+  // If the event has not been already placed yet
+  // Then checked if the event can be placed
+  if (!events[eventsBlockedChain[0][select]].placed) {
+    change = true;
+    events[eventsBlockedChain[0][select]].placed = true;
+    events[eventsBlockedChain[0][select]].position = position;
+  } else if (events[eventsBlockedChain[0][select]].position !== position) {
+    newSelect += 1;
+    eventPlaced = false;
+  }
+
+  // Only if the current event has been able to be placed, while the event placed doesn't able a good placement for all events, change the event which is placed in position.
+  if (eventPlaced) {
+    tempEventBlockedChain = eventsBlockedChain.slice();
+    tempEventBlockedChain[0] = eventsBlockedChain[0]
+      .slice(0, select)
+      .concat(eventsBlockedChain[0].slice(select + 1));
+    if (
+      !placeEvents(
+        events,
+        chain,
+        tempEventBlockedChain,
+        position + events[eventsBlockedChain[0][select]].effectiveSize
+      )
+    ) {
+      if (change) {
+        events[eventsBlockedChain[0][select]].placed = false;
+      }
+      newSelect += 1;
+    } else {
+      chainPlaced = true;
+    }
+  }
+  return { newSelect, chainPlaced };
 }
 
 /**
@@ -388,48 +479,20 @@ function placeEvents(
   }
 
   let select = 0;
-  let change = false;
-  let eventPlaced;
   let chainPlaced = false;
   let allPlaced = false;
-  let tempEventBlockedChain;
+  let newValues;
   while (!allPlaced) {
     while (!chainPlaced && select < eventsBlockedChain[0].length) {
-      eventPlaced = true;
-      // If the event has not been already placed yet
-      // Then checked if the event can be placed
-      if (!events[eventsBlockedChain[0][select]].placed) {
-        change = true;
-        events[eventsBlockedChain[0][select]].placed = true;
-        events[eventsBlockedChain[0][select]].position = position;
-      } else if (events[eventsBlockedChain[0][select]].position !== position) {
-        select += 1;
-        eventPlaced = false;
-      }
-
-      // Only if the current event has been able to be placed, while the event placed doesn't able a good placement for all events, change the event which is placed in position.
-      if (eventPlaced) {
-        tempEventBlockedChain = eventsBlockedChain.slice();
-        tempEventBlockedChain[0] = eventsBlockedChain[0]
-          .slice(0, select)
-          .concat(eventsBlockedChain[0].slice(select + 1));
-        if (
-          !placeEvents(
-            events,
-            chain,
-            tempEventBlockedChain,
-            position + events[eventsBlockedChain[0][select]].effectiveSize
-          )
-        ) {
-          if (change) {
-            change = false;
-            events[eventsBlockedChain[0][select]].placed = false;
-          }
-          select += 1;
-        } else {
-          chainPlaced = true;
-        }
-      }
+      newValues = placeChainEvent(
+        events,
+        chain,
+        eventsBlockedChain,
+        position,
+        select
+      );
+      select = newValues.newSelect;
+      chainPlaced = newValues.chainPlaced;
     }
     if (!chainPlaced) {
       return false;
@@ -478,22 +541,7 @@ function setSameTimeEvents(events: Array<EventProps>) {
   }
 
   // Create list of couples of events that occurs in same time and store them in eventData.
-  let eventData;
-  let coupleEventsLength;
-  for (let i = 0; i < eventsData.length; i++) {
-    eventData = eventsData[i];
-    for (let j = 0; j < eventData.sameTimeEvent.length; j++) {
-      coupleEventsLength = eventData.coupleEvents.length;
-      for (let k = 0; k < coupleEventsLength; k++) {
-        if (allSameTime(j, eventData.coupleEvents[k], eventsData)) {
-          eventData.coupleEvents.push(
-            eventData.coupleEvents[k].concat([eventData.sameTimeEvent[j]])
-          );
-        }
-      }
-      eventData.coupleEvents.push([eventData.sameTimeEvent[j]]);
-    }
-  }
+  createCoupleEvents(eventsData);
 
   // Get couples of events with maximal events foreach event and set the size of each event with it.
   const blockedEventsChain = blockedChains(events, eventsData);
@@ -527,7 +575,7 @@ function setSameTimeEvents(events: Array<EventProps>) {
  * @returns The list of events, sorted by day.
  */
 function sortInWeek(oldSortEvents: Array<EventProps>) {
-  const sortEvents = new Array<any>();
+  const sortEvents = [];
   for (let i = 0; i < 7; i++) {
     sortEvents.push(new Array<EventProps>());
   }
