@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, selectClasses } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import './Calendar.scss';
 import { EventProps } from 'pages/Props/Event';
 
@@ -145,7 +145,8 @@ function Day(props: {
  * @param endDate The maximal date.
  * @returns The boolean that tells whether the date is between the others
  */
-function getEventWithEndDate(eventDate: Date, beginDate: Date, endDate: Date) {
+function betweenDate(eventDate: Date, beginDate: Date, endDate: Date) {
+  if (
     beginDate.getFullYear() <= eventDate.getFullYear() &&
     eventDate.getFullYear() <= endDate.getFullYear()
   ) {
@@ -177,15 +178,12 @@ function getEventWithDate(
   endDate: Date
 ) {
   const sortedEvents = new Array<EventProps>();
-  let eventSorted;
   events.forEach((event) => {
-    eventSorted = getEventWithEndDate(new Date(event.date), beginDate, endDate);
-    if (eventSorted) {
-      sortedEvents.push(event);
-    } else if (
-      getEventWithEndDate(new Date(event.end_date), beginDate, endDate)
+    // Sort with end date too.
+    if (
+      betweenDate(new Date(event.date), beginDate, endDate) ||
+      betweenDate(new Date(event.end_date), beginDate, endDate)
     ) {
-      // To sort with end date too.
       sortedEvents.push(event);
     }
   });
