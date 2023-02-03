@@ -47,7 +47,9 @@ class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
         fields = ['id', 'student', 'group', 'summary', 'description',
-                  'begin_date', 'end_date', 'admin']
+                  'begin_date', 'end_date', 'order', 'admin', 'admin_request']
+        read_only_fields = ['admin_request']
+        admin_fields = ['order', 'admin']
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         group: Group = data['group']
@@ -56,7 +58,10 @@ class MembershipSerializer(serializers.ModelSerializer):
             raise exceptions.PermissionDenied(_(
                 "You can only edit a membership for yourself or for "
                 "someone else inside a group where you are admin."))
-        if data['admin'] and not group.is_admin(user):
+        # check if fields reserved for admins have been changed
+        if (any([getattr(self.instance, field) != data.get(field)
+                 for field in self.Meta.admin_fields])
+                and not group.is_admin(user)):
             raise exceptions.ValidationError(_(
                 "You cannot add admin rights for yourself."))
         return data
