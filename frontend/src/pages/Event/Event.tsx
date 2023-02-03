@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { Box, Button, Tab } from '@mui/material';
-import { CalendarPicker, TabContext, TabList, TabPanel } from '@mui/lab';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
 
@@ -60,7 +60,7 @@ function EventView(props: { events: any }) {
       <TabPanel value="2">
         <EventCalendar events={events}></EventCalendar>
         <CalendarMonth></CalendarMonth>
-        <CalendarPicker></CalendarPicker>
+        {/* <CalendarPicker></CalendarPicker> */}
         <CalendarViewDay></CalendarViewDay>
         <CalendarToday></CalendarToday>
       </TabPanel>
