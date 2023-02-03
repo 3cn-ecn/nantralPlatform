@@ -146,6 +146,7 @@ function Day(props: {
  * @returns The boolean that tells whether the date is between the others
  */
 function getEventWithEndDate(eventDate: Date, beginDate: Date, endDate: Date) {
+  if (
     beginDate.getFullYear() <= eventDate.getFullYear() &&
     eventDate.getFullYear() <= endDate.getFullYear()
   ) {
