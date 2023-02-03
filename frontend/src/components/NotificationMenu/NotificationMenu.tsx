@@ -43,6 +43,7 @@ import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.s
 import { NotificationItem } from './NotificationItem';
 import axios from '../../legacy/utils/axios';
 import formatUrl from '../../legacy/utils/formatUrl';
+import merge from '../../legacy/notification/utils';
 
 interface Notification {
   id: number;
@@ -103,23 +104,13 @@ export function NotificationMenu(props) {
   }
 
   async function getListNotifs(): Promise<void> {
-    setOnLoad(true);
     const start = listNotifs.length;
-    const url = formatUrl(GET_NOTIFICATIONS_URL, [], {
-      mode: 1,
-    });
-    fetch(url)
-      .then((resp) =>
-        resp.json().then((data) => {
-          const merging = merge(listNotifs, data);
-          setListNotifs(data);
-          setOnLoad(false);
-          if (merging.length < start + step) setAllLoaded(true);
-        })
-      )
-      .catch((err) => {
-        setOnLoad(false);
-      });
+    const url = '/api/notification/get_notifications?mode=2';
+    const response = await axios.get(url);
+    if (listNotifs.length !== nbNotifs) {
+      const merging = merge(listNotifs, response.data);
+      setListNotifs(merging);
+    }
   }
 
   function askPermission(event): void {
@@ -137,11 +128,11 @@ export function NotificationMenu(props) {
     const res = true;
     return res;
   });
-  console.log("a");
+  console.log('a');
   console.log(listToShow);
-  console.log(nbNotifs);
+  console.log(listToShow.length === 0);
   if (listToShow.length === 0) {
-    if (onLoad) {
+    if (!onLoad) {
       content = (
         <MenuItem>
           <ListItem>{listToShow.length} 😢</ListItem>
@@ -149,11 +140,9 @@ export function NotificationMenu(props) {
       );
     }
   } else {
-    content = (
-      <MenuItem>
-        <ListItem>{listToShow.length} 😢</ListItem>
-      </MenuItem>
-    );
+    content = listToShow.map((sn) => (
+      <NotificationItem key={sn.notification.id} sn={sn} />
+    ));
   }
   return (
     <>
@@ -174,6 +163,7 @@ export function NotificationMenu(props) {
         onClose={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
         TransitionComponent={Collapse}
+        sx={{ width: 320 }}
       >
         {content}
       </Menu>

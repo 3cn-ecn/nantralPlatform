@@ -43,6 +43,7 @@ import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import axios from '../../legacy/utils/axios';
 import formatUrl from '../../legacy/utils/formatUrl';
+import './NotificationItem.scss';
 
 const app = '/api/notification/';
 const REGISTER_URL = `${app}register`;
@@ -94,7 +95,23 @@ function NotificationItem(props) {
 
   return (
     <MenuItem>
-      <ListItem> {n.title}</ListItem>
+      <li className={sn.seen ? '' : 'bg-light'}>
+        <span className="spanno" style={{ alignItems: 'center' }}>
+          {n.icon_url ? (
+            <img src={n.icon_url} alt="Icon de l'évènement" loading="lazy" />
+          ) : (
+            <SvgIcon component={NantralIcon} inheritViewBox />
+          )}
+          <small className="notif">
+            <strong>{n.title}</strong>
+            <br />
+            {n.body}
+          </small>
+        </span>
+        <span className={`text-${sn.seen ? 'light' : 'danger'} read-button`}>
+          {sn.seen != null} ●
+        </span>
+      </li>
     </MenuItem>
   );
 }
