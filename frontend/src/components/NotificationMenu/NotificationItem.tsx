@@ -41,6 +41,14 @@ import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
+import axios from '../../legacy/utils/axios';
+import formatUrl from '../../legacy/utils/formatUrl';
+
+const app = '/api/notification/';
+const REGISTER_URL = `${app}register`;
+const SUBSCRIPTION_URL = `${app}subscription/{0}`;
+const GET_NOTIFICATIONS_URL = `${app}get_notifications`;
+const MANAGE_NOTIFICATION_URL = `${app}notification/{0}`;
 
 function NotificationItem(props) {
   const { sn } = props;

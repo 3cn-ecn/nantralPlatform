@@ -41,6 +41,8 @@ import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import { NotificationItem } from './NotificationItem';
+import axios from '../../legacy/utils/axios';
+import formatUrl from '../../legacy/utils/formatUrl';
 
 interface Notification {
   id: number;
@@ -62,12 +64,12 @@ interface SentNotification {
   seen: boolean;
 }
 
-export function NotificationMenu() {
+export function NotificationMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    loadNotifications();
+    getListNotifs();
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -104,15 +106,13 @@ export function NotificationMenu() {
     setOnLoad(true);
     const start = listNotifs.length;
     const url = formatUrl(GET_NOTIFICATIONS_URL, [], {
-      mode: 2,
-      start: start,
-      nb: step,
+      mode: 1,
     });
     fetch(url)
       .then((resp) =>
         resp.json().then((data) => {
           const merging = merge(listNotifs, data);
-          setListNotifs(merging);
+          setListNotifs(data);
           setOnLoad(false);
           if (merging.length < start + step) setAllLoaded(true);
         })
@@ -131,11 +131,15 @@ export function NotificationMenu() {
   async function loadNotifications(nextShow: boolean, meta: any) {
     if (onLoad) getListNotifs();
   }
+  console.log(listNotifs);
   let content;
   const listToShow = listNotifs.filter((sn: SentNotification) => {
     const res = true;
     return res;
   });
+  console.log("a");
+  console.log(listToShow);
+  console.log(nbNotifs);
   if (listToShow.length === 0) {
     if (onLoad) {
       content = (
@@ -145,9 +149,11 @@ export function NotificationMenu() {
       );
     }
   } else {
-    content = listToShow.map((sn) => (
-      <NotificationItem key={sn.notification.id} sn={sn} />
-    ));
+    content = (
+      <MenuItem>
+        <ListItem>{listToShow.length} 😢</ListItem>
+      </MenuItem>
+    );
   }
   return (
     <>

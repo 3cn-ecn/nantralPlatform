@@ -23,7 +23,7 @@ function Home() {
   async function getEvent() {
     const response = await axios.get('api/event');
     setEvents(response.data);
-    console.log(response);
+    // console.log(response);
   }
 
   const myEvents = (
