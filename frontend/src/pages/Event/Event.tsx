@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { Box, Button, Tab } from '@mui/material';
+import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
@@ -14,7 +14,6 @@ import { EventProps } from 'pages/Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import { getEventApi } from '../../api';
 import Calendar from '../../components/Calendar/Calendar';
-import { formatDate } from '../../utils/date';
 
 /**
  * Event Page, with Welcome message, next events, etc...
@@ -23,6 +22,7 @@ import { formatDate } from '../../utils/date';
 
 function EventList(props: { events: any }) {
   const { events } = props;
+  console.log(events);
 
   return <p>Ceci est une liste.</p>;
 }
