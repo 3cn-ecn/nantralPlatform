@@ -100,12 +100,12 @@ function NotificationItem(props) {
           {n.icon_url ? (
             <img src={n.icon_url} alt="Icon de l'évènement" loading="lazy" />
           ) : (
-            <SvgIcon component={NantralIcon} inheritViewBox />
+            <SvgIcon sx={{ mr: 2 }} component={NantralIcon} inheritViewBox />
           )}
           <small className="notif">
-            <strong>{n.title}</strong>
+            <p className="title">{n.title}</p>
             <br />
-            {n.body}
+            <p className="body">{n.body}</p>
           </small>
         </span>
         <span className={`text-${sn.seen ? 'light' : 'danger'} read-button`}>

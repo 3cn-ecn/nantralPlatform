@@ -3,7 +3,21 @@
 }
 
 .spanno {
-  display:inline;
-    max-width:280px;
-    word-wrap:break-all;
+  display:inline-block;
+    width: 300px;
+    overflow-wrap:normal;
+}
+
+small {
+  display:inline-block;
+    max-width: 100px;
+    overflow-wrap:normal;
+}
+
+p.title {
+  font-weight: 700;
+}
+
+p.body {
+  font-size: 10;
 }

@@ -163,7 +163,6 @@ export function NotificationMenu(props) {
         onClose={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
         TransitionComponent={Collapse}
-        sx={{ width: 320 }}
       >
         {content}
       </Menu>
