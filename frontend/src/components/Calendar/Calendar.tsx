@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import './Calendar.scss';
 import { EventProps } from 'pages/Props/Event';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { CalendarMonth } from '@mui/icons-material';
 
 interface EventDataProps {
   key: number; // The index of the event which this object refects to in the events list.
@@ -617,6 +618,40 @@ function sortInWeek(oldSortEvents: Array<EventProps>, mondayDate) {
   return sortEvents;
 }
 
+function DateBox(props: { date: Date; endDate: Date }) {
+  const { date, endDate } = props;
+  const sunday = new Date(
+    endDate.getFullYear(),
+    endDate.getMonth(),
+    endDate.getDate()
+  );
+  sunday.setDate(sunday.getDate() - 1);
+  return (
+    <div>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          console.log('tap');
+        }}
+      >
+        {`${date.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })} au `}
+        {sunday.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
+        <CalendarMonth></CalendarMonth>
+      </Button>
+    </div>
+  );
+}
+
 function ChangeWeek(props: {
   action: 'previous' | 'next';
   beginDate: Date;
@@ -627,7 +662,8 @@ function ChangeWeek(props: {
   const { action, beginDate, endDate, updateBegin, updateEnd } = props;
   if (action === 'previous') {
     return (
-      <ArrowBackIosNewIcon
+      <Button
+        variant="outlined"
         onClick={() => {
           const newBeginDate = new Date(
             beginDate.getFullYear(),
@@ -644,12 +680,15 @@ function ChangeWeek(props: {
           newEndDate.setDate(endDate.getDate() - 7);
           updateEnd(newEndDate);
         }}
-      ></ArrowBackIosNewIcon>
+      >
+        <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
+      </Button>
     );
   }
   if (action === 'next') {
     return (
-      <ArrowForwardIosIcon
+      <Button
+        variant="outlined"
         onClick={() => {
           const newBeginDate = new Date(
             beginDate.getFullYear(),
@@ -666,7 +705,9 @@ function ChangeWeek(props: {
           newEndDate.setDate(endDate.getDate() + 7);
           updateEnd(newEndDate);
         }}
-      ></ArrowForwardIosIcon>
+      >
+        <ArrowForwardIosIcon></ArrowForwardIosIcon>
+      </Button>
     );
   }
   console.warn('Appel de ChangeWeek mal effectué');
@@ -689,6 +730,9 @@ function ChooseWeek(props: {
         updateBegin={updateBegin}
         updateEnd={updateEnd}
       ></ChangeWeek>
+      <Stack spacing={3}>
+        <DateBox date={beginDate} endDate={endDate}></DateBox>
+      </Stack>
       <ChangeWeek
         action="next"
         beginDate={beginDate}
@@ -716,9 +760,6 @@ function Calendar(props: { events: Array<EventProps> }) {
   const tempMondayOfTheWeek = new Date();
   tempMondayOfTheWeek.setDate(
     tempMondayOfTheWeek.getDate() - ((tempMondayOfTheWeek.getDay() - 1) % 7)
-    // (tempMondayOfTheWeek.getDay() === 0
-    //   ? 6
-    //   : tempMondayOfTheWeek.getDay() - 1)
   );
 
   const tempEndSundayOfTheWeek = new Date(
@@ -759,10 +800,6 @@ function Calendar(props: { events: Array<EventProps> }) {
   return (
     <>
       <p>Le calendrier</p>
-      <p>
-        Semaine du {beginOfWeek.getDate()}/{beginOfWeek.getMonth() + 1} au{' '}
-        {endOfWeek.getDate()}/{endOfWeek.getMonth() + 1}
-      </p>
       <ChooseWeek
         key="ChooseWeekComponent"
         beginDate={beginOfWeek}
