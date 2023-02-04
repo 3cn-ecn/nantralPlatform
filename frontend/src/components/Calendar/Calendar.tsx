@@ -29,7 +29,7 @@ function EventBlock(props: { day: number; event: EventProps }) {
   let startTime = 24;
 
   // Set the time when the event begins in the day.
-  if (day === 7 ? beginDate.getDay() === 0 : beginDate.getDay() === day) {
+  if (beginDate.getDay() === day % 7) {
     todayBegin = true;
     if (
       beginDate.getHours() !== 0 ||
@@ -49,7 +49,7 @@ function EventBlock(props: { day: number; event: EventProps }) {
   console.log(day, endDate);
   if (todayBegin) {
     duration = (endDate.getTime() - beginDate.getTime()) / 3600000;
-  } else if (day === 7 ? endDate.getDay() === 0 : endDate.getDay() === day) {
+  } else if (endDate.getDay() === day % 7) {
     duration =
       endDate.getHours() +
       endDate.getMinutes() / 60 +
@@ -715,10 +715,10 @@ function Calendar(props: { events: Array<EventProps> }) {
 
   const tempMondayOfTheWeek = new Date();
   tempMondayOfTheWeek.setDate(
-    tempMondayOfTheWeek.getDate() -
-      (tempMondayOfTheWeek.getDay() === 0
-        ? 6
-        : tempMondayOfTheWeek.getDay() - 1)
+    tempMondayOfTheWeek.getDate() - ((tempMondayOfTheWeek.getDay() - 1) % 7)
+    // (tempMondayOfTheWeek.getDay() === 0
+    //   ? 6
+    //   : tempMondayOfTheWeek.getDay() - 1)
   );
 
   const tempEndSundayOfTheWeek = new Date(
