@@ -47,5 +47,13 @@
     "nantes",
     "nantral",
     "Nantral"
-  ]
+  ],
+  "i18n-ally.localesPaths": "frontend/src/translations",
+  "i18n-ally.enabledFrameworks": ["react", "i18next", "general"],
+  "i18n-ally.pathMatcher": "{locale}.json",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.sourceLanguage": "fr-FR",
+  "i18n-ally.sortKeys": true,
+  "i18n-ally.indent": 2,
+  "i18n-ally.tabStyle": "space"
 }
