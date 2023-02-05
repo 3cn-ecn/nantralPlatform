@@ -9,16 +9,16 @@
     <icon>https://docs.nantral-platform.fr/img/logo.svg</icon>
     <entry>
         <title type="html"><![CDATA[History]]></title>
-        <id>/history</id>
+        <id>https://docs.nantral-platform.fr/blog/history</id>
         <link href="https://docs.nantral-platform.fr/blog/history"/>
         <updated>2022-05-29T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Before Nantral Platform came to life, various projects have been created before.]]></summary>
-        <content type="html"><![CDATA[<p>Before Nantral Platform came to life, various projects have been created before.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-students-server-or-serveur-des-élèves">The Students Server, or "Serveur des Élèves"<a class="hash-link" href="#the-students-server-or-serveur-des-élèves" title="Direct link to heading">​</a></h2><p>The <em>Students Server</em> was a server, maintained by students, which had the
+        <content type="html"><![CDATA[<p>Before Nantral Platform came to life, various projects have been created before.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-students-server-or-serveur-des-élèves">The Students Server, or "Serveur des Élèves"<a href="#the-students-server-or-serveur-des-élèves" class="hash-link" aria-label="Direct link to The Students Server, or &quot;Serveur des Élèves&quot;" title="Direct link to The Students Server, or &quot;Serveur des Élèves&quot;">​</a></h2><p>The <em>Students Server</em> was a server, maintained by students, which had the
 purpose to host different websites of the clubs and associations of the school.
 Unfortunately, it was too difficult to maintain and the project ended up
-in 2018.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="hippocéan">Hippocéan<a class="hash-link" href="#hippocéan" title="Direct link to heading">​</a></h2><p>Hippocean was a website created to be a directory with all the websites
+in 2018.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="hippocéan">Hippocéan<a href="#hippocéan" class="hash-link" aria-label="Direct link to Hippocéan" title="Direct link to Hippocéan">​</a></h2><p>Hippocean was a website created to be a directory with all the websites
 related to Centrale Nantes. Its purpose was to give a simple way to find
-easily and quickly the website you were looking for.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-students-directory-or-annuaire-des-élèves">The Students Directory, or "Annuaire des Élèves"<a class="hash-link" href="#the-students-directory-or-annuaire-des-élèves" title="Direct link to heading">​</a></h2><p>The purpose of this project was simply to offer a website to regroup the names
+easily and quickly the website you were looking for.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-students-directory-or-annuaire-des-élèves">The Students Directory, or "Annuaire des Élèves"<a href="#the-students-directory-or-annuaire-des-élèves" class="hash-link" aria-label="Direct link to The Students Directory, or &quot;Annuaire des Élèves&quot;" title="Direct link to The Students Directory, or &quot;Annuaire des Élèves&quot;">​</a></h2><p>The purpose of this project was simply to offer a website to regroup the names
 of all the students of the school. It is the main source of Nantral Platform:
 our project has been built in continuity with this one.</p>]]></content>
         <author>
@@ -28,7 +28,7 @@ our project has been built in continuity with this one.</p>]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[Introducing Nantral Platform]]></title>
-        <id>/introduce</id>
+        <id>https://docs.nantral-platform.fr/blog/introduce</id>
         <link href="https://docs.nantral-platform.fr/blog/introduce"/>
         <updated>2022-05-28T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Welcome to Nantral Platform! I'm glad to introduce you to this new website 🥰]]></summary>
