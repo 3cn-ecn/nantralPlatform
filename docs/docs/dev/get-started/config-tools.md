@@ -43,7 +43,7 @@ A detailed tutorial with screenshots is available [here](https://code.visualstud
 
 ### Install the extensions
 
-The first time you open the `nantralPlatform` folder` in VSCode,
+The first time you open the `nantralPlatform` folder in VSCode,
 you should see this pop-up:
 
 ![Install recommended extensions pop-up](./img/install-extensions-popup.png)
