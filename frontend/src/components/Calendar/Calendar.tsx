@@ -1,7 +1,10 @@
-import React from 'react';
-import { Box, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Button, Stack } from '@mui/material';
 import './Calendar.scss';
 import { EventProps } from 'pages/Props/Event';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { CalendarMonth } from '@mui/icons-material';
 
 interface EventDataProps {
   key: number; // The index of the event which this object refects to in the events list.
@@ -27,29 +30,33 @@ function EventBlock(props: { day: number; event: EventProps }) {
   let startTime = 24;
 
   // Set the time when the event begins in the day.
-  if (
-    beginDate.getDay() === day &&
-    (beginDate.getHours() !== 0 ||
-      beginDate.getMinutes() !== 0 ||
-      beginDate.getSeconds() !== 0)
-  ) {
-    startTime =
-      23 -
-      beginDate.getHours() +
-      (59 - beginDate.getMinutes()) / 60 +
-      (60 - beginDate.getSeconds()) / 3600;
+  if (beginDate.getDay() === day % 7) {
     todayBegin = true;
+    if (
+      beginDate.getHours() !== 0 ||
+      beginDate.getMinutes() !== 0 ||
+      beginDate.getSeconds() !== 0
+    ) {
+      startTime =
+        23 -
+        beginDate.getHours() +
+        (59 - beginDate.getMinutes()) / 60 +
+        (60 - beginDate.getSeconds()) / 3600;
+    }
   }
 
   // Set the duration of the event.
   let duration;
+  console.log(day, endDate);
   if (todayBegin) {
     duration = (endDate.getTime() - beginDate.getTime()) / 3600000;
-  } else {
+  } else if (endDate.getDay() === day % 7) {
     duration =
       endDate.getHours() +
       endDate.getMinutes() / 60 +
       endDate.getSeconds() / 3600;
+  } else {
+    duration = 24;
   }
   return (
     <Button
@@ -146,21 +153,8 @@ function Day(props: {
  * @returns The boolean that tells whether the date is between the others
  */
 function betweenDate(eventDate: Date, beginDate: Date, endDate: Date) {
-  if (
-    beginDate.getFullYear() <= eventDate.getFullYear() &&
-    eventDate.getFullYear() <= endDate.getFullYear()
-  ) {
-    if (
-      beginDate.getMonth() <= eventDate.getMonth() &&
-      eventDate.getMonth() <= endDate.getMonth()
-    ) {
-      if (
-        beginDate.getDate() <= eventDate.getDate() &&
-        eventDate.getDate() <= endDate.getDate()
-      ) {
-        return true;
-      }
-    }
+  if (beginDate <= eventDate && eventDate < endDate) {
+    return true;
   }
   return false;
 }
@@ -179,6 +173,7 @@ function getEventWithDate(
 ) {
   const sortedEvents = new Array<EventProps>();
   events.forEach((event) => {
+    console.log(event.date);
     // Sort with end date too.
     if (
       betweenDate(new Date(event.date), beginDate, endDate) ||
@@ -187,6 +182,7 @@ function getEventWithDate(
       sortedEvents.push(event);
     }
   });
+  console.log(sortedEvents);
   return sortedEvents;
 }
 
@@ -567,37 +563,185 @@ function setSameTimeEvents(events: Array<EventProps>) {
   }
 }
 
+function isInDay(event, mondayDate, sortEvents) {
+  const checkBeginDate = new Date(
+    mondayDate.getFullYear(),
+    mondayDate.getMonth(),
+    mondayDate.getDate()
+  );
+  const checkEndDate = new Date(
+    mondayDate.getFullYear(),
+    mondayDate.getMonth(),
+    mondayDate.getDate()
+  );
+  checkEndDate.setDate(checkEndDate.getDate() + 1);
+  const eventBeginDate = new Date(event.date);
+  const eventEndDate = new Date(event.end_date);
+  if (
+    betweenDate(eventBeginDate, checkBeginDate, checkEndDate) ||
+    betweenDate(checkBeginDate, eventBeginDate, eventEndDate)
+  ) {
+    sortEvents[0].push(event);
+    console.log('je push');
+  }
+  for (let i = 1; i < 7; i++) {
+    checkBeginDate.setDate(checkBeginDate.getDate() + 1);
+    checkEndDate.setDate(checkEndDate.getDate() + 1);
+    console.log(eventBeginDate, eventEndDate, checkBeginDate, checkEndDate);
+    if (
+      betweenDate(eventBeginDate, checkBeginDate, checkEndDate) ||
+      betweenDate(checkBeginDate, eventBeginDate, eventEndDate)
+    ) {
+      sortEvents[i].push({ ...event });
+      console.log('je push');
+    }
+  }
+}
+
 /**
  * Function that sorted event in days of the week.
  * @param oldSortEvents The list of events to sort.
  * @returns The list of events, sorted by day.
  */
-function sortInWeek(oldSortEvents: Array<EventProps>) {
+function sortInWeek(oldSortEvents: Array<EventProps>, mondayDate) {
   const sortEvents = [];
   for (let i = 0; i < 7; i++) {
     sortEvents.push(new Array<EventProps>());
   }
-  let eventDate;
   oldSortEvents.forEach((event) => {
-    eventDate = new Date(event.date);
-    sortEvents[eventDate.getDay() === 0 ? 6 : eventDate.getDay() - 1].push(
-      event
-    );
-    eventDate = new Date(event.end_date);
-    if (
-      !sortEvents[
-        eventDate.getDay() === 0 ? 6 : eventDate.getDay() - 1
-      ].includes(event)
-    ) {
-      sortEvents[eventDate.getDay() === 0 ? 6 : eventDate.getDay() - 1].push({
-        ...event,
-      });
-    }
+    isInDay(event, mondayDate, sortEvents);
   });
   sortEvents.forEach((eventsList) => {
+    console.log(eventsList);
     setSameTimeEvents(eventsList);
   });
   return sortEvents;
+}
+
+function DateBox(props: { date: Date; endDate: Date }) {
+  const { date, endDate } = props;
+  const sunday = new Date(
+    endDate.getFullYear(),
+    endDate.getMonth(),
+    endDate.getDate()
+  );
+  sunday.setDate(sunday.getDate() - 1);
+  return (
+    <div>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          console.log('tap');
+        }}
+      >
+        {`${date.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })} au `}
+        {sunday.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
+        <CalendarMonth></CalendarMonth>
+      </Button>
+    </div>
+  );
+}
+
+function ChangeWeek(props: {
+  action: 'previous' | 'next';
+  beginDate: Date;
+  endDate: Date;
+  updateBegin: any;
+  updateEnd: any;
+}) {
+  const { action, beginDate, endDate, updateBegin, updateEnd } = props;
+  if (action === 'previous') {
+    return (
+      <Button
+        variant="outlined"
+        onClick={() => {
+          const newBeginDate = new Date(
+            beginDate.getFullYear(),
+            beginDate.getMonth(),
+            beginDate.getDate()
+          );
+          const newEndDate = new Date(
+            endDate.getFullYear(),
+            endDate.getMonth(),
+            endDate.getDate()
+          );
+          newBeginDate.setDate(newBeginDate.getDate() - 7);
+          updateBegin(newBeginDate);
+          newEndDate.setDate(endDate.getDate() - 7);
+          updateEnd(newEndDate);
+        }}
+      >
+        <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
+      </Button>
+    );
+  }
+  if (action === 'next') {
+    return (
+      <Button
+        variant="outlined"
+        onClick={() => {
+          const newBeginDate = new Date(
+            beginDate.getFullYear(),
+            beginDate.getMonth(),
+            beginDate.getDate()
+          );
+          const newEndDate = new Date(
+            endDate.getFullYear(),
+            endDate.getMonth(),
+            endDate.getDate()
+          );
+          newBeginDate.setDate(newBeginDate.getDate() + 7);
+          updateBegin(newBeginDate);
+          newEndDate.setDate(endDate.getDate() + 7);
+          updateEnd(newEndDate);
+        }}
+      >
+        <ArrowForwardIosIcon></ArrowForwardIosIcon>
+      </Button>
+    );
+  }
+  console.warn('Appel de ChangeWeek mal effectué');
+  return <p>Error</p>;
+}
+
+function ChooseWeek(props: {
+  beginDate: Date;
+  endDate: Date;
+  updateBegin: any;
+  updateEnd: any;
+}) {
+  const { beginDate, endDate, updateBegin, updateEnd } = props;
+  return (
+    <div id="day" style={{ display: 'flex' }}>
+      <ChangeWeek
+        action="previous"
+        beginDate={beginDate}
+        endDate={endDate}
+        updateBegin={updateBegin}
+        updateEnd={updateEnd}
+      ></ChangeWeek>
+      <Stack spacing={3}>
+        <DateBox date={beginDate} endDate={endDate}></DateBox>
+      </Stack>
+      <ChangeWeek
+        action="next"
+        beginDate={beginDate}
+        endDate={endDate}
+        updateBegin={updateBegin}
+        updateEnd={updateEnd}
+      ></ChangeWeek>
+    </div>
+  );
 }
 
 /**
@@ -608,13 +752,40 @@ function sortInWeek(oldSortEvents: Array<EventProps>) {
 function Calendar(props: { events: Array<EventProps> }) {
   const { events } = props;
 
+  console.log(events);
+
   // Selection day to implement
   console.log('implémenter la sélection des jours');
-  let sortEvents = getEventWithDate(
-    events,
-    new Date('June 07, 2023 03:24:00'),
-    new Date('June 13, 2023 03:24:00')
+
+  const tempMondayOfTheWeek = new Date();
+  tempMondayOfTheWeek.setDate(
+    tempMondayOfTheWeek.getDate() - ((tempMondayOfTheWeek.getDay() - 1) % 7)
   );
+
+  const tempEndSundayOfTheWeek = new Date(
+    tempMondayOfTheWeek.getFullYear(),
+    tempMondayOfTheWeek.getMonth(),
+    tempMondayOfTheWeek.getDate()
+  );
+  tempEndSundayOfTheWeek.setDate(tempEndSundayOfTheWeek.getDate() + 7);
+
+  const [beginOfWeek, setBeginOfWeek] = useState(
+    new Date(
+      tempMondayOfTheWeek.getFullYear(),
+      tempMondayOfTheWeek.getMonth(),
+      tempMondayOfTheWeek.getDate()
+    )
+  );
+  const [endOfWeek, setEndOfWeek] = useState(
+    new Date(
+      tempEndSundayOfTheWeek.getFullYear(),
+      tempEndSundayOfTheWeek.getMonth(),
+      tempEndSundayOfTheWeek.getDate()
+    )
+  );
+
+  console.log(beginOfWeek, endOfWeek);
+  let sortEvents = getEventWithDate(events, beginOfWeek, endOfWeek);
 
   // Delete when end_date added
   console.log('endDate à virer');
@@ -625,10 +796,17 @@ function Calendar(props: { events: Array<EventProps> }) {
   });
   //
 
-  sortEvents = sortInWeek(sortEvents);
+  sortEvents = sortInWeek(sortEvents, beginOfWeek);
   return (
     <>
       <p>Le calendrier</p>
+      <ChooseWeek
+        key="ChooseWeekComponent"
+        beginDate={beginOfWeek}
+        endDate={endOfWeek}
+        updateBegin={setBeginOfWeek}
+        updateEnd={setEndOfWeek}
+      ></ChooseWeek>
       <div id="Calendar" style={{ display: 'flex' }}>
         <DayInfos />
         {[
