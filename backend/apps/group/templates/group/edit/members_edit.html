@@ -19,13 +19,12 @@
     </br>
     <button class='btn btn-dark'>Modifier les membres</button>
 </form> {% endcomment %}
-<div id="root2"></div>
+<div id="root-members"></div>
 {% endblock %}
 
 {% block script %}
 <script>
-  const membersURL = "{% url 'group_api:list-members' %}?slug={{ group.slug }}";
-  const studentsURL = "{% url 'student_api:list' %}";
+  const groupSlug = "{{ group.slug }}";
 </script>
-<script src='{% static "js/group/editGroupMembers.js" %}'></script>
+<script src='{% static "js/group/membersEditList.js" %}'></script>
 {% endblock %}
