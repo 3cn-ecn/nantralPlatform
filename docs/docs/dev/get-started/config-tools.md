@@ -1,11 +1,12 @@
 ---
 sidebar_position: 2
+description: Clone the repo and discover the directory structure
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Confgure your tools
+# Configure your tools
 
 Now that's every softwares are installed, let's set up them!
 
