@@ -16,6 +16,7 @@ endif
 
 
 # Install the project
+.PHONY install
 install:
 	$(PYTHON) -m pip install --upgrade --user pipenv
 	cd deployment && \
@@ -34,6 +35,7 @@ install:
 
 
 # Update after pull
+.PHONY update
 update:
 	$(PYTHON) -m pip install --upgrade --user pipenv
 	cd frontend && \
@@ -45,12 +47,14 @@ update:
 
 
 # Run the tests
+.PHONY test
 test:
 	cd backend && \
 		$(PIPENV) run test
 
 
 # Run the backend server
+.PHONY start-backend
 start-backend:
 	python -c 'import webbrowser && webbrowser.open("localhost:8000")'
 	cd backend && \
@@ -58,14 +62,13 @@ start-backend:
 
 
 # Run the frontend
+.PHONY start-frontend
 start-frontend:
 	cd frontend && \
 		npm run start
 
 
 # Test the quality of code
+.PHONY quality
 quality:
 	flake8 --config setup.cfg ./backend
-
-
-.PHONY: install update test quality
