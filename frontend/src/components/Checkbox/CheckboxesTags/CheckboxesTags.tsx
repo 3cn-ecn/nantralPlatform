@@ -23,8 +23,12 @@ function CheckboxesTags(props: { label: string }) {
   const { label } = props;
   return (
     <Autocomplete
+      autoComplete
       multiple
-      id="checkboxes-tags-demo"
+      clearOnBlur
+      limitTags={2}
+      id="size-small-standard"
+      size="small"
       options={top100Films}
       disableCloseOnSelect
       getOptionLabel={(option) => option.title}
@@ -34,8 +38,9 @@ function CheckboxesTags(props: { label: string }) {
           {option.title}
         </li>
       )}
+      style={{ width: 230 }}
       renderInput={(params) => (
-        <TextField {...params} label={label} placeholder="Favorites" />
+        <TextField {...params} label={label} multiline placeholder={label} />
       )}
     />
   );
