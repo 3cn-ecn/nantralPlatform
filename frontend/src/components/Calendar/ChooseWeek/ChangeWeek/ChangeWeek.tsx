@@ -3,13 +3,22 @@ import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
+/**
+ * The component which display the arrow to switch to last and next week.
+ * @param action Defines whether the component is for last or next week.
+ * @param beginDate The first day of the week.
+ * @param endDate The last day of the week.
+ * @param updateBegin The callback to update first day.
+ * @param updateEnd The callback to update last day.
+ * @returns
+ */
 export function ChangeWeek(props: {
   action: 'previous' | 'next';
   beginDate: Date;
   endDate: Date;
   updateBegin: any;
   updateEnd: any;
-}) {
+}): JSX.Element {
   const { action, beginDate, endDate, updateBegin, updateEnd } = props;
   if (action === 'previous') {
     return (

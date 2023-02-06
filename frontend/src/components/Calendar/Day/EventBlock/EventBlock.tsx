@@ -8,7 +8,10 @@ import { EventProps } from 'pages/Props/Event';
  * @param event The event object with the event data.
  * @returns The button to display, already placed and resized.
  */
-export function EventBlock(props: { day: number; event: EventProps }) {
+export function EventBlock(props: {
+  day: number;
+  event: EventProps;
+}): JSX.Element {
   const { day, event } = props;
   const beginDate = new Date(event.date);
   const endDate = new Date(event.end_date);

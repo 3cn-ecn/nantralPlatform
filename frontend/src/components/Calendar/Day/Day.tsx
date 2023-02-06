@@ -15,7 +15,7 @@ export function Day(props: {
   dayValue: number;
   day: string;
   events: Array<EventProps>;
-}) {
+}): JSX.Element {
   const { dayValue, day, events } = props;
 
   const dayChain = [];

@@ -21,7 +21,7 @@ function getEventWithDate(
   events: Array<EventProps>,
   beginDate: Date,
   endDate: Date
-) {
+): Array<EventProps> {
   const sortedEvents = new Array<EventProps>();
   events.forEach((event) => {
     // Sort with end date too.
@@ -42,7 +42,10 @@ function getEventWithDate(
  * @param event2Compare The second eventData, to compare with the first one.
  * @returns If the events are ocurring in same time.
  */
-function sameTime(event: EventDataProps, event2Compare: EventDataProps) {
+function sameTime(
+  event: EventDataProps,
+  event2Compare: EventDataProps
+): boolean {
   if (
     (event.beginDate < event2Compare.beginDate &&
       event2Compare.beginDate < event.endDate) ||
@@ -70,7 +73,7 @@ function allSameTime(
   key: number,
   eventsList: Array<number>,
   eventsData: Array<EventDataProps>
-) {
+): boolean {
   let areSameTime = true;
   let iterator = 0;
   while (areSameTime && iterator < eventsList.length) {
@@ -89,7 +92,7 @@ function allSameTime(
 function blockedChains(
   events: Array<EventProps>,
   eventsData: Array<EventDataProps>
-) {
+): Array<Array<number>> {
   const currentSizeObject = {
     maxSize: 0,
     blockedChains: [],
@@ -141,7 +144,7 @@ function blockedChains(
  * Create list of couples of events that occurs in same time and store them in eventData.
  * @param eventsData List of events data.
  */
-function createCoupleEvents(eventsData: Array<EventDataProps>) {
+function createCoupleEvents(eventsData: Array<EventDataProps>): void {
   let coupleEventsLength: number;
   eventsData.forEach((eventData) => {
     for (let j = 0; j < eventData.sameTimeEvent.length; j++) {
@@ -168,7 +171,7 @@ function eventSizeReajust(
   blockedEventsChain: Array<Array<number>>,
   events: Array<EventProps>,
   eventsData: Array<EventDataProps>
-) {
+): void {
   let event2reajust: Array<number>;
   let size2Add: number;
   let sizeUsed: number;
@@ -206,7 +209,7 @@ function placeChainEvent(
   eventsBlockedChain: Array<Array<number>>,
   position: number,
   select: number
-) {
+): { newSelect: number; chainPlaced: boolean } {
   let newSelect = select;
   let chainPlaced = false;
   let change = false;
@@ -261,7 +264,7 @@ function placeEvents(
   chain: Array<number>,
   eventsBlockedChain: Array<Array<number>>,
   position: number
-) {
+): boolean {
   // If all the events have been rightfully placed, return true
   if (eventsBlockedChain.length === 0) {
     return true;
@@ -308,7 +311,7 @@ function placeEvents(
  * Function that will handle the placement process of the events in a day.
  * @param events List of the events.
  */
-function setSameTimeEvents(events: Array<EventProps>) {
+function setSameTimeEvents(events: Array<EventProps>): void {
   const eventsData = new Array<EventDataProps>();
   for (let i = 0; i < events.length; i++) {
     events[i].placed = false;
@@ -364,12 +367,16 @@ function setSameTimeEvents(events: Array<EventProps>) {
 }
 
 /**
- *
- * @param event
- * @param mondayDate
- * @param sortEvents
+ * Get the dates of each event and put them in sortEvents accordingly.
+ * @param event The event.
+ * @param mondayDate The date of the monday of the week.
+ * @param sortEvents The container of the events of the week sorted by day
  */
-function isInDay(event, mondayDate, sortEvents) {
+function isInDay(
+  event: EventProps,
+  mondayDate: Date,
+  sortEvents: Array<Array<EventProps>>
+): void {
   const checkBeginDate = new Date(
     mondayDate.getFullYear(),
     mondayDate.getMonth(),
@@ -407,9 +414,13 @@ function isInDay(event, mondayDate, sortEvents) {
 /**
  * Function that sorted event in days of the week.
  * @param oldSortEvents The list of events to sort.
+ * @param mondayDate The date of the monday of the week.
  * @returns The list of events, sorted by day.
  */
-function sortInWeek(oldSortEvents: Array<EventProps>, mondayDate) {
+function sortInWeek(
+  oldSortEvents: Array<EventProps>,
+  mondayDate: Date
+): Array<Array<EventProps>> {
   const sortEvents = [];
   for (let i = 0; i < 7; i++) {
     sortEvents.push(new Array<EventProps>());
@@ -428,7 +439,7 @@ function sortInWeek(oldSortEvents: Array<EventProps>, mondayDate) {
  * @param event The list of events.
  * @returns The calendar component.
  */
-function Calendar(props: { events: Array<EventProps> }) {
+function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { events } = props;
 
   console.log(events);

@@ -2,7 +2,12 @@ import React from 'react';
 import { CalendarMonth } from '@mui/icons-material';
 import { Button } from '@mui/material';
 
-export function DateBox(props: { date: Date; endDate: Date }) {
+/**
+ * The DateBox component which displays the current week and allow to change by click.
+ * @param date The first day of the week.
+ * @param endDate The last day of the week.
+ */
+export function DateBox(props: { date: Date; endDate: Date }): JSX.Element {
   const { date, endDate } = props;
   const sunday = new Date(
     endDate.getFullYear(),
