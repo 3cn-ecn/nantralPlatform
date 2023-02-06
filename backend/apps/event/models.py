@@ -60,11 +60,11 @@ class BaseEvent(AbstractPost):
         return self.participants.all().count()
 
     def is_participating(self, user: User) -> bool:
-        student = Student.objects.filter(user=user).first()
+        student = user.student
         return student in self.participants.all()
 
     def is_favorite(self, user: User) -> bool:
-        student = Student.objects.filter(user=user).first()
+        student = user.student
         if (student is None):
             return False
         return student.favorite_event.contains(self)
