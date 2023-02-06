@@ -311,7 +311,10 @@ function placeEvents(
  * Function that will handle the placement process of the events in a day.
  * @param events List of the events.
  */
-function setSameTimeEvents(events: Array<EventProps>): void {
+function setSameTimeEvents(
+  events: Array<EventProps>,
+  eventsBlockedChain: Array<Array<Array<number>>>
+): void {
   const eventsData = new Array<EventDataProps>();
   for (let i = 0; i < events.length; i++) {
     events[i].placed = false;
@@ -342,6 +345,7 @@ function setSameTimeEvents(events: Array<EventProps>): void {
 
   // Get couples of events with maximal events foreach event and set the size of each event with it.
   const blockedEventsChain = blockedChains(events, eventsData);
+  eventsBlockedChain.push(blockedEventsChain);
 
   // Set the blocked attribute to true for all events that take part of a couple chain that takes all horizontal space.
   let sizeUsed: number;
@@ -422,15 +426,22 @@ function sortInWeek(
   mondayDate: Date
 ): Array<Array<EventProps>> {
   const sortEvents = [];
+  const eventsBlockedChain = [];
   for (let i = 0; i < 7; i++) {
     sortEvents.push(new Array<EventProps>());
+    // eventsBlockedChain.push(new Array<Array<number>>());
   }
   oldSortEvents.forEach((event) => {
     isInDay(event, mondayDate, sortEvents);
   });
-  sortEvents.forEach((eventsList) => {
-    setSameTimeEvents(eventsList);
-  });
+
+  for (let i = 0; i < 7; i++) {
+    setSameTimeEvents(sortEvents[i], eventsBlockedChain);
+  }
+  // sortEvents.forEach((eventsList) => {
+  //   setSameTimeEvents(eventsList);
+  // });
+  console.log(eventsBlockedChain);
   return sortEvents;
 }
 

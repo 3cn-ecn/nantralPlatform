@@ -65,7 +65,8 @@ export function EventBlock(props: {
         transform: `translate(${0}px, -${startTime * 20}px)`,
       }}
     >
-      {/* {event.title} */}
+      {event.effectiveSize}
+      {event.position}
     </Button>
     //   </Grid>
     // </Grid>
