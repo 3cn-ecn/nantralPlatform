@@ -54,8 +54,15 @@ function Home() {
           : [0, 1, 2].map((item, key) => (
               <Skeleton
                 variant="rectangular"
-                width={450}
-                height={300}
+                width={Math.min(Math.max(
+                  document.documentElement.clientWidth,
+                  window.innerWidth || 0
+                ) * 2/3, 450)}
+                height={Math.min(Math.max(
+                  document.documentElement.clientWidth,
+                  window.innerWidth || 0
+                ) / 2, 300)}
+
                 key={item}
                 style={{ margin: 10, borderRadius: 10 }}
               />
@@ -73,8 +80,15 @@ function Home() {
           : [0, 1, 2].map((item) => (
               <Skeleton
                 variant="rectangular"
-                width={450}
-                height={300}
+                width={Math.min(Math.max(
+                  document.documentElement.clientWidth,
+                  window.innerWidth || 0
+                ) * 2/3, 450)}
+                height={Math.min(Math.max(
+                  document.documentElement.clientWidth,
+                  window.innerWidth || 0
+                ) / 2, 300)}
+
                 key={item}
                 style={{ margin: 10, borderRadius: 10 }}
               />
@@ -109,7 +123,7 @@ function Home() {
             <SvgIcon
               component={NantralIcon}
               inheritViewBox
-              sx={{ height: 50, width: 50 }}
+              sx={{ height: 50, width: 50, display: { xs: 'none', md: 'flex' } }}
             />
             <p id="main-title">Nantral Platform</p>
           </div>
