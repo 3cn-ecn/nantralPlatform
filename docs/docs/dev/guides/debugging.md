@@ -1,9 +1,8 @@
 ---
-title: Debugging
-sidebar_position: 3
+sidebar_position: 7
 ---
 
-# Debugging your code
+# Debugging
 
 Local issues can be hard to track down. Don't hesitate to 
 **copy paste your issue into Google**, you will likely find an answer there.

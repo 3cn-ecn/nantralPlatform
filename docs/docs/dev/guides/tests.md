@@ -1,9 +1,8 @@
 ---
-title: Test your code
-sidebar_position: 2
+sidebar_position: 6
 ---
 
-# Test your code
+# Tests
 
 You can test your code globally by running in the `nantralPlatform` folder:
 

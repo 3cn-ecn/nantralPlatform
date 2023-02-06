@@ -46,7 +46,7 @@ A detailed tutorial with screenshots is available [here](https://code.visualstud
 The first time you open the `nantralPlatform` folder in VSCode,
 you should see this pop-up:
 
-![Install recommended extensions pop-up](./img/install-extensions-popup.png)
+![Install recommended extensions pop-up](./install-extensions-popup.png)
 
 Click the *"Install all"* button, and you're ready!
 
@@ -58,7 +58,7 @@ Press <kbd>CTRL</kbd>+<kbd>SHIFT</kbd>+<kbd>P</kbd>, and search **Extensions: Sh
 The list of all recommended extensions will appear on the left panel, and you can then click the download
 button to install them:
 
-![Download all recommended extensions](./img/install-extensions.png)
+![Download all recommended extensions](./install-extensions.png)
 
 </details>
 

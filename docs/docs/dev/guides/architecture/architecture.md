@@ -2,13 +2,11 @@
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+# Architecture
 
-# The Basics
+Discover the main architecture of the Nantral Platform project.
 
-Before doing your first steps on Nantral Platform, you might need to learn how to use the different frameworks we use
-on the Nantral Platform project. Let's follow the steps!
+[![](architecture.png)](architecture.png)
 
 ## Definitions
 
