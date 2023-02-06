@@ -36,6 +36,13 @@ Top half
   right: 0px;
 }
 
+.moreActions {
+  margin: $margin;
+  position: absolute;
+  top:0px;
+  left: 0px;
+}
+
 /* 
 ===========
 Bottom half 
@@ -65,14 +72,14 @@ Bottom half
 .groupIcon {
   position: relative;
   border-radius: 50%;
-  background-color: $secondaryBackground;
+
   width: 60px;
   height: 60px;
   margin: 0;
-  
-  top: 50%;
-  transform: translateY(-50%);
+}
 
+.loadedGroupIcon{
+  background-color: $secondaryBackground;
 }
 
 .joinButton {

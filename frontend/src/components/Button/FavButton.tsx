@@ -7,11 +7,6 @@ import Zoom from '@mui/material/Zoom/Zoom';
 function FavButton(props: { className: string }) {
   const [fav, setFav] = useState(false);
   const { className } = props;
-  const icon = fav ? (
-    <FavoriteIcon color="primary" />
-  ) : (
-    <FavoriteBorderIcon color="primary" />
-  );
   return (
     <div className={className}>
       <Zoom in={fav}>

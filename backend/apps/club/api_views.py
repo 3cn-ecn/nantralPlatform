@@ -127,3 +127,17 @@ class ListClubMembersAPIView(APIView):
                     admin=admin,
                     function=function).save()
             return HttpResponse(status=200)
+
+
+class GetClubInfoAPIView(APIView):
+    """ Return informations about a club """
+        
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ClubSerializer
+    
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            club_slug = self.kwargs["group"]
+            club = get_object_or_404(Club, slug=club_slug)
+            serializer = ClubSerializer(club, context={'request': request})
+            return Response(data=serializer.data)
