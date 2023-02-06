@@ -65,6 +65,8 @@ class BaseEvent(AbstractPost):
 
     def is_favorite(self, user: User) -> bool:
         student = Student.objects.filter(user=user).first()
+        if (student is None):
+            return False
         return student.favorite_event.contains(self)
 
     def __str__(self):
