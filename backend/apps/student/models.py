@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
-
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
 
@@ -30,6 +29,7 @@ path_and_rename = PathAndRename("students/profile_pictures")
 
 
 class Student(models.Model):
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     promo = models.IntegerField(
         verbose_name='Année de promotion entrante', null=True, blank=True)
@@ -46,6 +46,9 @@ class Student(models.Model):
         choices=PATHS,
         null=True,
         blank=True)
+    favorite_event = models.ManyToManyField(
+        to='event.BaseEvent', verbose_name='Événement en favoris', blank=True,
+        null=True)
 
     @property
     def name(self):
@@ -76,6 +79,12 @@ class Student(models.Model):
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self) -> str:
         return reverse('student:detail', args=[self.pk])
+
+    def add_favorite_event(self, event):
+        self.favorite_event.add(event)
+
+    def remove_favorite_event(self, event):
+        self.favorite_event.remove(event)
 
     @property
     def absolute_url(self) -> str:

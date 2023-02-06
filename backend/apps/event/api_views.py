@@ -127,3 +127,25 @@ class ParticipateAPIView(APIView):
                 "success": True,
                 "message": "You have been removed from this event"
             })
+
+
+class FavoriteAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
+        request.user.student.add_favorite_event(event)
+        return Response(status='200', data={
+            "success": True,
+            "message": "You have added this event to your favorites"
+        })
+
+    def delete(self, request, *args, **kwargs):
+        event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
+        request.user.student.remove_favorite_event(event)
+        return Response(
+            status='200',
+            data={
+                "success": True,
+                "message": "You have removed this event from your favorites"
+            })

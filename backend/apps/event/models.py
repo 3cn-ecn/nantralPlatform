@@ -63,6 +63,13 @@ class BaseEvent(AbstractPost):
         student = Student.objects.filter(user=user).first()
         return student in self.participants.all()
 
+    def is_favorite(self, user: User) -> bool:
+        student = Student.objects.filter(user=user).first()
+        return student.favorite_event.contains(self)
+
+    def __str__(self):
+        return self.title
+
     def save(self, *args, **kwargs):
         # create the slug
         self.set_slug(
