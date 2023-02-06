@@ -79,6 +79,7 @@ function EventCard(props: { event: EventProps }) {
     is_participating,
     slug,
     ticketing,
+    is_favorite,
   } = event;
 
   let variant; //= max_participant === null ? 'normal' : 'shotgun';
@@ -104,7 +105,11 @@ function EventCard(props: { event: EventProps }) {
           image={image}
           alt="Banner"
         />
-        <FavButton className="favIcon" />
+        <FavButton
+          className="favIcon"
+          eventSlug={slug}
+          selected={is_favorite}
+        />
         <CardContent sx={{ padding: 0 }}>
           <div className="infoContainer">
             <div className="infoMain">
