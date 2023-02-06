@@ -81,7 +81,7 @@ function NotificationItem(props) {
     return true;
   }
 
-  function openItem() {
+  const openItem = () => {
     // update the seen property
     setNotifOnLoad(true);
     sn.seen = null;
@@ -91,10 +91,16 @@ function NotificationItem(props) {
       const url = formatUrl(MANAGE_NOTIFICATION_URL, [n.id]);
       axios.post(url, {}).finally(() => window.open(n.url, '_self'));
     }
-  }
+  };
 
   return (
-    <MenuItem>
+    <MenuItem
+      component={Link}
+      to={n.url}
+      className="menuItem"
+      disablePadding
+      onClick={() => updateSeen}
+    >
       <li className={sn.seen ? '' : 'bg-light'}>
         <span className="spanno" style={{ alignItems: 'center' }}>
           {n.icon_url ? (
@@ -103,13 +109,19 @@ function NotificationItem(props) {
             <SvgIcon sx={{ mr: 2 }} component={NantralIcon} inheritViewBox />
           )}
           <small className="notif">
-            <p className="title">{n.title}</p>
+            {n.title}
             <br />
-            <p className="body">{n.body}</p>
+            <Box
+              component="div"
+              whiteSpace="normal"
+              sx={{ typography: 'subtitle2' }}
+            >
+              {n.body}
+            </Box>
           </small>
         </span>
         <span className={`text-${sn.seen ? 'light' : 'danger'} read-button`}>
-          {sn.seen != null} ●
+          {sn.seen != null ? '●' : ''}
         </span>
       </li>
     </MenuItem>
