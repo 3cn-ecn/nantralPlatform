@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Grid, Stack } from '@mui/material';
 import './Calendar.scss';
 import { EventProps } from 'pages/Props/Event';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -64,7 +64,7 @@ function EventBlock(props: { day: number; event: EventProps }) {
       style={{
         position: 'absolute',
         minWidth: `1px`,
-        width: `${(120 * event.effectiveSize) / event.globalSize}px`,
+        // width: `${(120 * event.effectiveSize) / event.globalSize}px`,
         height: `${Math.min(duration, startTime) * 20}px`,
         padding: '0px',
         transform: `translate(${
@@ -808,25 +808,31 @@ function Calendar(props: { events: Array<EventProps> }) {
         updateEnd={setEndOfWeek}
       ></ChooseWeek>
       <div id="Calendar" style={{ display: 'flex' }}>
-        <DayInfos />
-        {[
-          'Lundi',
-          'Mardi',
-          'Mercredi',
-          'Jeudi',
-          'Vendredi',
-          'Samedi',
-          'Dimanche',
-        ].map((day, number) => {
-          return (
-            <Day
-              key={day}
-              dayValue={number + 1}
-              day={day}
-              events={sortEvents[number]}
-            />
-          );
-        })}
+        <Grid container spacing={0} md={12}>
+          <Grid item md={1}>
+            <DayInfos />
+          </Grid>
+          {[
+            'Lundi',
+            'Mardi',
+            'Mercredi',
+            'Jeudi',
+            'Vendredi',
+            'Samedi',
+            'Dimanche',
+          ].map((day, number) => {
+            return (
+              <Grid item md={1} key={day}>
+                <Day
+                  key={day}
+                  dayValue={number + 1}
+                  day={day}
+                  events={sortEvents[number]}
+                />
+              </Grid>
+            );
+          })}
+        </Grid>
       </div>
     </>
   );
