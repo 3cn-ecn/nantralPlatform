@@ -134,18 +134,30 @@ class FavoriteAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
-        request.user.student.add_favorite_event(event)
-        return Response(status='200', data={
-            "success": True,
-            "message": "You have added this event to your favorites"
-        })
+        student = request.user.student
+        if (student is None):
+            return Response(status='404', data={
+                "success": False,
+                "message": "Couldn\'t find student"
+            })
+        else:
+            student.add_favorite_event(event)
+            return Response(status='200', data={
+                "success": True,
+                "message": "You have added this event to your favorites"
+            })
 
     def delete(self, request, *args, **kwargs):
         event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
-        request.user.student.remove_favorite_event(event)
-        return Response(
-            status='200',
-            data={
+        student = request.user.student
+        if (student is None):
+            return Response(status='404', data={
+                "success": False,
+                "message": "Couldn\'t find student"
+            })
+        else:
+            student.remove_favorite_event(event)
+            return Response(status='200', data={
                 "success": True,
-                "message": "You have removed this event from your favorites"
+                "message": "You have added this event to your favorites"
             })
