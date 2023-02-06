@@ -26,7 +26,7 @@
 }
 #main-title {
   display: flex;
-  font-size: 45px;
+  font-size: 54px;
   font-family: "Heebo", sans-serif;
   font-weight: 900;
   line-height: 35px;
@@ -38,9 +38,13 @@
   justify-content: center;
   margin : 0px;
   padding-left: 10px;
+  position: relative;
 }
 #second-title {
-  font-size: 18px;
+  font-size: 25px;
+  position: absolute;
+  width: 100%;
+  bottom: 1.2cm;
   display: block;
   font-family: "Heebo", sans-serif;
   font-weight: 900;
@@ -93,4 +97,8 @@
   padding-left : 10px;
   padding-right : 10px;
   padding-bottom : 10px;
+}
+.club {
+  margin-left: 10;
+  margin-right: 10;
 }

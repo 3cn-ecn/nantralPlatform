@@ -8,33 +8,44 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GroupsIcon from '@mui/icons-material/Groups';
-import AttractionsIcon from '@mui/icons-material/Attractions';
+import TimerIcon from '@mui/icons-material/Timer';
 import Close from '@mui/icons-material/Close';
 import './FilterBar.scss';
 import IconButton from '@mui/material/IconButton';
+import { Grid } from '@mui/material';
 import SimpleAccordion from '../Accordion/SimpleAccordion';
 import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
+import BasicDatePicker from '../DatePicker/BasicDatePicker';
 
-interface filterInterface {
+interface FilterInterface {
   name: string;
   icon: any;
   isMenu?: boolean;
   content: any;
 }
 
-// ATTENTION POUR LES ORGANISATEURS, UTILISER UN CHECKBOXES DE AUTOCOMPLETE OU REFAIRE UNE LISTE ?
-
 function FilterBar() {
   const [state, setState] = React.useState({
     right: false,
   });
-  const filters: filterInterface[] = [
+  const filters: FilterInterface[] = [
     {
       name: 'Date',
       icon: <DateRangeIcon />,
       isMenu: true,
-      content: 'A faire',
+      content: (
+        <>
+          <Grid item xs="auto">
+            <p>Du :</p>
+            <BasicDatePicker label={null} />
+          </Grid>
+          <Grid item xs="auto">
+            <p>Au :</p>
+            <BasicDatePicker label={null} />
+          </Grid>
+        </>
+      ),
     },
     {
       name: 'Favoris',
@@ -49,10 +60,10 @@ function FilterBar() {
       content: <CheckboxesTags label="Organisateur" />,
     },
     {
-      name: 'Type',
-      icon: <AttractionsIcon />,
-      isMenu: true,
-      content: 'A faire',
+      name: 'Shotgun',
+      icon: <TimerIcon />,
+      isMenu: false,
+      content: null,
     },
   ];
 
@@ -71,11 +82,7 @@ function FilterBar() {
     };
 
   const list = (anchor: 'right') => (
-    <Box
-      id="center"
-      role="presentation"
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
+    <Box id="center" role="presentation">
       <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
         <IconButton onClick={toggleDrawer(anchor, false)}>
           <Close />
@@ -85,7 +92,7 @@ function FilterBar() {
 
       <List>
         {filters.map((filter) => (
-          <ListItem key={filter.name} disablePadding>
+          <ListItem component="div" key={filter.name} disablePadding>
             <ListItem id="auto-fit">
               {filter.isMenu ? (
                 <SimpleAccordion
@@ -127,10 +134,10 @@ function FilterBar() {
             open={state[anchor]}
             onClose={toggleDrawer(anchor, false)}
             sx={{
-              width: 240,
+              width: 300,
               flexShrink: 0,
               [`& .MuiDrawer-paper`]: {
-                width: 240,
+                width: 300,
                 boxSizing: 'border-box',
               },
             }}

@@ -71,6 +71,8 @@ function EventCard(props: { event: EventProps }) {
     get_group_name,
     is_participating,
     slug,
+    ticketing,
+    is_favorite,
     get_absolute_url,
   } = event;
 
@@ -86,8 +88,12 @@ function EventCard(props: { event: EventProps }) {
     setGroup(response.data);
   }
 
-  const variant = max_participant === null ? 'normal' : 'shotgun';
+  let variant; //= max_participant === null ? 'normal' : 'shotgun';
+  if (ticketing !== null) variant = 'form';
+  else if (max_participant === null) variant = 'normal';
+  else variant = 'shotgun';
   const bannerDescription = 'Banner';
+
   const dateValue = new Date(date);
   const dateText = `${dateValue.getDate()} ${t(
     `event.months.${dateValue.getMonth() + 1}`
@@ -113,7 +119,11 @@ function EventCard(props: { event: EventProps }) {
           image={image}
           alt="Banner"
         />
-        <FavButton className="favIcon" />
+        <FavButton
+          className="favIcon"
+          eventSlug={slug}
+          selected={is_favorite}
+        />
         <MoreActionsButton
           isAdmin={groupData.is_current_user_admin}
           className="moreActions"
@@ -136,6 +146,7 @@ function EventCard(props: { event: EventProps }) {
                   maxPerson={max_participant}
                   participating={is_participating}
                   eventSlug={slug}
+                  link={ticketing}
                 />
               </div>
             </div>
