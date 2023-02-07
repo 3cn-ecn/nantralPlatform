@@ -8,12 +8,13 @@ import TabItem from '@theme/TabItem';
 
 # Django
 
-* **[Official Documentation](https://docs.djangoproject.com/)** (tip: the downloadable PDF is easier to use)
 * **[Recommended Tutorial (MDN)](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django)**
+* **[Official Documentation](https://docs.djangoproject.com/)** (tip: the downloadable PDF is easier to use)
+* **[Source Code](https://github.com/django/django)** (tip: on Github, use the <kbd>.</kbd> shortcut to open the code in VSCode)
 
 ## Basic commands
 
-:::caution
+:::caution Reminder
 All the commands for django should be run from the `backend` directory.
 :::
 
@@ -23,15 +24,15 @@ All the commands for django should be run from the `backend` directory.
   ```
 * **Run the django tests:** (optionally for one app only)
   ```bash
-  pipenv run test [appname]
+  pipenv run test [app_label]
   ```
 * **Create the database migration files:** (optionally for one app only)
   ```bash
-  pipenv run makemigrations [appname]
+  pipenv run makemigrations [app_label]
   ```
-* **Apply the migration files and update your database:** (optionally for one app only)
+* **Apply the migration files and update your database:**
   ```bash
-  pipenv run migrate [appname]
+  pipenv run migrate
   ```
 * **Run any `django` command:** (this command replace `django-admin` or `python manage.py`):
   ```bash
@@ -40,30 +41,87 @@ All the commands for django should be run from the `backend` directory.
 
 ## Database, models and migrations
 
-- Whenever you make a change to your database's structure (basically each time you modify one of the `models.py` file), you need to save the modifications of your database in a file so as to other users can know the database modifications. In the `backend` folder, run `pipenv run makemigrations` to automatically create these files
-- Then, you can apply these modifications to your own database by running `pipenv run migrate`
+- The structure of the database is defined in the `models.py` files: each
+  *django app* can have multiple tables, defined as python classes.
+- Whenever you make a change to your database's structure (basically each time
+  you modify one of the `models.py` file), you need to create a migration file
+  to detect the changes in the database structure. Hopefully, django can create
+  these files automatically with this command (replace `[app_label]` with the
+  label of your django app):
+  ```bash
+  pipenv run makemigrations [app_label]
+  ```
+- Then, you can apply these changes to your own database by running:
+  ```bash
+  pipenv run migrate
+  ```
 
-Some good practices:
+:::info Some good practices
+- Try to **merge** migration files into one file as much as possible: we
+  try to have as few migration files as possible (to do so, just *unapply*
+  your last migrations files, delete them, and recreate a new migration file).
+- Be careful: you can't change migration files once they are uploaded to
+  the `master` branch on the server.
+:::
 
-- The migration files are saved in the `migrations` folder in each app. Try to rename the migrations scripts to something more understandable for a human. Example : rename `migration01.py` to `create_news_model_alter_clubs.py`
-- Try also to merge migrations into one migration as much as possible.
-- Be careful: you can't change your migration files once you migrate your database. If you want to merge them before pushing your updates to the server for example, you'll have to destroy your database (simply delete the `db.sqlite3` file).
+<details>
+<summary>More on migrations...</summary>
 
-## Create a new server app
+* **Write custom migrations**: you can write custom migrations, for example
+  to transfer or copy data from one *table* to another. First, create an empty
+  migration file with:
+  ```bash
+  pipenv run makemigrations <app_label> --empty --name <file_name>
+  ```
+  Then, go to the `migrations` directory, and edit the new created file
+  to implement your custom migrations (see [this documentation](https://docs.djangoproject.com/en/4.1/howto/writing-migrations/)
+  about how to write custom migrations).
+* **Apply only some migrations**: you can specify
+  which migration files to apply by specifying the app or the file:
+  ```bash
+  pipenv run migrate <app_label> [migration_name]
+  ```
+* **Unapply a migration**: you can unapply a migration and reverse your database
+  to the previous state. This is very useful when you want to merge migrations,
+  for example. To do so, just run:
+  ```bash
+  pipenv run migrate <app_label> <migration_name>
+  ```
+  where `<migration_name>` is the name of the migration just before the one
+  you want to unapply: this will reverse the state of your database to the state
+  just after this migration. Note that you can also only specify the number of the
+  migration, and not the full name (for example, `pipenv run migrate event 0004`
+  works).
 
-In django, all functionnalities are separeted in "apps". Each "app" correspond to a directory in the `server/apps` folder.
+</details> 
 
-- To create a new app in the django server, use `pipenv run django startapp <app_name>`. This will create a new folder with the app name you chose.
-- Then move the app folder to the main `apps` folder, so as to have all apps in the same place.
-- **In your new app folder:**
-  - Create or update a `urls.py` script inside the folder. Base this script on other `urls.py` you can find in other apps
-  - Update the `apps.py` script, by replacing `name = 'app_name'` by `name = 'apps.app_name'`
-- **Then in the `server/config` folder:**
-  _ In the `urls.py` script, add a namespace for your app like this: `url('app_name/', include('apps.app_name.urls', namespace='app_name')),`. This will link the url router to your urls.py script in the app you created.
-  _ Finally add the app in `settings/base.py`:
-  `COMMON_APPS = [ 'apps.app_name', ]`
-- Finally, some defaults tables have been added in your database: run the migrations, and then run the server!
+
+## Create a new app
+
+In django, all functionalities are separated into **apps**. Each app correspond
+to a directory in the `server/apps` folder.
+
+To create a new app:
+1. Create a new empty app folder with the django command:
+  ```bash
+  pipenv run django startapp <app_name>
+  ```
+2. Then move this new app folder to the main `apps` folder, so as to have all
+  apps in the same place.
+3. **Inside your new app folder:**
+    - Create a `urls.py` script. You can copy the structure of `urls.py` from other apps.
+    - Update the `apps.py` script, by replacing `name = 'app_name'` by `name = 'apps.app_name'`
+4. **Inside the `backend/config` folder:**
+    - In the `urls.py` script, add a namespace for your app like this:
+      ```python
+      url('app_name/', include('apps.app_name.urls', namespace='app_name')),
+      ```
+      This will link the url router to your urls.py script in the app you created.
+    - Then add your app in `settings/base.py`:
+      ```python
+      COMMON_APPS = [ 'apps.app_name', ]
+      ```
+5. Finally, we need to update your database:
     ```bash
     pipenv run migrate
-    piepnv run start
     ```
