@@ -1,9 +1,9 @@
 ---
-title: Git
 sidebar_position: 2
+description: An easy tutorial for beginners with Git
 ---
 
-# Git
+# Git Tutorial
 
 Let's learn git and github by a simple example: you will try to add your
 name on the README.md page of the github project.
@@ -29,7 +29,7 @@ suppose that you are able to transpose the actions with your git interface.
 
 * In Github Desktop, create a new branch from `master`, and give it a name.
 
-![Create new branch](./img/new-branch-button-win.png)
+![Create new branch](./new-branch-button-win.png)
 
 :::info
 We recommand you to create a new branch before writing new changes to the code. Indeed, the default selected branch
@@ -39,7 +39,7 @@ push changes on it.
 
 * Then publish your new branch to Github:
 
-![Publish a branch](./img/publish-branch-button.png)
+![Publish a branch](./publish-branch-button.png)
 
 :::info
 If you cannot publish the branch, that means that you do not have the right to write on the repository.
@@ -57,15 +57,15 @@ this access by adding you to the nantral-platform organization.
 
 * Now go back to Github Desktop, give a name to the commit and create it:
 
-![Create commit](./img/commit-button.png)
+![Create commit](./commit-button.png)
 
 * Then push your commit on the github server:
 
-![Push a commit](./img/push-origin-button.png)
+![Push a commit](./push-origin-button.png)
 
 * Finally create a pull request:
 
-![Create pull request](./img/create-pull-request.png)
+![Create pull request](./create-pull-request.png)
 
 * Now the github website should open in your browser. Click the *"Create pull request"* button, and then 
 *"Merge pull request"*.

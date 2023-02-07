@@ -2,11 +2,26 @@
 sidebar_position: 4
 ---
 
-# Begin to code
+# Last things to know
 
-## The back end
+Some important things to know before starting to code.
 
-For the backend, simply go into the `backend` folder and run this command:
+## Updates
+
+When someone else make changes on the project, you have to update your database
+on your computer to avoid problems.
+* First, download the last commits on your local branch: 
+    ```bash
+    git pull
+    ```
+* Then, update the dependencies and your database:
+    ```bash
+    make update
+    ```
+
+## Run the back end server (Django)
+
+To run the backend, simply go into the `backend` folder and start the server:
 ```bash
 cd backend/
 pipenv run start
@@ -19,26 +34,16 @@ server at any time by simply pressing <kbd>CTRL</kbd>+<kbd>C</kbd> in the termin
 When you edit a file of the backend, the changes will be automatically
 taken into account: no need to relaunch the server.
 
-## The front end
+## Run the front end server (React)
 
-For the front end, open a new terminal in the `frontend` folder and run this command:
+If you also want to code on the front end, open a second terminal
+(you need to keep the django server running), and run these commands:
 ```bash
 cd frontend/
 npm run start
 ```
 
-This will generate files in a `.js` format, which will be created in the `backend/static/js` directory.
-When you modify and save a source file of the frontend, the compilation will be automatic and the build files
-will be instantly updated.
-
-:::info
-If you need to compile the files without listening to modifications, you can also run
-```bash
-npm run build:dev
-```
-:::
-
-Now, ensure that Django is running in your first terminal, and visit your browser at [http://localhost:8000](http://localhost:8000) to see
+You can now visit your browser at [http://localhost:8000](http://localhost:8000) to see
 the result! 🥳
 
 :::caution 

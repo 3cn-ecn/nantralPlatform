@@ -36,8 +36,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          routeBasePath: '/',
           editUrl:
             "https://github.com/3cn-ecn/nantralPlatform/tree/master/docs/",
         },
@@ -58,6 +57,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      docs: {
+        sidebar: {
+          hideable: true,
+          autoCollapseCategories: true
+        }
+      },
       navbar: {
         title: "Nantral Platform Docs",
         logo: {
@@ -66,12 +71,12 @@ const config = {
         },
         items: [
           {
-            to: "/docs/user",
+            to: "/user",
             label: "User Docs",
             position: "left",
           },
           {
-            to: "/docs/dev",
+            to: "/dev",
             label: "Dev Docs",
             position: "left",
           },
@@ -100,11 +105,11 @@ const config = {
             items: [
               {
                 label: "User Docs",
-                to: "/docs/user",
+                to: "/user",
               },
               {
                 label: "Dev Docs",
-                to: "/docs/dev",
+                to: "/dev",
               },
               {
                 label: "Blog",
