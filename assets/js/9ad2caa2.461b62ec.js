@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunknantralplatform_docs=self.webpackChunknantralplatform_docs||[]).push([[1202],{3376:e=>{e.exports=JSON.parse('{"title":"Roommates","slug":"/category/roommates","permalink":"/category/roommates","navigation":{"previous":{"title":"User Documentation","permalink":"/user/"},"next":{"title":"Colocathlon","permalink":"/user/roommates/colocathlon"}}}')}}]);
