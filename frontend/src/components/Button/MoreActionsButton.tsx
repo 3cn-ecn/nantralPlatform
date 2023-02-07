@@ -48,7 +48,7 @@ export default function MoreActionsButton(props: {
       }}
     >
       <EditIcon className="itemIcon" />
-      Edit
+      {t('event.action_menu.edit')}
     </MenuItem>
   ) : null;
   return (
@@ -102,7 +102,7 @@ export default function MoreActionsButton(props: {
         onClose={() => setOpenCopyNotif(false)}
       >
         <Alert severity="success" sx={{ width: '100%' }}>
-          Lien copié !
+          {t('event.action_menu.linkCopied')}
         </Alert>
       </Snackbar>
     </div>

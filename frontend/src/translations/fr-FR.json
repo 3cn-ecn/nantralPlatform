@@ -101,7 +101,9 @@
   "event" : {
     "action_menu": {
       "unsubscribe": "Se désinscrire",
-      "share": "Partager"
+      "share": "Partager",
+      "linkCopied": "Lien copié",
+      "edit": "Modifier"
     },
     "months": {
       "1": "Janvier",

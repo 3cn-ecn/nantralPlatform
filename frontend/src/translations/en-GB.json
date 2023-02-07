@@ -100,8 +100,10 @@
   },
   "event" : {
     "action_menu": {
-      "unsubscribe": "Unsubscribe",
-      "share": "Share"
+      "unsubscribe": "Unregister",
+      "share": "Share",
+      "linkCopied": "Link copied",
+      "edit": "Edit"
     },
     "months": {
       "1": "January",

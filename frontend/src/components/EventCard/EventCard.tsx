@@ -104,11 +104,13 @@ function EventCard(props: { event: EventProps }) {
     typeof groupData.logo_url === 'undefined' ? (
       <CircularProgress size="60px" />
     ) : (
-      <img
-        className="groupIcon loadedGroupIcon"
-        src={groupData.logo_url}
-        alt={bannerDescription}
-      />
+      <a href={window.location.origin + groupData.get_absolute_url}>
+        <img
+          className="groupIcon loadedGroupIcon"
+          src={groupData.logo_url}
+          alt={bannerDescription}
+        />
+      </a>
     );
   return (
     <Card className="eventCard">
