@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { CardActionArea } from '@mui/material';
+import { Avatar, CardActionArea } from '@mui/material';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { EventProps } from 'pages/Props/Event';
+import { ClubProps } from 'pages/Props/Club';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -78,7 +79,12 @@ function EventCard(props: { event: EventProps }) {
 
   const groupSlug =
     group === 'club--bde-1' ? group.slice(6, group.length) : group;
-  const [groupData, setGroup] = React.useState<ClubProps>([]);
+  const [groupData, setGroup] = React.useState<ClubProps>({
+    name: '',
+    logo_url: '',
+    get_absolute_url: '',
+    is_current_user_admin: false,
+  });
   React.useEffect(() => {
     getGroup();
   }, []);
@@ -92,29 +98,28 @@ function EventCard(props: { event: EventProps }) {
   if (ticketing !== null) variant = 'form';
   else if (max_participant === null) variant = 'normal';
   else variant = 'shotgun';
-  const bannerDescription = 'Banner';
 
   const dateValue = new Date(date);
-  const dateText = `${dateValue.getDate()} ${t(
-    `event.months.${dateValue.getMonth() + 1}`
-  )} ${dateValue.getFullYear()}`;
+  const dateText = `
+    ${t(`event.days.${dateValue.getDay()}`)}
+    ${dateValue.getDate()} ${t(`event.months.${dateValue.getMonth() + 1}`)}`;
   const hourText = `${dateValue.getHours()}:${dateValue.getMinutes()}`;
 
   const groupIcon =
     typeof groupData.logo_url === 'undefined' ? (
-      <CircularProgress size="60px" />
+      <CircularProgress size="3.75em" />
     ) : (
       <a href={window.location.origin + groupData.get_absolute_url}>
-        <img
-          className="groupIcon loadedGroupIcon"
+        <Avatar
+          alt={groupData.name}
           src={groupData.logo_url}
-          alt={bannerDescription}
+          sx={{ fontSize: '1rem', width: '3.75em', height: '3.75em' }}
         />
       </a>
     );
   return (
     <Card className="eventCard">
-      <CardActionArea disableRipple>
+      <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
         <CardMedia
           className="banner"
           component="img"
@@ -125,12 +130,14 @@ function EventCard(props: { event: EventProps }) {
           className="favIcon"
           eventSlug={slug}
           selected={is_favorite}
+          size="2.1em"
         />
         <MoreActionsButton
           isAdmin={groupData.is_current_user_admin}
           className="moreActions"
           shareUrl={window.location.origin + get_absolute_url}
           slug={slug}
+          size="1.7em"
         />
         <CardContent sx={{ padding: 0 }}>
           <div className="infoContainer">
@@ -138,7 +145,7 @@ function EventCard(props: { event: EventProps }) {
               <div className="groupIcon">{groupIcon}</div>
 
               <div className="infos">
-                <h2 className="title">{title}</h2>
+                <h2 className="eventTitle">{title}</h2>
                 <div>{get_group_name}</div>
               </div>
               <div className="joinButton">

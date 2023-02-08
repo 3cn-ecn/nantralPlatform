@@ -1,6 +1,5 @@
 import * as React from 'react';
 import './MoreActionsButton.scss';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -10,7 +9,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
 import { useTranslation } from 'react-i18next';
-import { rgbToHex } from '@mui/material';
+import { IconButton, rgbToHex } from '@mui/material';
 
 import Snackbar from '@mui/material/Snackbar';
 
@@ -23,14 +22,15 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function MoreActionsButton(props: {
+function MoreActionsButton(props: {
   className: string;
   isAdmin: boolean;
   shareUrl: string;
   slug: string;
+  size?: string;
 }) {
   const { t } = useTranslation('translation'); // translation module
-  const { className, isAdmin, shareUrl, slug } = props;
+  const { className, isAdmin, shareUrl, slug, size } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openCopyNotif, setOpenCopyNotif] = React.useState(false);
   const open = Boolean(anchorEl);
@@ -53,14 +53,17 @@ export default function MoreActionsButton(props: {
   ) : null;
   return (
     <div className={className}>
-      <Button
+      <IconButton
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        style={{ minWidth: 0, padding: 0 }}
+        style={{ minWidth: 0, padding: 0, width: `${size}`, height: `${size}` }}
       >
-        <MoreHorizIcon />
-      </Button>
+        <MoreHorizIcon
+          style={{ width: `${size}`, height: `${size}` }}
+          color="primary"
+        />
+      </IconButton>
       <Menu
         anchorEl={anchorEl}
         open={open}
@@ -108,3 +111,9 @@ export default function MoreActionsButton(props: {
     </div>
   );
 }
+
+MoreActionsButton.defaultProps = {
+  size: '25px',
+};
+
+export default MoreActionsButton;

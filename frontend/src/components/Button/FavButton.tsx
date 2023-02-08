@@ -10,8 +10,9 @@ function FavButton(props: {
   className: string;
   eventSlug: string;
   selected: boolean;
+  size?: string;
 }) {
-  const { className, eventSlug, selected } = props;
+  const { className, eventSlug, selected, size } = props;
   const [fav, setFav] = useState(selected);
   const [loading, setLoading] = useState(false);
   const handlePress = async () => {
@@ -19,43 +20,51 @@ function FavButton(props: {
     if (fav) {
       axios
         .delete(`api/event/${eventSlug}/favorite`)
-        .then((res) => setFav(false))
+        .then(() => setFav(false))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     } else {
       axios
         .post(`api/event/${eventSlug}/favorite`)
-        .then((res) => setFav(true))
+        .then(() => setFav(true))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     }
   };
 
-  const icon = fav ? (
-    <FavoriteIcon color="primary" />
-  ) : (
-    <FavoriteBorderIcon color="primary" />
-  );
   return (
     <div className={className}>
-      <Zoom in={fav}>
-        <FavoriteIcon color="primary" style={{ position: 'absolute' }} />
-      </Zoom>
-
       <IconButton
         aria-label="favorite"
         size="large"
-        style={{ padding: '0px' }}
+        style={{ padding: '0', width: `${size}`, height: `${size}` }}
         onClick={handlePress}
         disabled={loading}
       >
-        <FavoriteBorderIcon color="primary" />
+        <Zoom in={fav}>
+          <FavoriteIcon
+            color="primary"
+            style={{
+              position: 'absolute',
+              width: `${size}`,
+              height: `${size}`,
+            }}
+          />
+        </Zoom>
+        <FavoriteBorderIcon
+          style={{ width: `${size}`, height: `${size}` }}
+          color="primary"
+        />
         {loading && (
-          <CircularProgress size={25} style={{ position: 'absolute' }} />
+          <CircularProgress size={size} style={{ position: 'absolute' }} />
         )}
       </IconButton>
     </div>
   );
 }
+
+FavButton.defaultProps = {
+  size: '1.5625em',
+};
 
 export default FavButton;
