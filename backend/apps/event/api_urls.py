@@ -39,5 +39,5 @@ urlpatterns = [
     path(
         '<slug:event_slug>/favorite',
         FavoriteAPIView.as_view(),
-        name='participate-to-event'),
+        name='set-event-to-favorite'),
 ]
