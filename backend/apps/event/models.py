@@ -22,6 +22,10 @@ class BaseEvent(AbstractPost):
         verbose_name='Description de l\'événement', blank=True)
     date = models.DateTimeField(
         verbose_name='Date de l\'événement')
+    end_date = models.DateTimeField(
+        verbose_name='Date de fin de l\'événement',
+        blank=True,
+        null=True)
     location = models.CharField(
         max_length=200, verbose_name='Lieu')
     group = models.SlugField(
@@ -40,6 +44,11 @@ class BaseEvent(AbstractPost):
         blank=True,
         null=True
     )
+    begin_inscription = models.DateTimeField(
+        verbose_name='Date de début de l\'inscription',
+        blank=True,
+        null=True
+    )
     end_inscription = models.DateTimeField(
         verbose_name='Date de fin de l\'inscription',
         blank=True,
@@ -51,8 +60,19 @@ class BaseEvent(AbstractPost):
         return self.participants.all().count()
 
     def is_participating(self, user: User) -> bool:
-        student = Student.objects.filter(user=user).first()
-        return student in self.participants.all()
+        if user.is_anonymous or not user.is_authenticated or not hasattr(
+                user, 'student'):
+            return False
+        return user.student in self.participants.all()
+
+    def is_favorite(self, user: User) -> bool:
+        if user.is_anonymous or not user.is_authenticated or not hasattr(
+                user, 'student'):
+            return False
+        return user.student.favorite_event.contains(self)
+
+    def __str__(self):
+        return self.title
 
     def save(self, *args, **kwargs):
         # create the slug

@@ -141,7 +141,12 @@ function NavBarTop(props: {
         </IconButton>
         <SvgIcon component={NantralIcon} inheritViewBox />
         <Box sx={{ flexGrow: 0.02 }} />
-        <Typography variant="h6" component="div" color="TextPrimary">
+        <Typography
+          variant="h6"
+          component="div"
+          color="TextPrimary"
+          sx={{ display: { xs: 'none', md: 'flex' } }}
+        >
           Nantral Platform
         </Typography>
         <Box sx={{ flexGrow: 0.9 }} />
@@ -332,7 +337,7 @@ function NavBarTop(props: {
             </MenuItem>
           </Menu>
         </Box>
-        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+        <Box sx={{ display: { xs: 'none', md: 'none' } }}>
           <IconButton
             size="large"
             aria-label="show more"

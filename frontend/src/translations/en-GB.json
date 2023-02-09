@@ -28,7 +28,11 @@
     "theme": "Theme"
   },
   "button": {
+    "cancel" : "cancel",
     "joinButton" : {
+      "unsuscribe" : "unsuscribe",
+      "registerLink" : "register link",
+      "shotgunClosed" : "shotgun closed",
       "register": "register",
       "title": "Do you want to unsubscribe from this event?"
     }
@@ -91,6 +95,38 @@
     "myEvents": "My events",
     "upcomingEvents": "Upcoming Events",
     "seeMore": "see more",
-    "welcomeTo": "Welcome to"
+    "welcomeTo": "Welcome to",
+    "myClubs": "My clubs & Assos"
+  },
+  "event" : {
+    "action_menu": {
+      "unsubscribe": "Unregister",
+      "share": "Share",
+      "linkCopied": "Link copied",
+      "edit": "Edit"
+    },
+    "months": {
+      "1": "January",
+      "2": "February",
+      "3": "March",
+      "4": "April",
+      "5": "May",
+      "6": "June",
+      "7": "July",
+      "8": "August",
+      "9": "September",
+      "10": "October",
+      "11": "November",
+      "12": "December"
+    },
+    "days": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    }
   }
 }

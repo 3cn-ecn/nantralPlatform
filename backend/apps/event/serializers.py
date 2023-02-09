@@ -10,6 +10,7 @@ class BaseEventSerializer(serializers.ModelSerializer):
     get_group_name = serializers.ReadOnlyField()
     is_participating = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
+    is_favorite = serializers.SerializerMethodField()
 
     class Meta:
         model = BaseEvent
@@ -29,7 +30,11 @@ class BaseEventSerializer(serializers.ModelSerializer):
             'is_participating',
             'is_member',
             'max_participant',
-            'end_inscription']
+            'end_inscription',
+            'begin_inscription',
+            'end_date',
+            'ticketing',
+            'is_favorite']
 
     def get_is_participating(self, obj):
         user = self.context['request'].user
@@ -39,6 +44,10 @@ class BaseEventSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         group = obj.get_group
         return group.is_member(user)
+
+    def get_is_favorite(self, obj):
+        user = self.context['request'].user
+        return obj.is_favorite(user)
 
 
 class EventParticipatingSerializer(serializers.ModelSerializer):

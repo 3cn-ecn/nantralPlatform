@@ -20,6 +20,7 @@ import {
 import axios from 'axios';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { CapitalizeFirstLetter } from '../../utils/formatText';
 
 interface JoinButtonProps {
   variant?: 'shotgun' | 'normal' | 'form';
@@ -60,8 +61,8 @@ function JoinButton({
           console.error('could not subscribe to event');
         }
       })
-      .catch((err) => console.error(err));
-    setLoading(false);
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   const quit = async () => {
@@ -75,8 +76,8 @@ function JoinButton({
           console.error('could not unsuscribe from event');
         }
       })
-      .catch((err) => console.error(err));
-    setLoading(false);
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   const handleClose = (unsuscribe: boolean) => {
@@ -143,6 +144,13 @@ function JoinButton({
         return people;
     }
   };
+  let title: string;
+  if (variant === 'form') title = t('button.joinButton.registerLink');
+  else if ((people >= maxPerson || shotgunClosed) && variant === 'shotgun')
+    title = t('button.joinButton.shotgunClosed');
+  else if (!selected) title = t('button.joinButton.register');
+  else title = t('button.joinButton.unsuscribe');
+
   let color:
     | 'inherit'
     | 'primary'
@@ -168,7 +176,7 @@ function JoinButton({
         color={color}
         endIcon={getSecondIcon()}
         sx={sx}
-        title="test"
+        title={title}
       >
         {getText()}
         {loading && (
@@ -180,20 +188,22 @@ function JoinButton({
         onClose={() => handleClose(false)}
         aria-labelledby="responsive-dialog-title"
       >
-        <DialogTitle id="responsive-dialog-title">Se désinscrire ?</DialogTitle>
+        <DialogTitle id="responsive-dialog-title">
+          {CapitalizeFirstLetter(t('button.joinButton.unsuscribe'))} ?
+        </DialogTitle>
         <DialogContent>
           <DialogContentText>{t('button.joinButton.title')}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={() => handleClose(false)}>
-            Annuler
+            {t('button.cancel')}
           </Button>
           <Button
             onClick={() => handleClose(true)}
             autoFocus
             variant="contained"
           >
-            Se désinscrire
+            {t('button.joinButton.unsuscribe')}
           </Button>
         </DialogActions>
       </Dialog>
