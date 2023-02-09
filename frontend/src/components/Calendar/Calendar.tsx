@@ -80,6 +80,10 @@ function allSameTime(
     areSameTime = sameTime(eventsData[key], eventsData[eventsList[iterator]]);
     iterator += 1;
   }
+  if (areSameTime) {
+    console.log('same time !');
+    console.log(eventsList, key, eventsData);
+  }
   return areSameTime;
 }
 
@@ -101,8 +105,10 @@ function blockedChains(
   const blockedEventsChain = [];
   let globalSize = 1;
   eventsData.forEach((eventData) => {
+    console.log(`EventData ${eventData.key}`);
     currentSizeObject.maxSize = 0;
     eventData.coupleEvents.forEach((eventList) => {
+      console.log(`CoupleEvents ${eventList}`);
       currentSizeObject.maxSize = Math.max(
         eventList.length,
         currentSizeObject.maxSize
@@ -113,6 +119,7 @@ function blockedChains(
       }
       if (eventList.length === currentSizeObject.maxSize) {
         currentSizeObject.blockedChains.push(eventList);
+        console.log('je push');
       }
     });
     currentSizeObject.blockedChains.forEach((chain) => {
@@ -124,6 +131,7 @@ function blockedChains(
         j += 1;
       }
       if (j >= blockedEventsChain.length) {
+        console.log(`ajout ${chain}`);
         blockedEventsChain.push(chain);
       }
     });
@@ -146,14 +154,23 @@ function blockedChains(
  */
 function createCoupleEvents(eventsData: Array<EventDataProps>): void {
   let coupleEventsLength: number;
+  console.log('couplevent');
   eventsData.forEach((eventData) => {
     for (let j = 0; j < eventData.sameTimeEvent.length; j++) {
       coupleEventsLength = eventData.coupleEvents.length;
       for (let k = 0; k < coupleEventsLength; k++) {
-        if (allSameTime(j, eventData.coupleEvents[k], eventsData)) {
+        if (
+          allSameTime(
+            eventData.sameTimeEvent[j],
+            eventData.coupleEvents[k],
+            eventsData
+          )
+        ) {
+          console.log(eventData.coupleEvents, j);
           eventData.coupleEvents.push(
             eventData.coupleEvents[k].concat([eventData.sameTimeEvent[j]])
           );
+          console.log(eventData.coupleEvents[k], eventData.sameTimeEvent[j]);
         }
       }
       eventData.coupleEvents.push([eventData.sameTimeEvent[j]]);
@@ -331,6 +348,10 @@ function setSameTimeEvents(
     });
   }
 
+  if (eventsData.length > 3) {
+    console.log(sameTime(eventsData[1], eventsData[2]));
+  }
+
   // Set all same time events foreach events.
   for (let i = 0; i < events.length; i++) {
     eventsData.forEach((eventData) => {
@@ -399,12 +420,12 @@ function isInDay(
     betweenDate(checkBeginDate, eventBeginDate, eventEndDate)
   ) {
     sortEvents[0].push(event);
-    console.log('je push');
+    // console.log('je push');
   }
   for (let i = 1; i < 7; i++) {
     checkBeginDate.setDate(checkBeginDate.getDate() + 1);
     checkEndDate.setDate(checkEndDate.getDate() + 1);
-    console.log(eventBeginDate, eventEndDate, checkBeginDate, checkEndDate);
+    // console.log(eventBeginDate, eventEndDate, checkBeginDate, checkEndDate);
     if (
       betweenDate(eventBeginDate, checkBeginDate, checkEndDate) ||
       betweenDate(checkBeginDate, eventBeginDate, eventEndDate)
@@ -415,6 +436,7 @@ function isInDay(
   }
 }
 
+// To comment return
 /**
  * Function that sorted event in days of the week.
  * @param oldSortEvents The list of events to sort.
@@ -424,7 +446,10 @@ function isInDay(
 function sortInWeek(
   oldSortEvents: Array<EventProps>,
   mondayDate: Date
-): Array<Array<EventProps>> {
+): {
+  sortEvents: Array<Array<EventProps>>;
+  eventsBlockedChain: Array<Array<Array<EventProps>>>;
+} {
   const sortEvents = [];
   const eventsBlockedChain = [];
   for (let i = 0; i < 7; i++) {
@@ -442,7 +467,7 @@ function sortInWeek(
   //   setSameTimeEvents(eventsList);
   // });
   console.log(eventsBlockedChain);
-  return sortEvents;
+  return { sortEvents, eventsBlockedChain };
 }
 
 /**
@@ -493,12 +518,21 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   console.log('endDate à virer');
   sortEvents.forEach((event) => {
     if (event.end_date === null) {
-      event.end_date = 'June 10, 2023 19:10:34';
+      const endDateEvent = new Date(new Date(event.date).getTime() + 3600000);
+      // console.log(endDateEvent);
+      event.end_date = endDateEvent.toString();
+      // console.log(event);
     }
   });
   //
 
-  const newSortEvents = sortInWeek(sortEvents, beginOfWeek);
+  const teste: {
+    sortEvents: Array<Array<EventProps>>;
+    eventsBlockedChain: Array<Array<Array<EventProps>>>;
+  } = sortInWeek(sortEvents, beginOfWeek);
+  const newSortEvents = teste.sortEvents;
+  const { eventsBlockedChain } = teste;
+  console.log(eventsBlockedChain);
   return (
     <>
       <p>Le calendrier</p>
@@ -530,6 +564,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
                   dayValue={number + 1}
                   day={day}
                   events={newSortEvents[number]}
+                  chain={eventsBlockedChain[number]}
                 />
               </Grid>
             );

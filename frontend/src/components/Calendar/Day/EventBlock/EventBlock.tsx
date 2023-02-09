@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { Button, Grid, Paper } from '@mui/material';
 import { EventProps } from 'pages/Props/Event';
 
 /**
@@ -36,7 +36,8 @@ export function EventBlock(props: {
 
   // Set the duration of the event.
   let duration;
-  console.log(day, endDate);
+  // console.log(day, endDate);
+  // console.log(event);
   if (todayBegin) {
     duration = (endDate.getTime() - beginDate.getTime()) / 3600000;
   } else if (endDate.getDay() === day % 7) {
@@ -50,24 +51,35 @@ export function EventBlock(props: {
   return (
     // <Grid container xs={12}>
     //   <Grid item xs={12}>
+    // <div>
     <Button
       variant="contained"
+      // fullWidth
+      // sx={{ width: 50, padding: 1, margin: 2 }}
       style={{
         position: 'absolute',
-        // minWidth: `1px`,
+        minWidth: `10px`,
         // width: `${(120 * event.effectiveSize) / event.globalSize}px`,
-        width: 'inherit',
+        // width: 'inherit',
+        // fullWidth
+        // width: '3px',
         height: `${Math.min(duration, startTime) * 20}px`,
         padding: '0px',
+        // textAlign: 'left',
         // transform: `translate(${
         //   -60 + (120 * event.position) / event.globalSize
         // }px, -${startTime * 20}px)`,
         transform: `translate(${0}px, -${startTime * 20}px)`,
       }}
     >
-      {event.effectiveSize}
-      {event.position}
+      {/* // <div>
+    //   {event.effectiveSize}
+    //   {event.position}
+    //   {event.title[0]}
+    // </div> */}
     </Button>
+    // </div>
+    // <Paper elevation={3}>a</Paper>
     //   </Grid>
     // </Grid>
   );

@@ -15,8 +15,9 @@ export function Day(props: {
   dayValue: number;
   day: string;
   events: Array<EventProps>;
+  chain: Array<Array<EventProps>>;
 }): JSX.Element {
-  const { dayValue, day, events } = props;
+  const { dayValue, day, events, chain } = props;
 
   const dayChain = [];
   for (let hour = 0; hour < 24; hour++) {
