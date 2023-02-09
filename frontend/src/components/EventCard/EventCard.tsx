@@ -22,13 +22,6 @@ import JoinButton from '../Button/JoinButton';
 import FavButton from '../Button/FavButton';
 import MoreActionsButton from '../Button/MoreActionsButton';
 
-interface EventCardProps {
-  banner?: string;
-  groupIcon?: string;
-  bannerDescription?: string;
-  variant?: 'shotgun' | 'normal' | 'form';
-}
-
 function InfoItem(props: { name: string; value: string }) {
   let icon = null;
   const { name, value } = props;
@@ -77,6 +70,8 @@ function EventCard(props: { event: EventProps }) {
     get_absolute_url,
   } = event;
 
+  // An exception is made for the BDE as the "club" needs to be removed from the slug
+  // (Not the case for the other clubs)
   const groupSlug =
     group === 'club--bde-1' ? group.slice(6, group.length) : group;
   const [groupData, setGroup] = React.useState<ClubProps>({
@@ -94,11 +89,12 @@ function EventCard(props: { event: EventProps }) {
     setGroup(response.data);
   }
 
-  let variant; //= max_participant === null ? 'normal' : 'shotgun';
+  let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
   if (ticketing !== null) variant = 'form';
   else if (max_participant === null) variant = 'normal';
   else variant = 'shotgun';
 
+  // Conversion of the date to a human redeable format
   const dateValue = new Date(date);
   const dateText = `
     ${t(`event.days.${dateValue.getDay()}`)}
@@ -113,7 +109,7 @@ function EventCard(props: { event: EventProps }) {
         <Avatar
           alt={groupData.name}
           src={groupData.logo_url}
-          sx={{ fontSize: '1rem', width: '3.75em', height: '3.75em' }}
+          sx={{ fontSize: '1em', width: '3.75em', height: '3.75em' }}
         />
       </a>
     );

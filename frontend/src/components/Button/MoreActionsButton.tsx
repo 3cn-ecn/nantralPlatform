@@ -24,7 +24,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 function MoreActionsButton(props: {
   className: string;
-  isAdmin: boolean;
+  isAdmin: boolean; // Show or hide the link to the edit page
   shareUrl: string;
   slug: string;
   size?: string;
@@ -93,7 +93,7 @@ function MoreActionsButton(props: {
           style={{ color: rgbToHex(theme.palette.error.main) }}
         >
           <HighlightOffIcon
-            color="theme.palette.error.main"
+            style={{ color: rgbToHex(theme.palette.error.main) }}
             className="itemIcon"
           />
           {t('event.action_menu.unsubscribe')}
@@ -113,7 +113,7 @@ function MoreActionsButton(props: {
 }
 
 MoreActionsButton.defaultProps = {
-  size: '25px',
+  size: '1.6em',
 };
 
 export default MoreActionsButton;

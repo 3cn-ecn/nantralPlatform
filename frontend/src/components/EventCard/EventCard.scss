@@ -4,9 +4,6 @@ $height: 18.75em;
 
 $margin: 0.625em;
 
-$mainBackground: rgb(201, 201, 201);
-$secondaryBackground: rgb(250, 250, 250);
-
 /* 
 ==============
 Main component 
@@ -124,7 +121,7 @@ Bottom half
 // Div with 2 elements (icon and text)
 .infoItem {
   display: flex;
-  padding-left: 15px;
+  padding-left: 0.94em;
   margin: 0;
   font-size: 0.875em;
 }
