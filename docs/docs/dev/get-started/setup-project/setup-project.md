@@ -91,7 +91,7 @@ Now it's time to launch the website! To do this:
 
 And that's it! You should now see the login page of Nantral Platform:
 
-![The login page](/login-page.png)
+![The login page](./login-page.png)
 
 ## Create your account
 

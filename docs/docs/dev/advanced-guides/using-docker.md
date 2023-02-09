@@ -36,7 +36,7 @@ In practice, using Docker on your local machine will allow you to:
 If you can access the login page, congratulations everything is ok! 🥳 
 
 Let's create a superuser account now, so that you can connect. For this, follow the
-tutorial [here](../get-started/setup-project.md#create-your-account). You only have to replace
+tutorial [here](../get-started/setup-project/setup-project.md#create-your-account). You only have to replace
 the command for creating a superuser by:
 ```bash
 docker-compose exec backend python3 manage.py createsuperuser
