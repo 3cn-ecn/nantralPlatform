@@ -1,48 +1,20 @@
 import * as React from 'react';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Link } from 'react-router-dom';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   IconButton,
-  AppBar,
   Typography,
   Box,
   Badge,
-  Toolbar,
   Menu,
   MenuItem,
   ListItem,
-  ListItemText,
   Button,
 } from '@mui/material';
-import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
-import {
-  Notifications as NotificationsIcon,
-  AccountCircle,
-  MoreVert as MoreIcon,
-} from '@mui/icons-material';
-import Divider from '@mui/material/Divider';
-import GavelIcon from '@mui/icons-material/Gavel';
-import PersonIcon from '@mui/icons-material/Person';
-import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
-import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CloseIcon from '@mui/icons-material/Close';
-import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { createSvgIcon } from '@mui/material/utils';
-import { ThemeProvider } from '@mui/material/styles';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
 import SettingsIcon from '@mui/icons-material/Settings';
-import PaletteIcon from '@mui/icons-material/Palette';
-import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
-import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import { NotificationItem } from './NotificationItem';
 import axios from '../../legacy/utils/axios';
 import formatUrl from '../../legacy/utils/formatUrl';
@@ -146,7 +118,12 @@ export function NotificationMenu(props) {
     }
   } else {
     content = listToShow.map((sn) => (
-      <NotificationItem key={sn.notification.id} sn={sn} />
+      <NotificationItem
+        key={sn.notification.id}
+        sn={sn}
+        nbNotifs={nbNotifs}
+        setNbNotifs={setNbNotifs}
+      />
     ));
   }
   return (
