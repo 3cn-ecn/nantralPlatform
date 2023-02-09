@@ -14,6 +14,7 @@ import {
   MenuItem,
   ListItem,
   ListItemText,
+  Button,
 } from '@mui/material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
@@ -28,6 +29,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CloseIcon from '@mui/icons-material/Close';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { createSvgIcon } from '@mui/material/utils';
@@ -35,6 +37,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
+import SettingsIcon from '@mui/icons-material/Settings';
 import PaletteIcon from '@mui/icons-material/Palette';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
@@ -44,6 +47,7 @@ import { NotificationItem } from './NotificationItem';
 import axios from '../../legacy/utils/axios';
 import formatUrl from '../../legacy/utils/formatUrl';
 import merge from '../../legacy/notification/utils';
+import './NotificationItem.scss';
 
 interface Notification {
   id: number;
@@ -107,7 +111,7 @@ export function NotificationMenu(props) {
     const start = listNotifs.length;
     const url = '/api/notification/get_notifications?mode=2';
     const response = await axios.get(url);
-    if (listNotifs.length !== nbNotifs) {
+    if (listNotifs.length === 0) {
       const merging = merge(listNotifs, response.data);
       setListNotifs(merging);
     }
@@ -125,17 +129,18 @@ export function NotificationMenu(props) {
   console.log(listNotifs);
   let content;
   const listToShow = listNotifs.filter((sn: SentNotification) => {
-    const res = true;
+    let res = true;
+    if (unseenFilter) res = res && !sn.seen;
+    if (subscribeFilter) res = res && sn.suscribed;
     return res;
   });
-  console.log('a');
-  console.log(listToShow);
-  console.log(listToShow.length === 0);
   if (listToShow.length === 0) {
-    if (!onLoad) {
+    if (onLoad) {
       content = (
         <MenuItem>
-          <ListItem>{listToShow.length} 😢</ListItem>
+          <ListItem>
+            <Typography sx={{ width: 278 }}>Aucune Notification 😢</Typography>
+          </ListItem>
         </MenuItem>
       );
     }
@@ -164,6 +169,58 @@ export function NotificationMenu(props) {
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
         TransitionComponent={Collapse}
       >
+        <ListItem disableRipple="true">
+          <Typography className="menuTitle" variant="h6">
+            Notifications
+          </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton
+            aria-label="show 17 new notifications"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <SvgIcon component={SettingsIcon} inheritViewBox />
+          </IconButton>
+        </ListItem>
+        <ListItem>
+          <Button
+            variant="outlined"
+            size="small"
+            sx={[
+              { mr: 1 },
+              {
+                '&:hover': {
+                  color: 'white',
+                  backgroundColor: '#dc3545',
+                },
+              },
+              {
+                borderRadius: 4,
+              },
+            ]}
+            onClick={() => setSubscribeFilter(!subscribeFilter)}
+          >
+            Abonné
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            sx={[
+              {
+                '&:hover': {
+                  color: 'white',
+                  backgroundColor: '#dc3545',
+                },
+              },
+              {
+                borderRadius: 4,
+              },
+            ]}
+            onClick={() => setUnseenFilter(!unseenFilter)}
+          >
+            Non Lu
+          </Button>
+        </ListItem>
         {content}
       </Menu>
     </>

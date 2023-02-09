@@ -95,6 +95,9 @@ function NavBarTop(props: {
     setAnchorElLangue(null);
     setAnchorEl(spanRef.current);
   };
+  const handleCloseLAll = () => {
+    setAnchorElLangue(null);
+  };
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -109,6 +112,9 @@ function NavBarTop(props: {
   const handleCloseD = () => {
     setAnchorElDark(null);
     setAnchorEl(spanRef.current);
+  };
+  const handleCloseDAll = () => {
+    setAnchorElDark(null);
   };
 
   const { t } = useTranslation('translation');
@@ -238,7 +244,7 @@ function NavBarTop(props: {
             id="basic-menu"
             anchorEl={anchorElLangue}
             open={openL}
-            onClose={handleCloseL}
+            onClose={handleCloseLAll}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             TransitionComponent={Collapse}
           >
@@ -274,7 +280,7 @@ function NavBarTop(props: {
             id="menu-dark-mode"
             anchorEl={anchorElDark}
             open={openD}
-            onClose={handleCloseD}
+            onClose={handleCloseDAll}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             TransitionComponent={Collapse}
           >

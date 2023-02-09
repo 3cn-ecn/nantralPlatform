@@ -106,7 +106,7 @@ function NotificationItem(props) {
           {n.icon_url ? (
             <img src={n.icon_url} alt="Icon de l'évènement" loading="lazy" />
           ) : (
-            <SvgIcon sx={{ mr: 2 }} component={NantralIcon} inheritViewBox />
+            <SvgIcon sx={[{ mr: 2 }]} component={NantralIcon} inheritViewBox />
           )}
           <small className="notif">
             {n.title}
