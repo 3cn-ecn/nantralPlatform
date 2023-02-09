@@ -1,12 +1,8 @@
 // Variables
-$radius: 15px;
-$width: 450px;
-$height: 300px;
+$width: 28.125em;
+$height: 18.75em;
 
-$margin: 10px;
-
-$mainBackground: rgb(201, 201, 201);
-$secondaryBackground: rgb(250, 250, 250);
+$margin: 0.625em;
 
 /* 
 ==============
@@ -25,22 +21,22 @@ Top half
 ========
 */
 .banner {
-  height: $height/2;
+  height: calc($height / 2);
 }
 
 // Heart icon
 .favIcon {
   margin: $margin;
   position: absolute;
-  top:0px;
-  right: 0px;
+  top:0;
+  right: 0;
 }
 
 .moreActions {
   margin: $margin;
   position: absolute;
-  top:0px;
-  left: 0px;
+  top:0;
+  left: 0;
 }
 
 /* 
@@ -50,7 +46,7 @@ Bottom half
 */
 
 .infoContainer{
-  height: $height/2;
+  height:calc($height / 2);
   margin: 0;
   padding: $margin;
 }
@@ -65,43 +61,41 @@ Bottom half
 .infoMain {
   display: flex;
   left: $margin;
-  top: $margin
+  top: $margin;
+  height: 5em
 }
 
 // Div to store the group's icon
 .groupIcon {
   position: relative;
-  border-radius: 50%;
 
-  width: 60px;
-  height: 60px;
-  margin: 0;
-}
-
-.loadedGroupIcon{
-  background-color: $secondaryBackground;
+  width: 3.75em;
+  height: 3.75em;
+    
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .joinButton {
   margin: $margin;
-  top: 0px;
-  right: 0px;
+  top: 0;
+  right: 0;
 }
 
 // Div to display the title and the group's name
 .infos {
   text-align: left;
-  font-size: 13px;
+  font-size: 0.81em;
   margin-left: $margin;
   width: 100%;
   overflow: hidden;
 
 }
 
-.title {
+.eventTitle {
   text-align: left;
-  line-height: 25px;
-  margin: 0px;
+  line-height: 1.57em;
+  margin: 0;
   width: 100%;
   overflow: hidden;
   overflow-wrap: break-word;
@@ -121,15 +115,15 @@ Bottom half
 .infoDetails{
   justify-content: flex-start;
   display: flex;
-  margin: $margin;
-  min-height: 57px;
+  min-height: 3.6em;
 }
 
 // Div with 2 elements (icon and text)
 .infoItem {
   display: flex;
-  padding-left: 15px;
+  padding-left: 0.94em;
   margin: 0;
+  font-size: 0.875em;
 }
 
 // An element
@@ -138,7 +132,7 @@ Bottom half
   align-self: center;
   margin: 0 auto;
   overflow: hidden;
-  line-height: 16px;
+  line-height: 1em;
   overflow-wrap: break-word;
   text-overflow: ellipsis;
   display: -webkit-box;

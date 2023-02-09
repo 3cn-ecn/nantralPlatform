@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import { CardActionArea } from '@mui/material';
+import { Avatar, CardActionArea } from '@mui/material';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { EventProps } from 'pages/Props/Event';
+import { ClubProps } from 'pages/Props/Club';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -20,13 +21,6 @@ import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
 import MoreActionsButton from '../Button/MoreActionsButton';
-
-interface EventCardProps {
-  banner?: string;
-  groupIcon?: string;
-  bannerDescription?: string;
-  variant?: 'shotgun' | 'normal' | 'form';
-}
 
 function InfoItem(props: { name: string; value: string }) {
   let icon = null;
@@ -76,9 +70,16 @@ function EventCard(props: { event: EventProps }) {
     get_absolute_url,
   } = event;
 
+  // An exception is made for the BDE as the "club" needs to be removed from the slug
+  // (Not the case for the other clubs)
   const groupSlug =
     group === 'club--bde-1' ? group.slice(6, group.length) : group;
-  const [groupData, setGroup] = React.useState<ClubProps>([]);
+  const [groupData, setGroup] = React.useState<ClubProps>({
+    name: '',
+    logo_url: '',
+    get_absolute_url: '',
+    is_current_user_admin: false,
+  });
   React.useEffect(() => {
     getGroup();
   }, []);
@@ -88,31 +89,33 @@ function EventCard(props: { event: EventProps }) {
     setGroup(response.data);
   }
 
-  let variant; //= max_participant === null ? 'normal' : 'shotgun';
+  let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
   if (ticketing !== null) variant = 'form';
   else if (max_participant === null) variant = 'normal';
   else variant = 'shotgun';
-  const bannerDescription = 'Banner';
 
+  // Conversion of the date to a human redeable format
   const dateValue = new Date(date);
-  const dateText = `${dateValue.getDate()} ${t(
-    `event.months.${dateValue.getMonth() + 1}`
-  )} ${dateValue.getFullYear()}`;
+  const dateText = `
+    ${t(`event.days.${dateValue.getDay()}`)}
+    ${dateValue.getDate()} ${t(`event.months.${dateValue.getMonth() + 1}`)}`;
   const hourText = `${dateValue.getHours()}:${dateValue.getMinutes()}`;
 
   const groupIcon =
     typeof groupData.logo_url === 'undefined' ? (
-      <CircularProgress size="60px" />
+      <CircularProgress size="3.75em" />
     ) : (
-      <img
-        className="groupIcon loadedGroupIcon"
-        src={groupData.logo_url}
-        alt={bannerDescription}
-      />
+      <a href={window.location.origin + groupData.get_absolute_url}>
+        <Avatar
+          alt={groupData.name}
+          src={groupData.logo_url}
+          sx={{ fontSize: '1em', width: '3.75em', height: '3.75em' }}
+        />
+      </a>
     );
   return (
     <Card className="eventCard">
-      <CardActionArea disableRipple>
+      <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
         <CardMedia
           className="banner"
           component="img"
@@ -123,12 +126,14 @@ function EventCard(props: { event: EventProps }) {
           className="favIcon"
           eventSlug={slug}
           selected={is_favorite}
+          size="2.1em"
         />
         <MoreActionsButton
           isAdmin={groupData.is_current_user_admin}
           className="moreActions"
           shareUrl={window.location.origin + get_absolute_url}
           slug={slug}
+          size="1.7em"
         />
         <CardContent sx={{ padding: 0 }}>
           <div className="infoContainer">
@@ -136,7 +141,7 @@ function EventCard(props: { event: EventProps }) {
               <div className="groupIcon">{groupIcon}</div>
 
               <div className="infos">
-                <h2 className="title">{title}</h2>
+                <h2 className="eventTitle">{title}</h2>
                 <div>{get_group_name}</div>
               </div>
               <div className="joinButton">
