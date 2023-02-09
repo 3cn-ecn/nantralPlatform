@@ -60,8 +60,10 @@ class BaseEvent(AbstractPost):
         return self.participants.all().count()
 
     def is_participating(self, user: User) -> bool:
+        if user is None:
+            return False
         student = user.student
-        return student in self.participants.all()
+        return self.participants.contains(student)
 
     def is_favorite(self, user: User) -> bool:
         student = user.student
