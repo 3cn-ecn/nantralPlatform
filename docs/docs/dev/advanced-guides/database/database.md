@@ -10,7 +10,7 @@ Some explanations about how the database is used in the project
 
 This schema presents the main entities ans associations of the project. It can be used as a reference for searching attributes name or tables name.
 
-[![schema_bdd.svg](/schema_bdd_simplified.svg)](/schema_bdd_simplified.svg)
+[![](./schema_bdd_simplified.svg)](./schema_bdd_simplified.svg)
 
 ## Complete Physical Model
 
@@ -21,4 +21,4 @@ If you have problems in running the method described above, you have to run befo
 `sudo apt-get install libgraphviz-dev libpython3.7-dev`
 :::
 
-[![schema_bdd_complete.png](/schema_bdd_complete.png)](/schema_bdd_complete.png)
+[![](./schema_bdd_complete.png)](./schema_bdd_complete.png)

@@ -7,6 +7,8 @@ editor: markdown
 dateCreated: 2021-10-12T16:15:59.459Z
 ---
 
+import './styles.scss';
+
 # Parrainage
 
 Cette page se destine à fournir des explications sur l'algorithme de parrainage pour Centrale Nantes, utilisé et mis en place par le BDE. Elle pourra notamment servir au pôle inté ou aux futurs DSI de l'association.
@@ -59,7 +61,7 @@ Les droits d'accès sont accordés en ajoutant l'utilisateur dans le groupe `adm
 :::
 
 L'interface admin se présente ainsi :
-![parrainage_admin.png](/parrainage_admin.png)
+![](./parrainage_admin.png)
 
 Cette page est accessible via le lien suivant : [nantral-platform.fr/parrainage/admin](https://nantral-platform.fr/parrainage/admin/). Vous avez accès à :
 

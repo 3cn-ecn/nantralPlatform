@@ -10,7 +10,6 @@ const config = {
   tagline: "The offical documentation of Nantral Platform!",
   url: "https://docs.nantral-platform.fr",
   baseUrl: "/",
-  trailingSlash: true,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/logo.svg",
@@ -20,6 +19,9 @@ const config = {
   organizationName: "nantral-platform", // Usually your GitHub org/user name.
   projectName: "nantralPlatform", // Usually your repo name.
   deploymentBranch: "gh-pages",
+
+  // plugins
+  plugins: ['docusaurus-plugin-sass'],
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
