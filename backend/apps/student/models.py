@@ -80,12 +80,6 @@ class Student(models.Model):
     def get_absolute_url(self) -> str:
         return reverse('student:detail', args=[self.pk])
 
-    def add_favorite_event(self, event):
-        self.favorite_event.add(event)
-
-    def remove_favorite_event(self, event):
-        self.favorite_event.remove(event)
-
     @property
     def absolute_url(self) -> str:
         return self.get_absolute_url()
