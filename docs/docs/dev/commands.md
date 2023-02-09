@@ -1,9 +1,9 @@
 ---
 title: Commands Memo
-sidebar_position: 3
+sidebar_position: 98
 ---
 
-# List of everyday commands
+# Commands Memo
 
 ## Updates
 
