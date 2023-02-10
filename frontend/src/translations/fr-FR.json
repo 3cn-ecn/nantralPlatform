@@ -128,5 +128,11 @@
       "5": "Vendredi",
       "6": "Samedi"
     }
+  },
+  "notif": {
+    "title": "Notifications",
+    "unread": "Non Lu",
+    "subscribed": "Abonné",
+    "load": "Charger Plus"
   }
 }

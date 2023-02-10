@@ -128,5 +128,11 @@
       "5": "Friday",
       "6": "Saturday"
     }
+  },
+  "notif": {
+    "title": "Notifications",
+    "unread": "Unread",
+    "subscribed": "Suscribed",
+    "load": "Loading More"
   }
 }
