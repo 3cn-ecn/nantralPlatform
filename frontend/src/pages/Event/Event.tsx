@@ -14,6 +14,7 @@ import { EventProps } from 'pages/Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import { getEventApi } from '../../api';
 import Calendar from '../../components/Calendar/Calendar';
+import Formular from '../../components/Formular/Formular'
 
 /**
  * Event Page, with Welcome message, next events, etc...
@@ -90,8 +91,9 @@ function Event() {
       <h1>Évènements</h1>
       <p>Ceci est la page des events</p>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Formular />
         <FilterBar />
-      </div>
+      </div> 
       <EventView events={events} />
     </>
   );
