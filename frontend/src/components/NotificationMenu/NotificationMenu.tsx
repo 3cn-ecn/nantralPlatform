@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import url from 'url';
 import {
   IconButton,
   Typography,
@@ -58,9 +57,6 @@ export function NotificationMenu(props) {
   const [subscribeFilter, setSubscribeFilter] = React.useState<boolean>(false);
   const [unseenFilter, setUnseenFilter] = React.useState<boolean>(false);
   const [allLoaded, setAllLoaded] = React.useState<boolean>(false);
-  const [askPermissionBanner, setAskPermissionBanner] = React.useState<boolean>(
-    !!('Notification' in window && Notification.permission === 'default')
-  );
   const step = 5;
   const app = '/api/notification/';
   const GET_NOTIFICATIONS_URL = `${app}get_notifications`;
@@ -86,23 +82,15 @@ export function NotificationMenu(props) {
     };
     const params = new URLSearchParams(queryParams);
     const urlf = `/api/notification/get_notifications?${params}`;
-    const response = await axios.get(urlf);
-    if (listNotifs.length === checkNotif) {
-      const merging = merge(listNotifs, response.data);
-      setListNotifs(merging);
-      if (merging.length < start + step) setAllLoaded(true);
-    }
-  }
-
-  function askPermission(event): void {
-    Notification.requestPermission().then(() => {
-      setAskPermissionBanner(Notification.permission === 'default');
+    axios.get(urlf).then((res) => {
+      if (listNotifs.length === checkNotif) {
+        const merging = merge(listNotifs, res.data);
+        setListNotifs(merging);
+        if (merging.length < start + step) setAllLoaded(true);
+      }
     });
   }
 
-  async function loadNotifications(nextShow: boolean, meta: any) {
-    getListNotifs();
-  }
   let content;
   const listToShow = listNotifs.filter((sn: SentNotification) => {
     let res = true;
@@ -171,7 +159,7 @@ export function NotificationMenu(props) {
           },
         }}
       >
-        <ListItem disableRipple="true">
+        <ListItem>
           <Typography className="menuTitle" variant="h6">
             {t('notif.title')}
           </Typography>

@@ -244,7 +244,7 @@ function NavBarTop(props: {
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             TransitionComponent={Collapse}
           >
-            <MenuItem disableRipple="true">
+            <ListItem>
               <IconButton
                 aria-label="account of current user"
                 aria-haspopup="true"
@@ -256,7 +256,7 @@ function NavBarTop(props: {
               <Typography className="menuTitle" variant="h6">
                 {t('user_menu.title_language')}
               </Typography>
-            </MenuItem>
+            </ListItem>
             <MenuItem
               value="fr-FR"
               onClick={() => i18next.changeLanguage('fr-FR')}
@@ -280,7 +280,7 @@ function NavBarTop(props: {
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             TransitionComponent={Collapse}
           >
-            <MenuItem disableRipple="true">
+            <ListItem>
               <IconButton
                 aria-label="account of current user"
                 aria-haspopup="true"
@@ -292,7 +292,7 @@ function NavBarTop(props: {
               <Typography className="menuTitle" variant="h6">
                 {t('user_menu.title_theme')}
               </Typography>
-            </MenuItem>
+            </ListItem>
             <MenuItem
               onClick={() => {
                 setThemeApp(true);
