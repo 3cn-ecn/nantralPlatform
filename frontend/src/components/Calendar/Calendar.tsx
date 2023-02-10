@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Grid } from '@mui/material';
 import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
-import { EventProps } from 'pages/Props/Event';
+import { EventProps } from 'Props/Event';
 import { betweenDate } from '../../utils/date';
 import { ppcm } from '../../utils/maths';
 import { isInArray } from '../../utils/array';

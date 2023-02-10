@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { EventProps } from 'pages/Props/Event';
+import { EventProps } from 'Props/Event';
 import { EventBlock } from './EventBlock/EventBlock';
 import { TimeBlock } from './TimeBlock/TimeBlock';
 
