@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next';
+import Container from '@mui/material/Container';
+import React from 'react';
 
 /**
  * Legal Notice, like the name and owner of the site, etc.
@@ -9,7 +11,7 @@ function Legal() {
 
 
   return (
-    <>
+    <Container maxWidth="sm">
       {/* <CheckboxListSecondary /> */}
       
       <h1>{t("legalNotice.title")}</h1>
@@ -51,7 +53,7 @@ function Legal() {
 
       <h2>{t("legalNotice.subtitles.8")}</h2>
       <p>{t("legalNotice.paragraphs.8")}</p>
-    </>
+    </Container>
   );
 }
 
