@@ -1,6 +1,6 @@
 import * as React from 'react';
-import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
+import url from 'url';
 import {
   IconButton,
   Typography,
@@ -20,6 +20,8 @@ import axios from '../../legacy/utils/axios';
 import formatUrl from '../../legacy/utils/formatUrl';
 import merge from '../../legacy/notification/utils';
 import './NotificationItem.scss';
+
+let checkNotif = 0;
 
 interface Notification {
   id: number;
@@ -51,8 +53,6 @@ export function NotificationMenu(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [onLoad, setOnLoad] = React.useState<boolean>(true);
-  const [notifOnLoad, setNotifOnLoad] = React.useState<boolean>(false);
   const [nbNotifs, setNbNotifs] = React.useState<number>(null);
   const [listNotifs, setListNotifs] = React.useState<SentNotification[]>([]);
   const [subscribeFilter, setSubscribeFilter] = React.useState<boolean>(false);
@@ -61,31 +61,36 @@ export function NotificationMenu(props) {
   const [askPermissionBanner, setAskPermissionBanner] = React.useState<boolean>(
     !!('Notification' in window && Notification.permission === 'default')
   );
-  const step = 10;
+  const step = 5;
   const app = '/api/notification/';
-  const REGISTER_URL = `${app}register`;
-  const SUBSCRIPTION_URL = `${app}subscription/{0}`;
   const GET_NOTIFICATIONS_URL = `${app}get_notifications`;
-  const MANAGE_NOTIFICATION_URL = `${app}notification/{0}`;
+  const { t } = useTranslation('translation');
 
   if (nbNotifs === null) {
     getNbNotifs();
   }
 
   async function getNbNotifs(): Promise<void> {
-    const url = formatUrl(GET_NOTIFICATIONS_URL, [], { mode: 1 });
-    fetch(url)
+    const urlf = formatUrl(GET_NOTIFICATIONS_URL, [], { mode: 1 });
+    fetch(urlf)
       .then((resp) => resp.json().then((data) => setNbNotifs(data)))
       .catch((err) => setNbNotifs(null));
   }
 
   async function getListNotifs(): Promise<void> {
     const start = listNotifs.length;
-    const url = '/api/notification/get_notifications?mode=2';
-    const response = await axios.get(url);
-    if (listNotifs.length === 0) {
+    const queryParams = {
+      mode: 2,
+      start: start,
+      nb: step,
+    };
+    const params = new URLSearchParams(queryParams);
+    const urlf = `/api/notification/get_notifications?${params}`;
+    const response = await axios.get(urlf);
+    if (listNotifs.length === checkNotif) {
       const merging = merge(listNotifs, response.data);
       setListNotifs(merging);
+      if (merging.length < start + step) setAllLoaded(true);
     }
   }
 
@@ -96,9 +101,8 @@ export function NotificationMenu(props) {
   }
 
   async function loadNotifications(nextShow: boolean, meta: any) {
-    if (onLoad) getListNotifs();
+    getListNotifs();
   }
-  console.log(listNotifs);
   let content;
   const listToShow = listNotifs.filter((sn: SentNotification) => {
     let res = true;
@@ -107,15 +111,13 @@ export function NotificationMenu(props) {
     return res;
   });
   if (listToShow.length === 0) {
-    if (onLoad) {
-      content = (
-        <MenuItem>
-          <ListItem>
-            <Typography sx={{ width: 278 }}>Aucune Notification 😢</Typography>
-          </ListItem>
-        </MenuItem>
-      );
-    }
+    content = (
+      <MenuItem>
+        <ListItem>
+          <Typography sx={{ width: 278 }}>Aucune Notification 😢</Typography>
+        </ListItem>
+      </MenuItem>
+    );
   } else {
     content = listToShow.map((sn) => (
       <NotificationItem
@@ -125,6 +127,24 @@ export function NotificationMenu(props) {
         setNbNotifs={setNbNotifs}
       />
     ));
+  }
+  let contentMore;
+  if (!allLoaded) {
+    contentMore = (
+      <ListItem>
+        <Box sx={{ flexGrow: 0.5 }} />
+        <Button
+          size="small"
+          onClick={() => {
+            checkNotif += step;
+            getListNotifs();
+          }}
+        >
+          {t('notif.load')}
+        </Button>
+        <Box sx={{ flexGrow: 0.5 }} />
+      </ListItem>
+    );
   }
   return (
     <>
@@ -145,10 +165,15 @@ export function NotificationMenu(props) {
         onClose={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
         TransitionComponent={Collapse}
+        PaperProps={{
+          style: {
+            maxHeight: 600,
+          },
+        }}
       >
         <ListItem disableRipple="true">
           <Typography className="menuTitle" variant="h6">
-            Notifications
+            {t('notif.title')}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
@@ -177,7 +202,7 @@ export function NotificationMenu(props) {
             ]}
             onClick={() => setSubscribeFilter(!subscribeFilter)}
           >
-            Abonné
+            {t('notif.subscribed')}
           </Button>
           <Button
             variant="outlined"
@@ -195,10 +220,11 @@ export function NotificationMenu(props) {
             ]}
             onClick={() => setUnseenFilter(!unseenFilter)}
           >
-            Non Lu
+            {t('notif.unread')}
           </Button>
         </ListItem>
         {content}
+        {contentMore}
       </Menu>
     </>
   );

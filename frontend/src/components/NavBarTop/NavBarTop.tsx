@@ -6,26 +6,20 @@ import FormControl from '@mui/material/FormControl';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Link } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Legal from 'pages/LegalNotice/Legal';
 import {
   IconButton,
   AppBar,
   Typography,
   Box,
-  Badge,
   Toolbar,
   Menu,
   MenuItem,
   ListItem,
   ListItemText,
 } from '@mui/material';
-import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
-import {
-  Notifications as NotificationsIcon,
-  AccountCircle,
-  MoreVert as MoreIcon,
-} from '@mui/icons-material';
+import { MoreVert as MoreIcon } from '@mui/icons-material';
 import Divider from '@mui/material/Divider';
 import GavelIcon from '@mui/icons-material/Gavel';
 import PersonIcon from '@mui/icons-material/Person';
@@ -34,8 +28,6 @@ import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { createSvgIcon } from '@mui/material/utils';
-import { ThemeProvider } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
@@ -44,7 +36,6 @@ import { SearchBar } from './SearchBar/SearchBar';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
-import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 
