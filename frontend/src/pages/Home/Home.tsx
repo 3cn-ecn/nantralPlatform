@@ -52,6 +52,34 @@ function Home(props) {
       .catch((err) => console.error(err));
   }
 
+  const LoadingSkeleton = (
+    <>
+      {[0, 1, 2].map((item, key) => (
+        <Skeleton
+          variant="rectangular"
+          width={Math.min(
+            (Math.max(
+              document.documentElement.clientWidth,
+              window.innerWidth || 0
+            ) *
+              2) /
+              3,
+            450
+          )}
+          height={Math.min(
+            Math.max(
+              document.documentElement.clientWidth,
+              window.innerWidth || 0
+            ) / 2,
+            300
+          )}
+          key={item}
+          style={{ margin: 10, borderRadius: 10 }}
+        />
+      ))}
+    </>
+  );
+
   const myEvents = (
     <Card variant="outlined" className="card">
       <SectionTitle title={t('home.myEvents')} url="/event" />
@@ -60,29 +88,7 @@ function Home(props) {
           ? events
               .slice(0, 3)
               .map((event) => <EventCard event={event} key={event.slug} />)
-          : [0, 1, 2].map((item, key) => (
-              <Skeleton
-                variant="rectangular"
-                width={Math.min(
-                  (Math.max(
-                    document.documentElement.clientWidth,
-                    window.innerWidth || 0
-                  ) *
-                    2) /
-                    3,
-                  450
-                )}
-                height={Math.min(
-                  Math.max(
-                    document.documentElement.clientWidth,
-                    window.innerWidth || 0
-                  ) / 2,
-                  300
-                )}
-                key={item}
-                style={{ margin: 10, borderRadius: 10 }}
-              />
-            ))}
+          : LoadingSkeleton}
       </Grid>
     </Card>
   );
@@ -95,29 +101,7 @@ function Home(props) {
           ? events
               .slice(0, maxEventCount)
               .map((event) => <EventCard event={event} key={event.slug} />)
-          : [0, 1, 2].map((item) => (
-              <Skeleton
-                variant="rectangular"
-                width={Math.min(
-                  (Math.max(
-                    document.documentElement.clientWidth,
-                    window.innerWidth || 0
-                  ) *
-                    2) /
-                    3,
-                  450
-                )}
-                height={Math.min(
-                  Math.max(
-                    document.documentElement.clientWidth,
-                    window.innerWidth || 0
-                  ) / 2,
-                  300
-                )}
-                key={item}
-                style={{ margin: 10, borderRadius: 10 }}
-              />
-            ))}
+          : LoadingSkeleton}
       </Grid>
     </Card>
   );
