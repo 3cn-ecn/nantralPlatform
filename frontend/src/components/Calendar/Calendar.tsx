@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Grid } from '@mui/material';
 import './Calendar.scss';
-import { EventProps } from 'pages/Props/Event';
+import { EventProps } from 'Props/Event';
 import { betweenDate } from '../../utils/date';
 import { ppcm } from '../../utils/maths';
 import { isInArray } from '../../utils/array';

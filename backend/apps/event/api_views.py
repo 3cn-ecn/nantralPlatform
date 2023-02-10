@@ -100,17 +100,27 @@ class ParticipateAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
-        if event.max_participant is None:
-            event.participants.add(request.user.student)
-            return Response(
-                status='200',
-                data={"success": True,
-                      "message": "You have been added to this event"})
-        elif event.max_participant <= event.number_of_participants:
+        inscription_finished: bool = event.end_inscription is not None and\
+            timezone.now() > event.end_inscription
+        inscription_not_started: bool = event.begin_inscription is not None and\
+            timezone.now() < event.begin_inscription
+        shotgun: bool = event.max_participant is not None
+        print(inscription_finished)
+        if inscription_not_started:
             return Response(
                 status='401',
                 data={"success": False,
-                      "message": "Shotgun full or finished"})
+                      "message": "Inscription not started"})
+        elif inscription_finished:
+            return Response(
+                status='401',
+                data={"success": False,
+                      "message": "Inscription finished"})
+        elif shotgun and event.max_participant <= event.number_of_participants:
+            return Response(
+                status='401',
+                data={"success": False,
+                      "message": "Shotgun full"})
         else:
             event.participants.add(request.user.student)
             return Response(

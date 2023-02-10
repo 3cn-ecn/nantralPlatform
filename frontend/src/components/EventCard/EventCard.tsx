@@ -10,8 +10,8 @@ import { Avatar, CardActionArea } from '@mui/material';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { EventProps } from 'pages/Props/Event';
-import { ClubProps } from 'pages/Props/Club';
+import { EventProps } from 'Props/Event';
+import { ClubProps } from 'Props/Club';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -21,6 +21,7 @@ import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
 import MoreActionsButton from '../Button/MoreActionsButton';
+import { formatTime } from '../../utils/date';
 
 function InfoItem(props: { name: string; value: string }) {
   let icon = null;
@@ -68,6 +69,8 @@ function EventCard(props: { event: EventProps }) {
     ticketing,
     is_favorite,
     get_absolute_url,
+    end_inscription,
+    begin_inscription,
   } = event;
 
   // An exception is made for the BDE as the "club" needs to be removed from the slug
@@ -99,7 +102,7 @@ function EventCard(props: { event: EventProps }) {
   const dateText = `
     ${t(`event.days.${dateValue.getDay()}`)}
     ${dateValue.getDate()} ${t(`event.months.${dateValue.getMonth() + 1}`)}`;
-  const hourText = `${dateValue.getHours()}:${dateValue.getMinutes()}`;
+  const hourText = formatTime(dateValue, 'short');
 
   const groupIcon =
     typeof groupData.logo_url === 'undefined' ? (
@@ -152,6 +155,8 @@ function EventCard(props: { event: EventProps }) {
                   participating={is_participating}
                   eventSlug={slug}
                   link={ticketing}
+                  beginInscription={begin_inscription}
+                  endInscription={end_inscription}
                 />
               </div>
             </div>
