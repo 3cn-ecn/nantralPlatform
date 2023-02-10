@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink, Link } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Legal from 'pages/LegalNotice/Legal';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 import {
   IconButton,
   AppBar,
@@ -134,10 +135,16 @@ function NavBarTop(props: {
         </IconButton>
         <SvgIcon component={NantralIcon} inheritViewBox />
         <Box sx={{ flexGrow: 0.02 }} />
-        <Typography variant="h6" component="div" color="TextPrimary"
-        sx={{ display: { xs: 'none', md: 'flex' } }}>
-          Nantral Platform
-        </Typography>
+          <Breadcrumbs aria-label="breadcrumb">
+            <ListItem
+              color="text.primary"
+              component={Link}
+              to="/"
+              >
+              Nantral Plateform
+            </ListItem>
+            <Typography variant="h6" component="div" color="text.primary">Home</Typography>
+          </Breadcrumbs>
         <Box sx={{ flexGrow: 0.9 }} />
         <SearchBar />
         <Box sx={{ flexGrow: 1.0 }} />
