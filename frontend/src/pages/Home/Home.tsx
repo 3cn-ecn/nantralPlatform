@@ -28,7 +28,6 @@ function Home(props) {
   const [events, setEvents] = React.useState<Array<EventProps>>(undefined);
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>(undefined);
   const { t } = useTranslation('translation'); // translation module
-  console.log(banner);
   const headerImageURL =
     'https://www.ec-nantes.fr/medias/photo/carroussel-campus-drone-002_1524738012430-jpg';
   React.useEffect(() => {
