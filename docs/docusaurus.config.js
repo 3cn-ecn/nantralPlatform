@@ -10,7 +10,6 @@ const config = {
   tagline: "The offical documentation of Nantral Platform!",
   url: "https://docs.nantral-platform.fr",
   baseUrl: "/",
-  trailingSlash: true,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/logo.svg",
@@ -20,6 +19,9 @@ const config = {
   organizationName: "nantral-platform", // Usually your GitHub org/user name.
   projectName: "nantralPlatform", // Usually your repo name.
   deploymentBranch: "gh-pages",
+
+  // plugins
+  plugins: ['docusaurus-plugin-sass'],
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -36,8 +38,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
+          routeBasePath: '/',
           editUrl:
             "https://github.com/3cn-ecn/nantralPlatform/tree/master/docs/",
         },
@@ -58,6 +59,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      docs: {
+        sidebar: {
+          hideable: true,
+          autoCollapseCategories: true
+        }
+      },
       navbar: {
         title: "Nantral Platform Docs",
         logo: {
@@ -66,12 +73,12 @@ const config = {
         },
         items: [
           {
-            to: "/docs/user",
+            to: "/user",
             label: "User Docs",
             position: "left",
           },
           {
-            to: "/docs/dev",
+            to: "/dev",
             label: "Dev Docs",
             position: "left",
           },
@@ -100,11 +107,11 @@ const config = {
             items: [
               {
                 label: "User Docs",
-                to: "/docs/user",
+                to: "/user",
               },
               {
                 label: "Dev Docs",
-                to: "/docs/dev",
+                to: "/dev",
               },
               {
                 label: "Blog",

@@ -127,3 +127,37 @@ class ParticipateAPIView(APIView):
                 "success": True,
                 "message": "You have been removed from this event"
             })
+
+
+class FavoriteAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
+        student = request.user.student
+        if (student is None):
+            return Response(status='404', data={
+                "success": False,
+                "message": "Couldn\'t find student"
+            })
+        else:
+            student.favorite_event.add(event)
+            return Response(status='200', data={
+                "success": True,
+                "message": "You have added this event to your favorites"
+            })
+
+    def delete(self, request, *args, **kwargs):
+        event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
+        student = request.user.student
+        if (student is None):
+            return Response(status='404', data={
+                "success": False,
+                "message": "Couldn\'t find student"
+            })
+        else:
+            student.favorite_event.remove(event)
+            return Response(status='200', data={
+                "success": True,
+                "message": "You have added this event to your favorites"
+            })

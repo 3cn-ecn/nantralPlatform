@@ -18,6 +18,7 @@ export interface EventProps {
   begin_inscripion: Date | null; // date of the beginning of inscription
   end_date: string | null; // end date of the event
   ticketing: string | null; // url of inscription form
+  is_favorite: boolean;
   effectiveSize?: number; // The number of horizontal parts the events will used
   globalSize?: number; // The number of parts available
   position?: number; // The position in number of parts in the calendar
