@@ -1,0 +1,904 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="1332.2986"
+   height="957.50464"
+   viewBox="0 0 1332.2986 957.50464"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2">
+    <marker
+       style="overflow:visible"
+       id="Arrow3"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow3-1"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3-0"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow3-7"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3-5"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow3-4"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3-6"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow3-8"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3-7"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow3-3"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3-50"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow3-0"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3-4"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow3-13"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3-59"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow3-41"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3-508"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow3-8-7"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       markerWidth="4.2071066"
+       markerHeight="6.9999995"
+       viewBox="0 0 4.2071068 7"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         id="arrow3-7-0"
+         transform="rotate(180,0.125,0)" />
+    </marker>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-11.313708)">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       id="rect15614"
+       width="1332.2986"
+       height="957.50464"
+       x="11.313708"
+       y="0" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#878787;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="m 60.775513,458.64253 811.183357,0.89825"
+       id="path245" />
+    <path
+       style="fill:none;fill-opacity:1;stroke:#878787;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+       d="m 904.49954,34.808601 -0.8983,887.466659"
+       id="path245-2" />
+    <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+    <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+    <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+    <g
+       id="g7550">
+      <g
+         id="g3253"
+         transform="matrix(0.5274573,0,0,0.52950925,316.50352,146.95549)"
+         style="stroke-width:1.89221">
+        <path
+           id="rect992"
+           style="fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+           d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+        <path
+           id="rect3178"
+           style="fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+           d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+        <text
+           xml:space="preserve"
+           style="font-weight:bold;font-size:24.5333px;line-height:150.25%;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:1.89221;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+           x="864.07825"
+           y="250.85248"
+           id="text3309"><tspan
+             id="tspan3307"
+             x="864.07825"
+             y="250.85248"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1.89221">urls.py</tspan></text>
+      </g>
+      <g
+         id="g5303"
+         transform="translate(-67.271059,-68.941521)">
+        <rect
+           style="fill:#ddf6ff;fill-opacity:0.530744;stroke:#395d6a;stroke-width:0.999998;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:0.999998, 2;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
+           id="rect5357"
+           width="402.45508"
+           height="353.91211"
+           x="309.099"
+           y="122.81236" />
+        <g
+           id="g3253-9"
+           transform="matrix(0.5274573,0,0,0.52950925,202.04149,165.84255)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-8"
+             style="fill:#dddfff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-8"
+             style="fill:#dddfff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:18.4261px;line-height:150.25%;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:1.89221;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.16986"
+             y="249.27988"
+             id="text3309-5"><tspan
+               id="tspan3307-8"
+               x="864.16986"
+               y="249.27988"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1.89221">urls.py</tspan></text>
+        </g>
+        <g
+           id="g3253-9-8"
+           transform="matrix(0.5274573,0,0,0.52950925,202.04149,280.82392)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-8-0"
+             style="fill:#ddfff5;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-8-9"
+             style="fill:#ddfff5;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:16.1058px;line-height:150.25%;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:1.8922;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.20471"
+             y="248.81125"
+             id="text3309-5-7"><tspan
+               id="tspan3307-8-9"
+               x="864.20471"
+               y="248.81125"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1.8922">api_urls.py</tspan></text>
+        </g>
+        <g
+           id="g3253-9-8-9"
+           transform="matrix(0.5274573,0,0,0.52950925,101.0415,280.82392)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-8-0-3"
+             style="fill:#ddfff5;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-8-9-2"
+             style="fill:#ddfff5;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:15.4357px;line-height:150.25%;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:1.8922;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.21472"
+             y="248.63333"
+             id="text3309-5-7-4"><tspan
+               id="tspan3307-8-9-3"
+               x="864.21472"
+               y="248.63333"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1.8922">api_views.py</tspan></text>
+        </g>
+        <g
+           id="g6084"
+           transform="translate(-18.346954,223.67872)">
+          <path
+             id="rect992-8-0-3-2"
+             style="fill:#ddfff5;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z"
+             transform="matrix(0.5274573,0,0,0.52950925,27.54149,57.145199)" />
+          <path
+             id="rect3178-8-9-2-0"
+             style="fill:#ddfff5;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z"
+             transform="matrix(0.5274573,0,0,0.52950925,27.54149,57.145199)" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:13.976px;line-height:150.25%;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:1.8922;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.02698"
+             y="248.24579"
+             id="text3309-5-7-4-2"
+             transform="matrix(0.5274573,0,0,0.52950925,27.54149,57.145199)"><tspan
+               id="tspan3307-8-9-3-1"
+               x="864.02698"
+               y="248.24579"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1.8922">serializers.py</tspan></text>
+        </g>
+        <g
+           id="g3253-9-8-9-2-1"
+           transform="matrix(0.5274573,0,0,0.52950925,-90.206632,227.10963)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-8-0-3-2-7"
+             style="fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-8-9-2-0-1"
+             style="fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:13.976px;line-height:150.25%;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:1.8922;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.02698"
+             y="251.56378"
+             id="text3309-5-7-4-2-1"><tspan
+               id="tspan3307-8-9-3-1-1"
+               x="864.02698"
+               y="251.56378"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1.8922">models.py</tspan></text>
+        </g>
+        <g
+           id="g3253-9-8-9-2-1-7"
+           transform="matrix(0.5274573,0,0,0.52950925,202.04149,53.724131)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-8-0-3-2-7-0"
+             style="fill:#dddfff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-8-9-2-0-1-4"
+             style="fill:#dddfff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:13.976px;line-height:150.25%;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:1.8922;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.2157"
+             y="248.13397"
+             id="text3309-5-7-4-2-1-0"><tspan
+               id="tspan3307-8-9-3-1-1-8"
+               x="864.2157"
+               y="248.13397"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1.8922">templates.py</tspan></text>
+        </g>
+        <g
+           id="g3253-9-4"
+           transform="matrix(0.5274573,0,0,0.52950925,101.0415,165.84255)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-8-3"
+             style="fill:#dddfff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-8-7"
+             style="fill:#dddfff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:16.4336px;line-height:150.25%;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:1.89221;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.44629"
+             y="248.89827"
+             id="text3309-5-1"><tspan
+               id="tspan3307-8-3"
+               x="864.44629"
+               y="248.89827"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1.89221">views.py</tspan></text>
+        </g>
+        <g
+           id="g3253-9-4-7"
+           transform="matrix(0.5274573,0,0,0.52950925,9.1945361,165.84255)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-8-3-5"
+             style="fill:#dddfff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-8-7-1"
+             style="fill:#dddfff;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:19.5751px;line-height:150.25%;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#ddf6ff;fill-opacity:1;stroke:#000000;stroke-width:1.89221;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="863.9765"
+             y="249.62468"
+             id="text3309-5-1-7"><tspan
+               id="tspan3307-8-3-4"
+               x="863.9765"
+               y="249.62468"
+               style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1.89221">forms.py</tspan></text>
+        </g>
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:0.999999, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+           d="m 523.83356,420.00886 c -13.21059,10.62992 -25.16905,2.09107 -25.16905,2.09107"
+           id="path4781" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:0.999999, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+           d="m 497.88609,403.67077 c 12.48892,-9.26557 24.94957,-1.01557 24.94957,-1.01557"
+           id="path4803" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:0.999999, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+           d="m 523.83356,306.63769 c -13.42253,9.62657 -25.16905,1.31807 -25.16905,1.31807"
+           id="path4825" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:0.999999, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+           d="m 497.66645,295.53403 c 13.53983,-8.6147 25.16921,-2.25074 25.16921,-2.25074"
+           id="path4845" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:0.999999, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+           d="M 430.33563,413.34743 C 406.75001,411.1552 399.91638,386.03889 399.91638,386.03889"
+           id="path4865" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:0.999999, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+           d="M 398.91832,375.1552 C 420,373.93335 430.33563,399.50325 430.33563,399.50325"
+           id="path4885" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:0.999999, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+           d="m 430.33547,314.4052 c -11.08546,26.75 -30.41909,28.20635 -30.41909,28.20635"
+           id="path4905" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:0.999999, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+           d="m 398.96384,326.1552 c 10.53617,-24.25 31.37179,-26.84326 31.37179,-26.84326"
+           id="path4925" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:markers fill stroke"
+           d="m 624.02542,402.73306 c -17.02641,-10.08879 -32.8623,-1.5617 -32.8623,-1.5617"
+           id="path6086" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3-1);paint-order:markers fill stroke"
+           d="m 624.02976,292.66525 c -17.02641,10.08879 -32.8623,1.5617 -32.8623,1.5617"
+           id="path6086-2" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:markers fill stroke"
+           d="m 566.29338,247.72623 c -1.56115,-33.7506 56.77239,-42.2506 56.77239,-42.2506"
+           id="path6122" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:12.955px;line-height:150.25%;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';text-align:start;text-anchor:start;fill:#395d6a;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:1, 2;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
+           x="323.1582"
+           y="146.1833"
+           id="text5958"><tspan
+             id="tspan5956"
+             x="323.1582"
+             y="146.1833"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';text-align:start;text-anchor:start;stroke-width:1">One Django Application</tspan></text>
+      </g>
+      <path
+         style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+         d="m 738.29754,304.99183 c -50.5686,64.22185 -113.40406,64.97185 -113.40406,64.97185"
+         id="path4421" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#395d6a;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:stroke markers fill"
+         d="M 738.29769,267.65206 C 706.74921,222.03103 624.89348,209.31575 624.89348,209.31575"
+         id="path4721" />
+      <g
+         id="g7478"
+         style="fill:#ebad13;fill-opacity:1;stroke-width:1.22401"
+         transform="matrix(0.81699173,0,0,0.81699173,-20.061284,23.199826)">
+        <path
+           d="m 229.42484,288.88243 v 8.8578 c 0,8.15656 -15.68194,14.76301 -35.02245,14.76301 -19.34053,0 -35.02245,-6.60645 -35.02245,-14.76301 v -8.8578 c 0,-8.15656 15.68192,-14.76301 35.02245,-14.76301 19.34051,0 35.02245,6.60645 35.02245,14.76301 z m -8.568,24.85721 c 3.25208,-1.36558 6.23838,-3.11868 8.568,-5.27777 v 18.80438 c 0,8.15656 -15.68194,14.76301 -35.02245,14.76301 -19.34053,0 -35.02245,-6.60645 -35.02245,-14.76301 v -18.80438 c 2.32962,2.17755 5.31591,3.91219 8.56799,5.27777 7.02013,2.9526 16.36987,4.66881 26.45446,4.66881 10.08459,0 19.43432,-1.71621 26.45445,-4.66881 z m -61.4769,24.24825 c 2.32962,2.17754 5.31591,3.91219 8.56799,5.27777 7.02013,2.9526 16.36987,4.66881 26.45446,4.66881 10.08459,0 19.43432,-1.71621 26.45445,-4.66881 3.25208,-1.36558 6.23838,-3.11868 8.568,-5.27777 v 15.85177 c 0,8.15657 -15.68194,14.76301 -35.02245,14.76301 -19.34053,0 -35.02245,-6.60644 -35.02245,-14.76301 z"
+           id="path7360"
+           style="fill:#4d5d97;fill-opacity:1;stroke-width:1.22401" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.2684px;line-height:150.25%;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';text-align:center;text-anchor:middle;fill:#4d5d97;fill-opacity:1;stroke:none;stroke-width:3.67201;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+           x="194.44305"
+           y="392.07742"
+           id="text7423"><tspan
+             id="tspan7421"
+             x="194.44305"
+             y="392.07742"
+             style="stroke-width:3.67201">Database</tspan></text>
+        <path
+           style="fill:none;fill-opacity:1;stroke:#4d5d97;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+           d="m 253.49778,306.39418 c -43.48707,20.28915 -80.96373,-0.72324 -80.96373,-0.72324"
+           id="path7864"
+           transform="matrix(1.2240026,0,0,1.2240026,27.557523,-32.72415)" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#4d5d97;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3-7);paint-order:normal"
+           d="m 173.16929,283.93273 c 43.48707,-20.28915 80.96373,0.72324 80.96373,0.72324"
+           id="path7864-6"
+           transform="matrix(1.2240026,0,0,1.2240026,27.557523,-32.72415)" />
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.5333px;line-height:150.25%;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';text-align:center;text-anchor:middle;fill:#878787;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         x="126.96152"
+         y="101.33071"
+         id="text7566"><tspan
+           id="tspan7564"
+           x="126.96152"
+           y="101.33071">Back End</tspan></text>
+    </g>
+    <g
+       id="g6647"
+       transform="translate(-70.099486,-34.194867)"
+       style="fill:#ebad13;fill-opacity:1">
+      <g
+         id="g7358"
+         transform="translate(2.5857864,7.444257)">
+        <path
+           d="m 1124.0516,389.18125 c -15.0831,0 -27.3461,12.26301 -27.3461,27.3461 v 109.38439 h 27.3461 V 416.52735 h 164.0766 v 109.38439 h 27.3461 V 416.52735 c 0,-15.08309 -12.263,-27.3461 -27.3461,-27.3461 z m -46.4884,150.40353 c -4.5292,0 -8.2038,3.67463 -8.2038,8.20383 0,18.11679 14.6985,32.81532 32.8154,32.81532 h 207.8303 c 18.1168,0 32.8153,-14.69853 32.8153,-32.81532 0,-4.5292 -3.6747,-8.20383 -8.2039,-8.20383 z"
+           id="path6578"
+           style="fill:#ebad13;fill-opacity:1;stroke-width:1;stroke-dasharray:none" />
+        <path
+           d="m 1218.4905,477.22446 c 0,2.86763 -0.155,5.63191 -0.4263,8.26702 h -23.9486 c -0.2841,-2.63511 -0.4263,-5.39939 -0.4263,-8.26702 0,-2.86762 0.155,-5.6319 0.4263,-8.26701 h 23.9486 c 0.2842,2.63511 0.4263,5.39939 0.4263,8.26701 z m 3.7201,-8.26701 h 15.9011 c 0.6846,2.64803 1.0463,5.41231 1.0463,8.26701 0,2.85471 -0.3617,5.61899 -1.0463,8.26702 h -15.9011 c 0.2713,-2.66095 0.4134,-5.42523 0.4134,-8.26702 0,-2.84178 -0.1422,-5.60607 -0.4134,-8.26701 z m 14.5448,-4.13351 h -15.0744 c -1.2917,-8.2541 -3.8494,-15.16481 -7.1432,-19.5825 10.1142,2.67387 18.3425,10.01085 22.2046,19.5825 z m -19.2597,0 h -22.8118 c 0.788,-4.70187 2.0022,-8.86121 3.4876,-12.23261 1.3564,-3.04846 2.8677,-5.2573 4.3274,-6.65236 1.4467,-1.36923 2.648,-1.78257 3.591,-1.78257 0.9429,0 2.1442,0.41334 3.5909,1.78257 1.4597,1.39506 2.971,3.6039 4.3273,6.65236 1.4984,3.35848 2.7126,7.51783 3.4876,12.23261 z m -26.9969,0 h -15.0744 c 3.8751,-9.57165 12.0905,-16.90863 22.2176,-19.5825 -3.2939,4.41769 -5.8515,11.3284 -7.1432,19.5825 z m -16.4307,4.13351 h 15.9011 c -0.2713,2.66094 -0.4134,5.42523 -0.4134,8.26701 0,2.84179 0.1421,5.60607 0.4134,8.26702 h -15.9011 c -0.6847,-2.64803 -1.0463,-5.41231 -1.0463,-8.26702 0,-2.8547 0.3616,-5.61898 1.0463,-8.26701 z m 24.1034,32.88723 c -1.4983,-3.3585 -2.6996,-7.51781 -3.4876,-12.21969 h 22.8118 c -0.7879,4.70188 -2.0021,8.86119 -3.4876,12.21969 -1.3563,3.04847 -2.8676,5.25729 -4.3273,6.65239 -1.4467,1.38213 -2.648,1.79547 -3.5909,1.79547 -0.943,0 -2.1443,-0.41334 -3.5909,-1.78256 -1.4598,-1.3951 -2.971,-3.60392 -4.3274,-6.65239 z m -7.6727,-12.21969 c 1.2917,8.25409 3.8493,15.1648 7.1432,19.58249 -10.1271,-2.67387 -18.3425,-10.01084 -22.2176,-19.58249 z m 46.2565,0 c -3.8751,9.57165 -12.0905,16.90862 -22.2046,19.58249 3.2938,-4.41769 5.8385,-11.3284 7.1431,-19.58249 z"
+           id="path6636"
+           style="fill:#ebad13;fill-opacity:1;stroke-width:1" />
+      </g>
+      <path
+         style="fill:none;fill-opacity:1;stroke:#ebad13;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+         d="M 1173.8093,380.67858 C 1171.7978,338.48454 884.14107,320.57451 884.14107,320.57451"
+         id="path6805" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#ebad13;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3-4);paint-order:normal"
+         d="M 704.5816,148.4611 C 1241.7438,1.9068212 1234.9134,382.24831 1234.9134,382.24831"
+         id="path6805-3" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.14px;line-height:150.25%;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';text-align:center;text-anchor:middle;fill:#ebad13;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         x="1103.8752"
+         y="138.52579"
+         id="text7248"
+         transform="rotate(10.244858)"><tspan
+           id="tspan7246"
+           x="1103.8752"
+           y="138.52579"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';stroke-width:3">Request</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.14px;line-height:150.25%;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';text-align:center;text-anchor:middle;fill:#ebad13;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         x="1035.0156"
+         y="-201.94679"
+         id="text7248-7"
+         transform="rotate(17.680106)"><tspan
+           id="tspan7246-9"
+           x="1035.0156"
+           y="-201.94679"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';stroke-width:3">Response</tspan></text>
+      <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.5333px;line-height:150.25%;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';text-align:center;text-anchor:middle;fill:#878787;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         x="1304.0654"
+         y="145.16716"
+         id="text7566-7-9"><tspan
+           id="tspan7564-4-1"
+           x="1304.0654"
+           y="145.16716">Client</tspan></text>
+    </g>
+    <g
+       id="g8758">
+      <g
+         id="g3253-7"
+         transform="matrix(0.5274573,0,0,0.52950925,248.87668,511.79883)"
+         style="stroke-width:1.89221">
+        <path
+           id="rect992-0"
+           style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+           d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+        <path
+           id="rect3178-6"
+           style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+           d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+        <text
+           xml:space="preserve"
+           style="font-weight:bold;font-size:24.5333px;line-height:1em;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#af1c20;fill-opacity:1;stroke:#000000;stroke-width:1.89221;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+           x="864.07825"
+           y="250.85248"
+           id="text3309-0"><tspan
+             id="tspan3307-85"
+             x="864.07825"
+             y="250.85248"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:1.89221">router</tspan><tspan
+             x="864.07825"
+             y="275.38577"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.1836px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:1.89221"
+             id="tspan8862">(App.js)</tspan></text>
+      </g>
+      <path
+         style="fill:none;fill-opacity:1;stroke:#af1c20;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3-8);paint-order:normal"
+         d="M 771.70467,328.5251 C 943.62809,655.98656 751.42028,648.00225 751.42028,648.00225"
+         id="path6805-6" />
+      <path
+         style="fill:none;fill-opacity:1;stroke:#af1c20;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3-8-7);paint-order:normal"
+         d="M 594.46542,726.5435 C 1160.1953,870.9481 1137.8443,565.97691 1137.8443,565.97691"
+         id="path6805-6-0" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.14px;line-height:150.25%;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';text-align:center;text-anchor:middle;fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         x="718.69141"
+         y="992.85175"
+         id="text7248-7-3"
+         transform="rotate(-17.05006)"><tspan
+           id="tspan7246-9-4"
+           x="718.69141"
+           y="992.85175"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#af1c20;fill-opacity:1;stroke-width:3">Response</tspan></text>
+      <g
+         id="g9851"
+         transform="translate(12,4.7025866)">
+        <rect
+           style="fill:#ffddde;fill-opacity:0.407975;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:1, 2;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+           id="rect9000-8"
+           width="330.40933"
+           height="127.2541"
+           x="252.05888"
+           y="645.25024"
+           transform="translate(1.962211e-6,-1.268065e-5)" />
+        <text
+           xml:space="preserve"
+           style="font-weight:bold;font-size:12.9654px;line-height:1em;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#af1c20;fill-opacity:1;stroke:#000000;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+           x="281.47266"
+           y="665.08002"
+           id="text3309-0-9-5"
+           transform="scale(0.99806054,1.0019432)"><tspan
+             x="281.47266"
+             y="665.08002"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.9654px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:0.999999"
+             id="tspan8862-3-1">Pages</tspan></text>
+        <g
+           id="g3253-7-5"
+           transform="matrix(0.5274573,0,0,0.52950925,-109.01542,584.09624)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-0-5"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-6-4"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:24.5333px;line-height:1em;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#af1c20;fill-opacity:1;stroke:#000000;stroke-width:1.89221;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.50763"
+             y="253.17088"
+             id="text3309-0-9"><tspan
+               x="864.50763"
+               y="253.17088"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.1836px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:1.89221"
+               id="tspan8862-3"><tspan
+                 id="tspan9677"
+                 style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.5333px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:1.89221">Home</tspan></tspan></text>
+        </g>
+        <g
+           id="g3253-7-5-9"
+           transform="matrix(0.5274573,0,0,0.52950925,-21.526028,584.09624)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-0-5-0"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-6-4-2"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:24.5333px;line-height:1em;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#af1c20;fill-opacity:1;stroke:#000000;stroke-width:1.89221;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.50763"
+             y="253.17088"
+             id="text3309-0-9-4"><tspan
+               x="864.50763"
+               y="253.17088"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20.1836px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:1.89221"
+               id="tspan8862-3-7"><tspan
+                 id="tspan9677-6"
+                 style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.5333px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:1.89221">Events</tspan></tspan></text>
+        </g>
+        <g
+           id="g3253-7-5-5"
+           transform="matrix(0.5274573,0,0,0.52950925,65.963364,584.09624)"
+           style="stroke-width:1.89221">
+          <path
+             id="rect992-0-5-7"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-6-4-1"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+          <text
+             xml:space="preserve"
+             style="font-weight:bold;font-size:18.8866px;line-height:1em;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#af1c20;fill-opacity:1;stroke:#000000;stroke-width:1.89221;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             x="864.25739"
+             y="249.54955"
+             id="text3309-0-9-3"><tspan
+               x="864.25739"
+               y="249.54955"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15.538px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:1.89221"
+               id="tspan8862-3-3"><tspan
+                 id="tspan9677-3"
+                 style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:18.8866px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:1.89221">Signature</tspan></tspan></text>
+        </g>
+      </g>
+      <g
+         id="g9851-9"
+         transform="translate(12.757418,157.12272)">
+        <rect
+           style="fill:#ffddde;fill-opacity:0.407975;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:1, 2;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+           id="rect9000-8-9"
+           width="330.40933"
+           height="100.8858"
+           x="252.05888"
+           y="645.25024" />
+        <text
+           xml:space="preserve"
+           style="font-weight:bold;font-size:12.9654px;line-height:1em;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#af1c20;fill-opacity:1;stroke:#000000;stroke-width:0.999999;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+           x="300.01691"
+           y="662.09814"
+           id="text3309-0-9-5-0"
+           transform="scale(0.99806055,1.0019432)"><tspan
+             x="300.01691"
+             y="662.09814"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.9654px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:0.999999"
+             id="tspan8862-3-1-7">Components</tspan></text>
+        <g
+           id="g3253-7-5-6"
+           transform="matrix(0.27971343,0,0,0.28283065,87.11637,637.06773)"
+           style="stroke-width:3.55533">
+          <path
+             id="rect992-0-5-3"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:7.11068;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-6-4-7"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:7.11068;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+        </g>
+        <g
+           id="g3253-7-5-6-2"
+           transform="matrix(0.27971343,0,0,0.28283065,146.00609,637.06773)"
+           style="stroke-width:3.55533">
+          <path
+             id="rect992-0-5-3-7"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:7.11068;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-6-4-7-4"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:7.11068;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+        </g>
+        <g
+           id="g3253-7-5-6-0"
+           transform="matrix(0.27971343,0,0,0.28283065,204.89581,637.06773)"
+           style="stroke-width:3.55533">
+          <path
+             id="rect992-0-5-3-3"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:7.11068;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-6-4-7-2"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:7.11068;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+        </g>
+        <g
+           id="g3253-7-5-6-8"
+           transform="matrix(0.27971343,0,0,0.28283065,263.78553,637.06773)"
+           style="stroke-width:3.55533">
+          <path
+             id="rect992-0-5-3-0"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:7.11068;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 v 132.0918 H 927.32617 V 157.51953 Z" />
+          <path
+             id="rect3178-6-4-7-3"
+             style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:7.11068;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+             d="m 843.50781,157.51953 -41.9414,41.93945 h 41.9414 z" />
+        </g>
+        <path
+           style="fill:none;fill-opacity:1;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+           d="m 521.16445,607.23531 -9.7159,72.38377"
+           id="path13846" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+           d="m 433.67506,607.23531 18.88377,72.38377"
+           id="path13962" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+           d="m 346.18567,607.23531 47.48344,72.38377"
+           id="path14078" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+           d="M 521.16445,607.23531 406.61042,680.24408"
+           id="path14194" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+           d="m 433.67506,607.23531 -98.89567,72.38377"
+           id="path14310" />
+        <path
+           style="fill:none;fill-opacity:1;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+           d="m 346.18567,607.23531 94.6506,72.38377"
+           id="path14426" />
+      </g>
+      <g
+         id="g3253-7-9"
+         transform="matrix(0.5274573,0,0,0.52950925,36.93514,415.69326)"
+         style="stroke-width:1.89221">
+        <rect
+           style="fill:#ffddde;fill-opacity:1;stroke:#000000;stroke-width:3.78442;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke markers fill"
+           id="rect9000"
+           width="384.00217"
+           height="101.72874"
+           x="603.41327"
+           y="206.36139" />
+        <text
+           xml:space="preserve"
+           style="font-weight:bold;font-size:24.5333px;line-height:1em;font-family:'JMH Typewriter';-inkscape-font-specification:'JMH Typewriter Bold';text-align:center;text-anchor:middle;fill:#af1c20;fill-opacity:1;stroke:#000000;stroke-width:1.89221;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+           x="797.62231"
+           y="264.72067"
+           id="text3309-0-5"><tspan
+             x="797.62231"
+             y="264.72067"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.5333px;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:1.89221"
+             id="tspan8862-1">Axios (AJAX)</tspan></text>
+      </g>
+      <path
+         style="fill:none;fill-opacity:0.407975;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+         d="m 670.67067,650.40313 c -102.58429,-20.19332 -108.86938,20.8018 -108.86938,20.8018"
+         id="path10354" />
+      <path
+         style="fill:none;fill-opacity:0.407975;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3-3);paint-order:normal"
+         d="m 670.67067,650.40313 c -248.28429,-53.92299 -283.92804,19.9928 -283.92804,19.9928"
+         id="path10354-8" />
+      <path
+         style="fill:none;fill-opacity:0.407975;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3-0);paint-order:normal"
+         d="M 670.67067,650.40313 C 484.96749,615.5049 474.33145,670.58905 474.33145,670.58905"
+         id="path10354-1" />
+      <path
+         style="fill:none;fill-opacity:0.407975;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:1, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+         d="M 354.21181,649.45282 C 355.1664,602.33794 367,579.83177 367,579.83177"
+         id="path11676" />
+      <path
+         style="fill:none;fill-opacity:0.407975;stroke:#671618;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:1, 2;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3-13);paint-order:normal"
+         d="m 383.53923,579.49557 c -0.95459,47.11488 -12.78819,69.62105 -12.78819,69.62105"
+         id="path11676-3" />
+      <path
+         style="fill:none;fill-opacity:0.407975;stroke:#af1c20;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3);paint-order:normal"
+         d="m 558.75268,552.55959 c 185.51766,1.95664 194.58121,-227.0253 194.58121,-227.0253"
+         id="path11915" />
+      <path
+         style="fill:none;fill-opacity:0.407975;stroke:#af1c20;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow3-41);paint-order:normal"
+         d="m 480.18408,387.78554 c -58.69604,35.14384 -54.95032,134.76939 -54.95032,134.76939"
+         id="path11915-3" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:11.4141px;line-height:150.25%;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';text-align:start;text-anchor:start;fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         x="439.91129"
+         y="659.81012"
+         id="text12260"
+         transform="rotate(-12.792734)"><tspan
+           id="tspan12258"
+           x="439.91129"
+           y="659.81012"
+           style="stroke-width:2">Request</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;line-height:1em;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono';text-align:center;text-anchor:middle;fill:#af1c20;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         x="392.24466"
+         y="504.75723"
+         id="text12597"><tspan
+           id="tspan12595"
+           x="392.24466"
+           y="504.75723">Response</tspan><tspan
+           x="392.24466"
+           y="515.42395"
+           id="tspan15008">(JSON)</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:24.5333px;line-height:150.25%;font-family:'Noto Sans Mono';-inkscape-font-specification:'Noto Sans Mono Bold';text-align:center;text-anchor:middle;fill:#878787;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         x="134.32149"
+         y="554.98456"
+         id="text7566-7"><tspan
+           id="tspan7564-4"
+           x="134.32149"
+           y="554.98456">Front End</tspan></text>
+    </g>
+  </g>
+</svg>

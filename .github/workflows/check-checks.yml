@@ -1,0 +1,15 @@
+name: Check for all checks
+
+on:
+  check_run:
+    type: [completed]
+
+jobs:
+  checkForSuccess:
+    name: success-check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check
+      uses: arup-group/action-all-checks-passed@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
