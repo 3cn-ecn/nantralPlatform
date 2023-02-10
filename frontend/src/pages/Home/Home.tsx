@@ -13,7 +13,8 @@ import './Home.scss';
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
-function Home() {
+function Home(props) {
+  console.log(props);
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
   const { t } = useTranslation('translation'); // translation module

@@ -12,7 +12,6 @@ import { isString } from 'lodash';
 import axios from 'axios';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../../theme';
-import formatQuery, { searchApi } from '../../../api';
 
 /** Interface for the options */
 interface Option {
@@ -47,7 +46,7 @@ export function SearchBar(): JSX.Element {
       return;
     }
     axios
-      .get<Option[]>(formatQuery(searchApi, { query: value }))
+      .get<Option[]>('/api/search/', { params: { query: value } })
       .then((res) => {
         // when we get the answer to our request, update the options
         setOptions(res.data);
