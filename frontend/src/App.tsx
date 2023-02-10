@@ -30,13 +30,12 @@ import './App.scss';
  * @returns The App Component
  */
 function App() {
-  const [menuOpen, setMenuOpen] = React.useState(true);
+  const [menuOpen, setMenuOpen] = React.useState(false);
   const [themeApp, setThemeApp] = React.useState(true);
   const [isAutomatic, setIsAutomatic] = React.useState(true);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const choixTheme = isAutomatic ? !prefersDarkMode : themeApp;
   const drawerWidth = 240; // the width of the lateral navbar
-  const count = 0;
   return (
     <ThemeProvider theme={choixTheme ? theme : darktheme}>
       <Box sx={{ display: 'flex' }}>

@@ -12,7 +12,6 @@ import {
 } from '@mui/icons-material';
 import { EventProps } from 'pages/Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
-import { getEventApi } from '../../api';
 import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular'
 
@@ -73,7 +72,7 @@ function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
 
   React.useEffect(() => {
-    axios.get(getEventApi).then((eventsData) => {
+    axios.get('/api/event').then((eventsData) => {
       setEvents(eventsData.data);
       // console.log(events[0].date);
       // console.log(eventsData.data[0].date);
