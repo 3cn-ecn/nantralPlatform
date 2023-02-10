@@ -1,5 +1,6 @@
 import React from 'react';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import Container from '@mui/material/Container';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 
 /**
@@ -8,7 +9,7 @@ import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.s
  */
 function Student() {
   return (
-    <>
+    <Container maxWidth="sm">
       <h1>Student</h1>
       <p>Bienvenue sur Nantral Plateform</p>
       <SvgIcon component={NantralIcon} inheritViewBox />
@@ -138,7 +139,7 @@ function Student() {
         cupidatat cillum exercitation ullamco veniam. Ex magna non culpa
         incididunt aliqua fugiat excepteur fugiat quis elit duis.
       </p>
-    </>
+    </Container>
   );
 }
 
