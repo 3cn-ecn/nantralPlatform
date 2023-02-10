@@ -13,6 +13,7 @@ Main component
   width: $width;
   height: $height;
   margin: $margin;
+  
 }
 
 /* 
@@ -77,9 +78,9 @@ Bottom half
 }
 
 .joinButton {
-  margin: $margin;
   top: 0;
   right: 0;
+  margin: auto 0;
 }
 
 // Div to display the title and the group's name
@@ -94,7 +95,6 @@ Bottom half
 
 .eventTitle {
   text-align: left;
-  line-height: 1.57em;
   margin: 0;
   width: 100%;
   overflow: hidden;
@@ -113,8 +113,8 @@ Bottom half
 
 // Main div
 .infoDetails{
-  justify-content: flex-start;
   display: flex;
+  justify-content: space-between;
   min-height: 3.6em;
 }
 
@@ -132,18 +132,9 @@ Bottom half
   align-self: center;
   margin: 0 auto;
   overflow: hidden;
-  line-height: 1em;
   overflow-wrap: break-word;
   text-overflow: ellipsis;
   display: -webkit-box;
    -webkit-line-clamp: 3; // Allow the title on 3 lines maximum
    -webkit-box-orient: vertical;
-}
-
-.infoItemMaxSize { // Prevent the item to be displayed on multiple lines.
-  min-width: max-content;
-}
-
-.infoItemShrinkable {
-  min-width: 0;
 }

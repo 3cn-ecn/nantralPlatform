@@ -13,10 +13,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { EventProps } from 'pages/Props/Event';
 import { ClubProps } from 'pages/Props/Club';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from 'axios';
-
+import Typography from '@mui/material/Typography';
 import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
@@ -26,8 +25,6 @@ function InfoItem(props: { name: string; value: string }) {
   let icon = null;
   const { name, value } = props;
   const text = value;
-  const specificClass =
-    name === 'location' ? 'infoItemShrinkable' : 'infoItemMaxSize';
   switch (name) {
     case 'date':
       icon = <CalendarTodayIcon className="infoItemElement" />;
@@ -35,30 +32,29 @@ function InfoItem(props: { name: string; value: string }) {
     case 'time':
       icon = <AccessTimeIcon className="infoItemElement" />;
       break;
-    case 'location':
-      icon = <LocationOnIcon className="infoItemElement" />;
-
-      break;
     default:
   }
   return (
-    <div className={`infoItem ${specificClass}`}>
+    <div className="infoItem">
       {icon}
-      <div className="infoItemElement" style={{ paddingLeft: '7px' }}>
+      <Typography
+        variant="subtitle2"
+        className="infoItemElement"
+        style={{ paddingLeft: '7px' }}
+      >
         {text}
-      </div>
+      </Typography>
     </div>
   );
 }
 
-function EventCard(props: { event: EventProps }) {
+function EventCard(props: { event: EventProps; scale?: string }) {
   const { t } = useTranslation('translation'); // translation module
-  const { event } = props;
+  const { event, scale } = props;
   const {
     title,
     number_of_participants,
     max_participant,
-    location,
     date,
     image,
     group,
@@ -96,9 +92,12 @@ function EventCard(props: { event: EventProps }) {
 
   // Conversion of the date to a human redeable format
   const dateValue = new Date(date);
-  const dateText = `
-    ${t(`event.days.${dateValue.getDay()}`)}
-    ${dateValue.getDate()} ${t(`event.months.${dateValue.getMonth() + 1}`)}`;
+  const options: Intl.DateTimeFormatOptions = {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  };
+  const dateText = dateValue.toLocaleDateString(t('lang'), options);
   const hourText = `${dateValue.getHours()}:${dateValue.getMinutes()}`;
 
   const groupIcon =
@@ -114,8 +113,8 @@ function EventCard(props: { event: EventProps }) {
       </a>
     );
   return (
-    <Card className="eventCard">
-      <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
+    <Card className="eventCard" style={{ fontSize: scale }}>
+      <CardActionArea disableRipple sx={{ fontSize: '1em' }}>
         <CardMedia
           className="banner"
           component="img"
@@ -126,14 +125,14 @@ function EventCard(props: { event: EventProps }) {
           className="favIcon"
           eventSlug={slug}
           selected={is_favorite}
-          size="2.1em"
+          size="3em"
         />
         <MoreActionsButton
           isAdmin={groupData.is_current_user_admin}
           className="moreActions"
           shareUrl={window.location.origin + get_absolute_url}
           slug={slug}
-          size="1.7em"
+          size="2em"
         />
         <CardContent sx={{ padding: 0 }}>
           <div className="infoContainer">
@@ -141,9 +140,15 @@ function EventCard(props: { event: EventProps }) {
               <div className="groupIcon">{groupIcon}</div>
 
               <div className="infos">
-                <h2 className="eventTitle">{title}</h2>
-                <div>{get_group_name}</div>
+                <Typography variant="h5" className="eventTitle">
+                  {title}
+                </Typography>
+                <Typography variant="caption">{get_group_name}</Typography>
               </div>
+            </div>
+            <div className="infoDetails">
+              <InfoItem name="date" value={dateText} />
+              <InfoItem name="time" value={hourText} />
               <div className="joinButton">
                 <JoinButton
                   variant={variant}
@@ -155,16 +160,15 @@ function EventCard(props: { event: EventProps }) {
                 />
               </div>
             </div>
-            <div className="infoDetails">
-              <InfoItem name="date" value={dateText} />
-              <InfoItem name="time" value={hourText} />
-              <InfoItem name="location" value={location} />
-            </div>
           </div>
         </CardContent>
       </CardActionArea>
     </Card>
   );
 }
+
+EventCard.defaultProps = {
+  scale: '1rem',
+};
 
 export default EventCard;

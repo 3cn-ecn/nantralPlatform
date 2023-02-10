@@ -57,10 +57,16 @@ function MoreActionsButton(props: {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        style={{ minWidth: 0, padding: 0, width: `${size}`, height: `${size}` }}
+        style={{
+          minWidth: 0,
+          padding: 0,
+          width: `${size}`,
+          height: `${size}`,
+          fontSize: '1em',
+        }}
       >
         <MoreHorizIcon
-          style={{ width: `${size}`, height: `${size}` }}
+          style={{ width: `${size}`, height: `${size}`, fontSize: '1em' }}
           color="primary"
         />
       </IconButton>

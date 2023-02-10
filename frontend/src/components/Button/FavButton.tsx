@@ -37,7 +37,12 @@ function FavButton(props: {
       <IconButton
         aria-label="favorite"
         size="large"
-        style={{ padding: '0', width: `${size}`, height: `${size}` }}
+        style={{
+          padding: '0',
+          width: `${size}`,
+          height: `${size}`,
+          fontSize: '1em',
+        }}
         onClick={handlePress}
         disabled={loading}
       >
@@ -48,11 +53,12 @@ function FavButton(props: {
               position: 'absolute',
               width: `${size}`,
               height: `${size}`,
+              fontSize: '1em',
             }}
           />
         </Zoom>
         <FavoriteBorderIcon
-          style={{ width: `${size}`, height: `${size}` }}
+          style={{ width: `${size}`, height: `${size}`, fontSize: '1em' }}
           color="primary"
         />
         {loading && (
