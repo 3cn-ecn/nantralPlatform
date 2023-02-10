@@ -133,6 +133,7 @@ function EventCard(props: { event: EventProps; scale?: string }) {
           shareUrl={window.location.origin + get_absolute_url}
           slug={slug}
           size="2em"
+          participating={is_participating}
         />
         <CardContent sx={{ padding: 0 }}>
           <div className="infoContainer">

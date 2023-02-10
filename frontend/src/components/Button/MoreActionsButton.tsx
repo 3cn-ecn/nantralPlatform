@@ -27,10 +27,11 @@ function MoreActionsButton(props: {
   isAdmin: boolean; // Show or hide the link to the edit page
   shareUrl: string;
   slug: string;
+  participating: boolean;
   size?: string;
 }) {
   const { t } = useTranslation('translation'); // translation module
-  const { className, isAdmin, shareUrl, slug, size } = props;
+  const { className, isAdmin, shareUrl, slug, size, participating } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openCopyNotif, setOpenCopyNotif] = React.useState(false);
   const open = Boolean(anchorEl);
@@ -49,6 +50,19 @@ function MoreActionsButton(props: {
     >
       <EditIcon className="itemIcon" />
       {t('event.action_menu.edit')}
+    </MenuItem>
+  ) : null;
+
+  const unregisterOption = participating ? (
+    <MenuItem
+      onClick={handleClose}
+      style={{ color: rgbToHex(theme.palette.error.main) }}
+    >
+      <HighlightOffIcon
+        style={{ color: rgbToHex(theme.palette.error.main) }}
+        className="itemIcon"
+      />
+      {t('event.action_menu.unsubscribe')}
     </MenuItem>
   ) : null;
   return (
@@ -94,16 +108,7 @@ function MoreActionsButton(props: {
           {t('event.action_menu.share')}
         </MenuItem>
         {editOption}
-        <MenuItem
-          onClick={handleClose}
-          style={{ color: rgbToHex(theme.palette.error.main) }}
-        >
-          <HighlightOffIcon
-            style={{ color: rgbToHex(theme.palette.error.main) }}
-            className="itemIcon"
-          />
-          {t('event.action_menu.unsubscribe')}
-        </MenuItem>
+        {unregisterOption}
       </Menu>
       <Snackbar
         open={openCopyNotif}
