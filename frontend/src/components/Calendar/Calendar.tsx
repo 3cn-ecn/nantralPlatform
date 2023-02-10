@@ -146,23 +146,17 @@ function blockedChains(
 function createCoupleEvents(eventsData: Array<EventDataProps>): void {
   let coupleEventsLength: number;
   eventsData.forEach((eventData) => {
-    for (let j = 0; j < eventData.sameTimeEvent.length; j++) {
+    eventData.sameTimeEvent.forEach((index) => {
       coupleEventsLength = eventData.coupleEvents.length;
       for (let k = 0; k < coupleEventsLength; k++) {
-        if (
-          allSameTime(
-            eventData.sameTimeEvent[j],
-            eventData.coupleEvents[k],
-            eventsData
-          )
-        ) {
+        if (allSameTime(index, eventData.coupleEvents[k], eventsData)) {
           eventData.coupleEvents.push(
-            eventData.coupleEvents[k].concat([eventData.sameTimeEvent[j]])
+            eventData.coupleEvents[k].concat([index])
           );
         }
       }
-      eventData.coupleEvents.push([eventData.sameTimeEvent[j]]);
-    }
+      eventData.coupleEvents.push([index]);
+    });
   });
 }
 
@@ -413,7 +407,6 @@ function isInDay(
       betweenDate(checkBeginDate, eventBeginDate, eventEndDate)
     ) {
       sortEvents[i].push({ ...event });
-      console.log('je push');
     }
   }
 }
