@@ -15,7 +15,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import ClubAvatar from '../../components/ClubAvatar/ClubAvatar';
 import EventCard from '../../components/EventCard/EventCard';
-import banner from '../../assets/images/banner.jpg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import './Home.scss';
 
