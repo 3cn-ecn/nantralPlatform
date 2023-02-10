@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
+import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
-import { EventProps } from 'pages/Props/Event';
+import { EventProps } from 'Props/Event';
 import { betweenDate } from '../../utils/date';
 import { ppcm } from '../../utils/maths';
 import { isInArray } from '../../utils/array';
@@ -440,6 +441,69 @@ function sortInWeek(
 }
 
 /**
+ * Convert an EventProps in a type that can be exported in ics.
+ * @param event An event to import.
+ * @returns An event in EventAttributes type.
+ */
+function addEventICS(event: EventProps): EventAttributes {
+  const beginDate = new Date(event.date);
+  const endDate = new Date(event.end_date);
+  const duration = Math.floor(
+    (endDate.getTime() - beginDate.getTime()) / 60000
+  );
+  const eventCalendar: EventAttributes = {
+    start: [
+      beginDate.getFullYear(),
+      beginDate.getMonth() + 1,
+      beginDate.getDate(),
+      beginDate.getHours(),
+      beginDate.getMinutes(),
+    ],
+    duration: { hours: Math.floor(duration / 60), minutes: duration % 60 },
+    title: event.title,
+    description: event.description,
+    location: event.location,
+    organizer: { name: event.group },
+  };
+
+  return eventCalendar;
+}
+
+/**
+ * Function which imports the events in an ics file.
+ * @param events The list of events to import.
+ */
+async function callICS(events: Array<EventProps>) {
+  const filename = 'EventCalendar.ics';
+  const eventsCalendar: Array<EventAttributes> = [];
+  events.forEach((event) => {
+    eventsCalendar.push(addEventICS(event));
+  });
+  const file: File = await new Promise((resolve, reject) => {
+    createEvents(eventsCalendar, (error, value) => {
+      if (error) {
+        reject(error);
+      }
+
+      resolve(new File([value], filename, { type: 'plain/text' }));
+    });
+  });
+  const url = URL.createObjectURL(file);
+
+  // trying to assign the file URL to a window could cause cross-site
+  // issues so this is a workaround using HTML5
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+
+  URL.revokeObjectURL(url);
+}
+
+/**
  * The calendar component which will contains all the day and events components.
  * @param event The list of events.
  * @returns The calendar component.
@@ -534,6 +598,16 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
             );
           })}
         </Grid>
+      </div>
+      <div id="ics">
+        <Button
+          variant="outlined"
+          onClick={() => {
+            callICS(sortEvents);
+          }}
+        >
+          Exporter les évènements
+        </Button>
       </div>
     </>
   );

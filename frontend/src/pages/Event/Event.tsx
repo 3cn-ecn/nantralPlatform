@@ -10,7 +10,7 @@ import {
   CalendarToday,
   CalendarViewDay,
 } from '@mui/icons-material';
-import { EventProps } from 'pages/Props/Event';
+import { EventProps } from 'Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular'
