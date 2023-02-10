@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 const FeatureList = [
   {
     title: 'News & Events',
-    Svg: require('@site/static/img/icons/post.svg').default,
+    Svg: require('@site/static/img/home/post.svg').default,
     description: (
       <>
         Create and share your news and events with the student community
@@ -15,7 +15,7 @@ const FeatureList = [
   },
   {
     title: 'Groups',
-    Svg: require('@site/static/img/icons/club.svg').default,
+    Svg: require('@site/static/img/home/club.svg').default,
     description: (
       <>
         Create a group for your club, association, roommate or more, and
@@ -25,7 +25,7 @@ const FeatureList = [
   },
   {
     title: 'Roommates Map',
-    Svg: require('@site/static/img/icons/roommates.svg').default,
+    Svg: require('@site/static/img/home/roommates.svg').default,
     description: (
       <>
         Find all the roommates of the school on this map,

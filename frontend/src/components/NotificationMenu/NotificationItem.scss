@@ -1,0 +1,32 @@
+.notif {
+  line-break: auto;
+}
+
+.spanno {
+  display:inline-block;
+    width: 300px;
+    overflow-wrap:normal;
+}
+
+small {
+  display:inline-block;
+    max-width: 250px;
+    overflow-wrap:normal;
+}
+
+p.title {
+  font-weight: 300;
+}
+
+p.body {
+  font-size: 300;
+}
+
+.filter {
+  border-radius: 50%;
+  margin-left: 2px;
+}
+
+.read-button {
+  color: '#dc3545',
+}

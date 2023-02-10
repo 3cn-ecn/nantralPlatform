@@ -10,9 +10,10 @@ import { Avatar, CardActionArea } from '@mui/material';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { EventProps } from 'pages/Props/Event';
-import { ClubProps } from 'pages/Props/Club';
+import { EventProps } from 'Props/Event';
+import { ClubProps } from 'Props/Club';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from 'axios';
 import Typography from '@mui/material/Typography';
@@ -20,11 +21,13 @@ import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
 import MoreActionsButton from '../Button/MoreActionsButton';
+import { formatTime } from '../../utils/date';
 
 function InfoItem(props: { name: string; value: string }) {
   let icon = null;
   const { name, value } = props;
   const text = value;
+
   switch (name) {
     case 'date':
       icon = <CalendarTodayIcon className="infoItemElement" />;
@@ -64,6 +67,8 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     ticketing,
     is_favorite,
     get_absolute_url,
+    end_inscription,
+    begin_inscription,
   } = event;
 
   // An exception is made for the BDE as the "club" needs to be removed from the slug
@@ -98,7 +103,7 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     day: 'numeric',
   };
   const dateText = dateValue.toLocaleDateString(t('lang'), options);
-  const hourText = `${dateValue.getHours()}:${dateValue.getMinutes()}`;
+  const hourText = formatTime(dateValue, 'short');
 
   const groupIcon =
     typeof groupData.logo_url === 'undefined' ? (

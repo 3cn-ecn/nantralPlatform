@@ -106,5 +106,11 @@
       "edit": "Modifier"
     }
   },
-  "lang": "fr-FR"
+  "lang": "fr-FR",
+  "notif": {
+    "title": "Notifications",
+    "unread": "Non Lu",
+    "subscribed": "Abonné",
+    "load": "Charger Plus"
+  }
 }

@@ -106,5 +106,11 @@
       "edit": "Edit"
     }
   },
-  "lang": "en-GB"
+  "lang": "en-GB",
+  "notif": {
+    "title": "Notifications",
+    "unread": "Unread",
+    "subscribed": "Suscribed",
+    "load": "Loading More"
+  }
 }
