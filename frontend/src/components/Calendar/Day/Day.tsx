@@ -89,7 +89,7 @@ export function Day(props: {
     <div id={day} style={{ display: 'block' }}>
       {day}
       {dayChain}
-      {chains.map((chain) => (
+      {chains.map((chain, number) => (
         <Grid container key={`Chain${chain}Day${day}`}>
           {chain.map((eventKey) => {
             if (placing.includes(eventKey)) {
@@ -104,7 +104,9 @@ export function Day(props: {
                   }
                   sx={{
                     height: `1px`,
-                    transform: `translate(0px, -${20 * eventDate[eventKey]}px)`,
+                    transform: `translate(0px, -${
+                      number + 20 * eventDate[eventKey]
+                    }px)`,
                   }}
                 >
                   <EventBlock
@@ -126,7 +128,9 @@ export function Day(props: {
                 }
                 sx={{
                   height: `$1px`,
-                  transform: `translate(0px, -${20 * eventDate[eventKey]}px)`,
+                  transform: `translate(0px, -${
+                    number + 20 * eventDate[eventKey]
+                  }px)`,
                 }}
               ></Grid>
             );
