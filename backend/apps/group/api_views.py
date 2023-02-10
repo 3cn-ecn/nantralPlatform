@@ -9,11 +9,15 @@ from django.utils.dateparse import parse_date
 from django.utils.translation import gettext as _
 from django.views.generic import FormView, View
 
-from rest_framework import permissions, serializers, exceptions
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
-
+from rest_framework import (
+    decorators,
+    exceptions,
+    permissions,
+    response,
+    serializers,
+    status,
+    views,
+    viewsets)
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 from apps.student.models import Student
@@ -138,7 +142,7 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
         return redirect(self.get_group().get_absolute_url())
 
 
-class UpdateMembershipsAPIView(APIView):
+class UpdateMembershipsAPIView(views.APIView):
     """API endpoint to interact with the members of a club."""
     permission_classes = [permissions.IsAuthenticated]
 
@@ -150,7 +154,7 @@ class UpdateMembershipsAPIView(APIView):
             Q(end_date__isnull=True) | Q(end_date__gt=end_date)
         ).order_by('student__user__first_name')
         serializer = MembershipSerializer(memberships, many=True)
-        return Response(data=serializer.data)
+        return response.Response(data=serializer.data)
 
     def post(self, request, *args, **kwargs):
         # Check if group's admin
@@ -206,7 +210,7 @@ class UpdateMembershipsAPIView(APIView):
             return HttpResponse(status=200)
 
 
-class MembershipViewSet(ModelViewSet):
+class MembershipViewSet(viewsets.ModelViewSet):
     """An API viewset to get memberships of a group. This viewset ignore all
     logic related with admin requests.
 
@@ -245,7 +249,7 @@ class MembershipViewSet(ModelViewSet):
     def get_query_param(self, param: str, default=None) -> any:
         return self.request.query_params.get(param, default)
 
-    def get_queryset(self) -> QuerySet:
+    def get_queryset(self) -> QuerySet[Membership]:
         """
         Get list of memberships filtered by query params.
         Used by list, retrieve, update, partial_update and destroy actions.
@@ -273,7 +277,7 @@ class MembershipViewSet(ModelViewSet):
                 Q(end_date__gte=from_date) if from_date else Q(),
                 Q(begin_date__lt=to_date) if to_date else Q())
             # order fields
-            .order_by('order',
+            .order_by('-order',
                       'student__user__first_name',
                       'student__user__last_name')
             .prefetch_related('student__user'))
@@ -290,3 +294,51 @@ class MembershipViewSet(ModelViewSet):
             raise exceptions.ParseError(
                 detail=_("Provides either 'group' or 'student' as params."))
         return super().list(request, *args, **kwargs)
+
+    @decorators.action(detail=False, methods=['post'])
+    def reorder(self, request, *args, **kwargs):
+        """
+        Action to reorder a membership. It changes the 'order' fields for all
+        members of a group to place the member between two other members, in the
+        list of memberships defined by the query parameters.
+
+        Body Parameters
+        ---------------
+        member: id of the membership we want to move elsewhere
+        lower: id of the membership that should be just before the member,
+               for the given query parameters, or None if member should be the
+               last.
+        """
+        member: Membership = get_object_or_404(
+            self.get_queryset(),
+            id=request.data.get('member', None))
+        lower = self.get_queryset().filter(
+            id=request.data.get('lower', None)).first()
+        # check that memberships are from same group
+        if (lower and lower.group != member.group
+                or self.get_query_param('group') != member.group.slug):
+            raise exceptions.ValidationError(_(
+                "All memberships objects must be from the same group."))
+        # check user is admin
+        if not member.group.is_admin(request.user):
+            raise exceptions.PermissionDenied()
+        # move the member
+        member.order = lower.order + 1 if lower else 0
+        member.save()
+        # move every other members that are higher
+        members = self.get_queryset().exclude(id=member.id).all()
+        prev_order = member.order
+        curr_index = len(members) - 1
+        if lower is not None:
+            while members[curr_index] != lower:
+                curr_index -= 1
+            curr_index -= 1
+        if curr_index >= 0:
+            retenue = prev_order + 1 - members[curr_index].order
+            while curr_index >= 0 and retenue > 0:
+                retenue -= max(members[curr_index].order - prev_order - 1, 0)
+                members[curr_index].order += retenue
+                prev_order = members[curr_index].order
+                curr_index -= 1
+            Membership.objects.bulk_update(members, ['order'])
+        return response.Response(status=status.HTTP_200_OK)

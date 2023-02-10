@@ -14,8 +14,8 @@ export interface Student {
 
 export interface Membership {
   id: number;
-  student: Student | number;
-  group: Group | number;
+  student: Student;
+  group: Group;
   summary: string;
   description: string;
   beginDate: Date;
@@ -23,4 +23,5 @@ export interface Membership {
   order: number;
   admin: boolean;
   admin_request?: boolean;
+  dragId?: string;
 }
