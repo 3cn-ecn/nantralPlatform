@@ -40,7 +40,6 @@ class UpdateGroupForm(ModelForm):
             'year',
             'private',
             'public',
-            'restrict_membership',
             'archived']
 
     def __init__(self, *args, **kwargs):

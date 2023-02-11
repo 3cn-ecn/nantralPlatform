@@ -6,7 +6,8 @@ from .api_views import (
     MembershipFormView,
     AdminRequestFormView,
     UpdateMembershipsAPIView,
-    MembershipViewSet)
+    MembershipViewSet,
+    GroupViewSet)
 
 app_name = 'api_group'
 
@@ -15,6 +16,7 @@ app_name = 'api_group'
 # see https://www.django-rest-framework.org/api-guide/routers/#simplerouter
 router = DefaultRouter()
 router.register('membership', MembershipViewSet, basename='membership')
+router.register('group', GroupViewSet, basename='group')
 
 
 urlpatterns = [

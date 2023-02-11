@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
-from django.db.models import Q, QuerySet
+from django.db.models import Q, QuerySet, Count
 from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.urls.base import reverse
@@ -23,9 +23,12 @@ from discord_webhook import DiscordWebhook, DiscordEmbed
 from apps.student.models import Student
 
 from .views import UserCanSeeGroupMixin
-from .models import Group, Membership
+from .models import Group, Membership, GroupType
 from .forms import MembershipForm, AdminRequestForm
-from .serializers import MembershipSerializer, NewMembershipSerializer
+from .serializers import (
+    MembershipSerializer,
+    NewMembershipSerializer,
+    GroupSerializer)
 
 
 class UpdateSubscriptionView(UserCanSeeGroupMixin, View):
@@ -210,6 +213,66 @@ class UpdateMembershipsAPIView(views.APIView):
             return HttpResponse(status=200)
 
 
+class GroupPermission(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj: Group):
+        if request.method in permissions.SAFE_METHODS:
+            return (obj.public or (
+                    request.user.is_authenticated and (
+                        not obj.private or obj.is_member(request.user))))
+        return obj.is_admin(request.user)
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """An API endpoint for groups."""
+
+    permission_classes = [GroupPermission]
+    serializer_class = GroupSerializer
+
+    def get_queryset(self) -> QuerySet[Group]:
+        user = self.request.user
+        group_type = get_object_or_404(
+            GroupType, slug=self.request.query_params.get('type', None))
+        return (Group.objects
+                # filter by group_type
+                .filter(group_type=group_type)
+                # remove the sub-groups to keep only parent groups
+                .filter(Q(parent=None)
+                        | Q(parent__in=group_type.extra_parents.all()))
+                # hide archived groups
+                .filter(archived=False)
+                # hide private groups unless user is member
+                # and hide non-public group if user is not authenticated
+                .filter(Q(private=False) | Q(members=user.student)
+                        if user.is_authenticated
+                        else Q(public=True))
+                # hide groups without active members (ie end_date > today)
+                .annotate(num_active_members=Count(
+                    'membership_set',
+                    filter=Q(membership_set__end_date__gte=timezone.now())))
+                .filter(Q(num_active_members__gt=0)
+                        if group_type.hide_no_active_members
+                        else Q())
+                # prefetch type and parent group for better performances
+                .prefetch_related('group_type', 'parent')
+                # order by category, order and then name
+                .order_by(*group_type.sort_fields.split(',')))
+
+    def get_object(self):
+        obj = get_object_or_404(Group, pk=self.kwargs['pk'])
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+
+class MembershipPermission(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj: Membership):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return (obj.student.user == request.user
+                or obj.group.is_admin(request.user))
+
+
 class MembershipViewSet(viewsets.ModelViewSet):
     """An API viewset to get memberships of a group. This viewset ignore all
     logic related with admin requests.
@@ -233,12 +296,12 @@ class MembershipViewSet(viewsets.ModelViewSet):
     Detail Actions (/api/group/membership/<id>)
     --------------
     retrieve (GET): get the membership object by id
-    update (UPDATE) : replace the membership object by a new membership object
+    update (PUT) : replace the membership object by a new membership object
     partial_update (PATCH): update some fields of the membership object
     destroy (DELETE): delete the membership object
     """
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, MembershipPermission]
 
     def get_serializer_class(self) -> serializers.ModelSerializer:
         if self.action == 'create':

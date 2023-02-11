@@ -21,7 +21,7 @@ from apps.utils.slug import SlugModel
 
 
 path_and_rename_group = PathAndRename('groups/logo')
-path_and_rename_group_banniere = PathAndRename('groups/banniere')
+path_and_rename_group_banner = PathAndRename('groups/banniere')
 path_and_rename_group_type = PathAndRename('groups/types')
 
 
@@ -190,11 +190,6 @@ class Group(models.Model, SlugModel):
         help_text=_("If ticked, the group page can be seen by everyone, "
                     "including non-authenticated users. Members, events and "
                     "posts still however hidden."))
-    restrict_membership = models.BooleanField(
-        verbose_name=_("Restricted membership"),
-        default=False,
-        help_text=_("Hide the 'Become member' button. Only admins can add new "
-                    "members."))
 
     # Profile
     summary = models.CharField(
@@ -222,7 +217,7 @@ class Group(models.Model, SlugModel):
         verbose_name=_("Banner"),
         blank=True,
         null=True,
-        upload_to=path_and_rename_group_banniere,
+        upload_to=path_and_rename_group_banner,
         help_text=_("Your banner will be displayed at 1320x492 pixels."))
     video1 = models.URLField(
         verbose_name=_("Video link 1"), max_length=200, null=True, blank=True)
@@ -247,8 +242,8 @@ class Group(models.Model, SlugModel):
     created_by = models.ForeignKey(
         Student, blank=True, null=True,
         on_delete=models.SET_NULL, related_name='+')
-    last_modified_at = models.DateTimeField(auto_now=True)
-    last_modified_by = models.ForeignKey(
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(
         Student, blank=True, null=True,
         on_delete=models.SET_NULL, related_name='+')
 
@@ -296,7 +291,7 @@ class Group(models.Model, SlugModel):
         if not self.short_name:
             self.short_name = self.name
         if self.pk is None:
-            self.created_by = self.last_modified_by
+            self.created_by = self.updated_by
         if self.pk is None and self.group_type.private_by_default:
             self.private = True
         # create the slug

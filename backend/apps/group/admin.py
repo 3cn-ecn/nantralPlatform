@@ -11,17 +11,17 @@ class GroupTypeAdmin(admin.ModelAdmin):
 class GroupAdmin(admin.ModelAdmin):
     search_fields = ['name', 'short_name']
     list_display = ['name', 'short_name', 'group_type']
-    list_filter = ['group_type', 'year', 'private', 'archived']
+    list_filter = ['group_type', 'year', 'public', 'private', 'archived']
     exclude = ['members', 'subscribers']
     raw_id_fields = ['social_links']
     readonly_fields = [
         'created_by',
         'created_at',
-        'last_modified_by',
-        'last_modified_at']
+        'updated_by',
+        'updated_at']
 
     def save_model(self, request, obj: Group, form, change):
-        obj.last_modified_by = request.user.student
+        obj.updated_by = request.user.student
         super().save_model(request, obj, form, change)
 
 

@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import QuerySet, Q, Count
 # from django.http import HttpResponse  # , HttpRequest
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls.base import reverse
 from django.utils import timezone
 from django.views.generic import (
@@ -98,7 +98,7 @@ class GroupListView(ListView):
 
     def get_queryset(self) -> QuerySet[Group]:
         user = self.request.user
-        group_type = GroupType.objects.get(slug=self.kwargs.get('type'))
+        group_type = get_object_or_404(GroupType, slug=self.kwargs.get('type'))
         return (Group.objects
                 # filter by group_type
                 .filter(group_type=group_type)
