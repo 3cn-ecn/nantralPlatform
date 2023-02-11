@@ -25,7 +25,7 @@ class SimpleStudentSerializer(serializers.ModelSerializer):
         fields = ['id', 'full_name', 'url', 'picture_url']
 
     def get_full_name(self, obj: Student) -> str:
-        return obj.user.get_full_name()
+        return obj.name
 
     def get_url(self, obj: Student) -> str:
         return obj.get_absolute_url()

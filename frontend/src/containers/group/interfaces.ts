@@ -18,8 +18,8 @@ export interface Membership {
   group: Group;
   summary: string;
   description: string;
-  beginDate: Date;
-  endDate: Date;
+  begin_date: Date;
+  end_date: Date;
   order: number;
   admin: boolean;
   admin_request?: boolean;

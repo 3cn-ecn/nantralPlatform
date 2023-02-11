@@ -9,20 +9,26 @@ import {
   TableRow,
   Paper,
   Snackbar,
-  Alert
+  Alert,
+  IconButton,
+  Box,
+  Typography
 } from '@mui/material';
 import {
   CheckCircle as CheckCircleIcon,
   Help as HelpIcon,
-  DragIndicator as DragIndicatorIcon
+  DragIndicator as DragIndicatorIcon,
+  Edit as EditIcon,
+  Visibility as VisibilityIcon
 } from '@mui/icons-material';
 import {
   DragDropContext,
   Droppable,
   Draggable,
-  DraggingStyle,
-  NotDraggingStyle
+  OnDragEndResponder,
+  DropResult
 } from 'react-beautiful-dnd';
+import Avatar from './components/avatar';
 import { Student, Group, Membership} from './interfaces';
 import axios from '../utils/axios';
 
@@ -37,31 +43,11 @@ declare const groupSlug: string;
  * @param endIndex 
  * @returns the re-ordered list
  */
-function reorder(list: Membership[], startIndex: number, endIndex: number): Membership[] {
+function reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
   return result;
-};
-
-/**
- * Change item style when dragged.
- *
- * @param isDragging 
- * @param draggableStyle 
- * @returns new style of the item
- */
-function getItemStyle(
-  isDragging: boolean,
-  draggableStyle: DraggingStyle | NotDraggingStyle
-): DraggingStyle | NotDraggingStyle {
-  return {
-    // styles we need to apply on draggables
-    ...draggableStyle,
-    ...(isDragging && {
-      background: "rgb(235,235,235)",
-    }),
-  };
 };
 
 /**
@@ -80,10 +66,12 @@ function DraggableComponent(id: string, index: number) {
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            style={getItemStyle(
-              snapshot.isDragging,
-              provided.draggableProps.style
-            )}
+            style={{
+              ...provided.draggableProps.style,
+              ...(snapshot.isDragging && {
+                background: "rgb(235,235,235)",
+              })
+            }}
             {...props}
           >
             {props.children}
@@ -100,7 +88,7 @@ function DraggableComponent(id: string, index: number) {
  * @param onDragEnd - function to use after dragging
  * @returns A component
  */
-function DroppableComponent(onDragEnd: (result, provided) => void) {
+function DroppableComponent(onDragEnd: OnDragEndResponder) {
   return function (props: any): JSX.Element {
     return (
       <DragDropContext onDragEnd={onDragEnd}>
@@ -121,47 +109,61 @@ function DroppableComponent(onDragEnd: (result, provided) => void) {
   };
 };
 
-function MembershipAdminTable(props: {}): JSX.Element {
+/**
+ * Main table component for editing members in the admin page of groups.
+ */
+function EditMembershipsPage(props: {}): JSX.Element {
+  // members
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>('load');
-  const [params, setParams] = useState({
+  // filters passed as query parameters
+  const [filters, setFilters] = useState({
     group: groupSlug,
     from: new Date().toISOString(),
     to: null
   });
-  const [message, setMessage] = useState({ open: false, type: null, text: '' });
+  // status of the snackbar
+  const [message, setMessage] = useState<{open: boolean; type: any; text: string }>({ open: false, type: null, text: '' });
   
   useEffect(() => {
     getMembers();
   }, []);
 
+  /**
+   * Get the list of memberships, for these filters (including the group slug)
+   */
   async function getMembers() {
-    axios.get<Membership[]>('/api/group/membership/', {params})  // get data
-    .then((res) => res.data.map((item) => {  // map each item to add dragId
-      item.dragId = `item-${item.id}`;
+    axios.get<Membership[]>('/api/group/membership/', {params: filters})
+    .then((res) => res.data.map((item) => {
+      item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
+      item.begin_date = new Date(item.begin_date);  // convert string to dates
+      item.end_date = new Date(item.end_date);
       return item;
     }))
-    .then((list) => {  // update members variables
+    .then((list) => {
       setMembers(list);
       setLoadState('success');
     })
-    .catch(() => setLoadState('fail'));  // error case
+    .catch(() => setLoadState('fail'));
   }
 
-  async function onDragEnd(result) {
+  /**
+   * Callback after dropping for the drag-and-drop.
+   * Send a request to the server to save the new order.
+   */
+  async function onDragEnd(result: DropResult) {
     // dropped outside the list
     if (!result.destination) return;
     const source = result.source.index;
     const dest = result.destination.index;
     const r_members = reorder(members, source, dest);
+    setMembers(r_members);
     axios.post('/api/group/membership/reorder/', {
       member: members[source].id,
-      higher: dest > 0 ? r_members[dest - 1].id : null,
       lower: dest + 1 < members.length ? r_members[dest + 1].id : null
-    }, {params})
+    }, {params: filters})
     .then(() => setMessage({ open: true, type: 'success', text: 'Reordering saved!'}))
-    .catch(() => setMessage({ open: true, type: 'error', text: 'An error occurred while reordering...'}))
-    setMembers(r_members);
+    .catch(() => setMessage({ open: true, type: 'error', text: 'An error occurred: reordering not saved...'}));
   }
 
   return loadState == 'load' ?
@@ -186,17 +188,29 @@ function MembershipAdminTable(props: {}): JSX.Element {
             <TableCell>Nom</TableCell>
             <TableCell>Résumé</TableCell>
             <TableCell>Admin</TableCell>
+            <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody component={DroppableComponent(onDragEnd)}>
           {members.map((item, index) => (
             <TableRow
-              component={DraggableComponent(item.dragId, index)}
+              component={DraggableComponent(item.dragId!!, index)}
               key={item.id}
             >
-              <TableCell scope="row"><DragIndicatorIcon color='disabled' /></TableCell>
-              <TableCell>{item.student.full_name}</TableCell>
-              <TableCell style={{textOverflow: 'ellipsis'}}>{item.summary}</TableCell>
+              <TableCell scope="row" sx={{width: 0}}>
+                <DragIndicatorIcon color='disabled' />
+              </TableCell>
+              <TableCell>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <Avatar url={item.student.picture_url} title={item.student.full_name} size='small' />
+                  <Typography noWrap fontWeight="lg">
+                    {item.student.full_name}
+                  </Typography>
+                </Box>
+              </TableCell>
+              <TableCell>
+                {item.summary}
+              </TableCell>
               <TableCell>{
                 item.admin ?
                   <CheckCircleIcon color='success' />
@@ -204,6 +218,12 @@ function MembershipAdminTable(props: {}): JSX.Element {
                   <HelpIcon color='warning' />
                 : <></>
               }</TableCell>
+              <TableCell>
+                <Box sx={{ display: 'flex', gap: 1.5 }}>
+                  <IconButton aria-label='edit' size='small'><VisibilityIcon fontSize='small'/></IconButton>
+                  <IconButton aria-label='edit' size='small'><EditIcon fontSize='small'/></IconButton>
+                </Box>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -211,4 +231,4 @@ function MembershipAdminTable(props: {}): JSX.Element {
     </TableContainer>
 }
 
-render(<MembershipAdminTable />, document.getElementById("root-members"));
+render(<EditMembershipsPage />, document.getElementById("root-members"));
