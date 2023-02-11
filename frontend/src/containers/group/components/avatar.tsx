@@ -1,7 +1,13 @@
 import React from 'react';
 import { Avatar as MUIAvatar } from '@mui/material';
 
-function stringToColor(string) {
+/**
+ * Create a color from a string.
+ *
+ * @param string The string to create the color from
+ * @returns A color as a hexadecimal string
+ */
+function stringToColor(string: string): string {
   let hash = 0;
   /* eslint-disable no-bitwise */
   for (let i = 0; i < string.length; i += 1) {
@@ -16,11 +22,19 @@ function stringToColor(string) {
   return color;
 }
 
+/**
+ * A component for abstract avatar with a picture or initials if no picture.
+ *
+ * @param props.urls - The url of the picure
+ * @param props.title - The name of the avatar, used for the color generation
+ * @param props.size - The size of the avatar (small, medium, large)
+ * @returns 
+ */
 function Avatar(props: {url: string; title: string, size: 'small' | 'medium' | 'large'}) {
   const { url, title, size } = props;
   const initials = `${title.split(' ')[0][0]}${title.split(' ')[1][0]}`;
   const sx = size === 'small' ?
-    { width: 24, height: 24, fontSize: 12 }
+    { width: 30, height: 30, fontSize: 13 }
   : size === 'large' ?
     { width: 56, height: 56, fontSize: 24 }
   : {};

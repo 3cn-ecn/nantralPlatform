@@ -29,6 +29,7 @@ import {
   DropResult
 } from 'react-beautiful-dnd';
 import Avatar from './components/avatar';
+import ShowMemberModal from './components/showMemberModal';
 import { Student, Group, Membership} from './interfaces';
 import axios from '../utils/axios';
 
@@ -110,21 +111,68 @@ function DroppableComponent(onDragEnd: OnDragEndResponder) {
 };
 
 /**
+ * A row of the table with a membership
+ * 
+ * @param props 
+ * @returns 
+ */
+function MembershipRow(props: {item: Membership; index: number}) {
+  const { item, index } = props;
+  const [openShowModal, setOpenShowModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+
+  return <TableRow
+    component={DraggableComponent(item.dragId!!, index)}
+    key={item.id}
+  >
+    <TableCell scope="row" sx={{width: 0}}>
+      <DragIndicatorIcon color='disabled' />
+    </TableCell>
+    <TableCell>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Avatar url={item.student.picture_url} title={item.student.full_name} size='small' />
+        <Typography noWrap fontWeight="lg">
+          {item.student.full_name}
+        </Typography>
+      </Box>
+    </TableCell>
+    <TableCell>
+      {item.summary}
+    </TableCell>
+    <TableCell>{
+      item.admin ?
+        <CheckCircleIcon color='success' />
+      : item.admin_request ?
+        <HelpIcon color='warning' />
+      : <></>
+    }</TableCell>
+    <TableCell>
+      <Box sx={{ display: 'flex', gap: 1.5 }}>
+        <IconButton aria-label='edit' size='small' onClick={() => setOpenShowModal(true)}><VisibilityIcon fontSize='small'/></IconButton>
+        <IconButton aria-label='edit' size='small'><EditIcon fontSize='small'/></IconButton>
+      </Box>
+      <ShowMemberModal open={openShowModal} onClose={() => setOpenShowModal(false)} member={item}/>
+    </TableCell>
+  </TableRow>
+}
+
+/**
  * Main table component for editing members in the admin page of groups.
  */
 function EditMembershipsPage(props: {}): JSX.Element {
   // members
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>('load');
+  // status of modals
+  const [message, setMessage] = useState<{open: boolean; type: any; text: string }>({ open: false, type: null, text: '' });
+  
   // filters passed as query parameters
-  const [filters, setFilters] = useState({
+  const filters = {
     group: groupSlug,
     from: new Date().toISOString(),
     to: null
-  });
-  // status of the snackbar
-  const [message, setMessage] = useState<{open: boolean; type: any; text: string }>({ open: false, type: null, text: '' });
-  
+  };
+
   useEffect(() => {
     getMembers();
   }, []);
@@ -193,38 +241,7 @@ function EditMembershipsPage(props: {}): JSX.Element {
         </TableHead>
         <TableBody component={DroppableComponent(onDragEnd)}>
           {members.map((item, index) => (
-            <TableRow
-              component={DraggableComponent(item.dragId!!, index)}
-              key={item.id}
-            >
-              <TableCell scope="row" sx={{width: 0}}>
-                <DragIndicatorIcon color='disabled' />
-              </TableCell>
-              <TableCell>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <Avatar url={item.student.picture_url} title={item.student.full_name} size='small' />
-                  <Typography noWrap fontWeight="lg">
-                    {item.student.full_name}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell>
-                {item.summary}
-              </TableCell>
-              <TableCell>{
-                item.admin ?
-                  <CheckCircleIcon color='success' />
-                : item.admin_request ?
-                  <HelpIcon color='warning' />
-                : <></>
-              }</TableCell>
-              <TableCell>
-                <Box sx={{ display: 'flex', gap: 1.5 }}>
-                  <IconButton aria-label='edit' size='small'><VisibilityIcon fontSize='small'/></IconButton>
-                  <IconButton aria-label='edit' size='small'><EditIcon fontSize='small'/></IconButton>
-                </Box>
-              </TableCell>
-            </TableRow>
+            <MembershipRow item={item} index={index} />
           ))}
         </TableBody>
       </Table>

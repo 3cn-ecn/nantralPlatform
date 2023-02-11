@@ -31,7 +31,7 @@ const entryPoints = [
   "app/app.ts",
   "club/clubsList.tsx",
   "group.old/eventsGroupListUpdate.tsx",
-  "group/membersEditList.tsx",
+  "group/editMembershipsPage.tsx",
   // "group/postsGroupListUpdate.tsx",
   // "group/groupMembers.tsx",
   // "group/editGroupMembers.tsx",
