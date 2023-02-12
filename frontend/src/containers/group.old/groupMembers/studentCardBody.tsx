@@ -40,7 +40,7 @@ export function StudentCardBody(props: StudentCardBodyProps): JSX.Element {
   }
   return (
     <div className="col text-start">
-      <a href={member.student.absolute_url} style={{ color: "inherit" }}>
+      <a href={member.student.url} style={{ color: "inherit" }}>
         <div style={textWrapper}>
           <div>
             <h5 style={h5Style}>{member.student.name}</h5>

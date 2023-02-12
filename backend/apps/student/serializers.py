@@ -5,14 +5,17 @@ from .models import Student
 
 class StudentSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
-    absolute_url = serializers.ReadOnlyField()
+    url = serializers.SerializerMethodField()
 
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = ['id', 'name', 'promo', 'picture', 'faculty', 'path', 'url']
 
-    def get_name(self, obj) -> str:
+    def get_name(self, obj: Student) -> str:
         return obj.name
+
+    def get_url(self, obj: Student) -> str:
+        return obj.get_absolute_url()
 
 
 class SimpleStudentSerializer(serializers.ModelSerializer):

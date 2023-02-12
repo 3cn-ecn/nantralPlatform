@@ -28,7 +28,7 @@ export function StudentCardPicture(props: StudentCardBodyProps): JSX.Element {
   }
   return (
     <div className="col-3">
-      <a href={member.student.absolute_url}>
+      <a href={member.student.url}>
         <div style={centerWrapper}>
           <div className="ratio ratio-1x1">
             <img

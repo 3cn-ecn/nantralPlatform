@@ -1,7 +1,7 @@
 ﻿export interface Student {
   id: number;
   name: string;
-  absolute_url: string;
+  url: string;
   promo: number;
   picture?: string;
   faculty: string;

@@ -77,10 +77,6 @@ class Student(models.Model):
     def get_absolute_url(self) -> str:
         return reverse('student:detail', args=[self.pk])
 
-    @property
-    def absolute_url(self) -> str:
-        return self.get_absolute_url()
-
     def save(self, *args, **kwargs):
         self.picture = compress_model_image(self, 'picture')
         super(Student, self).save(*args, **kwargs)

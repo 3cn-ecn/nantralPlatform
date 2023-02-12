@@ -13,7 +13,7 @@ export function ParticipantsModal(props: ParticipantsModalProps): JSX.Element {
         {
           <ExportButton
             participants={props.participants.map((e): Student => {
-              return { name: e.name, get_absolute_url: e.absolute_url };
+              return { name: e.name, get_absolute_url: e.url };
             })}
             title={""}
           />
@@ -24,7 +24,7 @@ export function ParticipantsModal(props: ParticipantsModalProps): JSX.Element {
           {props.participants.map((e, i) => {
             return (
               <li key={i}>
-                <a href={e.absolute_url}>{e.name}</a>
+                <a href={e.url}>{e.name}</a>
               </li>
             );
           })}

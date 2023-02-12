@@ -21,6 +21,7 @@ from rest_framework import (
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
 from apps.student.models import Student
+from apps.utils.searchAPIMixin import SearchAPIMixin
 
 from .views import UserCanSeeGroupMixin
 from .models import Group, Membership, GroupType
@@ -223,13 +224,14 @@ class GroupPermission(permissions.BasePermission):
         return obj.is_admin(request.user)
 
 
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
     """An API endpoint for groups."""
 
     permission_classes = [GroupPermission]
     serializer_class = GroupSerializer
     lookup_field = 'slug'
     lookup_url_kwarg = 'slug'
+    search_fields = ['name', 'short_name']
 
     def get_queryset(self) -> QuerySet[Group]:
         user = self.request.user
@@ -275,7 +277,7 @@ class MembershipPermission(permissions.BasePermission):
                 or obj.group.is_admin(request.user))
 
 
-class MembershipViewSet(viewsets.ModelViewSet):
+class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
     """An API viewset to get memberships of a group. This viewset ignore all
     logic related with admin requests.
 
@@ -304,6 +306,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
     """
 
     permission_classes = [permissions.IsAuthenticated, MembershipPermission]
+    search_fields = ['student__user__first_name', 'student__user__last_name',
+                     'group__name', 'group__short_name', 'summary']
 
     def get_serializer_class(self) -> serializers.ModelSerializer:
         if self.action == 'create':
