@@ -1,16 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { render } from 'react-dom';
 import {
-  TableContainer,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Paper,
   Snackbar,
   Alert,
-  IconButton,
   Box,
   Typography,
   Grid,
@@ -18,20 +10,6 @@ import {
   CardContent,
   CardActionArea
 } from '@mui/material';
-import {
-  CheckCircle as CheckCircleIcon,
-  Help as HelpIcon,
-  DragIndicator as DragIndicatorIcon,
-  Edit as EditIcon,
-  Visibility as VisibilityIcon
-} from '@mui/icons-material';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  OnDragEndResponder,
-  DropResult
-} from 'react-beautiful-dnd';
 import Avatar from './components/Avatar';
 import ShowMemberModal from './components/ShowMemberModal';
 import EditMemberModal from './components/EditMemberModal';
@@ -60,7 +38,7 @@ function MembershipCard(props: {
     <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card>
         <CardActionArea onClick={() => setOpenShowModal(true)}>
-          <CardContent sx={{ display: 'flex', alignBoxs: 'center', gap: 1.5, p: 1.5 }}>
+          <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5 }}>
             <Avatar url={item.student.picture_url} title={item.student.full_name} size='large' />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant='h6' sx={{ fontWeight: 500 }} noWrap>

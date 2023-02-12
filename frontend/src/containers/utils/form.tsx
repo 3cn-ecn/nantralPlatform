@@ -13,24 +13,21 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 
-interface GroupField {
-  kind: 'group';
-  fields: Field[];
-}
-
 interface Field {
-  name: string;
-  label: string;
-  kind: 'text' | 'integer' | 'float' | 'boolean' | 'date';
+  kind: 'text' | 'integer' | 'float' | 'boolean' | 'date' | 'custom' | 'group';
+  name?: string;
+  label?: string;
   required?: boolean;
   maxLength?: number;
   helpText?: string;
   error?: string;
   multiline?: boolean;
+  component?: JSX.Element;
+  fields?: Field[];
 }
 
 function FormGroup(props: {
-  fields: (Field | GroupField)[],
+  fields: Field[],
   values: any,
   setValues: (values: any) => void,
   noFullWidth?: boolean
@@ -51,7 +48,7 @@ function FormGroup(props: {
           return (
             <Box sx={{display: 'flex', gap: 1.5 }} key={index}>
               <FormGroup
-                fields={field.fields}
+                fields={field.fields!!}
                 values={values}
                 setValues={setValues}
                 noFullWidth
@@ -65,8 +62,8 @@ function FormGroup(props: {
               id={`${field.name}-input`}
               name={field.name}
               label={field.label}
-              value={values[field.name]}
-              onChange={(e) => handleChange(field.name, e.target.value)}
+              value={values[field.name!!]}
+              onChange={(e) => handleChange(field.name!!, e.target.value)}
               fullWidth={!noFullWidth}
               required={field.required}
               inputProps={{ maxLength: field.maxLength }}
@@ -81,8 +78,8 @@ function FormGroup(props: {
             <LocalizationProvider adapterLocale={'fr'} dateAdapter={AdapterDayjs} key={index}>
               <DatePicker
                 label={field.label}
-                value={new Date(values[field.name])}
-                onChange={(val) => handleChange(field.name, val?.toISOString().split('T')[0])}
+                value={new Date(values[field.name!!])}
+                onChange={(val) => handleChange(field.name!!, val?.toISOString().split('T')[0])}
                 renderInput={(params) => 
                   <TextField {...params}
                     id={`${field.name}-input`}
@@ -117,12 +114,14 @@ function FormGroup(props: {
                     </FormHelperText>
                   </>
                 }
-                checked={values[field.name]}
-                onChange={(e: any) => handleChange(field.name, e.target.checked)}
+                checked={values[field.name!!]}
+                onChange={(e: any) => handleChange(field.name!!, e.target.checked)}
                 control={<Checkbox name={field.name} />}
               />
             </FormControl>
           )
+        case 'custom':
+          return field.component;
         default:
           return (
             <></>

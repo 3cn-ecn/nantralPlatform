@@ -22,12 +22,11 @@ function EditMemberModal(props: {
   onClose: () => void;
   onValid: (data?: Membership) => void;
   open: boolean;
-  member: Membership;
+  member?: Membership;
   group: Group,
 }) {
-  const { onClose, onValid, open, member, group } = props;
-  const [ formValues, setFormValues ] = useState<Membership>(structuredClone(member));
-  const [ saving, setSaving ] = useState(false);
+  const { onClose, onValid, open, group } = props;
+  let { member } = props;
 
   // fields for the form
   const fields: Parameters<typeof FormGroup>[0]['fields'] = [
@@ -51,6 +50,24 @@ function EditMemberModal(props: {
       helpText: 'Un admin peut modifier le groupe et ses membres.'
     });
   };
+  if (!member) {
+    fields.splice(0, 0, {
+      kind: 'text',
+      label: 'Utilisateur',
+      name: 'student',
+    });
+    member = {
+      student: null,
+      summary: null,
+      description: null,
+      begin_date: Date(),
+      end_date: new Date((new Date()).getFullYear()+1, (new Date).getMonth(), (new Date).getDate()),
+      admin: false,
+    } as any;
+  }
+
+  const [ formValues, setFormValues ] = useState<Membership>(structuredClone(member));
+  const [ saving, setSaving ] = useState(false);
 
   return (
     <Dialog
@@ -65,10 +82,10 @@ function EditMemberModal(props: {
       }}>
         <DialogTitle sx={{ m: 0, p: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Avatar title={member.student.full_name} children={<EditIcon />} />
+            <Avatar title={member?.student?.full_name || 'Ajouter un membre'} children={<EditIcon />} />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {member.student.full_name}
+                {member?.student?.full_name || 'Ajouter un membre'}
               </Typography>
             </Box>
             <IconButton

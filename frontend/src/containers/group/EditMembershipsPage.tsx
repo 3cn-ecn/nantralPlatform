@@ -12,7 +12,8 @@ import {
   Alert,
   IconButton,
   Box,
-  Typography
+  Typography,
+  Button
 } from '@mui/material';
 import {
   CheckCircle as CheckCircleIcon,
@@ -192,6 +193,7 @@ function EditMembershipsPage(props: {}): JSX.Element {
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>('load');
   // status of modals
   const [message, setMessage] = useState<{open: boolean; type: any; text: string }>({ open: false, type: null, text: '' });
+  const [ openAddModal, setOpenAddModal ] = useState(false);
 
   // filters passed as query parameters
   const filters = {
@@ -252,44 +254,72 @@ function EditMembershipsPage(props: {}): JSX.Element {
       .catch(() => setMessage({ open: true, type: 'error', text: 'Erreur de réseau' })));
   };
 
+  async function createMembership(member: Membership) {
+    return (
+      axios.post('/api/group/membership/', member)
+      .then((res) => {
+        members.push(res.data)
+      })
+      .catch(() => setMessage({ open: true, type: 'error', text: 'Erreur de réseau' })));
+  };
+
+
   return loadState == 'load' ?
     <p>Chargement en cours... ⏳</p>
   : loadState == 'fail' ?
     <p>Échec du chargement 😢</p>
-  : 
-    <TableContainer component={Paper}>
-      <Snackbar 
-        open={message.open}
-        autoHideDuration={4000}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        onClose={() => setMessage({ ...message, open: false })}>
-        <Alert severity={message.type} sx={{ width: '100%' }} elevation={6} variant="filled">
-          {message.text}
-        </Alert>
-      </Snackbar>
-      <Table size='small'>
-        <TableHead>
-          <TableRow>
-            <TableCell></TableCell>
-            <TableCell>Nom</TableCell>
-            <TableCell>Résumé</TableCell>
-            <TableCell>Admin</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody component={DroppableComponent(onDragEnd)}>
-          {members.map((item, index) => (
-            <MembershipRow
-              item={item}
-              index={index}
-              group={group!!}
-              key={item.id}
-              updateMembership={updateMembership}
-            />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+  : <>
+      <TableContainer component={Paper}>
+        <Snackbar 
+          open={message.open}
+          autoHideDuration={4000}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={() => setMessage({ ...message, open: false })}>
+          <Alert severity={message.type} sx={{ width: '100%' }} elevation={6} variant="filled">
+            {message.text}
+          </Alert>
+        </Snackbar>
+        <Table size='small'>
+          <TableHead>
+            <TableRow>
+              <TableCell></TableCell>
+              <TableCell>Nom</TableCell>
+              <TableCell>Résumé</TableCell>
+              <TableCell>Admin</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody component={DroppableComponent(onDragEnd)}>
+            {members.map((item, index) => (
+              <MembershipRow
+                item={item}
+                index={index}
+                group={group!!}
+                key={item.id}
+                updateMembership={updateMembership}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Button
+        variant="contained"
+        sx={{ mt: 2, ml: 'auto'}}
+        onClick={() => setOpenAddModal(true)}
+      >
+        Ajouter
+      </Button>
+      <EditMemberModal
+        open={openAddModal}
+        onClose={() => setOpenAddModal(false)}
+        onValid={(data?: Membership) =>
+          data
+          ? createMembership(data).then(() => setOpenAddModal(false)).catch(() => {})
+          : setOpenAddModal(false)
+        }
+        group={group!!}
+      />
+    </>
 }
 
 render(<EditMembershipsPage />, document.getElementById("root-members"));
