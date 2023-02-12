@@ -3,28 +3,17 @@
 {% load static %}
 
 {% block content %}
+
 {% include 'group/included/navbar_edit.html' with open='members' %}
 
-<h2>Membres</h2>
-{% comment %} <form method='POST' action="{% url object.app|add:':update-members' object.slug %}">
-    {% csrf_token %}
-    {{ members.management_form }}
-    {% for member in members %}
-    <div class='card'>
-        <div class='card-body'>
-            {{member |crispy}}
-        </div>
-    </div>
-    {% endfor %}
-    </br>
-    <button class='btn btn-dark'>Modifier les membres</button>
-</form> {% endcomment %}
 <div id="root-members"></div>
+
 {% endblock %}
 
 {% block script %}
 <script>
   const groupSlug = "{{ group.slug }}";
+  const displayType = 'table';
 </script>
-<script src='{% static "js/group/EditMembershipsPage.js" %}'></script>
+<script src='{% static "js/group/Memberships.js" %}'></script>
 {% endblock %}

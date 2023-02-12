@@ -1,5 +1,6 @@
 from rest_framework import generics, status, permissions, viewsets, exceptions
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 from apps.academic.serializers import NamedMembershipCourseSerializer
 from apps.academic.models import NamedMembershipCourse, Course
@@ -64,4 +65,11 @@ class StudentViewSet(SearchAPIMixin, viewsets.ModelViewSet):
     queryset = Student.objects.all()
 
     def create(self, request, *args, **kwargs):
+        """Remove the 'create' method from default methods."""
         raise exceptions.MethodNotAllowed(method="create")
+
+    @action(detail=False, methods=['get'])
+    def me(self, request, *args, **kwargs):
+        """A view to get the current user."""
+        serializer = self.get_serializer(request.user.student)
+        return Response(serializer.data)

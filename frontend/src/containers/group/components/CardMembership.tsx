@@ -8,10 +8,10 @@ import {
   Typography,
 } from '@mui/material';
 import Avatar from './Avatar';
-import ShowMemberModal from './ShowMemberModal';
-import EditMemberModal from './EditMemberModal';
-import DeleteMemberModal from './DeleteMemberModal';
-import { Membership, Group } from '../interfaces';
+import ModalDisplayMember from './ModalDisplayMember';
+import ModalEditMember from './ModalEditMember';
+import ModalDeleteMember from './ModalDeleteMember';
+import { Membership, Group, Student } from '../interfaces';
 
 /**
  * A row of the table with a membership
@@ -22,10 +22,11 @@ import { Membership, Group } from '../interfaces';
 function MembershipCard(props: {
   item: Membership;
   group: Group,
+  student: Student,
   updateMembership: (member: Membership) => Promise<void>,
   deleteMembership: (member: Membership) => Promise<void>;
 }) {
-  const { item, group, updateMembership, deleteMembership } = props;
+  const { item, group, student, updateMembership, deleteMembership } = props;
   const [openShowModal, setOpenShowModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -47,22 +48,23 @@ function MembershipCard(props: {
           </CardContent>
         </CardActionArea>
       </Card>
-      <ShowMemberModal
+      <ModalDisplayMember
         open={openShowModal}
         closeModal={() => setOpenShowModal(false)}
         openEditModal={() => { setOpenShowModal(false); setOpenEditModal(true); }}
         member={item}
         group={group}
       />
-      <EditMemberModal
+      <ModalEditMember
         open={openEditModal}
         closeModal={() => setOpenEditModal(false)}
         saveMembership={updateMembership}
         openDeleteModal={() => { setOpenEditModal(false); setOpenDeleteModal(true); }}
         member={item}
         group={group}
+        student={student}
       />
-      <DeleteMemberModal
+      <ModalDeleteMember
         open={openDeleteModal}
         deleteMembership={deleteMembership}
         closeModal={() => setOpenDeleteModal(false)}

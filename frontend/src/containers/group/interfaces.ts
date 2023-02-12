@@ -29,6 +29,16 @@ export interface Group {
   video2: string;
   url: string;
   is_admin: boolean;
+  is_member: boolean;
+}
+
+export interface Student {
+  id: number;
+  name: string;
+  promo: number;
+  picture: string;
+  faculty: string;
+  path: string;
 }
 
 export interface Membership {

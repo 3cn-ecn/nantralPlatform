@@ -17,7 +17,7 @@ import {
 } from '@mui/icons-material';
 import Avatar from './Avatar';
 import FormGroup, { FieldType } from '../../utils/form';
-import { Membership, Group } from '../interfaces';
+import { Membership, Group, Student } from '../interfaces';
 
 /**
  * A function to generate the default fields fot the edit modal form.
@@ -48,7 +48,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       helpText: 'Un admin peut modifier le groupe et ses membres.'
     });
   };
-  if (member.id === null) {
+  if (member.id === null && group.is_admin) {
     defaultFields.splice(0, 0, {
       kind: 'autocomplete',
       label: 'Utilisateur',
@@ -66,14 +66,14 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
  * @param group - the group of the membership
  * @returns A blank membership
  */
-function createBlankMember(group: Group): Membership {
+function createBlankMember(group: Group, student: Student): Membership {
   const date = new Date();
   const today = date.toISOString().split('T')[0];
   date.setFullYear(date.getFullYear() + 1);
   const oneYearLater = date.toISOString().split('T')[0];
   const member = {
     id: null,
-    student: null,
+    student: group.is_admin ? null : student.id as any,
     group: group.id as any,
     summary: '',
     description: '',
@@ -89,12 +89,20 @@ function EditMemberModal(props: {
   open: boolean;
   member?: Membership;
   group: Group,
+  student: Student,
   saveMembership: (member: Membership) => Promise<any>;
   closeModal: () => void;
   openDeleteModal?: () => void;
 }) {
-  const { open, group, saveMembership, closeModal, openDeleteModal } = props;
-  const member = props.member || createBlankMember(group);
+  const {
+    open,
+    group,
+    student,
+    saveMembership,
+    closeModal,
+    openDeleteModal
+  } = props;
+  const member = props.member || createBlankMember(group, student);
   const formFields = createFormFields(group, member);
 
   const [ formValues, setFormValues ] = useState<Membership>(structuredClone(member));
