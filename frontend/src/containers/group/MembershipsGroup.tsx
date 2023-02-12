@@ -6,6 +6,7 @@ import {
   Button,
   Box
 } from '@mui/material';
+import { Edit as EditIcon } from '@mui/icons-material';
 import ModalEditMember from './components/ModalEditMember';
 import { Group, Membership, Student } from './interfaces';
 import axios from '../utils/axios';
@@ -19,7 +20,7 @@ declare const displayType: 'grid' | 'table';
 /**
  * Main table component for editing members in the admin page of groups.
  */
-function Memberships(props: {}): JSX.Element {
+function MembershipsGroup(props: {}): JSX.Element {
   // data
   const [ group, setGroup ] = useState<Group | null>(null);
   const [ student, setStudent ] = useState<Student | null>(null);
@@ -31,8 +32,8 @@ function Memberships(props: {}): JSX.Element {
   // filters passed as query parameters
   const [ filters, setFilters ] = useState({
     group: groupSlug,
-    from: new Date().toISOString(),
-    to: null
+    from: new Date().toISOString() as null | string,
+    to: null as null | string
   });
 
   useEffect(() => {
@@ -106,10 +107,10 @@ function Memberships(props: {}): JSX.Element {
       axios
       .delete(`/api/group/membership/${member.id}/`)
       .then(() => getMemberships())
-      .then(() =>
-        member.student.id === student.id
-        && setGroup({...group, is_member: false }
-      ))
+      .then(() => {
+        member.student.id === student!!.id
+        && setGroup({...group!!, is_member: false })
+      })
     );
   }
 
@@ -120,13 +121,13 @@ function Memberships(props: {}): JSX.Element {
       .post('/api/group/membership/', member)
       .then(() => getMemberships())
       .then(() =>
-        member.student as any === student.id
-        && setGroup({ ...group, is_member: true }
+        member.student as any === student!!.id
+        && setGroup({ ...group!!, is_member: true }
       ))
     );
   };
 
-  return loadState == 'load' ?
+  return loadState == 'load' || !group || !student ?
     <p>Chargement en cours... ⏳</p>
   : loadState == 'fail' ?
     <p>Échec du chargement 😢</p>
@@ -135,21 +136,28 @@ function Memberships(props: {}): JSX.Element {
       { displayType === 'grid'
       ? <ListMembershipsGrid
           members={members}
-          group={group!!}
-          student={student!!}
+          group={group}
+          student={student}
           updateMembership={updateMembership}
           deleteMembership={deleteMembership}
         />
       : <ListMembershipsTable
           members={members}
-          group={group!!}
-          student={student!!}
+          group={group}
+          student={student}
           reorderMemberships={reorderMemberships}
           updateMembership={updateMembership}
           deleteMembership={deleteMembership}
         />
       }
       <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+        { group.is_admin && displayType === 'grid'
+        ? <Button
+            variant='contained'
+            href='edit/members'
+            endIcon={<EditIcon />}
+          >Modifier</Button>
+        : <></> }
         { !group.is_member || group.is_admin
         ? <>
             <Button
@@ -162,8 +170,8 @@ function Memberships(props: {}): JSX.Element {
               open={openAddModal}
               saveMembership={createMembership}
               closeModal={() => setOpenAddModal(false)}
-              group={group!!}
-              student={student!!}
+              group={group}
+              student={student}
             />
           </>
         : <></> }
@@ -200,4 +208,4 @@ function Memberships(props: {}): JSX.Element {
     </>
 }
 
-render(<Memberships />, document.getElementById("root-members"));
+render(<MembershipsGroup />, document.getElementById("root-members"));

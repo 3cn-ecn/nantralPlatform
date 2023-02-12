@@ -175,6 +175,7 @@ function MembershipRow(props: {
         openEditModal={() => { setOpenShowModal(false); setOpenEditModal(true); }}
         member={item}
         group={group}
+        student={student}
       />
       <ModalEditMember
         open={openEditModal}

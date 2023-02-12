@@ -8,7 +8,6 @@ import {
   IconButton,
   Typography,
   Box,
-  Divider
 } from '@mui/material';
 import {
   Close as CloseIcon,
@@ -17,16 +16,17 @@ import {
   Verified as VerifiedIcon
 } from '@mui/icons-material';
 import Avatar from './Avatar';
-import { Membership, Group } from '../interfaces';
+import { Membership, Group, Student } from '../interfaces';
 
 function ShowMemberModal(props: {
   closeModal: () => void;
-  openEditModal: () => void;
+  openEditModal?: () => void;
   open: boolean;
   member: Membership;
-  group: Group
+  group: Group,
+  student: Student
 }) {
-  const { closeModal, openEditModal, open, member, group } = props;
+  const { closeModal, openEditModal, open, member, group, student } = props;
 
   return (
     <Dialog
@@ -77,14 +77,15 @@ function ShowMemberModal(props: {
       <DialogActions>
         <Button
           href={member.student.url}
-          variant='outlined'
+          variant='text'
           endIcon={<OpenInNewIcon />}
         >
           Ouvrir le profil
         </Button>
         <Button
+          hidden={!openEditModal || !group.is_admin && student.id !== member.student.id }
           onClick={openEditModal}
-          variant='contained'
+          variant='outlined'
           endIcon={<EditIcon />}
           sx={{ marginLeft: 1 }}
         >

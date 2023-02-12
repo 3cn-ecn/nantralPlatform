@@ -68,6 +68,7 @@ class GroupSerializer(AdminFieldsMixin, serializers.ModelSerializer):
         return obj.get_absolute_url()
 
     def get_is_admin(self, obj: Group) -> bool:
+        return False
         return obj.is_admin(self.context['request'].user)
 
     def get_is_member(self, obj: Group) -> bool:

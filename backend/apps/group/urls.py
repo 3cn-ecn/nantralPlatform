@@ -26,7 +26,7 @@ urlpatterns = [
     # vue generale du groupe
     path('', GroupTypeListView.as_view(), name='index'),
     path('<slug:type>/', GroupListView.as_view(), name='sub_index'),
-    path('@<slug:slug>', GroupDetailView.as_view(), name='detail'),
+    path('@<slug:slug>/', GroupDetailView.as_view(), name='detail'),
 
     # edition (réservée aux admins)
     path('@<slug:slug>/edit/', UpdateGroupView.as_view(), name='update'),

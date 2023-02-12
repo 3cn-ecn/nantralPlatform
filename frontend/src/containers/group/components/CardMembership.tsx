@@ -23,8 +23,8 @@ function MembershipCard(props: {
   item: Membership;
   group: Group,
   student: Student,
-  updateMembership: (member: Membership) => Promise<void>,
-  deleteMembership: (member: Membership) => Promise<void>;
+  updateMembership?: (member: Membership) => Promise<void>,
+  deleteMembership?: (member: Membership) => Promise<void>;
 }) {
   const { item, group, student, updateMembership, deleteMembership } = props;
   const [openShowModal, setOpenShowModal] = useState(false);
@@ -51,15 +51,20 @@ function MembershipCard(props: {
       <ModalDisplayMember
         open={openShowModal}
         closeModal={() => setOpenShowModal(false)}
-        openEditModal={() => { setOpenShowModal(false); setOpenEditModal(true); }}
+        openEditModal={updateMembership
+          ? () => { setOpenShowModal(false); setOpenEditModal(true); }
+          : undefined}
         member={item}
         group={group}
+        student={student}
       />
       <ModalEditMember
         open={openEditModal}
         closeModal={() => setOpenEditModal(false)}
         saveMembership={updateMembership}
-        openDeleteModal={() => { setOpenEditModal(false); setOpenDeleteModal(true); }}
+        openDeleteModal={deleteMembership
+          ? () => { setOpenEditModal(false); setOpenDeleteModal(true); }
+          : undefined }
         member={item}
         group={group}
         student={student}

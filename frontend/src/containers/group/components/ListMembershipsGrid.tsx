@@ -11,8 +11,8 @@ function ListMembershipsGrid(props: {
   members: Membership[],
   group: Group,
   student: Student,
-  updateMembership: (member: Membership) => Promise<void>,
-  deleteMembership: (member: Membership) => Promise<void>,
+  updateMembership?: (member: Membership) => Promise<void>,
+  deleteMembership?: (member: Membership) => Promise<void>,
 }): JSX.Element {
 
   const { members, group, student, updateMembership, deleteMembership } = props;
