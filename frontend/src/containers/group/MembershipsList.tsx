@@ -3,75 +3,14 @@ import { render } from 'react-dom';
 import {
   Snackbar,
   Alert,
-  Box,
-  Typography,
   Grid,
-  Card,
-  CardContent,
-  CardActionArea
 } from '@mui/material';
-import Avatar from './components/Avatar';
-import ShowMemberModal from './components/ShowMemberModal';
-import EditMemberModal from './components/EditMemberModal';
+import MembershipCard from './components/MembershipCard';
 import { Group, Membership} from './interfaces';
 import axios from '../utils/axios';
 
 // passed through django template
 declare const groupSlug: string;
-
-/**
- * A row of the table with a membership
- * 
- * @param props 
- * @returns 
- */
-function MembershipCard(props: {
-  item: Membership;
-  group: Group,
-  updateMembership: (member: Membership) => Promise<void>
-}) {
-  const { item, group, updateMembership } = props;
-  const [openShowModal, setOpenShowModal] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState(false);
-
-  return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Card>
-        <CardActionArea onClick={() => setOpenShowModal(true)}>
-          <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5 }}>
-            <Avatar url={item.student.picture_url} title={item.student.full_name} size='large' />
-            <Box sx={{ minWidth: 0 }}>
-              <Typography variant='h6' sx={{ fontWeight: 500 }} noWrap>
-                {item.student.full_name}
-              </Typography>
-              <Typography sx={{fontSize: '0.9em' }} color='text.secondary' noWrap>
-                {item.summary}
-              </Typography>
-            </Box>
-          </CardContent>
-        </CardActionArea>
-      </Card>
-      <ShowMemberModal
-        open={openShowModal}
-        onClose={() => setOpenShowModal(false)}
-        onEdit={() => { setOpenShowModal(false); setOpenEditModal(true); }}
-        member={item}
-        group={group}
-      />
-      <EditMemberModal
-        open={openEditModal}
-        onClose={() => setOpenEditModal(false)}
-        onValid={(data?: Membership) =>
-          data
-          ? updateMembership(data).then(() => setOpenEditModal(false)).catch(() => {})
-          : setOpenEditModal(false)
-        }
-        member={item}
-        group={group}
-      />
-    </Grid>
-  );
-};
 
 /**
  * Main table component for editing members in the admin page of groups.
@@ -94,12 +33,7 @@ function MembershipsList(props: {}): JSX.Element {
   useEffect(() => {
     Promise.all([
       // fetch memberships objects
-      axios.get<Membership[]>('/api/group/membership/', {params: filters})
-      .then((res) => res.data.map((item) => {
-        item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
-        return item;
-      }))
-      .then((list) => setMembers(list)),
+      getMembers(),
       // fetch group object
       axios.get<Group>(`/api/group/group/${groupSlug}`)
       .then((res) => setGroup(res.data))
@@ -108,6 +42,16 @@ function MembershipsList(props: {}): JSX.Element {
     .catch(() => setLoadState('fail'));
   }, []);
 
+  /** Get the list of members */
+  async function getMembers(): Promise<void> {
+    return axios.get<Membership[]>('/api/group/membership/', {params: filters})
+    .then((res) => res.data.map((item) => {
+      item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
+      return item;
+    }))
+    .then((list) => setMembers(list));
+  }
+
   /**
    * A function to edit a membership object
    *
@@ -115,13 +59,23 @@ function MembershipsList(props: {}): JSX.Element {
    */
   async function updateMembership(member: Membership) {
     return (
-      axios.put(`/api/group/membership/${member.id}/`, member)
+      axios
+      .put(`/api/group/membership/${member.id}/`, member)
       .then((res) => {
         const i = members.findIndex((elt) => elt.id === member.id);
         Object.assign(members[i], res.data);
       })
-      .catch(() => setMessage({ open: true, type: 'error', text: 'Erreur de réseau' })));
+    );
   };
+
+  /** A function to delete a membership object. */
+  async function deleteMembership(member: Membership) {
+    return (
+      axios
+      .delete(`/api/group/membership/${member.id}/`)
+      .then(() => getMembers())
+    )
+  }
 
   return loadState == 'load' ?
     <p>Chargement en cours... ⏳</p>
@@ -144,6 +98,7 @@ function MembershipsList(props: {}): JSX.Element {
           group={group!!}
           key={item.id}
           updateMembership={updateMembership}
+          deleteMembership={deleteMembership}
         />
       ))}
     </Grid>

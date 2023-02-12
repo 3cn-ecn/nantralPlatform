@@ -20,7 +20,8 @@ import {
   Help as HelpIcon,
   DragIndicator as DragIndicatorIcon,
   Edit as EditIcon,
-  Visibility as VisibilityIcon
+  Visibility as VisibilityIcon,
+  Delete as DeleteIcon
 } from '@mui/icons-material';
 import {
   DragDropContext,
@@ -32,6 +33,7 @@ import {
 import Avatar from './components/Avatar';
 import ShowMemberModal from './components/ShowMemberModal';
 import EditMemberModal from './components/EditMemberModal';
+import DeleteMemberModal from './components/DeleteMemberModal';
 import { Group, Membership} from './interfaces';
 import axios from '../utils/axios';
 
@@ -121,12 +123,14 @@ function DroppableComponent(onDragEnd: OnDragEndResponder) {
 function MembershipRow(props: {
   item: Membership;
   index: number;
-  group: Group,
-  updateMembership: (member: Membership) => Promise<void>
+  group: Group;
+  updateMembership: (member: Membership) => Promise<void>;
+  deleteMembership: (member: Membership) => Promise<void>;
 }) {
-  const { item, index, group, updateMembership } = props;
+  const { item, index, group, updateMembership, deleteMembership } = props;
   const [openShowModal, setOpenShowModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   return <TableRow
     component={DraggableComponent(item.dragId!!, index)}
@@ -136,7 +140,7 @@ function MembershipRow(props: {
     </TableCell>
     <TableCell>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <Avatar url={item.student.picture_url} title={item.student.full_name} size='small' />
+        <Avatar url={item.student.picture} title={item.student.full_name} size='small' />
         <Typography noWrap fontWeight="lg">
           {item.student.full_name}
         </Typography>
@@ -153,31 +157,37 @@ function MembershipRow(props: {
       : <></>
     }</TableCell>
     <TableCell>
-      <Box sx={{ display: 'flex', gap: 1.5 }}>
+      <Box sx={{ display: 'flex', gap: 1 }}>
         <IconButton title='Ouvrir' aria-label='show' size='small' onClick={() => setOpenShowModal(true)}>
           <VisibilityIcon fontSize='small'/>
         </IconButton>
         <IconButton title='Modifier' aria-label='edit' size='small' onClick={() => setOpenEditModal(true)}>
           <EditIcon fontSize='small'/>
         </IconButton>
+        <IconButton title='Supprimer' aria-label='edit' size='small' onClick={() => setOpenDeleteModal(true)}>
+          <DeleteIcon fontSize='small'/>
+        </IconButton>
       </Box>
       <ShowMemberModal
         open={openShowModal}
-        onClose={() => setOpenShowModal(false)}
-        onEdit={() => { setOpenShowModal(false); setOpenEditModal(true); }}
+        closeModal={() => setOpenShowModal(false)}
+        openEditModal={() => { setOpenShowModal(false); setOpenEditModal(true); }}
         member={item}
         group={group}
       />
       <EditMemberModal
         open={openEditModal}
-        onClose={() => setOpenEditModal(false)}
-        onValid={(data?: Membership) =>
-          data
-          ? updateMembership(data).then(() => setOpenEditModal(false)).catch(() => {})
-          : setOpenEditModal(false)
-        }
+        saveMembership={updateMembership}
+        closeModal={() => setOpenEditModal(false)}
+        openDeleteModal={() => { setOpenEditModal(false); setOpenDeleteModal(true); }}
         member={item}
         group={group}
+      />
+      <DeleteMemberModal
+        open={openDeleteModal}
+        deleteMembership={deleteMembership}
+        closeModal={() => setOpenDeleteModal(false)}
+        member={item}
       />
     </TableCell>
   </TableRow>
@@ -188,11 +198,11 @@ function MembershipRow(props: {
  */
 function EditMembershipsPage(props: {}): JSX.Element {
   // data
-  const [group, setGroup] = useState<Group | null>(null);
-  const [members, setMembers] = useState<Membership[]>([]);
-  const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>('load');
+  const [ group, setGroup ] = useState<Group | null>(null);
+  const [ members, setMembers ] = useState<Membership[]>([]);
+  const [ loadState, setLoadState ] = useState<'load' | 'success' | 'fail'>('load');
   // status of modals
-  const [message, setMessage] = useState<{open: boolean; type: any; text: string }>({ open: false, type: null, text: '' });
+  const [ message, setMessage ] = useState<{type: any; text: string }>({ type: null, text: '' });
   const [ openAddModal, setOpenAddModal ] = useState(false);
 
   // filters passed as query parameters
@@ -205,12 +215,7 @@ function EditMembershipsPage(props: {}): JSX.Element {
   useEffect(() => {
     Promise.all([
       // fetch memberships objects
-      axios.get<Membership[]>('/api/group/membership/', {params: filters})
-      .then((res) => res.data.map((item) => {
-        item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
-        return item;
-      }))
-      .then((list) => setMembers(list)),
+      getMembers(),
       // fetch group object
       axios.get<Group>(`/api/group/group/${groupSlug}`)
       .then((res) => setGroup(res.data))
@@ -218,6 +223,16 @@ function EditMembershipsPage(props: {}): JSX.Element {
     .then(() => setLoadState('success'))
     .catch(() => setLoadState('fail'));
   }, []);
+
+  /** Get the list of members */
+  async function getMembers(): Promise<void> {
+    return axios.get<Membership[]>('/api/group/membership/', {params: filters})
+    .then((res) => res.data.map((item) => {
+      item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
+      return item;
+    }))
+    .then((list) => setMembers(list));
+  }
 
   /**
    * Callback after dropping for the drag-and-drop.
@@ -235,34 +250,39 @@ function EditMembershipsPage(props: {}): JSX.Element {
       member: members[source].id,
       lower: dest + 1 < members.length ? r_members[dest + 1].id : null
     }, {params: filters})
-    .then(() => setMessage({ open: true, type: 'success', text: 'Réagencement sauvegardé !'}))
-    .catch(() => setMessage({ open: true, type: 'error', text: 'Erreur de réseau : le réagencement n\'est pas sauvegardé...'}));
+    .then(() => setMessage({ type: 'success', text: 'Réagencement sauvegardé !'}))
+    .catch(() => setMessage({ type: 'error', text: 'Erreur de réseau : le réagencement n\'est pas sauvegardé...'}));
   };
 
-  /**
-   * A function to edit a membership object
-   *
-   * @param member 
-   */
+  /** A function to update a membership object. */
   async function updateMembership(member: Membership) {
     return (
-      axios.put(`/api/group/membership/${member.id}/`, member)
+      axios
+      .put(`/api/group/membership/${member.id}/`, member)
       .then((res) => {
         const i = members.findIndex((elt) => elt.id === member.id);
         Object.assign(members[i], res.data);
       })
-      .catch(() => setMessage({ open: true, type: 'error', text: 'Erreur de réseau' })));
+    );
   };
 
+  /** A function to delete a membership object. */
+  async function deleteMembership(member: Membership) {
+    return (
+      axios
+      .delete(`/api/group/membership/${member.id}/`)
+      .then(() => getMembers())
+    )
+  }
+
+  /** A function to create a new membership object. */
   async function createMembership(member: Membership) {
     return (
-      axios.post('/api/group/membership/', member)
-      .then((res) => {
-        members.push(res.data)
-      })
-      .catch(() => setMessage({ open: true, type: 'error', text: 'Erreur de réseau' })));
+      axios
+      .post('/api/group/membership/', member)
+      .then(() => getMembers())
+    );
   };
-
 
   return loadState == 'load' ?
     <p>Chargement en cours... ⏳</p>
@@ -270,11 +290,11 @@ function EditMembershipsPage(props: {}): JSX.Element {
     <p>Échec du chargement 😢</p>
   : <>
       <TableContainer component={Paper}>
-        <Snackbar 
-          open={message.open}
+        <Snackbar
           autoHideDuration={4000}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          onClose={() => setMessage({ ...message, open: false })}>
+          onClose={() => setMessage({ type: 'success', text: '' })}
+          open={!!message.text}>
           <Alert severity={message.type} sx={{ width: '100%' }} elevation={6} variant="filled">
             {message.text}
           </Alert>
@@ -297,6 +317,7 @@ function EditMembershipsPage(props: {}): JSX.Element {
                 group={group!!}
                 key={item.id}
                 updateMembership={updateMembership}
+                deleteMembership={deleteMembership}
               />
             ))}
           </TableBody>
@@ -311,13 +332,9 @@ function EditMembershipsPage(props: {}): JSX.Element {
       </Button>
       <EditMemberModal
         open={openAddModal}
-        onClose={() => setOpenAddModal(false)}
-        onValid={(data?: Membership) =>
-          data
-          ? createMembership(data).then(() => setOpenAddModal(false)).catch(() => {})
-          : setOpenAddModal(false)
-        }
-        group={group!!}
+        saveMembership={createMembership}
+        closeModal={() => setOpenAddModal(false)}
+        group={group}
       />
     </>
 }

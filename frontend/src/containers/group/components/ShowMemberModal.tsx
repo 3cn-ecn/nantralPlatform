@@ -19,18 +19,24 @@ import {
 import Avatar from './Avatar';
 import { Membership, Group } from '../interfaces';
 
-function ShowMemberModal(props: { onClose: () => void; onEdit: () => void; open: boolean; member: Membership; group: Group}) {
-  const { onClose, onEdit, open, member, group } = props;
+function ShowMemberModal(props: {
+  closeModal: () => void;
+  openEditModal: () => void;
+  open: boolean;
+  member: Membership;
+  group: Group
+}) {
+  const { closeModal, openEditModal, open, member, group } = props;
 
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
       open={open}
-      onClose={onClose}
+      onClose={closeModal}
     >
       <DialogTitle sx={{ m: 0, p: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Avatar url={member.student.picture_url} title={member.student.full_name} size='large' />
+          <Avatar url={member.student.picture} title={member.student.full_name} size='large' />
           <Box sx={{ minWidth: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
@@ -44,7 +50,7 @@ function ShowMemberModal(props: { onClose: () => void; onEdit: () => void; open:
           </Box>
           <IconButton
             aria-label="close"
-            onClick={onClose}
+            onClick={closeModal}
             sx={{
               marginLeft: 'auto',
               color: (theme) => theme.palette.grey[500],
@@ -77,7 +83,7 @@ function ShowMemberModal(props: { onClose: () => void; onEdit: () => void; open:
           Ouvrir le profil
         </Button>
         <Button
-          onClick={onEdit}
+          onClick={openEditModal}
           variant='contained'
           endIcon={<EditIcon />}
           sx={{ marginLeft: 1 }}

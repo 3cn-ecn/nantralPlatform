@@ -12,7 +12,7 @@ export interface Group {
     name: string;
     slug: string;
     url: string;
-    icon_url: string;
+    icon: string;
   };
   year: number;
   slug: string;
@@ -37,13 +37,13 @@ export interface Membership {
     id: number;
     full_name: string;
     url: string;
-    picture_url: string;
+    picture: string;
   };
   group: {
     name: string;
     slug: string;
     url: string;
-    icon_url: string;
+    icon: string;
   };
   summary: string;
   description: string;

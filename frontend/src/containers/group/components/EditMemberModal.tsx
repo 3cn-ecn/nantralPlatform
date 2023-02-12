@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -8,33 +8,31 @@ import {
   IconButton,
   Typography,
   Box,
-  CircularProgress
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import {
   Close as CloseIcon,
   Edit as EditIcon
 } from '@mui/icons-material';
 import Avatar from './Avatar';
-import FormGroup from '../../utils/form';
+import FormGroup, { FieldType } from '../../utils/form';
 import { Membership, Group } from '../interfaces';
 
-function EditMemberModal(props: {
-  onClose: () => void;
-  onValid: (data?: Membership) => void;
-  open: boolean;
-  member?: Membership;
-  group: Group,
-}) {
-  const { onClose, onValid, open, group } = props;
-  let { member } = props;
-
-  // fields for the form
-  const fields: Parameters<typeof FormGroup>[0]['fields'] = [
+/**
+ * A function to generate the default fields fot the edit modal form.
+ *
+ * @param group 
+ * @param member 
+ * @returns The default list of fields
+ */
+function createFormFields(group: Group, member: Membership): FieldType[] {
+  const defaultFields: FieldType[] = [
     { kind: 'text', name: 'summary', label: 'Résumé', maxLength: 20, helpText: 'Entrez le résumé du membre' },
     { kind: 'text', name: 'description', label: 'Description', multiline: true },
   ];
   if (!group.group_type.is_year_group) {
-    fields.push({
+    defaultFields.push({
       kind: 'group',
       fields: [
         { kind: 'date', name: 'begin_date', label: 'Date de début', required: true },
@@ -43,43 +41,94 @@ function EditMemberModal(props: {
     });
   };
   if (group.is_admin) {
-    fields.push({
+    defaultFields.push({
       kind: 'boolean',
       name: 'admin',
       label: 'Admin',
       helpText: 'Un admin peut modifier le groupe et ses membres.'
     });
   };
-  if (!member) {
-    fields.splice(0, 0, {
-      kind: 'text',
+  if (member.id === null) {
+    defaultFields.splice(0, 0, {
+      kind: 'autocomplete',
       label: 'Utilisateur',
       name: 'student',
+      endPoint: '/api/student/student',
+      getOptionLabel: ((m) => m?.name || '')
     });
-    member = {
-      student: null,
-      summary: null,
-      description: null,
-      begin_date: Date(),
-      end_date: new Date((new Date()).getFullYear()+1, (new Date).getMonth(), (new Date).getDate()),
-      admin: false,
-    } as any;
   }
+  return defaultFields;
+}
+
+/**
+ * Create a new blank membership object.
+ *
+ * @param group - the group of the membership
+ * @returns A blank membership
+ */
+function createBlankMember(group: Group): Membership {
+  const date = new Date();
+  const today = date.toISOString().split('T')[0];
+  date.setFullYear(date.getFullYear() + 1);
+  const oneYearLater = date.toISOString().split('T')[0];
+  const member = {
+    id: null,
+    student: null,
+    group: group.id as any,
+    summary: '',
+    description: '',
+    begin_date: today,
+    end_date: oneYearLater,
+    admin: false,
+    order: 0
+  };
+  return member;
+}
+
+function EditMemberModal(props: {
+  open: boolean;
+  member?: Membership;
+  group: Group,
+  saveMembership: (member: Membership) => Promise<any>;
+  closeModal: () => void;
+  openDeleteModal?: () => void;
+}) {
+  const { open, group, saveMembership, closeModal, openDeleteModal } = props;
+  const member = props.member || createBlankMember(group);
+  const formFields = createFormFields(group, member);
 
   const [ formValues, setFormValues ] = useState<Membership>(structuredClone(member));
+  const [ formErrors, setFormErrors ] = useState({});
   const [ saving, setSaving ] = useState(false);
+  const [ globalErrors, setGlobalErrors ] = useState('');
+
+  /** Function called on submit to save data */
+  function onSubmit(e: FormEvent) {
+    e.preventDefault();  // prevent default action from browser
+    setSaving(true);  // show loading
+    saveMembership(formValues)  // save data
+    .then(() => { setSaving(false); closeModal(); })  // close modal
+    .catch((err) => {
+      setSaving(false);
+      if (err.response) {
+        setFormErrors(err.response.data);  // show errors per fields
+        if (err.response.data.non_field_errors)  // show form errors
+          setGlobalErrors(err.response.data.non_field_errors);
+        if (err.response.status === 500)
+          setGlobalErrors('Notre serveur a crashé, désolé 😢')
+      } else {
+        setGlobalErrors('Erreur de réseau');  // show global error
+      }
+    });
+  }
 
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
       open={open}
-      onClose={onClose}
+      onClose={closeModal}
     >
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        setSaving(true);
-        onValid(formValues);
-      }}>
+      <form onSubmit={onSubmit} >
         <DialogTitle sx={{ m: 0, p: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Avatar title={member?.student?.full_name || 'Ajouter un membre'} children={<EditIcon />} />
@@ -90,7 +139,7 @@ function EditMemberModal(props: {
             </Box>
             <IconButton
               aria-label="close"
-              onClick={onClose}
+              onClick={closeModal}
               sx={{
                 marginLeft: 'auto',
                 color: (theme) => theme.palette.grey[500],
@@ -101,15 +150,29 @@ function EditMemberModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
-          <FormGroup
-            fields={fields}
-            values={formValues}
-            setValues={setFormValues}
-          />
+          <Alert severity='error' hidden={!globalErrors}>{globalErrors}</Alert>
+          <Box>
+            <FormGroup
+              fields={formFields}
+              values={formValues}
+              errors={formErrors}
+              setValues={setFormValues}
+            />
+          </Box>
+          <Button
+            hidden={!openDeleteModal}
+            onClick={openDeleteModal}
+            variant='outlined'
+            color='error'
+            disabled={saving}
+            sx={{ mr: 'auto', mt: 2 }}
+          >
+            Supprimer
+          </Button>
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => onValid()}
+            onClick={closeModal}
             variant='text'
             color='error'
             disabled={saving}
