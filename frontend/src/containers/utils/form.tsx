@@ -13,17 +13,22 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 
-interface Field {
-  kind: 'text' | 'integer' | 'float' | 'boolean' | 'date' | 'custom' | 'group';
-  name?: string;
-  label?: string;
+type Field = {
+  kind: 'text' | 'integer' | 'float' | 'boolean' | 'date';
+  name: string;
+  label: string;
   required?: boolean;
   maxLength?: number;
   helpText?: string;
   error?: string;
   multiline?: boolean;
-  component?: JSX.Element;
+} | {
+  kind: 'group';
   fields?: Field[];
+} | {
+  kind: 'custom';
+  component: (props: {error?: boolean}) => JSX.Element;
+  error?: string;
 }
 
 function FormGroup(props: {
@@ -121,7 +126,7 @@ function FormGroup(props: {
             </FormControl>
           )
         case 'custom':
-          return field.component;
+          return <field.component error={!!field.error} />;
         default:
           return (
             <></>
