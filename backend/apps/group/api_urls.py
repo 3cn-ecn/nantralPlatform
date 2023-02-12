@@ -5,7 +5,6 @@ from .api_views import (
     UpdateSubscriptionView,
     MembershipFormView,
     AdminRequestFormView,
-    UpdateMembershipsAPIView,
     MembershipViewSet,
     GroupViewSet)
 
@@ -27,8 +26,4 @@ urlpatterns = [
          name='edit-member'),
     path('@<slug:slug>/admin-request/', AdminRequestFormView.as_view(),
          name='admin-request'),
-
-    # used by react
-    path('club-members', UpdateMembershipsAPIView.as_view(),
-         name='list-members'),
 ] + router.urls
