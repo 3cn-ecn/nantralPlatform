@@ -24,9 +24,8 @@ function EditMemberModal(props: {
   open: boolean;
   member: Membership;
   group: Group,
-  admin?: boolean,
 }) {
-  const { onClose, onValid, open, member, group, admin } = props;
+  const { onClose, onValid, open, member, group } = props;
   const [ formValues, setFormValues ] = useState<Membership>(structuredClone(member));
   const [ saving, setSaving ] = useState(false);
 
@@ -44,7 +43,7 @@ function EditMemberModal(props: {
       ]
     });
   };
-  if (admin) {
+  if (group.is_admin) {
     fields.push({
       kind: 'boolean',
       name: 'admin',

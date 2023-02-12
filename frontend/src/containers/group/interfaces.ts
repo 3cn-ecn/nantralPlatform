@@ -28,6 +28,7 @@ export interface Group {
   video1: string;
   video2: string;
   url: string;
+  is_admin: boolean;
 }
 
 export interface Membership {

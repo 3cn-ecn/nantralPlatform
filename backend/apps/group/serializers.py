@@ -50,6 +50,7 @@ class SimpleGroupSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
+    is_admin = serializers.SerializerMethodField()
     group_type = GroupTypeSerializer(read_only=True)
     parent = SimpleGroupSerializer(read_only=True)
 
@@ -63,8 +64,8 @@ class GroupSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
 
-    def get_icon_url(self, obj: Group) -> str | None:
-        return obj.icon.url if obj.icon else None
+    def get_is_admin(self, obj: Group) -> bool:
+        return obj.is_admin(self.context['request'].user)
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         group: Group = data['group']

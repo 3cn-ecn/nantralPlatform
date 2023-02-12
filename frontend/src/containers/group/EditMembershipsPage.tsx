@@ -177,7 +177,6 @@ function MembershipRow(props: {
         }
         member={item}
         group={group}
-        admin={true}
       />
     </TableCell>
   </TableRow>
@@ -224,7 +223,8 @@ function EditMembershipsPage(props: {}): JSX.Element {
    */
   async function onDragEnd(result: DropResult) {
     // dropped outside the list
-    if (!result.destination) return;
+    if (!result.destination || result.destination.index === result.source.index)
+      return;
     const source = result.source.index;
     const dest = result.destination.index;
     const r_members = reorder(members, source, dest);
