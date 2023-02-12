@@ -32,6 +32,7 @@ const entryPoints = [
   "club/clubsList.tsx",
   "group.old/eventsGroupListUpdate.tsx",
   "group/EditMembershipsPage.tsx",
+  "group/MembershipsList.tsx",
   // "group/postsGroupListUpdate.tsx",
   // "group/groupMembers.tsx",
   // "group/editGroupMembers.tsx",

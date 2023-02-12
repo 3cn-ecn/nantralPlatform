@@ -162,7 +162,7 @@
     {% if user.is_authenticated %}
         <br/>
         <h2>Membres</h2>
-        <div id="members-root"></div>
+        <div id="root-members"></div>
     {% endif %}
 
     {# Bouton pour faire une demande pour devenir admin #}
@@ -185,9 +185,9 @@
     const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
     const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
     const isAdmin = {{ is_admin|yesno:"true,false,false" }};
+    const groupSlug = "{{ group.slug }}";
     {# const membersURL = "{% url 'group_api:list-members' %}?slug={{ group.slug }}"; #}
 </script>
 <script src='{% static "js/event/eventsView.js" %}'></script>
-<script src='{% static "js/group/groupMembers.js" %}'></script>
+<script src='{% static "js/group/MembershipsList.js" %}'></script>
 {% endblock %}
-
