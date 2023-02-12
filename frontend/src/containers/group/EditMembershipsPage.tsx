@@ -28,9 +28,10 @@ import {
   OnDragEndResponder,
   DropResult
 } from 'react-beautiful-dnd';
-import Avatar from './components/avatar';
-import ShowMemberModal from './components/showMemberModal';
-import { Student, Group, Membership} from './interfaces';
+import Avatar from './components/Avatar';
+import ShowMemberModal from './components/ShowMemberModal';
+import EditMemberModal from './components/EditMemberModal';
+import { Group, Membership} from './interfaces';
 import axios from '../utils/axios';
 
 // passed through django template
@@ -116,14 +117,18 @@ function DroppableComponent(onDragEnd: OnDragEndResponder) {
  * @param props 
  * @returns 
  */
-function MembershipRow(props: {item: Membership; index: number}) {
-  const { item, index } = props;
+function MembershipRow(props: {
+  item: Membership;
+  index: number;
+  group: Group,
+  updateMembership: (member: Membership) => Promise<void>
+}) {
+  const { item, index, group, updateMembership } = props;
   const [openShowModal, setOpenShowModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
   return <TableRow
     component={DraggableComponent(item.dragId!!, index)}
-    key={item.id}
   >
     <TableCell scope="row" sx={{width: 0}}>
       <DragIndicatorIcon color='disabled' />
@@ -148,10 +153,32 @@ function MembershipRow(props: {item: Membership; index: number}) {
     }</TableCell>
     <TableCell>
       <Box sx={{ display: 'flex', gap: 1.5 }}>
-        <IconButton aria-label='edit' size='small' onClick={() => setOpenShowModal(true)}><VisibilityIcon fontSize='small'/></IconButton>
-        <IconButton aria-label='edit' size='small'><EditIcon fontSize='small'/></IconButton>
+        <IconButton title='Ouvrir' aria-label='show' size='small' onClick={() => setOpenShowModal(true)}>
+          <VisibilityIcon fontSize='small'/>
+        </IconButton>
+        <IconButton title='Modifier' aria-label='edit' size='small' onClick={() => setOpenEditModal(true)}>
+          <EditIcon fontSize='small'/>
+        </IconButton>
       </Box>
-      <ShowMemberModal open={openShowModal} onClose={() => setOpenShowModal(false)} member={item}/>
+      <ShowMemberModal
+        open={openShowModal}
+        onClose={() => setOpenShowModal(false)}
+        onEdit={() => { setOpenShowModal(false); setOpenEditModal(true); }}
+        member={item}
+        group={group}
+      />
+      <EditMemberModal
+        open={openEditModal}
+        onClose={() => setOpenEditModal(false)}
+        onValid={(data?: Membership) =>
+          data
+          ? updateMembership(data).then(() => setOpenEditModal(false)).catch(() => {})
+          : setOpenEditModal(false)
+        }
+        member={item}
+        group={group}
+        admin={true}
+      />
     </TableCell>
   </TableRow>
 }
@@ -160,12 +187,13 @@ function MembershipRow(props: {item: Membership; index: number}) {
  * Main table component for editing members in the admin page of groups.
  */
 function EditMembershipsPage(props: {}): JSX.Element {
-  // members
+  // data
+  const [group, setGroup] = useState<Group | null>(null);
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>('load');
   // status of modals
   const [message, setMessage] = useState<{open: boolean; type: any; text: string }>({ open: false, type: null, text: '' });
-  
+
   // filters passed as query parameters
   const filters = {
     group: groupSlug,
@@ -174,26 +202,21 @@ function EditMembershipsPage(props: {}): JSX.Element {
   };
 
   useEffect(() => {
-    getMembers();
-  }, []);
-
-  /**
-   * Get the list of memberships, for these filters (including the group slug)
-   */
-  async function getMembers() {
-    axios.get<Membership[]>('/api/group/membership/', {params: filters})
-    .then((res) => res.data.map((item) => {
-      item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
-      item.begin_date = new Date(item.begin_date);  // convert string to dates
-      item.end_date = new Date(item.end_date);
-      return item;
-    }))
-    .then((list) => {
-      setMembers(list);
-      setLoadState('success');
-    })
+    Promise.all([
+      // fetch memberships objects
+      axios.get<Membership[]>('/api/group/membership/', {params: filters})
+      .then((res) => res.data.map((item) => {
+        item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
+        return item;
+      }))
+      .then((list) => setMembers(list)),
+      // fetch group object
+      axios.get<Group>(`/api/group/group/${groupSlug}`)
+      .then((res) => setGroup(res.data))
+    ])
+    .then(() => setLoadState('success'))
     .catch(() => setLoadState('fail'));
-  }
+  }, []);
 
   /**
    * Callback after dropping for the drag-and-drop.
@@ -210,9 +233,24 @@ function EditMembershipsPage(props: {}): JSX.Element {
       member: members[source].id,
       lower: dest + 1 < members.length ? r_members[dest + 1].id : null
     }, {params: filters})
-    .then(() => setMessage({ open: true, type: 'success', text: 'Reordering saved!'}))
-    .catch(() => setMessage({ open: true, type: 'error', text: 'An error occurred: reordering not saved...'}));
-  }
+    .then(() => setMessage({ open: true, type: 'success', text: 'Réagencement sauvegardé !'}))
+    .catch(() => setMessage({ open: true, type: 'error', text: 'Erreur de réseau : le réagencement n\'est pas sauvegardé...'}));
+  };
+
+  /**
+   * A function to edit a membership object
+   *
+   * @param member 
+   */
+  async function updateMembership(member: Membership) {
+    return (
+      axios.put(`/api/group/membership/${member.id}/`, member)
+      .then((res) => {
+        const i = members.findIndex((elt) => elt.id === member.id);
+        Object.assign(members[i], res.data);
+      })
+      .catch(() => setMessage({ open: true, type: 'error', text: 'Erreur de réseau' })));
+  };
 
   return loadState == 'load' ?
     <p>Chargement en cours... ⏳</p>
@@ -241,7 +279,13 @@ function EditMembershipsPage(props: {}): JSX.Element {
         </TableHead>
         <TableBody component={DroppableComponent(onDragEnd)}>
           {members.map((item, index) => (
-            <MembershipRow item={item} index={index} />
+            <MembershipRow
+              item={item}
+              index={index}
+              group={group!!}
+              key={item.id}
+              updateMembership={updateMembership}
+            />
           ))}
         </TableBody>
       </Table>

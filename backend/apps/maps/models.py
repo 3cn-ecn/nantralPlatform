@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.utils import timezone
 
@@ -100,7 +102,7 @@ class Place(models.Model):
         recent group is the group with the member who has the most recent
         begin_date (lower than the date of today).
         """
-        default_date = timezone.date(1987, 1, 1)
+        default_date = datetime.date(1987, 1, 1)
         today = timezone.now().today()
         self.most_recent_group = max(
             (self.group_set

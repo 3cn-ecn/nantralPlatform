@@ -228,6 +228,8 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     permission_classes = [GroupPermission]
     serializer_class = GroupSerializer
+    lookup_field = 'slug'
+    lookup_url_kwarg = 'slug'
 
     def get_queryset(self) -> QuerySet[Group]:
         user = self.request.user
@@ -259,7 +261,7 @@ class GroupViewSet(viewsets.ModelViewSet):
                 .order_by(*group_type.sort_fields.split(',')))
 
     def get_object(self):
-        obj = get_object_or_404(Group, pk=self.kwargs['pk'])
+        obj = get_object_or_404(Group, slug=self.kwargs['slug'])
         self.check_object_permissions(self.request, obj)
         return obj
 

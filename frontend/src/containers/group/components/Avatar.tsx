@@ -30,8 +30,8 @@ function stringToColor(string: string): string {
  * @param props.size - The size of the avatar (small, medium, large)
  * @returns 
  */
-function Avatar(props: {url: string; title: string, size: 'small' | 'medium' | 'large'}) {
-  const { url, title, size } = props;
+function Avatar(props: {url?: string; title: string, size?: 'small' | 'medium' | 'large', children?: JSX.Element}) {
+  const { url, title, size, children } = props;
   const initials = `${title.split(' ')[0][0]}${title.split(' ')[1][0]}`;
   const sx = size === 'small' ?
     { width: 30, height: 30, fontSize: 13 }
@@ -41,7 +41,7 @@ function Avatar(props: {url: string; title: string, size: 'small' | 'medium' | '
   return <MUIAvatar 
     src={url}
     alt={title}
-    children={initials}
+    children={children ? children : initials}
     sx={{...sx, bgcolor: stringToColor(title)}}
   />
 }

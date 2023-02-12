@@ -1,4 +1,4 @@
-from datetime import timedelta, date
+import datetime
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -25,14 +25,14 @@ path_and_rename_group_banner = PathAndRename('groups/banniere')
 path_and_rename_group_type = PathAndRename('groups/types')
 
 
-def today() -> date:
+def today() -> datetime.date:
     """Returns the date of today."""
     return timezone.now().date()
 
 
-def one_year_later() -> date:
+def one_year_later() -> datetime.date:
     """Returns the day of today but one year later."""
-    return (timezone.now() + timedelta(days=365)).date()
+    return (timezone.now() + datetime.timedelta(days=365)).date()
 
 
 class GroupType(models.Model):
@@ -413,8 +413,8 @@ class Membership(models.Model):
         """Save the membership object."""
         # default dates for year groups
         if self.group.group_type.is_year_group:
-            self.begin_date = timezone.date(self.group.year, 8, 1)
-            self.end_date = timezone.date(self.group.year + 1, 7, 31)
+            self.begin_date = datetime.date(self.group.year, 8, 1)
+            self.end_date = datetime.date(self.group.year + 1, 7, 31)
         # if member becomes admin, remove the admin request
         if self.admin and self.admin_request:
             self.admin_request = False
