@@ -9,7 +9,7 @@ import { Group, Membership, Student } from '../interfaces';
  */
 function ListMembershipsGrid(props: {
   members: Membership[],
-  group: Group,
+  group?: Group,
   student: Student,
   updateMembership?: (member: Membership) => Promise<void>,
   deleteMembership?: (member: Membership) => Promise<void>,

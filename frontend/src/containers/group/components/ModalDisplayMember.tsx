@@ -23,7 +23,7 @@ function ShowMemberModal(props: {
   openEditModal?: () => void;
   open: boolean;
   member: Membership;
-  group: Group,
+  group?: Group,
   student: Student
 }) {
   const { closeModal, openEditModal, open, member, group, student } = props;
@@ -36,11 +36,15 @@ function ShowMemberModal(props: {
     >
       <DialogTitle sx={{ m: 0, p: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Avatar url={member.student.picture} title={member.student.full_name} size='large' />
+          <Avatar
+            url={group ? member.student.picture : member.group.icon }
+            title={group ? member.student.full_name : member.group.name }
+            size='large'
+          />
           <Box sx={{ minWidth: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {member.student.full_name}
+                {group ? member.student.full_name : member.group.name }
               </Typography>
               { member.admin ? <VerifiedIcon color='secondary' /> : <></> }
             </Box>
@@ -62,7 +66,7 @@ function ShowMemberModal(props: {
       </DialogTitle>
       <DialogContent dividers>
         <Typography
-          hidden={group.group_type.is_year_group}
+          hidden={group && group.group_type.is_year_group}
           color='text.secondary'
           gutterBottom
           sx={{ fontSize: 12, fontStyle: 'italic' }}
@@ -71,19 +75,19 @@ function ShowMemberModal(props: {
           } au {new Date(member.end_date).toLocaleDateString()}
         </Typography>
         <Typography gutterBottom>
-          {member.description || `Membre de ${group.name}`}
+          {member.description || `Membre de ${member.group.name}`}
         </Typography>
       </DialogContent>
       <DialogActions>
         <Button
-          href={member.student.url}
+          href={group ? member.student.url : member.group.url }
           variant='text'
           endIcon={<OpenInNewIcon />}
         >
-          Ouvrir le profil
+          { group ? 'Ouvrir le profil' : 'Ouvrir le groupe' }
         </Button>
         <Button
-          hidden={!openEditModal || !group.is_admin && student.id !== member.student.id }
+          hidden={!openEditModal || !group?.is_admin && student.id !== member.student.id }
           onClick={openEditModal}
           variant='outlined'
           endIcon={<EditIcon />}

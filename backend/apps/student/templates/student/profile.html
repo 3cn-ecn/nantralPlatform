@@ -58,28 +58,12 @@
         </p>
     {% endif %}
     
-    {% if clubs %}
-        <h2>Clubs</h2>
-        <div class="grille">
-            {% for membership in clubs %}
-                <div class="grille-icon text-center" style="transform: rotate(0)">
-                    <a href="{{ membership.group.get_absolute_url }}" class="stretched-link">
-                        <div class="ratio ratio-1x1">
-                            {% if membership.group.logo %}
-                                <img src="{{ membership.group.logo|file_url }}" />
-                            {% else %}
-                                <img src="https://avatars.dicebear.com/api/initials/{{membership.group.slug}}.svg" />
-                            {% endif %}
-                        </div>
-                    </a>
-                    <p>
-                        {{ membership.group.name }}
-                        <br>
-                        <small class="text-secondary">{{ membership.function }}</small>
-                    </p>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+    <div id="root-members" />
 {%endblock%}
 
+{% block script %}
+<script>
+    const studentId = "{{ object.id }}";
+</script>
+<script src='{% static "js/group/MembershipsStudent.js" %}'></script>
+{% endblock %}

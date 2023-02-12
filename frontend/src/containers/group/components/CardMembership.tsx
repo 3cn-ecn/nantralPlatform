@@ -21,7 +21,7 @@ import { Membership, Group, Student } from '../interfaces';
  */
 function MembershipCard(props: {
   item: Membership;
-  group: Group,
+  group?: Group,
   student: Student,
   updateMembership?: (member: Membership) => Promise<void>,
   deleteMembership?: (member: Membership) => Promise<void>;
@@ -36,10 +36,14 @@ function MembershipCard(props: {
       <Card>
         <CardActionArea onClick={() => setOpenShowModal(true)}>
           <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5 }}>
-            <Avatar url={item.student.picture} title={item.student.full_name} size='large' />
+            <Avatar
+              url={group ? item.student.picture : item.group.icon }
+              title={group ? item.student.full_name : item.group.name }
+              size='large'
+            />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant='h6' sx={{ fontWeight: 500 }} noWrap>
-                {item.student.full_name}
+                {group ? item.student.full_name : item.group.name }
               </Typography>
               <Typography sx={{fontSize: '0.9em' }} color='text.secondary' noWrap>
                 {item.summary}

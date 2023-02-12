@@ -31,7 +31,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
     { kind: 'text', name: 'summary', label: 'Résumé', maxLength: 50, helpText: 'Entrez le résumé du membre' },
     { kind: 'text', name: 'description', label: 'Description', multiline: true },
   ];
-  if (!group.group_type.is_year_group) {
+  if (group && !group.group_type.is_year_group) {
     defaultFields.push({
       kind: 'group',
       fields: [
@@ -40,7 +40,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       ]
     });
   };
-  if (group.is_admin) {
+  if (group?.is_admin) {
     defaultFields.push({
       kind: 'boolean',
       name: 'admin',
@@ -48,7 +48,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       helpText: 'Un admin peut modifier le groupe et ses membres.'
     });
   };
-  if (member.id === null && group.is_admin) {
+  if (member.id === null && group?.is_admin) {
     defaultFields.splice(0, 0, {
       kind: 'autocomplete',
       label: 'Utilisateur',
@@ -88,7 +88,7 @@ function createBlankMember(group: Group, student: Student): Membership {
 function EditMemberModal(props: {
   open: boolean;
   member?: Membership;
-  group: Group,
+  group?: Group,
   student: Student,
   saveMembership: (member: Membership) => Promise<any>;
   closeModal: () => void;
