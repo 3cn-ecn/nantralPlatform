@@ -82,26 +82,29 @@ function MembershipsList(props: {}): JSX.Element {
   : loadState == 'fail' ?
     <p>Échec du chargement 😢</p>
   : 
-    <Grid container spacing={2}>
-      <Snackbar 
-        open={message.open}
-        autoHideDuration={4000}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        onClose={() => setMessage({ ...message, open: false })}>
-        <Alert severity={message.type} sx={{ width: '100%' }} elevation={6} variant="filled">
-          {message.text}
-        </Alert>
-      </Snackbar>
-      {members.map((item, index) => (
-        <MembershipCard
-          item={item}
-          group={group!!}
-          key={item.id}
-          updateMembership={updateMembership}
-          deleteMembership={deleteMembership}
-        />
-      ))}
-    </Grid>
+    <>
+      <h2>Membres</h2>
+      <Grid container spacing={2}>
+        <Snackbar 
+          open={message.open}
+          autoHideDuration={4000}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={() => setMessage({ ...message, open: false })}>
+          <Alert severity={message.type} sx={{ width: '100%' }} elevation={6} variant="filled">
+            {message.text}
+          </Alert>
+        </Snackbar>
+        {members.map((item, index) => (
+          <MembershipCard
+            item={item}
+            group={group!!}
+            key={item.id}
+            updateMembership={updateMembership}
+            deleteMembership={deleteMembership}
+          />
+        ))}
+      </Grid>
+    </>
 }
 
 render(<MembershipsList />, document.getElementById("root-members"));

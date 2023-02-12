@@ -38,10 +38,10 @@ function DeleteMemberModal(props: {
       open={open}
       onClose={closeModal}
     >
-      <DialogTitle sx={{ m: 0, p: 2 }}>
+      <DialogTitle>
         Supprimer le membre ?
       </DialogTitle>
-      <DialogContent dividers>
+      <DialogContent>
         <Alert severity='error' hidden={!globalErrors} sx={{mb: 1 }}>{globalErrors}</Alert>
         <DialogContentText>
           Voulez-vous vraiment supprimer {member.student.full_name} des

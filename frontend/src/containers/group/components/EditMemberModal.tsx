@@ -28,7 +28,7 @@ import { Membership, Group } from '../interfaces';
  */
 function createFormFields(group: Group, member: Membership): FieldType[] {
   const defaultFields: FieldType[] = [
-    { kind: 'text', name: 'summary', label: 'Résumé', maxLength: 20, helpText: 'Entrez le résumé du membre' },
+    { kind: 'text', name: 'summary', label: 'Résumé', maxLength: 50, helpText: 'Entrez le résumé du membre' },
     { kind: 'text', name: 'description', label: 'Description', multiline: true },
   ];
   if (!group.group_type.is_year_group) {
