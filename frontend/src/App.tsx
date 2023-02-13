@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Box, CssBaseline, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import i18next from 'i18next';
 import Home from './pages/Home/Home';
 import Test1 from './pages/Test1/Test1';
 import NavBarTop from './components/NavBarTop/NavBarTop';
@@ -37,6 +38,9 @@ function App() {
   } else {
     mode = true;
   }
+  const changeLanguage = (lng) => {
+    i18next.changeLanguage(lng);
+  };
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [themeApp, setThemeApp] = React.useState(mode);
   const jAuto = JSON.parse(localStorage.getItem('auto'));
@@ -50,6 +54,10 @@ function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const choixTheme = isAutomatic ? !prefersDarkMode : themeApp;
   const drawerWidth = 240; // the width of the lateral navbar
+  const jLangue = localStorage.getItem('language');
+  if (jLangue != null) {
+    changeLanguage(jLangue);
+  }
   return (
     <ThemeProvider theme={choixTheme ? theme : darktheme}>
       <Box sx={{ display: 'flex' }}>

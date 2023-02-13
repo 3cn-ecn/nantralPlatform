@@ -259,14 +259,20 @@ function NavBarTop(props: {
             </ListItem>
             <MenuItem
               value="fr-FR"
-              onClick={() => i18next.changeLanguage('fr-FR')}
+              onClick={() => {
+                i18next.changeLanguage('fr-FR');
+                localStorage.setItem('language', 'fr-FR');
+              }}
               selected={i18next.language === 'fr-FR'}
             >
               Français
             </MenuItem>
             <MenuItem
               value="en-GB"
-              onClick={() => i18next.changeLanguage('en-GB')}
+              onClick={() => {
+                i18next.changeLanguage('en-GB');
+                localStorage.setItem('language', 'en-GB');
+              }}
               selected={i18next.language === 'en-GB'}
             >
               English
