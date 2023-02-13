@@ -157,9 +157,9 @@ function NavBarTop(props: {
         >
           <SvgIcon component={MenuIcon} inheritViewBox />
         </IconButton>
-        <SvgIcon component={NantralIcon} inheritViewBox />
+        <SvgIcon sx={{ display: {xs: 'none', md: 'flex'} }} component={NantralIcon} inheritViewBox />
         <Box sx={{ flexGrow: 0.02 }} />
-          <Breadcrumbs aria-label="breadcrumb">
+          <Breadcrumbs sx={{ display: {xs: 'none', md: 'flex'} }} aria-label="breadcrumb">
             <Typography color="text.primary">Nantral Platform</Typography>
             <Link color="inherit" to="/">
               {t("navbar.home")}
@@ -182,7 +182,7 @@ function NavBarTop(props: {
         <Box sx={{ flexGrow: 0.9 }} />
         <SearchBar />
         <Box sx={{ flexGrow: 1.0 }} />
-        <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
+        <Box sx={{ display: 'flex' }}>
           <IconButton
             size="large"
             aria-label="show 17 new notifications"
