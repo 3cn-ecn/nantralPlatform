@@ -3,13 +3,9 @@ import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import {
   Link,
-  Route,
-  Routes,
-  MemoryRouter,
   useLocation,
 } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Legal from 'pages/LegalNotice/Legal';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import {
   IconButton,
@@ -19,7 +15,6 @@ import {
   Toolbar,
   Menu,
   MenuItem,
-  List,
   ListItem,
   ListItemText,
 } from '@mui/material';
@@ -39,7 +34,6 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
 import PaletteIcon from '@mui/icons-material/Palette';
 import { SearchBar } from './SearchBar/SearchBar';
-import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
@@ -113,10 +107,6 @@ function NavBarTop(props: {
   };
 
   const { t } = useTranslation('translation');
-
-  const [langue, setLangue] = React.useState('');
-
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   
   const breadcrumbNameMap: { [key: string]: string } = {
     '/event/': t("navbar.events"),
