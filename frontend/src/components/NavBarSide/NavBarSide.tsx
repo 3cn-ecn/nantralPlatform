@@ -7,11 +7,9 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
   SvgIcon,
   Typography,
 } from '@mui/material';
-import { InsertLink as InsertLinkIcon } from '@mui/icons-material';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
@@ -25,7 +23,6 @@ import { ReactComponent as AdminIcon } from '../../assets/scalable/admin.svg';
 import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
 import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
 import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import { ReactComponent as AcademicIcon } from '../../assets/scalable/academic.svg';
 
 /** Interface for all links */
@@ -115,7 +112,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
           width: drawerWidth,
           boxSizing: 'border-box',
         },
-        zIndex: '0',
+        zIndex: 0,
       }}
     >
       <Toolbar />

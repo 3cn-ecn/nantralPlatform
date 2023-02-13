@@ -60,8 +60,19 @@ class BaseEvent(AbstractPost):
         return self.participants.all().count()
 
     def is_participating(self, user: User) -> bool:
-        student = Student.objects.filter(user=user).first()
-        return student in self.participants.all()
+        if user.is_anonymous or not user.is_authenticated or not hasattr(
+                user, 'student'):
+            return False
+        return user.student in self.participants.all()
+
+    def is_favorite(self, user: User) -> bool:
+        if user.is_anonymous or not user.is_authenticated or not hasattr(
+                user, 'student'):
+            return False
+        return user.student.favorite_event.contains(self)
+
+    def __str__(self):
+        return self.title
 
     def save(self, *args, **kwargs):
         # create the slug

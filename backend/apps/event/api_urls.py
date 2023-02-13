@@ -6,7 +6,8 @@ from .api_views import (
     ListEventsGroupAPIView,
     ListEventsParticipantsAPIView,
     ParticipateAPIView,
-    UpdateEventAPIView)
+    UpdateEventAPIView,
+    FavoriteAPIView)
 
 app_name = 'event'
 
@@ -35,4 +36,8 @@ urlpatterns = [
         '<slug:event_slug>/participate',
         ParticipateAPIView.as_view(),
         name='participate-to-event'),
+    path(
+        '<slug:event_slug>/favorite',
+        FavoriteAPIView.as_view(),
+        name='set-event-to-favorite'),
 ]

@@ -1,3 +1,4 @@
+import { Skeleton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton/IconButton';
 import * as React from 'react';
@@ -16,6 +17,7 @@ function ClubAvatar(props: {
       <IconButton onClick={() => window.open(clubUrl, '_self')}>
         <Avatar alt="" src={logoUrl} sx={{ height: size, width: size }} />
       </IconButton>
+
       <p style={{ marginTop: 0 }}>{name}</p>
     </div>
   );
