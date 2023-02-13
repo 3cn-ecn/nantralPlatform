@@ -5,7 +5,6 @@ import {
   Link,
   useLocation,
 } from 'react-router-dom';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import {
   IconButton,
