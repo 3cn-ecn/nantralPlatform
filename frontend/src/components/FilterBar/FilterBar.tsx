@@ -40,9 +40,9 @@ function FilterBar() {
   const [dateBeginTransformed, setDateBeginTransformed] = React.useState(null);
   const [dateEnd, setDateEnd] = React.useState(null);
   const [dateEndTransformed, setDateEndTransformed] = React.useState(null);
-  const [isFavorite, setIsFavorite] = React.useState(null);
-  const [isParticipated, setIsParticipated] = React.useState(null);
-  const [isShotgun, setIsShotgun] = React.useState(null);
+  const [isFavorite, setIsFavorite] = React.useState(false);
+  const [isParticipated, setIsParticipated] = React.useState(false);
+  const [isShotgun, setIsShotgun] = React.useState(false);
   const [organiser, setOrganiser] = React.useState(null);
   const [validateFilter, setValidateFilter] = React.useState(null);
 
@@ -136,7 +136,7 @@ function FilterBar() {
     { id: 'favorite', value: { isFavorite } },
     { id: 'participate', value: { isParticipated } },
     { id: 'organiser', value: { organiser } },
-    { id: 'shotgun', value: { isShotgun }},
+    { id: 'shotgun', value: { isShotgun } },
   ];
 
   const toggleDrawer =
