@@ -4,7 +4,6 @@ import { Box, CssBaseline, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Home from './pages/Home/Home';
-import Test1 from './pages/Test1/Test1';
 import NavBarTop from './components/NavBarTop/NavBarTop';
 import NavBarSide from './components/NavBarSide/NavBarSide';
 import NotFound from './pages/NotFound/NotFound';
@@ -30,18 +29,18 @@ import './App.scss';
  * @returns The App Component
  */
 function App() {
-  const jMode = JSON.parse(localStorage.getItem('mode'));
+  const jMode = JSON.parse(localStorage.getItem('theme-mode'));
   let mode;
-  if (jMode != null) {
+  if (jMode !== null) {
     mode = jMode;
   } else {
     mode = true;
   }
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [themeApp, setThemeApp] = React.useState(mode);
-  const jAuto = JSON.parse(localStorage.getItem('auto'));
+  const jAuto = JSON.parse(localStorage.getItem('theme-auto'));
   let auto;
-  if (jMode != null) {
+  if (jMode !== null) {
     auto = jAuto;
   } else {
     auto = true;

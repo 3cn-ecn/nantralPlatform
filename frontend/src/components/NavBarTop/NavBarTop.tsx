@@ -1,10 +1,7 @@
 import * as React from 'react';
 import i18next from 'i18next';
-import InputLabel from '@mui/material/InputLabel';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
 import { useTranslation } from 'react-i18next';
-import { NavLink, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   IconButton,
@@ -109,13 +106,6 @@ function NavBarTop(props: {
   };
 
   const { t } = useTranslation('translation');
-
-  const [langue, setLangue] = React.useState('');
-
-  const handleChangeLangue = (event: React.MouseEvent<HTMLButtonElement>) => {
-    changeLanguage(event.target.value);
-  };
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   return (
     <AppBar position="fixed" color="secondary">
@@ -243,6 +233,11 @@ function NavBarTop(props: {
             onClose={handleCloseLAll}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             TransitionComponent={Collapse}
+            PaperProps={{
+              style: {
+                width: 195,
+              },
+            }}
           >
             <ListItem>
               <IconButton
@@ -283,6 +278,11 @@ function NavBarTop(props: {
             onClose={handleCloseDAll}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             TransitionComponent={Collapse}
+            PaperProps={{
+              style: {
+                width: 195,
+              },
+            }}
           >
             <ListItem>
               <IconButton
@@ -301,8 +301,8 @@ function NavBarTop(props: {
               onClick={() => {
                 setThemeApp(true);
                 setIsAutomatic(false);
-                localStorage.setItem('auto', JSON.stringify(false));
-                localStorage.setItem('mode', JSON.stringify(true));
+                localStorage.setItem('theme-auto', JSON.stringify(false));
+                localStorage.setItem('theme-mode', JSON.stringify(true));
               }}
               selected={themeApp === true && isAutomatic === false}
             >
@@ -315,9 +315,8 @@ function NavBarTop(props: {
               onClick={() => {
                 setThemeApp(false);
                 setIsAutomatic(false);
-                localStorage.setItem('auto', JSON.stringify(false));
-                console.log(JSON.parse(localStorage.getItem('auto')));
-                localStorage.setItem('mode', JSON.stringify(false));
+                localStorage.setItem('theme-auto', JSON.stringify(false));
+                localStorage.setItem('theme-mode', JSON.stringify(false));
               }}
               selected={themeApp === false && isAutomatic === false}
             >
@@ -329,7 +328,7 @@ function NavBarTop(props: {
             <MenuItem
               onClick={() => {
                 setIsAutomatic(true);
-                localStorage.setItem('auto', JSON.stringify(true));
+                localStorage.setItem('theme-auto', JSON.stringify(true));
               }}
               selected={isAutomatic === true}
             >
