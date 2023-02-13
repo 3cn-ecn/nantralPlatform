@@ -6,31 +6,25 @@ import {
   LocalFireDepartment as ShotgunIcon,
   Cancel as Cross,
 } from '@mui/icons-material';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  Theme,
-  SxProps,
-  CircularProgress,
-} from '@mui/material';
+import { Button, Theme, SxProps, CircularProgress } from '@mui/material';
 import axios from 'axios';
+
 import * as React from 'react';
+
 import { useTranslation } from 'react-i18next';
-import { CapitalizeFirstLetter } from '../../utils/formatText';
+import { formatDate, formatTime } from '../../utils/date';
+import { UnsuscribeModal } from '../Modal/UnsuscribeModal';
 
 interface JoinButtonProps {
   variant?: 'shotgun' | 'normal' | 'form';
   link?: string;
   maxPerson?: number;
-  shotgunClosed?: boolean;
   person: number;
   sx?: SxProps<Theme>;
   participating: boolean;
   eventSlug: string;
+  beginInscription: string | null;
+  endInscription: string | null;
 }
 
 function JoinButton({
@@ -38,10 +32,11 @@ function JoinButton({
   link,
   maxPerson,
   person,
-  shotgunClosed,
   sx,
   participating,
   eventSlug,
+  beginInscription,
+  endInscription,
 }: JoinButtonProps): JSX.Element {
   const [selected, setSelected] = React.useState(participating);
   const [people, setPeople] = React.useState(person);
@@ -49,6 +44,13 @@ function JoinButton({
   const [loading, setLoading] = React.useState(false);
 
   const { t } = useTranslation('translation');
+  const closed: boolean =
+    (variant === 'shotgun' && person >= maxPerson) ||
+    (endInscription !== null &&
+      Date.now() > new Date(endInscription).getTime());
+  const inscriptionNotStarted: boolean =
+    beginInscription !== null &&
+    Date.now() < new Date(beginInscription).getTime();
 
   const participate = async () => {
     axios
@@ -90,6 +92,7 @@ function JoinButton({
   const onClick = () => {
     switch (variant) {
       case 'normal':
+        if (closed || inscriptionNotStarted) return;
         if (selected) {
           setOpen(true);
         } else {
@@ -98,7 +101,7 @@ function JoinButton({
         }
         break;
       case 'shotgun':
-        if ((person >= maxPerson || shotgunClosed) && !selected) return;
+        if ((closed && !selected) || inscriptionNotStarted) return;
         if (selected) {
           setOpen(true);
         } else {
@@ -114,6 +117,7 @@ function JoinButton({
   };
 
   const getFirstIcon = () => {
+    if (inscriptionNotStarted) return null;
     switch (variant) {
       case 'shotgun':
         return <ShotgunIcon />;
@@ -124,9 +128,11 @@ function JoinButton({
     }
   };
   const getSecondIcon = () => {
+    if (inscriptionNotStarted) return null;
+    if (closed && variant !== 'form') return <Cross />;
     if (variant === 'normal') return selected ? <CheckIcon /> : <PlusIcon />;
     if (variant === 'shotgun') {
-      if ((person >= maxPerson || shotgunClosed) && !selected) return <Cross />;
+      if (closed && !selected) return <Cross />;
       if (selected) return <CheckIcon />;
       return selected ? <CheckIcon /> : <PlusIcon />;
     }
@@ -135,9 +141,16 @@ function JoinButton({
   const getText = () => {
     switch (variant) {
       case 'normal':
-        return people;
+        return inscriptionNotStarted
+          ? new Date(beginInscription).toLocaleTimeString()
+          : people;
       case 'shotgun':
-        return `${people}/${maxPerson}`;
+        return inscriptionNotStarted
+          ? `${formatDate(new Date(beginInscription), 'short')} ${formatTime(
+              new Date(beginInscription),
+              'short'
+            )}`
+          : `${people}/${maxPerson}`;
       case 'form':
         return t('button.joinButton.register');
       default:
@@ -146,7 +159,7 @@ function JoinButton({
   };
   let title: string;
   if (variant === 'form') title = t('button.joinButton.registerLink');
-  else if ((people >= maxPerson || shotgunClosed) && variant === 'shotgun')
+  else if (closed && variant === 'shotgun')
     title = t('button.joinButton.shotgunClosed');
   else if (!selected) title = t('button.joinButton.register');
   else title = t('button.joinButton.unsuscribe');
@@ -159,17 +172,17 @@ function JoinButton({
     | 'error'
     | 'info'
     | 'warning';
-  if ((people >= maxPerson || shotgunClosed) && variant === 'shotgun') {
-    color = 'error';
-  } else if (selected) {
+  if (selected) {
     color = 'success';
+  } else if (closed) {
+    color = 'warning';
   } else {
     color = 'info';
   }
   return (
     <>
       <Button
-        disabled={loading}
+        disabled={loading || inscriptionNotStarted || closed}
         onClick={() => onClick()}
         variant="contained"
         startIcon={getFirstIcon()}
@@ -183,30 +196,7 @@ function JoinButton({
           <CircularProgress size={25} style={{ position: 'absolute' }} />
         )}
       </Button>
-      <Dialog
-        open={open}
-        onClose={() => handleClose(false)}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title">
-          {CapitalizeFirstLetter(t('button.joinButton.unsuscribe'))} ?
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>{t('button.joinButton.title')}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={() => handleClose(false)}>
-            {t('button.cancel')}
-          </Button>
-          <Button
-            onClick={() => handleClose(true)}
-            autoFocus
-            variant="contained"
-          >
-            {t('button.joinButton.unsuscribe')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <UnsuscribeModal open={open} onClose={handleClose} />
     </>
   );
 }
@@ -215,7 +205,6 @@ JoinButton.defaultProps = {
   variant: 'normal',
   link: '',
   maxPerson: 0,
-  shotgunClosed: false,
   sx: {},
 };
 

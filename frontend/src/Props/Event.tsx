@@ -14,8 +14,8 @@ export interface EventProps {
   slug: string; // slug of the event
   title: string;
   max_participant: number | null; // number max of participant
-  end_inscription: Date | null; // date of the end of inscription
-  begin_inscripion: Date | null; // date of the beginning of inscription
+  end_inscription: string | null; // date of the end of inscription
+  begin_inscription: string | null; // date of the beginning of inscription
   end_date: string | null; // end date of the event
   ticketing: string | null; // url of inscription form
   is_favorite: boolean;
