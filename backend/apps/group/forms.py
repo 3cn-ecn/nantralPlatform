@@ -11,7 +11,7 @@ from .models import Group, Membership
 # from apps.club.models import Club, BDX
 # from apps.liste.models import Liste
 # from apps.roommates.models import Roommates
-# from apps.sociallink.models import SocialLink
+from apps.sociallink.models import SocialLink
 from apps.student.models import Student
 # import apps.academic.forms as academicforms
 # import apps.administration.forms as adminforms
@@ -89,44 +89,8 @@ class AdminRequestForm(ModelForm):
         return super().save(*args, **kwargs)
 
 
-MembershipFormset = modelformset_factory(
-    Membership,
-    fields=[
-        'student',
-        'summary',
-        'begin_date',
-        'end_date',
-        'admin',
-        'order',
-        'description'],
+SocialLinkGroupFormset = modelformset_factory(
+    SocialLink,
+    fields=['network', 'uri', 'label'],
     extra=1,
-    can_delete=True,
-)
-
-
-# # NB : Les BDX sont aussi des instances de Club
-
-
-# def NamedMembershipGroupFormset(  # noqa: N802
-#     group: object
-# ) -> Type[BaseModelFormSet] | None:
-#     if isinstance(group, Club):
-#         return clubforms.NamedMembershipClubFormset
-#     elif isinstance(group, Liste):
-#         return listeforms.NamedMembershipListeFormset
-#     elif isinstance(group, Roommates):
-#         return roommatesforms.NamedMembershipRoommatesFormset
-#     elif isinstance(group, Course):
-#         return academicforms.NamedMembershipCourseFormset
-#     elif isinstance(group, Administration):
-#         return adminforms.NamedMembershipAdministrationFormset
-#     else:
-#         return None
-
-
-# SocialLinkGroupFormset = modelformset_factory(
-#     SocialLink,
-#     fields=['network', 'url', 'label'],
-#     extra=1,
-#     can_delete=True,
-# )
+    can_delete=True)

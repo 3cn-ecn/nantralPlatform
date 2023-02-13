@@ -2,10 +2,10 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-{% include 'abstract_group/included/navbar_edit.html' with open='sociallinks' %}
+{% include 'group/included/navbar_edit.html' with open='sociallinks' %}
 
 <h2>Liens de Réseaux Sociaux</h2>
-<form method='POST' action="{% url object.app|add:':update-sociallinks' object.slug %}">
+<form method='POST' action="{% url 'group:update-sociallinks' group.slug %}">
     {% csrf_token %}
     {{ sociallinks.management_form }}
     {% for sociallink in sociallinks %}

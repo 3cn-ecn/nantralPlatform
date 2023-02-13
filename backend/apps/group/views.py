@@ -41,7 +41,7 @@ from .forms import (
     MembershipForm,
     AdminRequestForm,
     UpdateGroupForm,
-    MembershipFormset)
+    SocialLinkGroupFormset)
 
 # from apps.utils.accessMixins import UserIsAdmin, user_is_connected
 # from apps.utils.slug import get_object_from_slug
@@ -259,69 +259,55 @@ class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
         ]
         return context
 
+
+class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
+    '''Vue pour modifier les réseaux sociaux d'un groupe.'''
+
+    template_name = 'group/edit/sociallinks_edit.html'
+
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        form = SocialLinkGroupFormset(queryset=self.object.social_links.all())
+        context['sociallinks'] = form
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': "Groupes"
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.name
+            },
+            {
+                'target': '#',
+                'label': "Modifier"
+            }
+        ]
+        return context
+
     def post(self, request, **kwargs):
         group = self.get_object()
-        form = MembershipFormset(request.POST)
+        form = SocialLinkGroupFormset(request.POST)
         if form.is_valid():
-            members = form.save(commit=False)
-            for member in members:
-                member.group = group
-                member.save()
-            for member in form.deleted_objects:
-                member.delete()
-            messages.success(request, 'Membres modifiés')
+            sociallinks = form.save(commit=False)
+            for sociallink in sociallinks:
+                sociallink.save()
+                group.social_links.add(sociallink)
+            for sociallink in form.deleted_objects:
+                sociallink.delete()
+            messages.success(request, 'Liens modifiés')
         else:
             messages.error(request, form.errors)
-        return redirect('group:update-members', group.slug)
-
-
-# class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
-#     '''Vue pour modifier les réseaux sociaux d'un groupe.'''
-
-#     template_name = 'abstract_group/edit/sociallinks_edit.html'
-
-#     def get_object(self, **kwargs):
-#         app = resolve(self.request.path).app_name
-#         slug = self.kwargs.get("slug")
-#         return get_object_from_slug(app, slug)
-
-#     def get_context_data(self, **kwargs):
-#         context = {}
-#         group = self.get_object()
-#         context['object'] = group
-#         sociallinks = SocialLink.objects.filter(
-#             slug=context['object'].full_slug)
-#         form = SocialLinkGroupFormset(queryset=sociallinks)
-#         context['sociallinks'] = form
-#         context['ariane'] = [{'target': reverse(group.app + ':index'),
-#                               'label': group.app_name},
-#                              {'target': reverse(group.app + ':detail',
-#                                                 kwargs={'slug': group.slug}),
-#                               'label': group.name},
-#                              {'target': '#',
-#                               'label': 'Modifier'}]
-#         return context
-
-#     def post(self, request, **kwargs):
-#         group = self.get_object()
-#         return edit_sociallinks(request, group)
-
-
-# @ require_http_methods(['POST'])
-# @ login_required
-# def edit_sociallinks(request, group):
-#     form = SocialLinkGroupFormset(request.POST)
-#     if form.is_valid():
-#         sociallinks = form.save(commit=False)
-#         for sociallink in sociallinks:
-#             sociallink.slug = group.full_slug
-#             sociallink.save()
-#         for sociallink in form.deleted_objects:
-#             sociallink.delete()
-#         messages.success(request, 'Liens modifiés')
-#     else:
-#         messages.error(request, form.errors)
-#     return redirect(group.app + ':update-sociallinks', group.slug)
+        return redirect('group:update-sociallinks', group.slug)
 
 
 # class AcceptAdminRequestView(UserIsAdmin, View):
