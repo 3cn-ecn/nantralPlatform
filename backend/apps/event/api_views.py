@@ -58,7 +58,7 @@ class ListEventsParticipantsAPIView(generics.ListAPIView):
         user = self.request.user
         event_slug = self.kwargs['event_slug']
         event = BaseEvent.objects.get(slug=event_slug)
-        group = event.get_group
+        group = event.get_group()
         if group.is_admin(user):
             return event.participants
         return []

@@ -36,7 +36,7 @@ class PostDetailView(LoginRequiredMixin, TemplateView):
         ).update(seen=True)
         # get context
         context['object'] = self.object
-        context['group'] = self.object.get_group
+        context['group'] = self.object.get_group()
         context['ariane'] = [
             {
                 'target': reverse('home:home'),

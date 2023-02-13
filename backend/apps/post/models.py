@@ -54,13 +54,8 @@ class AbstractPost(models.Model, SlugModel):
     class Meta:
         abstract = True
 
-    @property
     def get_group(self) -> AbstractGroup:
         return get_object_from_full_slug(self.group)
-
-    @property
-    def get_group_name(self) -> AbstractGroup:
-        return get_object_from_full_slug(self.group).name
 
     def save(self, *args, **kwargs):
         # compression des images
@@ -74,7 +69,7 @@ class AbstractPost(models.Model, SlugModel):
     def can_view(self, user: User) -> bool:
         if self.publicity == VISIBILITY[0][0]:
             return True
-        return self.get_group.is_member(user)
+        return self.get_group().is_member(user)
 
     def create_notification(self, title, body):
         """Create a new notification for this post"""
@@ -87,7 +82,7 @@ class AbstractPost(models.Model, SlugModel):
             url=self.get_absolute_url(),
             sender=self.group,
             date=self.publication_date,
-            icon_url=self.get_group.logo.url if self.get_group.logo else None,
+            icon_url=self.get_group().logo.url if self.get_group().logo else None,
             publicity=self.publicity
         )
         # add image
@@ -105,6 +100,7 @@ class AbstractPost(models.Model, SlugModel):
             title="Gérer",
             url=reverse("notification:settings")
         )
+        self.save()
 
 
 class Post(AbstractPost):
@@ -117,7 +113,7 @@ class Post(AbstractPost):
         )
         # save the notification
         self.create_notification(
-            title=self.get_group_name,
+            title=self.get_group().name,
             body=self.title)
         # save agin the post
         super(Post, self).save(*args, **kwargs)

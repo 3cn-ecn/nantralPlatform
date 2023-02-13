@@ -17,7 +17,7 @@ export function Event(props): JSX.Element {
           {eventInfos.title}
         </Card.Title>
         <Card.Subtitle className="mb-3">
-          {getHour(eventInfos.date)} • {eventInfos.location} • {eventInfos.get_group_name}
+          {getHour(eventInfos.date)} • {eventInfos.location} • {eventInfos.group_name}
         </Card.Subtitle>
       </Card.Body>
       <Card.Body className="pt-0">

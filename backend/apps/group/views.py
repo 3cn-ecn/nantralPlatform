@@ -15,8 +15,7 @@ from django.views.generic import (
     UpdateView,
     TemplateView,
     View,
-    FormView
-)
+    FormView)
 
 from discord_webhook import DiscordWebhook, DiscordEmbed
 

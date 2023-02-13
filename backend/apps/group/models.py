@@ -91,7 +91,7 @@ class GroupType(models.Model):
     sort_fields = models.CharField(
         verbose_name=_("Sort Fields"),
         max_length=100,
-        default='-order, short_name',
+        default='-order,short_name',
         help_text=_("Fields used to sort groups in the list, separated by ',' "
                     "and without spaces. If categories are defined, you must "
                     "also reflect them here."))

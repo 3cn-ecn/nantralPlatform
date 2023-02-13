@@ -2,45 +2,42 @@ from django.utils import timezone
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.utils import IntegrityError
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import resolve
 from django.urls.base import reverse
 from django.views.decorators.http import require_http_methods
-from django.views.generic import UpdateView, FormView
-from django.views.generic.base import TemplateView, View
+from django.views.generic import UpdateView, FormView, DetailView
+from django.views.generic.base import View
 
-from .models import BaseEvent, EatingEvent
+from .models import BaseEvent
 from .forms import EventForm, EventFormSet
 
 from apps.notification.models import SentNotification
 from apps.utils.slug import (
     get_object_from_slug,
-    get_full_slug_from_slug,
-    get_app_from_full_slug,
-    get_slug_from_full_slug,
-    get_object_from_full_slug)
+    get_full_slug_from_slug)
 from apps.utils.accessMixins import UserIsAdmin
 
 
 # Application Event
 
-class EventDetailView(LoginRequiredMixin, TemplateView):
+class EventDetailView(LoginRequiredMixin, DetailView):
     template_name = 'event/detail.html'
+    model = BaseEvent
+    slug_field = 'slug'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # get the event
-        self.object = BaseEvent.get_event_by_slug(self.kwargs.get('event_slug'))
+        event: BaseEvent = self.object
         # mark it as read
         SentNotification.objects.filter(
             student=self.request.user.student,
-            notification=self.object.notification
+            notification=event.notification
         ).update(seen=True)
         # get context
-        context['object'] = self.object
-        context['group'] = self.object.get_group
+        context['group'] = self.object.get_group()
         context['is_participating'] = self.object.is_participating(
             self.request.user)
         context['is_admin'] = context['group'].is_admin(self.request.user)
@@ -53,6 +50,39 @@ class EventDetailView(LoginRequiredMixin, TemplateView):
                 'target': '#',
                 'label': self.object.title
             },
+        ]
+        return context
+
+
+class EventUpdateView(UserPassesTestMixin, UpdateView):
+    """Update an event"""
+
+    template_name = 'event/update.html'
+    fields = ['title', 'description', 'location',
+              'date', 'publicity', 'color', 'image']
+    model = BaseEvent
+    slug_field = 'slug'
+
+    def test_func(self) -> bool:
+        event = self.get_object()
+        group = event.get_group()
+        return group.is_admin(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': reverse('home:home'),
+                'label': "Évènements"
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.title
+            },
+            {
+                'target': '#',
+                'label': "Modifier"
+            }
         ]
         return context
 
@@ -99,43 +129,6 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
                  "l'événement existant ou changer le nom de l'événement que "
                  "vous tentez d'ajouter."))
             return self.form_invalid(self.request)
-
-
-class EventUpdateView(UserIsAdmin, UpdateView):
-    '''In the context of edit group, update an event'''
-    template_name = 'event/update.html'
-    fields = ['title', 'description', 'location',
-              'date', 'publicity', 'color', 'image']
-
-    def test_func(self) -> bool:
-        self.request.path = '/' + \
-            get_app_from_full_slug(self.object.group) + '/'
-        self.kwargs['slug'] = get_slug_from_full_slug(self.object.group)
-        return super().test_func()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['event'] = self.object
-        context['object'] = group = get_object_from_full_slug(self.object.group)
-        context['ariane'] = [{'target': reverse(group.app + ':index'),
-                              'label': group.app_name},
-                             {'target': reverse(group.app + ':detail',
-                                                kwargs={'slug': group.slug}),
-                              'label': group.name},
-                             {'target': '#',
-                              'label': 'Modifier'}]
-        return context
-
-    def get_object(self, **kwargs):
-        return BaseEvent.get_event_by_slug(self.kwargs['event_slug'])
-
-    def dispatch(self, request, *args, **kwargs):
-        self.object = BaseEvent.get_event_by_slug(self.kwargs['event_slug'])
-        self.kwargs['slug'] = get_slug_from_full_slug(self.object.group)
-        if isinstance(self.object, EatingEvent):
-            self.fields = ['title', 'description', 'location',
-                           'date', 'publicity', 'color', 'image', 'menu']
-        return super().dispatch(request, *args, **kwargs)
 
 
 class UpdateGroupEventsView(UserIsAdmin, View):
@@ -214,9 +207,9 @@ class UpdateGroupArchivedEventsView(UserIsAdmin, View):
 
 @require_http_methods(['GET'])
 @login_required
-def add_participant(request, event_slug):
+def add_participant(request, slug):
     """Adds the user to the list of participants."""
-    event = BaseEvent.get_event_by_slug(event_slug)
+    event = get_object_or_404(BaseEvent, slug=slug)
     event.participants.add(request.user.student)
     if request.GET.get('redirect'):
         return redirect('home:home')
@@ -225,9 +218,9 @@ def add_participant(request, event_slug):
 
 @require_http_methods(['GET'])
 @login_required
-def remove_participant(request, event_slug):
+def remove_participant(request, slug):
     """Removes the user from the list of participants."""
-    event = BaseEvent.get_event_by_slug(event_slug)
+    event = get_object_or_404(BaseEvent, slug=slug)
     event.participants.remove(request.user.student)
     if request.GET.get('redirect'):
         return redirect('home:home')
