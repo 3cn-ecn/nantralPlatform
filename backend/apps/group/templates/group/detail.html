@@ -65,7 +65,7 @@
                 {% endif %}
                 {# Admin link #}
                 {% if user.is_superuser %}
-                    <a href="{{ group.get_admin_url }}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+                    <a href="{% url 'admin:group_group_change' group.pk %}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-shield-alt"></i>&nbsp; Page Admin
                     </a>
                 {% endif %}

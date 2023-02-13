@@ -121,11 +121,6 @@ class GroupType(models.Model):
         """Get the url of the object."""
         return reverse('group:sub_index', kwargs={'type': self.slug})
 
-    def get_admin_url(self) -> str:
-        """Get the url to edit the object in the admin interface."""
-        return reverse('admin:group_grouptype_change',
-                       kwargs={'object_id': self.pk})
-
 
 class Group(models.Model, SlugModel):
     """Database of all groups, with different types: clubs, flatshares..."""
@@ -363,11 +358,6 @@ class Group(models.Model, SlugModel):
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
         return reverse('group:detail', kwargs={'slug': self.slug})
-
-    def get_admin_url(self) -> str:
-        """Get the url to edit the object in the admin interface."""
-        return reverse('admin:group_group_change',
-                       kwargs={'object_id': self.pk})
 
 
 class Membership(models.Model):
