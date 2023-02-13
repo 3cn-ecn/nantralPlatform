@@ -30,9 +30,23 @@ import './App.scss';
  * @returns The App Component
  */
 function App() {
+  const jMode = JSON.parse(localStorage.getItem('mode'));
+  let mode;
+  if (jMode != null) {
+    mode = jMode;
+  } else {
+    mode = true;
+  }
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const [themeApp, setThemeApp] = React.useState(true);
-  const [isAutomatic, setIsAutomatic] = React.useState(true);
+  const [themeApp, setThemeApp] = React.useState(mode);
+  const jAuto = JSON.parse(localStorage.getItem('auto'));
+  let auto;
+  if (jMode != null) {
+    auto = jAuto;
+  } else {
+    auto = true;
+  }
+  const [isAutomatic, setIsAutomatic] = React.useState(auto);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const choixTheme = isAutomatic ? !prefersDarkMode : themeApp;
   const drawerWidth = 240; // the width of the lateral navbar

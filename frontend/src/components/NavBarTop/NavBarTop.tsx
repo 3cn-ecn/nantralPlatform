@@ -297,6 +297,8 @@ function NavBarTop(props: {
               onClick={() => {
                 setThemeApp(true);
                 setIsAutomatic(false);
+                localStorage.setItem('auto', JSON.stringify(false));
+                localStorage.setItem('mode', JSON.stringify(true));
               }}
               selected={themeApp === true && isAutomatic === false}
             >
@@ -309,6 +311,9 @@ function NavBarTop(props: {
               onClick={() => {
                 setThemeApp(false);
                 setIsAutomatic(false);
+                localStorage.setItem('auto', JSON.stringify(false));
+                console.log(JSON.parse(localStorage.getItem('auto')));
+                localStorage.setItem('mode', JSON.stringify(false));
               }}
               selected={themeApp === false && isAutomatic === false}
             >
@@ -318,7 +323,10 @@ function NavBarTop(props: {
               </ListItemText>
             </MenuItem>
             <MenuItem
-              onClick={() => setIsAutomatic(true)}
+              onClick={() => {
+                setIsAutomatic(true);
+                localStorage.setItem('auto', JSON.stringify(true));
+              }}
               selected={isAutomatic === true}
             >
               <SvgIcon component={BrightnessMediumIcon} />
