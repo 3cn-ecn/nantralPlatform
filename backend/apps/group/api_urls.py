@@ -1,10 +1,6 @@
-from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .api_views import (
-    UpdateSubscriptionView,
-    MembershipFormView,
-    AdminRequestFormView,
     MembershipViewSet,
     GroupViewSet)
 
@@ -17,13 +13,4 @@ router = DefaultRouter()
 router.register('membership', MembershipViewSet, basename='membership')
 router.register('group', GroupViewSet, basename='group')
 
-
-urlpatterns = [
-    # used by django forms
-    path('@<slug:slug>/edit-subscription/', UpdateSubscriptionView.as_view(),
-         name='edit-subscription'),
-    path('@<slug:slug>/edit-membership/', MembershipFormView.as_view(),
-         name='edit-member'),
-    path('@<slug:slug>/admin-request/', AdminRequestFormView.as_view(),
-         name='admin-request'),
-] + router.urls
+urlpatterns = router.urls

@@ -70,7 +70,7 @@
                     </a>
                 {% endif %}
                 {# Subscription #}
-                <a href="{% url 'group_api:edit-subscription' group.slug %}" class="btn btn-dark btn-sm">
+                <a href="{% url 'group:edit-subscription' group.slug %}" class="btn btn-dark btn-sm">
                     <i class="{{ has_subscribed | yesno:"fas,far"}} fa-bell"></i>&nbsp;
                     {{ has_subscribed | yesno:"Abonné !,S'abonner" }}
                 </a>
@@ -162,10 +162,15 @@
     {% if user.is_authenticated %}
         <br/>
         <div id="root-members"></div>
+        <script>
+            const groupSlug = "{{ group.slug }}";
+            const displayType = 'grid';
+        </script>
+        <script src='{% static "js/group/MembershipsGroup.js" %}'></script>
     {% endif %}
 
     {# Bouton pour faire une demande pour devenir admin #}
-    {% if is_member and not is_admin %}
+    {% if is_member and not is_admin and not has_requested_admin %}
         {% include 'group/included/request-admin.html' %}
     {% endif %}
 
@@ -184,10 +189,7 @@
     const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
     const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
     const isAdmin = {{ is_admin|yesno:"true,false,false" }};
-    const groupSlug = "{{ group.slug }}";
-    const displayType = 'grid';
-    {# const membersURL = "{% url 'group_api:list-members' %}?slug={{ group.slug }}"; #}
+    {# const membersURL = "{% url 'group:list-members' %}?slug={{ group.slug }}"; #}
 </script>
 <script src='{% static "js/event/eventsView.js" %}'></script>
-<script src='{% static "js/group/MembershipsGroup.js" %}'></script>
 {% endblock %}

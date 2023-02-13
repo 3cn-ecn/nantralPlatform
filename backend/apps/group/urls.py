@@ -7,13 +7,11 @@ from .views import (
     UpdateGroupView,
     UpdateGroupMembershipsView,
     UpdateGroupSocialLinksView,
-    # AddToGroupView,
-    # UpdateGroupView,
-    # UpdateGroupMembersView,
-    # RequestAdminRightsView,
-    # AcceptAdminRequestView,
-    # DenyAdminRequestView,
-    # UpdateGroupSocialLinksView
+    UpdateSubscriptionView,
+    MembershipFormView,
+    AdminRequestFormView,
+    AcceptAdminRequestView,
+    DenyAdminRequestView
 )
 # from apps.event.views import (
 #     UpdateGroupCreateEventView,
@@ -24,12 +22,12 @@ from .views import (
 app_name = 'group'
 
 urlpatterns = [
-    # vue generale du groupe
+    # main views
     path('', GroupTypeListView.as_view(), name='index'),
     path('<slug:type>/', GroupListView.as_view(), name='sub_index'),
     path('@<slug:slug>/', GroupDetailView.as_view(), name='detail'),
 
-    # edition (réservée aux admins)
+    # edit views (for group admins only)
     path('@<slug:slug>/edit/', UpdateGroupView.as_view(), name='update'),
     path('@<slug:slug>/edit/members/',
          UpdateGroupMembershipsView.as_view(), name='update-members'),
@@ -46,11 +44,17 @@ urlpatterns = [
     # path('@<slug:slug>/edit/posts/create/',
     #         create_post_view, name='create-post'),
 
-    # # formulaire de demande d'admin
-    # path('@<slug:slug>/admin-request/',
-    #         RequestAdminRightsView.as_view(), name='admin-req'),
-    # path('@<slug:slug>/admin-request/<int:id>/accept/',
-    #         AcceptAdminRequestView.as_view(), name='accept-admin-req'),
-    # path('@<slug:slug>/admin-request/<int:id>/deny/',
-    #         DenyAdminRequestView.as_view(), name='deny-admin-req')
+    # views for django forms
+    path('@<slug:slug>/edit-subscription/',
+         UpdateSubscriptionView.as_view(), name='edit-subscription'),
+    path('@<slug:slug>/edit-membership/',
+         MembershipFormView.as_view(), name='edit-member'),
+
+    # views for admin request
+    path('@<slug:slug>/admin-request/',
+         AdminRequestFormView.as_view(), name='admin-request'),
+    path('admin-request/<int:id>/accept/',
+         AcceptAdminRequestView.as_view(), name='accept-admin-req'),
+    path('admin-request/<int:id>/deny/',
+         DenyAdminRequestView.as_view(), name='deny-admin-req')
 ]

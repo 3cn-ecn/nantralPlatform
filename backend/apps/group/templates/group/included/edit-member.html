@@ -13,7 +13,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>        
                 <div class="modal-body">
-                    <form method="post" action="{% url 'group_api:edit-member' object.slug %}">
+                    <form method="post" action="{% url 'group:edit-member' object.slug %}">
                         {% csrf_token %}
                         {{member_form | crispy}}
                         {% if is_member %}

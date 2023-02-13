@@ -1,50 +1,34 @@
 from datetime import timedelta
 
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.sites.shortcuts import get_current_site
-# from django.db.utils import IntegrityError
-# from django.urls import resolve
-# from django.views.decorators.http import require_http_methods
-# from django.conf import settings
+from django.conf import settings
 from django.contrib import messages
+from django.http import HttpResponse, HttpRequest
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import QuerySet, Q, Count
-# from django.http import HttpResponse  # , HttpRequest
 from django.shortcuts import redirect, get_object_or_404
 from django.urls.base import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.views.generic import (
     DetailView,
     ListView,
     UpdateView,
     TemplateView,
-    # View
+    View,
+    FormView
 )
 
-# from discord_webhook import DiscordWebhook, DiscordEmbed
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
-# from apps.group.abstract.models import AbstractGroup
-# from apps.sociallink.models import SocialLink
 from apps.event.models import BaseEvent
 from apps.post.models import Post
 
-# from .forms import (
-#     NamedMembershipAddGroup,
-#     NamedMembershipGroupFormset,
-#     AdminRightsRequestForm,
-#     UpdateGroupForm,
-#     SocialLinkGroupFormset,
-#     AdminRightsRequest)
-
-from .models import GroupType, Group
+from .models import GroupType, Group, Membership
 from .forms import (
     MembershipForm,
     AdminRequestForm,
     UpdateGroupForm,
     SocialLinkGroupFormset)
-
-# from apps.utils.accessMixins import UserIsAdmin, user_is_connected
-# from apps.utils.slug import get_object_from_slug
 
 
 class UserCanSeeGroupMixin(UserPassesTestMixin):
@@ -68,9 +52,12 @@ class UserIsGroupAdminMixin(UserPassesTestMixin):
     """A mixin class to test if a user has the rights to see a group."""
 
     def test_func(self) -> bool:
-        group = Group.objects.get(slug=self.kwargs.get('slug'))
-        user = self.request.user
-        return group.is_admin(user)
+        try:
+            group = Group.objects.get(slug=self.kwargs.get('slug'))
+            user = self.request.user
+            return group.is_admin(user)
+        except Group.DoesNotExist:
+            return self.request.user.is_superuser
 
 
 class GroupTypeListView(ListView, LoginRequiredMixin):
@@ -173,6 +160,8 @@ class GroupDetailView(UserCanSeeGroupMixin, DetailView):
             context['has_subscribed'] = group.subscribers.contains(user.student)
             # member form
             if context['is_member']:
+                context['has_requested_admin'] = (
+                    group.membership_set.get(student__user=user).admin_request)
                 membership = group.membership_set.get(
                     student=user.student,
                     group=group)
@@ -310,47 +299,141 @@ class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
         return redirect('group:update-sociallinks', group.slug)
 
 
-# class AcceptAdminRequestView(UserIsAdmin, View):
-#     def get(self, request: HttpRequest, slug, id):
-#         app = resolve(request.path_info).app_name
-#         group: AbstractGroup = get_object_from_slug(app, slug)
-#         try:
-#             admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
-#                 id=id)
-#             if group.full_slug == admin_req.group:
-#                 # Checking whether the url is legit
-#                 messages.success(
-#                     request,
-#                     message=(
-#                         "Vous avez accepté la demande "
-#                         f"de {admin_req.student}"))
-#                 admin_req.accept()
-#             else:
-#                 messages.error(request, message="L'URL est invalide !!!")
-#         except AdminRightsRequest.DoesNotExist:
-#             messages.error(
-#                 request, message="La demande a déjà été traitée !")
-#         return redirect(group.get_absolute_url())
+class UpdateSubscriptionView(UserCanSeeGroupMixin, View):
+    """
+    SUBSCRIBE BUTTON: call this view to subscribe to a group, or unsubscribe
+    if the user has already subscribed.
+    """
+
+    def get(self, request, slug) -> HttpResponse:
+        group = Group.objects.get(slug=slug)
+        student = request.user.student
+        if group.subscribers.contains(student):
+            group.subscribers.remove(student)
+        else:
+            group.subscribers.add(student)
+        return redirect(group.get_absolute_url())
 
 
-# class DenyAdminRequestView(UserIsAdmin, View):
-#     def get(self, request: HttpRequest, slug, id):
-#         app = resolve(request.path_info).app_name
-#         group: AbstractGroup = get_object_from_slug(app, slug)
-#         try:
-#             admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
-#                 id=id)
-#             if group.full_slug == admin_req.group:
-#                 # Checking whether the url is legit
-#                 messages.success(
-#                     request,
-#                     message=(
-#                         "Vous avez refusé la demande "
-#                         f" de {admin_req.student}"))
-#                 admin_req.deny()
-#             else:
-#                 messages.error(request, message="L'URL est invalide !!!")
-#         except AdminRightsRequest.DoesNotExist:
-#             messages.error(
-#                 request, message="La demande a déjà été traitée !")
-#         return redirect(group.get_absolute_url())
+class MembershipFormView(UserCanSeeGroupMixin, FormView):
+    """
+    MEMBERSHIP BUTTON: View for the user to add himself as a member of a group,
+    and to edit its membership.
+    """
+
+    http_method_names = ['post']
+
+    @property
+    def group(self) -> Group:
+        if not hasattr(self, '_group'):
+            self._group = Group.objects.get(slug=self.kwargs.get('slug'))
+        return self._group
+
+    def get_form(self) -> MembershipForm:
+        return MembershipForm(
+            group=self.group,
+            student=self.request.user.student,
+            instance=(self.group.membership_set
+                      .filter(student=self.request.user.student)
+                      .first()),
+            **self.get_form_kwargs())
+
+    def form_valid(self, form: MembershipForm) -> HttpResponse:
+        student = self.request.user.student
+        if self.request.POST.get('delete'):
+            # delete the membership
+            self.group.subscribers.remove(student)
+            form.instance.delete()
+            messages.success(self.request, 'Membre supprimé.')
+        else:
+            # create or update the membership
+            created = form.instance.pk is None
+            form.save()
+            if created:
+                self.group.subscribers.add(student)
+                messages.success(self.request, 'Bienvenue dans le groupe !')
+            else:
+                messages.success(
+                    self.request,
+                    'Les modifications ont bien été enregistrées !')
+        # return to the page
+        return redirect(self.group.get_absolute_url())
+
+    def form_invalid(self, form: MembershipForm):
+        messages.error(self.request, 'Modification refusée... 😥')
+        return redirect(self.group.get_absolute_url())
+
+
+class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
+    """ADMIN BUTTON: View to ask for admin rights."""
+
+    http_method_names = ['post']
+
+    def get_group(self) -> Group:
+        if not hasattr(self, 'group'):
+            self.group = Group.objects.get(slug=self.kwargs.get('slug'))
+        return self.group
+
+    def get_form(self) -> AdminRequestForm:
+        return AdminRequestForm(
+            instance=(self.get_group()
+                      .membership_set
+                      .get(student=self.request.user.student)),
+            **self.get_form_kwargs())
+
+    def form_valid(self, form: AdminRequestForm) -> HttpResponse:
+        membership = form.save()
+        messages.success(
+            self.request,
+            ("Votre demande a bien été envoyée ! Vous recevrez la "
+             "réponse par mail."))
+        # send a message to the discord channel for administrators
+        accept_url = self.request.build_absolute_uri(
+            reverse('group:accept-admin-req', kwargs={'id': membership.id}))
+        deny_url = self.request.build_absolute_uri(
+            reverse('group:deny-admin-req', kwargs={'id': membership.id}))
+        webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(
+            title=(f"{membership.student} demande à "
+                   f"devenir admin de {membership.group.short_name}"),
+            description=membership.admin_request_messsage,
+            color=242424)
+        embed.add_embed_field(
+            name='Accepter', value=f"[Accepter]({accept_url})", inline=True)
+        embed.add_embed_field(
+            name='Refuser', value=f"[Refuser]({deny_url})", inline=True)
+        # if membership.student.picture:
+        #     embed.thumbnail = {"url": membership.student.picture.url}
+        webhook.add_embed(embed)
+        webhook.execute()
+        return redirect(self.get_group().get_absolute_url())
+
+    def form_invalid(self, form: AdminRequestForm):
+        messages.error(self.request, "Une erreur s'est produit... 😥")
+        return redirect(self.get_group().get_absolute_url())
+
+
+class AcceptAdminRequestView(UserIsGroupAdminMixin, View):
+    def get(self, request: HttpRequest, id):
+        member = get_object_or_404(Membership, id=id)
+        if member.admin_request:
+            member.accept_admin_request()
+            messages.success(request, message=(_(
+                "L'utilisateur %(user)s est maintenant admin !")
+                % {'user': member.student}))
+        else:
+            messages.error(request, message=_("Demande déjà traitée !"))
+        return redirect(member.group.get_absolute_url())
+
+
+class DenyAdminRequestView(UserIsGroupAdminMixin, View):
+    def get(self, request: HttpRequest, id):
+        member = get_object_or_404(Membership, id=id)
+        if member.admin_request:
+            member.deny_admin_request()
+            messages.success(request, message=(_(
+                "La demande de %(user)s pour être admin a été refusée.")
+                % {'user': member.student}))
+        else:
+            messages.error(request, message=_("Demande déjà traitée !"))
+        return redirect(member.group.get_absolute_url())

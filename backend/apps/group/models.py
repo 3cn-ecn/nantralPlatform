@@ -425,12 +425,15 @@ class Membership(models.Model):
         """Accept an admin request."""
         self.admin = True
         self.save()
-        mail = render_to_string('abstract_group/mail/new_admin.html', {
+        mail = render_to_string('group/mail/accept_admin_request.html', {
             'group': self.group,
             'user': self.student.user
         })
-        self.student.user.email_user(f'Vous êtes admin de {self.group}', mail,
-                                     from_email=None, html_message=mail)
+        self.student.user.email_user(
+            subject=(_("Votre demande d\'admin pour %(group)s a été acceptée")
+                     % {'group': self.group.name}),
+            message=mail,
+            html_message=mail)
         webhook = DiscordWebhook(
             url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(
@@ -446,6 +449,15 @@ class Membership(models.Model):
         self.admin_request = False
         self.admin_request_messsage = ""
         self.save()
+        mail = render_to_string('group/mail/deny_admin_request.html', {
+            'group': self.group,
+            'user': self.student.user
+        })
+        self.student.user.email_user(
+            subject=(_("Votre demande d\'admin pour %(group)s a été acceptée")
+                     % {'group': self.group.name}),
+            message=mail,
+            html_message=mail)
         webhook = DiscordWebhook(
             url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(
