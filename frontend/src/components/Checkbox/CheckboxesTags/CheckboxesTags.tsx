@@ -19,8 +19,13 @@ const top100Films = [
   { title: 'Pulp Fiction', year: 1994 },
 ];
 
-function CheckboxesTags(props: { label: string }) {
-  const { label } = props;
+function CheckboxesTags(props: { label: string; getResult: any }) {
+  const { label, getResult } = props;
+
+  const handleChange = (e, selected) => {
+    getResult(selected);
+  };
+
   return (
     <Autocomplete
       autoComplete
@@ -39,6 +44,7 @@ function CheckboxesTags(props: { label: string }) {
         </li>
       )}
       style={{ width: 230 }}
+      onChange={handleChange}
       renderInput={(params) => (
         <TextField {...params} label={label} multiline placeholder={label} />
       )}
