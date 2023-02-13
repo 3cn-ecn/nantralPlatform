@@ -10,6 +10,7 @@ import { Day } from './Day/Day';
 import { EventDataProps } from './EventDataProps/EventDataProps';
 import { DayInfos } from './DayInfos/DayInfos';
 import { ChooseWeek } from './ChooseWeek/ChooseWeek';
+import { DayRenderer } from './DayRenderer';
 
 /**
  * Function that sort event date-wise.
@@ -503,6 +504,46 @@ async function callICS(events: Array<EventProps>) {
   URL.revokeObjectURL(url);
 }
 
+function chooseDisplay(
+  display: 'day' | '3Day' | 'week' | 'month',
+  beginDate: Date,
+  endDate: Date,
+  updateBegin: any,
+  updateEnd: any
+) {
+  const newBeginDate = new Date(
+    beginDate.getFullYear(),
+    beginDate.getMonth(),
+    beginDate.getDate()
+  );
+  const newEndDate = new Date(
+    beginDate.getFullYear(),
+    beginDate.getMonth(),
+    beginDate.getDate()
+  );
+  switch (display) {
+    case 'day':
+      newEndDate.setDate(beginDate.getDate() + 1);
+      updateEnd(newEndDate);
+      break;
+    case '3Day':
+      newEndDate.setDate(beginDate.getDate() + 3);
+      updateEnd(newEndDate);
+      break;
+    case 'week':
+      newBeginDate.setDate(
+        newBeginDate.getDate() - ((newBeginDate.getDay() - 1) % 7)
+      );
+      newEndDate.setDate(beginDate.getDate() + 7);
+      updateBegin(newBeginDate);
+      updateEnd(newEndDate);
+      break;
+    // case 'month':
+    default:
+      break;
+  }
+}
+
 /**
  * The calendar component which will contains all the day and events components.
  * @param event The list of events.
@@ -510,6 +551,7 @@ async function callICS(events: Array<EventProps>) {
  */
 function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { events } = props;
+  // const {}
 
   const tempMondayOfTheWeek = new Date();
   tempMondayOfTheWeek.setDate(
@@ -576,15 +618,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
           <Grid item xs={1}>
             <DayInfos />
           </Grid>
-          {[
-            'Lundi',
-            'Mardi',
-            'Mercredi',
-            'Jeudi',
-            'Vendredi',
-            'Samedi',
-            'Dimanche',
-          ].map((day, number) => {
+          {/* {week.map((day, number) => {
             return (
               <Grid item xs={1.5} key={day}>
                 <Day
@@ -596,7 +630,11 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
                 />
               </Grid>
             );
-          })}
+          })} */}
+          <DayRenderer
+            eventsList={newSortEvents}
+            chainsList={eventsBlockedChain}
+          ></DayRenderer>
         </Grid>
       </div>
       <div id="ics">
