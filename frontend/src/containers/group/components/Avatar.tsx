@@ -25,14 +25,23 @@ function stringToColor(string: string): string {
 /**
  * A component for abstract avatar with a picture or initials if no picture.
  *
- * @param props.urls - The url of the picure
- * @param props.title - The name of the avatar, used for the color generation
- * @param props.size - The size of the avatar (small, medium, large)
+ * @param props.title - The name of the avatar, used for the color
+ * @param props.urls (optional) - The url of the picure
+ * @param props.icon (optional) - An icon to show inside the avatar
+ * @param props.size (optional) - The size of the avatar (small, medium, large)
  * @returns 
  */
-function Avatar(props: {url?: string; title: string, size?: 'small' | 'medium' | 'large', children?: JSX.Element}) {
-  const { url, title, size, children } = props;
-  const initials = `${title.split(' ')[0][0]}${title.split(' ')[1][0]}`;
+function Avatar(props: {
+  title: string;
+  url?: string;
+  icon?: JSX.Element;
+  size?: 'small' | 'medium' | 'large';
+}) {
+  const { title, url, icon, size } = props;
+  const words = title.split(' ');
+  const initials = words.length > 1
+    ? `${words[0][0]}${words[1][0]}`
+    : words[0].substring(0, 2);
   const sx = size === 'small' ?
     { width: 30, height: 30, fontSize: 13 }
   : size === 'large' ?
@@ -41,7 +50,7 @@ function Avatar(props: {url?: string; title: string, size?: 'small' | 'medium' |
   return <MUIAvatar 
     src={url}
     alt={title}
-    children={children ? children : initials}
+    children={icon ? icon : initials.toUpperCase()}
     sx={{...sx, bgcolor: stringToColor(title)}}
   />
 }

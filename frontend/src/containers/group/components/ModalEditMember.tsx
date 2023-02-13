@@ -139,7 +139,9 @@ function EditMemberModal(props: {
       <form onSubmit={onSubmit} >
         <DialogTitle sx={{ m: 0, p: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Avatar title={member?.student?.full_name || 'Ajouter un membre'} children={<EditIcon />} />
+            <Avatar
+              title={member?.student?.full_name || 'Ajouter un membre'}
+              icon={<EditIcon />} />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
                 {member?.student?.full_name || 'Ajouter un membre'}
