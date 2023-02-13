@@ -4,7 +4,7 @@ import React from 'react';
 import { Day } from './Day/Day';
 
 export function DayRenderer(props: {
-  display: 'day' | '3Day' | 'week' | 'month';
+  display: { type: 'day' | '3Day' | 'week' | 'month'; beginDate: number };
   eventsList: Array<Array<EventProps>>;
   chainsList: Array<Array<Array<number>>>;
 }): Array<JSX.Element> {
@@ -20,9 +20,11 @@ export function DayRenderer(props: {
     'Dimanche',
   ];
 
-  switch (display) {
+  let displaySize;
+  switch (display.type) {
     case 'day':
-      return week.map((day, number) => {
+      displaySize = week.slice((display.beginDate - 1) % 7, display.beginDate);
+      return displaySize.map((day, number) => {
         return (
           <Grid item xs={1.5} key={day}>
             <Day
@@ -36,7 +38,14 @@ export function DayRenderer(props: {
         );
       });
     case '3Day':
-      return week.map((day, number) => {
+      displaySize = week.slice(
+        (display.beginDate - 1) % 7,
+        Math.max(6, (display.beginDate + 2) % 7)
+      );
+      if (display.beginDate + 2 > 6) {
+        displaySize.concat(week.slice(0, display.beginDate + (2 % 7)));
+      }
+      return displaySize.map((day, number) => {
         return (
           <Grid item xs={1.5} key={day}>
             <Day

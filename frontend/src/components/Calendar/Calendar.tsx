@@ -504,7 +504,7 @@ async function callICS(events: Array<EventProps>) {
   URL.revokeObjectURL(url);
 }
 
-function chooseDisplay(
+function changeDisplay(
   display: 'day' | '3Day' | 'week' | 'month',
   beginDate: Date,
   endDate: Date,
@@ -544,6 +544,56 @@ function chooseDisplay(
   }
 }
 
+function ChooseDisplay(props: {
+  display;
+  updateDisplay;
+  beginDate;
+  endDate;
+  updateBegin;
+  updateEnd;
+}) {
+  const { display, updateDisplay, beginDate, endDate, updateBegin, updateEnd } =
+    props;
+  return (
+    <>
+      <Button
+        onClick={() => {
+          if (display.type !== 'day') {
+            updateDisplay({ type: 'day', beginDate: display.beginDate });
+            changeDisplay(
+              display.type,
+              beginDate,
+              endDate,
+              updateBegin,
+              updateEnd
+            );
+          }
+        }}
+      >
+        day
+      </Button>
+      <Button
+        onClick={() => {
+          if (display.type !== '3Day') {
+            updateDisplay('3Day');
+            changeDisplay(
+              display.type,
+              beginDate,
+              endDate,
+              updateBegin,
+              updateEnd
+            );
+          }
+        }}
+      >
+        3Day
+      </Button>
+      <Button>week</Button>
+      <Button>month</Button>
+    </>
+  );
+}
+
 /**
  * The calendar component which will contains all the day and events components.
  * @param event The list of events.
@@ -551,7 +601,10 @@ function chooseDisplay(
  */
 function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { events } = props;
-  // const {}
+  const [displayData, updateDisplay] = useState({
+    type: 'week',
+    beginDate: '0',
+  });
 
   const tempMondayOfTheWeek = new Date();
   tempMondayOfTheWeek.setDate(
@@ -613,6 +666,14 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
         updateBegin={setBeginOfWeek}
         updateEnd={setEndOfWeek}
       ></ChooseWeek>
+      <ChooseDisplay
+        display={displayData}
+        updateDisplay={updateDisplay}
+        beginDate={beginOfWeek}
+        endDate={endOfWeek}
+        updateBegin={setBeginOfWeek}
+        updateEnd={setEndOfWeek}
+      ></ChooseDisplay>
       <div id="Calendar" style={{ display: 'flex' }}>
         <Grid container spacing={0}>
           <Grid item xs={1}>
@@ -632,6 +693,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
             );
           })} */}
           <DayRenderer
+            display={displayData}
             eventsList={newSortEvents}
             chainsList={eventsBlockedChain}
           ></DayRenderer>
