@@ -2,7 +2,6 @@ import * as React from 'react';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   IconButton,
   AppBar,
@@ -88,9 +87,6 @@ function NavBarTop(props: {
   };
   const handleClose = () => {
     setAnchorEl(null);
-  };
-  const changeLanguage = (lng) => {
-    i18next.changeLanguage(lng);
   };
 
   const handleClickD = () => {
