@@ -1,7 +1,11 @@
 import * as React from 'react';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+} from 'react-router-dom';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 import {
   IconButton,
   AppBar,
@@ -29,11 +33,11 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
 import PaletteIcon from '@mui/icons-material/Palette';
 import { SearchBar } from './SearchBar/SearchBar';
-import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import './NavBarTop.scss';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
+
 
 /**
  * The top bar for navigation
@@ -102,6 +106,22 @@ function NavBarTop(props: {
   };
 
   const { t } = useTranslation('translation');
+  
+  const breadcrumbNameMap: { [key: string]: string } = {
+    '/event/': t("navbar.events"),
+    '/club/': t("navbar.clubs"),
+    '/colocs/': t("navbar.flatshare"),
+    '/parrainage/': t("navbar.family"),
+    '/liste/': t("navbar.bdx"),
+    '/academics/': t("navbar.academics"),
+    '/administration/': t("navbar.administration"),
+    '/student/': t("navbar.student"),
+    '/tools/signature': t("navbar.signature"),
+    '/suggestions/': 'Bug',
+    '/legal_mentions/': 'Legal'
+  };
+  const location = useLocation();
+  const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
     <AppBar position="fixed" color="secondary">
@@ -116,21 +136,39 @@ function NavBarTop(props: {
         >
           <SvgIcon component={MenuIcon} inheritViewBox />
         </IconButton>
-        <SvgIcon component={NantralIcon} inheritViewBox />
+        <SvgIcon sx={{ display: {xs: 'none', md: 'flex'} }} component={NantralIcon} inheritViewBox />
         <Box sx={{ flexGrow: 0.02 }} />
-        <Typography
-          variant="h6"
-          component="div"
-          color="TextPrimary"
-          sx={{ display: { xs: 'none', md: 'flex' } }}
-        >
-          Nantral Platform
-        </Typography>
+          <Breadcrumbs sx={{ display: {xs: 'none', md: 'flex'} }} aria-label="breadcrumb">
+            <Typography
+              variant="h6"
+              component="div"
+              color="TextPrimary"
+              sx={{ display: { xs: 'none', md: 'flex' } }}
+            >
+              Nantral Platform
+            </Typography>
+            <Link color="inherit" to="/">
+              {t("navbar.home")}
+            </Link>
+            {pathnames.map((value, index) => {
+              const last = index === pathnames.length - 1;
+              const to = `/${pathnames.slice(0, index + 1)}/`
+
+              return last ? (
+                <Typography color="text.primary" key={to}>
+                  {breadcrumbNameMap[to]}
+                </Typography>
+              ) : (
+                <Link color="inherit" to={to} key={to}>
+                  {breadcrumbNameMap[to]}
+                </Link>
+              );
+            })}
+          </Breadcrumbs>
         <Box sx={{ flexGrow: 0.9 }} />
         <SearchBar />
         <Box sx={{ flexGrow: 1.0 }} />
-        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <NotificationMenu />
+        <Box sx={{ display: 'flex' }}>
           <IconButton
             size="large"
             edge="end"
