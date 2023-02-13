@@ -38,7 +38,6 @@ function FilterBar() {
   });
   const [dateBegin, setDateBegin] = React.useState(null);
   const [dateBeginTransformed, setDateBeginTransformed] = React.useState(null);
-  const [dateEnd, setDateEnd] = React.useState(null);
   const [dateEndTransformed, setDateEndTransformed] = React.useState(null);
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [isParticipated, setIsParticipated] = React.useState(false);
@@ -53,7 +52,6 @@ function FilterBar() {
     }
   };
   const getDateEnd = (newDate) => {
-    setDateEnd(newDate);
     if (newDate !== null) {
       setDateEndTransformed(newDate.format('DD/MM/YYYY'));
     }
