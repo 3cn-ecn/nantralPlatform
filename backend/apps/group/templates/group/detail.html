@@ -100,7 +100,15 @@
     {% if has_events and user.is_authenticated %}
         <br/>   
         <h2>Évènements</h2>
-        <div id="events-root"></div>
+        <div id="root-events"></div>
+        <script>
+            const eventsApiUrl = "{% url 'event_api:list-all-group-events' group.slug %}";
+            const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
+            const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
+            const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
+            const isAdmin = {{ is_admin|yesno:"true,false,false" }};
+        </script>
+        <script src='{% static "js/event/eventsView.js" %}'></script>
     {% endif %}
     
     {# Anonces #}
@@ -180,16 +188,4 @@
     {% endif %}
 
     <br/>
-{% endblock %}
-
-{% block script %}
-<script>
-    const eventsApiUrl = "{% url 'event_api:list-all-group-events' group.slug %}";
-    const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
-    const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
-    const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
-    const isAdmin = {{ is_admin|yesno:"true,false,false" }};
-    {# const membersURL = "{% url 'group:list-members' %}?slug={{ group.slug }}"; #}
-</script>
-<script src='{% static "js/event/eventsView.js" %}'></script>
 {% endblock %}

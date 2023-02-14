@@ -10,7 +10,8 @@ from .views import (
 app_name = 'event'
 
 urlpatterns = [
-    path('create/group/<slug:group>', EventCreateView.as_view(), name='create'),
+    path('create/group/<slug:group>/',
+         EventCreateView.as_view(), name='create'),
     path('<slug:slug>/', EventDetailView.as_view(), name='detail'),
     path('<slug:slug>/edit/', EventUpdateView.as_view(), name='edit'),
     path('<slug:slug>/participants/add/',
