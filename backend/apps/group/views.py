@@ -143,14 +143,14 @@ class GroupDetailView(UserCanSeeGroupMixin, DetailView):
         if user.is_authenticated:
             # show the posts from last 6 months (3 maximum)
             all_posts = Post.objects.filter(
-                group=group.slug,
+                group_slug=group.slug,
                 publication_date__gte=timezone.now() - timedelta(days=6 * 30),
                 publication_date__lte=timezone.now()
             ).order_by('-publication_date')
             context['posts'] = [p for p in all_posts if p.can_view(user)][:3]
             # check if there are some events planned for this group
             context['has_events'] = BaseEvent.objects.filter(
-                group=group.slug,
+                group_slug=group.slug,
                 date__gte=timezone.now()
             ).exists()
             # members

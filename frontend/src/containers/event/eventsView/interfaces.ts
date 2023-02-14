@@ -11,7 +11,7 @@ export interface Urls {
 
 export interface EventInfos {
   title: string;
-  group: string;
+  group_slug: string;
   description: string;
   location: string;
   date: Date;

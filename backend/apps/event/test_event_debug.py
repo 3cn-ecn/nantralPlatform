@@ -23,7 +23,7 @@ def create_events(apps, schema_editor):
         # For some reason, slugs are appended with a '-1'
         # so we have to add it manually or it won't find anything
         new_event = BaseEvent.objects.create(
-            group=f'{clubs[club_id].full_slug}-1',
+            group_slug=f'{clubs[club_id].full_slug}-1',
             date=random_date,
             **event
         )

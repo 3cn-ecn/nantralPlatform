@@ -24,7 +24,7 @@ class BaseEventSerializer(serializers.ModelSerializer):
             'slug',
             'number_of_participants',
             'get_absolute_url',
-            'group',
+            'group_slug',
             'group_name',
             'is_participating',
             'is_member']
@@ -35,11 +35,11 @@ class BaseEventSerializer(serializers.ModelSerializer):
 
     def get_is_member(self, obj):
         user = self.context['request'].user
-        group = obj.get_group()
+        group = obj.group
         return group.is_member(user)
 
     def get_group_name(self, obj):
-        return obj.get_group().name
+        return obj.group.name
 
 
 class EventParticipatingSerializer(serializers.ModelSerializer):

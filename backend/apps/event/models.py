@@ -24,7 +24,7 @@ class BaseEvent(AbstractPost):
         verbose_name='Date de l\'événement')
     location = models.CharField(
         max_length=200, verbose_name='Lieu')
-    group = models.SlugField(
+    group_slug = models.SlugField(
         verbose_name='Groupe organisateur')
     slug = models.SlugField(
         verbose_name='Slug de l\'événement', unique=True, null=True)
@@ -51,7 +51,7 @@ class BaseEvent(AbstractPost):
         )
         # save the notification
         self.create_notification(
-            title=self.get_group().name,
+            title=self.group.name,
             body=f'Nouvel event : {self.title}')
         # save again the event
         super(BaseEvent, self).save(*args, **kwargs)

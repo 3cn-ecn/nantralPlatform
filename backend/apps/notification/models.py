@@ -1,11 +1,11 @@
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from apps.utils.slug import get_object_from_full_slug
-
-from .webpush import send_webpush_notification
+from apps.group.models import Group
 from apps.student.models import Student
 
+from .webpush import send_webpush_notification
 
 # Fonctionnement des notifications :
 # ----------------------------------
@@ -60,7 +60,7 @@ class Notification(models.Model):
         update high_priority field for notification"""
         super().save(*args, **kwargs)
         # initiate
-        page = get_object_from_full_slug(self.sender)
+        page = get_object_or_404(Group, slug=self.sender)
         receivers = Student.objects.none()
         # if receivers are everyone
         if self.publicity == 'Pub':

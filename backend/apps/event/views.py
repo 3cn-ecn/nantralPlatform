@@ -8,12 +8,13 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import resolve
 from django.urls.base import reverse
 from django.views.decorators.http import require_http_methods
-from django.views.generic import UpdateView, FormView, DetailView
+from django.views.generic import UpdateView, FormView, DetailView, CreateView
 from django.views.generic.base import View
 
 from .models import BaseEvent
 from .forms import EventForm, EventFormSet
 
+from apps.group.models import Group
 from apps.notification.models import SentNotification
 from apps.utils.slug import (
     get_object_from_slug,
@@ -37,10 +38,10 @@ class EventDetailView(LoginRequiredMixin, DetailView):
             notification=event.notification
         ).update(seen=True)
         # get context
-        context['group'] = self.object.get_group()
+        context['group'] = self.object.group
         context['is_participating'] = self.object.is_participating(
             self.request.user)
-        context['is_admin'] = context['group'].is_admin(self.request.user)
+        context['is_admin'] = self.object.group.is_admin(self.request.user)
         context['ariane'] = [
             {
                 'target': reverse('home:home'),
@@ -65,7 +66,7 @@ class EventUpdateView(UserPassesTestMixin, UpdateView):
 
     def test_func(self) -> bool:
         event = self.get_object()
-        group = event.get_group()
+        group = event.group
         return group.is_admin(self.request.user)
 
     def get_context_data(self, **kwargs):
@@ -85,6 +86,37 @@ class EventUpdateView(UserPassesTestMixin, UpdateView):
             }
         ]
         return context
+
+
+class EventCreateView(UserPassesTestMixin, CreateView):
+    """Create an event"""
+
+    template_name = 'event/update.html'
+    fields = ['title', 'description', 'location',
+              'date', 'publicity', 'color', 'image']
+    model = BaseEvent
+
+    def test_func(self) -> bool:
+        group = get_object_or_404(Group, slug=self.kwargs['group'])
+        return group.is_admin(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': reverse('home:home'),
+                'label': "Évènements"
+            },
+            {
+                'target': '#',
+                'label': "Créer"
+            }
+        ]
+        return context
+
+    def form_valid(self, form):
+        form.instance.group_slug = self.kwargs['group']
+        return super().form_valid(form)
 
 
 # Application AbstractGroup
@@ -115,7 +147,9 @@ class UpdateGroupCreateEventView(UserIsAdmin, FormView):
 
     def form_valid(self, form, **kwargs):
         event = form.save(commit=False)
-        event.group = get_full_slug_from_slug(self.get_app(), self.get_slug())
+        event.group_slug = get_full_slug_from_slug(
+            self.get_app(),
+            self.get_slug())
         try:
             event.save()
             messages.success(
@@ -235,7 +269,7 @@ def edit_events(request, group):
         events = form.save(commit=False)
         # Link each event to the group
         for event in events:
-            event.group = group.full_slug
+            event.group_slug = group.full_slug
             event.save()
         # Delete  missing events
         for event in form.deleted_objects:

@@ -157,6 +157,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'fr-fr'
+LANGUAGES = [
+    ('fr', "Français"),
+    ('en', "English"),
+]
 TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_L10N = True

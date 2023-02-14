@@ -6,10 +6,11 @@ from django.contrib.auth.models import User
 
 from django_ckeditor_5.fields import CKEditor5Field
 
-from apps.utils.slug import SlugModel, get_object_from_full_slug
+from apps.utils.slug import SlugModel
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
 from apps.group.abstract.models import AbstractGroup
+from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
 
 
@@ -37,7 +38,7 @@ class AbstractPost(models.Model, SlugModel):
         max_length=200, verbose_name='Titre de l\'annonce')
     description = CKEditor5Field(
         verbose_name='Texte de l\'annonce', blank=True)
-    group = models.SlugField(verbose_name='Groupe publiant l\'annonce')
+    group_slug = models.SlugField(verbose_name='Groupe publiant l\'annonce')
     slug = models.SlugField(verbose_name='Slug de l\'annonce',
                             unique=True, null=True)
     color = models.CharField(max_length=200, verbose_name='Couleur de fond',
@@ -54,8 +55,9 @@ class AbstractPost(models.Model, SlugModel):
     class Meta:
         abstract = True
 
-    def get_group(self) -> AbstractGroup:
-        return get_object_from_full_slug(self.group)
+    @property
+    def group(self) -> AbstractGroup:
+        return get_object_or_404(Group, slug=self.group_slug)
 
     def save(self, *args, **kwargs):
         # compression des images
@@ -69,7 +71,7 @@ class AbstractPost(models.Model, SlugModel):
     def can_view(self, user: User) -> bool:
         if self.publicity == VISIBILITY[0][0]:
             return True
-        return self.get_group().is_member(user)
+        return self.group.is_member(user)
 
     def create_notification(self, title, body):
         """Create a new notification for this post"""
@@ -80,9 +82,10 @@ class AbstractPost(models.Model, SlugModel):
             title=title,
             body=body,
             url=self.get_absolute_url(),
-            sender=self.group,
+            sender=self.group_slug,
             date=self.publication_date,
-            icon_url=self.get_group().logo.url if self.get_group().logo else None,
+            icon_url=(self.group.icon.url
+                      if self.group.icon else None),
             publicity=self.publicity
         )
         # add image
@@ -113,7 +116,7 @@ class Post(AbstractPost):
         )
         # save the notification
         self.create_notification(
-            title=self.get_group().name,
+            title=self.group.name,
             body=self.title)
         # save agin the post
         super(Post, self).save(*args, **kwargs)

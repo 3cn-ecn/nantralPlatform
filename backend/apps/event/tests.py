@@ -20,8 +20,11 @@ class BaseEventTestCase(TestCase, TestMixin):
             admin=True
         )
         self.event = BaseEvent.objects.create(
-            title="TestEvent", group=self.club.full_slug, date=timezone.now(),
-            description="Test Desc", location="Amphi A")
+            title="TestEvent",
+            group_slug=self.club.full_slug,
+            date=timezone.now(),
+            description="Test Desc",
+            location="Amphi A")
         self.assertEqual(len(BaseEvent.objects.all()), 1)
 
     def tearDown(self):
