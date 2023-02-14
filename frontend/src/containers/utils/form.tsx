@@ -69,6 +69,7 @@ function FormGroup(props: {
               <FormGroup
                 fields={field.fields}
                 values={values}
+                errors={errors}
                 setValues={setValues}
                 noFullWidth
               />
@@ -93,16 +94,17 @@ function FormGroup(props: {
             />
           );
         case 'date':  // date as string
-          const [ dateValue, setDateValue ] = useState(new Date(values[field.name]));
           return (
             <LocalizationProvider adapterLocale={'fr'} dateAdapter={AdapterDayjs} key={index}>
               <DatePicker
                 label={field.label}
-                value={dateValue}
+                value={values[field.name] && new Date(values[field.name])}
                 onChange={(val) => {
-                  setDateValue(val);
-                  if (val && val.toString() !== 'Invalid Date')
+                  if (val && val.toString() !== 'Invalid Date') {
                     handleChange(field.name, new Intl.DateTimeFormat('en-GB').format(val).split('/').reverse().join('-'));
+                  } else {
+                    handleChange(field.name, val);
+                  }
                 }}
                 renderInput={(params) => 
                   <TextField {...params}
