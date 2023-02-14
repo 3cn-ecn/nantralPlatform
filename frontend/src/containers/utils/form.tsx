@@ -43,6 +43,16 @@ export type FieldType = {
   pk?: any;
 }
 
+/**
+ * A component to create a group of fields for a form
+ *
+ * @param props.fields - the list of the structure of each field
+ * @param props.values - an object { key: value } where keys are the 'name' key in the field structure
+ * @param props.errors - a list of errors for each field (usually sent back by the server)
+ * @param props.setValues - A function to update the values (usually with useState)
+ * @param props.noFullWidth - Prevent the fields to have width=100%. Only used on recursive calls
+ * @returns 
+ */
 function FormGroup(props: {
   fields: FieldType[],
   values: any,
@@ -52,6 +62,12 @@ function FormGroup(props: {
 }) {
   const { fields, values, errors, setValues, noFullWidth } = props;
 
+  /**
+   * Update the value of a key in the values object.
+   *
+   * @param name - the name of the field, and the key of the object in 'values'
+   * @param value - the new value for this field
+   */
   function handleChange(name: string, value: any) {
     setValues({
       ...values,
@@ -168,24 +184,33 @@ function FormGroup(props: {
   </>
 }
 
+/**
+ * A field for searching on the API with autocomplete
+ * 
+ * @param props.field - the field
+ * @param props.field.endPoint - the base url of the api router where to make the search
+ * @param props.value - the value for this field
+ * @param props.error - the error for this field
+ * @param props.handleChange - a function to update the value
+ * @param props.noFullWidth - prevent the field to be set to width=100%
+ * @returns 
+ */
 function AutocompleteField<T>(props: {
-  field: FieldType,
+  field: FieldType & { kind: "autocomplete" },
   value: any,
   error: any,
-  handleChange: (name: string, value: string) => void,
+  handleChange: (name: string, value: any) => void,
   noFullWidth: boolean,
 }) {
   const { field, value, error, handleChange, noFullWidth } = props;
-  if (field.kind !== 'autocomplete') return <></>;
 
   const [ options, setOptions ] = useState<T[]>([]);
   const [ selectedOption, setSelectedOption ] = useState<T | string>(null);
-  const endPoint = field.endPoint;
 
   useEffect(() => {
     if (value) {
       axios
-      .get<T>(`${endPoint}/${value}/`)
+      .get<T>(`${field.endPoint}/${value}/`)
       .then((res) => setSelectedOption(res.data));
     }
   }, []);
@@ -197,7 +222,7 @@ function AutocompleteField<T>(props: {
   ): void {
     if (reason !== 'input' || value.length < 3) return;
     axios
-      .get<any[]>(`${endPoint}/search/`, { params: { q: value } })
+      .get<any[]>(`${field.endPoint}/search/`, { params: { q: value } })
       .then((res) => setOptions(res.data))
       .catch(() => {});
   };
