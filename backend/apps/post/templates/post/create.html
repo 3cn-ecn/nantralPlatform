@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<h1>Créer un évènement</h1>
+<h1>Créer un post</h1>
 
 <form method='POST' enctype="multipart/form-data">
   {% csrf_token %}
@@ -12,10 +12,10 @@
   </br>
   <p><button class='btn btn-dark'>Valider</button></p>
   <p><small>
-    En validant l'évènement, une notification pour cet évènement sera
+    En validant le post, une notification pour celui-ci sera
     envoyée à tous les utilisateurs qui se sont abonnés au groupe.
     Les données de cette notification ne seront pas mises à jour si vous
-    modifiez l'évènement plus tard.
+    modifiez le post plus tard.
   </small></p>
 </form>
 

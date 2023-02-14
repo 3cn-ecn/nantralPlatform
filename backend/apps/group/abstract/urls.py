@@ -9,7 +9,6 @@ from .views import (
     AcceptAdminRequestView,
     DenyAdminRequestView,
     UpdateGroupSocialLinksView)
-from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
 
 app_name = 'group'
 
@@ -29,8 +28,6 @@ def make_group_url_patterns(
     update_events_view=UpdateGroupView.as_view(),
     create_event_view=UpdateGroupView.as_view(),
     archived_events_view=UpdateGroupView.as_view(),
-    update_posts_view=UpdateGroupPostsView.as_view(),
-    create_post_view=UpdateGroupCreatePostView.as_view()
 ):
     '''
     Fonction créant toutes les urls pour un groupe
@@ -64,10 +61,6 @@ def make_group_url_patterns(
              create_event_view, name='create-event'),
         path(url_base + '<slug:slug>/edit/events/archives/',
              archived_events_view, name='archived-events'),
-        path(url_base + '<slug:slug>/edit/posts/',
-             update_posts_view, name='update-posts'),
-        path(url_base + '<slug:slug>/edit/posts/create/',
-             create_post_view, name='create-post'),
 
         # formulaire de demande d'admin
         path(url_base + '<slug:slug>/admin-request/',

@@ -33,7 +33,9 @@ COLORS = [
 
 class AbstractPost(models.Model, SlugModel):
     publication_date = models.DateTimeField(
-        verbose_name="Date de publication", default=timezone.now)
+        verbose_name="Date de publication",
+        default=timezone.now,
+        help_text="Entrez la date au format JJ/MM/AAAA HH:MM")
     title = models.CharField(
         max_length=200, verbose_name='Titre de l\'annonce')
     description = CKEditor5Field(

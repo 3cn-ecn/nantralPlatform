@@ -26,10 +26,10 @@ class EventDetailView(LoginRequiredMixin, DetailView):
             notification=event.notification
         ).update(seen=True)
         # get context
-        context['group'] = self.object.group
-        context['is_participating'] = self.object.is_participating(
+        context['group'] = event.group
+        context['is_participating'] = event.is_participating(
             self.request.user)
-        context['is_admin'] = self.object.group.is_admin(self.request.user)
+        context['is_admin'] = event.group.is_admin(self.request.user)
         context['ariane'] = [
             {
                 'target': reverse('home:home'),
@@ -37,7 +37,7 @@ class EventDetailView(LoginRequiredMixin, DetailView):
             },
             {
                 'target': '#',
-                'label': self.object.title
+                'label': event.title
             },
         ]
         return context
@@ -54,8 +54,7 @@ class EventUpdateView(UserPassesTestMixin, UpdateView):
 
     def test_func(self) -> bool:
         event = self.get_object()
-        group = event.group
-        return group.is_admin(self.request.user)
+        return event.group.is_admin(self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -77,7 +76,7 @@ class EventUpdateView(UserPassesTestMixin, UpdateView):
 
 
 class EventDeleteView(UserPassesTestMixin, DeleteView):
-    """Update an event"""
+    """Delete an event"""
 
     template_name = 'event/delete.html'
     model = BaseEvent
@@ -86,8 +85,7 @@ class EventDeleteView(UserPassesTestMixin, DeleteView):
 
     def test_func(self) -> bool:
         event = self.get_object()
-        group = event.group
-        return group.is_admin(self.request.user)
+        return event.group.is_admin(self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

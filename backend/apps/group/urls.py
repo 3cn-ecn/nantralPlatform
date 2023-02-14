@@ -8,6 +8,7 @@ from .views import (
     UpdateGroupMembershipsView,
     UpdateGroupSocialLinksView,
     UpdateGroupEventsView,
+    UpdateGroupPostsView,
     UpdateSubscriptionView,
     MembershipFormView,
     AdminRequestFormView,
@@ -37,9 +38,7 @@ urlpatterns = [
     path('@<slug:slug>/edit/events/',
          UpdateGroupEventsView.as_view(), name='update-events'),
     path('@<slug:slug>/edit/posts/',
-         UpdateGroupView.as_view(), name='update-posts'),
-    # path('@<slug:slug>/edit/posts/create/',
-    #         create_post_view, name='create-post'),
+         UpdateGroupPostsView.as_view(), name='update-posts'),
 
     # views for django forms
     path('@<slug:slug>/edit-subscription/',

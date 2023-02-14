@@ -218,7 +218,7 @@ class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
 class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
     """Vue pour modifier les membres d'un groupe."""
 
-    template_name = 'group/edit/members_edit.html'
+    template_name = 'group/edit/members.html'
 
     def get_object(self, **kwargs):
         return Group.objects.get(slug=self.kwargs.get('slug'))
@@ -251,7 +251,7 @@ class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
 class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
     '''Vue pour modifier les réseaux sociaux d'un groupe.'''
 
-    template_name = 'group/edit/sociallinks_edit.html'
+    template_name = 'group/edit/sociallinks.html'
 
     def get_object(self, **kwargs):
         return Group.objects.get(slug=self.kwargs.get('slug'))
@@ -313,6 +313,42 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
         context['events'] = (BaseEvent.objects
                              .filter(group_slug=self.object.slug)
                              .order_by('-date'))
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': "Groupes"
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.name
+            },
+            {
+                'target': '#',
+                'label': "Modifier"
+            }
+        ]
+        return context
+
+
+class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
+    """Vue pour modifier les membres d'un groupe."""
+
+    template_name = 'group/edit/posts.html'
+
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        context['posts'] = (Post.objects
+                            .filter(group_slug=self.object.slug)
+                            .order_by('-publication_date'))
         context['ariane'] = [
             {
                 'target': reverse('group:index'),

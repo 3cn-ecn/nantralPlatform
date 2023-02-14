@@ -21,7 +21,8 @@ class BaseEvent(AbstractPost):
     description = CKEditor5Field(
         verbose_name='Description de l\'événement', blank=True)
     date = models.DateTimeField(
-        verbose_name='Date de l\'événement')
+        verbose_name='Date de l\'événement',
+        help_text="Entrez la date au format JJ/MM/AAAA HH:MM")
     location = models.CharField(
         max_length=200, verbose_name='Lieu')
     group_slug = models.SlugField(
