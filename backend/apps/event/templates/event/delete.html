@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1>Supprimer l'évènement</h1>
+
+<form method='POST'>
+  {% csrf_token %}
+  <p>Voulez-vous vraiment supprimer l'évènement {{ object.title }} ?</p>
+  {{ form | crispy }}
+  </br>
+  <input type="submit" class='btn btn-danger' value="Supprimer" />
+</form>
+
+{% endblock %}

@@ -6,9 +6,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.utils import IntegrityError
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import resolve
-from django.urls.base import reverse
+from django.urls.base import reverse, reverse_lazy
 from django.views.decorators.http import require_http_methods
-from django.views.generic import UpdateView, FormView, DetailView, CreateView
+from django.views.generic import (
+    UpdateView, FormView, DetailView, CreateView, DeleteView)
 from django.views.generic.base import View
 
 from .models import BaseEvent
@@ -83,6 +84,38 @@ class EventUpdateView(UserPassesTestMixin, UpdateView):
             {
                 'target': '#',
                 'label': "Modifier"
+            }
+        ]
+        return context
+
+
+class EventDeleteView(UserPassesTestMixin, DeleteView):
+    """Update an event"""
+
+    template_name = 'event/delete.html'
+    model = BaseEvent
+    slug_field = 'slug'
+    success_url = reverse_lazy('home:home')
+
+    def test_func(self) -> bool:
+        event = self.get_object()
+        group = event.group
+        return group.is_admin(self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': reverse('home:home'),
+                'label': "Évènements"
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.title
+            },
+            {
+                'target': '#',
+                'label': "Supprimer"
             }
         ]
         return context
