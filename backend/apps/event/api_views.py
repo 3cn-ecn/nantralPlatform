@@ -27,18 +27,11 @@ class ListAllEventsGroupAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         group = self.kwargs["group"]
-        date_gte = timezone.make_aware(timezone.now().today())
+        today = timezone.now()
         events = BaseEvent.objects.filter(
             group_slug=group,
-            date__gte=date_gte).order_by("date")
-        return [event for event in events if event.can_view(
-            self.request.user)]
-
-    def get_serializer_context(self):
-        context = super(ListAllEventsGroupAPIView,
-                        self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
+            date__gte=today).order_by("date")
+        return [e for e in events if e.can_view(self.request.user)]
 
 
 class ListEventsParticipantsAPIView(generics.ListAPIView):

@@ -9,10 +9,6 @@ from .views import (
     AcceptAdminRequestView,
     DenyAdminRequestView,
     UpdateGroupSocialLinksView)
-from apps.event.views import (
-    UpdateGroupCreateEventView,
-    UpdateGroupArchivedEventsView,
-    UpdateGroupEventsView)
 from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
 
 app_name = 'group'
@@ -30,9 +26,9 @@ def make_group_url_patterns(
     update_view=UpdateGroupView.as_view(),
     update_members_view=UpdateGroupMembersView.as_view(),
     update_sociallinks_view=UpdateGroupSocialLinksView.as_view(),
-    update_events_view=UpdateGroupEventsView.as_view(),
-    create_event_view=UpdateGroupCreateEventView.as_view(),
-    archived_events_view=UpdateGroupArchivedEventsView.as_view(),
+    update_events_view=UpdateGroupView.as_view(),
+    create_event_view=UpdateGroupView.as_view(),
+    archived_events_view=UpdateGroupView.as_view(),
     update_posts_view=UpdateGroupPostsView.as_view(),
     create_post_view=UpdateGroupCreatePostView.as_view()
 ):

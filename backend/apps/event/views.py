@@ -1,29 +1,16 @@
-from django.utils import timezone
-
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.utils import IntegrityError
-from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import resolve
+from django.shortcuts import redirect, get_object_or_404
 from django.urls.base import reverse, reverse_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.generic import (
-    UpdateView, FormView, DetailView, CreateView, DeleteView)
-from django.views.generic.base import View
+    UpdateView, DetailView, CreateView, DeleteView)
 
 from .models import BaseEvent
-from .forms import EventForm, EventFormSet
 
 from apps.group.models import Group
 from apps.notification.models import SentNotification
-from apps.utils.slug import (
-    get_object_from_slug,
-    get_full_slug_from_slug)
-from apps.utils.accessMixins import UserIsAdmin
 
-
-# Application Event
 
 class EventDetailView(LoginRequiredMixin, DetailView):
     template_name = 'event/detail.html'
@@ -124,7 +111,7 @@ class EventDeleteView(UserPassesTestMixin, DeleteView):
 class EventCreateView(UserPassesTestMixin, CreateView):
     """Create an event"""
 
-    template_name = 'event/update.html'
+    template_name = 'event/create.html'
     fields = ['title', 'description', 'location',
               'date', 'publicity', 'color', 'image']
     model = BaseEvent
@@ -152,126 +139,6 @@ class EventCreateView(UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
 
-# Application AbstractGroup
-
-class UpdateGroupCreateEventView(UserIsAdmin, FormView):
-    """In the context of edit group, create event view."""
-    template_name = 'abstract_group/edit/event/create.html'
-    form_class = EventForm
-
-    def get_app(self, **kwargs):
-        return resolve(self.request.path).app_name
-
-    def get_slug(self, **kwargs):
-        return self.kwargs.get("slug")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['object'] = group = get_object_from_slug(
-            self.get_app(), self.get_slug())
-        context['ariane'] = [{'target': reverse(group.app + ':index'),
-                              'label': group.app_name},
-                             {'target': reverse(group.app + ':detail',
-                                                kwargs={'slug': group.slug}),
-                              'label': group.name},
-                             {'target': '#',
-                              'label': 'Modifier'}]
-        return context
-
-    def form_valid(self, form, **kwargs):
-        event = form.save(commit=False)
-        event.group_slug = get_full_slug_from_slug(
-            self.get_app(),
-            self.get_slug())
-        try:
-            event.save()
-            messages.success(
-                self.request,
-                f'Vous avez programé {event.title}, le {event.date}.')
-            return redirect(self.get_app() + ':update-events', self.get_slug())
-        except IntegrityError:
-            messages.error(
-                self.request,
-                (f"L'événement {event.title} existe déjà. Veuillez modifier "
-                 "l'événement existant ou changer le nom de l'événement que "
-                 "vous tentez d'ajouter."))
-            return self.form_invalid(self.request)
-
-
-class UpdateGroupEventsView(UserIsAdmin, View):
-    '''In the context of edit group, show planned events'''
-    template_name = 'abstract_group/edit/event/planned_edit.html'
-
-    def get_app(self, **kwargs):
-        return resolve(self.request.path).app_name
-
-    def get_slug(self, **kwargs):
-        return self.kwargs.get("slug")
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        context['object'] = group = get_object_from_slug(
-            self.get_app(), self.get_slug())
-        date_gte = timezone.make_aware(timezone.now().today())
-        context['events'] = BaseEvent.objects.filter(
-            group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
-            date__gte=date_gte)
-        context['form'] = EventFormSet(queryset=context['events'])
-        context['ariane'] = [{'target': reverse(group.app + ':index'),
-                              'label': group.app_name},
-                             {'target': reverse(group.app + ':detail',
-                                                kwargs={'slug': group.slug}),
-                              'label': group.name},
-                             {'target': '#',
-                              'label': 'Modifier'}]
-        return context
-
-    def get(self, request, **kwargs):
-        context = self.get_context_data()
-        return render(request, self.template_name, context)
-
-    def post(self, request, **kwargs):
-        object = get_object_from_slug(self.get_app(), self.get_slug())
-        return edit_events(request, object)
-
-
-class UpdateGroupArchivedEventsView(UserIsAdmin, View):
-    '''In the context of edit group, show archived events'''
-    template_name = 'abstract_group/edit/event/archived_edit.html'
-
-    def get_app(self, **kwargs):
-        return resolve(self.request.path).app_name
-
-    def get_slug(self, **kwargs):
-        return self.kwargs.get("slug")
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        context['object'] = group = get_object_from_slug(
-            self.get_app(), self.get_slug())
-        date_lte = timezone.make_aware(timezone.now().today())
-        context['events'] = BaseEvent.objects.filter(
-            group=get_full_slug_from_slug(self.get_app(), self.get_slug()),
-            date__lte=date_lte)
-        context['form'] = EventFormSet(queryset=context['events'])
-        context['ariane'] = [{'target': reverse(group.app + ':index'),
-                              'label': group.app_name},
-                             {'target': reverse(group.app + ':detail',
-                                                kwargs={'slug': group.slug}),
-                              'label': group.name},
-                             {'target': '#',
-                              'label': 'Modifier'}]
-        return context
-
-    def get(self, request, **kwargs):
-        context = self.get_context_data()
-        return render(request, self.template_name, context)
-
-    def post(self, request, **kwargs):
-        object = get_object_from_slug(self.get_app(), self.get_slug())
-        return edit_events(request, object)
-
-
 @require_http_methods(['GET'])
 @login_required
 def add_participant(request, slug):
@@ -292,22 +159,3 @@ def remove_participant(request, slug):
     if request.GET.get('redirect'):
         return redirect('home:home')
     return redirect(event.get_absolute_url())
-
-
-@require_http_methods(['POST'])
-@login_required
-def edit_events(request, group):
-    form = EventFormSet(request.POST)
-    if form.is_valid():
-        events = form.save(commit=False)
-        # Link each event to the group
-        for event in events:
-            event.group_slug = group.full_slug
-            event.save()
-        # Delete  missing events
-        for event in form.deleted_objects:
-            event.delete()
-        messages.success(request, 'Évènements modifiés !')
-    else:
-        messages.error(request, form.errors)
-    return redirect(group.app + ':update-events', group.slug)

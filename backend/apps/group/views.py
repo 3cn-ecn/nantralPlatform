@@ -298,6 +298,42 @@ class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
         return redirect('group:update-sociallinks', group.slug)
 
 
+class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
+    """Vue pour modifier les membres d'un groupe."""
+
+    template_name = 'group/edit/events.html'
+
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        context['events'] = (BaseEvent.objects
+                             .filter(group_slug=self.object.slug)
+                             .order_by('-date'))
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': "Groupes"
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.name
+            },
+            {
+                'target': '#',
+                'label': "Modifier"
+            }
+        ]
+        return context
+
+
 class UpdateSubscriptionView(UserCanSeeGroupMixin, View):
     """
     SUBSCRIBE BUTTON: call this view to subscribe to a group, or unsubscribe
