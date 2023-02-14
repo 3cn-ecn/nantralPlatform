@@ -107,6 +107,10 @@ class AbstractPost(models.Model, SlugModel):
         )
         self.save()
 
+    def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
+        self.notification.delete()
+        return super().delete(*args, **kwargs)
+
 
 class Post(AbstractPost):
 
