@@ -93,12 +93,17 @@ function FormGroup(props: {
             />
           );
         case 'date':  // date as string
+          const [ dateValue, setDateValue ] = useState(new Date(values[field.name]));
           return (
             <LocalizationProvider adapterLocale={'fr'} dateAdapter={AdapterDayjs} key={index}>
               <DatePicker
                 label={field.label}
-                value={new Date(values[field.name])}
-                onChange={(val) => handleChange(field.name, val?.toISOString().split('T')[0])}
+                value={dateValue}
+                onChange={(val) => {
+                  setDateValue(val);
+                  if (val && val.toString() !== 'Invalid Date')
+                    handleChange(field.name, new Intl.DateTimeFormat('en-GB').format(val).split('/').reverse().join('-'));
+                }}
                 renderInput={(params) => 
                   <TextField {...params}
                     id={`${field.name}-input`}
@@ -172,7 +177,7 @@ function AutocompleteField<T>(props: {
   if (field.kind !== 'autocomplete') return <></>;
 
   const [ options, setOptions ] = useState<T[]>([]);
-  const [ selectedOption, setSelectedOption ] = useState<T | string>('');
+  const [ selectedOption, setSelectedOption ] = useState<T | string>(null);
   const endPoint = field.endPoint;
 
   useEffect(() => {
@@ -212,7 +217,6 @@ function AutocompleteField<T>(props: {
       freeSolo={field.freeSolo}
       onInputChange={updateOptions}
       renderInput={(params) => (
-        // component used for the input
         <TextField
           {...params}
           name={field.name}
