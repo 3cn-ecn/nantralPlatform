@@ -115,7 +115,13 @@ function EditMemberModal(props: {
     e.preventDefault();  // prevent default action from browser
     setSaving(true);  // show loading
     saveMembership(formValues)  // save data
-    .then(() => { setSaving(false); closeModal(); })  // close modal
+    .then(() => {
+      // reset all errors messages, saving loading and close modal
+      setFormErrors({});
+      setGlobalErrors('');
+      setSaving(false);
+      closeModal();
+    })
     .catch((err) => {
       setSaving(false);
       if (err.response) {

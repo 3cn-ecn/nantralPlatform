@@ -195,7 +195,7 @@ function AutocompleteField<T>(props: {
     value: string,
     reason: AutocompleteInputChangeReason
   ): void {
-    if (reason !== 'input') return;
+    if (reason !== 'input' || value.length < 3) return;
     axios
       .get<any[]>(`${endPoint}/search/`, { params: { q: value } })
       .then((res) => setOptions(res.data))
@@ -206,10 +206,10 @@ function AutocompleteField<T>(props: {
     <Autocomplete
       id={`${field.name}-input`}
       value={selectedOption}
-      onChange={(e, val, reason) => {
+      onChange={(e, val: T, reason) => {
         if (reason === 'selectOption') {
-          setSelectedOption(val as T);
-          handleChange(field.name, (val as T)[field.pk || 'id']);
+          setSelectedOption(val);
+          handleChange(field.name, val[field.pk || 'id']);
         }
       }}
       options={options}
