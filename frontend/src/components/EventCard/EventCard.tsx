@@ -105,11 +105,9 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     day: 'numeric',
   };
   const dateText = dateValue.toLocaleDateString(i18next.language, dateFormat);
-  const timeFormat: Intl.DateTimeFormatOptions = {
-    hour: '2-digit',
-    minute: '2-digit',
-  };
-  const hourText = dateValue.toLocaleTimeString(i18next.language, timeFormat);
+  const hourText = dateValue.toLocaleTimeString(i18next.language, {
+    timeStyle: 'short',
+  });
   const groupIcon =
     typeof groupData.logo_url === 'undefined' ? (
       <CircularProgress size="3.75em" />
