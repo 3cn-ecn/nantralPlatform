@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import * as React from 'react';
 import './EventCard.scss';
-import { useTranslation } from 'react-i18next';
 
 import {
   Card,
