@@ -12,7 +12,7 @@ import { DateBox } from './DateBox/DateBox';
  * @returns The component to change week.
  */
 export function ChooseWeek(props: {
-  step: 'day' | '3Day' | 'week' | 'month'
+  step: 'day' | '3Day' | 'week' | 'month';
   updateDisplay;
   beginDate: Date;
   endDate: Date;

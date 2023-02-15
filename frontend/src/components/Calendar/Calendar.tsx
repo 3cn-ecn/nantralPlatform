@@ -4,7 +4,7 @@ import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
 import { EventProps } from 'Props/Event';
 import { betweenDate } from '../../utils/date';
-import { ppcm } from '../../utils/maths';
+import { modulo, ppcm } from '../../utils/maths';
 import { isInArray } from '../../utils/array';
 import { Day } from './Day/Day';
 import { EventDataProps } from './EventDataProps/EventDataProps';
@@ -690,7 +690,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     case 'day':
       displaySize = week.slice(
         displayData.beginDate,
-        (displayData.beginDate + 1) % 7
+        displayData.beginDate + 1
       );
       // console.log(displaySize);
       // console.log((displayData.beginDate - 1) % 7);
@@ -699,10 +699,15 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     case '3Day':
       displaySize = week.slice(
         displayData.beginDate,
-        Math.min(6, (displayData.beginDate + 3) % 7)
+        displayData.beginDate + 3
       );
       if (displayData.beginDate + 3 > 6) {
-        displaySize.concat(week.slice(0, (displayData.beginDate + 3) % 7));
+        // console.log(displayData.beginDate + 4);
+        // console.log((displayData.beginDate + 4) % 7);
+        // console.log(week.slice(0, (displayData.beginDate + 3) % 7));
+        displaySize = displaySize.concat(
+          week.slice(0, (displayData.beginDate + 3) % 7)
+        );
       }
       // console.log(displaySize);
       break;
