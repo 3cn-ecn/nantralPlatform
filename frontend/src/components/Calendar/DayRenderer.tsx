@@ -19,11 +19,14 @@ export function DayRenderer(props: {
     'Samedi',
     'Dimanche',
   ];
-
+  console.log(display);
   let displaySize;
   switch (display.type) {
     case 'day':
-      displaySize = week.slice((display.beginDate - 1) % 7, display.beginDate);
+      displaySize = week.slice(display.beginDate, (display.beginDate + 1) % 7);
+      console.log(displaySize);
+      console.log((display.beginDate - 1) % 7);
+      console.log(display.beginDate);
       return displaySize.map((day, number) => {
         return (
           <Grid item xs={1.5} key={day}>
@@ -39,12 +42,13 @@ export function DayRenderer(props: {
       });
     case '3Day':
       displaySize = week.slice(
-        (display.beginDate - 1) % 7,
-        Math.max(6, (display.beginDate + 2) % 7)
+        display.beginDate,
+        Math.min(6, (display.beginDate + 3) % 7)
       );
-      if (display.beginDate + 2 > 6) {
-        displaySize.concat(week.slice(0, display.beginDate + (2 % 7)));
+      if (display.beginDate + 3 > 6) {
+        displaySize.concat(week.slice(0, (display.beginDate + 3) % 7));
       }
+      console.log(displaySize);
       return displaySize.map((day, number) => {
         return (
           <Grid item xs={1.5} key={day}>

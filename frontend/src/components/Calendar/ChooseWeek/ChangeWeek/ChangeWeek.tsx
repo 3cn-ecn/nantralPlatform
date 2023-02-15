@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { modulo } from 'utils/maths';
 
 /**
  * The component which display the arrow to switch to last and next week.
@@ -14,17 +15,51 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
  */
 export function ChangeWeek(props: {
   action: 'previous' | 'next';
+  // step: 'day' | '3Day' | 'week' | 'month';
+  step;
+  updateDisplay;
   beginDate: Date;
   endDate: Date;
   updateBegin: any;
   updateEnd: any;
 }): JSX.Element {
-  const { action, beginDate, endDate, updateBegin, updateEnd } = props;
+  const {
+    step,
+    updateDisplay,
+    action,
+    beginDate,
+    endDate,
+    updateBegin,
+    updateEnd,
+  } = props;
+  let stepValue;
+  switch (step.type) {
+    case 'day':
+      stepValue = 1;
+      break;
+    case '3Day':
+      stepValue = 3;
+      break;
+    case 'week':
+      stepValue = 7;
+      break;
+    case 'month':
+      stepValue = 1;
+      break;
+    default:
+      stepValue = 0;
+      break;
+  }
   if (action === 'previous') {
     return (
       <Button
         variant="outlined"
         onClick={() => {
+          console.log(modulo(step.beginDate - stepValue, 7));
+          updateDisplay({
+            type: step.type,
+            beginDate: modulo(step.beginDate - stepValue, 7),
+          });
           const newBeginDate = new Date(
             beginDate.getFullYear(),
             beginDate.getMonth(),
@@ -35,9 +70,9 @@ export function ChangeWeek(props: {
             endDate.getMonth(),
             endDate.getDate()
           );
-          newBeginDate.setDate(newBeginDate.getDate() - 7);
+          newBeginDate.setDate(newBeginDate.getDate() - stepValue);
           updateBegin(newBeginDate);
-          newEndDate.setDate(endDate.getDate() - 7);
+          newEndDate.setDate(endDate.getDate() - stepValue);
           updateEnd(newEndDate);
         }}
       >
@@ -50,6 +85,10 @@ export function ChangeWeek(props: {
       <Button
         variant="outlined"
         onClick={() => {
+          updateDisplay({
+            type: step.type,
+            beginDate: modulo(step.beginDate + stepValue, 7),
+          });
           const newBeginDate = new Date(
             beginDate.getFullYear(),
             beginDate.getMonth(),
@@ -60,9 +99,9 @@ export function ChangeWeek(props: {
             endDate.getMonth(),
             endDate.getDate()
           );
-          newBeginDate.setDate(newBeginDate.getDate() + 7);
+          newBeginDate.setDate(newBeginDate.getDate() + stepValue);
           updateBegin(newBeginDate);
-          newEndDate.setDate(endDate.getDate() + 7);
+          newEndDate.setDate(endDate.getDate() + stepValue);
           updateEnd(newEndDate);
         }}
       >

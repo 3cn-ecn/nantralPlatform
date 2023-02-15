@@ -12,16 +12,20 @@ import { DateBox } from './DateBox/DateBox';
  * @returns The component to change week.
  */
 export function ChooseWeek(props: {
+  step: 'day' | '3Day' | 'week' | 'month'
+  updateDisplay;
   beginDate: Date;
   endDate: Date;
   updateBegin: any;
   updateEnd: any;
 }): JSX.Element {
-  const { beginDate, endDate, updateBegin, updateEnd } = props;
+  const { step, updateDisplay, beginDate, endDate, updateBegin, updateEnd } = props;
   return (
     <div id="day" style={{ display: 'flex' }}>
       <ChangeWeek
         action="previous"
+        step={step}
+        updateDisplay={updateDisplay}
         beginDate={beginDate}
         endDate={endDate}
         updateBegin={updateBegin}
@@ -32,6 +36,8 @@ export function ChooseWeek(props: {
       </Stack>
       <ChangeWeek
         action="next"
+        step={step}
+        updateDisplay={updateDisplay}
         beginDate={beginDate}
         endDate={endDate}
         updateBegin={updateBegin}

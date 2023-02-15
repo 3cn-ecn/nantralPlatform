@@ -51,6 +51,7 @@ export function Day(props: {
   for (let hour = 0; hour < 24; hour++) {
     dayChain.push(<TimeBlock key={hour} startTime={hour}></TimeBlock>);
   }
+  console.log('day');
 
   // Sort Event chains
   for (let i = 0; i < chains.length; i++) {

@@ -508,9 +508,10 @@ function changeDisplay(
   display: 'day' | '3Day' | 'week' | 'month',
   beginDate: Date,
   endDate: Date,
-  updateBegin: any,
-  updateEnd: any
+  updateBegin: React.Dispatch<React.SetStateAction<Date>>,
+  updateEnd: React.Dispatch<React.SetStateAction<Date>>
 ) {
+  console.log(display);
   const newBeginDate = new Date(
     beginDate.getFullYear(),
     beginDate.getMonth(),
@@ -523,10 +524,12 @@ function changeDisplay(
   );
   switch (display) {
     case 'day':
+      console.log(newEndDate.getDate());
       newEndDate.setDate(beginDate.getDate() + 1);
       updateEnd(newEndDate);
       break;
     case '3Day':
+      console.log(newEndDate.getDate());
       newEndDate.setDate(beginDate.getDate() + 3);
       updateEnd(newEndDate);
       break;
@@ -560,13 +563,13 @@ function ChooseDisplay(props: {
         onClick={() => {
           if (display.type !== 'day') {
             updateDisplay({ type: 'day', beginDate: display.beginDate });
-            changeDisplay(
-              display.type,
-              beginDate,
-              endDate,
-              updateBegin,
-              updateEnd
-            );
+            // changeDisplay(
+            //   display.type,
+            //   beginDate,
+            //   endDate,
+            //   updateBegin,
+            //   updateEnd
+            // );
           }
         }}
       >
@@ -575,20 +578,35 @@ function ChooseDisplay(props: {
       <Button
         onClick={() => {
           if (display.type !== '3Day') {
-            updateDisplay('3Day');
-            changeDisplay(
-              display.type,
-              beginDate,
-              endDate,
-              updateBegin,
-              updateEnd
-            );
+            updateDisplay({ type: '3Day', beginDate: display.beginDate });
+            // changeDisplay(
+            //   display.type,
+            //   beginDate,
+            //   endDate,
+            //   updateBegin,
+            //   updateEnd
+            // );
           }
         }}
       >
         3Day
       </Button>
-      <Button>week</Button>
+      <Button
+        onClick={() => {
+          if (display.type !== 'week') {
+            updateDisplay({ type: 'week', beginDate: display.beginDate });
+            // changeDisplay(
+            //   display.type,
+            //   beginDate,
+            //   endDate,
+            //   updateBegin,
+            //   updateEnd
+            // );
+          }
+        }}
+      >
+        week
+      </Button>
       <Button>month</Button>
     </>
   );
@@ -603,7 +621,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { events } = props;
   const [displayData, updateDisplay] = useState({
     type: 'week',
-    beginDate: '0',
+    beginDate: 0,
   });
 
   const tempMondayOfTheWeek = new Date();
@@ -656,11 +674,62 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
 
   const newSortEvents = eventsWeek.sortEvents;
   const { eventsBlockedChain } = eventsWeek;
+
+  const week = [
+    'Lundi',
+    'Mardi',
+    'Mercredi',
+    'Jeudi',
+    'Vendredi',
+    'Samedi',
+    'Dimanche',
+  ];
+  console.log(displayData);
+  let displaySize;
+  switch (displayData.type) {
+    case 'day':
+      displaySize = week.slice(
+        displayData.beginDate,
+        (displayData.beginDate + 1) % 7
+      );
+      // console.log(displaySize);
+      // console.log((displayData.beginDate - 1) % 7);
+      // console.log(displayData.beginDate);
+      break;
+    case '3Day':
+      displaySize = week.slice(
+        displayData.beginDate,
+        Math.min(6, (displayData.beginDate + 3) % 7)
+      );
+      if (displayData.beginDate + 3 > 6) {
+        displaySize.concat(week.slice(0, (displayData.beginDate + 3) % 7));
+      }
+      // console.log(displaySize);
+      break;
+    case 'week':
+      displaySize = week.slice();
+      break;
+    default:
+  }
+
+  console.log(displaySize);
+  React.useEffect(() => {
+    changeDisplay(
+      displayData.type,
+      beginOfWeek,
+      endOfWeek,
+      setBeginOfWeek,
+      setEndOfWeek
+    );
+  }, [displayData]);
+
   return (
     <>
       <p>Le calendrier</p>
       <ChooseWeek
         key="ChooseWeekComponent"
+        step={displayData}
+        updateDisplay={updateDisplay}
         beginDate={beginOfWeek}
         endDate={endOfWeek}
         updateBegin={setBeginOfWeek}
@@ -679,9 +748,9 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
           <Grid item xs={1}>
             <DayInfos />
           </Grid>
-          {/* {week.map((day, number) => {
+          {displaySize.map((day, number) => {
             return (
-              <Grid item xs={1.5} key={day}>
+              <Grid item xs={10.5 / displaySize.length} key={day}>
                 <Day
                   key={day}
                   dayValue={number + 1}
@@ -691,12 +760,12 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
                 />
               </Grid>
             );
-          })} */}
-          <DayRenderer
+          })}
+          {/* <DayRenderer
             display={displayData}
             eventsList={newSortEvents}
             chainsList={eventsBlockedChain}
-          ></DayRenderer>
+          ></DayRenderer> */}
         </Grid>
       </div>
       <div id="ics">
