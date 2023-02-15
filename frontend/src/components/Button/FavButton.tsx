@@ -49,7 +49,7 @@ function FavButton(props: {
         <Zoom in={fav}>
           <FavoriteIcon
             color="primary"
-            style={{
+            sx={{
               position: 'absolute',
               width: `${size}`,
               height: `${size}`,

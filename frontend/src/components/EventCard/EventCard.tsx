@@ -3,12 +3,15 @@ import * as React from 'react';
 import './EventCard.scss';
 import { useTranslation } from 'react-i18next';
 
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import { Avatar, CardActionArea } from '@mui/material';
-
-import CircularProgress from '@mui/material/CircularProgress';
+import {
+  Card,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Typography,
+  Avatar,
+  CardActionArea,
+} from '@mui/material/';
 
 import { EventProps } from 'Props/Event';
 import { ClubProps } from 'Props/Club';
@@ -16,7 +19,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from 'axios';
-import Typography from '@mui/material/Typography';
+import i18next from 'i18next';
 import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
@@ -51,7 +54,6 @@ function InfoItem(props: { name: string; value: string }) {
 }
 
 function EventCard(props: { event: EventProps; scale?: string }) {
-  const { t } = useTranslation('translation'); // translation module
   const { event, scale } = props;
   const {
     title,
@@ -103,13 +105,12 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     month: 'long',
     day: 'numeric',
   };
-  const dateText = dateValue.toLocaleDateString(t('lang'), dateFormat);
+  const dateText = dateValue.toLocaleDateString(i18next.language, dateFormat);
   const timeFormat: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
     minute: '2-digit',
   };
-  const hourText = dateValue.toLocaleTimeString(t('lang'), timeFormat);
-
+  const hourText = dateValue.toLocaleTimeString(i18next.language, timeFormat);
   const groupIcon =
     typeof groupData.logo_url === 'undefined' ? (
       <CircularProgress size="3.75em" />
