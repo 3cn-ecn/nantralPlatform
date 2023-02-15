@@ -12,7 +12,7 @@ function SimpleAccordion(props: { label: string; icon: any; content: any }) {
 
   return (
     <div>
-      <Accordion square id="accordion">
+      <Accordion square className="accordion">
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"

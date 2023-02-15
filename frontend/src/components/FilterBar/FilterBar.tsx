@@ -13,24 +13,67 @@ import Close from '@mui/icons-material/Close';
 import './FilterBar.scss';
 import IconButton from '@mui/material/IconButton';
 import { Grid } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
 import SimpleAccordion from '../Accordion/SimpleAccordion';
 import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
 import BasicDatePicker from '../DatePicker/BasicDatePicker';
 
 interface FilterInterface {
+  id: string;
   name: string;
   icon: any;
   isMenu?: boolean;
   content: any;
 }
 
+interface ResultInterface {
+  id: string;
+  value: any;
+}
+
 function FilterBar() {
   const [state, setState] = React.useState({
     right: false,
   });
+  const [dateBegin, setDateBegin] = React.useState(null);
+  const [dateBeginTransformed, setDateBeginTransformed] = React.useState(null);
+  const [dateEndTransformed, setDateEndTransformed] = React.useState(null);
+  const [isFavorite, setIsFavorite] = React.useState(false);
+  const [isParticipated, setIsParticipated] = React.useState(false);
+  const [isShotgun, setIsShotgun] = React.useState(false);
+  const [organiser, setOrganiser] = React.useState(null);
+  const [validateFilter, setValidateFilter] = React.useState(null);
+
+  const getDateBegin = (newDate) => {
+    setDateBegin(newDate);
+    if (newDate !== null) {
+      setDateBeginTransformed(newDate.format('DD/MM/YYYY'));
+    }
+  };
+  const getDateEnd = (newDate) => {
+    if (newDate !== null) {
+      setDateEndTransformed(newDate.format('DD/MM/YYYY'));
+    }
+  };
+  const getChecked = (id, checked) => {
+    if (id === 'favoris') {
+      setIsFavorite(checked);
+    }
+    if (id === 'participe') {
+      setIsParticipated(checked);
+    }
+    if (id === 'shotgun') {
+      setIsShotgun(checked);
+    }
+  };
+  const getOrganiser = (organiserDic) => {
+    setOrganiser(organiserDic);
+  };
+
   const filters: FilterInterface[] = [
     {
+      id: 'date',
       name: 'Date',
       icon: <DateRangeIcon />,
       isMenu: true,
@@ -38,33 +81,60 @@ function FilterBar() {
         <>
           <Grid item xs="auto">
             <p>Du :</p>
-            <BasicDatePicker label={null} />
+            <BasicDatePicker
+              label={null}
+              minDate={null}
+              getDate={getDateBegin}
+            />
           </Grid>
           <Grid item xs="auto">
             <p>Au :</p>
-            <BasicDatePicker label={null} />
+            <BasicDatePicker
+              label={null}
+              minDate={dateBegin}
+              getDate={getDateEnd}
+            />
           </Grid>
         </>
       ),
     },
     {
+      id: 'favorite',
       name: 'Favoris',
       icon: <FavoriteIcon />,
       isMenu: false,
       content: null,
     },
     {
+      id: 'participate',
+      name: 'Je participe',
+      icon: <PersonIcon />,
+      isMenu: false,
+      content: null,
+    },
+    {
+      id: 'organiser',
       name: 'Organisateur',
       icon: <GroupsIcon />,
       isMenu: true,
-      content: <CheckboxesTags label="Organisateur" />,
+      content: <CheckboxesTags label="Organisateur" getResult={getOrganiser} />,
     },
     {
+      id: 'shotgun',
       name: 'Shotgun',
       icon: <TimerIcon />,
       isMenu: false,
       content: null,
     },
+  ];
+
+  const currentFilter: ResultInterface[] = [
+    { id: 'dateBegin', value: { dateBeginTransformed } },
+    { id: 'dateEnd', value: { dateEndTransformed } },
+    { id: 'favorite', value: { isFavorite } },
+    { id: 'participate', value: { isParticipated } },
+    { id: 'organiser', value: { organiser } },
+    { id: 'shotgun', value: { isShotgun } },
   ];
 
   const toggleDrawer =
@@ -82,7 +152,7 @@ function FilterBar() {
     };
 
   const list = (anchor: 'right') => (
-    <Box id="center" role="presentation">
+    <Box className="center" role="presentation">
       <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
         <IconButton onClick={toggleDrawer(anchor, false)}>
           <Close />
@@ -92,8 +162,8 @@ function FilterBar() {
 
       <List>
         {filters.map((filter) => (
-          <ListItem component="div" key={filter.name} disablePadding>
-            <ListItem id="auto-fit">
+          <ListItem component="div" key={filter.id} disablePadding>
+            <ListItem className="auto-fit">
               {filter.isMenu ? (
                 <SimpleAccordion
                   label={filter.name}
@@ -101,7 +171,12 @@ function FilterBar() {
                   icon={filter.icon}
                 />
               ) : (
-                <CheckboxButton label={filter.name} icon={filter.icon} />
+                <CheckboxButton
+                  label={filter.name}
+                  icon={filter.icon}
+                  id={filter.id}
+                  getChecked={getChecked}
+                />
               )}
             </ListItem>
           </ListItem>
@@ -115,7 +190,6 @@ function FilterBar() {
       </div>
     </Box>
   );
-
   return (
     <div>
       {(['right'] as const).map((anchor) => (
