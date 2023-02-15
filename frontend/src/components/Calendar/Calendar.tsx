@@ -529,12 +529,10 @@ function changeDisplay(
   );
   switch (display) {
     case 'day':
-      console.log(newEndDate.getDate());
       newEndDate.setDate(beginDate.getDate() + 1);
       updateEnd(newEndDate);
       break;
     case '3Days':
-      console.log(newEndDate.getDate());
       newEndDate.setDate(beginDate.getDate() + 3);
       updateEnd(newEndDate);
       break;
@@ -654,7 +652,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     default:
   }
 
-  console.log(displaySize);
+  // Update the display and the view
   React.useEffect(() => {
     changeDisplay(displayData.type, beginOfWeek, setBeginOfWeek, setEndOfWeek);
   }, [displayData]);
