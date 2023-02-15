@@ -33,7 +33,7 @@ export function ChooseDisplay(props: {
           }
         }}
       >
-        3Day
+        3Days
       </Button>
       <Button
         onClick={() => {
