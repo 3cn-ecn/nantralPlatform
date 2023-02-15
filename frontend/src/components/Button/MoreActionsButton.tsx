@@ -5,15 +5,12 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-
-import { useTranslation } from 'react-i18next';
-import { IconButton, rgbToHex } from '@mui/material';
-
 import Snackbar from '@mui/material/Snackbar';
+import { useTranslation } from 'react-i18next';
+import { IconButton } from '@mui/material';
 
-import theme from '../../theme';
+import JoinButton from './JoinButton';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -28,24 +25,33 @@ function MoreActionsButton(props: {
   shareUrl: string;
   slug: string;
   participating: boolean;
+  setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
   size?: string;
 }) {
   const { t } = useTranslation('translation'); // translation module
-  const { className, isAdmin, shareUrl, slug, size, participating } = props;
+  const {
+    className,
+    isAdmin,
+    shareUrl,
+    slug,
+    size,
+    participating,
+    setParticipating,
+  } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openCopyNotif, setOpenCopyNotif] = React.useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
   };
   const editOption = isAdmin ? (
     <MenuItem
       onClick={() => {
         window.open(`event/${slug}/edit`, '_blank', 'noreferrer');
-        handleClose();
+        handleCloseMenu();
       }}
     >
       <EditIcon className="itemIcon" />
@@ -54,16 +60,19 @@ function MoreActionsButton(props: {
   ) : null;
 
   const unregisterOption = participating ? (
-    <MenuItem
-      onClick={handleClose}
-      style={{ color: rgbToHex(theme.palette.error.main) }}
-    >
-      <HighlightOffIcon
-        style={{ color: rgbToHex(theme.palette.error.main) }}
-        className="itemIcon"
-      />
-      {t('event.action_menu.unsubscribe')}
-    </MenuItem>
+    <JoinButton
+      variant="normal"
+      handleClick={handleCloseMenu}
+      person={1}
+      maxPerson={2}
+      participating={participating}
+      setParticipating={setParticipating}
+      eventSlug={slug}
+      link=""
+      beginInscription=""
+      endInscription=""
+      unregisterOnly
+    />
   ) : null;
   return (
     <div className={className}>
@@ -87,7 +96,7 @@ function MoreActionsButton(props: {
       <Menu
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={handleCloseMenu}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'left',
@@ -101,7 +110,7 @@ function MoreActionsButton(props: {
           onClick={() => {
             navigator.clipboard.writeText(shareUrl);
             setOpenCopyNotif(true);
-            handleClose();
+            handleCloseMenu();
           }}
         >
           <ShareIcon className="itemIcon" />

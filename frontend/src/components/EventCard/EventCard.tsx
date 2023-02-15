@@ -21,7 +21,6 @@ import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
 import MoreActionsButton from '../Button/MoreActionsButton';
-import { formatTime } from '../../utils/date';
 
 function InfoItem(props: { name: string; value: string }) {
   let icon = null;
@@ -71,6 +70,8 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     begin_inscription,
   } = event;
 
+  const [participating, setParticipating] = React.useState(is_participating);
+
   // An exception is made for the BDE as the "club" needs to be removed from the slug
   // (Not the case for the other clubs)
   const groupSlug =
@@ -97,13 +98,17 @@ function EventCard(props: { event: EventProps; scale?: string }) {
 
   // Conversion of the date to a human redeable format
   const dateValue = new Date(date);
-  const options: Intl.DateTimeFormatOptions = {
+  const dateFormat: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
   };
-  const dateText = dateValue.toLocaleDateString(t('lang'), options);
-  const hourText = formatTime(dateValue, 'short');
+  const dateText = dateValue.toLocaleDateString(t('lang'), dateFormat);
+  const timeFormat: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+  };
+  const hourText = dateValue.toLocaleTimeString(t('lang'), timeFormat);
 
   const groupIcon =
     typeof groupData.logo_url === 'undefined' ? (
@@ -138,7 +143,8 @@ function EventCard(props: { event: EventProps; scale?: string }) {
           shareUrl={window.location.origin + get_absolute_url}
           slug={slug}
           size="2em"
-          participating={is_participating}
+          participating={participating}
+          setParticipating={setParticipating}
         />
         <CardContent sx={{ padding: 0 }}>
           <div className="infoContainer">
@@ -160,9 +166,12 @@ function EventCard(props: { event: EventProps; scale?: string }) {
                   variant={variant}
                   person={number_of_participants}
                   maxPerson={max_participant}
-                  participating={is_participating}
+                  participating={participating}
                   eventSlug={slug}
                   link={ticketing}
+                  beginInscription={begin_inscription}
+                  endInscription={end_inscription}
+                  setParticipating={setParticipating}
                 />
               </div>
             </div>
