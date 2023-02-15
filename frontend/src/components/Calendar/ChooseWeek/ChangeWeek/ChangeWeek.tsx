@@ -36,7 +36,7 @@ export function ChangeWeek(props: {
     updateBegin,
     updateEnd,
   } = props;
-  let stepValue;
+  let stepValue: number;
   switch (step.type) {
     case 'day':
       stepValue = 1;
@@ -59,7 +59,6 @@ export function ChangeWeek(props: {
       <Button
         variant="outlined"
         onClick={() => {
-          console.log(modulo(step.beginDate - stepValue, 7));
           updateDisplay({
             type: step.type,
             beginDate: modulo(step.beginDate - stepValue, 7),
