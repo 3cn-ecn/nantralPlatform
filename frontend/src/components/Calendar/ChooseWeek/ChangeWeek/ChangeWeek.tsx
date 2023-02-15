@@ -2,11 +2,14 @@ import React from 'react';
 import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { calendarView } from '../../CalendarProps/CalendarProps';
 import { modulo } from '../../../../utils/maths';
 
 /**
  * The component which display the arrow to switch to last and next week.
  * @param action Defines whether the component is for last or next week.
+ * @param step The type and beginning day in the week of the view.
+ * @param updateDisplay The callback to update display.
  * @param beginDate The first day of the week.
  * @param endDate The last day of the week.
  * @param updateBegin The callback to update first day.
@@ -15,9 +18,10 @@ import { modulo } from '../../../../utils/maths';
  */
 export function ChangeWeek(props: {
   action: 'previous' | 'next';
-  // step: 'day' | '3Day' | 'week' | 'month';
-  step;
-  updateDisplay;
+  step: { type: calendarView; beginDate: number };
+  updateDisplay: React.Dispatch<
+    React.SetStateAction<{ type: calendarView; beginDate: number }>
+  >;
   beginDate: Date;
   endDate: Date;
   updateBegin: any;
@@ -37,7 +41,7 @@ export function ChangeWeek(props: {
     case 'day':
       stepValue = 1;
       break;
-    case '3Day':
+    case '3Days':
       stepValue = 3;
       break;
     case 'week':

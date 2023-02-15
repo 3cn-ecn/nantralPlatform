@@ -38,6 +38,7 @@ function sortWithPos(
  * @param dayValue The value of the day in the week.
  * @param day The day in the week.
  * @param events The list of events in corresponding day.
+ * @param chains
  * @returns The Day component.
  */
 export function Day(props: {
@@ -51,7 +52,6 @@ export function Day(props: {
   for (let hour = 0; hour < 24; hour++) {
     dayChain.push(<TimeBlock key={hour} startTime={hour}></TimeBlock>);
   }
-  console.log('day');
 
   // Sort Event chains
   for (let i = 0; i < chains.length; i++) {

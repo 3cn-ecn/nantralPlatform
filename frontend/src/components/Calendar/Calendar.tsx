@@ -4,13 +4,13 @@ import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
 import { EventProps } from 'Props/Event';
 import { betweenDate } from '../../utils/date';
-import { modulo, ppcm } from '../../utils/maths';
+import { ppcm } from '../../utils/maths';
 import { isInArray } from '../../utils/array';
 import { Day } from './Day/Day';
-import { EventDataProps } from './EventDataProps/EventDataProps';
+import { EventDataProps, calendarView } from './CalendarProps/CalendarProps';
 import { DayInfos } from './DayInfos/DayInfos';
 import { ChooseWeek } from './ChooseWeek/ChooseWeek';
-import { DayRenderer } from './DayRenderer';
+import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';
 
 /**
  * Function that sort event date-wise.
@@ -29,7 +29,7 @@ function getEventWithDate(
     // Sort with end date too.
     if (
       betweenDate(new Date(event.date), beginDate, endDate) ||
-      betweenDate(new Date(event.end_date), beginDate, endDate)
+      betweenDate(beginDate, new Date(event.date), new Date(event.end_date))
     ) {
       sortedEvents.push(event);
     }
@@ -474,7 +474,7 @@ function addEventICS(event: EventProps): EventAttributes {
  * Function which imports the events in an ics file.
  * @param events The list of events to import.
  */
-async function callICS(events: Array<EventProps>) {
+async function callICS(events: Array<EventProps>): Promise<void> {
   const filename = 'EventCalendar.ics';
   const eventsCalendar: Array<EventAttributes> = [];
   events.forEach((event) => {
@@ -504,14 +504,19 @@ async function callICS(events: Array<EventProps>) {
   URL.revokeObjectURL(url);
 }
 
+/**
+ * Change the display to the format asked.
+ * @param display The type of display.
+ * @param beginDate The first day of the display.
+ * @param updateBegin The callback to update the first day of the display.
+ * @param updateEnd The callback to update the last day of the display.
+ */
 function changeDisplay(
-  display: 'day' | '3Day' | 'week' | 'month',
+  display: calendarView,
   beginDate: Date,
-  endDate: Date,
   updateBegin: React.Dispatch<React.SetStateAction<Date>>,
   updateEnd: React.Dispatch<React.SetStateAction<Date>>
-) {
-  console.log(display);
+): void {
   const newBeginDate = new Date(
     beginDate.getFullYear(),
     beginDate.getMonth(),
@@ -528,7 +533,7 @@ function changeDisplay(
       newEndDate.setDate(beginDate.getDate() + 1);
       updateEnd(newEndDate);
       break;
-    case '3Day':
+    case '3Days':
       console.log(newEndDate.getDate());
       newEndDate.setDate(beginDate.getDate() + 3);
       updateEnd(newEndDate);
@@ -542,74 +547,10 @@ function changeDisplay(
       updateEnd(newEndDate);
       break;
     // case 'month':
+    // break;
     default:
       break;
   }
-}
-
-function ChooseDisplay(props: {
-  display;
-  updateDisplay;
-  beginDate;
-  endDate;
-  updateBegin;
-  updateEnd;
-}) {
-  const { display, updateDisplay, beginDate, endDate, updateBegin, updateEnd } =
-    props;
-  return (
-    <>
-      <Button
-        onClick={() => {
-          if (display.type !== 'day') {
-            updateDisplay({ type: 'day', beginDate: display.beginDate });
-            // changeDisplay(
-            //   display.type,
-            //   beginDate,
-            //   endDate,
-            //   updateBegin,
-            //   updateEnd
-            // );
-          }
-        }}
-      >
-        day
-      </Button>
-      <Button
-        onClick={() => {
-          if (display.type !== '3Day') {
-            updateDisplay({ type: '3Day', beginDate: display.beginDate });
-            // changeDisplay(
-            //   display.type,
-            //   beginDate,
-            //   endDate,
-            //   updateBegin,
-            //   updateEnd
-            // );
-          }
-        }}
-      >
-        3Day
-      </Button>
-      <Button
-        onClick={() => {
-          if (display.type !== 'week') {
-            updateDisplay({ type: 'week', beginDate: display.beginDate });
-            // changeDisplay(
-            //   display.type,
-            //   beginDate,
-            //   endDate,
-            //   updateBegin,
-            //   updateEnd
-            // );
-          }
-        }}
-      >
-        week
-      </Button>
-      <Button>month</Button>
-    </>
-  );
 }
 
 /**
@@ -619,7 +560,10 @@ function ChooseDisplay(props: {
  */
 function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { events } = props;
-  const [displayData, updateDisplay] = useState({
+  const [displayData, updateDisplay] = useState<{
+    type: calendarView;
+    beginDate: number;
+  }>({
     type: 'week',
     beginDate: 0,
   });
@@ -676,40 +620,33 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { eventsBlockedChain } = eventsWeek;
 
   const week = [
-    'Lundi',
-    'Mardi',
-    'Mercredi',
-    'Jeudi',
-    'Vendredi',
-    'Samedi',
-    'Dimanche',
+    ['Lundi', 1],
+    ['Mardi', 2],
+    ['Mercredi', 3],
+    ['Jeudi', 4],
+    ['Vendredi', 5],
+    ['Samedi', 6],
+    ['Dimanche', 7],
   ];
-  console.log(displayData);
-  let displaySize;
+
+  let displaySize: Array<Array<any>>;
   switch (displayData.type) {
     case 'day':
       displaySize = week.slice(
         displayData.beginDate,
         displayData.beginDate + 1
       );
-      // console.log(displaySize);
-      // console.log((displayData.beginDate - 1) % 7);
-      // console.log(displayData.beginDate);
       break;
-    case '3Day':
+    case '3Days':
       displaySize = week.slice(
         displayData.beginDate,
         displayData.beginDate + 3
       );
       if (displayData.beginDate + 3 > 6) {
-        // console.log(displayData.beginDate + 4);
-        // console.log((displayData.beginDate + 4) % 7);
-        // console.log(week.slice(0, (displayData.beginDate + 3) % 7));
         displaySize = displaySize.concat(
           week.slice(0, (displayData.beginDate + 3) % 7)
         );
       }
-      // console.log(displaySize);
       break;
     case 'week':
       displaySize = week.slice();
@@ -719,13 +656,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
 
   console.log(displaySize);
   React.useEffect(() => {
-    changeDisplay(
-      displayData.type,
-      beginOfWeek,
-      endOfWeek,
-      setBeginOfWeek,
-      setEndOfWeek
-    );
+    changeDisplay(displayData.type, beginOfWeek, setBeginOfWeek, setEndOfWeek);
   }, [displayData]);
 
   return (
@@ -743,10 +674,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
       <ChooseDisplay
         display={displayData}
         updateDisplay={updateDisplay}
-        beginDate={beginOfWeek}
-        endDate={endOfWeek}
-        updateBegin={setBeginOfWeek}
-        updateEnd={setEndOfWeek}
       ></ChooseDisplay>
       <div id="Calendar" style={{ display: 'flex' }}>
         <Grid container spacing={0}>
@@ -755,22 +682,17 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
           </Grid>
           {displaySize.map((day, number) => {
             return (
-              <Grid item xs={10.5 / displaySize.length} key={day}>
+              <Grid item xs={10.5 / displaySize.length} key={day[0]}>
                 <Day
-                  key={day}
-                  dayValue={number + 1}
-                  day={day}
+                  key={day[0]}
+                  dayValue={day[1]}
+                  day={day[0]}
                   events={newSortEvents[number]}
                   chains={eventsBlockedChain[number]}
                 />
               </Grid>
             );
           })}
-          {/* <DayRenderer
-            display={displayData}
-            eventsList={newSortEvents}
-            chainsList={eventsBlockedChain}
-          ></DayRenderer> */}
         </Grid>
       </div>
       <div id="ics">
