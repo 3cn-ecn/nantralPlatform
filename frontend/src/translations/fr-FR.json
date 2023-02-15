@@ -22,9 +22,9 @@
     "french": "Français",
     "light": "Thème clair",
     "dark": "Thème sombre",
-    "automatic": "Mode Automatique",
-    "title_theme": "Choix du thème",
-    "title_language": "Choix du langage",
+    "automatic": "Automatique",
+    "title_theme": "Thème",
+    "title_language": "Langage",
     "theme": "Thème"
   },
   "button": {
