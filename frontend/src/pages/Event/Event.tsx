@@ -71,7 +71,7 @@ function Event() {
 
   React.useEffect(() => {
     axios.get('/api/event').then((res) => {
-      // const eventsObject: Array<EventProps> = [];
+      // to change when beginDate is add in event : const eventsObject: Array<EventProps> = [];
       const eventsObject = [];
       
       // delete when endDate defined forEach event
