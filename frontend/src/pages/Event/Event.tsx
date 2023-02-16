@@ -10,7 +10,8 @@ import {
   CalendarToday,
   CalendarViewDay,
 } from '@mui/icons-material';
-import { EventProps } from 'Props/Event';
+import { EventBDDProps, EventProps } from 'Props/Event';
+import { snakeIntoCamel } from '../../utils/camel';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular'
@@ -29,7 +30,6 @@ function EventList(props: { events: any }) {
 
 function EventCalendar(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
   return (
     <>
       <p>Ceci est un calendrier.</p>
@@ -41,7 +41,6 @@ function EventCalendar(props: { events: any }) {
 
 function EventView(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
   const [value, setValue] = React.useState('1');
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -60,7 +59,6 @@ function EventView(props: { events: any }) {
       <TabPanel value="2">
         <EventCalendar events={events}></EventCalendar>
         <CalendarMonth></CalendarMonth>
-        {/* <CalendarPicker></CalendarPicker> */}
         <CalendarViewDay></CalendarViewDay>
         <CalendarToday></CalendarToday>
       </TabPanel>
@@ -72,17 +70,24 @@ function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
 
   React.useEffect(() => {
-    axios.get('/api/event').then((eventsData) => {
-      const tempEvents = eventsData.data;
-      tempEvents.forEach((event: EventProps) => {
-        event.beginDate = new Date(event.date);
+    axios.get('/api/event').then((res) => {
+      // const eventsObject: Array<EventProps> = [];
+      const eventsObject = [];
+      
+      // delete when endDate defined forEach event
+      res.data.forEach((event: EventBDDProps) => 
+      { 
+        eventsObject.push(snakeIntoCamel(event, [{type2Convert: "Date", keys: ["date", "end_date"]}]));
         if (event.end_date === null) {
-          event.endDate = new Date(new Date(event.date).getTime() + 3600000);
-        } else {
-          event.endDate = new Date(event.end_date);
+          eventsObject[eventsObject.length - 1].endDate = new Date(new Date(event.date).getTime() + 3600000);
         }
       });
-      setEvents(tempEvents);
+
+      // delete when date update to beginDate
+      eventsObject.forEach((event) => {
+        event.beginDate = event.date;
+      });
+      setEvents(eventsObject);
     });
   }, []);
 

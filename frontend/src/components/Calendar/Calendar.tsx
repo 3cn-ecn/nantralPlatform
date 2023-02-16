@@ -134,8 +134,6 @@ function blockedChains(
   let previousMaxSize: number;
   const blockedEventsChain = [];
   let globalSize = 1;
-  // let chainEventKey: number;
-  // let isInclude: boolean;
 
   eventsData.forEach((eventData) => {
     currentSizeObject.maxSize = 0;
@@ -153,28 +151,6 @@ function blockedChains(
       }
     });
     addInBlockedChains(blockedEventsChain, currentSizeObject.blockedChains);
-    // currentSizeObject.blockedChains.forEach((chain: Array<number>) => {
-    //   chainEventKey = 0;
-    //   if (blockedEventsChain.length > 0) {
-    //     isInclude = !chain.every((eventKey: number) =>
-    //       blockedEventsChain[chainEventKey].includes(eventKey)
-    //     );
-    //     while (isInclude) {
-    //       chainEventKey += 1;
-    //       if (chainEventKey < blockedEventsChain.length) {
-    //         const chainContainer = blockedEventsChain[chainEventKey];
-    //         isInclude = !chain.every((eventKey: number) =>
-    //           chainContainer.includes(eventKey)
-    //         );
-    //       } else {
-    //         isInclude = false;
-    //       }
-    //     }
-    //   }
-    //   if (chainEventKey >= blockedEventsChain.length) {
-    //     blockedEventsChain.push(chain);
-    //   }
-    // });
     eventData.size = currentSizeObject.maxSize;
     globalSize = ppcm(currentSizeObject.maxSize, globalSize);
   });
