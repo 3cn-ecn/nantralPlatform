@@ -3,7 +3,7 @@ import { Button, Grid } from '@mui/material';
 import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
 import { EventProps } from 'Props/Event';
-import { ppcm } from '../../utils/maths';
+import { modulo, ppcm } from '../../utils/maths';
 import { Day } from './Day/Day';
 import { EventDataProps, CalendarView } from './CalendarProps/CalendarProps';
 import { DayInfos } from './DayInfos/DayInfos';
@@ -545,9 +545,9 @@ function changeDisplay(
       break;
     case 'week':
       newBeginDate.setDate(
-        newBeginDate.getDate() - ((newBeginDate.getDay() - 1) % 7)
+        newBeginDate.getDate() - modulo(newBeginDate.getDay() - 1, 7)
       );
-      newEndDate.setDate(beginDate.getDate() + 7);
+      newEndDate.setDate(newBeginDate.getDate() + 7);
       updateBegin(newBeginDate);
       updateEnd(newEndDate);
       break;
