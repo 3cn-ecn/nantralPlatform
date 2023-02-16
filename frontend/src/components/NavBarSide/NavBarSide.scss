@@ -1,7 +1,8 @@
 @import '../../theme.scss';
 
 a.navlink {
-  color: rgba(0, 0, 0, 0.87);
+
+  color: black;
   
   &.active {
     color: $primary-red-color;
