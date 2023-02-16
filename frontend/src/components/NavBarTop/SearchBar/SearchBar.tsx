@@ -10,8 +10,6 @@ import { Search as SearchIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { isString } from 'lodash';
 import axios from 'axios';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../../theme';
 
 /** Interface for the options */
 interface Option {
