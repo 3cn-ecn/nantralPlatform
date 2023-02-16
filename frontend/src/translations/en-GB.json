@@ -30,11 +30,11 @@
   "button": {
     "cancel" : "cancel",
     "joinButton" : {
-      "unsuscribe" : "unsuscribe",
+      "unsuscribe" : "unregister",
       "registerLink" : "register link",
       "shotgunClosed" : "shotgun closed",
       "register": "register",
-      "title": "Do you want to unsubscribe from this event?"
+      "title": "Do you want to unregister from this event?"
     }
   },
   "legalNotice": {
