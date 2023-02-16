@@ -174,7 +174,7 @@ export function NotificationMenu(props) {
         </ListItem>
         <ListItem>
           <Button
-            variant="outlined"
+            variant={!subscribeFilter ? 'outlined' : 'contained'}
             size="small"
             sx={[
               { mr: 1 },
@@ -193,7 +193,7 @@ export function NotificationMenu(props) {
             {t('notif.subscribed')}
           </Button>
           <Button
-            variant="outlined"
+            variant={!unseenFilter ? 'outlined' : 'contained'}
             size="small"
             sx={[
               {
