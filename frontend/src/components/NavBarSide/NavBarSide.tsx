@@ -24,6 +24,7 @@ import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
 import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
 import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
 import { ReactComponent as AcademicIcon } from '../../assets/scalable/academic.svg';
+import theme from './theme';
 
 /** Interface for all links */
 interface linksInterface {
@@ -126,6 +127,9 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
               to={link.url}
               reloadDocument={link.isOnBackend}
               className="navlink"
+              sx={{
+                color: 'text.primary',
+              }}
             >
               <ListItemButton>
                 <ListItemIcon>

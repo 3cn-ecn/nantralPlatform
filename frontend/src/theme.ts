@@ -8,6 +8,7 @@ const theme = createTheme({
     },
     secondary: {
       main: '#efefef',
+      light: '#fff',
     },
     warning: {
       main: '#dc3545',

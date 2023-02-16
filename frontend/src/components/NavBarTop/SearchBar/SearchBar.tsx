@@ -112,25 +112,26 @@ export function SearchBar(): JSX.Element {
       )}
       renderInput={(params) => (
         // component used for the input
-        <ThemeProvider theme={theme}>
-          <TextField
-            {...params}
-            hiddenLabel
-            variant="standard"
-            size="small"
-            InputProps={{
-              ...params.InputProps,
-              type: 'search',
-              placeholder: 'Search',
-              className: 'search-input',
-              startAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </ThemeProvider>
+        <TextField
+          {...params}
+          hiddenLabel
+          variant="standard"
+          sx={{
+            color: 'text.primary',
+          }}
+          size="small"
+          InputProps={{
+            ...params.InputProps,
+            type: 'search',
+            placeholder: 'Search',
+            className: 'search-input',
+            startAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
       )}
       onInputChange={updateOptions}
       onChange={onValidation}

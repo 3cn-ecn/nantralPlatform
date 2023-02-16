@@ -158,6 +158,9 @@ function NavBarTop(props: {
                 to="/profile/"
                 className="menuItem"
                 disablePadding
+                sx={{
+                  color: 'text.primary',
+                }}
               >
                 {t('user_menu.profile')}
               </ListItem>
@@ -169,6 +172,9 @@ function NavBarTop(props: {
                 to="/logout/"
                 className="menuItem"
                 disablePadding
+                sx={{
+                  color: 'text.primary',
+                }}
               >
                 {t('user_menu.logout')}
               </ListItem>
@@ -181,6 +187,9 @@ function NavBarTop(props: {
                 to="/bug/"
                 className="menuItem"
                 disablePadding
+                sx={{
+                  color: 'text.primary',
+                }}
               >
                 {t('user_menu.bug')}
               </ListItem>
@@ -193,6 +202,9 @@ function NavBarTop(props: {
                 to="https://docs.nantral-platform.fr/"
                 className="menuItem"
                 disablePadding
+                sx={{
+                  color: 'text.primary',
+                }}
               >
                 {t('user_menu.doc')}
               </ListItem>
@@ -204,6 +216,9 @@ function NavBarTop(props: {
                 to="/legal-notice/"
                 className="menuItem"
                 disablePadding
+                sx={{
+                  color: 'text.primary',
+                }}
               >
                 {t('user_menu.legal')}
               </ListItem>
