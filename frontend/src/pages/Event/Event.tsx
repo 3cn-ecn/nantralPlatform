@@ -73,15 +73,16 @@ function Event() {
 
   React.useEffect(() => {
     axios.get('/api/event').then((eventsData) => {
-      setEvents(eventsData.data);
-      // console.log(events[0].date);
-      // console.log(eventsData.data[0].date);
-      // const a = new Date(eventsData.data[0].date);
-      // console.log(a);
-      // console.log(a.getDay());
-      // console.log(a.getDate());
-      // console.log(a.getMonth());
-      // console.log(a.getFullYear());
+      const tempEvents = eventsData.data;
+      tempEvents.forEach((event: EventProps) => {
+        event.beginDate = new Date(event.date);
+        if (event.end_date === null) {
+          event.endDate = new Date(new Date(event.date).getTime() + 3600000);
+        } else {
+          event.endDate = new Date(event.end_date);
+        }
+      });
+      setEvents(tempEvents);
     });
   }, []);
 

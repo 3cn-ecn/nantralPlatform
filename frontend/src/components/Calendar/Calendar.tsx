@@ -3,7 +3,6 @@ import { Button, Grid } from '@mui/material';
 import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
 import { EventProps } from 'Props/Event';
-import { betweenDate } from '../../utils/date';
 import { ppcm } from '../../utils/maths';
 import { isInArray } from '../../utils/array';
 import { Day } from './Day/Day';
@@ -28,8 +27,8 @@ function getEventWithDate(
   events.forEach((event) => {
     // Sort with end date too.
     if (
-      betweenDate(new Date(event.date), beginDate, endDate) ||
-      betweenDate(beginDate, new Date(event.date), new Date(event.end_date))
+      (beginDate <= event.beginDate && event.beginDate < endDate) ||
+      (event.beginDate <= beginDate && beginDate < event.endDate)
     ) {
       sortedEvents.push(event);
     }
@@ -116,11 +115,14 @@ function blockedChains(
         currentSizeObject.blockedChains.push(eventList);
       }
     });
-    currentSizeObject.blockedChains.forEach((chain) => {
+    currentSizeObject.blockedChains.forEach((chain: Array<number>) => {
       let j = 0;
       while (
         j < blockedEventsChain.length &&
-        !isInArray(chain, blockedEventsChain[j])
+        // !isInArray(chain, blockedEventsChain[j])
+        !chain.every((eventKey: number) =>
+          blockedEventsChain[j].includes(eventKey)
+        )
       ) {
         j += 1;
       }
@@ -323,8 +325,8 @@ function setSameTimeEvents(
     // Create an eventData object which will be used to treat simultaneous events.
     eventsData.push({
       key: i,
-      beginDate: new Date(events[i].date),
-      endDate: new Date(events[i].end_date),
+      beginDate: events[i].beginDate,
+      endDate: events[i].endDate,
       blocked: false,
       size: 1,
       sameTimeEvent: [],
@@ -393,11 +395,9 @@ function isInDay(
     mondayDate.getDate()
   );
   checkEndDate.setDate(checkEndDate.getDate() + 1);
-  const eventBeginDate = new Date(event.date);
-  const eventEndDate = new Date(event.end_date);
   if (
-    betweenDate(eventBeginDate, checkBeginDate, checkEndDate) ||
-    betweenDate(checkBeginDate, eventBeginDate, eventEndDate)
+    (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
+    (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
   ) {
     sortEvents[0].push(event);
   }
@@ -405,8 +405,8 @@ function isInDay(
     checkBeginDate.setDate(checkBeginDate.getDate() + 1);
     checkEndDate.setDate(checkEndDate.getDate() + 1);
     if (
-      betweenDate(eventBeginDate, checkBeginDate, checkEndDate) ||
-      betweenDate(checkBeginDate, eventBeginDate, eventEndDate)
+      (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
+      (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
     ) {
       sortEvents[i].push({ ...event });
     }
@@ -447,18 +447,16 @@ function sortInWeek(
  * @returns An event in EventAttributes type.
  */
 function addEventICS(event: EventProps): EventAttributes {
-  const beginDate = new Date(event.date);
-  const endDate = new Date(event.end_date);
   const duration = Math.floor(
-    (endDate.getTime() - beginDate.getTime()) / 60000
+    (event.endDate.getTime() - event.beginDate.getTime()) / 60000
   );
   const eventCalendar: EventAttributes = {
     start: [
-      beginDate.getFullYear(),
-      beginDate.getMonth() + 1,
-      beginDate.getDate(),
-      beginDate.getHours(),
-      beginDate.getMinutes(),
+      event.beginDate.getFullYear(),
+      event.beginDate.getMonth() + 1,
+      event.beginDate.getDate(),
+      event.beginDate.getHours(),
+      event.beginDate.getMinutes(),
     ],
     duration: { hours: Math.floor(duration / 60), minutes: duration % 60 },
     title: event.title,
@@ -598,16 +596,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     beginOfWeek,
     endOfWeek
   );
-
-  // Delete when end_date added
-  console.log('endDate à virer');
-  sortEvents.forEach((event) => {
-    if (event.end_date === null) {
-      const endDateEvent = new Date(new Date(event.date).getTime() + 3600000);
-      event.end_date = endDateEvent.toString();
-    }
-  });
-  //
 
   const eventsWeek: {
     sortEvents: Array<Array<EventProps>>;

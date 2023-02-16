@@ -1,6 +1,9 @@
 export interface EventProps {
   color: string | null; // Color of the event card
   date: string; // Event begin date
+  end_date: string | null; // end date of the event
+  beginDate: Date; // Event begin date in Date format
+  endDate: Date; // Event begin date in Date format
   description: string; // Description of the event in html
   get_absolute_url: string; // url of the event from root url
   get_group_name: string; // name of the organiser
@@ -16,7 +19,6 @@ export interface EventProps {
   max_participant: number | null; // number max of participant
   end_inscription: string | null; // date of the end of inscription
   begin_inscription: string | null; // date of the beginning of inscription
-  end_date: string | null; // end date of the event
   ticketing: string | null; // url of inscription form
   is_favorite: boolean;
   effectiveSize?: number; // The number of horizontal parts the events will used
