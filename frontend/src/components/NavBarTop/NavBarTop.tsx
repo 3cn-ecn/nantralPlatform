@@ -13,6 +13,7 @@ import {
   MenuItem,
   ListItem,
   ListItemText,
+  Link as LinkMui,
 } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
@@ -146,26 +147,37 @@ function NavBarTop(props: {
           <Typography
             variant="h6"
             component="div"
-            color="TextPrimary"
+            color="textPrimary"
             sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             Nantral Platform
           </Typography>
-          <Link color="primaryText" to="/">
+          <LinkMui
+            component={Link}
+            to="/"
+            color="textPrimary"
+            underline="hover"
+            variant="h6"
+          >
             {t('navbar.home')}
-          </Link>
+          </LinkMui>
           {pathnames.map((value, index) => {
             const last = index === pathnames.length - 1;
             const to = `/${pathnames.slice(0, index + 1)}/`;
 
             return last ? (
-              <Typography color="text.primary" key={to}>
-                {breadcrumbNameMap[to]}
-              </Typography>
+              <Typography key={to}>{breadcrumbNameMap[to]}</Typography>
             ) : (
-              <Link color="inherit" to={to} key={to}>
+              <LinkMui
+                component={Link}
+                underline="hover"
+                color="textPrimary"
+                to={to}
+                key={to}
+                variant="h6"
+              >
                 {breadcrumbNameMap[to]}
-              </Link>
+              </LinkMui>
             );
           })}
         </Breadcrumbs>
