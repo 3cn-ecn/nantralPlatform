@@ -2,7 +2,7 @@ import React from 'react';
 import { Stack } from '@mui/material';
 import { ChangeWeek } from './ChangeWeek/ChangeWeek';
 import { DateBox } from './DateBox/DateBox';
-import { calendarView } from '../CalendarProps/CalendarProps';
+import { CalendarView } from '../CalendarProps/CalendarProps';
 
 /**
  * Create an object to choose the current week.
@@ -15,9 +15,9 @@ import { calendarView } from '../CalendarProps/CalendarProps';
  * @returns The component to change week.
  */
 export function ChooseWeek(props: {
-  step: { type: calendarView; beginDate: number };
+  step: { type: CalendarView; beginDate: number };
   updateDisplay: React.Dispatch<
-    React.SetStateAction<{ type: calendarView; beginDate: number }>
+    React.SetStateAction<{ type: CalendarView; beginDate: number }>
   >;
   beginDate: Date;
   endDate: Date;

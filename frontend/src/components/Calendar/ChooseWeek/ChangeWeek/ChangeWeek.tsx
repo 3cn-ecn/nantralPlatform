@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { calendarView } from '../../CalendarProps/CalendarProps';
+import { CalendarView } from '../../CalendarProps/CalendarProps';
 import { modulo } from '../../../../utils/maths';
 
 /**
@@ -18,9 +18,9 @@ import { modulo } from '../../../../utils/maths';
  */
 export function ChangeWeek(props: {
   action: 'previous' | 'next';
-  step: { type: calendarView; beginDate: number };
+  step: { type: CalendarView; beginDate: number };
   updateDisplay: React.Dispatch<
-    React.SetStateAction<{ type: calendarView; beginDate: number }>
+    React.SetStateAction<{ type: CalendarView; beginDate: number }>
   >;
   beginDate: Date;
   endDate: Date;

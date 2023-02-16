@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@mui/material';
-import { calendarView } from '../CalendarProps/CalendarProps';
+import { CalendarView } from '../CalendarProps/CalendarProps';
 
 /**
  * Component to change the calendar view.
@@ -9,9 +9,9 @@ import { calendarView } from '../CalendarProps/CalendarProps';
  * @returns The buttons to change the view of the calendar.
  */
 export function ChooseDisplay(props: {
-  display: { type: calendarView; beginDate: number };
+  display: { type: CalendarView; beginDate: number };
   updateDisplay: React.Dispatch<
-    React.SetStateAction<{ type: calendarView; beginDate: number }>
+    React.SetStateAction<{ type: CalendarView; beginDate: number }>
   >;
 }): JSX.Element {
   const { display, updateDisplay } = props;

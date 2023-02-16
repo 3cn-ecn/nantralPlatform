@@ -83,6 +83,41 @@ function allSameTime(
 }
 
 /**
+ * Add chains in event blochedChains.
+ * @param blockedEventsChain The list of couples events with maximal events foreach events
+ * @param currentChains A list of chains events.
+ */
+function addInBlockedChains(
+  blockedEventsChain: Array<Array<number>>,
+  currentChains: Array<Array<number>>
+): void {
+  let chainEventKey: number;
+  let isInclude: boolean;
+  currentChains.forEach((chain: Array<number>) => {
+    chainEventKey = 0;
+    if (blockedEventsChain.length > 0) {
+      isInclude = !chain.every((eventKey: number) =>
+        blockedEventsChain[chainEventKey].includes(eventKey)
+      );
+      while (isInclude) {
+        chainEventKey += 1;
+        if (chainEventKey < blockedEventsChain.length) {
+          const chainContainer = blockedEventsChain[chainEventKey];
+          isInclude = !chain.every((eventKey: number) =>
+            chainContainer.includes(eventKey)
+          );
+        } else {
+          isInclude = false;
+        }
+      }
+    }
+    if (chainEventKey >= blockedEventsChain.length) {
+      blockedEventsChain.push(chain);
+    }
+  });
+}
+
+/**
  * Get couples of events with maximal events foreach event and set the size of each event with it.
  * @param events List of events.
  * @param eventsData List of events data.
@@ -99,8 +134,8 @@ function blockedChains(
   let previousMaxSize: number;
   const blockedEventsChain = [];
   let globalSize = 1;
-  let chainEventKey: number;
-  let isInclude: boolean;
+  // let chainEventKey: number;
+  // let isInclude: boolean;
 
   eventsData.forEach((eventData) => {
     currentSizeObject.maxSize = 0;
@@ -117,28 +152,29 @@ function blockedChains(
         currentSizeObject.blockedChains.push(eventList);
       }
     });
-    currentSizeObject.blockedChains.forEach((chain: Array<number>) => {
-      chainEventKey = 0;
-      if (blockedEventsChain.length > 0) {
-        isInclude = !chain.every((eventKey: number) =>
-          blockedEventsChain[chainEventKey].includes(eventKey)
-        );
-        while (isInclude) {
-          chainEventKey += 1;
-          if (chainEventKey < blockedEventsChain.length) {
-            const chainContainer = blockedEventsChain[chainEventKey];
-            isInclude = !chain.every((eventKey: number) =>
-              chainContainer.includes(eventKey)
-            );
-          } else {
-            isInclude = false;
-          }
-        }
-      }
-      if (chainEventKey >= blockedEventsChain.length) {
-        blockedEventsChain.push(chain);
-      }
-    });
+    addInBlockedChains(blockedEventsChain, currentSizeObject.blockedChains);
+    // currentSizeObject.blockedChains.forEach((chain: Array<number>) => {
+    //   chainEventKey = 0;
+    //   if (blockedEventsChain.length > 0) {
+    //     isInclude = !chain.every((eventKey: number) =>
+    //       blockedEventsChain[chainEventKey].includes(eventKey)
+    //     );
+    //     while (isInclude) {
+    //       chainEventKey += 1;
+    //       if (chainEventKey < blockedEventsChain.length) {
+    //         const chainContainer = blockedEventsChain[chainEventKey];
+    //         isInclude = !chain.every((eventKey: number) =>
+    //           chainContainer.includes(eventKey)
+    //         );
+    //       } else {
+    //         isInclude = false;
+    //       }
+    //     }
+    //   }
+    //   if (chainEventKey >= blockedEventsChain.length) {
+    //     blockedEventsChain.push(chain);
+    //   }
+    // });
     eventData.size = currentSizeObject.maxSize;
     globalSize = ppcm(currentSizeObject.maxSize, globalSize);
   });

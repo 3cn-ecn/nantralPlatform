@@ -50,6 +50,9 @@ export function EventBlock(props: {
     <Button
       variant="contained"
       fullWidth
+      onClick={() => {
+        console.log(event);
+      }}
       style={{
         minWidth: `1px`,
         height: `${Math.min(duration, startTime) * 20}px`,
