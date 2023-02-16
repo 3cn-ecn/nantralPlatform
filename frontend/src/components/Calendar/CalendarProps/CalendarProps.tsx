@@ -8,4 +8,4 @@ export interface EventDataProps {
   coupleEvents: Array<Array<number>>; // List of simultaneous events which have all a common area of time.
 }
 
-export type calendarView = 'day' | '3Days' | 'week' | 'month';
+export type CalendarView = 'day' | '3Days' | 'week' | 'month';

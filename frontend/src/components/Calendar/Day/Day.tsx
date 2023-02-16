@@ -38,7 +38,7 @@ function sortWithPos(
  * @param dayValue The value of the day in the week.
  * @param day The day in the week.
  * @param events The list of events in corresponding day.
- * @param chains
+ * @param chains The list of blocked chains.
  * @returns The Day component.
  */
 export function Day(props: {

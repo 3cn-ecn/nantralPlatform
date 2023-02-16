@@ -4,9 +4,8 @@ import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
 import { EventProps } from 'Props/Event';
 import { ppcm } from '../../utils/maths';
-import { isInArray } from '../../utils/array';
 import { Day } from './Day/Day';
-import { EventDataProps, calendarView } from './CalendarProps/CalendarProps';
+import { EventDataProps, CalendarView } from './CalendarProps/CalendarProps';
 import { DayInfos } from './DayInfos/DayInfos';
 import { ChooseWeek } from './ChooseWeek/ChooseWeek';
 import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';
@@ -100,6 +99,9 @@ function blockedChains(
   let previousMaxSize: number;
   const blockedEventsChain = [];
   let globalSize = 1;
+  let chainEventKey: number;
+  let isInclude: boolean;
+
   eventsData.forEach((eventData) => {
     currentSizeObject.maxSize = 0;
     eventData.coupleEvents.forEach((eventList) => {
@@ -116,17 +118,24 @@ function blockedChains(
       }
     });
     currentSizeObject.blockedChains.forEach((chain: Array<number>) => {
-      let j = 0;
-      while (
-        j < blockedEventsChain.length &&
-        // !isInArray(chain, blockedEventsChain[j])
-        !chain.every((eventKey: number) =>
-          blockedEventsChain[j].includes(eventKey)
-        )
-      ) {
-        j += 1;
+      chainEventKey = 0;
+      if (blockedEventsChain.length > 0) {
+        isInclude = !chain.every((eventKey: number) =>
+          blockedEventsChain[chainEventKey].includes(eventKey)
+        );
+        while (isInclude) {
+          chainEventKey += 1;
+          if (chainEventKey < blockedEventsChain.length) {
+            const chainContainer = blockedEventsChain[chainEventKey];
+            isInclude = !chain.every((eventKey: number) =>
+              chainContainer.includes(eventKey)
+            );
+          } else {
+            isInclude = false;
+          }
+        }
       }
-      if (j >= blockedEventsChain.length) {
+      if (chainEventKey >= blockedEventsChain.length) {
         blockedEventsChain.push(chain);
       }
     });
@@ -510,7 +519,7 @@ async function callICS(events: Array<EventProps>): Promise<void> {
  * @param updateEnd The callback to update the last day of the display.
  */
 function changeDisplay(
-  display: calendarView,
+  display: CalendarView,
   beginDate: Date,
   updateBegin: React.Dispatch<React.SetStateAction<Date>>,
   updateEnd: React.Dispatch<React.SetStateAction<Date>>
@@ -557,7 +566,7 @@ function changeDisplay(
 function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { events } = props;
   const [displayData, updateDisplay] = useState<{
-    type: calendarView;
+    type: CalendarView;
     beginDate: number;
   }>({
     type: 'week',
