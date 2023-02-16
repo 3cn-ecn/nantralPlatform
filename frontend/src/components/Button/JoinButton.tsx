@@ -12,15 +12,19 @@ import {
   SxProps,
   CircularProgress,
   Typography,
+  MenuItem,
+  rgbToHex,
 } from '@mui/material';
 import axios from 'axios';
-import { grey } from '@mui/material/colors';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import * as React from 'react';
 
 import { useTranslation } from 'react-i18next';
 import { formatDate, formatTime } from '../../utils/date';
 import { UnsuscribeModal } from '../Modal/UnsuscribeModal';
+
+import theme from '../../theme';
 
 interface JoinButtonProps {
   variant?: 'shotgun' | 'normal' | 'form';
@@ -32,6 +36,9 @@ interface JoinButtonProps {
   eventSlug: string;
   beginInscription: string | null;
   endInscription: string | null;
+  unregisterOnly?: boolean;
+  setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
+  handleClick?: () => void;
 }
 
 function JoinButton({
@@ -44,11 +51,26 @@ function JoinButton({
   eventSlug,
   beginInscription,
   endInscription,
+  unregisterOnly,
+  setParticipating,
+  handleClick,
 }: JoinButtonProps): JSX.Element {
   const [selected, setSelected] = React.useState(participating);
   const [people, setPeople] = React.useState(person);
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(false);
+  React.useEffect(() => {
+    if (loaded) {
+      setSelected(participating);
+      if (participating) {
+        setPeople(people + 1);
+      } else {
+        setPeople(people - 1);
+      }
+    }
+    setLoaded(true);
+  }, [participating]);
 
   const { t } = useTranslation('translation');
   const closed: boolean =
@@ -64,8 +86,8 @@ function JoinButton({
       .post(`api/event/${eventSlug}/participate`)
       .then((res) => {
         if (res.data.success) {
-          setPeople(people + 1);
           setSelected(true);
+          setParticipating(true);
         } else {
           console.error('could not subscribe to event');
         }
@@ -80,7 +102,7 @@ function JoinButton({
       .then((res) => {
         if (res.data.success) {
           setSelected(false);
-          setPeople(people - 1);
+          setParticipating(false);
         } else {
           console.error('could not unsuscribe from event');
         }
@@ -95,6 +117,7 @@ function JoinButton({
       setLoading(true);
       quit();
     }
+    handleClick();
   };
   const onClick = () => {
     switch (variant) {
@@ -208,6 +231,23 @@ function JoinButton({
   } else {
     color = 'info';
   }
+  if (unregisterOnly) {
+    return (
+      <>
+        <MenuItem
+          onClick={() => onClick()}
+          style={{ color: rgbToHex(theme.palette.error.main) }}
+        >
+          <HighlightOffIcon
+            className="itemIcon"
+            style={{ color: rgbToHex(theme.palette.error.main) }}
+          />
+          {t('event.action_menu.unsubscribe')}
+        </MenuItem>
+        <UnsuscribeModal open={open} onClose={handleClose} />
+      </>
+    );
+  }
   return (
     <>
       <Button
@@ -235,6 +275,8 @@ JoinButton.defaultProps = {
   link: '',
   maxPerson: 0,
   sx: {},
+  unregisterOnly: false,
+  handleClick: {},
 };
 
 export default JoinButton;
