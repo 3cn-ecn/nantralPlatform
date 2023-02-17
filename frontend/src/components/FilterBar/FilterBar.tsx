@@ -32,10 +32,9 @@ interface ResultInterface {
   value: any;
 }
 
-function FilterBar() {
-  const [state, setState] = React.useState({
-    right: false,
-  });
+function FilterBar(props: { getFilter: any }) {
+  const { getFilter } = props;
+  const [open, setOpen] = React.useState(false);
   const [dateBegin, setDateBegin] = React.useState(null);
   const [dateBeginTransformed, setDateBeginTransformed] = React.useState(null);
   const [dateEndTransformed, setDateEndTransformed] = React.useState(null);
@@ -43,7 +42,6 @@ function FilterBar() {
   const [isParticipated, setIsParticipated] = React.useState(false);
   const [isShotgun, setIsShotgun] = React.useState(false);
   const [organiser, setOrganiser] = React.useState(null);
-  const [validateFilter, setValidateFilter] = React.useState(null);
 
   const getDateBegin = (newDate) => {
     setDateBegin(newDate);
@@ -57,10 +55,10 @@ function FilterBar() {
     }
   };
   const getChecked = (id, checked) => {
-    if (id === 'favoris') {
+    if (id === 'favorite') {
       setIsFavorite(checked);
     }
-    if (id === 'participe') {
+    if (id === 'participate') {
       setIsParticipated(checked);
     }
     if (id === 'shotgun') {
@@ -70,6 +68,14 @@ function FilterBar() {
   const getOrganiser = (organiserDic) => {
     setOrganiser(organiserDic);
   };
+  const currentFilter: ResultInterface[] = [
+    { id: 'dateBegin', value: { dateBeginTransformed } },
+    { id: 'dateEnd', value: { dateEndTransformed } },
+    { id: 'favorite', value: { isFavorite } },
+    { id: 'participate', value: { isParticipated } },
+    { id: 'organiser', value: { organiser } },
+    { id: 'shotgun', value: { isShotgun } },
+  ];
 
   const filters: FilterInterface[] = [
     {
@@ -128,33 +134,19 @@ function FilterBar() {
     },
   ];
 
-  const currentFilter: ResultInterface[] = [
-    { id: 'dateBegin', value: { dateBeginTransformed } },
-    { id: 'dateEnd', value: { dateEndTransformed } },
-    { id: 'favorite', value: { isFavorite } },
-    { id: 'participate', value: { isParticipated } },
-    { id: 'organiser', value: { organiser } },
-    { id: 'shotgun', value: { isShotgun } },
-  ];
+  const validate = () => {
+    setOpen(false);
+    getFilter(currentFilter);
+  };
 
-  const toggleDrawer =
-    (anchor: 'right', open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return;
-      }
-
-      setState({ ...state, [anchor]: open });
-    };
-
-  const list = (anchor: 'right') => (
+  const list = () => (
     <Box className="center" role="presentation">
       <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-        <IconButton onClick={toggleDrawer(anchor, false)}>
+        <IconButton
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
           <Close />
         </IconButton>
       </div>
@@ -184,7 +176,7 @@ function FilterBar() {
       </List>
       <div style={{ height: '15px' }}></div>
       <div>
-        <Button onClick={toggleDrawer(anchor, false)} variant="contained">
+        <Button onClick={validate} variant="contained">
           Valider
         </Button>
       </div>
@@ -197,7 +189,9 @@ function FilterBar() {
           <Button
             style={{ textTransform: 'none', padding: '2px 8px' }}
             variant="contained"
-            onClick={toggleDrawer(anchor, true)}
+            onClick={() => {
+              setOpen(true);
+            }}
             endIcon={<FilterAltIcon />}
           >
             Filtrer
@@ -205,8 +199,10 @@ function FilterBar() {
           <Drawer
             keepMounted
             anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
+            open={open}
+            onClose={() => {
+              setOpen(false);
+            }}
             sx={{
               width: 300,
               flexShrink: 0,
@@ -216,7 +212,7 @@ function FilterBar() {
               },
             }}
           >
-            {list(anchor)}
+            {list()}
           </Drawer>
         </React.Fragment>
       ))}

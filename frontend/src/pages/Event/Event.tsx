@@ -22,7 +22,7 @@ import Formular from '../../components/Formular/Formular'
  */
 function EventList(props: { events: any }) {
   const { events } = props;
-  console.log(events);
+  // console.log(events);
 
   return <p>Ceci est une liste.</p>;
 }
@@ -66,6 +66,11 @@ function EventView(props: { events: any }) {
 
 function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
+  const [filter, setFilter] = React.useState(null);
+
+  const getFilter = (validateFilter) => {
+    setFilter(validateFilter);
+  }
 
   React.useEffect(() => {
     axios.get('/api/event').then((res: any) => {
@@ -92,7 +97,7 @@ function Event() {
       <p>Ceci est la page des events</p>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Formular />
-        <FilterBar />
+        <FilterBar getFilter={getFilter}/>
       </div> 
       <EventView events={events} />
     </>
