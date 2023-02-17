@@ -10,8 +10,8 @@ import {
   CalendarToday,
   CalendarViewDay,
 } from '@mui/icons-material';
-import { EventBDDProps, EventProps } from 'Props/Event';
-import { snakeIntoCamel } from '../../utils/camel';
+import { EventProps } from 'Props/Event';
+import { snakeToCamelCase } from '../../utils/camel';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular'
@@ -20,7 +20,6 @@ import Formular from '../../components/Formular/Formular'
  * Event Page, with Welcome message, next events, etc...
  * @returns Event page component
  */
-
 function EventList(props: { events: any }) {
   const { events } = props;
   console.log(events);
@@ -70,24 +69,21 @@ function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
 
   React.useEffect(() => {
-    axios.get('/api/event').then((res) => {
-      // to change when beginDate is add in event : const eventsObject: Array<EventProps> = [];
-      const eventsObject = [];
+    axios.get('/api/event').then((res: any) => {
       
-      // delete when endDate defined forEach event
-      res.data.forEach((event: EventBDDProps) => 
+      res.data.forEach((event) => 
       { 
-        eventsObject.push(snakeIntoCamel(event, [{type2Convert: "Date", keys: ["date", "end_date"]}]));
-        if (event.end_date === null) {
-          eventsObject[eventsObject.length - 1].endDate = new Date(new Date(event.date).getTime() + 3600000);
-        }
-      });
+        // delete when date update to beginDate
+        event.begin_date = event.date;
 
-      // delete when date update to beginDate
-      eventsObject.forEach((event) => {
-        event.beginDate = event.date;
+        // delete when endDate defined forEach event
+        if (event.end_date === null) {
+          event.end_date = new Date(new Date(event.date).getTime() + 3600000);
+        }
+
+        snakeToCamelCase(event, { beginDate: 'Date', endDate: 'Date' });
       });
-      setEvents(eventsObject);
+      setEvents(res.data);
     });
   }, []);
 
