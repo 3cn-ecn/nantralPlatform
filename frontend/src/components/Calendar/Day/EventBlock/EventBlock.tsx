@@ -13,36 +13,34 @@ export function EventBlock(props: {
   event: EventProps;
 }): JSX.Element {
   const { day, event } = props;
-  const beginDate = new Date(event.date);
-  const endDate = new Date(event.end_date);
   let todayBegin = false;
   let startTime = 24;
 
   // Set the time when the event begins in the day.
-  if (beginDate.getDay() === day % 7) {
+  if (event.beginDate.getDay() === day % 7) {
     todayBegin = true;
     if (
-      beginDate.getHours() !== 0 ||
-      beginDate.getMinutes() !== 0 ||
-      beginDate.getSeconds() !== 0
+      event.beginDate.getHours() !== 0 ||
+      event.beginDate.getMinutes() !== 0 ||
+      event.beginDate.getSeconds() !== 0
     ) {
       startTime =
         23 -
-        beginDate.getHours() +
-        (59 - beginDate.getMinutes()) / 60 +
-        (60 - beginDate.getSeconds()) / 3600;
+        event.beginDate.getHours() +
+        (59 - event.beginDate.getMinutes()) / 60 +
+        (60 - event.beginDate.getSeconds()) / 3600;
     }
   }
 
   // Set the duration of the event.
   let duration: number;
   if (todayBegin) {
-    duration = (endDate.getTime() - beginDate.getTime()) / 3600000;
-  } else if (endDate.getDay() === day % 7) {
+    duration = (event.endDate.getTime() - event.beginDate.getTime()) / 3600000;
+  } else if (event.endDate.getDay() === day % 7) {
     duration =
-      endDate.getHours() +
-      endDate.getMinutes() / 60 +
-      endDate.getSeconds() / 3600;
+      event.endDate.getHours() +
+      event.endDate.getMinutes() / 60 +
+      event.endDate.getSeconds() / 3600;
   } else {
     duration = 24;
   }
@@ -50,6 +48,9 @@ export function EventBlock(props: {
     <Button
       variant="contained"
       fullWidth
+      onClick={() => {
+        console.log(event);
+      }}
       style={{
         minWidth: `1px`,
         height: `${Math.min(duration, startTime) * 20}px`,

@@ -11,6 +11,7 @@ import {
   CalendarViewDay,
 } from '@mui/icons-material';
 import { EventProps } from 'Props/Event';
+import { snakeToCamelCase } from '../../utils/camel';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular'
@@ -19,7 +20,6 @@ import Formular from '../../components/Formular/Formular'
  * Event Page, with Welcome message, next events, etc...
  * @returns Event page component
  */
-
 function EventList(props: { events: any }) {
   const { events } = props;
   console.log(events);
@@ -29,11 +29,9 @@ function EventList(props: { events: any }) {
 
 function EventCalendar(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
   return (
     <>
       <p>Ceci est un calendrier.</p>
-      <CalendarMonth></CalendarMonth>
       <Calendar events={events}></Calendar>
     </>
   );
@@ -41,7 +39,6 @@ function EventCalendar(props: { events: any }) {
 
 function EventView(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
   const [value, setValue] = React.useState('1');
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -60,7 +57,6 @@ function EventView(props: { events: any }) {
       <TabPanel value="2">
         <EventCalendar events={events}></EventCalendar>
         <CalendarMonth></CalendarMonth>
-        {/* <CalendarPicker></CalendarPicker> */}
         <CalendarViewDay></CalendarViewDay>
         <CalendarToday></CalendarToday>
       </TabPanel>
@@ -72,16 +68,21 @@ function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
 
   React.useEffect(() => {
-    axios.get('/api/event').then((eventsData) => {
-      setEvents(eventsData.data);
-      // console.log(events[0].date);
-      // console.log(eventsData.data[0].date);
-      // const a = new Date(eventsData.data[0].date);
-      // console.log(a);
-      // console.log(a.getDay());
-      // console.log(a.getDate());
-      // console.log(a.getMonth());
-      // console.log(a.getFullYear());
+    axios.get('/api/event').then((res: any) => {
+      
+      res.data.forEach((event) => 
+      { 
+        // delete when date update to beginDate
+        event.begin_date = event.date;
+
+        // delete when endDate defined forEach event
+        if (event.end_date === null) {
+          event.end_date = new Date(new Date(event.date).getTime() + 3600000);
+        }
+
+        snakeToCamelCase(event, { beginDate: 'Date', endDate: 'Date' });
+      });
+      setEvents(res.data);
     });
   }, []);
 
