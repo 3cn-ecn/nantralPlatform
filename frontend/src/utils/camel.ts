@@ -39,7 +39,6 @@ export function snakeToCamelCase<T>(
           break;
         default:
           throw new Error(`Given type ${data[key]} not implemented`);
-          break;
       }
     }
   });
