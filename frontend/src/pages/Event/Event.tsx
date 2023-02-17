@@ -32,7 +32,6 @@ function EventCalendar(props: { events: any }) {
   return (
     <>
       <p>Ceci est un calendrier.</p>
-      <CalendarMonth></CalendarMonth>
       <Calendar events={events}></Calendar>
     </>
   );
