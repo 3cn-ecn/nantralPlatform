@@ -1,14 +1,7 @@
 import * as React from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Dialog,
-  DialogTitle,
-  Modal,
-} from '@mui/material';
+import { Button, Modal } from '@mui/material';
 import './ButtonBanner.scss';
+import { formatDate } from '../../utils/date';
 
 export function ButtonBanner(props: { imageUri: string }) {
   const { imageUri } = props;
@@ -34,7 +27,8 @@ export function ButtonBanner(props: { imageUri: string }) {
         <div id="container">
           <div id="image-container">
             <h2 id="banner-title">
-              Semaine du {startDate.toDateString()} au {endDate.toDateString()}
+              Semaine du {formatDate(startDate, 'short')} au{' '}
+              {formatDate(endDate, 'short')}
             </h2>
             <img alt="" src={imageUri} id="image" />
           </div>

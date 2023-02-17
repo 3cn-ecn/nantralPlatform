@@ -1,54 +1,32 @@
 {
-  "navbar": {
-    "clubs": "Clubs and Assos",
-    "flatshare": "Flatshares Map",
-    "home": "Home",
-    "events": "Events",
-    "family": "Family",
-    "bdx": "BDX Lists",
-    "academics": "Academics",
-    "administration": "Administration",
-    "student": "Student List",
-    "signature": "Signature"
-  },
-  "user_menu": {
-    "profile": "My Profile",
-    "logout": "Log Out",
-    "bug": "Suggest / Bug",
-    "doc": "Documentation",
-    "legal": "Legal Notice",
-    "language": "Language",
-    "english": "English",
-    "french": "French",
-    "light": "Light Theme",
-    "dark": "Dark Theme",
-    "automatic": "Automatic",
-    "title_theme": "Theme",
-    "title_language": "Language",
-    "theme": "Theme"
-  },
   "button": {
-    "cancel" : "cancel",
-    "joinButton" : {
-      "unsuscribe" : "unregister",
-      "registerLink" : "register link",
-      "shotgunClosed" : "shotgun closed",
+    "cancel": "cancel",
+    "joinButton": {
       "register": "register",
-      "title": "Do you want to unregister from this event?"
+      "registerLink": "register link",
+      "shotgunClosed": "shotgun closed",
+      "title": "Do you want to unregister from this event?",
+      "unsuscribe": "unregister"
     }
   },
-  "legalNotice": {
-    "title": "Legal Notice",
-    "subtitles": {
-      "1": "Site identity",
-      "2": "The association",
-      "3": "Design and production",
-      "4": "Hosting",
-      "5": "Intellectual property",
-      "6": "Cookies",
-      "7": "Embedded content from other sites",
-      "8": "Personnal data usage"
+  "event": {
+    "action_menu": {
+      "edit": "Edit",
+      "linkCopied": "Link copied",
+      "share": "Share",
+      "unsubscribe": "Unregister"
     },
+    "no_event": "No Event"
+  },
+  "home": {
+    "myClubs": "My clubs & Assos",
+    "myEvents": "My events",
+    "seeMore": "see more",
+    "thisWeek": "This week",
+    "upcomingEvents": "Upcoming Events",
+    "welcomeTo": "Welcome to"
+  },
+  "legalNotice": {
     "paragraphs": {
       "1": {
         "lines": {
@@ -89,27 +67,51 @@
       "6": "Only a session cookie is used on the site and expires after 14 days.",
       "7": "The contents on this site may include contents from external sources (for instance videos, images, ...). These embedded contents act in the same way as if the visitor had visited the original site from where this content is based. These sites may therefore use additional cookies.",
       "8": "When you register on the site, the personal data you send us will be stored and kept by the Association des Étudiants de l'École Centrale de Nantes until you request the deletion of your user account using the contact form."
-    }
+    },
+    "subtitles": {
+      "1": "Site identity",
+      "2": "The association",
+      "3": "Design and production",
+      "4": "Hosting",
+      "5": "Intellectual property",
+      "6": "Cookies",
+      "7": "Embedded content from other sites",
+      "8": "Personnal data usage"
+    },
+    "title": "Legal Notice"
   },
-  "home" : {
-    "myEvents": "My events",
-    "upcomingEvents": "Upcoming Events",
-    "seeMore": "see more",
-    "welcomeTo": "Welcome to",
-    "myClubs": "My clubs & Assos"
-  },
-  "event" : {
-    "action_menu": {
-      "unsubscribe": "Unregister",
-      "share": "Share",
-      "linkCopied": "Link copied",
-      "edit": "Edit"
-    }
+  "navbar": {
+    "academics": "Academics",
+    "administration": "Administration",
+    "bdx": "BDX Lists",
+    "clubs": "Clubs and Assos",
+    "events": "Events",
+    "family": "Family",
+    "flatshare": "Flatshares Map",
+    "home": "Home",
+    "signature": "Signature",
+    "student": "Student List"
   },
   "notif": {
-    "title": "Notifications",
-    "unread": "Unread",
+    "load": "Loading More",
     "subscribed": "Suscribed",
-    "load": "Loading More"
+    "title": "Notifications",
+    "unread": "Unread"
+  },
+  "user_menu": {
+    "automatic": "Automatic",
+    "bug": "Suggest / Bug",
+    "dark": "Dark Theme",
+    "doc": "Documentation",
+    "english": "English",
+    "french": "French",
+    "language": "Language",
+    "legal": "Legal Notice",
+    "light": "Light Theme",
+    "logout": "Log Out",
+    "profile": "My Profile",
+    "theme": "Theme",
+    "title_language": "Language",
+    "title_theme": "Theme"
   }
 }
