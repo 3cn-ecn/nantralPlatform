@@ -20,12 +20,10 @@ export function snakeToCamelCase<T>(
   // recursive calls
   Object.keys(data).forEach((key) => {
     if (isArray(data[key])) {
-      data[key].map((val: any) => snakeToCamelCase(val, convert));
+      snakeToCamelCase(data[key], {});
     }
     if (isObject(data[key])) {
-      Object.keys(data[key]).forEach((dataKey: string) => {
-        snakeToCamelCase(data[key][dataKey], convert);
-      });
+      snakeToCamelCase(data[key], convert);
     }
   });
 
@@ -40,7 +38,7 @@ export function snakeToCamelCase<T>(
           data[key] = String(data[key]);
           break;
         default:
-          console.warn('given type not implemented');
+          throw new Error(`Given type ${data[key]} not implemented`);
           break;
       }
     }
