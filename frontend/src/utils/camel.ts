@@ -20,7 +20,7 @@ export function snakeToCamelCase<T>(
   // recursive calls
   Object.keys(data).forEach((key) => {
     if (isArray(data[key])) {
-      snakeToCamelCase(data[key], {});
+      data[key].map((val: any) => snakeToCamelCase(val, convert));
     }
     if (isObject(data[key])) {
       snakeToCamelCase(data[key], convert);
@@ -38,7 +38,7 @@ export function snakeToCamelCase<T>(
           data[key] = String(data[key]);
           break;
         default:
-          throw new Error(`Given type ${data[key]} not implemented`);
+          throw new Error(`Given type ${convert[key]} not implemented`);
       }
     }
   });
