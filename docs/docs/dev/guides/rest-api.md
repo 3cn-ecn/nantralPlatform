@@ -90,7 +90,7 @@ class EventPermission(permissions.BasePermission):
         # permission check run for all views
         return True
 
-    def has_object_permission(self, request, view, obj: Group):
+    def has_object_permission(self, request, view, obj: Event) -> bool:
         # this method is only called on views that make actions on ONE object.
         if request.method in permissions.SAFE_METHODS:
             # if the method is a safe method (GET, HEAD, OPTIONS), i.e. it
