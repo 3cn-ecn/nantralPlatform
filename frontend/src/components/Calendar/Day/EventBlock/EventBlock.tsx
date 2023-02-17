@@ -61,3 +61,5 @@ export function EventBlock(props: {
     </Button>
   );
 }
+
+// module.exports = EventBlock;
