@@ -7,3 +7,5 @@ export interface EventDataProps {
   sameTimeEvent: Array<number>; // List of simultaneous events.
   coupleEvents: Array<Array<number>>; // List of simultaneous events which have all a common area of time.
 }
+
+export type CalendarView = 'day' | '3Days' | 'week' | 'month';

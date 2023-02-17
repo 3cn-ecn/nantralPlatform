@@ -3,13 +3,12 @@ import { Button, Grid } from '@mui/material';
 import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
 import { EventProps } from 'Props/Event';
-import { betweenDate } from '../../utils/date';
-import { ppcm } from '../../utils/maths';
-import { isInArray } from '../../utils/array';
+import { modulo, ppcm } from '../../utils/maths';
 import { Day } from './Day/Day';
-import { EventDataProps } from './EventDataProps/EventDataProps';
+import { EventDataProps, CalendarView } from './CalendarProps/CalendarProps';
 import { DayInfos } from './DayInfos/DayInfos';
 import { ChooseWeek } from './ChooseWeek/ChooseWeek';
+import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';
 
 /**
  * Function that sort event date-wise.
@@ -27,8 +26,8 @@ function getEventWithDate(
   events.forEach((event) => {
     // Sort with end date too.
     if (
-      betweenDate(new Date(event.date), beginDate, endDate) ||
-      betweenDate(new Date(event.end_date), beginDate, endDate)
+      (beginDate <= event.beginDate && event.beginDate < endDate) ||
+      (event.beginDate <= beginDate && beginDate < event.endDate)
     ) {
       sortedEvents.push(event);
     }
@@ -84,6 +83,41 @@ function allSameTime(
 }
 
 /**
+ * Add chains in event blochedChains.
+ * @param blockedEventsChain The list of couples events with maximal events foreach events
+ * @param currentChains A list of chains events.
+ */
+function addInBlockedChains(
+  blockedEventsChain: Array<Array<number>>,
+  currentChains: Array<Array<number>>
+): void {
+  let chainEventKey: number;
+  let isInclude: boolean;
+  currentChains.forEach((chain: Array<number>) => {
+    chainEventKey = 0;
+    if (blockedEventsChain.length > 0) {
+      isInclude = !chain.every((eventKey: number) =>
+        blockedEventsChain[chainEventKey].includes(eventKey)
+      );
+      while (isInclude) {
+        chainEventKey += 1;
+        if (chainEventKey < blockedEventsChain.length) {
+          const chainContainer = blockedEventsChain[chainEventKey];
+          isInclude = !chain.every((eventKey: number) =>
+            chainContainer.includes(eventKey)
+          );
+        } else {
+          isInclude = false;
+        }
+      }
+    }
+    if (chainEventKey >= blockedEventsChain.length) {
+      blockedEventsChain.push(chain);
+    }
+  });
+}
+
+/**
  * Get couples of events with maximal events foreach event and set the size of each event with it.
  * @param events List of events.
  * @param eventsData List of events data.
@@ -100,6 +134,7 @@ function blockedChains(
   let previousMaxSize: number;
   const blockedEventsChain = [];
   let globalSize = 1;
+
   eventsData.forEach((eventData) => {
     currentSizeObject.maxSize = 0;
     eventData.coupleEvents.forEach((eventList) => {
@@ -115,18 +150,7 @@ function blockedChains(
         currentSizeObject.blockedChains.push(eventList);
       }
     });
-    currentSizeObject.blockedChains.forEach((chain) => {
-      let j = 0;
-      while (
-        j < blockedEventsChain.length &&
-        !isInArray(chain, blockedEventsChain[j])
-      ) {
-        j += 1;
-      }
-      if (j >= blockedEventsChain.length) {
-        blockedEventsChain.push(chain);
-      }
-    });
+    addInBlockedChains(blockedEventsChain, currentSizeObject.blockedChains);
     eventData.size = currentSizeObject.maxSize;
     globalSize = ppcm(currentSizeObject.maxSize, globalSize);
   });
@@ -322,8 +346,8 @@ function setSameTimeEvents(
     // Create an eventData object which will be used to treat simultaneous events.
     eventsData.push({
       key: i,
-      beginDate: new Date(events[i].date),
-      endDate: new Date(events[i].end_date),
+      beginDate: events[i].beginDate,
+      endDate: events[i].endDate,
       blocked: false,
       size: 1,
       sameTimeEvent: [],
@@ -392,11 +416,9 @@ function isInDay(
     mondayDate.getDate()
   );
   checkEndDate.setDate(checkEndDate.getDate() + 1);
-  const eventBeginDate = new Date(event.date);
-  const eventEndDate = new Date(event.end_date);
   if (
-    betweenDate(eventBeginDate, checkBeginDate, checkEndDate) ||
-    betweenDate(checkBeginDate, eventBeginDate, eventEndDate)
+    (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
+    (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
   ) {
     sortEvents[0].push(event);
   }
@@ -404,8 +426,8 @@ function isInDay(
     checkBeginDate.setDate(checkBeginDate.getDate() + 1);
     checkEndDate.setDate(checkEndDate.getDate() + 1);
     if (
-      betweenDate(eventBeginDate, checkBeginDate, checkEndDate) ||
-      betweenDate(checkBeginDate, eventBeginDate, eventEndDate)
+      (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
+      (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
     ) {
       sortEvents[i].push({ ...event });
     }
@@ -446,18 +468,16 @@ function sortInWeek(
  * @returns An event in EventAttributes type.
  */
 function addEventICS(event: EventProps): EventAttributes {
-  const beginDate = new Date(event.date);
-  const endDate = new Date(event.end_date);
   const duration = Math.floor(
-    (endDate.getTime() - beginDate.getTime()) / 60000
+    (event.endDate.getTime() - event.beginDate.getTime()) / 60000
   );
   const eventCalendar: EventAttributes = {
     start: [
-      beginDate.getFullYear(),
-      beginDate.getMonth() + 1,
-      beginDate.getDate(),
-      beginDate.getHours(),
-      beginDate.getMinutes(),
+      event.beginDate.getFullYear(),
+      event.beginDate.getMonth() + 1,
+      event.beginDate.getDate(),
+      event.beginDate.getHours(),
+      event.beginDate.getMinutes(),
     ],
     duration: { hours: Math.floor(duration / 60), minutes: duration % 60 },
     title: event.title,
@@ -473,7 +493,7 @@ function addEventICS(event: EventProps): EventAttributes {
  * Function which imports the events in an ics file.
  * @param events The list of events to import.
  */
-async function callICS(events: Array<EventProps>) {
+async function callICS(events: Array<EventProps>): Promise<void> {
   const filename = 'EventCalendar.ics';
   const eventsCalendar: Array<EventAttributes> = [];
   events.forEach((event) => {
@@ -504,12 +524,66 @@ async function callICS(events: Array<EventProps>) {
 }
 
 /**
+ * Change the display to the format asked.
+ * @param display The type of display.
+ * @param beginDate The first day of the display.
+ * @param updateBegin The callback to update the first day of the display.
+ * @param updateEnd The callback to update the last day of the display.
+ */
+function changeDisplay(
+  display: CalendarView,
+  beginDate: Date,
+  updateBegin: React.Dispatch<React.SetStateAction<Date>>,
+  updateEnd: React.Dispatch<React.SetStateAction<Date>>
+): void {
+  const newBeginDate = new Date(
+    beginDate.getFullYear(),
+    beginDate.getMonth(),
+    beginDate.getDate()
+  );
+  const newEndDate = new Date(
+    beginDate.getFullYear(),
+    beginDate.getMonth(),
+    beginDate.getDate()
+  );
+  switch (display) {
+    case 'day':
+      newEndDate.setDate(beginDate.getDate() + 1);
+      updateEnd(newEndDate);
+      break;
+    case '3Days':
+      newEndDate.setDate(beginDate.getDate() + 3);
+      updateEnd(newEndDate);
+      break;
+    case 'week':
+      newBeginDate.setDate(
+        newBeginDate.getDate() - modulo(newBeginDate.getDay() - 1, 7)
+      );
+      newEndDate.setDate(newBeginDate.getDate() + 7);
+      updateBegin(newBeginDate);
+      updateEnd(newEndDate);
+      break;
+    // case 'month':
+    // break;
+    default:
+      break;
+  }
+}
+
+/**
  * The calendar component which will contains all the day and events components.
  * @param event The list of events.
  * @returns The calendar component.
  */
 function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { events } = props;
+  const [displayData, updateDisplay] = useState<{
+    type: CalendarView;
+    beginDate: number;
+  }>({
+    type: 'week',
+    beginDate: 0,
+  });
 
   const tempMondayOfTheWeek = new Date();
   tempMondayOfTheWeek.setDate(
@@ -544,16 +618,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     endOfWeek
   );
 
-  // Delete when end_date added
-  console.log('endDate à virer');
-  sortEvents.forEach((event) => {
-    if (event.end_date === null) {
-      const endDateEvent = new Date(new Date(event.date).getTime() + 3600000);
-      event.end_date = endDateEvent.toString();
-    }
-  });
-  //
-
   const eventsWeek: {
     sortEvents: Array<Array<EventProps>>;
     eventsBlockedChain: Array<Array<Array<number>>>;
@@ -561,36 +625,75 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
 
   const newSortEvents = eventsWeek.sortEvents;
   const { eventsBlockedChain } = eventsWeek;
+
+  const week = [
+    ['Lundi', 1],
+    ['Mardi', 2],
+    ['Mercredi', 3],
+    ['Jeudi', 4],
+    ['Vendredi', 5],
+    ['Samedi', 6],
+    ['Dimanche', 7],
+  ];
+
+  let displaySize: Array<Array<any>>;
+  switch (displayData.type) {
+    case 'day':
+      displaySize = week.slice(
+        displayData.beginDate,
+        displayData.beginDate + 1
+      );
+      break;
+    case '3Days':
+      displaySize = week.slice(
+        displayData.beginDate,
+        displayData.beginDate + 3
+      );
+      if (displayData.beginDate + 3 > 6) {
+        displaySize = displaySize.concat(
+          week.slice(0, (displayData.beginDate + 3) % 7)
+        );
+      }
+      break;
+    case 'week':
+      displaySize = week.slice();
+      break;
+    default:
+  }
+
+  // Update the display and the view
+  React.useEffect(() => {
+    changeDisplay(displayData.type, beginOfWeek, setBeginOfWeek, setEndOfWeek);
+  }, [displayData]);
+
   return (
     <>
       <p>Le calendrier</p>
       <ChooseWeek
         key="ChooseWeekComponent"
+        step={displayData}
+        updateDisplay={updateDisplay}
         beginDate={beginOfWeek}
         endDate={endOfWeek}
         updateBegin={setBeginOfWeek}
         updateEnd={setEndOfWeek}
       ></ChooseWeek>
+      <ChooseDisplay
+        display={displayData}
+        updateDisplay={updateDisplay}
+      ></ChooseDisplay>
       <div id="Calendar" style={{ display: 'flex' }}>
         <Grid container spacing={0}>
           <Grid item xs={1}>
             <DayInfos />
           </Grid>
-          {[
-            'Lundi',
-            'Mardi',
-            'Mercredi',
-            'Jeudi',
-            'Vendredi',
-            'Samedi',
-            'Dimanche',
-          ].map((day, number) => {
+          {displaySize.map((day, number) => {
             return (
-              <Grid item xs={1.5} key={day}>
+              <Grid item xs={10.5 / displaySize.length} key={day[0]}>
                 <Day
-                  key={day}
-                  dayValue={number + 1}
-                  day={day}
+                  key={day[0]}
+                  dayValue={day[1]}
+                  day={day[0]}
                   events={newSortEvents[number]}
                   chains={eventsBlockedChain[number]}
                 />
