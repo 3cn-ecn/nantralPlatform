@@ -38,6 +38,7 @@ function sortWithPos(
  * @param dayValue The value of the day in the week.
  * @param day The day in the week.
  * @param events The list of events in corresponding day.
+ * @param chains The list of blocked chains.
  * @returns The Day component.
  */
 export function Day(props: {
@@ -64,22 +65,20 @@ export function Day(props: {
   }
 
   const eventDate = [];
-  let beginDate: Date;
 
   events.forEach((event) => {
-    beginDate = new Date(event.date);
     let startTime = 24;
-    if (beginDate.getDay() === dayValue % 7) {
+    if (event.beginDate.getDay() === dayValue % 7) {
       if (
-        beginDate.getHours() !== 0 ||
-        beginDate.getMinutes() !== 0 ||
-        beginDate.getSeconds() !== 0
+        event.beginDate.getHours() !== 0 ||
+        event.beginDate.getMinutes() !== 0 ||
+        event.beginDate.getSeconds() !== 0
       ) {
         startTime =
           23 -
-          beginDate.getHours() +
-          (59 - beginDate.getMinutes()) / 60 +
-          (60 - beginDate.getSeconds()) / 3600;
+          event.beginDate.getHours() +
+          (59 - event.beginDate.getMinutes()) / 60 +
+          (60 - event.beginDate.getSeconds()) / 3600;
       }
     }
     eventDate.push(startTime);
