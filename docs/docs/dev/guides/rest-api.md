@@ -3,7 +3,7 @@ sidebar_position: 5
 description: How to share data between the front and the back end
 ---
 
-# The Rest API
+# Rest API
 
 * **[Quick tutorial on the Django REST Framework](https://blog.logrocket.com/creating-an-app-with-react-and-django/)**
 
