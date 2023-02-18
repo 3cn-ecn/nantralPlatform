@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@mui/material';
-import { EventProps } from 'Props/Event';
+import { EventProps } from '../../../../Props/Event';
 
 /**
  * The EventBlock component, which is an event in the calendar display.

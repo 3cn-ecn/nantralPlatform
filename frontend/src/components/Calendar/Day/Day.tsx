@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from '@mui/material';
-import { EventProps } from 'Props/Event';
+import { EventProps } from '../../../Props/Event';
 import { EventBlock } from './EventBlock/EventBlock';
 import { TimeBlock } from './TimeBlock/TimeBlock';
 
@@ -89,7 +89,11 @@ export function Day(props: {
       {day}
       {dayChain}
       {chains.map((chain, number) => (
-        <Grid container key={`Chain${chain}Day${day}`}>
+        <Grid
+          container
+          key={`Chain${chain}Day${day}`}
+          sx={{ text: 'GlobalDayContainer' }}
+        >
           {chain.map((eventKey) => {
             if (placing.includes(eventKey)) {
               placing.splice(placing.indexOf(eventKey), 1);

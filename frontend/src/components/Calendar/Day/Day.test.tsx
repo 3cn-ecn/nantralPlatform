@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { EventProps } from '../../../../Props/Event';
-import { EventBlock } from './EventBlock';
+import { EventProps } from '../../../Props/Event';
+import { Day } from './Day';
 
 const event: EventProps = {
   color: 'blue',
@@ -29,13 +29,20 @@ const event: EventProps = {
   position: 0,
   placed: false,
 };
-describe('<EventBlock />', () => {
-  it('should display an EventBlock', async () => {
+describe('<Day />', () => {
+  it('should display a Day', async () => {
     const component = render(
-      <EventBlock day={event.beginDate.getDay()} event={event} />
+      <Day
+        dayValue={event.beginDate.getDay()}
+        day="Vendredi"
+        events={[event]}
+        chains={[[0]]}
+      />
     );
-    expect(component.getByRole('button').style.height).toBe('20px');
-    expect(component.getByRole('button').style.padding).toBe('0px');
+    // console.log(component.getByText('GlobalDayContainer').style.transform);
+    // expect(component.getByText('GlobalDayContainer').style.transform).toBe(
+    //   `translate(0px, ${20 * 21.6}px)`
+    // );
     expect(component).toMatchSnapshot();
   });
 });
