@@ -18,8 +18,7 @@ description: How to share data between the front and the back end
 
 ## How to create an API endpoint
 
-To show you how to create and use an API on Nantral Platform, here is a quick
-example with events.
+Let's see how to create an API endpoint with the example of events.
 
 ### The Model
 
@@ -44,6 +43,7 @@ to JSON so that they can be sent to the front end. We can add extra fields
 
 ```python title="serializers.py"
 from rest_framework import serializers, exceptions
+from .models import Event
 
 class EventSerializer(serializers.ModelSerializer):
     is_participating = serializers.SerializerMethodField()
@@ -59,8 +59,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         """Check that end_date is after begin_date"""
-        if (data['begin_date'] and data['end_date']
-                and data['begin_date'] > data['end_date']):
+        if data['begin_date'] > data['end_date']:
             # raise exception if not valid
             raise exceptions.ValidationError(
                 "The end date must be after the begin date.")
@@ -83,11 +82,14 @@ table below).
 ```python title="api_views.py"
 from rest_framework import permissions, viewsets
 from django.db import QuerySet
+from .models import Event
+from .serializers import EventSerializer
+
 
 class EventPermission(permissions.BasePermission):
 
     def has_permission(self, request, view) -> bool:
-        # permission check run for all views
+        # permission check run for all views, optional
         return True
 
     def has_object_permission(self, request, view, obj: Event) -> bool:
@@ -97,7 +99,7 @@ class EventPermission(permissions.BasePermission):
             # does not modify the database, then allow
             return True
         # else, if the method ask to modify the database (POST, PUT, PATCH, DELETE),
-        # then check that the use is an admin
+        # then check that the user is an admin
         return request.user.is_superuser
 
 
@@ -122,6 +124,7 @@ are in the `api_urls.py` file of the `event` app).
 
 ```python title="api_urls.py"
 from rest_framework import routers
+from .api_views import EventViewSet
 
 router = routers.DefaultRouter()
 router.register('event', EventViewSet, basename='event')
@@ -130,7 +133,7 @@ urlpatterns = router.urls
 
 So what are the available urls now?
 
-| HTTP Method and URL | View (or action) | Description | (1) | (2) | (3) |
+| HTTP Method and URL | View (or action) | Description | (1) | (2) | (3) |
 | -- | -- | -- | -- | -- | -- |
 | GET `/api/event/event/`           | list      | Get the list of all events defined by the queryset    | ✅ | ❌ | ❌ |
 | POST `/api/event/event/`          | create    | Create a new Event object                             | ✅ | ❌ | ✅ |
@@ -149,9 +152,9 @@ You can also add your custom actions (or views) on a ViewSet: see the
 
 ## How to use an API endpoint
 
-Let's see how to create an API endpoint with the example of events.
+Now, let's see how to use our new API endpoint in a React component:
 
-```tsx
+```tsx title="MyComponent.tsx"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import snakeToCamelCase from '../utils/snakeToCamelCase';
@@ -169,17 +172,17 @@ function MyComponent(props: {}): JSX.Element {
 
     // use useEffect to fetch the API only the first time the component is rendered
     useEffect(() => {
-        Promise.all([  // make multiple api requests at the same time
-            axios.get<Event[]>('/api/event/event/')
-            .then((res) =>
-                // convert the keys from snake_case to camelCase, and convert dates
-                // to Date objects (other types are automatically converted)
-                snakeToCamelCase(res.data, {beginDate: 'Date', endDate: 'Date'})
-            )
-            .then((eventList) => setEvents(eventList)),
-            // other api calls go here
-        ])
-        .then(() => setLoadState('success'))  // if all success
+        axios.get<Event[]>('/api/event/event/')
+        .then((res) => {
+            // get data
+            const eventList = res.data;
+            // convert the format of the keys from snake_case to camelCase, and convert
+            // dates to Date objects (other types are automatically converted)
+            snakeToCamelCase(eventList, {beginDate: 'Date', endDate: 'Date'});
+            // update the state variables
+            setEvents(eventList);
+            setLoadState('success');
+        })
         .catch(() => setLoadState('fail'));  // if error
     }, []);
 
@@ -190,6 +193,27 @@ function MyComponent(props: {}): JSX.Element {
         return <p>Échec du chargement 😢</p>
     
     // render the list of titles of the events
-    return <ul>{events.map((ev) => <li>{ev.title}</li>)}</ul>;
+    return (
+        <ul>
+            {events.map((e) =>
+                <li>{e.title}</li>
+            )}
+        </ul>
+    );
 }
 ```
+
+Some explanations on this code:
+
+* First, we declare the imports and interfaces.
+* Then, we declare the state variable (`events`) where we will stock the result of the API call.
+* Then we call our API with `axios`. We obtain a list like this:
+    ```js
+    [ { title: 'Title 1', begin_date: '2022-01-01T16:54:000Z', ...}, ...]
+    ```
+* To respect javascript conventions, we change the format of the keys
+    and convert dates from string to Date objects with the `snakeToCamelCase` function:
+    ```js
+    [ { title: 'Title 1', beginDate: Date('2022-01-01T16:54:000Z'), ...}, ...]
+    ```
+* And finally we render the data.
