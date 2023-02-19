@@ -10,8 +10,6 @@ import { Search as SearchIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { isString } from 'lodash';
 import axios from 'axios';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../../theme';
 
 /** Interface for the options */
 interface Option {
@@ -112,25 +110,26 @@ export function SearchBar(): JSX.Element {
       )}
       renderInput={(params) => (
         // component used for the input
-        <ThemeProvider theme={theme}>
-          <TextField
-            {...params}
-            hiddenLabel
-            variant="standard"
-            size="small"
-            InputProps={{
-              ...params.InputProps,
-              type: 'search',
-              placeholder: 'Search',
-              className: 'search-input',
-              startAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </ThemeProvider>
+        <TextField
+          {...params}
+          hiddenLabel
+          variant="standard"
+          sx={{
+            color: 'text.primary',
+          }}
+          size="small"
+          InputProps={{
+            ...params.InputProps,
+            type: 'search',
+            placeholder: 'Search',
+            className: 'search-input',
+            startAdornment: (
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
       )}
       onInputChange={updateOptions}
       onChange={onValidation}

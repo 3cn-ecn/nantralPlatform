@@ -12,6 +12,7 @@ import {
   Theme,
   SxProps,
   CircularProgress,
+  Typography,
   MenuItem,
   rgbToHex,
 } from '@mui/material';
@@ -150,37 +151,58 @@ function JoinButton({
     if (inscriptionNotStarted) return null;
     switch (variant) {
       case 'shotgun':
-        return <ShotgunIcon />;
+        return <ShotgunIcon sx={{ color: '#fff' }} />;
       case 'form':
-        return <LinkIcon />;
+        return <LinkIcon sx={{ color: '#fff' }} />;
       default:
-        return <PeopleIcon />;
+        return <PeopleIcon sx={{ color: '#fff' }} />;
     }
   };
   const getSecondIcon = () => {
-    if (inscriptionNotStarted) return <Info />;
-    if (closed && variant !== 'form') return <Cross />;
-    if (variant === 'normal') return selected ? <CheckIcon /> : <PlusIcon />;
+    if (inscriptionNotStarted) return <Info sx={{ color: '#fff' }} />;
+    if (closed && variant !== 'form') return <Cross sx={{ color: '#fff' }} />;
+    if (variant === 'normal')
+      return selected ? (
+        <CheckIcon sx={{ color: '#fff' }} />
+      ) : (
+        <PlusIcon sx={{ color: '#fff' }} />
+      );
     if (variant === 'shotgun') {
       if (closed && !selected) return <Cross />;
-      if (selected) return <CheckIcon />;
-      return selected ? <CheckIcon /> : <PlusIcon />;
+      if (selected) return <CheckIcon sx={{ color: '#fff' }} />;
+      return selected ? (
+        <CheckIcon sx={{ color: '#fff' }} />
+      ) : (
+        <PlusIcon sx={{ color: '#fff' }} />
+      );
     }
     return null;
   };
   const getText = () => {
     switch (variant) {
       case 'normal':
-        return inscriptionNotStarted ? 'Inscription' : people;
+        return (
+          <Typography sx={{ color: '#fff' }}>
+            {inscriptionNotStarted ? 'Inscription' : people}
+          </Typography>
+        );
       case 'shotgun':
-        return inscriptionNotStarted
-          ? `${formatDate(new Date(beginInscription), 'short')} ${formatTime(
-              new Date(beginInscription),
-              'short'
-            )}`
-          : `${people}/${maxPerson}`;
+        return (
+          <Typography sx={{ color: '#fff' }}>
+            {inscriptionNotStarted
+              ? `${formatDate(
+                  new Date(beginInscription),
+                  'short'
+                )} ${formatTime(new Date(beginInscription), 'short')}`
+              : `${people}/${maxPerson}`}
+          </Typography>
+        );
       case 'form':
-        return t('button.joinButton.register');
+        return (
+          <Typography sx={{ color: '#fff' }}>
+            {t('button.joinButton.register')}
+          </Typography>
+        );
       default:
         return people;
     }
