@@ -80,7 +80,7 @@ function Event() {
           event.end_date = new Date(new Date(event.date).getTime() + 3600000);
         }
 
-        snakeToCamelCase(event, { beginDate: 'Date', endDate: 'Date' });
+        snakeToCamelCase(event, { 'beginDate': 'Date', 'endDate': 'Date' });
       });
       setEvents(res.data);
     });
