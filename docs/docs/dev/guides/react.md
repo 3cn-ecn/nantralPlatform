@@ -1,26 +1,28 @@
 ---
 sidebar_position: 4
+description: A JavaScript library for building user interfaces. 
 ---
 
 # React
 
+* **[OpenClassrooms Tutorial](https://openclassrooms.com/fr/courses/7008001-debutez-avec-react)** (recommended, in French)
+* **[MDN Tutorial](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_getting_started)** (available in multiple languages)
+* **[Official Documentation](https://reactjs.org/)**
 
-## Tutorial
+<iframe 
+    className="youtube margin-bottom--md"
+    src="https://www.youtube-nocookie.com/embed/Tn6-PIqc4UM" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+</iframe>
 
-Did you get the basis of django? Now, it's time to learn **React**!
-You can follow the **[official tutorial of React here](https://reactjs.org/tutorial/tutorial.html)**
-to get the basis of the framework.
+Other videos to see: [JavaScript in 100s](https://www.youtube.com/watch?v=DHjqpvDnNGE)
+and [TypeScript in 100s](https://www.youtube.com/watch?v=zQnBQ4tB3ZA).
 
-:::note
-For the *Setup* section, choose the option 2: *Local development environment*.
-:::
-
-## Why we need it
-
-The framework we use for our backend can generate static html pages at runtime, on the server and serve it to the client. While this is desirable for performance reasons, this approach is not very modern, as a user expects to be able to interact with the website, like they would with a mobile application. Our server has to generate a new template everytime the user does something on the website, meaning the page has to be refreshed.
-
-Imagine that you want to play a game of tic-tac-toe, but everytime you place an X or an O, the page has to be refreshed.
-We can use a frontend framework like React.js to solve this problem for us.
+<details>
+<summary>Old version of the Front End</summary>
 
 ## How our frontend is made
 
@@ -32,15 +34,6 @@ React (optionaly, but mostly) uses a language called JSX, which allows to organi
 the frontend code in the form of components, that represents logical, reusable parts of the UI.
 You can pass arguments to components, which you can then display in its body (like
 the number of participants to an event). If the value changes, React will react and re-render the component.
-
-<iframe 
-    class="youtube"
-    src="https://www.youtube-nocookie.com/embed/Tn6-PIqc4UM" 
-    title="YouTube video player" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-    allowfullscreen>
-</iframe>
 
 ### TypeScript
 
@@ -56,29 +49,6 @@ When using TypeScript, React code becomes TSX code instead of JSX.
 It is configured through the `tsconfig.json` file in the `frontend/` folder.
 
 As this part of the codebase has already been configured, we won't go into further details on how TypeScript works, as we do not need to worry about it anymore.
-
-<details>
-    <summary>Discover Javascript in 100s 🎬</summary>
-    <iframe 
-        class="youtube"
-        src="https://www.youtube-nocookie.com/embed/DHjqpvDnNGE" 
-        title="YouTube video player" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-    </iframe>
-</details>
-<details>
-    <summary>Discover Typescript in 100s 🎬</summary>
-    <iframe 
-        class="youtube"
-        src="https://www.youtube-nocookie.com/embed/zQnBQ4tB3ZA" 
-        title="YouTube video player" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-    </iframe>
-</details>
 
 ### Node.js
 
@@ -132,3 +102,5 @@ In the HTML page you want your React code to load, add a `<div id="root"></div>`
 ```
 
 If you now try to load this page through Django, you should see a Hello World! where your div was added.
+
+</details>
