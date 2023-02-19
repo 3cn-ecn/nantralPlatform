@@ -1,0 +1,44 @@
+.upcoming-event {
+  display: block;
+  align-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container {
+  max-width: 93em;
+  padding: 1em;
+  width : 100%;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  display : block;
+}
+
+.section {
+  flex-direction: row;
+  // margin-left: 1em;
+  // margin-right: 1em;
+  display: flex;
+  align-items: center;
+  width: '100%';
+  justify-content: space-between;
+}
+
+.card {
+  margin-top : 1.3em;
+  padding-left : 0.6em;
+  padding-right : 0.6em;
+  padding-bottom : 0.6em;
+}
+.club {
+  margin-left: 0.6em;
+  margin-right: 0.6em;
+}
+.see-more {
+  text-decoration: none;
+}
+
+.section-title {
+  font-size: min(6vw, 30px);
+}
