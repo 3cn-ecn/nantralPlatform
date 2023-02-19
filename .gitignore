@@ -6,7 +6,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-*.snap
 
 # Visual Studio Code
 .history
