@@ -5,6 +5,7 @@ import {
   LinkOutlined as LinkIcon,
   LocalFireDepartment as ShotgunIcon,
   Cancel as Cross,
+  Info,
 } from '@mui/icons-material';
 import {
   Button,
@@ -158,7 +159,7 @@ function JoinButton({
     }
   };
   const getSecondIcon = () => {
-    if (inscriptionNotStarted) return null;
+    if (inscriptionNotStarted) return <Info sx={{ color: '#fff' }} />;
     if (closed && variant !== 'form') return <Cross sx={{ color: '#fff' }} />;
     if (variant === 'normal')
       return selected ? (
@@ -182,10 +183,7 @@ function JoinButton({
       case 'normal':
         return (
           <Typography sx={{ color: '#fff' }}>
-            {' '}
-            {inscriptionNotStarted
-              ? new Date(beginInscription).toLocaleTimeString()
-              : people}
+            {inscriptionNotStarted ? 'Inscription' : people}
           </Typography>
         );
       case 'shotgun':
