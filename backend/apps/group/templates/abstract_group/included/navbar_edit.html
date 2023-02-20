@@ -24,19 +24,6 @@
             <i class="fa fa-share-alt"></i> Liens
         </a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link {% if open == "events" %}active" aria-current="page{% endif %}" 
-            href="{% url object.app|add:':update-events' object.slug %}">
-            <i class="fa fa-calendar-alt"></i> Évènements
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link {% if open == "posts" %}active" aria-current="page{% endif %}"
-            href="{% url object.app|add:':update-posts' object.slug %}" >
-            <i class="fa fa-bullhorn"></i> Annonces
-        </a>
-    </li>
 </ul>
 
 <br/>
-

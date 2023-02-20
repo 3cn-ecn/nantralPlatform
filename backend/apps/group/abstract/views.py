@@ -1,6 +1,3 @@
-from datetime import timedelta
-from django.utils import timezone
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,8 +12,6 @@ from django.views.generic import View, FormView, TemplateView, DetailView
 
 from .models import AbstractGroup
 from apps.sociallink.models import SocialLink
-from apps.event.models import BaseEvent
-from apps.post.models import Post
 from apps.notification.models import Subscription
 
 from .forms import (
@@ -48,17 +43,6 @@ class BaseDetailGroupView(DetailView):
         # seulement si connecté
         context['connected'] = user_is_connected(self.request.user)
         if user_is_connected(self.request.user):
-            publication_date = timezone.make_aware(
-                timezone.now().today() - timedelta(days=10))
-            posts = Post.objects.filter(
-                group=group.full_slug,
-                publication_date__gte=publication_date
-            ).order_by('-publication_date')
-            context['posts'] = [
-                post for post in posts if post.can_view(self.request.user)]
-            date_gte = timezone.make_aware(timezone.now().today())
-            context['has_events'] = BaseEvent.objects.filter(
-                group=group.full_slug, date__gte=date_gte).exists()
             # members
             context['members'] = group.members.through.objects.filter(
                 group=group).order_by('student__user__first_name')
