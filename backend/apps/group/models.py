@@ -12,7 +12,6 @@ from django.utils.translation import gettext_lazy as _
 from django_ckeditor_5.fields import CKEditor5Field
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
-from apps.maps.models import Place, Map
 from apps.sociallink.models import SocialLink
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
@@ -54,20 +53,6 @@ class GroupType(models.Model):
         blank=True,
         null=True,
         upload_to=path_and_rename_group_type)
-
-    # Maps settings
-    map = models.ForeignKey(
-        to=Map,
-        verbose_name=_("Associated map"),
-        default=False,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        help_text=_("Groups can have a place only if a map is associated."))
-    place_required = models.BooleanField(
-        verbose_name=_("Place is required"),
-        default=False,
-        help_text=_("Only if a map is associated."))
 
     # Members settings
     is_year_group = models.BooleanField(
@@ -222,14 +207,6 @@ class Group(models.Model, SlugModel):
         to=SocialLink,
         verbose_name=_("Social networks"),
         related_name='+',
-        blank=True)
-
-    # Map data
-    place = models.ForeignKey(
-        to=Place,
-        verbose_name=_("Place attached to the group"),
-        on_delete=models.SET_NULL,
-        null=True,
         blank=True)
 
     # Log infos
