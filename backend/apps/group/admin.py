@@ -10,11 +10,12 @@ class GroupTypeAdmin(admin.ModelAdmin):
 
 class GroupAdmin(admin.ModelAdmin):
     search_fields = ['name', 'short_name']
-    list_display = ['name', 'short_name', 'group_type']
+    list_display = ['name', 'short_name', 'slug', 'group_type']
     list_filter = ['group_type', 'year', 'public', 'private', 'archived']
     exclude = ['members', 'subscribers']
     raw_id_fields = ['social_links']
     readonly_fields = [
+        'id',
         'created_by',
         'created_at',
         'updated_by',
@@ -31,8 +32,9 @@ class MembershipAdmin(admin.ModelAdmin):
         'student__user__last_name',
         'group__name',
         'group__short_name']
-    list_display = ['student', 'group', 'admin']
+    list_display = ['student', 'group', 'admin', 'id']
     list_filter = ['admin', 'group__group_type']
+    readonly_fields = ['id']
 
 
 admin.site.register(GroupType, GroupTypeAdmin)

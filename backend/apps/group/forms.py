@@ -1,25 +1,9 @@
-# spell-checker: words listeforms
 from django.forms import ModelForm, modelformset_factory
-from .models import Group, Membership
 
-# from typing import Type
-
-# from django.forms import ModelForm, BaseModelFormSet, modelformset_factory
-
-# from apps.academic.models import Course
-# from apps.administration.models import Administration
-# from apps.club.models import Club, BDX
-# from apps.liste.models import Liste
-# from apps.roommates.models import Roommates
 from apps.sociallink.models import SocialLink
 from apps.student.models import Student
-# import apps.academic.forms as academicforms
-# import apps.administration.forms as adminforms
-# import apps.club.forms as clubforms
-# import apps.liste.forms as listeforms
-# import apps.roommates.forms as roommatesforms
 
-# from .models import AdminRightsRequest
+from .models import Group, Membership
 
 
 class UpdateGroupForm(ModelForm):

@@ -71,7 +71,7 @@ class GroupTypeListView(ListView, LoginRequiredMixin):
         context['ariane'] = [
             {
                 'target': '#',
-                'label': "Groupes"
+                'label': _("Groups")
             }
         ]
         return context
@@ -117,7 +117,7 @@ class GroupListView(ListView):
         context['ariane'] = [
             {
                 'target': reverse('group:index'),
-                'label': "Groupes"
+                'label': _("Groups")
             },
             {
                 'target': '#',
@@ -171,7 +171,7 @@ class GroupDetailView(UserCanSeeGroupMixin, DetailView):
         context['ariane'] = [
             {
                 'target': reverse('group:index'),
-                'label': "Groupes"
+                'label': _("Groups")
             },
             {
                 'target': group.group_type.get_absolute_url(),
@@ -197,7 +197,7 @@ class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
         context['ariane'] = [
             {
                 'target': reverse('group:index'),
-                'label': "Groupes"
+                'label': _("Groups")
             },
             {
                 'target': self.object.group_type.get_absolute_url(),
@@ -209,7 +209,7 @@ class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
             },
             {
                 'target': '#',
-                'label': "Modifier"
+                'label': _("Edit")
             }
         ]
         return context
@@ -230,7 +230,7 @@ class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
         context['ariane'] = [
             {
                 'target': reverse('group:index'),
-                'label': "Groupes"
+                'label': _("Groups")
             },
             {
                 'target': self.object.group_type.get_absolute_url(),
@@ -242,7 +242,7 @@ class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
             },
             {
                 'target': '#',
-                'label': "Modifier"
+                'label': _("Edit")
             }
         ]
         return context
@@ -265,7 +265,7 @@ class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
         context['ariane'] = [
             {
                 'target': reverse('group:index'),
-                'label': "Groupes"
+                'label': _("Groups")
             },
             {
                 'target': self.object.group_type.get_absolute_url(),
@@ -277,7 +277,7 @@ class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
             },
             {
                 'target': '#',
-                'label': "Modifier"
+                'label': _("Edit")
             }
         ]
         return context
@@ -292,7 +292,7 @@ class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
                 group.social_links.add(sociallink)
             for sociallink in form.deleted_objects:
                 sociallink.delete()
-            messages.success(request, 'Liens modifiés')
+            messages.success(request, _("Social links updated"))
         else:
             messages.error(request, form.errors)
         return redirect('group:update-sociallinks', group.slug)
@@ -316,7 +316,7 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
         context['ariane'] = [
             {
                 'target': reverse('group:index'),
-                'label': "Groupes"
+                'label': _("Groups")
             },
             {
                 'target': self.object.group_type.get_absolute_url(),
@@ -328,7 +328,7 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
             },
             {
                 'target': '#',
-                'label': "Modifier"
+                'label': _("Edit")
             }
         ]
         return context
@@ -352,7 +352,7 @@ class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
         context['ariane'] = [
             {
                 'target': reverse('group:index'),
-                'label': "Groupes"
+                'label': _("Groups")
             },
             {
                 'target': self.object.group_type.get_absolute_url(),
@@ -364,7 +364,7 @@ class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
             },
             {
                 'target': '#',
-                'label': "Modifier"
+                'label': _("Edit")
             }
         ]
         return context
@@ -415,23 +415,23 @@ class MembershipFormView(UserCanSeeGroupMixin, FormView):
             # delete the membership
             self.group.subscribers.remove(student)
             form.instance.delete()
-            messages.success(self.request, 'Membre supprimé.')
+            messages.success(self.request, _(
+                "You are no longer a member of this group."))
         else:
             # create or update the membership
             created = form.instance.pk is None
             form.save()
             if created:
                 self.group.subscribers.add(student)
-                messages.success(self.request, 'Bienvenue dans le groupe !')
+                messages.success(self.request, _("Welcome in the group!"))
             else:
-                messages.success(
-                    self.request,
-                    'Les modifications ont bien été enregistrées !')
+                messages.success(self.request, _(
+                    "Your modifications have been saved!"))
         # return to the page
         return redirect(self.group.get_absolute_url())
 
     def form_invalid(self, form: MembershipForm):
-        messages.error(self.request, 'Modification refusée... 😥')
+        messages.error(self.request, _("Modifications failed... 😥"))
         return redirect(self.group.get_absolute_url())
 
 
@@ -454,10 +454,9 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
 
     def form_valid(self, form: AdminRequestForm) -> HttpResponse:
         membership = form.save()
-        messages.success(
-            self.request,
-            ("Votre demande a bien été envoyée ! Vous recevrez la "
-             "réponse par mail."))
+        messages.success(self.request, _(
+            "Your admin request has been sent! You will receive the answer "
+            "soon by email."))
         # send a message to the discord channel for administrators
         accept_url = self.request.build_absolute_uri(
             reverse('group:accept-admin-req', kwargs={'id': membership.id}))
@@ -480,7 +479,7 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
         return redirect(self.get_group().get_absolute_url())
 
     def form_invalid(self, form: AdminRequestForm):
-        messages.error(self.request, "Une erreur s'est produit... 😥")
+        messages.error(self.request, _("An error occurred... 😥"))
         return redirect(self.get_group().get_absolute_url())
 
 
@@ -490,10 +489,10 @@ class AcceptAdminRequestView(UserIsGroupAdminMixin, View):
         if member.admin_request:
             member.accept_admin_request()
             messages.success(request, message=(_(
-                "L'utilisateur %(user)s est maintenant admin !")
+                "The user %(user)s is now admin!")
                 % {'user': member.student}))
         else:
-            messages.error(request, message=_("Demande déjà traitée !"))
+            messages.error(request, message=_("Request already answered!"))
         return redirect(member.group.get_absolute_url())
 
 
@@ -503,8 +502,8 @@ class DenyAdminRequestView(UserIsGroupAdminMixin, View):
         if member.admin_request:
             member.deny_admin_request()
             messages.success(request, message=(_(
-                "La demande de %(user)s pour être admin a été refusée.")
+                "The admin request from %(user)s has been denied.")
                 % {'user': member.student}))
         else:
-            messages.error(request, message=_("Demande déjà traitée !"))
+            messages.error(request, message=_("Request already answered!"))
         return redirect(member.group.get_absolute_url())

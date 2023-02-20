@@ -313,9 +313,10 @@ class Group(models.Model, SlugModel):
             True if the user has admin rights.
         """
 
-        return (self.is_member(user)
+        return (user.is_superuser
+                or self.is_member(user)
                 and self.membership_set.get(student=user.student).admin
-                or user.is_superuser)
+                or self.parent.is_admin(user))
 
     def is_member(self, user: User) -> bool:
         """Check if a user is a member for this group.
@@ -420,7 +421,7 @@ class Membership(models.Model):
             'user': self.student.user
         })
         self.student.user.email_user(
-            subject=(_("Votre demande d\'admin pour %(group)s a été acceptée")
+            subject=(_("Your admin request for %(group)s has been accepted.")
                      % {'group': self.group.name}),
             message=mail,
             html_message=mail)
@@ -444,7 +445,7 @@ class Membership(models.Model):
             'user': self.student.user
         })
         self.student.user.email_user(
-            subject=(_("Votre demande d\'admin pour %(group)s a été acceptée")
+            subject=(_("Your admin request for %(group)s has been denied.")
                      % {'group': self.group.name}),
             message=mail,
             html_message=mail)
