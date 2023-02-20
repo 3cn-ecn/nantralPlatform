@@ -187,6 +187,55 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
         return context
 
 
+class ListGroupChildrenView(ListView):
+    """List of Groups, filtered by type."""
+
+    template_name = 'group/children_list.html'
+
+    def get_queryset(self) -> QuerySet[Group]:
+        user = self.request.user
+        parent = get_object_or_404(Group, slug=self.kwargs.get('slug'))
+        return (Group.objects
+                # remove the sub-groups to keep only parent groups
+                .filter(parent=parent)
+                # hide archived groups
+                .filter(archived=False)
+                # hide private groups unless user is member
+                # and hide non-public group if user is not authenticated
+                .filter(Q(private=False) | Q(members=user.student)
+                        if user.is_authenticated
+                        else Q(public=True))
+                # prefetch type and parent group for better performances
+                .prefetch_related('group_type', 'parent')
+                # order by category, order and then name
+                .order_by('order', 'short_name'))
+
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        parent = Group.objects.get(slug=self.kwargs.get('slug'))
+        context['parent'] = parent
+        context['is_admin'] = parent.is_admin(self.request.user)
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': parent.group_type.get_absolute_url(),
+                'label': parent.group_type.name
+            },
+            {
+                'target': parent.get_absolute_url(),
+                'label': parent.name
+            },
+            {
+                'target': '#',
+                'label': parent.children_label
+            }
+        ]
+        return context
+
+
 class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
     """Edit general data of a group."""
 
@@ -297,9 +346,10 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
             form.instance.year = (
                 timezone.now().year - int(timezone.now().month < 7))
         res = super().form_valid(form)
-        form.instance.members.add(
-            self.request.user.student,
-            through_defaults={'admin': True})
+        if not self.parent:
+            form.instance.members.add(
+                self.request.user.student,
+                through_defaults={'admin': True})
         return res
 
 
@@ -384,6 +434,39 @@ class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
         else:
             messages.error(request, form.errors)
         return redirect('group:update-sociallinks', group.slug)
+
+
+class UpdateGroupChildrenView(UserIsGroupAdminMixin, TemplateView):
+    """Vue pour modifier les groups enfants d'un groupe."""
+
+    template_name = 'group/edit/children.html'
+
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.name
+            },
+            {
+                'target': '#',
+                'label': _("Edit")
+            }
+        ]
+        return context
 
 
 class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):

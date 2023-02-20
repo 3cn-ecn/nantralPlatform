@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cache %}
+{% load file_url %}
+
+{% block content %}
+
+  <h1 class="position-relative">
+    {{ parent.children_label }}
+    {% if is_admin %}
+      <a
+        href="{% url 'group:create' parent.group_type.slug %}?parent={{ parent.slug }}"
+        class="btn btn-success btn-lg position-absolute end-0"
+      >Créer</a>
+    {% endif %}
+  </h1>
+  <br />
+
+  <div class="grille">
+    {% for group in group_list %}
+      <div class="grille-icon text-center" style="transform: rotate(0)">
+        <a href="{{ group.get_absolute_url }}" class="stretched-link">
+          <div class="ratio ratio-1x1">
+            {% if group.icon %}
+              <img src="{{ group.icon|file_url }}" />
+            {% else %}
+              <img src="https://avatars.dicebear.com/api/initials/{{group.short_name}}.svg" />
+            {% endif %}
+          </div>
+        </a>
+        <h6>
+          {{ group.short_name }}
+          {% if group.get_sub_category %}
+            <br>
+            <small class="text-secondary">{{ group.get_sub_category }}</small>
+          {% endif %}
+        </h6>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

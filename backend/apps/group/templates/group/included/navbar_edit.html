@@ -23,6 +23,12 @@
         </a>
     </li>
     <li class="nav-item">
+        <a class="nav-link {% if open == "children" %}active" aria-current="page{% endif %}" 
+            href="{% url 'group:update-children' group.slug %}">
+            <i class="fa fa-ring"></i> Sous-groupes
+        </a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link {% if open == "events" %}active" aria-current="page{% endif %}" 
             href="{% url 'group:update-events' group.slug %}">
             <i class="fa fa-calendar-alt"></i> Évènements

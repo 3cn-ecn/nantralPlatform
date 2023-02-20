@@ -166,6 +166,33 @@
         </div>
     {% endif %}
 
+    {# Sous-groupes #}
+    {% if group.children.count %}
+        <h2>{{ group.children_label }}</h2>
+        {% if group.children.count < 10 %}
+            <div class="grille mb-0">
+            {% for child in group.children.all %}
+                <div class="grille-icon text-center" style="transform: rotate(0)">
+                    <a href="{{ child.get_absolute_url }}" class="stretched-link">
+                        <div class="ratio ratio-1x1">
+                        {% if child.icon %}
+                            <img src="{{ child.icon|file_url }}" />
+                        {% else %}
+                            <img src="https://avatars.dicebear.com/api/initials/{{child.short_name}}.svg" />
+                        {% endif %}
+                        </div>
+                    </a>
+                    <h6>{{ child.short_name }}</h6>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p><a href="{% url 'group:children' group.slug %}">
+                Voir les {{ group.children.count }} {{ group.children_label }}
+            </a></p>
+        {% endif %}
+    {% endif %}
+
     {# Liste des membres #}
     {% if user.is_authenticated %}
         <br/>

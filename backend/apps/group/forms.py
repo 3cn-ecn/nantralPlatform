@@ -24,6 +24,7 @@ class UpdateGroupForm(ModelForm):
             'year',
             'private',
             'public',
+            'children_label',
             'archived']
 
     def __init__(self, *args, **kwargs):

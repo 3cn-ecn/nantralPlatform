@@ -147,7 +147,12 @@ class Group(models.Model, SlugModel):
         verbose_name=_("Parent group"),
         blank=True,
         null=True,
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE,
+        related_name='children')
+    children_label = models.CharField(
+        verbose_name=_("Children groups label"),
+        max_length=50,
+        default=_("Sub-groups"))
     order = models.IntegerField(
         verbose_name=_("Order"),
         default=0)
