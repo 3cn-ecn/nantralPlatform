@@ -14,6 +14,7 @@ import './FilterBar.scss';
 import IconButton from '@mui/material/IconButton';
 import { Grid } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
+import { Dayjs } from 'dayjs';
 import SimpleAccordion from '../Accordion/SimpleAccordion';
 import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
@@ -30,9 +31,8 @@ interface FilterInterface {
 function FilterBar(props: { getFilter: any }) {
   const { getFilter } = props;
   const [open, setOpen] = React.useState(false);
-  const [dateBegin, setDateBegin] = React.useState(null);
-  const [dateBeginTransformed, setDateBeginTransformed] = React.useState(null);
-  const [dateEndTransformed, setDateEndTransformed] = React.useState(null);
+  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(null);
+  const [dateEnd, setDateEnd] = React.useState(null);
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [isParticipated, setIsParticipated] = React.useState(false);
   const [isShotgun, setIsShotgun] = React.useState(false);
@@ -41,14 +41,9 @@ function FilterBar(props: { getFilter: any }) {
 
   const getDateBegin = (newDate) => {
     setDateBegin(newDate);
-    if (newDate !== null) {
-      setDateBeginTransformed(newDate.format('DD/MM/YYYY'));
-    }
   };
   const getDateEnd = (newDate) => {
-    if (newDate !== null) {
-      setDateEndTransformed(newDate.format('DD/MM/YYYY'));
-    }
+    setDateEnd(newDate);
   };
   const getChecked = (id, checked) => {
     if (id === 'favorite') {
@@ -65,8 +60,8 @@ function FilterBar(props: { getFilter: any }) {
     setOrganiser(organiserDic);
   };
 
-  currentFilter.set('dateBegin', dateBeginTransformed);
-  currentFilter.set('dateEnd', dateEndTransformed);
+  currentFilter.set('dateBegin', dateBegin);
+  currentFilter.set('dateEnd', dateEnd);
   currentFilter.set('favorite', isFavorite);
   currentFilter.set('participate', isParticipated);
   currentFilter.set('shotgun', isShotgun);
@@ -130,13 +125,6 @@ function FilterBar(props: { getFilter: any }) {
           </Grid>
         </>
       ),
-    },
-    {
-      id: 'test',
-      name: 'Test',
-      icon: <DateRangeIcon />,
-      isMenu: true,
-      content: 'test',
     },
   ];
 

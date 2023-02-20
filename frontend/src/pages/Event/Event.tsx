@@ -23,7 +23,7 @@ import Formular from '../../components/Formular/Formular'
 
 
 const filterFunction=(event:EventProps, filter: Map<string, any>) => {
-  // //logique d'union pour tous les filtres sauf date. Si le filtre est vide, affichage de tous les events.
+  // //logique d'union pour Organiser. si le filtre est vide, affichage de tous les events.
   // const keepUnion = [];
   // if (filter.get('dateBegin')=== null && filter.get('dateEnd')=== null 
   // && filter.get('shotgun')=== false  && filter.get('participate')===false 
@@ -56,13 +56,33 @@ const filterFunction=(event:EventProps, filter: Map<string, any>) => {
   if(filter.get('shotgun')===true && event.maxParticipant===null){
     return null;
   }
+
+  if(filter.get('dateBegin')!==null && filter.get('dateEnd')===null){
+    if (filter.get('dateBegin').isAfter(event.endDate)){
+      return null;
+    }
+  }
+
+  if(filter.get('dateBegin')===null && filter.get('dateEnd')!==null){
+    if (filter.get('dateEnd').isBefore(event.beginDate)){
+      return null;
+    }
+  }
+
+  if(filter.get('dateBegin')!==null && filter.get('dateEnd')!==null){
+    if (filter.get('dateBegin').isAfter(event.endDate) || filter.get('dateEnd').isBefore(event.beginDate)){
+      return null;
+    }
+
+  }
+
  
   return event;
   
 }
 
 const filterEvent=(events: Array<EventProps>, filter: Map<string, any>) => {
-  if (events !== undefined && filter !== undefined){
+  if (filter !== undefined){
     return(events.filter((event) => filterFunction(event, filter)))
   }
 
