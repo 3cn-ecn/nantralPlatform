@@ -35,7 +35,7 @@ class GroupTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupType
-        fields = ['name', 'slug', 'place_required', 'is_year_group']
+        fields = ['name', 'slug', 'is_year_group']
 
 
 class SimpleGroupSerializer(serializers.ModelSerializer):
@@ -59,7 +59,7 @@ class GroupSerializer(AdminFieldsMixin, serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        exclude = ['members', 'subscribers', 'order', 'social_links', 'place',
+        exclude = ['members', 'subscribers', 'order', 'social_links',
                    'created_at', 'created_by', 'updated_at', 'updated_by']
         read_only_fields = ['group_type', 'parent', 'url']
         admin_fields = '__all__'

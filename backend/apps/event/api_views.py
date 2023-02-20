@@ -67,13 +67,3 @@ class ListEventsGroupAPIView(generics.ListAPIView):
         date_gte = timezone.make_aware(timezone.now().today())
         return BaseEvent.objects.filter(
             group_slug=self.kwargs['group'], date__gte=date_gte)
-
-
-class UpdateEventAPIView(generics.RetrieveDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = BaseEventSerializer
-    lookup_field = 'slug'
-    lookup_url_kwarg = 'event_slug'
-
-    def get_queryset(self):
-        return BaseEvent.objects.filter(slug=self.kwargs['event_slug'])

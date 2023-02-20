@@ -95,6 +95,11 @@ class GroupType(models.Model):
         default=False,
         help_text=_("Hide groups where all 'end_date' from members are past."))
 
+    # Permissions
+    can_create = models.BooleanField(
+        verbose_name=_("Everyone can create new group"),
+        default=False)
+
     class Meta:
         verbose_name = _("group type")
         verbose_name_plural = _("group types")

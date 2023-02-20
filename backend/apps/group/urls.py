@@ -1,9 +1,11 @@
 from django.urls import path
 
 from .views import (
-    GroupTypeListView,
-    GroupListView,
-    GroupDetailView,
+    ListGroupTypeView,
+    ListGroupView,
+    DetailGroupView,
+    DeleteGroupView,
+    CreateGroupView,
     UpdateGroupView,
     UpdateGroupMembershipsView,
     UpdateGroupSocialLinksView,
@@ -15,21 +17,17 @@ from .views import (
     AcceptAdminRequestView,
     DenyAdminRequestView
 )
-# from apps.event.views import (
-#     UpdateGroupCreateEventView,
-#     UpdateGroupArchivedEventsView,
-#     UpdateGroupEventsView)
-# from apps.post.views import UpdateGroupCreatePostView, UpdateGroupPostsView
 
 app_name = 'group'
 
 urlpatterns = [
-    # main views
-    path('', GroupTypeListView.as_view(), name='index'),
-    path('<slug:type>/', GroupListView.as_view(), name='sub_index'),
-    path('@<slug:slug>/', GroupDetailView.as_view(), name='detail'),
+    # list views
+    path('', ListGroupTypeView.as_view(), name='index'),
+    path('<slug:type>/', ListGroupView.as_view(), name='sub_index'),
+    path('<slug:type>/create/', CreateGroupView.as_view(), name='create'),
 
-    # edit views (for group admins only)
+    # objet views (for group admins only)
+    path('@<slug:slug>/', DetailGroupView.as_view(), name='detail'),
     path('@<slug:slug>/edit/', UpdateGroupView.as_view(), name='update'),
     path('@<slug:slug>/edit/members/',
          UpdateGroupMembershipsView.as_view(), name='update-members'),
@@ -39,6 +37,8 @@ urlpatterns = [
          UpdateGroupEventsView.as_view(), name='update-events'),
     path('@<slug:slug>/edit/posts/',
          UpdateGroupPostsView.as_view(), name='update-posts'),
+    path('@<slug:slug>/edit/delete/',
+         DeleteGroupView.as_view(), name='delete'),
 
     # views for django forms
     path('@<slug:slug>/edit-subscription/',

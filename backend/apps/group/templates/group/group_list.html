@@ -5,7 +5,12 @@
 
 {% block content %}
 
-  <h1>{{ group_type.name }}</h1>
+  <h1 class="position-relative">
+    {{ group_type.name }}
+    {% if group_type.can_create %}
+      <a href="{% url 'group:create' group_type.slug %}" class="btn btn-success btn-lg position-absolute end-0">Créer</a>
+    {% endif %}
+  </h1>
   {% if user.is_superuser %}
     <a href="{% url 'admin:group_grouptype_change' group_type.pk %}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
       <i class="fas fa-shield-alt"></i>&nbsp; Modifier le type

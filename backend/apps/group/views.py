@@ -10,12 +10,14 @@ from django.urls.base import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.generic import (
+    CreateView,
+    DeleteView,
     DetailView,
+    FormView,
     ListView,
-    UpdateView,
     TemplateView,
-    View,
-    FormView)
+    UpdateView,
+    View)
 
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
@@ -59,7 +61,7 @@ class UserIsGroupAdminMixin(UserPassesTestMixin):
             return self.request.user.is_superuser
 
 
-class GroupTypeListView(ListView, LoginRequiredMixin):
+class ListGroupTypeView(ListView, LoginRequiredMixin):
     """List of GroupTypes."""
 
     model = GroupType
@@ -77,7 +79,7 @@ class GroupTypeListView(ListView, LoginRequiredMixin):
         return context
 
 
-class GroupListView(ListView):
+class ListGroupView(ListView):
     """List of Groups, filtered by type."""
 
     template_name = 'group/group_list.html'
@@ -127,7 +129,7 @@ class GroupListView(ListView):
         return context
 
 
-class GroupDetailView(UserCanSeeGroupMixin, DetailView):
+class DetailGroupView(UserCanSeeGroupMixin, DetailView):
     """The page for details on a group."""
 
     template_name = 'group/detail.html'
@@ -213,6 +215,92 @@ class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
             }
         ]
         return context
+
+
+class DeleteGroupView(UserIsGroupAdminMixin, DeleteView):
+    """Delete a group."""
+
+    template_name = 'group/edit/delete.html'
+    model = Group
+    slug_field = 'slug'
+
+    def get_success_url(self) -> str:
+        return self.object.group_type.get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.name
+            },
+            {
+                'target': '#',
+                'label': _("Edit")
+            }
+        ]
+        return context
+
+
+class CreateGroupView(UserPassesTestMixin, CreateView):
+    """Create a group"""
+
+    template_name = 'group/edit/create.html'
+    model = Group
+    fields = ['name', 'short_name', 'summary', 'description', 'meeting_place',
+              'meeting_hour', 'icon', 'banner', 'video1', 'video2', 'public']
+
+    def test_func(self) -> bool:
+        self.group_type = get_object_or_404(GroupType, slug=self.kwargs['type'])
+        self.parent = Group.objects.filter(
+            slug=self.request.GET.get('parent', None)).first()
+        return (self.request.user.is_superuser
+                or self.group_type.can_create
+                or self.parent and self.parent.is_admin(self.request.user))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.group_type.get_absolute_url(),
+                'label': self.group_type.name
+            },
+            {
+                'target': '#',
+                'label': _("Create")
+            }
+        ]
+        return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.instance.group_type = self.group_type
+        form.instance.parent = self.parent
+        return form
+
+    def form_valid(self, form):
+        if self.group_type.is_year_group:
+            # We add by default the current year.
+            # The change of year is placed on 1st July.
+            form.instance.year = (
+                timezone.now().year - int(timezone.now().month < 7))
+        res = super().form_valid(form)
+        form.instance.members.add(
+            self.request.user.student,
+            through_defaults={'admin': True})
+        return res
 
 
 class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
