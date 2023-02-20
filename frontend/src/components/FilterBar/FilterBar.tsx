@@ -99,7 +99,11 @@ function FilterBar(props: { getFilter: any }) {
       name: 'Organisateur',
       icon: <GroupsIcon />,
       isMenu: true,
-      content: <CheckboxesTags label="Organisateur" getResult={getOrganiser} />,
+      content: (
+        <Grid item xs="auto">
+          <CheckboxesTags label="Organisateur" getResult={getOrganiser} />
+        </Grid>
+      ),
     },
     {
       id: 'date',
@@ -126,6 +130,13 @@ function FilterBar(props: { getFilter: any }) {
           </Grid>
         </>
       ),
+    },
+    {
+      id: 'test',
+      name: 'Test',
+      icon: <DateRangeIcon />,
+      isMenu: true,
+      content: 'test',
     },
   ];
 

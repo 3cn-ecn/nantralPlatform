@@ -22,12 +22,17 @@ export default function BasicDatePicker(props: {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
+    <LocalizationProvider
+      dateAdapter={AdapterDayjs}
+      adapterLocale="fr"
+      style={{ width: 230 }}
+    >
       <DatePicker
         minDate={minDate}
         label={label}
         value={valueDebut}
         onChange={handleChange}
+        toolbarTitle="dd/mm/yyyy"
         renderInput={(params) => <TextField {...params} />}
       />
     </LocalizationProvider>
