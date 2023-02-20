@@ -6,7 +6,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import (
     UpdateView, DetailView, CreateView, DeleteView)
 
-from .models import BaseEvent
+from .models import Event
 
 from apps.group.models import Group
 from apps.notification.models import SentNotification
@@ -14,12 +14,12 @@ from apps.notification.models import SentNotification
 
 class EventDetailView(LoginRequiredMixin, DetailView):
     template_name = 'event/detail.html'
-    model = BaseEvent
+    model = Event
     slug_field = 'slug'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        event: BaseEvent = self.object
+        event: Event = self.object
         # mark it as read
         SentNotification.objects.filter(
             student=self.request.user.student,
@@ -49,7 +49,7 @@ class EventUpdateView(UserPassesTestMixin, UpdateView):
     template_name = 'event/update.html'
     fields = ['title', 'description', 'location',
               'date', 'publicity', 'color', 'image']
-    model = BaseEvent
+    model = Event
     slug_field = 'slug'
 
     def test_func(self) -> bool:
@@ -79,7 +79,7 @@ class EventDeleteView(UserPassesTestMixin, DeleteView):
     """Delete an event"""
 
     template_name = 'event/delete.html'
-    model = BaseEvent
+    model = Event
     slug_field = 'slug'
     success_url = reverse_lazy('home:home')
 
@@ -112,7 +112,7 @@ class EventCreateView(UserPassesTestMixin, CreateView):
     template_name = 'event/create.html'
     fields = ['title', 'description', 'location',
               'date', 'publicity', 'color', 'image']
-    model = BaseEvent
+    model = Event
 
     def test_func(self) -> bool:
         group = get_object_or_404(Group, slug=self.kwargs['group'])
@@ -141,7 +141,7 @@ class EventCreateView(UserPassesTestMixin, CreateView):
 @login_required
 def add_participant(request, slug):
     """Adds the user to the list of participants."""
-    event = get_object_or_404(BaseEvent, slug=slug)
+    event = get_object_or_404(Event, slug=slug)
     event.participants.add(request.user.student)
     if request.GET.get('redirect'):
         return redirect('home:home')
@@ -152,7 +152,7 @@ def add_participant(request, slug):
 @login_required
 def remove_participant(request, slug):
     """Removes the user from the list of participants."""
-    event = get_object_or_404(BaseEvent, slug=slug)
+    event = get_object_or_404(Event, slug=slug)
     event.participants.remove(request.user.student)
     if request.GET.get('redirect'):
         return redirect('home:home')

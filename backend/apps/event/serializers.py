@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from .models import BaseEvent
+from .models import Event
 from apps.student.models import Student
 
 
-class BaseEventSerializer(serializers.ModelSerializer):
+class EventSerializer(serializers.ModelSerializer):
     number_of_participants = serializers.ReadOnlyField()
     get_absolute_url = serializers.ReadOnlyField()
     group_name = serializers.SerializerMethodField()
@@ -12,7 +12,7 @@ class BaseEventSerializer(serializers.ModelSerializer):
     is_member = serializers.SerializerMethodField()
 
     class Meta:
-        model = BaseEvent
+        model = Event
         fields = [
             'title',
             'description',

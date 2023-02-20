@@ -12,7 +12,7 @@ from apps.utils.upload import PathAndRename
 path_and_rename = PathAndRename("events/pictures")
 
 
-class BaseEvent(AbstractPost):
+class Event(AbstractPost):
     """
     A basic event model for groups
     """
@@ -55,7 +55,7 @@ class BaseEvent(AbstractPost):
             title=self.group.name,
             body=f'Nouvel event : {self.title}')
         # save again the event
-        super(BaseEvent, self).save(*args, **kwargs)
+        super(Event, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('event:detail', args=[self.slug])

@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.club.models import Club
-from apps.event.models import BaseEvent
+from apps.event.models import Event
 from apps.post.models import VISIBILITY
 from apps.utils.utest import TestMixin
 
@@ -21,7 +21,7 @@ class TestHomeView(TestCase, TestMixin):
     def test_home_view_events(self):
         """Test wether the home view displays events
         correctly."""
-        self.past = BaseEvent.objects.create(
+        self.past = Event.objects.create(
             date=timezone.now() - timedelta(days=1),
             title='An Event in the past',
             description="",
@@ -29,7 +29,7 @@ class TestHomeView(TestCase, TestMixin):
             group=self.test_club.full_slug,
             publicity=VISIBILITY[0][0],
         )
-        self.today = BaseEvent.objects.create(
+        self.today = Event.objects.create(
             date=timezone.now(),
             title='An Event today',
             description="",
@@ -37,7 +37,7 @@ class TestHomeView(TestCase, TestMixin):
             group=self.test_club.full_slug,
             publicity=VISIBILITY[0][0]
         )
-        self.tomorrow = BaseEvent.objects.create(
+        self.tomorrow = Event.objects.create(
             date=timezone.now() + timedelta(days=1),
             title='An Event tomorrow',
             description="",
@@ -45,7 +45,7 @@ class TestHomeView(TestCase, TestMixin):
             group=self.test_club.full_slug,
             publicity=VISIBILITY[0][0]
         )
-        self.future = BaseEvent.objects.create(
+        self.future = Event.objects.create(
             date=timezone.now() + timedelta(days=10),
             title='An Event in the distant future',
             description="",
@@ -53,7 +53,7 @@ class TestHomeView(TestCase, TestMixin):
             group=self.test_club.full_slug,
             publicity=VISIBILITY[0][0]
         )
-        self.assertEqual(len(BaseEvent.objects.all()), 4)
+        self.assertEqual(len(Event.objects.all()), 4)
 
         self.client.login(username=self.u1.username, password=self.PASSWORD)
         # Test if / loads

@@ -21,7 +21,7 @@ from django.views.generic import (
 
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
-from apps.event.models import BaseEvent
+from apps.event.models import Event
 from apps.post.models import Post
 
 from .models import GroupType, Group, Membership
@@ -151,7 +151,7 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
             ).order_by('-publication_date')
             context['posts'] = [p for p in all_posts if p.can_view(user)][:3]
             # check if there are some events planned for this group
-            context['has_events'] = BaseEvent.objects.filter(
+            context['has_events'] = Event.objects.filter(
                 group_slug=group.slug,
                 date__gte=timezone.now()
             ).exists()
@@ -481,7 +481,7 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         self.object = self.get_object()
         context['group'] = self.object
-        context['events'] = (BaseEvent.objects
+        context['events'] = (Event.objects
                              .filter(group_slug=self.object.slug)
                              .order_by('-date'))
         context['ariane'] = [

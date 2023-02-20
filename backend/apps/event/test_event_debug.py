@@ -2,7 +2,7 @@
 import os
 from django.conf import settings
 from django.db import migrations
-from apps.event.models import BaseEvent
+from apps.event.models import Event
 from apps.club.models import Club
 from apps.student.models import Student
 import random
@@ -22,7 +22,7 @@ def create_events(apps, schema_editor):
         random_date = timezone.now() + timedelta(days=random.randint(1, 20))
         # For some reason, slugs are appended with a '-1'
         # so we have to add it manually or it won't find anything
-        new_event = BaseEvent.objects.create(
+        new_event = Event.objects.create(
             group_slug=f'{clubs[club_id].full_slug}-1',
             date=random_date,
             **event

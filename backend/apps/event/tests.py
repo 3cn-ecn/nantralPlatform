@@ -3,12 +3,12 @@ from django.utils import timezone
 from django.urls import reverse
 from rest_framework import status
 
-from .models import BaseEvent
+from .models import Event
 from apps.club.models import Club
 from apps.utils.utest import TestMixin
 
 
-class BaseEventTestCase(TestCase, TestMixin):
+class EventTestCase(TestCase, TestMixin):
 
     def setUp(self) -> None:
         self.user_setup()
@@ -19,13 +19,13 @@ class BaseEventTestCase(TestCase, TestMixin):
             group=self.club,
             admin=True
         )
-        self.event = BaseEvent.objects.create(
+        self.event = Event.objects.create(
             title="TestEvent",
             group_slug=self.club.full_slug,
             date=timezone.now(),
             description="Test Desc",
             location="Amphi A")
-        self.assertEqual(len(BaseEvent.objects.all()), 1)
+        self.assertEqual(len(Event.objects.all()), 1)
 
     def tearDown(self):
         self.user_teardown()

@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import BaseEvent
+from .models import Event
 
 
-class BaseEventAdmin(admin.ModelAdmin):
+class EventAdmin(admin.ModelAdmin):
     list_display = ['title', 'date', 'group_slug']
 
 
-admin.site.register(BaseEvent, BaseEventAdmin)
+admin.site.register(Event, EventAdmin)
