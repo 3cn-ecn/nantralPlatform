@@ -20,6 +20,55 @@ import Formular from '../../components/Formular/Formular'
  * Event Page, with Welcome message, next events, etc...
  * @returns Event page component
  */
+
+
+const filterFunction=(event:EventProps, filter: Map<string, any>) => {
+  // //logique d'union pour tous les filtres sauf date. Si le filtre est vide, affichage de tous les events.
+  // const keepUnion = [];
+  // if (filter.get('dateBegin')=== null && filter.get('dateEnd')=== null 
+  // && filter.get('shotgun')=== false  && filter.get('participate')===false 
+  // && filter.get('favorite')===false && filter.get('organiser')!==null){  
+  //   return event;
+  // }
+  // if(filter.get('favorite')===true && event.isFavorite===true){
+  //   keepUnion.push(true);
+  // } else {
+  //   keepUnion.push(false);
+  // }
+  // if(filter.get('participate')===true && event.isParticipating===true){
+  //   keepUnion.push(true);
+  // } else {
+  //   keepUnion.push(false);
+  // }
+  // if (keepUnion.includes(true)){
+  // return event} 
+  // return null;
+
+  // logique exclusive partout
+  if(filter.get('favorite')===true && event.isFavorite!==true){
+    return null;
+  }
+  
+  if(filter.get('participate')===true && event.isParticipating!==true){
+    return null;
+  }
+
+  if(filter.get('shotgun')===true && event.maxParticipant===null){
+    return null;
+  }
+ 
+  return event;
+  
+}
+
+const filterEvent=(events: Array<EventProps>, filter: Map<string, any>) => {
+  if (events !== undefined && filter !== undefined){
+    return(events.filter((event) => filterFunction(event, filter)))
+  }
+
+  return events;
+}
+
 function EventList(props: { events: any }) {
   const { events } = props;
   // console.log(events);
@@ -66,11 +115,12 @@ function EventView(props: { events: any }) {
 
 function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [filter, setFilter] = React.useState(null);
+  const [filter, setFilter] = React.useState<Map<string,any>>();
 
   const getFilter = (validateFilter) => {
     setFilter(validateFilter);
   }
+ console.log(filterEvent(events, filter));
 
   React.useEffect(() => {
     axios.get('/api/event').then((res: any) => {
@@ -99,7 +149,7 @@ function Event() {
         <Formular />
         <FilterBar getFilter={getFilter}/>
       </div> 
-      <EventView events={events} />
+      <EventView events={events}/>
     </>
   );
 }

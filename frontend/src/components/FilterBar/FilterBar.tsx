@@ -27,11 +27,6 @@ interface FilterInterface {
   content: any;
 }
 
-interface ResultInterface {
-  id: string;
-  value: any;
-}
-
 function FilterBar(props: { getFilter: any }) {
   const { getFilter } = props;
   const [open, setOpen] = React.useState(false);
@@ -42,6 +37,7 @@ function FilterBar(props: { getFilter: any }) {
   const [isParticipated, setIsParticipated] = React.useState(false);
   const [isShotgun, setIsShotgun] = React.useState(false);
   const [organiser, setOrganiser] = React.useState(null);
+  const currentFilter = new Map();
 
   const getDateBegin = (newDate) => {
     setDateBegin(newDate);
@@ -68,16 +64,43 @@ function FilterBar(props: { getFilter: any }) {
   const getOrganiser = (organiserDic) => {
     setOrganiser(organiserDic);
   };
-  const currentFilter: ResultInterface[] = [
-    { id: 'dateBegin', value: { dateBeginTransformed } },
-    { id: 'dateEnd', value: { dateEndTransformed } },
-    { id: 'favorite', value: { isFavorite } },
-    { id: 'participate', value: { isParticipated } },
-    { id: 'organiser', value: { organiser } },
-    { id: 'shotgun', value: { isShotgun } },
-  ];
+
+  currentFilter.set('dateBegin', dateBeginTransformed);
+  currentFilter.set('dateEnd', dateEndTransformed);
+  currentFilter.set('favorite', isFavorite);
+  currentFilter.set('participate', isParticipated);
+  currentFilter.set('shotgun', isShotgun);
+  currentFilter.set('organiser', organiser);
 
   const filters: FilterInterface[] = [
+    {
+      id: 'favorite',
+      name: 'Favoris',
+      icon: <FavoriteIcon />,
+      isMenu: false,
+      content: null,
+    },
+    {
+      id: 'participate',
+      name: 'Je participe',
+      icon: <PersonIcon />,
+      isMenu: false,
+      content: null,
+    },
+    {
+      id: 'shotgun',
+      name: 'Shotgun',
+      icon: <TimerIcon />,
+      isMenu: false,
+      content: null,
+    },
+    {
+      id: 'organiser',
+      name: 'Organisateur',
+      icon: <GroupsIcon />,
+      isMenu: true,
+      content: <CheckboxesTags label="Organisateur" getResult={getOrganiser} />,
+    },
     {
       id: 'date',
       name: 'Date',
@@ -103,34 +126,6 @@ function FilterBar(props: { getFilter: any }) {
           </Grid>
         </>
       ),
-    },
-    {
-      id: 'favorite',
-      name: 'Favoris',
-      icon: <FavoriteIcon />,
-      isMenu: false,
-      content: null,
-    },
-    {
-      id: 'participate',
-      name: 'Je participe',
-      icon: <PersonIcon />,
-      isMenu: false,
-      content: null,
-    },
-    {
-      id: 'organiser',
-      name: 'Organisateur',
-      icon: <GroupsIcon />,
-      isMenu: true,
-      content: <CheckboxesTags label="Organisateur" getResult={getOrganiser} />,
-    },
-    {
-      id: 'shotgun',
-      name: 'Shotgun',
-      icon: <TimerIcon />,
-      isMenu: false,
-      content: null,
     },
   ];
 
