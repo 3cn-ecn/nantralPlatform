@@ -16,47 +16,30 @@ import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular'
 
+
+
 /**
- * Event Page, with Welcome message, next events, etc...
- * @returns Event page component
+ * Function used to filter a single event depending on the state of the filterbar
+ * @returns event if it matches the filter, null if not
  */
-
-
 const filterFunction=(event:EventProps, filter: Map<string, any>) => {
-  // //logique d'union pour Organiser. si le filtre est vide, affichage de tous les events.
-  // const keepUnion = [];
-  // if (filter.get('dateBegin')=== null && filter.get('dateEnd')=== null 
-  // && filter.get('shotgun')=== false  && filter.get('participate')===false 
-  // && filter.get('favorite')===false && filter.get('organiser')!==null){  
-  //   return event;
-  // }
-  // if(filter.get('favorite')===true && event.isFavorite===true){
-  //   keepUnion.push(true);
-  // } else {
-  //   keepUnion.push(false);
-  // }
-  // if(filter.get('participate')===true && event.isParticipating===true){
-  //   keepUnion.push(true);
-  // } else {
-  //   keepUnion.push(false);
-  // }
-  // if (keepUnion.includes(true)){
-  // return event} 
-  // return null;
 
-  // logique exclusive partout
+  // filter for favorite events
   if(filter.get('favorite')===true && event.isFavorite!==true){
     return null;
   }
   
+  // filter for participated events
   if(filter.get('participate')===true && event.isParticipating!==true){
     return null;
   }
 
+  // filter for shotgun events
   if(filter.get('shotgun')===true && event.maxParticipant===null){
     return null;
   }
 
+  // filter for date
   if(filter.get('dateBegin')!==null && filter.get('dateEnd')===null){
     if (filter.get('dateBegin').isAfter(event.endDate)){
       return null;
@@ -73,14 +56,20 @@ const filterFunction=(event:EventProps, filter: Map<string, any>) => {
     if (filter.get('dateBegin').isAfter(event.endDate) || filter.get('dateEnd').isBefore(event.beginDate)){
       return null;
     }
-
   }
 
+  // filter for organiser
  
   return event;
   
 }
 
+/**
+ * Function used to filter all the events
+ * @param events all events from the database
+ * @param filter filter chosen by the user in the filterbar
+ * @returns events filtered if there is a filter, all events if not
+ */
 const filterEvent=(events: Array<EventProps>, filter: Map<string, any>) => {
   if (filter !== undefined){
     return(events.filter((event) => filterFunction(event, filter)))
@@ -133,6 +122,10 @@ function EventView(props: { events: any }) {
   );
 }
 
+/**
+ * Event Page, with Welcome message, next events, etc...
+ * @returns Event page component
+ */
 function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
   const [filter, setFilter] = React.useState<Map<string,any>>();
