@@ -24,7 +24,7 @@ import Formular from '../../components/Formular/Formular'
  */
 const filterFunction=(event:EventProps, filter: Map<string, any>) => {
 
-  // filter for favorite events
+  // filter for checkboxes
   if((filter.get('favorite')===true && event.isFavorite!==true)||
   (filter.get('participate')===true && event.isParticipating!==true)||
   (filter.get('shotgun')===true && event.maxParticipant===null)){
@@ -32,20 +32,14 @@ const filterFunction=(event:EventProps, filter: Map<string, any>) => {
   }
 
   // filter for date
-  if(filter.get('dateBegin')!==null && filter.get('dateEnd')===null){
+  if(filter.get('dateBegin')!==null){
     if (filter.get('dateBegin').isAfter(event.endDate)){
       return null;
     }
   }
 
-  if(filter.get('dateBegin')===null && filter.get('dateEnd')!==null){
+  if(filter.get('dateEnd')!==null){
     if (filter.get('dateEnd').isBefore(event.beginDate)){
-      return null;
-    }
-  }
-
-  if(filter.get('dateBegin')!==null && filter.get('dateEnd')!==null){
-    if (filter.get('dateBegin').isAfter(event.endDate) || filter.get('dateEnd').isBefore(event.beginDate)){
       return null;
     }
   }
