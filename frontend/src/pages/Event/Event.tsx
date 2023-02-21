@@ -21,6 +21,7 @@ import Formular from '../../components/Formular/Formular'
 /**
  * Function used to filter a single event depending on the state of the filterbar
  * @returns event if it matches the filter, null if not
+ * @TODO move this function to backend
  */
 const filterFunction=(event:EventProps, filter: Map<string, any>) => {
 
@@ -55,6 +56,7 @@ const filterFunction=(event:EventProps, filter: Map<string, any>) => {
  * @param events all events from the database
  * @param filter filter chosen by the user in the filterbar
  * @returns events filtered if there is a filter, all events if not
+ * @todo move this function to backend
  */
 const filterEvent=(events: Array<EventProps>, filter: Map<string, any>) => {
   if (filter !== undefined){
