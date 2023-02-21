@@ -25,6 +25,9 @@ const darktheme = createTheme({
     text: {
       primary: '#fff',
     },
+    success: {
+      main: '#2e7d32',
+    },
   },
   overrides: {
     MuiAppBar: {
