@@ -66,7 +66,6 @@ class ListGroupTypeView(ListView, LoginRequiredMixin):
 
     model = GroupType
     template_name = 'group/group_type_list.html'
-    # ordering = ['-order', 'name']
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
@@ -208,7 +207,7 @@ class ListGroupChildrenView(ListView):
                 # prefetch type and parent group for better performances
                 .prefetch_related('group_type', 'parent')
                 # order by category, order and then name
-                .order_by('order', 'short_name'))
+                .order_by('-priority', 'short_name'))
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)

@@ -59,7 +59,7 @@ class GroupSerializer(AdminFieldsMixin, serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        exclude = ['members', 'subscribers', 'order', 'social_links',
+        exclude = ['members', 'subscribers', 'priority', 'social_links',
                    'created_at', 'created_by', 'updated_at', 'updated_by']
         read_only_fields = ['group_type', 'parent', 'url']
         admin_fields = '__all__'
@@ -92,9 +92,10 @@ class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Membership
         fields = ['id', 'student', 'group', 'summary', 'description',
-                  'begin_date', 'end_date', 'order', 'admin', 'admin_request']
+                  'begin_date', 'end_date', 'priority', 'admin',
+                  'admin_request']
         read_only_fields = ['id', 'student', 'group', 'admin_request']
-        admin_fields = ['order', 'admin']
+        admin_fields = ['priority', 'admin']
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         if (data['begin_date'] and data['end_date']

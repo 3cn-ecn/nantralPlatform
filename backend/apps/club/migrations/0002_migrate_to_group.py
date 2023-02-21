@@ -18,7 +18,7 @@ def forwards(apps, schema_editor):
     gt = GroupType.objects.create(
         name="Clubs & Assos",
         slug='club',
-        sort_fields='parent,-order,short_name',
+        sort_fields='parent,-priority,short_name',
         category_expr='f"Clubs {group.parent.short_name}" if group.parent else "Associations"',
     )
     if not SocialNetwork.objects.filter(name='Email').exists():
@@ -46,7 +46,8 @@ def forwards(apps, schema_editor):
             banner=club.banniere,
             video1=club.video1,
             video2=club.video2,
-            slug=club.slug
+            slug=club.slug,
+            priority=club.order
         )
         if hasattr(club, 'bdx'):
             bdx[club.id] = g
@@ -57,7 +58,7 @@ def forwards(apps, schema_editor):
                 'description': m.function if len(m.function) > 50 else '',
                 'begin_date': m.date_begin,
                 'end_date': m.date_end if m.date_end else (m.date_begin + timedelta(days=365)),
-                'order': m.order,
+                'priority': m.order,
             })
         for s in Subscription.objects.filter(page=f"club--{club.slug}"):
             g.subscribers.add(s.student)
@@ -115,7 +116,7 @@ def reverse(apps, schema_editor):
                 'function': m.summary,
                 'date_begin': m.begin_date,
                 'date_end': m.end_date,
-                'order': m.order,
+                'order': m.priority,
             })
         for student in group.subscribers.all():
             Subscription.objects.create(student=student, page=f"club--{c.slug}")
@@ -129,7 +130,6 @@ def reverse(apps, schema_editor):
             s.slug = f"club--{c.slug}"
             s.save()
     # delete all group objects
-    Group.objects.filter(group_type__slug='club').delete()
     GroupType.objects.filter(slug='club').delete()
 
 
@@ -137,6 +137,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('club', '0001_alter_namedmembershipclub_date_begin'),
+        ('liste', '0015_migrate_to_group'),
         ('group', '0010_group_grouptype_tag_membership_label_and_more'),
         ('notification', '0003_alter_notification_publicity'),
         ('event', '0011_rename_baseevent_event'),

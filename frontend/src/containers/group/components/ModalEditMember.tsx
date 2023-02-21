@@ -80,7 +80,7 @@ function createBlankMember(group: Group, student: Student): Membership {
     begin_date: today,
     end_date: oneYearLater,
     admin: false,
-    order: 0
+    priority: 0
   };
   return member;
 }

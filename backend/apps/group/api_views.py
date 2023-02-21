@@ -153,7 +153,7 @@ class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
                 Q(end_date__gte=from_date) if from_date else Q(),
                 Q(begin_date__lt=to_date) if to_date else Q())
             # order fields
-            .order_by('-order',
+            .order_by('-priority',
                       'student__user__first_name',
                       'student__user__last_name')
             .prefetch_related('student__user'))
@@ -174,7 +174,7 @@ class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
     @decorators.action(detail=False, methods=['post'])
     def reorder(self, request, *args, **kwargs):
         """
-        Action to reorder a membership. It changes the 'order' fields for all
+        Action to reorder a membership. It changes the 'priority' fields for all
         members of a group to place the member between two other members, in the
         list of memberships defined by the query parameters.
 
@@ -199,22 +199,24 @@ class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
         if not member.group.is_admin(request.user):
             raise exceptions.PermissionDenied()
         # move the member
-        member.order = lower.order + 1 if lower else 0
+        member.priority = lower.priority + 1 if lower else 0
         member.save()
         # move every other members that are higher
         members = self.get_queryset().exclude(id=member.id).all()
-        prev_order = member.order
+        prev_priority = member.priority
         curr_index = len(members) - 1
         if lower is not None:
             while members[curr_index] != lower:
                 curr_index -= 1
             curr_index -= 1
         if curr_index >= 0:
-            retenue = prev_order + 1 - members[curr_index].order
+            retenue = prev_priority + 1 - members[curr_index].priority
             while curr_index >= 0 and retenue > 0:
-                retenue -= max(members[curr_index].order - prev_order - 1, 0)
-                members[curr_index].order += retenue
-                prev_order = members[curr_index].order
+                retenue -= max(
+                    members[curr_index].priority - prev_priority - 1,
+                    0)
+                members[curr_index].priority += retenue
+                prev_priority = members[curr_index].priority
                 curr_index -= 1
-            Membership.objects.bulk_update(members, ['order'])
+            Membership.objects.bulk_update(members, ['priority'])
         return response.Response(status=status.HTTP_200_OK)

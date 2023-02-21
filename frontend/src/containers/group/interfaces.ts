@@ -59,7 +59,7 @@ export interface Membership {
   description: string;
   begin_date: string;  // date as ISO string
   end_date: string;  // date as ISO string
-  order: number;
+  priority: number;
   admin: boolean;
   admin_request?: boolean;
   dragId?: string;

@@ -76,7 +76,7 @@ class GroupType(models.Model):
     sort_fields = models.CharField(
         verbose_name=_("Sort Fields"),
         max_length=100,
-        default='-order,short_name',
+        default='-priority,short_name',
         help_text=_("Fields used to sort groups in the list, separated by ',' "
                     "and without spaces. If categories are defined, you must "
                     "also reflect them here."))
@@ -114,6 +114,7 @@ class GroupType(models.Model):
 
 class Label(models.Model):
     name = models.CharField(_("Label Name"), max_length=20)
+    priority = models.IntegerField(_("Priority"), default=0)
     group_type = models.ForeignKey(
         to=GroupType,
         verbose_name=_("Type of group"),
@@ -185,8 +186,8 @@ class Group(models.Model, SlugModel):
         verbose_name=_("Children groups label"),
         max_length=50,
         default=_("Sub-groups"))
-    order = models.IntegerField(
-        verbose_name=_("Order"),
+    priority = models.IntegerField(
+        verbose_name=_("Priority"),
         default=0)
     year = models.IntegerField(
         verbose_name=_("Group year"),
@@ -404,7 +405,7 @@ class Membership(models.Model):
     end_date = models.DateField(
         verbose_name=_("End date"),
         default=one_year_later,)
-    order = models.IntegerField(_("Order"), default=0)
+    priority = models.IntegerField(_("Priority"), default=0)
     admin = models.BooleanField(_("Admin"), default=False)
     admin_request = models.BooleanField(
         _("Asked to become admin"), default=False)
@@ -413,7 +414,7 @@ class Membership(models.Model):
 
     class Meta:
         unique_together = ('student', 'group')
-        ordering = ['group', 'order', 'student']
+        ordering = ['group', '-priority', 'student']
         verbose_name = "membre"
 
     def __str__(self) -> str:
