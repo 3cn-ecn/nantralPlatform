@@ -112,6 +112,28 @@ class GroupType(models.Model):
         return reverse('group:sub_index', kwargs={'type': self.slug})
 
 
+class Label(models.Model):
+    name = models.CharField(_("Label Name"), max_length=20)
+    group_type = models.ForeignKey(
+        to=GroupType,
+        verbose_name=_("Type of group"),
+        on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+class Tag(models.Model):
+    name = models.CharField(_("Tag Name"), max_length=50)
+    group_type = models.ForeignKey(
+        to=GroupType,
+        verbose_name=_("Type of group"),
+        on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Group(models.Model, SlugModel):
     """Database of all groups, with different types: clubs, flatshares..."""
 
@@ -142,8 +164,18 @@ class Group(models.Model, SlugModel):
         to=GroupType,
         verbose_name=_("Type of group"),
         on_delete=models.CASCADE)
+    label = models.ForeignKey(
+        to=Label,
+        verbose_name=_("Label"),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True)
+    tags = models.ManyToManyField(
+        to=Tag,
+        verbose_name=_("Tags"),
+        blank=True)
     parent = models.ForeignKey(
-        to='Group',
+        to='self',
         verbose_name=_("Parent group"),
         blank=True,
         null=True,

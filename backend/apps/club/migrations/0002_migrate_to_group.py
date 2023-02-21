@@ -3,17 +3,12 @@
 
 from django.db import migrations
 from datetime import timedelta
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from apps.club.models import Club as T1
-    from apps.group.models import GroupType as T3, Group as T4
 
 
 def forwards(apps, schema_editor):
-    Club: T1 = apps.get_model('club', 'Club')
-    GroupType: T3 = apps.get_model('group', 'GroupType')
-    Group: T4 = apps.get_model('group', 'Group')
+    Club = apps.get_model('club', 'Club')
+    GroupType = apps.get_model('group', 'GroupType')
+    Group = apps.get_model('group', 'Group')
     Subscription = apps.get_model('notification', 'Subscription')
     Event = apps.get_model('event', 'Event')
     Post = apps.get_model('post', 'Post')
@@ -87,10 +82,10 @@ def forwards(apps, schema_editor):
 
 
 def reverse(apps, schema_editor):
-    Club: T1 = apps.get_model('club', 'Club')
-    BDX: T1 = apps.get_model('club', 'BDX')
-    GroupType: T3 = apps.get_model('group', 'GroupType')
-    Group: T4 = apps.get_model('group', 'Group')
+    Club = apps.get_model('club', 'Club')
+    BDX = apps.get_model('club', 'BDX')
+    GroupType = apps.get_model('group', 'GroupType')
+    Group = apps.get_model('group', 'Group')
     Subscription = apps.get_model('notification', 'Subscription')
     Event = apps.get_model('event', 'Event')
     Post = apps.get_model('post', 'Post')
@@ -142,7 +137,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('club', '0001_alter_namedmembershipclub_date_begin'),
-        ('group', '0010_group_membership_grouptype_group_group_type_and_more'),
+        ('group', '0010_group_grouptype_tag_membership_label_and_more'),
         ('notification', '0003_alter_notification_publicity'),
         ('event', '0011_rename_baseevent_event'),
         ('post', '0005_rename_group_post_group_slug'),

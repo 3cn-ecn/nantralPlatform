@@ -1,11 +1,22 @@
 from django.contrib import admin
 
-from .models import Group, GroupType, Membership
+from .models import Group, GroupType, Membership, Label, Tag
+
+
+class LabelInline(admin.TabularInline):
+    model = Label
+    extra = 0
+
+
+class TagInline(admin.TabularInline):
+    model = Tag
+    extra = 0
 
 
 class GroupTypeAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
     autocomplete_fields = ['extra_parents']
+    inlines = [LabelInline, TagInline]
 
 
 class GroupAdmin(admin.ModelAdmin):
@@ -20,6 +31,13 @@ class GroupAdmin(admin.ModelAdmin):
         'created_at',
         'updated_by',
         'updated_at']
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if obj:
+            form.base_fields['label'].queryset = obj.group_type.label_set.all()
+            form.base_fields['tags'].queryset = obj.group_type.tag_set.all()
+        return form
 
     def save_model(self, request, obj: Group, form, change):
         obj.updated_by = request.user.student
