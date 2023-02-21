@@ -13,6 +13,7 @@ class UpdateGroupForm(ModelForm):
         fields = [
             'name',
             'short_name',
+            'label',
             'summary',
             'description',
             'meeting_place',
@@ -22,10 +23,24 @@ class UpdateGroupForm(ModelForm):
             'video1',
             'video2',
             'creation_year',
+            'tags',
             'private',
             'public',
             'children_label',
             'archived']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        labels = self.instance.group_type.label_set.all()
+        if labels:
+            self.fields['label'].queryset = labels
+        else:
+            del self.fields['label']
+        tags = self.instance.group_type.tag_set.all()
+        if tags:
+            self.fields['tags'].queryset = tags
+        else:
+            del self.fields['tags']
 
 
 class MembershipForm(ModelForm):

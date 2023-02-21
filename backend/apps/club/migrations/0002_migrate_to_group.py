@@ -18,7 +18,7 @@ def forwards(apps, schema_editor):
     gt = GroupType.objects.create(
         name="Clubs & Assos",
         slug='club',
-        sort_fields='parent,-priority,short_name',
+        sort_fields='parent__priority,parent__short_name,priority,short_name',
         category_expr='f"Clubs {group.parent.short_name}" if group.parent else "Associations"',
     )
     if not SocialNetwork.objects.filter(name='Email').exists():

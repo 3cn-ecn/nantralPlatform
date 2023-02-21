@@ -303,9 +303,9 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
 
     template_name = 'group/edit/create.html'
     model = Group
-    fields = ['name', 'short_name', 'summary', 'description', 'meeting_place',
-              'meeting_hour', 'icon', 'banner', 'video1', 'video2',
-              'creation_year', 'public']
+    fields = ['name', 'short_name', 'label', 'summary', 'description',
+              'meeting_place', 'meeting_hour', 'icon', 'banner', 'video1',
+              'video2', 'creation_year', 'tags', 'public']
 
     def test_func(self) -> bool:
         self.group_type = get_object_or_404(GroupType, slug=self.kwargs['type'])
@@ -337,6 +337,16 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
         form = super().get_form(form_class)
         form.instance.group_type = self.group_type
         form.instance.parent = self.parent
+        labels = self.group_type.label_set.all()
+        if labels:
+            form.fields['label'].queryset = labels
+        else:
+            del form.fields['label']
+        tags = self.group_type.tag_set.all()
+        if tags:
+            form.fields['tags'].queryset = tags
+        else:
+            del form.fields['tags']
         return form
 
     def form_valid(self, form):
