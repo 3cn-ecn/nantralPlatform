@@ -25,17 +25,9 @@ import Formular from '../../components/Formular/Formular'
 const filterFunction=(event:EventProps, filter: Map<string, any>) => {
 
   // filter for favorite events
-  if(filter.get('favorite')===true && event.isFavorite!==true){
-    return null;
-  }
-  
-  // filter for participated events
-  if(filter.get('participate')===true && event.isParticipating!==true){
-    return null;
-  }
-
-  // filter for shotgun events
-  if(filter.get('shotgun')===true && event.maxParticipant===null){
+  if((filter.get('favorite')===true && event.isFavorite!==true)||
+  (filter.get('participate')===true && event.isParticipating!==true)||
+  (filter.get('shotgun')===true && event.maxParticipant===null)){
     return null;
   }
 
@@ -80,7 +72,7 @@ const filterEvent=(events: Array<EventProps>, filter: Map<string, any>) => {
 
 function EventList(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
+  console.log(events);
 
   return <p>Ceci est une liste.</p>;
 }
