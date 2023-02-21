@@ -1,12 +1,9 @@
-import datetime
-
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.loader import render_to_string
 from django.urls.base import reverse
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from django_ckeditor_5.fields import CKEditor5Field
@@ -22,16 +19,6 @@ from apps.utils.slug import SlugModel
 path_and_rename_group = PathAndRename('groups/logo')
 path_and_rename_group_banner = PathAndRename('groups/banniere')
 path_and_rename_group_type = PathAndRename('groups/types')
-
-
-def today() -> datetime.date:
-    """Returns the date of today."""
-    return timezone.now().date()
-
-
-def one_year_later() -> datetime.date:
-    """Returns the day of today but one year later."""
-    return (timezone.now() + datetime.timedelta(days=365)).date()
 
 
 class GroupType(models.Model):
@@ -55,11 +42,10 @@ class GroupType(models.Model):
         upload_to=path_and_rename_group_type)
 
     # Members settings
-    is_year_group = models.BooleanField(
-        _("Year Group"),
+    no_membership_dates = models.BooleanField(
+        _("No dates for memberships"),
         default=False,
-        help_text=_("Groupes are linked to a scholar year. No dates are "
-                    "asked to members."))
+        help_text=_("Do not ask dates for members."))
     private_by_default = models.BooleanField(
         _("Private by default"),
         default=False,
@@ -189,12 +175,11 @@ class Group(models.Model, SlugModel):
     priority = models.IntegerField(
         verbose_name=_("Priority"),
         default=0)
-    year = models.IntegerField(
-        verbose_name=_("Group year"),
+    creation_year = models.IntegerField(
+        verbose_name=_("Year of creation"),
         null=True,
         blank=True,
-        help_text=_("For scholar year, only indicate the first year (from "
-                    "september to december)."))
+        help_text=_("The year the group has been created."))
     slug = models.SlugField(max_length=40, unique=True, blank=True)
     archived = models.BooleanField(
         verbose_name=_("Archived group"),
@@ -280,8 +265,8 @@ class Group(models.Model, SlugModel):
         '2019-2020'
         """
 
-        if self.year:
-            return f"{self.year}-{self.year+1}"
+        if self.creation_year:
+            return f"{self.creation_year}-{self.creation_year+1}"
         else:
             return ""
 
@@ -294,8 +279,6 @@ class Group(models.Model, SlugModel):
     def clean(self) -> None:
         """Method to test if the object is valid (no incompatibility between
         fields."""
-        if self.group_type.is_year_group and self.year is None:
-            raise ValidationError(_("You must provides a year."))
         if self.public and self.private:
             raise ValidationError(_("You cannot set both 'public' and "
                                     "'private' properties to True."))
@@ -401,10 +384,10 @@ class Membership(models.Model):
         blank=True)
     begin_date = models.DateField(
         verbose_name=_("Begin date"),
-        default=today)
+        null=True)
     end_date = models.DateField(
         verbose_name=_("End date"),
-        default=one_year_later,)
+        null=True)
     priority = models.IntegerField(_("Priority"), default=0)
     admin = models.BooleanField(_("Admin"), default=False)
     admin_request = models.BooleanField(
@@ -423,9 +406,9 @@ class Membership(models.Model):
     def save(self, *args, **kwargs) -> None:
         """Save the membership object."""
         # default dates for year groups
-        if self.group.group_type.is_year_group:
-            self.begin_date = datetime.date(self.group.year, 8, 1)
-            self.end_date = datetime.date(self.group.year + 1, 7, 31)
+        if self.group.group_type.no_membership_dates:
+            self.begin_date = None
+            self.end_date = None
         # if member becomes admin, remove the admin request
         if self.admin and self.admin_request:
             self.admin_request = False

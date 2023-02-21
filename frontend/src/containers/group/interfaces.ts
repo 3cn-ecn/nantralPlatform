@@ -5,8 +5,7 @@ export interface Group {
   group_type: {
     name: string;
     slug: string;
-    place_required: boolean;
-    is_year_group: boolean;
+    no_membership_dates: boolean;
   };
   parent: {
     name: string;
@@ -14,7 +13,7 @@ export interface Group {
     url: string;
     icon: string;
   };
-  year: number;
+  creation_year: number;
   slug: string;
   archived: boolean;
   private: boolean;
@@ -57,8 +56,8 @@ export interface Membership {
   };
   summary: string;
   description: string;
-  begin_date: string;  // date as ISO string
-  end_date: string;  // date as ISO string
+  begin_date?: string;  // date as ISO string
+  end_date?: string;  // date as ISO string
   priority: number;
   admin: boolean;
   admin_request?: boolean;

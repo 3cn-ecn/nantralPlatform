@@ -150,8 +150,9 @@ class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
             .filter(
                 Q(group__slug=group_slug) if group_slug else Q(),
                 Q(student__id=student_id) if student_id else Q(),
-                Q(end_date__gte=from_date) if from_date else Q(),
-                Q(begin_date__lt=to_date) if to_date else Q())
+                ((Q(end_date__gte=from_date) if from_date else Q())
+                 & (Q(begin_date__lt=to_date) if to_date else Q()))
+                | Q(end_date__isnull=True, begin_date__isnull=True))
             # order fields
             .order_by('-priority',
                       'student__user__first_name',

@@ -35,7 +35,7 @@ class GroupTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupType
-        fields = ['name', 'slug', 'is_year_group']
+        fields = ['name', 'slug', 'no_membership_dates']
 
 
 class SimpleGroupSerializer(serializers.ModelSerializer):

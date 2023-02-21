@@ -21,16 +21,11 @@ class UpdateGroupForm(ModelForm):
             'banner',
             'video1',
             'video2',
-            'year',
+            'creation_year',
             'private',
             'public',
             'children_label',
             'archived']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if not self.instance.group_type.is_year_group:
-            del self.fields['year']
 
 
 class MembershipForm(ModelForm):
@@ -57,7 +52,7 @@ class MembershipForm(ModelForm):
             self.instance.group = group
             self.instance.student = student
         # customize the form
-        if self.instance.group.group_type.is_year_group:
+        if self.instance.group.group_type.no_membership_dates:
             del self.fields['begin_date']
             del self.fields['end_date']
 

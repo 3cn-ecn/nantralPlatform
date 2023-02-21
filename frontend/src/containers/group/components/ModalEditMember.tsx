@@ -31,7 +31,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
     { kind: 'text', name: 'summary', label: 'Résumé', maxLength: 50, helpText: 'Entrez le résumé du membre' },
     { kind: 'text', name: 'description', label: 'Description', multiline: true },
   ];
-  if (group && !group.group_type.is_year_group) {
+  if (group && !group.group_type.no_membership_dates) {
     defaultFields.push({
       kind: 'group',
       fields: [

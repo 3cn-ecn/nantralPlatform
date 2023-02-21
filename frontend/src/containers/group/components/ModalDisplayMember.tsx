@@ -66,7 +66,7 @@ function ShowMemberModal(props: {
       </DialogTitle>
       <DialogContent dividers>
         <Typography
-          hidden={group && group.group_type.is_year_group}
+          hidden={group && group.group_type.no_membership_dates}
           color='text.secondary'
           gutterBottom
           sx={{ fontSize: 12, fontStyle: 'italic' }}

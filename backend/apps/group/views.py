@@ -304,7 +304,8 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
     template_name = 'group/edit/create.html'
     model = Group
     fields = ['name', 'short_name', 'summary', 'description', 'meeting_place',
-              'meeting_hour', 'icon', 'banner', 'video1', 'video2', 'public']
+              'meeting_hour', 'icon', 'banner', 'video1', 'video2',
+              'creation_year', 'public']
 
     def test_func(self) -> bool:
         self.group_type = get_object_or_404(GroupType, slug=self.kwargs['type'])
@@ -339,11 +340,6 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
         return form
 
     def form_valid(self, form):
-        if self.group_type.is_year_group:
-            # We add by default the current year.
-            # The change of year is placed on 1st July.
-            form.instance.year = (
-                timezone.now().year - int(timezone.now().month < 7))
         res = super().form_valid(form)
         if not self.parent:
             form.instance.members.add(

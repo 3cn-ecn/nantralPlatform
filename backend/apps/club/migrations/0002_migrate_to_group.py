@@ -47,7 +47,7 @@ def forwards(apps, schema_editor):
             video1=club.video1,
             video2=club.video2,
             slug=club.slug,
-            priority=club.order
+            priority=club.bdx.order if hasattr(club, 'bdx') else 0
         )
         if hasattr(club, 'bdx'):
             bdx[club.id] = g
