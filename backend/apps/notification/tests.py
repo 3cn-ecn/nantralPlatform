@@ -14,10 +14,10 @@ class TestSubscription(TransactionTestCase, TestMixin):
     def setUp(self):
         self.user_setup()
         t = GroupType.objects.create(name="T1", slug="t1")
-        g = Group.objects.create(name="Club de test", group_type=t)
-        self.slug = g.slug
+        self.g = Group.objects.create(name="Club de test", group_type=t)
+        self.slug = self.g.slug
         self.url = reverse(
-            'notification_api:subscription', kwargs={'page': self.slug})
+            'notification_api:subscription', kwargs={'slug': self.slug})
 
     def tearDown(self):
         self.user_teardown()
@@ -42,10 +42,13 @@ class TestSubscription(TransactionTestCase, TestMixin):
         # check subscription is ok
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertTrue(self.client.get(self.url).data)
-        # try to subscribe again and check the fail
-        with self.assertLogs('django.request', level='WARNING'):
-            resp = self.client.post(self.url)
-        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 1)
+        # try to subscribe again and check we keep the same
+        resp = self.client.post(self.url)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 1)
 
     def test_delete_api(self):
         "test to unsubscribe"
@@ -57,10 +60,13 @@ class TestSubscription(TransactionTestCase, TestMixin):
         # check deletion is ok
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(self.client.get(self.url).data)
-        # try to delete again and check the fail
-        with self.assertLogs('django.request', level='WARNING'):
-            resp = self.client.delete(self.url)
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 0)
+        # try to delete again and check we keep the same
+        resp = self.client.delete(self.url)
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 0)
 
 
 class TestNotification(TransactionTestCase, TestMixin):

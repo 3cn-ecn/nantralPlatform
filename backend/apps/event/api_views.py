@@ -15,7 +15,6 @@ class ListEventsHomeAPIView(generics.ListAPIView):
     def get_queryset(self):
         today = timezone.now()
         events = Event.objects.filter(date__gte=today).order_by("date")
-        print(events.count())
         return [e for e in events if e.can_view(self.request.user)]
 
 
