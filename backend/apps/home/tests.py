@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from apps.club.models import Club
+from apps.group.models import GroupType, Group
 from apps.event.models import Event
 from apps.post.models import VISIBILITY
 from apps.utils.utest import TestMixin
@@ -14,8 +14,8 @@ class TestHomeView(TestCase, TestMixin):
 
     def setUp(self):
         self.user_setup()
-        self.test_club = Club.objects.create(name='TestClub')
-        self.assertEqual(len(Club.objects.all()), 1)
+        t = GroupType.objects.create(name="T1", slug="t1")
+        self.test_club = Group.objects.create(name='TestClub', group_type=t)
 
     def test_home_view_events(self):
         """Test wether the home view displays events
@@ -25,7 +25,7 @@ class TestHomeView(TestCase, TestMixin):
             title='An Event in the past',
             description="",
             location="Test",
-            group=self.test_club.full_slug,
+            group_slug=self.test_club.slug,
             publicity=VISIBILITY[0][0],
         )
         self.today = Event.objects.create(
@@ -33,7 +33,7 @@ class TestHomeView(TestCase, TestMixin):
             title='An Event today',
             description="",
             location="Test",
-            group=self.test_club.full_slug,
+            group_slug=self.test_club.slug,
             publicity=VISIBILITY[0][0]
         )
         self.tomorrow = Event.objects.create(
@@ -41,7 +41,7 @@ class TestHomeView(TestCase, TestMixin):
             title='An Event tomorrow',
             description="",
             location="Test",
-            group=self.test_club.full_slug,
+            group_slug=self.test_club.slug,
             publicity=VISIBILITY[0][0]
         )
         self.future = Event.objects.create(
@@ -49,7 +49,7 @@ class TestHomeView(TestCase, TestMixin):
             title='An Event in the distant future',
             description="",
             location="Test",
-            group=self.test_club.full_slug,
+            group_slug=self.test_club.slug,
             publicity=VISIBILITY[0][0]
         )
         self.assertEqual(len(Event.objects.all()), 4)
