@@ -29,6 +29,7 @@ export interface Group {
   url: string;
   is_admin: boolean;
   is_member: boolean;
+  lock_memberships: boolean;
 }
 
 export interface Student {

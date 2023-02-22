@@ -24,8 +24,9 @@ class UpdateGroupForm(ModelForm):
             'video2',
             'creation_year',
             'tags',
-            'private',
             'public',
+            'private',
+            'lock_memberships',
             'children_label',
             'archived']
 

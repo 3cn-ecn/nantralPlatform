@@ -60,7 +60,8 @@ class GroupSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     class Meta:
         model = Group
         exclude = ['members', 'subscribers', 'priority', 'social_links',
-                   'created_at', 'created_by', 'updated_at', 'updated_by']
+                   'created_at', 'created_by', 'updated_at', 'updated_by',
+                   'lock_memberships']
         read_only_fields = ['group_type', 'parent', 'url']
         admin_fields = '__all__'
 
@@ -122,7 +123,8 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
             raise exceptions.PermissionDenied(_(
                 "You can only create new membership for yourself or for "
                 "someone else inside a group where you are admin."))
-        if group.private and not group.is_admin(user):
+        if ((group.private or group.lock_memberships)
+                and not group.is_admin(user)):
             raise exceptions.PermissionDenied(_(
                 "You cannot create create a new membership inside a private "
                 "group if you are not admin of this group."))

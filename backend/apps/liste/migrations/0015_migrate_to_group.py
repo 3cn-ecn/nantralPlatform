@@ -2,7 +2,6 @@
 # flake8: noqa
 
 from django.db import migrations
-import datetime
 from django.utils.text import slugify
 
 
@@ -34,9 +33,9 @@ def forwards(apps, schema_editor):
 
     for liste in Liste.objects.all():
         slug = slugify(liste.name)[:40]
-        if Liste.objects.filter(slug=slug).exists():
+        if Group.objects.filter(slug=slug).exists():
             id = 1
-            while Liste.objects.filter(slug=f'{slug}-{id}').exists(): id += 1
+            while Group.objects.filter(slug=f'{slug}-{id}').exists(): id += 1
             slug = f'{slug}-{id}'
         g = Group.objects.create(
             name=liste.name,

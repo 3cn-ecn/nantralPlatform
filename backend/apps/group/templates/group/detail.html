@@ -52,7 +52,7 @@
                             Modifier
                         </button>
                     </span>
-                {% elif not group.restrict_membership %}
+                {% elif not group.lock_memberships %}
                     <button id='show-add-group' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
                         <i class="fa fa-user-plus"></i>&nbsp; Devenir membre
                     </button>
@@ -210,7 +210,7 @@
     {% endif %}
 
     {# popup pour devenir membre du groupe #}
-    {% if is_member or not group.restrict_membership %}
+    {% if is_member or not group.lock_memberships %}
         {% include 'group/included/edit-member.html' %}
     {% endif %}
 

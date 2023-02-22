@@ -158,7 +158,7 @@ function MembershipsGroup(props: {}): JSX.Element {
             endIcon={<EditIcon />}
           >Modifier</Button>
         : <></> }
-        { !group.is_member || group.is_admin
+        { !group.is_member && !group.lock_memberships || group.is_admin
         ? <>
             <Button
               variant="contained"

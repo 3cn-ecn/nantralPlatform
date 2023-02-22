@@ -24,10 +24,13 @@ from .serializers import (
 class GroupPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj: Group):
+        user = request.user
         if request.method in permissions.SAFE_METHODS:
-            return (obj.public or (
-                    request.user.is_authenticated and (
-                        not obj.private or obj.is_member(request.user))))
+            if obj.public:
+                return True
+            if obj.private:
+                return obj.is_member(user) or user.is_superuser
+            return user.is_authenticated
         return obj.is_admin(request.user)
 
 
@@ -150,9 +153,10 @@ class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
             .filter(
                 Q(group__slug=group_slug) if group_slug else Q(),
                 Q(student__id=student_id) if student_id else Q(),
-                ((Q(end_date__gte=from_date) if from_date else Q())
-                 & (Q(begin_date__lt=to_date) if to_date else Q()))
-                | Q(end_date__isnull=True, begin_date__isnull=True))
+                (Q(end_date__gte=from_date) | Q(end_date__isnull=True))
+                if from_date else Q(),
+                (Q(begin_date__lt=to_date) | Q(begin_date__isnull=True))
+                if to_date else Q())
             # order fields
             .order_by('-priority',
                       'student__user__first_name',

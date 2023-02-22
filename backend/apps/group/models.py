@@ -131,7 +131,7 @@ class Group(models.Model, SlugModel):
         max_length=100)
     short_name = models.CharField(
         verbose_name=_("Short name"),
-        max_length=20,
+        max_length=100,
         blank=True,
         help_text=_("This name will be used in the list of groups."))
     members = models.ManyToManyField(
@@ -171,7 +171,11 @@ class Group(models.Model, SlugModel):
     children_label = models.CharField(
         verbose_name=_("Children groups label"),
         max_length=50,
-        default=_("Sub-groups"))
+        default="Sous-groupes")
+    lock_memberships = models.BooleanField(
+        _("Lock memberships"),
+        default=False,
+        help_text=_("Users cannot add themselves as members of this group."))
     priority = models.IntegerField(
         verbose_name=_("Priority"),
         default=0)

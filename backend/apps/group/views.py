@@ -66,6 +66,7 @@ class ListGroupTypeView(ListView, LoginRequiredMixin):
 
     model = GroupType
     template_name = 'group/group_type_list.html'
+    ordering = ['name']
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
@@ -180,7 +181,7 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
             },
             {
                 'target': '#',
-                'label': group.name
+                'label': group.short_name
             },
         ]
         return context
@@ -255,7 +256,7 @@ class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
             },
             {
                 'target': self.object.get_absolute_url(),
-                'label': self.object.name
+                'label': self.object.short_name
             },
             {
                 'target': '#',
@@ -288,7 +289,7 @@ class DeleteGroupView(UserIsGroupAdminMixin, DeleteView):
             },
             {
                 'target': self.object.get_absolute_url(),
-                'label': self.object.name
+                'label': self.object.short_name
             },
             {
                 'target': '#',
@@ -303,9 +304,9 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
 
     template_name = 'group/edit/create.html'
     model = Group
-    fields = ['name', 'short_name', 'label', 'summary', 'description',
+    fields = ['name', 'short_name', 'parent', 'label', 'summary', 'description',
               'meeting_place', 'meeting_hour', 'icon', 'banner', 'video1',
-              'video2', 'creation_year', 'tags', 'public']
+              'video2', 'creation_year', 'tags', 'public', 'children_label']
 
     def test_func(self) -> bool:
         self.group_type = get_object_or_404(GroupType, slug=self.kwargs['type'])
@@ -337,6 +338,10 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
         form = super().get_form(form_class)
         form.instance.group_type = self.group_type
         form.instance.parent = self.parent
+        if self.group_type.extra_parents.all():
+            form.fields['parent'].queryset = self.group_type.extra_parents.all()
+        else:
+            del form.fields['parent']
         labels = self.group_type.label_set.all()
         if labels:
             form.fields['label'].queryset = labels
@@ -381,7 +386,7 @@ class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
             },
             {
                 'target': self.object.get_absolute_url(),
-                'label': self.object.name
+                'label': self.object.short_name
             },
             {
                 'target': '#',
@@ -416,7 +421,7 @@ class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
             },
             {
                 'target': self.object.get_absolute_url(),
-                'label': self.object.name
+                'label': self.object.short_name
             },
             {
                 'target': '#',
@@ -464,7 +469,7 @@ class UpdateGroupChildrenView(UserIsGroupAdminMixin, TemplateView):
             },
             {
                 'target': self.object.get_absolute_url(),
-                'label': self.object.name
+                'label': self.object.short_name
             },
             {
                 'target': '#',
@@ -500,7 +505,7 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
             },
             {
                 'target': self.object.get_absolute_url(),
-                'label': self.object.name
+                'label': self.object.short_name
             },
             {
                 'target': '#',
@@ -536,7 +541,7 @@ class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
             },
             {
                 'target': self.object.get_absolute_url(),
-                'label': self.object.name
+                'label': self.object.short_name
             },
             {
                 'target': '#',
