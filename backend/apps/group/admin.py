@@ -32,6 +32,7 @@ class GroupAdmin(admin.ModelAdmin):
         'created_at',
         'updated_by',
         'updated_at']
+    autocomplete_fields = ['parent']
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

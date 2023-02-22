@@ -325,3 +325,25 @@ class TestMemberships(APITestCase):
         # check the modification is done
         self.assertFalse(Membership.objects.filter(id=m1.id).exists())
         self.assertFalse(Membership.objects.filter(id=m2.id).exists())
+
+    def test_reorder(self):
+        self.client.force_login(self.u1)
+        m1 = Membership.objects.create(
+            group=self.g1, student=self.u1.student, admin=True)
+        m2 = Membership.objects.create(group=self.g1, student=self.u2.student)
+        # test to order u1 before u2
+        res = self.client.post(
+            f'/api/group/membership/reorder/?group={self.g1.slug}',
+            {'member': m1.id, 'lower': m2.id})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        ms = self.g1.membership_set.all().order_by('-priority')
+        self.assertEqual(ms[0].student, self.u1.student)
+        self.assertEqual(ms[1].student, self.u2.student)
+        # test to order u2 before u1
+        res = self.client.post(
+            f'/api/group/membership/reorder/?group={self.g1.slug}',
+            {'member': m1.id})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        ms = self.g1.membership_set.all().order_by('-priority')
+        self.assertEqual(ms[0].student, self.u2.student)
+        self.assertEqual(ms[1].student, self.u1.student)

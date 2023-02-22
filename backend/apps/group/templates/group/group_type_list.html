@@ -21,9 +21,9 @@
           <a href="{{ group_type.get_absolute_url }}" class="stretched-link">
             <div class="ratio ratio-1x1">
               {% if group_type.icon %}
-                <img src="{{ group_type.icon|file_url }}" />
+                <img src="{{ group_type.icon|file_url }}" alt=""/>
               {% else %}
-                <img src="https://avatars.dicebear.com/api/initials/{{group_type.name}}.svg" />
+                <img src="https://avatars.dicebear.com/api/initials/{{group_type.name}}.svg" alt=""/>
               {% endif %}
             </div>
           </a>

@@ -32,9 +32,9 @@
           <a href="{{ group.get_absolute_url }}" class="stretched-link">
             <div class="ratio ratio-1x1">
               {% if group.icon %}
-                <img src="{{ group.icon|file_url }}" />
+                <img src="{{ group.icon|file_url }}" alt=""/>
               {% else %}
-                <img src="https://avatars.dicebear.com/api/initials/{{group.short_name}}.svg" />
+                <img src="https://avatars.dicebear.com/api/initials/{{group.short_name}}.svg" alt=""/>
               {% endif %}
             </div>
           </a>
