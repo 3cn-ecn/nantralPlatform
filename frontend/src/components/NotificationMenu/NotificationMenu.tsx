@@ -9,6 +9,7 @@ import {
   MenuItem,
   ListItem,
   Button,
+  Chip,
 } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
@@ -173,43 +174,19 @@ export function NotificationMenu(props) {
           </IconButton>
         </ListItem>
         <ListItem>
-          <Button
-            variant="outlined"
-            size="small"
-            sx={[
-              { mr: 1 },
-              {
-                '&:hover': {
-                  color: 'white',
-                  backgroundColor: '#dc3545',
-                },
-              },
-              {
-                borderRadius: 4,
-              },
-            ]}
+          <Chip
+            variant={!subscribeFilter ? 'outlined' : 'contained'}
+            label={t('notif.subscribed')}
+            color="primary"
+            sx={[{ mr: 1 }]}
             onClick={() => setSubscribeFilter(!subscribeFilter)}
-          >
-            {t('notif.subscribed')}
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            sx={[
-              {
-                '&:hover': {
-                  color: 'white',
-                  backgroundColor: '#dc3545',
-                },
-              },
-              {
-                borderRadius: 4,
-              },
-            ]}
+          />
+          <Chip
+            variant={!unseenFilter ? 'outlined' : 'contained'}
+            label={t('notif.unread')}
+            color="primary"
             onClick={() => setUnseenFilter(!unseenFilter)}
-          >
-            {t('notif.unread')}
-          </Button>
+          />
         </ListItem>
         {content}
         {contentMore}

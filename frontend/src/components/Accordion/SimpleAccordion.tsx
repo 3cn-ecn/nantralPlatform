@@ -11,21 +11,21 @@ function SimpleAccordion(props: { label: string; icon: any; content: any }) {
   const { label, icon, content } = props;
 
   return (
-    <div>
-      <Accordion square className="accordion">
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <ListItemIcon>{icon}</ListItemIcon>
-          <Typography component="span">{label}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography component="span">{content}</Typography>
-        </AccordionDetails>
-      </Accordion>
-    </div>
+    // <div>
+    <Accordion square className="accordion">
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <ListItemIcon>{icon}</ListItemIcon>
+        <Typography component="span">{label}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography component="span">{content}</Typography>
+      </AccordionDetails>
+    </Accordion>
+    // </div>
   );
 }
 
