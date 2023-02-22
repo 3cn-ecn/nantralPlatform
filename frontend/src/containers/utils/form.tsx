@@ -26,7 +26,7 @@ export type FieldType = {
   multiline?: boolean;
 } | {
   kind: 'group';
-  fields?: FieldType[];
+  fields?: (FieldType & { name: string })[];
 } | {
   kind: 'custom';
   name: string;
@@ -76,12 +76,12 @@ function FormGroup(props: {
   }
 
   return <>
-    {fields.map((field, index) => {
+    {fields.map((field) => {
       const error = field.kind !== 'group' && errors && errors[field.name];
       switch (field.kind) {
         case 'group':
           return (
-            <Box sx={{display: 'flex', gap: 1.5 }} key={index}>
+            <Box sx={{display: 'flex', gap: 1.5 }} key={field.fields.reduce((prev, curr) => `${prev}+${curr.name}`, '')}>
               <FormGroup
                 fields={field.fields}
                 values={values}
@@ -94,7 +94,7 @@ function FormGroup(props: {
         case 'text':
           return (
             <TextField
-              key={index}
+              key={field.name}
               id={`${field.name}-input`}
               name={field.name}
               label={field.label}
@@ -111,7 +111,7 @@ function FormGroup(props: {
           );
         case 'date':  // date as string
           return (
-            <LocalizationProvider adapterLocale={'fr'} dateAdapter={AdapterDayjs} key={index}>
+            <LocalizationProvider adapterLocale={'fr'} dateAdapter={AdapterDayjs} key={field.name}>
               <DatePicker
                 label={field.label}
                 value={values[field.name] && new Date(values[field.name])}
@@ -139,7 +139,7 @@ function FormGroup(props: {
         case 'boolean':
           return (
             <FormControl
-              key={index}
+              key={field.name}
               id={`${field.name}-input`}
               required={field.required}
               error={!!error}
@@ -165,7 +165,7 @@ function FormGroup(props: {
         case 'autocomplete':
           return (
             <AutocompleteField
-              key={index}
+              key={field.name}
               field={field}
               value={values[field.name]}
               error={error}

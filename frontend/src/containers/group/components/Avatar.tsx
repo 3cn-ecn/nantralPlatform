@@ -42,11 +42,11 @@ function Avatar(props: {
   const initials = words.length > 1
     ? `${words[0][0]}${words[1][0]}`
     : words[0].substring(0, 2);
-  const sx = size === 'small' ?
-    { width: 30, height: 30, fontSize: 13 }
-  : size === 'large' ?
-    { width: 56, height: 56, fontSize: 24 }
-  : {};
+  const sx = {};
+  if (size === 'small')
+    Object.assign(sx, { width: 30, height: 30, fontSize: 13 });
+  if (size === 'large')
+    Object.assign({ width: 56, height: 56, fontSize: 24 });
   return <MUIAvatar 
     src={url}
     alt={title}
