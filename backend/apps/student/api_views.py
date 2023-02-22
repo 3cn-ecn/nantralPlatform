@@ -1,40 +1,11 @@
-from rest_framework import generics, status, permissions, viewsets, exceptions
+from rest_framework import generics, permissions, viewsets, exceptions
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from apps.academic.serializers import NamedMembershipCourseSerializer
-from apps.academic.models import NamedMembershipCourse, Course
 from apps.utils.searchAPIMixin import SearchAPIMixin
 
 from .models import Student
 from .serializers import StudentSerializer
-
-
-class StudentCoursesView(generics.ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = NamedMembershipCourseSerializer
-
-    def get_queryset(self):
-        return NamedMembershipCourse.objects.filter(
-            student=self.kwargs['student_id'])
-
-    def create(self, request, *args, **kwargs):
-        NamedMembershipCourse.objects.create(
-            student=Student.objects.get(pk=kwargs['student_id']),
-            course=Course.objects.get(pk=request.data['group']),
-            when=request.data['year']
-        )
-        return Response(
-            {'Success': 'Student will folow this course (maybe)'},
-            status=status.HTTP_201_CREATED)
-
-
-class StudentEditNamedMembershipCourse(generics.DestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = NamedMembershipCourseSerializer
-
-    def get_queryset(self):
-        return NamedMembershipCourse.objects.filter(id=self.kwargs['pk'])
 
 
 class StudentListView(generics.ListAPIView):

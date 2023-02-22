@@ -46,18 +46,6 @@
         </p>
     {% endif %}
 
-    {% if courses or request.user == object.user %}
-        <h2>Formations suivies</h2>
-        <p>
-        {% for course in courses %}
-            {{course.year}} - <a href="{{ course.group.get_absolute_url }}">{{course.group.get_type_display}} : {{course.group.name}}</a><br/>
-        {% endfor %}
-            {% if request.user == object.user %}
-                <a href="{% url 'academic:index' %}">Ajouter une formation</a>
-            {% endif %}
-        </p>
-    {% endif %}
-    
     <div id="root-members" />
 {%endblock%}
 
