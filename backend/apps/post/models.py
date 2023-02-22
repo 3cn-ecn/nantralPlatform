@@ -105,7 +105,6 @@ class AbstractPost(models.Model, SlugModel):
             title="Gérer",
             url=reverse("notification:settings")
         )
-        self.save()
 
     def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
         self.notification.delete()

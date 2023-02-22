@@ -83,7 +83,7 @@ class Notification(models.Model):
             sub_receivers = self.receivers.all()
         else:
             sub_receivers = self.receivers.filter(
-                subscription_set__page=self.sender
+                subscriptions__slug=self.sender
             )
         SentNotification.objects.filter(
             student__in=sub_receivers,

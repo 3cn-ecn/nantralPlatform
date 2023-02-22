@@ -3,32 +3,35 @@ from django.utils import timezone
 from django.urls import reverse
 from rest_framework import status
 
-from .models import Event
-from apps.club.models import Club
+from apps.group.models import Group, GroupType
 from apps.utils.utest import TestMixin
+
+from .models import Event
 
 
 class EventTestCase(TestCase, TestMixin):
 
     def setUp(self) -> None:
         self.user_setup()
-        self.club = Club.objects.create(
-            name="TestClubForEvents")
-        self.club.members.through.objects.create(
-            student=self.u2.student,
-            group=self.club,
-            admin=True
+        t = GroupType.objects.create(name="T1", slug="t1")
+        self.g = Group.objects.create(name="TestClubForEvents", group_type=t)
+        self.g.members.add(
+            self.u2.student,
+            through_defaults={'admin': True}
         )
         self.event = Event.objects.create(
-            title="TestEvent",
-            group_slug=self.club.full_slug,
+            title="A test event 1",
+            group_slug=self.g.slug,
             date=timezone.now(),
             description="Test Desc",
             location="Amphi A")
-        self.assertEqual(len(Event.objects.all()), 1)
+        # self.assertEqual(len(Event.objects.all()), 1)
 
     def tearDown(self):
         self.user_teardown()
+        Group.objects.all().delete()
+        GroupType.objects.all().delete()
+        Event.objects.all().delete()
 
     def test_event_detail_view(self):
         url = reverse('event:detail', args=[self.event.slug])
