@@ -47,8 +47,7 @@ class Student(models.Model):
         null=True,
         blank=True)
     favorite_event = models.ManyToManyField(
-        to='event.BaseEvent', verbose_name='Événement en favoris', blank=True,
-        null=True)
+        to='event.BaseEvent', verbose_name='Événement en favoris', blank=True)
 
     @property
     def name(self):

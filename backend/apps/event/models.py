@@ -34,7 +34,7 @@ class BaseEvent(AbstractPost):
         verbose_name='Slug de l\'événement', unique=True, null=True)
     participants = models.ManyToManyField(
         to=Student, verbose_name='Participants', blank=True)
-    ticketing = models.CharField(
+    form_url = models.CharField(
         verbose_name='Lien vers la billetterie',
         blank=True,
         max_length=200,
