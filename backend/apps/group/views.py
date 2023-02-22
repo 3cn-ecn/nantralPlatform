@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse, HttpRequest
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import QuerySet, Q, Count
 from django.shortcuts import redirect, get_object_or_404
 from django.urls.base import reverse
@@ -59,7 +59,7 @@ class UserIsGroupAdminMixin(UserPassesTestMixin):
             return self.request.user.is_superuser
 
 
-class ListGroupTypeView(ListView, LoginRequiredMixin):
+class ListGroupTypeView(ListView):
     """List of GroupTypes."""
 
     model = GroupType
