@@ -8,7 +8,6 @@ from apps.student.models import Student
 import random
 import json
 from pathlib import Path
-from datetime import timedelta
 from django.utils import timezone
 
 
@@ -19,7 +18,8 @@ def create_events(apps, schema_editor):
     for event in dummy_events:
         clubs = Club.objects.all()[:]
         club_id = random.randint(0, len(clubs))
-        random_date = timezone.now() + timedelta(days=random.randint(1, 20))
+        random_date = timezone.now() + timezone.timedelta(
+            days=random.randint(1, 20))
         # For some reason, slugs are appended with a '-1'
         # so we have to add it manually or it won't find anything
         new_event = Event.objects.create(

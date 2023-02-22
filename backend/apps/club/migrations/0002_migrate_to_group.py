@@ -2,7 +2,7 @@
 # flake8: noqa
 
 from django.db import migrations
-from datetime import timedelta
+from django.utils.timezone import timedelta
 
 
 def forwards(apps, schema_editor):

@@ -1,4 +1,3 @@
-from datetime import timedelta
 from rest_framework import status
 
 from django.test import TestCase
@@ -22,7 +21,7 @@ class TestHomeView(TestCase, TestMixin):
         """Test wether the home view displays events
         correctly."""
         self.past = Event.objects.create(
-            date=timezone.now() - timedelta(days=1),
+            date=timezone.now() - timezone.timedelta(days=1),
             title='An Event in the past',
             description="",
             location="Test",
@@ -38,7 +37,7 @@ class TestHomeView(TestCase, TestMixin):
             publicity=VISIBILITY[0][0]
         )
         self.tomorrow = Event.objects.create(
-            date=timezone.now() + timedelta(days=1),
+            date=timezone.now() + timezone.timedelta(days=1),
             title='An Event tomorrow',
             description="",
             location="Test",
@@ -46,7 +45,7 @@ class TestHomeView(TestCase, TestMixin):
             publicity=VISIBILITY[0][0]
         )
         self.future = Event.objects.create(
-            date=timezone.now() + timedelta(days=10),
+            date=timezone.now() + timezone.timedelta(days=10),
             title='An Event in the distant future',
             description="",
             location="Test",

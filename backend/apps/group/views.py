@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse, HttpRequest
@@ -146,7 +144,8 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
             # show the posts from last 6 months (3 maximum)
             all_posts = Post.objects.filter(
                 group_slug=group.slug,
-                publication_date__gte=timezone.now() - timedelta(days=6 * 30),
+                publication_date__gte=(
+                    timezone.now() - timezone.timedelta(days=6 * 30)),
                 publication_date__lte=timezone.now()
             ).order_by('-publication_date')
             context['posts'] = [p for p in all_posts if p.can_view(user)][:3]
