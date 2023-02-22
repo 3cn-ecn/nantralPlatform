@@ -56,22 +56,22 @@ function EventCard(props: { event: EventProps; scale?: string }) {
   const { event, scale } = props;
   const {
     title,
-    number_of_participants,
-    max_participant,
-    date,
+    numberOfParticipants,
+    maxParticipant,
+    beginDate,
     image,
     group,
-    get_group_name,
-    is_participating,
+    getGroupName,
+    isParticipating,
     slug,
-    ticketing,
-    is_favorite,
-    get_absolute_url,
-    end_inscription,
-    begin_inscription,
+    formUrl,
+    isFavorite,
+    getAbsoluteUrl,
+    endInscription,
+    beginInscription,
   } = event;
 
-  const [participating, setParticipating] = React.useState(is_participating);
+  const [participating, setParticipating] = React.useState(isParticipating);
 
   // An exception is made for the BDE as the "club" needs to be removed from the slug
   // (Not the case for the other clubs)
@@ -93,12 +93,12 @@ function EventCard(props: { event: EventProps; scale?: string }) {
   }
 
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
-  if (ticketing !== null) variant = 'form';
-  else if (max_participant === null) variant = 'normal';
+  if (formUrl !== null) variant = 'form';
+  else if (maxParticipant === null) variant = 'normal';
   else variant = 'shotgun';
 
   // Conversion of the date to a human redeable format
-  const dateValue = new Date(date);
+  const dateValue = new Date(beginDate);
   const dateFormat: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     month: 'long',
@@ -121,7 +121,7 @@ function EventCard(props: { event: EventProps; scale?: string }) {
       </a>
     );
   return (
-    <Card className="eventCard" style={{ fontSize: scale }}>
+    <Card className="eventCard">
       <CardActionArea disableRipple sx={{ fontSize: '1em' }}>
         <CardMedia
           className="banner"
@@ -132,13 +132,13 @@ function EventCard(props: { event: EventProps; scale?: string }) {
         <FavButton
           className="favIcon"
           eventSlug={slug}
-          selected={is_favorite}
+          selected={isFavorite}
           size="3em"
         />
         <MoreActionsButton
           isAdmin={groupData.is_current_user_admin}
           className="moreActions"
-          shareUrl={window.location.origin + get_absolute_url}
+          shareUrl={window.location.origin + getAbsoluteUrl}
           slug={slug}
           size="2em"
           participating={participating}
@@ -153,7 +153,7 @@ function EventCard(props: { event: EventProps; scale?: string }) {
                 <Typography variant="h5" className="eventTitle">
                   {title}
                 </Typography>
-                <Typography variant="caption">{get_group_name}</Typography>
+                <Typography variant="caption">{getGroupName}</Typography>
               </div>
             </div>
             <div className="infoDetails">
@@ -162,13 +162,13 @@ function EventCard(props: { event: EventProps; scale?: string }) {
               <div className="joinButton">
                 <JoinButton
                   variant={variant}
-                  person={number_of_participants}
-                  maxPerson={max_participant}
+                  person={numberOfParticipants}
+                  maxPerson={maxParticipant}
                   participating={participating}
                   eventSlug={slug}
-                  link={ticketing}
-                  beginInscription={begin_inscription}
-                  endInscription={end_inscription}
+                  link={formUrl}
+                  beginInscription={beginInscription}
+                  endInscription={endInscription}
                   setParticipating={setParticipating}
                 />
               </div>

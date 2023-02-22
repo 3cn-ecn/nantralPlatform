@@ -10,11 +10,10 @@ import {
   CalendarToday,
   CalendarViewDay,
 } from '@mui/icons-material';
-import { EventProps } from 'Props/Event';
-import { snakeToCamelCase } from '../../utils/camel';
+import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
-import Formular from '../../components/Formular/Formular'
+import Formular from '../../components/Formular/Formular';
 
 /**
  * Event Page, with Welcome message, next events, etc...
@@ -69,19 +68,7 @@ function Event() {
 
   React.useEffect(() => {
     axios.get('/api/event').then((res: any) => {
-      
-      res.data.forEach((event) => 
-      { 
-        // delete when date update to beginDate
-        event.begin_date = event.date;
-
-        // delete when endDate defined forEach event
-        if (event.end_date === null) {
-          event.end_date = new Date(new Date(event.date).getTime() + 3600000);
-        }
-
-        snakeToCamelCase(event, { beginDate: 'Date', endDate: 'Date' });
-      });
+      eventsToCamelCase(res.data);
       setEvents(res.data);
     });
   }, []);
@@ -93,7 +80,7 @@ function Event() {
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Formular />
         <FilterBar />
-      </div> 
+      </div>
       <EventView events={events} />
     </>
   );

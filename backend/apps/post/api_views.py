@@ -4,6 +4,16 @@ from .models import Post
 from .serializers import PostSerializer
 
 
+class ListPostsAPIView(generics.ListAPIView):
+    """List all current postss."""
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.method == 'GET':
+            return Post.objects.all()
+
+
 class ListPostsGroupAPIView(generics.ListAPIView):
     """List posts in the context of a group."""
     serializer_class = PostSerializer
