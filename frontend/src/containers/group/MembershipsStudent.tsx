@@ -23,12 +23,10 @@ function MembershipsStudent(props: {}): JSX.Element {
   const [ loadState, setLoadState ] = useState<'load' | 'success' | 'fail'>('load');
   // status of modals
   const [ message, setMessage ] = useState<{type: any; text: string }>({ type: null, text: '' });
-  const [ openAddModal, setOpenAddModal ] = useState(false);
   // filters passed as query parameters
-  const [ filters, setFilters ] = useState({
+  const [ filters, setFilters ] = useState<{student: string; from?: string; to?: string}>({
     student: studentId,
-    from: new Date().toISOString() as null | string,
-    to: null as null | string
+    from: new Date().toISOString()
   });
 
   useEffect(() => {
@@ -54,41 +52,14 @@ function MembershipsStudent(props: {}): JSX.Element {
     .then((list) => setMembers(list));
   }
 
-  /** A function to update a membership object. */
-  async function updateMembership(member: Membership) {
-    return (
-      axios
-      .put(`/api/group/membership/${member.id}/`, member)
-      .then((res) => {
-        const i = members.findIndex((elt) => elt.id === member.id);
-        Object.assign(members[i], res.data);
-      })
-    );
-  };
+  if (loadState === 'load' || !student)
+    return <p>Chargement en cours... ⏳</p>;
+  
+  if (loadState === 'fail')
+    return <p>Échec du chargement 😢</p>;
 
-  /** A function to delete a membership object. */
-  async function deleteMembership(member: Membership) {
-    return (
-      axios
-      .delete(`/api/group/membership/${member.id}/`)
-      .then(() => getMemberships())
-    );
-  }
-
-  /** A function to create a new membership object. */
-  async function createMembership(member: Membership) {
-    return (
-      axios
-      .post('/api/group/membership/', member)
-      .then(() => getMemberships())
-    );
-  };
-
-  return loadState == 'load' || !student ?
-    <p>Chargement en cours... ⏳</p>
-  : loadState == 'fail' ?
-    <p>Échec du chargement 😢</p>
-  : <>
+  return (
+    <>
       <h2>Groupes</h2>
       <ListMembershipsGrid
         members={members}
@@ -126,6 +97,7 @@ function MembershipsStudent(props: {}): JSX.Element {
         </Alert>
       </Snackbar>
     </>
+  );
 }
 
 render(<MembershipsStudent />, document.getElementById("root-members"));

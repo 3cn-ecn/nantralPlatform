@@ -30,10 +30,9 @@ function MembershipsGroup(props: {}): JSX.Element {
   const [ message, setMessage ] = useState<{type: any; text: string }>({ type: null, text: '' });
   const [ openAddModal, setOpenAddModal ] = useState(false);
   // filters passed as query parameters
-  const [ filters, setFilters ] = useState({
+  const [ filters, setFilters ] = useState<{group: string; from?: string; to?: string}>({
     group: groupSlug,
-    from: new Date().toISOString() as null | string,
-    to: null as null | string
+    from: new Date().toISOString()
   });
 
   useEffect(() => {
@@ -102,36 +101,47 @@ function MembershipsGroup(props: {}): JSX.Element {
   };
 
   /** A function to delete a membership object. */
-  async function deleteMembership(member: Membership) {
+  async function deleteMembership(
+    member: Membership,
+    student: Student,
+    group: Group
+  ) {
     return (
       axios
       .delete(`/api/group/membership/${member.id}/`)
       .then(() => getMemberships())
       .then(() => {
-        member.student.id === student!!.id
-        && setGroup({...group!!, is_member: false })
+        member.student.id === student.id
+        && setGroup({...group, is_member: false })
       })
     );
   }
 
   /** A function to create a new membership object. */
-  async function createMembership(member: Membership) {
+  async function createMembership(
+    member: Membership,
+    student: Student,
+    group: Group
+  ) {
     return (
       axios
       .post('/api/group/membership/', member)
       .then(() => getMemberships())
       .then(() =>
-        member.student as any === student!!.id
-        && setGroup({ ...group!!, is_member: true }
+        member.student as any === student.id
+        && setGroup({ ...group, is_member: true }
       ))
     );
   };
 
-  return loadState == 'load' || !group || !student ?
-    <p>Chargement en cours... ⏳</p>
-  : loadState == 'fail' ?
-    <p>Échec du chargement 😢</p>
-  : <>
+  if (loadState === 'load' || !group || !student)
+    return <p>Chargement en cours... ⏳</p>;
+  
+  if (loadState === 'fail')
+    return <p>Échec du chargement 😢</p>;
+
+  return (
+    <>
       <h2>Membres</h2>
       { displayType === 'grid'
       ? <ListMembershipsGrid
@@ -139,7 +149,8 @@ function MembershipsGroup(props: {}): JSX.Element {
           group={group}
           student={student}
           updateMembership={updateMembership}
-          deleteMembership={deleteMembership}
+          deleteMembership={(member: Membership) =>
+            deleteMembership(member, student, group)}
         />
       : <ListMembershipsTable
           members={members}
@@ -147,7 +158,8 @@ function MembershipsGroup(props: {}): JSX.Element {
           student={student}
           reorderMemberships={reorderMemberships}
           updateMembership={updateMembership}
-          deleteMembership={deleteMembership}
+          deleteMembership={(member: Membership) =>
+            deleteMembership(member, student, group)}
         />
       }
       <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
@@ -168,7 +180,8 @@ function MembershipsGroup(props: {}): JSX.Element {
             </Button>
             <ModalEditMember
               open={openAddModal}
-              saveMembership={createMembership}
+              saveMembership={(member: Membership) =>
+                createMembership(member, student, group)}
               closeModal={() => setOpenAddModal(false)}
               group={group}
               student={student}
@@ -179,7 +192,7 @@ function MembershipsGroup(props: {}): JSX.Element {
         ? <Button
             variant='text'
             onClick={() => {
-              filters.from = null;
+              filters.from = undefined;
               getMemberships();
             }}
           >
@@ -206,6 +219,7 @@ function MembershipsGroup(props: {}): JSX.Element {
         </Alert>
       </Snackbar>
     </>
+  );
 }
 
 render(<MembershipsGroup />, document.getElementById("root-members"));
