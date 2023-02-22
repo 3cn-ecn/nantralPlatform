@@ -33,7 +33,6 @@ function convertType<T>(
   convert: Record<keyof T, 'Date' | 'string'>,
   key: string
 ): void {
-  // if (key in convert) {
   switch (convert[key]) {
     case 'Date':
       data[key] = new Date(data[key]);
@@ -44,7 +43,6 @@ function convertType<T>(
     default:
       throw new Error(`Given type ${convert[key]} not implemented`);
   }
-  // }
 }
 
 /**
