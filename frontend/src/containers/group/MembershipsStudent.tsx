@@ -70,7 +70,7 @@ function MembershipsStudent(props: {}): JSX.Element {
         ? <Button
             variant='text'
             onClick={() => {
-              filters.from = null;
+              filters.from = undefined;
               getMemberships();
             }}
           >

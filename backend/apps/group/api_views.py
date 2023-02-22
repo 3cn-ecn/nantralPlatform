@@ -23,6 +23,15 @@ from .serializers import (
 
 class GroupPermission(permissions.BasePermission):
 
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        if view.action == 'create':
+            group_type = get_object_or_404(
+                GroupType, slug=request.query_params.get('type', None))
+            return group_type.can_create
+        return True
+
     def has_object_permission(self, request, view, obj: Group):
         user = request.user
         if request.method in permissions.SAFE_METHODS:
@@ -82,7 +91,7 @@ class MembershipPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj: Membership):
         if request.method in permissions.SAFE_METHODS:
-            return True
+            return not obj.group.private or obj.group.is_member(request.user)
         return (obj.student.user == request.user
                 or obj.group.is_admin(request.user))
 
@@ -161,7 +170,8 @@ class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
             .order_by('-priority',
                       'student__user__first_name',
                       'student__user__last_name')
-            .prefetch_related('student__user'))
+            .prefetch_related('student__user')
+            .distinct())
         return self.queryset
 
     def list(self, request, *args, **kwargs):

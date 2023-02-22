@@ -1,48 +1,327 @@
+import logging
+
+from django.contrib.auth import get_user_model
+
 from rest_framework import status
-from django.test import TestCase
-from django.urls import reverse
-from django.utils import timezone
+from rest_framework.test import APITestCase
 
-from apps.utils.utest import TestMixin
-from .models import Club, NamedMembershipClub
+from .models import GroupType, Group, Membership
 
 
-class TestGroups(TestCase, TestMixin):
+class TestGroups(APITestCase):
+
     def setUp(self):
-        self.user_setup()
+        User = get_user_model()  # noqa: N806
+        self.u1 = User.objects.create(username='u1')
+        self.t1 = GroupType.objects.create(name="T1", slug='t1')
+        self.t2 = GroupType.objects.create(
+            name="T2", slug='t2', can_create=True)
+        # deactivate warnings
+        logger = logging.getLogger('django.request')
+        self.previous_level = logger.getEffectiveLevel()
+        logger.setLevel(logging.ERROR)
 
     def tearDown(self):
-        self.user_teardown()
+        User = get_user_model()  # noqa: N806
+        User.objects.all().delete()
+        GroupType.objects.all().delete()
+        # re-activate warnings
+        logger = logging.getLogger('django.request')
+        logger.setLevel(self.previous_level)
 
-    def test_create_club(self):
-        Club.objects.create(name='TestClub')
-        self.assertEqual(len(Club.objects.all()), 1)
+    def test_list(self):
+        self.client.force_login(self.u1)
+        # test without indicating a group type
+        res = self.client.get('/api/group/group/')
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        # test an empty list
+        res = self.client.get('/api/group/group/', {'type': 't1'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 0)
+        # test with a group
+        g = Group.objects.create(name="G1", group_type=self.t1)
+        res = self.client.get('/api/group/group/', {'type': 't1'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+        # test with a private group
+        g.private = True
+        g.save()
+        res = self.client.get('/api/group/group/', {'type': 't1'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 0)
+        # test with a private group where the user is member
+        g.members.add(self.u1.student)
+        res = self.client.get('/api/group/group/', {'type': 't1'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
 
-    def test_club_views(self):
-        Club.objects.create(name='TestClub')
-        club = Club.objects.all().first()
+    def test_create(self):
+        self.client.force_login(self.u1)
+        init_nb = Group.objects.count()
+        # test on a type that is forbidden
+        res = self.client.post('/api/group/group/?type=t1', {'name': 'G1'})
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(Group.objects.count(), init_nb)
+        # test on a type that is open
+        res = self.client.post('/api/group/group/?type=t2', {'name': 'G1'})
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Group.objects.count(), init_nb + 1)
 
-        url = reverse('club:detail', args=[club.slug])
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+    def test_retrieve(self):
+        self.client.force_login(self.u1)
+        g = Group.objects.create(name="G1", group_type=self.t1)
+        # test to retrieve a normal group
+        res = self.client.get(f'/api/group/group/{g.slug}/')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        # test with private=True
+        g.private = True
+        g.save()
+        res = self.client.get(f'/api/group/group/{g.slug}/')
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        g.members.add(self.u1.student)
+        res = self.client.get(f'/api/group/group/{g.slug}/')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        g.private = False
+        g.save()
+        # test with public=True
+        self.client.logout()
+        res = self.client.get(f'/api/group/group/{g.slug}/')
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        g.public = True
+        g.save()
+        res = self.client.get(f'/api/group/group/{g.slug}/')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-        url = reverse('club:update', args=[club.slug])
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
+    def test_update(self):
+        g = Group.objects.create(name="G1", slug='g1', group_type=self.t1)
+        # test for non-authenticated users
+        res = self.client.put(f'/api/group/group/{g.slug}/', {'name': 'G2'})
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with authenticated user
+        self.client.force_login(self.u1)
+        res = self.client.put(f'/api/group/group/{g.slug}/', {'name': 'G2'})
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with member
+        g.members.add(self.u1.student)
+        res = self.client.put(f'/api/group/group/{g.slug}/', {'name': 'G2'})
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with admin
+        g.membership_set.filter(student=self.u1.student).update(admin=True)
+        res = self.client.put(f'/api/group/group/{g.slug}/', {'name': 'G2'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        # check the modification is done
+        self.assertEqual(Group.objects.get(slug='g1').name, "G2")
 
-    def test_add_member(self):
-        club = Club.objects.create(name='TestClub')
-        payload = {
-            'function': 'test',
-            'date_begin': timezone.now().today().date(),
-        }
-        url = reverse('club:add-member', args=[club.slug])
-        with self.assertLogs('django.request', level='WARNING'):
-            resp = self.client.post(url, payload)
-        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+    def test_delete(self):
+        g = Group.objects.create(name="G1", slug='g1', group_type=self.t1)
+        # test for non-authenticated users
+        res = self.client.delete(f'/api/group/group/{g.slug}/')
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with authenticated user
+        self.client.force_login(self.u1)
+        res = self.client.delete(f'/api/group/group/{g.slug}/')
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with member
+        g.members.add(self.u1.student)
+        res = self.client.delete(f'/api/group/group/{g.slug}/')
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with admin
+        g.membership_set.filter(student=self.u1.student).update(admin=True)
+        res = self.client.delete(f'/api/group/group/{g.slug}/')
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        # check the modification is done
+        self.assertFalse(Group.objects.filter(slug='g1').exists())
 
-        self.client.login(username=self.u2.username, password=self.PASSWORD)
-        resp = self.client.post(url, payload)
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(NamedMembershipClub.objects.filter(
-            group=club, student=self.u2.student).count(), 1)
+
+class TestMemberships(APITestCase):
+
+    def setUp(self):
+        User = get_user_model()  # noqa: N806
+        self.u1 = User.objects.create(username='u1')
+        self.u2 = User.objects.create(username='u2')
+        self.u3 = User.objects.create(username='u3')
+        self.t1 = GroupType.objects.create(name="T1", slug='t1')
+        self.g1 = Group.objects.create(name="G1", group_type=self.t1)
+        # deactivate warnings
+        logger = logging.getLogger('django.request')
+        self.previous_level = logger.getEffectiveLevel()
+        logger.setLevel(logging.ERROR)
+
+    def tearDown(self):
+        User = get_user_model()  # noqa: N806
+        User.objects.all().delete()
+        Group.objects.all().delete()
+        GroupType.objects.all().delete()
+        # re-activate warnings
+        logger = logging.getLogger('django.request')
+        logger.setLevel(self.previous_level)
+
+    def test_list(self):
+        self.client.force_login(self.u1)
+        # test without indicating a group or a student
+        res = self.client.get('/api/group/membership/')
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # test an empty list
+        res = self.client.get('/api/group/membership/', {'group': 'g1'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 0)
+        # test with one membership
+        self.g1.members.add(self.u2.student)
+        res = self.client.get('/api/group/membership/', {'group': 'g1'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+        # test with a private group
+        self.g1.private = True
+        self.g1.save()
+        res = self.client.get('/api/group/membership/', {'group': 'g1'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 0)
+        # test with a private group where the user is member
+        self.g1.members.add(self.u1.student)
+        res = self.client.get('/api/group/membership/', {'group': 'g1'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 2)
+        self.g1.private = False
+        self.g1.save()
+        # test on student
+        res = self.client.get('/api/group/membership/', {'student': self.u2.id})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 1)
+        # test if non authenticated
+        self.client.logout()
+        res = self.client.get('/api/group/membership/', {'group': 'g1'})
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create(self):
+        self.client.force_login(self.u1)
+        init_nb = self.g1.members.count()
+        # test without dates
+        res = self.client.post('/api/group/membership/', {
+            'group': self.g1.id,
+            'student': self.u1.id
+        })
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        # test with dates
+        res = self.client.post('/api/group/membership/', {
+            'group': self.g1.id,
+            'student': self.u1.id,
+            'begin_date': '2022-01-01',
+            'end_date': '2023-01-01',
+        })
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(self.g1.members.count(), init_nb + 1)
+        # test for groups with no_memberships_dates
+        self.g1.membership_set.filter(student=self.u1.student).delete()
+        self.t1.no_membership_dates = True
+        self.t1.save()
+        res = self.client.post('/api/group/membership/', {
+            'group': self.g1.id,
+            'student': self.u1.id
+        })
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(self.g1.members.count(), init_nb + 1)
+        # test for creating the a duplicate membership
+        res = self.client.post('/api/group/membership/', {
+            'group': self.g1.id,
+            'student': self.u1.id
+        })
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(self.g1.members.count(), init_nb + 1)
+        # test for adding another member
+        res = self.client.post('/api/group/membership/', {
+            'group': self.g1.id,
+            'student': self.u2.id
+        })
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(self.g1.members.count(), init_nb + 1)
+        # test for adding a new member if admin
+        self.g1.membership_set.filter(student=self.u1.student).update(
+            admin=True)
+        res = self.client.post('/api/group/membership/', {
+            'group': self.g1.id,
+            'student': self.u2.id
+        })
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(self.g1.members.count(), init_nb + 2)
+        # test of locking
+        self.g1.lock_memberships = True
+        self.g1.save()
+        self.client.force_login(self.u3)
+        res = self.client.post('/api/group/membership/', {
+            'group': self.g1.id,
+            'student': self.u3.id
+        })
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_retrieve(self):
+        m2 = Membership.objects.create(student=self.u2.student, group=self.g1)
+        # test to retrieve
+        self.client.force_login(self.u1)
+        res = self.client.get(f'/api/group/membership/{m2.id}/')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.client.logout()
+        res = self.client.get(f'/api/group/membership/{m2.id}/')
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with private=True
+        self.g1.private = True
+        self.g1.save()
+        self.client.force_login(self.u3)
+        res = self.client.get(f'/api/group/membership/{m2.id}/')
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+        self.g1.private = False
+        self.g1.save()
+        # test with public=True
+        self.client.logout()
+        res = self.client.get(f'/api/group/membership/{m2.id}/')
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update(self):
+        m1 = Membership.objects.create(student=self.u1.student, group=self.g1)
+        m2 = Membership.objects.create(student=self.u2.student, group=self.g1)
+        # test for non-authenticated users
+        res = self.client.put(f'/api/group/membership/{m1.id}/',
+                              {'summary': 'Test'})
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with authenticated user
+        self.client.force_login(self.u1)
+        res = self.client.put(f'/api/group/membership/{m1.id}/',
+                              {'summary': 'Test'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        # test with other member
+        res = self.client.put(f'/api/group/membership/{m2.id}/',
+                              {'summary': 'Test2'})
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with admin
+        Membership.objects.filter(id=m1.id).update(admin=True)
+        res = self.client.put(f'/api/group/membership/{m2.id}/',
+                              {'summary': 'Test2'})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        # check the modifications are done
+        self.assertEqual(
+            self.g1.membership_set.get(student=self.u1.student).summary,
+            "Test")
+        self.assertEqual(
+            self.g1.membership_set.get(student=self.u2.student).summary,
+            "Test2")
+
+    def test_delete(self):
+        m1 = Membership.objects.create(student=self.u1.student, group=self.g1)
+        m2 = Membership.objects.create(student=self.u2.student, group=self.g1)
+        # test for non-authenticated users
+        res = self.client.delete(f'/api/group/membership/{m2.id}/')
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with authenticated user
+        self.client.force_login(self.u1)
+        res = self.client.delete(f'/api/group/membership/{m2.id}/')
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        # test with admin
+        Membership.objects.filter(id=m1.id).update(admin=True)
+        res = self.client.delete(f'/api/group/membership/{m2.id}/')
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        # test for yourself
+        Membership.objects.filter(id=m1.id).update(admin=False)
+        res = self.client.delete(f'/api/group/membership/{m1.id}/')
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        # check the modification is done
+        self.assertFalse(Membership.objects.filter(id=m1.id).exists())
+        self.assertFalse(Membership.objects.filter(id=m2.id).exists())

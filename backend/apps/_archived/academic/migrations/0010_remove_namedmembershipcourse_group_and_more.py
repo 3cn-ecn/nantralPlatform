@@ -7,6 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('academic', '0009_migrate_to_group'),
+        ('exchange', '0002_delete_exchange'),
     ]
 
     operations = [

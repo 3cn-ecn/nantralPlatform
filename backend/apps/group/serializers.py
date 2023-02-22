@@ -19,11 +19,11 @@ class AdminFieldsMixin:
             admin_fields = self.fields
         if self.instance:
             an_admin_field_is_updated = any([
-                getattr(self.instance, field) != data.get(field)
+                data.get(field) and getattr(self.instance, field) != data[field]
                 for field in admin_fields])
         else:
             an_admin_field_is_updated = any([
-                not data.get(field) for field in admin_fields
+                data.get(field) for field in admin_fields
             ])
         user = self.context['request'].user
         if an_admin_field_is_updated and not group.is_admin(user):
@@ -50,7 +50,7 @@ class SimpleGroupSerializer(serializers.ModelSerializer):
         return obj.get_absolute_url()
 
 
-class GroupSerializer(AdminFieldsMixin, serializers.ModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     is_admin = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
@@ -63,7 +63,6 @@ class GroupSerializer(AdminFieldsMixin, serializers.ModelSerializer):
                    'created_at', 'created_by', 'updated_at', 'updated_by',
                    'lock_memberships']
         read_only_fields = ['group_type', 'parent', 'url']
-        admin_fields = '__all__'
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
@@ -74,15 +73,11 @@ class GroupSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     def get_is_member(self, obj: Group) -> bool:
         return obj.is_member(self.context['request'].user)
 
-    def validate(self, data: dict[str, any]) -> dict[str, any]:
-        group: Group = data['group']
-        user = self.context['request'].user
-        if not (user.student == data['student'] or group.is_admin(user)):
-            raise exceptions.PermissionDenied(_(
-                "You can only edit a membership for yourself or for "
-                "someone else inside a group where you are admin."))
-        self.validate_admin_fields(data, self.instance)
-        return data
+    def validate(self, data):
+        if not self.instance:
+            data['group_type'] = GroupType.objects.get(
+                slug=self.context['request'].query_params.get('type', None))
+        return super().validate(data)
 
 
 class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
@@ -99,7 +94,7 @@ class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
         admin_fields = ['priority', 'admin']
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
-        if (data['begin_date'] and data['end_date']
+        if (data.get('begin_date') and data.get('end_date')
                 and data['begin_date'] > data['end_date']):
             raise exceptions.ValidationError(_(
                 "The end date must be after the begin date."))
@@ -128,9 +123,12 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
             raise exceptions.PermissionDenied(_(
                 "You cannot create create a new membership inside a private "
                 "group if you are not admin of this group."))
-        if (data['begin_date'] and data['end_date']
-                and data['begin_date'] > data['end_date']):
+        if data.get('end_date', None) and data.get('begin_date', None):
+            if data['begin_date'] > data['end_date']:
+                raise exceptions.ValidationError(_(
+                    "The end date must be after the begin date."))
+        elif not group.group_type.no_membership_dates:
             raise exceptions.ValidationError(_(
-                "The end date must be after the begin date."))
+                "You must provides 'begin_date' and 'end_date'."))
         self.validate_admin_fields(data, group)
         return data

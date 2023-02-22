@@ -264,6 +264,10 @@ class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
         ]
         return context
 
+    def form_valid(self, form):
+        form.instance.updated_by = self.request.user.student
+        return super().form_valid(form)
+
 
 class DeleteGroupView(UserIsGroupAdminMixin, DeleteView):
     """Delete a group."""
@@ -354,6 +358,7 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
         return form
 
     def form_valid(self, form):
+        form.instance.updated_by = self.request.user.student
         res = super().form_valid(form)
         if not self.parent:
             form.instance.members.add(
