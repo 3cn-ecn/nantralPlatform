@@ -1,54 +1,32 @@
 {
-  "navbar": {
-    "clubs": "Clubs et assos",
-    "flatshare": "Carte des colocs",
-    "home": "Accueil",
-    "events": "Évènements",
-    "family": "Parrainage",
-    "bdx": "Listes BDX",
-    "academics": "Cours et Formations",
-    "administration": "Administration",
-    "student": "Annuaire Étudiant",
-    "signature": "Signature ECN"
-  },
-  "user_menu": {
-    "profile": "Mon Profil",
-    "logout": "Se déconnecter",
-    "bug": "Suggestion / Bug",
-    "doc": "Documentation",
-    "legal": "Mentions Légales",
-    "language": "Langue",
-    "english": "Anglais",
-    "french": "Français",
-    "light": "Thème clair",
-    "dark": "Thème sombre",
-    "automatic": "Automatique",
-    "title_theme": "Thème",
-    "title_language": "Langage",
-    "theme": "Thème"
-  },
   "button": {
-    "cancel" : "annuler",
+    "cancel": "annuler",
     "joinButton": {
       "register": "s'inscrire",
       "registerLink": "lien d'inscription",
-      "unsuscribe" : "se désinscrire",
-      "shotgunClosed" : "shotgun fermé",
-      "title": "Voulez-vous vous désinscrire de cet événements ?"
+      "shotgunClosed": "shotgun fermé",
+      "title": "Voulez-vous vous désinscrire de cet événements ?",
+      "unsuscribe": "se désinscrire"
     }
   },
-  "legalNotice": {
-    "title": "Mentions Légales",
-    "subtitles": {
-      "1": "Identité du site",
-      "2": "L'association",
-      "3": "Conception et réalisation",
-      "4": "Hébergement",
-      "5": "Propriété intellectuelle",
-      "6": "Cookies",
-      "7": "Contenu embarqué depuis d'autres sites",
-      "8": "Traitement des données personnelles"
+  "event": {
+    "action_menu": {
+      "edit": "Modifier",
+      "linkCopied": "Lien copié",
+      "share": "Partager",
+      "unsubscribe": "Se désinscrire"
     },
+    "no_event": "Aucun évènement"
+  },
+  "home": {
+    "myClubs": "Mes Clubs & Assos",
+    "myEvents": "Mes événements",
+    "seeMore": "voir plus",
+    "thisWeek": "Cette semaine",
+    "upcomingEvents": "Évènements à venir",
+    "welcomeTo": "Bienvenue sur"
+  },
+  "legalNotice": {
     "paragraphs": {
       "1": {
         "lines": {
@@ -89,27 +67,51 @@
       "6": "Seul un cookie de session est utilisé sur le site et expire après 14 jours.",
       "7": "Les contenus de ce site peuvent inclure du contenu provenant de sources extérieures (par exemple les vidéos, images, etc…). Ces contenus embarqués agissent de la même manière que si le visiteur avait visité le site original où repose ce contenu. Ces sites peuvent donc utiliser des cookies supplémentaires.",
       "8": "Lors de votre inscription sur le site, les données personnelles que vous nous transmettez seront stockées et conservées par l’Association des Étudiants de l’École Centrale de Nantes jusqu’à demande de suppression de votre compte utilisateur à l’aide du formulaire de contact"
-    }
+    },
+    "subtitles": {
+      "1": "Identité du site",
+      "2": "L'association",
+      "3": "Conception et réalisation",
+      "4": "Hébergement",
+      "5": "Propriété intellectuelle",
+      "6": "Cookies",
+      "7": "Contenu embarqué depuis d'autres sites",
+      "8": "Traitement des données personnelles"
+    },
+    "title": "Mentions Légales"
   },
-  "home" : {
-    "myEvents": "Mes événements",
-    "upcomingEvents": "Événements à venir",
-    "seeMore": "voir plus",
-    "welcomeTo": "Bienvenue sur",
-    "myClubs": "Mes Clubs & Assos"
-  },
-  "event" : {
-    "action_menu": {
-      "unsubscribe": "Se désinscrire",
-      "share": "Partager",
-      "linkCopied": "Lien copié",
-      "edit": "Modifier"
-    }
+  "navbar": {
+    "academics": "Cours et Formations",
+    "administration": "Administration",
+    "bdx": "Listes BDX",
+    "clubs": "Clubs et assos",
+    "events": "Évènements",
+    "family": "Parrainage",
+    "flatshare": "Carte des colocs",
+    "home": "Accueil",
+    "signature": "Signature ECN",
+    "student": "Annuaire Étudiant"
   },
   "notif": {
-    "title": "Notifications",
-    "unread": "Non Lu",
+    "load": "Charger Plus",
     "subscribed": "Abonné",
-    "load": "Charger Plus"
+    "title": "Notifications",
+    "unread": "Non Lu"
+  },
+  "user_menu": {
+    "automatic": "Automatique",
+    "bug": "Suggestion / Bug",
+    "dark": "Thème sombre",
+    "doc": "Documentation",
+    "english": "Anglais",
+    "french": "Français",
+    "language": "Langue",
+    "legal": "Mentions Légales",
+    "light": "Thème clair",
+    "logout": "Se déconnecter",
+    "profile": "Mon Profil",
+    "theme": "Thème",
+    "title_language": "Langage",
+    "title_theme": "Thème"
   }
 }

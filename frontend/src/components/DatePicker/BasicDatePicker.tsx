@@ -7,7 +7,7 @@ import 'dayjs/locale/fr';
 import TextField from '@mui/material/TextField';
 
 // TO DO : UN BOUTON POUR ENLEVER LA DATE CHOISIE
-
+// TO DO : make adapterLocale and toolbarTitle adapt to the language selected
 export default function BasicDatePicker(props: {
   label: string;
   minDate: any;
@@ -22,12 +22,17 @@ export default function BasicDatePicker(props: {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
+    <LocalizationProvider
+      dateAdapter={AdapterDayjs}
+      adapterLocale="fr"
+      style={{ width: 230 }}
+    >
       <DatePicker
         minDate={minDate}
         label={label}
         value={valueDebut}
         onChange={handleChange}
+        toolbarTitle="dd/mm/yyyy"
         renderInput={(params) => <TextField {...params} />}
       />
     </LocalizationProvider>

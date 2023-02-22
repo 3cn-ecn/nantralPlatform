@@ -8,7 +8,6 @@ import {
   ListItemButton,
   ListItemIcon,
   SvgIcon,
-  Typography,
 } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -126,6 +125,9 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
               to={link.url}
               reloadDocument={link.isOnBackend}
               className="navlink"
+              sx={{
+                color: 'text.primary',
+              }}
             >
               <ListItemButton>
                 <ListItemIcon>
@@ -135,7 +137,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
                     <SvgIcon component={LinkIcon} inheritViewBox />
                   )}
                 </ListItemIcon>
-                <Typography>{link.text}</Typography>
+                {link.text}
               </ListItemButton>
             </ListItem>
           ))}
