@@ -1,7 +1,7 @@
 # spell-checker: words notif
 
-from django.db.utils import IntegrityError
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 from push_notifications.models import WebPushDevice
 from rest_framework import permissions, status
@@ -9,10 +9,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.exceptions import (
     ValidationError,
-    NotFound,
-    MethodNotAllowed)
+    NotFound)
 
-from .models import SentNotification, Subscription
+from apps.group.models import Group
+from .models import SentNotification
 from .serializers import SentNotificationSerializer
 
 
@@ -39,37 +39,27 @@ class SubscriptionAPIView(APIView):
     """
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, page, format=None):
+    def get(self, request, slug, format=None):
         """Get the state of the subscription of current user to a page."""
 
-        student = request.user.student
-        res = Subscription.objects.filter(page=page, student=student).exists()
+        res = request.user.student.subscriptions.filter(slug=slug).exists()
         return Response(data=res)
 
-    def post(self, request, page, *args, **kwargs):
+    def post(self, request, slug, *args, **kwargs):
         """Register the subscription of a user to a page"""
 
         student = request.user.student
-        try:
-            Subscription.objects.create(page=page, student=student)
-            return Response(status=status.HTTP_201_CREATED, data=True)
-        except IntegrityError:
-            raise MethodNotAllowed(
-                method="POST",
-                detail="User has already subscribed! Use DELETE to unsubscribe."
-            )
+        group = get_object_or_404(Group, slug=slug)
+        group.subscribers.add(student)
+        return Response(status=status.HTTP_201_CREATED, data=True)
 
-    def delete(self, request, page, *args, **kwargs):
+    def delete(self, request, slug, *args, **kwargs):
         """Delete the subscription of a user to a page"""
 
         student = request.user.student
-        try:
-            obj = Subscription.objects.get(page=page, student=student)
-            obj.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT, data=False)
-        except Subscription.DoesNotExist:
-            raise NotFound(
-                "Cannot delete the subscription: user did not subscribed")
+        group = get_object_or_404(Group, slug=slug)
+        group.subscribers.remove(student)
+        return Response(status=status.HTTP_204_NO_CONTENT, data=False)
 
 
 class GetNotificationsAPIView(APIView):

@@ -24,7 +24,8 @@ class TestGroups(APITestCase):
     def tearDown(self):
         User = get_user_model()  # noqa: N806
         User.objects.all().delete()
-        GroupType.objects.all().delete()
+        GroupType.objects.filter(slug='t1').delete()
+        GroupType.objects.filter(slug='t2').delete()
         # re-activate warnings
         logger = logging.getLogger('django.request')
         logger.setLevel(self.previous_level)
@@ -150,8 +151,7 @@ class TestMemberships(APITestCase):
     def tearDown(self):
         User = get_user_model()  # noqa: N806
         User.objects.all().delete()
-        Group.objects.all().delete()
-        GroupType.objects.all().delete()
+        GroupType.objects.filter(slug='t1').delete()
         # re-activate warnings
         logger = logging.getLogger('django.request')
         logger.setLevel(self.previous_level)

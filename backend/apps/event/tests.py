@@ -29,8 +29,7 @@ class EventTestCase(TestCase, TestMixin):
 
     def tearDown(self):
         self.user_teardown()
-        Group.objects.all().delete()
-        GroupType.objects.all().delete()
+        GroupType.objects.filter(slug='t1').delete()
         Event.objects.all().delete()
 
     def test_event_detail_view(self):

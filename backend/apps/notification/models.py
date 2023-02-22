@@ -22,17 +22,6 @@ VISIBILITY = [
 ]
 
 
-class Subscription(models.Model):
-    """Groupes auxquels un utilisateur est abonné."""
-    student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, related_name="subscription_set")
-    page = models.SlugField('Page', max_length=50)
-
-    class Meta:
-        verbose_name = "Abonnement"
-        unique_together = ['student', 'page']
-
-
 class Notification(models.Model):
     """Contenu d'une notification"""
     title = models.CharField('Titre', max_length=255)

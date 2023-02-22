@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.utils import IntegrityError
 from django.http.request import HttpRequest
 from django.shortcuts import redirect
 from django.urls.base import reverse
@@ -12,7 +11,6 @@ from django.views.generic import View, FormView, TemplateView, DetailView
 
 from .models import AbstractGroup
 from apps.sociallink.models import SocialLink
-from apps.notification.models import Subscription
 
 from .forms import (
     NamedMembershipAddGroup,
@@ -108,21 +106,9 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         if not self.object.pk:
             self.object.save()
             messages.success(self.request, 'Bienvenue dans le groupe !')
-            try:
-                Subscription.objects.create(
-                    page=self.object.group.full_slug,
-                    student=self.object.student)
-            except IntegrityError:
-                pass
         elif self.request.POST.get('delete'):
             self.object.delete()
             messages.success(self.request, 'Membre supprimé.')
-            try:
-                Subscription.objects.get(
-                    page=self.object.group.full_slug,
-                    student=self.object.student).delete()
-            except Subscription.DoesNotExist:
-                pass
         else:
             self.object.save()
             messages.success(

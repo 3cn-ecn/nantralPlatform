@@ -72,6 +72,7 @@ class TestHomeView(TestCase, TestMixin):
         # )
 
     def tearDown(self):
+        GroupType.objects.filter(slug='t1').delete()
         self.past.delete()
         self.today.delete()
         self.tomorrow.delete()
