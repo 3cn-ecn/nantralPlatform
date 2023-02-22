@@ -30,7 +30,7 @@ def forwards(apps, schema_editor):
         email_type = SocialNetwork.objects.get(name='Email')
     bdx = {}
 
-    for club in Club.objects.all().order_by('-bdx__isnull'):
+    for club in Club.objects.all().order_by('bdx_type__order'):
         alt_name = club.alt_name.split(',')[0] if club.alt_name else ''
         g = Group.objects.create(
             name=club.name if len(club.name) > len(alt_name) else alt_name,

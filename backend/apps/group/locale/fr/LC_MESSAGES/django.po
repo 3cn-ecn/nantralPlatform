@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-22 12:11+0100\n"
-"PO-Revision-Date: 2023-02-22 12:12+0100\n"
+"POT-Creation-Date: 2023-02-23 00:17+0100\n"
+"PO-Revision-Date: 2023-02-23 00:18+0100\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: api_views.py:176
+#: api_views.py:186
 msgid "Provides either 'group' or 'student' as params."
 msgstr "Ajoutez soit 'group', soit 'student' comme paramètres de requête."
 
-#: api_views.py:202
+#: api_views.py:212
 msgid "All memberships objects must be from the same group."
 msgstr "Tous les objets membres doivent être du même groupe."
 
@@ -162,10 +162,6 @@ msgstr "Groupe parent"
 msgid "Children groups label"
 msgstr "Label des groupes enfants"
 
-#: models.py:174
-msgid "Sub-groups"
-msgstr "Sous-groupes"
-
 #: models.py:176
 msgid "Lock memberships"
 msgstr "Verrouiller les membres"
@@ -295,19 +291,11 @@ msgstr ""
 "Certains champs ne peuvent pas être modifiés par des utilisateurs qui ne "
 "sont pas admins."
 
-#: serializers.py:82
-msgid ""
-"You can only edit a membership for yourself or for someone else inside a "
-"group where you are admin."
-msgstr ""
-"Vous pouvez uniquement modifier les objets membres rattachés à votre compte "
-"ou ceux des groupes dont vous êtes admin."
-
-#: serializers.py:105 serializers.py:134
+#: serializers.py:100 serializers.py:129
 msgid "The end date must be after the begin date."
 msgstr "La date de fin doit être située après la date de début."
 
-#: serializers.py:124
+#: serializers.py:119
 msgid ""
 "You can only create new membership for yourself or for someone else inside a "
 "group where you are admin."
@@ -315,7 +303,7 @@ msgstr ""
 "Vous pouvez uniquement créer de nouveaux objets membres pour vous-même ou "
 "pour un groupe dont vous êtes admin."
 
-#: serializers.py:129
+#: serializers.py:124
 msgid ""
 "You cannot create create a new membership inside a private group if you are "
 "not admin of this group."
@@ -323,62 +311,66 @@ msgstr ""
 "Vous ne pouvez pas créer d'objets membres dans un groupe privé si vous "
 "n'êtes pas déjà admin du groupe."
 
-#: views.py:76 views.py:122 views.py:176 views.py:221 views.py:251 views.py:284
-#: views.py:324 views.py:381 views.py:416 views.py:464 views.py:500
-#: views.py:536
+#: serializers.py:132
+msgid "You must provides 'begin_date' and 'end_date'."
+msgstr "Vous devez indiquer une date de début et une date de fin."
+
+#: views.py:74 views.py:120 views.py:175 views.py:220 views.py:250 views.py:287
+#: views.py:327 views.py:385 views.py:420 views.py:468 views.py:504
+#: views.py:540
 msgid "Groups"
 msgstr "Groupes"
 
-#: views.py:263 views.py:296 views.py:393 views.py:428 views.py:476
-#: views.py:512 views.py:548
+#: views.py:262 views.py:299 views.py:397 views.py:432 views.py:480
+#: views.py:516 views.py:552
 msgid "Edit"
 msgstr "Modifier"
 
-#: views.py:332
+#: views.py:335
 msgid "Create"
 msgstr "Créer"
 
-#: views.py:443
+#: views.py:447
 msgid "Social links updated"
 msgstr "Liens mis à jour"
 
-#: views.py:600
+#: views.py:604
 msgid "You are no longer a member of this group."
 msgstr "Vous n'êtes plus membre du groupe."
 
-#: views.py:607
+#: views.py:611
 msgid "Welcome in the group!"
 msgstr "Bienvenue dans le groupe !"
 
-#: views.py:610
+#: views.py:614
 msgid "Your modifications have been saved!"
 msgstr "Vos modifications ont bien été modifiées !"
 
-#: views.py:615
+#: views.py:619
 msgid "Modifications failed... 😥"
 msgstr "Les modifications ont échoué... 😥"
 
-#: views.py:639
+#: views.py:643
 msgid ""
 "Your admin request has been sent! You will receive the answer soon by email."
 msgstr ""
 "Votre demande a bien été envoyée ! Vous recevrez une réponse rapidement par "
 "mail."
 
-#: views.py:663
+#: views.py:667
 msgid "An error occurred... 😥"
 msgstr "Une erreur s'est produite... 😥"
 
-#: views.py:673
+#: views.py:677
 #, python-format
 msgid "The user %(user)s is now admin!"
 msgstr "L'utilisateur %(user)s est maintenant admin !"
 
-#: views.py:676 views.py:689
+#: views.py:680 views.py:693
 msgid "Request already answered!"
 msgstr "Cette demande d'admin a déjà été traitée!"
 
-#: views.py:686
+#: views.py:690
 #, python-format
 msgid "The admin request from %(user)s has been denied."
 msgstr "La demande d'admin de %(user)s a été refusée."
