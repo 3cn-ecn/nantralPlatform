@@ -9,7 +9,7 @@ import {
   Alert,
   CircularProgress
 } from '@mui/material';
-import { Membership, Group } from '../interfaces';
+import { Membership } from '../interfaces';
 
 /** A modal to confirm the deletion of a member. */
 function DeleteMemberModal(props: {

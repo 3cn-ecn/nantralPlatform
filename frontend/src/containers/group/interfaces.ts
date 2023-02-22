@@ -62,5 +62,5 @@ export interface Membership {
   priority: number;
   admin: boolean;
   admin_request?: boolean;
-  dragId?: string;
+  dragId: string;
 }

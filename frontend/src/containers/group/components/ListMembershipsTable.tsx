@@ -107,6 +107,16 @@ function DroppableComponent(onDragEnd: OnDragEndResponder) {
   };
 };
 
+/** An admin badge for the cells of admin columns. */
+function AdminBadge(props: {item: Membership}): JSX.Element {
+  const { item } = props;
+  if (item.admin)
+    return <CheckCircleIcon color='success' />;
+  if (item.admin_request)
+    return <HelpIcon color='warning' />;
+  return <></>;
+}
+
 /**
  * A row of the table with a membership
  * 
@@ -120,7 +130,7 @@ function MembershipRow(props: {
   student: Student;
   updateMembership: (member: Membership) => Promise<void>;
   deleteMembership: (member: Membership) => Promise<void>;
-}) {
+}): JSX.Element {
   const {
     item,
     index,
@@ -134,7 +144,7 @@ function MembershipRow(props: {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   return <TableRow
-    component={DraggableComponent(item.dragId!!, index)}
+    component={DraggableComponent(item.dragId, index)}
   >
     <TableCell scope="row" sx={{width: 0}}>
       <DragIndicatorIcon color='disabled' />
@@ -150,13 +160,9 @@ function MembershipRow(props: {
     <TableCell>
       {item.summary}
     </TableCell>
-    <TableCell>{
-      item.admin ?
-        <CheckCircleIcon color='success' />
-      : item.admin_request ?
-        <HelpIcon color='warning' />
-      : <></>
-    }</TableCell>
+    <TableCell>
+      <AdminBadge item={item} />
+    </TableCell>
     <TableCell>
       <Box sx={{ display: 'flex', gap: 1 }}>
         <IconButton title='Ouvrir' aria-label='show' size='small' onClick={() => setOpenShowModal(true)}>
@@ -251,8 +257,8 @@ function ListMembershipsTable(props: {
             <MembershipRow
               item={item}
               index={index}
-              group={group!!}
-              student={student!!}
+              group={group}
+              student={student}
               key={item.id}
               updateMembership={updateMembership}
               deleteMembership={deleteMembership}
