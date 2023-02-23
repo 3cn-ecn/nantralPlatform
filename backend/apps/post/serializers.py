@@ -13,7 +13,5 @@ class PostSerializer(serializers.ModelSerializer):
             'color',
             'image',
             'slug',
-            'publicity',
-            'group',
-            'pinned'
+            'publicity'
         ]

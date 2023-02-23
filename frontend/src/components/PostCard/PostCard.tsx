@@ -31,12 +31,12 @@ export function PostCard(props: {
   const ref = React.useRef<any>(null);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
 
-  React.useEffect(() => {
-    axios
-      .get(`api/club/${club.slice(6)}`)
-      .then((res) => setClubDetails(res.data))
-      .catch((err) => console.error(err));
-  }, []);
+  // React.useEffect(() => {
+  //   axios
+  //     .get(`api/club/${club.slice(6)}`)
+  //     .then((res) => setClubDetails(res.data))
+  //     .catch((err) => console.error(err));
+  // }, []);
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -86,7 +86,7 @@ export function PostCard(props: {
               <h2 id="post-title">{title}</h2>
               <p id="post-club">{clubDetails && clubDetails.name}</p>
             </div>
-            {clubDetails && clubDetails.is_current_user_admin && (
+            {clubDetails && clubDetails.is_admin && (
               <IconButton
                 onClick={handleClick}
                 aria-label="settings"

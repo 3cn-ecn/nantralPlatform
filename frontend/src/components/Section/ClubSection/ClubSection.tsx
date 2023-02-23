@@ -65,8 +65,8 @@ export function ClubSection(props: {
           <Grid item xs={6} sm={4} md={3} lg={2} key={club.name}>
             <ClubAvatar
               name={club.name}
-              clubUrl={club.get_absolute_url}
-              logoUrl={club.logo_url}
+              clubUrl={club.icon}
+              logoUrl={club.url}
               key={club.name}
               size={clubAvatarSize}
             />

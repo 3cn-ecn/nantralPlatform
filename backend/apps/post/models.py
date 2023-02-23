@@ -58,9 +58,6 @@ class AbstractPost(models.Model, SlugModel):
                               upload_to=path_and_rename, null=True, blank=True)
     notification = models.ForeignKey(
         to=Notification, on_delete=models.SET_NULL, blank=True, null=True)
-    pinned = models.BooleanField(
-        verbose_name="Épinglé", default=False, blank=True
-    )
 
     class Meta:
         abstract = True
