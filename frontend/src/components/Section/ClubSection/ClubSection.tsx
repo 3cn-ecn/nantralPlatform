@@ -62,7 +62,7 @@ export function ClubSection(props: {
     case 'success':
       if (clubs.length > 0) {
         content = allclubs.map((club) => (
-          <Grid item key={club.name}>
+          <Grid item xs={6} sm={4} md={3} lg={2} key={club.name}>
             <ClubAvatar
               name={club.name}
               clubUrl={club.get_absolute_url}
@@ -92,7 +92,13 @@ export function ClubSection(props: {
         id="panel1a-header"
       >
         <NavLink to={seeMoreUrl} className="see-more">
-          <Button sx={{ textTransform: 'none', color: 'text.primary' }}>
+          <Button
+            sx={{
+              textTransform: 'none',
+              color: 'text.primary',
+              ':hover': { backgroundColor: 'ThreeDHighlight' },
+            }}
+          >
             <h1 className="section-title">{title}</h1>
             <ChevronRightOutlined />
           </Button>

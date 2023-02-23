@@ -91,7 +91,13 @@ export function EventSection(props: {
         id="panel1a-header"
       >
         <NavLink to={seeMoreUrl} className="see-more">
-          <Button sx={{ textTransform: 'none', color: 'text.primary' }}>
+          <Button
+            sx={{
+              textTransform: 'none',
+              color: 'text.primary',
+              ':hover': { backgroundColor: 'ThreeDHighlight' },
+            }}
+          >
             <h1 className="section-title">{title}</h1>
             <ChevronRightOutlined />
           </Button>

@@ -10,7 +10,6 @@ export function PageSuggestionButton(props: {
 }) {
   const { text, link } = props;
   const language = i18n.languages[0];
-  console.log(language);
   return (
     <LinkMui component={Link} to={link} color="textPrimary" underline="none">
       <Button

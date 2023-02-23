@@ -97,7 +97,7 @@ export function PostSection(props: {
       title={`${title} (${posts.length})`}
     >
       {allEvents.map((post) => (
-        <div key={post.slug} style={{ padding: 8 }}>
+        <div key={post.slug} style={{ padding: 8, overflow: 'hidden' }}>
           <PostCard
             title={post.title}
             imageUri={post.image}
