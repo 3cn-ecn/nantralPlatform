@@ -99,7 +99,7 @@ class GroupType(models.Model):
 
 
 class Label(models.Model):
-    name = models.CharField(_("Label Name"), max_length=20)
+    name = models.CharField(_("Label Name"), max_length=30)
     priority = models.IntegerField(_("Priority"), default=0)
     group_type = models.ForeignKey(
         to=GroupType,

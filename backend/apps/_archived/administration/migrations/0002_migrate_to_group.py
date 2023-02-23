@@ -17,7 +17,7 @@ def forwards(apps, schema_editor):
 
     gt = GroupType.objects.create(
         name="Administration",
-        slug='administration',
+        slug='admin',
         can_create=True)
 
     for ad in Administration.objects.all():
