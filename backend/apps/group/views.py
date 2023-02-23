@@ -108,7 +108,8 @@ class ListGroupView(ListView):
                 # prefetch type and parent group for better performances
                 .prefetch_related('group_type', 'parent')
                 # order by category, order and then name
-                .order_by(*group_type.sort_fields.split(',')))
+                .order_by(*group_type.sort_fields.split(','))
+                .distinct())
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
@@ -207,7 +208,8 @@ class ListGroupChildrenView(ListView):
                 # prefetch type and parent group for better performances
                 .prefetch_related('group_type', 'parent')
                 # order by category, order and then name
-                .order_by('-priority', 'short_name'))
+                .order_by('-priority', 'short_name')
+                .distinct())
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)

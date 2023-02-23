@@ -59,7 +59,7 @@ def forwards(apps, schema_editor):
                 'description': m.function if len(m.function) > 50 else '',
                 'begin_date': m.date_begin,
                 'end_date': m.date_end if m.date_end else (m.date_begin + timedelta(days=365)),
-                'priority': m.order,
+                'priority': 100 - m.order if m.order else 0,
             })
         for s in Subscription.objects.filter(page=f"club--{club.slug}"):
             g.subscribers.add(s.student)
