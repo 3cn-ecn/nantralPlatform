@@ -1,12 +1,6 @@
 from rest_framework import serializers
 
-from .models import Subscription, Notification, SentNotification
-
-
-class SubscriptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subscription
-        fields = ['page', 'student']
+from .models import Notification, SentNotification
 
 
 class NotificationSerializer(serializers.ModelSerializer):

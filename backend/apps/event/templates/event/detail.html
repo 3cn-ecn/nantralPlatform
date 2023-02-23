@@ -32,7 +32,7 @@
         <a href="{% url 'event:edit' object.slug %}" class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier l'évènement</a>
     {% endif %}
 
-    </br>
+    <br /><br />
     {{ object.description | safe }}
 
 {% endblock %}

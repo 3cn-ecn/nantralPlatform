@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1>Supprimer le groupe</h1>
+
+<form method='POST'>
+  {% csrf_token %}
+  <p>Voulez-vous vraiment supprimer le groupe {{ object.name }} ?</p>
+  <p>
+    Cette supression est définitive, aucune annulation ne pourra être effectuée
+    ensuite. <b>Toutes les données liées au groupe (évènements, posts, et membres)
+    seront aussi supprimées.</b>
+  </p>
+  <p>La suppression définitive est <b>fortement déconseillée</b> : à la place,
+    nous vous recommendons plutôt d'<b>archiver</b> le groupe (disponible dans
+    les paramètres d'édition). N'utilisez la suppression que pour des groupes
+    créés par erreur.
+  </p>
+  <p>Si vous souhaitez toujours supprimer ce groupe, le lien pour valider
+    la suppression est caché en bas de la page.
+  </p>
+  {{ form | crispy }}
+  </br>
+  <a href="{% url 'group:update' object.slug %}" class="btn btn-danger">Annuler</a>
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+  <input type="submit" class='btn btn-outline-danger ms-auto' value="Supprimer définitivement" />
+</form>
+
+{% endblock %}

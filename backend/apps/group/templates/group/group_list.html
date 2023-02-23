@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cache %}
+{% load file_url %}
+
+{% block content %}
+
+  <h1 class="position-relative">
+    {{ group_type.name }}
+    {% if group_type.can_create %}
+      <a href="{% url 'group:create' group_type.slug %}" class="btn btn-success btn-lg position-absolute end-0">Créer</a>
+    {% endif %}
+  </h1>
+  {% if user.is_superuser %}
+    <a href="{% url 'admin:group_grouptype_change' group_type.pk %}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+      <i class="fas fa-shield-alt"></i>&nbsp; Modifier le type
+    </a>
+    <a href="{% url 'admin:group_group_changelist' %}?group_type__exact={{ group_type.pk}}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+      <i class="fas fa-shield-alt"></i>&nbsp; Voir la liste
+    </a>
+    <br />
+  {% endif %}
+  <br />
+
+  {% regroup group_list by get_category as groups_by_category %}
+
+  {% for category in groups_by_category %}
+    <h2>{{ category.grouper }}</h2>
+    <div class="grille">
+      {% for group in category.list %}
+        <div class="grille-icon text-center" style="transform: rotate(0)">
+          <a href="{{ group.get_absolute_url }}" class="stretched-link">
+            <div class="ratio ratio-1x1">
+              {% if group.icon %}
+                <img src="{{ group.icon|file_url }}" alt=""/>
+              {% else %}
+                <img src="https://avatars.dicebear.com/api/initials/{{group.short_name}}.svg" alt=""/>
+              {% endif %}
+            </div>
+          </a>
+          <h6>
+            {{ group.short_name }}
+            {% if group.get_sub_category %}
+              <br>
+              <small class="text-secondary">{{ group.get_sub_category }}</small>
+            {% endif %}
+          </h6>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+{% endblock %}

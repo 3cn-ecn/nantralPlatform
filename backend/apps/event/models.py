@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.shortcuts import reverse, get_object_or_404
+from django.shortcuts import reverse
 
 from django_ckeditor_5.fields import CKEditor5Field
 
@@ -12,7 +12,7 @@ from apps.utils.upload import PathAndRename
 path_and_rename = PathAndRename("events/pictures")
 
 
-class BaseEvent(AbstractPost):
+class Event(AbstractPost):
     """
     A basic event model for groups
     """
@@ -21,14 +21,15 @@ class BaseEvent(AbstractPost):
     description = CKEditor5Field(
         verbose_name='Description de l\'événement', blank=True)
     date = models.DateTimeField(
-        verbose_name='Date de l\'événement')
+        verbose_name='Date de l\'événement',
+        help_text="Entrez la date au format JJ/MM/AAAA HH:MM")
     end_date = models.DateTimeField(
         verbose_name='Date de fin de l\'événement',
         blank=True,
         null=True)
     location = models.CharField(
         max_length=200, verbose_name='Lieu')
-    group = models.SlugField(
+    group_slug = models.SlugField(
         verbose_name='Groupe organisateur')
     slug = models.SlugField(
         verbose_name='Slug de l\'événement', unique=True, null=True)
@@ -81,30 +82,10 @@ class BaseEvent(AbstractPost):
         )
         # save the notification
         self.create_notification(
-            title=self.get_group_name,
+            title=self.group.name,
             body=f'Nouvel event : {self.title}')
         # save again the event
-        super(BaseEvent, self).save(*args, **kwargs)
-
-    # Don't make this a property, Django expects it to be a method.
-    # Making it a property can cause a 500 error (see issue #553).
+        super(Event, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('event:detail', args=[self.slug])
-
-    @staticmethod
-    def get_event_by_slug(slug: str):
-        object = get_object_or_404(BaseEvent, slug=slug)
-        try:
-            object = object.eatingevent
-        except EatingEvent.DoesNotExist:
-            pass
-        return object
-
-
-class EatingEvent(BaseEvent):
-    """
-    Events that features meals.
-    They can show a menu, ask people about their eating habbits...
-    """
-    menu = models.TextField(verbose_name='Menu de l\'événement')

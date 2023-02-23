@@ -18,5 +18,9 @@ echo "========= Collect static files"
 python manage.py collectstatic --no-input
 echo "========= DONE ============"
 
+echo "========= Compile translations"
+python manage.py compilemessages -l fr -l en
+echo "========= DONE ============"
+
 echo "========= Starting server ========="
 /usr/local/bin/gunicorn --log-level info --log-file=- --name nantral_platform -b 0.0.0.0:8000 --reload config.wsgi:application

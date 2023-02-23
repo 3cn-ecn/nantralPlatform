@@ -81,14 +81,14 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     name: '',
     logo_url: '',
     get_absolute_url: '',
-    is_current_user_admin: false,
+    is_admin: false,
   });
   React.useEffect(() => {
     getGroup();
   }, []);
 
   async function getGroup() {
-    const response = await axios.get(`api/club/${groupSlug}`);
+    const response = await axios.get(`/api/group/group/${groupSlug}/`);
     setGroup(response.data);
   }
 
@@ -136,7 +136,7 @@ function EventCard(props: { event: EventProps; scale?: string }) {
           size="3em"
         />
         <MoreActionsButton
-          isAdmin={groupData.is_current_user_admin}
+          isAdmin={groupData.is_admin}
           className="moreActions"
           shareUrl={window.location.origin + getAbsoluteUrl}
           slug={slug}
