@@ -3,11 +3,10 @@ import requests
 from typing import List
 from urllib.parse import quote
 
-
 from django.conf import settings
 
 
-def geocode(search: str) -> List[str]:
+def geocode(search: str, limit: int = 3) -> List[str]:
     results = requests.get(
         f'https://api.mapbox.com/geocoding/v5/mapbox.places/'
         f'{quote(search)}.json'
@@ -15,7 +14,7 @@ def geocode(search: str) -> List[str]:
         '&autocomplete=true'
         '&language=fr'
         '&types=address'
-        '&limit=3'
+        f'&limit={limit}'
         f'&access_token={settings.MAPBOX_API_KEY}')
     if results.status_code == 200:
         return [{

@@ -1,9 +1,0 @@
-{% extends "admin/base_site.html" %}
-{% block content %}
-<h2>Metrics clubs:</h2>
-<p>Clubs sans admins pour cette année: {{no_admins|length}} / {{total_clubs}}</p>
-<h3>Liste des clubs:</h3>
-{% for club in no_admins%}
-<p>{{club.name}}</p>
-{%endfor%}
-{% endblock %}

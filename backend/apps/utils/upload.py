@@ -11,8 +11,8 @@ class PathAndRename(object):
 
     def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
-        from apps.group.models import Group
-        if isinstance(instance, Group):
+        from apps.group.abstract.models import AbstractGroup
+        if isinstance(instance, AbstractGroup):
             dir = os.path.join(self.path, instance.app)
         else:
             dir = self.path

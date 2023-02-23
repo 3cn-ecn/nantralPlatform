@@ -1,12 +1,11 @@
-from datetime import timedelta
 from rest_framework import status
 
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from apps.club.models import Club
-from apps.event.models import BaseEvent
+from apps.group.models import GroupType, Group
+from apps.event.models import Event
 from apps.post.models import VISIBILITY
 from apps.utils.utest import TestMixin
 
@@ -15,45 +14,45 @@ class TestHomeView(TestCase, TestMixin):
 
     def setUp(self):
         self.user_setup()
-        self.test_club = Club.objects.create(name='TestClub')
-        self.assertEqual(len(Club.objects.all()), 1)
+        t = GroupType.objects.create(name="T1", slug="t1")
+        self.test_club = Group.objects.create(name='TestClub', group_type=t)
 
     def test_home_view_events(self):
         """Test wether the home view displays events
         correctly."""
-        self.past = BaseEvent.objects.create(
-            date=timezone.now() - timedelta(days=1),
+        self.past = Event.objects.create(
+            date=timezone.now() - timezone.timedelta(days=1),
             title='An Event in the past',
             description="",
             location="Test",
-            group=self.test_club.full_slug,
+            group_slug=self.test_club.slug,
             publicity=VISIBILITY[0][0],
         )
-        self.today = BaseEvent.objects.create(
+        self.today = Event.objects.create(
             date=timezone.now(),
             title='An Event today',
             description="",
             location="Test",
-            group=self.test_club.full_slug,
+            group_slug=self.test_club.slug,
             publicity=VISIBILITY[0][0]
         )
-        self.tomorrow = BaseEvent.objects.create(
-            date=timezone.now() + timedelta(days=1),
+        self.tomorrow = Event.objects.create(
+            date=timezone.now() + timezone.timedelta(days=1),
             title='An Event tomorrow',
             description="",
             location="Test",
-            group=self.test_club.full_slug,
+            group_slug=self.test_club.slug,
             publicity=VISIBILITY[0][0]
         )
-        self.future = BaseEvent.objects.create(
-            date=timezone.now() + timedelta(days=10),
+        self.future = Event.objects.create(
+            date=timezone.now() + timezone.timedelta(days=10),
             title='An Event in the distant future',
             description="",
             location="Test",
-            group=self.test_club.full_slug,
+            group_slug=self.test_club.slug,
             publicity=VISIBILITY[0][0]
         )
-        self.assertEqual(len(BaseEvent.objects.all()), 4)
+        self.assertEqual(len(Event.objects.all()), 4)
 
         self.client.login(username=self.u1.username, password=self.PASSWORD)
         # Test if / loads
@@ -73,6 +72,7 @@ class TestHomeView(TestCase, TestMixin):
         # )
 
     def tearDown(self):
+        GroupType.objects.filter(slug='t1').delete()
         self.past.delete()
         self.today.delete()
         self.tomorrow.delete()

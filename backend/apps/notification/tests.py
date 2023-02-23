@@ -2,10 +2,10 @@ from rest_framework import status
 from django.test import TransactionTestCase
 from django.urls import reverse
 
-from apps.club.models import Club
+from apps.group.models import GroupType, Group
 from apps.utils.utest import TestMixin
 
-from .models import Subscription, Notification
+from .models import Notification
 
 
 class TestSubscription(TransactionTestCase, TestMixin):
@@ -13,18 +13,20 @@ class TestSubscription(TransactionTestCase, TestMixin):
 
     def setUp(self):
         self.user_setup()
-        self.slug = Club.objects.create(name="Club de test").full_slug
+        t = GroupType.objects.create(name="T1", slug="t1")
+        self.g = Group.objects.create(name="Club de test", group_type=t)
+        self.slug = self.g.slug
         self.url = reverse(
-            'notification_api:subscription', kwargs={'page': self.slug})
+            'notification_api:subscription', kwargs={'slug': self.slug})
 
     def tearDown(self):
         self.user_teardown()
+        GroupType.objects.filter(slug='t1').delete()
 
     def test_reading_api(self):
         "test to read subscription states in database"
         # subscribe u2
-        Subscription.objects.create(
-            student=self.u2.student, page=self.slug)
+        Group.objects.get(slug=self.slug).subscribers.add(self.u2.student)
         # check u2 has subscribed
         self.client.login(username=self.u2.username, password=self.PASSWORD)
         self.assertTrue(self.client.get(self.url).data)
@@ -40,26 +42,31 @@ class TestSubscription(TransactionTestCase, TestMixin):
         # check subscription is ok
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertTrue(self.client.get(self.url).data)
-        # try to subscribe again and check the fail
-        with self.assertLogs('django.request', level='WARNING'):
-            resp = self.client.post(self.url)
-        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 1)
+        # try to subscribe again and check we keep the same
+        resp = self.client.post(self.url)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 1)
 
     def test_delete_api(self):
         "test to unsubscribe"
         # subscribe
-        Subscription.objects.create(
-            student=self.u2.student, page=self.slug)
+        Group.objects.get(slug=self.slug).subscribers.add(self.u2.student)
         # delete subscription
         self.client.login(username=self.u2.username, password=self.PASSWORD)
         resp = self.client.delete(self.url)
         # check deletion is ok
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(self.client.get(self.url).data)
-        # try to delete again and check the fail
-        with self.assertLogs('django.request', level='WARNING'):
-            resp = self.client.delete(self.url)
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 0)
+        # try to delete again and check we keep the same
+        resp = self.client.delete(self.url)
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 0)
 
 
 class TestNotification(TransactionTestCase, TestMixin):
@@ -67,16 +74,19 @@ class TestNotification(TransactionTestCase, TestMixin):
 
     def setUp(self):
         self.user_setup()
-        self.club1 = Club.objects.create(name="Club génial").full_slug
-        self.club2 = Club.objects.create(name="Club inconnu").full_slug
+        t = GroupType.objects.create(name="T1", slug="t1")
+        self.club1 = Group.objects.create(
+            name="Club génial", group_type=t).slug
+        self.club2 = Group.objects.create(
+            name="Club inconnu", group_type=t).slug
 
     def tearDown(self):
         self.user_teardown()
+        GroupType.objects.filter(slug='t1').delete()
 
     def test_notification_api(self):
         # create subscriptions and notifications
-        Subscription.objects.create(
-            student=self.u2.student, page=self.club1)
+        Group.objects.get(slug=self.club1).subscribers.add(self.u2.student)
         Notification.objects.create(
             body="Notif de test 1",
             url='/',
