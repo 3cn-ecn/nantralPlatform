@@ -46,7 +46,7 @@ function Home() {
   }
   async function getMyClubs() {
     axios
-      .get('/api/group/group/', { params: { is_member: true } })
+      .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
       .then((res) => {
         setMyClubs(res.data);
       })
@@ -70,8 +70,8 @@ function Home() {
           ? myClubs.map((item) => (
               <ClubAvatar
                 name={item.name}
-                clubUrl={item.get_absolute_url}
-                logoUrl={item.logo_url}
+                clubUrl={item.url}
+                logoUrl={item.icon}
                 key={item.name}
                 size={clubAvatarSize}
               />
