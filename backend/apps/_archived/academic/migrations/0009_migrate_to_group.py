@@ -18,7 +18,7 @@ def forwards(apps, schema_editor):
     gt = GroupType.objects.create(
         name="Formations",
         slug='academic',
-        sort_fields='parent__name,-label__priority,label__name,-priority,short_name',
+        sort_fields='-parent__priority,parent__name,-label__priority,label__name,-priority,short_name',
         category_expr='group.parent.name if group.parent else ""',
         sub_category_expr='group.label',
         can_create=True)

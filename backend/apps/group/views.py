@@ -341,7 +341,7 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
         form = super().get_form(form_class)
         form.instance.group_type = self.group_type
         form.instance.parent = self.parent
-        if self.group_type.extra_parents.all():
+        if self.group_type.extra_parents.all() and not self.parent:
             form.fields['parent'].queryset = self.group_type.extra_parents.all()
         else:
             del form.fields['parent']

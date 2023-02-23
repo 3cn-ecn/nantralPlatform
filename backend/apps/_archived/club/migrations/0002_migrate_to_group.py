@@ -2,6 +2,7 @@
 # flake8: noqa
 
 from django.db import migrations
+from django.db.models import F
 from django.utils.timezone import timedelta
 
 
@@ -18,19 +19,19 @@ def forwards(apps, schema_editor):
     gt = GroupType.objects.create(
         name="Clubs & Assos",
         slug='club',
-        sort_fields='parent__priority,parent__short_name,priority,short_name',
+        sort_fields='-parent__priority,parent__short_name,-priority,short_name',
         category_expr='f"Clubs {group.parent.short_name}" if group.parent else "Associations"',
     )
     if not SocialNetwork.objects.filter(name='Email').exists():
         email_type = SocialNetwork.objects.create(
-            name='Email',
+            name='E-mail',
             color='#bc6c25',
             icon_name='fas fa-envelope')
     else:
         email_type = SocialNetwork.objects.get(name='Email')
     bdx = {}
 
-    for club in Club.objects.all().order_by('bdx_type__order'):
+    for club in Club.objects.all().order_by(F('bdx').asc(nulls_last=True)):
         alt_name = club.alt_name.split(',')[0] if club.alt_name else ''
         g = Group.objects.create(
             name=club.name if len(club.name) > len(alt_name) else alt_name,
@@ -74,7 +75,7 @@ def forwards(apps, schema_editor):
         if club.email:
             g.social_links.create(
                 uri=f"mailto:{club.email}",
-                label=club.email,
+                label=club.email if len(club.email) < 20 else '',
                 network=email_type)
     # add bdx as extra_parents
     gt.extra_parents.add(*[g for _, g in bdx.items()])
@@ -92,7 +93,7 @@ def reverse(apps, schema_editor):
     Post = apps.get_model('post', 'Post')
 
     parent = {}
-    for group in Group.objects.filter(group_type__slug='club').order_by('parent__id'):
+    for group in Group.objects.filter(group_type__slug='club').order_by(F('parent').asc(nulls_first=True)):
         Model = BDX if not group.parent else Club
         c = Model.objects.create(
             name=group.name,
