@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+{% include 'group/included/navbar_edit.html' with open='members' %}
+
+<div id="root-members"></div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  const groupSlug = "{{ group.slug }}";
+  const displayType = 'table';
+</script>
+<script src='{% static "js/group/MembershipsGroup.js" %}'></script>
+{% endblock %}

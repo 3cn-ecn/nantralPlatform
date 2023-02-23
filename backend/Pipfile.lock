@@ -56,18 +56,18 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:98efcc8472c58060856bf42e9afe10eefb60c0e52680db0a43daf96e7a1216de",
-                "sha256:bd92def38355ea055c6c29bd599832878eecc19cad21dab34ade38280e1b403b"
+                "sha256:17f0d782487275cac12676a61b3f1a4900954cc454c842b8551ca47a3dcd59b4",
+                "sha256:bf808f7433629650128ab577a9d4a0f4daf072d9f2f3a907b9d567a6952d9154"
             ],
-            "version": "==1.26.73"
+            "version": "==1.26.77"
         },
         "botocore": {
             "hashes": [
-                "sha256:a9f0e006b3342424d59d5e23dc1ca0c6972c909a727dcd0811c9b20966d4adf8",
-                "sha256:df467573a96d2e1ba1196b5a30b0a5e4a83fd960d27b5c2f8f128c9148dc120e"
+                "sha256:9d94a02f2584b52c65fb3cb309fb1b29d6d0c36d69062722b0275c1c382c44c9",
+                "sha256:d8aa7bffe2422de282b2d02945b7b45d5fecf00f67b65eebb0b1fa3de1abc6d0"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==1.29.73"
+            "version": "==1.29.77"
         },
         "celery": {
             "hashes": [
@@ -245,7 +245,6 @@
                 "sha256:f9d0c5c045a3ca9bedfc35dca8526798eb91a07aa7a2c0fee134c6c6f321cbd7",
                 "sha256:ff6f3db31555657f3163b15a6b7c6938d08df7adbfc9dd13d9d19edad678f1e8"
             ],
-            "markers": "python_full_version >= '3.6.0'",
             "version": "==3.0.1"
         },
         "click": {
@@ -341,11 +340,11 @@
         },
         "django-ckeditor-5": {
             "hashes": [
-                "sha256:82330129636977d7aef0255f2dc1d053833d0f4f1c33f3772d75ac5de79a9979",
-                "sha256:9385535d18e7d18025b032cdda376b5242f51aee196d925e979cbcae489c8665"
+                "sha256:4438881cf2a25ec237d418570423b430378646202c73dec46d52aaaac7b7734e",
+                "sha256:aaaba02b1cb3a020e5eef2a921ffb9b53784a180554e7249c744e9abba90a7a6"
             ],
             "index": "pypi",
-            "version": "==0.2.3"
+            "version": "==0.2.4"
         },
         "django-crispy-forms": {
             "hashes": [
@@ -659,11 +658,11 @@
         },
         "prompt-toolkit": {
             "hashes": [
-                "sha256:3e163f254bef5a03b146397d7c1963bd3e2812f0964bb9a24e6ec761fd28db63",
-                "sha256:aa64ad242a462c5ff0363a7b9cfe696c20d55d9fc60c11fd8e632d064804d305"
+                "sha256:6a2948ec427dfcc7c983027b1044b355db6aaa8be374f54ad2015471f7d81c5b",
+                "sha256:d5d73d4b5eb1a92ba884a88962b157f49b71e06c4348b417dd622b25cdd3800b"
             ],
-            "markers": "python_full_version >= '3.6.2'",
-            "version": "==3.0.36"
+            "markers": "python_full_version >= '3.7.0'",
+            "version": "==3.0.37"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -826,11 +825,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:95f00380ef2ffa41d9bba85d95b27689d923c93dfbafed4aecd7cf988a25e012",
-                "sha256:bb6d8e508de562768f2027902929f8523932fcd1fb784e6d573d2cafac995a48"
+                "sha256:e5fd0a713141a4a105412233c63dc4e17ba0090c8e8334594ac790ec97792330",
+                "sha256:f106dee1b506dee5102cc3f3e9e68137bbad6d47b616be7991714b0c62204251"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==67.3.2"
+            "version": "==67.4.0"
         },
         "six": {
             "hashes": [

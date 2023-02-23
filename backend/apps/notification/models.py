@@ -1,11 +1,11 @@
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-from apps.utils.slug import get_object_from_full_slug
-
-from .webpush import send_webpush_notification
+from apps.group.models import Group
 from apps.student.models import Student
 
+from .webpush import send_webpush_notification
 
 # Fonctionnement des notifications :
 # ----------------------------------
@@ -20,17 +20,6 @@ VISIBILITY = [
     ('Mem', 'Membres - Visible uniquement par les membres du groupe'),
     ('Adm', 'Administrateurs de la page')
 ]
-
-
-class Subscription(models.Model):
-    """Groupes auxquels un utilisateur est abonné."""
-    student = models.ForeignKey(
-        Student, on_delete=models.CASCADE, related_name="subscription_set")
-    page = models.SlugField('Page', max_length=50)
-
-    class Meta:
-        verbose_name = "Abonnement"
-        unique_together = ['student', 'page']
 
 
 class Notification(models.Model):
@@ -60,7 +49,7 @@ class Notification(models.Model):
         update high_priority field for notification"""
         super().save(*args, **kwargs)
         # initiate
-        page = get_object_from_full_slug(self.sender)
+        page = get_object_or_404(Group, slug=self.sender)
         receivers = Student.objects.none()
         # if receivers are everyone
         if self.publicity == 'Pub':
@@ -83,7 +72,7 @@ class Notification(models.Model):
             sub_receivers = self.receivers.all()
         else:
             sub_receivers = self.receivers.filter(
-                subscription_set__page=self.sender
+                subscriptions__slug=self.sender
             )
         SentNotification.objects.filter(
             student__in=sub_receivers,

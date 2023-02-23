@@ -83,4 +83,4 @@ function Root(props: {}): JSX.Element {
   );
 }
 
-render(<Root />, document.getElementById("root"));
+render(<Root />, document.getElementById("root-events"));

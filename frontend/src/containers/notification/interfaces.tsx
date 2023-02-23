@@ -17,4 +17,3 @@ export interface SentNotification {
   subscribed: boolean;
   seen: boolean;
 }
-  

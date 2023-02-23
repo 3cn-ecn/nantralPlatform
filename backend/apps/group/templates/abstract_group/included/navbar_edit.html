@@ -1,0 +1,29 @@
+
+
+<h1>
+    <a href="{{ object.get_absolute_url }}"><i class="fas fa-arrow-alt-circle-left link-dark"></i></a>  
+    {{object.name}}
+</h1>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link {% if open == 'general' %}active" aria-current="page{% endif %}" 
+            href="{% url object.app|add:':update' object.slug %}">
+            <i class="fa fa-cog"></i> Général
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if open == "members" %}active" aria-current="page{% endif %}" 
+            href="{% url object.app|add:':update-members' object.slug %}">
+            <i class="fa fa-users"></i> Membres
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if open == "sociallinks" %}active" aria-current="page{% endif %}"
+            href="{% url object.app|add:':update-sociallinks' object.slug %}" >
+            <i class="fa fa-share-alt"></i> Liens
+        </a>
+    </li>
+</ul>
+
+<br/>

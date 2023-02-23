@@ -85,15 +85,11 @@ THIRD_PARTY_APPS = [
     'storages',
 ]
 COMMON_APPS = [
-    'apps.academic',
     'apps.account',
-    'apps.administration',
-    'apps.club',
     'apps.event',
     'apps.family',
     'apps.group',
     'apps.home',
-    'apps.liste',
     'apps.notification',
     'apps.post',
     'apps.roommates',
@@ -104,6 +100,10 @@ COMMON_APPS = [
 ARCHIVED_APPS = [
     'apps._archived.exchange',
     'apps._archived.services',
+    'apps._archived.club',
+    'apps._archived.liste',
+    'apps._archived.administration',
+    'apps._archived.academic',
 ]
 INSTALLED_APPS = DJANGO_APPS + COMMON_APPS + THIRD_PARTY_APPS + ARCHIVED_APPS
 
@@ -156,6 +156,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
 LANGUAGE_CODE = 'fr-fr'
+LANGUAGES = [
+    ('fr', "Français"),
+    ('en', "English"),
+]
 TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_L10N = True

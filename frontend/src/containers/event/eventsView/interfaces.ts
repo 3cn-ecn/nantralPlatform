@@ -11,7 +11,7 @@ export interface Urls {
 
 export interface EventInfos {
   title: string;
-  group: string;
+  group_slug: string;
   description: string;
   location: string;
   date: Date;
@@ -21,7 +21,7 @@ export interface EventInfos {
   slug: string;
   number_of_participants: number;
   get_absolute_url: string;
-  get_group_name: string;
+  group_name: string;
   is_participating: boolean;
   is_member: boolean;
 }

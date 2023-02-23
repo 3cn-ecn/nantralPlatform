@@ -86,13 +86,14 @@ registerRoute(
 // cache the home and main pages to accelerate navigation
 registerRoute(
   ({url}) => url.pathname === '' ||
-             url.pathname === '/club/' ||
+             url.pathname === '/group/' ||
+             url.pathname === '/group/club/' ||
+             url.pathname === '/group/liste/' ||
+             url.pathname === '/group/academic/' ||
+             url.pathname === '/group/admin/' ||
              url.pathname === '/colocs/' ||
-             url.pathname === '/liste/' ||
              url.pathname === '/tools/signature' ||  
-             url.pathname === '/student/' ||
-             url.pathname === '/academic/' ||
-             url.pathname === '/administration/',
+             url.pathname === '/student/',
   new StaleWhileRevalidate({
     cacheName: 'main-pages',
     plugins: [

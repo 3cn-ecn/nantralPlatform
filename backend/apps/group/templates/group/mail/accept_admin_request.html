@@ -1,0 +1,45 @@
+<h2>Votre demande d'admin pour {{ group.short_name }} a été acceptée !</h2>
+
+<p>Bonjour {{ user.first_name|title }},</p>
+
+<p>
+  Votre demande pour devenir admin de
+  <a href="https://nantral-platform.fr{{ group.get_abslute_url}}">
+    {{ group.name }}
+  </a> a été acceptée.
+</p>
+
+<p>
+  Vous pouvez maintenant modifier le groupe, ses events et ses news
+  <a href="https://nantral-platform.fr{% url "group:update" group.slug %}">
+    sur cette page
+  </a>.
+</p>
+
+<p>Au plaisir de vous revoir sur le site !</p>
+<p>Cordialement,</p>
+<p>L'équipe Nantral Platform</p>
+
+<br />
+
+<h2>Your admin request for {{ group.short_name }} has been approved!</h2>
+
+<p>Hello {{ user.first_name|title }},</p>
+
+<p>
+  Your admin request for
+  <a href="https://nantral-platform.fr{{ group.get_abslute_url}}">
+    {{ group.name }}
+  </a> has just been approved.
+</p>
+
+<p>
+  You can now edit the group, its events and its news
+  <a href="https://nantral-platform.fr{% url "group:update" group.slug %}">
+    on this page
+  </a>.
+</p>
+
+<p>Hope to see you soon on the website!</p>
+<p>Best regards,</p>
+<p>The Nantral Platform Team</p>

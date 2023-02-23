@@ -28,7 +28,7 @@ export interface Member {
 export interface ColocathlonParticipant {
   id: number;
   name: string;
-  absolute_url: string;
+  url: string;
   promo: number;
   picture?: string;
   faculty: string;
