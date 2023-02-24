@@ -52,8 +52,8 @@ function InfoItem(props: { name: string; value: string }) {
   );
 }
 
-function EventCard(props: { event: EventProps; scale?: string }) {
-  const { event, scale } = props;
+function EventCard(props: { event: EventProps }) {
+  const { event } = props;
   const {
     title,
     numberOfParticipants,
@@ -173,9 +173,5 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     </Card>
   );
 }
-
-EventCard.defaultProps = {
-  scale: '1rem',
-};
 
 export default EventCard;

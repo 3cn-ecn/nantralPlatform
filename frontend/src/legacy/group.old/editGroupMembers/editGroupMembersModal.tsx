@@ -1,6 +1,5 @@
 ﻿import * as React from 'react';
 import { useState } from 'react';
-import ReactDOM from 'react-dom';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 import { EditGroupMembersModalProps } from './interfaces';
@@ -35,7 +34,7 @@ export function EditGroupMembersModal(
     return null;
   }
   const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
+  // const handleShow = () => setShowModal(true);
 
   const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
 import './ClubSection.scss';
 import { Grid, Skeleton } from '@mui/material';
 import { ClubProps } from '../../../Props/Club';
