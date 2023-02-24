@@ -18,10 +18,6 @@ export function EditGroupMembersModal(
     setMembers,
   } = props;
 
-  if (!showModal) {
-    return <></>;
-  }
-
   const [role, setRole] = useState(selectedMember.function);
   const [beginDate, setBeginDate] = useState(
     selectedMember.date_begin
@@ -35,7 +31,9 @@ export function EditGroupMembersModal(
   );
   const [admin, setAdmin] = useState(selectedMember.admin);
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
-
+  if (!showModal) {
+    return null;
+  }
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 

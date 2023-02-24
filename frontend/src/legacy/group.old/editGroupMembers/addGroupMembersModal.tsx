@@ -12,10 +12,6 @@ export function AddGroupMembersModal(props): JSX.Element {
   const { showModal, setShowModal, membersURL, setIsLoading, setMembers } =
     props;
 
-  if (!showModal) {
-    return <></>;
-  }
-
   const [formData, setFormData] = useState<MemberAdd>({
     id: 0,
     function: 'Membre',
@@ -43,6 +39,9 @@ export function AddGroupMembersModal(props): JSX.Element {
     () => getStudents(props.studentsURL, setStudents, setIsAddLoading),
     []
   );
+  if (!showModal) {
+    return null;
+  }
 
   if (isAddLoading) {
     return (
