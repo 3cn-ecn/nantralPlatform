@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './ClubSection.scss';
 import { Grid, Skeleton } from '@mui/material';
 import { ClubProps } from '../../../Props/Club';
 import ClubAvatar from '../../ClubAvatar/ClubAvatar';
