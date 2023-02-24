@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { useMediaQuery } from '@mui/material';
 import { PostCard } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';
 import Carousel from '../../Carousel/Carousel';
+import { theme } from '../../style/palette';
 
 /**
  * Une section comportant
@@ -18,16 +20,10 @@ export function PostSection(props: {
   maxItem?: number;
 }) {
   const { posts, title, maxItem } = props;
-  const [windowSize, setWindowSize] = React.useState(window.innerWidth);
-  window.addEventListener('resize', () => {
-    setWindowSize(window.innerWidth);
-  });
+  const md: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const allPosts = maxItem ? posts.slice(0, maxItem) : posts;
   return (
-    <Carousel
-      itemNumber={windowSize > 800 ? 3 : 1}
-      title={`${title} (${posts.length})`}
-    >
+    <Carousel itemNumber={md ? 1 : 3} title={`${title} (${posts.length})`}>
       {allPosts.map((post) => (
         <div key={post.slug} style={{ padding: 8, overflow: 'hidden' }}>
           <PostCard

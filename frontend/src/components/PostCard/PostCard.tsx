@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
+  useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
 
@@ -18,6 +19,7 @@ import { ArrowForward, Close, Edit, PushPin } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import ClubAvatar from '../ClubAvatar/ClubAvatar';
+import { theme } from '../style/palette';
 
 export function PostCard(props: {
   imageUri: string;
@@ -30,7 +32,7 @@ export function PostCard(props: {
   const { imageUri, title, club, pinned, pageLink, description } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
-
+  const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   React.useEffect(() => {
     axios
       .get(`api/group/group/${club}`)
@@ -119,7 +121,9 @@ export function PostCard(props: {
         onClose={handleClose}
         scroll="paper"
         fullWidth
+        fullScreen={fullScreen}
         maxWidth="md"
+        sx={{ margin: 0 }}
       >
         <DialogTitle id="scroll-dialog-title">
           <div
