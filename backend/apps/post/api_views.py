@@ -1,17 +1,19 @@
 from rest_framework import generics, permissions
-
+from rest_framework import viewsets
 from .models import Post
 from .serializers import PostSerializer
+from rest_framework.response import Response
 
 
-class ListPostsAPIView(generics.ListAPIView):
-    """List all current postss."""
+class ListPostsAPIView(viewsets.ViewSet):
+    """List all current posts."""
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        if self.request.method == 'GET':
-            return Post.objects.all()
+    def list(self, request):
+        queryset = Post.objects.all()
+        serializer = PostSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class ListPostsGroupAPIView(generics.ListAPIView):
