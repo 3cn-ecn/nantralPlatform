@@ -30,11 +30,6 @@ COLORS = [
     ('dark', 'Noir')
 ]
 
-TYPE = [
-    ('Content', 'Partage de contenu'),
-    ('Suggestion', )
-]
-
 
 class AbstractPost(models.Model, SlugModel):
     publication_date = models.DateTimeField(
