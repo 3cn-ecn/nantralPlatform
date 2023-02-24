@@ -1,18 +1,10 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
 import './ClubSection.scss';
-import {
-  Button,
-  Grid,
-  Skeleton,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-} from '@mui/material';
-import { ChevronRightOutlined, ExpandMore } from '@mui/icons-material';
+import { Grid, Skeleton } from '@mui/material';
 import { ClubProps } from '../../../Props/Club';
 import ClubAvatar from '../../ClubAvatar/ClubAvatar';
+import { AccordionSection } from '../AccordionSection';
 
 const clubAvatarSize = 100;
 
@@ -50,12 +42,11 @@ export function ClubSection(props: {
   const { t } = useTranslation('translation'); // translation module
   const { status, clubs, title, maxItem, seeMoreUrl } = props;
   let content: JSX.Element | Array<JSX.Element>;
-  const [expanded, setExpanded] = React.useState<boolean>(true);
   const allclubs = maxItem ? clubs.slice(0, maxItem) : clubs;
 
   switch (status) {
     case 'fail':
-      content = <p className="card">{t('event.error')}</p>;
+      content = <p className="card">Error</p>;
       break;
     case 'load':
       content = LoadingSkeleton;
@@ -74,44 +65,13 @@ export function ClubSection(props: {
           </Grid>
         ));
       } else {
-        content = <p className="event-grid">{t('event.no_event')}</p>;
+        content = <p className="event-grid">Nothing to show</p>;
       }
       break;
     default:
       content = null;
   }
-  return (
-    <Accordion
-      variant="outlined"
-      className="card"
-      expanded={expanded}
-      onChange={() => setExpanded(!expanded)}
-    >
-      <AccordionSummary
-        expandIcon={<ExpandMore />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <NavLink to={seeMoreUrl} className="see-more">
-          <Button
-            sx={{
-              textTransform: 'none',
-              color: 'text.primary',
-              ':hover': { textDecoration: 'underline', bgcolor: 'transparent' },
-            }}
-          >
-            <h1 className="section-title">{title}</h1>
-            <ChevronRightOutlined />
-          </Button>
-        </NavLink>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Grid spacing={2} container className="event-grid">
-          {content}
-        </Grid>
-      </AccordionDetails>
-    </Accordion>
-  );
+  return <AccordionSection content={content} title={title} url={seeMoreUrl} />;
 }
 
 ClubSection.defaultProps = {

@@ -17,7 +17,6 @@ import './PostCard.scss';
 import { ArrowForward, Close, Edit, PushPin } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Club';
-import Avatar from '../Avatar/Avatar';
 import ClubAvatar from '../ClubAvatar/ClubAvatar';
 
 export function PostCard(props: {

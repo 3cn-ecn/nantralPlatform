@@ -1,18 +1,10 @@
-import { ChevronRightOutlined, ExpandMore } from '@mui/icons-material';
 import { EventProps } from 'Props/Event';
 import * as React from 'react';
-import {
-  AccordionSummary,
-  AccordionDetails,
-  Accordion,
-  Button,
-  Grid,
-  Skeleton,
-} from '@mui/material';
+import { Grid, Skeleton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
 import EventCard from '../../EventCard/EventCard';
 import './EventSection.scss';
+import { AccordionSection } from '../AccordionSection';
 
 const LoadingSkeleton = (
   <>
@@ -47,19 +39,18 @@ export function EventSection(props: {
 }) {
   const { t } = useTranslation('translation'); // translation module
   const { status, events, title, maxItem, seeMoreUrl } = props;
-  let myEventsContent: JSX.Element | Array<JSX.Element>;
+  let content: JSX.Element | Array<JSX.Element>;
   const allEvents = maxItem ? events.slice(0, maxItem) : events;
-  const [expanded, setExpanded] = React.useState<boolean>(true);
   switch (status) {
     case 'fail':
-      myEventsContent = <p className="card">{t('event.error')}</p>;
+      content = <p className="card">{t('event.error')}</p>;
       break;
     case 'load':
-      myEventsContent = LoadingSkeleton;
+      content = LoadingSkeleton;
       break;
     case 'success':
       if (events.length > 0) {
-        myEventsContent = allEvents.map((event) => (
+        content = allEvents.map((event) => (
           <Grid
             item
             xs={12}
@@ -72,44 +63,13 @@ export function EventSection(props: {
           </Grid>
         ));
       } else {
-        myEventsContent = <p className="event-grid">{t('event.no_event')}</p>;
+        content = <p className="event-grid">{t('event.no_event')}</p>;
       }
       break;
     default:
-      myEventsContent = null;
+      content = null;
   }
-  return (
-    <Accordion
-      variant="outlined"
-      className="card"
-      expanded={expanded}
-      onChange={() => setExpanded(!expanded)}
-    >
-      <AccordionSummary
-        expandIcon={<ExpandMore />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <NavLink to={seeMoreUrl} className="see-more">
-          <Button
-            sx={{
-              textTransform: 'none',
-              color: 'text.primary',
-              ':hover': { textDecoration: 'underline', bgcolor: 'transparent' },
-            }}
-          >
-            <h1 className="section-title">{title}</h1>
-            <ChevronRightOutlined />
-          </Button>
-        </NavLink>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Grid spacing={2} container className="event-grid">
-          {myEventsContent}
-        </Grid>
-      </AccordionDetails>
-    </Accordion>
-  );
+  return <AccordionSection title={title} content={content} url={seeMoreUrl} />;
 }
 
 EventSection.defaultProps = {
