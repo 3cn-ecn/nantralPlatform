@@ -8,10 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from apps.club.models import NamedMembershipClub
 from apps.roommates.models import NamedMembershipRoommates
-from apps.academic.models import NamedMembershipCourse
-
 from .models import Student
 from .forms import ChangePassForm
 
@@ -38,10 +35,6 @@ class StudentProfile(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['clubs'] = NamedMembershipClub.objects.filter(
-            student=self.object)
-        context['courses'] = NamedMembershipCourse.objects.filter(
-            student=self.object).order_by('year')
         context['colocs'] = NamedMembershipRoommates.objects.filter(
             student=self.object)
         context['ariane'] = [

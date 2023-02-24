@@ -1,0 +1,42 @@
+<h2>Votre demande d'admin pour {{ group.short_name }} a été refusée.</h2>
+
+<p>Bonjour {{ user.first_name|title }},</p>
+
+<p>
+  Nous sommes désolé de vous apprendre que votre demande pour devenir admin de
+  <a href="https://nantral-platform.fr{{ group.get_abslute_url}}">
+    {{ group.name }}
+  </a> a été refusée.
+</p>
+
+<p>
+  Si vous n'êtes pas d'accord avec cette décision, vous pouvez contacter
+  directement l'équipe de Nantral Platform via Facebook, ou via la page
+  "Contact" du site.
+</p>
+
+<p>Au plaisir de vous revoir bientôt sur le site !</p>
+<p>Cordialement,</p>
+<p>L'équipe Nantral Platform</p>
+
+<br />
+
+<h2>Your admin request for {{ group.short_name }} has been denied.</h2>
+
+<p>Hello {{ user.first_name|title }},</p>
+
+<p>
+  We are sorry to inform you that your admin request for
+  <a href="https://nantral-platform.fr{{ group.get_abslute_url}}">
+    {{ group.name }}
+  </a> has just been denied.
+</p>
+
+<p>
+  If you do not agree with this decisino, feel free to contact the Nantral
+  Platform team on our Facebook page, or with the "Contact" page of the website.
+</p>
+
+<p>Hope to see you soon on the website!</p>
+<p>Best regards,</p>
+<p>The Nantral Platform Team</p>

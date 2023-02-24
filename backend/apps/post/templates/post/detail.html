@@ -12,7 +12,14 @@
 
 {% block content %}
     <h1>{{object.title}}</h1>
-    <p>Annonce par <a href='{{group.get_absolute_url }}'>{{group.name}}</a></p>
-    </br>
+
+    <p>Annonce du {{object.publication_date|date:"l j F Y à H:i"|capfirst}} de <a href='{{group.get_absolute_url }}'>{{group.name}}</a>.</p>
+
+    {% if is_admin %}
+        <a href="{% url 'post:edit' object.slug %}" class="btn btn-dark btn-sm"><i class="fa fa-pencil"></i> Modifier le post</a>
+    {% endif %}
+    
+    <br /><br />
     {{ object.description | safe }}
+
 {% endblock %}

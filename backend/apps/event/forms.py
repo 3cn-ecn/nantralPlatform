@@ -1,12 +1,12 @@
 from django import forms
 from django.forms import modelformset_factory
 
-from apps.event.models import BaseEvent
+from apps.event.models import Event
 
 
 class EventForm(forms.ModelForm):
     class Meta:
-        model = BaseEvent
+        model = Event
         fields = ['title', 'description', 'location',
                   'date', 'publicity', 'color', 'image']
 
@@ -16,7 +16,7 @@ class EventForm(forms.ModelForm):
 
 
 EventFormSet = modelformset_factory(
-    BaseEvent,
+    Event,
     fields=['title', 'description', 'location',
             'date', 'publicity', 'color', 'image'],
     extra=0,
