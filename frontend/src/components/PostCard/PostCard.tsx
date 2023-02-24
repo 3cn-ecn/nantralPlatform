@@ -29,7 +29,6 @@ export function PostCard(props: {
 }) {
   const { imageUri, title, club, pinned, pageLink, description } = props;
   const [open, setOpen] = React.useState<boolean>(false);
-  const ref = React.useRef<any>(null);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
 
   React.useEffect(() => {
@@ -140,6 +139,7 @@ export function PostCard(props: {
         <DialogContent dividers>
           <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
             <img alt="" src={imageUri} id="image" />
+            {/* Dangerous should change */}
             <div dangerouslySetInnerHTML={{ __html: description }}></div>
           </DialogContentText>
         </DialogContent>

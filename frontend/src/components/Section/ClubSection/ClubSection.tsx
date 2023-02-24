@@ -39,7 +39,6 @@ export function ClubSection(props: {
   /** url relative du bouton voir plus */
   seeMoreUrl?: string;
 }) {
-  const { t } = useTranslation('translation'); // translation module
   const { status, clubs, title, maxItem, seeMoreUrl } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allclubs = maxItem ? clubs.slice(0, maxItem) : clubs;

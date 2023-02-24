@@ -1,42 +1,8 @@
-import { Button, Card, Grid, Skeleton } from '@mui/material';
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
 import { PostCard } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';
-import './PostSection.scss';
 import Carousel from '../../Carousel/Carousel';
 
-export function SectionTitle(props: {
-  title: string;
-  url: string;
-}): JSX.Element {
-  const { t } = useTranslation('translation'); // translation module
-  const { title, url } = props;
-  return (
-    <span className="section">
-      <h1 className="section-title">{title}</h1>
-      {url && (
-        <NavLink to={url} className="see-more">
-          <Button>{t('home.seeMore')}</Button>
-        </NavLink>
-      )}
-    </span>
-  );
-}
-const LoadingSkeleton = (
-  <>
-    {[0, 1, 2].map((item) => (
-      <Grid item xs={12} sm={6} md={4} sx={{ maxWidth: '700px' }} key={item}>
-        <Skeleton
-          variant="rectangular"
-          key={item}
-          style={{ borderRadius: 5, height: '18.75em' }}
-        />
-      </Grid>
-    ))}
-  </>
-);
 /**
  * Une section comportant
  * un titre,

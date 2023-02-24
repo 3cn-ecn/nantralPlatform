@@ -11,7 +11,7 @@ import { EventSection } from '../../components/Section/EventSection/EventSection
 import { isThisWeek } from '../../utils/date';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
 import { PostProps } from '../../Props/Post';
-import { Status } from 'Props/GenericTypes';
+import { Status } from '../../Props/GenericTypes';
 
 /**
  * Home Page, with Welcome message, next events, etc...
