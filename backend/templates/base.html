@@ -11,7 +11,7 @@
   <meta name="vapid-key" content="{{ vapid_key }}">
   <!-- css -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4.1">
   <!-- js --> 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
   <!-- fonts -->
@@ -60,9 +60,9 @@
               <img src='{% static "/img/icons/scalable/event.svg" %}' class="align-middle" loading="lazy" alt="">
               Posts et Évènements
             </a></li>
-            <li><a class="dropdown-item" href="{% url 'club:index' %}">
+            <li><a class="dropdown-item" href="{% url 'group:index' %}">
               <img src='{% static "/img/icons/scalable/club.svg" %}' class="align-middle" loading="lazy" alt="">
-              Clubs &amp; Assos
+              Groupes
             </a></li>
             <li><a class="dropdown-item" href="{% url 'roommates:index' %}">
               <img src='{% static "/img/icons/scalable/roommates.svg" %}' class="align-middle" loading="lazy" alt="">
@@ -71,18 +71,6 @@
             <li><a class="dropdown-item" href="{% url 'family:home' %}">
               <img src='{% static "/img/icons/scalable/family.svg" %}' class="align-middle" loading="lazy" alt="">
               Parrainage
-            </a></li>
-            <li><a class="dropdown-item" href="{% url 'liste:index' %}">
-              <img src='{% static "/img/icons/scalable/campaign.svg" %}' class="align-middle" loading="lazy" alt="">
-              Listes BDX
-            </a></li>
-            <li><a class="dropdown-item" href="{% url 'academic:index' %}">
-              <img src='{% static "/img/icons/scalable/academic.svg" %}' class="align-middle" loading="lazy" alt="">
-              Cours et Formations
-            </a></li>
-            <li><a class="dropdown-item" href="{% url 'administration:index' %}">
-              <img src='{% static "/img/icons/scalable/admin.svg" %}' class="align-middle" loading="lazy" alt="">
-              Administration
             </a></li>
             <li><a class="dropdown-item" href="{% url 'student:list' %}">
               <img src='{% static "/img/icons/scalable/list.svg" %}' class="align-middle" loading="lazy" alt="">
@@ -120,7 +108,7 @@
                 </li>
                 {% if request.user.is_staff %}
                   <li>
-                    <a class="dropdown-item" href="{% url 'admin:index' %}">
+                    <a class="dropdown-item" href="{% url 'admin:index' %}" target="_blank" rel="noopener noreferrer">
                       <i class="fas fa-shield-alt" aria-hidden="true"></i>&nbsp; Interface Admin
                     </a>
                   </li>

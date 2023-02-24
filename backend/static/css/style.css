@@ -191,6 +191,26 @@ img.logo {
   }
 }
 
+/* lieux et heures de réunions */
+p.infos > span {
+  margin-right: 2rem;
+}
+p.infos > span, p.infos a {
+  color: #707070;
+}
+p.infos > span > span {
+  background-color: #eeeeee;
+  border-radius:100%;
+  width: 1.7rem;
+  height:1.7rem;
+  text-align: center;
+  display: inline-block;
+  transform: translateY(-0.2rem);
+}
+p.infos > span > span > i {
+  transform: translateY(0.2rem);
+}
+
 /* reseaux sociaux */
 .grille-rs {
   display: flex;

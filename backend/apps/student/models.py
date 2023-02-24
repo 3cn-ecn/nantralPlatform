@@ -47,7 +47,7 @@ class Student(models.Model):
         null=True,
         blank=True)
     favorite_event = models.ManyToManyField(
-        to='event.BaseEvent', verbose_name='Événement en favoris', blank=True,
+        to='event.Event', verbose_name='Événement en favoris', blank=True,
         null=True)
 
     @property
@@ -79,10 +79,6 @@ class Student(models.Model):
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self) -> str:
         return reverse('student:detail', args=[self.pk])
-
-    @property
-    def absolute_url(self) -> str:
-        return self.get_absolute_url()
 
     def save(self, *args, **kwargs):
         self.picture = compress_model_image(self, 'picture')

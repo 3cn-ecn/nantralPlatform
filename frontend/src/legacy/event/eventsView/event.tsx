@@ -4,6 +4,7 @@ import { ParticipateButton } from './participateButton';
 import { Card } from 'react-bootstrap';
 import { getDate, getHour } from './utils';
 
+
 export function Event(props): JSX.Element {
   const urls = props.urls;
   const eventInfos: EventInfos = props.eventInfos;
@@ -24,8 +25,7 @@ export function Event(props): JSX.Element {
         </small>
         <Card.Title as="h4">{eventInfos.title}</Card.Title>
         <Card.Subtitle className="mb-3">
-          {getHour(eventInfos.date)} • {eventInfos.location} •{' '}
-          {eventInfos.get_group_name}
+          {getHour(eventInfos.date)} • {eventInfos.location} • {eventInfos.group_name}
         </Card.Subtitle>
       </Card.Body>
       <Card.Body className="pt-0">

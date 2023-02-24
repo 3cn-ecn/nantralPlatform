@@ -18,5 +18,9 @@ echo "========= [STAGING] Collect static files"
 python manage.py collectstatic --no-input
 echo "========= [STAGING] DONE ============"
 
+echo "========= Compile translations"
+python manage.py compilemessages -l fr -l en
+echo "========= DONE ============"
+
 echo "========= [STAGING] Starting server ========="
 /usr/local/bin/gunicorn --log-level info --log-file=- --name nantral_platform_staging -b 0.0.0.0:8001 --reload config.wsgi:application

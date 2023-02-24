@@ -65,7 +65,7 @@ class SlugModel:
             model = type(self)
             if model.objects.filter(slug=slug).exists():
                 id = 1
-                while model.objects.filter(slug=f'{slug}-{id}'):
+                while model.objects.filter(slug=f'{slug}-{id}').exists():
                     id += 1
                 slug = f'{slug}-{id}'
             self.slug = slug

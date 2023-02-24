@@ -1,36 +1,17 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+
 {% block content %}
-{% include 'group/included/navbar_edit.html' with open='events' %}
+
+<h1>Modifier l'évènement</h1>
+
 <form method='POST' enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.media }}
-  {{form|crispy}}
+  {{ form | crispy }}
   </br>
+  <a href="{% url 'event:delete' object.slug %}" class="btn btn-outline-danger">Supprimer</a>
   <button class='btn btn-dark'>Modifier l'événement</button>
 </form>
-{% endblock %}
-{% block script %}
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<script>
-  $(function () {
-    $('input.datepicker').daterangepicker({
-      singleDatePicker: true,
-      drops: 'up',
-      showDropdowns: true,
-      autoApply: true,
-      timePicker: true,
-      timePicker24Hour: true,
-      timePickerIncrement: 15,
-      locale: {
-        format: 'YYYY-MM-DD HH:mm'
-      },
-      minYear: parseInt(moment().format('YYYY'), 10)-1,
-      maxYear: parseInt(moment().format('YYYY'), 10)+1
-    });
-  });
-</script>
+
 {% endblock %}
