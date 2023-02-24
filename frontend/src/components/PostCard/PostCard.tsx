@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
+  Typography,
   useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
@@ -20,22 +21,17 @@ import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import ClubAvatar from '../ClubAvatar/ClubAvatar';
 import { theme } from '../style/palette';
+import { PostProps } from '../../Props/Post';
+import { formatDate } from '../../utils/date';
 
-export function PostCard(props: {
-  imageUri: string;
-  title: string;
-  club: string;
-  pinned?: boolean;
-  pageLink?: string;
-  description?: string;
-}) {
-  const { imageUri, title, club, pinned, pageLink, description } = props;
+export function PostCard(props: { post: PostProps }) {
+  const { post } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   React.useEffect(() => {
     axios
-      .get(`api/group/group/${club}`)
+      .get(`api/group/group/${post.group_slug}`)
       .then((res) => setClubDetails(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -49,7 +45,7 @@ export function PostCard(props: {
   return (
     <>
       <Card
-        variant={pinned ? 'outlined' : 'elevation'}
+        variant={post.pinned ? 'outlined' : 'elevation'}
         sx={{
           height: '110px',
           borderColor: 'red',
@@ -61,10 +57,11 @@ export function PostCard(props: {
           onClick={() => setOpen(true)}
           disableTouchRipple
         >
-          {imageUri && (
-            <CardMedia src={imageUri} id="card-image" component="img" />
+          {post.image && (
+            <CardMedia src={post.image} id="card-image" component="img" />
           )}
-          {pinned && (
+          {/* I don't like the pin icon */}
+          {post.pinned && false && (
             <PushPin
               sx={{
                 position: 'absolute',
@@ -85,7 +82,7 @@ export function PostCard(props: {
             }}
           >
             <div>
-              <h2 id="post-title">{title}</h2>
+              <h2 id="post-title">{post.title}</h2>
               <p id="post-club">{clubDetails && clubDetails.name}</p>
             </div>
             {clubDetails && clubDetails.is_admin && (
@@ -97,7 +94,7 @@ export function PostCard(props: {
                 <Edit />
               </IconButton>
             )}
-            {pageLink && (
+            {post.page_suggestion && (
               <Button
                 style={{
                   position: 'absolute',
@@ -108,7 +105,7 @@ export function PostCard(props: {
                 }}
                 onClick={(e) => e.stopPropagation()}
                 endIcon={<ArrowForward />}
-                href={pageLink}
+                href={post.page_suggestion}
               >
                 Voir la page
               </Button>
@@ -134,7 +131,7 @@ export function PostCard(props: {
               alignItems: 'center',
             }}
           >
-            <div>{title}</div>
+            <div>{post.title}</div>
             <IconButton onClick={handleClose}>
               <Close />
             </IconButton>
@@ -142,9 +139,24 @@ export function PostCard(props: {
         </DialogTitle>
         <DialogContent dividers>
           <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-            <img alt="" src={imageUri} id="image" />
+            <img alt="" src={post.image} id="image" />
             {/* Dangerous should change */}
-            <div dangerouslySetInnerHTML={{ __html: description }}></div>
+            <div dangerouslySetInnerHTML={{ __html: post.description }}></div>
+            <div
+              style={{
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'right',
+              }}
+            >
+              <Typography variant="caption" textAlign="right">
+                {`Ajouté le ${formatDate(
+                  new Date(post.publication_date),
+                  'short',
+                  'short'
+                )}`}
+              </Typography>
+            </div>
           </DialogContentText>
         </DialogContent>
         <DialogActions style={{ justifyContent: 'space-between' }}>
@@ -157,14 +169,14 @@ export function PostCard(props: {
               size={60}
             />
           )}
-          {pageLink && (
+          {post.page_suggestion && (
             <Button
               style={{
                 position: 'relative',
               }}
               onClick={(e) => e.stopPropagation()}
               endIcon={<ArrowForward />}
-              href={pageLink}
+              href={post.page_suggestion}
             >
               Voir la page
             </Button>
@@ -174,8 +186,3 @@ export function PostCard(props: {
     </>
   );
 }
-PostCard.defaultProps = {
-  pinned: false,
-  pageLink: null,
-  description: null,
-};

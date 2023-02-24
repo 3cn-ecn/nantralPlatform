@@ -64,7 +64,7 @@ class AbstractPost(models.Model, SlugModel):
     def save(self, *args, **kwargs):
         # compression des images
         self.image = compress_model_image(
-            self, 'image', size=(1320, 492), contains=False)
+            self, 'image', size=(960, 540), contains=False)
         super(AbstractPost, self).save(*args, **kwargs)
         # send the notification
         if not self.notification.sent:

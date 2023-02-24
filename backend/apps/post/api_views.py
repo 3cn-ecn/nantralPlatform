@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from .models import Post
 from .serializers import PostSerializer
 from rest_framework.response import Response
+from django.utils import timezone
 
 
 class ListPostsAPIView(viewsets.ViewSet):
@@ -11,7 +12,10 @@ class ListPostsAPIView(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request):
-        queryset = Post.objects.all()
+        today = timezone.now()
+        queryset = Post.objects.filter(
+            publication_date__lte=today).order_by("publication_date")
+        queryset = [p for p in queryset if p.can_view(request.user)]
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
 

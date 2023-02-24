@@ -26,15 +26,7 @@ export function PostSection(props: {
     <Carousel itemNumber={md ? 1 : 3} title={`${title} (${posts.length})`}>
       {allPosts.map((post) => (
         <div key={post.slug} style={{ padding: 8, overflow: 'hidden' }}>
-          <PostCard
-            title={post.title}
-            imageUri={post.image}
-            club={post.group_slug}
-            key={post.slug}
-            description={post.description}
-            pinned={post.pinned}
-            pageLink={post.page_suggestion}
-          />
+          <PostCard post={post} />
         </div>
       ))}
     </Carousel>
