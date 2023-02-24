@@ -43,7 +43,6 @@ function Home() {
     axios
       .get('api/event')
       .then((res) => {
-        // setEvents(res.data);
         eventsToCamelCase(res.data);
         setEvents(res.data);
         setEventsStatus('success');
@@ -57,7 +56,6 @@ function Home() {
     axios
       .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
       .then((res) => {
-        console.log(res.data);
         setMyClubs(res.data);
         setClubsStatus('success');
       })
@@ -71,7 +69,6 @@ function Home() {
       .get('api/post')
       .then((res) => {
         setPosts(res.data);
-        console.log(res.data);
         setPostsStatus('success');
       })
       .catch((err) => {
@@ -93,7 +90,6 @@ function Home() {
               sx={{
                 height: 50,
                 width: 50,
-                // display: { xs: 'none', md: 'flex' },
               }}
             />
             <Typography id="main-title">Nantral Platform</Typography>

@@ -23,7 +23,8 @@ function Carousel(props: {
   children;
   /** Number of item displayed at a time */
   itemNumber: number;
-  infiniteLoop?: boolean; // TO DO
+  /** Loop through all elements NOT WORKING !!! */
+  infiniteLoop?: boolean;
   /** Transition duration in ms */
   transition?: number;
   /** Title displayed between navigation arrows */

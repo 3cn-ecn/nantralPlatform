@@ -71,13 +71,7 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     beginInscription,
     groupName,
   } = event;
-  console.log(event);
   const [participating, setParticipating] = React.useState(isParticipating);
-
-  // An exception is made for the BDE as the "club" needs to be removed from the slug
-  // (Not the case for the other clubs)
-  // const groupSlug =
-  //   group === 'club--bde-1' ? group.slice(6, group.length) : group;
   const [groupData, setGroup] = React.useState<ClubProps>({
     name: '',
     icon: '',

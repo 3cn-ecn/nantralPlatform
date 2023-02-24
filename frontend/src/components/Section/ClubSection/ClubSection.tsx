@@ -52,7 +52,7 @@ export function ClubSection(props: {
   let content: JSX.Element | Array<JSX.Element>;
   const [expanded, setExpanded] = React.useState<boolean>(true);
   const allclubs = maxItem ? clubs.slice(0, maxItem) : clubs;
-  console.log(allclubs);
+
   switch (status) {
     case 'fail':
       content = <p className="card">{t('event.error')}</p>;
