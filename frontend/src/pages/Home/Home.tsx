@@ -9,9 +9,9 @@ import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.s
 import './Home.scss';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { isThisWeek } from '../../utils/date';
-import { PageSuggestionButton } from '../../components/PageSuggestionButton/PageSuggestionButton';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
 import { PostProps } from '../../Props/Post';
+import { Status } from 'Props/GenericTypes';
 
 /**
  * Home Page, with Welcome message, next events, etc...
@@ -19,17 +19,11 @@ import { PostProps } from '../../Props/Post';
  */
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [eventsStatus, setEventsStatus] = React.useState<
-    'load' | 'success' | 'fail'
-  >('load');
+  const [eventsStatus, setEventsStatus] = React.useState<Status>('load');
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
-  const [clubsStatus, setClubsStatus] = React.useState<
-    'load' | 'success' | 'fail'
-  >('load');
+  const [clubsStatus, setClubsStatus] = React.useState<Status>('load');
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
-  const [postsStatus, setPostsStatus] = React.useState<
-    'load' | 'success' | 'fail'
-  >('load');
+  const [postsStatus, setPostsStatus] = React.useState<Status>('load');
   const { t } = useTranslation('translation'); // translation module
   const headerImageURL =
     'https://www.ec-nantes.fr/medias/photo/carroussel-campus-drone-002_1524738012430-jpg';
@@ -100,12 +94,10 @@ function Home() {
         <div className="container">
           <PostSection
             posts={posts.filter((post) => post.pinned)}
-            status={postsStatus}
             title="A la une"
           />
           <PostSection
             posts={posts.filter((post) => !post.pinned)}
-            status={postsStatus}
             title="Annonces"
           />
           <EventSection

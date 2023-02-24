@@ -2,18 +2,18 @@ import { ChevronLeftRounded, ChevronRightRounded } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import * as React from 'react';
 import './Carousel.scss';
-
-function loopSlice(arr: Array<any>, a: number, b: number): Array<any> {
-  const l = arr.length;
-  console.log(a, b);
-  return arr
-    .slice(Math.min(a, 0) + l, l)
-    .concat(
-      arr
-        .slice(Math.max(0, a), Math.min(b, l))
-        .concat(arr.slice(0, Math.max(b - l, 0)))
-    );
-}
+// WILL BE USED LATER
+// function loopSlice(arr: Array<any>, a: number, b: number): Array<any> {
+//   const l = arr.length;
+//   console.log(a, b);
+//   return arr
+//     .slice(Math.min(a, 0) + l, l)
+//     .concat(
+//       arr
+//         .slice(Math.max(0, a), Math.min(b, l))
+//         .concat(arr.slice(0, Math.max(b - l, 0)))
+//     );
+// }
 
 /**
  * A custom carousel to display any content

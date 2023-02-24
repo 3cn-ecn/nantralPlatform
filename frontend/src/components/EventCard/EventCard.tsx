@@ -61,7 +61,6 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     beginDate,
     image,
     groupSlug,
-    getGroupName,
     isParticipating,
     slug,
     formUrl,

@@ -44,59 +44,25 @@ const LoadingSkeleton = (
  * et les événements de `events`
  */
 export function PostSection(props: {
-  /** L'état de chargement des événements */
-  status: 'success' | 'fail' | 'load';
-  /** La liste des événements à afficher */
+  /** La liste des posts à afficher */
   posts: Array<PostProps>;
   /** Titre de la section */
   title?: string;
-  /** Nombre maximal d'événement à afficher */
+  /** Nombre maximal d'éléments à afficher */
   maxItem?: number;
-  /** url relative du bouton voir plus */
-  seeMoreUrl?: string;
 }) {
-  const { t } = useTranslation('translation'); // translation module
-  const { status, posts, title, maxItem, seeMoreUrl } = props;
+  const { posts, title, maxItem } = props;
   const [windowSize, setWindowSize] = React.useState(window.innerWidth);
   window.addEventListener('resize', () => {
     setWindowSize(window.innerWidth);
   });
-  let myEventsContent: any;
-  const allEvents = maxItem ? posts.slice(0, maxItem) : posts;
-  switch (status) {
-    case 'fail':
-      myEventsContent = <p className="card">{t('event.error')}</p>;
-      break;
-    case 'load':
-      myEventsContent = LoadingSkeleton;
-      break;
-    case 'success':
-      if (posts.length > 0) {
-        myEventsContent = allEvents.map((post) => (
-          <div key={post.slug}>
-            <div style={{ padding: 8 }}>
-              <PostCard
-                title={post.title}
-                imageUri={post.image}
-                club={post.group_slug}
-                key={post.slug}
-              />
-            </div>
-          </div>
-        ));
-      } else {
-        myEventsContent = <p className="event-grid">{t('event.no_event')}</p>;
-      }
-      break;
-    default:
-      myEventsContent = null;
-  }
+  const allPosts = maxItem ? posts.slice(0, maxItem) : posts;
   return (
     <Carousel
       itemNumber={windowSize > 800 ? 3 : 1}
       title={`${title} (${posts.length})`}
     >
-      {allEvents.map((post) => (
+      {allPosts.map((post) => (
         <div key={post.slug} style={{ padding: 8, overflow: 'hidden' }}>
           <PostCard
             title={post.title}
@@ -116,5 +82,4 @@ export function PostSection(props: {
 PostSection.defaultProps = {
   title: null,
   maxItem: null,
-  seeMoreUrl: null,
 };

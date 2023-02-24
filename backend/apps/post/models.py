@@ -112,9 +112,10 @@ class AbstractPost(models.Model, SlugModel):
 
 
 class Post(AbstractPost):
-    page_suggestion = models.CharField(
-        verbose_name="Lien vers une page de Nantral Platform",
-        null=True, blank=True, max_length=200)
+    page_suggestion = models.URLField(
+        verbose_name="Suggestion de page",
+        null=True, blank=True,
+        help_text="Lien vers une page web")
     pinned = models.BooleanField(
         verbose_name="Épinglé", default=False)
 
