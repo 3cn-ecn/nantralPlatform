@@ -95,7 +95,7 @@ export function EventSection(props: {
             sx={{
               textTransform: 'none',
               color: 'text.primary',
-              ':hover': { backgroundColor: 'ThreeDHighlight' },
+              ':hover': { textDecoration: 'underline', bgcolor: 'transparent' },
             }}
           >
             <h1 className="section-title">{title}</h1>

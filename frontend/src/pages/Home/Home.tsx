@@ -102,13 +102,6 @@ function Home() {
       </div>
       <div style={{ alignContent: 'center', display: 'flex', paddingTop: 20 }}>
         <div className="container">
-          <PageSuggestionButton
-            text={{
-              fr: 'Les parrainages arrivent ! Répondez à ce questionnaire pour participer',
-              en: 'Parrainages are coming! ANswer this form to participate.',
-            }}
-            link="/event/"
-          />
           <PostSection
             posts={posts.filter((post) => post.pinned)}
             status={postsStatus}

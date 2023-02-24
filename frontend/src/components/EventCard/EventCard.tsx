@@ -60,7 +60,7 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     maxParticipant,
     beginDate,
     image,
-    group,
+    groupSlug,
     getGroupName,
     isParticipating,
     slug,
@@ -69,18 +69,19 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     getAbsoluteUrl,
     endInscription,
     beginInscription,
+    groupName,
   } = event;
-
+  console.log(event);
   const [participating, setParticipating] = React.useState(isParticipating);
 
   // An exception is made for the BDE as the "club" needs to be removed from the slug
   // (Not the case for the other clubs)
-  const groupSlug =
-    group === 'club--bde-1' ? group.slice(6, group.length) : group;
+  // const groupSlug =
+  //   group === 'club--bde-1' ? group.slice(6, group.length) : group;
   const [groupData, setGroup] = React.useState<ClubProps>({
     name: '',
-    logo_url: '',
-    get_absolute_url: '',
+    icon: '',
+    url: '',
     is_admin: false,
   });
   React.useEffect(() => {
@@ -109,13 +110,13 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     timeStyle: 'short',
   });
   const groupIcon =
-    typeof groupData.logo_url === 'undefined' ? (
+    typeof groupData.icon === 'undefined' ? (
       <CircularProgress size="3.75em" />
     ) : (
-      <a href={window.location.origin + groupData.get_absolute_url}>
+      <a href={window.location.origin + groupData.url}>
         <Avatar
           alt={groupData.name}
-          src={groupData.logo_url}
+          src={groupData.icon}
           sx={{ fontSize: '1em', width: '3.75em', height: '3.75em' }}
         />
       </a>
@@ -153,7 +154,7 @@ function EventCard(props: { event: EventProps; scale?: string }) {
                 <Typography variant="h5" className="eventTitle">
                   {title}
                 </Typography>
-                <Typography variant="caption">{getGroupName}</Typography>
+                <Typography variant="caption">{groupName}</Typography>
               </div>
             </div>
             <div className="infoDetails">

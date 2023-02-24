@@ -7,7 +7,8 @@ export interface EventProps {
   description: string; // Description of the event in html
   getAbsoluteUrl: string; // url of the event from root url
   getGroupName: string; // name of the organiser
-  group: string; // slug of the organiser
+  groupSlug: string; // slug of the organiser
+  groupName: string; // name of the organiser
   image: string | null; // uri of the banner
   isMember: boolean;
   isParticipating: boolean; // whether connected user particpate at this event

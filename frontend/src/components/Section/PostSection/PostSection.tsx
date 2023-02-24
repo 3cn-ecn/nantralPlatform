@@ -78,7 +78,7 @@ export function PostSection(props: {
               <PostCard
                 title={post.title}
                 imageUri={post.image}
-                club={post.group}
+                club={post.group_slug}
                 key={post.slug}
               />
             </div>
@@ -101,10 +101,11 @@ export function PostSection(props: {
           <PostCard
             title={post.title}
             imageUri={post.image}
-            club={post.group}
+            club={post.group_slug}
             key={post.slug}
             description={post.description}
             pinned={post.pinned}
+            pageLink={post.page_suggestion}
           />
         </div>
       ))}

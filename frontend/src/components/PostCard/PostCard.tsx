@@ -17,6 +17,8 @@ import './PostCard.scss';
 import { ArrowForward, Close, Edit, PushPin } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Club';
+import Avatar from '../Avatar/Avatar';
+import ClubAvatar from '../ClubAvatar/ClubAvatar';
 
 export function PostCard(props: {
   imageUri: string;
@@ -31,12 +33,12 @@ export function PostCard(props: {
   const ref = React.useRef<any>(null);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
 
-  // React.useEffect(() => {
-  //   axios
-  //     .get(`api/club/${club.slice(6)}`)
-  //     .then((res) => setClubDetails(res.data))
-  //     .catch((err) => console.error(err));
-  // }, []);
+  React.useEffect(() => {
+    axios
+      .get(`api/group/group/${club}`)
+      .then((res) => setClubDetails(res.data))
+      .catch((err) => console.error(err));
+  }, []);
 
   const handleClick = (event) => {
     event.stopPropagation();
@@ -106,6 +108,7 @@ export function PostCard(props: {
                 }}
                 onClick={(e) => e.stopPropagation()}
                 endIcon={<ArrowForward />}
+                href={pageLink}
               >
                 Voir la page
               </Button>
@@ -113,51 +116,12 @@ export function PostCard(props: {
           </CardContent>
         </CardActionArea>
       </Card>
-      {/* <Card sx={{ height: '100%' }}>
-          <CardActionArea
-            onClick={() => setOpen(true)}
-            sx={{ display: 'flex', flexDirection: 'row' }}
-          >
-            <div id="image-shadow"></div>
-            <div id="card-top">
-              <IconButton
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                style={{
-                  minWidth: 0,
-                  padding: 0,
-                  fontSize: '1em',
-                }}
-              >
-                <MoreHoriz color="primary" style={{ height: 40, width: 40 }} />
-              </IconButton>
-              <PushPin sx={{ color: 'black' }} />
-            </div>
-            <CardMedia
-              component="img"
-              id="card-image"
-              image={imageUri}
-              alt="img"
-            ></CardMedia>
-
-            <CardContent>
-              <Typography gutterBottom variant="h5" sx={{}}>
-                {title}
-              </Typography>
-              <Typography gutterBottom variant="caption" sx={{}}>
-                {club}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card> */}
       <Dialog
         open={open}
         onClose={handleClose}
         scroll="paper"
         fullWidth
         maxWidth="md"
-        // aria-labelledby="scroll-dialog-title"
-        // aria-describedby="scroll-dialog-description"
       >
         <DialogTitle id="scroll-dialog-title">
           <div
@@ -168,48 +132,42 @@ export function PostCard(props: {
               alignItems: 'center',
             }}
           >
-            {title}
+            <div>{title}</div>
             <IconButton onClick={handleClose}>
               <Close />
             </IconButton>
           </div>
         </DialogTitle>
         <DialogContent dividers>
-          <DialogContentText
-            id="scroll-dialog-description"
-            // ref={descriptionElementRef}
-            tabIndex={-1}
-          >
+          <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
             <img alt="" src={imageUri} id="image" />
             <div dangerouslySetInnerHTML={{ __html: description }}></div>
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
+        <DialogActions style={{ justifyContent: 'space-between' }}>
+          {clubDetails && (
+            <ClubAvatar
+              name={clubDetails.name}
+              clubUrl={clubDetails.url}
+              logoUrl={clubDetails.icon}
+              textPosition="right"
+              size={60}
+            />
+          )}
           {pageLink && (
             <Button
               style={{
-                position: 'absolute',
-                right: 0,
-                bottom: 0,
-                marginRight: 10,
-                marginBottom: 5,
+                position: 'relative',
               }}
               onClick={(e) => e.stopPropagation()}
               endIcon={<ArrowForward />}
+              href={pageLink}
             >
               Voir la page
             </Button>
           )}
         </DialogActions>
       </Dialog>
-      {/* <Modal open={open} onClose={() => setOpen(false)}>
-        <div id="container">
-          <div id="image-container">
-            <h2 id="banner-title">{title}</h2>
-            <img alt="" src={imageUri} id="image" />
-          </div>
-        </div>
-      </Modal> */}
     </>
   );
 }

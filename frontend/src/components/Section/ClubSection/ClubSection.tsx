@@ -52,6 +52,7 @@ export function ClubSection(props: {
   let content: JSX.Element | Array<JSX.Element>;
   const [expanded, setExpanded] = React.useState<boolean>(true);
   const allclubs = maxItem ? clubs.slice(0, maxItem) : clubs;
+  console.log(allclubs);
   switch (status) {
     case 'fail':
       content = <p className="card">{t('event.error')}</p>;
@@ -65,8 +66,8 @@ export function ClubSection(props: {
           <Grid item xs={6} sm={4} md={3} lg={2} key={club.name}>
             <ClubAvatar
               name={club.name}
-              clubUrl={club.icon}
-              logoUrl={club.url}
+              clubUrl={club.url}
+              logoUrl={club.icon}
               key={club.name}
               size={clubAvatarSize}
             />
@@ -96,7 +97,7 @@ export function ClubSection(props: {
             sx={{
               textTransform: 'none',
               color: 'text.primary',
-              ':hover': { backgroundColor: 'ThreeDHighlight' },
+              ':hover': { textDecoration: 'underline', bgcolor: 'transparent' },
             }}
           >
             <h1 className="section-title">{title}</h1>

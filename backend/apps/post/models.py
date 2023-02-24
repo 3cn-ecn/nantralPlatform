@@ -117,6 +117,11 @@ class AbstractPost(models.Model, SlugModel):
 
 
 class Post(AbstractPost):
+    page_suggestion = models.CharField(
+        verbose_name="Lien vers une page de Nantral Platform",
+        null=True, blank=True, max_length=200)
+    pinned = models.BooleanField(
+        verbose_name="Épinglé", default=False)
 
     def save(self, *args, **kwargs):
         # create the slug

@@ -13,5 +13,8 @@ class PostSerializer(serializers.ModelSerializer):
             'color',
             'image',
             'slug',
-            'publicity'
+            'publicity',
+            'group_slug',
+            'pinned',
+            'page_suggestion'
         ]
