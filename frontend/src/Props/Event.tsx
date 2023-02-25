@@ -3,8 +3,8 @@ export interface EventProps {
   beginDate: Date; // Event begin date in Date format
   endDate: Date; // Event begin date in Date format
   description: string; // Description of the event in html
-  getAbsolute_url: string; // url of the event from root url
-  getGroup_name: string; // name of the organiser
+  getAbsoluteUrl: string; // url of the event from root url
+  getGroupName: string; // name of the organiser
   group: string; // slug of the organiser
   image: string | null; // uri of the banner
   isMember: boolean;
