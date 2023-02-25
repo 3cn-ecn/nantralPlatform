@@ -95,10 +95,12 @@ function Home() {
           <PostSection
             posts={posts.filter((post) => post.pinned)}
             title="A la une"
+            status={postsStatus}
           />
           <PostSection
             posts={posts.filter((post) => !post.pinned)}
             title="Annonces"
+            status={postsStatus}
           />
           <EventSection
             events={events.filter((item: EventProps) =>

@@ -34,7 +34,6 @@ export function EditGroupMembersModal(
     return null;
   }
   const handleClose = () => setShowModal(false);
-  // const handleShow = () => setShowModal(true);
 
   const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
