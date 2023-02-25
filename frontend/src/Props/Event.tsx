@@ -6,7 +6,6 @@ export interface EventProps {
   endDate: Date; // Event begin date in Date format
   description: string; // Description of the event in html
   getAbsoluteUrl: string; // url of the event from root url
-  getGroupName: string; // name of the organiser
   groupSlug: string; // slug of the organiser
   groupName: string; // name of the organiser
   image: string | null; // uri of the banner
