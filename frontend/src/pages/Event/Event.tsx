@@ -122,7 +122,18 @@ function Event() {
 
   React.useEffect(() => {
     axios.get('/api/event').then((res: any) => {
-      eventsToCamelCase(res.data);
+      res.data.forEach((event) => 
+      { 
+        // delete when date update to beginDate
+        event.begin_date = event.date;
+
+        // delete when endDate defined forEach event
+        if (event.end_date === null) {
+          event.end_date = new Date(new Date(event.date).getTime() + 3600000);
+        }
+
+        snakeToCamelCase(event, { 'beginDate': 'Date', 'endDate': 'Date' });
+      });
       setEvents(res.data);
     });
   }, []);
