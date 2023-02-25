@@ -48,11 +48,6 @@ export function PostSection(props: {
   }
   return (
     <Carousel itemNumber={md ? 1 : 3} title={`${title} (${posts.length})`}>
-      {/* {allPosts.map((post) => (
-        <div key={post.slug} style={{ padding: 8, overflow: 'hidden' }}>
-          <PostCard post={post} />
-        </div>
-      ))} */}
       {content}
     </Carousel>
   );

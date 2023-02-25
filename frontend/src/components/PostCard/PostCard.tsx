@@ -16,7 +16,7 @@ import {
 import * as React from 'react';
 
 import './PostCard.scss';
-import { ArrowForward, Close, Edit, PushPin } from '@mui/icons-material';
+import { ArrowForward, Close, Edit } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import ClubAvatar from '../ClubAvatar/ClubAvatar';
@@ -59,17 +59,6 @@ export function PostCard(props: { post: PostProps }) {
         >
           {post.image && (
             <CardMedia src={post.image} id="card-image" component="img" />
-          )}
-          {/* I don't like the pin icon */}
-          {post.pinned && false && (
-            <PushPin
-              sx={{
-                position: 'absolute',
-                color: 'primary.main',
-                height: '30px',
-                width: '30px',
-              }}
-            />
           )}
           <CardContent
             style={{
