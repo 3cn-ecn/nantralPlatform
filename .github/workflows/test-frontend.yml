@@ -21,6 +21,8 @@ jobs:
         run: yarn
       - name: Test and coverage
         run: yarn test --coverage
+        with:
+          projectBaseDir: frontend
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
