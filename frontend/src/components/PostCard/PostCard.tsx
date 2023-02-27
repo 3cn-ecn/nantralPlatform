@@ -6,7 +6,6 @@ import {
   CardMedia,
   IconButton,
   Tooltip,
-  useMediaQuery,
 } from '@mui/material';
 import * as React from 'react';
 
@@ -15,7 +14,6 @@ import { ArrowForward, Edit, Groups } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../style/palette';
 import { PostProps } from '../../Props/Post';
 import { formatDate } from '../../utils/date';
 import { PostModal } from '../Modal/PostModal';

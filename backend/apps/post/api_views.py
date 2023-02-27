@@ -43,9 +43,6 @@ class UpdatePostAPIView(generics.RetrieveDestroyAPIView):
         return Response(status=404)
 
     def get_queryset(self):
-        # post = get_object_or_404(
-        #     Post, slug=self.kwargs['post_slug'])
-        # print(post.title)
         post = Post.objects.filter(slug=self.kwargs['post_slug'])
         if (post[0].can_view(self.request.user)):
             return post

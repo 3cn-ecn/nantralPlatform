@@ -1,7 +1,6 @@
 import React from 'react';
-import { ArrowForward, Close, Groups } from '@mui/icons-material';
+import { Close } from '@mui/icons-material';
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
