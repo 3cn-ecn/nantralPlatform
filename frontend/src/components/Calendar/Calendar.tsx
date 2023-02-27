@@ -623,8 +623,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     eventsBlockedChain: Array<Array<Array<number>>>;
   } = sortInWeek(sortEvents, beginOfWeek);
 
-  console.log('todelete');
-
   const newSortEvents = eventsWeek.sortEvents;
   const { eventsBlockedChain } = eventsWeek;
 
