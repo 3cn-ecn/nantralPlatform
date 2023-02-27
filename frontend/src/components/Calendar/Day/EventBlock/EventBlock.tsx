@@ -54,7 +54,7 @@ export function EventBlock(props: {
       style={{
         minWidth: `1px`,
         height: `${Math.min(duration, startTime) * 20}px`,
-        padding: '0px',
+        padding: '5px',
       }}
     >
       {event.title[0]}

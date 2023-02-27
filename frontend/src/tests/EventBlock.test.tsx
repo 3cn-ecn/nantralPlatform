@@ -11,7 +11,7 @@ describe('<EventBlock />', () => {
       <EventBlock day={event.beginDate.getDay()} event={event} />
     );
     expect(component.getByRole('button').style.height).toBe('20px');
-    expect(component.getByRole('button').style.padding).toBe('0px');
+    expect(component.getByRole('button').style.padding).toBe('5px');
     expect(component).toMatchSnapshot();
   });
 });
