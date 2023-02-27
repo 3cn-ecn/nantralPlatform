@@ -8,4 +8,5 @@ export default {
   },
   testEnvironment: 'jsdom',
   collectCoverage: true,
+  testResultsProcessor: 'jest-sonar-reporter',
 };
