@@ -13,6 +13,9 @@ jobs:
   tests-on-frontend:
     name: SonarCloud
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./backend
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -20,9 +23,8 @@ jobs:
       - name: Install dependencies
         run: yarn
       - name: Test and coverage
+        working-directory: ${{ env.working-directory }}
         run: yarn test --coverage
-        with:
-          projectBaseDir: frontend
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
