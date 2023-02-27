@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load file_url %}
+{% load video %}
+
+{% block head %}
+    <meta name="description" CONTENT="{{group.summary}} - {{group.name}} - Centrale Nantes">
+{% endblock %}
+
+{% block banniere %}
+    {% if group.banner %}
+        <div class="ratio ratio-banniere container-xl">
+            <img class="banniere" src="{{ group.banner|file_url }}" alt="">
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {# Header of the page #}
+    <div class="row">
+        {# Icon #}
+        {% if group.icon %}
+            <div class="col-12 col-sm-3">
+                <a href="{{group.icon|file_url}}">
+                    <div class="ratio ratio-1x1 logo-div mb-4">
+                        <img class="logo" src="{{group.icon|file_url}}" alt="">
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+        {# Description of the club #}
+        <div class="col">
+            <h1>{{group.name}}</h1>
+            <p>
+            {% if user.is_authenticated %}
+                {# Membership #}
+                {% if is_member and is_admin %}
+                    <span class="btn-group" role="group">
+                        <button class='btn btn-light btn-sm disabled border'>
+                            <i class="fa fa-crown"></i>&nbsp; Vous êtes admin !
+                        </button>
+                        <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
+                            Modifier
+                        </button>
+                    </span>
+                {% elif is_member %}
+                    <span class="btn-group" role="group">
+                        <button class='btn btn-light btn-sm disabled'>
+                            <i class="fa fa-user"></i>&nbsp; Vous êtes membre !
+                        </button>
+                        <button id='show-add-group' class='btn btn-secondary btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
+                            Modifier
+                        </button>
+                    </span>
+                {% elif not group.lock_memberships %}
+                    <button id='show-add-group' class='btn btn-dark btn-sm' data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fa fa-user-plus"></i>&nbsp; Devenir membre
+                    </button>
+                {% endif %}
+                {# Edition of the page #}
+                {% if is_admin %}
+                    <a href='{%url "group:update" group.slug %}' class="btn btn-dark btn-sm">
+                        <i class="fa fa-pencil"></i>&nbsp; Modifier la page
+                    </a>
+                {% endif %}
+                {# Admin link #}
+                {% if user.is_superuser %}
+                    <a href="{% url 'admin:group_group_change' group.pk %}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-shield-alt"></i>&nbsp; Page Admin
+                    </a>
+                {% endif %}
+                {# Subscription #}
+                <a href="{% url 'group:edit-subscription' group.slug %}" class="btn btn-dark btn-sm">
+                    <i class="{{ has_subscribed | yesno:"fas,far"}} fa-bell"></i>&nbsp;
+                    {{ has_subscribed | yesno:"Abonné !,S'abonner" }}
+                </a>
+            {% endif %}
+            </p>
+            {# Hours and place meetings #}
+            {% if group.meeting_place or group.meeting_hour %}
+                <p class="infos">
+                    {% if group.meeting_place %}
+                        <span class="text-nowrap"><span><i class="fas fa-map-marker-alt"></i></span> {{ group.meeting_place }}</span>
+                    {% endif %}
+                    {% if group.meeting_hour %}
+                        <span class="text-nowrap"><span><i class="far fa-clock"></i></span> {{ group.meeting_hour }}</span>
+                    {% endif %}
+                </p>
+            {% endif %}
+            {# Summary #}
+            {% if group.summary %}
+                <p>{{ group.summary }}</p>
+            {% endif %}
+            {# Social links #}
+            {% include "sociallink/liste.html" with sociallinks=group.social_links.all %}
+        </div>
+    </div>
+
+    {# Events #}
+    {% if has_events and user.is_authenticated %}
+        <br/>   
+        <h2>Évènements</h2>
+        <div id="root-events"></div>
+        <script>
+            const eventsApiUrl = "{% url 'event_api:list-all-group-events' group.slug %}";
+            const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
+            const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
+            const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
+            const isAdmin = {{ is_admin|yesno:"true,false,false" }};
+        </script>
+        <script src='{% static "js/event/eventsView.js" %}?v=1'></script>
+    {% endif %}
+    
+    {# Anonces #}
+    {% if posts and user.is_authenticated %}
+        <br/>
+        <h2>Annonces</h2>
+        {% for post in posts %}
+        <a href="{{post.get_absolute_url }}" style='color:white;' class="mb-1">
+            <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
+              <div class="card-body">
+                <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'l d F'}}</h5>
+                <h6 class="card-subtitle mb-2">{{post.group.name}}</h6>
+            </h6>
+                <p class="card-text" >{% autoescape off %}{{post.description | truncatewords_html:20}}{% endautoescape %}</p>
+              </div>
+            </div>
+          </a>
+          <br/>
+        {% endfor %}
+    {% endif %}
+
+    {# Vidéos s'il y en a 2 #}
+    {% if group.video1 and group.video2 or group.video1 and not group.description %}
+        <br/>
+        <div class="row gy-3">
+            <div class="col-12 col-md-6">
+                <div class="ratio ratio-16x9">
+                    {% video group.video1 %}
+                </div>
+            </div>
+            {% if group.video2 %}
+            <div class="col-12 col-md-6">
+                <div class="ratio ratio-16x9">
+                    {% video group.video2 %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {# Description avec vidéo dans le coin s'il y en a une seulement#}
+    {% if group.description %}
+        <br/>
+        <div class="clearfix">
+            {% if group.video1 and not group.video2 %}
+            <div class="col-md-6 float-md-end mb-3 ms-md-3">
+                <div class="ratio ratio-16x9">
+                    {% video group.video1 %}
+                </div>
+            </div>
+            {% endif %}
+            {% if group.description %}
+                {{ group.description | safe }}
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {# Sous-groupes #}
+    {% if group.children.count %}
+        <h2>{{ group.children_label }}</h2>
+        {% if group.children.count < 10 %}
+            <div class="grille mb-0">
+            {% for child in group.children.all %}
+                <div class="grille-icon text-center" style="transform: rotate(0)">
+                    <a href="{{ child.get_absolute_url }}" class="stretched-link">
+                        <div class="ratio ratio-1x1">
+                        {% if child.icon %}
+                            <img src="{{ child.icon|file_url }}" alt=""/>
+                        {% else %}
+                            <img src="https://avatars.dicebear.com/api/initials/{{child.short_name}}.svg" alt=""/>
+                        {% endif %}
+                        </div>
+                    </a>
+                    <h6>{{ child.short_name }}</h6>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <p><a href="{% url 'group:children' group.slug %}">
+                Voir les {{ group.children.count }} {{ group.children_label }}
+            </a></p>
+        {% endif %}
+    {% endif %}
+
+    {# Liste des membres #}
+    {% if user.is_authenticated %}
+        <br/>
+        <div id="root-members"></div>
+        <script>
+            const groupSlug = "{{ group.slug }}";
+            const displayType = 'grid';
+        </script>
+        <script src='{% static "js/group/MembershipsGroup.js" %}?v=1'></script>
+    {% endif %}
+
+    {# Bouton pour faire une demande pour devenir admin #}
+    {% if is_member and not is_admin and not has_requested_admin %}
+        {% include 'group/included/request-admin.html' %}
+    {% endif %}
+
+    {# popup pour devenir membre du groupe #}
+    {% if is_member or not group.lock_memberships %}
+        {% include 'group/included/edit-member.html' %}
+    {% endif %}
+
+    <br/>
+{% endblock %}

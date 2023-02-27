@@ -16,6 +16,7 @@
       "share": "Partager",
       "unsubscribe": "Se désinscrire"
     },
+    "error": "Erreur lors du chargement des évènements",
     "no_event": "Aucun évènement"
   },
   "home": {

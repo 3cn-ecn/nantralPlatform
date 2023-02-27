@@ -18,8 +18,9 @@ You can also run the tests:
     ```
 * on a specific app of the backend:
     ```bash
-    pipenv run test <app_name>
+    pipenv run test <path>
     ```
+    where `<path>` is the path of the app, for example `apps.group`
 * on the front end:
     ```bash
     npm run test

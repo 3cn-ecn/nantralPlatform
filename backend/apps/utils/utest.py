@@ -10,7 +10,7 @@ class TestMixin(object):
     -------
     user_setup() -> None
         Create 3 users
-    create_user(username: str, email: stri, is_active: bool, name: str) -> User
+    create_user(username: str, email: string, is_active: bool, name: str)->User
         Create a new user
     user_teardown() -> None
         Delete the users of the database
