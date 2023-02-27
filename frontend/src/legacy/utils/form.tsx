@@ -3,11 +3,14 @@ import {
   TextField,
   Checkbox,
   Box,
+  Select,
   FormControl,
   FormControlLabel,
   FormHelperText,
   Typography,
   Autocomplete,
+  MenuItem,
+  InputLabel,
   AutocompleteInputChangeReason,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -25,6 +28,16 @@ export type FieldType =
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
+    }
+  | {
+      kind: 'select';
+      name: string;
+      label: string;
+      required?: boolean;
+      maxLength?: number;
+      helpText?: string;
+      multiline?: boolean;
+      item: Array<string>;
     }
   | {
       kind: 'group';
@@ -102,6 +115,30 @@ function FormGroup(props: {
                 />
               </Box>
             );
+          case 'select':
+            return (
+              <FormControl label={field.label} FullWidth>
+                <InputLabel id={`${field.name}-input`}>
+                  {field.label}
+                </InputLabel>
+                <Select
+                  key={field.name}
+                  id={`${field.name}-input`}
+                  name={field.name}
+                  label={field.label}
+                  value={values[field.name]}
+                  fullWidth={!noFullWidth}
+                  onChange={(e) => handleChange(field.name, e.target.value)}
+                  required={field.required}
+                >
+                  {field.item.map((name) => (
+                    <MenuItem key={name} value={name}>
+                      {name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            );
           case 'text':
             return (
               <TextField
@@ -114,7 +151,7 @@ function FormGroup(props: {
                 fullWidth={!noFullWidth}
                 required={field.required}
                 inputProps={{ maxLength: field.maxLength }}
-                helperText={error ? error : field.helpText}
+                helperText={error || field.helpText}
                 error={!!error}
                 margin="normal"
                 multiline={field.multiline}
@@ -123,7 +160,7 @@ function FormGroup(props: {
           case 'date': // date as string
             return (
               <LocalizationProvider
-                adapterLocale={'fr'}
+                adapterLocale="fr"
                 dateAdapter={AdapterDayjs}
                 key={field.name}
               >
@@ -151,7 +188,7 @@ function FormGroup(props: {
                       name={field.name}
                       fullWidth={!noFullWidth}
                       required={field.required}
-                      helperText={error ? error : field.helpText}
+                      helperText={error || field.helpText}
                       error={!!error}
                       margin="normal"
                     />
@@ -175,7 +212,7 @@ function FormGroup(props: {
                         {`${field.label}${field.required ? ' *' : ''}`}
                       </Typography>
                       <FormHelperText sx={{ m: 0 }}>
-                        {error ? error : field.helpText}
+                        {error || field.helpText}
                       </FormHelperText>
                     </>
                   }
@@ -273,7 +310,7 @@ function AutocompleteField<T>(props: {
           name={field.name}
           label={field.label}
           required={field.required}
-          helperText={error ? error : field.helpText}
+          helperText={error || field.helpText}
           error={!!error}
           margin="normal"
         />
