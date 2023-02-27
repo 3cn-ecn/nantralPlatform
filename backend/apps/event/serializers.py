@@ -33,7 +33,7 @@ class EventSerializer(serializers.ModelSerializer):
             'end_inscription',
             'begin_inscription',
             'end_date',
-            'ticketing',
+            'form_url',
             'is_favorite']
 
     def get_is_participating(self, obj):

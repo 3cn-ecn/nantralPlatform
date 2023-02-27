@@ -16,6 +16,7 @@
       "share": "Share",
       "unsubscribe": "Unregister"
     },
+    "error": "Error while loading the events",
     "no_event": "No Event"
   },
   "home": {
