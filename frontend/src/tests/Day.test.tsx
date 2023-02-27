@@ -16,7 +16,6 @@ describe('<Day />', () => {
       />
     );
     // to implement: console.log(component.getByText('GlobalDayContainer').style.transform);expect(component.getByText('GlobalDayContainer').style.transform).toBe(`translate(0px, ${20 * 21.6}px)`);
-    // to implement: console.log(component.getByText('GlobalDayContainer').style.transform);expect(component.getByText('GlobalDayContainer').style.transform).toBe(`translate(0px, ${20 * 21.6}px)`);
     expect(component).toMatchSnapshot();
   });
 });

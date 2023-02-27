@@ -2,10 +2,6 @@ import React from 'react';
 import { Button } from '@mui/material';
 import { EventProps } from '../../../../Props/Event';
 
-function functiiii() {
-  console.log('oui');
-}
-
 /**
  * The EventBlock component, which is an event in the calendar display.
  * @param day The number of the day in the week.
@@ -35,6 +31,8 @@ export function EventBlock(props: {
         (60 - event.beginDate.getSeconds()) / 3600;
     }
   }
+  const a = 0;
+  console.log(a);
 
   // Set the duration of the event.
   let duration: number;
@@ -58,7 +56,7 @@ export function EventBlock(props: {
       style={{
         minWidth: `1px`,
         height: `${Math.min(duration, startTime) * 20}px`,
-        padding: '5px',
+        padding: '0px',
       }}
     >
       {event.title[0]}
