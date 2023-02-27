@@ -114,5 +114,21 @@
     "theme": "Thème",
     "title_language": "Langage",
     "title_theme": "Thème"
+  },
+  "filterbar": {
+    "button_filter": "Filtrer",
+    "title_filter": "Filtres",
+    "favorite": "Favoris",
+    "participating": "Je participe",
+    "shotgun": "Shotgun",
+    "organiser": "Organisateur",
+    "date": "Date",
+    "from": "À partir du",
+    "to": "Jusqu'au",
+    "validate_button": "Valider"
+  },
+  "date_picker": {
+    "language": "fr"
   }
+  
 }
