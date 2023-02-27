@@ -1,47 +1,49 @@
-import { Card, Grid, Skeleton, SvgIcon, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { EventProps } from 'Props/Event';
 import { ClubProps } from 'Props/Club';
-import React from 'react';
-import ClubAvatar from '../../components/ClubAvatar/ClubAvatar';
+import * as React from 'react';
+import { SvgIcon, Typography } from '@mui/material';
+import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
+import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import './Home.scss';
-import { ButtonBanner } from '../../components/ButtonBanner/ButtonBanner';
-import {
-  EventSection,
-  SectionTitle,
-} from '../../components/EventSection/EventSection';
+import { EventSection } from '../../components/Section/EventSection/EventSection';
+import { isThisWeek } from '../../utils/date';
+import { PostSection } from '../../components/Section/PostSection/PostSection';
+import { PostProps } from '../../Props/Post';
+import { Status } from '../../Props/GenericTypes';
 
-const clubAvatarSize = 120;
 /**
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [eventsStatus, setEventsStatus] = React.useState<
-    'loading' | 'success' | 'error'
-  >('loading');
+  const [eventsStatus, setEventsStatus] = React.useState<Status>('load');
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
+  const [clubsStatus, setClubsStatus] = React.useState<Status>('load');
+  const [posts, setPosts] = React.useState<Array<PostProps>>([]);
+  const [postsStatus, setPostsStatus] = React.useState<Status>('load');
   const { t } = useTranslation('translation'); // translation module
   const headerImageURL =
     'https://www.ec-nantes.fr/medias/photo/carroussel-campus-drone-002_1524738012430-jpg';
   React.useEffect(() => {
     getEvent();
     getMyClubs();
+    getPosts();
   }, []);
 
   async function getEvent() {
     axios
       .get('api/event')
       .then((res) => {
+        eventsToCamelCase(res.data);
         setEvents(res.data);
         setEventsStatus('success');
       })
       .catch((err) => {
         console.error(err);
-        setEventsStatus('error');
+        setEventsStatus('fail');
       });
   }
   async function getMyClubs() {
@@ -49,45 +51,25 @@ function Home() {
       .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
       .then((res) => {
         setMyClubs(res.data);
+        setClubsStatus('success');
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        setClubsStatus('fail');
+      });
   }
-
-  function isThisWeek(date: Date): boolean {
-    const todayTime: number = date.getTime();
-    const monday = new Date();
-    monday.setDate(monday.getDate() - monday.getDay() + 1);
-    const sunday = new Date();
-    sunday.setDate(sunday.getDate() - sunday.getDay() + 8);
-    return todayTime >= monday.getTime() && todayTime <= sunday.getTime();
+  async function getPosts() {
+    axios
+      .get('api/post')
+      .then((res) => {
+        setPosts(res.data);
+        setPostsStatus('success');
+      })
+      .catch((err) => {
+        console.error(err);
+        setPostsStatus('fail');
+      });
   }
-
-  const myClubsSection = (
-    <Card variant="outlined" className="card">
-      <SectionTitle title={t('home.myClubs')} url="/club" />
-      <Grid container>
-        {myClubs
-          ? myClubs.map((item) => (
-              <ClubAvatar
-                name={item.name}
-                clubUrl={item.url}
-                logoUrl={item.icon}
-                key={item.name}
-                size={clubAvatarSize}
-              />
-            ))
-          : [0, 1, 2].map((item) => (
-              <Skeleton
-                key={item}
-                variant="circular"
-                height={clubAvatarSize}
-                width={clubAvatarSize}
-                sx={{ margin: '10px' }}
-              />
-            ))}
-      </Grid>
-    </Card>
-  );
 
   return (
     <>
@@ -102,7 +84,6 @@ function Home() {
               sx={{
                 height: 50,
                 width: 50,
-                // display: { xs: 'none', md: 'flex' },
               }}
             />
             <Typography id="main-title">Nantral Platform</Typography>
@@ -111,10 +92,19 @@ function Home() {
       </div>
       <div style={{ alignContent: 'center', display: 'flex', paddingTop: 20 }}>
         <div className="container">
-          <ButtonBanner imageUri="https://scontent-cdg2-1.xx.fbcdn.net/v/t39.30808-6/331025535_6475709975779474_1538531856304866688_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=8631f5&_nc_ohc=9-rJrSTbmTAAX-ap3mM&_nc_ht=scontent-cdg2-1.xx&oh=00_AfAZrGMxaT31DRn7NkL1OE7iiK0qh8HqGl8pMEFLx871hg&oe=63F094FD" />
+          <PostSection
+            posts={posts.filter((post) => post.pinned)}
+            title="A la une"
+            status={postsStatus}
+          />
+          <PostSection
+            posts={posts.filter((post) => !post.pinned)}
+            title="Annonces"
+            status={postsStatus}
+          />
           <EventSection
             events={events.filter((item: EventProps) =>
-              isThisWeek(new Date(item.date))
+              isThisWeek(new Date(item.beginDate))
             )}
             status={eventsStatus}
             seeMoreUrl="/event"
@@ -122,14 +112,19 @@ function Home() {
           />
           <EventSection
             events={events.filter(
-              (item: EventProps) => !isThisWeek(new Date(item.date))
+              (item: EventProps) => !isThisWeek(new Date(item.beginDate))
             )}
             status={eventsStatus}
             maxItem={3}
             seeMoreUrl="/event"
             title={t('home.upcomingEvents')}
           />
-          {myClubsSection}
+          <ClubSection
+            clubs={myClubs}
+            status={clubsStatus}
+            title={t('home.myClubs')}
+            seeMoreUrl="/club"
+          />
         </div>
       </div>
     </>

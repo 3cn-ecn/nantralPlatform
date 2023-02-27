@@ -1,4 +1,4 @@
-.upcoming-event {
+.event-grid {
   display: block;
   align-content: center;
   margin-left: auto;
@@ -27,9 +27,6 @@
 
 .card {
   margin-top : 1.3em;
-  padding-left : 0.6em;
-  padding-right : 0.6em;
-  padding-bottom : 0.6em;
 }
 .club {
   margin-left: 0.6em;
@@ -40,5 +37,6 @@
 }
 
 .section-title {
-  font-size: min(6vw, 30px);
+  font-size: min(5vw, 30px);
+  margin : 0px;
 }
