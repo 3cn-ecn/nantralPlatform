@@ -1,17 +1,8 @@
 import * as React from 'react';
-import {
-  Badge,
-  Button,
-  Divider,
-  Grid,
-  Skeleton,
-  useMediaQuery,
-} from '@mui/material';
+import { Badge, Button, Divider, Grid, Skeleton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PostCard } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';
-import Carousel from '../../Carousel/Carousel';
-import { theme } from '../../style/palette';
 import { Status } from '../../../Props/GenericTypes';
 
 /**
