@@ -14,11 +14,7 @@ class ListPostsAPIView(viewsets.ViewSet):
     def list(self, request):
         today = timezone.now()
         queryset = Post.objects.filter(
-<<<<<<< HEAD
             publication_date__lte=today).order_by("-publication_date")
-=======
-            publication_date__lte=today).order_by("publication_date")
->>>>>>> origin/react-app
         queryset = [p for p in queryset if p.can_view(request.user)]
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)

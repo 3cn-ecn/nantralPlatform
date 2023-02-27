@@ -7,7 +7,12 @@
       "shotgunClosed": "shotgun fermé",
       "title": "Voulez-vous vous désinscrire de cet événements ?",
       "unsuscribe": "se désinscrire"
-    }
+    },
+    "showAll": "Tout afficher",
+    "showLess": "Afficher moins"
+  },
+  "date_picker": {
+    "language": "fr"
   },
   "event": {
     "action_menu": {
@@ -17,9 +22,24 @@
       "unsubscribe": "Se désinscrire"
     },
     "error": "Erreur lors du chargement des évènements",
+    "membersOnly": "Membres uniquement",
     "no_event": "Aucun évènement"
   },
+  "filterbar": {
+    "button_filter": "Filtrer",
+    "date": "Date",
+    "favorite": "Favoris",
+    "from": "À partir du",
+    "organiser": "Organisateur",
+    "participating": "Je participe",
+    "shotgun": "Shotgun",
+    "title_filter": "Filtres",
+    "to": "Jusqu'au",
+    "validate_button": "Valider"
+  },
   "home": {
+    "announcement": "Annonces",
+    "highlighted": "À la une",
     "myClubs": "Mes Clubs & Assos",
     "myEvents": "Mes événements",
     "seeMore": "voir plus",
@@ -114,21 +134,5 @@
     "theme": "Thème",
     "title_language": "Langage",
     "title_theme": "Thème"
-  },
-  "filterbar": {
-    "button_filter": "Filtrer",
-    "title_filter": "Filtres",
-    "favorite": "Favoris",
-    "participating": "Je participe",
-    "shotgun": "Shotgun",
-    "organiser": "Organisateur",
-    "date": "Date",
-    "from": "À partir du",
-    "to": "Jusqu'au",
-    "validate_button": "Valider"
-  },
-  "date_picker": {
-    "language": "fr"
   }
-  
 }
