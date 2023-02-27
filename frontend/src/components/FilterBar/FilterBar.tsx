@@ -98,7 +98,10 @@ function FilterBar(props: { getFilter: any }) {
       isMenu: true,
       content: (
         <Grid item xs="auto">
-          <CheckboxesTags label="Organisateur" getResult={getOrganiser} />
+          <CheckboxesTags
+            label={t('filterbar.organiser')}
+            getResult={getOrganiser}
+          />
         </Grid>
       ),
     },

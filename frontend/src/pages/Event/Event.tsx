@@ -65,7 +65,7 @@ const filterEvent = (events: Array<EventProps>, filter: Map<string, any>) => {
 
 function EventList(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
+  console.log(events);
 
   return <p>Ceci est une liste.</p>;
 }
