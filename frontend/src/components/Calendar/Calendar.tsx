@@ -570,6 +570,10 @@ function changeDisplay(
   }
 }
 
+function functiiii() {
+  console.log('oui');
+}
+
 /**
  * The calendar component which will contains all the day and events components.
  * @param event The list of events.
