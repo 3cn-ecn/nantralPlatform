@@ -483,7 +483,7 @@ function addEventICS(event: EventProps): EventAttributes {
     title: event.title,
     description: event.description,
     location: event.location,
-    organizer: { name: event.group },
+    organizer: { name: event.groupName },
   };
 
   return eventCalendar;
