@@ -2,6 +2,10 @@ import React from 'react';
 import { Button } from '@mui/material';
 import { EventProps } from '../../../../Props/Event';
 
+function functiiii() {
+  console.log('oui');
+}
+
 /**
  * The EventBlock component, which is an event in the calendar display.
  * @param day The number of the day in the week.
