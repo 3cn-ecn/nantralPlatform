@@ -10,15 +10,58 @@ import {
   CalendarToday,
   CalendarViewDay,
 } from '@mui/icons-material';
-import { EventProps } from 'Props/Event';
+import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
-import Formular from '../../components/Formular/Formular'
+import Formular from '../../components/Formular/Formular';
 
 /**
- * Event Page, with Welcome message, next events, etc...
- * @returns Event page component
+ * Function used to filter a single event depending on the state of the filterbar
+ * @returns event if it matches the filter, null if not
+ * @TODO move this function to backend
  */
+const filterFunction = (event: EventProps, filter: Map<string, any>) => {
+  // filter for checkboxes
+  if (
+    (filter.get('favorite') === true && event.isFavorite !== true) ||
+    (filter.get('participate') === true && event.isParticipating !== true) ||
+    (filter.get('shotgun') === true && event.maxParticipant === null)
+  ) {
+    return null;
+  }
+
+  // filter for date
+  if (filter.get('dateBegin') !== null) {
+    if (filter.get('dateBegin').isAfter(event.endDate)) {
+      return null;
+    }
+  }
+
+  if (filter.get('dateEnd') !== null) {
+    if (filter.get('dateEnd').isBefore(event.beginDate)) {
+      return null;
+    }
+  }
+
+  // filter for organiser
+
+  return event;
+};
+
+/**
+ * Function used to filter all the events
+ * @param events all events from the database
+ * @param filter filter chosen by the user in the filterbar
+ * @returns events filtered if there is a filter, all events if not
+ * @todo move this function to backend
+ */
+const filterEvent = (events: Array<EventProps>, filter: Map<string, any>) => {
+  if (filter !== undefined) {
+    return events.filter((event) => filterFunction(event, filter));
+  }
+
+  return events;
+};
 
 function EventList(props: { events: any }) {
   const { events } = props;
@@ -29,11 +72,9 @@ function EventList(props: { events: any }) {
 
 function EventCalendar(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
   return (
     <>
       <p>Ceci est un calendrier.</p>
-      <CalendarMonth></CalendarMonth>
       <Calendar events={events}></Calendar>
     </>
   );
@@ -41,7 +82,6 @@ function EventCalendar(props: { events: any }) {
 
 function EventView(props: { events: any }) {
   const { events } = props;
-  // console.log(events);
   const [value, setValue] = React.useState('1');
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -60,7 +100,6 @@ function EventView(props: { events: any }) {
       <TabPanel value="2">
         <EventCalendar events={events}></EventCalendar>
         <CalendarMonth></CalendarMonth>
-        {/* <CalendarPicker></CalendarPicker> */}
         <CalendarViewDay></CalendarViewDay>
         <CalendarToday></CalendarToday>
       </TabPanel>
@@ -68,20 +107,23 @@ function EventView(props: { events: any }) {
   );
 }
 
+/**
+ * Event Page, with Welcome message, next events, etc...
+ * @returns Event page component
+ */
 function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
+  const [filter, setFilter] = React.useState<Map<string, any>>();
+
+  const getFilter = (validateFilter) => {
+    setFilter(validateFilter);
+  };
+  console.log(filterEvent(events, filter));
 
   React.useEffect(() => {
-    axios.get('/api/event').then((eventsData) => {
-      setEvents(eventsData.data);
-      // console.log(events[0].date);
-      // console.log(eventsData.data[0].date);
-      // const a = new Date(eventsData.data[0].date);
-      // console.log(a);
-      // console.log(a.getDay());
-      // console.log(a.getDate());
-      // console.log(a.getMonth());
-      // console.log(a.getFullYear());
+    axios.get('/api/event').then((res: any) => {
+      eventsToCamelCase(res.data);
+      setEvents(res.data);
     });
   }, []);
 
@@ -91,8 +133,8 @@ function Event() {
       <p>Ceci est la page des events</p>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Formular />
-        <FilterBar />
-      </div> 
+        <FilterBar getFilter={getFilter} />
+      </div>
       <EventView events={events} />
     </>
   );

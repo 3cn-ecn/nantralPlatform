@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -14,6 +15,7 @@ import './FilterBar.scss';
 import IconButton from '@mui/material/IconButton';
 import { Grid } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
+import { Dayjs } from 'dayjs';
 import SimpleAccordion from '../Accordion/SimpleAccordion';
 import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
@@ -27,40 +29,29 @@ interface FilterInterface {
   content: any;
 }
 
-interface ResultInterface {
-  id: string;
-  value: any;
-}
-
-function FilterBar() {
-  const [state, setState] = React.useState({
-    right: false,
-  });
-  const [dateBegin, setDateBegin] = React.useState(null);
-  const [dateBeginTransformed, setDateBeginTransformed] = React.useState(null);
-  const [dateEndTransformed, setDateEndTransformed] = React.useState(null);
+function FilterBar(props: { getFilter: any }) {
+  const { getFilter } = props;
+  const { t } = useTranslation('translation'); // translation module
+  const [open, setOpen] = React.useState(false);
+  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(null);
+  const [dateEnd, setDateEnd] = React.useState(null);
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [isParticipated, setIsParticipated] = React.useState(false);
   const [isShotgun, setIsShotgun] = React.useState(false);
   const [organiser, setOrganiser] = React.useState(null);
-  const [validateFilter, setValidateFilter] = React.useState(null);
+  const currentFilter = new Map();
 
   const getDateBegin = (newDate) => {
     setDateBegin(newDate);
-    if (newDate !== null) {
-      setDateBeginTransformed(newDate.format('DD/MM/YYYY'));
-    }
   };
   const getDateEnd = (newDate) => {
-    if (newDate !== null) {
-      setDateEndTransformed(newDate.format('DD/MM/YYYY'));
-    }
+    setDateEnd(newDate);
   };
   const getChecked = (id, checked) => {
-    if (id === 'favoris') {
+    if (id === 'favorite') {
       setIsFavorite(checked);
     }
-    if (id === 'participe') {
+    if (id === 'participate') {
       setIsParticipated(checked);
     }
     if (id === 'shotgun') {
@@ -71,26 +62,67 @@ function FilterBar() {
     setOrganiser(organiserDic);
   };
 
+  currentFilter.set('dateBegin', dateBegin);
+  currentFilter.set('dateEnd', dateEnd);
+  currentFilter.set('favorite', isFavorite);
+  currentFilter.set('participate', isParticipated);
+  currentFilter.set('shotgun', isShotgun);
+  currentFilter.set('organiser', organiser);
+
   const filters: FilterInterface[] = [
     {
+      id: 'favorite',
+      name: t('filterbar.favorite'),
+      icon: <FavoriteIcon />,
+      isMenu: false,
+      content: null,
+    },
+    {
+      id: 'participate',
+      name: t('filterbar.participating'),
+      icon: <PersonIcon />,
+      isMenu: false,
+      content: null,
+    },
+    {
+      id: 'shotgun',
+      name: t('filterbar.shotgun'),
+      icon: <TimerIcon />,
+      isMenu: false,
+      content: null,
+    },
+    {
+      id: 'organiser',
+      name: t('filterbar.organiser'),
+      icon: <GroupsIcon />,
+      isMenu: true,
+      content: (
+        <Grid item xs="auto">
+          <CheckboxesTags
+            label={t('filterbar.organiser')}
+            getResult={getOrganiser}
+          />
+        </Grid>
+      ),
+    },
+    {
       id: 'date',
-      name: 'Date',
+      name: t('filterbar.date'),
       icon: <DateRangeIcon />,
       isMenu: true,
       content: (
         <>
           <Grid item xs="auto">
-            <p>Du :</p>
             <BasicDatePicker
-              label={null}
+              label={t('filterbar.from')}
               minDate={null}
               getDate={getDateBegin}
             />
           </Grid>
+          <div style={{ height: '15px' }}></div>
           <Grid item xs="auto">
-            <p>Au :</p>
             <BasicDatePicker
-              label={null}
+              label={t('filterbar.to')}
               minDate={dateBegin}
               getDate={getDateEnd}
             />
@@ -98,67 +130,25 @@ function FilterBar() {
         </>
       ),
     },
-    {
-      id: 'favorite',
-      name: 'Favoris',
-      icon: <FavoriteIcon />,
-      isMenu: false,
-      content: null,
-    },
-    {
-      id: 'participate',
-      name: 'Je participe',
-      icon: <PersonIcon />,
-      isMenu: false,
-      content: null,
-    },
-    {
-      id: 'organiser',
-      name: 'Organisateur',
-      icon: <GroupsIcon />,
-      isMenu: true,
-      content: <CheckboxesTags label="Organisateur" getResult={getOrganiser} />,
-    },
-    {
-      id: 'shotgun',
-      name: 'Shotgun',
-      icon: <TimerIcon />,
-      isMenu: false,
-      content: null,
-    },
   ];
 
-  const currentFilter: ResultInterface[] = [
-    { id: 'dateBegin', value: { dateBeginTransformed } },
-    { id: 'dateEnd', value: { dateEndTransformed } },
-    { id: 'favorite', value: { isFavorite } },
-    { id: 'participate', value: { isParticipated } },
-    { id: 'organiser', value: { organiser } },
-    { id: 'shotgun', value: { isShotgun } },
-  ];
+  const validate = () => {
+    setOpen(false);
+    getFilter(currentFilter);
+  };
 
-  const toggleDrawer =
-    (anchor: 'right', open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' ||
-          (event as React.KeyboardEvent).key === 'Shift')
-      ) {
-        return;
-      }
-
-      setState({ ...state, [anchor]: open });
-    };
-
-  const list = (anchor: 'right') => (
+  const list = () => (
     <Box className="center" role="presentation">
       <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-        <IconButton onClick={toggleDrawer(anchor, false)}>
+        <IconButton
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
           <Close />
         </IconButton>
       </div>
-      <h2>Filtres</h2>
+      <h2>{t('filterbar.title_filter')}</h2>
 
       <List>
         {filters.map((filter) => (
@@ -184,8 +174,8 @@ function FilterBar() {
       </List>
       <div style={{ height: '15px' }}></div>
       <div>
-        <Button onClick={toggleDrawer(anchor, false)} variant="contained">
-          Valider
+        <Button onClick={validate} variant="contained">
+          {t('filterbar.validate_button')}
         </Button>
       </div>
     </Box>
@@ -197,16 +187,20 @@ function FilterBar() {
           <Button
             style={{ textTransform: 'none', padding: '2px 8px' }}
             variant="contained"
-            onClick={toggleDrawer(anchor, true)}
+            onClick={() => {
+              setOpen(true);
+            }}
             endIcon={<FilterAltIcon />}
           >
-            Filtrer
+            {t('filterbar.title_filter')}
           </Button>
           <Drawer
             keepMounted
             anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
+            open={open}
+            onClose={() => {
+              setOpen(false);
+            }}
             sx={{
               width: 300,
               flexShrink: 0,
@@ -216,7 +210,7 @@ function FilterBar() {
               },
             }}
           >
-            {list(anchor)}
+            {list()}
           </Drawer>
         </React.Fragment>
       ))}

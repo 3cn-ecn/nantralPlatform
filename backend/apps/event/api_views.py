@@ -4,50 +4,35 @@ from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import BaseEvent
-from .serializers import BaseEventSerializer, EventParticipatingSerializer
+from .models import Event
+from .serializers import EventSerializer, EventParticipatingSerializer
 
 
 class ListEventsHomeAPIView(generics.ListAPIView):
     """List all events for a user depending on the chosen
     time window. By default only returns current events."""
-    serializer_class = BaseEventSerializer
+    serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        date_gte = timezone.make_aware(timezone.now().today())
-        events = BaseEvent.objects.filter(
-            # If we don't do this, it throws a RunTimeWarning for some reason
-            date__gte=date_gte).order_by("date")
-        return [event for event in events if event.can_view(
-            self.request.user)]
-
-    def get_serializer_context(self):
-        context = super(ListEventsHomeAPIView, self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
+        today = timezone.now()
+        events = Event.objects.filter(date__gte=today).order_by("date")
+        return [e for e in events if e.can_view(self.request.user)]
 
 
 class ListAllEventsGroupAPIView(generics.ListAPIView):
     """List all events for a group depending on the chosen
     time window. By default only returns current events."""
-    serializer_class = BaseEventSerializer
+    serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         group = self.kwargs["group"]
-        date_gte = timezone.make_aware(timezone.now().today())
-        events = BaseEvent.objects.filter(
-            group=group,
-            date__gte=date_gte).order_by("date")
-        return [event for event in events if event.can_view(
-            self.request.user)]
-
-    def get_serializer_context(self):
-        context = super(ListAllEventsGroupAPIView,
-                        self).get_serializer_context()
-        context.update({"request": self.request})
-        return context
+        today = timezone.now()
+        events = Event.objects.filter(
+            group_slug=group,
+            date__gte=today).order_by("date")
+        return [e for e in events if e.can_view(self.request.user)]
 
 
 class ListEventsParticipantsAPIView(generics.ListAPIView):
@@ -59,8 +44,8 @@ class ListEventsParticipantsAPIView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         event_slug = self.kwargs['event_slug']
-        event = BaseEvent.objects.get(slug=event_slug)
-        group = event.get_group
+        event = Event.objects.get(slug=event_slug)
+        group = event.group
         if group.is_admin(user):
             return event.participants
         return []
@@ -69,37 +54,27 @@ class ListEventsParticipantsAPIView(generics.ListAPIView):
 class ListEventsGroupAPIView(generics.ListAPIView):
     """List events for a group depending on the chosen
     time window. By default only returns current events."""
-    serializer_class = BaseEventSerializer
+    serializer_class = EventSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         if self.request.method == 'GET':
             if self.request.GET.get('view') == 'archives':
                 date_lt = timezone.make_aware(timezone.now().today())
-                return BaseEvent.objects.filter(
-                    group=self.kwargs['group'], date__lt=date_lt)
+                return Event.objects.filter(
+                    group_slug=self.kwargs['group'], date__lt=date_lt)
             elif self.request.GET.get('view') == 'all':
-                return BaseEvent.objects.filter(group=self.kwargs['group'])
+                return Event.objects.filter(group_slug=self.kwargs['group'])
         date_gte = timezone.make_aware(timezone.now().today())
-        return BaseEvent.objects.filter(
+        return Event.objects.filter(
             group=self.kwargs['group'], date__gte=date_gte)
-
-
-class UpdateEventAPIView(generics.RetrieveDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = BaseEventSerializer
-    lookup_field = 'slug'
-    lookup_url_kwarg = 'event_slug'
-
-    def get_queryset(self):
-        return BaseEvent.objects.filter(slug=self.kwargs['event_slug'])
 
 
 class ParticipateAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
         inscription_finished: bool = event.end_inscription is not None and\
             timezone.now() > event.end_inscription
         inscription_not_started: bool = event.begin_inscription is not None and\
@@ -129,7 +104,7 @@ class ParticipateAPIView(APIView):
                       "message": "You have been added to this event"})
 
     def delete(self, request, *args, **kwargs):
-        event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
         event.participants.remove(request.user.student)
         return Response(
             status='200',
@@ -143,7 +118,7 @@ class FavoriteAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
         student = request.user.student
         if (student is None):
             return Response(status='404', data={
@@ -158,7 +133,7 @@ class FavoriteAPIView(APIView):
             })
 
     def delete(self, request, *args, **kwargs):
-        event = get_object_or_404(BaseEvent, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
         student = request.user.student
         if (student is None):
             return Response(status='404', data={

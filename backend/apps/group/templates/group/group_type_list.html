@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cache %}
+{% load file_url %}
+
+{% block content %}
+
+  <h1>Groupes</h1>
+  {% if user.is_superuser %}
+    <a href="{% url 'admin:group_grouptype_changelist' %}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+      <i class="fas fa-shield-alt"></i>&nbsp; Voir la liste
+    </a>
+    <br />
+  {% endif %}
+  <br />
+
+  {% cache None group_type_list %}
+    <div class="grille">
+      {% for group_type in grouptype_list %}
+        <div class="grille-icon text-center" style="transform: rotate(0)">
+          <a href="{{ group_type.get_absolute_url }}" class="stretched-link">
+            <div class="ratio ratio-1x1">
+              {% if group_type.icon %}
+                <img src="{{ group_type.icon|file_url }}" alt=""/>
+              {% else %}
+                <img src="https://avatars.dicebear.com/api/initials/{{group_type.name}}.svg" alt=""/>
+              {% endif %}
+            </div>
+          </a>
+          <h6>{{ group_type.name }}</h6>
+        </div>
+      {% endfor %}
+    </div>
+  {% endcache %}
+{% endblock %}

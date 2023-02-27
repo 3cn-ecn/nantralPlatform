@@ -36,16 +36,11 @@ export function formatTime(
   return formatDate(date, undefined, timeFormat);
 }
 
-/**
- * Function that check if a date is between two others.
- * @param eventDate The date to check.
- * @param beginDate The minimal date.
- * @param endDate The maximal date.
- * @returns The boolean that tells whether the date is between the others
- */
-export function betweenDate(eventDate: Date, beginDate: Date, endDate: Date) {
-  if (beginDate <= eventDate && eventDate < endDate) {
-    return true;
-  }
-  return false;
+export function isThisWeek(date: Date): boolean {
+  const todayTime: number = date.getTime();
+  const monday = new Date();
+  monday.setDate(monday.getDate() - monday.getDay() + 1);
+  const sunday = new Date();
+  sunday.setDate(sunday.getDate() - sunday.getDay() + 8);
+  return todayTime >= monday.getTime() && todayTime <= sunday.getTime();
 }

@@ -1,34 +1,91 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import 'dayjs/locale/fr';
 import TextField from '@mui/material/TextField';
-
-// TO DO : UN BOUTON POUR ENLEVER LA DATE CHOISIE
+import './BasicDatePicker.scss';
+import { IconButton, InputAdornment } from '@mui/material';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
 export default function BasicDatePicker(props: {
   label: string;
   minDate: any;
   getDate: any;
 }) {
-  const [valueDebut, setValue] = React.useState<Dayjs | null>(null);
+  const { t } = useTranslation('translation'); // translation module
+  const [value, setValue] = React.useState<Dayjs | null>(null);
+  const [isEmpty, setIsEmpty] = React.useState(true);
   const { label, minDate, getDate } = props;
 
   const handleChange = (newValue: Dayjs | null) => {
     setValue(newValue);
-    getDate(newValue);
+    if (newValue === null) {
+      setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
+    }
+  };
+
+  const clearDate = () => {
+    setValue(null);
+    getDate(null);
+    setIsEmpty(true);
+  };
+
+  /**
+   * Function used to render DesktopDatePicker
+   * @param params params of DesktopDatePicker
+   * @param empty boolean : true if picker is empty
+   * @returns the input rendered
+   */
+  const render = (params: any, empty: boolean) => {
+    // if picker is not empty, display a clear button
+    if (empty === false) {
+      return (
+        <TextField
+          className="textfield"
+          size="small"
+          {...params}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                <InputAdornment className="adornment" position="end">
+                  <IconButton
+                    className="button"
+                    size="small"
+                    onClick={clearDate}
+                  >
+                    <CancelIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+                {params.InputProps.endAdornment}
+              </>
+            ),
+          }}
+        ></TextField>
+      );
+    }
+    return (
+      <TextField className="textfield" size="small" {...params}></TextField>
+    );
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="fr">
-      <DatePicker
+    <LocalizationProvider
+      dateAdapter={AdapterDayjs}
+      adapterLocale={t('date_picker.language')}
+    >
+      <DesktopDatePicker
         minDate={minDate}
         label={label}
-        value={valueDebut}
+        value={value}
         onChange={handleChange}
-        renderInput={(params) => <TextField {...params} />}
+        showDaysOutsideCurrentMonth
+        renderInput={(params) => render(params, isEmpty)}
       />
     </LocalizationProvider>
   );

@@ -43,7 +43,7 @@ function CheckboxesTags(props: { label: string; getResult: any }) {
           {option.title}
         </li>
       )}
-      style={{ width: 230 }}
+      // style={{ width: 230 }}
       onChange={handleChange}
       renderInput={(params) => (
         <TextField {...params} label={label} multiline placeholder={label} />

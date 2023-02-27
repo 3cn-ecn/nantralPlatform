@@ -88,6 +88,4 @@ function Root(props: {}): JSX.Element {
   );
 }
 
-render(<Root />, document.getElementById('root'));
-
-// export default EventList;
+render(<Root />, document.getElementById("root-events"));

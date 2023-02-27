@@ -1,365 +1,696 @@
-from datetime import timedelta
-from django.utils import timezone
-
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
-from django.db.utils import IntegrityError
-from django.http.request import HttpRequest
-from django.shortcuts import redirect
+from django.http import HttpResponse, HttpRequest
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.db.models import QuerySet, Q, Count
+from django.shortcuts import redirect, get_object_or_404
 from django.urls.base import reverse
-from django.urls import resolve
-from django.views.decorators.http import require_http_methods
-from django.views.generic import View, FormView, TemplateView, DetailView
+from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    FormView,
+    ListView,
+    TemplateView,
+    UpdateView,
+    View)
 
-from apps.group.models import Group
-from apps.sociallink.models import SocialLink
-from apps.event.models import BaseEvent
+from discord_webhook import DiscordWebhook, DiscordEmbed
+
+from apps.event.models import Event
 from apps.post.models import Post
-from apps.notification.models import Subscription
 
+from .models import GroupType, Group, Membership
 from .forms import (
-    NamedMembershipAddGroup,
-    NamedMembershipGroupFormset,
-    AdminRightsRequestForm,
+    MembershipForm,
+    AdminRequestForm,
     UpdateGroupForm,
-    SocialLinkGroupFormset,
-    AdminRightsRequest)
-
-from apps.utils.accessMixins import UserIsAdmin, user_is_connected
-from apps.utils.slug import get_object_from_slug
+    SocialLinkGroupFormset)
 
 
-class BaseDetailGroupView(DetailView):
-    '''Vue de détails d'un groupe générique, sans protection.'''
-    template_name = 'group/detail/detail.html'
+class UserCanSeeGroupMixin(UserPassesTestMixin):
+    """A mixin class to test if a user has the rights to see a group."""
 
-    def get_object(self, **kwargs):
-        app = resolve(self.request.path).app_name
-        slug = self.kwargs.get("slug")
-        return get_object_from_slug(app, slug)
+    def test_func(self) -> bool:
+        group = Group.objects.get(slug=self.kwargs.get('slug'))
+        user = self.request.user
+        if group.public:
+            # public group: everyone can see
+            return True
+        elif group.private:
+            # private group: only members (and admins of course)
+            return group.is_member(user) or user.is_superuser
+        else:
+            # normal group: every authenticated users
+            return user.is_authenticated
 
-    def get_context_data(self, **kwargs):
+
+class UserIsGroupAdminMixin(UserPassesTestMixin):
+    """A mixin class to test if a user has the rights to see a group."""
+
+    def test_func(self) -> bool:
+        try:
+            group = Group.objects.get(slug=self.kwargs.get('slug'))
+            user = self.request.user
+            return group.is_admin(user)
+        except Group.DoesNotExist:
+            return self.request.user.is_superuser
+
+
+class ListGroupTypeView(ListView):
+    """List of GroupTypes."""
+
+    model = GroupType
+    template_name = 'group/group_type_list.html'
+    ordering = ['name']
+
+    def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
-        group = self.object
-        # réseaux sociaux
-        context['sociallinks'] = SocialLink.objects.filter(slug=group.full_slug)
-        # seulement si connecté
-        context['connected'] = user_is_connected(self.request.user)
-        if user_is_connected(self.request.user):
-            publication_date = timezone.make_aware(
-                timezone.now().today() - timedelta(days=10))
-            posts = Post.objects.filter(
-                group=group.full_slug,
-                publication_date__gte=publication_date
-            ).order_by('-publication_date')
-            context['posts'] = [
-                post for post in posts if post.can_view(self.request.user)]
-            date_gte = timezone.make_aware(timezone.now().today())
-            context['has_events'] = BaseEvent.objects.filter(
-                group=group.full_slug, date__gte=date_gte).exists()
-            # members
-            context['members'] = group.members.through.objects.filter(
-                group=group).order_by('student__user__first_name')
-            context['is_member'] = group.is_member(self.request.user)
-            if context['is_member']:
-                membership = group.members.through.objects.get(
-                    student=self.request.user.student,
-                    group=group,
-                )
-                context['form'] = NamedMembershipAddGroup(
-                    group)(instance=membership)
-            else:
-                context['form'] = NamedMembershipAddGroup(group)()
-            # admin
-            context['is_admin'] = group.is_admin(self.request.user)
-            context['admin_req_form'] = AdminRightsRequestForm()
         context['ariane'] = [
             {
-                'target': reverse(group.app + ':index'),
-                'label': group.app_name
+                'target': '#',
+                'label': _("Groups")
+            }
+        ]
+        return context
+
+
+class ListGroupView(ListView):
+    """List of Groups, filtered by type."""
+
+    template_name = 'group/group_list.html'
+
+    def get_queryset(self) -> QuerySet[Group]:
+        user = self.request.user
+        group_type = get_object_or_404(GroupType, slug=self.kwargs.get('type'))
+        return (Group.objects
+                # filter by group_type
+                .filter(group_type=group_type)
+                # remove the sub-groups to keep only parent groups
+                .filter(Q(parent=None)
+                        | Q(parent__in=group_type.extra_parents.all()))
+                # hide archived groups
+                .filter(archived=False)
+                # hide private groups unless user is member
+                # and hide non-public group if user is not authenticated
+                .filter(Q(private=False) | Q(members=user.student)
+                        if user.is_authenticated
+                        else Q(public=True))
+                # hide groups without active members (ie end_date > today)
+                .annotate(num_active_members=Count(
+                    'membership_set',
+                    filter=Q(membership_set__end_date__gte=timezone.now())))
+                .filter(Q(num_active_members__gt=0)
+                        if group_type.hide_no_active_members
+                        else Q())
+                # prefetch type and parent group for better performances
+                .prefetch_related('group_type', 'parent')
+                # order by category, order and then name
+                .order_by(*group_type.sort_fields.split(','))
+                .distinct())
+
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        group_type = GroupType.objects.get(slug=self.kwargs.get('type'))
+        context['group_type'] = group_type
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
             },
             {
                 'target': '#',
-                'label': group.name
+                'label': group_type.name
+            }
+        ]
+        return context
+
+
+class DetailGroupView(UserCanSeeGroupMixin, DetailView):
+    """The page for details on a group."""
+
+    template_name = 'group/detail.html'
+    model = Group
+    slug_field = 'slug'
+
+    def get_context_data(self, **kwargs):
+        """Get the context data to send to the template."""
+        context = super().get_context_data(**kwargs)
+        group: Group = self.object
+        user = self.request.user
+
+        if user.is_authenticated:
+            # show the posts from last 6 months (3 maximum)
+            all_posts = Post.objects.filter(
+                group_slug=group.slug,
+                publication_date__gte=(
+                    timezone.now() - timezone.timedelta(days=6 * 30)),
+                publication_date__lte=timezone.now()
+            ).order_by('-publication_date')
+            context['posts'] = [p for p in all_posts if p.can_view(user)][:3]
+            # check if there are some events planned for this group
+            context['has_events'] = Event.objects.filter(
+                group_slug=group.slug,
+                date__gte=timezone.now()
+            ).exists()
+            # members
+            context['is_member'] = group.is_member(user)
+            context['is_admin'] = group.is_admin(user)
+            context['has_subscribed'] = group.subscribers.contains(user.student)
+            # member form
+            if context['is_member']:
+                context['has_requested_admin'] = (
+                    group.membership_set.get(student__user=user).admin_request)
+                membership = group.membership_set.get(
+                    student=user.student,
+                    group=group)
+                context['member_form'] = MembershipForm(instance=membership)
+                context['admin_form'] = AdminRequestForm(instance=membership)
+            else:
+                context['member_form'] = MembershipForm(group, user.student)
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': group.group_type.get_absolute_url(),
+                'label': group.group_type.name
+            },
+            {
+                'target': '#',
+                'label': group.short_name
             },
         ]
         return context
 
 
-class DetailGroupView(LoginRequiredMixin, BaseDetailGroupView):
-    '''Vue de détail d'un groupe protégée.'''
-    pass
+class ListGroupChildrenView(ListView):
+    """List of Groups, filtered by type."""
+
+    template_name = 'group/children_list.html'
+
+    def get_queryset(self) -> QuerySet[Group]:
+        user = self.request.user
+        parent = get_object_or_404(Group, slug=self.kwargs.get('slug'))
+        return (Group.objects
+                # remove the sub-groups to keep only parent groups
+                .filter(parent=parent)
+                # hide archived groups
+                .filter(archived=False)
+                # hide private groups unless user is member
+                # and hide non-public group if user is not authenticated
+                .filter(Q(private=False) | Q(members=user.student)
+                        if user.is_authenticated
+                        else Q(public=True))
+                # prefetch type and parent group for better performances
+                .prefetch_related('group_type', 'parent')
+                # order by category, order and then name
+                .order_by('-priority', 'short_name')
+                .distinct())
+
+    def get_context_data(self, **kwargs) -> dict[str, any]:
+        context = super().get_context_data(**kwargs)
+        parent = Group.objects.get(slug=self.kwargs.get('slug'))
+        context['parent'] = parent
+        context['is_admin'] = parent.is_admin(self.request.user)
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': parent.group_type.get_absolute_url(),
+                'label': parent.group_type.name
+            },
+            {
+                'target': parent.get_absolute_url(),
+                'label': parent.name
+            },
+            {
+                'target': '#',
+                'label': parent.children_label
+            }
+        ]
+        return context
 
 
-class AddToGroupView(LoginRequiredMixin, FormView):
-    '''Vue pour le bouton "Devenir Membre".'''
+class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
+    """Edit general data of a group."""
 
-    raise_exception = True
+    template_name = 'group/edit/update.html'
+    form_class = UpdateGroupForm
+    model = Group
 
-    def get_group(self, **kwargs):
-        app = resolve(self.request.path).app_name
-        slug = self.kwargs.get("slug")
-        return get_object_from_slug(app, slug)
-
-    def get_form_class(self):
-        group = self.get_group()
-        self.form_class = NamedMembershipAddGroup(group)
-        return NamedMembershipAddGroup(group)
-
-    def get_form(self, form_class=None):
-        if form_class is None:
-            form_class = self.get_form_class()
-        student = self.request.user.student
-        group = self.get_group()
-        membership = group.members.through.objects.filter(
-            group=group, student=student).first()
-        return form_class(instance=membership, **self.get_form_kwargs())
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.short_name
+            },
+            {
+                'target': '#',
+                'label': _("Edit")
+            }
+        ]
+        return context
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.student = self.request.user.student
-        self.object.group = self.get_group()
-        if not self.object.pk:
-            self.object.save()
-            messages.success(self.request, 'Bienvenue dans le groupe !')
-            try:
-                Subscription.objects.create(
-                    page=self.object.group.full_slug,
-                    student=self.object.student)
-            except IntegrityError:
-                pass
-        elif self.request.POST.get('delete'):
-            self.object.delete()
-            messages.success(self.request, 'Membre supprimé.')
-            try:
-                Subscription.objects.get(
-                    page=self.object.group.full_slug,
-                    student=self.object.student).delete()
-            except Subscription.DoesNotExist:
-                pass
-        else:
-            self.object.save()
-            messages.success(
-                self.request, 'Les modifications ont bien été enregistrées !')
-        return redirect(self.object.group.get_absolute_url())
+        form.instance.updated_by = self.request.user.student
+        return super().form_valid(form)
 
-    def form_invalid(self, form):
-        messages.error(self.request, 'Modification refusée... 😥')
+
+class DeleteGroupView(UserIsGroupAdminMixin, DeleteView):
+    """Delete a group."""
+
+    template_name = 'group/edit/delete.html'
+    model = Group
+    slug_field = 'slug'
+
+    def get_success_url(self) -> str:
+        return self.object.group_type.get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.short_name
+            },
+            {
+                'target': '#',
+                'label': _("Edit")
+            }
+        ]
+        return context
+
+
+class CreateGroupView(UserPassesTestMixin, CreateView):
+    """Create a group"""
+
+    template_name = 'group/edit/create.html'
+    model = Group
+    fields = ['name', 'short_name', 'parent', 'label', 'summary', 'description',
+              'meeting_place', 'meeting_hour', 'icon', 'banner', 'video1',
+              'video2', 'creation_year', 'tags', 'public', 'children_label']
+
+    def test_func(self) -> bool:
+        self.group_type = get_object_or_404(GroupType, slug=self.kwargs['type'])
+        self.parent = Group.objects.filter(
+            slug=self.request.GET.get('parent', None)).first()
+        return (self.request.user.is_superuser
+                or self.group_type.can_create
+                or self.parent and self.parent.is_admin(self.request.user))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.group_type.get_absolute_url(),
+                'label': self.group_type.name
+            },
+            {
+                'target': '#',
+                'label': _("Create")
+            }
+        ]
+        return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.instance.group_type = self.group_type
+        form.instance.parent = self.parent
+        if self.group_type.extra_parents.all() and not self.parent:
+            form.fields['parent'].queryset = self.group_type.extra_parents.all()
+        else:
+            del form.fields['parent']
+        labels = self.group_type.label_set.all()
+        if labels:
+            form.fields['label'].queryset = labels
+        else:
+            del form.fields['label']
+        tags = self.group_type.tag_set.all()
+        if tags:
+            form.fields['tags'].queryset = tags
+        else:
+            del form.fields['tags']
+        return form
+
+    def form_valid(self, form):
+        form.instance.updated_by = self.request.user.student
+        res = super().form_valid(form)
+        if not self.parent:
+            form.instance.members.add(
+                self.request.user.student,
+                through_defaults={'admin': True})
+        return res
+
+
+class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
+    """Vue pour modifier les membres d'un groupe."""
+
+    template_name = 'group/edit/members.html'
+
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.short_name
+            },
+            {
+                'target': '#',
+                'label': _("Edit")
+            }
+        ]
+        return context
+
+
+class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
+    '''Vue pour modifier les réseaux sociaux d'un groupe.'''
+
+    template_name = 'group/edit/sociallinks.html'
+
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        form = SocialLinkGroupFormset(queryset=self.object.social_links.all())
+        context['sociallinks'] = form
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.short_name
+            },
+            {
+                'target': '#',
+                'label': _("Edit")
+            }
+        ]
+        return context
+
+    def post(self, request, **kwargs):
+        group = self.get_object()
+        form = SocialLinkGroupFormset(request.POST)
+        if form.is_valid():
+            sociallinks = form.save(commit=False)
+            for sociallink in sociallinks:
+                sociallink.save()
+                group.social_links.add(sociallink)
+            for sociallink in form.deleted_objects:
+                sociallink.delete()
+            messages.success(request, _("Social links updated"))
+        else:
+            messages.error(request, form.errors)
+        return redirect('group:update-sociallinks', group.slug)
+
+
+class UpdateGroupChildrenView(UserIsGroupAdminMixin, TemplateView):
+    """Vue pour modifier les groups enfants d'un groupe."""
+
+    template_name = 'group/edit/children.html'
+
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.short_name
+            },
+            {
+                'target': '#',
+                'label': _("Edit")
+            }
+        ]
+        return context
+
+
+class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
+    """Vue pour modifier les membres d'un groupe."""
+
+    template_name = 'group/edit/events.html'
+
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        context['events'] = (Event.objects
+                             .filter(group_slug=self.object.slug)
+                             .order_by('-date'))
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.short_name
+            },
+            {
+                'target': '#',
+                'label': _("Edit")
+            }
+        ]
+        return context
+
+
+class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
+    """Vue pour modifier les membres d'un groupe."""
+
+    template_name = 'group/edit/posts.html'
+
+    def get_object(self, **kwargs):
+        return Group.objects.get(slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object = self.get_object()
+        context['group'] = self.object
+        context['posts'] = (Post.objects
+                            .filter(group_slug=self.object.slug)
+                            .order_by('-publication_date'))
+        context['ariane'] = [
+            {
+                'target': reverse('group:index'),
+                'label': _("Groups")
+            },
+            {
+                'target': self.object.group_type.get_absolute_url(),
+                'label': self.object.group_type.name
+            },
+            {
+                'target': self.object.get_absolute_url(),
+                'label': self.object.short_name
+            },
+            {
+                'target': '#',
+                'label': _("Edit")
+            }
+        ]
+        return context
+
+
+class UpdateSubscriptionView(UserCanSeeGroupMixin, View):
+    """
+    SUBSCRIBE BUTTON: call this view to subscribe to a group, or unsubscribe
+    if the user has already subscribed.
+    """
+
+    def get(self, request, slug) -> HttpResponse:
+        group = Group.objects.get(slug=slug)
+        student = request.user.student
+        if group.subscribers.contains(student):
+            group.subscribers.remove(student)
+        else:
+            group.subscribers.add(student)
+        return redirect(group.get_absolute_url())
+
+
+class MembershipFormView(UserCanSeeGroupMixin, FormView):
+    """
+    MEMBERSHIP BUTTON: View for the user to add himself as a member of a group,
+    and to edit its membership.
+    """
+
+    http_method_names = ['post']
+
+    @property
+    def group(self) -> Group:
+        if not hasattr(self, '_group'):
+            self._group = Group.objects.get(slug=self.kwargs.get('slug'))
+        return self._group
+
+    def get_form(self) -> MembershipForm:
+        return MembershipForm(
+            group=self.group,
+            student=self.request.user.student,
+            instance=(self.group.membership_set
+                      .filter(student=self.request.user.student)
+                      .first()),
+            **self.get_form_kwargs())
+
+    def form_valid(self, form: MembershipForm) -> HttpResponse:
+        student = self.request.user.student
+        if self.request.POST.get('delete'):
+            # delete the membership
+            self.group.subscribers.remove(student)
+            form.instance.delete()
+            messages.success(self.request, _(
+                "You are no longer a member of this group."))
+        else:
+            # create or update the membership
+            created = form.instance.pk is None
+            form.save()
+            if created:
+                self.group.subscribers.add(student)
+                messages.success(self.request, _("Welcome in the group!"))
+            else:
+                messages.success(self.request, _(
+                    "Your modifications have been saved!"))
+        # return to the page
+        return redirect(self.group.get_absolute_url())
+
+    def form_invalid(self, form: MembershipForm):
+        messages.error(self.request, _("Modifications failed... 😥"))
+        return redirect(self.group.get_absolute_url())
+
+
+class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
+    """ADMIN BUTTON: View to ask for admin rights."""
+
+    http_method_names = ['post']
+
+    def get_group(self) -> Group:
+        if not hasattr(self, 'group'):
+            self.group = Group.objects.get(slug=self.kwargs.get('slug'))
+        return self.group
+
+    def get_form(self) -> AdminRequestForm:
+        return AdminRequestForm(
+            instance=(self.get_group()
+                      .membership_set
+                      .get(student=self.request.user.student)),
+            **self.get_form_kwargs())
+
+    def form_valid(self, form: AdminRequestForm) -> HttpResponse:
+        membership = form.save()
+        messages.success(self.request, _(
+            "Your admin request has been sent! You will receive the answer "
+            "soon by email."))
+        # send a message to the discord channel for administrators
+        accept_url = self.request.build_absolute_uri(
+            reverse('group:accept-admin-req', kwargs={'id': membership.id}))
+        deny_url = self.request.build_absolute_uri(
+            reverse('group:deny-admin-req', kwargs={'id': membership.id}))
+        webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(
+            title=(f"{membership.student} demande à "
+                   f"devenir admin de {membership.group.short_name}"),
+            description=membership.admin_request_messsage,
+            color=242424)
+        embed.add_embed_field(
+            name='Accepter', value=f"[Accepter]({accept_url})", inline=True)
+        embed.add_embed_field(
+            name='Refuser', value=f"[Refuser]({deny_url})", inline=True)
+        # if membership.student.picture:
+        #     embed.thumbnail = {"url": membership.student.picture.url}
+        webhook.add_embed(embed)
+        webhook.execute()
+        return redirect(self.get_group().get_absolute_url())
+
+    def form_invalid(self, form: AdminRequestForm):
+        messages.error(self.request, _("An error occurred... 😥"))
         return redirect(self.get_group().get_absolute_url())
 
 
-class UpdateGroupView(UserIsAdmin, TemplateView):
-    '''Vue pour modifier les infos générales sur un groupe.'''
-
-    template_name = 'group/edit/update.html'
-
-    def get_object(self, **kwargs):
-        app = resolve(self.request.path).app_name
-        slug = self.kwargs.get("slug")
-        return get_object_from_slug(app, slug)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['object'] = self.get_object()
-        group = self.get_object()
-        UpdateForm = UpdateGroupForm(context['object'])  # noqa: N806
-        if UpdateForm:
-            context['form'] = UpdateForm(instance=context['object'])
-        context['ariane'] = [{'target': reverse(group.app + ':index'),
-                              'label': group.app_name},
-                             {'target': reverse(group.app + ':detail',
-                                                kwargs={'slug': group.slug}),
-                              'label': group.name},
-                             {'target': '#',
-                              'label': 'Modifier'}]
-        return context
-
-    def post(self, request, **kwargs):
-        group = self.get_object()
-        UpdateForm = UpdateGroupForm(group)  # noqa: N806
-        if UpdateForm:
-            form = UpdateForm(request.POST, request.FILES, instance=group)
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Informations modifiées !')
-            else:
-                messages.error(request, form.errors)
-        return redirect(group.app + ':update', group.slug)
-
-
-class UpdateGroupMembersView(UserIsAdmin, TemplateView):
-    '''Vue pour modifier les membres d'un groupe.'''
-
-    template_name = 'group/edit/members_edit.html'
-
-    def get_object(self, **kwargs):
-        app = resolve(self.request.path).app_name
-        slug = self.kwargs.get("slug")
-        return get_object_from_slug(app, slug)
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        group = self.get_object()
-        context['object'] = group
-        context['ariane'] = [{'target': reverse(group.app + ':index'),
-                              'label': group.app_name},
-                             {'target': reverse(group.app + ':detail',
-                                                kwargs={'slug': group.slug}),
-                              'label': group.name},
-                             {'target': '#',
-                              'label': 'Modifier'}]
-        # memberships = context['object'].members.through.objects.filter(
-        #     group=context['object'])
-        # MembersFormset = NamedMembershipGroupFormset(
-        #     context['object'])
-        # if MembersFormset:
-        #     context['members'] = MembersFormset(queryset=memberships)
-        return context
-
-    def post(self, request, **kwargs):
-        group = self.get_object()
-        return edit_named_memberships(request, group)
-
-
-@ require_http_methods(['POST'])
-@ login_required
-def edit_named_memberships(request, group):
-    MembersFormset = NamedMembershipGroupFormset(group)  # noqa: N806
-    if MembersFormset:
-        form = MembersFormset(request.POST)
-        if form.is_valid():
-            members = form.save(commit=False)
-            for member in members:
-                member.group = group
-                member.save()
-            for member in form.deleted_objects:
-                member.delete()
-            messages.success(request, 'Membres modifiés')
+class AcceptAdminRequestView(UserIsGroupAdminMixin, View):
+    def get(self, request: HttpRequest, id):
+        member = get_object_or_404(Membership, id=id)
+        if member.admin_request:
+            member.accept_admin_request()
+            messages.success(request, message=(_(
+                "The user %(user)s is now admin!")
+                % {'user': member.student}))
         else:
-            messages.error(request, form.errors)
-    return redirect(group.app + ':update-members', group.slug)
+            messages.error(request, message=_("Request already answered!"))
+        return redirect(member.group.get_absolute_url())
 
 
-class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
-    '''Vue pour modifier les réseaux sociaux d'un groupe.'''
-
-    template_name = 'group/edit/sociallinks_edit.html'
-
-    def get_object(self, **kwargs):
-        app = resolve(self.request.path).app_name
-        slug = self.kwargs.get("slug")
-        return get_object_from_slug(app, slug)
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        group = self.get_object()
-        context['object'] = group
-        sociallinks = SocialLink.objects.filter(
-            slug=context['object'].full_slug)
-        form = SocialLinkGroupFormset(queryset=sociallinks)
-        context['sociallinks'] = form
-        context['ariane'] = [{'target': reverse(group.app + ':index'),
-                              'label': group.app_name},
-                             {'target': reverse(group.app + ':detail',
-                                                kwargs={'slug': group.slug}),
-                              'label': group.name},
-                             {'target': '#',
-                              'label': 'Modifier'}]
-        return context
-
-    def post(self, request, **kwargs):
-        group = self.get_object()
-        return edit_sociallinks(request, group)
-
-
-@ require_http_methods(['POST'])
-@ login_required
-def edit_sociallinks(request, group):
-    form = SocialLinkGroupFormset(request.POST)
-    if form.is_valid():
-        sociallinks = form.save(commit=False)
-        for sociallink in sociallinks:
-            sociallink.slug = group.full_slug
-            sociallink.save()
-        for sociallink in form.deleted_objects:
-            sociallink.delete()
-        messages.success(request, 'Liens modifiés')
-    else:
-        messages.error(request, form.errors)
-    return redirect(group.app + ':update-sociallinks', group.slug)
-
-
-class RequestAdminRightsView(LoginRequiredMixin, FormView):
-    raise_exception = True
-    form_class = AdminRightsRequestForm
-
-    def get_group(self, **kwargs):
-        app = resolve(self.request.path).app_name
-        slug = self.kwargs.get("slug")
-        return get_object_from_slug(app, slug)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['object'] = self.get_group()
-        return context
-
-    def form_valid(self, form):
-        messages.success(
-            self.request,
-            ('Votre demande a bien été enregistrée ! Vous recevrez la réponse '
-             'par mail.'))
-        object = form.save(commit=False)
-        object.student = self.request.user.student
-        object.group = self.get_group().full_slug
-        object.save(domain=get_current_site(self.request).domain)
-        return super().form_valid(form)
-
-    def get_success_url(self) -> str:
-        group = self.get_group()
-        return reverse(group.app + ':detail', kwargs={'slug': group.slug})
-
-
-class AcceptAdminRequestView(UserIsAdmin, View):
-    def get(self, request: HttpRequest, slug, id):
-        app = resolve(request.path_info).app_name
-        group: Group = get_object_from_slug(app, slug)
-        try:
-            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
-                id=id)
-            if group.full_slug == admin_req.group:
-                # Checking whether the url is legit
-                messages.success(
-                    request,
-                    message=(
-                        f"Vous avez accepté la demande de {admin_req.student}"))
-                admin_req.accept()
-            else:
-                messages.error(request, message="L'URL est invalide !!!")
-        except AdminRightsRequest.DoesNotExist:
-            messages.error(
-                request, message="La demande a déjà été traitée !")
-        return redirect(group.get_absolute_url())
-
-
-class DenyAdminRequestView(UserIsAdmin, View):
-    def get(self, request: HttpRequest, slug, id):
-        app = resolve(request.path_info).app_name
-        group: Group = get_object_from_slug(app, slug)
-        try:
-            admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
-                id=id)
-            if group.full_slug == admin_req.group:
-                # Checking whether the url is legit
-                messages.success(
-                    request,
-                    message=(
-                        f"Vous avez refusé la demande de {admin_req.student}"))
-                admin_req.deny()
-            else:
-                messages.error(request, message="L'URL est invalide !!!")
-        except AdminRightsRequest.DoesNotExist:
-            messages.error(
-                request, message="La demande a déjà été traitée !")
-        return redirect(group.get_absolute_url())
+class DenyAdminRequestView(UserIsGroupAdminMixin, View):
+    def get(self, request: HttpRequest, id):
+        member = get_object_or_404(Membership, id=id)
+        if member.admin_request:
+            member.deny_admin_request()
+            messages.success(request, message=(_(
+                "The admin request from %(user)s has been denied.")
+                % {'user': member.student}))
+        else:
+            messages.error(request, message=_("Request already answered!"))
+        return redirect(member.group.get_absolute_url())

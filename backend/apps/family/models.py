@@ -2,11 +2,11 @@ from django.db import models
 from django.urls.base import reverse
 from django.utils import timezone
 
-from apps.group.models import Group, NamedMembership
+from apps.group.abstract.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
 
 
-class Family(Group):
+class Family(AbstractGroup):
     '''Famille de parrainage.'''
     members = models.ManyToManyField(Student, through='MembershipFamily')
     year = models.IntegerField('Année de parrainage')

@@ -19,31 +19,28 @@ Including another URLconf
 import debug_toolbar
 from django.contrib import admin
 from django.urls import path, include
-
 # pour importer les fichiers en dev local
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 
-urlpatterns = [
-    # default and third-party apps
+
+urlpatterns = i18n_patterns(
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
+    # default and third-party apps
     path('__debug__/', include(debug_toolbar.urls)),
     path("ckeditor5/", include('django_ckeditor_5.urls')),
 
     # apps
     path('account/', include('apps.account.urls', namespace='account')),
     path('student/', include('apps.student.urls', namespace='student')),
-    path('club/', include('apps.club.urls', namespace='club')),
-    path('liste/', include('apps.liste.urls', namespace='liste')),
+    path('group/', include('apps.group.urls', namespace='group')),
+    path('club/', include('apps._archived.club.urls', namespace='club')),
     path('colocs/', include('apps.roommates.urls', namespace='roommates')),
     path(
         'colocs/admin',
         include('apps.roommates.admin_urls', namespace='roommates-admin')),
-    path(
-        'administration/',
-        include('apps.administration.urls', namespace='administration')),
-    path('academic/', include('apps.academic.urls', namespace='academic')),
     path('parrainage/', include('apps.family.urls', namespace='family')),
     path(
         'parrainage/admin/',
@@ -59,28 +56,21 @@ urlpatterns = [
     path(
         'api/student/',
         include('apps.student.api_urls', namespace='student_api')),
-    path('api/club/', include('apps.club.api_urls', namespace='club_api')),
-    path('api/liste/', include('apps.liste.api_urls', namespace='liste_api')),
     path(
         'api/colocs/',
         include('apps.roommates.api_urls', namespace='roommates_api')),
-    path(
-        'api/administration/',
-        include(
-            'apps.administration.api_urls',
-            namespace='administration_api')),
-    path(
-        'api/academic/',
-        include('apps.academic.api_urls', namespace='academic_api')),
     path('api/post/', include('apps.post.api_urls', namespace='post_api')),
     path('api/event/', include('apps.event.api_urls', namespace='event_api')),
     path(
         'api/notification/',
         include('apps.notification.api_urls', namespace='notification_api')),
+    path('api/group/', include('apps.group.api_urls', namespace='group_api')),
 
     # homepage
-    path('', include('apps.home.urls', namespace='home'))
-]
+    path('', include('apps.home.urls', namespace='home')),
+
+    prefix_default_language=False
+)
 
 urlpatterns += static(
     settings.MEDIA_URL,

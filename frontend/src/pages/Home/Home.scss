@@ -12,7 +12,7 @@
   fill: cover;
   height: 12.5em;
   object-fit: cover;
-  filter: blur(4px) opacity(0.7);
+  filter: blur(6px) opacity(0.4);
   transform: scale(1.1);
 
 }
@@ -27,7 +27,7 @@
 }
 #main-title {
   display: flex;
-  font-size: 3.4em;
+  font-size: min(10vw,3.4em);
   font-family: "Heebo", sans-serif;
   font-weight: 900;
   line-height: 0.1em;
@@ -42,7 +42,7 @@
   position: relative;
 }
 #second-title {
-  font-size: 1.6em;
+  font-size: min(6vw,1.6em);
   position: relative;
   width: 100%;
   display: block;
@@ -65,43 +65,4 @@
 #logo {
   height: 6.3em;
   width: 6.3em;
-}
-.upcoming-event {
-  display: block;
-  align-content: center;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.container {
-  max-width: 97em;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-  display : block;
-}
-
-.section {
-  flex-direction: row;
-  margin-left: 1.3em;
-  margin-right: 1.3em;
-  display: flex;
-  align-items: center;
-  width: '100%';
-  justify-content: space-between;
-}
-
-.card {
-  margin : 1.3em;
-  padding-left : 0.6em;
-  padding-right : 0.6em;
-  padding-bottom : 0.6em;
-}
-.club {
-  margin-left: 0.6em;
-  margin-right: 0.6em;
-}
-.see-more {
-  text-decoration: none;
 }
