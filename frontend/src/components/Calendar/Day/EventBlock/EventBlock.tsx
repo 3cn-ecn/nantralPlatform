@@ -31,8 +31,6 @@ export function EventBlock(props: {
         (60 - event.beginDate.getSeconds()) / 3600;
     }
   }
-  const a = 0;
-  console.log(a);
 
   // Set the duration of the event.
   let duration: number;
