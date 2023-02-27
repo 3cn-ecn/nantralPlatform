@@ -7,6 +7,4 @@ export default {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
   },
   testEnvironment: 'jsdom',
-  collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.(tsx|ts)'],
 };
