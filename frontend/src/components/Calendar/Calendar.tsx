@@ -483,7 +483,7 @@ function addEventICS(event: EventProps): EventAttributes {
     title: event.title,
     description: event.description,
     location: event.location,
-    organizer: { name: event.group },
+    organizer: { name: event.groupName },
   };
 
   return eventCalendar;
@@ -622,8 +622,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     sortEvents: Array<Array<EventProps>>;
     eventsBlockedChain: Array<Array<Array<number>>>;
   } = sortInWeek(sortEvents, beginOfWeek);
-
-  console.log('todelete');
 
   const newSortEvents = eventsWeek.sortEvents;
   const { eventsBlockedChain } = eventsWeek;
