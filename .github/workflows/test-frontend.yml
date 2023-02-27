@@ -21,10 +21,11 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Install dependencies
-        run: yarn
+        working-directory: ${{ env.working-directory }}
+        run: npm install
       - name: Test and coverage
         working-directory: ${{ env.working-directory }}
-        run: yarn test --coverage
+        run: npm test --coverage
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
