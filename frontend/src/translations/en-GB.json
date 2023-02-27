@@ -34,8 +34,33 @@
       "registerLink" : "register link",
       "shotgunClosed" : "shotgun closed",
       "register": "register",
-      "title": "Do you want to unsubscribe from this event?"
-    }
+      "registerLink": "register link",
+      "shotgunClosed": "shotgun closed",
+      "title": "Do you want to unregister from this event?",
+      "unsuscribe": "unregister"
+    },
+    "seePage": "See page"
+  },
+  "event": {
+    "action_menu": {
+      "edit": "Edit",
+      "linkCopied": "Link copied",
+      "share": "Share",
+      "unsubscribe": "Unregister"
+    },
+    "error": "Error while loading the events",
+    "membersOnly": "Members only",
+    "no_event": "No Event"
+  },
+  "home": {
+    "announcement": "Announcements",
+    "highlighted": "Highlighted",
+    "myClubs": "My clubs & Assos",
+    "myEvents": "My events",
+    "seeMore": "see more",
+    "thisWeek": "This week",
+    "upcomingEvents": "Upcoming Events",
+    "welcomeTo": "Welcome to"
   },
   "legalNotice": {
     "title": "Legal Notice",
@@ -110,6 +135,27 @@
     "title": "Notifications",
     "unread": "Unread",
     "subscribed": "Suscribed",
-    "load": "Loading More"
+    "title": "Notifications",
+    "unread": "Unread"
+  },
+  "section": {
+    "showAll": "Show all",
+    "showLess": "Show Less"
+  },
+  "user_menu": {
+    "automatic": "Automatic",
+    "bug": "Suggest / Bug",
+    "dark": "Dark Theme",
+    "doc": "Documentation",
+    "english": "English",
+    "french": "French",
+    "language": "Language",
+    "legal": "Legal Notice",
+    "light": "Light Theme",
+    "logout": "Log Out",
+    "profile": "My Profile",
+    "theme": "Theme",
+    "title_language": "Language",
+    "title_theme": "Theme"
   }
 }

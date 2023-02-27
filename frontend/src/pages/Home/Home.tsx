@@ -154,9 +154,39 @@ function Home(props) {
       </div>
       <div style={{ alignContent: 'center', display: 'flex' }}>
         <div className="container">
-          {myEvents}
-          {upcomingEvents}
-          {myClubsSection}
+          <PostSection
+            posts={posts.filter((post) => post.pinned)}
+            title={t('home.highlighted')}
+            status={postsStatus}
+          />
+          <PostSection
+            posts={posts.filter((post) => !post.pinned)}
+            title={t('home.announcement')}
+            status={postsStatus}
+          />
+          <EventSection
+            events={events.filter((item: EventProps) =>
+              isThisWeek(new Date(item.beginDate))
+            )}
+            status={eventsStatus}
+            seeMoreUrl="/event"
+            title={t('home.thisWeek')}
+          />
+          <EventSection
+            events={events.filter(
+              (item: EventProps) => !isThisWeek(new Date(item.beginDate))
+            )}
+            status={eventsStatus}
+            maxItem={3}
+            seeMoreUrl="/event"
+            title={t('home.upcomingEvents')}
+          />
+          <ClubSection
+            clubs={myClubs}
+            status={clubsStatus}
+            title={t('home.myClubs')}
+            seeMoreUrl="/club"
+          />
         </div>
       </div>
     </>

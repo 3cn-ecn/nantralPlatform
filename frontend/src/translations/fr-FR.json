@@ -32,10 +32,32 @@
     "joinButton": {
       "register": "s'inscrire",
       "registerLink": "lien d'inscription",
-      "unsuscribe" : "se désinscrire",
-      "shotgunClosed" : "shotgun fermé",
-      "title": "Voulez-vous vous désinscrire de cet événements ?"
-    }
+      "shotgunClosed": "shotgun fermé",
+      "title": "Voulez-vous vous désinscrire de cet événements ?",
+      "unsuscribe": "se désinscrire"
+    },
+    "seePage": "Voir la page"
+  },
+  "event": {
+    "action_menu": {
+      "edit": "Modifier",
+      "linkCopied": "Lien copié",
+      "share": "Partager",
+      "unsubscribe": "Se désinscrire"
+    },
+    "error": "Erreur lors du chargement des évènements",
+    "membersOnly": "Membres uniquement",
+    "no_event": "Aucun évènement"
+  },
+  "home": {
+    "announcement": "Annonces",
+    "highlighted": "À la une",
+    "myClubs": "Mes Clubs & Assos",
+    "myEvents": "Mes événements",
+    "seeMore": "voir plus",
+    "thisWeek": "Cette semaine",
+    "upcomingEvents": "Évènements à venir",
+    "welcomeTo": "Bienvenue sur"
   },
   "legalNotice": {
     "title": "Mentions Légales",
@@ -108,8 +130,26 @@
   },
   "notif": {
     "title": "Notifications",
-    "unread": "Non Lu",
-    "subscribed": "Abonné",
-    "load": "Charger Plus"
+    "unread": "Non Lu"
+  },
+  "section": {
+    "showAll": "Tout afficher",
+    "showLess": "Afficher moins"
+  },
+  "user_menu": {
+    "automatic": "Automatique",
+    "bug": "Suggestion / Bug",
+    "dark": "Thème sombre",
+    "doc": "Documentation",
+    "english": "Anglais",
+    "french": "Français",
+    "language": "Langue",
+    "legal": "Mentions Légales",
+    "light": "Thème clair",
+    "logout": "Se déconnecter",
+    "profile": "Mon Profil",
+    "theme": "Thème",
+    "title_language": "Langage",
+    "title_theme": "Thème"
   }
 }
