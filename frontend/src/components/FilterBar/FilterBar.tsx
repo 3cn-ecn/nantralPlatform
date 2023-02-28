@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -20,6 +21,7 @@ import SimpleAccordion from '../Accordion/SimpleAccordion';
 import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
 import BasicDatePicker from '../DatePicker/BasicDatePicker';
+import { ClubProps } from '../../Props/Club';
 
 interface FilterInterface {
   id: string;
@@ -39,6 +41,7 @@ function FilterBar(props: { getFilter: any }) {
   const [isParticipated, setIsParticipated] = React.useState(false);
   const [isShotgun, setIsShotgun] = React.useState(false);
   const [organiser, setOrganiser] = React.useState(null);
+  const [groups, setGroups] = React.useState<Array<ClubProps>>([]);
   const currentFilter = new Map();
 
   const getDateBegin = (newDate) => {
@@ -68,6 +71,18 @@ function FilterBar(props: { getFilter: any }) {
   currentFilter.set('participate', isParticipated);
   currentFilter.set('shotgun', isShotgun);
   currentFilter.set('organiser', organiser);
+
+  React.useEffect(() => {
+    axios
+      .get('/api/group/group/', { params: { is_member: false, type: 'club' } })
+      .then((res) => {
+        setGroups(res.data);
+        console.log(groups);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   const filters: FilterInterface[] = [
     {
