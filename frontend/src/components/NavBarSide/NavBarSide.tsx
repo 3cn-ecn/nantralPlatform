@@ -111,7 +111,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
           width: drawerWidth,
           boxSizing: 'border-box',
         },
-        zIndex: 100,
+        zIndex: 0,
       }}
     >
       <Toolbar />

@@ -6,6 +6,12 @@ from rest_framework.response import Response
 from django.utils import timezone
 
 
+class PostAdminPermission(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj: Post):
+        return obj.group.is_admin(request.user)
+
+
 class ListPostsAPIView(viewsets.ViewSet):
     """List all current posts."""
     serializer_class = PostSerializer

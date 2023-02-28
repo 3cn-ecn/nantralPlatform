@@ -1,31 +1,25 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from .api_views import (
-    ListEventsHomeAPIView,
+    # ListEventsHomeAPIView,
     ListAllEventsGroupAPIView,
-    ListEventsGroupAPIView,
+    # ListEventsGroupAPIView,
     ListEventsParticipantsAPIView,
     ParticipateAPIView,
-    FavoriteAPIView)
+    FavoriteAPIView,
+    EventListViewSet)
 
 app_name = 'event'
 
-urlpatterns = [
+router = DefaultRouter()
+router.register('', EventListViewSet, basename='event')
+# router.register('group')
+
+paths = [
     path(
-        '',
-        ListEventsHomeAPIView.as_view(),
-        name='list-home-events'),
-    path(
-        'group/all/<slug:group>',
-        ListAllEventsGroupAPIView.as_view(),
-        name='list-all-group-events'),
-    path(
-        'group/<slug:group>',
-        ListEventsGroupAPIView.as_view(),
-        name='list-group-events'),
-    path(
-        'participating/<slug:event_slug>',
-        ListEventsParticipantsAPIView.as_view(),
+        '<slug:event_slug>/participants',
+        ListEventsParticipantsAPIView.as_view({'get': 'list'}),
         name='list-participants'),
     path(
         '<slug:event_slug>/participate',
@@ -35,4 +29,37 @@ urlpatterns = [
         '<slug:event_slug>/favorite',
         FavoriteAPIView.as_view(),
         name='set-event-to-favorite'),
+    path(
+        'group/all/<slug:group>',
+        ListAllEventsGroupAPIView.as_view(),
+        name='list-all-group-events'),
 ]
+
+urlpatterns = router.urls + paths
+
+# urlpatterns = [
+#     path(
+#         '',
+#         ListEventsHomeAPIView.as_view(),
+#         name='list-home-events'),
+#     path(
+#         'group/all/<slug:group>',
+#         ListAllEventsGroupAPIView.as_view(),
+#         name='list-all-group-events'),
+#     path(
+#         'group/<slug:group>',
+#         ListEventsGroupAPIView.as_view(),
+#         name='list-group-events'),
+#     path(
+#         'participating/<slug:event_slug>',
+#         ListEventsParticipantsAPIView.as_view(),
+#         name='list-participants'),
+#     path(
+#         '<slug:event_slug>/participate',
+#         ParticipateAPIView.as_view(),
+#         name='participate-to-event'),
+#     path(
+#         '<slug:event_slug>/favorite',
+#         FavoriteAPIView.as_view(),
+#         name='set-event-to-favorite'),
+# ]

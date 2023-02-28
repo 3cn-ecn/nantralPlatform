@@ -9,7 +9,6 @@ from django_ckeditor_5.fields import CKEditor5Field
 from apps.utils.slug import SlugModel
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
-from apps.group.abstract.models import AbstractGroup
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
 
@@ -38,9 +37,10 @@ class AbstractPost(models.Model, SlugModel):
         help_text="Entrez la date au format JJ/MM/AAAA HH:MM")
     title = models.CharField(
         max_length=200, verbose_name='Titre de l\'annonce')
+    group = models.ForeignKey(
+        Group, verbose_name="Organisateur", on_delete=models.CASCADE)
     description = CKEditor5Field(
         verbose_name='Texte de l\'annonce', blank=True)
-    group_slug = models.SlugField(verbose_name='Groupe publiant l\'annonce')
     slug = models.SlugField(verbose_name='Slug de l\'annonce',
                             unique=True, null=True)
     color = models.CharField(max_length=200, verbose_name='Couleur de fond',
@@ -57,17 +57,13 @@ class AbstractPost(models.Model, SlugModel):
     class Meta:
         abstract = True
 
-    @property
-    def group(self) -> AbstractGroup:
-        return get_object_or_404(Group, slug=self.group_slug)
-
     def save(self, *args, **kwargs):
         # compression des images
         self.image = compress_model_image(
-            self, 'image', size=(960, 540), contains=False)
+            self, 'image', size=(960, 540), contains=True)
         super(AbstractPost, self).save(*args, **kwargs)
         # send the notification
-        if not self.notification.sent:
+        if self.notification and not self.notification.sent:
             self.notification.send()
 
     def can_view(self, user: User) -> bool:
@@ -84,7 +80,7 @@ class AbstractPost(models.Model, SlugModel):
             title=title,
             body=body,
             url=self.get_absolute_url(),
-            sender=self.group_slug,
+            sender=self.group.slug,
             date=self.publication_date,
             icon_url=(self.group.icon.url
                       if self.group.icon else None),

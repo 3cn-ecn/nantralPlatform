@@ -4,16 +4,42 @@ from .models import Event
 from apps.student.models import Student
 
 
+class PostEventSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Event
+        fields = [
+            'title',
+            'description',
+            'location',
+            'date',
+            'end_date',
+            'publicity',
+            'color',
+            'group',
+            'image',
+            'max_participant',
+            'end_inscription',
+            'begin_inscription',
+            'form_url',
+        ]
+
+    def get_group_slug(self, obj):
+        return obj.group.slug
+
+
 class EventSerializer(serializers.ModelSerializer):
     number_of_participants = serializers.ReadOnlyField()
-    get_absolute_url = serializers.ReadOnlyField()
+    absolute_url = serializers.ReadOnlyField()
     group_name = serializers.SerializerMethodField()
+    group_slug = serializers.SerializerMethodField()
     is_participating = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
+        read_only_fields = ['absolute_url']
         fields = [
             'title',
             'description',
@@ -24,7 +50,7 @@ class EventSerializer(serializers.ModelSerializer):
             'image',
             'slug',
             'number_of_participants',
-            'get_absolute_url',
+            'absolute_url',
             'group_slug',
             'group_name',
             'is_participating',
@@ -52,6 +78,12 @@ class EventSerializer(serializers.ModelSerializer):
     def get_group_name(self, obj):
         return obj.group.name
 
+    def get_group_slug(self, obj):
+        return obj.group.slug
+
+    def get_absolute_url(self, obj: Event):
+        return obj.get_absolute_url()
+
 
 class EventParticipatingSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField()
@@ -59,4 +91,4 @@ class EventParticipatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ['name', 'get_absolute_url']
+        fields = ['name', 'get_absolute_url', 'id']
