@@ -9,6 +9,4 @@ export default {
   testEnvironment: 'jsdom',
   maxWorkers: 2,
   collectCoverage: true,
-
-  testResultsProcessor: 'jest-sonar-reporter',
 };
