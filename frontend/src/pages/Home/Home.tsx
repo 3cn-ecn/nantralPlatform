@@ -50,7 +50,7 @@ function Home() {
     axios
       .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
       .then((res) => {
-        setMyClubs(res.data);
+        setMyClubs(res.data.results);
         setClubsStatus('success');
       })
       .catch((err) => {
