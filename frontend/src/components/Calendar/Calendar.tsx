@@ -219,6 +219,27 @@ function eventSizeReajust(
 }
 
 /**
+ * Function that add blanked events to fill chains. Blanked Events have only a key that is the opposite of their size.
+ * @param blockedEventsChain List of events chain that have to take all horizontal space.
+ * @param events List of events.
+ */
+function addBlankedEvents(
+  blockedEventsChain: Array<Array<number>>,
+  events: Array<EventProps>
+): void {
+  let cumulateSize: number;
+  blockedEventsChain.forEach((chain) => {
+    cumulateSize = 0;
+    chain.forEach((event) => {
+      cumulateSize += events[event].effectiveSize;
+    });
+    if (cumulateSize !== events[0].globalSize) {
+      chain.push(cumulateSize - events[0].globalSize);
+    }
+  });
+}
+
+/**
  * A function that check if the placement of an event corresponds with an event chain. If the event is not already placed, this function places it.
  * @param events List of events.
  * @param chain List of keys of current simultaneous events that are placed.
@@ -238,16 +259,22 @@ function placeChainEvent(
   let chainPlaced = false;
   let change = false;
   let eventPlaced = true;
-  let tempEventBlockedChain;
+  let tempEventBlockedChain: Array<Array<number>>;
+
+  // Set if it's a blanked event
+  const blanked = eventsBlockedChain[0][select] < 0;
+
   // If the event has not been already placed yet
   // Then checked if the event can be placed
-  if (!events[eventsBlockedChain[0][select]].placed) {
-    change = true;
-    events[eventsBlockedChain[0][select]].placed = true;
-    events[eventsBlockedChain[0][select]].position = position;
-  } else if (events[eventsBlockedChain[0][select]].position !== position) {
-    newSelect += 1;
-    eventPlaced = false;
+  if (!blanked) {
+    if (!events[eventsBlockedChain[0][select]].placed) {
+      change = true;
+      events[eventsBlockedChain[0][select]].placed = true;
+      events[eventsBlockedChain[0][select]].position = position;
+    } else if (events[eventsBlockedChain[0][select]].position !== position) {
+      newSelect += 1;
+      eventPlaced = false;
+    }
   }
 
   // Only if the current event has been able to be placed, while the event placed doesn't able a good placement for all events, change the event which is placed in position.
@@ -256,17 +283,32 @@ function placeChainEvent(
     tempEventBlockedChain[0] = eventsBlockedChain[0]
       .slice(0, select)
       .concat(eventsBlockedChain[0].slice(select + 1));
-    if (
+    if (!blanked) {
+      if (
+        !placeEvents(
+          events,
+          chain,
+          tempEventBlockedChain,
+          position + events[eventsBlockedChain[0][select]].effectiveSize
+        )
+      ) {
+        // Fail to place the event
+        if (change) {
+          events[eventsBlockedChain[0][select]].placed = false;
+        }
+        newSelect += 1;
+      } else {
+        chainPlaced = true;
+      }
+    } else if (
       !placeEvents(
         events,
         chain,
         tempEventBlockedChain,
-        position + events[eventsBlockedChain[0][select]].effectiveSize
+        position - eventsBlockedChain[0][select]
       )
     ) {
-      if (change) {
-        events[eventsBlockedChain[0][select]].placed = false;
-      }
+      // Fail to place the blanked event
       newSelect += 1;
     } else {
       chainPlaced = true;
@@ -387,6 +429,9 @@ function setSameTimeEvents(
 
   // Reajust the size of events to use all the horizontal space
   eventSizeReajust(blockedEventsChain, events, eventsData);
+
+  // Add blanks to complete uncomplete line
+  addBlankedEvents(blockedEventsChain, events);
 
   // Try to place the events optimally
   if (!placeEvents(events, blockedEventsChain[0], blockedEventsChain, 0)) {
