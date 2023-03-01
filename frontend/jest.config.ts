@@ -7,6 +7,6 @@ export default {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
   },
   testEnvironment: 'jsdom',
+  maxWorkers: 2,
   collectCoverage: true,
-  testResultsProcessor: 'jest-sonar-reporter',
 };
