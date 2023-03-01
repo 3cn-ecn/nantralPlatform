@@ -9,16 +9,6 @@ export default {
   testEnvironment: 'jsdom',
   maxWorkers: 2,
   collectCoverage: true,
-  collectCoverageFrom: [
-    '**/src/**/*.{ts,tsx}',
-    '!**/node_modules/**',
-    '!**/legacy/**',
-    '!**/translations/**',
-    '!**/assets/**',
-    '!**/*.test.tsx',
-    '!**/*NotificationMenu.tsx',
-    '!**/*theme.ts',
-    '!**/*darktheme.ts',
-  ],
+
   testResultsProcessor: 'jest-sonar-reporter',
 };
