@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { ChooseDisplay } from './ChooseDisplay';
+import { ChooseDisplay } from '../components/Calendar/ChooseDisplay/ChooseDisplay';
 
 describe('<ChooseDisplay />', () => {
   const testClick = () => {
