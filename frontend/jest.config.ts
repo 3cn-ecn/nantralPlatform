@@ -8,5 +8,13 @@ export default {
   },
   testEnvironment: 'jsdom',
   collectCoverage: true,
+  collectCoverageFrom: [
+    '**/*.{ts,tsx}',
+    '!**/node_modules/**',
+    '!**/legacy/**',
+    '!**/translations/**',
+    '!**/assets/**',
+    '!**/*.test.tsx',
+  ],
   testResultsProcessor: 'jest-sonar-reporter',
 };
