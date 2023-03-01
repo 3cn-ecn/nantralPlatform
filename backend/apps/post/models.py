@@ -61,10 +61,15 @@ class AbstractPost(models.Model, SlugModel):
         # compression des images
         self.image = compress_model_image(
             self, 'image', size=(960, 540), contains=True)
-        super(AbstractPost, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
+        # save the notification
+        self.create_notification(
+            title=self.group.name,
+            body=self.title)
         # send the notification
         if self.notification and not self.notification.sent:
             self.notification.send()
+        super(AbstractPost, self).save(*args, **kwargs)
 
     def can_view(self, user: User) -> bool:
         if self.publicity == VISIBILITY[0][0]:
@@ -87,9 +92,10 @@ class AbstractPost(models.Model, SlugModel):
             publicity=self.publicity
         )
         # add image
-        if self.image:
-            self.notification.image_url = self.image.url
-            self.notification.save()
+        # if self.image:
+        #     self.notification.icon_url = compress_model_image(
+        #         self, 'image', size=(960, 540), contains=True)
+        #     self.notification.save()
         # add actions to the notification
         NotificationAction.objects.create(
             notification=self.notification,
@@ -103,7 +109,8 @@ class AbstractPost(models.Model, SlugModel):
         )
 
     def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
-        self.notification.delete()
+        if self.notification:
+            self.notification.delete()
         return super().delete(*args, **kwargs)
 
 
@@ -121,10 +128,6 @@ class Post(AbstractPost):
         self.set_slug(
             f'{d.year}-{d.month}-{d.day}-{self.title}'
         )
-        # save the notification
-        self.create_notification(
-            title=self.group.name,
-            body=self.title)
         # save agin the post
         super(Post, self).save(*args, **kwargs)
 
@@ -132,6 +135,9 @@ class Post(AbstractPost):
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
         return reverse('post:detail', args=[self.slug])
+
+    def __str__(self) -> str:
+        return self.group.name + " - " + self.title
 
     @staticmethod
     def get_post_by_slug(slug: str):

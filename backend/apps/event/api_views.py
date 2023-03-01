@@ -48,27 +48,33 @@ class EventListViewSet(viewsets.ModelViewSet):
             list of attributes to order results in the form of order=a,b,...
             - is_member : bool = None ->
             whether user is member of the organizer group
-            - from_date : 'yyyy-MM-dd' = today ->
+            - from_date : 'yyyy-MM-ddz' = today ->
             filter begin_date of the event from this date
             - to_date : 'yyyy-MM-dd' = None ->
             filter begin_date of the event to this date
+            - favorite : bool = None ->
+            filter 
+
         """
         # query params
         order: list[str] = self.request.query_params.get(
             "order", "date").split(',')
         member: bool = self.request.query_params.get("is_member", None)
-        shotgun: bool = self.request.query_params.get("type", None)
+        shotgun: bool = self.request.query_params.get("shotgun", None)
         from_date: str = self.request.query_params.get(
             "from_date", timezone.now())
         to_date: str = self.request.query_params.get(
             "to_date", None)
-        print(from_date, to_date)
+        favorite: bool = self.request.query_params.get(
+            "favorite", None)
         # query
+        user_event_pk = self.request.user.student.favorite_event.values('pk')
         events = (
             Event.objects
             .filter(
                 Q(group__members=self.request.user) if member else Q())
             .filter(~Q(max_participant=None) if shotgun else Q())
+            .filter(Q(pk__in=user_event_pk) if favorite else Q())
             .order_by(*order)
         )
         if from_date is not None and to_date is None:
