@@ -45,7 +45,7 @@ function MembershipsGroup(props: {}): JSX.Element {
   // urls and filters passed as query parameters
   const [ prevUrl, setPrevUrl ] = useState('');
   const [ nextUrl, setNextUrl ] = useState('');
-  const [ filters, setFilters ] = useState<QueryParams>({
+  const [ filters, _ ] = useState<QueryParams>({
     group: groupSlug,
     from: new Date().toISOString()
   });
@@ -69,9 +69,9 @@ function MembershipsGroup(props: {}): JSX.Element {
   /** Get the list of members */
   async function getMemberships(
     url='/api/group/membership/',
-    query_params: Partial<QueryParams>=filters
+    queryParams: Partial<QueryParams>=filters
   ): Promise<void> {
-    return axios.get<Page<Membership>>(url, {params: query_params})
+    return axios.get<Page<Membership>>(url, {params: queryParams})
     .then((res) => res.data)
     .then((data) => {
         setMembers(
@@ -217,7 +217,7 @@ function MembershipsGroup(props: {}): JSX.Element {
         ? <Button
             variant='text'
             onClick={() => {
-              setFilters({ ...filters, from: undefined });
+              filters.from = undefined;
               getMemberships();
             }}
           >
@@ -226,7 +226,7 @@ function MembershipsGroup(props: {}): JSX.Element {
         : <Button
             variant='text'
             onClick={() => {
-              setFilters({ ...filters, from: new Date().toISOString() });
+              filters.from = new Date().toISOString();
               getMemberships();
             }}
           >
