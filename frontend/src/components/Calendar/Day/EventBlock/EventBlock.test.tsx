@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { EventProps } from '../Props/Event';
-import { createTestEvent } from '../components/Calendar/testElements/testElements';
-import { EventBlock } from '../components/Calendar/Day/EventBlock/EventBlock';
+import { EventProps } from '../../../../Props/Event';
+import { createTestEvent } from '../../testElements/testElements';
+import { EventBlock } from './EventBlock';
 
 const event: EventProps = createTestEvent();
 describe('<EventBlock />', () => {
