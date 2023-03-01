@@ -240,6 +240,69 @@ function addBlankedEvents(
 }
 
 /**
+ * Call functions to place the next events in the chains list
+ * @param blanked Wheter current event is blanked
+ * @param events List of events.
+ * @param chain List of keys of current simultaneous events that are placed.
+ * @param eventsBlockedChain List of chains with simultaneous events that have to be placed.
+ * @param position The position where the event has to be placed.
+ * @param select The current index in eventsBlockedChain[0] of the key of the event that is placed.
+ * @returns Then next index in eventsBlockedChain[0] of the key of the event that will be placed and a boolean to tell if the chain is totally placed
+ * @param changePlacement Whether the current event has been placed this iteration.
+ * @returns The next index in eventsBlockedChain[0] of the key of the event that will be placed and a boolean to tell if the chain is totally placed
+ */
+function placeNextEvents(
+  blanked: boolean,
+  events: Array<EventProps>,
+  chain: Array<number>,
+  eventsBlockedChain: Array<Array<number>>,
+  position: number,
+  select: number,
+  changePlacement: boolean
+): { newSelect: number; chainPlaced: boolean } {
+  let newSelect = select;
+  let chainPlaced = false;
+
+  const tempEventBlockedChain: Array<Array<number>> =
+    eventsBlockedChain.slice();
+  tempEventBlockedChain[0] = eventsBlockedChain[0]
+    .slice(0, select)
+    .concat(eventsBlockedChain[0].slice(select + 1));
+
+  if (!blanked) {
+    if (
+      !placeEvents(
+        events,
+        chain,
+        tempEventBlockedChain,
+        position + events[eventsBlockedChain[0][select]].effectiveSize
+      )
+    ) {
+      // Fail to place the next event
+      if (changePlacement) {
+        events[eventsBlockedChain[0][select]].placed = false;
+      }
+      newSelect += 1;
+    } else {
+      chainPlaced = true;
+    }
+  } else if (
+    !placeEvents(
+      events,
+      chain,
+      tempEventBlockedChain,
+      position - eventsBlockedChain[0][select]
+    )
+  ) {
+    // Fail to place the next event which is blanked
+    newSelect += 1;
+  } else {
+    chainPlaced = true;
+  }
+  return { newSelect, chainPlaced };
+}
+
+/**
  * A function that check if the placement of an event corresponds with an event chain. If the event is not already placed, this function places it.
  * @param events List of events.
  * @param chain List of keys of current simultaneous events that are placed.
@@ -257,9 +320,8 @@ function placeChainEvent(
 ): { newSelect: number; chainPlaced: boolean } {
   let newSelect = select;
   let chainPlaced = false;
-  let change = false;
+  let changePlacement = false;
   let eventPlaced = true;
-  let tempEventBlockedChain: Array<Array<number>>;
 
   // Set if it's a blanked event
   const blanked = eventsBlockedChain[0][select] < 0;
@@ -268,7 +330,7 @@ function placeChainEvent(
   // Then checked if the event can be placed
   if (!blanked) {
     if (!events[eventsBlockedChain[0][select]].placed) {
-      change = true;
+      changePlacement = true;
       events[eventsBlockedChain[0][select]].placed = true;
       events[eventsBlockedChain[0][select]].position = position;
     } else if (events[eventsBlockedChain[0][select]].position !== position) {
@@ -279,40 +341,17 @@ function placeChainEvent(
 
   // Only if the current event has been able to be placed, while the event placed doesn't able a good placement for all events, change the event which is placed in position.
   if (eventPlaced) {
-    tempEventBlockedChain = eventsBlockedChain.slice();
-    tempEventBlockedChain[0] = eventsBlockedChain[0]
-      .slice(0, select)
-      .concat(eventsBlockedChain[0].slice(select + 1));
-    if (!blanked) {
-      if (
-        !placeEvents(
-          events,
-          chain,
-          tempEventBlockedChain,
-          position + events[eventsBlockedChain[0][select]].effectiveSize
-        )
-      ) {
-        // Fail to place the event
-        if (change) {
-          events[eventsBlockedChain[0][select]].placed = false;
-        }
-        newSelect += 1;
-      } else {
-        chainPlaced = true;
-      }
-    } else if (
-      !placeEvents(
-        events,
-        chain,
-        tempEventBlockedChain,
-        position - eventsBlockedChain[0][select]
-      )
-    ) {
-      // Fail to place the blanked event
-      newSelect += 1;
-    } else {
-      chainPlaced = true;
-    }
+    const newValues = placeNextEvents(
+      blanked,
+      events,
+      chain,
+      eventsBlockedChain,
+      position,
+      select,
+      changePlacement
+    );
+    newSelect = newValues.newSelect;
+    chainPlaced = newValues.chainPlaced;
   }
   return { newSelect, chainPlaced };
 }
