@@ -1,4 +1,4 @@
-from django.db.models import Q, QuerySet, Count
+from django.db.models import Q, F, QuerySet, Count
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 from rest_framework import (
     decorators,
     exceptions,
+    pagination,
     permissions,
     response,
     serializers,
@@ -18,7 +19,8 @@ from .models import Group, Membership, GroupType
 from .serializers import (
     MembershipSerializer,
     NewMembershipSerializer,
-    GroupSerializer)
+    GroupSerializer,
+    SimpleGroupSerializer)
 
 
 class GroupPermission(permissions.BasePermission):
@@ -27,8 +29,11 @@ class GroupPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         if view.action == 'create':
-            group_type = get_object_or_404(
-                GroupType, slug=request.query_params.get('type', None))
+            group_type = GroupType.objects.filter(
+                slug=request.query_params.get('type', None)).first()
+            if not group_type:
+                raise exceptions.ValidationError(_(
+                    "You must specify a valid group type in query parameters."))
             return group_type.can_create
         return True
 
@@ -44,24 +49,50 @@ class GroupPermission(permissions.BasePermission):
 
 
 class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
-    """An API endpoint for groups."""
+    """An API endpoint for groups.
+
+    Query Parameters
+    ----------------
+    type: slug
+        The group-type we want to limit the query to.
+    simple: bool
+        Returns only name, short_name, slug, icon and url for each group.
+    limit: int
+        The max number of items to return
+    offset: int
+        The index of the first item to return
+
+    Actions
+    -------
+    GET .../group/ : get the list of groups
+    POST .../group/ : create a new group (group_type required)
+    GET .../group/search/ : search a group by name or short_name
+    GET .../group/<id>/ : get a group
+    PUT .../group/<id>/ : update a group
+    DELETE .../group/<id>/ : delete a group
+    """
 
     permission_classes = [GroupPermission]
-    serializer_class = GroupSerializer
+    pagination_class = pagination.LimitOffsetPagination
     lookup_field = 'slug'
     lookup_url_kwarg = 'slug'
     search_fields = ['name', 'short_name']
 
+    def get_serializer_class(self):
+        if self.request.query_params.get('simple'):
+            return SimpleGroupSerializer
+        return GroupSerializer
+
     def get_queryset(self) -> QuerySet[Group]:
         user = self.request.user
-        group_type = get_object_or_404(
-            GroupType, slug=self.request.query_params.get('type', None))
+        group_type = GroupType.objects.filter(
+            slug=self.request.query_params.get('type')).first()
         return (Group.objects
                 # filter by group_type
-                .filter(group_type=group_type)
+                .filter(Q(group_type=group_type) if group_type else Q())
                 # remove the sub-groups to keep only parent groups
                 .filter(Q(parent=None)
-                        | Q(parent__in=group_type.extra_parents.all()))
+                        | Q(parent__in=F('group_type__extra_parents')))
                 # hide archived groups
                 .filter(archived=False)
                 # hide private groups unless user is member
@@ -74,12 +105,13 @@ class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
                     'membership_set',
                     filter=Q(membership_set__end_date__gte=timezone.now())))
                 .filter(Q(num_active_members__gt=0)
-                        if group_type.hide_no_active_members
-                        else Q())
+                        | Q(group_type__hide_no_active_members=False))
                 # prefetch type and parent group for better performances
                 .prefetch_related('group_type', 'parent')
                 # order by category, order and then name
-                .order_by(*group_type.sort_fields.split(',')))
+                .order_by(*group_type.sort_fields.split(',')
+                          if group_type else '')
+                .distinct())
 
     def get_object(self):
         obj = get_object_or_404(Group, slug=self.kwargs['slug'])
@@ -104,27 +136,29 @@ class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
     ------------
     student: id
         The student id
-    group: str (required)
+    group: str
         The group slug
     from: Date
         The date from which we want to filter the member list
     to: Date
         The date to which we want to filter the member list
+    limit: int
+        The max number of items to return
+    offset: int
+        The index of the first item to return
 
-    List Actions (/api/group/membership)
-    ------------
-    list (GET): list all memberships objects, filtered by query params
-    create (POST): create a new membership object
-
-    Detail Actions (/api/group/membership/<id>)
-    --------------
-    retrieve (GET): get the membership object by id
-    update (PUT) : replace the membership object by a new membership object
-    partial_update (PATCH): update some fields of the membership object
-    destroy (DELETE): delete the membership object
+    Actions
+    -------
+    GET .../membership/ : list all memberships
+    POST .../membership/ : create a new membership
+    GET .../membership/search/ : search a membership by group or student name
+    GET .../membership/<id>/ : get a membership details
+    PUT .../membership/<id>/ : update a membership
+    DELETE .../membership/<id>/ : delete a membership object
     """
 
     permission_classes = [permissions.IsAuthenticated, MembershipPermission]
+    pagination_class = pagination.LimitOffsetPagination
     search_fields = ['student__user__first_name', 'student__user__last_name',
                      'group__name', 'group__short_name', 'summary']
 
@@ -173,18 +207,6 @@ class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
             .prefetch_related('student__user')
             .distinct())
         return self.queryset
-
-    def list(self, request, *args, **kwargs):
-        """
-        LIST view to list memberships. Overridden to avoid getting all
-        memberships (request must provide a group or a student)
-        """
-        group = self.get_query_param('group')
-        student = self.get_query_param('student')
-        if group is None and student is None:
-            raise exceptions.ParseError(
-                detail=_("Provides either 'group' or 'student' as params."))
-        return super().list(request, *args, **kwargs)
 
     @decorators.action(detail=False, methods=['post'])
     def reorder(self, request, *args, **kwargs):
