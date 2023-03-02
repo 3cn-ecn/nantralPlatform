@@ -28,9 +28,42 @@ function Home() {
   const headerImageURL =
     'https://www.ec-nantes.fr/medias/photo/carroussel-campus-drone-002_1524738012430-jpg';
   React.useEffect(() => {
-    getEvent();
-    getMyClubs();
-    getPosts();
+    axios.all([
+      // fetch events
+      axios
+        .get('api/event')
+        .then((res) => {
+          eventsToCamelCase(res.data);
+          setEvents(res.data);
+          setEventsStatus('success');
+        })
+        .catch((err) => {
+          console.error(err);
+          setEventsStatus('fail');
+        }),
+      // fetch my clubs
+      axios
+        .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
+        .then((res) => {
+          setMyClubs(res.data);
+          setClubsStatus('success');
+        })
+        .catch((err) => {
+          console.error(err);
+          setClubsStatus('fail');
+        }),
+      // fetch posts
+      axios
+        .get('api/post')
+        .then((res) => {
+          setPosts(res.data);
+          setPostsStatus('success');
+        })
+        .catch((err) => {
+          console.error(err);
+          setPostsStatus('fail');
+        }),
+    ]);
   }, []);
 
   async function getEvent() {
@@ -94,12 +127,12 @@ function Home() {
         <div className="container">
           <PostSection
             posts={posts.filter((post) => post.pinned)}
-            title="A la une"
+            title={t('home.highlighted')}
             status={postsStatus}
           />
           <PostSection
             posts={posts.filter((post) => !post.pinned)}
-            title="Annonces"
+            title={t('home.announcement')}
             status={postsStatus}
           />
           <EventSection

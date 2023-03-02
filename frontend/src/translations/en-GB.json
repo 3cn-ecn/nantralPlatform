@@ -7,7 +7,13 @@
       "shotgunClosed": "shotgun closed",
       "title": "Do you want to unregister from this event?",
       "unsuscribe": "unregister"
-    }
+    },
+    "seePage": "See page",
+    "showAll": "Show all",
+    "showLess": "Show less"
+  },
+  "date_picker": {
+    "language": "en"
   },
   "event": {
     "action_menu": {
@@ -17,9 +23,23 @@
       "unsubscribe": "Unregister"
     },
     "error": "Error while loading the events",
+    "membersOnly": "Members only",
     "no_event": "No Event"
   },
+  "filterbar": {
+    "date": "Date",
+    "favorite": "Favorites",
+    "from": "From",
+    "organiser": "Organiser",
+    "participating": "I participate",
+    "shotgun": "Shotgun",
+    "title_filter": "Filters",
+    "to": "To",
+    "validate_button": "Validate"
+  },
   "home": {
+    "announcement": "Announcement",
+    "highlighted": "Highlighted",
     "myClubs": "My clubs & Assos",
     "myEvents": "My events",
     "seeMore": "see more",
@@ -114,19 +134,5 @@
     "theme": "Theme",
     "title_language": "Language",
     "title_theme": "Theme"
-  },
-  "filterbar": {
-    "title_filter": "Filters",
-    "favorite": "Favorites",
-    "participating": "I participate",
-    "shotgun": "Shotgun",
-    "organiser": "Organiser",
-    "date": "Date",
-    "from": "From",
-    "to": "To",
-    "validate_button": "Validate"
-  },
-  "date_picker": {
-    "language": "en"
   }
 }

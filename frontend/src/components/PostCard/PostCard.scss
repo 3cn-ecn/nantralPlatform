@@ -1,5 +1,3 @@
-$height : 100px;
-
 #container {
   align-items: center;
   align-content: center;
@@ -42,6 +40,8 @@ $height : 100px;
 #post-title {
   font-size: 18px;
   margin : 0px;
+  align-items: center;
+  display: flex;
 }
 #post-club {
   font-size: 12px;
