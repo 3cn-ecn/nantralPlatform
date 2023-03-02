@@ -69,6 +69,44 @@ function Home() {
       });
   }, []);
 
+  async function getEvent() {
+    axios
+      .get('api/event')
+      .then((res) => {
+        eventsToCamelCase(res.data);
+        setEvents(res.data);
+        setEventsStatus('success');
+      })
+      .catch((err) => {
+        console.error(err);
+        setEventsStatus('fail');
+      });
+  }
+  async function getMyClubs() {
+    axios
+      .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
+      .then((res) => {
+        setMyClubs(res.data.results);
+        setClubsStatus('success');
+      })
+      .catch((err) => {
+        console.error(err);
+        setClubsStatus('fail');
+      });
+  }
+  async function getPosts() {
+    axios
+      .get('api/post')
+      .then((res) => {
+        setPosts(res.data);
+        setPostsStatus('success');
+      })
+      .catch((err) => {
+        console.error(err);
+        setPostsStatus('fail');
+      });
+  }
+
   return (
     <>
       <div className="header">

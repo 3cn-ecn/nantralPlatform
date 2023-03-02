@@ -4,11 +4,16 @@ import {
   Snackbar,
   Alert,
   Button,
-  Box
+  Box,
+  IconButton,
 } from '@mui/material';
-import { Edit as EditIcon } from '@mui/icons-material';
+import {
+  Edit as EditIcon,
+  NavigateBefore as NavigateBeforeIcon,
+  NavigateNext as NavigateNextIcon
+} from '@mui/icons-material';
 import ModalEditMember from './components/ModalEditMember';
-import { Group, Membership, Student } from './interfaces';
+import { Group, Membership, Student, Page } from './interfaces';
 import axios from '../utils/axios';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import ListMembershipsTable from './components/ListMembershipsTable';
@@ -16,6 +21,14 @@ import ListMembershipsTable from './components/ListMembershipsTable';
 // passed through django template
 declare const groupSlug: string;
 declare const displayType: 'grid' | 'table';
+
+interface QueryParams {
+  group: string;
+  from?: string;
+  to?: string;
+  limit?: number;
+  offset?: number;
+}
 
 /**
  * Main table component for editing members in the admin page of groups.
@@ -29,8 +42,10 @@ function MembershipsGroup(props: {}): JSX.Element {
   // status of modals
   const [ message, setMessage ] = useState<{type: any; text: string }>({ type: null, text: '' });
   const [ openAddModal, setOpenAddModal ] = useState(false);
-  // filters passed as query parameters
-  const [ filters, setFilters ] = useState<{group: string; from?: string; to?: string}>({
+  // urls and filters passed as query parameters
+  const [ prevUrl, setPrevUrl ] = useState('');
+  const [ nextUrl, setNextUrl ] = useState('');
+  const [ filters, _ ] = useState<QueryParams>({
     group: groupSlug,
     from: new Date().toISOString()
   });
@@ -52,13 +67,22 @@ function MembershipsGroup(props: {}): JSX.Element {
   }, []);
 
   /** Get the list of members */
-  async function getMemberships(): Promise<void> {
-    return axios.get<Membership[]>('/api/group/membership/', {params: filters})
-    .then((res) => res.data.map((item) => {
-      item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
-      return item;
-    }))
-    .then((list) => setMembers(list));
+  async function getMemberships(
+    url='/api/group/membership/',
+    queryParams: Partial<QueryParams>=filters
+  ): Promise<void> {
+    return axios.get<Page<Membership>>(url, {params: queryParams})
+    .then((res) => res.data)
+    .then((data) => {
+        setMembers(
+          data.results.map((item) => {
+            item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
+            return item;
+          })
+        );
+        setPrevUrl(data.previous);
+        setNextUrl(data.next);
+    });
   }
 
   /**
@@ -163,13 +187,14 @@ function MembershipsGroup(props: {}): JSX.Element {
         />
       }
       <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
-        { group.is_admin && displayType === 'grid'
-        ? <Button
-            variant='contained'
-            href='edit/members'
-            endIcon={<EditIcon />}
-          >Modifier</Button>
-        : <></> }
+        <Button
+          variant='contained'
+          hidden={ !group.is_admin || displayType !== 'grid' }
+          href='edit/members'
+          endIcon={<EditIcon />}
+        >
+          Modifier
+        </Button>
         { !group.is_member && !group.lock_memberships || group.is_admin
         ? <>
             <Button
@@ -208,6 +233,12 @@ function MembershipsGroup(props: {}): JSX.Element {
             Masquer les anciens membres
           </Button>
         }
+        <IconButton sx={{ml: 'auto'}} disabled={!prevUrl} onClick={() => getMemberships(prevUrl, {})}>
+          <NavigateBeforeIcon />
+        </IconButton>
+        <IconButton disabled={!nextUrl} onClick={() => getMemberships(nextUrl, {})}>
+          <NavigateNextIcon />
+        </IconButton>
       </Box>
       <Snackbar
         autoHideDuration={4000}
