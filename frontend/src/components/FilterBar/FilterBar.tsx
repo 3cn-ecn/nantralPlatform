@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -30,6 +31,7 @@ interface FilterInterface {
 
 function FilterBar(props: { getFilter: any }) {
   const { getFilter } = props;
+  const { t } = useTranslation('translation'); // translation module
   const [open, setOpen] = React.useState(false);
   const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(null);
   const [dateEnd, setDateEnd] = React.useState(null);
@@ -70,55 +72,57 @@ function FilterBar(props: { getFilter: any }) {
   const filters: FilterInterface[] = [
     {
       id: 'favorite',
-      name: 'Favoris',
+      name: t('filterbar.favorite'),
       icon: <FavoriteIcon />,
       isMenu: false,
       content: null,
     },
     {
       id: 'participate',
-      name: 'Je participe',
+      name: t('filterbar.participating'),
       icon: <PersonIcon />,
       isMenu: false,
       content: null,
     },
     {
       id: 'shotgun',
-      name: 'Shotgun',
+      name: t('filterbar.shotgun'),
       icon: <TimerIcon />,
       isMenu: false,
       content: null,
     },
     {
       id: 'organiser',
-      name: 'Organisateur',
+      name: t('filterbar.organiser'),
       icon: <GroupsIcon />,
       isMenu: true,
       content: (
         <Grid item xs="auto">
-          <CheckboxesTags label="Organisateur" getResult={getOrganiser} />
+          <CheckboxesTags
+            label={t('filterbar.organiser')}
+            getResult={getOrganiser}
+          />
         </Grid>
       ),
     },
     {
       id: 'date',
-      name: 'Date',
+      name: t('filterbar.date'),
       icon: <DateRangeIcon />,
       isMenu: true,
       content: (
         <>
           <Grid item xs="auto">
-            <p>Du :</p>
             <BasicDatePicker
-              label={null}
+              label={t('filterbar.from')}
               minDate={null}
               getDate={getDateBegin}
             />
           </Grid>
+          <div style={{ height: '15px' }}></div>
           <Grid item xs="auto">
-            <p>Au :</p>
             <BasicDatePicker
-              label={null}
+              label={t('filterbar.to')}
               minDate={dateBegin}
               getDate={getDateEnd}
             />
@@ -144,7 +148,7 @@ function FilterBar(props: { getFilter: any }) {
           <Close />
         </IconButton>
       </div>
-      <h2>Filtres</h2>
+      <h2>{t('filterbar.title_filter')}</h2>
 
       <List>
         {filters.map((filter) => (
@@ -171,7 +175,7 @@ function FilterBar(props: { getFilter: any }) {
       <div style={{ height: '15px' }}></div>
       <div>
         <Button onClick={validate} variant="contained">
-          Valider
+          {t('filterbar.validate_button')}
         </Button>
       </div>
     </Box>
@@ -188,7 +192,7 @@ function FilterBar(props: { getFilter: any }) {
             }}
             endIcon={<FilterAltIcon />}
           >
-            Filtrer
+            {t('filterbar.title_filter')}
           </Button>
           <Drawer
             keepMounted

@@ -14,9 +14,18 @@ class SearchAPIMixin:
     @action(detail=False, methods=['get'])
     def search(self, request: Request, *args, **kwargs):
         """
-        A view to search through elements of the table. You must provides
-        'search_fields' (a list of fields in which to search).
+        A view to search through elements of the table, filtered by the
+        'search_fields' property.
 
+        Query Paramers
+        --------------
+        q: str
+            The text string to search
+        limit: bool
+            The max number of objects to query (by default 5)
+
+        Sources
+        -------
         Based on the django-admin contrib package (see
         https://docs.djangoproject.com/en/4.1/ref/contrib/admin/#django.contrib.admin.ModelAdmin.get_search_results
         and

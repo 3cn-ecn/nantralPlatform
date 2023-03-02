@@ -10,6 +10,11 @@ class PostSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'publication_date',
-            'color', 'image', 'slug',
-            'publicity'
+            'color',
+            'image',
+            'slug',
+            'publicity',
+            'group_slug',
+            'pinned',
+            'page_suggestion'
         ]

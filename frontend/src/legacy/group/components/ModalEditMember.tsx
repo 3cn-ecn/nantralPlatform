@@ -99,6 +99,7 @@ function createBlankMember(group: Group, student: Student): Membership {
     end_date: oneYearLater,
     admin: false,
     priority: 0,
+    dragId: '',
   };
   return member;
 }
