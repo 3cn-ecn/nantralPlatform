@@ -8,12 +8,12 @@ from .api_views import (
     ListEventsParticipantsAPIView,
     ParticipateAPIView,
     FavoriteAPIView,
-    EventListViewSet)
+    EventViewSet)
 
 app_name = 'event'
 
 router = DefaultRouter()
-router.register('', EventListViewSet, basename='event')
+router.register('', EventViewSet, basename='event')
 # router.register('group')
 
 paths = [

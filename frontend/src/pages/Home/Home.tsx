@@ -30,7 +30,12 @@ function Home() {
   React.useEffect(() => {
     // fetch events
     axios
-      .get('api/event')
+      .get('api/event', {
+        params: {
+          from_date: new Date().toISOString(),
+          order_by: 'begin_inscription',
+        },
+      })
       .then((res) => {
         eventsToCamelCase(res.data);
         setEvents(res.data);
