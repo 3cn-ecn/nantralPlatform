@@ -36,6 +36,7 @@ import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
+import EditSuggestionModal from '../../pages/Suggestion/Suggestion';
 
 /**
  * The top bar for navigation
@@ -101,6 +102,16 @@ function NavBarTop(props: {
   };
   const handleCloseDAll = () => {
     setAnchorElDark(null);
+  };
+
+  const [openS, setOpenS] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpenS(true);
+  };
+
+  const handleCloseS = () => {
+    setOpenS(false);
   };
 
   const { t } = useTranslation('translation');
@@ -205,6 +216,11 @@ function NavBarTop(props: {
             onClose={handleClose}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             TransitionComponent={Collapse}
+            PaperProps={{
+              style: {
+                width: 195,
+              },
+            }}
           >
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PersonIcon} />
@@ -235,11 +251,9 @@ function NavBarTop(props: {
               </ListItem>
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleClickOpen}>
               <SvgIcon component={ErrorRoundedIcon} />
               <ListItem
-                component={Link}
-                to="/bug/"
                 className="menuItem"
                 disablePadding
                 sx={{
@@ -249,6 +263,7 @@ function NavBarTop(props: {
                 {t('user_menu.bug')}
               </ListItem>
             </MenuItem>
+            <EditSuggestionModal open={openS} closeModal={handleCloseS} />
             <MenuItem onClick={handleClose}>
               <SvgIcon component={HelpRoundedIcon} />
               <ListItem

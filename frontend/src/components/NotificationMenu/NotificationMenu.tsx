@@ -96,7 +96,7 @@ export function NotificationMenu(props) {
   const listToShow = listNotifs.filter((sn: SentNotification) => {
     let res = true;
     if (unseenFilter) res = res && !sn.seen;
-    if (subscribeFilter) res = res && sn.suscribed;
+    if (subscribeFilter) res = res && sn.subscribed;
     return res;
   });
   if (listToShow.length === 0) {

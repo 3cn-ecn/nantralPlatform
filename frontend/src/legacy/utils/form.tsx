@@ -28,6 +28,7 @@ export type FieldType =
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
+      rows: int;
     }
   | {
       kind: 'select';
@@ -37,7 +38,7 @@ export type FieldType =
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
-      item: Array<string>;
+      item?: Array<string>;
     }
   | {
       kind: 'group';
@@ -117,27 +118,30 @@ function FormGroup(props: {
             );
           case 'select':
             return (
-              <FormControl label={field.label} FullWidth>
-                <InputLabel id={`${field.name}-input`}>
-                  {field.label}
-                </InputLabel>
-                <Select
-                  key={field.name}
-                  id={`${field.name}-input`}
-                  name={field.name}
-                  label={field.label}
-                  value={values[field.name]}
-                  fullWidth={!noFullWidth}
-                  onChange={(e) => handleChange(field.name, e.target.value)}
-                  required={field.required}
-                >
-                  {field.item.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Box sx={{ minWidth: 120, mt: 2 }}>
+                <FormControl fullWidth>
+                  <InputLabel id={`${field.name}-input`}>
+                    {field.label}
+                  </InputLabel>
+                  <Select
+                    key={field.name}
+                    labelId="demo-simple-select-label"
+                    id={`${field.name}-input`}
+                    name={field.name}
+                    label={field.label}
+                    value={values[field.name]}
+                    onChange={(e) => handleChange(field.name, e.target.value)}
+                    required={field.required}
+                    margin="normal"
+                  >
+                    {field.item.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
             );
           case 'text':
             return (
@@ -155,6 +159,7 @@ function FormGroup(props: {
                 error={!!error}
                 margin="normal"
                 multiline={field.multiline}
+                rows={field.rows}
               />
             );
           case 'date': // date as string
@@ -231,7 +236,7 @@ function FormGroup(props: {
                 field={field}
                 value={values[field.name]}
                 error={error}
-                handleChange={handleChange}
+                handleChange={() => handleChange}
                 noFullWidth={noFullWidth}
               />
             );

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Typography, Box, MenuItem } from '@mui/material';
+import { Typography, Box, MenuItem, Avatar } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import axios from '../../legacy/utils/axios';
@@ -46,10 +46,14 @@ function NotificationItem(props) {
         updateSeen();
       }}
     >
-      <li className={sn.seen ? '' : 'bg-light'}>
+      <li className="bob">
         <span className="spanno">
           {n.icon_url ? (
-            <img src={n.icon_url} alt="Icon de l'évènement" />
+            <Avatar
+              src={n.icon_url}
+              alt="Icon de l'évènement"
+              sx={{ width: 21.41, height: 23.51, mr: 2 }}
+            />
           ) : (
             <SvgIcon sx={[{ mr: 2 }]} component={NantralIcon} inheritViewBox />
           )}

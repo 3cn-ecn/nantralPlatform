@@ -7,12 +7,9 @@ import EditSuggestionModal from '../Suggestion/Suggestion';
  */
 function Family() {
   return (
-    <>
-      <Container maxWidth="sm">
-        <h1>Family</h1>
-      </Container>
-      <EditSuggestionModal />
-    </>
+    <Container maxWidth="sm">
+      <h1>Family</h1>
+    </Container>
   );
 }
 
