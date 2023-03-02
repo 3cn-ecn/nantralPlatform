@@ -1,20 +1,21 @@
-export interface Group {
-  id: number;
+
+export interface SimpleGroup {
   name: string;
   short_name: string;
+  slug: string;
+  url: string;
+  icon?: string;
+}
+
+export interface Group extends SimpleGroup {
+  id: number;
   group_type: {
     name: string;
     slug: string;
     no_membership_dates: boolean;
   };
-  parent: {
-    name: string;
-    slug: string;
-    url: string;
-    icon: string;
-  };
-  creation_year: number;
-  slug: string;
+  parent?: SimpleGroup;
+  creation_year?: number;
   archived: boolean;
   private: boolean;
   public: boolean;
@@ -22,14 +23,19 @@ export interface Group {
   description: string;
   meeting_place: string;
   meeting_hour: string;
-  icon: string;
   banner: string;
   video1: string;
   video2: string;
-  url: string;
   is_admin: boolean;
   is_member: boolean;
   lock_memberships: boolean;
+}
+
+export interface SimpleStudent {
+  id: number;
+  full_name: string;
+  url: string;
+  picture: string;
 }
 
 export interface Student {
@@ -63,4 +69,11 @@ export interface Membership {
   admin: boolean;
   admin_request?: boolean;
   dragId: string;
+}
+
+export interface Page<T> {
+  count: number;
+  next: string;
+  previous: string;
+  results: T[];
 }
