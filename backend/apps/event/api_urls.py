@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from .api_views import (
     # ListEventsHomeAPIView,
-    ListAllEventsGroupAPIView,
+    # ListAllEventsGroupAPIView,
     # ListEventsGroupAPIView,
     ListEventsParticipantsAPIView,
     ParticipateAPIView,
@@ -29,10 +29,6 @@ paths = [
         '<slug:event_slug>/favorite',
         FavoriteAPIView.as_view(),
         name='set-event-to-favorite'),
-    path(
-        'group/all/<slug:group>',
-        ListAllEventsGroupAPIView.as_view(),
-        name='list-all-group-events'),
 ]
 
 urlpatterns = router.urls + paths

@@ -4,30 +4,6 @@ from .models import Event
 from apps.student.models import Student
 
 
-class PostEventSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Event
-        fields = [
-            'title',
-            'description',
-            'location',
-            'date',
-            'end_date',
-            'publicity',
-            'color',
-            'group',
-            'image',
-            'max_participant',
-            'end_inscription',
-            'begin_inscription',
-            'form_url',
-        ]
-
-    def get_group_slug(self, obj):
-        return obj.group.slug
-
-
 class EventSerializer(serializers.ModelSerializer):
     number_of_participants = serializers.ReadOnlyField()
     absolute_url = serializers.ReadOnlyField()
@@ -39,26 +15,27 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        read_only_fields = ['absolute_url']
+        read_only_fields = ['absolute_url', 'slug',
+                            'number_of_participants', 'color']
         fields = [
             'title',
             'description',
             'location',
             'date',
+            'end_date',
             'publicity',
-            'color',
             'image',
             'slug',
             'number_of_participants',
             'absolute_url',
+            'group',
             'group_slug',
             'group_name',
             'is_participating',
             'is_member',
             'max_participant',
-            'end_inscription',
             'begin_inscription',
-            'end_date',
+            'end_inscription',
             'form_url',
             'is_favorite']
 

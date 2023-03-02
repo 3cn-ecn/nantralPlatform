@@ -16,6 +16,12 @@ def migrate_slugs_to_fk(apps, schema_editor) :
             print("Club mis à défaut à " + obj.group.name)
         obj.save()
 
+def migrate_fk_to_slugs(apps, schema_editor) :
+    Post = apps.get_model('post', 'Post')
+    for obj in Post.objects.all() :
+        slug = obj.group.slug
+        obj.group_slug = slug
+        obj.save()
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -33,7 +39,7 @@ class Migration(migrations.Migration):
                 to='group.group', 
                 verbose_name='Organisateur'),
         ),
-        migrations.RunPython(migrate_slugs_to_fk),
+        migrations.RunPython(migrate_slugs_to_fk, reverse_code=migrate_fk_to_slugs),
         migrations.RemoveField(
             model_name='post',
             name='group_slug',

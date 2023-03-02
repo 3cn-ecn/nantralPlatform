@@ -61,7 +61,6 @@ class AbstractPost(models.Model, SlugModel):
         # compression des images
         self.image = compress_model_image(
             self, 'image', size=(960, 540), contains=True)
-        super().save(*args, **kwargs)
         # save the notification
         self.create_notification(
             title=self.group.name,

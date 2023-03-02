@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions, viewsets
@@ -6,8 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Event
 from apps.group.models import Group
-from .serializers import (EventSerializer, EventParticipatingSerializer,
-                          PostEventSerializer)
+from .serializers import (EventSerializer, EventParticipatingSerializer)
 
 
 class EventPermission(permissions.BasePermission):
@@ -27,62 +26,101 @@ class EventPermission(permissions.BasePermission):
 
 class EventListViewSet(viewsets.ModelViewSet):
     """An API endpoint for events."""
-
     permission_classes = [permissions.IsAuthenticated, EventPermission]
     serializer_class = EventSerializer
     lookup_field = 'slug'
     lookup_url_kwarg = 'slug'
-    # search_fields = ['name', 'short_name']
-
-    def get_serializer_class(self):
-        if self.request.method in permissions.SAFE_METHODS:
-            return EventSerializer
-        else:
-            return PostEventSerializer
 
     def get_queryset(self) -> list[Event]:
         """Get all events
         - request : GET event/
         - query params :
-            - order : list[str] = date ->
-            list of attributes to order results in the form of order=a,b,...
+            - order_by : list[str] = date ->
+            list of attributes to order the result in the form "order=a,b,c".
+            In ascending order by defaukt. Add "-" in front of row name without
+            spaces to sort by descending order
+            - organizer : list[str] = None ->
+            the slug list of organizers of the form organizer=a,b,c
+            - from_date : 'yyyy-MM-dd' = None ->
+            filter event whose date is greater or equal to from_date
+            - to_date : 'yyyy-MM-dd' = None ->
+            filter event whose date is less or equal to to_date
+            - from_date : 'yyyy-MM-dd' = None ->
+            filter event whose date is greater or equal to from_date
+            - to_date : 'yyyy-MM-dd' = None ->
+            filter event whose date is less or equal to to_date
+            - min_participants : int = None ->
+            lower bound for participants count
+            - max_participants : int = None ->
+            upper bound for participants count
             - is_member : bool = None ->
             whether user is member of the organizer group
-            - from_date : 'yyyy-MM-ddz' = today ->
-            filter begin_date of the event from this date
-            - to_date : 'yyyy-MM-dd' = None ->
-            filter begin_date of the event to this date
-            - favorite : bool = None ->
-            filter 
-
+            - is_favorite : bool = None ->
+            filter your favorite event
+            - is_shotgun : bool = None ->
+            filter shotgun events
+            - is_form : bool = None ->
+            filter events containing a form link
         """
         # query params
-        order: list[str] = self.request.query_params.get(
-            "order", "date").split(',')
-        member: bool = self.request.query_params.get("is_member", None)
-        shotgun: bool = self.request.query_params.get("shotgun", None)
+        order_by: list[str] = self.request.query_params.get(
+            "order_by", "date").split(',')
+        organizers_slug: list[str] = self.request.query_params.get(
+            "group", "").split(',')
+        is_member: bool = self.request.query_params.get("is_member", None)
+        is_shotgun: bool = self.request.query_params.get("is_shotgun", None)
+        is_form: bool = self.request.query_params.get("is_form", None)
         from_date: str = self.request.query_params.get(
-            "from_date", timezone.now())
+            "from_date", None)
         to_date: str = self.request.query_params.get(
             "to_date", None)
-        favorite: bool = self.request.query_params.get(
-            "favorite", None)
+        from_begin_inscription: str = self.request.query_params.get(
+            "from_begin_inscription", None)
+        to_begin_inscription: str = self.request.query_params.get(
+            "to_begin_inscription", None)
+        is_favorite: bool = self.request.query_params.get(
+            "is_favorite", None)
+        is_participating: bool = self.request.query_params.get(
+            "is_participating", None)
+        min_participants: int = self.request.query_params.get(
+            "min_participants", None)
+        max_participants: int = self.request.query_params.get(
+            "max_participants", None)
         # query
-        user_event_pk = self.request.user.student.favorite_event.values('pk')
+        user_student = self.request.user.student
+        user_event_pk = user_student.favorite_event.values('pk')
+        my_groups = Group.objects.filter(members=user_student)
+        groups: list[Group] = []
+        print(organizers_slug)
+        try:
+            groups = [Group.objects.get(
+                slug=slug) for slug in organizers_slug]
+        except Group.DoesNotExist:
+            groups = []
+        # filtering
         events = (
             Event.objects
             .filter(
-                Q(group__members=self.request.user) if member else Q())
-            .filter(~Q(max_participant=None) if shotgun else Q())
-            .filter(Q(pk__in=user_event_pk) if favorite else Q())
-            .order_by(*order)
+                Q(group__in=my_groups) if is_member else Q())
+            .filter(~Q(max_participant=None) if is_shotgun else Q())
+            .filter(Q(participants=user_student) if is_participating else Q())
+            .filter(Q(pk__in=user_event_pk) if is_favorite else Q())
+            .filter(Q(group__in=groups) if len(groups) > 0 else Q())
+            .filter(~Q(form_url=None) if is_form else Q())
+            .filter(Q(date__gte=from_date) if from_date else Q())
+            .filter(Q(date__lte=to_date) if to_date else Q())
+            .filter(Q(begin_inscription__gte=from_begin_inscription)
+                    if from_begin_inscription else Q())
+            .filter(Q(begin_inscription_date__lte=to_begin_inscription)
+                    if to_begin_inscription else Q())
+            .annotate(participants_count=Count('participants'))
+            .filter(Q(participants_count__gte=min_participants)
+                    if min_participants else Q())
+            .filter(Q(participants_count__lte=max_participants)
+                    if max_participants else Q())
+            .order_by(*order_by)
         )
-        if from_date is not None and to_date is None:
-            events = events.filter(date__gte=from_date)
-        elif from_date is None and to_date is not None:
-            events = events.filter(date__lte=to_date)
-        elif from_date is not None and to_date is not None:
-            events = events.filter(date__range=[from_date, to_date])
+
         return [e for e in events if e.can_view(self.request.user)]
 
     def get_object(self) -> Event:
