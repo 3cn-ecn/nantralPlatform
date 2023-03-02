@@ -1,5 +1,7 @@
 import i18n from 'i18next';
 
+type DateType = 'short' | 'medium' | 'long' | 'full';
+
 /**
  * Format a datetime according to the current language
  *
@@ -10,8 +12,8 @@ import i18n from 'i18next';
  */
 export function formatDate(
   date: Date,
-  dateFormat?: 'short' | 'medium' | 'long' | 'full',
-  timeFormat?: 'short' | 'medium' | 'long' | 'full'
+  dateFormat?: DateType,
+  timeFormat?: DateType
 ) {
   const lang = i18n.language;
   const customFormat = {
@@ -29,10 +31,7 @@ export function formatDate(
  * @param timeFormat The format for the time
  * @returns A string represented the time formatted
  */
-export function formatTime(
-  date: Date,
-  timeFormat: 'short' | 'medium' | 'long' | 'full'
-) {
+export function formatTime(date: Date, timeFormat: DateType) {
   return formatDate(date, undefined, timeFormat);
 }
 
@@ -43,4 +42,23 @@ export function isThisWeek(date: Date): boolean {
   const sunday = new Date();
   sunday.setDate(sunday.getDate() - sunday.getDay() + 8);
   return todayTime >= monday.getTime() && todayTime <= sunday.getTime();
+}
+
+/**
+ * Get the number of days in a month.
+ * @param year The year of the month.
+ * @param month The month.
+ * @returns The number of days in the month.
+ */
+export function numberOfDayInMonth(year: number, month: number): number {
+  return new Date(year, month + 1, 0).getDate();
+}
+
+/**
+ * Get the number of days in a month.
+ * @param date The date in the month.
+ * @returns The number of days in the month.
+ */
+export function numberOfDayInDateMonth(date: Date): number {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 }

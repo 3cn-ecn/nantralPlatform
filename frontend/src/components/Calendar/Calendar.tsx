@@ -4,11 +4,13 @@ import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
 import { EventProps } from 'Props/Event';
 import { modulo, ppcm } from '../../utils/maths';
+import { numberOfDayInDateMonth } from '../../utils/date';
 import { Day } from './Day/Day';
 import { EventDataProps, CalendarView } from './CalendarProps/CalendarProps';
 import { DayInfos } from './DayInfos/DayInfos';
 import { ChooseWeek } from './ChooseWeek/ChooseWeek';
 import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';
+import { Month } from './Month/Month';
 
 /**
  * Function that sort event date-wise.
@@ -487,7 +489,8 @@ function setSameTimeEvents(
 function isInDay(
   event: EventProps,
   mondayDate: Date,
-  sortEvents: Array<Array<EventProps>>
+  sortEvents: Array<Array<EventProps>>,
+  mode: 'week' | 'month'
 ): void {
   const checkBeginDate = new Date(
     mondayDate.getFullYear(),
@@ -506,15 +509,30 @@ function isInDay(
   ) {
     sortEvents[0].push(event);
   }
-  for (let i = 1; i < 7; i++) {
-    checkBeginDate.setDate(checkBeginDate.getDate() + 1);
-    checkEndDate.setDate(checkEndDate.getDate() + 1);
-    if (
-      (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
-      (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
-    ) {
-      sortEvents[i].push({ ...event });
+  if (mode === 'week') {
+    for (let i = 1; i < 7; i++) {
+      checkBeginDate.setDate(checkBeginDate.getDate() + 1);
+      checkEndDate.setDate(checkEndDate.getDate() + 1);
+      if (
+        (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
+        (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
+      ) {
+        sortEvents[i].push({ ...event });
+      }
     }
+  } else if (mode === 'month') {
+    for (let i = 1; i < numberOfDayInDateMonth(checkBeginDate); i++) {
+      checkBeginDate.setDate(checkBeginDate.getDate() + 1);
+      checkEndDate.setDate(checkEndDate.getDate() + 1);
+      if (
+        (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
+        (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
+      ) {
+        sortEvents[i].push({ ...event });
+      }
+    }
+  } else {
+    throw new Error(`Le mode ${mode} n'existe pas pour la fonction isInDay()`);
   }
 }
 
@@ -537,13 +555,34 @@ function sortInWeek(
     sortEvents.push(new Array<EventProps>());
   }
   oldSortEvents.forEach((event) => {
-    isInDay(event, mondayDate, sortEvents);
+    isInDay(event, mondayDate, sortEvents, 'week');
   });
 
   for (let i = 0; i < 7; i++) {
     setSameTimeEvents(sortEvents[i], eventsBlockedChain);
   }
   return { sortEvents, eventsBlockedChain };
+}
+
+function sortInMonth(
+  oldSortEvents: Array<EventProps>,
+  beginDate: Date
+): {
+  sortEvents: Array<Array<EventProps>>;
+} {
+  const sortEvents = [];
+  const eventsBlockedChain = [];
+  for (let i = 0; i < numberOfDayInDateMonth(beginDate); i++) {
+    sortEvents.push(new Array<EventProps>());
+  }
+  oldSortEvents.forEach((event) => {
+    isInDay(event, beginDate, sortEvents, 'month');
+  });
+
+  for (let i = 0; i < 7; i++) {
+    setSameTimeEvents(sortEvents[i], eventsBlockedChain);
+  }
+  return { sortEvents };
 }
 
 /**
@@ -647,10 +686,18 @@ function changeDisplay(
       updateBegin(newBeginDate);
       updateEnd(newEndDate);
       break;
-    // case 'month':
-    // break;
-    default:
+    case 'month':
+      newBeginDate.setDate(1);
+      console.log(newBeginDate);
+      console.log(newBeginDate.getMonth());
+      console.log(numberOfDayInDateMonth(newBeginDate));
+      newEndDate.setDate(numberOfDayInDateMonth(newBeginDate));
+      console.log(newEndDate);
+      updateBegin(newBeginDate);
+      updateEnd(newEndDate);
       break;
+    default:
+      throw new Error(`Given display ${display} not implemented`);
   }
 }
 
@@ -701,14 +748,23 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     beginOfWeek,
     endOfWeek
   );
+  console.log(sortEvents);
+  console.log(endOfWeek);
 
-  const eventsWeek: {
+  let eventsWeek: {
     sortEvents: Array<Array<EventProps>>;
-    eventsBlockedChain: Array<Array<Array<number>>>;
-  } = sortInWeek(sortEvents, beginOfWeek);
+    eventsBlockedChain?: Array<Array<Array<number>>>;
+  };
+  let eventsBlockedChain: Array<Array<Array<number>>>;
+
+  if (displayData.type !== 'month') {
+    eventsWeek = sortInWeek(sortEvents, beginOfWeek);
+    ({ eventsBlockedChain } = eventsWeek);
+  } else {
+    eventsWeek = sortInMonth(sortEvents, beginOfWeek);
+  }
 
   const newSortEvents = eventsWeek.sortEvents;
-  const { eventsBlockedChain } = eventsWeek;
 
   const week = [
     ['Lundi', 1],
@@ -734,15 +790,37 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
         displayData.beginDate + 3
       );
       if (displayData.beginDate + 3 > 6) {
-        displaySize = displaySize.concat(
-          week.slice(0, (displayData.beginDate + 3) % 7)
-        );
+        displaySize = displaySize.concat(week.slice(0, endOfWeek.getDay() - 1));
       }
       break;
     case 'week':
       displaySize = week.slice();
       break;
+    case 'month':
+      console.log(displayData.beginDate);
+      displaySize = week.slice(modulo(beginOfWeek.getDay() - 1, 7));
+      console.log(
+        -(7 - beginOfWeek.getDay()) + numberOfDayInDateMonth(beginOfWeek)
+      );
+      for (
+        let i = 1;
+        i <
+        (modulo(beginOfWeek.getDay() - 1, 7) +
+          numberOfDayInDateMonth(beginOfWeek) -
+          6) /
+          7;
+        i++
+      ) {
+        displaySize = displaySize.concat(week.slice());
+      }
+      if (endOfWeek.getDay() !== 0) {
+        displaySize = displaySize.concat(week.slice(0, endOfWeek.getDay()));
+      }
+      console.log(beginOfWeek, endOfWeek);
+      console.log(displaySize);
+      break;
     default:
+      throw new Error(`Given display ${displayData.type} not implemented`);
   }
 
   // Update the display and the view
@@ -767,24 +845,32 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
         updateDisplay={updateDisplay}
       ></ChooseDisplay>
       <div id="Calendar" style={{ display: 'flex' }}>
-        <Grid container spacing={0}>
-          <Grid item xs={1}>
-            <DayInfos />
+        {displayData.type !== 'month' ? (
+          <Grid container spacing={0}>
+            <Grid item xs={1}>
+              <DayInfos />
+            </Grid>
+            {displaySize.map((day, number) => {
+              return (
+                <Grid item xs={10.5 / displaySize.length} key={day[0]}>
+                  <Day
+                    key={day[0]}
+                    dayValue={day[1]}
+                    day={day[0]}
+                    events={newSortEvents[number]}
+                    chains={eventsBlockedChain[number]}
+                  />
+                </Grid>
+              );
+            })}
           </Grid>
-          {displaySize.map((day, number) => {
-            return (
-              <Grid item xs={10.5 / displaySize.length} key={day[0]}>
-                <Day
-                  key={day[0]}
-                  dayValue={day[1]}
-                  day={day[0]}
-                  events={newSortEvents[number]}
-                  chains={eventsBlockedChain[number]}
-                />
-              </Grid>
-            );
-          })}
-        </Grid>
+        ) : (
+          <Grid container spacing={0}>
+            <Grid item xs={1}>
+              <Month monthData={displaySize} events={newSortEvents} />
+            </Grid>
+          </Grid>
+        )}
       </div>
       <div id="ics">
         <Button

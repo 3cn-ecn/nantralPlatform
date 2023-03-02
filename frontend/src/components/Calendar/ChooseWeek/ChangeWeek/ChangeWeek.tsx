@@ -2,6 +2,10 @@ import React from 'react';
 import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import {
+  numberOfDayInMonth,
+  numberOfDayInDateMonth,
+} from '../../../../utils/date';
 import { CalendarView } from '../../CalendarProps/CalendarProps';
 import { modulo } from '../../../../utils/maths';
 
@@ -48,7 +52,15 @@ export function ChangeWeek(props: {
       stepValue = 7;
       break;
     case 'month':
-      stepValue = 1;
+      if (action === 'previous') {
+        stepValue = numberOfDayInMonth(
+          beginDate.getFullYear(),
+          beginDate.getMonth() - 1
+        );
+      }
+      if (action === 'next') {
+        stepValue = numberOfDayInDateMonth(beginDate);
+      }
       break;
     default:
       stepValue = 0;
@@ -112,6 +124,5 @@ export function ChangeWeek(props: {
       </Button>
     );
   }
-  console.warn('Appel de ChangeWeek mal effectué');
-  return <p>Error</p>;
+  throw new Error('Appel de ChangeWeek mal effectué');
 }
