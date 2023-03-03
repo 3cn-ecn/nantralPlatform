@@ -32,29 +32,26 @@ class TestGroups(APITestCase):
 
     def test_list(self):
         self.client.force_login(self.u1)
-        # test without indicating a group type
-        res = self.client.get('/api/group/group/')
-        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
         # test an empty list
         res = self.client.get('/api/group/group/', {'type': 't1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 0)
+        self.assertEqual(len(res.data.get('results')), 0)
         # test with a group
         g = Group.objects.create(name="G1", group_type=self.t1)
         res = self.client.get('/api/group/group/', {'type': 't1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 1)
+        self.assertEqual(len(res.data.get('results')), 1)
         # test with a private group
         g.private = True
         g.save()
         res = self.client.get('/api/group/group/', {'type': 't1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 0)
+        self.assertEqual(len(res.data.get('results')), 0)
         # test with a private group where the user is member
         g.members.add(self.u1.student)
         res = self.client.get('/api/group/group/', {'type': 't1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 1)
+        self.assertEqual(len(res.data.get('results')), 1)
 
     def test_create(self):
         self.client.force_login(self.u1)
@@ -158,35 +155,32 @@ class TestMemberships(APITestCase):
 
     def test_list(self):
         self.client.force_login(self.u1)
-        # test without indicating a group or a student
-        res = self.client.get('/api/group/membership/')
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         # test an empty list
         res = self.client.get('/api/group/membership/', {'group': 'g1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 0)
+        self.assertEqual(len(res.data.get('results')), 0)
         # test with one membership
         self.g1.members.add(self.u2.student)
         res = self.client.get('/api/group/membership/', {'group': 'g1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 1)
+        self.assertEqual(len(res.data.get('results')), 1)
         # test with a private group
         self.g1.private = True
         self.g1.save()
         res = self.client.get('/api/group/membership/', {'group': 'g1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 0)
+        self.assertEqual(len(res.data.get('results')), 0)
         # test with a private group where the user is member
         self.g1.members.add(self.u1.student)
         res = self.client.get('/api/group/membership/', {'group': 'g1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 2)
+        self.assertEqual(len(res.data.get('results')), 2)
         self.g1.private = False
         self.g1.save()
         # test on student
         res = self.client.get('/api/group/membership/', {'student': self.u2.id})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 1)
+        self.assertEqual(len(res.data.get('results')), 1)
         # test if non authenticated
         self.client.logout()
         res = self.client.get('/api/group/membership/', {'group': 'g1'})

@@ -8,6 +8,7 @@ import {
   Grid,
 } from '@mui/material';
 import { NavLink } from 'react-router-dom';
+import './AccordionSection.scss';
 
 export function AccordionSection(props: {
   title: string;
@@ -33,7 +34,10 @@ export function AccordionSection(props: {
             sx={{
               textTransform: 'none',
               color: 'text.primary',
-              ':hover': { textDecoration: 'underline', bgcolor: 'transparent' },
+              ':hover': {
+                textDecoration: 'underline',
+                bgcolor: 'transparent',
+              },
             }}
           >
             <h1 className="section-title">{title}</h1>

@@ -4,31 +4,54 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   IconButton,
-  Typography,
-  useMediaQuery,
+  Tooltip,
 } from '@mui/material';
 import * as React from 'react';
 
 import './PostCard.scss';
-import { ArrowForward, Close, Edit } from '@mui/icons-material';
+import { ArrowForward, Edit, Groups } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Club';
-import ClubAvatar from '../ClubAvatar/ClubAvatar';
-import { theme } from '../style/palette';
+import { useTranslation } from 'react-i18next';
 import { PostProps } from '../../Props/Post';
 import { formatDate } from '../../utils/date';
+import { PostModal } from '../Modal/PostModal';
 
+export function SeePageButton(props: {
+  link: string;
+  style?: React.CSSProperties;
+}) {
+  const { link, style } = props;
+  const { t } = useTranslation('translation');
+  return (
+    <Button
+      style={style}
+      onClick={(e) => e.stopPropagation()}
+      endIcon={<ArrowForward />}
+      href={link}
+    >
+      {t('button.seePage')}
+    </Button>
+  );
+}
+
+export function MembersIcon() {
+  const { t } = useTranslation('translation');
+  return (
+    <Tooltip title={t('event.membersOnly')} arrow>
+      <Groups sx={{ marginRight: 1 }} />
+    </Tooltip>
+  );
+}
+
+SeePageButton.defaultProps = {
+  style: null,
+};
 export function PostCard(props: { post: PostProps }) {
   const { post } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
-  const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   React.useEffect(() => {
     axios
       .get(`api/group/group/${post.group_slug}`)
@@ -38,9 +61,6 @@ export function PostCard(props: { post: PostProps }) {
 
   const handleClick = (event) => {
     event.stopPropagation();
-  };
-  const handleClose = () => {
-    setOpen(false);
   };
   return (
     <>
@@ -71,20 +91,29 @@ export function PostCard(props: { post: PostProps }) {
             }}
           >
             <div>
-              <h2 id="post-title">{post.title}</h2>
-              <p id="post-club">{clubDetails && clubDetails.name}</p>
+              <h2 id="post-title">
+                {post.publicity === 'Mem' && <MembersIcon />}
+                {post.title}
+              </h2>
+              <p id="post-club">
+                {clubDetails && clubDetails.name}
+                {' • '}
+                {formatDate(new Date(post.publication_date), 'medium')}
+              </p>
             </div>
             {clubDetails && clubDetails.is_admin && (
-              <IconButton
-                onClick={handleClick}
-                aria-label="settings"
-                style={{ position: 'absolute', right: 0, top: 0 }}
-              >
-                <Edit />
-              </IconButton>
+              <Tooltip title="Edit" arrow>
+                <IconButton
+                  onClick={handleClick}
+                  aria-label="settings"
+                  style={{ position: 'absolute', right: 0, top: 0 }}
+                >
+                  <Edit />
+                </IconButton>
+              </Tooltip>
             )}
             {post.page_suggestion && (
-              <Button
+              <SeePageButton
                 style={{
                   position: 'absolute',
                   right: 0,
@@ -92,86 +121,18 @@ export function PostCard(props: { post: PostProps }) {
                   marginRight: 10,
                   marginBottom: 5,
                 }}
-                onClick={(e) => e.stopPropagation()}
-                endIcon={<ArrowForward />}
-                href={post.page_suggestion}
-              >
-                Voir la page
-              </Button>
+                link={post.page_suggestion}
+              />
             )}
           </CardContent>
         </CardActionArea>
       </Card>
-      <Dialog
+      <PostModal
+        post={post}
+        clubDetails={clubDetails}
         open={open}
-        onClose={handleClose}
-        scroll="paper"
-        fullWidth
-        fullScreen={fullScreen}
-        maxWidth="md"
-        sx={{ margin: 0 }}
-      >
-        <DialogTitle id="scroll-dialog-title">
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <div>{post.title}</div>
-            <IconButton onClick={handleClose}>
-              <Close />
-            </IconButton>
-          </div>
-        </DialogTitle>
-        <DialogContent dividers>
-          <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-            <img alt="" src={post.image} id="image" />
-            {/* Dangerous should change */}
-            <div dangerouslySetInnerHTML={{ __html: post.description }}></div>
-            <div
-              style={{
-                display: 'flex',
-                width: '100%',
-                justifyContent: 'right',
-              }}
-            >
-              <Typography variant="caption" textAlign="right">
-                {`Ajouté le ${formatDate(
-                  new Date(post.publication_date),
-                  'short',
-                  'short'
-                )}`}
-              </Typography>
-            </div>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions style={{ justifyContent: 'space-between' }}>
-          {clubDetails && (
-            <ClubAvatar
-              name={clubDetails.name}
-              clubUrl={clubDetails.url}
-              logoUrl={clubDetails.icon}
-              textPosition="right"
-              size={60}
-            />
-          )}
-          {post.page_suggestion && (
-            <Button
-              style={{
-                position: 'relative',
-              }}
-              onClick={(e) => e.stopPropagation()}
-              endIcon={<ArrowForward />}
-              href={post.page_suggestion}
-            >
-              Voir la page
-            </Button>
-          )}
-        </DialogActions>
-      </Dialog>
+        onClose={() => setOpen(false)}
+      />
     </>
   );
 }

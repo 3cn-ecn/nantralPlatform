@@ -207,6 +207,12 @@ STAGING = env('STAGING')
 ### THIRD PARTY LIBRARIES SETTINGS ###
 ######################################
 
+# Rest API settings
+REST_FRAMEWORK = {
+    'PAGE_SIZE': 50
+}
+SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
+
 # Extra Settings
 EXTRA_SETTINGS_CACHE_NAME = "extra_settings"
 
