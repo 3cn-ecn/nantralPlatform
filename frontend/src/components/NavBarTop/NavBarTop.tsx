@@ -31,6 +31,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
 import PaletteIcon from '@mui/icons-material/Palette';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import axios from 'axios';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
@@ -71,6 +72,7 @@ function NavBarTop(props: {
   const [anchorElDark, setAnchorElDark] = React.useState<null | HTMLElement>(
     null
   );
+  const [loggedId, setLoggedId] = React.useState<string>();
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
   const openD = Boolean(anchorElDark);
@@ -134,6 +136,21 @@ function NavBarTop(props: {
   };
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
+
+  React.useEffect(() => {
+    getLoggedUser();
+  }, []);
+
+  async function getLoggedUser() {
+    axios
+      .get('api/student/student/me')
+      .then((res) => {
+        setLoggedId(res.data.id.toString());
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
   return (
     <AppBar position="fixed" color="secondary">
@@ -229,7 +246,7 @@ function NavBarTop(props: {
               <SvgIcon component={PersonIcon} />
               <ListItem
                 component={Link}
-                to="/profile/"
+                to={`/profile/${loggedId}`}
                 className="menuItem"
                 disablePadding
                 sx={{
