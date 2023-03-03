@@ -1,7 +1,7 @@
 from django.db.models import Q, Count
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions, viewsets
+from rest_framework import permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -37,39 +37,47 @@ TRUE_ARGUMENTS: list[str] = ['true', 'True', '1']
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    """# Event api
-    ## Get all events
-    - request : GET /event
-    - query params :
-        - order_by : list[str] = date ->
-        list of attributes to order the result in the form "order=a,b,c".
-        In ascending order by defaut. Add "-" in front of row name without
-        spaces to sort by descending order
-        - organizer : list[str] = None ->
-        the slug list of organizers of the form organizer=a,b,c
-        - from_date : 'yyyy-MM-dd' = None ->
-        filter event whose date is greater or equal to from_date
-        - to_date : 'yyyy-MM-dd' = None ->
-        filter event whose date is less or equal to to_date
-        - min_participants : int = None ->
-        lower bound for participants count
-        - max_participants : int = None ->
-        upper bound for participants count
-        - is_member : bool = None ->
-        whether user is member of the organizer group
-        - is_favorite : bool = None ->
-        filter your favorite event
-        - is_shotgun : bool = None ->
-        filter shotgun events
-        - is_form : bool = None ->
-        filter events containing a form link
-        - is_participating : bool = None ->
-        filter events current user is participating
+    """An API endpoint for event
+
+    Query Parameters
+    ----------------
+    - order_by : list[str] = date ->
+    list of attributes to order the result in the form "order=a,b,c".
+    In ascending order by defaut. Add "-" in front of row name without
+    spaces to sort by descending order
+    - organizer : list[str] = None ->
+    the slug list of organizers of the form "organizer=a,b,c"
+    - from_date : 'yyyy-MM-dd' = None ->
+    filter event whose date is greater or equal to from_date
+    - to_date : 'yyyy-MM-dd' = None ->
+    filter event whose date is less or equal to to_date
+    - min_participants : int = None ->
+    lower bound for participants count
+    - max_participants : int = None ->
+    upper bound for participants count
+    - is_member : bool = None ->
+    whether user is member of the organizer group
+    - is_favorite : bool = None ->
+    filter your favorite event
+    - is_shotgun : bool = None ->
+    filter shotgun events
+    - is_form : bool = None ->
+    filter events containing a form link
+    - is_participating : bool = None ->
+    filter events current user is participating
+
+    Actions
+    -------
+    - GET .../event/ : get the list of event
+    - POST .../event/ : create a new event
+    - GET .../event/<id>/ : get an event
+    - PUT .../event/<id>/ : update an event
+    - DELETE .../event/<id>/ : delete an event
     """
     permission_classes = [permissions.IsAuthenticated, EventPermission]
     serializer_class = EventSerializer
-    lookup_field = 'slug'
-    lookup_url_kwarg = 'slug'
+    lookup_field = 'id'
+    lookup_url_kwarg = 'id'
 
     def get_queryset(self) -> list[Event]:
         # query params
@@ -133,48 +141,22 @@ class EventViewSet(viewsets.ModelViewSet):
             .order_by(*order_by)
             .distinct()
         )
-        print(events.query)
         return events
-        return [e for e in events if e.can_view(self.request.user)]
-
-
-class ListEventsHomeAPIView(generics.ListAPIView):
-    """List all events for a user depending on the chosen
-    time window. By default only returns current events."""
-    serializer_class = EventSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        today = timezone.now()
-        events = Event.objects.filter(date__gte=today).order_by("date")
-        return [e for e in events if e.can_view(self.request.user)]
-
-
-class ListAllEventsGroupAPIView(generics.ListAPIView):
-    """List all events for a group depending on the chosen
-    time window. By default only returns current events."""
-    serializer_class = EventSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        group = self.kwargs["group"]
-        today = timezone.now()
-        events = Event.objects.filter(
-            group_slug=group,
-            date__gte=today).order_by("date")
-        return [e for e in events if e.can_view(self.request.user)]
 
 
 class ListEventsParticipantsAPIView(viewsets.ViewSet):
     """List the persons participating to an event.
-    Only allowed to members of the group to which the event belongs."""
+    Only allowed to members of the group to which the event belongs.
+
+    Actions
+    -------
+    - GET .../event/<slug>/participants"""
     serializer_class = EventParticipatingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
         user = self.request.user
-        event_slug = kwargs['event_slug']
-        event = Event.objects.get(slug=event_slug)
+        event = get_object_or_404(Event, id=self.kwargs['event_id'])
         group = event.group
         if group.is_admin(user):
             serializer = EventParticipatingSerializer(
@@ -184,26 +166,13 @@ class ListEventsParticipantsAPIView(viewsets.ViewSet):
                         data={"detail": "You are not admin of this club"})
 
 
-class ListEventsGroupAPIView(viewsets.ViewSet):
-    """List events for a group depending on the chosen
-    time window. By default only returns current events."""
-    serializer_class = EventSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def list(self):
-        if self.request.method == 'GET':
-            if self.request.GET.get('view') == 'archives':
-                date_lt = timezone.make_aware(timezone.now().today())
-                return Event.objects.filter(
-                    group_slug=self.kwargs['group'], date__lt=date_lt)
-            elif self.request.GET.get('view') == 'all':
-                return Event.objects.filter(group_slug=self.kwargs['group'])
-        date_gte = timezone.make_aware(timezone.now().today())
-        return Event.objects.filter(
-            group=self.kwargs['group'], date__gte=date_gte)
-
-
 class ParticipateAPIView(APIView):
+    """
+    Actions
+    -------
+    - POST .../event/<slug>/participate : participate to an event
+    - DELETE .../event/<slug>/participate : remove participation of an event
+    """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
