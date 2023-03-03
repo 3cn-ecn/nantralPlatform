@@ -11,11 +11,11 @@ export function Month(props: {
   console.log(events);
   return (
     <div>
-      {/* {monthData.map(
+      {monthData.map(
         (week: Array<{ date: number; events: Array<EventProps> }>) => {
-          return <WeekLine week={week} />;
+          return <WeekLine events={events} week={week} />;
         }
-      )} */}
+      )}
       oui
     </div>
   );

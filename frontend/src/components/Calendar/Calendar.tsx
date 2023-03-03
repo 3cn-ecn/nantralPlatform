@@ -797,11 +797,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
       displaySize = week.slice();
       break;
     case 'month':
-      console.log(displayData.beginDate);
       displaySize = week.slice(modulo(beginOfWeek.getDay() - 1, 7));
-      console.log(
-        -(7 - beginOfWeek.getDay()) + numberOfDayInDateMonth(beginOfWeek)
-      );
       for (
         let i = 1;
         i <
