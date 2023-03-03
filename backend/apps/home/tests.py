@@ -60,7 +60,7 @@ class TestHomeView(TestCase, TestMixin):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         # Test if /api/event/ loads
-        url = "api/event"
+        url = "/api/event"
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         # self.assertEqual(len(resp.context["events"]), 3)
