@@ -30,6 +30,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
 import PaletteIcon from '@mui/icons-material/Palette';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
@@ -113,6 +114,8 @@ function NavBarTop(props: {
   const handleCloseS = () => {
     setOpenS(false);
   };
+
+  const isOnBackend = true;
 
   const { t } = useTranslation('translation');
 
@@ -291,6 +294,21 @@ function NavBarTop(props: {
                 }}
               >
                 {t('user_menu.legal')}
+              </ListItem>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={AdminPanelSettingsIcon} />
+              <ListItem
+                component={Link}
+                to="/admin/"
+                className="menuItem"
+                disablePadding
+                reloadDocument={isOnBackend}
+                sx={{
+                  color: 'text.primary',
+                }}
+              >
+                {t('user_menu.admin')}
               </ListItem>
             </MenuItem>
             <MenuItem onClick={handleClickL}>
