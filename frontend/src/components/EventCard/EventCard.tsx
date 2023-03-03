@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import * as React from 'react';
 import './EventCard.scss';
 
@@ -19,6 +18,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
@@ -31,10 +31,20 @@ function InfoItem(props: { name: string; value: string }) {
 
   switch (name) {
     case 'date':
-      icon = <CalendarTodayIcon className="infoItemElement" />;
+      icon = (
+        <CalendarTodayIcon
+          className="infoItemElement"
+          sx={{ fontSize: '1.5em' }}
+        />
+      );
       break;
     case 'time':
-      icon = <AccessTimeIcon className="infoItemElement" />;
+      icon = (
+        <AccessTimeIcon
+          className="infoItemElement"
+          sx={{ fontSize: '1.5em' }}
+        />
+      );
       break;
     default:
   }
@@ -42,9 +52,9 @@ function InfoItem(props: { name: string; value: string }) {
     <div className="infoItem">
       {icon}
       <Typography
+        sx={{ fontSize: '1.2em', paddingLeft: '7px' }}
         variant="subtitle2"
         className="infoItemElement"
-        style={{ paddingLeft: '7px' }}
       >
         {text}
       </Typography>
@@ -77,9 +87,31 @@ function EventCard(props: { event: EventProps }) {
     url: '',
     is_admin: false,
   });
-  React.useEffect(() => {
+  useEffect(() => {
     getGroup();
   }, []);
+
+  const ref = useRef<HTMLHeadingElement>(null);
+  // Scale of the font (multiplier of the browser's base font size)
+  const [rem, setRem] = React.useState<number>(
+    parseFloat(getComputedStyle(document.documentElement).fontSize)
+  );
+
+  const updateDimensions = () => {
+    if (ref.current) {
+      if (ref.current) {
+        setRem(ref.current.offsetWidth / 28.125);
+      }
+    }
+  };
+  // This sets the dimensions on the first render
+  useLayoutEffect(() => {
+    updateDimensions();
+  }, []);
+
+  window.addEventListener('resize', () => {
+    updateDimensions();
+  });
 
   async function getGroup() {
     const response = await axios.get(`/api/group/group/${groupSlug}/`);
@@ -117,7 +149,7 @@ function EventCard(props: { event: EventProps }) {
       </a>
     );
   return (
-    <Card className="eventCard">
+    <Card ref={ref} className="eventCard" sx={{ fontSize: `${rem}px` }}>
       <CardActionArea disableRipple sx={{ fontSize: '1em' }}>
         <CardMedia
           className="banner"
@@ -146,10 +178,16 @@ function EventCard(props: { event: EventProps }) {
               <div className="groupIcon">{groupIcon}</div>
 
               <div className="infos">
-                <Typography variant="h5" className="eventTitle">
+                <Typography
+                  sx={{ fontSize: '1.5em', marginBottom: '0.2em' }}
+                  variant="h5"
+                  className="eventTitle"
+                >
                   {title}
                 </Typography>
-                <Typography variant="caption">{groupName}</Typography>
+                <Typography sx={{ fontSize: '1em' }} variant="caption">
+                  {groupName}
+                </Typography>
               </div>
             </div>
             <div className="infoDetails">
