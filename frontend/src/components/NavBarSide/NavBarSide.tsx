@@ -101,7 +101,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
 
   return (
     <Drawer
-      variant="persistent"
+      variant={window.innerWidth < 2 * drawerWidth ? 'temporary' : 'persistent'}
       open={menuOpen}
       anchor="left"
       sx={{
@@ -111,7 +111,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
           width: drawerWidth,
           boxSizing: 'border-box',
         },
-        zIndex: 0,
+        zIndex: 100,
       }}
     >
       <Toolbar />

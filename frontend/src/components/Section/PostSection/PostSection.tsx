@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Skeleton, useMediaQuery } from '@mui/material';
+import { Badge, Button, Divider, Grid, Skeleton } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { PostCard } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';
-import Carousel from '../../Carousel/Carousel';
-import { theme } from '../../style/palette';
 import { Status } from '../../../Props/GenericTypes';
 
 /**
@@ -20,10 +19,13 @@ export function PostSection(props: {
   title?: string;
   /** Nombre maximal d'éléments à afficher */
   maxItem?: number;
+  /** Nombre d'item à afficher de base */
+  shownItem?: number;
 }) {
-  const { posts, title, maxItem, status } = props;
-  const md: boolean = useMediaQuery(theme.breakpoints.down('md'));
+  const { posts, title, maxItem, status, shownItem } = props;
   const allPosts = maxItem ? posts.slice(0, maxItem) : posts;
+  const { t } = useTranslation('translation');
+  const [showAll, setShowAll] = React.useState<boolean>(false);
   let content;
   switch (status) {
     case 'fail':
@@ -31,29 +33,48 @@ export function PostSection(props: {
       break;
     case 'load':
       content = [0, 1, 2].map((item) => (
-        <div key={item} style={{ padding: 8 }}>
+        <Grid key={item} xs={12} md={4} item>
           <Skeleton key={item} height={110} variant="rectangular" />
-        </div>
+        </Grid>
       ));
       break;
     case 'success':
-      content = allPosts.map((post) => (
-        <div key={post.slug} style={{ padding: 8 }}>
-          <PostCard post={post} />
-        </div>
-      ));
+      content = allPosts
+        .slice(0, showAll ? allPosts.length : shownItem)
+        .map((post) => (
+          <Grid key={post.slug} xs={12} md={4} item>
+            <PostCard post={post} />
+          </Grid>
+        ));
       break;
     default:
       content = [<p key={0}>Nothing to show</p>];
   }
   return (
-    <Carousel itemNumber={md ? 1 : 3} title={`${title} (${posts.length})`}>
-      {content}
-    </Carousel>
+    <>
+      <h2 className="section-title">
+        {title}
+        <Badge
+          badgeContent={posts.length}
+          color="primary"
+          sx={{ marginLeft: 2 }}
+        />
+      </h2>
+      <Grid sx={{ marginTop: 0, marginBottom: 1 }} spacing={1} container>
+        {content}
+      </Grid>
+      <Divider />
+      {allPosts.length > shownItem && (
+        <Button onClick={() => setShowAll((value) => !value)}>
+          {showAll ? t('button.showLess') : t('button.showAll')}
+        </Button>
+      )}
+    </>
   );
 }
 
 PostSection.defaultProps = {
   title: null,
   maxItem: null,
+  shownItem: 3,
 };

@@ -43,8 +43,8 @@ class SimpleGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['name', 'slug', 'url', 'icon']
-        read_only_fields = ['name', 'slug', 'url', 'icon']
+        fields = ['name', 'short_name', 'slug', 'url', 'icon']
+        read_only_fields = ['name', 'short_name', 'slug', 'url', 'icon']
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
