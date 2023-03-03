@@ -498,7 +498,7 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context['group'] = self.object
         context['events'] = (Event.objects
-                             .filter(group_slug=self.object.slug)
+                             .filter(group=self.object)
                              .order_by('-date'))
         context['ariane'] = [
             {
@@ -534,7 +534,7 @@ class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context['group'] = self.object
         context['posts'] = (Post.objects
-                            .filter(group_slug=self.object.slug)
+                            .filter(group=self.object.slug)
                             .order_by('-publication_date'))
         context['ariane'] = [
             {
