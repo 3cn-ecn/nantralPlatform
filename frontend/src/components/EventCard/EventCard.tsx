@@ -18,7 +18,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from 'axios';
-import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
 import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
@@ -86,6 +86,8 @@ function EventCard(props: { event: EventProps }) {
     setGroup(response.data);
   }
 
+  const { i18n } = useTranslation('translation');
+
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
   if (formUrl !== null) variant = 'form';
   else if (maxParticipant === null) variant = 'normal';
@@ -98,8 +100,8 @@ function EventCard(props: { event: EventProps }) {
     month: 'long',
     day: 'numeric',
   };
-  const dateText = dateValue.toLocaleDateString(i18next.language, dateFormat);
-  const hourText = dateValue.toLocaleTimeString(i18next.language, {
+  const dateText = dateValue.toLocaleDateString(i18n.language, dateFormat);
+  const hourText = dateValue.toLocaleTimeString(i18n.language, {
     timeStyle: 'short',
   });
   const groupIcon =
