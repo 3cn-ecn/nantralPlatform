@@ -3,17 +3,36 @@ import { EventProps } from '../../../Props/Event';
 import { WeekLine } from './WeekLine/WeekLine';
 
 export function Month(props: {
-  monthData: Array<Array<any>>;
+  monthWeeks: Array<Array<Array<any>>>;
   events: Array<Array<EventProps>>;
 }) {
-  const { monthData, events } = props;
-  console.log(monthData);
-  console.log(events);
+  const { monthWeeks, events } = props;
+  // console.log(monthWeeks);
+  // console.log(events);
+  let weekIndex = 0;
+  let dayCount = 0;
+  const weeks: Array<
+    Array<{ day: number; date: number; events: Array<EventProps> }>
+  > = [];
+  let tempWeek: Array<{ day: number; date: number; events: Array<EventProps> }>;
+  monthWeeks.forEach((week) => {
+    tempWeek = [];
+    week.forEach((day) => {
+      dayCount += 1;
+      tempWeek.push({ day: day[1], date: dayCount, events: events[dayCount] });
+    });
+    weeks.push(tempWeek);
+  });
   return (
     <div>
-      {monthData.map(
-        (week: Array<{ date: number; events: Array<EventProps> }>) => {
-          return <WeekLine events={events} week={week} />;
+      {weeks.map(
+        (
+          week: Array<{ day: number; date: number; events: Array<EventProps> }>
+        ) => {
+          console.log(week);
+          console.log(`week${weekIndex}`);
+          weekIndex += 1;
+          return <WeekLine key={`week${weekIndex}`} week={week} />;
         }
       )}
       oui

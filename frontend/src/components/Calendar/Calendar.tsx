@@ -688,11 +688,11 @@ function changeDisplay(
       break;
     case 'month':
       newBeginDate.setDate(1);
-      console.log(newBeginDate);
-      console.log(newBeginDate.getMonth());
-      console.log(numberOfDayInDateMonth(newBeginDate));
+      // console.log(newBeginDate);
+      // console.log(newBeginDate.getMonth());
+      // console.log(numberOfDayInDateMonth(newBeginDate));
       newEndDate.setDate(numberOfDayInDateMonth(newBeginDate));
-      console.log(newEndDate);
+      // console.log(newEndDate);
       updateBegin(newBeginDate);
       updateEnd(newEndDate);
       break;
@@ -748,8 +748,8 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     beginOfWeek,
     endOfWeek
   );
-  console.log(sortEvents);
-  console.log(endOfWeek);
+  // console.log(sortEvents);
+  // console.log(endOfWeek);
 
   let eventsWeek: {
     sortEvents: Array<Array<EventProps>>;
@@ -776,7 +776,8 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     ['Dimanche', 7],
   ];
 
-  let displaySize: Array<Array<any>>;
+  // In month view, the display size is composed of multiples weeks, so there ara arrays of days
+  let displaySize: Array<Array<any>> | Array<Array<Array<any>>>;
   switch (displayData.type) {
     case 'day':
       displaySize = week.slice(
@@ -790,14 +791,20 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
         displayData.beginDate + 3
       );
       if (displayData.beginDate + 3 > 6) {
-        displaySize = displaySize.concat(week.slice(0, endOfWeek.getDay() - 1));
+        displaySize = displaySize.concat([
+          week.slice(0, endOfWeek.getDay() - 1),
+        ]);
       }
       break;
     case 'week':
       displaySize = week.slice();
       break;
     case 'month':
-      displaySize = week.slice(modulo(beginOfWeek.getDay() - 1, 7));
+      // console.log(displayData.beginDate);
+      displaySize = [week.slice(modulo(beginOfWeek.getDay() - 1, 7))];
+      // console.log(
+      //   -(7 - beginOfWeek.getDay()) + numberOfDayInDateMonth(beginOfWeek)
+      // );
       for (
         let i = 1;
         i <
@@ -807,13 +814,13 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
           7;
         i++
       ) {
-        displaySize = displaySize.concat(week.slice());
+        displaySize = displaySize.concat([week.slice()]);
       }
       if (endOfWeek.getDay() !== 0) {
-        displaySize = displaySize.concat(week.slice(0, endOfWeek.getDay()));
+        displaySize = displaySize.concat([week.slice(0, endOfWeek.getDay())]);
       }
-      console.log(beginOfWeek, endOfWeek);
-      console.log(displaySize);
+      // console.log(beginOfWeek, endOfWeek);
+      // console.log(displaySize);
       break;
     default:
       throw new Error(`Given display ${displayData.type} not implemented`);
@@ -862,8 +869,8 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
           </Grid>
         ) : (
           <Grid container spacing={0}>
-            <Grid item xs={1}>
-              <Month monthData={displaySize} events={newSortEvents} />
+            <Grid item xs={12}>
+              <Month monthWeeks={displaySize} events={newSortEvents} />
             </Grid>
           </Grid>
         )}
