@@ -80,8 +80,8 @@ function EventCard(props: { event: EventProps }) {
     beginInscription,
     groupName,
   } = event;
-  const [participating, setParticipating] = React.useState(isParticipating);
-  const [groupData, setGroup] = React.useState<ClubProps>({
+  const [participating, setParticipating] = useState(isParticipating);
+  const [groupData, setGroup] = useState<ClubProps>({
     name: '',
     icon: '',
     url: '',
@@ -91,12 +91,16 @@ function EventCard(props: { event: EventProps }) {
     getGroup();
   }, []);
 
+  // Reference of the EventCard
   const ref = useRef<HTMLHeadingElement>(null);
+
   // Scale of the font (multiplier of the browser's base font size)
-  const [rem, setRem] = React.useState<number>(
+  const [rem, setRem] = useState<number>(
     parseFloat(getComputedStyle(document.documentElement).fontSize)
   );
 
+  // Update the font size according to the width of the component.
+  // This allow the component to be scaled proportionally.
   const updateDimensions = () => {
     if (ref.current) {
       if (ref.current) {
@@ -104,11 +108,13 @@ function EventCard(props: { event: EventProps }) {
       }
     }
   };
-  // This sets the dimensions on the first render
+
+  // Sets the dimensions on the first render
   useLayoutEffect(() => {
     updateDimensions();
   }, []);
 
+  // Update the content when the window is resized
   window.addEventListener('resize', () => {
     updateDimensions();
   });
