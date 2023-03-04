@@ -7,8 +7,6 @@ export function Month(props: {
   events: Array<Array<EventProps>>;
 }) {
   const { monthWeeks, events } = props;
-  // console.log(monthWeeks);
-  // console.log(events);
   let weekIndex = 0;
   let dayCount = 0;
   const weeks: Array<
@@ -19,7 +17,11 @@ export function Month(props: {
     tempWeek = [];
     week.forEach((day) => {
       dayCount += 1;
-      tempWeek.push({ day: day[1], date: dayCount, events: events[dayCount] });
+      tempWeek.push({
+        day: day[1],
+        date: dayCount,
+        events: events[dayCount - 1],
+      });
     });
     weeks.push(tempWeek);
   });
@@ -29,8 +31,6 @@ export function Month(props: {
         (
           week: Array<{ day: number; date: number; events: Array<EventProps> }>
         ) => {
-          console.log(week);
-          console.log(`week${weekIndex}`);
           weekIndex += 1;
           return <WeekLine key={`week${weekIndex}`} week={week} />;
         }

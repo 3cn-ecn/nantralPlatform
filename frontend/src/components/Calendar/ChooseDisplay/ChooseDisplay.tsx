@@ -47,7 +47,7 @@ export function ChooseDisplay(props: {
       <Button
         onClick={() => {
           if (display.type !== 'month') {
-            updateDisplay({ type: 'month', beginDate: display.beginDate });
+            updateDisplay({ type: 'month', beginDate: 0 });
           }
         }}
       >

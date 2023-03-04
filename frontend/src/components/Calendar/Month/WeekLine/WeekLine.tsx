@@ -8,12 +8,22 @@ export function WeekLine(props: {
 }): JSX.Element {
   const { week } = props;
   const weekComponent: Array<JSX.Element> = [];
+  let maxEvents = 0;
+  week.forEach((day) => {
+    maxEvents = Math.max(maxEvents, day.events.length);
+  });
+
   if (week.length === 7) {
     week.forEach(
       (day: { day: number; date: number; events: Array<EventProps> }) => {
         weekComponent.push(
-          <Grid item xs={12 / 7}>
-            <DayBlock key={`day${day.day}`} day={day} inMonth></DayBlock>
+          <Grid item key={`gridDay${day.date}`} xs={12 / 7}>
+            <DayBlock
+              key={`day${day.date}`}
+              day={day}
+              maxEventsInDayWeek={maxEvents}
+              inMonth
+            ></DayBlock>
           </Grid>
         );
       }
@@ -21,10 +31,11 @@ export function WeekLine(props: {
   } else if (week[0].date === 1) {
     for (let i = 0; i < 7 - week.length; i++) {
       weekComponent.push(
-        <Grid item xs={12 / 7}>
+        <Grid item key={`previousDay${i - (7 - week.length)}`} xs={12 / 7}>
           <DayBlock
-            key={`day${i - (7 - week.length)}`}
+            key={`previousDay${i - (7 - week.length)}`}
             day={null}
+            maxEventsInDayWeek={0}
             inMonth={false}
           ></DayBlock>
         </Grid>
@@ -33,8 +44,13 @@ export function WeekLine(props: {
     week.forEach(
       (day: { day: number; date: number; events: Array<EventProps> }) => {
         weekComponent.push(
-          <Grid item xs={12 / 7}>
-            <DayBlock key={`day${day.day}`} day={day} inMonth></DayBlock>
+          <Grid item key={`gridDay${day.date}`} xs={12 / 7}>
+            <DayBlock
+              key={`day${day.date}`}
+              day={day}
+              maxEventsInDayWeek={maxEvents}
+              inMonth
+            ></DayBlock>
           </Grid>
         );
       }
@@ -43,18 +59,24 @@ export function WeekLine(props: {
     week.forEach(
       (day: { day: number; date: number; events: Array<EventProps> }) => {
         weekComponent.push(
-          <Grid item xs={12 / 7}>
-            <DayBlock key={`day${day.day}`} day={day} inMonth></DayBlock>
+          <Grid item key={`gridDay${day.date}`} xs={12 / 7}>
+            <DayBlock
+              key={`day${day.date}`}
+              day={day}
+              maxEventsInDayWeek={maxEvents}
+              inMonth
+            ></DayBlock>
           </Grid>
         );
       }
     );
     for (let i = 0; i < 7 - week.length; i++) {
       weekComponent.push(
-        <Grid item xs={12 / 7}>
+        <Grid item key={`gridAfterDay${i}`} xs={12 / 7}>
           <DayBlock
-            key={`day${i - week.length}`}
+            key={`afterDay${i}`}
             day={null}
+            maxEventsInDayWeek={0}
             inMonth={false}
           ></DayBlock>
         </Grid>
