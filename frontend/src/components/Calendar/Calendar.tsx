@@ -4,7 +4,7 @@ import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
 import { EventProps } from 'Props/Event';
 import { modulo, ppcm } from '../../utils/maths';
-import { numberOfDayInDateMonth } from '../../utils/date';
+import { numberOfDayInDateMonth } from './utils';
 import { Day } from './Day/Day';
 import { EventDataProps, CalendarView } from './CalendarProps/CalendarProps';
 import { DayInfos } from './DayInfos/DayInfos';

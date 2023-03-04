@@ -5,7 +5,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import {
   numberOfDayInMonth,
   numberOfDayInDateMonth,
-} from '../../../../utils/date';
+} from '../../utils';
 import { CalendarView } from '../../CalendarProps/CalendarProps';
 import { modulo } from '../../../../utils/maths';
 
