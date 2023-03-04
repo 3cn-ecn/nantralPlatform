@@ -75,7 +75,6 @@ export default function BasicDatePicker(props: {
       <TextField className="textfield" size="small" {...params}></TextField>
     );
   };
-  console.log(value);
   return (
     <LocalizationProvider
       dateAdapter={AdapterDayjs}

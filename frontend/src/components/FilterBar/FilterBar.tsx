@@ -18,10 +18,13 @@ import { Grid } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import { Dayjs } from 'dayjs';
 import SimpleAccordion from '../Accordion/SimpleAccordion';
-import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
+import CheckboxesTags, {
+  AutocompleteField,
+} from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
 import BasicDatePicker from '../DatePicker/BasicDatePicker';
 import { ClubProps } from '../../Props/Club';
+import { FieldType } from '../../../legacy/utils/form';
 
 interface FilterInterface {
   id: string;
@@ -71,18 +74,7 @@ function FilterBar(props: { getFilter: any }) {
   currentFilter.set('participate', isParticipated);
   currentFilter.set('shotgun', isShotgun);
   currentFilter.set('organiser', organiser);
-
-  React.useEffect(() => {
-    axios
-      .get('/api/group/group/', { params: { is_member: false, type: 'club' } })
-      .then((res) => {
-        setGroups(res.data);
-        console.log(groups);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+  console.log(organiser);
 
   const filters: FilterInterface[] = [
     {
@@ -115,6 +107,7 @@ function FilterBar(props: { getFilter: any }) {
         <Grid item xs="auto">
           <CheckboxesTags
             label={t('filterbar.organiser')}
+            tableContent={groups}
             getResult={getOrganiser}
           />
         </Grid>
