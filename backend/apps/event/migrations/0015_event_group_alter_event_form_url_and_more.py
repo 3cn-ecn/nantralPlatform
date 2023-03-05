@@ -4,21 +4,21 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 def migrate_slugs_to_fk(apps, schema_editor) :
-    Event = apps.get_model('event', 'Event')
-    Group = apps.get_model('group', 'Group')
-    for obj in Event.objects.all() :
-        group_object = Group.objects.filter(slug = obj.group_slug)
+    event = apps.get_model('event', 'Event')
+    group = apps.get_model('group', 'Group')
+    for obj in event.objects.all() :
+        group_object = group.objects.filter(slug = obj.group_slug)
         if group_object.exists() :
             obj.group = group_object.first()
         else :
             print("Club" , obj.group_slug , "non reconnu" )
-            obj.group = Group.objects.all().first()
+            obj.group = group.objects.all().first()
             print("Club mis à défaut à " + obj.group.name)
         obj.save()
 
 def migrate_fk_to_slugs(apps, schema_editor) :
-    Event = apps.get_model('event', 'Event')
-    for obj in Event.objects.all() :
+    event = apps.get_model('event', 'Event')
+    for obj in event.objects.all() :
         slug = obj.group.slug
         obj.group_slug = slug
         obj.save()

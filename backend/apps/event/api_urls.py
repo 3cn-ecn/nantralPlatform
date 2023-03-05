@@ -2,9 +2,6 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .api_views import (
-    # ListEventsHomeAPIView,
-    # ListAllEventsGroupAPIView,
-    # ListEventsGroupAPIView,
     ListEventsParticipantsAPIView,
     ParticipateAPIView,
     FavoriteAPIView,
