@@ -49,7 +49,7 @@
 
 {% block script %}
 <script>
-  const eventsApiUrl = "/event";
+  const eventsApiUrl = "{% url 'event_api:event-list' %}";
   const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
   const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
   const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";

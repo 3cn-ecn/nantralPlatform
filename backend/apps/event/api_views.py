@@ -80,6 +80,8 @@ class EventViewSet(viewsets.ModelViewSet):
     lookup_url_kwarg = 'id'
 
     def get_queryset(self) -> list[Event]:
+        if not hasattr(self.request.user, 'student'):
+            return
         # query params
         order_by: list[str] = self.request.query_params.get(
             "order_by", "date").split(',')
