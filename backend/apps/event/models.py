@@ -30,16 +30,14 @@ class Event(AbstractPost):
         null=True)
     location = models.CharField(
         max_length=200, verbose_name='Lieu')
-    group_slug = models.SlugField(
-        verbose_name='Groupe organisateur')
     slug = models.SlugField(
         verbose_name='Slug de l\'événement', unique=True, null=True)
     participants = models.ManyToManyField(
         to=Student, verbose_name='Participants', blank=True)
-    form_url = models.CharField(
+    form_url = models.URLField(
         verbose_name='Lien vers la billetterie',
-        blank=True,
         max_length=200,
+        blank=True,
         null=True)
     max_participant = models.IntegerField(
         verbose_name='Nombre de places maximal',
@@ -81,6 +79,8 @@ class Event(AbstractPost):
         self.set_slug(
             f'{self.date.year}-{self.date.month}-{self.date.day}-{self.title}'
         )
+        if (self.form_url == ""):
+            self.form_url = None
         # set end date to 1 hour after begin date if not set
         if (self.end_date is None):
             self.end_date = self.date + timedelta(hours=1)
