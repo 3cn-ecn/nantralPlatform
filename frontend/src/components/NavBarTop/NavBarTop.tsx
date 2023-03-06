@@ -143,7 +143,7 @@ function NavBarTop(props: {
 
   async function getLoggedUser() {
     axios
-      .get('api/student/student/me')
+      .get('/api/student/student/me/')
       .then((res) => {
         setLoggedId(res.data.id.toString());
       })
@@ -246,7 +246,7 @@ function NavBarTop(props: {
               <SvgIcon component={PersonIcon} />
               <ListItem
                 component={Link}
-                to={`/profile/${loggedId}`}
+                to={`/student/${loggedId}`}
                 className="menuItem"
                 disablePadding
                 sx={{

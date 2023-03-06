@@ -3,7 +3,15 @@ import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import * as React from 'react';
 import { useLoaderData, useParams } from 'react-router-dom';
-import { SvgIcon, Typography, Grid, Avatar, Button, Box } from '@mui/material';
+import {
+  SvgIcon,
+  Typography,
+  Grid,
+  Avatar,
+  Button,
+  Box,
+  Input,
+} from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
@@ -14,12 +22,13 @@ import { PostSection } from '../../components/Section/PostSection/PostSection';
 import { PostProps } from '../../Props/Post';
 import { Status } from '../../Props/GenericTypes';
 import { MembershipsStudent } from '../../legacy/group/MembershipsStudent/';
+import { EditProfilModal } from '../../components/FormProfil/FormProfil';
 
 const API_URL = '../../api/student/student/';
 
 function Profile() {
   const [student, setStudent] = React.useState(null);
-  const [faculty, setFaculty] = React.useState<string>('/');
+  const [faculty, setFaculty] = React.useState<string>('Centraliens');
   const { studentId } = useParams();
   const url = API_URL + studentId;
 
@@ -56,6 +65,16 @@ function Profile() {
         break;
     }
   }
+
+  const [openS, setOpenS] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpenS(true);
+  };
+
+  const handleCloseS = () => {
+    setOpenS(false);
+  };
   return (
     <Box container sx={{ mt: 5, ml: 5, mr: 5 }}>
       <Grid container spacing={2}>
@@ -73,18 +92,24 @@ function Profile() {
           </Grid>
           <Grid>
             <Typography variant="h7">
-              {student === null || faculty !== '/'
+              {student === null || faculty !== 'Centraliens'
                 ? faculty
                 : getFaculty(student.faculty)}
             </Typography>
           </Grid>
           <Grid>
             <Typography variant="h7">
-              Année entrée à Centrale: {student !== null ? student.promo : ''}
+              Année d&apos;entrée à Centrale :
+              {student !== null ? student.promo : ''}
             </Typography>
           </Grid>
           <Grid>
-            <Button variant="contained" size="small">
+            <Button
+              variant="contained"
+              size="small"
+              sx={{ mt: 2 }}
+              onClick={handleClickOpen}
+            >
               Modifier mon profil
               <SvgIcon
                 sx={{ display: { xs: 'none', md: 'flex' }, ml: 1 }}
@@ -93,6 +118,7 @@ function Profile() {
                 inheritViewBox
               />
             </Button>
+            <EditProfilModal open={openS} closeModal={handleCloseS} />
           </Grid>
         </Grid>
       </Grid>

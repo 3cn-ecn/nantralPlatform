@@ -12,12 +12,15 @@ import {
   MenuItem,
   InputLabel,
   AutocompleteInputChangeReason,
+  Input,
+  Button,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 import axios from './axios';
+import './form.scss';
 
 export type FieldType =
   | {
@@ -29,6 +32,21 @@ export type FieldType =
       helpText?: string;
       multiline?: boolean;
       rows: int;
+    }
+  | {
+      kind: 'number';
+      name: string;
+      label: string;
+      required?: boolean;
+      min: float;
+      max: float;
+      step: float;
+      default: float;
+    }
+  | {
+      kind: 'picture';
+      name: string;
+      label: string;
     }
   | {
       kind: 'select';
@@ -116,6 +134,35 @@ function FormGroup(props: {
                 />
               </Box>
             );
+          case 'number':
+            return (
+              <Box sx={{ minWidth: 120, mt: 2 }}>
+                <FormControl fullWidth>
+                  <InputLabel id={`${field.name}-number`}>
+                    {field.label}
+                  </InputLabel>
+                  <Input
+                    key={field.name}
+                    id={`${field.name}-number`}
+                    name={field.name}
+                    label={field.label}
+                    value={values[field.name]}
+                    onChange={(e) => handleChange(field.name, e.target.value)}
+                    required={field.required}
+                    margin="normal"
+                    type="number"
+                    defaultValue={field.default}
+                    slotProps={{
+                      input: {
+                        min: field.min,
+                        max: field.max,
+                        step: field.step,
+                      },
+                    }}
+                  />
+                </FormControl>
+              </Box>
+            );
           case 'select':
             return (
               <Box sx={{ minWidth: 120, mt: 2 }}>
@@ -161,6 +208,27 @@ function FormGroup(props: {
                 multiline={field.multiline}
                 rows={field.rows}
               />
+            );
+          case 'picture':
+            return (
+              <Box sx={{ minWidth: 120, mt: 2 }}>
+                <FormControl fullWidth>
+                  <input
+                    style={{ display: 'none' }}
+                    id="contained-button-file"
+                    type="file"
+                  />
+                  <label htmlFor="contained-button-file">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      component="span"
+                    >
+                      Upload
+                    </Button>
+                  </label>
+                </FormControl>
+              </Box>
             );
           case 'date': // date as string
             return (
