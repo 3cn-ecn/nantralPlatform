@@ -15,6 +15,7 @@ export function DayBlock(props: {
           height: `${(maxEventsInDayWeek + 1) * 40}px`,
           border: '1px solid gray',
         }}
+        data-testid="DateBoxTestId"
       >
         {day.date}
         {day.events.map((event) => {
@@ -31,6 +32,7 @@ export function DayBlock(props: {
                 height: `40px`,
                 padding: '0px',
               }}
+              data-testid={`${event.slug}DateBoxButtonTestId`}
             >
               {event.title[0]}
             </Button>

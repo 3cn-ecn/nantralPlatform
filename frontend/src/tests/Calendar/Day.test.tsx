@@ -15,7 +15,10 @@ describe('<Day />', () => {
         chains={[[0]]}
       />
     );
-    // to implement: console.log(component.getByText('GlobalDayContainer').style.transform);expect(component.getByText('GlobalDayContainer').style.transform).toBe(`translate(0px, ${20 * 21.6}px)`);
+    console.log(component.getByTestId('GlobalDayContainer').textContent);
+    // expect(component.getByTestId('GlobalDayContainer').style.transform).toBe(
+    //   `translate(0px, ${20 * 21.6}px)`
+    // );
     expect(component).toMatchSnapshot();
   });
 });

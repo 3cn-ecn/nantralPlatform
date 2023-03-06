@@ -65,6 +65,7 @@
     "@mui/material": "^5.11.6",
     "@mui/x-date-pickers": "^5.0.15",
     "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@turf/helpers": "^6.3.0",
     "@vitejs/plugin-react": "^2.0.0",
     "array-move": "^4.0.0",

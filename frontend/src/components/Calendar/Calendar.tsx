@@ -845,54 +845,8 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   }
 
   const newSortEvents = eventsWeek.sortEvents;
-  const displaySize = updateWeekToDisplay(displayData, beginOfWeek, endOfWeek);
   // In month view, the display size is composed of multiples weeks, so there ara arrays of days
-  // let displaySize: Array<Array<any>> | Array<Array<Array<any>>>;
-  // switch (displayData.type) {
-  //   case 'day':
-  //     displaySize = week.slice(
-  //       displayData.beginDate,
-  //       displayData.beginDate + 1
-  //     );
-  //     break;
-  //   case '3Days':
-  //     displaySize = week.slice(
-  //       displayData.beginDate,
-  //       displayData.beginDate + 3
-  //     );
-  //     if (displayData.beginDate + 3 > 6) {
-  //       displaySize = displaySize.concat([
-  //         week.slice(0, endOfWeek.getDay() - 1),
-  //       ]);
-  //     }
-  //     break;
-  //   case 'week':
-  //     displaySize = week.slice();
-  //     break;
-  //   case 'month':
-  //     if (beginOfWeek.getDate() === 1 && endOfWeek.getDate() === 1) {
-  //       displaySize = [week.slice(modulo(beginOfWeek.getDay() - 1, 7))];
-  //       for (
-  //         let i = 1;
-  //         i <
-  //         (modulo(beginOfWeek.getDay() - 1, 7) +
-  //           numberOfDayInDateMonth(beginOfWeek) -
-  //           6) /
-  //           7;
-  //         i++
-  //       ) {
-  //         displaySize = displaySize.concat([week.slice()]);
-  //       }
-  //       if (endOfWeek.getDay() !== 1) {
-  //         displaySize = displaySize.concat([
-  //           week.slice(0, modulo(endOfWeek.getDay() - 1, 7)),
-  //         ]);
-  //       }
-  //     }
-  //     break;
-  //   default:
-  //     throw new Error(`Given display ${displayData.type} not implemented`);
-  // }
+  const displaySize = updateWeekToDisplay(displayData, beginOfWeek, endOfWeek);
 
   // Update the display and the view
   React.useEffect(() => {

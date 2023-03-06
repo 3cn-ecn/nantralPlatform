@@ -22,7 +22,6 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import * as React from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { formatDate, formatTime } from '../../utils/date';
 import { UnsuscribeModal } from '../Modal/UnsuscribeModal';
 
 import theme from '../../theme';
@@ -190,10 +189,7 @@ function JoinButton({
         return (
           <Typography sx={{ color: '#fff' }}>
             {inscriptionNotStarted
-              ? `${formatDate(
-                  new Date(beginInscription),
-                  'short'
-                )} ${formatTime(new Date(beginInscription), 'short')}`
+              ? `${new Date(beginInscription).toDateString()}`
               : `${people}/${maxPerson}`}
           </Typography>
         );

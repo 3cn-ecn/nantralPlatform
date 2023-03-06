@@ -1,7 +1,8 @@
 import { EventProps } from '../../../Props/Event';
 
 export function createTestEvent(
-  color = 'blue',
+  slug = 'The slug',
+  title = 'The test event',
   beginDate = new Date('2023-02-17T03:24:00'),
   endDate = new Date('2023-02-17T04:24:00'),
   description = 'This is an event to test',
@@ -9,13 +10,12 @@ export function createTestEvent(
   groupName = 'Moi-même',
   groupSlug = 'Mon groupe',
   image = null,
+  color = 'blue',
   isMember = true,
   isParticipating = true,
   location = 'My home',
   numberOfParticipants = 15,
   publicity: 'Pub' = 'Pub',
-  slug = 'The slug',
-  title = 'The test event',
   maxParticipant = null,
   endInscription = null,
   beginInscription = null,

@@ -1,18 +1,24 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { EventProps } from '../../Props/Event';
-import { createTestEvent } from './testElements/testElements';
 import { TimeBlock } from '../../components/Calendar/Day/TimeBlock/TimeBlock';
 
-const event: EventProps = createTestEvent();
-const day: { day: number; date: number; events: Array<EventProps> }
 describe('<DayInfos />', () => {
   it('should display an TimeBlock', async () => {
-    const component = render(
-      <TimeBlock key="TimeBlockTest" day={null} maxEventsInDayWeek={3} inMonth />
+    const oddComponent = render(
+      <TimeBlock key="TimeBlockOddTest" startTime={5} />
     );
-    expect(component.getByRole('button').style.height).toBe('20px');
-    expect(component.getByRole('button').style.padding).toBe('0px');
-    expect(component).toMatchSnapshot();
+
+    const evenComponent = render(
+      <TimeBlock key="TimeBlockEvenTest" startTime={2} />
+    );
+    expect(
+      oddComponent.getByTestId('TimeBlockOddTestId').className.slice(0, 12)
+    ).toBe('TimeBlockOdd');
+    expect(
+      evenComponent.getByTestId('TimeBlockEvenTestId').className.slice(0, 13)
+    ).toBe('TimeBlockEven');
+
+    expect(evenComponent).toMatchSnapshot();
+    expect(oddComponent).toMatchSnapshot();
   });
 });

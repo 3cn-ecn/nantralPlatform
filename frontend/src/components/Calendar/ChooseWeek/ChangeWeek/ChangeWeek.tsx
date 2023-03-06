@@ -2,10 +2,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import {
-  numberOfDayInMonth,
-  numberOfDayInDateMonth,
-} from '../../utils';
+import { numberOfDayInMonth, numberOfDayInDateMonth } from '../../utils';
 import { CalendarView } from '../../CalendarProps/CalendarProps';
 import { modulo } from '../../../../utils/maths';
 
@@ -57,8 +54,7 @@ export function ChangeWeek(props: {
           beginDate.getFullYear(),
           beginDate.getMonth() - 1
         );
-      }
-      if (action === 'next') {
+      } else {
         stepValue = numberOfDayInDateMonth(beginDate);
       }
       break;
@@ -90,39 +86,38 @@ export function ChangeWeek(props: {
           newEndDate.setDate(endDate.getDate() - stepValue);
           updateEnd(newEndDate);
         }}
+        data-testid="ChangeWeekPreviousTestId"
       >
         <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
       </Button>
     );
   }
-  if (action === 'next') {
-    return (
-      <Button
-        variant="outlined"
-        onClick={() => {
-          updateDisplay({
-            type: step.type,
-            beginDate: modulo(step.beginDate + stepValue, 7),
-          });
-          const newBeginDate = new Date(
-            beginDate.getFullYear(),
-            beginDate.getMonth(),
-            beginDate.getDate()
-          );
-          const newEndDate = new Date(
-            endDate.getFullYear(),
-            endDate.getMonth(),
-            endDate.getDate()
-          );
-          newBeginDate.setDate(newBeginDate.getDate() + stepValue);
-          updateBegin(newBeginDate);
-          newEndDate.setDate(endDate.getDate() + stepValue);
-          updateEnd(newEndDate);
-        }}
-      >
-        <ArrowForwardIosIcon></ArrowForwardIosIcon>
-      </Button>
-    );
-  }
-  throw new Error('Appel de ChangeWeek mal effectué');
+  return (
+    <Button
+      variant="outlined"
+      onClick={() => {
+        updateDisplay({
+          type: step.type,
+          beginDate: modulo(step.beginDate + stepValue, 7),
+        });
+        const newBeginDate = new Date(
+          beginDate.getFullYear(),
+          beginDate.getMonth(),
+          beginDate.getDate()
+        );
+        const newEndDate = new Date(
+          endDate.getFullYear(),
+          endDate.getMonth(),
+          endDate.getDate()
+        );
+        newBeginDate.setDate(newBeginDate.getDate() + stepValue);
+        updateBegin(newBeginDate);
+        newEndDate.setDate(endDate.getDate() + stepValue);
+        updateEnd(newEndDate);
+      }}
+      data-testid="ChangeWeekNextTestId"
+    >
+      <ArrowForwardIosIcon></ArrowForwardIosIcon>
+    </Button>
+  );
 }

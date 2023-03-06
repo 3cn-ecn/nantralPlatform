@@ -116,7 +116,7 @@ export function Day(props: {
         <Grid
           container
           key={`Chain${chain}Day${day}`}
-          sx={{ text: 'GlobalDayContainer' }}
+          data-testid="GlobalDayContainer"
         >
           {chain.map((eventKey) => {
             if (eventKey >= 0) {
