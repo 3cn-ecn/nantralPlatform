@@ -5,7 +5,6 @@ from django.shortcuts import reverse
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.post.models import AbstractPost
-from apps.group.models import Group
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
 from datetime import timedelta
@@ -29,8 +28,6 @@ class Event(AbstractPost):
         help_text='Par défaut une heure après la date de début',
         blank=True,
         null=True)
-    group = models.ForeignKey(
-        Group, verbose_name="Organisateur", on_delete=models.CASCADE)
     location = models.CharField(
         max_length=200, verbose_name='Lieu')
     slug = models.SlugField(

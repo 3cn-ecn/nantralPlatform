@@ -7,8 +7,10 @@ from rest_framework.response import Response
 
 from apps.post.models import VISIBILITY
 from .models import Event
+from apps.student.models import Student
 from apps.group.models import Group
 from .serializers import (EventSerializer, EventParticipatingSerializer)
+from apps.student.serializers import StudentSerializer, SimpleStudentSerializer
 
 
 class EventPermission(permissions.BasePermission):
@@ -45,7 +47,7 @@ class EventViewSet(viewsets.ModelViewSet):
     list of attributes to order the result in the form "order=a,b,c".
     In ascending order by defaut. Add "-" in front of row name without
     spaces to sort by descending order
-    - organizer : list[str] = None ->
+    - group : list[str] = None ->
     the slug list of organizers of the form "organizer=a,b,c"
     - from_date : 'yyyy-MM-dd' = None ->
     filter event whose date is greater or equal to from_date
@@ -76,8 +78,6 @@ class EventViewSet(viewsets.ModelViewSet):
     """
     permission_classes = [permissions.IsAuthenticated, EventPermission]
     serializer_class = EventSerializer
-    lookup_field = 'id'
-    lookup_url_kwarg = 'id'
 
     def get_queryset(self) -> list[Event]:
         if not hasattr(self.request.user, 'student'):
@@ -112,9 +112,9 @@ class EventViewSet(viewsets.ModelViewSet):
         # query
         order_by = filter(lambda ord: ord in ORDERS or (
             ord[0] == '-' and ord[1:]) in ORDERS, order_by)
-        user_student = self.request.user.student
-        user_event_pk = user_student.favorite_event.values('pk')
-        my_groups = Group.objects.filter(members=user_student)
+        student: Student = self.request.user.student
+        my_groups = Group.objects.filter(members=student)
+        user_event_pk = student.favorite_event.values('pk')
         # filtering
         events = (
             Event.objects
@@ -122,7 +122,7 @@ class EventViewSet(viewsets.ModelViewSet):
             .filter(
                 Q(member=True) if is_member else Q())
             .filter(~Q(max_participant=None) if is_shotgun else Q())
-            .filter(Q(participants=user_student)
+            .filter(Q(participants=student)
                     if is_participating else Q())
             .filter(Q(pk__in=user_event_pk) if is_favorite else Q())
             .filter(Q(group__slug__in=organizers_slug)
@@ -157,12 +157,17 @@ class ListEventsParticipantsAPIView(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
+        simple: bool = request.query_params.get('simple')
         user = self.request.user
         event = get_object_or_404(Event, id=self.kwargs['event_id'])
         group = event.group
         if group.is_admin(user):
-            serializer = EventParticipatingSerializer(
-                event.participants, many=True)
+            if simple:
+                serializer = SimpleStudentSerializer(
+                    event.participants, many=True)
+            else:
+                serializer = StudentSerializer(
+                    event.participants, many=True)
             return Response(serializer.data)
         return Response(status=403,
                         data={"detail": "You are not admin of this club"})
