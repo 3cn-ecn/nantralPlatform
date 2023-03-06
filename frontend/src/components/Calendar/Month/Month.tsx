@@ -35,7 +35,6 @@ export function Month(props: {
           return <WeekLine key={`week${weekIndex}`} week={week} />;
         }
       )}
-      oui
     </div>
   );
 }
