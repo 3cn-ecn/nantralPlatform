@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 /**
  * The 404 error page when the requested page is not found.
@@ -7,6 +8,7 @@ import { Link } from 'react-router-dom';
  * @returns The NotFound component
  */
 function NotFound() {
+  const { t } = useTranslation('translation');
   return (
     <Box className="container">
       <Box
@@ -17,21 +19,16 @@ function NotFound() {
           padding: 2,
         }}
       >
-        <h1 className="card-title">Erreur 404 - Page introuvable</h1>
-        <p className="card-text">
-          Désolé, il semblerait que cette page n&#39;existe pas...
-        </p>
+        <h1 className="card-title">{t('404.error')}</h1>
+        <p className="card-text">{t('404.notFound')}</p>
       </Box>
       <p>
-        Ce que vous pouvez faire maintenant :
+        {t('404.whatYouCanDo')}
         <ul>
           <li>
-            Si vous pensez que c&#39;est un bug, vous pouvez{' '}
-            <Link to="/">nous le signaler ici</Link>
+            {t('404.bug')} <Link to="/">{t('404.report')}</Link>
           </li>
-          <li>
-            Sinon, retournez à la page d&#39;accueil en cliquant sur le mouton :
-          </li>
+          <li>{t('404.home')}</li>
         </ul>
       </p>
       <Link to="/">
