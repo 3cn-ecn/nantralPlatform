@@ -52,9 +52,10 @@ export function PostCard(props: { post: PostProps }) {
   const { post } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
+  console.log(post);
   React.useEffect(() => {
     axios
-      .get(`api/group/group/${post.group_slug}`)
+      .get(`/api/group/group/${post.groupSlug}/`)
       .then((res) => setClubDetails(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -98,7 +99,7 @@ export function PostCard(props: { post: PostProps }) {
               <p id="post-club">
                 {clubDetails && clubDetails.name}
                 {' • '}
-                {formatDate(new Date(post.publication_date), 'medium')}
+                {formatDate(post.publicationDate, 'medium')}
               </p>
             </div>
             {clubDetails && clubDetails.is_admin && (
@@ -112,7 +113,7 @@ export function PostCard(props: { post: PostProps }) {
                 </IconButton>
               </Tooltip>
             )}
-            {post.page_suggestion && (
+            {post.pageSuggestion && (
               <SeePageButton
                 style={{
                   position: 'absolute',
@@ -121,7 +122,7 @@ export function PostCard(props: { post: PostProps }) {
                   marginRight: 10,
                   marginBottom: 5,
                 }}
-                link={post.page_suggestion}
+                link={post.pageSuggestion}
               />
             )}
           </CardContent>

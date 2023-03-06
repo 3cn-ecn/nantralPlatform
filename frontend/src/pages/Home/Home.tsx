@@ -10,7 +10,7 @@ import './Home.scss';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { isThisWeek } from '../../utils/date';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
-import { PostProps } from '../../Props/Post';
+import { PostProps, postsToCamelCase } from '../../Props/Post';
 import { Status } from '../../Props/GenericTypes';
 
 /**
@@ -25,12 +25,11 @@ function Home() {
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
   const [postsStatus, setPostsStatus] = React.useState<Status>('load');
   const { t } = useTranslation('translation'); // translation module
-  const headerImageURL =
-    'https://www.ec-nantes.fr/medias/photo/carroussel-campus-drone-002_1524738012430-jpg';
+  const headerImageURL = '/static/img/central_background.jpg';
   React.useEffect(() => {
     // fetch events
     axios
-      .get('api/event/', {
+      .get('/api/event/', {
         params: {
           from_date: new Date().toISOString(),
           order_by: 'begin_inscription',
@@ -58,8 +57,9 @@ function Home() {
       });
     // fetch posts
     axios
-      .get('api/post')
+      .get('/api/post')
       .then((res) => {
+        postsToCamelCase(res.data);
         setPosts(res.data);
         setPostsStatus('success');
       })

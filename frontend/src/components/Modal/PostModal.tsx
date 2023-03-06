@@ -68,7 +68,7 @@ export function PostModal(props: {
           >
             <Typography variant="caption" textAlign="right">
               {`Ajouté le ${formatDate(
-                new Date(post.publication_date),
+                post.publicationDate,
                 'short',
                 'short'
               )}`}
@@ -86,7 +86,7 @@ export function PostModal(props: {
             size={60}
           />
         )}
-        {post.page_suggestion && <SeePageButton link={post.page_suggestion} />}
+        {post.pageSuggestion && <SeePageButton link={post.pageSuggestion} />}
       </DialogActions>
     </Dialog>
   );
