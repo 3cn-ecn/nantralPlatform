@@ -105,6 +105,7 @@ export function EditProfilModal(props: {
       aria-labelledby="customized-dialog-title"
       open={open}
       onClose={closeModal}
+      sx={{ minWidth: 700 }}
     >
       <form onSubmit={onSubmit}>
         <DialogTitle sx={{ m: 0, p: 2 }}>
@@ -127,7 +128,7 @@ export function EditProfilModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
-          <Box sx={{ maxWidth: 500 }}>
+          <Box sx={{ minWidth: 500 }}>
             <FormGroup
               fields={formFields}
               values={formValues}

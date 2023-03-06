@@ -14,6 +14,7 @@ import {
   AutocompleteInputChangeReason,
   Input,
   Button,
+  InputAdornment,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -212,21 +213,31 @@ function FormGroup(props: {
           case 'picture':
             return (
               <Box sx={{ minWidth: 120, mt: 2 }}>
-                <FormControl fullWidth>
+                <FormControl fullWidth row>
                   <input
-                    style={{ display: 'none' }}
-                    id="contained-button-file"
+                    hidden
+                    style={{ zIndex: 5000 }}
+                    accept="image/*"
+                    multiple
                     type="file"
                   />
-                  <label htmlFor="contained-button-file">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      component="span"
-                    >
-                      Upload
-                    </Button>
-                  </label>
+                  <TextField
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            disableElevation
+                            sx={{ height: 56, ml: -1.7 }}
+                          >
+                            Upload
+                          </Button>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 </FormControl>
               </Box>
             );
