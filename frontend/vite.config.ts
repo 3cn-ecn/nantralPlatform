@@ -1,33 +1,33 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { visualizer } from 'rollup-plugin-visualizer';
+import svgr from 'vite-plugin-svgr';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import svgr from 'vite-plugin-svgr';
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Entry points for legacy React components not yet compiled in the main one
 const legacyEntryPoints = [
-  'app/sw.ts',
-  'app/app.ts',
-  'club/clubsList.tsx',
-  'group/eventsGroupListUpdate.tsx',
-  'group/postsGroupListUpdate.tsx',
-  'group/groupMembers.tsx',
-  'group/editGroupMembers.tsx',
-  'event/eventsView.tsx',
-  'roommates/colocathlonCard.tsx',
-  'roommates/housingMap.tsx',
-  'roommates/createHousing.tsx',
-  'notification/subscribeButton.tsx',
-  'notification/deviceSubscribeButton.tsx',
+  // 'app/sw.ts',
+  // 'app/app.ts',
+  // 'club/clubsList.tsx',
+  // 'group.old/eventsGroupListUpdate.tsx',
+  // 'group/MembershipsGroup.tsx',
+  // 'group/MembershipsStudent.tsx',
+  // 'event/eventsView.tsx',
+  // 'roommates/colocathlonCard.tsx',
+  // 'roommates/housingMap.tsx',
+  // 'roommates/createHousing.tsx',
+  // 'notification/subscribeButton.tsx',
+  // 'notification/deviceSubscribeButton.tsx',
 ];
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svgr(), react()],
+  plugins: [svgr(), react(), visualizer({ template: 'sunburst' })],
   base: '/static/',
   server: {
     host: 'localhost',
