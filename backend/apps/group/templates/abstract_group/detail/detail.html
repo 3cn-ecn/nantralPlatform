@@ -179,7 +179,7 @@
 
 {% block script %}
 <script>
-    const eventsApiUrl = "{% url 'event_api:list-all-group-events' object.full_slug %}";
+    const eventsApiUrl = "{% url 'api/event?club=' object.full_slug %}";
     const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
     const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
     const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";

@@ -68,7 +68,14 @@ export function ClubSection(props: {
     default:
       content = null;
   }
-  return <AccordionSection content={content} title={title} url={seeMoreUrl} />;
+  return (
+    <AccordionSection
+      content={content}
+      title={title}
+      url={seeMoreUrl}
+      badge={clubs.length}
+    />
+  );
 }
 
 ClubSection.defaultProps = {
