@@ -18,6 +18,7 @@ export function ChooseDisplay(props: {
   return (
     <>
       <Button
+        data-testid="dayButtonTestId"
         onClick={() => {
           if (display.type !== 'day') {
             updateDisplay({ type: 'day', beginDate: display.beginDate });
@@ -27,6 +28,7 @@ export function ChooseDisplay(props: {
         day
       </Button>
       <Button
+        data-testid="monthButtonTestId"
         onClick={() => {
           if (display.type !== '3Days') {
             updateDisplay({ type: '3Days', beginDate: display.beginDate });
@@ -36,6 +38,7 @@ export function ChooseDisplay(props: {
         3Days
       </Button>
       <Button
+        data-testid="weekButtonTestId"
         onClick={() => {
           if (display.type !== 'week') {
             updateDisplay({ type: 'week', beginDate: 0 });
@@ -45,6 +48,7 @@ export function ChooseDisplay(props: {
         week
       </Button>
       <Button
+        data-testid="monthButtonTestId"
         onClick={() => {
           if (display.type !== 'month') {
             updateDisplay({ type: 'month', beginDate: 0 });

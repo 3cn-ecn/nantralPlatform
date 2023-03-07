@@ -3,6 +3,11 @@ import { Grid } from '@mui/material';
 import { EventProps } from 'Props/Event';
 import { DayBlock } from './DayBlock/DayBlock';
 
+/**
+ * The component that displays the line for each week in the month view of the calendar.
+ * @param week An array of day with the corresponding events.
+ * @returns A WeekLine in the month view of the calendar.
+ */
 export function WeekLine(props: {
   week: Array<{ day: number; date: number; events: Array<EventProps> }>;
 }): JSX.Element {
