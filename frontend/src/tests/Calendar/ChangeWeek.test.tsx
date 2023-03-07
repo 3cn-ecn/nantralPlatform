@@ -48,9 +48,32 @@ const updateNewDisplay = (newDisplay: {
   newDisplayData = newDisplay;
 };
 
+const lastBeginDate = new Date('2023-09-14T03:24:00');
+const setLastBeginDate = (newDate: Date) => {
+  newBeginDate = newDate;
+};
+const lastEndDate = new Date('2023-09-16T03:24:00');
+const setLastEndDate = (newDate: Date) => {
+  newEndDate = newDate;
+};
+const lastDisplayData: {
+  type: CalendarView;
+  beginDate: number;
+} = {
+  type: 'month',
+  beginDate: 0,
+};
+const updateLastDisplay = (newDisplay: {
+  type: CalendarView;
+  beginDate: number;
+}) => {
+  newDisplayData = newDisplay;
+};
+
+const user = userEvent.setup();
+
 describe('<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rerender', () => {
   it('should display a ChangeWeek (week and 3Daays)', async () => {
-    const user = userEvent.setup();
     const previousComponent = render(
       <ChangeWeek
         key="ChangeWeekTest"
@@ -89,7 +112,6 @@ describe('<ChangeWeek />; only changes the date of the number of days, does not 
   });
 
   it('should display an other ChangeWeek (day and month)', async () => {
-    const user = userEvent.setup();
     const previousComponent = render(
       <ChangeWeek
         key="ChangeWeekTest"
@@ -126,5 +148,25 @@ describe('<ChangeWeek />; only changes the date of the number of days, does not 
 
     expect(previousComponent).toMatchSnapshot();
     expect(nextComponent).toMatchSnapshot();
+  });
+
+  it('should display an other ChangeWeek (month previous)', async () => {
+    const component = render(
+      <ChangeWeek
+        key="ChangeWeekTest"
+        action="previous"
+        step={lastDisplayData}
+        updateDisplay={updateLastDisplay}
+        beginDate={lastBeginDate}
+        endDate={lastEndDate}
+        updateBegin={setLastBeginDate}
+        updateEnd={setLastEndDate}
+      />
+    );
+
+    await user.click(component.getByTestId('ChangeWeekPreviousTestId'));
+    expect(newBeginDate.getMonth()).toBe(7);
+
+    expect(component).toMatchSnapshot();
   });
 });
