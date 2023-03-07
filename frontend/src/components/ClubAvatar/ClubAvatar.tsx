@@ -25,7 +25,7 @@ function ClubAvatar(props: {
         display: 'flex',
       }}
     >
-      <IconButton href={clubUrl}>
+      <IconButton href={clubUrl} sx={{ padding: 0, margin: 1 }}>
         <Avatar
           alt=""
           src={logoUrl}

@@ -57,7 +57,7 @@ export function PostSection(props: {
         <Badge
           badgeContent={posts.length}
           color="primary"
-          sx={{ marginLeft: 2 }}
+          sx={{ marginLeft: 2, zIndex: 0 }}
         />
       </h2>
       <Grid sx={{ marginTop: 0, marginBottom: 1 }} spacing={1} container>
@@ -65,7 +65,7 @@ export function PostSection(props: {
       </Grid>
       <Divider />
       {allPosts.length > shownItem && (
-        <Button onClick={() => setShowAll((value) => !value)}>
+        <Button onClick={() => setShowAll(!showAll)}>
           {showAll ? t('button.showLess') : t('button.showAll')}
         </Button>
       )}

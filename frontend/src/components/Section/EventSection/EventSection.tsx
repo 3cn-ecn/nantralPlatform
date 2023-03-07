@@ -69,7 +69,14 @@ export function EventSection(props: {
     default:
       content = null;
   }
-  return <AccordionSection title={title} content={content} url={seeMoreUrl} />;
+  return (
+    <AccordionSection
+      title={title}
+      badge={events.length}
+      content={content}
+      url={seeMoreUrl}
+    />
+  );
 }
 
 EventSection.defaultProps = {

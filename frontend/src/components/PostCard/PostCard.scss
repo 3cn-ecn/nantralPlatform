@@ -23,9 +23,10 @@
 }
 
 #card-image {
+  padding: 0.5em;
   width: 30%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 #post-container {
@@ -66,6 +67,8 @@
 
 #image {
   width : 100%;
+  object-fit: contain;
   position: relative;
-  align-self: center; 
+  align-self: center;
+  max-height: 500px;
 }

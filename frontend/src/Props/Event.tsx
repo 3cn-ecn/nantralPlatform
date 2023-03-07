@@ -1,6 +1,7 @@
 import { snakeToCamelCase } from '../utils/camel';
 
 export interface EventProps {
+  id?: number;
   color: string | null; // Color of the event card
   beginDate: Date; // Event begin date in Date format
   endDate: Date; // Event begin date in Date format

@@ -9,7 +9,6 @@ from django_ckeditor_5.fields import CKEditor5Field
 from apps.utils.slug import SlugModel
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
-from apps.group.abstract.models import AbstractGroup
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
 
@@ -38,9 +37,10 @@ class AbstractPost(models.Model, SlugModel):
         help_text="Entrez la date au format JJ/MM/AAAA HH:MM")
     title = models.CharField(
         max_length=200, verbose_name='Titre de l\'annonce')
+    group = models.ForeignKey(
+        Group, verbose_name="Organisateur", on_delete=models.CASCADE)
     description = CKEditor5Field(
         verbose_name='Texte de l\'annonce', blank=True)
-    group_slug = models.SlugField(verbose_name='Groupe publiant l\'annonce')
     slug = models.SlugField(verbose_name='Slug de l\'annonce',
                             unique=True, null=True)
     color = models.CharField(max_length=200, verbose_name='Couleur de fond',
@@ -57,18 +57,18 @@ class AbstractPost(models.Model, SlugModel):
     class Meta:
         abstract = True
 
-    @property
-    def group(self) -> AbstractGroup:
-        return get_object_or_404(Group, slug=self.group_slug)
-
     def save(self, *args, **kwargs):
         # compression des images
         self.image = compress_model_image(
-            self, 'image', size=(960, 540), contains=False)
-        super(AbstractPost, self).save(*args, **kwargs)
+            self, 'image', size=(960, 540), contains=True)
+        # save the notification
+        self.create_notification(
+            title=self.group.name,
+            body=self.title)
         # send the notification
-        if not self.notification.sent:
+        if self.notification and not self.notification.sent:
             self.notification.send()
+        super(AbstractPost, self).save(*args, **kwargs)
 
     def can_view(self, user: User) -> bool:
         if self.publicity == VISIBILITY[0][0]:
@@ -84,16 +84,17 @@ class AbstractPost(models.Model, SlugModel):
             title=title,
             body=body,
             url=self.get_absolute_url(),
-            sender=self.group_slug,
+            sender=self.group.slug,
             date=self.publication_date,
             icon_url=(self.group.icon.url
                       if self.group.icon else None),
             publicity=self.publicity
         )
         # add image
-        if self.image:
-            self.notification.image_url = self.image.url
-            self.notification.save()
+        # if self.image:
+        #     self.notification.icon_url = compress_model_image(
+        #         self, 'image', size=(960, 540), contains=True)
+        #     self.notification.save()
         # add actions to the notification
         NotificationAction.objects.create(
             notification=self.notification,
@@ -107,7 +108,8 @@ class AbstractPost(models.Model, SlugModel):
         )
 
     def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
-        self.notification.delete()
+        if self.notification:
+            self.notification.delete()
         return super().delete(*args, **kwargs)
 
 
@@ -125,10 +127,6 @@ class Post(AbstractPost):
         self.set_slug(
             f'{d.year}-{d.month}-{d.day}-{self.title}'
         )
-        # save the notification
-        self.create_notification(
-            title=self.group.name,
-            body=self.title)
         # save agin the post
         super(Post, self).save(*args, **kwargs)
 
@@ -136,6 +134,9 @@ class Post(AbstractPost):
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
         return reverse('post:detail', args=[self.slug])
+
+    def __str__(self) -> str:
+        return self.group.name + " - " + self.title
 
     @staticmethod
     def get_post_by_slug(slug: str):
