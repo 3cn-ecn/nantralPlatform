@@ -723,7 +723,7 @@ function updateWeekToDisplay(
   },
   beginOfWeek: Date,
   endOfWeek: Date
-): Array<Array<any>> | Array<Array<Array<any>>> {
+): Array<Array<any>> | Array<Array<[string, number]>> {
   const week = [
     ['Lundi', 1],
     ['Mardi', 2],

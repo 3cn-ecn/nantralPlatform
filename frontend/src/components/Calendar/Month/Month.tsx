@@ -3,7 +3,7 @@ import { EventProps } from '../../../Props/Event';
 import { WeekLine } from './WeekLine/WeekLine';
 
 export function Month(props: {
-  monthWeeks: Array<Array<Array<any>>>;
+  monthWeeks: Array<Array<[string, number]>>;
   events: Array<Array<EventProps>>;
 }) {
   const { monthWeeks, events } = props;
