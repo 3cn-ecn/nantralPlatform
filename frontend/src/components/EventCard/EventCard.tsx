@@ -144,19 +144,19 @@ function EventCard(props: { event: EventProps }) {
   });
   const groupIcon =
     typeof groupData.icon === 'undefined' ? (
-      <CircularProgress size="3.75em" />
+      <CircularProgress size="3.75rem" />
     ) : (
       <a href={window.location.origin + groupData.url}>
         <Avatar
           alt={groupData.name}
           src={groupData.icon}
-          sx={{ fontSize: '1em', width: '3.75em', height: '3.75em' }}
+          sx={{ fontSize: '1rem', width: '3.75rem', height: '3.75rem' }}
         />
       </a>
     );
   return (
     <Card ref={ref} className="eventCard" sx={{ fontSize: `${rem}px` }}>
-      <CardActionArea disableRipple sx={{ fontSize: '1em' }}>
+      <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
         <CardMedia
           className="banner"
           component="img"
@@ -167,14 +167,14 @@ function EventCard(props: { event: EventProps }) {
           className="favIcon"
           eventSlug={slug}
           selected={isFavorite}
-          size="3em"
+          size="2rem"
         />
         <MoreActionsButton
           isAdmin={groupData.is_admin}
           className="moreActions"
           shareUrl={window.location.origin + getAbsoluteUrl}
           slug={slug}
-          size="2em"
+          size="r2em"
           participating={participating}
           setParticipating={setParticipating}
         />
@@ -185,13 +185,13 @@ function EventCard(props: { event: EventProps }) {
 
               <div className="infos">
                 <Typography
-                  sx={{ fontSize: '1.5em', marginBottom: '0.2em' }}
+                  sx={{ fontSize: '1.3rem', marginBottom: '0.2rem' }}
                   variant="h5"
                   className="eventTitle"
                 >
                   {title}
                 </Typography>
-                <Typography sx={{ fontSize: '1em' }} variant="caption">
+                <Typography sx={{ fontSize: '1rem' }} variant="caption">
                   {groupName}
                 </Typography>
               </div>
@@ -199,19 +199,20 @@ function EventCard(props: { event: EventProps }) {
             <div className="infoDetails">
               <InfoItem name="date" value={dateText} />
               <InfoItem name="time" value={hourText} />
-              <div className="joinButton">
-                <JoinButton
-                  variant={variant}
-                  person={numberOfParticipants}
-                  maxPerson={maxParticipant}
-                  participating={participating}
-                  eventSlug={slug}
-                  link={formUrl}
-                  beginInscription={beginInscription}
-                  endInscription={endInscription}
-                  setParticipating={setParticipating}
-                />
-              </div>
+            </div>
+            <div className="joinButton">
+              <JoinButton
+                variant={variant}
+                person={numberOfParticipants}
+                maxPerson={maxParticipant}
+                participating={participating}
+                eventSlug={slug}
+                link={formUrl}
+                beginInscription={beginInscription}
+                endInscription={endInscription}
+                setParticipating={setParticipating}
+                sx={{ width: '100%' }}
+              />
             </div>
           </div>
         </CardContent>
