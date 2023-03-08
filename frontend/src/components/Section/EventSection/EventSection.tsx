@@ -36,9 +36,10 @@ export function EventSection(props: {
   maxItem?: number;
   /** url relative du bouton voir plus */
   seeMoreUrl?: string;
+  collapsable?: boolean;
 }) {
   const { t } = useTranslation('translation'); // translation module
-  const { status, events, title, maxItem, seeMoreUrl } = props;
+  const { status, events, title, maxItem, seeMoreUrl, collapsable } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allEvents = maxItem ? events.slice(0, maxItem) : events;
   switch (status) {
@@ -75,6 +76,7 @@ export function EventSection(props: {
       badge={events.length}
       content={content}
       url={seeMoreUrl}
+      collapsable={collapsable}
     />
   );
 }
@@ -83,4 +85,5 @@ EventSection.defaultProps = {
   title: null,
   maxItem: null,
   seeMoreUrl: null,
+  collapsable: true,
 };

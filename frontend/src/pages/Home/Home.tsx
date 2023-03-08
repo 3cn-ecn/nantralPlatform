@@ -112,6 +112,7 @@ function Home() {
             status={eventsStatus}
             seeMoreUrl="/event"
             title={t('home.thisWeek')}
+            collapsable={false}
           />
           <EventSection
             events={events.filter(

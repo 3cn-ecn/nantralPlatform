@@ -16,9 +16,41 @@ export function AccordionSection(props: {
   url?: string;
   content: JSX.Element | Array<JSX.Element>;
   badge?: number;
+  collapsable?: boolean;
 }) {
-  const { url, content, title, badge } = props;
+  const { url, content, title, badge, collapsable } = props;
   const [expanded, setExpanded] = React.useState<boolean>(true);
+  if (collapsable) {
+    return (
+      <>
+        <NavLink to={url} className="see-more">
+          <Button
+            sx={{
+              textTransform: 'none',
+              color: 'text.primary',
+              ':hover': {
+                textDecoration: 'underline',
+                bgcolor: 'transparent',
+              },
+            }}
+          >
+            <h1 className="section-title">{title}</h1>
+            {badge > 0 && (
+              <Badge
+                badgeContent={badge}
+                color="primary"
+                sx={{ margin: 2.5, zIndex: 0 }}
+              />
+            )}
+          </Button>
+        </NavLink>
+        <Grid spacing={2} container className="event-grid">
+          {content}
+        </Grid>
+      </>
+    );
+  }
+
   return (
     <Accordion
       variant="outlined"
@@ -64,4 +96,5 @@ export function AccordionSection(props: {
 AccordionSection.defaultProps = {
   badge: 0,
   url: null,
+  collapsable: true,
 };
