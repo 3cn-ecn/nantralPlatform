@@ -25,7 +25,7 @@ import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
 import { ReactComponent as AcademicIcon } from '../../assets/scalable/academic.svg';
 
 /** Interface for all links */
-interface linksInterface {
+interface LinksInterface {
   text: string; // the text of the link
   url: string;
   icon?: any;
@@ -45,7 +45,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
   const { menuOpen, drawerWidth } = props;
   const { t } = useTranslation('translation'); // translation module
 
-  const links: linksInterface[] = [
+  const links: LinksInterface[] = [
     {
       text: t('navbar.home'),
       url: '/',
