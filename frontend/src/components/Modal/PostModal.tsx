@@ -11,7 +11,6 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { PostProps } from 'Props/Post';
-import { formatDate } from '../../utils/date';
 import { ClubProps } from '../../Props/Club';
 import { theme } from '../style/palette';
 import ClubAvatar from '../ClubAvatar/ClubAvatar';
@@ -67,11 +66,7 @@ export function PostModal(props: {
             }}
           >
             <Typography variant="caption" textAlign="right">
-              {`Ajouté le ${formatDate(
-                new Date(post.publication_date),
-                'short',
-                'short'
-              )}`}
+              {`Ajouté le ${new Date(post.publication_date).toDateString()}`}
             </Typography>
           </div>
         </DialogContentText>

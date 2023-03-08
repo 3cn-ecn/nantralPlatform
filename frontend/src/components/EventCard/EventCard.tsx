@@ -55,6 +55,7 @@ function InfoItem(props: { name: string; value: string }) {
         sx={{ fontSize: '1.2em', paddingLeft: '7px' }}
         variant="subtitle2"
         className="infoItemElement"
+        style={{ paddingLeft: '7px' }}
       >
         {text}
       </Typography>
