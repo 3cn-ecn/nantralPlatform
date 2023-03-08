@@ -110,6 +110,13 @@ class LegalMentionsView(TemplateView):
         return context
 
 
+@login_required
+@require_http_methods(["GET"])
+def react_app_view(request):
+    response = render(request, 'base_empty.html')
+    return response
+
+
 # SHORTCUT AND REDIRECT VIEWS
 
 @require_http_methods(["GET"])
@@ -168,6 +175,8 @@ def offline_view(request):
     response = render(request, 'home/offline.html')
     return response
 
+
+# ERROR PAGES VIEWS
 
 @require_http_methods(["GET", "POST", "PUT", "DELETE"])
 def handler403(request, *args, **argv):

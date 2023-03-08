@@ -17,11 +17,20 @@
     ```
     make unix-install
     ```
-* Start the server:
+* Start the back end server:
     ```
     cd backend/ && pipenv run start
     ```
-    The server is launch on [http://localhost:8000](http://localhost:8000). The administration panel is available at [http://localhost:8000/admin](http://localhost:8000/admin), with the default account `admin/admin`.
+* Start the front end server (in another terminal):
+    ```
+    cd frontend/ && npm run start
+    ```
+* Access the login page on [http://localhost:8000](http://localhost:8000) and
+    create your account. 
+* Access the administration panel at 
+    [http://localhost:8000/admin](http://localhost:8000/admin) with the default
+    account `admin/admin`, grant yourself admin rights, and then log back into
+    your account.
 
 ## Contribute
 

@@ -1,0 +1,30 @@
+.secondary-text {
+  color: gray;
+}
+
+.search-box {
+  width: 400px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+  }
+
+  .search-input {
+    padding: 5px 0 !important;
+
+    &::after, &::before {
+      display: none;
+    }
+
+    svg {
+      color: white;
+    }
+
+    input {
+      margin-left: 5px;
+      color: white;
+    }
+  }
+}

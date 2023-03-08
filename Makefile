@@ -40,7 +40,7 @@ update:
 	$(PYTHON) -m pip install --upgrade --user pipenv
 	cd frontend && \
 		npm install && \
-		npm run build:dev
+		npm run leg:build:dev
 	cd backend && \
 		$(PIPENV) sync --dev && \
 		$(PIPENV) run migrate
@@ -54,18 +54,16 @@ test:
 
 
 # Run the backend server
-.PHONY: start-backend
-start-backend:
-	python -c 'import webbrowser && webbrowser.open("localhost:8000")'
-	cd backend && \
-		$(PIPENV) run start
+.PHONY: backend-start
+backend-start:
+	cd backend && $(PIPENV) run start
 
 
 # Run the frontend
-.PHONY: start-frontend
-start-frontend:
-	cd frontend && \
-		npm run start
+.PHONY: frontend-start
+frontend-start:
+	$(PYTHON) -c 'import webbrowser, time; time.sleep(3); webbrowser.open("localhost:8000")' &
+	cd frontend && npm run start
 
 
 # Test the quality of code

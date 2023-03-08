@@ -87,6 +87,7 @@ class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
         user = self.request.user
         group_type = GroupType.objects.filter(
             slug=self.request.query_params.get('type')).first()
+        filter_is_member = self.request.query_params.get('is_member', False)
         return (Group.objects
                 # filter by group_type
                 .filter(Q(group_type=group_type) if group_type else Q())
@@ -95,6 +96,8 @@ class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
                         | Q(parent__in=F('group_type__extra_parents')))
                 # hide archived groups
                 .filter(archived=False)
+                # filter by groups where current user is member
+                .filter(Q(members=user.student) if filter_is_member else Q())
                 # hide private groups unless user is member
                 # and hide non-public group if user is not authenticated
                 .filter(Q(private=False) | Q(members=user.student)

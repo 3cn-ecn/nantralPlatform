@@ -1,0 +1,9 @@
+@import '../../theme.scss';
+
+a.navlink {
+
+  
+  &.active {
+    color: $primary-red-color;
+  }
+}

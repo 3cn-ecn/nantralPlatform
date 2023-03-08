@@ -1,0 +1,139 @@
+{
+  "button": {
+    "cancel": "annuler",
+    "joinButton": {
+      "register": "s'inscrire",
+      "registerLink": "lien d'inscription",
+      "shotgunClosed": "shotgun fermé",
+      "title": "Voulez-vous vous désinscrire de cet événements ?",
+      "unsuscribe": "se désinscrire"
+    },
+    "seePage": "Voir la page",
+    "showAll": "Tout afficher",
+    "showLess": "Afficher moins"
+  },
+  "date_picker": {
+    "language": "fr"
+  },
+  "event": {
+    "action_menu": {
+      "edit": "Modifier",
+      "linkCopied": "Lien copié",
+      "share": "Partager",
+      "unsubscribe": "Se désinscrire"
+    },
+    "error": "Erreur lors du chargement des évènements",
+    "membersOnly": "Membres uniquement",
+    "no_event": "Aucun évènement"
+  },
+  "filterbar": {
+    "button_filter": "Filtrer",
+    "date": "Date",
+    "favorite": "Favoris",
+    "from": "À partir du",
+    "organiser": "Organisateur",
+    "participating": "Je participe",
+    "shotgun": "Shotgun",
+    "title_filter": "Filtres",
+    "to": "Jusqu'au",
+    "validate_button": "Valider"
+  },
+  "home": {
+    "announcement": "Annonces",
+    "highlighted": "À la une",
+    "myClubs": "Mes Clubs & Assos",
+    "myEvents": "Mes événements",
+    "seeMore": "voir plus",
+    "thisWeek": "Cette semaine",
+    "upcomingEvents": "Évènements à venir",
+    "welcomeTo": "Bienvenue sur"
+  },
+  "legalNotice": {
+    "paragraphs": {
+      "1": {
+        "lines": {
+          "1": "Nom du site web : Nantral Platform",
+          "2": "Adresse : https://www.nantral-platform.fr",
+          "3": "Propriétaire : Association des Étudiants de l'École Centrale de Nantes"
+        }
+      },
+      "2": {
+        "lines": {
+          "1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
+          "2": "École Centrale de Nantes, 1 rue de la Noë, 44300 Nantes",
+          "3": "SIREN : 790 010 078",
+          "4": "APE : 9499Z",
+          "5": "N° TVA Intra : FR 49 79 00 10 07 8",
+          "6": "Mail : bde@ec-nantes.fr"
+        }
+      },
+      "3": "CLUB NANTRAL PLATFORM",
+      "4": {
+        "lines": {
+          "1": "OVH",
+          "2": "SAS au capital de 10 069 020 €",
+          "3": "RCS Lille Métropole 424 761 419 00045",
+          "4": "Code APE : 2620Z",
+          "5": "N° TVA : FR 22 42 47 61 41 9",
+          "6": "Siège social : 2 rue Kellermann - 59100 Roubaix - France"
+        }
+      },
+      "5": {
+        "lines": {
+          "1": "Sauf mention contraire, tous les éléments accessibles sur le site (textes, images, logo, icônes, sons, logiciels, etc.) restent la propriété exclusive de leurs auteurs, en ce qui concerne les droits de propriété intellectuelle ou les droits d’usage.",
+          "2": "Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de l’auteur.",
+          "3": "Toute exploitation non autorisée du site ou d'un quelconque élément qu’il contient est considérée comme constitutive d’une contrefaçon et poursuivie.",
+          "4": "Les marques et logos reproduits sur le site sont déposés par les sociétés qui en sont propriétaires."
+        }
+      },
+      "6": "Seul un cookie de session est utilisé sur le site et expire après 14 jours.",
+      "7": "Les contenus de ce site peuvent inclure du contenu provenant de sources extérieures (par exemple les vidéos, images, etc…). Ces contenus embarqués agissent de la même manière que si le visiteur avait visité le site original où repose ce contenu. Ces sites peuvent donc utiliser des cookies supplémentaires.",
+      "8": "Lors de votre inscription sur le site, les données personnelles que vous nous transmettez seront stockées et conservées par l’Association des Étudiants de l’École Centrale de Nantes jusqu’à demande de suppression de votre compte utilisateur à l’aide du formulaire de contact"
+    },
+    "subtitles": {
+      "1": "Identité du site",
+      "2": "L'association",
+      "3": "Conception et réalisation",
+      "4": "Hébergement",
+      "5": "Propriété intellectuelle",
+      "6": "Cookies",
+      "7": "Contenu embarqué depuis d'autres sites",
+      "8": "Traitement des données personnelles"
+    },
+    "title": "Mentions Légales"
+  },
+  "navbar": {
+    "academics": "Cours et Formations",
+    "administration": "Administration",
+    "bdx": "Listes BDX",
+    "clubs": "Clubs et assos",
+    "events": "Évènements",
+    "family": "Parrainage",
+    "flatshare": "Carte des colocs",
+    "home": "Accueil",
+    "signature": "Signature ECN",
+    "student": "Annuaire Étudiant"
+  },
+  "notif": {
+    "load": "Charger Plus",
+    "subscribed": "Abonné",
+    "title": "Notifications",
+    "unread": "Non Lu"
+  },
+  "user_menu": {
+    "automatic": "Automatique",
+    "bug": "Suggestion / Bug",
+    "dark": "Thème sombre",
+    "doc": "Documentation",
+    "english": "Anglais",
+    "french": "Français",
+    "language": "Langue",
+    "legal": "Mentions Légales",
+    "light": "Thème clair",
+    "logout": "Se déconnecter",
+    "profile": "Mon Profil",
+    "theme": "Thème",
+    "title_language": "Langage",
+    "title_theme": "Thème"
+  }
+}

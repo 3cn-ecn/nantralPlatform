@@ -22,38 +22,42 @@
  * @date July 2022
  */
 
-const path = require("path");
+import esbuild from 'esbuild';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const appsdir = path.join(__dirname, "src/containers");
+// eslint-disable-next-line no-underscore-dangle
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const appsdir = path.join(__dirname, 'src/legacy');
 
 const entryPoints = [
-  "app/sw.ts",
-  "app/app.ts",
-  "club/clubsList.tsx",
-  "group.old/eventsGroupListUpdate.tsx",
-  "group/MembershipsGroup.tsx",
-  "group/MembershipsStudent.tsx",
-  "event/eventsView.tsx",
-  "roommates/colocathlonCard.tsx",
-  "roommates/housingMap.tsx",
-  "roommates/createHousing.tsx",
-  "notification/subscribeButton.tsx",
-  "notification/deviceSubscribeButton.tsx",
+  'app/sw.ts',
+  'app/app.ts',
+  'club/clubsList.tsx',
+  'group.old/eventsGroupListUpdate.tsx',
+  'group/MembershipsGroup.tsx',
+  'group/MembershipsStudent.tsx',
+  'event/eventsView.tsx',
+  'roommates/colocathlonCard.tsx',
+  'roommates/housingMap.tsx',
+  'roommates/createHousing.tsx',
+  'notification/subscribeButton.tsx',
+  'notification/deviceSubscribeButton.tsx',
 ];
 
 // Parse arguments
-const watch = process.argv[2] === "watch";
-const dev = process.argv[2] === "dev";
+const watch = process.argv[2] === 'watch';
+const dev = process.argv[2] === 'dev' || watch;
 
-require("esbuild")
+esbuild
   .build({
     entryPoints: entryPoints.map((e) => path.join(appsdir, e)),
     bundle: true,
-    sourcemap: dev || watch,
-    minify: !dev && !watch,
-    outdir: path.join(__dirname, "../backend/static/js"),
-    logLevel: "info",
+    minify: !dev,
+    sourcemap: dev,
     watch: watch,
+    outdir: path.join(__dirname, '../backend/static/js'),
+    logLevel: 'info',
   })
   .catch((err) => {
     console.error(err);

@@ -1,0 +1,68 @@
+.header {
+  position : relative;
+  display : flex;
+  width : 100%;
+  align-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: white;
+}
+.header-image {
+  width : 100%;
+  fill: cover;
+  height: 12.5em;
+  object-fit: cover;
+  filter: blur(6px) opacity(0.4);
+  transform: scale(1.1);
+
+}
+#header-title {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+}
+#main-title {
+  display: flex;
+  font-size: min(10vw,3.4em);
+  font-family: "Heebo", sans-serif;
+  font-weight: 900;
+  line-height: 0.1em;
+  color : #232323;
+  text-align: center;
+  text-shadow: 10px 10px 25px rgb(163, 163, 163),
+  -10px 10px 25px rgb(149, 147, 137);
+  word-break: keep-all;
+  justify-content: center;
+  margin : 0px;
+  padding-left: 0.2em;
+  position: relative;
+}
+#second-title {
+  font-size: min(6vw,1.6em);
+  position: relative;
+  width: 100%;
+  display: block;
+  font-family: "Heebo", sans-serif;
+  font-weight: 900;
+  color : #232323;
+  text-align: center;
+  text-shadow: 10px 10px 25px rgb(163, 163, 163),
+  -10px 10px 25px rgb(149, 147, 137);
+  margin : 0px;
+  padding: 0px;
+}
+
+#title {
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  display: flex;
+}
+#logo {
+  height: 6.3em;
+  width: 6.3em;
+}
