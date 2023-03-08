@@ -18,7 +18,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
@@ -91,34 +91,6 @@ function EventCard(props: { event: EventProps }) {
     getGroup();
   }, []);
 
-  // Reference of the EventCard
-  const ref = useRef<HTMLHeadingElement>(null);
-
-  // Scale of the font (multiplier of the browser's base font size)
-  const [rem, setRem] = useState<number>(
-    parseFloat(getComputedStyle(document.documentElement).fontSize)
-  );
-
-  // Update the font size according to the width of the component.
-  // This allow the component to be scaled proportionally.
-  const updateDimensions = () => {
-    if (ref.current) {
-      if (ref.current) {
-        setRem(ref.current.offsetWidth / 28.125);
-      }
-    }
-  };
-
-  // Sets the dimensions on the first render
-  useLayoutEffect(() => {
-    updateDimensions();
-  }, []);
-
-  // Update the content when the window is resized
-  window.addEventListener('resize', () => {
-    updateDimensions();
-  });
-
   async function getGroup() {
     const response = await axios.get(`/api/group/group/${groupSlug}/`);
     setGroup(response.data);
@@ -155,7 +127,7 @@ function EventCard(props: { event: EventProps }) {
       </a>
     );
   return (
-    <Card ref={ref} className="eventCard" sx={{ fontSize: `${rem}px` }}>
+    <Card className="eventCard" sx={{ fontSize: '1rem' }}>
       <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
         <CardMedia
           className="banner"
@@ -174,7 +146,7 @@ function EventCard(props: { event: EventProps }) {
           className="moreActions"
           shareUrl={window.location.origin + getAbsoluteUrl}
           slug={slug}
-          size="r2em"
+          size="2rem"
           participating={participating}
           setParticipating={setParticipating}
         />

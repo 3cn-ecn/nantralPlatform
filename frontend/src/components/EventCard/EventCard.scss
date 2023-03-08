@@ -89,7 +89,6 @@ Bottom half
   margin-left: $margin;
   width: 100%;
   overflow: hidden;
-  display: grid;
 }
 
 .eventTitle {
@@ -113,7 +112,7 @@ Bottom half
 // Main div
 .infoDetails{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   min-height: 3.6rem;
 }
 
