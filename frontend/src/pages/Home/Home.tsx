@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import * as React from 'react';
 import { SvgIcon, Typography } from '@mui/material';
+import { Container } from '@mui/system';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
@@ -89,17 +90,21 @@ function Home() {
         </div>
       </div>
       <div style={{ alignContent: 'center', display: 'flex', paddingTop: 20 }}>
-        <div className="container">
-          <PostSection
-            posts={posts.filter((post) => post.pinned)}
-            title={t('home.highlighted')}
-            status={postsStatus}
-          />
-          <PostSection
-            posts={posts.filter((post) => !post.pinned)}
-            title={t('home.announcement')}
-            status={postsStatus}
-          />
+        <Container>
+          {posts.filter((post) => post.pinned) && (
+            <PostSection
+              posts={posts.filter((post) => post.pinned)}
+              title={t('home.highlighted')}
+              status={postsStatus}
+            />
+          )}
+          {posts.filter((post) => !post.pinned) && (
+            <PostSection
+              posts={posts.filter((post) => !post.pinned)}
+              title={t('home.announcement')}
+              status={postsStatus}
+            />
+          )}
           <EventSection
             events={events.filter((item: EventProps) =>
               isThisWeek(new Date(item.beginDate))
@@ -123,7 +128,7 @@ function Home() {
             title={t('home.myClubs')}
             seeMoreUrl="/club"
           />
-        </div>
+        </Container>
       </div>
     </>
   );

@@ -56,7 +56,7 @@ export function PostModal(props: {
       </DialogTitle>
       <DialogContent dividers>
         <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-          <img alt="" src={post.image} id="image" />
+          {post.image && <img alt="" src={post.image} id="image" />}
           {/* Dangerous should change */}
           <div dangerouslySetInnerHTML={{ __html: post.description }}></div>
           <div

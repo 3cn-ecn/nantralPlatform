@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { Container } from '@mui/system';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -10,7 +11,7 @@ import { Link } from 'react-router-dom';
 function NotFound() {
   const { t } = useTranslation('translation');
   return (
-    <Box className="container">
+    <Container sx={{ marginTop: 2 }}>
       <Box
         sx={{
           borderWidth: 2,
@@ -40,7 +41,7 @@ function NotFound() {
           style={{ margin: 20 }}
         />
       </Link>
-    </Box>
+    </Container>
   );
 }
 
