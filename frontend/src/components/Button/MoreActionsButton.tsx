@@ -8,9 +8,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import { IconButton, rgbToHex } from '@mui/material';
 
 import JoinButton from './JoinButton';
+import theme from '../../theme';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -80,16 +81,20 @@ function MoreActionsButton(props: {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        style={{
+        sx={{
           minWidth: 0,
-          padding: 0,
+          padding: '1.2rem',
+          background: rgbToHex(theme.palette.secondary.main).concat('b5'),
           width: `${size}`,
           height: `${size}`,
-          fontSize: '1em',
+          fontSize: '1rem',
+          '&:hover': {
+            background: rgbToHex(theme.palette.primary.main).concat('b5'),
+          },
         }}
       >
         <MoreHorizIcon
-          style={{ width: `${size}`, height: `${size}`, fontSize: '1em' }}
+          style={{ width: `${size}`, height: `${size}`, fontSize: '1rem' }}
           color="primary"
         />
       </IconButton>
@@ -97,10 +102,6 @@ function MoreActionsButton(props: {
         anchorEl={anchorEl}
         open={open}
         onClose={handleCloseMenu}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
         transformOrigin={{
           vertical: 'top',
           horizontal: 'left',
@@ -133,7 +134,7 @@ function MoreActionsButton(props: {
 }
 
 MoreActionsButton.defaultProps = {
-  size: '1.6em',
+  size: '1.6rem',
 };
 
 export default MoreActionsButton;
