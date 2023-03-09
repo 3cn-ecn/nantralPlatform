@@ -10,7 +10,11 @@ import {
   CalendarToday,
   CalendarViewDay,
 } from '@mui/icons-material';
-import { EventSection, EventLoadStatus } from '../../components/Section/EventSection/EventSection';
+import { Container } from '@mui/system';
+import {
+  EventSection,
+  EventLoadStatus,
+} from '../../components/Section/EventSection/EventSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
@@ -64,14 +68,18 @@ const filterEvent = (events: Array<EventProps>, filter: Map<string, any>) => {
   return events;
 };
 
-function EventList(props: { status: EventLoadStatus , events: any }) {
+function EventList(props: { status: EventLoadStatus; events: any }) {
   const { events, status } = props;
   console.log(events);
 
-  return(
+  return (
     <>
       <p>Ceci est une liste.</p>
-      <EventSection status={status} events={events} title="Liste des prochains évènements"></EventSection>
+      <EventSection
+        status={status}
+        events={events}
+        title="Liste des prochains évènements"
+      ></EventSection>
     </>
   );
 }
@@ -86,7 +94,7 @@ function EventCalendar(props: { events: any }) {
   );
 }
 
-function EventView(props: { status: EventLoadStatus, events: any }) {
+function EventView(props: { status: EventLoadStatus; events: any }) {
   const { events, status } = props;
   const [value, setValue] = React.useState('1');
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -127,16 +135,20 @@ function Event() {
   console.log(filterEvent(events, filter));
 
   React.useEffect(() => {
-    axios.get('/api/event').then((res: any) => {
-      eventsToCamelCase(res.data);
-      setEvents(res.data);
-      setStatus('success');
-    }).catch(() => {
-      setStatus('fail');});
+    axios
+      .get('/api/event')
+      .then((res: any) => {
+        eventsToCamelCase(res.data);
+        setEvents(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
+      });
   }, []);
 
   return (
-    <>
+    <Container>
       <h1>Évènements</h1>
       <p>Ceci est la page des events</p>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -144,7 +156,7 @@ function Event() {
         <FilterBar getFilter={getFilter} />
       </div>
       <EventView status={eventsLoadStatus} events={events} />
-    </>
+    </Container>
   );
 }
 

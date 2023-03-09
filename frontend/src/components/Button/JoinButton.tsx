@@ -87,7 +87,7 @@ function JoinButton({
 
   const participate = async () => {
     axios
-      .post(`api/event/${eventSlug}/participate`)
+      .post(`/api/event/${eventSlug}/participate`)
       .then((res) => {
         if (res.data.success) {
           setSelected(true);
@@ -102,7 +102,7 @@ function JoinButton({
 
   const quit = async () => {
     axios
-      .delete(`api/event/${eventSlug}/participate`)
+      .delete(`/api/event/${eventSlug}/participate`)
       .then((res) => {
         if (res.data.success) {
           setSelected(false);
@@ -144,7 +144,7 @@ function JoinButton({
         }
         break;
       case 'form':
-        window.open(link, '_blank');
+        window.open(link);
         break;
       default:
     }
