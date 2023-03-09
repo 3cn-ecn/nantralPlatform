@@ -75,7 +75,30 @@ function EditSuggestionModal(props: { open: boolean; closeModal: () => void }) {
   const [globalErrors, setGlobalErrors] = useState('');
 
   /** Function called on submit to save data */
-  function onSubmit(e: FormEvent) {}
+  function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    saveSuggestion()
+      .then(() => {
+        // reset all errors messages, saving loading and close modal
+        setFormErrors({});
+        setGlobalErrors('');
+        setSaving(false);
+        closeModal();
+      })
+      .catch((err) => {
+        setSaving(false);
+        if (err.response) {
+          setFormErrors(err.response.data); // show errors per fields
+          if (err.response.data.non_field_errors)
+            // show form errors
+            setGlobalErrors(err.response.data.non_field_errors);
+          if (err.response.status === 500)
+            setGlobalErrors('Notre serveur a crashé, désolé 😢');
+        } else {
+          setGlobalErrors('Erreur de réseau'); // show global error
+        }
+      });
+  }
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
@@ -130,6 +153,7 @@ function EditSuggestionModal(props: { open: boolean; closeModal: () => void }) {
               saving ? (
                 <CircularProgress size="1em" sx={{ color: 'inherit' }} />
               ) : (
+                // eslint-disable-next-line react/jsx-no-useless-fragment
                 <></>
               )
             }

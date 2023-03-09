@@ -32,11 +32,6 @@ function createFormFields() {
       min: 1919,
     },
     {
-      kind: 'picture',
-      name: 'description',
-      label: 'Description',
-    },
-    {
       kind: 'select',
       name: 'Filière',
       label: 'Filière',
@@ -62,6 +57,11 @@ function createFormFields() {
         'Ingénieur-Officier',
         'Officier-Ingénieur',
       ],
+    },
+    {
+      kind: 'picture',
+      title: 'Upload',
+      description: 'Upload une photo de profil',
     },
   ];
   return defaultFields;
@@ -112,7 +112,7 @@ export function EditProfilModal(props: {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                Suggestion/Bug
+                Modification du Profil
               </Typography>
             </Box>
             <IconButton

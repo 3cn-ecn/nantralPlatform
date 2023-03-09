@@ -46,8 +46,8 @@ export type FieldType =
     }
   | {
       kind: 'picture';
-      name: string;
-      label: string;
+      title: string;
+      description: string;
     }
   | {
       kind: 'select';
@@ -214,30 +214,10 @@ function FormGroup(props: {
             return (
               <Box sx={{ minWidth: 120, mt: 2 }}>
                 <FormControl fullWidth row>
-                  <input
-                    hidden
-                    style={{ zIndex: 5000 }}
-                    accept="image/*"
-                    multiple
-                    type="file"
-                  />
-                  <TextField
-                    variant="outlined"
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            disableElevation
-                            sx={{ height: 56, ml: -1.7 }}
-                          >
-                            Upload
-                          </Button>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+                  <Button variant="contained" component="label">
+                    {field.description}
+                    <input hidden accept="image/*" multiple type="file" />
+                  </Button>
                 </FormControl>
               </Box>
             );
