@@ -10,6 +10,7 @@ import {
   CalendarToday,
   CalendarViewDay,
 } from '@mui/icons-material';
+import { EventSection, EventLoadStatus } from '../../components/Section/EventSection/EventSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
@@ -63,11 +64,16 @@ const filterEvent = (events: Array<EventProps>, filter: Map<string, any>) => {
   return events;
 };
 
-function EventList(props: { events: any }) {
-  const { events } = props;
+function EventList(props: { status: EventLoadStatus , events: any }) {
+  const { events, status } = props;
   console.log(events);
 
-  return <p>Ceci est une liste.</p>;
+  return(
+    <>
+      <p>Ceci est une liste.</p>
+      <EventSection status={status} events={events} title="Liste des prochains évènements"></EventSection>
+    </>
+  );
 }
 
 function EventCalendar(props: { events: any }) {
@@ -80,8 +86,8 @@ function EventCalendar(props: { events: any }) {
   );
 }
 
-function EventView(props: { events: any }) {
-  const { events } = props;
+function EventView(props: { status: EventLoadStatus, events: any }) {
+  const { events, status } = props;
   const [value, setValue] = React.useState('1');
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -95,7 +101,7 @@ function EventView(props: { events: any }) {
         </TabList>
       </Box>
       <TabPanel value="1">
-        <EventList events={events}></EventList>
+        <EventList status={status} events={events}></EventList>
       </TabPanel>
       <TabPanel value="2">
         <EventCalendar events={events}></EventCalendar>
@@ -114,7 +120,7 @@ function EventView(props: { events: any }) {
 function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
   const [filter, setFilter] = React.useState<Map<string, any>>();
-
+  const [eventsLoadStatus, setStatus] = React.useState<EventLoadStatus>('load');
   const getFilter = (validateFilter) => {
     setFilter(validateFilter);
   };
@@ -124,7 +130,9 @@ function Event() {
     axios.get('/api/event').then((res: any) => {
       eventsToCamelCase(res.data);
       setEvents(res.data);
-    });
+      setStatus('success');
+    }).catch(() => {
+      setStatus('fail');});
   }, []);
 
   return (
@@ -135,7 +143,7 @@ function Event() {
         <Formular />
         <FilterBar getFilter={getFilter} />
       </div>
-      <EventView events={events} />
+      <EventView status={eventsLoadStatus} events={events} />
     </>
   );
 }
