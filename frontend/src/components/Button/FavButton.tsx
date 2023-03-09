@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import IconButton from '@mui/material/IconButton/IconButton';
 import Zoom from '@mui/material/Zoom/Zoom';
 import axios from 'axios';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, rgbToHex } from '@mui/material';
+import theme from '../../theme';
 
 function FavButton(props: {
   className: string;
@@ -37,11 +38,16 @@ function FavButton(props: {
       <IconButton
         aria-label="favorite"
         size="large"
-        style={{
-          padding: '0',
+        sx={{
+          padding: '1.2rem',
+          background: rgbToHex(theme.palette.secondary.main).concat('b5'),
+          backdropFilter: 'blur(4px)',
           width: `${size}`,
           height: `${size}`,
-          fontSize: '1em',
+          fontSize: '1rem',
+          '&:hover': {
+            background: rgbToHex(theme.palette.primary.main).concat('b5'),
+          },
         }}
         onClick={handlePress}
         disabled={loading}
@@ -53,12 +59,12 @@ function FavButton(props: {
               position: 'absolute',
               width: `${size}`,
               height: `${size}`,
-              fontSize: '1em',
+              fontSize: '1rem',
             }}
           />
         </Zoom>
         <FavoriteBorderIcon
-          style={{ width: `${size}`, height: `${size}`, fontSize: '1em' }}
+          style={{ width: `${size}`, height: `${size}`, fontSize: '1rem' }}
           color="primary"
         />
         {loading && (
@@ -70,7 +76,7 @@ function FavButton(props: {
 }
 
 FavButton.defaultProps = {
-  size: '1.5625em',
+  size: '1.5625rem',
 };
 
 export default FavButton;

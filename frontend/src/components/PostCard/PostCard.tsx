@@ -15,7 +15,6 @@ import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import { useTranslation } from 'react-i18next';
 import { PostProps } from '../../Props/Post';
-import { formatDate } from '../../utils/date';
 import { PostModal } from '../Modal/PostModal';
 
 export function SeePageButton(props: {
@@ -99,7 +98,7 @@ export function PostCard(props: { post: PostProps }) {
               <p id="post-club">
                 {clubDetails && clubDetails.name}
                 {' • '}
-                {formatDate(post.publicationDate, 'medium')}
+                {new Date(post.publication_date).toDateString()}
               </p>
             </div>
             {clubDetails && clubDetails.is_admin && (

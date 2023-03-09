@@ -18,7 +18,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
@@ -55,6 +55,7 @@ function InfoItem(props: { name: string; value: string }) {
         sx={{ fontSize: '1.2em', paddingLeft: '7px' }}
         variant="subtitle2"
         className="infoItemElement"
+        style={{ paddingLeft: '7px' }}
       >
         {text}
       </Typography>
@@ -91,34 +92,6 @@ function EventCard(props: { event: EventProps }) {
     getGroup();
   }, []);
 
-  // Reference of the EventCard
-  const ref = useRef<HTMLHeadingElement>(null);
-
-  // Scale of the font (multiplier of the browser's base font size)
-  const [rem, setRem] = useState<number>(
-    parseFloat(getComputedStyle(document.documentElement).fontSize)
-  );
-
-  // Update the font size according to the width of the component.
-  // This allow the component to be scaled proportionally.
-  const updateDimensions = () => {
-    if (ref.current) {
-      if (ref.current) {
-        setRem(ref.current.offsetWidth / 28.125);
-      }
-    }
-  };
-
-  // Sets the dimensions on the first render
-  useLayoutEffect(() => {
-    updateDimensions();
-  }, []);
-
-  // Update the content when the window is resized
-  window.addEventListener('resize', () => {
-    updateDimensions();
-  });
-
   async function getGroup() {
     const response = await axios.get(`/api/group/group/${groupSlug}/`);
     setGroup(response.data);
@@ -144,19 +117,19 @@ function EventCard(props: { event: EventProps }) {
   });
   const groupIcon =
     typeof groupData.icon === 'undefined' ? (
-      <CircularProgress size="3.75em" />
+      <CircularProgress size="3.75rem" />
     ) : (
       <a href={window.location.origin + groupData.url}>
         <Avatar
           alt={groupData.name}
           src={groupData.icon}
-          sx={{ fontSize: '1em', width: '3.75em', height: '3.75em' }}
+          sx={{ fontSize: '1rem', width: '3.75rem', height: '3.75rem' }}
         />
       </a>
     );
   return (
-    <Card ref={ref} className="eventCard" sx={{ fontSize: `${rem}px` }}>
-      <CardActionArea disableRipple sx={{ fontSize: '1em' }}>
+    <Card className="eventCard" sx={{ fontSize: '1rem' }}>
+      <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
         <CardMedia
           className="banner"
           component="img"
@@ -167,14 +140,14 @@ function EventCard(props: { event: EventProps }) {
           className="favIcon"
           eventSlug={slug}
           selected={isFavorite}
-          size="3em"
+          size="2rem"
         />
         <MoreActionsButton
           isAdmin={groupData.is_admin}
           className="moreActions"
           shareUrl={window.location.origin + getAbsoluteUrl}
           slug={slug}
-          size="2em"
+          size="2rem"
           participating={participating}
           setParticipating={setParticipating}
         />
@@ -185,13 +158,13 @@ function EventCard(props: { event: EventProps }) {
 
               <div className="infos">
                 <Typography
-                  sx={{ fontSize: '1.5em', marginBottom: '0.2em' }}
+                  sx={{ fontSize: '1.3rem', marginBottom: '0.2rem' }}
                   variant="h5"
                   className="eventTitle"
                 >
                   {title}
                 </Typography>
-                <Typography sx={{ fontSize: '1em' }} variant="caption">
+                <Typography sx={{ fontSize: '1rem' }} variant="caption">
                   {groupName}
                 </Typography>
               </div>
@@ -199,19 +172,20 @@ function EventCard(props: { event: EventProps }) {
             <div className="infoDetails">
               <InfoItem name="date" value={dateText} />
               <InfoItem name="time" value={hourText} />
-              <div className="joinButton">
-                <JoinButton
-                  variant={variant}
-                  person={numberOfParticipants}
-                  maxPerson={maxParticipant}
-                  participating={participating}
-                  eventSlug={slug}
-                  link={formUrl}
-                  beginInscription={beginInscription}
-                  endInscription={endInscription}
-                  setParticipating={setParticipating}
-                />
-              </div>
+            </div>
+            <div className="joinButton">
+              <JoinButton
+                variant={variant}
+                person={numberOfParticipants}
+                maxPerson={maxParticipant}
+                participating={participating}
+                eventSlug={slug}
+                link={formUrl}
+                beginInscription={beginInscription}
+                endInscription={endInscription}
+                setParticipating={setParticipating}
+                sx={{ width: '100%' }}
+              />
             </div>
           </div>
         </CardContent>

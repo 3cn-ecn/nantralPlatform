@@ -19,7 +19,6 @@ import Student from './pages/Student/Student';
 import LegalNotice from './pages/LegalNotice/Legal';
 import theme from './theme';
 import darktheme from './darktheme';
-import './App.scss';
 
 /**
  * Main component of the application. It is composed of:
