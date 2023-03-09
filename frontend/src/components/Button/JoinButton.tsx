@@ -15,12 +15,14 @@ import {
   Typography,
   MenuItem,
   rgbToHex,
+  IconButton,
+  Popover,
 } from '@mui/material';
 import axios from 'axios';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 import * as React from 'react';
-
+import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { UnsuscribeModal } from '../Modal/UnsuscribeModal';
 
@@ -60,6 +62,8 @@ function JoinButton({
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
+  const [tootlTipOpen, setTooltipOpen] = React.useState(false);
+  const buttonRef = React.useRef();
   React.useEffect(() => {
     if (loaded) {
       setSelected(participating);
@@ -150,7 +154,18 @@ function JoinButton({
     if (inscriptionNotStarted) return null;
     switch (variant) {
       case 'shotgun':
-        return <ShotgunIcon sx={{ color: '#fff' }} />;
+        return (
+          <div
+            style={{
+              flexDirection: 'row',
+              display: 'flex',
+              fontSize: '14px',
+              alignItems: 'center',
+            }}
+          >
+            <ShotgunIcon sx={{ color: '#fff' }} />
+          </div>
+        );
       case 'form':
         return <LinkIcon sx={{ color: '#fff' }} />;
       default:
@@ -158,7 +173,7 @@ function JoinButton({
     }
   };
   const getSecondIcon = () => {
-    if (inscriptionNotStarted) return <Info sx={{ color: '#fff' }} />;
+    if (inscriptionNotStarted) return null;
     if (closed && variant !== 'form') return <Cross sx={{ color: '#fff' }} />;
     if (variant === 'normal')
       return selected ? (
@@ -189,7 +204,10 @@ function JoinButton({
         return (
           <Typography sx={{ color: '#fff' }}>
             {inscriptionNotStarted
-              ? `${new Date(beginInscription).toDateString()}`
+              ? `Shotgun ${new Date(beginInscription).toLocaleDateString(
+                  'en-US',
+                  { day: '2-digit', month: '2-digit' }
+                )}`
               : `${people}/${maxPerson}`}
           </Typography>
         );
@@ -244,21 +262,69 @@ function JoinButton({
   }
   return (
     <>
-      <Button
-        disabled={loading || inscriptionNotStarted || closed}
-        onClick={() => onClick()}
-        variant="contained"
-        startIcon={getFirstIcon()}
-        color={color}
-        endIcon={getSecondIcon()}
-        sx={sx}
-        title={title}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          width: '100%',
+        }}
       >
-        {getText()}
-        {loading && (
-          <CircularProgress size={25} style={{ position: 'absolute' }} />
+        <Button
+          disabled={loading || inscriptionNotStarted || closed}
+          onClick={() => onClick()}
+          variant="contained"
+          startIcon={getFirstIcon()}
+          color={color}
+          endIcon={getSecondIcon()}
+          sx={sx}
+          title={title}
+        >
+          {getText()}
+          {loading && (
+            <CircularProgress size={25} style={{ position: 'absolute' }} />
+          )}
+        </Button>
+        <Popover
+          id="id"
+          anchorEl={buttonRef.current}
+          open={tootlTipOpen}
+          onClose={() => setTooltipOpen(false)}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+        >
+          {`${new Date(beginInscription).toLocaleDateString(i18n.language, {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+          })}`}
+          <div>
+            {`${new Date(beginInscription).toLocaleTimeString(i18n.language, {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}`}
+          </div>
+          <div>
+            {maxPerson}
+            <PeopleIcon />
+          </div>
+        </Popover>
+        {inscriptionNotStarted && (
+          <IconButton
+            ref={buttonRef}
+            aria-describedby="id"
+            onClick={() => setTooltipOpen(!tootlTipOpen)}
+          >
+            <Info color="secondary" />
+          </IconButton>
         )}
-      </Button>
+      </div>
       <UnsuscribeModal open={open} onClose={handleClose} />
     </>
   );

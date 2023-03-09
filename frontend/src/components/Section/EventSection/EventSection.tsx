@@ -52,14 +52,7 @@ export function EventSection(props: {
     case 'success':
       if (events.length > 0) {
         content = allEvents.map((event) => (
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            sx={{ maxWidth: '700px' }}
-            key={event.slug}
-          >
+          <Grid item xs={12} sm={6} md={4} key={event.slug}>
             <EventCard event={event} />
           </Grid>
         ));

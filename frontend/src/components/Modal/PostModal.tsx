@@ -66,7 +66,7 @@ export function PostModal(props: {
             }}
           >
             <Typography variant="caption" textAlign="right">
-              {`Ajouté le ${new Date(post.publication_date).toDateString()}`}
+              {`Ajouté le ${new Date(post.publicationDate).toDateString()}`}
             </Typography>
           </div>
         </DialogContentText>

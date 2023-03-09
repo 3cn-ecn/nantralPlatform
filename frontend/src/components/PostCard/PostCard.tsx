@@ -98,7 +98,7 @@ export function PostCard(props: { post: PostProps }) {
               <p id="post-club">
                 {clubDetails && clubDetails.name}
                 {' • '}
-                {new Date(post.publication_date).toDateString()}
+                {new Date(post.publicationDate).toDateString()}
               </p>
             </div>
             {clubDetails && clubDetails.is_admin && (

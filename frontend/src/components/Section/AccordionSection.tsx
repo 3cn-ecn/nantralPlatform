@@ -20,7 +20,7 @@ export function AccordionSection(props: {
 }) {
   const { url, content, title, badge, collapsable } = props;
   const [expanded, setExpanded] = React.useState<boolean>(true);
-  if (collapsable) {
+  if (!collapsable) {
     return (
       <>
         <NavLink to={url} className="see-more">
