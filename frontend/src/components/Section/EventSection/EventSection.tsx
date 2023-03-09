@@ -38,10 +38,10 @@ export function EventSection(props: {
   maxItem?: number;
   /** url relative du bouton voir plus */
   seeMoreUrl?: string;
-  collapsable?: boolean;
+  accordion?: boolean;
 }) {
   const { t } = useTranslation('translation'); // translation module
-  const { status, events, title, maxItem, seeMoreUrl, collapsable } = props;
+  const { status, events, title, maxItem, seeMoreUrl, accordion } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allEvents = maxItem ? events.slice(0, maxItem) : events;
   switch (status) {
@@ -54,7 +54,7 @@ export function EventSection(props: {
     case 'success':
       if (events.length > 0) {
         content = allEvents.map((event) => (
-          <Grid item xs={12} sm={6} md={4} key={event.slug}>
+          <Grid item xs={12} sm={6} md={4} key={event.slug} flexGrow={1}>
             <EventCard event={event} />
           </Grid>
         ));
@@ -71,7 +71,7 @@ export function EventSection(props: {
       badge={events.length}
       content={content}
       url={seeMoreUrl}
-      collapsable={collapsable}
+      accordion={accordion}
     />
   );
 }
@@ -80,5 +80,5 @@ EventSection.defaultProps = {
   title: null,
   maxItem: null,
   seeMoreUrl: null,
-  collapsable: true,
+  accordion: false,
 };

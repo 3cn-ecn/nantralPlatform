@@ -65,10 +65,10 @@ export function PostCard(props: { post: PostProps }) {
   return (
     <>
       <Card
-        variant={post.pinned ? 'outlined' : 'elevation'}
+        variant="outlined"
         sx={{
           height: '110px',
-          borderColor: 'red',
+          borderColor: post.pinned ? 'red' : '',
           borderWidth: 1,
         }}
       >

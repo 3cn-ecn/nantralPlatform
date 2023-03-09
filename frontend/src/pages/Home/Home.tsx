@@ -112,6 +112,7 @@ function Home() {
             status={eventsStatus}
             seeMoreUrl="/event"
             title={t('home.thisWeek')}
+            accordion
           />
           <EventSection
             events={events.filter(
@@ -121,12 +122,14 @@ function Home() {
             maxItem={6}
             seeMoreUrl="/event"
             title={t('home.upcomingEvents')}
+            accordion
           />
           <ClubSection
             clubs={myClubs}
             status={clubsStatus}
             title={t('home.myClubs')}
             seeMoreUrl="/club"
+            accordion
           />
         </Container>
       </div>

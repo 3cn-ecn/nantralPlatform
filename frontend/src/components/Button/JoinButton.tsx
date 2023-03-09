@@ -204,10 +204,11 @@ function JoinButton({
         return (
           <Typography sx={{ color: '#fff' }}>
             {inscriptionNotStarted
-              ? `Shotgun ${new Date(beginInscription).toLocaleDateString(
-                  'en-US',
-                  { day: '2-digit', month: '2-digit' }
-                )}`
+              ? new Date(beginInscription).toLocaleDateString(i18n.language, {
+                  weekday: 'short',
+                  day: 'numeric',
+                  month: 'short',
+                })
               : `${people}/${maxPerson}`}
           </Typography>
         );

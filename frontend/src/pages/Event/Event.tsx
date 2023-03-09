@@ -108,10 +108,10 @@ function EventView(props: { status: EventLoadStatus; events: any }) {
           <Tab label="Calendrier" value="2" />
         </TabList>
       </Box>
-      <TabPanel value="1">
+      <TabPanel value="1" sx={{ padding: 0 }}>
         <EventList status={status} events={events}></EventList>
       </TabPanel>
-      <TabPanel value="2">
+      <TabPanel value="2" sx={{ padding: 0 }}>
         <EventCalendar events={events}></EventCalendar>
         <CalendarMonth></CalendarMonth>
         <CalendarViewDay></CalendarViewDay>

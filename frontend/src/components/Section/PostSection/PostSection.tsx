@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Badge, Button, Divider, Grid, Skeleton } from '@mui/material';
+import { Badge, Box, Button, Divider, Grid, Skeleton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PostCard } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';
@@ -51,7 +51,7 @@ export function PostSection(props: {
       content = [<p key={0}>Nothing to show</p>];
   }
   return (
-    <>
+    <Box marginBottom={2}>
       <h2 className="section-title">
         {title}
         <Badge
@@ -69,7 +69,7 @@ export function PostSection(props: {
           {showAll ? t('button.showLess') : t('button.showAll')}
         </Button>
       )}
-    </>
+    </Box>
   );
 }
 
