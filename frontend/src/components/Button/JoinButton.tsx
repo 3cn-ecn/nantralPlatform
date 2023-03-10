@@ -15,7 +15,6 @@ import {
   Typography,
   MenuItem,
   rgbToHex,
-  IconButton,
   Popover,
 } from '@mui/material';
 import axios from 'axios';
@@ -317,13 +316,16 @@ function JoinButton({
           </div>
         </Popover>
         {inscriptionNotStarted && (
-          <IconButton
+          <Button
+            sx={{ marginLeft: 1 }}
+            color="info"
+            variant="contained"
             ref={buttonRef}
             aria-describedby="id"
             onClick={() => setTooltipOpen(!tootlTipOpen)}
           >
             <Info color="secondary" />
-          </IconButton>
+          </Button>
         )}
       </div>
       <UnsuscribeModal open={open} onClose={handleClose} />
