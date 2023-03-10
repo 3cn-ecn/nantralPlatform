@@ -20,13 +20,13 @@ function FavButton(props: {
     setLoading(true);
     if (fav) {
       axios
-        .delete(`api/event/${eventSlug}/favorite`)
+        .delete(`/api/event/${eventSlug}/favorite`)
         .then(() => setFav(false))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     } else {
       axios
-        .post(`api/event/${eventSlug}/favorite`)
+        .post(`/api/event/${eventSlug}/favorite`)
         .then(() => setFav(true))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));

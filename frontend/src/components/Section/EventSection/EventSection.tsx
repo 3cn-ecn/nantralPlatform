@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import EventCard from '../../EventCard/EventCard';
 import './EventSection.scss';
 import { AccordionSection } from '../AccordionSection';
-
-export type EventLoadStatus = 'success' | 'fail' | 'load';
+import { LoadStatus } from '../../../Props/GenericTypes';
 
 const LoadingSkeleton = (
   <>
@@ -29,7 +28,7 @@ const LoadingSkeleton = (
  */
 export function EventSection(props: {
   /** L'état de chargement des événements */
-  status: EventLoadStatus;
+  status: LoadStatus;
   /** La liste des événements à afficher */
   events: Array<EventProps>;
   /** Titre de la section */
@@ -38,9 +37,10 @@ export function EventSection(props: {
   maxItem?: number;
   /** url relative du bouton voir plus */
   seeMoreUrl?: string;
+  accordion?: boolean;
 }) {
   const { t } = useTranslation('translation'); // translation module
-  const { status, events, title, maxItem, seeMoreUrl } = props;
+  const { status, events, title, maxItem, seeMoreUrl, accordion } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allEvents = maxItem ? events.slice(0, maxItem) : events;
   switch (status) {
@@ -53,14 +53,7 @@ export function EventSection(props: {
     case 'success':
       if (events.length > 0) {
         content = allEvents.map((event) => (
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            sx={{ maxWidth: '700px' }}
-            key={event.slug}
-          >
+          <Grid item xs={12} sm={6} md={4} key={event.slug} flexGrow={1}>
             <EventCard event={event} />
           </Grid>
         ));
@@ -77,6 +70,7 @@ export function EventSection(props: {
       badge={events.length}
       content={content}
       url={seeMoreUrl}
+      accordion={accordion}
     />
   );
 }
@@ -85,4 +79,5 @@ EventSection.defaultProps = {
   title: null,
   maxItem: null,
   seeMoreUrl: null,
+  accordion: false,
 };
