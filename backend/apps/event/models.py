@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.shortcuts import reverse
 
 from django_ckeditor_5.fields import CKEditor5Field
 
@@ -92,4 +91,4 @@ class Event(AbstractPost):
         super(Event, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('event:detail', args=[self.slug])
+        return '/event/' + str(self.pk)
