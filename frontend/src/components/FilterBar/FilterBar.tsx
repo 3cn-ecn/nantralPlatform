@@ -39,7 +39,7 @@ function FilterBar(props: { getFilter: any }) {
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [isParticipated, setIsParticipated] = React.useState(false);
   const [isShotgun, setIsShotgun] = React.useState(false);
-  const [organiser, setOrganiser] = React.useState<Array<SimpleGroup>>([]);
+  const [organiser, setOrganiser] = React.useState(null);
   const currentFilter = new Map();
 
   const getDateBegin = (newDate) => {

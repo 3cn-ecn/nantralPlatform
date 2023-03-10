@@ -24,15 +24,16 @@ function CheckboxesTags<T>(props: {
   updated: boolean; // true if you use a request need to update the content
   request: string; // the request used to get your options from database
   optionsList: Array<T>; // a list of options that you put directly in the Autocomplete
-  optionsLabel: string; // the field to display for each option of the optionsList
 }) {
   const { label, getResult, updated, request, optionsList } = props;
   const [options, setOptions] = React.useState<Array<SimpleGroup>>([]);
   const [chosen, setChosen] = React.useState<Array<SimpleGroup>>([]);
 
-  const handleChange = (e, selected) => {
-    getResult(selected);
+  const handleChange = (selected) => {
+    console.log(selected);
     setChosen(selected);
+    console.log(chosen);
+    getResult(selected);
   };
 
   React.useEffect(() => {
@@ -68,7 +69,12 @@ function CheckboxesTags<T>(props: {
     value: string,
     reason: AutocompleteInputChangeReason
   ) => {
-    if (reason !== 'input' || value.length < 1 || value === null) {
+    if (
+      reason !== 'input' ||
+      reason === 'clear' ||
+      value.length < 1 ||
+      value === null
+    ) {
       axios
         .get<any[]>(request, {
           params: { simple: true, limit: 10 },
@@ -85,6 +91,7 @@ function CheckboxesTags<T>(props: {
       })
       .then((res) => {
         setOptions(res.data.filter((element) => inChosenFunction(element)));
+        // console.log(chosen);
       });
   };
 
@@ -92,7 +99,12 @@ function CheckboxesTags<T>(props: {
     <Autocomplete
       onChange={(e, val, reason) => {
         if (reason === 'selectOption') {
-          handleChange(e, val);
+          handleChange(val);
+          console.log(val);
+        }
+        if (reason === 'clear' || reason === 'removeOption') {
+          handleChange(val);
+          updateOptions(e, val, reason);
         }
       }}
       options={options}
