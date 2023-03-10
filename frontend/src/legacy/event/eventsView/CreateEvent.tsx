@@ -12,114 +12,160 @@ import {
   Alert,
 } from '@mui/material';
 import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
-import Avatar from './Avatar';
 import FormGroup, { FieldType } from '../../utils/form';
-import { Membership, Group, Student } from '../interfaces';
+import { Event, Group } from '../interfaces';
 
 /**
- * A function to generate the default fields fot the edit modal form.
+ * Fonction permettant de générer le formulaire de création d'un événement.
+ * Elle ne vérifie pas que l'utilisateur soit bien admin du groupe.
  *
- * @param group
- * @param member
  * @returns The default list of fields
  */
-function createFormFields(group: Group, member: Membership): FieldType[] {
+function createFormFields(): FieldType[] {
   const defaultFields: FieldType[] = [
     {
-      kind: 'text',
-      name: 'summary',
-      label: 'Résumé',
+      kind: 'autocomplete',
+      name: 'group',
+      label: 'Groupe',
       maxLength: 50,
-      helpText: 'Entrez le résumé du membre',
+      helpText: 'Attention vous devez être admin pour créer un événement',
+      required: true,
+      endPoint: '/api/group/group/',
+      getOptionLabel: (m) => m?.name || '',
+    },
+    {
+      kind: 'text',
+      name: 'title',
+      label: "Titre de l'événement",
+      required: true,
+    },
+    {
+      kind: 'group',
+      fields: [
+        {
+          kind: 'date and hour',
+          name: 'begin_date',
+          label: 'Date et Heure de début',
+          required: true,
+          disablePast: true,
+        },
+        {
+          kind: 'date and hour',
+          name: 'end_date',
+          label: 'Date et Heure de fin',
+          required: true,
+          disablePast: true,
+        },
+      ],
+    },
+    {
+      kind: 'text',
+      name: 'place',
+      label: "Lieu de l'évenement",
+      required: true,
     },
     {
       kind: 'text',
       name: 'description',
       label: 'Description',
+      required: true,
       multiline: true,
     },
+    {
+      kind: 'date and hour',
+      name: 'end_inscription',
+      label: 'Date et Heure de fin des inscriptions',
+      required: true,
+      disablePast: true,
+    },
+    /*
+    {
+      kind: 'select',
+      name: 'type_evenement',
+      required: true,
+    }
+    */
+    /*
+    {
+      kind: 'custom',
+      component: (
+        <Typography style={{ overflowWrap: 'break-word' }}>
+          {' '}
+          Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre
+          le lien d&apos;un form, soit définir un nombre max de participants
+        </Typography>
+      ),
+    },
+    */
+    {
+      kind: 'date and hour',
+      name: 'shotgun_date',
+      label: 'Date et Heure du Shotgun',
+      disablePast: true,
+    },
+    {
+      kind: 'text',
+      name: 'lien_shotgun',
+      label: 'Lien du formulaire Shotgun',
+      multiline: true,
+    },
+    /*
+    {
+      kind: 'number',
+      name: 'Max_participants',
+      label: 'Nombre max de participants',
+      min: 0,
+      step: 1,
+    },
+    */
   ];
-  if (group && !group.group_type.no_membership_dates) {
-    defaultFields.push({
-      kind: 'group',
-      fields: [
-        {
-          kind: 'date',
-          name: 'begin_date',
-          label: 'Date de début',
-          required: true,
-        },
-        {
-          kind: 'date',
-          name: 'end_date',
-          label: 'Date de fin',
-          required: true,
-        },
-      ],
-    });
-  }
-  if (group?.is_admin) {
-    defaultFields.push({
-      kind: 'boolean',
-      name: 'admin',
-      label: 'Admin',
-      helpText: 'Un admin peut modifier le groupe et ses membres.',
-    });
-  }
-  if (member.id === null && group?.is_admin) {
-    defaultFields.splice(0, 0, {
-      kind: 'autocomplete',
-      label: 'Utilisateur',
-      name: 'student',
-      endPoint: '/api/student/student/',
-      getOptionLabel: (m) => m?.name || '',
-    });
-  }
   return defaultFields;
 }
 
 /**
- * Create a new blank membership object.
+ * Create a new blank event object.
  *
- * @param group - the group of the membership
- * @returns A blank membership
+ * @returns A blank event
  */
-function createBlankMember(group: Group, student: Student): Membership {
-  const date = new Date();
-  const today = date.toISOString().split('T')[0];
-  date.setFullYear(date.getFullYear() + 1);
-  const oneYearLater = date.toISOString().split('T')[0];
-  const member = {
-    id: null,
-    student: group.is_admin ? null : (student.id as any),
-    group: group.id as any,
-    summary: '',
+function createBlankEvent(): Event {
+  const event = {
+    group: '',
+    begin_inscription: '',
+    color: '',
+    date: '',
     description: '',
-    begin_date: today,
-    end_date: oneYearLater,
-    admin: false,
-    priority: 0,
+    end_date: '',
+    end_inscription: '',
+    get_absolute_url: '',
+    group_slug: '',
+    id: null,
+    image: '',
+    location: '',
+    max_participant: null,
+    number_of_participants: null,
+    publication_date: '',
+    publicity: '',
+    slug: '',
+    ticketing: '',
+    title: '',
+    begin_date: '',
   };
-  return member;
+  return event;
 }
 
-function EditMemberModal(props: {
+function EditEventModal(props: {
   open: boolean;
-  member?: Membership;
+  event?: Event;
   group?: Group;
-  student: Student;
-  saveMembership: (member: Membership) => Promise<any>;
+  saveEvent: (member: Event) => Promise<any>;
   closeModal: () => void;
   openDeleteModal?: () => void;
 }) {
-  const { open, group, student, saveMembership, closeModal, openDeleteModal } =
-    props;
-  const member = props.member || createBlankMember(group, student);
-  const formFields = createFormFields(group, member);
+  const { open, group, saveEvent, closeModal, openDeleteModal } = props;
+  const event = props.event || createBlankEvent(group);
+  const formFields = createFormFields();
 
-  const [formValues, setFormValues] = useState<Membership>(
-    structuredClone(member)
-  );
+  const [formValues, setFormValues] = useState<Event>(structuredClone(event));
   const [formErrors, setFormErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [globalErrors, setGlobalErrors] = useState('');
@@ -128,7 +174,7 @@ function EditMemberModal(props: {
   function onSubmit(e: FormEvent) {
     e.preventDefault(); // prevent default action from browser
     setSaving(true); // show loading
-    saveMembership(formValues) // save data
+    saveEvent(formValues) // save data
       .then(() => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
@@ -139,6 +185,7 @@ function EditMemberModal(props: {
       .catch((err) => {
         setSaving(false);
         if (err.response) {
+          console.log('Il y a une erreur');
           setFormErrors(err.response.data); // show errors per fields
           if (err.response.data.non_field_errors)
             // show form errors
@@ -151,6 +198,7 @@ function EditMemberModal(props: {
       });
   }
 
+  // {event.title || 'Ajouter un événement'}
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
@@ -160,13 +208,9 @@ function EditMemberModal(props: {
       <form onSubmit={onSubmit}>
         <DialogTitle sx={{ m: 0, p: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Avatar
-              title={member?.student?.full_name || 'Ajouter un membre'}
-              icon={<EditIcon />}
-            />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {member?.student?.full_name || 'Ajouter un membre'}
+                Ajouter un événement
               </Typography>
             </Box>
             <IconButton
@@ -182,9 +226,9 @@ function EditMemberModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
-          <Alert severity="error" hidden={!globalErrors}>
-            {globalErrors}
-          </Alert>
+          {globalErrors !== '' && (
+            <Alert severity="error">{globalErrors}</Alert>
+          )}
           <Box>
             <FormGroup
               fields={formFields}
@@ -193,16 +237,6 @@ function EditMemberModal(props: {
               setValues={setFormValues}
             />
           </Box>
-          <Button
-            hidden={!openDeleteModal}
-            onClick={openDeleteModal}
-            variant="outlined"
-            color="error"
-            disabled={saving}
-            sx={{ mr: 'auto', mt: 2 }}
-          >
-            Supprimer
-          </Button>
         </DialogContent>
         <DialogActions>
           <Button
@@ -234,4 +268,4 @@ function EditMemberModal(props: {
   );
 }
 
-export default EditMemberModal;
+export default EditEventModal;

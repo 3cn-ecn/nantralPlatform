@@ -57,8 +57,8 @@ export interface Membership {
   };
   summary: string;
   description: string;
-  begin_date?: string;  // date as ISO string
-  end_date?: string;  // date as ISO string
+  begin_date?: string; // date as ISO string
+  end_date?: string; // date as ISO string
   priority: number;
   admin: boolean;
   admin_request?: boolean;

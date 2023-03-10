@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import { Box, Tab } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Tab, Button } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
@@ -14,7 +14,8 @@ import { EventProps } from 'Props/Event';
 import { snakeToCamelCase } from '../../utils/camel';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
-import Formular from '../../components/Formular/Formular'
+import Formular from '../../components/Formular/Formular';
+import ModalEditEvent from '../../legacy/event/eventsView/CreateEvent'
 
 
 
@@ -70,7 +71,22 @@ function EventList(props: { events: any }) {
   const { events } = props;
   console.log(events);
 
-  return <p>Ceci est une liste.</p>;
+  const [ openAddModal, setOpenAddModal ] = useState(false);
+
+  return (<><p>Ceci est une liste.</p>
+            <Button
+              variant="contained"
+              onClick={() => setOpenAddModal(true)}
+            >
+              Ajouter
+            </Button>
+      <ModalEditEvent
+        open={openAddModal}
+        saveEvent={(event: Event) =>
+          createEvent()}
+        closeModal={() => setOpenAddModal(false)}
+      />
+      </>);
 }
 
 function EventCalendar(props: { events: any }) {

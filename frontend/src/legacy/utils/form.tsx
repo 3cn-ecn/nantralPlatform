@@ -8,40 +8,47 @@ import {
   FormHelperText,
   Typography,
   Autocomplete,
-  AutocompleteInputChangeReason
+  AutocompleteInputChangeReason,
 } from '@mui/material';
+import { Dayjs } from 'dayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 import axios from './axios';
 
-export type FieldType = {
-  kind: 'text' | 'integer' | 'float' | 'boolean' | 'date';
-  name: string;
-  label: string;
-  required?: boolean;
-  maxLength?: number;
-  helpText?: string;
-  multiline?: boolean;
-} | {
-  kind: 'group';
-  fields?: (FieldType & { name: string })[];
-} | {
-  kind: 'custom';
-  name: string;
-  component: (props: {error?: boolean}) => JSX.Element;
-} | {
-  kind: 'autocomplete';
-  name: string;
-  label: string;
-  required?: boolean;
-  helpText?: string;
-  endPoint: string;
-  freeSolo?: boolean;
-  getOptionLabel: (option: any) => string;
-  pk?: any;
-}
+export type FieldType =
+  | {
+      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date' | 'date and hour';
+      name: string;
+      label: string;
+      required?: boolean;
+      maxLength?: number;
+      helpText?: string;
+      multiline?: boolean;
+      disablePast?: boolean;
+    }
+  | {
+      kind: 'group';
+      fields?: (FieldType & { name: string })[];
+    }
+  | {
+      kind: 'custom';
+      name: string;
+      component: (props: { error?: boolean }) => JSX.Element;
+    }
+  | {
+      kind: 'autocomplete';
+      name: string;
+      label: string;
+      required?: boolean;
+      helpText?: string;
+      endPoint: string;
+      freeSolo?: boolean;
+      getOptionLabel: (option: any) => string;
+      pk?: any;
+    };
 
 /**
  * A component to create a group of fields for a form
@@ -51,14 +58,14 @@ export type FieldType = {
  * @param props.errors - a list of errors for each field (usually sent back by the server)
  * @param props.setValues - A function to update the values (usually with useState)
  * @param props.noFullWidth - Prevent the fields to have width=100%. Only used on recursive calls
- * @returns 
+ * @returns
  */
 function FormGroup(props: {
-  fields: FieldType[],
-  values: any,
-  errors?: any,
-  setValues: (values: any) => void,
-  noFullWidth?: boolean
+  fields: FieldType[];
+  values: any;
+  errors?: any;
+  setValues: (values: any) => void;
+  noFullWidth?: boolean;
 }) {
   const { fields, values, errors, setValues, noFullWidth } = props;
 
@@ -75,143 +82,193 @@ function FormGroup(props: {
     });
   }
 
-  return <>
-    {fields.map((field) => {
-      const error = field.kind !== 'group' && errors && errors[field.name];
-      switch (field.kind) {
-        case 'group':
-          return (
-            <Box sx={{display: 'flex', gap: 1.5 }} key={field.fields.reduce((prev, curr) => `${prev}+${curr.name}`, '')}>
-              <FormGroup
-                fields={field.fields}
-                values={values}
-                errors={errors}
-                setValues={setValues}
-                noFullWidth
-              />
-            </Box>
-          );
-        case 'text':
-          return (
-            <TextField
-              key={field.name}
-              id={`${field.name}-input`}
-              name={field.name}
-              label={field.label}
-              value={values[field.name]}
-              onChange={(e) => handleChange(field.name, e.target.value)}
-              fullWidth={!noFullWidth}
-              required={field.required}
-              inputProps={{ maxLength: field.maxLength }}
-              helperText={error ? error : field.helpText}
-              error={!!error}
-              margin='normal'
-              multiline={field.multiline}
-            />
-          );
-        case 'date':  // date as string
-          return (
-            <LocalizationProvider adapterLocale={'fr'} dateAdapter={AdapterDayjs} key={field.name}>
-              <DatePicker
+  return (
+    <>
+      {fields.map((field) => {
+        const error = field.kind !== 'group' && errors && errors[field.name];
+        switch (field.kind) {
+          case 'group':
+            return (
+              <Box
+                sx={{ display: 'flex', gap: 1.5 }}
+                key={field.fields.reduce(
+                  (prev, curr) => `${prev}+${curr.name}`,
+                  ''
+                )}
+              >
+                <FormGroup
+                  fields={field.fields}
+                  values={values}
+                  errors={errors}
+                  setValues={setValues}
+                  noFullWidth
+                />
+              </Box>
+            );
+          case 'text':
+            return (
+              <TextField
+                key={field.name}
+                id={`${field.name}-input`}
+                name={field.name}
                 label={field.label}
-                value={values[field.name] && new Date(values[field.name])}
-                onChange={(val) => {
-                  if (val && val.toString() !== 'Invalid Date') {
-                    handleChange(field.name, new Intl.DateTimeFormat('en-GB').format(val).split('/').reverse().join('-'));
-                  } else {
-                    handleChange(field.name, val);
+                value={values[field.name]}
+                onChange={(e) => handleChange(field.name, e.target.value)}
+                fullWidth={!noFullWidth}
+                required={field.required}
+                inputProps={{ maxLength: field.maxLength }}
+                helperText={error ? error : field.helpText}
+                error={!!error}
+                margin="normal"
+                multiline={field.multiline}
+              />
+            );
+          case 'date': // date as string
+            return (
+              <LocalizationProvider
+                adapterLocale={'fr'}
+                dateAdapter={AdapterDayjs}
+                key={field.name}
+              >
+                <DatePicker
+                  label={field.label}
+                  value={values[field.name] && new Date(values[field.name])}
+                  onChange={(val) => {
+                    if (val && val.toString() !== 'Invalid Date') {
+                      handleChange(
+                        field.name,
+                        new Intl.DateTimeFormat('en-GB')
+                          .format(val)
+                          .split('/')
+                          .reverse()
+                          .join('-')
+                      );
+                    } else {
+                      handleChange(field.name, val);
+                    }
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      id={`${field.name}-input`}
+                      name={field.name}
+                      fullWidth={!noFullWidth}
+                      required={field.required}
+                      helperText={error ? error : field.helpText}
+                      error={!!error}
+                      margin="normal"
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+            );
+          case 'boolean':
+            return (
+              <FormControl
+                key={field.name}
+                id={`${field.name}-input`}
+                required={field.required}
+                error={!!error}
+                margin="normal"
+              >
+                <FormControlLabel
+                  label={
+                    <>
+                      <Typography color={error ? 'error' : undefined}>
+                        {`${field.label}${field.required ? ' *' : ''}`}
+                      </Typography>
+                      <FormHelperText sx={{ m: 0 }}>
+                        {error ? error : field.helpText}
+                      </FormHelperText>
+                    </>
                   }
-                }}
-                renderInput={(params) => 
-                  <TextField {...params}
-                    id={`${field.name}-input`}
-                    name={field.name}
-                    fullWidth={!noFullWidth}
-                    required={field.required}
-                    helperText={error ? error : field.helpText}
-                    error={!!error}
-                    margin='normal'
-                  />
-                }
+                  checked={values[field.name]}
+                  onChange={(e: any) =>
+                    handleChange(field.name, e.target.checked)
+                  }
+                  control={<Checkbox name={field.name} />}
+                />
+              </FormControl>
+            );
+          case 'autocomplete':
+            return (
+              <AutocompleteField
+                key={field.name}
+                field={field}
+                value={values[field.name]}
+                error={error}
+                handleChange={handleChange}
+                noFullWidth={noFullWidth}
               />
-            </LocalizationProvider>
-          );
-        case 'boolean':
-          return (
-            <FormControl
-              key={field.name}
-              id={`${field.name}-input`}
-              required={field.required}
-              error={!!error}
-              margin='normal'
-            >
-              <FormControlLabel
-                label={
-                  <>
-                    <Typography color={error ? 'error' : undefined}>
-                      {`${field.label}${field.required ? ' *' : ''}`}
-                    </Typography>
-                    <FormHelperText sx={{ m: 0 }}>
-                      {error ? error : field.helpText}
-                    </FormHelperText>
-                  </>
-                }
-                checked={values[field.name]}
-                onChange={(e: any) => handleChange(field.name, e.target.checked)}
-                control={<Checkbox name={field.name} />}
-              />
-            </FormControl>
-          );
-        case 'autocomplete':
-          return (
-            <AutocompleteField
-              key={field.name}
-              field={field}
-              value={values[field.name]}
-              error={error}
-              handleChange={handleChange}
-              noFullWidth={noFullWidth}
-            />
-          );
-        case 'custom':
-          return <field.component error={!!error} />;
-        default:
-          return (
-            <></>
-          )
-      };
-    })}
-  </>
+            );
+          case 'date and hour':
+            return (
+              <LocalizationProvider
+                adapterLocale={'fr'}
+                dateAdapter={AdapterDayjs}
+                key={field.name}
+              >
+                <DateTimePicker
+                  label={field.label}
+                  value={values[field.name] && new Date(values[field.name])}
+                  disablePast={field.disablePast}
+                  onChange={(newValue: Dayjs | null) => {
+                    handleChange(field.name, newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      id={`${field.name}-input`}
+                      name={field.name}
+                      fullWidth={!noFullWidth}
+                      required={field.required}
+                      helperText={error ? error : field.helpText}
+                      error={!!error}
+                      margin="normal"
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+            );
+
+          case 'custom':
+            return <field.component error={!!error} />;
+          default:
+            return <></>;
+        }
+      })}
+    </>
+  );
 }
 
 /**
  * A field for searching on the API with autocomplete
- * 
+ *
  * @param props.field - the field
  * @param props.field.endPoint - the base url of the api router where to make the search
  * @param props.value - the value for this field
  * @param props.error - the error for this field
  * @param props.handleChange - a function to update the value
  * @param props.noFullWidth - prevent the field to be set to width=100%
- * @returns 
+ * @returns
  */
 function AutocompleteField<T>(props: {
-  field: FieldType & { kind: "autocomplete" },
-  value: any,
-  error: any,
-  handleChange: (name: string, value: any) => void,
-  noFullWidth: boolean,
+  field: FieldType & { kind: 'autocomplete' };
+  value: any;
+  error: any;
+  handleChange: (name: string, value: any) => void;
+  noFullWidth: boolean;
 }) {
   const { field, value, error, handleChange, noFullWidth } = props;
 
-  const [ options, setOptions ] = useState<T[]>([]);
-  const [ selectedOption, setSelectedOption ] = useState<T | string>(null);
+  const [options, setOptions] = useState<T[]>([]);
+  const [selectedOption, setSelectedOption] = useState<T | string>(null);
 
   useEffect(() => {
     if (value) {
       axios
-      .get<T>(`${field.endPoint}/${value}/`)
-      .then((res) => setSelectedOption(res.data));
+        .get<T>(`${field.endPoint}/${value}/`)
+        .then((res) => setSelectedOption(res.data));
     }
   }, []);
 
@@ -222,10 +279,10 @@ function AutocompleteField<T>(props: {
   ): void {
     if (reason !== 'input' || value.length < 3) return;
     axios
-      .get<any[]>(`${field.endPoint}/search/`, { params: { q: value } })
+      .get<any[]>(`${field.endPoint}search/`, { params: { q: value } })
       .then((res) => setOptions(res.data))
       .catch(() => {});
-  };
+  }
 
   return (
     <Autocomplete
@@ -251,11 +308,11 @@ function AutocompleteField<T>(props: {
           required={field.required}
           helperText={error ? error : field.helpText}
           error={!!error}
-          margin='normal'
+          margin="normal"
         />
       )}
     />
   );
-};
+}
 
 export default FormGroup;
