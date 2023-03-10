@@ -748,9 +748,7 @@ function updateWeekToDisplay(
         displayData.beginDate + 3
       );
       if (displayData.beginDate + 3 > 6) {
-        displaySize = displaySize.concat([
-          week.slice(0, endOfWeek.getDay() - 1),
-        ]);
+        displaySize = displaySize.concat(week.slice(0, endOfWeek.getDay() - 1));
       }
       break;
     case 'week':
@@ -768,12 +766,10 @@ function updateWeekToDisplay(
             7;
           i++
         ) {
-          displaySize = displaySize.concat([week.slice()]);
+          displaySize.push(week.slice());
         }
         if (endOfWeek.getDay() !== 1) {
-          displaySize = displaySize.concat([
-            week.slice(0, modulo(endOfWeek.getDay() - 1, 7)),
-          ]);
+          displaySize.push(week.slice(0, modulo(endOfWeek.getDay() - 1, 7)));
         }
       }
       break;
@@ -855,7 +851,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
 
   return (
     <>
-      <p>Le calendrier</p>
       <ChooseWeek
         key="ChooseWeekComponent"
         step={displayData}

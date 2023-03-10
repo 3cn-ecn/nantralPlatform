@@ -66,6 +66,7 @@ export function ChangeWeek(props: {
     return (
       <Button
         variant="outlined"
+        fullWidth
         onClick={() => {
           updateDisplay({
             type: step.type,
@@ -86,15 +87,19 @@ export function ChangeWeek(props: {
           newEndDate.setDate(endDate.getDate() - stepValue);
           updateEnd(newEndDate);
         }}
+        style={{
+          minWidth: `1px`,
+        }}
         data-testid="ChangeWeekPreviousTestId"
       >
-        <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
+        {/* <ArrowBackIosNewIcon></ArrowBackIosNewIcon> */}
       </Button>
     );
   }
   return (
     <Button
       variant="outlined"
+      fullWidth
       onClick={() => {
         updateDisplay({
           type: step.type,
@@ -115,9 +120,12 @@ export function ChangeWeek(props: {
         newEndDate.setDate(endDate.getDate() + stepValue);
         updateEnd(newEndDate);
       }}
+      style={{
+        minWidth: `1px`,
+      }}
       data-testid="ChangeWeekNextTestId"
     >
-      <ArrowForwardIosIcon></ArrowForwardIosIcon>
+      {/* <ArrowForwardIosIcon></ArrowForwardIosIcon> */}
     </Button>
   );
 }

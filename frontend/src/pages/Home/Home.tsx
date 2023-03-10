@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import * as React from 'react';
 import { SvgIcon, Typography } from '@mui/material';
+import { Container } from '@mui/system';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
@@ -10,8 +11,8 @@ import './Home.scss';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { isThisWeek } from '../../utils/date';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
-import { PostProps } from '../../Props/Post';
-import { Status } from '../../Props/GenericTypes';
+import { PostProps, postsToCamelCase } from '../../Props/Post';
+import { LoadStatus } from '../../Props/GenericTypes';
 
 /**
  * Home Page, with Welcome message, next events, etc...
@@ -19,18 +20,17 @@ import { Status } from '../../Props/GenericTypes';
  */
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [eventsStatus, setEventsStatus] = React.useState<Status>('load');
+  const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
-  const [clubsStatus, setClubsStatus] = React.useState<Status>('load');
+  const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
-  const [postsStatus, setPostsStatus] = React.useState<Status>('load');
+  const [postsStatus, setPostsStatus] = React.useState<LoadStatus>('load');
   const { t } = useTranslation('translation'); // translation module
-  const headerImageURL =
-    'https://www.ec-nantes.fr/medias/photo/carroussel-campus-drone-002_1524738012430-jpg';
+  const headerImageURL = '/static/img/central_background.jpg';
   React.useEffect(() => {
     // fetch events
     axios
-      .get('api/event/', {
+      .get('/api/event/', {
         params: {
           from_date: new Date().toISOString(),
           order_by: 'begin_inscription',
@@ -58,8 +58,9 @@ function Home() {
       });
     // fetch posts
     axios
-      .get('api/post')
+      .get('/api/post')
       .then((res) => {
+        postsToCamelCase(res.data);
         setPosts(res.data);
         setPostsStatus('success');
       })
@@ -89,17 +90,21 @@ function Home() {
         </div>
       </div>
       <div style={{ alignContent: 'center', display: 'flex', paddingTop: 20 }}>
-        <div className="container">
-          <PostSection
-            posts={posts.filter((post) => post.pinned)}
-            title={t('home.highlighted')}
-            status={postsStatus}
-          />
-          <PostSection
-            posts={posts.filter((post) => !post.pinned)}
-            title={t('home.announcement')}
-            status={postsStatus}
-          />
+        <Container>
+          {posts.filter((post) => post.pinned) && (
+            <PostSection
+              posts={posts.filter((post) => post.pinned)}
+              title={t('home.highlighted')}
+              status={postsStatus}
+            />
+          )}
+          {posts.filter((post) => !post.pinned) && (
+            <PostSection
+              posts={posts.filter((post) => !post.pinned)}
+              title={t('home.announcement')}
+              status={postsStatus}
+            />
+          )}
           <EventSection
             events={events.filter((item: EventProps) =>
               isThisWeek(new Date(item.beginDate))
@@ -107,6 +112,7 @@ function Home() {
             status={eventsStatus}
             seeMoreUrl="/event"
             title={t('home.thisWeek')}
+            accordion
           />
           <EventSection
             events={events.filter(
@@ -116,14 +122,16 @@ function Home() {
             maxItem={6}
             seeMoreUrl="/event"
             title={t('home.upcomingEvents')}
+            accordion
           />
           <ClubSection
             clubs={myClubs}
             status={clubsStatus}
             title={t('home.myClubs')}
             seeMoreUrl="/club"
+            accordion
           />
-        </div>
+        </Container>
       </div>
     </>
   );

@@ -24,7 +24,8 @@ export function createTestEvent(
   endInscription = null,
   beginInscription = null,
   formUrl = null,
-  isFavorite = true
+  isFavorite = true,
+  group = 1
 ) {
   const event: EventProps = {
     color: color,
@@ -34,6 +35,7 @@ export function createTestEvent(
     getAbsoluteUrl: getAbsoluteUrl,
     groupName: groupName,
     groupSlug: groupSlug,
+    group: group,
     image: image,
     isMember: isMember,
     isParticipating: isParticipating,

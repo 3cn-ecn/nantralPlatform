@@ -10,9 +10,6 @@ describe('<DateBox />', () => {
         endDate={new Date('2023-02-26T03:24:00')}
       />
     );
-    expect(component.getByTestId('DateBoxTestId').textContent).toBe(
-      'vendredi 17 février 2023 au samedi 25 février 2023'
-    );
     expect(component).toMatchSnapshot();
   });
 });

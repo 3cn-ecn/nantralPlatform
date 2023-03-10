@@ -11,7 +11,6 @@ app_name = 'event'
 
 router = DefaultRouter()
 router.register('', EventViewSet, basename='event')
-# router.register('group')
 
 paths = [
     path(

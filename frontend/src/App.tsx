@@ -38,6 +38,7 @@ function App() {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [themeApp, setThemeApp] = React.useState(mode);
   const jAuto = JSON.parse(localStorage.getItem('theme-auto'));
+
   let auto;
   if (jMode !== null) {
     auto = jAuto;
@@ -48,6 +49,8 @@ function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const choixTheme = isAutomatic ? !prefersDarkMode : themeApp;
   const drawerWidth = 240; // the width of the lateral navbar
+  const sideBarVariant =
+    window.innerWidth < 2 * drawerWidth ? 'temporary' : 'persistent';
   return (
     <ThemeProvider theme={choixTheme ? theme : darktheme}>
       <Box sx={{ display: 'flex' }}>
@@ -60,7 +63,12 @@ function App() {
           isAutomatic={isAutomatic}
           setIsAutomatic={setIsAutomatic}
         />
-        <NavBarSide menuOpen={menuOpen} drawerWidth={drawerWidth} />
+        <NavBarSide
+          menuOpen={menuOpen}
+          drawerWidth={drawerWidth}
+          variant={sideBarVariant}
+          onClose={() => setMenuOpen(false)}
+        />
         <Box
           component="main"
           sx={{
@@ -72,7 +80,8 @@ function App() {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.leavingScreen,
             }),
-            marginLeft: `-${drawerWidth}px`,
+            marginLeft:
+              sideBarVariant === 'persistent' ? `-${drawerWidth}px` : 0,
             ...(menuOpen && {
               transition: theme.transitions.create('margin', {
                 easing: theme.transitions.easing.easeOut,
