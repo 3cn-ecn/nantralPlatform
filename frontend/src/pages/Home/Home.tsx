@@ -12,7 +12,7 @@ import { EventSection } from '../../components/Section/EventSection/EventSection
 import { isThisWeek } from '../../utils/date';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
 import { PostProps, postsToCamelCase } from '../../Props/Post';
-import { Status } from '../../Props/GenericTypes';
+import { LoadStatus } from '../../Props/GenericTypes';
 
 /**
  * Home Page, with Welcome message, next events, etc...
@@ -20,11 +20,11 @@ import { Status } from '../../Props/GenericTypes';
  */
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [eventsStatus, setEventsStatus] = React.useState<Status>('load');
+  const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
-  const [clubsStatus, setClubsStatus] = React.useState<Status>('load');
+  const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
-  const [postsStatus, setPostsStatus] = React.useState<Status>('load');
+  const [postsStatus, setPostsStatus] = React.useState<LoadStatus>('load');
   const { t } = useTranslation('translation'); // translation module
   const headerImageURL = '/static/img/central_background.jpg';
   React.useEffect(() => {

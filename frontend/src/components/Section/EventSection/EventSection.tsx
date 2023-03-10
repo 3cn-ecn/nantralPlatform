@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import EventCard from '../../EventCard/EventCard';
 import './EventSection.scss';
 import { AccordionSection } from '../AccordionSection';
-
-export type EventLoadStatus = 'success' | 'fail' | 'load';
+import { LoadStatus } from '../../../Props/GenericTypes';
 
 const LoadingSkeleton = (
   <>
@@ -29,7 +28,7 @@ const LoadingSkeleton = (
  */
 export function EventSection(props: {
   /** L'état de chargement des événements */
-  status: EventLoadStatus;
+  status: LoadStatus;
   /** La liste des événements à afficher */
   events: Array<EventProps>;
   /** Titre de la section */

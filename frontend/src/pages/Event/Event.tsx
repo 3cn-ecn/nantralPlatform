@@ -11,14 +11,12 @@ import {
   CalendarViewDay,
 } from '@mui/icons-material';
 import { Container } from '@mui/system';
-import {
-  EventSection,
-  EventLoadStatus,
-} from '../../components/Section/EventSection/EventSection';
+import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular';
+import { LoadStatus } from '../../Props/GenericTypes';
 
 /**
  * Function used to filter a single event depending on the state of the filterbar
@@ -68,7 +66,7 @@ const filterEvent = (events: Array<EventProps>, filter: Map<string, any>) => {
   return events;
 };
 
-function EventList(props: { status: EventLoadStatus; events: any }) {
+function EventList(props: { status: LoadStatus; events: any }) {
   const { events, status } = props;
   console.log(events);
 
@@ -94,7 +92,7 @@ function EventCalendar(props: { events: any }) {
   );
 }
 
-function EventView(props: { status: EventLoadStatus; events: any }) {
+function EventView(props: { status: LoadStatus; events: any }) {
   const { events, status } = props;
   const [value, setValue] = React.useState('1');
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -128,7 +126,7 @@ function EventView(props: { status: EventLoadStatus; events: any }) {
 function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
   const [filter, setFilter] = React.useState<Map<string, any>>();
-  const [eventsLoadStatus, setStatus] = React.useState<EventLoadStatus>('load');
+  const [eventsLoadStatus, setStatus] = React.useState<LoadStatus>('load');
   const getFilter = (validateFilter) => {
     setFilter(validateFilter);
   };

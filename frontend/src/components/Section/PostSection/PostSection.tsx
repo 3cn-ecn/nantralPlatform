@@ -3,7 +3,7 @@ import { Badge, Box, Button, Divider, Grid, Skeleton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PostCard } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';
-import { Status } from '../../../Props/GenericTypes';
+import { LoadStatus } from '../../../Props/GenericTypes';
 
 /**
  * Une section comportant
@@ -12,7 +12,7 @@ import { Status } from '../../../Props/GenericTypes';
  * et les événements de `events`
  */
 export function PostSection(props: {
-  status: Status;
+  status: LoadStatus;
   /** La liste des posts à afficher */
   posts: Array<PostProps>;
   /** Titre de la section */
