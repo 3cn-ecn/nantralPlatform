@@ -12,7 +12,6 @@ Main component
 .eventCard {
   width: 100%;
   height: max-content;
-  
 }
 
 /* 
@@ -20,7 +19,7 @@ Main component
 Top half  
 ========
 */
-.banner {
+.eventBanner {
   height: 9.5rem;
 }
 
@@ -37,6 +36,12 @@ Top half
   position: absolute;
   top:0;
   left: 0;
+}
+
+.topButtons{
+  position: absolute;
+  width: 100%;
+  top: 0;
 }
 
 /* 
@@ -80,6 +85,8 @@ Bottom half
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin: $margin;
+  margin-top: 0;
 }
 
 // Div to display the title and the group's name

@@ -19,6 +19,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
@@ -80,6 +81,7 @@ function EventCard(props: { event: EventProps }) {
     endInscription,
     beginInscription,
     groupName,
+    id,
   } = event;
   const [participating, setParticipating] = useState(isParticipating);
   const [groupData, setGroup] = useState<ClubProps>({
@@ -127,15 +129,64 @@ function EventCard(props: { event: EventProps }) {
         />
       </a>
     );
+  const navigate = useNavigate();
   return (
-    <Card className="eventCard" sx={{ fontSize: '1rem' }}>
-      <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
-        <CardMedia
-          className="banner"
-          component="img"
-          image={image}
-          alt="Banner"
-        />
+    <div style={{ position: 'relative' }}>
+      <Card className="eventCard" sx={{ fontSize: '1rem' }}>
+        <CardActionArea
+          disableRipple
+          sx={{ fontSize: '1rem' }}
+          onClick={() => {
+            navigate(`/event/${id}/`);
+          }}
+        >
+          <CardMedia
+            className="eventBanner"
+            component="img"
+            image={image}
+            alt="Banner"
+          />
+          <CardContent sx={{ padding: 0 }}>
+            <div className="infoContainer">
+              <div className="infoMain">
+                <div className="groupIcon">{groupIcon}</div>
+
+                <div className="infos">
+                  <Typography
+                    sx={{ fontSize: '1.3rem', marginBottom: '0.2rem' }}
+                    variant="h5"
+                    className="eventTitle"
+                  >
+                    {title}
+                  </Typography>
+                  <Typography sx={{ fontSize: '1rem' }} variant="caption">
+                    {groupName}
+                  </Typography>
+                </div>
+              </div>
+              <div className="infoDetails">
+                <InfoItem name="date" value={dateText} />
+                <InfoItem name="time" value={hourText} />
+              </div>
+            </div>
+          </CardContent>
+        </CardActionArea>
+        <div className="joinButton">
+          <JoinButton
+            variant={variant}
+            person={numberOfParticipants}
+            maxPerson={maxParticipant}
+            participating={participating}
+            eventSlug={slug}
+            link={formUrl}
+            beginInscription={beginInscription}
+            endInscription={endInscription}
+            setParticipating={setParticipating}
+            sx={{ width: '100%' }}
+          />
+        </div>
+      </Card>
+      <div className="topButtons">
         <FavButton
           className="favIcon"
           eventSlug={slug}
@@ -151,46 +202,8 @@ function EventCard(props: { event: EventProps }) {
           participating={participating}
           setParticipating={setParticipating}
         />
-        <CardContent sx={{ padding: 0 }}>
-          <div className="infoContainer">
-            <div className="infoMain">
-              <div className="groupIcon">{groupIcon}</div>
-
-              <div className="infos">
-                <Typography
-                  sx={{ fontSize: '1.3rem', marginBottom: '0.2rem' }}
-                  variant="h5"
-                  className="eventTitle"
-                >
-                  {title}
-                </Typography>
-                <Typography sx={{ fontSize: '1rem' }} variant="caption">
-                  {groupName}
-                </Typography>
-              </div>
-            </div>
-            <div className="infoDetails">
-              <InfoItem name="date" value={dateText} />
-              <InfoItem name="time" value={hourText} />
-            </div>
-            <div className="joinButton">
-              <JoinButton
-                variant={variant}
-                person={numberOfParticipants}
-                maxPerson={maxParticipant}
-                participating={participating}
-                eventSlug={slug}
-                link={formUrl}
-                beginInscription={beginInscription}
-                endInscription={endInscription}
-                setParticipating={setParticipating}
-                sx={{ width: '100%' }}
-              />
-            </div>
-          </div>
-        </CardContent>
-      </CardActionArea>
-    </Card>
+      </div>
+    </div>
   );
 }
 
