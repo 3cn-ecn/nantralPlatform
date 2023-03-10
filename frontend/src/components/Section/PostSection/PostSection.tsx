@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Badge, Button, Divider, Grid, Skeleton } from '@mui/material';
+import { Badge, Box, Button, Divider, Grid, Skeleton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PostCard } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';
-import { Status } from '../../../Props/GenericTypes';
+import { LoadStatus } from '../../../Props/GenericTypes';
 
 /**
  * Une section comportant
@@ -12,7 +12,7 @@ import { Status } from '../../../Props/GenericTypes';
  * et les événements de `events`
  */
 export function PostSection(props: {
-  status: Status;
+  status: LoadStatus;
   /** La liste des posts à afficher */
   posts: Array<PostProps>;
   /** Titre de la section */
@@ -51,7 +51,7 @@ export function PostSection(props: {
       content = [<p key={0}>Nothing to show</p>];
   }
   return (
-    <>
+    <Box marginBottom={2}>
       <h2 className="section-title">
         {title}
         <Badge
@@ -69,7 +69,7 @@ export function PostSection(props: {
           {showAll ? t('button.showLess') : t('button.showAll')}
         </Button>
       )}
-    </>
+    </Box>
   );
 }
 

@@ -1,12 +1,13 @@
 import { snakeToCamelCase } from '../utils/camel';
 
 export interface EventProps {
-  id?: number;
+  id?: number; // Id of the event
   color: string | null; // Color of the event card
   beginDate: Date; // Event begin date in Date format
   endDate: Date; // Event begin date in Date format
   description: string; // Description of the event in html
   getAbsoluteUrl: string; // url of the event from root url
+  group: number; // id of the group
   groupSlug: string; // slug of the organiser
   groupName: string; // name of the organiser
   image: string | null; // uri of the banner
@@ -28,7 +29,7 @@ export interface EventProps {
   placed?: boolean; // whether the event has been placed in the calendar
 }
 
-export function eventsToCamelCase(events: Array<any>) {
+export function eventsToCamelCase(events: Array<any>): void {
   events.forEach((event) => {
     // delete when date update to beginDate
     event.begin_date = event.date;
