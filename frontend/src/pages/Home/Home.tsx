@@ -75,6 +75,9 @@ function Home() {
         console.error(err);
         setClubsStatus('fail');
       });
+  }
+
+  async function getPosts() {
     // fetch posts
     axios
       .get('/api/post')
