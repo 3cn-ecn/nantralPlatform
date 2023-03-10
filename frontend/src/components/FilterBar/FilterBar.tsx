@@ -18,13 +18,9 @@ import { Grid } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import { Dayjs } from 'dayjs';
 import SimpleAccordion from '../Accordion/SimpleAccordion';
-import CheckboxesTags, {
-  AutocompleteField,
-} from '../Checkbox/CheckboxesTags/CheckboxesTags';
+import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
 import BasicDatePicker from '../DatePicker/BasicDatePicker';
-import { ClubProps } from '../../Props/Club';
-import { FieldType } from '../../../legacy/utils/form';
 
 interface FilterInterface {
   id: string;
@@ -43,8 +39,7 @@ function FilterBar(props: { getFilter: any }) {
   const [isFavorite, setIsFavorite] = React.useState(false);
   const [isParticipated, setIsParticipated] = React.useState(false);
   const [isShotgun, setIsShotgun] = React.useState(false);
-  const [organiser, setOrganiser] = React.useState(null);
-  const [groups, setGroups] = React.useState<Array<ClubProps>>([]);
+  const [organiser, setOrganiser] = React.useState<Array<SimpleGroup>>([]);
   const currentFilter = new Map();
 
   const getDateBegin = (newDate) => {
@@ -74,7 +69,6 @@ function FilterBar(props: { getFilter: any }) {
   currentFilter.set('participate', isParticipated);
   currentFilter.set('shotgun', isShotgun);
   currentFilter.set('organiser', organiser);
-  console.log(organiser);
 
   const filters: FilterInterface[] = [
     {
@@ -107,8 +101,9 @@ function FilterBar(props: { getFilter: any }) {
         <Grid item xs="auto">
           <CheckboxesTags
             label={t('filterbar.organiser')}
-            tableContent={groups}
             getResult={getOrganiser}
+            updated
+            request="/api/group/group/"
           />
         </Grid>
       ),

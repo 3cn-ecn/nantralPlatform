@@ -8,45 +8,60 @@ import {
 } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { SimpleGroup } from '../../../legacy/group/interfaces';
 
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 
-// PROBLEME : COMME NOUVELLES REQUETES, N'ENREGISTRE PAS L'ETAT DES SOLUTIONS ET ON PEUT VALIDER PLUSIEURS FOIS LA MEME OPTION
-// PLUSIEURS FOIS LES MEME CHOIX DANS LE FILTRE
-
-function CheckboxesTags(props: {
-  label: string;
-  getResult: any;
-  tableContent: any;
-  currentvalue: any;
+/**
+ * Function to display an Autocomplete with Checkboxes, Tags, and multiple choices
+ * @param props described below
+ * @returns the autocomplete
+ */
+function CheckboxesTags<T>(props: {
+  label: string; // the label displayed on the component
+  getResult: any; // function to get result back into parent component
+  updated: boolean; // true if you use a request need to update the content
+  request: string; // the request used to get your options from database
+  optionsList: Array<T>; // a list of options that you put directly in the Autocomplete
+  optionsLabel: string; // the field to display for each option of the optionsList
 }) {
-  const { label, getResult, tableContent } = props;
-  const [options, setOptions] = React.useState<T[]>([]);
+  const { label, getResult, updated, request, optionsList } = props;
+  const [options, setOptions] = React.useState<Array<SimpleGroup>>([]);
+  const [chosen, setChosen] = React.useState<Array<SimpleGroup>>([]);
+
   const handleChange = (e, selected) => {
     getResult(selected);
+    setChosen(selected);
   };
 
-  // const checked = () => {
-  //   options.array.forEach((element) => {
-  //     if (result.includes(element)) {
-  //       element.set('checked', true);
-  //     } else {
-  //       element.set('checked', false);
-  //     }
-  //   });
-  // };
-
   React.useEffect(() => {
-    axios
-      .get<any[]>('/api/group/group/', {
-        params: { simple: true, limit: 10 },
-      })
-      .then((res) => {
-        setOptions(res.data.results);
-        console.log(res.data);
-      });
+    if (!updated) {
+      setOptions(optionsList);
+    } else {
+      axios
+        .get<any[]>(request, {
+          params: { simple: true, limit: 10 },
+        })
+        .then((res) => {
+          setOptions(res.data.results);
+        });
+    }
   }, []);
+
+  const inChosenFunction = (element: SimpleGroup) => {
+    let isThere: boolean;
+    isThere = false;
+    chosen.forEach((choice) => {
+      if (choice.slug === element.slug) {
+        isThere = true;
+      }
+    });
+    if (isThere === false) {
+      return element;
+    }
+    return null;
+  };
 
   const updateOptions = (
     event: React.SyntheticEvent,
@@ -55,20 +70,21 @@ function CheckboxesTags(props: {
   ) => {
     if (reason !== 'input' || value.length < 1 || value === null) {
       axios
-        .get<any[]>('/api/group/group/', {
+        .get<any[]>(request, {
           params: { simple: true, limit: 10 },
         })
         .then((res) => {
-          setOptions(res.data.results);
-          console.log(res.data);
+          setOptions(
+            res.data.results.filter((element) => inChosenFunction(element))
+          );
         });
     }
     axios
-      .get<any[]>(`/api/group/group/search/`, {
-        params: { simple: true, q: value },
+      .get<any[]>(`${request}search/`, {
+        params: { simple: true, q: value, limit: 10 },
       })
       .then((res) => {
-        setOptions(res.data);
+        setOptions(res.data.filter((element) => inChosenFunction(element)));
       });
   };
 
@@ -82,7 +98,7 @@ function CheckboxesTags(props: {
       options={options}
       filterOptions={(x) => x}
       getOptionLabel={(option) => option.name} // label displayed on the chips
-      onInputChange={updateOptions}
+      onInputChange={updated ? updateOptions : null}
       multiple // enable multiple choices
       clearOnBlur
       limitTags={2} // limit visible chips/tags to 2
@@ -101,104 +117,5 @@ function CheckboxesTags(props: {
     />
   );
 }
-
-// function CheckboxesTags(props: {
-//   label: string;
-//   getResult: any;
-//   tableContent: any;
-// }) {
-//   const { label, getResult, tableContent } = props;
-
-//   const handleChange = (e, selected) => {
-//     getResult(selected);
-//   };
-
-//   return (
-//     <Autocomplete
-//       autoComplete
-//       multiple
-//       clearOnBlur
-//       limitTags={2}
-//       id="size-small-standard"
-//       size="small"
-//       options={tableContent}
-//       disableCloseOnSelect
-//       getOptionLabel={(option) => option.name}
-//       renderOption={(content, option, { selected }) => (
-//         <li {...content}>
-//           <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-//           {option.name}
-//         </li>
-//       )}
-//       onChange={handleChange}
-//       renderInput={(params) => (
-//         <TextField {...params} label={label} multiline placeholder={label} />
-//       )}
-//     />
-//   );
-// }
-
-// export function AutocompleteField<T>(props: {
-//   field: FieldType & { kind: 'autocomplete' };
-//   value: any;
-//   error: any;
-//   handleChange: (name: string, value: any) => void;
-//   noFullWidth: boolean;
-// }) {
-//   const { field, value, error, handleChange, noFullWidth } = props;
-
-//   const [options, setOptions] = React.useState<T[]>([]);
-//   const [selectedOption, setSelectedOption] = React.useState<T | string>(null);
-
-//   React.useEffect(() => {
-//     if (value) {
-//       axios
-//         .get<T>(`${field.endPoint}/${value}/`)
-//         .then((res) => setSelectedOption(res.data));
-//     }
-//   }, []);
-
-//   function updateOptions(
-//     event: React.SyntheticEvent,
-//     value: string,
-//     reason: AutocompleteInputChangeReason
-//   ): void {
-//     if (reason !== 'input' || value.length < 3) return;
-//     axios
-//       .get<any[]>(`${field.endPoint}/search/`, { params: { q: value } })
-//       .then((res) => setOptions(res.data))
-//       .catch(() => {});
-//   }
-
-//   return (
-//     <Autocomplete
-//       id={`${field.name}-input`}
-//       value={selectedOption}
-//       onChange={(e, val: T, reason) => {
-//         if (reason === 'selectOption') {
-//           setSelectedOption(val);
-//           handleChange(field.name, val[field.pk || 'id']);
-//         }
-//       }}
-//       options={options}
-//       filterOptions={(x) => x}
-//       getOptionLabel={field.getOptionLabel}
-//       fullWidth={!noFullWidth}
-//       freeSolo={field.freeSolo}
-//       onInputChange={updateOptions}
-//       renderInput={(params) => (
-//         <TextField
-//           {...params}
-//           name={field.name}
-//           label={field.label}
-//           required={field.required}
-//           helperText={error || field.helpText}
-//           error={!!error}
-//           margin="normal"
-//         />
-//       )}
-//     />
-//   );
-// }
 
 export default CheckboxesTags;
