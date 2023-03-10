@@ -1,8 +1,8 @@
 // Variables
-$width: 28.125em;
-$height: 18.75em;
+$width: 28.125rem;
+$height: 19rem;
 
-$margin: 0.625em;
+$margin: 0.625rem;
 
 /* 
 ==============
@@ -11,7 +11,7 @@ Main component
 */
 .eventCard {
   width: 100%;
-  height: $height;
+  height: max-content;
   
 }
 
@@ -21,7 +21,7 @@ Top half
 ========
 */
 .banner {
-  height: calc($height / 2);
+  height: 9.5rem;
 }
 
 // Heart icon
@@ -46,7 +46,7 @@ Bottom half
 */
 
 .infoContainer{
-  height:calc($height / 2);
+  height:max-content;
   margin: 0;
   padding: $margin;
 }
@@ -62,24 +62,24 @@ Bottom half
   display: flex;
   left: $margin;
   top: $margin;
-  height: 5em
+  height: 5rem
 }
 
 // Div to store the group's icon
 .groupIcon {
   position: relative;
 
-  width: 3.75em;
-  height: 3.75em;
+  width: 3.75rem;
+  height: 3.75rem;
     
   top: 50%;
   transform: translateY(-50%);
 }
 
 .joinButton {
-  top: 0;
-  right: 0;
-  margin: auto 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 // Div to display the title and the group's name
@@ -113,16 +113,17 @@ Bottom half
 // Main div
 .infoDetails{
   display: flex;
-  justify-content: space-between;
-  min-height: 3.6em;
+  justify-content: space-around;
+  min-height: 3.6rem;
 }
 
 // Div with 2 elements (icon and text)
 .infoItem {
   display: flex;
-  padding-left: 0.3em;
+  padding-left: 0.6rem;
+  padding-right: 0.6rem;
   margin: 0;
-  font-size: 0.875em;
+  font-size: 0.875rem;
 }
 
 // An element

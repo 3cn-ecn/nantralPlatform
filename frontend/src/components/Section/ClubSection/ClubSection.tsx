@@ -36,8 +36,9 @@ export function ClubSection(props: {
   maxItem?: number;
   /** url relative du bouton voir plus */
   seeMoreUrl?: string;
+  accordion?: boolean;
 }) {
-  const { status, clubs, title, maxItem, seeMoreUrl } = props;
+  const { status, clubs, title, maxItem, seeMoreUrl, accordion } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allclubs = maxItem ? clubs.slice(0, maxItem) : clubs;
 
@@ -68,11 +69,20 @@ export function ClubSection(props: {
     default:
       content = null;
   }
-  return <AccordionSection content={content} title={title} url={seeMoreUrl} />;
+  return (
+    <AccordionSection
+      content={content}
+      title={title}
+      url={seeMoreUrl}
+      badge={clubs.length}
+      accordion={accordion}
+    />
+  );
 }
 
 ClubSection.defaultProps = {
   title: null,
   maxItem: null,
   seeMoreUrl: null,
+  accordion: false,
 };

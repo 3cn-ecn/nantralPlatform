@@ -1,19 +1,15 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { Box, Tab } from '@mui/material';
+import { Box, Tab, Container  } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
-
-import {
-  CalendarMonth,
-  CalendarToday,
-  CalendarViewDay,
-} from '@mui/icons-material';
+import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular';
+import { LoadStatus } from '../../Props/GenericTypes';
 
 /**
  * Function used to filter a single event depending on the state of the filterbar
@@ -63,25 +59,23 @@ const filterEvent = (events: Array<EventProps>, filter: Map<string, any>) => {
   return events;
 };
 
-function EventList(props: { events: any }) {
-  const { events } = props;
-  console.log(events);
+function EventList(props: { status: LoadStatus; events: any }) {
+  const { events, status } = props;
 
-  return <p>Ceci est une liste.</p>;
+  return(
+    <EventSection status={status} events={events} title="Liste des prochains évènements"></EventSection>
+  );
 }
 
 function EventCalendar(props: { events: any }) {
   const { events } = props;
   return (
-    <>
-      <p>Ceci est un calendrier.</p>
-      <Calendar events={events}></Calendar>
-    </>
+    <Calendar events={events}></Calendar>
   );
 }
 
-function EventView(props: { events: any }) {
-  const { events } = props;
+function EventView(props: { status: LoadStatus; events: any }) {
+  const { events, status } = props;
   const [value, setValue] = React.useState('1');
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -94,14 +88,11 @@ function EventView(props: { events: any }) {
           <Tab label="Calendrier" value="2" />
         </TabList>
       </Box>
-      <TabPanel value="1">
-        <EventList events={events}></EventList>
+      <TabPanel value="1" sx={{ padding: 0 }}>
+        <EventList status={status} events={events}></EventList>
       </TabPanel>
-      <TabPanel value="2">
+      <TabPanel value="2" sx={{ padding: 0 }}>
         <EventCalendar events={events}></EventCalendar>
-        <CalendarMonth></CalendarMonth>
-        <CalendarViewDay></CalendarViewDay>
-        <CalendarToday></CalendarToday>
       </TabPanel>
     </TabContext>
   );
@@ -114,29 +105,34 @@ function EventView(props: { events: any }) {
 function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
   const [filter, setFilter] = React.useState<Map<string, any>>();
-
+  const [eventsLoadStatus, setStatus] = React.useState<LoadStatus>('load');
   const getFilter = (validateFilter) => {
     setFilter(validateFilter);
   };
   console.log(filterEvent(events, filter));
 
   React.useEffect(() => {
-    axios.get('/api/event').then((res: any) => {
-      eventsToCamelCase(res.data);
-      setEvents(res.data);
-    });
+    axios
+      .get('/api/event')
+      .then((res: any) => {
+        eventsToCamelCase(res.data);
+        setEvents(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
+      });
   }, []);
 
   return (
-    <>
+    <Container className="EventPage">
       <h1>Évènements</h1>
-      <p>Ceci est la page des events</p>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Formular />
         <FilterBar getFilter={getFilter} />
       </div>
-      <EventView events={events} />
-    </>
+      <EventView status={eventsLoadStatus} events={events} />
+    </Container>
   );
 }
 

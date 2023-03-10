@@ -10,7 +10,7 @@ import { TimeBlock } from './TimeBlock/TimeBlock';
  * @param events The global list of events.
  * @returns The list of events sorted.
  */
-function sortWithPos(
+export function sortWithPos(
   eventKeyList: Array<number>,
   events: Array<EventProps>
 ): Array<number> {
@@ -52,7 +52,7 @@ function sortWithPos(
     }
   }
   if (currentSize !== globalSize) {
-    console.warn('Event chain is wrong');
+    throw new Error(`Event chain is wrong`);
   }
   return eventChain;
 }
@@ -116,7 +116,7 @@ export function Day(props: {
         <Grid
           container
           key={`Chain${chain}Day${day}`}
-          sx={{ text: 'GlobalDayContainer' }}
+          data-testid={`GlobalDayContainer${day}TestId`}
         >
           {chain.map((eventKey) => {
             if (eventKey >= 0) {
