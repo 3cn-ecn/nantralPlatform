@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { isString } from 'lodash';
+import { isString } from 'lodash-es';
 import axios from 'axios';
 
 /** Interface for the options */

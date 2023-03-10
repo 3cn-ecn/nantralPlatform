@@ -4,11 +4,13 @@ import { createEvents, EventAttributes } from 'ics';
 import './Calendar.scss';
 import { EventProps } from 'Props/Event';
 import { modulo, ppcm } from '../../utils/maths';
+import { numberOfDayInDateMonth } from './utils';
 import { Day } from './Day/Day';
 import { EventDataProps, CalendarView } from './CalendarProps/CalendarProps';
 import { DayInfos } from './DayInfos/DayInfos';
 import { ChooseWeek } from './ChooseWeek/ChooseWeek';
 import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';
+import { Month } from './Month/Month';
 
 /**
  * Function that sort event date-wise.
@@ -219,6 +221,90 @@ function eventSizeReajust(
 }
 
 /**
+ * Function that add blanked events to fill chains. Blanked Events have only a key that is the opposite of their size.
+ * @param blockedEventsChain List of events chain that have to take all horizontal space.
+ * @param events List of events.
+ */
+function addBlankedEvents(
+  blockedEventsChain: Array<Array<number>>,
+  events: Array<EventProps>
+): void {
+  let cumulateSize: number;
+  blockedEventsChain.forEach((chain) => {
+    cumulateSize = 0;
+    chain.forEach((event) => {
+      cumulateSize += events[event].effectiveSize;
+    });
+    if (cumulateSize !== events[0].globalSize) {
+      chain.push(cumulateSize - events[0].globalSize);
+    }
+  });
+}
+
+/**
+ * Call functions to place the next events in the chains list
+ * @param blanked Wheter current event is blanked
+ * @param events List of events.
+ * @param chain List of keys of current simultaneous events that are placed.
+ * @param eventsBlockedChain List of chains with simultaneous events that have to be placed.
+ * @param position The position where the event has to be placed.
+ * @param select The current index in eventsBlockedChain[0] of the key of the event that is placed.
+ * @returns Then next index in eventsBlockedChain[0] of the key of the event that will be placed and a boolean to tell if the chain is totally placed
+ * @param changePlacement Whether the current event has been placed this iteration.
+ * @returns The next index in eventsBlockedChain[0] of the key of the event that will be placed and a boolean to tell if the chain is totally placed
+ */
+function placeNextEvents(
+  blanked: boolean,
+  events: Array<EventProps>,
+  chain: Array<number>,
+  eventsBlockedChain: Array<Array<number>>,
+  position: number,
+  select: number,
+  changePlacement: boolean
+): { newSelect: number; chainPlaced: boolean } {
+  let newSelect = select;
+  let chainPlaced = false;
+
+  const tempEventBlockedChain: Array<Array<number>> =
+    eventsBlockedChain.slice();
+  tempEventBlockedChain[0] = eventsBlockedChain[0]
+    .slice(0, select)
+    .concat(eventsBlockedChain[0].slice(select + 1));
+
+  if (!blanked) {
+    if (
+      !placeEvents(
+        events,
+        chain,
+        tempEventBlockedChain,
+        position + events[eventsBlockedChain[0][select]].effectiveSize
+      )
+    ) {
+      // Fail to place the next event
+      if (changePlacement) {
+        events[eventsBlockedChain[0][select]].placed = false;
+      }
+      newSelect += 1;
+    } else {
+      chainPlaced = true;
+    }
+  } else if (
+    !placeEvents(
+      events,
+      chain,
+      tempEventBlockedChain,
+      position - eventsBlockedChain[0][select]
+    )
+  ) {
+    // Fail to place the next event which is blanked
+    newSelect += 1;
+  } else {
+    chainPlaced = true;
+  }
+  return { newSelect, chainPlaced };
+}
+
+/**
  * A function that check if the placement of an event corresponds with an event chain. If the event is not already placed, this function places it.
  * @param events List of events.
  * @param chain List of keys of current simultaneous events that are placed.
@@ -236,41 +322,38 @@ function placeChainEvent(
 ): { newSelect: number; chainPlaced: boolean } {
   let newSelect = select;
   let chainPlaced = false;
-  let change = false;
+  let changePlacement = false;
   let eventPlaced = true;
-  let tempEventBlockedChain;
+
+  // Set if it's a blanked event
+  const blanked = eventsBlockedChain[0][select] < 0;
+
   // If the event has not been already placed yet
   // Then checked if the event can be placed
-  if (!events[eventsBlockedChain[0][select]].placed) {
-    change = true;
-    events[eventsBlockedChain[0][select]].placed = true;
-    events[eventsBlockedChain[0][select]].position = position;
-  } else if (events[eventsBlockedChain[0][select]].position !== position) {
-    newSelect += 1;
-    eventPlaced = false;
+  if (!blanked) {
+    if (!events[eventsBlockedChain[0][select]].placed) {
+      changePlacement = true;
+      events[eventsBlockedChain[0][select]].placed = true;
+      events[eventsBlockedChain[0][select]].position = position;
+    } else if (events[eventsBlockedChain[0][select]].position !== position) {
+      newSelect += 1;
+      eventPlaced = false;
+    }
   }
 
   // Only if the current event has been able to be placed, while the event placed doesn't able a good placement for all events, change the event which is placed in position.
   if (eventPlaced) {
-    tempEventBlockedChain = eventsBlockedChain.slice();
-    tempEventBlockedChain[0] = eventsBlockedChain[0]
-      .slice(0, select)
-      .concat(eventsBlockedChain[0].slice(select + 1));
-    if (
-      !placeEvents(
-        events,
-        chain,
-        tempEventBlockedChain,
-        position + events[eventsBlockedChain[0][select]].effectiveSize
-      )
-    ) {
-      if (change) {
-        events[eventsBlockedChain[0][select]].placed = false;
-      }
-      newSelect += 1;
-    } else {
-      chainPlaced = true;
-    }
+    const newValues = placeNextEvents(
+      blanked,
+      events,
+      chain,
+      eventsBlockedChain,
+      position,
+      select,
+      changePlacement
+    );
+    newSelect = newValues.newSelect;
+    chainPlaced = newValues.chainPlaced;
   }
   return { newSelect, chainPlaced };
 }
@@ -388,9 +471,47 @@ function setSameTimeEvents(
   // Reajust the size of events to use all the horizontal space
   eventSizeReajust(blockedEventsChain, events, eventsData);
 
+  // Add blanks to complete uncomplete line
+  addBlankedEvents(blockedEventsChain, events);
+
   // Try to place the events optimally
   if (!placeEvents(events, blockedEventsChain[0], blockedEventsChain, 0)) {
     console.warn("Some events haven't been rightfully placed");
+  }
+}
+
+function isInDayWeek(
+  event: EventProps,
+  checkBeginDate: Date,
+  checkEndDate: Date,
+  sortEvents: Array<Array<EventProps>>
+) {
+  for (let i = 1; i < 7; i++) {
+    checkBeginDate.setDate(checkBeginDate.getDate() + 1);
+    checkEndDate.setDate(checkEndDate.getDate() + 1);
+    if (
+      (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
+      (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
+    ) {
+      sortEvents[i].push({ ...event });
+    }
+  }
+}
+function isInDayMonth(
+  event: EventProps,
+  checkBeginDate: Date,
+  checkEndDate: Date,
+  sortEvents: Array<Array<EventProps>>
+) {
+  for (let i = 1; i < numberOfDayInDateMonth(checkBeginDate); i++) {
+    checkBeginDate.setDate(checkBeginDate.getDate() + 1);
+    checkEndDate.setDate(checkEndDate.getDate() + 1);
+    if (
+      (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
+      (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
+    ) {
+      sortEvents[i].push({ ...event });
+    }
   }
 }
 
@@ -403,7 +524,8 @@ function setSameTimeEvents(
 function isInDay(
   event: EventProps,
   mondayDate: Date,
-  sortEvents: Array<Array<EventProps>>
+  sortEvents: Array<Array<EventProps>>,
+  mode: 'week' | 'month'
 ): void {
   const checkBeginDate = new Date(
     mondayDate.getFullYear(),
@@ -422,15 +544,12 @@ function isInDay(
   ) {
     sortEvents[0].push(event);
   }
-  for (let i = 1; i < 7; i++) {
-    checkBeginDate.setDate(checkBeginDate.getDate() + 1);
-    checkEndDate.setDate(checkEndDate.getDate() + 1);
-    if (
-      (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
-      (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
-    ) {
-      sortEvents[i].push({ ...event });
-    }
+  if (mode === 'week') {
+    isInDayWeek(event, checkBeginDate, checkEndDate, sortEvents);
+  } else if (mode === 'month') {
+    isInDayMonth(event, checkBeginDate, checkEndDate, sortEvents);
+  } else {
+    throw new Error(`Le mode ${mode} n'existe pas pour la fonction isInDay()`);
   }
 }
 
@@ -453,13 +572,34 @@ function sortInWeek(
     sortEvents.push(new Array<EventProps>());
   }
   oldSortEvents.forEach((event) => {
-    isInDay(event, mondayDate, sortEvents);
+    isInDay(event, mondayDate, sortEvents, 'week');
   });
 
   for (let i = 0; i < 7; i++) {
     setSameTimeEvents(sortEvents[i], eventsBlockedChain);
   }
   return { sortEvents, eventsBlockedChain };
+}
+
+function sortInMonth(
+  oldSortEvents: Array<EventProps>,
+  beginDate: Date
+): {
+  sortEvents: Array<Array<EventProps>>;
+} {
+  const sortEvents = [];
+  const eventsBlockedChain = [];
+  for (let i = 0; i < numberOfDayInDateMonth(beginDate); i++) {
+    sortEvents.push(new Array<EventProps>());
+  }
+  oldSortEvents.forEach((event) => {
+    isInDay(event, beginDate, sortEvents, 'month');
+  });
+
+  for (let i = 0; i < 7; i++) {
+    setSameTimeEvents(sortEvents[i], eventsBlockedChain);
+  }
+  return { sortEvents };
 }
 
 /**
@@ -483,7 +623,7 @@ function addEventICS(event: EventProps): EventAttributes {
     title: event.title,
     description: event.description,
     location: event.location,
-    organizer: { name: event.group },
+    organizer: { name: event.groupName },
   };
 
   return eventCalendar;
@@ -559,15 +699,84 @@ function changeDisplay(
       newBeginDate.setDate(
         newBeginDate.getDate() - modulo(newBeginDate.getDay() - 1, 7)
       );
+      newEndDate.setFullYear(newBeginDate.getFullYear());
+      newEndDate.setMonth(newBeginDate.getMonth());
       newEndDate.setDate(newBeginDate.getDate() + 7);
       updateBegin(newBeginDate);
       updateEnd(newEndDate);
       break;
-    // case 'month':
-    // break;
-    default:
+    case 'month':
+      newBeginDate.setDate(1);
+      newEndDate.setDate(numberOfDayInDateMonth(newBeginDate) + 1);
+      updateBegin(newBeginDate);
+      updateEnd(newEndDate);
       break;
+    default:
+      throw new Error(`Given display ${display} not implemented`);
   }
+}
+
+function updateWeekToDisplay(
+  displayData: {
+    type: CalendarView;
+    beginDate: number;
+  },
+  beginOfWeek: Date,
+  endOfWeek: Date
+): Array<Array<any>> | Array<Array<[string, number]>> {
+  const week = [
+    ['Lundi', 1],
+    ['Mardi', 2],
+    ['Mercredi', 3],
+    ['Jeudi', 4],
+    ['Vendredi', 5],
+    ['Samedi', 6],
+    ['Dimanche', 7],
+  ];
+  let displaySize: Array<Array<any>> | Array<Array<Array<any>>>;
+
+  switch (displayData.type) {
+    case 'day':
+      displaySize = week.slice(
+        displayData.beginDate,
+        displayData.beginDate + 1
+      );
+      break;
+    case '3Days':
+      displaySize = week.slice(
+        displayData.beginDate,
+        displayData.beginDate + 3
+      );
+      if (displayData.beginDate + 3 > 6) {
+        displaySize = displaySize.concat(week.slice(0, endOfWeek.getDay() - 1));
+      }
+      break;
+    case 'week':
+      displaySize = week.slice();
+      break;
+    case 'month':
+      if (beginOfWeek.getDate() === 1 && endOfWeek.getDate() === 1) {
+        displaySize = [week.slice(modulo(beginOfWeek.getDay() - 1, 7))];
+        for (
+          let i = 1;
+          i <
+          (modulo(beginOfWeek.getDay() - 1, 7) +
+            numberOfDayInDateMonth(beginOfWeek) -
+            6) /
+            7;
+          i++
+        ) {
+          displaySize.push(week.slice());
+        }
+        if (endOfWeek.getDay() !== 1) {
+          displaySize.push(week.slice(0, modulo(endOfWeek.getDay() - 1, 7)));
+        }
+      }
+      break;
+    default:
+      throw new Error(`Given display ${displayData.type} not implemented`);
+  }
+  return displaySize;
 }
 
 /**
@@ -618,48 +827,22 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     endOfWeek
   );
 
-  const eventsWeek: {
+  let eventsWeek: {
     sortEvents: Array<Array<EventProps>>;
-    eventsBlockedChain: Array<Array<Array<number>>>;
-  } = sortInWeek(sortEvents, beginOfWeek);
+    eventsBlockedChain?: Array<Array<Array<number>>>;
+  };
+  let eventsBlockedChain: Array<Array<Array<number>>>;
+
+  if (displayData.type !== 'month') {
+    eventsWeek = sortInWeek(sortEvents, beginOfWeek);
+    ({ eventsBlockedChain } = eventsWeek);
+  } else {
+    eventsWeek = sortInMonth(sortEvents, beginOfWeek);
+  }
 
   const newSortEvents = eventsWeek.sortEvents;
-  const { eventsBlockedChain } = eventsWeek;
-
-  const week = [
-    ['Lundi', 1],
-    ['Mardi', 2],
-    ['Mercredi', 3],
-    ['Jeudi', 4],
-    ['Vendredi', 5],
-    ['Samedi', 6],
-    ['Dimanche', 7],
-  ];
-
-  let displaySize: Array<Array<any>>;
-  switch (displayData.type) {
-    case 'day':
-      displaySize = week.slice(
-        displayData.beginDate,
-        displayData.beginDate + 1
-      );
-      break;
-    case '3Days':
-      displaySize = week.slice(
-        displayData.beginDate,
-        displayData.beginDate + 3
-      );
-      if (displayData.beginDate + 3 > 6) {
-        displaySize = displaySize.concat(
-          week.slice(0, (displayData.beginDate + 3) % 7)
-        );
-      }
-      break;
-    case 'week':
-      displaySize = week.slice();
-      break;
-    default:
-  }
+  // In month view, the display size is composed of multiples weeks, so there ara arrays of days
+  const displaySize = updateWeekToDisplay(displayData, beginOfWeek, endOfWeek);
 
   // Update the display and the view
   React.useEffect(() => {
@@ -668,7 +851,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
 
   return (
     <>
-      <p>Le calendrier</p>
       <ChooseWeek
         key="ChooseWeekComponent"
         step={displayData}
@@ -683,24 +865,36 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
         updateDisplay={updateDisplay}
       ></ChooseDisplay>
       <div id="Calendar" style={{ display: 'flex' }}>
-        <Grid container spacing={0}>
-          <Grid item xs={1}>
-            <DayInfos />
+        {displayData.type !== 'month' ? (
+          <Grid container spacing={0}>
+            <Grid item xs={1}>
+              <DayInfos />
+            </Grid>
+            {displaySize.map((day, number) => {
+              return (
+                <Grid item xs={10.5 / displaySize.length} key={day[0]}>
+                  <Day
+                    key={day[0]}
+                    dayValue={day[1]}
+                    day={day[0]}
+                    events={newSortEvents[number]}
+                    chains={eventsBlockedChain[number]}
+                  />
+                </Grid>
+              );
+            })}
           </Grid>
-          {displaySize.map((day, number) => {
-            return (
-              <Grid item xs={10.5 / displaySize.length} key={day[0]}>
-                <Day
-                  key={day[0]}
-                  dayValue={day[1]}
-                  day={day[0]}
-                  events={newSortEvents[number]}
-                  chains={eventsBlockedChain[number]}
-                />
+        ) : (
+          <Grid container spacing={0}>
+            {beginOfWeek.getDate() === 1 && endOfWeek.getDate() === 1 ? (
+              <Grid item xs={12}>
+                <Month monthWeeks={displaySize} events={newSortEvents} />
               </Grid>
-            );
-          })}
-        </Grid>
+            ) : (
+              <Grid item xs={12}></Grid>
+            )}
+          </Grid>
+        )}
       </div>
       <div id="ics">
         <Button

@@ -16,6 +16,7 @@ i18n
     supportedLngs: ['fr-FR', 'en-GB'],
     fallbackLng: { 'fr-*': ['fr-FR'], default: ['en-GB'] },
     debug: true,
+    load: 'currentOnly',
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },

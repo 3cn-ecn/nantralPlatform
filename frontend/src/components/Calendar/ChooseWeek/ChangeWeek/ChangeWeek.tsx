@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { numberOfDayInMonth, numberOfDayInDateMonth } from '../../utils';
 import { CalendarView } from '../../CalendarProps/CalendarProps';
 import { modulo } from '../../../../utils/maths';
 
@@ -48,7 +49,14 @@ export function ChangeWeek(props: {
       stepValue = 7;
       break;
     case 'month':
-      stepValue = 1;
+      if (action === 'previous') {
+        stepValue = numberOfDayInMonth(
+          beginDate.getFullYear(),
+          beginDate.getMonth() - 1
+        );
+      } else {
+        stepValue = numberOfDayInDateMonth(beginDate);
+      }
       break;
     default:
       stepValue = 0;
@@ -58,6 +66,7 @@ export function ChangeWeek(props: {
     return (
       <Button
         variant="outlined"
+        fullWidth
         onClick={() => {
           updateDisplay({
             type: step.type,
@@ -78,40 +87,45 @@ export function ChangeWeek(props: {
           newEndDate.setDate(endDate.getDate() - stepValue);
           updateEnd(newEndDate);
         }}
-      >
-        <ArrowBackIosNewIcon></ArrowBackIosNewIcon>
-      </Button>
-    );
-  }
-  if (action === 'next') {
-    return (
-      <Button
-        variant="outlined"
-        onClick={() => {
-          updateDisplay({
-            type: step.type,
-            beginDate: modulo(step.beginDate + stepValue, 7),
-          });
-          const newBeginDate = new Date(
-            beginDate.getFullYear(),
-            beginDate.getMonth(),
-            beginDate.getDate()
-          );
-          const newEndDate = new Date(
-            endDate.getFullYear(),
-            endDate.getMonth(),
-            endDate.getDate()
-          );
-          newBeginDate.setDate(newBeginDate.getDate() + stepValue);
-          updateBegin(newBeginDate);
-          newEndDate.setDate(endDate.getDate() + stepValue);
-          updateEnd(newEndDate);
+        style={{
+          minWidth: `1px`,
         }}
+        data-testid="ChangeWeekPreviousTestId"
       >
-        <ArrowForwardIosIcon></ArrowForwardIosIcon>
+        {/* <ArrowBackIosNewIcon></ArrowBackIosNewIcon> */}
       </Button>
     );
   }
-  console.warn('Appel de ChangeWeek mal effectué');
-  return <p>Error</p>;
+  return (
+    <Button
+      variant="outlined"
+      fullWidth
+      onClick={() => {
+        updateDisplay({
+          type: step.type,
+          beginDate: modulo(step.beginDate + stepValue, 7),
+        });
+        const newBeginDate = new Date(
+          beginDate.getFullYear(),
+          beginDate.getMonth(),
+          beginDate.getDate()
+        );
+        const newEndDate = new Date(
+          endDate.getFullYear(),
+          endDate.getMonth(),
+          endDate.getDate()
+        );
+        newBeginDate.setDate(newBeginDate.getDate() + stepValue);
+        updateBegin(newBeginDate);
+        newEndDate.setDate(endDate.getDate() + stepValue);
+        updateEnd(newEndDate);
+      }}
+      style={{
+        minWidth: `1px`,
+      }}
+      data-testid="ChangeWeekNextTestId"
+    >
+      {/* <ArrowForwardIosIcon></ArrowForwardIosIcon> */}
+    </Button>
+  );
 }

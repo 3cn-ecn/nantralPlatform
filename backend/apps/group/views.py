@@ -144,7 +144,7 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
         if user.is_authenticated:
             # show the posts from last 6 months (3 maximum)
             all_posts = Post.objects.filter(
-                group_slug=group.slug,
+                group=group,
                 publication_date__gte=(
                     timezone.now() - timezone.timedelta(days=6 * 30)),
                 publication_date__lte=timezone.now()
@@ -152,7 +152,7 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
             context['posts'] = [p for p in all_posts if p.can_view(user)][:3]
             # check if there are some events planned for this group
             context['has_events'] = Event.objects.filter(
-                group_slug=group.slug,
+                group=group,
                 date__gte=timezone.now()
             ).exists()
             # members
@@ -498,7 +498,7 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context['group'] = self.object
         context['events'] = (Event.objects
-                             .filter(group_slug=self.object.slug)
+                             .filter(group=self.object)
                              .order_by('-date'))
         context['ariane'] = [
             {
@@ -534,7 +534,7 @@ class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context['group'] = self.object
         context['posts'] = (Post.objects
-                            .filter(group_slug=self.object.slug)
+                            .filter(group=self.object.slug)
                             .order_by('-publication_date'))
         context['ariane'] = [
             {

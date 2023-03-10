@@ -4,14 +4,27 @@ import {
   Snackbar,
   Alert,
   Button,
-  Box
+  Box,
+  IconButton,
 } from '@mui/material';
-import { Membership, Student } from './interfaces';
+import {
+  NavigateBefore as NavigateBeforeIcon,
+  NavigateNext as NavigateNextIcon
+} from '@mui/icons-material';
+import { Membership, Student, Page } from './interfaces';
 import axios from '../utils/axios';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 
 // passed through django template
 declare const studentId: string;
+
+interface QueryParams {
+  student: string;
+  from?: string;
+  to?: string;
+  limit?: number;
+  offset?: number;
+}
 
 /**
  * Main table component for editing members in the admin page of groups.
@@ -23,8 +36,10 @@ function MembershipsStudent(props: {}): JSX.Element {
   const [ loadState, setLoadState ] = useState<'load' | 'success' | 'fail'>('load');
   // status of modals
   const [ message, setMessage ] = useState<{type: any; text: string }>({ type: null, text: '' });
-  // filters passed as query parameters
-  const [ filters, setFilters ] = useState<{student: string; from?: string; to?: string}>({
+  // urls and filters passed as query parameters
+  const [ prevUrl, setPrevUrl ] = useState('');
+  const [ nextUrl, setNextUrl ] = useState('');
+  const [ filters, setFilters ] = useState<QueryParams>({
     student: studentId,
     from: new Date().toISOString()
   });
@@ -43,13 +58,22 @@ function MembershipsStudent(props: {}): JSX.Element {
   }, []);
 
   /** Get the list of members */
-  async function getMemberships(): Promise<void> {
-    return axios.get<Membership[]>('/api/group/membership/', {params: filters})
-    .then((res) => res.data.map((item) => {
-      item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
-      return item;
-    }))
-    .then((list) => setMembers(list));
+  async function getMemberships(
+    url='/api/group/membership/',
+    query_params: Partial<QueryParams>=filters
+  ): Promise<void> {
+    return axios.get<Page<Membership>>(url, {params: query_params})
+    .then((res) => res.data)
+    .then((data) => {
+        setMembers(
+          data.results.map((item) => {
+            item.dragId = `item-${item.id}`;  // add a dragId for the drag-and-drop
+            return item;
+          })
+        );
+        setPrevUrl(data.previous);
+        setNextUrl(data.next);
+    });
   }
 
   if (loadState === 'load' || !student)
@@ -70,7 +94,7 @@ function MembershipsStudent(props: {}): JSX.Element {
         ? <Button
             variant='text'
             onClick={() => {
-              filters.from = undefined;
+              setFilters({ ...filters, from: undefined });
               getMemberships();
             }}
           >
@@ -79,13 +103,19 @@ function MembershipsStudent(props: {}): JSX.Element {
         : <Button
             variant='text'
             onClick={() => {
-              filters.from = new Date().toISOString();
+              setFilters({ ...filters, from: new Date().toISOString() });
               getMemberships();
             }}
           >
             Masquer les anciens groupes
           </Button>
         }
+        <IconButton sx={{ml: 'auto'}} disabled={!prevUrl} onClick={() => getMemberships(prevUrl, {})}>
+          <NavigateBeforeIcon />
+        </IconButton>
+        <IconButton disabled={!nextUrl} onClick={() => getMemberships(nextUrl, {})}>
+          <NavigateNextIcon />
+        </IconButton>
       </Box>
       <Snackbar
         autoHideDuration={4000}

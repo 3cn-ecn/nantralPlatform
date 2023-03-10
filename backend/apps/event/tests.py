@@ -21,7 +21,7 @@ class EventTestCase(TestCase, TestMixin):
         )
         self.event = Event.objects.create(
             title="A test event 1",
-            group_slug=self.g.slug,
+            group=self.g,
             date=timezone.now(),
             description="Test Desc",
             location="Amphi A")

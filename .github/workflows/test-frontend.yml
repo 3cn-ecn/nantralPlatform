@@ -13,14 +13,23 @@ jobs:
   tests-on-frontend:
     name: SonarCloud
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./frontend
+
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Install dependencies
+        working-directory: ${{ env.working-directory }}
+        run: npm install
+      - name: Test and coverage
+        working-directory: ${{ env.working-directory }}
+        run: npm test
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: frontend
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}

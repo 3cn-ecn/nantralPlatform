@@ -1,56 +1,48 @@
-/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
-import { Box, Tab, Button } from '@mui/material';
+import { Box, Tab, Button, Container } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
-
-import {
-  CalendarMonth,
-  CalendarToday,
-  CalendarViewDay,
-} from '@mui/icons-material';
-import { EventProps } from 'Props/Event';
-import { snakeToCamelCase } from '../../utils/camel';
+import { EventSection } from '../../components/Section/EventSection/EventSection';
+import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular';
-import ModalEditEvent from '../../legacy/event/eventsView/CreateEvent'
-
-
+import ModalEditEvent from '../../legacy/event/eventsView/CreateEvent';
+import { LoadStatus } from '../../Props/GenericTypes';
 
 /**
  * Function used to filter a single event depending on the state of the filterbar
  * @returns event if it matches the filter, null if not
  * @TODO move this function to backend
  */
-const filterFunction=(event:EventProps, filter: Map<string, any>) => {
-
+const filterFunction = (event: EventProps, filter: Map<string, any>) => {
   // filter for checkboxes
-  if((filter.get('favorite')===true && event.isFavorite!==true)||
-  (filter.get('participate')===true && event.isParticipating!==true)||
-  (filter.get('shotgun')===true && event.maxParticipant===null)){
+  if (
+    (filter.get('favorite') === true && event.isFavorite !== true) ||
+    (filter.get('participate') === true && event.isParticipating !== true) ||
+    (filter.get('shotgun') === true && event.maxParticipant === null)
+  ) {
     return null;
   }
 
   // filter for date
-  if(filter.get('dateBegin')!==null){
-    if (filter.get('dateBegin').isAfter(event.endDate)){
+  if (filter.get('dateBegin') !== null) {
+    if (filter.get('dateBegin').isAfter(event.endDate)) {
       return null;
     }
   }
 
-  if(filter.get('dateEnd')!==null){
-    if (filter.get('dateEnd').isBefore(event.beginDate)){
+  if (filter.get('dateEnd') !== null) {
+    if (filter.get('dateEnd').isBefore(event.beginDate)) {
       return null;
     }
   }
 
   // filter for organiser
- 
+
   return event;
-  
-}
+};
 
 /**
  * Function used to filter all the events
@@ -59,48 +51,45 @@ const filterFunction=(event:EventProps, filter: Map<string, any>) => {
  * @returns events filtered if there is a filter, all events if not
  * @todo move this function to backend
  */
-const filterEvent=(events: Array<EventProps>, filter: Map<string, any>) => {
-  if (filter !== undefined){
-    return(events.filter((event) => filterFunction(event, filter)))
+const filterEvent = (events: Array<EventProps>, filter: Map<string, any>) => {
+  if (filter !== undefined) {
+    return events.filter((event) => filterFunction(event, filter));
   }
 
   return events;
-}
+};
 
-function EventList(props: { events: any }) {
-  const { events } = props;
-  console.log(events);
+function EventList(props: { status: LoadStatus; events: any }) {
+  const { events, status } = props;
+  const [openAddModal, setOpenAddModal] = useState(false);
 
-  const [ openAddModal, setOpenAddModal ] = useState(false);
-
-  return (<><p>Ceci est une liste.</p>
-            <Button
-              variant="contained"
-              onClick={() => setOpenAddModal(true)}
-            >
-              Ajouter
-            </Button>
+  return (
+    <>
+      <p>Ceci est une liste.</p>
+      <Button variant="contained" onClick={() => setOpenAddModal(true)}>
+        Ajouter
+      </Button>
       <ModalEditEvent
         open={openAddModal}
-        saveEvent={(event: Event) =>
-          createEvent()}
+        saveEvent={(event: Event) => createEvent()}
         closeModal={() => setOpenAddModal(false)}
       />
-      </>);
+    </>
+  );
+  /*
+  return(
+    <EventSection status={status} events={events} title="Liste des prochains évènements"></EventSection>
+  );
+*/
 }
 
 function EventCalendar(props: { events: any }) {
   const { events } = props;
-  return (
-    <>
-      <p>Ceci est un calendrier.</p>
-      <Calendar events={events}></Calendar>
-    </>
-  );
+  return <Calendar events={events}></Calendar>;
 }
 
-function EventView(props: { events: any }) {
-  const { events } = props;
+function EventView(props: { status: LoadStatus; events: any }) {
+  const { events, status } = props;
   const [value, setValue] = React.useState('1');
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -113,14 +102,11 @@ function EventView(props: { events: any }) {
           <Tab label="Calendrier" value="2" />
         </TabList>
       </Box>
-      <TabPanel value="1">
-        <EventList events={events}></EventList>
+      <TabPanel value="1" sx={{ padding: 0 }}>
+        <EventList status={status} events={events}></EventList>
       </TabPanel>
-      <TabPanel value="2">
+      <TabPanel value="2" sx={{ padding: 0 }}>
         <EventCalendar events={events}></EventCalendar>
-        <CalendarMonth></CalendarMonth>
-        <CalendarViewDay></CalendarViewDay>
-        <CalendarToday></CalendarToday>
       </TabPanel>
     </TabContext>
   );
@@ -132,42 +118,35 @@ function EventView(props: { events: any }) {
  */
 function Event() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [filter, setFilter] = React.useState<Map<string,any>>();
-
+  const [filter, setFilter] = React.useState<Map<string, any>>();
+  const [eventsLoadStatus, setStatus] = React.useState<LoadStatus>('load');
   const getFilter = (validateFilter) => {
     setFilter(validateFilter);
-  }
- console.log(filterEvent(events, filter));
+  };
+  console.log(filterEvent(events, filter));
 
   React.useEffect(() => {
-    axios.get('/api/event').then((res: any) => {
-      
-      res.data.forEach((event) => 
-      { 
-        // delete when date update to beginDate
-        event.begin_date = event.date;
-
-        // delete when endDate defined forEach event
-        if (event.end_date === null) {
-          event.end_date = new Date(new Date(event.date).getTime() + 3600000);
-        }
-
-        snakeToCamelCase(event, { 'beginDate': 'Date', 'endDate': 'Date' });
+    axios
+      .get('/api/event')
+      .then((res: any) => {
+        eventsToCamelCase(res.data);
+        setEvents(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
       });
-      setEvents(res.data);
-    });
   }, []);
 
   return (
-    <>
+    <Container className="EventPage">
       <h1>Évènements</h1>
-      <p>Ceci est la page des events</p>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Formular />
-        <FilterBar getFilter={getFilter}/>
-      </div> 
-      <EventView events={events}/>
-    </>
+        <FilterBar getFilter={getFilter} />
+      </div>
+      <EventView status={eventsLoadStatus} events={events} />
+    </Container>
   );
 }
 

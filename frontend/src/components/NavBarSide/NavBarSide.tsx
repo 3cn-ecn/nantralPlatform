@@ -25,7 +25,7 @@ import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
 import { ReactComponent as AcademicIcon } from '../../assets/scalable/academic.svg';
 
 /** Interface for all links */
-interface linksInterface {
+interface LinksInterface {
   text: string; // the text of the link
   url: string;
   icon?: any;
@@ -41,11 +41,16 @@ interface linksInterface {
  * @params props.drawerWidth - The width that the drawer should be.
  * @returns The side bar component
  */
-function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
-  const { menuOpen, drawerWidth } = props;
+function NavBarSide(props: {
+  menuOpen: boolean;
+  drawerWidth: number;
+  variant: 'permanent' | 'persistent' | 'temporary';
+  onClose: () => any;
+}) {
+  const { menuOpen, drawerWidth, variant, onClose } = props;
   const { t } = useTranslation('translation'); // translation module
 
-  const links: linksInterface[] = [
+  const links: LinksInterface[] = [
     {
       text: t('navbar.home'),
       url: '/',
@@ -101,9 +106,12 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
 
   return (
     <Drawer
-      variant="persistent"
+      variant={variant}
       open={menuOpen}
       anchor="left"
+      onAbort={onClose}
+      onAbortCapture={onClose}
+      onAuxClick={onClose}
       sx={{
         width: drawerWidth,
         flexShrink: 0,
@@ -129,7 +137,7 @@ function NavBarSide(props: { menuOpen: boolean; drawerWidth: number }) {
                 color: 'text.primary',
               }}
             >
-              <ListItemButton>
+              <ListItemButton onClick={onClose}>
                 <ListItemIcon>
                   {link.icon ? (
                     <SvgIcon component={link.icon} inheritViewBox />

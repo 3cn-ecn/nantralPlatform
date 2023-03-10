@@ -1,4 +1,12 @@
 {
+  "404": {
+    "bug": "If you think it's a bug, you can",
+    "error": "Error 404 - Page Not Found",
+    "home": "Else, go back to home page by clicking on the sheep:",
+    "notFound": "Sorry, it seems that this page does not exist...",
+    "report": "report it here",
+    "whatYouCanDo": "What you can do now:"
+  },
   "button": {
     "cancel": "cancel",
     "joinButton": {
@@ -7,7 +15,13 @@
       "shotgunClosed": "shotgun closed",
       "title": "Do you want to unregister from this event?",
       "unsuscribe": "unregister"
-    }
+    },
+    "seePage": "See page",
+    "showAll": "Show all",
+    "showLess": "Show less"
+  },
+  "date_picker": {
+    "language": "en"
   },
   "event": {
     "action_menu": {
@@ -16,9 +30,24 @@
       "share": "Share",
       "unsubscribe": "Unregister"
     },
+    "error": "Error while loading the events",
+    "membersOnly": "Members only",
     "no_event": "No Event"
   },
+  "filterbar": {
+    "date": "Date",
+    "favorite": "Favorites",
+    "from": "From",
+    "organiser": "Organiser",
+    "participating": "I participate",
+    "shotgun": "Shotgun",
+    "title_filter": "Filters",
+    "to": "To",
+    "validate_button": "Validate"
+  },
   "home": {
+    "announcement": "Announcement",
+    "highlighted": "Highlighted",
     "myClubs": "My clubs & Assos",
     "myEvents": "My events",
     "seeMore": "see more",

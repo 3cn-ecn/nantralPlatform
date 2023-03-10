@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import * as React from 'react';
 import './EventCard.scss';
 
@@ -18,7 +17,8 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import axios from 'axios';
-import i18next from 'i18next';
+import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
@@ -31,10 +31,20 @@ function InfoItem(props: { name: string; value: string }) {
 
   switch (name) {
     case 'date':
-      icon = <CalendarTodayIcon className="infoItemElement" />;
+      icon = (
+        <CalendarTodayIcon
+          className="infoItemElement"
+          sx={{ fontSize: '1.5em' }}
+        />
+      );
       break;
     case 'time':
-      icon = <AccessTimeIcon className="infoItemElement" />;
+      icon = (
+        <AccessTimeIcon
+          className="infoItemElement"
+          sx={{ fontSize: '1.5em' }}
+        />
+      );
       break;
     default:
   }
@@ -42,6 +52,7 @@ function InfoItem(props: { name: string; value: string }) {
     <div className="infoItem">
       {icon}
       <Typography
+        sx={{ fontSize: '1.2em', paddingLeft: '7px' }}
         variant="subtitle2"
         className="infoItemElement"
         style={{ paddingLeft: '7px' }}
@@ -52,38 +63,32 @@ function InfoItem(props: { name: string; value: string }) {
   );
 }
 
-function EventCard(props: { event: EventProps; scale?: string }) {
-  const { event, scale } = props;
+function EventCard(props: { event: EventProps }) {
+  const { event } = props;
   const {
     title,
-    number_of_participants,
-    max_participant,
-    date,
+    numberOfParticipants,
+    maxParticipant,
+    beginDate,
     image,
-    group,
-    get_group_name,
-    is_participating,
+    groupSlug,
+    isParticipating,
     slug,
-    ticketing,
-    is_favorite,
-    get_absolute_url,
-    end_inscription,
-    begin_inscription,
+    formUrl,
+    isFavorite,
+    getAbsoluteUrl,
+    endInscription,
+    beginInscription,
+    groupName,
   } = event;
-
-  const [participating, setParticipating] = React.useState(is_participating);
-
-  // An exception is made for the BDE as the "club" needs to be removed from the slug
-  // (Not the case for the other clubs)
-  const groupSlug =
-    group === 'club--bde-1' ? group.slice(6, group.length) : group;
-  const [groupData, setGroup] = React.useState<ClubProps>({
+  const [participating, setParticipating] = useState(isParticipating);
+  const [groupData, setGroup] = useState<ClubProps>({
     name: '',
-    logo_url: '',
-    get_absolute_url: '',
+    icon: '',
+    url: '',
     is_admin: false,
   });
-  React.useEffect(() => {
+  useEffect(() => {
     getGroup();
   }, []);
 
@@ -92,37 +97,39 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     setGroup(response.data);
   }
 
+  const { i18n } = useTranslation('translation');
+
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
-  if (ticketing !== null) variant = 'form';
-  else if (max_participant === null) variant = 'normal';
+  if (formUrl !== null) variant = 'form';
+  else if (maxParticipant === null) variant = 'normal';
   else variant = 'shotgun';
 
   // Conversion of the date to a human redeable format
-  const dateValue = new Date(date);
+  const dateValue = new Date(beginDate);
   const dateFormat: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
   };
-  const dateText = dateValue.toLocaleDateString(i18next.language, dateFormat);
-  const hourText = dateValue.toLocaleTimeString(i18next.language, {
+  const dateText = dateValue.toLocaleDateString(i18n.language, dateFormat);
+  const hourText = dateValue.toLocaleTimeString(i18n.language, {
     timeStyle: 'short',
   });
   const groupIcon =
-    typeof groupData.logo_url === 'undefined' ? (
-      <CircularProgress size="3.75em" />
+    typeof groupData.icon === 'undefined' ? (
+      <CircularProgress size="3.75rem" />
     ) : (
-      <a href={window.location.origin + groupData.get_absolute_url}>
+      <a href={window.location.origin + groupData.url}>
         <Avatar
           alt={groupData.name}
-          src={groupData.logo_url}
-          sx={{ fontSize: '1em', width: '3.75em', height: '3.75em' }}
+          src={groupData.icon}
+          sx={{ fontSize: '1rem', width: '3.75rem', height: '3.75rem' }}
         />
       </a>
     );
   return (
-    <Card className="eventCard" style={{ fontSize: scale }}>
-      <CardActionArea disableRipple sx={{ fontSize: '1em' }}>
+    <Card className="eventCard" sx={{ fontSize: '1rem' }}>
+      <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
         <CardMedia
           className="banner"
           component="img"
@@ -132,15 +139,15 @@ function EventCard(props: { event: EventProps; scale?: string }) {
         <FavButton
           className="favIcon"
           eventSlug={slug}
-          selected={is_favorite}
-          size="3em"
+          selected={isFavorite}
+          size="2rem"
         />
         <MoreActionsButton
           isAdmin={groupData.is_admin}
           className="moreActions"
-          shareUrl={window.location.origin + get_absolute_url}
+          shareUrl={window.location.origin + getAbsoluteUrl}
           slug={slug}
-          size="2em"
+          size="2rem"
           participating={participating}
           setParticipating={setParticipating}
         />
@@ -150,28 +157,35 @@ function EventCard(props: { event: EventProps; scale?: string }) {
               <div className="groupIcon">{groupIcon}</div>
 
               <div className="infos">
-                <Typography variant="h5" className="eventTitle">
+                <Typography
+                  sx={{ fontSize: '1.3rem', marginBottom: '0.2rem' }}
+                  variant="h5"
+                  className="eventTitle"
+                >
                   {title}
                 </Typography>
-                <Typography variant="caption">{get_group_name}</Typography>
+                <Typography sx={{ fontSize: '1rem' }} variant="caption">
+                  {groupName}
+                </Typography>
               </div>
             </div>
             <div className="infoDetails">
               <InfoItem name="date" value={dateText} />
               <InfoItem name="time" value={hourText} />
-              <div className="joinButton">
-                <JoinButton
-                  variant={variant}
-                  person={number_of_participants}
-                  maxPerson={max_participant}
-                  participating={participating}
-                  eventSlug={slug}
-                  link={ticketing}
-                  beginInscription={begin_inscription}
-                  endInscription={end_inscription}
-                  setParticipating={setParticipating}
-                />
-              </div>
+            </div>
+            <div className="joinButton">
+              <JoinButton
+                variant={variant}
+                person={numberOfParticipants}
+                maxPerson={maxParticipant}
+                participating={participating}
+                eventSlug={slug}
+                link={formUrl}
+                beginInscription={beginInscription}
+                endInscription={endInscription}
+                setParticipating={setParticipating}
+                sx={{ width: '100%' }}
+              />
             </div>
           </div>
         </CardContent>
@@ -179,9 +193,5 @@ function EventCard(props: { event: EventProps; scale?: string }) {
     </Card>
   );
 }
-
-EventCard.defaultProps = {
-  scale: '1rem',
-};
 
 export default EventCard;
