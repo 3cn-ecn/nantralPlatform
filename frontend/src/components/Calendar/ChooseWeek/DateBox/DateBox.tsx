@@ -22,6 +22,7 @@ export function DateBox(props: { date: Date; endDate: Date }): JSX.Element {
         onClick={() => {
           console.log('tap');
         }}
+        data-testid="DateBoxTestId"
       >
         {`${date.toLocaleDateString('fr-FR', {
           weekday: 'long',

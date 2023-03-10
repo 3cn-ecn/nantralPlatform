@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { ChevronRightOutlined, ExpandMore } from '@mui/icons-material';
+import { ExpandMore } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Badge,
   Button,
   Grid,
 } from '@mui/material';
@@ -12,10 +13,11 @@ import './AccordionSection.scss';
 
 export function AccordionSection(props: {
   title: string;
-  url: string;
+  url?: string;
   content: JSX.Element | Array<JSX.Element>;
+  badge?: number;
 }) {
-  const { url, content, title } = props;
+  const { url, content, title, badge } = props;
   const [expanded, setExpanded] = React.useState<boolean>(true);
   return (
     <Accordion
@@ -41,7 +43,13 @@ export function AccordionSection(props: {
             }}
           >
             <h1 className="section-title">{title}</h1>
-            <ChevronRightOutlined />
+            {badge > 0 && (
+              <Badge
+                badgeContent={badge}
+                color="primary"
+                sx={{ margin: 2.5, zIndex: 0 }}
+              />
+            )}
           </Button>
         </NavLink>
       </AccordionSummary>
@@ -53,3 +61,7 @@ export function AccordionSection(props: {
     </Accordion>
   );
 }
+AccordionSection.defaultProps = {
+  badge: 0,
+  url: null,
+};

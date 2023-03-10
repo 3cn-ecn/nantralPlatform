@@ -6,6 +6,8 @@ import EventCard from '../../EventCard/EventCard';
 import './EventSection.scss';
 import { AccordionSection } from '../AccordionSection';
 
+export type EventLoadStatus = 'success' | 'fail' | 'load';
+
 const LoadingSkeleton = (
   <>
     {[0, 1, 2].map((item) => (
@@ -27,7 +29,7 @@ const LoadingSkeleton = (
  */
 export function EventSection(props: {
   /** L'état de chargement des événements */
-  status: 'success' | 'fail' | 'load';
+  status: EventLoadStatus;
   /** La liste des événements à afficher */
   events: Array<EventProps>;
   /** Titre de la section */
@@ -69,7 +71,14 @@ export function EventSection(props: {
     default:
       content = null;
   }
-  return <AccordionSection title={title} content={content} url={seeMoreUrl} />;
+  return (
+    <AccordionSection
+      title={title}
+      badge={events.length}
+      content={content}
+      url={seeMoreUrl}
+    />
+  );
 }
 
 EventSection.defaultProps = {

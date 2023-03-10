@@ -1,4 +1,4 @@
-import { camelCase, isArray, isObject } from 'lodash';
+import { camelCase, isArray, isObject } from 'lodash-es';
 
 /**
  * Call snakeTocamelCase when an attribute is an object or an array.
