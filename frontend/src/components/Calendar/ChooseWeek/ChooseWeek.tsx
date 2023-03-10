@@ -50,7 +50,7 @@ export function ChooseWeek(props: {
         })}
       </div>
       <div id="changeAreaOfTime">
-        <Grid container justifyContent="center" xs={12}>
+        <Grid container justifyContent="center">
           <Grid item xs={1}>
             <ChangeWeek
               action="previous"
