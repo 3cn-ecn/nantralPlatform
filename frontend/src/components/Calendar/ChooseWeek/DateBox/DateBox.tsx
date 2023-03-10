@@ -1,6 +1,6 @@
 import React from 'react';
 import { CalendarMonth } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Button, Container, Grid } from '@mui/material';
 
 /**
  * The DateBox component which displays the current week and allow to change by click.
@@ -19,24 +19,20 @@ export function DateBox(props: { date: Date; endDate: Date }): JSX.Element {
     <div>
       <Button
         variant="outlined"
+        fullWidth
         onClick={() => {
           console.log('tap');
         }}
         data-testid="DateBoxTestId"
+        style={{
+          minWidth: `1px`,
+        }}
       >
-        {`${date.toLocaleDateString('fr-FR', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })} au `}
-        {sunday.toLocaleDateString('fr-FR', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })}
-        <CalendarMonth></CalendarMonth>
+        <Grid container justifyContent="center" xs={12}>
+          <Grid item xs={12}>
+            <CalendarMonth></CalendarMonth>
+          </Grid>
+        </Grid>
       </Button>
     </div>
   );

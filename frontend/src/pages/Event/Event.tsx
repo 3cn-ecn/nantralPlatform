@@ -1,16 +1,9 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { Box, Tab } from '@mui/material';
+import { Box, Tab, Container  } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
-
-import {
-  CalendarMonth,
-  CalendarToday,
-  CalendarViewDay,
-} from '@mui/icons-material';
-import { Container } from '@mui/system';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
@@ -68,27 +61,16 @@ const filterEvent = (events: Array<EventProps>, filter: Map<string, any>) => {
 
 function EventList(props: { status: LoadStatus; events: any }) {
   const { events, status } = props;
-  console.log(events);
 
-  return (
-    <>
-      <p>Ceci est une liste.</p>
-      <EventSection
-        status={status}
-        events={events}
-        title="Liste des prochains évènements"
-      ></EventSection>
-    </>
+  return(
+    <EventSection status={status} events={events} title="Liste des prochains évènements"></EventSection>
   );
 }
 
 function EventCalendar(props: { events: any }) {
   const { events } = props;
   return (
-    <>
-      <p>Ceci est un calendrier.</p>
-      <Calendar events={events}></Calendar>
-    </>
+    <Calendar events={events}></Calendar>
   );
 }
 
@@ -111,9 +93,6 @@ function EventView(props: { status: LoadStatus; events: any }) {
       </TabPanel>
       <TabPanel value="2" sx={{ padding: 0 }}>
         <EventCalendar events={events}></EventCalendar>
-        <CalendarMonth></CalendarMonth>
-        <CalendarViewDay></CalendarViewDay>
-        <CalendarToday></CalendarToday>
       </TabPanel>
     </TabContext>
   );
@@ -146,9 +125,8 @@ function Event() {
   }, []);
 
   return (
-    <Container>
+    <Container className="EventPage">
       <h1>Évènements</h1>
-      <p>Ceci est la page des events</p>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Formular />
         <FilterBar getFilter={getFilter} />
