@@ -11,7 +11,6 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { PostProps } from 'Props/Post';
-import { formatDate } from '../../utils/date';
 import { ClubProps } from '../../Props/Club';
 import { theme } from '../style/palette';
 import ClubAvatar from '../ClubAvatar/ClubAvatar';
@@ -56,7 +55,7 @@ export function PostModal(props: {
       </DialogTitle>
       <DialogContent dividers>
         <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-          <img alt="" src={post.image} id="image" />
+          {post.image && <img alt="" src={post.image} id="image" />}
           {/* Dangerous should change */}
           <div dangerouslySetInnerHTML={{ __html: post.description }}></div>
           <div
@@ -67,11 +66,7 @@ export function PostModal(props: {
             }}
           >
             <Typography variant="caption" textAlign="right">
-              {`Ajouté le ${formatDate(
-                new Date(post.publication_date),
-                'short',
-                'short'
-              )}`}
+              {`Ajouté le ${new Date(post.publicationDate).toDateString()}`}
             </Typography>
           </div>
         </DialogContentText>
@@ -86,7 +81,7 @@ export function PostModal(props: {
             size={60}
           />
         )}
-        {post.page_suggestion && <SeePageButton link={post.page_suggestion} />}
+        {post.pageSuggestion && <SeePageButton link={post.pageSuggestion} />}
       </DialogActions>
     </Dialog>
   );

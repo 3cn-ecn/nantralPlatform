@@ -1,4 +1,12 @@
 {
+  "404": {
+    "bug": "Si vous pensez que c'est un bug, vous pouvez",
+    "error": "Erreur 404 - Page introuvable",
+    "home": "Sinon, retournez à la page d'accueil en cliquant sur le mouton :",
+    "notFound": "Désolé, il semblerait que cette page n'existe pas...",
+    "report": "nous le signaler ici",
+    "whatYouCanDo": "Ce que vous pouvez faire maintenant :"
+  },
   "button": {
     "cancel": "annuler",
     "joinButton": {

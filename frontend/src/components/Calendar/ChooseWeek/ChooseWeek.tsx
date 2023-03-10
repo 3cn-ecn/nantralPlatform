@@ -1,8 +1,9 @@
 import React from 'react';
-import { Stack } from '@mui/material';
+import { Grid } from '@mui/material';
 import { ChangeWeek } from './ChangeWeek/ChangeWeek';
 import { DateBox } from './DateBox/DateBox';
 import { CalendarView } from '../CalendarProps/CalendarProps';
+import './ChooseWeek.scss';
 
 /**
  * Create an object to choose the current week.
@@ -26,29 +27,57 @@ export function ChooseWeek(props: {
 }): JSX.Element {
   const { step, updateDisplay, beginDate, endDate, updateBegin, updateEnd } =
     props;
+  const sunday = new Date(
+    endDate.getFullYear(),
+    endDate.getMonth(),
+    endDate.getDate()
+  );
+  sunday.setDate(sunday.getDate() - 1);
   return (
-    <div id="day" style={{ display: 'flex' }}>
-      <ChangeWeek
-        action="previous"
-        step={step}
-        updateDisplay={updateDisplay}
-        beginDate={beginDate}
-        endDate={endDate}
-        updateBegin={updateBegin}
-        updateEnd={updateEnd}
-      ></ChangeWeek>
-      <Stack spacing={3}>
-        <DateBox date={beginDate} endDate={endDate}></DateBox>
-      </Stack>
-      <ChangeWeek
-        action="next"
-        step={step}
-        updateDisplay={updateDisplay}
-        beginDate={beginDate}
-        endDate={endDate}
-        updateBegin={updateBegin}
-        updateEnd={updateEnd}
-      ></ChangeWeek>
-    </div>
+    <>
+      <div id="areaOfTimeDisplay">
+        {`${beginDate.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })} au `}
+        {sunday.toLocaleDateString('fr-FR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
+      </div>
+      <div id="changeAreaOfTime">
+        <Grid container justifyContent="center" xs={12}>
+          <Grid item xs={1}>
+            <ChangeWeek
+              action="previous"
+              step={step}
+              updateDisplay={updateDisplay}
+              beginDate={beginDate}
+              endDate={endDate}
+              updateBegin={updateBegin}
+              updateEnd={updateEnd}
+            ></ChangeWeek>
+          </Grid>
+          <Grid item xs={1}>
+            <DateBox date={beginDate} endDate={endDate}></DateBox>
+          </Grid>
+          <Grid item xs={1}>
+            <ChangeWeek
+              action="next"
+              step={step}
+              updateDisplay={updateDisplay}
+              beginDate={beginDate}
+              endDate={endDate}
+              updateBegin={updateBegin}
+              updateEnd={updateEnd}
+            ></ChangeWeek>
+          </Grid>
+        </Grid>
+      </div>
+    </>
   );
 }

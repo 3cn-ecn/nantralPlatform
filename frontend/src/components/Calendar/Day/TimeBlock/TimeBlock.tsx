@@ -10,8 +10,10 @@ export function TimeBlock(props: { startTime: number }): JSX.Element {
   const { startTime } = props;
 
   if (startTime % 2 === 0) {
-    return <Box className="TimeBlockEven"></Box>;
+    return (
+      <Box className="TimeBlockEven" data-testid="TimeBlockEvenTestId"></Box>
+    );
   }
 
-  return <Box className="TimeBlockOdd"></Box>;
+  return <Box className="TimeBlockOdd" data-testid="TimeBlockOddTestId"></Box>;
 }

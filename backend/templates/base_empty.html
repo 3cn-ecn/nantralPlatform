@@ -1,39 +1,79 @@
-{% load static %}
-{% load django_vite %}
+{% load static %} {% load django_vite %}
 
 <!DOCTYPE html>
 <html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="{% static 'manifest.webmanifest' %}" />
+    <meta name="vapid-key" content="{{ vapid_key }}" />
 
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="manifest" href="{% static 'manifest.webmanifest' %}">
-	<meta name="vapid-key" content="{{ vapid_key }}">
-	
-	<script type="module">
-		import RefreshRuntime from 'http://localhost:5173/@react-refresh'
-		RefreshRuntime.injectIntoGlobalHook(window)
-		window.$RefreshReg$ = () => {}
-		window.$RefreshSig$ = () => (type) => type
-		window.__vite_plugin_react_preamble_installed__ = true
-	</script>
-	{% vite_hmr_client %}
+    <script type="module">
+      import RefreshRuntime from "http://localhost:5173/@react-refresh";
+      RefreshRuntime.injectIntoGlobalHook(window);
+      window.$RefreshReg$ = () => {};
+      window.$RefreshSig$ = () => (type) => type;
+      window.__vite_plugin_react_preamble_installed__ = true;
+    </script>
+    {% vite_hmr_client %}
 
-	<!-- favicon -->
-	<link rel="shortcut icon" type="image/svg+xml" href="{% static '/img/logo/scalable/logo.svg' %}">
-	<meta name="description" CONTENT="Bienvenue sur Nantral Platform, le site des étudiant⋅e⋅s de Centrale Nantes !">
-	<title>Nantral Platform</title>
-</head>
+    <!-- favicon -->
+    <link
+      rel="shortcut icon"
+      type="image/svg+xml"
+      href="{% static '/img/logo/scalable/logo.svg' %}"
+    />
+    <meta
+      name="description"
+      content="Bienvenue sur Nantral Platform, le site des étudiant⋅e⋅s de Centrale Nantes !"
+    />
+    <title>Nantral Platform</title>
+    <style>
+      .loader {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #c4c4c4;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spinloader 1s linear infinite;
+      }
+      .loader img {
+        height: 120px;
+        width: 120px;
+        animation: spinlogo 1s linear infinite;
+      }
+      @keyframes spinloader {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spinlogo {
+        0% {
+          transform: rotate(360deg);
+        }
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+    </style>
+  </head>
 
-<body>
-	
-	<noscript>You need to enable JavaScript to run this app.</noscript>
-	<div id="root">
-		Loading...
-	</div>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <div
+        style="position: absolute; top: 50%; left: 50%; margin: -50px 0 0 -50px"
+      >
+        <div class="loader">
+          <img src="{% static "/img/logo/scalable/logo.svg" %}" alt=""
+          loading="lazy" />
+        </div>
+      </div>
+    </div>
 
-	{% vite_asset 'src/index.tsx' %}
-
-</body>
-
+    {% vite_asset 'src/index.tsx' %}
+  </body>
 </html>

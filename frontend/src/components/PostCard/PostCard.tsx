@@ -15,7 +15,6 @@ import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import { useTranslation } from 'react-i18next';
 import { PostProps } from '../../Props/Post';
-import { formatDate } from '../../utils/date';
 import { PostModal } from '../Modal/PostModal';
 
 export function SeePageButton(props: {
@@ -52,9 +51,10 @@ export function PostCard(props: { post: PostProps }) {
   const { post } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
+  console.log(post);
   React.useEffect(() => {
     axios
-      .get(`api/group/group/${post.group_slug}`)
+      .get(`/api/group/group/${post.groupSlug}/`)
       .then((res) => setClubDetails(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -65,10 +65,10 @@ export function PostCard(props: { post: PostProps }) {
   return (
     <>
       <Card
-        variant={post.pinned ? 'outlined' : 'elevation'}
+        variant="outlined"
         sx={{
           height: '110px',
-          borderColor: 'red',
+          borderColor: post.pinned ? 'red' : '',
           borderWidth: 1,
         }}
       >
@@ -98,7 +98,7 @@ export function PostCard(props: { post: PostProps }) {
               <p id="post-club">
                 {clubDetails && clubDetails.name}
                 {' • '}
-                {formatDate(new Date(post.publication_date), 'medium')}
+                {new Date(post.publicationDate).toDateString()}
               </p>
             </div>
             {clubDetails && clubDetails.is_admin && (
@@ -112,7 +112,7 @@ export function PostCard(props: { post: PostProps }) {
                 </IconButton>
               </Tooltip>
             )}
-            {post.page_suggestion && (
+            {post.pageSuggestion && (
               <SeePageButton
                 style={{
                   position: 'absolute',
@@ -121,7 +121,7 @@ export function PostCard(props: { post: PostProps }) {
                   marginRight: 10,
                   marginBottom: 5,
                 }}
-                link={post.page_suggestion}
+                link={post.pageSuggestion}
               />
             )}
           </CardContent>

@@ -67,6 +67,8 @@ class EventViewSet(viewsets.ModelViewSet):
     filter events containing a form link
     - is_participating : bool = None ->
     filter events current user is participating
+    - publicity : 'Mem' | 'Pub' = None ->
+    visibility of the event
 
     Actions
     -------
@@ -109,6 +111,7 @@ class EventViewSet(viewsets.ModelViewSet):
             "min_participants")
         max_participants: int = self.request.query_params.get(
             "max_participants")
+        visibility: str = self.request.query_params.get('publicity')
         # query
         order_by = filter(lambda ord: ord in ORDERS or (
             ord[0] == '-' and ord[1:]) in ORDERS, order_by)
@@ -139,6 +142,8 @@ class EventViewSet(viewsets.ModelViewSet):
                     if min_participants else Q())
             .filter(Q(participants_count__lte=max_participants)
                     if max_participants else Q())
+            .filter(Q(publicity=visibility) if visibility in
+                    [VISIBILITY[i][0] for i in range(len(VISIBILITY))] else Q())
             .filter(Q(publicity=VISIBILITY[0][0]) | Q(member=True))
             .order_by(*order_by)
             .distinct()
