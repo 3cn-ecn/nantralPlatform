@@ -1,12 +1,22 @@
+import { snakeToCamelCase } from '../utils/camel';
+
 export interface PostProps {
+  id: number;
   color: string;
   title: string;
   description: string;
-  publication_date: string;
+  publicationDate: Date;
   image: string;
-  group_slug: string;
+  group: number; // id of the group
+  groupSlug: string;
   slug: string;
   publicity: 'Pub' | 'Mem';
   pinned: boolean;
-  page_suggestion: string;
+  pageSuggestion: string;
+}
+
+export function postsToCamelCase(posts: Array<any>): void {
+  posts.forEach((post) => {
+    snakeToCamelCase(post, { publicationDate: 'Date' });
+  });
 }

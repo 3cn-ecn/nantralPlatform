@@ -1,4 +1,12 @@
 {
+  "404": {
+    "bug": "If you think it's a bug, you can",
+    "error": "Error 404 - Page Not Found",
+    "home": "Else, go back to home page by clicking on the sheep:",
+    "notFound": "Sorry, it seems that this page does not exist...",
+    "report": "report it here",
+    "whatYouCanDo": "What you can do now:"
+  },
   "button": {
     "cancel": "cancel",
     "joinButton": {
