@@ -115,7 +115,6 @@ function Event() {
       eventsToCamelCase(res.data);
       setEvents(res.data);
       setStatus('success');
-      console.log(events);
     }).catch(() => {
       setStatus('fail');});
   }, []);
