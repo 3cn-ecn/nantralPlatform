@@ -40,7 +40,6 @@ function FilterBar(props: { getFilter: any }) {
   const [isParticipated, setIsParticipated] = React.useState(false);
   const [isShotgun, setIsShotgun] = React.useState(false);
   const [organiser, setOrganiser] = React.useState(null);
-  const currentFilter = new Map();
 
   const getDateBegin = (newDate) => {
     setDateBegin(newDate);
@@ -62,13 +61,14 @@ function FilterBar(props: { getFilter: any }) {
   const getOrganiser = (organiserDic) => {
     setOrganiser(organiserDic);
   };
-
-  currentFilter.set('dateBegin', dateBegin);
-  currentFilter.set('dateEnd', dateEnd);
-  currentFilter.set('favorite', isFavorite);
-  currentFilter.set('participate', isParticipated);
-  currentFilter.set('shotgun', isShotgun);
-  currentFilter.set('organiser', organiser);
+  const currentFilter = {
+    dateBegin: dateBegin,
+    dateEnd: dateEnd,
+    favorite: isFavorite,
+    participate: isParticipated,
+    shotgun: isShotgun,
+    organiser: organiser,
+  };
 
   const filters: FilterInterface[] = [
     {
@@ -104,6 +104,9 @@ function FilterBar(props: { getFilter: any }) {
             getResult={getOrganiser}
             updated
             request="/api/group/group/"
+            pkField="slug"
+            labelField="name"
+            optionsList={null}
           />
         </Grid>
       ),

@@ -1,14 +1,9 @@
 import * as React from 'react';
 import axios from 'axios';
-import {
-  TextField,
-  Checkbox,
-  Autocomplete,
-  AutocompleteInputChangeReason,
-} from '@mui/material';
+import { TextField, Checkbox, Autocomplete } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { SimpleGroup } from '../../../legacy/group/interfaces';
+import { Page } from '../../../legacy/group/interfaces';
 
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -24,10 +19,21 @@ function CheckboxesTags<T>(props: {
   updated: boolean; // true if you use a request need to update the content
   request: string; // the request used to get your options from database
   optionsList: Array<T>; // a list of options that you put directly in the Autocomplete
+  pkField: string; // field of option used as primary key
+  labelField: string; // field of option displayed in autocomplete
 }) {
-  const { label, getResult, updated, request, optionsList } = props;
-  const [options, setOptions] = React.useState<Array<SimpleGroup>>([]);
-  const [chosen, setChosen] = React.useState<Array<SimpleGroup>>([]);
+  const {
+    label,
+    getResult,
+    updated,
+    request,
+    optionsList,
+    pkField,
+    labelField,
+  } = props;
+  const [options, setOptions] = React.useState<Array<T>>([]);
+  const [chosen, setChosen] = React.useState<Array<T>>([]);
+  const [reloadCauseCleared, setReloadCauseCleared] = React.useState(false);
 
   const handleChange = (selected) => {
     console.log(selected);
@@ -36,25 +42,11 @@ function CheckboxesTags<T>(props: {
     getResult(selected);
   };
 
-  React.useEffect(() => {
-    if (!updated) {
-      setOptions(optionsList);
-    } else {
-      axios
-        .get<any[]>(request, {
-          params: { simple: true, limit: 10 },
-        })
-        .then((res) => {
-          setOptions(res.data.results);
-        });
-    }
-  }, []);
-
-  const inChosenFunction = (element: SimpleGroup) => {
+  const inChosenFunction = (element: T) => {
     let isThere: boolean;
     isThere = false;
     chosen.forEach((choice) => {
-      if (choice.slug === element.slug) {
+      if (choice[pkField] === element[pkField]) {
         isThere = true;
       }
     });
@@ -64,36 +56,38 @@ function CheckboxesTags<T>(props: {
     return null;
   };
 
-  const updateOptions = (
-    event: React.SyntheticEvent,
-    value: string,
-    reason: AutocompleteInputChangeReason
-  ) => {
-    if (
-      reason !== 'input' ||
-      reason === 'clear' ||
-      value.length < 1 ||
-      value === null
-    ) {
-      axios
-        .get<any[]>(request, {
-          params: { simple: true, limit: 10 },
-        })
-        .then((res) => {
-          setOptions(
-            res.data.results.filter((element) => inChosenFunction(element))
-          );
-        });
-    }
+  const updateOptions = (event: React.SyntheticEvent, value: string) => {
     axios
-      .get<any[]>(`${request}search/`, {
+      .get<T[]>(`${request}search/`, {
         params: { simple: true, q: value, limit: 10 },
       })
       .then((res) => {
         setOptions(res.data.filter((element) => inChosenFunction(element)));
-        // console.log(chosen);
       });
   };
+
+  React.useEffect(() => {
+    if (!updated) {
+      setOptions(optionsList);
+    } else {
+      axios
+        .get<Page<T>>(request, {
+          params: { simple: true, limit: 10 },
+        })
+        .then((res) => {
+          setOptions(res.data.results);
+        });
+    }
+  }, []);
+
+  // force to wait until chosen is updated before calling updateOptions
+  React.useEffect(() => {
+    if (reloadCauseCleared) {
+      console.log('hello');
+      updateOptions(null, null);
+      setReloadCauseCleared(false);
+    }
+  }, [chosen]);
 
   return (
     <Autocomplete
@@ -104,12 +98,12 @@ function CheckboxesTags<T>(props: {
         }
         if (reason === 'clear' || reason === 'removeOption') {
           handleChange(val);
-          updateOptions(e, val, reason);
+          setReloadCauseCleared(true);
         }
       }}
       options={options}
       filterOptions={(x) => x}
-      getOptionLabel={(option) => option.name} // label displayed on the chips
+      getOptionLabel={(option) => option[labelField]} // label displayed on the chips
       onInputChange={updated ? updateOptions : null}
       multiple // enable multiple choices
       clearOnBlur
@@ -120,7 +114,7 @@ function CheckboxesTags<T>(props: {
       renderOption={(content, option, { selected }) => (
         <li {...content}>
           <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-          {option.name}
+          {option[labelField]}
         </li>
       )}
       renderInput={(params) => (

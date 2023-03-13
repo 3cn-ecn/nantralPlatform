@@ -24,6 +24,7 @@ export default function BasicDatePicker(props: {
 
   const handleChange = (newValue: Dayjs | null) => {
     setValue(newValue);
+    getDate(newValue);
     if (newValue === null) {
       setIsEmpty(true);
     } else {
