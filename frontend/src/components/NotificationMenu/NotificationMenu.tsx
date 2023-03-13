@@ -11,6 +11,7 @@ import {
   Button,
   Chip,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -169,6 +170,9 @@ export function NotificationMenu(props) {
             aria-label="show 17 new notifications"
             color="inherit"
             onClick={handleClose}
+            component={Link}
+            reloadDocument
+            to="/notification/settings/"
           >
             <SvgIcon component={SettingsIcon} inheritViewBox />
           </IconButton>

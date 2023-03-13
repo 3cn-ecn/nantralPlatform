@@ -1,7 +1,14 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Typography, Box, MenuItem, Avatar } from '@mui/material';
+import {
+  Typography,
+  Box,
+  MenuItem,
+  Avatar,
+  Button,
+  ListItem,
+} from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import axios from '../../legacy/utils/axios';
@@ -38,15 +45,15 @@ function NotificationItem(props) {
   }
 
   return (
-    <MenuItem
-      component={Link}
-      to={n.url}
-      className="menuItem"
-      onClick={() => {
-        updateSeen();
-      }}
-    >
-      <li className="bob">
+    <ListItem>
+      <MenuItem
+        component={Link}
+        to={n.url}
+        className="menuItem"
+        onClick={() => {
+          updateSeen();
+        }}
+      >
         <span className="spanno">
           {n.icon_url ? (
             <Avatar
@@ -69,13 +76,15 @@ function NotificationItem(props) {
             </Box>
           </small>
         </span>
-        <Box component="span">
+      </MenuItem>
+      <Box component="span">
+        <Button onClick={() => updateSeen()} sx={{ zindex: 20 }}>
           <Typography color="primary" component="span">
             {sn.seen !== true ? '●' : ''}
           </Typography>
-        </Box>
-      </li>
-    </MenuItem>
+        </Button>
+      </Box>
+    </ListItem>
   );
 }
 

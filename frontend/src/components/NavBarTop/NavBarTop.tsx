@@ -283,6 +283,36 @@ function NavBarTop(props: {
               </ListItem>
             </MenuItem>
             <Divider />
+            <MenuItem onClick={handleClickL}>
+              <SvgIcon component={PublicRoundedIcon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.language')}
+              </ListItemText>
+              <NavigateNextIcon />
+            </MenuItem>
+            <MenuItem onClick={handleClickD}>
+              <SvgIcon component={PaletteIcon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.theme')}
+              </ListItemText>
+              <NavigateNextIcon />
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleClose}>
+              <SvgIcon component={AdminPanelSettingsIcon} />
+              <ListItem
+                component={Link}
+                to="/admin/"
+                className="menuItem"
+                disablePadding
+                reloadDocument={isOnBackend}
+                sx={{
+                  color: 'text.primary',
+                }}
+              >
+                {t('user_menu.admin')}
+              </ListItem>
+            </MenuItem>
             <MenuItem onClick={handleClickOpen}>
               <SvgIcon component={ErrorRoundedIcon} />
               <ListItem
@@ -328,34 +358,6 @@ function NavBarTop(props: {
               >
                 {t('user_menu.legal')}
               </ListItem>
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <SvgIcon component={AdminPanelSettingsIcon} />
-              <ListItem
-                component={Link}
-                to="/admin/"
-                className="menuItem"
-                disablePadding
-                reloadDocument={isOnBackend}
-                sx={{
-                  color: 'text.primary',
-                }}
-              >
-                {t('user_menu.admin')}
-              </ListItem>
-            </MenuItem>
-            <MenuItem onClick={handleClickL}>
-              <SvgIcon component={PublicRoundedIcon} />
-              <ListItemText className="menuItem">
-                {t('user_menu.language')}
-              </ListItemText>
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={handleClickD}>
-              <SvgIcon component={PaletteIcon} />
-              <ListItemText className="menuItem">
-                {t('user_menu.theme')}
-              </ListItemText>
             </MenuItem>
           </Menu>
           <Menu
