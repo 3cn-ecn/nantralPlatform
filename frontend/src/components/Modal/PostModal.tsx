@@ -19,6 +19,7 @@ import {
   MembersIcon,
   POST_AVATAR_SIZE,
   SeePageButton,
+  timeFromNow,
 } from '../PostCard/PostCard';
 
 export function PostModal(props: {
@@ -71,7 +72,7 @@ export function PostModal(props: {
             }}
           >
             <Typography variant="caption" textAlign="right">
-              {`Ajouté le ${new Date(post.publicationDate).toDateString()}`}
+              {`${timeFromNow(new Date(post.publicationDate))} ago`}
             </Typography>
           </div>
         </DialogContentText>

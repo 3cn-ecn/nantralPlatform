@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import './AccordionSection.scss';
+import { SeePageButton } from '../PostCard/PostCard';
 
 export function AccordionSection(props: {
   title: string;
@@ -70,27 +71,24 @@ export function AccordionSection(props: {
         aria-controls="panel1bh-content"
         id="panel1bh-header"
       >
-        <NavLink to={url} className="see-more">
-          <Button
-            sx={{
-              textTransform: 'none',
-              color: 'text.primary',
-              ':hover': {
-                textDecoration: 'underline',
-                bgcolor: 'transparent',
-              },
-            }}
-          >
-            <h1 className="section-title">{title}</h1>
-            {badge > 0 && (
-              <Badge
-                badgeContent={badge}
-                color="primary"
-                sx={{ margin: 2.5, zIndex: 0 }}
-              />
-            )}
-          </Button>
-        </NavLink>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            columnGap: 1,
+          }}
+        >
+          <h1 className="section-title">{title}</h1>
+
+          {url && (
+            <NavLink to={url} className="see-more">
+              <Button variant="contained" sx={{ borderRadius: 6 }}>
+                See all
+              </Button>
+            </NavLink>
+          )}
+        </Box>
       </AccordionSummary>
       <AccordionDetails>
         <Grid spacing={2} container className="event-grid" alignItems="stretch">

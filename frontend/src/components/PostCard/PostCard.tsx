@@ -11,7 +11,13 @@ import {
 import * as React from 'react';
 
 import './PostCard.scss';
-import { ArrowForward, Edit, ExitToApp, Groups } from '@mui/icons-material';
+import {
+  ArrowForward,
+  Edit,
+  ExitToApp,
+  Groups,
+  OpenInNew,
+} from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +39,7 @@ export function SeePageButton(props: {
       href={link}
       sx={{ backgroundColor: '#efefefb2' }}
     >
-      <ExitToApp color="primary" />
+      <OpenInNew color="primary" />
     </IconButton>
   );
 }
@@ -59,7 +65,7 @@ export function MembersIcon() {
   );
 }
 
-function timeFromNow(date: Date): string {
+export function timeFromNow(date: Date): string {
   const seconds: number = (new Date().getTime() - date.getTime()) / 1000;
   if (seconds < 60) return `${Math.round(seconds).toString()} seconds`;
   const minutes: number = seconds / 60;
