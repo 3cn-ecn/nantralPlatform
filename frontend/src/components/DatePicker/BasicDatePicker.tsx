@@ -4,6 +4,7 @@ import { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/fr';
+import 'dayjs/locale/en';
 import TextField from '@mui/material/TextField';
 import './BasicDatePicker.scss';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -16,12 +17,14 @@ export default function BasicDatePicker(props: {
   getDate: any;
 }) {
   const { t } = useTranslation('translation'); // translation module
+  const { i18n } = useTranslation('translation');
   const [value, setValue] = React.useState<Dayjs | null>(null);
   const [isEmpty, setIsEmpty] = React.useState(true);
   const { label, minDate, getDate } = props;
 
   const handleChange = (newValue: Dayjs | null) => {
     setValue(newValue);
+    getDate(newValue);
     if (newValue === null) {
       setIsEmpty(true);
     } else {
@@ -73,14 +76,14 @@ export default function BasicDatePicker(props: {
       <TextField className="textfield" size="small" {...params}></TextField>
     );
   };
-
   return (
     <LocalizationProvider
       dateAdapter={AdapterDayjs}
-      adapterLocale={t('date_picker.language')}
+      adapterLocale={i18n.language.substring(0, 2)}
     >
       <DesktopDatePicker
         minDate={minDate}
+        inputFormat="DD/MM/YYYY"
         label={label}
         value={value}
         onChange={handleChange}
