@@ -21,7 +21,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 import axios from './axios';
-import './form.scss';
 
 export type FieldType =
   | {

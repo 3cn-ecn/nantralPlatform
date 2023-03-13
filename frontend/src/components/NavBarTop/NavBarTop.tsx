@@ -14,12 +14,14 @@ import {
   ListItem,
   ListItemText,
   Link as LinkMui,
+  Avatar,
 } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
 import { MoreVert as MoreIcon } from '@mui/icons-material';
 import Divider from '@mui/material/Divider';
 import GavelIcon from '@mui/icons-material/Gavel';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import PersonIcon from '@mui/icons-material/Person';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
@@ -39,7 +41,7 @@ import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import EditSuggestionModal from '../../pages/Suggestion/Suggestion';
-
+import { Suggestion } from '../../pages/Suggestion/interfacesSuggestion';
 /**
  * The top bar for navigation
  *
@@ -73,6 +75,9 @@ function NavBarTop(props: {
     null
   );
   const [loggedId, setLoggedId] = React.useState<string>();
+  const [isProfilePicture, setIsProfilePicture] =
+    React.useState<boolean>(false);
+  const [student, setStudent] = React.useState();
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
   const openD = Boolean(anchorElDark);
@@ -146,10 +151,16 @@ function NavBarTop(props: {
       .get('/api/student/student/me/')
       .then((res) => {
         setLoggedId(res.data.id.toString());
+        setIsProfilePicture(res.data.picture !== null);
+        setStudent(res.data);
       })
       .catch((err) => {
         console.error(err);
       });
+  }
+
+  async function createSuggestion(suggestion: Suggestion) {
+    return axios.post('/api/suggestion', suggestion);
   }
 
   return (
@@ -174,30 +185,26 @@ function NavBarTop(props: {
         <Breadcrumbs
           sx={{ display: { xs: 'none', md: 'flex' } }}
           aria-label="breadcrumb"
+          separator={<NavigateNextIcon fontSize="small" />}
         >
-          <Typography
-            variant="h6"
-            component="div"
-            color="textPrimary"
-            sx={{ display: { xs: 'none', md: 'flex' } }}
-          >
-            Nantral Platform
-          </Typography>
           <LinkMui
+            variant="h6"
             component={Link}
             to="/"
             color="textPrimary"
             underline="hover"
-            variant="h6"
+            sx={{ display: { xs: 'none', md: 'flex' } }}
           >
-            {t('navbar.home')}
+            Nantral Platform
           </LinkMui>
           {pathnames.map((value, index) => {
             const last = index === pathnames.length - 1;
             const to = `/${pathnames.slice(0, index + 1)}/`;
 
             return last ? (
-              <Typography key={to}>{breadcrumbNameMap[to]}</Typography>
+              <Typography key={to} variant="h6">
+                {breadcrumbNameMap[to]}
+              </Typography>
             ) : (
               <LinkMui
                 component={Link}
@@ -213,7 +220,6 @@ function NavBarTop(props: {
           })}
         </Breadcrumbs>
         <Box sx={{ flexGrow: 0.9 }} />
-        <SearchBar />
         <Box sx={{ flexGrow: 1.0 }} />
         <Box sx={{ display: 'flex' }}>
           <NotificationMenu />
@@ -227,7 +233,11 @@ function NavBarTop(props: {
             component="span"
             ref={spanRef}
           >
-            <SvgIcon component={PeopleIcon} inheritViewBox />
+            {!isProfilePicture ? (
+              <SvgIcon component={PeopleIcon} inheritViewBox />
+            ) : (
+              <Avatar alt="profile" src={student.picture} />
+            )}
           </IconButton>
           <Menu
             id="basic-menu"
@@ -283,7 +293,11 @@ function NavBarTop(props: {
                 {t('user_menu.bug')}
               </ListItem>
             </MenuItem>
-            <EditSuggestionModal open={openS} closeModal={handleCloseS} />
+            <EditSuggestionModal
+              open={openS}
+              closeModal={handleCloseS}
+              saveSuggestion={createSuggestion}
+            />
             <MenuItem onClick={handleClose}>
               <SvgIcon component={HelpRoundedIcon} />
               <ListItem

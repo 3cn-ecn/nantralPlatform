@@ -39,7 +39,7 @@
       <div id="goBackButton" class="d-inline-block"></div>
       <div id="fil-dariane" class="navbar-brand">
         {# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
-        <a class="ariane-link" href="{% url 'home:home' %}" style="font-weight: 900;"><!--
+        <a class="ariane-link" href="/" style="font-weight: 900;"><!--
           --><img src="{% static '/img/logo/scalable/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="" loading="lazy"><!--
           --><span class="ms-0">Nantral Platform.</span><!--
         --></a><!--
@@ -144,7 +144,7 @@
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="{% url 'home:mentions' %}">
+              <a class="dropdown-item" href="/legal-notice/">
                 <i class="fas fa-gavel" aria-hidden="true"></i>&nbsp; Mentions Légales
               </a>
             </li>

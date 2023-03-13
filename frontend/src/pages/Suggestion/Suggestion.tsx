@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
 import FormGroup, { FieldType } from '../../legacy/utils/form';
+import { Suggestion } from './interfacesSuggestion';
 
 /**
  * A function to generate the default fields fot the edit modal form.
@@ -21,6 +22,12 @@ import FormGroup, { FieldType } from '../../legacy/utils/form';
  * @param member
  * @returns The default list of fields
  */
+
+interface Suggestion {
+  title: string;
+  description: string;
+  type: string;
+}
 function createFormFields() {
   const defaultFields: FieldType[] = [
     {
@@ -62,8 +69,12 @@ function createBlankSuggestion(): Suggestion {
   return suggestion;
 }
 
-function EditSuggestionModal(props: { open: boolean; closeModal: () => void }) {
-  const { open, closeModal } = props;
+function EditSuggestionModal(props: {
+  open: boolean;
+  closeModal: () => void;
+  saveSuggestion: (suggestion: Suggestion) => Promise<any>;
+}) {
+  const { open, closeModal, saveSuggestion } = props;
   const suggestion = createBlankSuggestion();
   const formFields = createFormFields();
 
@@ -77,7 +88,8 @@ function EditSuggestionModal(props: { open: boolean; closeModal: () => void }) {
   /** Function called on submit to save data */
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    saveSuggestion()
+    console.log(formValues);
+    saveSuggestion(formValues)
       .then(() => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
