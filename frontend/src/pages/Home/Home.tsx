@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import * as React from 'react';
-import { SvgIcon, Typography } from '@mui/material';
+import { Box, SvgIcon, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
@@ -27,6 +27,9 @@ function Home() {
   const [postsStatus, setPostsStatus] = React.useState<LoadStatus>('load');
   const { t } = useTranslation('translation'); // translation module
   const headerImageURL = '/static/img/central_background.jpg';
+  const today = new Date();
+  const postDateLimit = new Date();
+  postDateLimit.setDate(today.getDay() - 15);
   React.useEffect(() => {
     // fetch events
     axios
@@ -58,7 +61,11 @@ function Home() {
       });
     // fetch posts
     axios
-      .get('/api/post')
+      .get('/api/post', {
+        params: {
+          from_date: postDateLimit.toISOString(),
+        },
+      })
       .then((res) => {
         postsToCamelCase(res.data);
         setPosts(res.data);
@@ -73,7 +80,7 @@ function Home() {
   return (
     <>
       <div className="header">
-        <img className="header-image" alt="" src={headerImageURL} />
+        <div className="header-image" />
         <div id="header-title">
           <Typography id="second-title">{t('home.welcomeTo')}</Typography>
           <div id="title">
@@ -89,9 +96,18 @@ function Home() {
           </div>
         </div>
       </div>
-      <div style={{ alignContent: 'center', display: 'flex', paddingTop: 20 }}>
+      <Box
+        bgcolor="background.default"
+        id="home-container"
+        style={{
+          alignContent: 'center',
+          display: 'flex',
+          paddingTop: 20,
+          marginTop: '12.5em',
+        }}
+      >
         <Container>
-          {posts.filter((post) => post.pinned) && (
+          {posts.filter((post) => post.pinned).length > 0 && (
             <PostSection
               posts={posts.filter((post) => post.pinned)}
               title={t('home.highlighted')}
@@ -132,7 +148,7 @@ function Home() {
             accordion
           />
         </Container>
-      </div>
+      </Box>
     </>
   );
 }

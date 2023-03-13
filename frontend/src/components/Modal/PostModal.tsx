@@ -14,7 +14,12 @@ import { PostProps } from 'Props/Post';
 import { ClubProps } from '../../Props/Club';
 import { theme } from '../style/palette';
 import ClubAvatar from '../ClubAvatar/ClubAvatar';
-import { MembersIcon, SeePageButton } from '../PostCard/PostCard';
+import {
+  EditButton,
+  MembersIcon,
+  POST_AVATAR_SIZE,
+  SeePageButton,
+} from '../PostCard/PostCard';
 
 export function PostModal(props: {
   post: PostProps;
@@ -78,10 +83,13 @@ export function PostModal(props: {
             clubUrl={clubDetails.url}
             logoUrl={clubDetails.icon}
             textPosition="right"
-            size={60}
+            size={POST_AVATAR_SIZE}
           />
         )}
-        {post.pageSuggestion && <SeePageButton link={post.pageSuggestion} />}
+        <div style={{ display: 'flex', columnGap: 10 }}>
+          {clubDetails && clubDetails.is_admin && <EditButton />}
+          {post.pageSuggestion && <SeePageButton link={post.pageSuggestion} />}
+        </div>
       </DialogActions>
     </Dialog>
   );

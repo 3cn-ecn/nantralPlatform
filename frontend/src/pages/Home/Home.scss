@@ -1,19 +1,24 @@
+$header-height : 12.5em;
+$image-url : url("/static/img/central_background.jpg");
+
 .header {
-  position : relative;
+  position : fixed;
   display : flex;
   width : 100%;
   align-content: center;
   align-items: center;
   overflow: hidden;
   background-color: white;
+  z-index: -1;
 }
 .header-image {
   width : 100%;
-  fill: cover;
-  height: 12.5em;
-  object-fit: cover;
-  filter: blur(6px) opacity(0.4);
+  background-image: $image-url;
+  height: $header-height;
+  filter: blur(6px) opacity(0.7);
   transform: scale(1.1);
+  background-size: cover;
+  background-position: center;
 
 }
 #header-title {
@@ -54,6 +59,12 @@
   -10px 10px 25px rgb(149, 147, 137);
   margin : 0px;
   padding: 0px;
+}
+#home-container {
+  align-content: center;
+  display: flex;
+  padding-top: 20;
+  margin-top: $header-height;
 }
 
 #title {

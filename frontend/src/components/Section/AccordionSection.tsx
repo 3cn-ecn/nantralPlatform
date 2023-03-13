@@ -59,15 +59,16 @@ export function AccordionSection(props: {
 
   return (
     <Accordion
+      sx={{ borderRadius: '4px' }}
       variant="outlined"
-      className="card"
       expanded={expanded}
       onChange={() => setExpanded(!expanded)}
+      square={false}
     >
       <AccordionSummary
         expandIcon={<ExpandMore />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
+        aria-controls="panel1bh-content"
+        id="panel1bh-header"
       >
         <NavLink to={url} className="see-more">
           <Button

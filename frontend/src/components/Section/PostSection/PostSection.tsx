@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Badge, Box, Button, Divider, Grid, Skeleton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { PostCard } from '../../PostCard/PostCard';
+import { PostCard, PostCardSkeleton } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';
 import { LoadStatus } from '../../../Props/GenericTypes';
 
@@ -34,7 +34,7 @@ export function PostSection(props: {
     case 'load':
       content = [0, 1, 2].map((item) => (
         <Grid key={item} xs={12} md={4} item>
-          <Skeleton key={item} height={110} variant="rectangular" />
+          <PostCardSkeleton />
         </Grid>
       ));
       break;
