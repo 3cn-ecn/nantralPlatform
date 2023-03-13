@@ -271,8 +271,9 @@ function NavBarTop(props: {
               <SvgIcon component={LogoutRoundedIcon} />
               <ListItem
                 component={Link}
-                to="/logout/"
+                to="/account/logout/"
                 className="menuItem"
+                reloadDocument
                 disablePadding
                 sx={{
                   color: 'text.primary',
@@ -297,7 +298,7 @@ function NavBarTop(props: {
             <EditSuggestionModal
               open={openS}
               closeModal={handleCloseS}
-              saveSuggestion={createSuggestion}
+              saveSuggestion={() => createSuggestion}
             />
             <MenuItem onClick={handleClose}>
               <SvgIcon component={HelpRoundedIcon} />
