@@ -141,7 +141,7 @@ function NavBarTop(props: {
     '/legal_mentions/': 'Legal',
   };
   const location = useLocation();
-  const pathnames = ('/home' + location.pathname).split('/').filter((x) => x);
+  const pathnames = `/home${location.pathname}`.split('/').filter((x) => x);
 
   React.useEffect(() => {
     getLoggedUser();
@@ -199,8 +199,9 @@ function NavBarTop(props: {
           </LinkMui>
           {pathnames.map((value, index) => {
             const last = index === pathnames.length - 1;
-            const to = (index == 0) ? '/home/' : `/${pathnames.slice(1, index + 1)}/`;
-            
+            const to =
+              index === 0 ? '/home/' : `/${pathnames.slice(1, index + 1)}/`;
+
             return last ? (
               <Typography key={to} variant="h6">
                 {breadcrumbNameMap[to]}
@@ -210,7 +211,7 @@ function NavBarTop(props: {
                 component={Link}
                 underline="hover"
                 color="textPrimary"
-                to = {(to === '/home/') ? '/' : to}
+                to={to === '/home/' ? '/' : to}
                 key={to}
                 variant="h6"
               >
