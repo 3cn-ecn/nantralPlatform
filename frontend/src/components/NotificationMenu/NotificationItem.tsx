@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
-import axios from '../../legacy/utils/axios';
-import formatUrl from '../../legacy/utils/formatUrl';
+import axios from '../../utils/axios';
+import formatUrl from '../../utils/formatUrl';
 import './NotificationItem.scss';
 
 const app = '/api/notification/';

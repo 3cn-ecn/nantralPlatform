@@ -40,8 +40,8 @@ import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
-import EditSuggestionModal from '../../pages/Suggestion/Suggestion';
-import { Suggestion } from '../../pages/Suggestion/interfacesSuggestion';
+import EditSuggestionModal from '../Suggestion/Suggestion';
+import { Suggestion } from '../Suggestion/interfacesSuggestion';
 /**
  * The top bar for navigation
  *

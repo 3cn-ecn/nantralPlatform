@@ -12,7 +12,7 @@ import {
   Alert,
 } from '@mui/material';
 import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
-import FormGroup, { FieldType } from '../../legacy/utils/form';
+import FormGroup, { FieldType } from '../../utils/form';
 import './FormProfil.scss';
 
 /**
