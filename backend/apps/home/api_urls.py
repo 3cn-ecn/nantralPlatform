@@ -10,5 +10,5 @@ app_name = 'api_home'
 # see https://www.django-rest-framework.org/api-guide/routers/#simplerouter
 
 urlpatterns = [
-    path('/suggestion/', CreateIssueView.as_view(), name='suggestion'),
+    path('suggestion', CreateIssueView.as_view(), name='suggestion'),
 ]

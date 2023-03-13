@@ -161,7 +161,7 @@ function NavBarTop(props: {
   }
 
   async function createSuggestion(suggestion: Suggestion) {
-    return axios.post('/api/suggestion', suggestion);
+    return axios.post('/api/home/suggestion', suggestion);
   }
 
   return (
@@ -328,7 +328,7 @@ function NavBarTop(props: {
             <EditSuggestionModal
               open={openS}
               closeModal={handleCloseS}
-              saveSuggestion={() => createSuggestion}
+              saveSuggestion={() => createSuggestion()}
             />
             <MenuItem onClick={handleClose}>
               <SvgIcon component={HelpRoundedIcon} />
