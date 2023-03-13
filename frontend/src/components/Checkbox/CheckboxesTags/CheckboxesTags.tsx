@@ -36,9 +36,7 @@ function CheckboxesTags<T>(props: {
   const [reloadCauseCleared, setReloadCauseCleared] = React.useState(false);
 
   const handleChange = (selected) => {
-    console.log(selected);
     setChosen(selected);
-    console.log(chosen);
     getResult(selected);
   };
 
@@ -92,11 +90,11 @@ function CheckboxesTags<T>(props: {
   return (
     <Autocomplete
       onChange={(e, val, reason) => {
-        if (reason === 'selectOption') {
-          handleChange(val);
-          console.log(val);
-        }
-        if (reason === 'clear' || reason === 'removeOption') {
+        if (
+          reason === 'selectOption' ||
+          reason === 'clear' ||
+          reason === 'removeOption'
+        ) {
           handleChange(val);
           setReloadCauseCleared(true);
         }
