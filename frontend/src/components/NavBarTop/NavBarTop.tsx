@@ -127,6 +127,7 @@ function NavBarTop(props: {
   const { t } = useTranslation('translation');
 
   const breadcrumbNameMap: { [key: string]: string } = {
+    '/home/': t('navbar.home'),
     '/event/': t('navbar.events'),
     '/club/': t('navbar.clubs'),
     '/colocs/': t('navbar.flatshare'),
@@ -140,7 +141,7 @@ function NavBarTop(props: {
     '/legal_mentions/': 'Legal',
   };
   const location = useLocation();
-  const pathnames = location.pathname.split('/').filter((x) => x);
+  const pathnames = ('/home' + location.pathname).split('/').filter((x) => x);
 
   React.useEffect(() => {
     getLoggedUser();
@@ -183,7 +184,6 @@ function NavBarTop(props: {
         />
         <Box sx={{ flexGrow: 0.02 }} />
         <Breadcrumbs
-          sx={{ display: { xs: 'none', md: 'flex' } }}
           aria-label="breadcrumb"
           separator={<NavigateNextIcon fontSize="small" />}
         >
@@ -199,8 +199,8 @@ function NavBarTop(props: {
           </LinkMui>
           {pathnames.map((value, index) => {
             const last = index === pathnames.length - 1;
-            const to = `/${pathnames.slice(0, index + 1)}/`;
-
+            const to = (index == 0) ? '/home/' : `/${pathnames.slice(1, index + 1)}/`;
+            
             return last ? (
               <Typography key={to} variant="h6">
                 {breadcrumbNameMap[to]}
@@ -210,7 +210,7 @@ function NavBarTop(props: {
                 component={Link}
                 underline="hover"
                 color="textPrimary"
-                to={to}
+                to = {(to === '/home/') ? '/' : to}
                 key={to}
                 variant="h6"
               >

@@ -109,7 +109,7 @@ function Event() {
   const getFilter = (validateFilter) => {
     setFilter(validateFilter);
   };
-  console.log(filterEvent(events, filter));
+  // console.log(filterEvent(events, filter));
 
   React.useEffect(() => {
     axios
