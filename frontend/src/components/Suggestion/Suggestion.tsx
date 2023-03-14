@@ -29,33 +29,6 @@ interface Suggestion {
   description: string;
   type: string;
 }
-function createFormFields() {
-  const { t } = useTranslation('translation');
-  const defaultFields: FieldType[] = [
-    {
-      kind: 'text',
-      name: 'title',
-      label: t('suggestion_menu.title'),
-      required: true,
-    },
-    {
-      kind: 'text',
-      name: 'description',
-      label: t('suggestion_menu.description'),
-      multiline: true,
-      rows: 10,
-      required: true,
-    },
-    {
-      kind: 'select',
-      name: 'type',
-      label: t('suggestion_menu.type'),
-      item: ['Bug', 'Suggestion'],
-      required: true,
-    },
-  ];
-  return defaultFields;
-}
 
 /**
  * Create a new blank membership object.
@@ -79,6 +52,32 @@ function EditSuggestionModal(props: {
   saveSuggestion: (suggestion: Suggestion) => Promise<any>;
 }) {
   const { t } = useTranslation('translation');
+  function createFormFields() {
+    const defaultFields: FieldType[] = [
+      {
+        kind: 'text',
+        name: 'title',
+        label: t('suggestion_menu.title'),
+        required: true,
+      },
+      {
+        kind: 'text',
+        name: 'description',
+        label: t('suggestion_menu.description'),
+        multiline: true,
+        rows: 10,
+        required: true,
+      },
+      {
+        kind: 'select',
+        name: 'type',
+        label: t('suggestion_menu.type'),
+        item: ['Bug', 'Suggestion'],
+        required: true,
+      },
+    ];
+    return defaultFields;
+  }
 
   const { open, closeModal, saveSuggestion } = props;
   const suggestion = createBlankSuggestion();

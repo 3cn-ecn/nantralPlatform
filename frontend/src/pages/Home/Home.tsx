@@ -31,7 +31,6 @@ function Home() {
     getEvent();
     getMyClubs();
     getPosts();
-    getProfile();
   }, []);
 
   async function getEvent() {
