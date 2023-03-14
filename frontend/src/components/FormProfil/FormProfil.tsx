@@ -8,12 +8,11 @@ import {
   IconButton,
   Typography,
   Box,
-  CircularProgress,
   Alert,
+  CircularProgress,
 } from '@mui/material';
-import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Close as CloseIcon } from '@mui/icons-material';
 import FormGroup, { FieldType } from '../../utils/form';
-import './FormProfil.scss';
 
 /**
  * A function to generate the default fields fot the edit modal form.
@@ -159,6 +158,9 @@ export function EditProfilModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
+          <Alert severity="error" hidden={!globalErrors}>
+            {globalErrors}
+          </Alert>
           <Box sx={{ minWidth: 500 }}>
             <FormGroup
               fields={formFields}

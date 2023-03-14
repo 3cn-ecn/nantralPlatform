@@ -1,6 +1,5 @@
 import React from 'react';
 import Container from '@mui/material/Container';
-import EditSuggestionModal from '../Suggestion/Suggestion';
 /**
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component

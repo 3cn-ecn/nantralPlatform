@@ -20,7 +20,6 @@ import { LoadStatus } from '../../Props/GenericTypes';
  */
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [student, setStudent] = React.useState<Array<StudentProps>>([]);
   const [eventsStatus, setEventsStatus] = React.useState<Status>('load');
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
   const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
@@ -55,14 +54,6 @@ function Home() {
       });
   }
 
-  async function getProfile() {
-    axios
-      .get('api/student/student/')
-      .then((res) => setStudent(res.data))
-      .catch((err) => {
-        console.error(err);
-      });
-  }
   async function getMyClubs() {
     // fetch my clubs
     axios

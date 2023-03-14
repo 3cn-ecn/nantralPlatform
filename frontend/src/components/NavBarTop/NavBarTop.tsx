@@ -34,7 +34,6 @@ import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
 import PaletteIcon from '@mui/icons-material/Palette';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import axios from 'axios';
-import { SearchBar } from './SearchBar/SearchBar';
 import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';

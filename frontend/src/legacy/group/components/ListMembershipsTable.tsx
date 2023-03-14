@@ -17,7 +17,6 @@ import {
   DragIndicator as DragIndicatorIcon,
   Edit as EditIcon,
   Visibility as VisibilityIcon,
-  Delete as DeleteIcon,
   Archive as ArchiveIcon,
 } from '@mui/icons-material';
 import {

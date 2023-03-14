@@ -1,18 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { ClubProps } from 'Props/Club';
 import * as React from 'react';
-import { useLoaderData, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { SvgIcon, Typography, Grid, Avatar, Button, Box } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
-import { EventProps, eventsToCamelCase } from '../../Props/Event';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
-import { EventSection } from '../../components/Section/EventSection/EventSection';
-import { isThisWeek } from '../../utils/date';
-import { PostSection } from '../../components/Section/PostSection/PostSection';
-import { PostProps } from '../../Props/Post';
-import { Status } from '../../Props/GenericTypes';
 import { MembershipsStudent } from '../../components/group/MembershipsStudent/';
 import { EditProfilModal } from '../../components/FormProfil/FormProfil';
 

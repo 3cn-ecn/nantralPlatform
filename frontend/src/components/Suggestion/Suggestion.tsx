@@ -10,6 +10,7 @@ import {
   Typography,
   Box,
   CircularProgress,
+  Alert,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import FormGroup, { FieldType } from '../../utils/form';
@@ -143,6 +144,9 @@ function EditSuggestionModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
+          <Alert severity="error" hidden={!globalErrors}>
+            {globalErrors}
+          </Alert>
           <Box sx={{ maxWidth: 500 }}>
             <FormGroup
               fields={formFields}

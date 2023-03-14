@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { render } from 'react-dom';
 import { Snackbar, Alert, Button, Box, IconButton } from '@mui/material';
 import {
   NavigateBefore as NavigateBeforeIcon,
