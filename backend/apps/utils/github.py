@@ -3,7 +3,8 @@ from django.conf import settings
 
 
 def create_issue(title: str, body: str, label):
-    label = "bug" if int(label) == 1 else "suggestion"
+    print(body)
+    label = "bug" if label == "Bug" else "suggestion"
     issue = {
         'title': title,
         'body': body,

@@ -34,7 +34,6 @@ function createFormFields() {
       kind: 'text',
       name: 'title',
       label: 'Titre',
-      maxLength: 50,
     },
     {
       kind: 'text',

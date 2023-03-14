@@ -25,6 +25,11 @@ import './FormProfil.scss';
 function createFormFields() {
   const defaultFields: FieldType[] = [
     {
+      kind: 'text',
+      name: 'test',
+      label: 'Test',
+    },
+    {
       kind: 'number',
       name: 'Année de promotion entrante',
       label: 'Promo',
