@@ -17,7 +17,7 @@ import {
   DragIndicator as DragIndicatorIcon,
   Edit as EditIcon,
   Visibility as VisibilityIcon,
-  Delete as DeleteIcon
+  Archive as ArchiveIcon,
 } from '@mui/icons-material';
 import {
   DragDropContext,
@@ -30,6 +30,7 @@ import Avatar from './Avatar';
 import ModalDisplayMember from './ModalDisplayMember';
 import ModalEditMember from './ModalEditMember';
 import ModalDeleteMember from './ModalDeleteMember';
+import ModalArchiveMember from './ModalArchiveMember';
 import { Group, Membership, Student } from '../interfaces';
 
 
@@ -128,7 +129,7 @@ function MembershipRow(props: {
   index: number;
   group: Group;
   student: Student;
-  updateMembership: (member: Membership) => Promise<void>;
+  updateMembership: (member: Membership, reload?: boolean) => Promise<void>;
   deleteMembership: (member: Membership) => Promise<void>;
 }): JSX.Element {
   const {
@@ -142,6 +143,8 @@ function MembershipRow(props: {
   const [openShowModal, setOpenShowModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openArchiveModal, setOpenArchiveModal] = useState(false);
+  const today = new Date().toISOString();
 
   return <TableRow
     component={DraggableComponent(item.dragId, index)}
@@ -171,8 +174,14 @@ function MembershipRow(props: {
         <IconButton title='Modifier' aria-label='edit' size='small' onClick={() => setOpenEditModal(true)}>
           <EditIcon fontSize='small'/>
         </IconButton>
-        <IconButton title='Supprimer' aria-label='edit' size='small' onClick={() => setOpenDeleteModal(true)}>
-          <DeleteIcon fontSize='small'/>
+        <IconButton
+          title='Archiver'
+          aria-label='archive'
+          size='small'
+          onClick={() => setOpenArchiveModal(true)}
+          hidden={group.group_type.no_membership_dates || item.end_date < today}
+        >
+          <ArchiveIcon fontSize='small'/>
         </IconButton>
       </Box>
       <ModalDisplayMember
@@ -198,6 +207,12 @@ function MembershipRow(props: {
         closeModal={() => setOpenDeleteModal(false)}
         member={item}
       />
+      <ModalArchiveMember
+        open={openArchiveModal}
+        saveMembership={updateMembership}
+        closeModal={() => setOpenArchiveModal(false)}
+        member={item}
+      />
     </TableCell>
   </TableRow>
 }
@@ -210,7 +225,7 @@ function ListMembershipsTable(props: {
   group: Group,
   student: Student,
   reorderMemberships: (reorderedMembers: Membership[], member: Membership, lower?: Membership) => Promise<void>,
-  updateMembership: (member: Membership) => Promise<void>,
+  updateMembership: (member: Membership, reload?: boolean) => Promise<void>,
   deleteMembership: (member: Membership) => Promise<void>,
 }): JSX.Element {
   const {
