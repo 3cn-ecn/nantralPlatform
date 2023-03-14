@@ -31,32 +31,6 @@ interface Suggestion {
 function createFormFields() {
   const defaultFields: FieldType[] = [
     {
-      kind: 'text',
-      name: 'title',
-      label: 'Titre',
-      required: true,
-    },
-    {
-      kind: 'text',
-      name: 'description',
-      label: 'Description',
-      multiline: true,
-      rows: 10,
-      required: true,
-    },
-    {
-      kind: 'select',
-      name: 'type',
-      label: 'Type',
-      item: ['Bug', 'Suggestion'],
-      required: true,
-    },
-    /*{
-      kind: 'text',
-      name: 'test',
-      label: 'Test',
-    },
-    {
       kind: 'number',
       name: 'Année de promotion entrante',
       label: 'Promo',
@@ -94,7 +68,7 @@ function createFormFields() {
       kind: 'picture',
       title: 'Upload',
       description: 'Upload une photo de profil',
-    },*/
+    },
   ];
   return defaultFields;
 }
