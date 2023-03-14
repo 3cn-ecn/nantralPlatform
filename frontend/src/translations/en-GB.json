@@ -119,7 +119,8 @@
     "flatshare": "Flatshares Map",
     "home": "Home",
     "signature": "Signature",
-    "student": "Student List"
+    "student": "Student List",
+    "group": "Groups"
   },
   "notif": {
     "load": "Loading More",
@@ -143,5 +144,28 @@
     "theme": "Theme",
     "title_language": "Language",
     "title_theme": "Theme"
+  },
+  "suggestion_menu": {
+    "header": "Suggest / Bug",
+    "title": "Title",
+    "description": "Description",
+    "type": "Type",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+
+  },
+  "profile": {
+    "promo": "Year of entry at Centrale: ",
+    "edit": "Edit my profile",
+    "gene": "Student Engineer Generalist",
+    "master": "Student in Master",
+    "iti": "Specialty engineering student (ITII)",
+    "doc": "Doctoral student"
+  },
+  "membership_student": {
+    "title": "Groups",
+    "show_old": "Show the old groups",
+    "mask_old": "Hide the old groups"
   }
+
 }

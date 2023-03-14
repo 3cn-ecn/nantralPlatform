@@ -1,5 +1,4 @@
 import React, { FormEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   Button,
   Dialog,
@@ -10,10 +9,12 @@ import {
   Typography,
   Box,
   CircularProgress,
+  Alert,
 } from '@mui/material';
-import { Close as CloseIcon } from '@mui/icons-material';
-import FormGroup, { FieldType } from '../../utils/form';
-import { Suggestion } from './interfacesSuggestion';
+import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
+import Avatar from './Avatar';
+import FormGroup, { FieldType } from '../../../utils/form';
+import { Membership, Group, Student } from '../interfaces';
 
 /**
  * A function to generate the default fields fot the edit modal form.
@@ -22,37 +23,58 @@ import { Suggestion } from './interfacesSuggestion';
  * @param member
  * @returns The default list of fields
  */
-
-interface Suggestion {
-  title: string;
-  description: string;
-  type: string;
-}
-function createFormFields() {
-  const { t } = useTranslation('translation');
+function createFormFields(group: Group, member: Membership): FieldType[] {
   const defaultFields: FieldType[] = [
     {
       kind: 'text',
-      name: 'title',
-      label: t('suggestion_menu.title'),
-      required: true,
+      name: 'summary',
+      label: 'Résumé',
+      maxLength: 50,
+      helpText: 'Entrez le résumé du membre',
     },
     {
       kind: 'text',
       name: 'description',
-      label: t('suggestion_menu.description'),
+      label: 'Description',
       multiline: true,
-      rows: 10,
-      required: true,
-    },
-    {
-      kind: 'select',
-      name: 'type',
-      label: t('suggestion_menu.type'),
-      item: ['Bug', 'Suggestion'],
-      required: true,
     },
   ];
+  if (group && !group.group_type.no_membership_dates) {
+    defaultFields.push({
+      kind: 'group',
+      fields: [
+        {
+          kind: 'date',
+          name: 'begin_date',
+          label: 'Date de début',
+          required: true,
+        },
+        {
+          kind: 'date',
+          name: 'end_date',
+          label: 'Date de fin',
+          required: true,
+        },
+      ],
+    });
+  }
+  if (group?.is_admin) {
+    defaultFields.push({
+      kind: 'boolean',
+      name: 'admin',
+      label: 'Admin',
+      helpText: 'Un admin peut modifier le groupe et ses membres.',
+    });
+  }
+  if (member.id === null && group?.is_admin) {
+    defaultFields.splice(0, 0, {
+      kind: 'autocomplete',
+      label: 'Utilisateur',
+      name: 'student',
+      endPoint: '/api/student/student',
+      getOptionLabel: (m) => m?.name || '',
+    });
+  }
   return defaultFields;
 }
 
@@ -62,29 +84,42 @@ function createFormFields() {
  * @param group - the group of the membership
  * @returns A blank membership
  */
-function createBlankSuggestion(): Suggestion {
-  const suggestion = {
-    id: 1,
-    name: '',
+function createBlankMember(group: Group, student: Student): Membership {
+  const date = new Date();
+  const today = date.toISOString().split('T')[0];
+  date.setFullYear(date.getFullYear() + 1);
+  const oneYearLater = date.toISOString().split('T')[0];
+  const member = {
+    id: null,
+    student: group.is_admin ? null : (student.id as any),
+    group: group.id as any,
+    summary: '',
     description: '',
-    type: '',
+    begin_date: today,
+    end_date: oneYearLater,
+    admin: false,
+    priority: 0,
+    dragId: '',
   };
-  return suggestion;
+  return member;
 }
 
-function EditSuggestionModal(props: {
+function EditMemberModal(props: {
   open: boolean;
+  member?: Membership;
+  group?: Group;
+  student: Student;
+  saveMembership: (member: Membership) => Promise<any>;
   closeModal: () => void;
-  saveSuggestion: (suggestion: Suggestion) => Promise<any>;
+  openDeleteModal?: () => void;
 }) {
-  const { t } = useTranslation('translation');
+  const { open, group, student, saveMembership, closeModal, openDeleteModal } =
+    props;
+  const member = props.member || createBlankMember(group, student);
+  const formFields = createFormFields(group, member);
 
-  const { open, closeModal, saveSuggestion } = props;
-  const suggestion = createBlankSuggestion();
-  const formFields = createFormFields();
-
-  const [formValues, setFormValues] = useState<Suggestion>(
-    structuredClone(suggestion)
+  const [formValues, setFormValues] = useState<Membership>(
+    structuredClone(member)
   );
   const [formErrors, setFormErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -92,9 +127,9 @@ function EditSuggestionModal(props: {
 
   /** Function called on submit to save data */
   function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    console.log(formValues);
-    saveSuggestion(formValues)
+    e.preventDefault(); // prevent default action from browser
+    setSaving(true); // show loading
+    saveMembership(formValues) // save data
       .then(() => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
@@ -116,6 +151,7 @@ function EditSuggestionModal(props: {
         }
       });
   }
+
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
@@ -125,9 +161,13 @@ function EditSuggestionModal(props: {
       <form onSubmit={onSubmit}>
         <DialogTitle sx={{ m: 0, p: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box sx={{ minWidth: 0 }} component="span">
+            <Avatar
+              title={member?.student?.full_name || 'Ajouter un membre'}
+              icon={<EditIcon />}
+            />
+            <Box sx={{ minWidth: 0 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {t('suggestion_menu.header')}
+                {member?.student?.full_name || 'Ajouter un membre'}
               </Typography>
             </Box>
             <IconButton
@@ -143,7 +183,10 @@ function EditSuggestionModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
-          <Box sx={{ maxWidth: 500 }}>
+          <Alert severity="error" hidden={!globalErrors}>
+            {globalErrors}
+          </Alert>
+          <Box>
             <FormGroup
               fields={formFields}
               values={formValues}
@@ -151,6 +194,16 @@ function EditSuggestionModal(props: {
               setValues={setFormValues}
             />
           </Box>
+          <Button
+            hidden={!openDeleteModal}
+            onClick={openDeleteModal}
+            variant="outlined"
+            color="error"
+            disabled={saving}
+            sx={{ mr: 'auto', mt: 2 }}
+          >
+            Supprimer
+          </Button>
         </DialogContent>
         <DialogActions>
           <Button
@@ -159,7 +212,7 @@ function EditSuggestionModal(props: {
             color="error"
             disabled={saving}
           >
-            {t('suggestion_menu.cancel')}
+            Annuler
           </Button>
           <Button
             type="submit"
@@ -170,12 +223,11 @@ function EditSuggestionModal(props: {
               saving ? (
                 <CircularProgress size="1em" sx={{ color: 'inherit' }} />
               ) : (
-                // eslint-disable-next-line react/jsx-no-useless-fragment
                 <></>
               )
             }
           >
-            {saving ? 'Sauvegarde...' : t('suggestion_menu.confirm')}
+            {saving ? 'Sauvegarde...' : 'Valider'}
           </Button>
         </DialogActions>
       </form>
@@ -183,4 +235,4 @@ function EditSuggestionModal(props: {
   );
 }
 
-export default EditSuggestionModal;
+export default EditMemberModal;

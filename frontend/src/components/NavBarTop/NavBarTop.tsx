@@ -326,11 +326,6 @@ function NavBarTop(props: {
                 {t('user_menu.bug')}
               </ListItem>
             </MenuItem>
-            <EditSuggestionModal
-              open={openS}
-              closeModal={handleCloseS}
-              saveSuggestion={createSuggestion}
-            />
             <MenuItem onClick={handleClose}>
               <SvgIcon component={HelpRoundedIcon} />
               <ListItem
@@ -474,6 +469,11 @@ function NavBarTop(props: {
             </MenuItem>
           </Menu>
         </Box>
+        <EditSuggestionModal
+          open={openS}
+          closeModal={handleCloseS}
+          saveSuggestion={createSuggestion}
+        />
         <Box sx={{ display: { xs: 'none', md: 'none' } }}>
           <IconButton
             size="large"

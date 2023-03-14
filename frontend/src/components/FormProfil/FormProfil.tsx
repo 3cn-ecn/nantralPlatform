@@ -22,9 +22,36 @@ import './FormProfil.scss';
  * @param member
  * @returns The default list of fields
  */
+
+interface Suggestion {
+  title: string;
+  description: string;
+  type: string;
+}
 function createFormFields() {
   const defaultFields: FieldType[] = [
     {
+      kind: 'text',
+      name: 'title',
+      label: 'Titre',
+      required: true,
+    },
+    {
+      kind: 'text',
+      name: 'description',
+      label: 'Description',
+      multiline: true,
+      rows: 10,
+      required: true,
+    },
+    {
+      kind: 'select',
+      name: 'type',
+      label: 'Type',
+      item: ['Bug', 'Suggestion'],
+      required: true,
+    },
+    /*{
       kind: 'text',
       name: 'test',
       label: 'Test',
@@ -67,7 +94,7 @@ function createFormFields() {
       kind: 'picture',
       title: 'Upload',
       description: 'Upload une photo de profil',
-    },
+    },*/
   ];
   return defaultFields;
 }
@@ -91,8 +118,9 @@ function createBlankSuggestion(): Suggestion {
 export function EditProfilModal(props: {
   open: boolean;
   closeModal: () => void;
+  saveSuggestion: (suggestion: Suggestion) => Promise<any>;
 }) {
-  const { open, closeModal } = props;
+  const { open, closeModal, saveSuggestion } = props;
   const suggestion = createBlankSuggestion();
   const formFields = createFormFields();
 
@@ -104,7 +132,31 @@ export function EditProfilModal(props: {
   const [globalErrors, setGlobalErrors] = useState('');
 
   /** Function called on submit to save data */
-  function onSubmit(e: FormEvent) {}
+  function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    console.log(formValues);
+    saveSuggestion(formValues)
+      .then(() => {
+        // reset all errors messages, saving loading and close modal
+        setFormErrors({});
+        setGlobalErrors('');
+        setSaving(false);
+        closeModal();
+      })
+      .catch((err) => {
+        setSaving(false);
+        if (err.response) {
+          setFormErrors(err.response.data); // show errors per fields
+          if (err.response.data.non_field_errors)
+            // show form errors
+            setGlobalErrors(err.response.data.non_field_errors);
+          if (err.response.status === 500)
+            setGlobalErrors('Notre serveur a crashé, désolé 😢');
+        } else {
+          setGlobalErrors('Erreur de réseau'); // show global error
+        }
+      });
+  }
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"

@@ -62,8 +62,8 @@ function NavBarSide(props: {
       icon: EventIcon,
     },
     {
-      text: t('navbar.clubs'),
-      url: '/group/club/',
+      text: t('navbar.group'),
+      url: '/group/',
       icon: ClubIcon,
       isOnBackend: true,
     },
@@ -77,24 +77,6 @@ function NavBarSide(props: {
       text: t('navbar.family'),
       url: '/parrainage/',
       icon: FamilyIcon,
-      isOnBackend: true,
-    },
-    {
-      text: t('navbar.bdx'),
-      url: '/group/liste/',
-      icon: CampaignIcon,
-      isOnBackend: true,
-    },
-    {
-      text: t('navbar.academics'),
-      url: '/group/academic/',
-      icon: LibraryIcon,
-      isOnBackend: true,
-    },
-    {
-      text: t('navbar.administration'),
-      url: '/group/admin/',
-      icon: AdminIcon,
       isOnBackend: true,
     },
     {

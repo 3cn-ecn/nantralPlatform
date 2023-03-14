@@ -3,15 +3,7 @@ import axios from 'axios';
 import { ClubProps } from 'Props/Club';
 import * as React from 'react';
 import { useLoaderData, useParams } from 'react-router-dom';
-import {
-  SvgIcon,
-  Typography,
-  Grid,
-  Avatar,
-  Button,
-  Box,
-  Input,
-} from '@mui/material';
+import { SvgIcon, Typography, Grid, Avatar, Button, Box } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
@@ -21,7 +13,7 @@ import { isThisWeek } from '../../utils/date';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
 import { PostProps } from '../../Props/Post';
 import { Status } from '../../Props/GenericTypes';
-import { MembershipsStudent } from '../../legacy/group/MembershipsStudent/';
+import { MembershipsStudent } from '../../components/group/MembershipsStudent/';
 import { EditProfilModal } from '../../components/FormProfil/FormProfil';
 
 const API_URL = '../../api/student/student/';
@@ -31,6 +23,8 @@ function Profile() {
   const [faculty, setFaculty] = React.useState<string>('Centraliens');
   const { studentId } = useParams();
   const url = API_URL + studentId;
+
+  const { t } = useTranslation('translation');
 
   React.useEffect(() => {
     getProfile();
@@ -46,19 +40,23 @@ function Profile() {
       });
   }
 
+  async function createSuggestion(suggestion: Suggestion) {
+    return axios.post('/api/home/suggestion', suggestion);
+  }
+
   function getFaculty(fac) {
     switch (fac) {
       case 'Gen':
-        setFaculty('Élève Ingénieur Généraliste');
+        setFaculty(t('profile.gene'));
         break;
       case 'Mas':
-        setFaculty('Élève en Master');
+        setFaculty(t('profile.master'));
         break;
       case 'Iti':
-        setFaculty('Élève Ingénieur de Spécialité (ITII)');
+        setFaculty(t('profile.iti'));
         break;
       case 'Doc':
-        setFaculty('Doctorant');
+        setFaculty(t('profile.doc'));
         break;
       default:
         setFaculty('');
@@ -99,7 +97,7 @@ function Profile() {
           </Grid>
           <Grid>
             <Typography variant="h7">
-              Année d&apos;entrée à Centrale :
+              {t('profile.promo')}
               {student !== null ? student.promo : ''}
             </Typography>
           </Grid>
@@ -110,7 +108,7 @@ function Profile() {
               sx={{ mt: 2 }}
               onClick={handleClickOpen}
             >
-              Modifier mon profil
+              {t('profile.edit')}
               <SvgIcon
                 sx={{ display: { xs: 'none', md: 'flex' }, ml: 1 }}
                 fontSize="small"
@@ -118,7 +116,11 @@ function Profile() {
                 inheritViewBox
               />
             </Button>
-            <EditProfilModal open={openS} closeModal={handleCloseS} />
+            <EditProfilModal
+              open={openS}
+              closeModal={handleCloseS}
+              saveSuggestion={createSuggestion}
+            />
           </Grid>
         </Grid>
       </Grid>
