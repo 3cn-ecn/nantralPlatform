@@ -14,7 +14,7 @@ import { Membership } from '../interfaces';
 /** A modal to confirm the deletion of a member. */
 function ArchiveMemberModal(props: {
   closeModal: () => void;
-  saveMembership: (member: Membership) => Promise<void>;
+  saveMembership: (member: Membership, reload?: boolean) => Promise<void>;
   open: boolean;
   member: Membership;
 }) {
@@ -27,7 +27,13 @@ function ArchiveMemberModal(props: {
   function onSave() {
     setSaving(true);  // show loading
     member.end_date = yesterday.toISOString().split('T')[0];
-    saveMembership(member)  // save data
+    saveMembership(member, true)  // save data
+    .then(() => {
+      // reset all errors messages, saving loading and close modal
+      setGlobalErrors('');
+      setSaving(false);
+      closeModal();
+    })
     .catch(() => {
       setSaving(false);
       setGlobalErrors('Une erreur s\'est produite.');
@@ -46,8 +52,8 @@ function ArchiveMemberModal(props: {
       <DialogContent>
         <Alert severity='error' hidden={!globalErrors} sx={{mb: 1 }}>{globalErrors}</Alert>
         <DialogContentText>
-          Archiver le membre modifier la date de fin de son adhésion au
-          {yesterday.toLocaleDateString()}.
+          Archiver le membre modifiera la date de fin de son adhésion
+          au {yesterday.toLocaleDateString()}.
         </DialogContentText>
       </DialogContent>
       <DialogActions>
