@@ -113,13 +113,16 @@ function MembershipsGroup(props: {}): JSX.Element {
   };
 
   /** A function to update a membership object. */
-  async function updateMembership(member: Membership) {
+  async function updateMembership(member: Membership, reload=false) {
     return (
       axios
       .put(`/api/group/membership/${member.id}/`, member)
       .then((res) => {
         const i = members.findIndex((elt) => elt.id === member.id);
         Object.assign(members[i], res.data);
+        if (reload) {
+          getMemberships();
+        }
       })
     );
   };

@@ -117,7 +117,7 @@ function FormGroup(props: {
                 value={values[field.name] && new Date(values[field.name])}
                 onChange={(val) => {
                   if (val && val.toString() !== 'Invalid Date') {
-                    handleChange(field.name, new Intl.DateTimeFormat('en-GB').format(val).split('/').reverse().join('-'));
+                    handleChange(field.name, val.toISOString().split('T')[0]);
                   } else {
                     handleChange(field.name, val);
                   }
