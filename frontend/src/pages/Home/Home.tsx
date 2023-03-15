@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { ClubProps } from 'Props/Club';
+import { ClubProps } from 'Props/Group';
 import * as React from 'react';
 import { Box, SvgIcon, Typography } from '@mui/material';
 import { Container } from '@mui/system';
