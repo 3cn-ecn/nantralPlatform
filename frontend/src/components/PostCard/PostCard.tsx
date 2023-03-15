@@ -36,6 +36,7 @@ export function SeePageButton(props: {
     <IconButton
       style={style}
       onClick={(e) => e.stopPropagation()}
+      target="_blank"
       href={link}
       sx={{ backgroundColor: '#efefefb2' }}
     >

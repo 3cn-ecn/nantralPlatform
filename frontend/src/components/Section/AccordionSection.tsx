@@ -83,7 +83,7 @@ export function AccordionSection(props: {
 
           {url && (
             <NavLink to={url} className="see-more">
-              <Button variant="contained" sx={{ borderRadius: 6 }}>
+              <Button variant="text" sx={{ borderRadius: 6 }}>
                 See all
               </Button>
             </NavLink>

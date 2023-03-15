@@ -48,4 +48,12 @@ ClubAvatar.defaultProps = {
   size: 100,
   textPosition: 'bottom',
 };
-export default ClubAvatar;
+
+function ClubAvatarSkeleton(props: {
+  size?: number;
+  textPosition?: 'right' | 'bottom' | false;
+}) {
+  const { size, textPosition } = props;
+}
+
+export { ClubAvatar, ClubAvatarSkeleton };
