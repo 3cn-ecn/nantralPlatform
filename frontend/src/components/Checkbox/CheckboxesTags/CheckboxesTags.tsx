@@ -3,7 +3,7 @@ import axios from 'axios';
 import { TextField, Checkbox, Autocomplete } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { Page } from '../../../legacy/group/interfaces';
+import { Page } from 'Props/Group';
 
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
