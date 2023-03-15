@@ -11,16 +11,23 @@ import { IconButton, InputAdornment } from '@mui/material';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
+/**
+ * Function to display a basic clearable Desktop DatePicker
+ * @param props label: text displayed inside TextView,
+ *              minDate: prevent from choosing a date before minDate,
+ *              getDate: function used to get date value back to parent component
+ * @returns the DatePicker
+ */
 export default function BasicDatePicker(props: {
   label: string;
   minDate: any;
   getDate: any;
 }) {
+  const { label, minDate, getDate } = props;
   const { t } = useTranslation('translation'); // translation module
   const { i18n } = useTranslation('translation');
-  const [value, setValue] = React.useState<Dayjs | null>(null);
-  const [isEmpty, setIsEmpty] = React.useState(true);
-  const { label, minDate, getDate } = props;
+  const [value, setValue] = React.useState<Dayjs | null>(null); // value selected
+  const [isEmpty, setIsEmpty] = React.useState(true); // true if not date is selected
 
   const handleChange = (newValue: Dayjs | null) => {
     setValue(newValue);
@@ -32,6 +39,7 @@ export default function BasicDatePicker(props: {
     }
   };
 
+  // function used to clear date. Only possible when value is not null
   const clearDate = () => {
     setValue(null);
     getDate(null);
@@ -79,11 +87,11 @@ export default function BasicDatePicker(props: {
   return (
     <LocalizationProvider
       dateAdapter={AdapterDayjs}
-      adapterLocale={i18n.language.substring(0, 2)}
+      adapterLocale={i18n.language.substring(0, 2)} // TO CHANGE: when en-GB and fr_FR are supported, delete substring
     >
       <DesktopDatePicker
         minDate={minDate}
-        inputFormat="DD/MM/YYYY"
+        inputFormat="DD/MM/YYYY" // TO CHANGE : when en-GB is supported, delete this line
         label={label}
         value={value}
         onChange={handleChange}

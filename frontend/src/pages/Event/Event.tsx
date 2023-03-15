@@ -4,6 +4,7 @@ import { Box, Tab, Container  } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
+import { FilterInterface } from 'Props/Filter';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
@@ -11,59 +12,11 @@ import Calendar from '../../components/Calendar/Calendar';
 import Formular from '../../components/Formular/Formular';
 import { LoadStatus } from '../../Props/GenericTypes';
 
-/**
- * Function used to filter a single event depending on the state of the filterbar
- * @returns event if it matches the filter, null if not
- * @TODO move this function to backend
- */
-const filterFunction = (event: EventProps, filter: Map<string, any>) => {
-  // filter for checkboxes
-  if (
-    (filter.get('favorite') === true && event.isFavorite !== true) ||
-    (filter.get('participate') === true && event.isParticipating !== true) ||
-    (filter.get('shotgun') === true && event.maxParticipant === null)
-  ) {
-    return null;
-  }
-
-  // filter for date
-  if (filter.get('dateBegin') !== null) {
-    if (filter.get('dateBegin').isAfter(event.endDate)) {
-      return null;
-    }
-  }
-
-  if (filter.get('dateEnd') !== null) {
-    if (filter.get('dateEnd').isBefore(event.beginDate)) {
-      return null;
-    }
-  }
-
-  // filter for organiser
-
-  return event;
-};
-
-/**
- * Function used to filter all the events
- * @param events all events from the database
- * @param filter filter chosen by the user in the filterbar
- * @returns events filtered if there is a filter, all events if not
- * @todo move this function to backend
- */
-const filterEvent = (events: Array<EventProps>, filter: Map<string, any>) => {
-  if (filter !== undefined) {
-    return events.filter((event) => filterFunction(event, filter));
-  }
-
-  return events;
-};
-
 function EventList(props: { status: LoadStatus; events: any }) {
   const { events, status } = props;
 
   return(
-    <EventSection status={status} events={events} title="Liste des prochains évènements"></EventSection>
+    <EventSection status={status} events={events}></EventSection>
   );
 }
 
@@ -74,12 +27,106 @@ function EventCalendar(props: { events: any }) {
   );
 }
 
-function EventView(props: { status: LoadStatus; events: any }) {
-  const { events, status } = props;
+function EventView(props: { filter: any}) {
+  const { filter } = props;
   const [value, setValue] = React.useState('1');
+  const [status, setStatus] = React.useState<LoadStatus>('load');
+  const [eventsList, setEventsList] = React.useState<Array<EventProps>>([]);
+  const [eventsCalendar, setEventsCalendar] = React.useState<Array<EventProps>>([]);
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const today = new Date();
+
+  // Request to get Events to display, depending of the filter. 
+  // If no date filter, only current and futur events are displayed.
+  React.useEffect(() => {
+    if(filter !== null){
+        // filtered calendar
+      axios
+      .get('/api/event', {params:{
+        is_shotgun: filter.shotgun,
+        is_favorite: filter.favorite,
+        is_participating: filter.participate,
+        group: filter.organiser,
+      }})
+      .then((res: any) => {
+        eventsToCamelCase(res.data);
+        setEventsCalendar(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
+      });
+      if(filter.dateBegin === '' && filter.dateEnd=== ''){
+        // filtered list without date filters (only current and futur events)
+        axios
+      .get('/api/event', {params:{
+        is_shotgun: filter.shotgun,
+        is_favorite: filter.favorite,
+        is_participating: filter.participate,
+        from_date: today,
+        group: filter.organiser,
+      }})
+      .then((res: any) => {
+        eventsToCamelCase(res.data);
+        setEventsList(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
+      });
+      }else {
+        // filtered list with date filters
+        axios
+      .get('/api/event', {params:{
+        is_shotgun: filter.shotgun,
+        is_favorite: filter.favorite,
+        is_participating: filter.participate,
+        from_date: filter.dateBegin,
+        to_date: filter.dateEnd,
+        group: filter.organiser,
+      }})
+      .then((res: any) => {
+        eventsToCamelCase(res.data);
+        setEventsList(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
+      });
+      } 
+    }else{
+      // non filtered list
+        axios
+      .get('/api/event', {params:{
+        from_date: today,
+      }})
+      .then((res: any) => {
+        eventsToCamelCase(res.data);
+        setEventsList(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
+      });
+
+      // non filtered calendar
+      axios
+      .get('/api/event')
+      .then((res: any) => {
+        eventsToCamelCase(res.data);
+        setEventsCalendar(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
+      });
+    }
+}, [filter]);
+
+
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -89,10 +136,10 @@ function EventView(props: { status: LoadStatus; events: any }) {
         </TabList>
       </Box>
       <TabPanel value="1" sx={{ padding: 0 }}>
-        <EventList status={status} events={events}></EventList>
+        <EventList status={status} events={eventsList}></EventList>
       </TabPanel>
       <TabPanel value="2" sx={{ padding: 0 }}>
-        <EventCalendar events={events}></EventCalendar>
+        <EventCalendar events={eventsCalendar}></EventCalendar>
       </TabPanel>
     </TabContext>
   );
@@ -103,26 +150,11 @@ function EventView(props: { status: LoadStatus; events: any }) {
  * @returns Event page component
  */
 function Event() {
-  const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [filter, setFilter] = React.useState<Map<string, any>>();
-  const [eventsLoadStatus, setStatus] = React.useState<LoadStatus>('load');
+  const [filter, setFilter] = React.useState<FilterInterface | null>(null);
+
   const getFilter = (validateFilter) => {
     setFilter(validateFilter);
   };
-  // console.log(filterEvent(events, filter));
-
-  React.useEffect(() => {
-    axios
-      .get('/api/event')
-      .then((res: any) => {
-        eventsToCamelCase(res.data);
-        setEvents(res.data);
-        setStatus('success');
-      })
-      .catch(() => {
-        setStatus('fail');
-      });
-  }, []);
 
   return (
     <Container className="EventPage">
@@ -131,7 +163,7 @@ function Event() {
         <Formular />
         <FilterBar getFilter={getFilter} />
       </div>
-      <EventView status={eventsLoadStatus} events={events} />
+      <EventView filter={filter} />
     </Container>
   );
 }

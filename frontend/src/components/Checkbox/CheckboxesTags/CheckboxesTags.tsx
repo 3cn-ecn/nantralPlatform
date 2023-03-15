@@ -31,15 +31,16 @@ function CheckboxesTags<T>(props: {
     pkField,
     labelField,
   } = props;
-  const [options, setOptions] = React.useState<Array<T>>([]);
-  const [chosen, setChosen] = React.useState<Array<T>>([]);
-  const [reloadCauseCleared, setReloadCauseCleared] = React.useState(false);
+  const [options, setOptions] = React.useState<Array<T>>([]); // options displayed
+  const [chosen, setChosen] = React.useState<Array<T>>([]); // options chosen
+  const [reload, setReload] = React.useState(false); // boolean : true if the options need to be reloaded
 
   const handleChange = (selected) => {
     setChosen(selected);
     getResult(selected);
   };
 
+  // function used to know if an element is in chosen. Returns null if it is, the element if not.
   const inChosenFunction = (element: T) => {
     let isThere: boolean;
     isThere = false;
@@ -54,16 +55,7 @@ function CheckboxesTags<T>(props: {
     return null;
   };
 
-  const updateOptions = (event: React.SyntheticEvent, value: string) => {
-    axios
-      .get<T[]>(`${request}search/`, {
-        params: { simple: true, q: value, limit: 10 },
-      })
-      .then((res) => {
-        setOptions(res.data.filter((element) => inChosenFunction(element)));
-      });
-  };
-
+  // function used to get the elements for options when component is created
   React.useEffect(() => {
     if (!updated) {
       setOptions(optionsList);
@@ -78,12 +70,22 @@ function CheckboxesTags<T>(props: {
     }
   }, []);
 
-  // force to wait until chosen is updated before calling updateOptions
+  // function used to update options of the autocomplete. It filters options depending on chosen.
+  const updateOptions = (event: React.SyntheticEvent, value: string) => {
+    axios
+      .get<T[]>(`${request}search/`, {
+        params: { simple: true, q: value, limit: 10 },
+      })
+      .then((res) => {
+        setOptions(res.data.filter((element) => inChosenFunction(element)));
+      });
+  };
+
+  // forces to wait until chosen is updated before calling updateOptions
   React.useEffect(() => {
-    if (reloadCauseCleared) {
-      console.log('hello');
+    if (reload) {
       updateOptions(null, null);
-      setReloadCauseCleared(false);
+      setReload(false);
     }
   }, [chosen]);
 
@@ -96,7 +98,9 @@ function CheckboxesTags<T>(props: {
           reason === 'removeOption'
         ) {
           handleChange(val);
-          setReloadCauseCleared(true);
+          if (updated) {
+            setReload(true); // options need to be reloaded
+          }
         }
       }}
       options={options}
