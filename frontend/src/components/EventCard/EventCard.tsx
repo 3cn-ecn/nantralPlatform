@@ -12,7 +12,7 @@ import {
 } from '@mui/material/';
 
 import { EventProps } from 'Props/Event';
-import { ClubProps } from 'Props/Club';
+import { ClubProps } from 'Props/Group';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';

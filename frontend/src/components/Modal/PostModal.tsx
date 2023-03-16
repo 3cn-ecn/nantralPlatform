@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { PostProps } from 'Props/Post';
-import { ClubProps } from '../../Props/Club';
+import { ClubProps } from '../../Props/Group';
 import { theme } from '../style/palette';
 import ClubAvatar from '../ClubAvatar/ClubAvatar';
 import { MembersIcon, SeePageButton } from '../PostCard/PostCard';
