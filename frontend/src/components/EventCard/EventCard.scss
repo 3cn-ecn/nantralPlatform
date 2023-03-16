@@ -120,16 +120,15 @@ Bottom half
 // Main div
 .infoDetails{
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   min-height: 3.6rem;
 }
 
 // Div with 2 elements (icon and text)
 .infoItem {
   display: flex;
-  padding-left: 0.6rem;
-  padding-right: 0.6rem;
   margin: 0;
+  padding-right: 1.5rem;
   font-size: 0.875rem;
 }
 
@@ -137,7 +136,6 @@ Bottom half
 .infoItemElement {
   text-align: left;
   align-self: center;
-  margin: 0 auto;
   overflow: hidden;
   overflow-wrap: break-word;
   text-overflow: ellipsis;

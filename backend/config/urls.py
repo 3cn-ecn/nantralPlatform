@@ -46,7 +46,6 @@ urlpatterns = i18n_patterns(
         'parrainage/admin/',
         include('apps.family.admin_urls', namespace='family-admin')),
     path('post/', include('apps.post.urls', namespace='post')),
-    path('event/', include('apps.event.urls', namespace='event')),
     path('tools/', include('apps.tools.urls', namespace='tools')),
     path(
         'notification/',
