@@ -12,7 +12,7 @@ import * as React from 'react';
 import './PostCard.scss';
 import { ArrowForward, Edit, Groups } from '@mui/icons-material';
 import axios from 'axios';
-import { ClubProps } from 'Props/Club';
+import { ClubProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
 import { PostProps } from '../../Props/Post';
 import { PostModal } from '../Modal/PostModal';
