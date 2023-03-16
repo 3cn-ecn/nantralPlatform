@@ -70,7 +70,8 @@ export function NotificationMenu(props) {
 
   async function getNbNotifs(): Promise<void> {
     const urlf = formatUrl(GET_NOTIFICATIONS_URL, [], { mode: 1 });
-    fetch(urlf)
+    console.log(urlf);
+    axios(GET_NOTIFICATIONS_URL, { params: { mode: 1 } })
       .then((resp) => resp.json().then((data) => setNbNotifs(data)))
       .catch((err) => setNbNotifs(null));
   }

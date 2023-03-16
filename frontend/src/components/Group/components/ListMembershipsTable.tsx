@@ -26,7 +26,7 @@ import {
   OnDragEndResponder,
   DropResult,
 } from 'react-beautiful-dnd';
-import Avatar from './Avatar';
+import Avatar from '../../Avatar/Avatar';
 import ModalDisplayMember from './ModalDisplayMember';
 import ModalEditMember from './ModalEditMember';
 import ModalDeleteMember from './ModalDeleteMember';

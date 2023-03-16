@@ -13,9 +13,9 @@ import {
   Close as CloseIcon,
   OpenInNew as OpenInNewIcon,
   Edit as EditIcon,
-  Verified as VerifiedIcon
+  Verified as VerifiedIcon,
 } from '@mui/icons-material';
-import Avatar from './Avatar';
+import Avatar from '../../Avatar/Avatar';
 import { Membership, Group, Student } from '../interfaces';
 
 function ShowMemberModal(props: {
@@ -23,8 +23,8 @@ function ShowMemberModal(props: {
   openEditModal?: () => void;
   open: boolean;
   member: Membership;
-  group?: Group,
-  student: Student
+  group?: Group;
+  student: Student;
 }) {
   const { closeModal, openEditModal, open, member, group, student } = props;
 
@@ -37,20 +37,18 @@ function ShowMemberModal(props: {
       <DialogTitle sx={{ m: 0, p: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Avatar
-            url={group ? member.student.picture : member.group.icon }
-            title={group ? member.student.full_name : member.group.name }
-            size='large'
+            url={group ? member.student.picture : member.group.icon}
+            title={group ? member.student.full_name : member.group.name}
+            size="large"
           />
           <Box sx={{ minWidth: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {group ? member.student.full_name : member.group.name }
+                {group ? member.student.full_name : member.group.name}
               </Typography>
-              { member.admin ? <VerifiedIcon color='secondary' /> : <></> }
+              {member.admin ? <VerifiedIcon color="secondary" /> : <></>}
             </Box>
-            <Typography variant="subtitle1">
-              {member.summary}
-            </Typography>
+            <Typography variant="subtitle1">{member.summary}</Typography>
           </Box>
           <IconButton
             aria-label="close"
@@ -67,12 +65,12 @@ function ShowMemberModal(props: {
       <DialogContent dividers>
         <Typography
           hidden={group && group.group_type.no_membership_dates}
-          color='text.secondary'
+          color="text.secondary"
           gutterBottom
           sx={{ fontSize: 12, fontStyle: 'italic' }}
         >
-          Membre du {new Date(member.begin_date).toLocaleDateString()
-          } au {new Date(member.end_date).toLocaleDateString()}
+          Membre du {new Date(member.begin_date).toLocaleDateString()} au{' '}
+          {new Date(member.end_date).toLocaleDateString()}
         </Typography>
         <Typography gutterBottom>
           {member.description || `Membre de ${member.group.name}`}
@@ -80,16 +78,19 @@ function ShowMemberModal(props: {
       </DialogContent>
       <DialogActions>
         <Button
-          href={group ? member.student.url : member.group.url }
-          variant='text'
+          href={group ? member.student.url : member.group.url}
+          variant="text"
           endIcon={<OpenInNewIcon />}
         >
-          { group ? 'Ouvrir le profil' : 'Ouvrir le groupe' }
+          {group ? 'Ouvrir le profil' : 'Ouvrir le groupe'}
         </Button>
         <Button
-          hidden={!openEditModal || !group?.is_admin && student.id !== member.student.id }
+          hidden={
+            !openEditModal ||
+            (!group?.is_admin && student.id !== member.student.id)
+          }
           onClick={openEditModal}
-          variant='outlined'
+          variant="outlined"
           endIcon={<EditIcon />}
           sx={{ marginLeft: 1 }}
         >

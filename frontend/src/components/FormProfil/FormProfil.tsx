@@ -14,21 +14,8 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material';
 import FormGroup, { FieldType } from '../../utils/form';
 
-/**
- * A function to generate the default fields fot the edit modal form.
- *
- * @param group
- * @param member
- * @returns The default list of fields
- */
-
-interface Suggestion {
-  title: string;
-  description: string;
-  type: string;
-}
-function createFormFields() {
-  const defaultFields: FieldType[] = [
+function createFormFields(): FieldType[] {
+  const defaultFields = [
     {
       kind: 'number',
       name: 'Année de promotion entrante',

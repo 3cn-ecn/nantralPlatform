@@ -106,7 +106,7 @@ function App() {
             <Route path="/student" element={<Student />} />
             <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="/tools/signature" element={<Sign />} />
-            <Route path="/student/:studentId/" element={<Profile />} />
+            <Route path="/student/:studentId" element={<Profile />} />
           </Routes>
         </Box>
       </Box>

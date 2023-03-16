@@ -2,12 +2,13 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from django.shortcuts import redirect
 from django.contrib.sites.shortcuts import get_current_site
+from rest_framework import response, status
 
 from apps.utils.github import create_issue
 
 
 class CreateIssueView(APIView):
-    """A view to query the external Geocoding service."""
+    """A view to send the data of bug report form to Github"""
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
@@ -20,4 +21,4 @@ class CreateIssueView(APIView):
                 f"(https://{get_current_site(self.request)}"
                 f"{self.request.user.student.get_absolute_url()})"),
         )
-        return redirect('/')
+        return response.Response(status=status.HTTP_200_OK)

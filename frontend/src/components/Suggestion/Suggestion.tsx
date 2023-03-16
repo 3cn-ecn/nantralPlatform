@@ -143,9 +143,6 @@ function EditSuggestionModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
-          <Alert severity="error" hidden={!globalErrors}>
-            {globalErrors}
-          </Alert>
           <Box sx={{ maxWidth: 500 }}>
             <FormGroup
               fields={formFields}

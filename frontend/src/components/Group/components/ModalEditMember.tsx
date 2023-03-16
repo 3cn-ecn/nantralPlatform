@@ -12,7 +12,7 @@ import {
   Alert,
 } from '@mui/material';
 import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
-import Avatar from './Avatar';
+import Avatar from '../../Avatar/Avatar';
 import FormGroup, { FieldType } from '../../../utils/form';
 import { Membership, Group, Student } from '../interfaces';
 

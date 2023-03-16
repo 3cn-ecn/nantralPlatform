@@ -35,25 +35,12 @@ function Profile() {
     return axios.post('/api/home/suggestion', suggestion);
   }
 
-  function getFaculty(fac) {
-    switch (fac) {
-      case 'Gen':
-        setFaculty(t('profile.gene'));
-        break;
-      case 'Mas':
-        setFaculty(t('profile.master'));
-        break;
-      case 'Iti':
-        setFaculty(t('profile.iti'));
-        break;
-      case 'Doc':
-        setFaculty(t('profile.doc'));
-        break;
-      default:
-        setFaculty('');
-        break;
-    }
-  }
+  const fac = {
+    Gen: t('profile.gene'),
+    Mas: t('profile.master'),
+    Iti: t('profile.iti'),
+    Doc: t('profile.doc'),
+  };
 
   const [openS, setOpenS] = React.useState(false);
 
@@ -83,7 +70,7 @@ function Profile() {
             <Typography variant="h7">
               {student === null || faculty !== 'Centraliens'
                 ? faculty
-                : getFaculty(student.faculty)}
+                : fac[student.faculty]}
             </Typography>
           </Grid>
           <Grid>

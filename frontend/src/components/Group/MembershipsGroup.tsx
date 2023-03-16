@@ -8,7 +8,7 @@ import {
 } from '@mui/icons-material';
 import ModalEditMember from './components/ModalEditMember';
 import { Group, Membership, Student, Page } from './interfaces';
-import axios from '../../utils/axios';
+import axios from '../utils/axios';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import ListMembershipsTable from './components/ListMembershipsTable';
 
@@ -124,12 +124,15 @@ function MembershipsGroup(props: {}): JSX.Element {
   }
 
   /** A function to update a membership object. */
-  async function updateMembership(member: Membership) {
+  async function updateMembership(member: Membership, reload = false) {
     return axios
       .put(`/api/group/membership/${member.id}/`, member)
       .then((res) => {
         const i = members.findIndex((elt) => elt.id === member.id);
         Object.assign(members[i], res.data);
+        if (reload) {
+          getMemberships();
+        }
       });
   }
 
