@@ -64,7 +64,9 @@ export function EventBlock(props: {
       }}
     >
       <div className="imageEventBlur">
-        <div className="eventBlockTitleDisplay">{event.title}</div>
+        <div className="eventBlockTitleDisplay">
+          {Math.min(duration, startTime) > 1 ? event.title : ''}
+        </div>
       </div>
     </Button>
   );
