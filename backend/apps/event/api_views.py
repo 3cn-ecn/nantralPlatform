@@ -157,7 +157,7 @@ class ListEventsParticipantsAPIView(viewsets.ViewSet):
 
     Actions
     -------
-    - GET .../event/<slug>/participants"""
+    - GET .../event/<id>/participants"""
     serializer_class = EventParticipatingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
