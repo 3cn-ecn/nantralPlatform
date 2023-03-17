@@ -12,11 +12,13 @@
 }
 
 #card-image {
-  border-radius: 3px;
-  height: 100%;
-  width : 30%;
   background-size: cover;
   background-position: center;
+  border-radius: 3px;
+  margin: 20px;
+  border-radius: 10px;
+  width: 100px;
+  aspect-ratio: 1;
 }
 
 #post-container {

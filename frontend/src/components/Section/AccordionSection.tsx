@@ -60,9 +60,9 @@ export function AccordionSection(props: {
 
   return (
     <Accordion
-      sx={{ borderRadius: '4px' }}
       variant="outlined"
       expanded={expanded}
+      sx={{ borderRadius: 1 }}
       onChange={() => setExpanded(!expanded)}
       square={false}
     >
@@ -81,13 +81,13 @@ export function AccordionSection(props: {
         >
           <h1 className="section-title">{title}</h1>
 
-          {url && (
+          {/* {url && (
             <NavLink to={url} className="see-more">
               <Button variant="text" sx={{ borderRadius: 6 }}>
                 See all
               </Button>
             </NavLink>
-          )}
+          )} */}
         </Box>
       </AccordionSummary>
       <AccordionDetails>

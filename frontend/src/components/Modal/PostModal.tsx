@@ -13,14 +13,14 @@ import {
 import { PostProps } from 'Props/Post';
 import { ClubProps } from '../../Props/Group';
 import { theme } from '../style/palette';
-import ClubAvatar from '../ClubAvatar/ClubAvatar';
+import { ClubAvatar } from '../ClubAvatar/ClubAvatar';
 import {
   EditButton,
   MembersIcon,
   POST_AVATAR_SIZE,
   SeePageButton,
-  timeFromNow,
 } from '../PostCard/PostCard';
+import { timeFromNow } from '../../utils/date';
 
 export function PostModal(props: {
   post: PostProps;

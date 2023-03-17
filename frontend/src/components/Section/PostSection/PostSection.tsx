@@ -52,14 +52,7 @@ export function PostSection(props: {
   }
   return (
     <Box marginBottom={2}>
-      <h2 className="section-title">
-        {title}
-        <Badge
-          badgeContent={posts.length}
-          color="primary"
-          sx={{ marginLeft: 2, zIndex: 0 }}
-        />
-      </h2>
+      <h2 className="section-title">{title}</h2>
       <Grid sx={{ marginTop: 0, marginBottom: 1 }} spacing={1} container>
         {content}
       </Grid>

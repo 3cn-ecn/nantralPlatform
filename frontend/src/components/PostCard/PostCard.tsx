@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardActionArea,
   CardActions,
@@ -11,19 +12,14 @@ import {
 import * as React from 'react';
 
 import './PostCard.scss';
-import {
-  ArrowForward,
-  Edit,
-  ExitToApp,
-  Groups,
-  OpenInNew,
-} from '@mui/icons-material';
+import { Edit, Groups, OpenInNew } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
 import { PostProps } from '../../Props/Post';
 import { PostModal } from '../Modal/PostModal';
-import ClubAvatar from '../ClubAvatar/ClubAvatar';
+import { ClubAvatar, ClubAvatarSkeleton } from '../ClubAvatar/ClubAvatar';
+import { timeFromNow } from '../../utils/date';
 
 const POST_HEIGHT = 150;
 export const POST_AVATAR_SIZE = 35;
@@ -65,21 +61,6 @@ export function MembersIcon() {
     </Tooltip>
   );
 }
-
-export function timeFromNow(date: Date): string {
-  const seconds: number = (new Date().getTime() - date.getTime()) / 1000;
-  if (seconds < 60) return `${Math.round(seconds).toString()} seconds`;
-  const minutes: number = seconds / 60;
-  if (minutes < 60) return `${Math.round(minutes).toString()} minutes`;
-  const hours: number = minutes / 60;
-  if (hours < 60) return `${Math.round(hours).toString()} hours`;
-  const days: number = hours / 24;
-  if (days < 30) return `${Math.round(days).toString()} days`;
-  const months: number = days / 30;
-  if (months < 12) return `${Math.round(months).toString()} months`;
-  const years: number = months / 12;
-  return `${Math.round(years).toString()} years`;
-}
 SeePageButton.defaultProps = {
   style: null,
 };
@@ -111,14 +92,6 @@ export function PostCard(props: { post: PostProps }) {
           onClick={() => setOpen(true)}
           sx={{ display: 'flex', height: POST_HEIGHT }}
         >
-          {post.image && (
-            <CardMedia
-              sx={{ backgroundImage: `url(${post.image})` }}
-              id="card-image"
-              component="img"
-              image={post.image}
-            />
-          )}
           <CardContent
             style={{
               borderColor: 'red',
@@ -145,6 +118,14 @@ export function PostCard(props: { post: PostProps }) {
               {`${timeFromNow(new Date(post.publicationDate))} ago`}
             </p>
           </CardContent>
+          {post.image && (
+            <CardMedia
+              sx={{ backgroundImage: `url(${post.image})` }}
+              id="card-image"
+              component="img"
+              image={post.image}
+            />
+          )}
         </CardActionArea>
         <CardActions sx={{ justifyContent: 'space-between' }}>
           {clubDetails ? (
@@ -156,12 +137,9 @@ export function PostCard(props: { post: PostProps }) {
               logoUrl={clubDetails.icon}
             />
           ) : (
-            <Skeleton
-              variant="circular"
-              sx={{ width: POST_AVATAR_SIZE, height: POST_AVATAR_SIZE }}
-            />
+            <ClubAvatarSkeleton size={POST_AVATAR_SIZE} textPosition="right" />
           )}
-          <div style={{ columnGap: 10, display: 'flex' }}>
+          <div style={{ columnGap: 10, display: 'flex', alignItems: 'center' }}>
             {clubDetails && clubDetails.is_admin && <EditButton />}
             {post.pageSuggestion && (
               <SeePageButton link={post.pageSuggestion} />
@@ -183,9 +161,8 @@ export function PostCardSkeleton() {
   return (
     <Skeleton
       variant="rectangular"
-      sx={{
-        height: POST_HEIGHT + 55,
-      }}
-    ></Skeleton>
+      width="100%"
+      height={POST_HEIGHT + POST_AVATAR_SIZE + 30}
+    />
   );
 }

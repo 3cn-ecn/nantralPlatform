@@ -26,7 +26,6 @@ function Home() {
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
   const [postsStatus, setPostsStatus] = React.useState<LoadStatus>('load');
   const { t } = useTranslation('translation'); // translation module
-  const headerImageURL = '/static/img/central_background.jpg';
   const today = new Date();
   const postDateLimit = new Date();
   postDateLimit.setDate(today.getDay() - 15);
@@ -80,13 +79,13 @@ function Home() {
   return (
     <>
       <div className="header">
-        <div className="header-image" />
         <div id="header-title">
           <Typography id="second-title">{t('home.welcomeTo')}</Typography>
           <div id="title">
             <SvgIcon
               component={NantralIcon}
               inheritViewBox
+              id="header-logo"
               sx={{
                 height: 50,
                 width: 50,
@@ -95,6 +94,7 @@ function Home() {
             <Typography id="main-title">Nantral Platform</Typography>
           </div>
         </div>
+        <div className="header-image" />
       </div>
       <Box
         bgcolor="background.default"
@@ -103,11 +103,11 @@ function Home() {
           alignContent: 'center',
           display: 'flex',
           paddingTop: 20,
-          marginTop: '12.5em',
         }}
       >
-        <Container>
-          {posts.filter((post) => post.pinned).length > 0 && (
+        <Container sx={{ marginBottom: 3 }}>
+          {(postsStatus === 'load' ||
+            posts.filter((post) => post.pinned).length > 0) && (
             <PostSection
               posts={posts.filter((post) => post.pinned)}
               title={t('home.highlighted')}

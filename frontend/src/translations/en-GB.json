@@ -20,6 +20,10 @@
     "showAll": "Show all",
     "showLess": "Show less"
   },
+  "club": {
+    "joinNow": "Join now",
+    "noClub": "You haven't joined any groups yet"
+  },
   "date_picker": {
     "language": "en"
   },
