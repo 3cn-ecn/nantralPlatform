@@ -50,7 +50,7 @@ urlpatterns = i18n_patterns(
     path(
         'notification/',
         include('apps.notification.urls', namespace='notification')),
-
+    path('event/<id>/edit', include('apps.event.urls', namespace='event')),
     # api
     path(
         'api/student/',
@@ -60,6 +60,7 @@ urlpatterns = i18n_patterns(
         include('apps.roommates.api_urls', namespace='roommates_api')),
     path('api/post/', include('apps.post.api_urls', namespace='post_api')),
     path('api/event/', include('apps.event.api_urls', namespace='event_api')),
+
     path(
         'api/notification/',
         include('apps.notification.api_urls', namespace='notification_api')),

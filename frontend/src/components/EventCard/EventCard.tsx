@@ -77,7 +77,6 @@ function EventCard(props: { event: EventProps }) {
     slug,
     formUrl,
     isFavorite,
-    getAbsoluteUrl,
     endInscription,
     beginInscription,
     groupName,
@@ -187,16 +186,13 @@ function EventCard(props: { event: EventProps }) {
         </div>
       </Card>
       <div className="topButtons">
-        <FavButton
-          className="favIcon"
-          eventSlug={slug}
-          selected={isFavorite}
-          size="2rem"
-        />
+        <div className="favIcon">
+          <FavButton eventSlug={slug} selected={isFavorite} size="2rem" />
+        </div>
         <MoreActionsButton
           isAdmin={groupData.is_admin}
           className="moreActions"
-          shareUrl={window.location.origin + getAbsoluteUrl}
+          shareUrl={`${window.location.origin}/event/${id}`}
           slug={slug}
           size="2rem"
           participating={participating}

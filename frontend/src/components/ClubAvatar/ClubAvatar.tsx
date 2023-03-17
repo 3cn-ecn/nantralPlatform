@@ -7,7 +7,7 @@ function ClubAvatar(props: {
   name: string;
   logoUrl: string;
   clubUrl: string;
-  size?: number;
+  size?: number | string;
   textPosition?: 'right' | 'bottom' | false;
 }): JSX.Element {
   const { name, logoUrl, clubUrl, size, textPosition } = props;
@@ -23,6 +23,7 @@ function ClubAvatar(props: {
         justifyContent: 'center',
         flexDirection: textPosition === 'bottom' ? 'column' : 'row',
         display: 'flex',
+        maxWidth: 'min-content',
       }}
     >
       <IconButton href={clubUrl} sx={{ padding: 0, margin: 1 }}>

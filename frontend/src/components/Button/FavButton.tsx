@@ -8,12 +8,11 @@ import { CircularProgress, rgbToHex } from '@mui/material';
 import theme from '../../theme';
 
 function FavButton(props: {
-  className: string;
   eventSlug: string;
   selected: boolean;
   size?: string;
 }) {
-  const { className, eventSlug, selected, size } = props;
+  const { eventSlug, selected, size } = props;
   const [fav, setFav] = useState(selected);
   const [loading, setLoading] = useState(false);
   const handlePress = async () => {
@@ -34,44 +33,42 @@ function FavButton(props: {
   };
 
   return (
-    <div className={className}>
-      <IconButton
-        aria-label="favorite"
-        size="large"
-        sx={{
-          padding: '1.2rem',
-          background: rgbToHex(theme.palette.secondary.main).concat('b5'),
-          backdropFilter: 'blur(4px)',
-          width: `${size}`,
-          height: `${size}`,
-          fontSize: '1rem',
-          '&:hover': {
-            background: rgbToHex(theme.palette.primary.main).concat('b5'),
-          },
-        }}
-        onClick={handlePress}
-        disabled={loading}
-      >
-        <Zoom in={fav}>
-          <FavoriteIcon
-            color="primary"
-            sx={{
-              position: 'absolute',
-              width: `${size}`,
-              height: `${size}`,
-              fontSize: '1rem',
-            }}
-          />
-        </Zoom>
-        <FavoriteBorderIcon
-          style={{ width: `${size}`, height: `${size}`, fontSize: '1rem' }}
+    <IconButton
+      aria-label="favorite"
+      size="large"
+      sx={{
+        padding: '1.2rem',
+        background: rgbToHex(theme.palette.secondary.main).concat('b5'),
+        backdropFilter: 'blur(4px)',
+        width: `${size}`,
+        height: `${size}`,
+        fontSize: '1rem',
+        '&:hover': {
+          background: rgbToHex(theme.palette.primary.main).concat('b5'),
+        },
+      }}
+      onClick={handlePress}
+      disabled={loading}
+    >
+      <Zoom in={fav}>
+        <FavoriteIcon
           color="primary"
+          sx={{
+            position: 'absolute',
+            width: `${size}`,
+            height: `${size}`,
+            fontSize: '1rem',
+          }}
         />
-        {loading && (
-          <CircularProgress size={size} style={{ position: 'absolute' }} />
-        )}
-      </IconButton>
-    </div>
+      </Zoom>
+      <FavoriteBorderIcon
+        style={{ width: `${size}`, height: `${size}`, fontSize: '1rem' }}
+        color="primary"
+      />
+      {loading && (
+        <CircularProgress size={size} style={{ position: 'absolute' }} />
+      )}
+    </IconButton>
   );
 }
 
