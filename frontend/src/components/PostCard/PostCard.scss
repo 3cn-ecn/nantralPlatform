@@ -14,7 +14,6 @@
 #card-image {
   background-size: cover;
   background-position: center;
-  border-radius: 3px;
   margin: 20px;
   border-radius: 10px;
   width: 100px;
@@ -38,21 +37,4 @@
 }
 #post-club {
   font-size: 12px;
-  // margin : 0px; 
-}
-#card-top {
-  position: absolute;
-  align-items: center;
-  justify-content: space-between;
-  display: flex;
-  width: 100%;
-  align-self: center;
-}
-
-#image {
-  width : 100%;
-  object-fit: contain;
-  position: relative;
-  align-self: center;
-  max-height: 500px;
 }

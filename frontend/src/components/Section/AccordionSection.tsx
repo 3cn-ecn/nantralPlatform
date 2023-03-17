@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import './AccordionSection.scss';
-import { SeePageButton } from '../PostCard/PostCard';
 
 export function AccordionSection(props: {
   title: string;
@@ -80,14 +79,6 @@ export function AccordionSection(props: {
           }}
         >
           <h1 className="section-title">{title}</h1>
-
-          {/* {url && (
-            <NavLink to={url} className="see-more">
-              <Button variant="text" sx={{ borderRadius: 6 }}>
-                See all
-              </Button>
-            </NavLink>
-          )} */}
         </Box>
       </AccordionSummary>
       <AccordionDetails>

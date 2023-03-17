@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Badge, Box, Button, Divider, Grid, Skeleton } from '@mui/material';
+import { Box, Button, Divider, Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PostCard, PostCardSkeleton } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';

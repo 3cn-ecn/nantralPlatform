@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Box } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/material';
 import { Container } from '@mui/system';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
