@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Grid, Skeleton } from '@mui/material';
-import { ClubProps } from '../../../Props/Club';
+import { ClubProps } from '../../../Props/Group';
 import ClubAvatar from '../../ClubAvatar/ClubAvatar';
 import { AccordionSection } from '../AccordionSection';
 

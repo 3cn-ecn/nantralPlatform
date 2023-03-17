@@ -110,7 +110,7 @@ export function Day(props: {
 
   return (
     <div id={day} style={{ display: 'block' }}>
-      {day}
+      {day[0]}
       {dayChain}
       {chains.map((chain, number) => (
         <Grid
