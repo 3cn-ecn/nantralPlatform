@@ -44,7 +44,7 @@ function NotificationItem(props) {
   }
 
   return (
-    <ListItem>
+    <ListItem sx={{ height: 70 }}>
       <MenuItem
         component={Link}
         to={n.url}
