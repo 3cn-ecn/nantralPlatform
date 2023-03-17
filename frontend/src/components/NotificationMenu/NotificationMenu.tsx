@@ -11,13 +11,13 @@ import {
   Button,
   Chip,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
+import axios from 'axios';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { NotificationItem } from './NotificationItem';
-import axios from '../../legacy/utils/axios';
-import formatUrl from '../../legacy/utils/formatUrl';
 import merge from '../../legacy/notification/utils';
 import './NotificationItem.scss';
 
@@ -68,9 +68,9 @@ export function NotificationMenu(props) {
   }
 
   async function getNbNotifs(): Promise<void> {
-    const urlf = formatUrl(GET_NOTIFICATIONS_URL, [], { mode: 1 });
-    fetch(urlf)
-      .then((resp) => resp.json().then((data) => setNbNotifs(data)))
+    axios
+      .get(GET_NOTIFICATIONS_URL, { params: { mode: 1 } })
+      .then((res) => setNbNotifs(res.data))
       .catch((err) => setNbNotifs(null));
   }
 
@@ -96,7 +96,7 @@ export function NotificationMenu(props) {
   const listToShow = listNotifs.filter((sn: SentNotification) => {
     let res = true;
     if (unseenFilter) res = res && !sn.seen;
-    if (subscribeFilter) res = res && sn.suscribed;
+    if (subscribeFilter) res = res && sn.subscribed;
     return res;
   });
   if (listToShow.length === 0) {
@@ -169,6 +169,9 @@ export function NotificationMenu(props) {
             aria-label="show 17 new notifications"
             color="inherit"
             onClick={handleClose}
+            component={Link}
+            reloadDocument
+            to="/notification/settings/"
           >
             <SvgIcon component={SettingsIcon} inheritViewBox />
           </IconButton>

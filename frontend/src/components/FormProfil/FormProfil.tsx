@@ -8,73 +8,60 @@ import {
   IconButton,
   Typography,
   Box,
-  CircularProgress,
   Alert,
+  CircularProgress,
 } from '@mui/material';
-import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
-import Avatar from './Avatar';
+import { Close as CloseIcon } from '@mui/icons-material';
 import FormGroup, { FieldType } from '../../utils/form';
-import { Membership, Group, Student } from '../interfaces';
 
-/**
- * A function to generate the default fields fot the edit modal form.
- *
- * @param group
- * @param member
- * @returns The default list of fields
- */
-function createFormFields(group: Group, member: Membership): FieldType[] {
-  const defaultFields: FieldType[] = [
+interface Profile {
+  promo: number;
+  filiere: string;
+  cursus: string;
+}
+
+function createFormFields(): FieldType[] {
+  const defaultFields = [
     {
-      kind: 'text',
-      name: 'summary',
-      label: 'Résumé',
-      maxLength: 50,
-      helpText: 'Entrez le résumé du membre',
+      kind: 'number',
+      name: 'Année de promotion entrante',
+      label: 'Promo',
+      step: 1,
+      min: 1919,
     },
     {
-      kind: 'text',
-      name: 'description',
-      label: 'Description',
-      multiline: true,
+      kind: 'select',
+      name: 'Filière',
+      label: 'Filière',
+      item: [
+        '-----------',
+        'Élève Ingénieur Généraliste',
+        'Élève Ingénieur de Spécialité',
+        'Élève en Master',
+        'Doctorant',
+      ],
+    },
+    {
+      kind: 'select',
+      name: 'Cursus',
+      label: 'Cursus',
+      item: [
+        '-----------',
+        'Alternance',
+        'Ingénieur-Architecte',
+        'Architecte-Ingénieur',
+        'Ingénieur-Manager',
+        'Manager-Ingénieur',
+        'Ingénieur-Officier',
+        'Officier-Ingénieur',
+      ],
+    },
+    {
+      kind: 'picture',
+      title: 'Upload',
+      description: 'Upload une photo de profil',
     },
   ];
-  if (group && !group.group_type.no_membership_dates) {
-    defaultFields.push({
-      kind: 'group',
-      fields: [
-        {
-          kind: 'date',
-          name: 'begin_date',
-          label: 'Date de début',
-          required: true,
-        },
-        {
-          kind: 'date',
-          name: 'end_date',
-          label: 'Date de fin',
-          required: true,
-        },
-      ],
-    });
-  }
-  if (group?.is_admin) {
-    defaultFields.push({
-      kind: 'boolean',
-      name: 'admin',
-      label: 'Admin',
-      helpText: 'Un admin peut modifier le groupe et ses membres.',
-    });
-  }
-  if (member.id === null && group?.is_admin) {
-    defaultFields.splice(0, 0, {
-      kind: 'autocomplete',
-      label: 'Utilisateur',
-      name: 'student',
-      endPoint: '/api/student/student',
-      getOptionLabel: (m) => m?.name || '',
-    });
-  }
   return defaultFields;
 }
 
@@ -84,42 +71,27 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
  * @param group - the group of the membership
  * @returns A blank membership
  */
-function createBlankMember(group: Group, student: Student): Membership {
-  const date = new Date();
-  const today = date.toISOString().split('T')[0];
-  date.setFullYear(date.getFullYear() + 1);
-  const oneYearLater = date.toISOString().split('T')[0];
-  const member = {
+function createBlankProfile(): Profile {
+  const profile = {
     id: null,
-    student: group.is_admin ? null : (student.id as any),
-    group: group.id as any,
-    summary: '',
-    description: '',
-    begin_date: today,
-    end_date: oneYearLater,
-    admin: false,
-    priority: 0,
-    dragId: '',
+    promo: null,
+    filiere: '',
+    cursus: '',
   };
-  return member;
+  return profile;
 }
 
-function EditMemberModal(props: {
+export function EditProfilModal(props: {
   open: boolean;
-  member?: Membership;
-  group?: Group;
-  student: Student;
-  saveMembership: (member: Membership) => Promise<any>;
   closeModal: () => void;
-  openDeleteModal?: () => void;
+  saveProfile: (profile: Profile) => Promise<any>;
 }) {
-  const { open, group, student, saveMembership, closeModal, openDeleteModal } =
-    props;
-  const member = props.member || createBlankMember(group, student);
-  const formFields = createFormFields(group, member);
+  const { open, closeModal, saveProfile } = props;
+  const suggestion = createBlankProfile();
+  const formFields = createFormFields();
 
-  const [formValues, setFormValues] = useState<Membership>(
-    structuredClone(member)
+  const [formValues, setFormValues] = useState<Suggestion>(
+    structuredClone(suggestion)
   );
   const [formErrors, setFormErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -127,9 +99,9 @@ function EditMemberModal(props: {
 
   /** Function called on submit to save data */
   function onSubmit(e: FormEvent) {
-    e.preventDefault(); // prevent default action from browser
-    setSaving(true); // show loading
-    saveMembership(formValues) // save data
+    e.preventDefault();
+    console.log(formValues);
+    saveProfile(formValues)
       .then(() => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
@@ -151,23 +123,19 @@ function EditMemberModal(props: {
         }
       });
   }
-
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
       open={open}
       onClose={closeModal}
+      sx={{ minWidth: 700 }}
     >
       <form onSubmit={onSubmit}>
         <DialogTitle sx={{ m: 0, p: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Avatar
-              title={member?.student?.full_name || 'Ajouter un membre'}
-              icon={<EditIcon />}
-            />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {member?.student?.full_name || 'Ajouter un membre'}
+                Modification du Profil
               </Typography>
             </Box>
             <IconButton
@@ -186,7 +154,7 @@ function EditMemberModal(props: {
           <Alert severity="error" hidden={!globalErrors}>
             {globalErrors}
           </Alert>
-          <Box>
+          <Box sx={{ minWidth: 500 }}>
             <FormGroup
               fields={formFields}
               values={formValues}
@@ -194,16 +162,6 @@ function EditMemberModal(props: {
               setValues={setFormValues}
             />
           </Box>
-          <Button
-            hidden={!openDeleteModal}
-            onClick={openDeleteModal}
-            variant="outlined"
-            color="error"
-            disabled={saving}
-            sx={{ mr: 'auto', mt: 2 }}
-          >
-            Supprimer
-          </Button>
         </DialogContent>
         <DialogActions>
           <Button
@@ -234,5 +192,3 @@ function EditMemberModal(props: {
     </Dialog>
   );
 }
-
-export default EditMemberModal;

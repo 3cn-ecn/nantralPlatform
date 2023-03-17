@@ -20,7 +20,7 @@ import { LoadStatus } from '../../Props/GenericTypes';
  */
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
+  const [eventsStatus, setEventsStatus] = React.useState<Status>('load');
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
   const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
@@ -28,6 +28,12 @@ function Home() {
   const { t } = useTranslation('translation'); // translation module
   const headerImageURL = '/static/img/central_background.jpg';
   React.useEffect(() => {
+    getEvent();
+    getMyClubs();
+    getPosts();
+  }, []);
+
+  async function getEvent() {
     // fetch events
     axios
       .get('/api/event/', {
@@ -45,6 +51,9 @@ function Home() {
         console.error(err);
         setEventsStatus('fail');
       });
+  }
+
+  async function getMyClubs() {
     // fetch my clubs
     axios
       .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
@@ -56,6 +65,9 @@ function Home() {
         console.error(err);
         setClubsStatus('fail');
       });
+  }
+
+  async function getPosts() {
     // fetch posts
     axios
       .get('/api/post')
@@ -68,7 +80,7 @@ function Home() {
         console.error(err);
         setPostsStatus('fail');
       });
-  }, []);
+  }
 
   return (
     <>

@@ -14,5 +14,5 @@ router.register('student', StudentViewSet, basename='student')
 
 # urls
 urlpatterns = [
-    path('', StudentListView.as_view(), name='list')
+    path('', StudentListView.as_view(), name='list'),
 ] + router.urls
