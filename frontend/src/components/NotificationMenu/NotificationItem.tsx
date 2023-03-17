@@ -12,11 +12,10 @@ import {
 import SvgIcon from '@mui/material/SvgIcon';
 import axios from 'axios';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
-import formatUrl from '../../utils/formatUrl';
 import './NotificationItem.scss';
 
 const app = '/api/notification/';
-const MANAGE_NOTIFICATION_URL = `${app}notification/{0}`;
+const MANAGE_NOTIFICATION_URL = `${app}notification/`;
 
 function NotificationItem(props) {
   const { sn, nbNotifs, setNbNotifs } = props;
@@ -26,12 +25,12 @@ function NotificationItem(props) {
     // update the seen property
     const previous = sn.seen;
     sn.seen = null;
-    const url = formatUrl(MANAGE_NOTIFICATION_URL, [n.id]);
+    const url = `${MANAGE_NOTIFICATION_URL}${[n.id]}`;
     const response = await axios.post(url, { seen: true });
     // mettre à jour la liste des notifs
     if (!previous) {
       sn.seen = response.data;
-      // mettre à jour le compteur
+      // mettre à jour le compteu`
       if (response.data) {
         setNbNotifs(nbNotifs - 1);
       } else {
