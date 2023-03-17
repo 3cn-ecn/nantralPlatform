@@ -1,23 +1,16 @@
-.cardEventBlock {
-  min-width: 1px;
-  padding: 0px;
+.imageEventBlur {
+  width: inherit;
+  height: inherit;
+  backdrop-filter: blur(3px) brightness(75%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.paperOnlyEventBlock {
-  min-width: 1px;
+.eventBlockTitleDisplay {
   overflow: hidden;
   overflow-wrap: break-word;
   display: -webkit-box;
-   -webkit-line-clamp: 1; // Allow the title on 1 lines maximums
-   -webkit-box-orient: vertical;
-}
-
-.paperEventBlock {
-  min-width: 1px;
-  padding: 0px;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  display: -webkit-box;
-   -webkit-line-clamp: 1; // Allow the title on 1 lines maximums
+   -webkit-line-clamp: 1; // Allow the title on 1 line maximum
    -webkit-box-orient: vertical;
 }

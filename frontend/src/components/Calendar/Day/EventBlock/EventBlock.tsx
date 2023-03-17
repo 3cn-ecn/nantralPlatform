@@ -1,5 +1,11 @@
 import React from 'react';
-import { CardActionArea, CardContent, CardMedia, Paper } from '@mui/material';
+import {
+  Button,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Paper,
+} from '@mui/material';
 import { EventProps } from '../../../../Props/Event';
 import './EventBlock.scss';
 
@@ -46,59 +52,26 @@ export function EventBlock(props: {
     duration = 24;
   }
 
-  const blockDisplayUnit = Math.min(duration, startTime);
-  const minimalDisplayUnit = 2;
-  if (blockDisplayUnit < minimalDisplayUnit) {
-    return (
-      <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
-        <CardContent sx={{ padding: 0 }}>
-          <Paper
-            className="paperOnlyEventBlock"
-            sx={{
-              backgroundColor: 'red',
-            }}
-            style={{
-              padding: `${(blockDisplayUnit - 1) * 10}px`,
-              height: `${blockDisplayUnit * 20}px`,
-            }}
-            data-testid="paperOnlyEventBlockId"
-          >
-            {event.title}
-          </Paper>
-        </CardContent>
-      </CardActionArea>
-    );
-  }
   return (
-    <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
-      <CardContent sx={{ padding: 0 }}>
-        <CardMedia
-          className="cardEventBlock"
-          component="img"
-          image={event.image}
-          alt="Loading"
-          style={{
-            height: `${
-              Math.max(blockDisplayUnit, 20) === 20
-                ? (blockDisplayUnit - 1) * 20
-                : blockDisplayUnit * 19
-            }px`,
-          }}
-          data-testid="cardEventBlockId"
-        />
-        <Paper
-          className="paperEventBlock"
-          sx={{
-            backgroundColor: 'red',
-          }}
-          style={{
-            height: `${Math.max(blockDisplayUnit, 20)}px`,
-          }}
-          data-testid="paperEventBlockId"
-        >
-          {event.title}
-        </Paper>
-      </CardContent>
-    </CardActionArea>
+    <Button
+      variant="contained"
+      fullWidth
+      onClick={() => {
+        console.log(event);
+      }}
+      style={{
+        minWidth: `1px`,
+        height: `${Math.min(duration, startTime) * 20}px`,
+        padding: '0px',
+        background: `url(${event.image})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <div className="imageEventBlur">
+        <div className="eventBlockTitleDisplay">{event.title}</div>
+      </div>
+    </Button>
   );
 }
