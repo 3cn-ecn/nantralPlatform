@@ -72,7 +72,10 @@ function EditSuggestionModal(props: {
         kind: 'select',
         name: 'type',
         label: t('suggestion_menu.type'),
-        item: ['Bug', 'Suggestion'],
+        item: [
+          ['Bug', 'bug'],
+          ['Suggestion', 'suggestion'],
+        ],
         required: true,
       },
     ];

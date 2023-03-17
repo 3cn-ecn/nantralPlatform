@@ -5,8 +5,8 @@ import {
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
+import axios from 'axios';
 import { Membership, Student, Page } from './interfaces';
-import axios from '../../utils/axios';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 
 // passed through django template

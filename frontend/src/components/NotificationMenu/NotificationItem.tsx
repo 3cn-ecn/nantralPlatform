@@ -10,8 +10,8 @@ import {
   ListItem,
 } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
+import axios from 'axios';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
-import axios from '../../utils/axios';
 import formatUrl from '../../utils/formatUrl';
 import './NotificationItem.scss';
 

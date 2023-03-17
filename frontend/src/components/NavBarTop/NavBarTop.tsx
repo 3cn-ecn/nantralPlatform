@@ -14,7 +14,6 @@ import {
   ListItem,
   ListItemText,
   Link as LinkMui,
-  Avatar,
 } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
@@ -34,6 +33,7 @@ import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
 import PaletteIcon from '@mui/icons-material/Palette';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import axios from 'axios';
+import Avatar from '../Avatar/Avatar';
 import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
@@ -112,10 +112,6 @@ function NavBarTop(props: {
   };
 
   const [openS, setOpenS] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpenS(true);
-  };
 
   const handleCloseS = () => {
     setOpenS(false);
@@ -237,7 +233,7 @@ function NavBarTop(props: {
             {!isProfilePicture ? (
               <SvgIcon component={PeopleIcon} inheritViewBox />
             ) : (
-              <Avatar alt="profile" src={student.picture} />
+              <Avatar title={student.name} url={student.picture} />
             )}
           </IconButton>
           <Menu
@@ -313,7 +309,7 @@ function NavBarTop(props: {
                 {t('user_menu.admin')}
               </ListItem>
             </MenuItem>
-            <MenuItem onClick={handleClickOpen}>
+            <MenuItem onClick={() => setOpenS(true)}>
               <SvgIcon component={ErrorRoundedIcon} />
               <ListItem
                 className="menuItem"

@@ -15,9 +15,9 @@ import { Link } from 'react-router-dom';
 import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
+import axios from 'axios';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { NotificationItem } from './NotificationItem';
-import axios from '../../utils/axios';
 import formatUrl from '../../utils/formatUrl';
 import merge from '../../legacy/notification/utils';
 import './NotificationItem.scss';
@@ -69,10 +69,9 @@ export function NotificationMenu(props) {
   }
 
   async function getNbNotifs(): Promise<void> {
-    const urlf = formatUrl(GET_NOTIFICATIONS_URL, [], { mode: 1 });
-    console.log(urlf);
-    axios(GET_NOTIFICATIONS_URL, { params: { mode: 1 } })
-      .then((resp) => resp.json().then((data) => setNbNotifs(data)))
+    axios
+      .get(GET_NOTIFICATIONS_URL, { params: { mode: 1 } })
+      .then((res) => setNbNotifs(res.data))
       .catch((err) => setNbNotifs(null));
   }
 

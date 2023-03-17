@@ -14,6 +14,12 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material';
 import FormGroup, { FieldType } from '../../utils/form';
 
+interface Profile {
+  promo: number;
+  filiere: string;
+  cursus: string;
+}
+
 function createFormFields(): FieldType[] {
   const defaultFields = [
     {
@@ -65,22 +71,22 @@ function createFormFields(): FieldType[] {
  * @param group - the group of the membership
  * @returns A blank membership
  */
-function createBlankSuggestion(): Suggestion {
-  const suggestion = {
+function createBlankProfile(): Profile {
+  const profile = {
     id: null,
-    name: '',
-    description: '',
-    type: '',
+    promo: null,
+    filiere: '',
+    cursus: '',
   };
-  return suggestion;
+  return profile;
 }
 
 export function EditProfilModal(props: {
   open: boolean;
   closeModal: () => void;
-  saveSuggestion: (suggestion: Suggestion) => Promise<any>;
+  saveProfile: (profile: Profile) => Promise<any>;
 }) {
-  const { open, closeModal, saveSuggestion } = props;
+  const { open, closeModal, saveProfile } = props;
   const suggestion = createBlankSuggestion();
   const formFields = createFormFields();
 
@@ -95,7 +101,7 @@ export function EditProfilModal(props: {
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     console.log(formValues);
-    saveSuggestion(formValues)
+    saveProfile(formValues)
       .then(() => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
