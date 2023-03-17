@@ -18,7 +18,8 @@
     },
     "seePage": "See page",
     "showAll": "Show all",
-    "showLess": "Show less"
+    "showLess": "Show less",
+    "close": "Close"
   },
   "date_picker": {
     "language": "en"
@@ -32,7 +33,8 @@
     },
     "error": "Error while loading the events",
     "membersOnly": "Members only",
-    "no_event": "No Event"
+    "no_event": "No Event",
+    "participantsList": "List of participants"
   },
   "filterbar": {
     "date": "Date",

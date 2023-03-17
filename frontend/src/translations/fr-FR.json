@@ -18,7 +18,8 @@
     },
     "seePage": "Voir la page",
     "showAll": "Tout afficher",
-    "showLess": "Afficher moins"
+    "showLess": "Afficher moins",
+    "close": "Fermer"
   },
   "date_picker": {
     "language": "fr"
@@ -32,7 +33,8 @@
     },
     "error": "Erreur lors du chargement des évènements",
     "membersOnly": "Membres uniquement",
-    "no_event": "Aucun évènement"
+    "no_event": "Aucun évènement",
+    "participantsList": "Liste des participants"
   },
   "filterbar": {
     "button_filter": "Filtrer",

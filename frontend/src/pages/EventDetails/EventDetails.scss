@@ -1,0 +1,31 @@
+.banner {
+  width: 100%;
+  height: auto;
+}
+
+.loading {
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.adaptativeText{
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+}
+
+.section{
+  margin-top:2em;
+}
+
+// An element
+.infoItemElement {
+  text-align: left;
+  align-self: center;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+   -webkit-line-clamp: 3; // Allow the title on 3 lines maximum
+   -webkit-box-orient: vertical;
+}
