@@ -142,4 +142,4 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
   );
 }
 
-ender(<MembershipsStudent />, document.getElementById('root-members'));
+render(<MembershipsStudent />, document.getElementById('root-members'));
