@@ -38,3 +38,10 @@
 #post-club {
   font-size: 12px;
 }
+#image {
+  width: 100%;
+  object-fit: contain;
+  position: relative;
+  align-self: center;
+  max-height: 500px;
+}
