@@ -20,6 +20,7 @@ import Collapse from '@mui/material/Collapse';
 import { MoreVert as MoreIcon } from '@mui/icons-material';
 import Divider from '@mui/material/Divider';
 import GavelIcon from '@mui/icons-material/Gavel';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import PersonIcon from '@mui/icons-material/Person';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
@@ -30,13 +31,16 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
 import PaletteIcon from '@mui/icons-material/Palette';
-import { SearchBar } from './SearchBar/SearchBar';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import axios from 'axios';
+import Avatar from '../Avatar/Avatar';
 import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
 import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
-
+import EditSuggestionModal from '../Suggestion/Suggestion';
+import { Suggestion } from '../Suggestion/interfacesSuggestion';
 /**
  * The top bar for navigation
  *
@@ -69,6 +73,10 @@ function NavBarTop(props: {
   const [anchorElDark, setAnchorElDark] = React.useState<null | HTMLElement>(
     null
   );
+  const [loggedId, setLoggedId] = React.useState<string>();
+  const [isProfilePicture, setIsProfilePicture] =
+    React.useState<boolean>(false);
+  const [student, setStudent] = React.useState();
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
   const openD = Boolean(anchorElDark);
@@ -103,6 +111,14 @@ function NavBarTop(props: {
     setAnchorElDark(null);
   };
 
+  const [openS, setOpenS] = React.useState(false);
+
+  const handleCloseS = () => {
+    setOpenS(false);
+  };
+
+  const isOnBackend = true;
+
   const { t } = useTranslation('translation');
 
   const breadcrumbNameMap: { [key: string]: string } = {
@@ -120,7 +136,29 @@ function NavBarTop(props: {
     '/legal_mentions/': 'Legal',
   };
   const location = useLocation();
-  const pathnames = ('/home' + location.pathname).split('/').filter((x) => x);
+  const pathnames = `/home${location.pathname}`.split('/').filter((x) => x);
+
+  React.useEffect(() => {
+    getLoggedUser();
+  }, []);
+
+  async function getLoggedUser() {
+    axios
+      .get('/api/student/student/me/')
+      .then((res) => {
+        setLoggedId(res.data.id.toString());
+        setIsProfilePicture(res.data.picture !== null);
+        setStudent(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  async function createSuggestion(suggestion: Suggestion) {
+    console.log(suggestion);
+    return axios.post('/api/home/suggestion', suggestion);
+  }
 
   return (
     <AppBar position="fixed" color="secondary">
@@ -143,27 +181,33 @@ function NavBarTop(props: {
         <Box sx={{ flexGrow: 0.02 }} />
         <Breadcrumbs
           aria-label="breadcrumb"
-          sx={{ display: { xs: 'none', md: 'flex' } }}
+          separator={<NavigateNextIcon fontSize="small" />}
         >
-          <Typography
+          <LinkMui
             variant="h6"
-            component="div"
+            component={Link}
+            to="/"
             color="textPrimary"
+            underline="hover"
+            sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             Nantral Platform
-          </Typography>
+          </LinkMui>
           {pathnames.map((value, index) => {
             const last = index === pathnames.length - 1;
-            const to = (index == 0) ? '/home/' : `/${pathnames.slice(1, index + 1)}/`;
-            
+            const to =
+              index === 0 ? '/home/' : `/${pathnames.slice(1, index + 1)}/`;
+
             return last ? (
-              <Typography key={to}>{breadcrumbNameMap[to]}</Typography>
+              <Typography key={to} variant="h6">
+                {breadcrumbNameMap[to]}
+              </Typography>
             ) : (
               <LinkMui
                 component={Link}
                 underline="hover"
                 color="textPrimary"
-                to = {(to === '/home/') ? '/' : to}
+                to={to === '/home/' ? '/' : to}
                 key={to}
                 variant="h6"
               >
@@ -173,7 +217,6 @@ function NavBarTop(props: {
           })}
         </Breadcrumbs>
         <Box sx={{ flexGrow: 0.9 }} />
-        <SearchBar />
         <Box sx={{ flexGrow: 1.0 }} />
         <Box sx={{ display: 'flex' }}>
           <NotificationMenu />
@@ -187,7 +230,11 @@ function NavBarTop(props: {
             component="span"
             ref={spanRef}
           >
-            <SvgIcon component={PeopleIcon} inheritViewBox />
+            {!isProfilePicture ? (
+              <SvgIcon component={PeopleIcon} inheritViewBox />
+            ) : (
+              <Avatar title={student.name} url={student.picture} />
+            )}
           </IconButton>
           <Menu
             id="basic-menu"
@@ -196,12 +243,17 @@ function NavBarTop(props: {
             onClose={handleClose}
             MenuListProps={{ 'aria-labelledby': 'basic-button' }}
             TransitionComponent={Collapse}
+            PaperProps={{
+              style: {
+                width: 195,
+              },
+            }}
           >
             <MenuItem onClick={handleClose}>
               <SvgIcon component={PersonIcon} />
               <ListItem
                 component={Link}
-                to="/profile/"
+                to={`/student/${loggedId}`}
                 className="menuItem"
                 disablePadding
                 sx={{
@@ -215,8 +267,9 @@ function NavBarTop(props: {
               <SvgIcon component={LogoutRoundedIcon} />
               <ListItem
                 component={Link}
-                to="/logout/"
+                to="/account/logout/"
                 className="menuItem"
+                reloadDocument
                 disablePadding
                 sx={{
                   color: 'text.primary',
@@ -226,11 +279,39 @@ function NavBarTop(props: {
               </ListItem>
             </MenuItem>
             <Divider />
+            <MenuItem onClick={handleClickL}>
+              <SvgIcon component={PublicRoundedIcon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.language')}
+              </ListItemText>
+              <NavigateNextIcon />
+            </MenuItem>
+            <MenuItem onClick={handleClickD}>
+              <SvgIcon component={PaletteIcon} />
+              <ListItemText className="menuItem">
+                {t('user_menu.theme')}
+              </ListItemText>
+              <NavigateNextIcon />
+            </MenuItem>
+            <Divider />
             <MenuItem onClick={handleClose}>
-              <SvgIcon component={ErrorRoundedIcon} />
+              <SvgIcon component={AdminPanelSettingsIcon} />
               <ListItem
                 component={Link}
-                to="/bug/"
+                to="/admin/"
+                className="menuItem"
+                disablePadding
+                reloadDocument={isOnBackend}
+                sx={{
+                  color: 'text.primary',
+                }}
+              >
+                {t('user_menu.admin')}
+              </ListItem>
+            </MenuItem>
+            <MenuItem onClick={() => setOpenS(true)}>
+              <SvgIcon component={ErrorRoundedIcon} />
+              <ListItem
                 className="menuItem"
                 disablePadding
                 sx={{
@@ -268,19 +349,6 @@ function NavBarTop(props: {
               >
                 {t('user_menu.legal')}
               </ListItem>
-            </MenuItem>
-            <MenuItem onClick={handleClickL}>
-              <SvgIcon component={PublicRoundedIcon} />
-              <ListItemText className="menuItem">
-                {t('user_menu.language')}
-              </ListItemText>
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={handleClickD}>
-              <SvgIcon component={PaletteIcon} />
-              <ListItemText className="menuItem">
-                {t('user_menu.theme')}
-              </ListItemText>
             </MenuItem>
           </Menu>
           <Menu
@@ -396,6 +464,11 @@ function NavBarTop(props: {
             </MenuItem>
           </Menu>
         </Box>
+        <EditSuggestionModal
+          open={openS}
+          closeModal={handleCloseS}
+          saveSuggestion={createSuggestion}
+        />
         <Box sx={{ display: { xs: 'none', md: 'none' } }}>
           <IconButton
             size="large"

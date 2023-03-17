@@ -124,7 +124,8 @@
     "flatshare": "Carte des colocs",
     "home": "Accueil",
     "signature": "Signature ECN",
-    "student": "Annuaire Étudiant"
+    "student": "Annuaire Étudiant",
+    "group": "Groupes"
   },
   "notif": {
     "load": "Charger Plus",
@@ -141,6 +142,7 @@
     "years": "années"
   },
   "user_menu": {
+    "admin": "Interface Admin",
     "automatic": "Automatique",
     "bug": "Suggestion / Bug",
     "dark": "Thème sombre",
@@ -155,5 +157,27 @@
     "theme": "Thème",
     "title_language": "Langage",
     "title_theme": "Thème"
+  },
+  "suggestion_menu": {
+    "header": "Suggestions / Bug",
+    "title": "Titre",
+    "description": "Description",
+    "type": "Type",
+    "cancel": "Annuler",
+    "confirm": "Valider"
+  },
+  "profile": {
+    "promo": "Année d'entrée à Centrale: ",
+    "edit": "Modifier mon profil",
+    "gene": "Élève Ingénieur Généraliste",
+    "master": "Élève en Master",
+    "iti": "Élève Ingénieur de Spécialité (ITII)",
+    "doc": "Doctorant"
+  },
+  "membership_student": {
+    "title": "Groupes",
+    "show_old": "Afficher les anciens groupes",
+    "mask_old": "Masquer les anciens groupes"
   }
+
 }
