@@ -20,6 +20,10 @@
     "showAll": "Tout afficher",
     "showLess": "Afficher moins"
   },
+  "club": {
+    "joinNow": "Rejoindre maintenant",
+    "noClub": "Vous n'avez rejoint aucun groupe pour le moment"
+  },
   "date_picker": {
     "language": "fr"
   },
@@ -128,6 +132,14 @@
     "subscribed": "Abonné",
     "title": "Notifications",
     "unread": "Non Lu"
+  },
+  "time": {
+    "days": "jours",
+    "hours": "heures",
+    "minutes": "minutes",
+    "months": "mois",
+    "seconds": "secondes",
+    "years": "années"
   },
   "user_menu": {
     "admin": "Interface Admin",
