@@ -39,6 +39,11 @@ class Migration(migrations.Migration):
                 to='group.group', 
                 verbose_name='Organisateur'),
         ),
+        migrations.AlterField(
+            model_name='post',
+            name='group_slug',
+            field=models.SlugField(blank=True, null=True, verbose_name='Slug du groupe'),
+        ),
         migrations.RunPython(migrate_slugs_to_fk, reverse_code=migrate_fk_to_slugs),
         migrations.RemoveField(
             model_name='post',

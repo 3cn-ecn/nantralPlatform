@@ -60,36 +60,26 @@ export function AccordionSection(props: {
   return (
     <Accordion
       variant="outlined"
-      className="card"
       expanded={expanded}
+      sx={{ borderRadius: 1 }}
       onChange={() => setExpanded(!expanded)}
+      square={false}
     >
       <AccordionSummary
         expandIcon={<ExpandMore />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
+        aria-controls="panel1bh-content"
+        id="panel1bh-header"
       >
-        <NavLink to={url} className="see-more">
-          <Button
-            sx={{
-              textTransform: 'none',
-              color: 'text.primary',
-              ':hover': {
-                textDecoration: 'underline',
-                bgcolor: 'transparent',
-              },
-            }}
-          >
-            <h1 className="section-title">{title}</h1>
-            {badge > 0 && (
-              <Badge
-                badgeContent={badge}
-                color="primary"
-                sx={{ margin: 2.5, zIndex: 0 }}
-              />
-            )}
-          </Button>
-        </NavLink>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            columnGap: 1,
+          }}
+        >
+          <h1 className="section-title">{title}</h1>
+        </Box>
       </AccordionSummary>
       <AccordionDetails>
         <Grid spacing={2} container className="event-grid" alignItems="stretch">
