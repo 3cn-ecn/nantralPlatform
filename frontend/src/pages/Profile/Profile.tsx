@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { SvgIcon, Typography, Grid, Avatar, Button, Box } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { MembershipsStudent } from '../../components/group/MembershipsStudent/';
+import { MembershipsStudent } from '../../components/Group/MembershipsStudent/';
 import { EditProfilModal } from '../../components/FormProfil/FormProfil';
 
 const API_URL = '../../api/student/student/';
