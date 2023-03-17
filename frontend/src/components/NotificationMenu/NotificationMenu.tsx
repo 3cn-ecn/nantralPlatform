@@ -18,7 +18,6 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import axios from 'axios';
 import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { NotificationItem } from './NotificationItem';
-import formatUrl from '../../utils/formatUrl';
 import merge from '../../legacy/notification/utils';
 import './NotificationItem.scss';
 

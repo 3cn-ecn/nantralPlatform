@@ -11,7 +11,6 @@ const API_URL = '../../api/student/student/';
 
 function Profile() {
   const [student, setStudent] = React.useState(null);
-  const [faculty, setFaculty] = React.useState<string>('Centraliens');
   const { studentId } = useParams();
   const url = API_URL + studentId;
 
@@ -31,8 +30,8 @@ function Profile() {
       });
   }
 
-  async function createSuggestion(suggestion: Suggestion) {
-    return axios.post('/api/home/suggestion', suggestion);
+  async function createProfile(suggestion: Suggestion) {
+    return console.log('test');
   }
 
   const fac = {
@@ -68,9 +67,7 @@ function Profile() {
           </Grid>
           <Grid>
             <Typography variant="h7">
-              {student === null || faculty !== 'Centraliens'
-                ? faculty
-                : fac[student.faculty]}
+              {student === null ? 'Chargement en cours' : fac[student.faculty]}
             </Typography>
           </Grid>
           <Grid>
@@ -97,7 +94,7 @@ function Profile() {
             <EditProfilModal
               open={openS}
               closeModal={handleCloseS}
-              saveSuggestion={createSuggestion}
+              saveProfile={createProfile}
             />
           </Grid>
         </Grid>

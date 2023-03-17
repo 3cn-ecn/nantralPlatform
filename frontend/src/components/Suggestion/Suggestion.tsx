@@ -146,6 +146,14 @@ function EditSuggestionModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
+          {globalErrors ? (
+            <Alert severity="error" hidden={!globalErrors}>
+              {globalErrors}
+            </Alert>
+          ) : (
+            // eslint-disable-next-line react/jsx-no-useless-fragment
+            <></>
+          )}
           <Box sx={{ maxWidth: 500 }}>
             <FormGroup
               fields={formFields}

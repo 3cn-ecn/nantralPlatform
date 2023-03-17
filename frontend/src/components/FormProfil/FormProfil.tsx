@@ -87,7 +87,7 @@ export function EditProfilModal(props: {
   saveProfile: (profile: Profile) => Promise<any>;
 }) {
   const { open, closeModal, saveProfile } = props;
-  const suggestion = createBlankSuggestion();
+  const suggestion = createBlankProfile();
   const formFields = createFormFields();
 
   const [formValues, setFormValues] = useState<Suggestion>(
