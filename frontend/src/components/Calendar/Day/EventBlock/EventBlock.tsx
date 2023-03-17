@@ -61,6 +61,7 @@ export function EventBlock(props: {
               padding: `${(blockDisplayUnit - 1) * 10}px`,
               height: `${blockDisplayUnit * 20}px`,
             }}
+            data-testid="paperOnlyEventBlockId"
           >
             {event.title}
           </Paper>
@@ -83,6 +84,7 @@ export function EventBlock(props: {
                 : blockDisplayUnit * 19
             }px`,
           }}
+          data-testid="cardEventBlockId"
         />
         <Paper
           className="paperEventBlock"
@@ -92,6 +94,7 @@ export function EventBlock(props: {
           style={{
             height: `${Math.max(blockDisplayUnit, 20)}px`,
           }}
+          data-testid="paperEventBlockId"
         >
           {event.title}
         </Paper>

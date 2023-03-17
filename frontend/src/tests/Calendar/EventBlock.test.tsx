@@ -8,7 +8,7 @@ const eventInDay: EventProps = createTestEvent(
   'The slug',
   'The test event',
   new Date('2023-02-17T03:24:00'),
-  new Date('2023-02-17T04:24:00')
+  new Date('2023-02-17T04:54:00')
 );
 const eventBeginInDay: EventProps = createTestEvent(
   'The slug',
@@ -34,8 +34,14 @@ describe('<EventBlock />', () => {
     const component = render(
       <EventBlock day={eventInDay.beginDate.getDay()} event={eventInDay} />
     );
-    expect(component.getByRole('button').style.height).toBe('20px');
-    expect(component.getByRole('button').style.padding).toBe('0px');
+
+    expect(component.getByTestId('paperOnlyEventBlockId').style.height).toBe(
+      '30px'
+    );
+    expect(component.getByTestId('paperOnlyEventBlockId').style.padding).toBe(
+      '5px'
+    );
+
     expect(component).toMatchSnapshot();
   });
 
@@ -46,8 +52,15 @@ describe('<EventBlock />', () => {
         event={eventBeginInDay}
       />
     );
-    expect(component.getByRole('button').style.height).toBe('420px');
-    expect(component.getByRole('button').style.padding).toBe('0px');
+
+    expect(component.getByTestId('cardEventBlockId').style.height).toBe(
+      '399px'
+    );
+
+    expect(component.getByTestId('paperEventBlockId').style.height).toBe(
+      '21px'
+    );
+
     expect(component).toMatchSnapshot();
   });
 
@@ -55,8 +68,13 @@ describe('<EventBlock />', () => {
     const component = render(
       <EventBlock day={eventEndInDay.endDate.getDay()} event={eventEndInDay} />
     );
-    expect(component.getByRole('button').style.height).toBe('80px');
-    expect(component.getByRole('button').style.padding).toBe('0px');
+
+    expect(component.getByTestId('cardEventBlockId').style.height).toBe('60px');
+
+    expect(component.getByTestId('paperEventBlockId').style.height).toBe(
+      '20px'
+    );
+
     expect(component).toMatchSnapshot();
   });
 
@@ -67,8 +85,15 @@ describe('<EventBlock />', () => {
         event={eventMiddleInDay}
       />
     );
-    expect(component.getByRole('button').style.height).toBe('480px');
-    expect(component.getByRole('button').style.padding).toBe('0px');
+
+    expect(component.getByTestId('cardEventBlockId').style.height).toBe(
+      '456px'
+    );
+
+    expect(component.getByTestId('paperEventBlockId').style.height).toBe(
+      '24px'
+    );
+
     expect(component).toMatchSnapshot();
   });
 });
