@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Paper,
-} from '@mui/material';
+import { Button } from '@mui/material';
 import { EventProps } from '../../../../Props/Event';
 import './EventBlock.scss';
 
