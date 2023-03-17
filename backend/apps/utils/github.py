@@ -1,9 +1,9 @@
 import requests
 from django.conf import settings
+from typing import Literal
 
 
-def create_issue(title: str, body: str, label):
-    label = "bug" if int(label) == 1 else "suggestion"
+def create_issue(title: str, body: str, label: Literal['bug', 'suggestion']):
     issue = {
         'title': title,
         'body': body,

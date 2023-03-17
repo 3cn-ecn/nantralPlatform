@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { render } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { Snackbar, Alert, Button, Box, IconButton } from '@mui/material';
 import {
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
+import axios from 'axios';
 import { Membership, Student, Page } from './interfaces';
-import axios from '../utils/axios';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 
 // passed through django template
@@ -30,6 +30,7 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
     'load'
   );
+  const { t } = useTranslation('translation');
 
   const studentId = Id.toString();
   // status of modals
@@ -85,7 +86,7 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
 
   return (
     <>
-      <h2>Groupes</h2>
+      <h2>{t('membership_student.title')}</h2>
       <ListMembershipsGrid members={members} student={student} />
       <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
         {filters.from ? (
@@ -96,7 +97,7 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
               getMemberships();
             }}
           >
-            Afficher les anciens groupes
+            {t('membership_student.show_old')}
           </Button>
         ) : (
           <Button
@@ -106,7 +107,7 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
               getMemberships();
             }}
           >
-            Masquer les anciens groupes
+            {t('membership_student.show_old')}
           </Button>
         )}
         <IconButton
@@ -141,5 +142,3 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
     </>
   );
 }
-
-render(<MembershipsStudent />, document.getElementById('root-members'));

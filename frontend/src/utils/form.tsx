@@ -19,7 +19,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
-import axios from './axios';
+import axios from 'axios';
 
 export type FieldType =
   | {
@@ -55,7 +55,7 @@ export type FieldType =
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
-      item?: Array<string>;
+      item?: Array<Array<string>>;
     }
   | {
       kind: 'group';
@@ -181,8 +181,8 @@ function FormGroup(props: {
                     margin="normal"
                   >
                     {field.item.map((name) => (
-                      <MenuItem key={name} value={name}>
-                        {name}
+                      <MenuItem key={name} value={name[1]}>
+                        {name[0]}
                       </MenuItem>
                     ))}
                   </Select>

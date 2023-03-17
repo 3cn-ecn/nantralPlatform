@@ -18,6 +18,7 @@ import Sign from './pages/Sign/Sign';
 import Student from './pages/Student/Student';
 import LegalNotice from './pages/LegalNotice/Legal';
 import EventDetails from './pages/EventDetails/EventDetails';
+import Profile from './pages/Profile/Profile';
 import theme from './theme';
 import darktheme from './darktheme';
 
@@ -107,6 +108,7 @@ function App() {
             <Route path="/student" element={<Student />} />
             <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="/tools/signature" element={<Sign />} />
+            <Route path="/student/:studentId" element={<Profile />} />
           </Routes>
         </Box>
       </Box>

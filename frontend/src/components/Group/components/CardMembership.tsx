@@ -7,7 +7,7 @@ import {
   Box,
   Typography,
 } from '@mui/material';
-import Avatar from './Avatar';
+import Avatar from '../../Avatar/Avatar';
 import ModalDisplayMember from './ModalDisplayMember';
 import ModalEditMember from './ModalEditMember';
 import ModalDeleteMember from './ModalDeleteMember';
