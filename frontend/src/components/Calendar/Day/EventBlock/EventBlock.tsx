@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { CardActionArea, CardContent, CardMedia, Paper } from '@mui/material';
 import { EventProps } from '../../../../Props/Event';
+import './EventBlock.scss';
 
 /**
  * The EventBlock component, which is an event in the calendar display.
@@ -44,20 +45,57 @@ export function EventBlock(props: {
   } else {
     duration = 24;
   }
+
+  const blockDisplayUnit = Math.min(duration, startTime);
+  const minimalDisplayUnit = 2;
+  if (blockDisplayUnit < minimalDisplayUnit) {
+    return (
+      <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
+        <CardContent sx={{ padding: 0 }}>
+          <Paper
+            className="paperOnlyEventBlock"
+            sx={{
+              backgroundColor: 'red',
+            }}
+            style={{
+              padding: `${(blockDisplayUnit - 1) * 10}px`,
+              height: `${blockDisplayUnit * 20}px`,
+            }}
+          >
+            {event.title}
+          </Paper>
+        </CardContent>
+      </CardActionArea>
+    );
+  }
   return (
-    <Button
-      variant="contained"
-      fullWidth
-      onClick={() => {
-        console.log(event);
-      }}
-      style={{
-        minWidth: `1px`,
-        height: `${Math.min(duration, startTime) * 20}px`,
-        padding: '0px',
-      }}
-    >
-      {event.title[0]}
-    </Button>
+    <CardActionArea disableRipple sx={{ fontSize: '1rem' }}>
+      <CardContent sx={{ padding: 0 }}>
+        <CardMedia
+          className="cardEventBlock"
+          component="img"
+          image={event.image}
+          alt="Loading"
+          style={{
+            height: `${
+              Math.max(blockDisplayUnit, 20) === 20
+                ? (blockDisplayUnit - 1) * 20
+                : blockDisplayUnit * 19
+            }px`,
+          }}
+        />
+        <Paper
+          className="paperEventBlock"
+          sx={{
+            backgroundColor: 'red',
+          }}
+          style={{
+            height: `${Math.max(blockDisplayUnit, 20)}px`,
+          }}
+        >
+          {event.title}
+        </Paper>
+      </CardContent>
+    </CardActionArea>
   );
 }

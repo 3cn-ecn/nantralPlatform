@@ -28,7 +28,7 @@ export function DateBox(props: { date: Date; endDate: Date }): JSX.Element {
           minWidth: `1px`,
         }}
       >
-        <Grid container justifyContent="center" xs={12}>
+        <Grid container justifyContent="center">
           <Grid item xs={12}>
             <CalendarMonth></CalendarMonth>
           </Grid>

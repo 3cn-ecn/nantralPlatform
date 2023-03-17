@@ -1,0 +1,23 @@
+.cardEventBlock {
+  min-width: 1px;
+  padding: 0px;
+}
+
+.paperOnlyEventBlock {
+  min-width: 1px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+   -webkit-line-clamp: 1; // Allow the title on 1 lines maximums
+   -webkit-box-orient: vertical;
+}
+
+.paperEventBlock {
+  min-width: 1px;
+  padding: 0px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+   -webkit-line-clamp: 1; // Allow the title on 1 lines maximums
+   -webkit-box-orient: vertical;
+}
