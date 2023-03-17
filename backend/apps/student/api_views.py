@@ -6,6 +6,7 @@ from apps.utils.searchAPIMixin import SearchAPIMixin
 
 from .models import Student
 from .serializers import StudentSerializer
+from .serializers import SimpleStudentSerializer
 
 
 class StudentListView(generics.ListAPIView):
