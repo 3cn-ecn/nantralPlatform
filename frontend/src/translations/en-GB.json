@@ -131,6 +131,14 @@
     "title": "Notifications",
     "unread": "Unread"
   },
+  "time": {
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "months": "months",
+    "seconds": "seconds",
+    "years": "years"
+  },
   "user_menu": {
     "automatic": "Automatic",
     "bug": "Suggest / Bug",

@@ -72,7 +72,7 @@ export function PostModal(props: {
             }}
           >
             <Typography variant="caption" textAlign="right">
-              {`${timeFromNow(new Date(post.publicationDate))} ago`}
+              {timeFromNow(new Date(post.publicationDate))}
             </Typography>
           </div>
         </DialogContentText>

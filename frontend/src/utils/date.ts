@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 /**
  * Return true if date is in the 7 next days
  * @param date
@@ -13,16 +15,30 @@ export function isThisWeek(date: Date): boolean {
 }
 
 export function timeFromNow(date: Date): string {
+  const { t, i18n } = useTranslation('translation');
+  let time: string;
   const seconds: number = (new Date().getTime() - date.getTime()) / 1000;
-  if (seconds < 60) return `${Math.round(seconds).toString()} seconds`;
   const minutes: number = seconds / 60;
-  if (minutes < 60) return `${Math.round(minutes).toString()} minutes`;
   const hours: number = minutes / 60;
-  if (hours < 60) return `${Math.round(hours).toString()} hours`;
   const days: number = hours / 24;
-  if (days < 30) return `${Math.round(days).toString()} days`;
   const months: number = days / 30;
-  if (months < 12) return `${Math.round(months).toString()} months`;
   const years: number = months / 12;
-  return `${Math.round(years).toString()} years`;
+  if (seconds < 60)
+    time = `${Math.round(seconds).toString()} ${t('time.seconds')}`;
+  else if (minutes < 60)
+    time = `${Math.round(minutes).toString()} ${t('time.minutes')}`;
+  else if (hours < 60)
+    time = `${Math.round(hours).toString()} ${t('time.hours')}`;
+  else if (days < 30) time = `${Math.round(days).toString()} ${t('time.days')}`;
+  else if (months < 12)
+    time = `${Math.round(months).toString()} ${t('time.months')}`;
+  else time = `${Math.round(years).toString()} ${t('time.years')}`;
+  switch (i18n.language) {
+    case 'en-EN':
+      return `${time} ago`;
+    case 'fr-FR':
+      return `il y a ${time}`;
+    default:
+      return `${time} ago`;
+  }
 }

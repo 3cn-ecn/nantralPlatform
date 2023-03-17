@@ -132,6 +132,14 @@
     "title": "Notifications",
     "unread": "Non Lu"
   },
+  "time": {
+    "days": "jours",
+    "hours": "heures",
+    "minutes": "minutes",
+    "months": "mois",
+    "seconds": "secondes",
+    "years": "années"
+  },
   "user_menu": {
     "automatic": "Automatique",
     "bug": "Suggestion / Bug",

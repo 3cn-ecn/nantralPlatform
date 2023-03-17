@@ -80,11 +80,9 @@ export function PostCard(props: { post: PostProps }) {
       <Card
         variant="outlined"
         sx={{
-          // height: POST_HEIGHT,
           borderColor: post.pinned ? 'primary.main' : '',
           borderWidth: 1,
           height: '100%',
-          // display: 'flex',
         }}
       >
         <CardActionArea
@@ -113,9 +111,7 @@ export function PostCard(props: { post: PostProps }) {
               {post.publicity === 'Mem' && <MembersIcon />}
               {post.title}
             </h2>
-            <p id="post-club">
-              {`${timeFromNow(new Date(post.publicationDate))} ago`}
-            </p>
+            <p id="post-club">{timeFromNow(new Date(post.publicationDate))}</p>
           </CardContent>
           {post.image && (
             <CardMedia
