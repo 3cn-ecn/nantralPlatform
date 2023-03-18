@@ -1,0 +1,16 @@
+.imageEventBlur {
+  width: inherit;
+  height: inherit;
+  backdrop-filter: blur(3px) brightness(75%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.eventBlockTitleDisplay {
+  overflow: hidden;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+   -webkit-line-clamp: 1; // Allow the title on 1 line maximum
+   -webkit-box-orient: vertical;
+}

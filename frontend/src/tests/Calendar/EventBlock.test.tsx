@@ -36,6 +36,13 @@ describe('<EventBlock />', () => {
     );
     expect(component.getByRole('button').style.height).toBe('20px');
     expect(component.getByRole('button').style.padding).toBe('0px');
+    expect(component.getByRole('button').style.backgroundSize).toBe('cover');
+    expect(component.getByRole('button').style.backgroundPosition).toBe(
+      'center'
+    );
+    expect(component.getByRole('button').style.backgroundRepeat).toBe(
+      'no-repeat'
+    );
     expect(component).toMatchSnapshot();
   });
 
@@ -48,6 +55,13 @@ describe('<EventBlock />', () => {
     );
     expect(component.getByRole('button').style.height).toBe('420px');
     expect(component.getByRole('button').style.padding).toBe('0px');
+    expect(component.getByRole('button').style.backgroundSize).toBe('cover');
+    expect(component.getByRole('button').style.backgroundPosition).toBe(
+      'center'
+    );
+    expect(component.getByRole('button').style.backgroundRepeat).toBe(
+      'no-repeat'
+    );
     expect(component).toMatchSnapshot();
   });
 
@@ -57,6 +71,13 @@ describe('<EventBlock />', () => {
     );
     expect(component.getByRole('button').style.height).toBe('80px');
     expect(component.getByRole('button').style.padding).toBe('0px');
+    expect(component.getByRole('button').style.backgroundSize).toBe('cover');
+    expect(component.getByRole('button').style.backgroundPosition).toBe(
+      'center'
+    );
+    expect(component.getByRole('button').style.backgroundRepeat).toBe(
+      'no-repeat'
+    );
     expect(component).toMatchSnapshot();
   });
 
@@ -69,6 +90,13 @@ describe('<EventBlock />', () => {
     );
     expect(component.getByRole('button').style.height).toBe('480px');
     expect(component.getByRole('button').style.padding).toBe('0px');
+    expect(component.getByRole('button').style.backgroundSize).toBe('cover');
+    expect(component.getByRole('button').style.backgroundPosition).toBe(
+      'center'
+    );
+    expect(component.getByRole('button').style.backgroundRepeat).toBe(
+      'no-repeat'
+    );
     expect(component).toMatchSnapshot();
   });
 });
