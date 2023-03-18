@@ -864,6 +864,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
       <ChooseDisplay
         display={displayData}
         updateDisplay={updateDisplay}
+        beginDate={beginOfWeek}
       ></ChooseDisplay>
       <div id="Calendar" style={{ display: 'flex' }}>
         {displayData.type !== 'month' ? (
