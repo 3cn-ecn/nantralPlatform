@@ -18,7 +18,9 @@
     },
     "seePage": "Voir la page",
     "showAll": "Tout afficher",
-    "showLess": "Afficher moins"
+    "showLess": "Afficher moins",
+    "close": "Fermer",
+    "like": "J'aime"
   },
   "club": {
     "joinNow": "Rejoindre maintenant",
@@ -36,7 +38,11 @@
     },
     "error": "Erreur lors du chargement des évènements",
     "membersOnly": "Membres uniquement",
-    "no_event": "Aucun évènement"
+    "no_event": "Aucun évènement",
+    "participantsList": "Liste des participants",
+    "participants": "Participants",
+    "endTime": "Se termine le :",
+    "endInscription": "L'inscription est ouverte jusqu'au"
   },
   "filterbar": {
     "button_filter": "Filtrer",

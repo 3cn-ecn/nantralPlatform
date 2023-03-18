@@ -1,0 +1,26 @@
+.banner {
+  width: 100%;
+  height: auto;
+}
+
+.loading {
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.adaptativeText{
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+}
+
+.section{
+  margin-top:2em;
+}
+
+// An element
+.infoElement {
+  display: flex;
+  align-items: center;
+  margin-right: 3rem;
+}

@@ -12,7 +12,6 @@ Main component
 .eventCard {
   width: 100%;
   height: max-content;
-  
 }
 
 /* 
@@ -20,7 +19,7 @@ Main component
 Top half  
 ========
 */
-.banner {
+.eventBanner {
   height: 9.5rem;
 }
 
@@ -37,6 +36,12 @@ Top half
   position: absolute;
   top:0;
   left: 0;
+}
+
+.topButtons{
+  position: absolute;
+  width: 100%;
+  top: 0;
 }
 
 /* 
@@ -80,6 +85,8 @@ Bottom half
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin: $margin;
+  margin-top: 0;
 }
 
 // Div to display the title and the group's name
@@ -113,16 +120,15 @@ Bottom half
 // Main div
 .infoDetails{
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   min-height: 3.6rem;
 }
 
 // Div with 2 elements (icon and text)
 .infoItem {
   display: flex;
-  padding-left: 0.6rem;
-  padding-right: 0.6rem;
   margin: 0;
+  padding-right: 1.5rem;
   font-size: 0.875rem;
 }
 
@@ -130,7 +136,6 @@ Bottom half
 .infoItemElement {
   text-align: left;
   align-self: center;
-  margin: 0 auto;
   overflow: hidden;
   overflow-wrap: break-word;
   text-overflow: ellipsis;

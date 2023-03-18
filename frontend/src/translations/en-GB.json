@@ -18,7 +18,9 @@
     },
     "seePage": "See page",
     "showAll": "Show all",
-    "showLess": "Show less"
+    "showLess": "Show less",
+    "close": "Close",
+    "like": "Like"
   },
   "club": {
     "joinNow": "Join now",
@@ -36,7 +38,11 @@
     },
     "error": "Error while loading the events",
     "membersOnly": "Members only",
-    "no_event": "No Event"
+    "no_event": "No Event",
+    "participantsList": "List of participants",
+    "participants": "Participants",
+    "endTime": "Will end on :",
+    "endInscription": "Registration is open until"
   },
   "filterbar": {
     "date": "Date",
