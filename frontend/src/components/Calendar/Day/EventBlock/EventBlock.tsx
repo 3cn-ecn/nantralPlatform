@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import { EventProps } from '../../../../Props/Event';
+import './EventBlock.scss';
 
 /**
  * The EventBlock component, which is an event in the calendar display.
@@ -44,6 +45,7 @@ export function EventBlock(props: {
   } else {
     duration = 24;
   }
+
   return (
     <Button
       variant="contained"
@@ -55,9 +57,17 @@ export function EventBlock(props: {
         minWidth: `1px`,
         height: `${Math.min(duration, startTime) * 20}px`,
         padding: '0px',
+        background: `url(${event.image})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
     >
-      {event.title[0]}
+      <div className="imageEventBlur">
+        <div className="eventBlockTitleDisplay">
+          {Math.min(duration, startTime) > 1 ? event.title : ''}
+        </div>
+      </div>
     </Button>
   );
 }
