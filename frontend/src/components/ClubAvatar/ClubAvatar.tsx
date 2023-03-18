@@ -1,9 +1,10 @@
+import { Skeleton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton/IconButton';
 import * as React from 'react';
 import { stringToColor } from '../../utils/formatText';
 
-function ClubAvatar(props: {
+export function ClubAvatar(props: {
   name: string;
   logoUrl: string;
   clubUrl: string;
@@ -45,8 +46,40 @@ function ClubAvatar(props: {
   );
 }
 
+export function ClubAvatarSkeleton(props: {
+  size?: number;
+  textPosition?: 'right' | 'bottom' | false;
+}) {
+  const { size, textPosition } = props;
+  return (
+    <div
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: textPosition === 'bottom' ? 'column' : 'row',
+        display: 'flex',
+      }}
+    >
+      <Skeleton variant="circular" sx={{ padding: 0, margin: 1 }}>
+        <Avatar
+          alt=""
+          sx={{
+            height: size,
+            width: size,
+          }}
+        />
+      </Skeleton>
+      {textPosition && <Skeleton variant="text" sx={{ width: 60 }} />}
+    </div>
+  );
+}
+
 ClubAvatar.defaultProps = {
   size: 100,
   textPosition: 'bottom',
 };
-export default ClubAvatar;
+
+ClubAvatarSkeleton.defaultProps = {
+  size: 100,
+  textPosition: 'bottom',
+};

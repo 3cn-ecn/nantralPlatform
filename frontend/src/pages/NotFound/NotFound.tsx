@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/material';
 import { Container } from '@mui/system';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,17 +12,10 @@ function NotFound() {
   const { t } = useTranslation('translation');
   return (
     <Container sx={{ marginTop: 2 }}>
-      <Box
-        sx={{
-          borderWidth: 2,
-          borderColor: 'red',
-          border: '2px dashed red',
-          padding: 2,
-        }}
-      >
-        <h1 className="card-title">{t('404.error')}</h1>
+      <Alert severity="error">
+        <AlertTitle>{t('404.error')}</AlertTitle>
         <p className="card-text">{t('404.notFound')}</p>
-      </Box>
+      </Alert>
       <p>
         {t('404.whatYouCanDo')}
         <ul>

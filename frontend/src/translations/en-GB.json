@@ -22,6 +22,10 @@
     "close": "Close",
     "like": "Like"
   },
+  "club": {
+    "joinNow": "Join now",
+    "noClub": "You haven't joined any groups yet"
+  },
   "date_picker": {
     "language": "en"
   },
@@ -133,6 +137,14 @@
     "subscribed": "Suscribed",
     "title": "Notifications",
     "unread": "Unread"
+  },
+  "time": {
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "months": "months",
+    "seconds": "seconds",
+    "years": "years"
   },
   "user_menu": {
     "automatic": "Automatic",
