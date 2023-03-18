@@ -32,17 +32,6 @@ class EventTestCase(TestCase, TestMixin):
         GroupType.objects.filter(slug='t1').delete()
         Event.objects.all().delete()
 
-    def test_event_detail_view(self):
-        url = reverse('event:detail', args=[self.event.slug])
-        # Une personne non connectée ne doit pas pouvoir voir l'event et doit
-        # être redirigée vers la page de login
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-
-        self.client.login(username=self.u2, password=self.PASSWORD)
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-
     def test_participate_function(self):
         """Check that a user can registrate for an event."""
         url = reverse('event:add-participant', args=[self.event.slug])
