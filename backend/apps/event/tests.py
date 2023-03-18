@@ -67,7 +67,7 @@ class EventTestCase(TestCase, TestMixin):
         self.assertEqual(self.event.number_of_participants, 0)
 
     def test_event_update_view(self):
-        url = reverse("event:edit", args=[self.event.slug])
+        url = reverse("event:edit", args=[self.event.pk])
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
 
