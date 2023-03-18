@@ -19,7 +19,8 @@
     "seePage": "See page",
     "showAll": "Show all",
     "showLess": "Show less",
-    "close": "Close"
+    "close": "Close",
+    "like": "Like"
   },
   "date_picker": {
     "language": "en"
@@ -34,7 +35,10 @@
     "error": "Error while loading the events",
     "membersOnly": "Members only",
     "no_event": "No Event",
-    "participantsList": "List of participants"
+    "participantsList": "List of participants",
+    "participants": "Participants",
+    "endTime": "Will end on :",
+    "endInscription": "Registration is open until"
   },
   "filterbar": {
     "date": "Date",

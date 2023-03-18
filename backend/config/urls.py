@@ -50,7 +50,7 @@ urlpatterns = i18n_patterns(
     path(
         'notification/',
         include('apps.notification.urls', namespace='notification')),
-    path('event/<id>/edit', include('apps.event.urls', namespace='event')),
+    path('event/', include('apps.event.urls', namespace='event')),
     # api
     path(
         'api/student/',
