@@ -19,13 +19,8 @@
 }
 
 // An element
-.infoItemElement {
-  text-align: left;
-  align-self: center;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-   -webkit-line-clamp: 3; // Allow the title on 3 lines maximum
-   -webkit-box-orient: vertical;
+.infoElement {
+  display: flex;
+  align-items: center;
+  margin-right: 3rem;
 }

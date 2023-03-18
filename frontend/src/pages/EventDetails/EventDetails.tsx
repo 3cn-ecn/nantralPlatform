@@ -27,7 +27,7 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import FavButton from '../../components/Button/FavButton';
 import JoinButton from '../../components/Button/JoinButton';
-import ClubAvatar from '../../components/ClubAvatar/ClubAvatar';
+import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
 import { EventParticipantsModal } from '../../components/Modal/EventParticipantsModal';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 
@@ -148,39 +148,28 @@ function EventDetails() {
         >
           {t('event.endTime')}
         </Typography>
-        <Grid container rowSpacing={1} columnSpacing={6}>
-          <Grid
-            item
-            xs={12}
-            sm={4}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+        <div
+          style={{
+            display: 'flex',
+            marginTop: '1rem',
+            flexDirection: matches ? 'row' : 'column',
+          }}
+        >
+          <div className="infoElement">
             <CalendarTodayIcon
               sx={{ fontSize: '1.5rem', marginRight: '1rem' }}
             />
             <Typography className="adaptativeText" variant="h5">
               {endDateText}
             </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={4}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: matches ? 'center' : 'left',
-            }}
-          >
+          </div>
+          <div className="infoElement">
             <AccessTimeIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
             <Typography className="adaptativeText" variant="h5">
               {endHourText}
             </Typography>
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       </>
     ) : null;
 
@@ -325,59 +314,34 @@ function EventDetails() {
           size="large"
         />
         {endInscriptionSection}
-        <Grid
-          container
-          rowSpacing={1}
-          columnSpacing={6}
-          sx={{ marginTop: '1rem' }}
+        <div
+          style={{
+            display: 'flex',
+            marginTop: '1rem',
+            flexDirection: matches ? 'row' : 'column',
+          }}
         >
-          <Grid
-            item
-            xs={12}
-            sm={4}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <div className="infoElement">
             <CalendarTodayIcon
               sx={{ fontSize: '1.5rem', marginRight: '1rem' }}
             />
             <Typography className="adaptativeText" variant="h5">
               {beginDateText}
             </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={4}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: matches ? 'center' : 'left',
-            }}
-          >
+          </div>
+          <div className="infoElement">
             <AccessTimeIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
             <Typography className="adaptativeText" variant="h5">
               {beginHourText} {endSameDay}
             </Typography>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            sm={4}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: matches ? 'right' : 'left',
-            }}
-          >
+          </div>
+          <div className="infoElement">
             <PlaceIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
             <Typography className="adaptativeText" variant="h5">
               {event.location}
             </Typography>
-          </Grid>
-        </Grid>
+          </div>
+        </div>
         {endSection}
 
         <Grid container spacing={1}>
