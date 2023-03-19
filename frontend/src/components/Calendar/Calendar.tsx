@@ -734,7 +734,6 @@ function updateWeekToDisplay(
     ['Dimanche', 7],
   ];
   let displaySize: Array<Array<any>> | Array<Array<Array<any>>>;
-  console.log(endOfWeek);
 
   switch (displayData.type) {
     case 'day':
@@ -849,7 +848,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   React.useEffect(() => {
     changeDisplay(displayData.type, beginOfWeek, setBeginOfWeek, setEndOfWeek);
   }, [displayData]);
-  console.log(displaySize);
   return (
     <>
       <ChooseWeek
