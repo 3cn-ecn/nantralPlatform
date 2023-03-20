@@ -246,10 +246,13 @@ function EventDetails() {
     </>
   ) : null;
 
+  const banner =
+    event.image === null ? '/static/img/default-banner.png' : event.image;
+
   return (
     <>
       <Container>
-        <img className="banner" src={event.image} alt="Banner" />
+        <img className="banner" src={banner} alt="Banner" />
         <Typography
           className="adaptativeText"
           variant="h3"
@@ -311,7 +314,7 @@ function EventDetails() {
           logoUrl={groupData.icon}
           name={groupData.name}
           textPosition="right"
-          size="large"
+          size="3.75rem"
         />
         {endInscriptionSection}
         <div
@@ -335,9 +338,13 @@ function EventDetails() {
               {beginHourText} {endSameDay}
             </Typography>
           </div>
-          <div className="infoElement">
+          <div className="infoElement" style={{ minWidth: 0 }}>
             <PlaceIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
-            <Typography className="adaptativeText" variant="h5">
+            <Typography
+              className="adaptativeText"
+              variant="h5"
+              sx={{ minWidth: 0 }}
+            >
               {event.location}
             </Typography>
           </div>
@@ -350,7 +357,7 @@ function EventDetails() {
 
         <Typography variant="caption" sx={{ textAlign: 'justify' }}>
           <div
-            style={{ marginTop: '2rem' }}
+            style={{ marginTop: '2rem', fontSize: '1rem' }}
             dangerouslySetInnerHTML={{
               __html: event.description,
             }}
