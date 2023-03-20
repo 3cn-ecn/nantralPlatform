@@ -14,38 +14,60 @@ import {
   AutocompleteInputChangeReason,
   Input,
   Button,
+  InputBase,
+  Paper,
+  IconButton,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 import axios from 'axios';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import { Image } from '@mui/icons-material';
 
 export type FieldType =
   | {
-      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date';
+      kind: 'text' | 'integer' | 'float' | 'boolean';
       name: string;
       label: string;
       required?: boolean;
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
-      rows: int;
+      rows: number;
+      disabled?: boolean;
+    }
+  | {
+      kind: 'date';
+      name: string;
+      label: string;
+      required?: boolean;
+      maxLength?: number;
+      helpText?: string;
+      multiline?: boolean;
+      rows: number;
+      disabled?: boolean;
+      type?: 'date' | 'date and time';
     }
   | {
       kind: 'number';
       name: string;
       label: string;
       required?: boolean;
-      min: float;
-      max: float;
-      step: float;
-      default: float;
+      min: number;
+      max: number;
+      step: number;
+      default: number;
+      disabled?: boolean;
     }
   | {
       kind: 'picture';
-      title: string;
+      label: string;
       description: string;
+      disabled?: boolean;
+      name: string;
+      required?: boolean;
     }
   | {
       kind: 'select';
@@ -56,6 +78,7 @@ export type FieldType =
       helpText?: string;
       multiline?: boolean;
       item?: Array<Array<string>>;
+      disabled?: boolean;
     }
   | {
       kind: 'group';
@@ -76,6 +99,7 @@ export type FieldType =
       freeSolo?: boolean;
       getOptionLabel: (option: any) => string;
       pk?: any;
+      disabled?: boolean;
     };
 
 /**
@@ -103,12 +127,13 @@ function FormGroup(props: {
    * @param name - the name of the field, and the key of the object in 'values'
    * @param value - the new value for this field
    */
-  function handleChange(name: string, value: any) {
+  const handleChange = (name: string, value: any) => {
+    console.log(name, value);
     setValues({
       ...values,
       [name]: value,
     });
-  }
+  };
 
   return (
     <>
@@ -144,12 +169,12 @@ function FormGroup(props: {
                     key={field.name}
                     id={`${field.name}-number`}
                     name={field.name}
-                    label={field.label}
                     value={values[field.name]}
                     onChange={(e) => handleChange(field.name, e.target.value)}
                     required={field.required}
-                    margin="normal"
+                    margin="dense"
                     type="number"
+                    disabled={field.disabled}
                     defaultValue={field.default}
                     slotProps={{
                       input: {
@@ -178,10 +203,11 @@ function FormGroup(props: {
                     value={values[field.name]}
                     onChange={(e) => handleChange(field.name, e.target.value)}
                     required={field.required}
-                    margin="normal"
+                    margin="dense"
+                    disabled={field.disabled}
                   >
                     {field.item.map((name) => (
-                      <MenuItem key={name} value={name[1]}>
+                      <MenuItem key={name.toString()} value={name[1]}>
                         {name[0]}
                       </MenuItem>
                     ))}
@@ -206,17 +232,52 @@ function FormGroup(props: {
                 margin="normal"
                 multiline={field.multiline}
                 rows={field.rows}
+                disabled={field.disabled}
               />
             );
           case 'picture':
             return (
               <Box sx={{ minWidth: 120, mt: 2 }}>
-                <FormControl fullWidth row>
-                  <Button variant="contained" component="label">
-                    {field.description}
-                    <input hidden accept="image/*" multiple type="file" />
-                  </Button>
-                </FormControl>
+                <TextField
+                  variant="outlined"
+                  disabled
+                  fullWidth
+                  label={field.label}
+                  required={field.required}
+                  value={
+                    values[field.name]?.name || values[field.name] || 'No image'
+                  }
+                  error={!!error}
+                  sx={{ marginBottom: 1 }}
+                  // helperText={error || field.description}
+                />
+                <Button
+                  disabled={field.disabled}
+                  variant="contained"
+                  component="label"
+                  sx={{ height: '100%', marginRight: 1 }}
+                >
+                  CHOOSE FILE
+                  <input
+                    disabled={field.disabled}
+                    hidden
+                    accept="image/*"
+                    multiple
+                    type="file"
+                    onChange={(event) => {
+                      console.log(event.target.files);
+                      if (event.target.files.length > 0)
+                        handleChange(field.name, event.target.files[0]);
+                    }}
+                  />
+                </Button>
+                <Button
+                  disabled={field.disabled}
+                  variant="outlined"
+                  onClick={() => handleChange(field.name, null)}
+                >
+                  DELETE
+                </Button>
               </Box>
             );
           case 'date': // date as string
@@ -226,36 +287,62 @@ function FormGroup(props: {
                 dateAdapter={AdapterDayjs}
                 key={field.name}
               >
-                <DatePicker
-                  label={field.label}
-                  value={values[field.name] && new Date(values[field.name])}
-                  onChange={(val) => {
-                    if (val && val.toString() !== 'Invalid Date') {
-                      handleChange(
-                        field.name,
-                        new Intl.DateTimeFormat('en-GB')
-                          .format(val)
-                          .split('/')
-                          .reverse()
-                          .join('-')
-                      );
-                    } else {
-                      handleChange(field.name, val);
-                    }
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      id={`${field.name}-input`}
-                      name={field.name}
-                      fullWidth={!noFullWidth}
-                      required={field.required}
-                      helperText={error || field.helpText}
-                      error={!!error}
-                      margin="normal"
-                    />
-                  )}
-                />
+                {field.type !== 'date and time' ? (
+                  <DatePicker
+                    label={field.label}
+                    value={values[field.name] && new Date(values[field.name])}
+                    onChange={(val) => {
+                      if (val && val.toString() !== 'Invalid Date') {
+                        handleChange(
+                          field.name,
+                          new Intl.DateTimeFormat('en-GB')
+                            .format(val)
+                            .split('/')
+                            .reverse()
+                            .join('-')
+                        );
+                      } else {
+                        handleChange(field.name, val);
+                      }
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        id={`${field.name}-input`}
+                        name={field.name}
+                        fullWidth={!noFullWidth}
+                        required={field.required}
+                        helperText={error || field.helpText}
+                        error={!!error}
+                        margin="normal"
+                      />
+                    )}
+                  />
+                ) : (
+                  <DateTimePicker
+                    label={field.label}
+                    value={values[field.name] && new Date(values[field.name])}
+                    onChange={(val) => {
+                      if (val && val.toString() !== 'Invalid Date') {
+                        handleChange(field.name, new Date(val.toISOString()));
+                      } else {
+                        handleChange(field.name, val);
+                      }
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        id={`${field.name}-input`}
+                        name={field.name}
+                        fullWidth={!noFullWidth}
+                        required={field.required}
+                        helperText={error || field.helpText}
+                        error={!!error}
+                        margin="normal"
+                      />
+                    )}
+                  />
+                )}
               </LocalizationProvider>
             );
           case 'boolean':
@@ -293,14 +380,14 @@ function FormGroup(props: {
                 field={field}
                 value={values[field.name]}
                 error={error}
-                handleChange={() => handleChange}
+                handleChange={handleChange}
                 noFullWidth={noFullWidth}
               />
             );
           case 'custom':
             return <field.component error={!!error} />;
           default:
-            return <></>;
+            return null;
         }
       })}
     </>
@@ -338,17 +425,19 @@ function AutocompleteField<T>(props: {
     }
   }, []);
 
-  function updateOptions(
+  const updateOptions = (
     event: React.SyntheticEvent,
     value: string,
     reason: AutocompleteInputChangeReason
-  ): void {
+  ): void => {
     if (reason !== 'input' || value.length < 3) return;
     axios
       .get<any[]>(`${field.endPoint}/search/`, { params: { q: value } })
       .then((res) => setOptions(res.data))
-      .catch(() => {});
-  }
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   return (
     <Autocomplete
@@ -366,6 +455,7 @@ function AutocompleteField<T>(props: {
       fullWidth={!noFullWidth}
       freeSolo={field.freeSolo}
       onInputChange={updateOptions}
+      disabled={field.disabled}
       renderInput={(params) => (
         <TextField
           {...params}
