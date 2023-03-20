@@ -16,3 +16,12 @@ export function numberOfDayInMonth(year: number, month: number): number {
 export function numberOfDayInDateMonth(date: Date): number {
   return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 }
+
+/**
+ * Get first day of a month
+ * @param date A date in the month.
+ * @returns The first day of the month.
+ */
+export function firstMonthDay(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), 0);
+}
