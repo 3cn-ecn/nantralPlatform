@@ -83,7 +83,6 @@ function JoinButton({
   const inscriptionNotStarted: boolean =
     beginInscription !== null &&
     Date.now() < new Date(beginInscription).getTime();
-
   const participate = async () => {
     axios
       .post(`/api/event/${eventSlug}/participate`)

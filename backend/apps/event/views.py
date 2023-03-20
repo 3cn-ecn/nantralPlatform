@@ -50,7 +50,7 @@ class EventUpdateView(UserPassesTestMixin, UpdateView):
     fields = ['title', 'description', 'location',
               'date', 'publicity', 'color', 'image']
     model = Event
-    slug_field = 'slug'
+    slug_field = 'pk'
 
     def test_func(self) -> bool:
         event = self.get_object()

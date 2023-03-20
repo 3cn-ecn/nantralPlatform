@@ -4,18 +4,20 @@ import React, { useState } from 'react';
 import IconButton from '@mui/material/IconButton/IconButton';
 import Zoom from '@mui/material/Zoom/Zoom';
 import axios from 'axios';
-import { CircularProgress, rgbToHex } from '@mui/material';
+import { Button, CircularProgress, rgbToHex } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import theme from '../../theme';
 
 function FavButton(props: {
-  className: string;
   eventSlug: string;
   selected: boolean;
+  iconized?: boolean;
   size?: string;
 }) {
-  const { className, eventSlug, selected, size } = props;
+  const { eventSlug, selected, size, iconized } = props;
   const [fav, setFav] = useState(selected);
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation('translation');
   const handlePress = async () => {
     setLoading(true);
     if (fav) {
@@ -32,9 +34,29 @@ function FavButton(props: {
         .finally(() => setLoading(false));
     }
   };
-
-  return (
-    <div className={className}>
+  const icon = (
+    <>
+      <Zoom in={fav}>
+        <FavoriteIcon
+          color="primary"
+          sx={{
+            position: 'absolute',
+            width: iconized ? `${size}` : '1.25rem',
+            height: iconized ? `${size}` : '1.25rem',
+          }}
+        />
+      </Zoom>
+      <FavoriteBorderIcon
+        style={{
+          width: iconized ? `${size}` : '1.25rem',
+          height: iconized ? `${size}` : '1.25rem',
+        }}
+        color="primary"
+      />
+    </>
+  );
+  if (iconized) {
+    return (
       <IconButton
         aria-label="favorite"
         size="large"
@@ -52,31 +74,30 @@ function FavButton(props: {
         onClick={handlePress}
         disabled={loading}
       >
-        <Zoom in={fav}>
-          <FavoriteIcon
-            color="primary"
-            sx={{
-              position: 'absolute',
-              width: `${size}`,
-              height: `${size}`,
-              fontSize: '1rem',
-            }}
-          />
-        </Zoom>
-        <FavoriteBorderIcon
-          style={{ width: `${size}`, height: `${size}`, fontSize: '1rem' }}
-          color="primary"
-        />
+        {icon}
         {loading && (
           <CircularProgress size={size} style={{ position: 'absolute' }} />
         )}
       </IconButton>
-    </div>
+    );
+  }
+  return (
+    <Button
+      onClick={handlePress}
+      disabled={loading}
+      variant="outlined"
+      startIcon={
+        <div style={{ fontSize: '1rem', maxHeight: '1.25rem' }}>{icon}</div>
+      }
+    >
+      {t('button.like')}
+    </Button>
   );
 }
 
 FavButton.defaultProps = {
   size: '1.5625rem',
+  iconized: false,
 };
 
 export default FavButton;

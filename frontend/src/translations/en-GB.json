@@ -18,7 +18,13 @@
     },
     "seePage": "See page",
     "showAll": "Show all",
-    "showLess": "Show less"
+    "showLess": "Show less",
+    "close": "Close",
+    "like": "Like"
+  },
+  "club": {
+    "joinNow": "Join now",
+    "noClub": "You haven't joined any groups yet"
   },
   "date_picker": {
     "language": "en"
@@ -32,7 +38,11 @@
     },
     "error": "Error while loading the events",
     "membersOnly": "Members only",
-    "no_event": "No Event"
+    "no_event": "No Event",
+    "participantsList": "List of participants",
+    "participants": "Participants",
+    "endTime": "Will end on :",
+    "endInscription": "Registration is open until"
   },
   "filterbar": {
     "date": "Date",
@@ -127,6 +137,14 @@
     "subscribed": "Suscribed",
     "title": "Notifications",
     "unread": "Unread"
+  },
+  "time": {
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "months": "months",
+    "seconds": "seconds",
+    "years": "years"
   },
   "user_menu": {
     "automatic": "Automatic",
