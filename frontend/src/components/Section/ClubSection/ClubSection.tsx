@@ -50,7 +50,15 @@ export function ClubSection(props: {
     case 'success':
       if (clubs.length > 0) {
         content = allclubs.map((club) => (
-          <Grid item xs={6} sm={4} md={3} lg={2} key={club.name}>
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md={3}
+            lg={2}
+            key={club.name}
+            sx={{ justifyContent: 'center', display: 'flex' }}
+          >
             <ClubAvatar
               name={club.name}
               clubUrl={club.url}

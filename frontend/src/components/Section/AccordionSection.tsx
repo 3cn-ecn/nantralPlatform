@@ -25,32 +25,11 @@ export function AccordionSection(props: {
     return (
       <Box marginBottom={2}>
         {title && (
-          <NavLink to={url} className="see-more">
-            <Button
-              sx={{
-                textAlign: 'left',
-                marginBottom: 2,
-                lineHeight: 1,
-                textTransform: 'none',
-                color: 'text.primary',
-                ':hover': {
-                  textDecoration: 'underline',
-                  bgcolor: 'transparent',
-                },
-              }}
-            >
-              <h1 className="section-title">{title}</h1>
-              {badge > 0 && (
-                <Badge
-                  badgeContent={badge}
-                  color="primary"
-                  sx={{ margin: 2.5, zIndex: 0 }}
-                />
-              )}
-            </Button>
-          </NavLink>
+          <h1 className="section-title" style={{ marginBottom: '0.5em' }}>
+            {title}
+          </h1>
         )}
-        <Grid spacing={2} container className="event-grid" alignItems="stretch">
+        <Grid spacing={2} container alignItems="stretch">
           {content}
         </Grid>
       </Box>

@@ -1,7 +1,6 @@
 import {
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
   IconButton,
@@ -11,16 +10,16 @@ import {
 import * as React from 'react';
 
 import './PostCard.scss';
-import { Edit, Groups, OpenInNew } from '@mui/icons-material';
+import { Edit, Groups, OpenInNew, Pin, PushPin } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
 import { PostProps } from '../../Props/Post';
 import { PostModal } from '../Modal/PostModal';
-import { ClubAvatar, ClubAvatarSkeleton } from '../ClubAvatar/ClubAvatar';
 import { timeFromNow } from '../../utils/date';
+import Avatar from '../Avatar/Avatar';
 
-const POST_HEIGHT = 150;
+const POST_HEIGHT = 180;
 export const POST_AVATAR_SIZE = 35;
 export function SeePageButton(props: {
   link: string;
@@ -40,12 +39,14 @@ export function SeePageButton(props: {
   );
 }
 
-export function EditButton() {
+export function EditButton(props: { onClick }) {
+  const { onClick } = props;
   return (
     <IconButton
       aria-label="settings"
       color="primary"
       sx={{ background: '#efefefb2' }}
+      onClick={onClick}
     >
       <Edit />
     </IconButton>
@@ -67,10 +68,15 @@ export function PostCard(props: { post: PostProps }) {
   const { post } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
+  const [postValue, setPostValue] = React.useState(post);
+
+  React.useEffect(() => {
+    setPostValue(post);
+  }, [post]);
 
   React.useEffect(() => {
     axios
-      .get(`/api/group/group/${post.groupSlug}/`)
+      .get(`/api/group/group/${postValue.groupSlug}/`)
       .then((res) => setClubDetails(res.data))
       .catch((err) => console.error(err));
   }, []);
@@ -80,15 +86,27 @@ export function PostCard(props: { post: PostProps }) {
       <Card
         variant="outlined"
         sx={{
-          borderColor: post.pinned ? 'primary.main' : '',
-          borderWidth: 1,
-          height: '100%',
+          height: POST_HEIGHT,
         }}
       >
         <CardActionArea
           onClick={() => setOpen(true)}
-          sx={{ display: 'flex', height: POST_HEIGHT }}
+          sx={{ display: 'flex', height: '100%' }}
         >
+          {post.pinned && (
+            <PushPin
+              sx={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                margin: 1,
+                padding: 0.4,
+                color: 'white',
+                borderRadius: '50%',
+                backgroundColor: 'primary.main',
+              }}
+            />
+          )}
           <CardContent
             style={{
               borderColor: 'red',
@@ -96,68 +114,76 @@ export function PostCard(props: { post: PostProps }) {
               flexDirection: 'column',
               display: 'flex',
               width: '100%',
-              justifyContent: 'flex-start',
+              height: '100%',
+              justifyContent: 'space-between',
             }}
           >
-            <h2
-              id="post-title"
+            <div
               style={{
-                wordBreak: 'break-word',
-                maxLines: 5,
-                display: '-webkit-flex',
-                WebkitLineClamp: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                height: '100%',
               }}
             >
-              {post.publicity === 'Mem' && <MembersIcon />}
-              {post.title}
-            </h2>
-            <p id="post-club">{timeFromNow(new Date(post.publicationDate))}</p>
+              <h2
+                id="post-title"
+                style={{
+                  wordBreak: 'break-word',
+                  maxLines: 5,
+                  display: '-webkit-flex',
+                  WebkitLineClamp: 2,
+                  marginBottom: 5,
+                }}
+              >
+                {postValue.publicity === 'Mem' && <MembersIcon />}
+                {postValue.title}
+              </h2>
+              <div style={{ fontStyle: 'italic' }}>
+                {timeFromNow(new Date(postValue.publicationDate))}
+              </div>
+            </div>
+            <div id="post-club">
+              {clubDetails ? (
+                <div style={{ display: 'contents' }}>
+                  <Avatar
+                    title={clubDetails.name}
+                    url={clubDetails.icon}
+                    size="small"
+                  />
+                  {clubDetails.name}
+                </div>
+              ) : (
+                <div style={{ display: 'contents' }}>
+                  <Skeleton variant="circular">
+                    <Avatar title="" size="small" />
+                  </Skeleton>
+                  <Skeleton variant="text" width="5em" height="2em"></Skeleton>
+                </div>
+              )}
+            </div>
           </CardContent>
-          {post.image && (
+          {postValue.image && (
             <CardMedia
-              sx={{ backgroundImage: `url(${post.image})` }}
+              sx={{ backgroundImage: `url(${postValue.image})` }}
               id="card-image"
               component="img"
-              image={post.image}
+              image={postValue.image.toString()}
             />
           )}
         </CardActionArea>
-        <CardActions sx={{ justifyContent: 'space-between' }}>
-          {clubDetails ? (
-            <ClubAvatar
-              size={POST_AVATAR_SIZE}
-              textPosition="right"
-              clubUrl={clubDetails.url}
-              name={clubDetails.name}
-              logoUrl={clubDetails.icon}
-            />
-          ) : (
-            <ClubAvatarSkeleton size={POST_AVATAR_SIZE} textPosition="right" />
-          )}
-          <div style={{ columnGap: 10, display: 'flex', alignItems: 'center' }}>
-            {clubDetails && clubDetails.is_admin && <EditButton />}
-            {post.pageSuggestion && (
-              <SeePageButton link={post.pageSuggestion} />
-            )}
-          </div>
-        </CardActions>
       </Card>
       <PostModal
-        post={post}
+        post={postValue}
         clubDetails={clubDetails}
         open={open}
         onClose={() => setOpen(false)}
+        onUpdate={setPostValue}
       />
     </>
   );
 }
 
 export function PostCardSkeleton() {
-  return (
-    <Skeleton
-      variant="rectangular"
-      width="100%"
-      height={POST_HEIGHT + POST_AVATAR_SIZE + 30}
-    />
-  );
+  return <Skeleton variant="rectangular" width="100%" height={POST_HEIGHT} />;
 }

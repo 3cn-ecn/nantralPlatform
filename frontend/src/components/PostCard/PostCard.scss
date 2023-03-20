@@ -34,9 +34,13 @@
   margin : 0px;
   align-items: center;
   display: flex;
+  line-height: normal;
 }
 #post-club {
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
 }
 #image {
   width: 100%;
