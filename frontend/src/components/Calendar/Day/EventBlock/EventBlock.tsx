@@ -50,6 +50,7 @@ export function EventBlock(props: {
   const navigate = useNavigate();
   return (
     <Button
+      className="eventButton"
       variant="contained"
       fullWidth
       onClick={() => {
