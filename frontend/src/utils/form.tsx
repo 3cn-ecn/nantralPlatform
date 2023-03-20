@@ -15,6 +15,8 @@ import {
   Input,
   Button,
 } from '@mui/material';
+import { Dayjs } from 'dayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -23,24 +25,25 @@ import axios from 'axios';
 
 export type FieldType =
   | {
-      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date';
+      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date' | 'date and hour';
       name: string;
       label: string;
       required?: boolean;
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
-      rows: int;
+      disablePast?: boolean;
+      rows?: number;
     }
   | {
       kind: 'number';
       name: string;
       label: string;
       required?: boolean;
-      min: float;
-      max: float;
-      step: float;
-      default: float;
+      min: number;
+      max?: number;
+      step: number;
+      default?: number;
     }
   | {
       kind: 'picture';
@@ -65,6 +68,11 @@ export type FieldType =
       kind: 'custom';
       name: string;
       component: (props: { error?: boolean }) => JSX.Element;
+    }
+  | {
+      kind: 'text explanatory';
+      name: string;
+      text: string;
     }
   | {
       kind: 'autocomplete';
@@ -161,6 +169,18 @@ function FormGroup(props: {
                   />
                 </FormControl>
               </Box>
+            );
+          case 'text explanatory':
+            return (
+              <Typography
+                sx={{
+                  overflowWrap: 'break-word',
+                  marginTop: 3,
+                  marginBottom: 3,
+                }}
+              >
+                {field.text}
+              </Typography>
             );
           case 'select':
             return (
@@ -296,6 +316,35 @@ function FormGroup(props: {
                 handleChange={() => handleChange}
                 noFullWidth={noFullWidth}
               />
+            );
+          case 'date and hour':
+            return (
+              <LocalizationProvider
+                adapterLocale={'fr'}
+                dateAdapter={AdapterDayjs}
+                key={field.name}
+              >
+                <DateTimePicker
+                  label={field.label}
+                  value={values[field.name] && new Date(values[field.name])}
+                  disablePast={field.disablePast}
+                  onChange={(newValue: Dayjs | null) => {
+                    handleChange(field.name, newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      id={`${field.name}-input`}
+                      name={field.name}
+                      fullWidth={!noFullWidth}
+                      required={field.required}
+                      helperText={error ? error : field.helpText}
+                      error={!!error}
+                      margin="normal"
+                    />
+                  )}
+                />
+              </LocalizationProvider>
             );
           case 'custom':
             return <field.component error={!!error} />;

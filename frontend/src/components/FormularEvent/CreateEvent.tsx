@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
 import FormGroup, { FieldType } from '../../utils/form';
-import { Event, Group } from '../interfaces';
+import { Event, Group } from '../../Props';
 
 /**
  * Fonction permettant de générer le formulaire de création d'un événement.
@@ -70,33 +70,29 @@ function createFormFields(): FieldType[] {
       label: 'Description',
       required: true,
       multiline: true,
+      row: 3,
     },
     {
       kind: 'date and hour',
       name: 'end_inscription',
       label: 'Date et Heure de fin des inscriptions',
-      required: true,
       disablePast: true,
     },
-    /*
     {
       kind: 'select',
       name: 'type_evenement',
+      label: "Type de l'événement",
+      item: [
+        ['réservé aux membres', 'Mem'],
+        ['visible par tout le monde', 'Pub'],
+      ],
       required: true,
-    }
-    */
-    /*
-    {
-      kind: 'custom',
-      component: (
-        <Typography style={{ overflowWrap: 'break-word' }}>
-          {' '}
-          Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre
-          le lien d&apos;un form, soit définir un nombre max de participants
-        </Typography>
-      ),
     },
-    */
+    {
+      kind: 'text explanatory',
+      name: 'help_shotgun',
+      text: "\n Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre le lien d'un form, soit définir un nombre max de participants \n",
+    },
     {
       kind: 'date and hour',
       name: 'shotgun_date',
@@ -109,7 +105,6 @@ function createFormFields(): FieldType[] {
       label: 'Lien du formulaire Shotgun',
       multiline: true,
     },
-    /*
     {
       kind: 'number',
       name: 'Max_participants',
@@ -117,7 +112,6 @@ function createFormFields(): FieldType[] {
       min: 0,
       step: 1,
     },
-    */
   ];
   return defaultFields;
 }

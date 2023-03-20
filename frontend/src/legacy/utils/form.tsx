@@ -9,15 +9,11 @@ import {
   FormHelperText,
   Typography,
   Autocomplete,
-<<<<<<< HEAD
-  AutocompleteInputChangeReason,
-=======
   MenuItem,
   InputLabel,
   AutocompleteInputChangeReason,
   Input,
   Button,
->>>>>>> origin/react-app
 } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -29,31 +25,25 @@ import axios from './axios';
 
 export type FieldType =
   | {
-<<<<<<< HEAD
       kind: 'text' | 'integer' | 'float' | 'boolean' | 'date' | 'date and hour';
-=======
-      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date';
->>>>>>> origin/react-app
       name: string;
       label: string;
       required?: boolean;
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
-<<<<<<< HEAD
       disablePast?: boolean;
-=======
-      rows: int;
+      rows?: number;
     }
   | {
       kind: 'number';
       name: string;
       label: string;
       required?: boolean;
-      min: float;
-      max: float;
-      step: float;
-      default: float;
+      min: number;
+      max: number;
+      step: number;
+      default: number;
     }
   | {
       kind: 'picture';
@@ -69,7 +59,6 @@ export type FieldType =
       helpText?: string;
       multiline?: boolean;
       item?: Array<string>;
->>>>>>> origin/react-app
     }
   | {
       kind: 'group';
@@ -147,8 +136,6 @@ function FormGroup(props: {
                 />
               </Box>
             );
-<<<<<<< HEAD
-=======
           case 'number':
             return (
               <Box sx={{ minWidth: 120, mt: 2 }}>
@@ -205,7 +192,6 @@ function FormGroup(props: {
                 </FormControl>
               </Box>
             );
->>>>>>> origin/react-app
           case 'text':
             return (
               <TextField
@@ -218,25 +204,13 @@ function FormGroup(props: {
                 fullWidth={!noFullWidth}
                 required={field.required}
                 inputProps={{ maxLength: field.maxLength }}
-<<<<<<< HEAD
                 helperText={error ? error : field.helpText}
                 error={!!error}
                 margin="normal"
                 multiline={field.multiline}
               />
             );
-          case 'date': // date as string
-            return (
-              <LocalizationProvider
-                adapterLocale={'fr'}
-=======
-                helperText={error || field.helpText}
-                error={!!error}
-                margin="normal"
-                multiline={field.multiline}
-                rows={field.rows}
-              />
-            );
+
           case 'picture':
             return (
               <Box sx={{ minWidth: 120, mt: 2 }}>
@@ -252,7 +226,6 @@ function FormGroup(props: {
             return (
               <LocalizationProvider
                 adapterLocale="fr"
->>>>>>> origin/react-app
                 dateAdapter={AdapterDayjs}
                 key={field.name}
               >
@@ -280,11 +253,7 @@ function FormGroup(props: {
                       name={field.name}
                       fullWidth={!noFullWidth}
                       required={field.required}
-<<<<<<< HEAD
-                      helperText={error ? error : field.helpText}
-=======
                       helperText={error || field.helpText}
->>>>>>> origin/react-app
                       error={!!error}
                       margin="normal"
                     />
@@ -308,11 +277,7 @@ function FormGroup(props: {
                         {`${field.label}${field.required ? ' *' : ''}`}
                       </Typography>
                       <FormHelperText sx={{ m: 0 }}>
-<<<<<<< HEAD
-                        {error ? error : field.helpText}
-=======
                         {error || field.helpText}
->>>>>>> origin/react-app
                       </FormHelperText>
                     </>
                   }
@@ -331,7 +296,6 @@ function FormGroup(props: {
                 field={field}
                 value={values[field.name]}
                 error={error}
-<<<<<<< HEAD
                 handleChange={handleChange}
                 noFullWidth={noFullWidth}
               />
@@ -365,13 +329,6 @@ function FormGroup(props: {
                 />
               </LocalizationProvider>
             );
-
-=======
-                handleChange={() => handleChange}
-                noFullWidth={noFullWidth}
-              />
-            );
->>>>>>> origin/react-app
           case 'custom':
             return <field.component error={!!error} />;
           default:
@@ -408,16 +365,9 @@ function AutocompleteField<T>(props: {
   useEffect(() => {
     console.log(value);
     if (value) {
-<<<<<<< HEAD
-      axios.get<T>(`${field.endPoint}/${value}/`).then((res) => {
-        setSelectedOption(res.data);
-        console.log(res.data);
-      });
-=======
       axios
         .get<T>(`${field.endPoint}/${value}/`)
         .then((res) => setSelectedOption(res.data));
->>>>>>> origin/react-app
     }
   }, []);
 
