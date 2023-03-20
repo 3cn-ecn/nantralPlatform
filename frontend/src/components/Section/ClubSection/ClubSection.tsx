@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { Grid, Skeleton } from '@mui/material';
-import { ClubProps } from '../../../Props/Club';
-import ClubAvatar from '../../ClubAvatar/ClubAvatar';
+import { Grid, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { ClubProps } from '../../../Props/Group';
+import { ClubAvatar, ClubAvatarSkeleton } from '../../ClubAvatar/ClubAvatar';
 import { AccordionSection } from '../AccordionSection';
 
 const clubAvatarSize = 100;
@@ -9,13 +11,9 @@ const clubAvatarSize = 100;
 const LoadingSkeleton = (
   <>
     {[0, 1, 2].map((club) => (
-      <Skeleton
-        key={club}
-        variant="circular"
-        height={clubAvatarSize}
-        width={clubAvatarSize}
-        sx={{ margin: '10px' }}
-      />
+      <Grid item xs={6} sm={4} md={3} lg={2} key={club}>
+        <ClubAvatarSkeleton key={club} size={clubAvatarSize} />
+      </Grid>
     ))}
   </>
 );
@@ -41,7 +39,7 @@ export function ClubSection(props: {
   const { status, clubs, title, maxItem, seeMoreUrl, accordion } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allclubs = maxItem ? clubs.slice(0, maxItem) : clubs;
-
+  const { t } = useTranslation('translation');
   switch (status) {
     case 'fail':
       content = <p className="card">Error</p>;
@@ -63,7 +61,11 @@ export function ClubSection(props: {
           </Grid>
         ));
       } else {
-        content = <p className="event-grid">Nothing to show</p>;
+        content = (
+          <Typography sx={{ marginLeft: 3, fontSize: 18 }}>
+            {t('club.noClub')} 🥹 <Link to="/club">{t('club.joinNow')}</Link>
+          </Typography>
+        );
       }
       break;
     default:

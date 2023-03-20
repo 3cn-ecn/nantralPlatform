@@ -7,6 +7,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ListItemIcon } from '@mui/material';
 import './SimpleAccordion.scss';
 
+/**
+ * Function to display a simple accordion
+ * @param props label : title on the accordion, icon : icon next to label,
+ *              content : what is displayed inside the accordion
+ * @returns an accordion
+ */
 function SimpleAccordion(props: { label: string; icon: any; content: any }) {
   const { label, icon, content } = props;
 

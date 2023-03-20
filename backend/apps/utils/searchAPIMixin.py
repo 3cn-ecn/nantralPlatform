@@ -34,7 +34,7 @@ class SearchAPIMixin:
 
         queryset = self.get_queryset()
         search_term = request.query_params.get('q', '')
-        limit = request.query_params.get('limit', 5)
+        limit = int(request.query_params.get('limit', 5))
 
         # Apply keyword searches.
         def construct_search(field_name):

@@ -18,7 +18,13 @@
     },
     "seePage": "See page",
     "showAll": "Show all",
-    "showLess": "Show less"
+    "showLess": "Show less",
+    "close": "Close",
+    "like": "Like"
+  },
+  "club": {
+    "joinNow": "Join now",
+    "noClub": "You haven't joined any groups yet"
   },
   "date_picker": {
     "language": "en"
@@ -32,7 +38,11 @@
     },
     "error": "Error while loading the events",
     "membersOnly": "Members only",
-    "no_event": "No Event"
+    "no_event": "No Event",
+    "participantsList": "List of participants",
+    "participants": "Participants",
+    "endTime": "Will end on :",
+    "endInscription": "Registration is open until"
   },
   "filterbar": {
     "date": "Date",
@@ -119,13 +129,22 @@
     "flatshare": "Flatshares Map",
     "home": "Home",
     "signature": "Signature",
-    "student": "Student List"
+    "student": "Student List",
+    "group": "Groups"
   },
   "notif": {
     "load": "Loading More",
     "subscribed": "Suscribed",
     "title": "Notifications",
     "unread": "Unread"
+  },
+  "time": {
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "months": "months",
+    "seconds": "seconds",
+    "years": "years"
   },
   "user_menu": {
     "automatic": "Automatic",
@@ -136,11 +155,35 @@
     "french": "French",
     "language": "Language",
     "legal": "Legal Notice",
+    "admin": "Admin Interface",
     "light": "Light Theme",
     "logout": "Log Out",
     "profile": "My Profile",
     "theme": "Theme",
     "title_language": "Language",
     "title_theme": "Theme"
+  },
+  "suggestion_menu": {
+    "header": "Suggest / Bug",
+    "title": "Title",
+    "description": "Description",
+    "type": "Type",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+
+  },
+  "profile": {
+    "promo": "Year of entry at Centrale: ",
+    "edit": "Edit my profile",
+    "gene": "Student Engineer Generalist",
+    "master": "Student in Master",
+    "iti": "Specialty engineering student (ITII)",
+    "doc": "Doctoral student"
+  },
+  "membership_student": {
+    "title": "Groups",
+    "show_old": "Show the old groups",
+    "mask_old": "Hide the old groups"
   }
+
 }

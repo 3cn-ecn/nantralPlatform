@@ -56,7 +56,7 @@ export function snakeToCamelCase<T>(
 ): void {
   // Convert all elements for array
   if (isArray(data)) {
-    data.map((val: any) => snakeToCamelCase(val, convert));
+    data.foreach((val: any) => snakeToCamelCase(val, convert));
   } else {
     // Convert all keys in camelCase format
     Object.keys(data).forEach((key) => {

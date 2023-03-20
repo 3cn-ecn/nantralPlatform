@@ -1,6 +1,6 @@
 import { EventProps } from 'Props/Event';
 import * as React from 'react';
-import { Grid, Skeleton } from '@mui/material';
+import { Alert, Grid, Skeleton, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import EventCard from '../../EventCard/EventCard';
 import './EventSection.scss';
@@ -45,7 +45,11 @@ export function EventSection(props: {
   const allEvents = maxItem ? events.slice(0, maxItem) : events;
   switch (status) {
     case 'fail':
-      content = <p className="card">{t('event.error')}</p>;
+      content = (
+        <Alert severity="error" sx={{ marginLeft: 3 }}>
+          {t('event.error')}
+        </Alert>
+      );
       break;
     case 'load':
       content = LoadingSkeleton;
@@ -58,7 +62,11 @@ export function EventSection(props: {
           </Grid>
         ));
       } else {
-        content = <p className="event-grid">{t('event.no_event')}</p>;
+        content = (
+          <Typography sx={{ marginLeft: 3, fontSize: 18 }}>
+            {t('event.no_event')} 🥹
+          </Typography>
+        );
       }
       break;
     default:

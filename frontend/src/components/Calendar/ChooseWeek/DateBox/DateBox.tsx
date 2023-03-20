@@ -1,6 +1,6 @@
 import React from 'react';
 import { CalendarMonth } from '@mui/icons-material';
-import { Button, Container, Grid } from '@mui/material';
+import { Button } from '@mui/material';
 
 /**
  * The DateBox component which displays the current week and allow to change by click.
@@ -9,6 +9,7 @@ import { Button, Container, Grid } from '@mui/material';
  */
 export function DateBox(props: { date: Date; endDate: Date }): JSX.Element {
   const { date, endDate } = props;
+  // @todo implement the change date with the CalendarMonth button
   const sunday = new Date(
     endDate.getFullYear(),
     endDate.getMonth(),
@@ -26,13 +27,10 @@ export function DateBox(props: { date: Date; endDate: Date }): JSX.Element {
         data-testid="DateBoxTestId"
         style={{
           minWidth: `1px`,
+          padding: '0px',
         }}
       >
-        <Grid container justifyContent="center" xs={12}>
-          <Grid item xs={12}>
-            <CalendarMonth></CalendarMonth>
-          </Grid>
-        </Grid>
+        <CalendarMonth style={{ width: 'inherit' }}></CalendarMonth>
       </Button>
     </div>
   );

@@ -14,6 +14,9 @@
       window.$RefreshReg$ = () => {};
       window.$RefreshSig$ = () => (type) => type;
       window.__vite_plugin_react_preamble_installed__ = true;
+      console.log(localStorage.getItem("theme-mode"));
+      document.body.style.backgroundColor =
+        localStorage.getItem("theme-mode") === "true" ? "white" : "#212121";
     </script>
     {% vite_hmr_client %}
 

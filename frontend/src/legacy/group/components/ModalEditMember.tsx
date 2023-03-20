@@ -71,7 +71,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       kind: 'autocomplete',
       label: 'Utilisateur',
       name: 'student',
-      endPoint: '/api/student/student/',
+      endPoint: '/api/student/student',
       getOptionLabel: (m) => m?.name || '',
     });
   }

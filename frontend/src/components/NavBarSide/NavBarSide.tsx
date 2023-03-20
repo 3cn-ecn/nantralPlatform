@@ -16,9 +16,6 @@ import { ReactComponent as EventIcon } from '../../assets/scalable/event.svg';
 import { ReactComponent as ClubIcon } from '../../assets/scalable/club.svg';
 import { ReactComponent as MapIcon } from '../../assets/scalable/roommates.svg';
 import { ReactComponent as FamilyIcon } from '../../assets/scalable/family.svg';
-import { ReactComponent as CampaignIcon } from '../../assets/scalable/campaign.svg';
-import { ReactComponent as LibraryIcon } from '../../assets/scalable/library.svg';
-import { ReactComponent as AdminIcon } from '../../assets/scalable/admin.svg';
 import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
 import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
 import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
@@ -62,39 +59,28 @@ function NavBarSide(props: {
       icon: EventIcon,
     },
     {
-      text: t('navbar.clubs'),
-      url: '/club/',
+      text: t('navbar.group'),
+      url: '/group/',
       icon: ClubIcon,
+      isOnBackend: true,
     },
     {
       text: t('navbar.flatshare'),
       url: '/colocs/',
       icon: MapIcon,
+      isOnBackend: true,
     },
     {
       text: t('navbar.family'),
       url: '/parrainage/',
       icon: FamilyIcon,
-    },
-    {
-      text: t('navbar.bdx'),
-      url: '/liste/',
-      icon: CampaignIcon,
-    },
-    {
-      text: t('navbar.academics'),
-      url: '/academics/',
-      icon: LibraryIcon,
-    },
-    {
-      text: t('navbar.administration'),
-      url: '/administration/',
-      icon: AdminIcon,
+      isOnBackend: true,
     },
     {
       text: t('navbar.student'),
       url: '/student/',
       icon: ListIcon,
+      isOnBackend: true,
     },
     {
       text: t('navbar.signature'),
