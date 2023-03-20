@@ -48,11 +48,12 @@ const updateMonthDisplay = (newDisplay: {
 const user = userEvent.setup();
 
 describe('<ChooseDisplay />', () => {
-  it('should display a ChooseDisplay which update variable day; Components does not rerender, so wwe can do only few tests', async () => {
+  it('should display a ChooseDisplay which update variable day; Components does not rerender, so we can do only few tests', async () => {
     const component = render(
       <ChooseDisplay
         display={dayDisplay}
         updateDisplay={updateDayDisplay}
+        beginDate={new Date('2023-02-26T03:24:00')}
       ></ChooseDisplay>
     );
 
@@ -94,7 +95,7 @@ describe('<ChooseDisplay />', () => {
     await user.click(component.getByRole('button', { name: 'month' }));
     expect(dayDisplay).toStrictEqual({
       type: 'month',
-      beginDate: 0,
+      beginDate: 2,
     });
 
     expect(component).toMatchSnapshot();
@@ -104,6 +105,7 @@ describe('<ChooseDisplay />', () => {
       <ChooseDisplay
         display={daysDisplay}
         updateDisplay={updateDaysDisplay}
+        beginDate={new Date('2023-02-22T03:24:00')}
       ></ChooseDisplay>
     );
 
@@ -132,7 +134,7 @@ describe('<ChooseDisplay />', () => {
     await user.click(component.getByRole('button', { name: 'month' }));
     expect(daysDisplay).toStrictEqual({
       type: 'month',
-      beginDate: 0,
+      beginDate: 2,
     });
 
     expect(component).toMatchSnapshot();
@@ -142,6 +144,7 @@ describe('<ChooseDisplay />', () => {
       <ChooseDisplay
         display={weekDisplay}
         updateDisplay={updateWeekDisplay}
+        beginDate={new Date('2023-02-20T03:24:00')}
       ></ChooseDisplay>
     );
 
@@ -170,7 +173,7 @@ describe('<ChooseDisplay />', () => {
     await user.click(component.getByRole('button', { name: 'month' }));
     expect(weekDisplay).toStrictEqual({
       type: 'month',
-      beginDate: 0,
+      beginDate: 2,
     });
 
     expect(component).toMatchSnapshot();
@@ -180,6 +183,7 @@ describe('<ChooseDisplay />', () => {
       <ChooseDisplay
         display={monthDisplay}
         updateDisplay={updateMonthDisplay}
+        beginDate={new Date('2023-02-20T03:24:00')}
       ></ChooseDisplay>
     );
 

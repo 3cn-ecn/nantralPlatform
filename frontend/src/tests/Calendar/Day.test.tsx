@@ -71,7 +71,7 @@ describe('<Day />', () => {
     const component = render(
       <Day
         dayValue={5}
-        day="Vendredi"
+        day={new Date('2023-02-10T13:21:00')}
         events={events}
         chains={[
           [0, 1, 2],
