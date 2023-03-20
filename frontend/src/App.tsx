@@ -17,6 +17,7 @@ import Map from './pages/Map/Map';
 import Sign from './pages/Sign/Sign';
 import Student from './pages/Student/Student';
 import LegalNotice from './pages/LegalNotice/Legal';
+import EventDetails from './pages/EventDetails/EventDetails';
 import Profile from './pages/Profile/Profile';
 import theme from './theme';
 import darktheme from './darktheme';
@@ -98,6 +99,7 @@ function App() {
             <Route path="/club" element={<Club />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/event" element={<Event />} />
+            <Route path="/event/:id" element={<EventDetails />} />
             <Route path="/academics" element={<Academics />} />
             <Route path="/administration" element={<Admin />} />
             <Route path="/liste" element={<BDX />} />

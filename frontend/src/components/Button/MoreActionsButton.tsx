@@ -24,7 +24,8 @@ function MoreActionsButton(props: {
   className: string;
   isAdmin: boolean; // Show or hide the link to the edit page
   shareUrl: string;
-  slug: string;
+  slug?: string;
+  id: number;
   participating: boolean;
   setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
   size?: string;
@@ -34,8 +35,9 @@ function MoreActionsButton(props: {
     className,
     isAdmin,
     shareUrl,
-    slug,
+    id,
     size,
+    slug,
     participating,
     setParticipating,
   } = props;
@@ -51,7 +53,7 @@ function MoreActionsButton(props: {
   const editOption = isAdmin ? (
     <MenuItem
       onClick={() => {
-        window.open(`event/${slug}/edit`, '_blank', 'noreferrer');
+        window.open(`event/${id}/edit`, '_blank', 'noreferrer');
         handleCloseMenu();
       }}
     >
@@ -135,6 +137,7 @@ function MoreActionsButton(props: {
 
 MoreActionsButton.defaultProps = {
   size: '1.6rem',
+  slug: '',
 };
 
 export default MoreActionsButton;
