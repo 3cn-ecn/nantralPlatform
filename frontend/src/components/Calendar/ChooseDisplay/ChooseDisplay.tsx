@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import { modulo } from '../../../utils/maths';
 import { CalendarView } from '../CalendarProps/CalendarProps';
+import { firstMonthDay } from '../utils';
 
 /**
  * Component to change the calendar view.
@@ -13,8 +15,9 @@ export function ChooseDisplay(props: {
   updateDisplay: React.Dispatch<
     React.SetStateAction<{ type: CalendarView; beginDate: number }>
   >;
+  beginDate: Date;
 }): JSX.Element {
-  const { display, updateDisplay } = props;
+  const { display, updateDisplay, beginDate } = props;
   return (
     <>
       <Button
@@ -51,7 +54,10 @@ export function ChooseDisplay(props: {
         data-testid="monthButtonTestId"
         onClick={() => {
           if (display.type !== 'month') {
-            updateDisplay({ type: 'month', beginDate: 0 });
+            updateDisplay({
+              type: 'month',
+              beginDate: modulo(firstMonthDay(beginDate).getDay() - 1, 7) + 1,
+            });
           }
         }}
       >

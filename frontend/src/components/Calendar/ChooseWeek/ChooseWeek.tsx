@@ -38,13 +38,11 @@ export function ChooseWeek(props: {
       <div id="areaOfTimeDisplay">
         {`${beginDate.toLocaleDateString('fr-FR', {
           weekday: 'long',
-          year: 'numeric',
           month: 'long',
           day: 'numeric',
         })} au `}
         {sunday.toLocaleDateString('fr-FR', {
           weekday: 'long',
-          year: 'numeric',
           month: 'long',
           day: 'numeric',
         })}

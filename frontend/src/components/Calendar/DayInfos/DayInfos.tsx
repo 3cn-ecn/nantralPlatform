@@ -7,18 +7,19 @@ import React from 'react';
 export function DayInfos() {
   return (
     <div style={{ display: 'block' }}>
-      <p>0</p>
-      <p>2</p>
-      <p>4</p>
-      <p>6</p>
-      <p>8</p>
-      <p>10</p>
-      <p>12</p>
-      <p>14</p>
-      <p>16</p>
-      <p>18</p>
-      <p>20</p>
-      <p>22</p>
+      <div style={{ height: '1.7rem' }}></div>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>00:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>02:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>04:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>06:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>08:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>10:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>12:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>14:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>16:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>18:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>20:00</p>
+      <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>22:00</p>
     </div>
   );
 }
