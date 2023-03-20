@@ -7,7 +7,7 @@ import React from 'react';
 export function DayInfos() {
   return (
     <div style={{ display: 'block' }}>
-      <div style={{ height: '1.7rem' }}></div>
+      <div style={{ height: '2.5rem' }}></div>
       <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>00:00</p>
       <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>02:00</p>
       <p style={{ height: '2.4rem', padding: '0px', margin: '0px' }}>04:00</p>

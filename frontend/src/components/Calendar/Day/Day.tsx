@@ -111,10 +111,10 @@ export function Day(props: {
 
   return (
     <div id={`${day}`} style={{ display: 'block' }}>
-      <div style={{ height: '1.2rem' }}>
+      <div style={{ height: '1.2rem', margin: '0.2rem' }}>
         {day.toLocaleDateString('fr-FR', { weekday: 'short' })}
       </div>
-      <div style={{ height: '1.2rem' }}>{day.getDate()}</div>
+      <div style={{ height: '1.2rem', margin: '0.2rem' }}>{day.getDate()}</div>
       {dayChain}
       {chains.map((chain) => (
         <Grid

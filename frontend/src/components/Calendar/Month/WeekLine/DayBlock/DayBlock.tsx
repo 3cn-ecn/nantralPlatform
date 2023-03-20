@@ -1,5 +1,6 @@
 import React from 'react';
 import { EventProps } from 'Props/Event';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 
 export function DayBlock(props: {
@@ -8,11 +9,12 @@ export function DayBlock(props: {
   maxEventsInDayWeek: number;
 }): JSX.Element {
   const { day, inMonth, maxEventsInDayWeek } = props;
+  const navigate = useNavigate();
   if (inMonth) {
     return (
       <Box
         sx={{
-          height: `${(maxEventsInDayWeek + 1) * 40}px`,
+          height: `${(maxEventsInDayWeek + 0.6) * 3}rem`,
           border: '1px solid gray',
         }}
         data-testid="DateBoxTestId"
@@ -25,11 +27,11 @@ export function DayBlock(props: {
               variant="contained"
               fullWidth
               onClick={() => {
-                console.log(event);
+                navigate(`/event/${event.id}/`);
               }}
               style={{
                 minWidth: `1px`,
-                height: `40px`,
+                height: `3rem`,
                 padding: '0px',
               }}
               data-testid={`${event.slug}DateBoxButtonTestId`}
