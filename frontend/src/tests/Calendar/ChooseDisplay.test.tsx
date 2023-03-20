@@ -95,7 +95,7 @@ describe('<ChooseDisplay />', () => {
     await user.click(component.getByRole('button', { name: 'month' }));
     expect(dayDisplay).toStrictEqual({
       type: 'month',
-      beginDate: 0,
+      beginDate: 2,
     });
 
     expect(component).toMatchSnapshot();
@@ -134,7 +134,7 @@ describe('<ChooseDisplay />', () => {
     await user.click(component.getByRole('button', { name: 'month' }));
     expect(daysDisplay).toStrictEqual({
       type: 'month',
-      beginDate: 0,
+      beginDate: 2,
     });
 
     expect(component).toMatchSnapshot();
@@ -173,7 +173,7 @@ describe('<ChooseDisplay />', () => {
     await user.click(component.getByRole('button', { name: 'month' }));
     expect(weekDisplay).toStrictEqual({
       type: 'month',
-      beginDate: 0,
+      beginDate: 2,
     });
 
     expect(component).toMatchSnapshot();
