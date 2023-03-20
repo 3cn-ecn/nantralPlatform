@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { EventProps } from '../../Props/Event';
 import { createTestEvent } from './testElements/testElements';
 import { WeekLine } from '../../components/Calendar/Month/WeekLine/WeekLine';
@@ -44,21 +45,35 @@ noEndWeek[3].events.push(createTestEvent('The slug6', 'The test event6'));
 
 describe('<WeekLine />', () => {
   it('should display a WeekLine with few events', async () => {
-    const component = render(<WeekLine key="WeekLineTest" week={week} />);
+    const component = render(
+      <BrowserRouter>
+        <WeekLine key="WeekLineTest" week={week} />
+      </BrowserRouter>
+    );
     expect(component).toMatchSnapshot();
   });
   it('should display a WeekLine withoutbegin', async () => {
     const component = render(
-      <WeekLine key="WeekLineTest" week={noBeginWeek} />
+      <BrowserRouter>
+        <WeekLine key="WeekLineTest" week={noBeginWeek} />
+      </BrowserRouter>
     );
     expect(component).toMatchSnapshot();
   });
   it('should display a WeekLine without end', async () => {
-    const component = render(<WeekLine key="WeekLineTest" week={noEndWeek} />);
+    const component = render(
+      <BrowserRouter>
+        <WeekLine key="WeekLineTest" week={noEndWeek} />
+      </BrowserRouter>
+    );
     expect(component).toMatchSnapshot();
   });
   it('should display an empty WeekLine', async () => {
-    const component = render(<WeekLine key="WeekLineTest" week={emptyWeek} />);
+    const component = render(
+      <BrowserRouter>
+        <WeekLine key="WeekLineTest" week={emptyWeek} />
+      </BrowserRouter>
+    );
     expect(component).toMatchSnapshot();
   });
 });
