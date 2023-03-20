@@ -157,8 +157,6 @@ function Home() {
                 text: 'Créer un post',
                 action: () => setPostFormOpen(true),
               },
-              { text: 'créer un post', link: '' },
-              { text: 'mon profil', link: '/me' },
             ].map((obj) => (
               <PageSuggestionButton
                 key={obj.text}
