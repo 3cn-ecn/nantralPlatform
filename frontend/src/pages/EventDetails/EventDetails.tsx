@@ -246,10 +246,13 @@ function EventDetails() {
     </>
   ) : null;
 
+  const banner =
+    event.image === null ? '/static/img/default-banner.png' : event.image;
+
   return (
     <>
       <Container>
-        <img className="banner" src={event.image} alt="Banner" />
+        <img className="banner" src={banner} alt="Banner" />
         <Typography
           className="adaptativeText"
           variant="h3"
@@ -311,7 +314,7 @@ function EventDetails() {
           logoUrl={groupData.icon}
           name={groupData.name}
           textPosition="right"
-          size="large"
+          size="3.75rem"
         />
         {endInscriptionSection}
         <div

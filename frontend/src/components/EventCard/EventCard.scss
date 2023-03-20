@@ -72,7 +72,10 @@ Bottom half
 
 // Div to store the group's icon
 .groupIcon {
-  position: relative;
+  margin: $margin;
+  position: absolute;
+
+  left: 0;
 
   width: 3.75rem;
   height: 3.75rem;
