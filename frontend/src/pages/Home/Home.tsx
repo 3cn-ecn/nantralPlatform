@@ -210,6 +210,10 @@ function Home() {
         open={postFormOpen}
         onClose={() => setPostFormOpen(false)}
         mode="create"
+        onUpdate={() => {
+          getPosts();
+          getPinnedPosts();
+        }}
       />
     </>
   );
