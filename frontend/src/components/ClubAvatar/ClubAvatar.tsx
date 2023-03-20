@@ -10,13 +10,17 @@ export function ClubAvatar(props: {
   clubUrl: string;
   size?: number | string;
   textPosition?: 'right' | 'bottom' | false;
+  hideName?: boolean;
 }): JSX.Element {
-  const { name, logoUrl, clubUrl, size, textPosition } = props;
+  const { name, logoUrl, clubUrl, size, textPosition, hideName } = props;
   const words = name.split(' ');
   const initials =
     words.length > 1
       ? `${words[0][0]}${words[1][0]}`
       : words[0].substring(0, 2);
+  const nameArea = hideName
+    ? null
+    : textPosition && <p style={{ margin: 0 }}>{name}</p>;
   return (
     <div
       style={{
@@ -41,7 +45,7 @@ export function ClubAvatar(props: {
           {!logoUrl && initials}
         </Avatar>
       </IconButton>
-      {textPosition && <p style={{ margin: 0 }}>{name}</p>}
+      {nameArea}
     </div>
   );
 }
@@ -77,6 +81,7 @@ export function ClubAvatarSkeleton(props: {
 ClubAvatar.defaultProps = {
   size: 100,
   textPosition: 'bottom',
+  hideName: false,
 };
 
 ClubAvatarSkeleton.defaultProps = {
