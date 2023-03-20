@@ -9,12 +9,9 @@ import {
   Typography,
   Box,
   CircularProgress,
-  Alert
+  Alert,
 } from '@mui/material';
-import {
-  Close as CloseIcon,
-  Edit as EditIcon
-} from '@mui/icons-material';
+import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
 import Avatar from './Avatar';
 import FormGroup, { FieldType } from '../../utils/form';
 import { Membership, Group, Student } from '../interfaces';
@@ -22,39 +19,60 @@ import { Membership, Group, Student } from '../interfaces';
 /**
  * A function to generate the default fields fot the edit modal form.
  *
- * @param group 
- * @param member 
+ * @param group
+ * @param member
  * @returns The default list of fields
  */
 function createFormFields(group: Group, member: Membership): FieldType[] {
   const defaultFields: FieldType[] = [
-    { kind: 'text', name: 'summary', label: 'Résumé', maxLength: 50, helpText: 'Entrez le résumé du membre' },
-    { kind: 'text', name: 'description', label: 'Description', multiline: true },
+    {
+      kind: 'text',
+      name: 'summary',
+      label: 'Résumé',
+      maxLength: 50,
+      helpText: 'Entrez le résumé du membre',
+    },
+    {
+      kind: 'text',
+      name: 'description',
+      label: 'Description',
+      multiline: true,
+    },
   ];
   if (group && !group.group_type.no_membership_dates) {
     defaultFields.push({
       kind: 'group',
       fields: [
-        { kind: 'date', name: 'begin_date', label: 'Date de début', required: true },
-        { kind: 'date', name: 'end_date', label: 'Date de fin', required: true }
-      ]
+        {
+          kind: 'date',
+          name: 'begin_date',
+          label: 'Date de début',
+          required: true,
+        },
+        {
+          kind: 'date',
+          name: 'end_date',
+          label: 'Date de fin',
+          required: true,
+        },
+      ],
     });
-  };
+  }
   if (group?.is_admin) {
     defaultFields.push({
       kind: 'boolean',
       name: 'admin',
       label: 'Admin',
-      helpText: 'Un admin peut modifier le groupe et ses membres.'
+      helpText: 'Un admin peut modifier le groupe et ses membres.',
     });
-  };
+  }
   if (member.id === null && group?.is_admin) {
     defaultFields.splice(0, 0, {
       kind: 'autocomplete',
       label: 'Utilisateur',
       name: 'student',
       endPoint: '/api/student/student',
-      getOptionLabel: ((m) => m?.name || '')
+      getOptionLabel: (m) => m?.name || '',
     });
   }
   return defaultFields;
@@ -73,7 +91,7 @@ function createBlankMember(group: Group, student: Student): Membership {
   const oneYearLater = date.toISOString().split('T')[0];
   const member = {
     id: null,
-    student: group.is_admin ? null : student.id as any,
+    student: group.is_admin ? null : (student.id as any),
     group: group.id as any,
     summary: '',
     description: '',
@@ -81,7 +99,7 @@ function createBlankMember(group: Group, student: Student): Membership {
     end_date: oneYearLater,
     admin: false,
     priority: 0,
-    dragId: ''
+    dragId: '',
   };
   return member;
 }
@@ -89,52 +107,49 @@ function createBlankMember(group: Group, student: Student): Membership {
 function EditMemberModal(props: {
   open: boolean;
   member?: Membership;
-  group?: Group,
-  student: Student,
+  group?: Group;
+  student: Student;
   saveMembership: (member: Membership) => Promise<any>;
   closeModal: () => void;
   openDeleteModal?: () => void;
 }) {
-  const {
-    open,
-    group,
-    student,
-    saveMembership,
-    closeModal,
-    openDeleteModal
-  } = props;
+  const { open, group, student, saveMembership, closeModal, openDeleteModal } =
+    props;
   const member = props.member || createBlankMember(group, student);
   const formFields = createFormFields(group, member);
 
-  const [ formValues, setFormValues ] = useState<Membership>(structuredClone(member));
-  const [ formErrors, setFormErrors ] = useState({});
-  const [ saving, setSaving ] = useState(false);
-  const [ globalErrors, setGlobalErrors ] = useState('');
+  const [formValues, setFormValues] = useState<Membership>(
+    structuredClone(member)
+  );
+  const [formErrors, setFormErrors] = useState({});
+  const [saving, setSaving] = useState(false);
+  const [globalErrors, setGlobalErrors] = useState('');
 
   /** Function called on submit to save data */
   function onSubmit(e: FormEvent) {
-    e.preventDefault();  // prevent default action from browser
-    setSaving(true);  // show loading
-    saveMembership(formValues)  // save data
-    .then(() => {
-      // reset all errors messages, saving loading and close modal
-      setFormErrors({});
-      setGlobalErrors('');
-      setSaving(false);
-      closeModal();
-    })
-    .catch((err) => {
-      setSaving(false);
-      if (err.response) {
-        setFormErrors(err.response.data);  // show errors per fields
-        if (err.response.data.non_field_errors)  // show form errors
-          setGlobalErrors(err.response.data.non_field_errors);
-        if (err.response.status === 500)
-          setGlobalErrors('Notre serveur a crashé, désolé 😢')
-      } else {
-        setGlobalErrors('Erreur de réseau');  // show global error
-      }
-    });
+    e.preventDefault(); // prevent default action from browser
+    setSaving(true); // show loading
+    saveMembership(formValues) // save data
+      .then(() => {
+        // reset all errors messages, saving loading and close modal
+        setFormErrors({});
+        setGlobalErrors('');
+        setSaving(false);
+        closeModal();
+      })
+      .catch((err) => {
+        setSaving(false);
+        if (err.response) {
+          setFormErrors(err.response.data); // show errors per fields
+          if (err.response.data.non_field_errors)
+            // show form errors
+            setGlobalErrors(err.response.data.non_field_errors);
+          if (err.response.status === 500)
+            setGlobalErrors('Notre serveur a crashé, désolé 😢');
+        } else {
+          setGlobalErrors('Erreur de réseau'); // show global error
+        }
+      });
   }
 
   return (
@@ -143,12 +158,13 @@ function EditMemberModal(props: {
       open={open}
       onClose={closeModal}
     >
-      <form onSubmit={onSubmit} >
+      <form onSubmit={onSubmit}>
         <DialogTitle sx={{ m: 0, p: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Avatar
               title={member?.student?.full_name || 'Ajouter un membre'}
-              icon={<EditIcon />} />
+              icon={<EditIcon />}
+            />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
                 {member?.student?.full_name || 'Ajouter un membre'}
@@ -167,7 +183,9 @@ function EditMemberModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
-          <Alert severity='error' hidden={!globalErrors}>{globalErrors}</Alert>
+          <Alert severity="error" hidden={!globalErrors}>
+            {globalErrors}
+          </Alert>
           <Box>
             <FormGroup
               fields={formFields}
@@ -179,8 +197,8 @@ function EditMemberModal(props: {
           <Button
             hidden={!openDeleteModal}
             onClick={openDeleteModal}
-            variant='outlined'
-            color='error'
+            variant="outlined"
+            color="error"
             disabled={saving}
             sx={{ mr: 'auto', mt: 2 }}
           >
@@ -190,20 +208,26 @@ function EditMemberModal(props: {
         <DialogActions>
           <Button
             onClick={closeModal}
-            variant='text'
-            color='error'
+            variant="text"
+            color="error"
             disabled={saving}
           >
             Annuler
           </Button>
           <Button
-            type='submit'
-            variant='contained'
-            color='success'
+            type="submit"
+            variant="contained"
+            color="success"
             disabled={saving}
-            endIcon={saving ? <CircularProgress size='1em' sx={{ color: 'inherit' }}/> : <></>}
+            endIcon={
+              saving ? (
+                <CircularProgress size="1em" sx={{ color: 'inherit' }} />
+              ) : (
+                <></>
+              )
+            }
           >
-            { saving ? 'Sauvegarde...' : 'Valider' }
+            {saving ? 'Sauvegarde...' : 'Valider'}
           </Button>
         </DialogActions>
       </form>

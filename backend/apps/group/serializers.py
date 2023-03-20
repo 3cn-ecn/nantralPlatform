@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers, exceptions
@@ -92,6 +94,18 @@ class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
                   'admin_request']
         read_only_fields = ['id', 'student', 'group', 'admin_request']
         admin_fields = ['priority', 'admin']
+
+    def validate_begin_date(self, value: date) -> date:
+        group_type: GroupType = self.instance.group.group_type
+        if not group_type.no_membership_dates and value is None:
+            raise exceptions.ValidationError(_("This field is required."))
+        return value
+
+    def validate_end_date(self, value: date) -> date:
+        group_type: GroupType = self.instance.group.group_type
+        if not group_type.no_membership_dates and value is None:
+            raise exceptions.ValidationError(_("This field is required."))
+        return value
 
     def validate(self, data: dict[str, any]) -> dict[str, any]:
         if (data.get('begin_date') and data.get('end_date')

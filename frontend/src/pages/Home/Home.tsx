@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { ClubProps } from 'Props/Club';
+import { ClubProps } from 'Props/Group';
 import * as React from 'react';
-import { SvgIcon, Typography } from '@mui/material';
+import { Box, SvgIcon, Typography } from '@mui/material';
 import { Container } from '@mui/system';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
@@ -20,14 +20,22 @@ import { LoadStatus } from '../../Props/GenericTypes';
  */
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
+  const [eventsStatus, setEventsStatus] = React.useState<Status>('load');
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
   const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
   const [postsStatus, setPostsStatus] = React.useState<LoadStatus>('load');
   const { t } = useTranslation('translation'); // translation module
-  const headerImageURL = '/static/img/central_background.jpg';
+  const today = new Date();
+  const postDateLimit = new Date();
+  postDateLimit.setDate(today.getDay() - 15);
   React.useEffect(() => {
+    getEvent();
+    getMyClubs();
+    getPosts();
+  }, []);
+
+  async function getEvent() {
     // fetch events
     axios
       .get('/api/event/', {
@@ -45,6 +53,9 @@ function Home() {
         console.error(err);
         setEventsStatus('fail');
       });
+  }
+
+  async function getMyClubs() {
     // fetch my clubs
     axios
       .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
@@ -56,9 +67,16 @@ function Home() {
         console.error(err);
         setClubsStatus('fail');
       });
+  }
+
+  async function getPosts() {
     // fetch posts
     axios
-      .get('/api/post')
+      .get('/api/post', {
+        params: {
+          from_date: postDateLimit.toISOString(),
+        },
+      })
       .then((res) => {
         postsToCamelCase(res.data);
         setPosts(res.data);
@@ -68,18 +86,18 @@ function Home() {
         console.error(err);
         setPostsStatus('fail');
       });
-  }, []);
+  }
 
   return (
     <>
       <div className="header">
-        <img className="header-image" alt="" src={headerImageURL} />
         <div id="header-title">
           <Typography id="second-title">{t('home.welcomeTo')}</Typography>
           <div id="title">
             <SvgIcon
               component={NantralIcon}
               inheritViewBox
+              id="header-logo"
               sx={{
                 height: 50,
                 width: 50,
@@ -88,10 +106,20 @@ function Home() {
             <Typography id="main-title">Nantral Platform</Typography>
           </div>
         </div>
+        <div className="header-image" />
       </div>
-      <div style={{ alignContent: 'center', display: 'flex', paddingTop: 20 }}>
-        <Container>
-          {posts.filter((post) => post.pinned) && (
+      <Box
+        bgcolor="background.default"
+        id="home-container"
+        style={{
+          alignContent: 'center',
+          display: 'flex',
+          paddingTop: 20,
+        }}
+      >
+        <Container sx={{ marginBottom: 3 }}>
+          {(postsStatus === 'load' ||
+            posts.filter((post) => post.pinned).length > 0) && (
             <PostSection
               posts={posts.filter((post) => post.pinned)}
               title={t('home.highlighted')}
@@ -132,7 +160,7 @@ function Home() {
             accordion
           />
         </Container>
-      </div>
+      </Box>
     </>
   );
 }

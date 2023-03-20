@@ -41,6 +41,11 @@ class Migration(migrations.Migration):
             name='form_url',
             field=models.URLField(blank=True, null=True, verbose_name='Lien vers la billetterie'),
         ),
+        migrations.AlterField(
+            model_name='event',
+            name='group_slug',
+            field=models.SlugField(blank=True, null=True, verbose_name='Slug du groupe'),
+        ),
         migrations.RunPython(migrate_slugs_to_fk, reverse_code=migrate_fk_to_slugs),
         migrations.RemoveField(
             model_name='event',

@@ -3,10 +3,12 @@
 }
 
 .spanno {
-  display:inline-block;
+  display:flex;
     width: 300px;
     overflow-wrap:normal;
+    align-items: center;
 }
+
 
 small {
   display:inline-block;
@@ -29,4 +31,9 @@ p.body {
 
 .read-button {
   color: '#dc3545',
+}
+
+.bob {
+  display: flex;
+  align-items: center;
 }

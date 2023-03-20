@@ -46,12 +46,11 @@ urlpatterns = i18n_patterns(
         'parrainage/admin/',
         include('apps.family.admin_urls', namespace='family-admin')),
     path('post/', include('apps.post.urls', namespace='post')),
-    path('event/', include('apps.event.urls', namespace='event')),
     path('tools/', include('apps.tools.urls', namespace='tools')),
     path(
         'notification/',
         include('apps.notification.urls', namespace='notification')),
-
+    path('event/', include('apps.event.urls', namespace='event')),
     # api
     path(
         'api/student/',
@@ -61,11 +60,12 @@ urlpatterns = i18n_patterns(
         include('apps.roommates.api_urls', namespace='roommates_api')),
     path('api/post/', include('apps.post.api_urls', namespace='post_api')),
     path('api/event/', include('apps.event.api_urls', namespace='event_api')),
+
     path(
         'api/notification/',
         include('apps.notification.api_urls', namespace='notification_api')),
     path('api/group/', include('apps.group.api_urls', namespace='group_api')),
-
+    path('api/home/', include('apps.home.api_urls', namespace='home_api')),
     # homepage
     path('', include('apps.home.urls', namespace='home')),
 

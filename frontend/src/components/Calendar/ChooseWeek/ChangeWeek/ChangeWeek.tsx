@@ -89,10 +89,11 @@ export function ChangeWeek(props: {
         }}
         style={{
           minWidth: `1px`,
+          padding: '0px',
         }}
         data-testid="ChangeWeekPreviousTestId"
       >
-        {/* <ArrowBackIosNewIcon></ArrowBackIosNewIcon> */}
+        <ArrowBackIosNewIcon style={{ width: 'inherit' }}></ArrowBackIosNewIcon>
       </Button>
     );
   }
@@ -122,10 +123,11 @@ export function ChangeWeek(props: {
       }}
       style={{
         minWidth: `1px`,
+        padding: '0px',
       }}
       data-testid="ChangeWeekNextTestId"
     >
-      {/* <ArrowForwardIosIcon></ArrowForwardIosIcon> */}
+      <ArrowForwardIosIcon style={{ width: 'inherit' }}></ArrowForwardIosIcon>
     </Button>
   );
 }

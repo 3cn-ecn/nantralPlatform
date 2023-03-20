@@ -18,7 +18,13 @@
     },
     "seePage": "Voir la page",
     "showAll": "Tout afficher",
-    "showLess": "Afficher moins"
+    "showLess": "Afficher moins",
+    "close": "Fermer",
+    "like": "J'aime"
+  },
+  "club": {
+    "joinNow": "Rejoindre maintenant",
+    "noClub": "Vous n'avez rejoint aucun groupe pour le moment"
   },
   "date_picker": {
     "language": "fr"
@@ -32,7 +38,11 @@
     },
     "error": "Erreur lors du chargement des évènements",
     "membersOnly": "Membres uniquement",
-    "no_event": "Aucun évènement"
+    "no_event": "Aucun évènement",
+    "participantsList": "Liste des participants",
+    "participants": "Participants",
+    "endTime": "Se termine le :",
+    "endInscription": "L'inscription est ouverte jusqu'au"
   },
   "filterbar": {
     "button_filter": "Filtrer",
@@ -120,7 +130,8 @@
     "flatshare": "Carte des colocs",
     "home": "Accueil",
     "signature": "Signature ECN",
-    "student": "Annuaire Étudiant"
+    "student": "Annuaire Étudiant",
+    "group": "Groupes"
   },
   "notif": {
     "load": "Charger Plus",
@@ -128,7 +139,16 @@
     "title": "Notifications",
     "unread": "Non Lu"
   },
+  "time": {
+    "days": "jours",
+    "hours": "heures",
+    "minutes": "minutes",
+    "months": "mois",
+    "seconds": "secondes",
+    "years": "années"
+  },
   "user_menu": {
+    "admin": "Interface Admin",
     "automatic": "Automatique",
     "bug": "Suggestion / Bug",
     "dark": "Thème sombre",
@@ -143,5 +163,27 @@
     "theme": "Thème",
     "title_language": "Langage",
     "title_theme": "Thème"
+  },
+  "suggestion_menu": {
+    "header": "Suggestions / Bug",
+    "title": "Titre",
+    "description": "Description",
+    "type": "Type",
+    "cancel": "Annuler",
+    "confirm": "Valider"
+  },
+  "profile": {
+    "promo": "Année d'entrée à Centrale: ",
+    "edit": "Modifier mon profil",
+    "gene": "Élève Ingénieur Généraliste",
+    "master": "Élève en Master",
+    "iti": "Élève Ingénieur de Spécialité (ITII)",
+    "doc": "Doctorant"
+  },
+  "membership_student": {
+    "title": "Groupes",
+    "show_old": "Afficher les anciens groupes",
+    "mask_old": "Masquer les anciens groupes"
   }
+
 }

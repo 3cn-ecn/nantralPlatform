@@ -38,19 +38,17 @@ export function ChooseWeek(props: {
       <div id="areaOfTimeDisplay">
         {`${beginDate.toLocaleDateString('fr-FR', {
           weekday: 'long',
-          year: 'numeric',
           month: 'long',
           day: 'numeric',
         })} au `}
         {sunday.toLocaleDateString('fr-FR', {
           weekday: 'long',
-          year: 'numeric',
           month: 'long',
           day: 'numeric',
         })}
       </div>
       <div id="changeAreaOfTime">
-        <Grid container justifyContent="center" xs={12}>
+        <Grid container justifyContent="center">
           <Grid item xs={1}>
             <ChangeWeek
               action="previous"
