@@ -265,10 +265,9 @@ function AutocompleteField<T>(props: {
   const [selectedOption, setSelectedOption] = useState<T | string>(null);
 
   useEffect(() => {
+    console.log(value);
     if (value) {
       axios
-        .get<T>(`${field.endPoint}/${value}/`)
-        .then((res) => setSelectedOption(res.data));
     }
   }, []);
 
