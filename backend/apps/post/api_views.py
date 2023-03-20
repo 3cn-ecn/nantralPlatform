@@ -7,6 +7,7 @@ from apps.group.api_views import Group
 from apps.student.api_views import Student
 from apps.post.models import VISIBILITY
 from apps.event.api_views import TRUE_ARGUMENTS
+from django.utils import timezone
 
 
 class PostAdminPermission(permissions.BasePermission):
@@ -39,11 +40,11 @@ class PostViewSet(viewsets.ModelViewSet):
 
     Actions
     -------
-    - GET .../post/ : get the list of event
-    - POST .../post/ : create a new event
-    - GET .../post/<id>/ : get an event
-    - PUT .../post/<id>/ : update an event
-    - DELETE .../post/<id>/ : delete an event
+    - GET .../post/ : get the list of post
+    - POST .../post/ : create a new post
+    - GET .../post/<id>/ : get a post
+    - PUT .../post/<id>/ : update a post
+    - DELETE .../post/<id>/ : delete a post
     """
     permission_classes = [permissions.IsAuthenticated, PostAdminPermission]
     serializer_class = PostSerializer
@@ -63,7 +64,11 @@ class PostViewSet(viewsets.ModelViewSet):
             "from_date")
         to_date: str = self.request.query_params.get(
             "to_date")
+        pinned: str = self.request.query_params.get(
+            "pinned")
+        print(pinned)
         # query
+        today = timezone.now()
         student: Student = self.request.user.student
         my_groups = Group.objects.filter(members=student)
         # filtering
@@ -75,10 +80,14 @@ class PostViewSet(viewsets.ModelViewSet):
             .filter(Q(group__slug__in=organizers_slug)
                     if len(organizers_slug) > 0 else Q())
             .filter(Q(publication_date__gte=from_date) if from_date else Q())
-            .filter(Q(publication_date__lte=to_date) if to_date else Q())
+            .filter(Q(publication_date__lte=to_date)
+                    if to_date
+                    else Q(publication_date__lte=today) | Q(member=True))
             .filter(Q(publicity=visibility) if visibility in
                     [VISIBILITY[i][0] for i in range(len(VISIBILITY))] else Q())
             .filter(Q(publicity=VISIBILITY[0][0]) | Q(member=True))
+            .filter(Q(pinned=True) if pinned == "true" else
+                    Q(pinned=False) if pinned == "false" else Q())
             .order_by(*order_by)
             .distinct()
         )

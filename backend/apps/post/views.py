@@ -45,7 +45,7 @@ class PostUpdateView(UserPassesTestMixin, UpdateView):
     fields = ['title', 'description', 'publication_date',
               'publicity', 'color', 'image']
     model = Post
-    slug_field = 'slug'
+    slug_field = 'pk'
 
     def test_func(self) -> bool:
         post = self.get_object()

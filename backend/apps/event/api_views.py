@@ -187,13 +187,13 @@ class ParticipateAPIView(APIView):
     """
     Actions
     -------
-    - POST .../event/<slug>/participate : participate to an event
-    - DELETE .../event/<slug>/participate : remove participation of an event
+    - POST .../event/<id>/participate : participate to an event
+    - DELETE .../event/<id>/participate : remove participation of an event
     """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, id=self.kwargs['event_id'])
         inscription_finished: bool = event.end_inscription is not None and\
             timezone.now() > event.end_inscription
         inscription_not_started: bool = event.begin_inscription is not None and\
@@ -223,7 +223,7 @@ class ParticipateAPIView(APIView):
                       "message": "You have been added to this event"})
 
     def delete(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, id=self.kwargs['event_id'])
         event.participants.remove(request.user.student)
         return Response(
             status='200',
@@ -235,9 +235,15 @@ class ParticipateAPIView(APIView):
 
 class FavoriteAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    """
+    Actions
+    -------
+    - POST .../event/<id>/favorite : add event to your favorites
+    - DELETE .../event/<id>/favorite : remove event to your favorites
+    """
 
     def post(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, id=self.kwargs['event_id'])
         student = request.user.student
         if (student is None):
             return Response(status='404', data={
@@ -252,7 +258,7 @@ class FavoriteAPIView(APIView):
             })
 
     def delete(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, id=self.kwargs['event_id'])
         student = request.user.student
         if (student is None):
             return Response(status='404', data={

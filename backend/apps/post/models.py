@@ -58,6 +58,7 @@ class AbstractPost(models.Model, SlugModel):
         abstract = True
 
     def save(self, *args, **kwargs):
+        print(self.image)
         # compression des images
         self.image = compress_model_image(
             self, 'image', size=(960, 540), contains=True)
@@ -120,6 +121,9 @@ class Post(AbstractPost):
         help_text="Lien vers une page web")
     pinned = models.BooleanField(
         verbose_name="Épinglé", default=False)
+    edit_date = models.DateField(
+        verbose_name="Date d'édition", auto_now=True
+    )
 
     def save(self, *args, **kwargs):
         # create the slug

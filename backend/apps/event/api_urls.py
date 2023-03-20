@@ -18,11 +18,11 @@ paths = [
         ListEventsParticipantsAPIView.as_view({'get': 'list'}),
         name='list-participants'),
     path(
-        '<slug:event_slug>/participate',
+        '<slug:event_id>/participate',
         ParticipateAPIView.as_view(),
         name='participate-to-event'),
     path(
-        '<slug:event_slug>/favorite',
+        '<slug:event_id>/favorite',
         FavoriteAPIView.as_view(),
         name='set-event-to-favorite'),
 ]

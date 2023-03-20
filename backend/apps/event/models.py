@@ -38,8 +38,8 @@ class Event(AbstractPost):
         max_length=200,
         blank=True,
         null=True)
-    max_participant = models.IntegerField(
-        verbose_name='Nombre de places maximal',
+    max_participant = models.PositiveIntegerField(
+        verbose_name='Nombre de places maximum',
         blank=True,
         null=True
     )
