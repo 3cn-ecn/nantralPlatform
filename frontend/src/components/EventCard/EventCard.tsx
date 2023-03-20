@@ -7,7 +7,6 @@ import {
   CardMedia,
   CircularProgress,
   Typography,
-  Avatar,
   CardActionArea,
 } from '@mui/material/';
 
