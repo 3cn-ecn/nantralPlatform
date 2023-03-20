@@ -338,9 +338,13 @@ function EventDetails() {
               {beginHourText} {endSameDay}
             </Typography>
           </div>
-          <div className="infoElement">
+          <div className="infoElement" style={{ minWidth: 0 }}>
             <PlaceIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
-            <Typography className="adaptativeText" variant="h5">
+            <Typography
+              className="adaptativeText"
+              variant="h5"
+              sx={{ minWidth: 0 }}
+            >
               {event.location}
             </Typography>
           </div>
