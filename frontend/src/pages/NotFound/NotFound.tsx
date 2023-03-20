@@ -16,7 +16,7 @@ function NotFound() {
         <AlertTitle>{t('404.error')}</AlertTitle>
         <p className="card-text">{t('404.notFound')}</p>
       </Alert>
-      <p>
+      <div style={{ marginTop: 10 }}>
         {t('404.whatYouCanDo')}
         <ul>
           <li>
@@ -24,7 +24,7 @@ function NotFound() {
           </li>
           <li>{t('404.home')}</li>
         </ul>
-      </p>
+      </div>
       <Link to="/">
         <img
           alt=""

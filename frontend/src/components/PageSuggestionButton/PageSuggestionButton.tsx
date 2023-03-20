@@ -7,27 +7,28 @@ import { Link } from 'react-router-dom';
 export function PageSuggestionButton(props: {
   text: { fr: string; en: string };
   link?: string;
+  action?: () => void;
 }) {
-  const { text, link } = props;
+  const { text, link, action } = props;
   const language = i18n.languages[0];
   return (
-    <LinkMui component={Link} to={link} color="textPrimary" underline="none">
-      <Button
-        variant="contained"
-        disableTouchRipple
-        endIcon={link && <ChevronRight />}
-        sx={{
-          display: 'flex',
-          marginBottom: '20px',
-          width: '100%',
-          justifyContent: 'space-between',
-        }}
-      >
-        {language === 'en-GB' && text.en ? text.en : text.fr}
-      </Button>
-    </LinkMui>
+    <Button
+      variant="contained"
+      disableTouchRipple
+      endIcon={link && <ChevronRight />}
+      sx={{
+        display: 'flex',
+        marginBottom: '20px',
+        width: '100%',
+        justifyContent: 'space-between',
+      }}
+      onClick={action}
+    >
+      {language === 'en-GB' && text.en ? text.en : text.fr}
+    </Button>
   );
 }
 PageSuggestionButton.defaultProps = {
   link: null,
+  action: null,
 };

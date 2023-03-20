@@ -176,7 +176,7 @@ function EventCard(props: { event: EventProps }) {
             person={numberOfParticipants}
             maxPerson={maxParticipant}
             participating={participating}
-            eventSlug={slug}
+            eventId={id}
             link={formUrl}
             beginInscription={beginInscription}
             endInscription={endInscription}
@@ -187,12 +187,7 @@ function EventCard(props: { event: EventProps }) {
       </Card>
       <div className="topButtons">
         <div className="favIcon">
-          <FavButton
-            eventSlug={slug}
-            selected={isFavorite}
-            size="2rem"
-            iconized
-          />
+          <FavButton eventId={id} selected={isFavorite} size="2rem" iconized />
         </div>
         <MoreActionsButton
           isAdmin={groupData.is_admin}
