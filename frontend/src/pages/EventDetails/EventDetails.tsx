@@ -353,7 +353,7 @@ function EventDetails() {
 
         <Typography variant="caption" sx={{ textAlign: 'justify' }}>
           <div
-            style={{ marginTop: '2rem' }}
+            style={{ marginTop: '2rem', fontSize: '1rem' }}
             dangerouslySetInnerHTML={{
               __html: event.description,
             }}
