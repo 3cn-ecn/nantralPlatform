@@ -11,7 +11,7 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material';
-import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Close as CloseIcon} from '@mui/icons-material';
 import FormGroup, { FieldType } from '../../utils/form';
 import { Event, Group } from '../../Props';
 
@@ -155,7 +155,7 @@ function EditEventModal(props: {
   closeModal: () => void;
   openDeleteModal?: () => void;
 }) {
-  const { open, group, saveEvent, closeModal, openDeleteModal } = props;
+  const { open, group, saveEvent, closeModal} = props;
   const event = props.event || createBlankEvent(group);
   const formFields = createFormFields();
 
@@ -191,8 +191,6 @@ function EditEventModal(props: {
         }
       });
   }
-
-  // {event.title || 'Ajouter un événement'}
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
