@@ -34,7 +34,7 @@ interface JoinButtonProps {
   person: number;
   sx?: SxProps<Theme>;
   participating: boolean;
-  eventSlug: string;
+  eventId: number;
   beginInscription: string | null;
   endInscription: string | null;
   unregisterOnly?: boolean;
@@ -49,7 +49,7 @@ function JoinButton({
   person,
   sx,
   participating,
-  eventSlug,
+  eventId,
   beginInscription,
   endInscription,
   unregisterOnly,
@@ -85,7 +85,7 @@ function JoinButton({
     Date.now() < new Date(beginInscription).getTime();
   const participate = async () => {
     axios
-      .post(`/api/event/${eventSlug}/participate`)
+      .post(`/api/event/${eventId}/participate`)
       .then((res) => {
         if (res.data.success) {
           setSelected(true);
@@ -100,7 +100,7 @@ function JoinButton({
 
   const quit = async () => {
     axios
-      .delete(`/api/event/${eventSlug}/participate`)
+      .delete(`/api/event/${eventId}/participate`)
       .then((res) => {
         if (res.data.success) {
           setSelected(false);
