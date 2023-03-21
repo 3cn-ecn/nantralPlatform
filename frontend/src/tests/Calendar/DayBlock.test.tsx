@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { EventProps } from '../../Props/Event';
 import { createTestEvent } from './testElements/testElements';
 import { DayBlock } from '../../components/Calendar/Month/WeekLine/DayBlock/DayBlock';
@@ -36,16 +37,23 @@ const otherDay = { day: 5, date: 17, events: otherEvents };
 
 const newOtherDay = { day: 5, date: 17, events: [] };
 describe('<DayBlock />', () => {
-  it('should display an DayBlock', async () => {
+  it('should display a DayBlock', async () => {
     const component = render(
-      <DayBlock key="DayBlockTest1" day={day} maxEventsInDayWeek={2} inMonth />
+      <BrowserRouter>
+        <DayBlock
+          key="DayBlockTest1"
+          day={day}
+          maxEventsInDayWeek={2}
+          inMonth
+        />
+      </BrowserRouter>
     );
     let innerHTMLString = '17';
 
     day.events.forEach((event) => {
       expect(
         component.getByTestId(`${event.slug}DateBoxButtonTestId`).style.height
-      ).toBe(`40px`);
+      ).toBe('3rem');
       expect(
         component.getByTestId(`${event.slug}DateBoxButtonTestId`).textContent
       ).toBe(event.title[0]);
@@ -60,19 +68,21 @@ describe('<DayBlock />', () => {
 
   it('should display an unfullfilled DayBlock', async () => {
     const component = render(
-      <DayBlock
-        key="DayBlockTest1"
-        day={otherDay}
-        maxEventsInDayWeek={3}
-        inMonth
-      />
+      <BrowserRouter>
+        <DayBlock
+          key="DayBlockTest1"
+          day={otherDay}
+          maxEventsInDayWeek={3}
+          inMonth
+        />
+      </BrowserRouter>
     );
     let innerHTMLString = '17';
 
     otherDay.events.forEach((event) => {
       expect(
         component.getByTestId(`${event.slug}DateBoxButtonTestId`).style.height
-      ).toBe(`40px`);
+      ).toBe('3rem');
       expect(
         component.getByTestId(`${event.slug}DateBoxButtonTestId`).textContent
       ).toBe(event.title[0]);
@@ -87,12 +97,14 @@ describe('<DayBlock />', () => {
 
   it('should display an empty DayBlock', async () => {
     const component = render(
-      <DayBlock
-        key="DayBlockTest1"
-        day={newOtherDay}
-        maxEventsInDayWeek={5}
-        inMonth
-      />
+      <BrowserRouter>
+        <DayBlock
+          key="DayBlockTest1"
+          day={newOtherDay}
+          maxEventsInDayWeek={5}
+          inMonth
+        />
+      </BrowserRouter>
     );
     expect(component.getByTestId('DateBoxTestId').textContent).toBe('17');
 
@@ -101,12 +113,14 @@ describe('<DayBlock />', () => {
 
   it('should display an out of month DayBlock', async () => {
     const component = render(
-      <DayBlock
-        key="DayBlockTest4"
-        day={null}
-        maxEventsInDayWeek={1}
-        inMonth={false}
-      />
+      <BrowserRouter>
+        <DayBlock
+          key="DayBlockTest4"
+          day={null}
+          maxEventsInDayWeek={1}
+          inMonth={false}
+        />
+      </BrowserRouter>
     );
     expect(component).toMatchSnapshot();
   });

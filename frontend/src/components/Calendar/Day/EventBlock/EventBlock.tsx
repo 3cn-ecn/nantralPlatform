@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { EventProps } from '../../../../Props/Event';
 import './EventBlock.scss';
 
@@ -46,12 +47,14 @@ export function EventBlock(props: {
     duration = 24;
   }
 
+  const navigate = useNavigate();
   return (
     <Button
+      className="eventButton"
       variant="contained"
       fullWidth
       onClick={() => {
-        console.log(event);
+        navigate(`/event/${event.id}/`);
       }}
       style={{
         minWidth: `1px`,

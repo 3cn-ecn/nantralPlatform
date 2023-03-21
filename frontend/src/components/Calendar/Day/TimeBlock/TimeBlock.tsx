@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
+import './TimeBlock.scss';
 
 /**
  * Function that creates the TimeBlock component, which are the backround lines in the calendar.
@@ -11,9 +12,9 @@ export function TimeBlock(props: { startTime: number }): JSX.Element {
 
   if (startTime % 2 === 0) {
     return (
-      <Box className="TimeBlockEven" data-testid="TimeBlockEvenTestId"></Box>
+      <Box className="timeBlockEven" data-testid="TimeBlockEvenTestId"></Box>
     );
   }
 
-  return <Box className="TimeBlockOdd" data-testid="TimeBlockOddTestId"></Box>;
+  return <Box className="timeBlockOdd" data-testid="TimeBlockOddTestId"></Box>;
 }
