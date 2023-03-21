@@ -170,7 +170,7 @@ function FormGroup(props: {
                 </FormControl>
               </Box>
             );
-          case 'text explanatory':
+          case 'comment':
             return (
               <Typography
                 sx={{
