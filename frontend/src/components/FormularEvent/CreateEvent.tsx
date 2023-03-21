@@ -11,7 +11,7 @@ import {
   CircularProgress,
   Alert,
 } from '@mui/material';
-import { Close as CloseIcon} from '@mui/icons-material';
+import { Close as CloseIcon } from '@mui/icons-material';
 import FormGroup, { FieldType } from '../../utils/form';
 import { Event, Group } from '../../Props';
 
@@ -43,14 +43,14 @@ function createFormFields(): FieldType[] {
       kind: 'group',
       fields: [
         {
-          kind: 'date and hour',
+          kind: 'datetime',
           name: 'begin_date',
           label: 'Date et Heure de début',
           required: true,
           disablePast: true,
         },
         {
-          kind: 'date and hour',
+          kind: 'datetime',
           name: 'end_date',
           label: 'Date et Heure de fin',
           required: true,
@@ -73,7 +73,7 @@ function createFormFields(): FieldType[] {
       row: 3,
     },
     {
-      kind: 'date and hour',
+      kind: 'datetime',
       name: 'end_inscription',
       label: 'Date et Heure de fin des inscriptions',
       disablePast: true,
@@ -89,12 +89,12 @@ function createFormFields(): FieldType[] {
       required: true,
     },
     {
-      kind: 'text explanatory',
+      kind: 'comment',
       name: 'help_shotgun',
-      text: "\n Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre le lien d'un form, soit définir un nombre max de participants \n",
+      text: "Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre le lien d'un form, soit définir un nombre max de participants",
     },
     {
-      kind: 'date and hour',
+      kind: 'datetime',
       name: 'shotgun_date',
       label: 'Date et Heure du Shotgun',
       disablePast: true,
@@ -155,7 +155,7 @@ function EditEventModal(props: {
   closeModal: () => void;
   openDeleteModal?: () => void;
 }) {
-  const { open, group, saveEvent, closeModal} = props;
+  const { open, group, saveEvent, closeModal } = props;
   const event = props.event || createBlankEvent(group);
   const formFields = createFormFields();
 

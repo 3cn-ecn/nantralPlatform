@@ -25,7 +25,7 @@ import axios from 'axios';
 
 export type FieldType =
   | {
-      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date' | 'date and hour';
+      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date' | 'datetime';
       name: string;
       label: string;
       required?: boolean;
@@ -70,7 +70,7 @@ export type FieldType =
       component: (props: { error?: boolean }) => JSX.Element;
     }
   | {
-      kind: 'text explanatory';
+      kind: 'comment';
       name: string;
       text: string;
     }
@@ -170,7 +170,7 @@ function FormGroup(props: {
                 </FormControl>
               </Box>
             );
-          case 'text explanatory':
+          case 'comment':
             return (
               <Typography
                 sx={{
@@ -317,7 +317,7 @@ function FormGroup(props: {
                 noFullWidth={noFullWidth}
               />
             );
-          case 'date and hour':
+          case 'datetime':
             return (
               <LocalizationProvider
                 adapterLocale={'fr'}

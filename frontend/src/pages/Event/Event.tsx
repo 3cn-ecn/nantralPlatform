@@ -46,7 +46,7 @@ function EventView(props: { filter: any }) {
     if (filter !== null) {
       // filtered calendar
       axios
-        .get('/api/event', {
+        .get('/api/event/', {
           params: {
             is_shotgun: filter.shotgun,
             is_favorite: filter.favorite,
@@ -85,7 +85,7 @@ function EventView(props: { filter: any }) {
       } else {
         // filtered list with date filters
         axios
-          .get('/api/event', {
+          .get('/api/event/', {
             params: {
               is_shotgun: filter.shotgun,
               is_favorite: filter.favorite,
@@ -107,7 +107,7 @@ function EventView(props: { filter: any }) {
     } else {
       // non filtered list
       axios
-        .get('/api/event', {
+        .get('/api/event/', {
           params: {
             from_date: today,
           },
@@ -123,7 +123,7 @@ function EventView(props: { filter: any }) {
 
       // non filtered calendar
       axios
-        .get('/api/event')
+        .get('/api/event/')
         .then((res: any) => {
           eventsToCamelCase(res.data);
           setEventsCalendar(res.data);
