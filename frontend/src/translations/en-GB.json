@@ -57,6 +57,7 @@
   },
   "form": {
     "PostTitle": "Post title",
+    "createAPost": "Create a post",
     "createPost": "Create post",
     "delete": "Delete",
     "description": "Description",

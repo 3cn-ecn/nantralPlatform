@@ -187,7 +187,7 @@ export function FormPost(props: {
           alignItems: 'center',
         }}
       >
-        {mode === 'edit' ? 'Editer un post' : 'Créer un post'}
+        {mode === 'edit' ? t('form.editPost') : t('form.createAPost')}
         <IconButton onClick={onClose}>
           <Close />
         </IconButton>
@@ -241,5 +241,5 @@ export function FormPost(props: {
 FormPost.defaultProps = {
   mode: 'edit',
   post: null,
-  onUpdate: (post: PostProps) => null,
+  onUpdate: () => null,
 };

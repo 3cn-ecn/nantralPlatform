@@ -58,6 +58,7 @@
   },
   "form": {
     "PostTitle": "Titre de l'annonce",
+    "createAPost": "Créer un post",
     "createPost": "Créer le post",
     "delete": "Supprimer",
     "description": "Description",

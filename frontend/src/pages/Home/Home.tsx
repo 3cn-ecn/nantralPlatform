@@ -177,7 +177,6 @@ function Home() {
               isThisWeek(new Date(item.beginDate))
             )}
             status={eventsStatus}
-            seeMoreUrl="/event"
             title={t('home.thisWeek')}
           />
           <EventSection
@@ -186,14 +185,12 @@ function Home() {
             )}
             status={eventsStatus}
             maxItem={6}
-            seeMoreUrl="/event"
             title={t('home.upcomingEvents')}
           />
           <ClubSection
             clubs={myClubs}
             status={clubsStatus}
             title={t('home.myClubs')}
-            seeMoreUrl="/club"
           />
         </Container>
       </Box>
