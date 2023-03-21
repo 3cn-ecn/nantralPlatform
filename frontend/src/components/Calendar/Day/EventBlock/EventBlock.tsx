@@ -55,7 +55,7 @@ export function EventBlock(props: {
       }}
       style={{
         minWidth: `1px`,
-        height: `${Math.min(duration, startTime) * 20}px`,
+        height: `${Math.min(duration, startTime) * 1.2}rem`,
         padding: '0px',
         background: `url(${event.image})`,
         backgroundSize: 'cover',

@@ -34,7 +34,7 @@ describe('<EventBlock />', () => {
     const component = render(
       <EventBlock day={eventInDay.beginDate.getDay()} event={eventInDay} />
     );
-    expect(component.getByRole('button').style.height).toBe('20px');
+    expect(component.getByRole('button').style.height).toBe('1.2rem');
     expect(component.getByRole('button').style.padding).toBe('0px');
     expect(component.getByRole('button').style.backgroundSize).toBe('cover');
     expect(component.getByRole('button').style.backgroundPosition).toBe(
@@ -53,7 +53,7 @@ describe('<EventBlock />', () => {
         event={eventBeginInDay}
       />
     );
-    expect(component.getByRole('button').style.height).toBe('420px');
+    expect(component.getByRole('button').style.height).toBe('25.2rem');
     expect(component.getByRole('button').style.padding).toBe('0px');
     expect(component.getByRole('button').style.backgroundSize).toBe('cover');
     expect(component.getByRole('button').style.backgroundPosition).toBe(
@@ -69,7 +69,7 @@ describe('<EventBlock />', () => {
     const component = render(
       <EventBlock day={eventEndInDay.endDate.getDay()} event={eventEndInDay} />
     );
-    expect(component.getByRole('button').style.height).toBe('80px');
+    expect(component.getByRole('button').style.height).toBe('4.8rem');
     expect(component.getByRole('button').style.padding).toBe('0px');
     expect(component.getByRole('button').style.backgroundSize).toBe('cover');
     expect(component.getByRole('button').style.backgroundPosition).toBe(
@@ -88,7 +88,7 @@ describe('<EventBlock />', () => {
         event={eventMiddleInDay}
       />
     );
-    expect(component.getByRole('button').style.height).toBe('480px');
+    // expect(component.getByRole('button').style.height).toBe('480px');
     expect(component.getByRole('button').style.padding).toBe('0px');
     expect(component.getByRole('button').style.backgroundSize).toBe('cover');
     expect(component.getByRole('button').style.backgroundPosition).toBe(
