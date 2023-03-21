@@ -7,7 +7,6 @@ import {
   CardMedia,
   CircularProgress,
   Typography,
-  Avatar,
   CardActionArea,
 } from '@mui/material/';
 
@@ -24,6 +23,7 @@ import JoinButton from '../Button/JoinButton';
 
 import FavButton from '../Button/FavButton';
 import MoreActionsButton from '../Button/MoreActionsButton';
+import { ClubAvatar } from '../ClubAvatar/ClubAvatar';
 
 function InfoItem(props: { name: string; value: string }) {
   let icon = null;
@@ -116,19 +116,22 @@ function EventCard(props: { event: EventProps }) {
   const hourText = dateValue.toLocaleTimeString(i18n.language, {
     timeStyle: 'short',
   });
+  const iconSize = '3.75rem';
   const groupIcon =
     typeof groupData.icon === 'undefined' ? (
-      <CircularProgress size="3.75rem" />
+      <CircularProgress size={iconSize} />
     ) : (
-      <a href={window.location.origin + groupData.url}>
-        <Avatar
-          alt={groupData.name}
-          src={groupData.icon}
-          sx={{ fontSize: '1rem', width: '3.75rem', height: '3.75rem' }}
-        />
-      </a>
+      <ClubAvatar
+        clubUrl={groupData.url}
+        logoUrl={groupData.icon}
+        name={groupData.name}
+        textPosition="bottom"
+        size={iconSize}
+        hideName
+      />
     );
   const navigate = useNavigate();
+  const banner = image === null ? '/static/img/default-banner.png' : image;
   return (
     <div style={{ position: 'relative' }}>
       <Card className="eventCard" sx={{ fontSize: '1rem' }}>
@@ -142,13 +145,13 @@ function EventCard(props: { event: EventProps }) {
           <CardMedia
             className="eventBanner"
             component="img"
-            image={image}
+            image={banner}
             alt="Banner"
           />
           <CardContent sx={{ padding: 0 }}>
             <div className="infoContainer">
               <div className="infoMain">
-                <div className="groupIcon">{groupIcon}</div>
+                <div style={{ minWidth: iconSize, minHeight: iconSize }}></div>
 
                 <div className="infos">
                   <Typography
@@ -185,6 +188,7 @@ function EventCard(props: { event: EventProps }) {
           />
         </div>
       </Card>
+      <div className="groupIcon">{groupIcon}</div>
       <div className="topButtons">
         <div className="favIcon">
           <FavButton eventId={id} selected={isFavorite} size="2rem" iconized />
