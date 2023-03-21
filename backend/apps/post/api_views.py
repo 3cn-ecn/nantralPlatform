@@ -86,8 +86,8 @@ class PostViewSet(viewsets.ModelViewSet):
             .filter(Q(publicity=visibility) if visibility in
                     [VISIBILITY[i][0] for i in range(len(VISIBILITY))] else Q())
             .filter(Q(publicity=VISIBILITY[0][0]) | Q(member=True))
-            .filter(Q(pinned=True) if pinned == "true" else
-                    Q(pinned=False) if pinned == "false" else Q())
+            .filter(Q(pinned=True) if pinned in ["true", ""] else Q())
+            .filter(Q(pinned=False) if pinned == "false" else Q())
             .order_by(*order_by)
             .distinct()
         )

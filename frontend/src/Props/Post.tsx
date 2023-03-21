@@ -1,4 +1,3 @@
-import { Blob } from 'buffer';
 import { snakeToCamelCase } from '../utils/camel';
 
 export interface PostProps {

@@ -10,7 +10,7 @@ import {
 import * as React from 'react';
 
 import './PostCard.scss';
-import { Edit, Groups, OpenInNew, Pin, PushPin } from '@mui/icons-material';
+import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';

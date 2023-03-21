@@ -14,8 +14,6 @@ import { isThisWeek } from '../../utils/date';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
 import { PostProps, postsToCamelCase } from '../../Props/Post';
 import { LoadStatus } from '../../Props/GenericTypes';
-import Carousel from '../../components/Carousel/Carousel';
-import { PageSuggestionButton } from '../../components/PageSuggestionButton/PageSuggestionButton';
 import { FormPost } from '../../components/FormPost/FormPost';
 
 /**

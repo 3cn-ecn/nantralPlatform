@@ -4,12 +4,9 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Badge,
   Box,
-  Button,
   Grid,
 } from '@mui/material';
-import { NavLink } from 'react-router-dom';
 import './AccordionSection.scss';
 
 export function AccordionSection(props: {

@@ -1,8 +1,7 @@
 import i18n from 'i18next';
 import { ChevronRight } from '@mui/icons-material';
-import { Button, Link as LinkMui } from '@mui/material';
+import { Button } from '@mui/material';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 
 export function PageSuggestionButton(props: {
   text: { fr: string; en: string };
