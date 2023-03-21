@@ -45,10 +45,9 @@ export function FormPost(props: {
       rows: 2,
     },
     {
-      kind: 'text',
+      kind: 'CKEditor',
+      label: "Description de l'évènement",
       name: 'description',
-      label: 'Description',
-      rows: 2,
     },
     {
       kind: 'date',
@@ -108,12 +107,14 @@ export function FormPost(props: {
   };
   const createPost = () => {
     const formData = new FormData();
-    if (typeof values.image !== 'string')
+    console.log(values.image);
+    if (values.image && typeof values.image !== 'string')
       formData.append('image', values.image, values.image.name);
     formData.append('group', values.group.toString());
     formData.append('publicity', values.publicity);
     formData.append('title', values.title);
-    formData.append('description', values.description);
+    console.log(values.description);
+    formData.append('description', values.description || '<p></p>');
     if (values.pageSuggestion)
       formData.append('page_suggestion', values.pageSuggestion);
     formData.append('publication_date', values.publicationDate.toISOString());
@@ -142,12 +143,12 @@ export function FormPost(props: {
     console.log(values);
     const formData = new FormData();
     // To avoid typescript error
-    if (typeof values.image !== 'string')
+    if (values.image && typeof values.image !== 'string')
       formData.append('image', values.image, values.image.name);
     formData.append('group', post.group.toString());
     formData.append('publicity', values.publicity);
     formData.append('title', values.title);
-    formData.append('description', values.description);
+    formData.append('description', values.description || '<p></p>');
     if (values.pageSuggestion)
       formData.append('page_suggestion', values.pageSuggestion);
     formData.append('publication_date', values.publicationDate.toISOString());

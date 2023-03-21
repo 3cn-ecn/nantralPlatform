@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {
   TextField,
   Checkbox,
@@ -14,9 +16,7 @@ import {
   AutocompleteInputChangeReason,
   Input,
   Button,
-  InputBase,
-  Paper,
-  IconButton,
+  useTheme,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -24,7 +24,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 import axios from 'axios';
 import { DateTimePicker } from '@mui/x-date-pickers';
-import { Image } from '@mui/icons-material';
+
+document.documentElement.style.setProperty('--ck-custom-foreground', 'black');
 
 export type FieldType =
   | {
@@ -78,6 +79,13 @@ export type FieldType =
       helpText?: string;
       multiline?: boolean;
       item?: Array<Array<string>>;
+      disabled?: boolean;
+    }
+  | {
+      kind: 'CKEditor';
+      name: string;
+      label: string;
+      helpText?: string;
       disabled?: boolean;
     }
   | {
@@ -137,6 +145,7 @@ function FormGroup(props: {
 
   return (
     <>
+      <link rel="stylesheet" href="custom.css" type="text/css" />
       {fields.map((field) => {
         const error = field.kind !== 'group' && errors && errors[field.name];
         switch (field.kind) {
@@ -160,7 +169,7 @@ function FormGroup(props: {
             );
           case 'number':
             return (
-              <Box sx={{ minWidth: 120, mt: 2 }}>
+              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
                 <FormControl fullWidth>
                   <InputLabel id={`${field.name}-number`}>
                     {field.label}
@@ -189,7 +198,7 @@ function FormGroup(props: {
             );
           case 'select':
             return (
-              <Box sx={{ minWidth: 120, mt: 2 }}>
+              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
                 <FormControl fullWidth>
                   <InputLabel id={`${field.name}-input`}>
                     {field.label}
@@ -237,7 +246,7 @@ function FormGroup(props: {
             );
           case 'picture':
             return (
-              <Box sx={{ minWidth: 120, mt: 2 }}>
+              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
                 <TextField
                   variant="outlined"
                   disabled
@@ -373,6 +382,41 @@ function FormGroup(props: {
                 />
               </FormControl>
             );
+          case 'CKEditor':
+            return (
+              <Box
+                key={field.name}
+                sx={{
+                  minWidth: 120,
+                  mt: 2,
+                  backgroundColor: 'primary',
+                  color: 'black',
+                }}
+              >
+                <Typography color="rgba(255, 255, 255, 0.7)" fontSize="1rem">
+                  {field.label}
+                </Typography>
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={values[field.name]}
+                  onReady={(editor) => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log('Editor is ready to use!', editor);
+                  }}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    handleChange(field.name, data);
+                  }}
+                  onBlur={(event, editor) => {
+                    console.log('Blur.', editor);
+                  }}
+                  onFocus={(event, editor) => {
+                    console.log('Focus.', editor);
+                  }}
+                />
+              </Box>
+            );
+
           case 'autocomplete':
             return (
               <AutocompleteField
@@ -427,12 +471,12 @@ function AutocompleteField<T>(props: {
 
   const updateOptions = (
     event: React.SyntheticEvent,
-    value: string,
+    newValue: string,
     reason: AutocompleteInputChangeReason
   ): void => {
-    if (reason !== 'input' || value.length < 3) return;
+    if (reason !== 'input' || newValue.length < 3) return;
     axios
-      .get<any[]>(`${field.endPoint}/search/`, { params: { q: value } })
+      .get<any[]>(`${field.endPoint}/search/`, { params: { q: newValue } })
       .then((res) => setOptions(res.data))
       .catch((err) => {
         console.error(err);

@@ -2,8 +2,9 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { ClubProps } from 'Props/Group';
 import * as React from 'react';
-import { Box, SvgIcon, Typography } from '@mui/material';
+import { Box, Fab, SvgIcon, Typography } from '@mui/material';
 import { Container } from '@mui/system';
+import { Add } from '@mui/icons-material';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
@@ -150,21 +151,15 @@ function Home() {
           paddingTop: 20,
         }}
       >
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={() => setPostFormOpen(true)}
+          sx={{ bottom: 0, right: 0, position: 'fixed', margin: 4 }}
+        >
+          <Add />
+        </Fab>
         <Container sx={{ marginBottom: 3 }}>
-          <Carousel itemNumber={2} title="Liens utiles">
-            {[
-              {
-                text: 'Créer un post',
-                action: () => setPostFormOpen(true),
-              },
-            ].map((obj) => (
-              <PageSuggestionButton
-                key={obj.text}
-                action={obj.action}
-                text={{ fr: obj.text, en: obj.text }}
-              />
-            ))}
-          </Carousel>
           {(postsPinnedStatus === 'load' || postsPinned.length > 0) && (
             <PostSection
               posts={postsPinned}
