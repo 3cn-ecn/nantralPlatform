@@ -23,7 +23,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import * as React from 'react';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { UnsuscribeModal } from '../Modal/UnsuscribeModal';
+import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 import theme from '../../theme';
 
@@ -255,7 +255,12 @@ function JoinButton({
           />
           {t('event.action_menu.unsubscribe')}
         </MenuItem>
-        <UnsuscribeModal open={open} onClose={handleClose} />
+        <ConfirmationModal
+          open={open}
+          title={t('button.joinButton.unsuscribe')}
+          content={t('button.joinButton.title')}
+          onClose={handleClose}
+        />
       </>
     );
   }
@@ -327,7 +332,12 @@ function JoinButton({
           </Button>
         )}
       </div>
-      <UnsuscribeModal open={open} onClose={handleClose} />
+      <ConfirmationModal
+        open={open}
+        title={t('button.joinButton.unsuscribe')}
+        content={t('button.joinButton.title')}
+        onClose={handleClose}
+      />
     </>
   );
 }

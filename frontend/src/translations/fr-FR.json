@@ -20,7 +20,8 @@
     "like": "J'aime",
     "seePage": "Voir la page",
     "showAll": "Tout afficher",
-    "showLess": "Afficher moins"
+    "showLess": "Afficher moins",
+    "yes": "oui"
   },
   "club": {
     "joinNow": "Rejoindre maintenant",
@@ -165,6 +166,7 @@
     "unread": "Non Lu"
   },
   "post": {
+    "confirmDelete": "Êtes vous sûr de vouloir supprimer le post (cette action est irréversible).",
     "edited": "édité",
     "noPost": "Il n'y a pas de post récents",
     "published": "publié",

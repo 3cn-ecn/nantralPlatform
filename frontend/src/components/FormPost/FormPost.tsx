@@ -16,6 +16,7 @@ import { PostProps, postsToCamelCase } from '../../Props/Post';
 import { theme } from '../style/palette';
 import FormGroup, { FieldType } from '../../utils/form';
 import { GroupProps } from '../../Props/Group';
+import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 export function FormPost(props: {
   mode?: 'create' | 'edit';
@@ -89,6 +90,8 @@ export function FormPost(props: {
   );
   const [errors, setErrors] = React.useState<any>({});
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [confirmationOpen, setConfirmationOpen] =
+    React.useState<boolean>(false);
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
 
   React.useEffect(() => {
@@ -184,91 +187,105 @@ export function FormPost(props: {
       });
   };
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      scroll="paper"
-      fullWidth
-      fullScreen={fullScreen}
-      maxWidth="md"
-      sx={{ margin: 0 }}
-    >
-      <DialogTitle
-        id="scroll-dialog-title"
-        sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
+    <>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        scroll="paper"
+        fullWidth
+        fullScreen={fullScreen}
+        maxWidth="md"
+        sx={{ margin: 0 }}
       >
-        {mode === 'edit' ? t('form.editPost') : t('form.createAPost')}
-        <IconButton onClick={onClose}>
-          <Close />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent dividers sx={{ display: 'flex', flexDirection: 'column' }}>
-        {errors.non_field_errors &&
-          errors.non_field_errors.map((text, key) => (
-            <Alert variant="filled" severity="error" key={text}>
-              {text}
-            </Alert>
-          ))}
-        <div>
-          <FormGroup
-            fields={defaultFields}
-            values={values}
-            setValues={setValues}
-            errors={errors}
-          />
-        </div>
-        {mode === 'edit' && (
-          <Button
-            disabled={loading}
-            color="warning"
-            variant="outlined"
-            onClick={deletePost}
-          >
-            {t('form.deletePost')}
-          </Button>
-        )}
-      </DialogContent>
-      <DialogActions style={{ justifyContent: 'right' }}>
-        <div style={{ display: 'flex' }}>
-          {mode === 'edit' ? (
-            <>
-              <Button
-                disabled={loading}
-                color="inherit"
-                variant="text"
-                onClick={onClose}
-                sx={{ marginRight: 1 }}
-              >
-                {t('form.cancel')}
-              </Button>
+        <DialogTitle
+          id="scroll-dialog-title"
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          {mode === 'edit' ? t('form.editPost') : t('form.createAPost')}
+          <IconButton onClick={onClose}>
+            <Close />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent
+          dividers
+          sx={{ display: 'flex', flexDirection: 'column' }}
+        >
+          {errors.non_field_errors &&
+            errors.non_field_errors.map((text, key) => (
+              <Alert variant="filled" severity="error" key={text}>
+                {text}
+              </Alert>
+            ))}
+          <div>
+            <FormGroup
+              fields={defaultFields}
+              values={values}
+              setValues={setValues}
+              errors={errors}
+            />
+          </div>
+          {mode === 'edit' && (
+            <Button
+              disabled={loading}
+              color="warning"
+              variant="outlined"
+              onClick={() => setConfirmationOpen(true)}
+            >
+              {t('form.deletePost')}
+            </Button>
+          )}
+        </DialogContent>
+        <DialogActions style={{ justifyContent: 'right' }}>
+          <div style={{ display: 'flex' }}>
+            {mode === 'edit' ? (
+              <>
+                <Button
+                  disabled={loading}
+                  color="inherit"
+                  variant="text"
+                  onClick={onClose}
+                  sx={{ marginRight: 1 }}
+                >
+                  {t('form.cancel')}
+                </Button>
+                <Button
+                  disabled={loading}
+                  color="info"
+                  variant="contained"
+                  onClick={updatePost}
+                >
+                  {t('form.editPost')}
+                </Button>
+              </>
+            ) : (
               <Button
                 disabled={loading}
                 color="info"
                 variant="contained"
-                onClick={updatePost}
+                onClick={createPost}
+                sx={{ marginRight: 1 }}
               >
-                {t('form.editPost')}
+                {t('form.createPost')}
               </Button>
-            </>
-          ) : (
-            <Button
-              disabled={loading}
-              color="info"
-              variant="contained"
-              onClick={createPost}
-              sx={{ marginRight: 1 }}
-            >
-              {t('form.createPost')}
-            </Button>
-          )}
-        </div>
-      </DialogActions>
-    </Dialog>
+            )}
+          </div>
+        </DialogActions>
+      </Dialog>
+      <ConfirmationModal
+        title={t('form.deletePost')}
+        open={confirmationOpen}
+        onClose={(value) => {
+          if (value) deletePost();
+          setConfirmationOpen(false);
+        }}
+        content={t('post.confirmDelete')}
+      />
+    </>
   );
 }
 

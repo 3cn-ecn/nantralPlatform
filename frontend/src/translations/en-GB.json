@@ -20,7 +20,8 @@
     "like": "Like",
     "seePage": "See page",
     "showAll": "Show all",
-    "showLess": "Show less"
+    "showLess": "Show less",
+    "yes": "Yes"
   },
   "club": {
     "joinNow": "Join now",
@@ -164,6 +165,7 @@
     "unread": "Unread"
   },
   "post": {
+    "confirmDelete": "Are you sure you want to delete the post (this action is irreversible).",
     "edited": "edited",
     "noPost": "There are no recent posts",
     "published": "posted",

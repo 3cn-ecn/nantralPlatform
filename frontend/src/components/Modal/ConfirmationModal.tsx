@@ -8,11 +8,13 @@ import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
 import { CapitalizeFirstLetter } from '../../utils/formatText';
 
-export function UnsuscribeModal(props: {
+export function ConfirmationModal(props: {
   open: boolean;
+  title: string;
+  content: string;
   onClose: (boolean) => any;
 }) {
-  const { open, onClose } = props;
+  const { open, onClose, title, content } = props;
   const { t } = useTranslation('translation'); // translation module
 
   return (
@@ -22,17 +24,17 @@ export function UnsuscribeModal(props: {
       aria-labelledby="responsive-dialog-title"
     >
       <DialogTitle id="responsive-dialog-title">
-        {CapitalizeFirstLetter(t('button.joinButton.unsuscribe'))} ?
+        {CapitalizeFirstLetter(title)} ?
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>{t('button.joinButton.title')}</DialogContentText>
+        <DialogContentText>{content}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={() => onClose(false)}>
           {t('button.cancel')}
         </Button>
         <Button onClick={() => onClose(true)} autoFocus variant="contained">
-          {t('button.joinButton.unsuscribe')}
+          {t('button.yes')}
         </Button>
       </DialogActions>
     </Dialog>
