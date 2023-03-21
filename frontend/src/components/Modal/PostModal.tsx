@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { PostProps } from 'Props/Post';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { ClubProps } from '../../Props/Group';
 import { theme } from '../style/palette';
 import { EditButton, MembersIcon, SeePageButton } from '../PostCard/PostCard';
@@ -28,7 +29,7 @@ export function PostModal(props: {
   const { post, open, clubDetails, onClose, onUpdate } = props;
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
-
+  const { t } = useTranslation('translation');
   return (
     <>
       <Dialog
@@ -78,19 +79,33 @@ export function PostModal(props: {
         </DialogTitle>
         <DialogContent dividers>
           {post.image && <img alt="" src={post.image.toString()} id="image" />}
-          {/* Dangerous should change */}
           <div dangerouslySetInnerHTML={{ __html: post.description }}></div>
         </DialogContent>
-        <DialogActions style={{ justifyContent: 'space-between' }}>
-          <Typography variant="caption" textAlign="right" fontStyle="italic">
-            {timeFromNow(new Date(post.publicationDate))}
-          </Typography>
+        <DialogActions
+          sx={{
+            justifyContent: 'space-between',
+            paddingLeft: 4,
+          }}
+        >
+          <div>
+            <Typography variant="caption" textAlign="right" fontStyle="italic">
+              {`${t('post.published')} ${timeFromNow(post.publicationDate)}`}
+            </Typography>
+            {post.publicationDate.toDateString() !==
+              post.editDate.toDateString() && (
+              <Typography
+                variant="caption"
+                textAlign="right"
+                fontStyle="italic"
+              >
+                {` • ${t('post.updated')} ${timeFromNow(post.editDate)}`}
+              </Typography>
+            )}
+          </div>
+
           <div style={{ display: 'flex', columnGap: 10 }}>
             {clubDetails && clubDetails.is_admin && (
-              <EditButton
-                // link={`/post/${post.id}/edit`}
-                onClick={() => setEditModalOpen(true)}
-              />
+              <EditButton onClick={() => setEditModalOpen(true)} />
             )}
             {post.pageSuggestion && (
               <SeePageButton link={post.pageSuggestion} />

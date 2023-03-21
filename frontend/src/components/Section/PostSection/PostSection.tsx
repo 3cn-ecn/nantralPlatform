@@ -63,11 +63,13 @@ export function PostSection(props: {
       <Grid sx={{ marginTop: 0, marginBottom: 1 }} spacing={1} container>
         {content}
       </Grid>
-      <Divider />
       {allPosts.length > shownItem && (
-        <Button onClick={() => setShowAll(!showAll)}>
-          {showAll ? t('button.showLess') : t('button.showAll')}
-        </Button>
+        <>
+          <Divider />
+          <Button onClick={() => setShowAll(!showAll)}>
+            {showAll ? t('button.showLess') : t('button.showAll')}
+          </Button>
+        </>
       )}
     </Box>
   );

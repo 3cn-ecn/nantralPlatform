@@ -58,9 +58,12 @@
   },
   "form": {
     "PostTitle": "Titre de l'annonce",
+    "cancel": "Annuler",
+    "chooseFile": "Choisir un fichier",
     "createAPost": "Créer un post",
     "createPost": "Créer le post",
     "delete": "Supprimer",
+    "deletePost": "Supprimer le post",
     "description": "Description",
     "editPost": "Modifier le post",
     "group": "Groupe",
@@ -162,7 +165,10 @@
     "unread": "Non Lu"
   },
   "post": {
-    "noPost": "Il n'y a pas de post récents"
+    "edited": "édité",
+    "noPost": "Il n'y a pas de post récents",
+    "published": "publié",
+    "updated": "mis à jour"
   },
   "profile": {
     "doc": "Doctorant",

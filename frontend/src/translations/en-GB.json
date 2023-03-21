@@ -57,9 +57,12 @@
   },
   "form": {
     "PostTitle": "Post title",
+    "cancel": "Cancel",
+    "chooseFile": "Choose file",
     "createAPost": "Create a post",
     "createPost": "Create post",
     "delete": "Delete",
+    "deletePost": "Delete post",
     "description": "Description",
     "editPost": "Edit post",
     "group": "Group",
@@ -161,7 +164,10 @@
     "unread": "Unread"
   },
   "post": {
-    "noPost": "There are no recent posts"
+    "edited": "edited",
+    "noPost": "There are no recent posts",
+    "published": "posted",
+    "updated": "updated"
   },
   "profile": {
     "doc": "Doctoral student",

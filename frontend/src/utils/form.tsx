@@ -24,8 +24,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 import axios from 'axios';
 import { DateTimePicker } from '@mui/x-date-pickers';
-
-document.documentElement.style.setProperty('--ck-custom-foreground', 'black');
+import { useTranslation } from 'react-i18next';
 
 export type FieldType =
   | {
@@ -140,7 +139,7 @@ function FormGroup(props: {
   noFullWidth?: boolean;
 }) {
   const { fields, values, errors, setValues, noFullWidth } = props;
-
+  const { t } = useTranslation('translation');
   /**
    * Update the value of a key in the values object.
    *
@@ -259,8 +258,10 @@ function FormGroup(props: {
               <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
                 <TextField
                   variant="outlined"
-                  disabled
+                  disabled={field.disabled}
                   fullWidth
+                  spellCheck={false}
+                  contentEditable={false}
                   label={field.label}
                   required={field.required}
                   value={
@@ -276,7 +277,7 @@ function FormGroup(props: {
                   component="label"
                   sx={{ height: '100%', marginRight: 1 }}
                 >
-                  CHOOSE FILE
+                  {t('form.chooseFile')}
                   <input
                     disabled={field.disabled}
                     hidden
@@ -295,7 +296,7 @@ function FormGroup(props: {
                   variant="outlined"
                   onClick={() => handleChange(field.name, new File([], ' '))}
                 >
-                  DELETE
+                  {t('form.delete')}
                 </Button>
               </Box>
             );
@@ -407,13 +408,11 @@ function FormGroup(props: {
                 key={field.name}
                 sx={{
                   minWidth: 120,
-                  mt: 2,
-                  paddingTop: 1,
                   backgroundColor: 'primary',
                   position: 'relative',
                 }}
               >
-                <Typography className="css-14jjh9-MuiFormLabel-root-MuiInputLabel-root">
+                <Typography variant="caption" color="inherit">
                   {field.label}
                 </Typography>
                 <div style={{ color: 'black' }}>

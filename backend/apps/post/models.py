@@ -115,7 +115,7 @@ class Post(AbstractPost):
         help_text="Lien vers une page web")
     pinned = models.BooleanField(
         verbose_name="Épinglé", default=False)
-    edit_date = models.DateField(
+    edit_date = models.DateTimeField(
         verbose_name="Date d'édition", auto_now=True
     )
 

@@ -69,6 +69,7 @@ export function PostCard(props: { post: PostProps }) {
   const [open, setOpen] = React.useState<boolean>(false);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
   const [postValue, setPostValue] = React.useState(post);
+  const { t } = useTranslation('translation');
 
   React.useEffect(() => {
     setPostValue(post);
@@ -140,7 +141,10 @@ export function PostCard(props: { post: PostProps }) {
                 {postValue.title}
               </h2>
               <div style={{ fontStyle: 'italic' }}>
-                {timeFromNow(new Date(postValue.publicationDate))}
+                {postValue.publicationDate.toDateString() ===
+                postValue.editDate.toDateString()
+                  ? timeFromNow(postValue.publicationDate)
+                  : `${t('post.updated')} ${timeFromNow(postValue.editDate)}`}
               </div>
             </div>
             <div id="post-club">

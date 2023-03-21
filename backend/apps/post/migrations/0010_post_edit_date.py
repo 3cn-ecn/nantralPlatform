@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='post',
             name='edit_date',
-            field=models.DateField(auto_now=True, verbose_name="Date d'édition"),
+            field=models.DateTimeField(auto_now=True, verbose_name="Date d'édition"),
         ),
     ]

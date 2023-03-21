@@ -1,5 +1,6 @@
 import { Close } from '@mui/icons-material';
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -86,8 +87,19 @@ export function FormPost(props: {
       ? structuredClone(post)
       : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
   );
+  const [errors, setErrors] = React.useState<any>({});
   const [loading, setLoading] = React.useState<boolean>(false);
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
+
+  React.useEffect(() => {
+    setErrors({});
+    setValues(
+      post
+        ? structuredClone(post)
+        : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
+    );
+  }, [open]);
+
   const deletePost = () => {
     setLoading(true);
     axios
@@ -98,17 +110,17 @@ export function FormPost(props: {
       })
       .catch((err) => {
         console.error(err);
+        setErrors(err.response.data);
         setLoading(false);
       });
   };
   const createPost = () => {
     const formData = new FormData();
-    console.log(values.image);
     if (values.image && typeof values.image !== 'string')
       formData.append('image', values.image, values.image.name);
-    formData.append('group', values.group.toString());
+    if (values.group) formData.append('group', values.group.toString());
     formData.append('publicity', values.publicity);
-    formData.append('title', values.title);
+    formData.append('title', values.title || '');
     console.log(values.description);
     formData.append('description', values.description || '<p></p>');
     if (values.pageSuggestion)
@@ -131,6 +143,7 @@ export function FormPost(props: {
       })
       .catch((err) => {
         console.error(err);
+        setErrors(err.response.data);
         setLoading(false);
       });
   };
@@ -141,7 +154,8 @@ export function FormPost(props: {
     // To avoid typescript error
     if (values.image && typeof values.image !== 'string')
       formData.append('image', values.image, values.image.name);
-    formData.append('group', post.group.toString());
+
+    if (values.group) formData.append('group', post.group.toString());
     formData.append('publicity', values.publicity);
     formData.append('title', values.title);
     formData.append('description', values.description || '<p></p>');
@@ -165,6 +179,7 @@ export function FormPost(props: {
       })
       .catch((err) => {
         console.error(err);
+        setErrors(err.response.data);
         setLoading(false);
       });
   };
@@ -192,12 +207,31 @@ export function FormPost(props: {
           <Close />
         </IconButton>
       </DialogTitle>
-      <DialogContent dividers>
-        <FormGroup
-          fields={defaultFields}
-          values={values}
-          setValues={setValues}
-        />
+      <DialogContent dividers sx={{ display: 'flex', flexDirection: 'column' }}>
+        {errors.non_field_errors &&
+          errors.non_field_errors.map((text, key) => (
+            <Alert variant="filled" severity="error" key={text}>
+              {text}
+            </Alert>
+          ))}
+        <div>
+          <FormGroup
+            fields={defaultFields}
+            values={values}
+            setValues={setValues}
+            errors={errors}
+          />
+        </div>
+        {mode === 'edit' && (
+          <Button
+            disabled={loading}
+            color="warning"
+            variant="outlined"
+            onClick={deletePost}
+          >
+            {t('form.deletePost')}
+          </Button>
+        )}
       </DialogContent>
       <DialogActions style={{ justifyContent: 'right' }}>
         <div style={{ display: 'flex' }}>
@@ -205,12 +239,12 @@ export function FormPost(props: {
             <>
               <Button
                 disabled={loading}
-                color="warning"
-                variant="outlined"
-                onClick={deletePost}
+                color="inherit"
+                variant="text"
+                onClick={onClose}
                 sx={{ marginRight: 1 }}
               >
-                {t('form.delete')}
+                {t('form.cancel')}
               </Button>
               <Button
                 disabled={loading}
