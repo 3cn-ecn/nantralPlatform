@@ -91,12 +91,6 @@ class AbstractPost(models.Model, SlugModel):
                       if self.group.icon else None),
             publicity=self.publicity
         )
-        # add image
-        # if self.image:
-        #     self.notification.icon_url = compress_model_image(
-        #         self, 'image', size=(960, 540), contains=True)
-        #     self.notification.save()
-        # add actions to the notification
         NotificationAction.objects.create(
             notification=self.notification,
             title="Ouvrir",
