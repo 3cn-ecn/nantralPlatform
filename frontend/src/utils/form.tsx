@@ -25,7 +25,7 @@ import axios from 'axios';
 
 export type FieldType =
   | {
-      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date' | 'date and hour';
+      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date' | 'datetime';
       name: string;
       label: string;
       required?: boolean;
