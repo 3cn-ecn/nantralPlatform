@@ -11,12 +11,10 @@ import './AccordionSection.scss';
 
 export function AccordionSection(props: {
   title: string;
-  url?: string;
   content: JSX.Element | Array<JSX.Element>;
-  badge?: number;
   accordion?: boolean;
 }) {
-  const { url, content, title, badge, accordion } = props;
+  const { content, title, accordion } = props;
   const [expanded, setExpanded] = React.useState<boolean>(true);
   if (!accordion) {
     return (
@@ -66,7 +64,5 @@ export function AccordionSection(props: {
   );
 }
 AccordionSection.defaultProps = {
-  badge: 0,
-  url: null,
   accordion: false,
 };

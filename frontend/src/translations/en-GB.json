@@ -9,6 +9,7 @@
   },
   "button": {
     "cancel": "cancel",
+    "close": "Close",
     "joinButton": {
       "register": "register",
       "registerLink": "register link",
@@ -16,11 +17,10 @@
       "title": "Do you want to unregister from this event?",
       "unsuscribe": "unregister"
     },
+    "like": "Like",
     "seePage": "See page",
     "showAll": "Show all",
-    "showLess": "Show less",
-    "close": "Close",
-    "like": "Like"
+    "showLess": "Show less"
   },
   "club": {
     "joinNow": "Join now",
@@ -36,13 +36,13 @@
       "share": "Share",
       "unsubscribe": "Unregister"
     },
+    "endInscription": "Registration is open until",
+    "endTime": "Will end on :",
     "error": "Error while loading the events",
     "membersOnly": "Members only",
     "no_event": "No Event",
-    "participantsList": "List of participants",
     "participants": "Participants",
-    "endTime": "Will end on :",
-    "endInscription": "Registration is open until"
+    "participantsList": "List of participants"
   },
   "filterbar": {
     "date": "Date",
@@ -54,6 +54,22 @@
     "title_filter": "Filters",
     "to": "To",
     "validate_button": "Validate"
+  },
+  "form": {
+    "PostTitle": "Post title",
+    "createPost": "Create post",
+    "delete": "Delete",
+    "description": "Description",
+    "editPost": "Edit post",
+    "group": "Group",
+    "groupHelpText": "Type the first 3 letters of your group",
+    "image": "Picture",
+    "imageDescription": "A picture, a banner, a poster",
+    "membersOnly": "Club members only",
+    "pinned": "Pinned post",
+    "public": "Public",
+    "publicationDate": "Publication date",
+    "publicity": "Publicity"
   },
   "home": {
     "announcement": "Announcement",
@@ -119,6 +135,11 @@
     },
     "title": "Legal Notice"
   },
+  "membership_student": {
+    "mask_old": "Hide the old groups",
+    "show_old": "Show the old groups",
+    "title": "Groups"
+  },
   "navbar": {
     "academics": "Academics",
     "administration": "Administration",
@@ -127,16 +148,35 @@
     "events": "Events",
     "family": "Family",
     "flatshare": "Flatshares Map",
+    "group": "Groups",
     "home": "Home",
     "signature": "Signature",
-    "student": "Student List",
-    "group": "Groups"
+    "student": "Student List"
   },
   "notif": {
     "load": "Loading More",
     "subscribed": "Suscribed",
     "title": "Notifications",
     "unread": "Unread"
+  },
+  "post": {
+    "noPost": "There are no recent posts"
+  },
+  "profile": {
+    "doc": "Doctoral student",
+    "edit": "Edit my profile",
+    "gene": "Student Engineer Generalist",
+    "iti": "Specialty engineering student (ITII)",
+    "master": "Student in Master",
+    "promo": "Year of entry at Centrale: "
+  },
+  "suggestion_menu": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "description": "Description",
+    "header": "Suggest / Bug",
+    "title": "Title",
+    "type": "Type"
   },
   "time": {
     "days": "days",
@@ -147,6 +187,7 @@
     "years": "years"
   },
   "user_menu": {
+    "admin": "Admin Interface",
     "automatic": "Automatic",
     "bug": "Suggest / Bug",
     "dark": "Dark Theme",
@@ -155,35 +196,11 @@
     "french": "French",
     "language": "Language",
     "legal": "Legal Notice",
-    "admin": "Admin Interface",
     "light": "Light Theme",
     "logout": "Log Out",
     "profile": "My Profile",
     "theme": "Theme",
     "title_language": "Language",
     "title_theme": "Theme"
-  },
-  "suggestion_menu": {
-    "header": "Suggest / Bug",
-    "title": "Title",
-    "description": "Description",
-    "type": "Type",
-    "cancel": "Cancel",
-    "confirm": "Confirm"
-
-  },
-  "profile": {
-    "promo": "Year of entry at Centrale: ",
-    "edit": "Edit my profile",
-    "gene": "Student Engineer Generalist",
-    "master": "Student in Master",
-    "iti": "Specialty engineering student (ITII)",
-    "doc": "Doctoral student"
-  },
-  "membership_student": {
-    "title": "Groups",
-    "show_old": "Show the old groups",
-    "mask_old": "Hide the old groups"
   }
-
 }

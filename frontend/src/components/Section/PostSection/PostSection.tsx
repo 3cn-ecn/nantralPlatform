@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Button, Divider, Grid } from '@mui/material';
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PostCard, PostCardSkeleton } from '../../PostCard/PostCard';
 import { PostProps } from '../../../Props/Post';
@@ -39,13 +39,20 @@ export function PostSection(props: {
       ));
       break;
     case 'success':
-      content = allPosts
-        .slice(0, showAll ? allPosts.length : shownItem)
-        .map((post) => (
-          <Grid key={post.slug} xs={12} md={4} item>
-            <PostCard post={post} />
-          </Grid>
-        ));
+      if (allPosts.length > 0)
+        content = allPosts
+          .slice(0, showAll ? allPosts.length : shownItem)
+          .map((post) => (
+            <Grid key={post.slug} xs={12} md={4} item>
+              <PostCard post={post} />
+            </Grid>
+          ));
+      else
+        content = (
+          <Typography sx={{ marginLeft: 3, fontSize: 18 }}>
+            {t('post.noPost')} 🥹
+          </Typography>
+        );
       break;
     default:
       content = [<p key={0}>Nothing to show</p>];

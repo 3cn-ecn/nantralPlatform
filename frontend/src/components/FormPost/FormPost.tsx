@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { PostProps, postsToCamelCase } from '../../Props/Post';
 import { theme } from '../style/palette';
 import FormGroup, { FieldType } from '../../utils/form';
@@ -23,66 +24,61 @@ export function FormPost(props: {
   onUpdate?: (post: PostProps) => void;
 }) {
   const { open, onClose, post, onUpdate, mode } = props;
+  const { t } = useTranslation('translation');
   const defaultFields: FieldType[] = [
     {
       kind: 'autocomplete',
       endPoint: 'api/group/group',
-      label: 'Groupe',
-      name: mode === 'edit' ? 'groupSlug' : 'group', // Weird
+      label: t('form.group'),
+      name: mode === 'edit' ? 'groupSlug' : 'group', // Clumbsy
       getOptionLabel: (option: GroupProps) => {
         return option.name;
       },
       required: true,
-      helpText:
-        mode === 'edit' ? '' : 'Tapez lez 3 premières lettres de votre groupe',
+      helpText: mode === 'edit' ? '' : t('form.groupHelpText'),
       disabled: mode === 'edit',
     },
     {
       kind: 'text',
       name: 'title',
-      label: "Titre de l'annonce",
+      label: t('form.PostTitle'),
       required: true,
       rows: 2,
     },
     {
       kind: 'CKEditor',
-      label: "Description de l'évènement",
+      label: t('form.description'),
       name: 'description',
     },
     {
       kind: 'date',
       name: 'publicationDate',
-      label: 'Date de publication',
+      label: t('form.publicationDate'),
       rows: 2,
       type: 'date and time',
     },
     {
       kind: 'picture',
-      description: 'Image',
-      label: 'Une image un poster une affiche',
+      description: t('form.imageDescription'),
+      label: t('form.image'),
       name: 'image',
     },
     {
       kind: 'select',
       name: 'publicity',
-      label: 'Visibilté',
+      label: t('form.publicity'),
       required: true,
       item: [
-        ['Public', 'Pub'],
-        ['Membres du club uniquement', 'Mem'],
+        [t('form.public'), 'Pub'],
+        [t('form.membersOnly'), 'Mem'],
       ],
     },
     {
       kind: 'boolean',
-      label: 'Épinglé',
+      label: t('form.pinned'),
       name: 'pinned',
       rows: 1,
-    },
-    {
-      kind: 'text',
-      label: 'Lien vers une page',
-      name: 'pageSuggestion',
-      rows: 2,
+      type: 'checkbox',
     },
   ];
   const [values, setValues] = React.useState<PostProps>(
@@ -204,9 +200,6 @@ export function FormPost(props: {
         />
       </DialogContent>
       <DialogActions style={{ justifyContent: 'right' }}>
-        {/* <Button variant="text" sx={{ color: 'GrayText' }} onClick={onClose}>
-          Annuler
-        </Button> */}
         <div style={{ display: 'flex' }}>
           {mode === 'edit' ? (
             <>
@@ -217,7 +210,7 @@ export function FormPost(props: {
                 onClick={deletePost}
                 sx={{ marginRight: 1 }}
               >
-                Supprimer
+                {t('form.delete')}
               </Button>
               <Button
                 disabled={loading}
@@ -225,7 +218,7 @@ export function FormPost(props: {
                 variant="contained"
                 onClick={updatePost}
               >
-                Modifier le post
+                {t('form.editPost')}
               </Button>
             </>
           ) : (
@@ -236,7 +229,7 @@ export function FormPost(props: {
               onClick={createPost}
               sx={{ marginRight: 1 }}
             >
-              Créer le post
+              {t('form.createPost')}
             </Button>
           )}
         </div>

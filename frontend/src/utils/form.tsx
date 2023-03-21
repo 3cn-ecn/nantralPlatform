@@ -16,6 +16,7 @@ import {
   AutocompleteInputChangeReason,
   Input,
   Button,
+  Switch,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -28,7 +29,7 @@ document.documentElement.style.setProperty('--ck-custom-foreground', 'black');
 
 export type FieldType =
   | {
-      kind: 'text' | 'integer' | 'float' | 'boolean';
+      kind: 'text' | 'integer' | 'float';
       name: string;
       label: string;
       required?: boolean;
@@ -37,6 +38,18 @@ export type FieldType =
       multiline?: boolean;
       rows: number;
       disabled?: boolean;
+    }
+  | {
+      kind: 'boolean';
+      name: string;
+      label: string;
+      required?: boolean;
+      maxLength?: number;
+      helpText?: string;
+      multiline?: boolean;
+      rows: number;
+      disabled?: boolean;
+      type?: 'checkbox' | 'switch';
     }
   | {
       kind: 'date';
@@ -135,7 +148,6 @@ function FormGroup(props: {
    * @param value - the new value for this field
    */
   const handleChange = (name: string, value: any) => {
-    console.log(name, value);
     setValues({
       ...values,
       [name]: value,
@@ -144,7 +156,6 @@ function FormGroup(props: {
 
   return (
     <>
-      <link rel="stylesheet" href="custom.css" type="text/css" />
       {fields.map((field) => {
         const error = field.kind !== 'group' && errors && errors[field.name];
         switch (field.kind) {
@@ -257,7 +268,7 @@ function FormGroup(props: {
                   }
                   error={!!error}
                   sx={{ marginBottom: 1 }}
-                  // helperText={error || field.description}
+                  helperText={error || field.description}
                 />
                 <Button
                   disabled={field.disabled}
@@ -271,9 +282,9 @@ function FormGroup(props: {
                     hidden
                     accept="image/*"
                     multiple
+                    value={undefined}
                     type="file"
                     onChange={(event) => {
-                      console.log(event.target.files);
                       if (event.target.files.length > 0)
                         handleChange(field.name, event.target.files[0]);
                     }}
@@ -282,7 +293,7 @@ function FormGroup(props: {
                 <Button
                   disabled={field.disabled}
                   variant="outlined"
-                  onClick={() => handleChange(field.name, null)}
+                  onClick={() => handleChange(field.name, new File([], ' '))}
                 >
                   DELETE
                 </Button>
@@ -323,6 +334,7 @@ function FormGroup(props: {
                         helperText={error || field.helpText}
                         error={!!error}
                         margin="normal"
+                        value={undefined}
                       />
                     )}
                   />
@@ -347,6 +359,7 @@ function FormGroup(props: {
                         helperText={error || field.helpText}
                         error={!!error}
                         margin="normal"
+                        value={undefined}
                       />
                     )}
                   />
@@ -377,7 +390,14 @@ function FormGroup(props: {
                   onChange={(e: any) =>
                     handleChange(field.name, e.target.checked)
                   }
-                  control={<Checkbox name={field.name} />}
+                  value={values[field.name]}
+                  control={
+                    field.type === 'switch' ? (
+                      <Switch name={field.name} />
+                    ) : (
+                      <Checkbox name={field.name} />
+                    )
+                  }
                 />
               </FormControl>
             );
@@ -388,31 +408,30 @@ function FormGroup(props: {
                 sx={{
                   minWidth: 120,
                   mt: 2,
+                  paddingTop: 1,
                   backgroundColor: 'primary',
-                  color: 'black',
+                  position: 'relative',
                 }}
               >
-                <Typography color="rgba(255, 255, 255, 0.7)" fontSize="1rem">
+                <Typography className="css-14jjh9-MuiFormLabel-root-MuiInputLabel-root">
                   {field.label}
                 </Typography>
-                <CKEditor
-                  editor={ClassicEditor}
-                  data={values[field.name]}
-                  onReady={(editor) => {
-                    // You can store the "editor" and use when it is needed.
-                    console.log('Editor is ready to use!', editor);
-                  }}
-                  onChange={(event, editor) => {
-                    const data = editor.getData();
-                    handleChange(field.name, data);
-                  }}
-                  onBlur={(event, editor) => {
-                    console.log('Blur.', editor);
-                  }}
-                  onFocus={(event, editor) => {
-                    console.log('Focus.', editor);
-                  }}
-                />
+                <div style={{ color: 'black' }}>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={values[field.name]}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      handleChange(field.name, data);
+                    }}
+                  />
+                </div>
+                <Typography
+                  color="gray"
+                  className="css-1wc848c-MuiFormHelperText-root"
+                >
+                  {field.helpText}
+                </Typography>
               </Box>
             );
 
@@ -513,5 +532,10 @@ function AutocompleteField<T>(props: {
     />
   );
 }
+
+FormGroup.defaultProps = {
+  errors: {},
+  noFullWidth: false,
+};
 
 export default FormGroup;

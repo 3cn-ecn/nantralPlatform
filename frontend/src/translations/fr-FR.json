@@ -9,6 +9,7 @@
   },
   "button": {
     "cancel": "annuler",
+    "close": "Fermer",
     "joinButton": {
       "register": "s'inscrire",
       "registerLink": "lien d'inscription",
@@ -16,11 +17,10 @@
       "title": "Voulez-vous vous désinscrire de cet événements ?",
       "unsuscribe": "se désinscrire"
     },
+    "like": "J'aime",
     "seePage": "Voir la page",
     "showAll": "Tout afficher",
-    "showLess": "Afficher moins",
-    "close": "Fermer",
-    "like": "J'aime"
+    "showLess": "Afficher moins"
   },
   "club": {
     "joinNow": "Rejoindre maintenant",
@@ -36,13 +36,13 @@
       "share": "Partager",
       "unsubscribe": "Se désinscrire"
     },
+    "endInscription": "L'inscription est ouverte jusqu'au",
+    "endTime": "Se termine le :",
     "error": "Erreur lors du chargement des évènements",
     "membersOnly": "Membres uniquement",
     "no_event": "Aucun évènement",
-    "participantsList": "Liste des participants",
     "participants": "Participants",
-    "endTime": "Se termine le :",
-    "endInscription": "L'inscription est ouverte jusqu'au"
+    "participantsList": "Liste des participants"
   },
   "filterbar": {
     "button_filter": "Filtrer",
@@ -55,6 +55,22 @@
     "title_filter": "Filtres",
     "to": "Jusqu'au",
     "validate_button": "Valider"
+  },
+  "form": {
+    "PostTitle": "Titre de l'annonce",
+    "createPost": "Créer le post",
+    "delete": "Supprimer",
+    "description": "Description",
+    "editPost": "Modifier le post",
+    "group": "Groupe",
+    "groupHelpText": "Tapez lez 3 premières lettres de votre groupe",
+    "image": "Image",
+    "imageDescription": "Une image, un poster, une affiche",
+    "membersOnly": "Membres du club uniquement",
+    "pinned": "Annonce épinglée",
+    "public": "Public",
+    "publicationDate": "Date de publication",
+    "publicity": "Visibilité"
   },
   "home": {
     "announcement": "Annonces",
@@ -120,6 +136,11 @@
     },
     "title": "Mentions Légales"
   },
+  "membership_student": {
+    "mask_old": "Masquer les anciens groupes",
+    "show_old": "Afficher les anciens groupes",
+    "title": "Groupes"
+  },
   "navbar": {
     "academics": "Cours et Formations",
     "administration": "Administration",
@@ -128,16 +149,35 @@
     "events": "Évènements",
     "family": "Parrainage",
     "flatshare": "Carte des colocs",
+    "group": "Groupes",
     "home": "Accueil",
     "signature": "Signature ECN",
-    "student": "Annuaire Étudiant",
-    "group": "Groupes"
+    "student": "Annuaire Étudiant"
   },
   "notif": {
     "load": "Charger Plus",
     "subscribed": "Abonné",
     "title": "Notifications",
     "unread": "Non Lu"
+  },
+  "post": {
+    "noPost": "Il n'y a pas de post récents"
+  },
+  "profile": {
+    "doc": "Doctorant",
+    "edit": "Modifier mon profil",
+    "gene": "Élève Ingénieur Généraliste",
+    "iti": "Élève Ingénieur de Spécialité (ITII)",
+    "master": "Élève en Master",
+    "promo": "Année d'entrée à Centrale: "
+  },
+  "suggestion_menu": {
+    "cancel": "Annuler",
+    "confirm": "Valider",
+    "description": "Description",
+    "header": "Suggestions / Bug",
+    "title": "Titre",
+    "type": "Type"
   },
   "time": {
     "days": "jours",
@@ -163,27 +203,5 @@
     "theme": "Thème",
     "title_language": "Langage",
     "title_theme": "Thème"
-  },
-  "suggestion_menu": {
-    "header": "Suggestions / Bug",
-    "title": "Titre",
-    "description": "Description",
-    "type": "Type",
-    "cancel": "Annuler",
-    "confirm": "Valider"
-  },
-  "profile": {
-    "promo": "Année d'entrée à Centrale: ",
-    "edit": "Modifier mon profil",
-    "gene": "Élève Ingénieur Généraliste",
-    "master": "Élève en Master",
-    "iti": "Élève Ingénieur de Spécialité (ITII)",
-    "doc": "Doctorant"
-  },
-  "membership_student": {
-    "title": "Groupes",
-    "show_old": "Afficher les anciens groupes",
-    "mask_old": "Masquer les anciens groupes"
   }
-
 }
