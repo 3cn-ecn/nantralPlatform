@@ -46,7 +46,7 @@ function EventView(props: { filter: any }) {
     if (filter !== null) {
       // filtered calendar
       axios
-        .get('/api/event', {
+        .get('/api/event/', {
           params: {
             is_shotgun: filter.shotgun,
             is_favorite: filter.favorite,
