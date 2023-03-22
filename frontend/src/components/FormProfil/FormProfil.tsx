@@ -12,8 +12,8 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
-import FormGroup, { FieldType } from '../../utils/form';
 import { Suggestion } from 'components/Suggestion/interfacesSuggestion';
+import FormGroup, { FieldType } from '../../utils/form';
 
 interface Profile {
   promo: number;
@@ -22,7 +22,7 @@ interface Profile {
 }
 
 function createFormFields(): FieldType[] {
-  const defaultFields = [
+  const defaultFields: FieldType[] = [
     {
       kind: 'number',
       name: 'Année de promotion entrante',
@@ -35,11 +35,11 @@ function createFormFields(): FieldType[] {
       name: 'Filière',
       label: 'Filière',
       item: [
-        '-----------',
-        'Élève Ingénieur Généraliste',
-        'Élève Ingénieur de Spécialité',
-        'Élève en Master',
-        'Doctorant',
+        ['-----------', null],
+        ['Élève Ingénieur Généraliste', ''],
+        ['Élève Ingénieur de Spécialité', ''],
+        ['Élève en Master', ''],
+        ['Doctorant', ''],
       ],
     },
     {
@@ -47,19 +47,20 @@ function createFormFields(): FieldType[] {
       name: 'Cursus',
       label: 'Cursus',
       item: [
-        '-----------',
-        'Alternance',
-        'Ingénieur-Architecte',
-        'Architecte-Ingénieur',
-        'Ingénieur-Manager',
-        'Manager-Ingénieur',
-        'Ingénieur-Officier',
-        'Officier-Ingénieur',
+        ['-----------', null],
+        ['Alternance', ''],
+        ['Ingénieur-Architecte', ''],
+        ['Architecte-Ingénieur', ''],
+        ['Ingénieur-Manager', ''],
+        ['Manager-Ingénieur', ''],
+        ['Ingénieur-Officier', ''],
+        ['Officier-Ingénieur', ''],
       ],
     },
     {
-      kind: 'picture',
-      title: 'Upload',
+      kind: 'file',
+      label: 'Upload',
+      name: 'image',
       description: 'Upload une photo de profil',
     },
   ];
@@ -179,10 +180,8 @@ export function EditProfilModal(props: {
             color="success"
             disabled={saving}
             endIcon={
-              saving ? (
+              saving && (
                 <CircularProgress size="1em" sx={{ color: 'inherit' }} />
-              ) : (
-                <></>
               )
             }
           >

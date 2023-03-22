@@ -48,19 +48,19 @@ export function FormPost(props: {
       rows: 2,
     },
     {
-      kind: 'CKEditor',
+      kind: 'richtext',
       label: t('form.description'),
       name: 'description',
     },
     {
-      kind: 'date',
+      kind: 'datetime',
       name: 'publicationDate',
       label: t('form.publicationDate'),
       rows: 2,
-      type: 'date and time',
+      disablePast: true,
     },
     {
-      kind: 'picture',
+      kind: 'file',
       description: t('form.imageDescription'),
       label: t('form.image'),
       name: 'image',
@@ -96,11 +96,6 @@ export function FormPost(props: {
 
   React.useEffect(() => {
     setErrors({});
-    setValues(
-      post
-        ? structuredClone(post)
-        : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
-    );
   }, [open]);
 
   const deletePost = () => {
@@ -174,6 +169,15 @@ export function FormPost(props: {
       })
       .then((res) => {
         postsToCamelCase([res.data]);
+        setValues(
+          post
+            ? structuredClone(post)
+            : {
+                group: undefined,
+                publicity: 'Pub',
+                publicationDate: new Date(),
+              }
+        );
         onUpdate(res.data);
       })
       .then(() => {

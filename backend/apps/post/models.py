@@ -11,7 +11,7 @@ from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
-
+from apps.student.models import Student
 
 path_and_rename = PathAndRename("posts/pictures")
 
@@ -53,12 +53,15 @@ class AbstractPost(models.Model, SlugModel):
                               upload_to=path_and_rename, null=True, blank=True)
     notification = models.ForeignKey(
         to=Notification, on_delete=models.SET_NULL, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(
+        Student, blank=True, null=True,
+        on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
         abstract = True
 
     def save(self, *args, **kwargs):
-        print(self.image)
         # compression des images
         self.image = compress_model_image(
             self, 'image', size=(960, 540), contains=True)
@@ -115,9 +118,6 @@ class Post(AbstractPost):
         help_text="Lien vers une page web")
     pinned = models.BooleanField(
         verbose_name="Épinglé", default=False)
-    edit_date = models.DateTimeField(
-        verbose_name="Date d'édition", auto_now=True
-    )
 
     def save(self, *args, **kwargs):
         # create the slug

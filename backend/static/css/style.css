@@ -337,3 +337,34 @@ footer div.app-install {
     transform: rotate(360deg);
   }
 }
+
+.loader {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #c4c4c4;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spinloader 1s linear infinite;
+}
+
+.loader img {
+  height: 120px;
+  width: 120px;
+  animation: spinlogo 1s linear infinite;
+}
+@keyframes spinloader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinlogo {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

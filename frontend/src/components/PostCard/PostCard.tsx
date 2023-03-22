@@ -94,20 +94,28 @@ export function PostCard(props: { post: PostProps }) {
           onClick={() => setOpen(true)}
           sx={{ display: 'flex', height: '100%' }}
         >
-          {post.pinned && (
-            <PushPin
-              sx={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                margin: 1,
-                padding: 0.4,
-                color: 'white',
-                borderRadius: '50%',
-                backgroundColor: 'primary.main',
-              }}
-            />
-          )}
+          <div className="post-icons">
+            {postValue.publicity === 'Mem' && (
+              <Groups
+                sx={{
+                  padding: 0.4,
+                  color: 'white',
+                  borderRadius: '50%',
+                  backgroundColor: 'primary.main',
+                }}
+              />
+            )}
+            {post.pinned && (
+              <PushPin
+                sx={{
+                  padding: 0.4,
+                  color: 'white',
+                  borderRadius: '50%',
+                  backgroundColor: 'primary.main',
+                }}
+              />
+            )}
+          </div>
           <CardContent
             style={{
               borderColor: 'red',
@@ -127,24 +135,12 @@ export function PostCard(props: { post: PostProps }) {
                 height: '100%',
               }}
             >
-              <h2
-                id="post-title"
-                style={{
-                  wordBreak: 'break-word',
-                  maxLines: 5,
-                  display: '-webkit-flex',
-                  WebkitLineClamp: 2,
-                  marginBottom: 5,
-                }}
-              >
-                {postValue.publicity === 'Mem' && <MembersIcon />}
-                {postValue.title}
-              </h2>
-              <div style={{ fontStyle: 'italic' }}>
+              <h2 className="post-title">{postValue.title}</h2>
+              <div style={{ fontStyle: 'italic', marginBottom: 5 }}>
                 {postValue.publicationDate.toDateString() ===
-                postValue.editDate.toDateString()
+                postValue.updatedAt.toDateString()
                   ? timeFromNow(postValue.publicationDate)
-                  : `${t('post.updated')} ${timeFromNow(postValue.editDate)}`}
+                  : `${t('post.updated')} ${timeFromNow(postValue.updatedAt)}`}
               </div>
             </div>
             <div id="post-club">

@@ -54,19 +54,18 @@ class PostViewSet(viewsets.ModelViewSet):
             return []
         # query params
         order_by: list[str] = self.request.query_params.get(
-            "order_by", "-publication_date").split(',')
-        groups: str = self.request.query_params.get("group")
+            'order_by', '-publication_date').split(',')
+        groups: str = self.request.query_params.get('group')
         visibility: str = self.request.query_params.get('publicity')
         organizers_slug: list[str] = groups.split(',') if groups else []
         is_member: bool = self.request.query_params.get(
-            "is_member") in TRUE_ARGUMENTS
+            'is_member') in TRUE_ARGUMENTS
         from_date: str = self.request.query_params.get(
-            "from_date")
+            'from_date')
         to_date: str = self.request.query_params.get(
-            "to_date")
+            'to_date')
         pinned: str = self.request.query_params.get(
-            "pinned")
-        print(pinned)
+            'pinned')
         # query
         today = timezone.now()
         student: Student = self.request.user.student
@@ -86,8 +85,8 @@ class PostViewSet(viewsets.ModelViewSet):
             .filter(Q(publicity=visibility) if visibility in
                     [VISIBILITY[i][0] for i in range(len(VISIBILITY))] else Q())
             .filter(Q(publicity=VISIBILITY[0][0]) | Q(member=True))
-            .filter(Q(pinned=True) if pinned in ["true", ""] else Q())
-            .filter(Q(pinned=False) if pinned == "false" else Q())
+            .filter(Q(pinned=True) if pinned in ['true', ''] else Q())
+            .filter(Q(pinned=False) if pinned == 'false' else Q())
             .order_by(*order_by)
             .distinct()
         )

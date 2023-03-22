@@ -17,6 +17,7 @@ import {
   Input,
   Button,
   Switch,
+  FormLabel,
 } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -25,7 +26,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 import axios from 'axios';
-import { DateTimePicker } from '@mui/x-date-pickers';
 import { useTranslation } from 'react-i18next';
 
 export type FieldType =
@@ -53,7 +53,7 @@ export type FieldType =
       type?: 'checkbox' | 'switch';
     }
   | {
-      kind: 'date';
+      kind: 'date' | 'datetime';
       name: string;
       label: string;
       required?: boolean;
@@ -61,7 +61,6 @@ export type FieldType =
       helpText?: string;
       multiline?: boolean;
       disabled?: boolean;
-      type?: 'date' | 'date and time';
       disablePast?: boolean;
       rows?: number;
     }
@@ -74,9 +73,10 @@ export type FieldType =
       max?: number;
       step: number;
       default?: number;
+      disabled?: boolean;
     }
   | {
-      kind: 'picture';
+      kind: 'file';
       label: string;
       description: string;
       disabled?: boolean;
@@ -95,7 +95,7 @@ export type FieldType =
       disabled?: boolean;
     }
   | {
-      kind: 'CKEditor';
+      kind: 'richtext';
       name: string;
       label: string;
       helpText?: string;
@@ -272,51 +272,71 @@ function FormGroup(props: {
                 disabled={field.disabled}
               />
             );
-          case 'picture':
+          case 'file':
+            // eslint-disable-next-line no-case-declarations
+            const imageName: string =
+              values[field.name]?.name ||
+              (typeof values[field.name] === 'string' && values[field.name]);
             return (
-              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
-                <TextField
-                  variant="outlined"
-                  disabled={field.disabled}
-                  fullWidth
-                  spellCheck={false}
-                  contentEditable={false}
-                  label={field.label}
-                  required={field.required}
-                  value={
-                    values[field.name]?.name || values[field.name] || 'No image'
-                  }
-                  error={!!error}
-                  sx={{ marginBottom: 1 }}
-                  helperText={error || field.description}
-                />
-                <Button
-                  disabled={field.disabled}
-                  variant="contained"
-                  component="label"
-                  sx={{ height: '100%', marginRight: 1 }}
-                >
-                  {t('form.chooseFile')}
-                  <input
-                    disabled={field.disabled}
-                    hidden
-                    accept="image/*"
-                    multiple
-                    value={undefined}
-                    type="file"
-                    onChange={(event) => {
-                      if (event.target.files.length > 0)
-                        handleChange(field.name, event.target.files[0]);
-                    }}
+              <Box
+                sx={{
+                  minWidth: 120,
+                  mt: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+                key={field.name}
+              >
+                {imageName ? (
+                  <TextField
+                    variant="outlined"
+                    disabled
+                    fullWidth
+                    spellCheck={false}
+                    contentEditable={false}
+                    label={field.label}
+                    required={field.required}
+                    value={imageName}
+                    error={!!error}
+                    sx={{ marginBottom: 1 }}
                   />
-                </Button>
-                <Button
-                  disabled={field.disabled}
-                  variant="outlined"
-                  onClick={() => handleChange(field.name, new File([], ' '))}
-                >
-                  {t('form.delete')}
-                </Button>
+                ) : (
+                  <FormLabel error={!!error}>{field.label}</FormLabel>
+                )}
+                <div>
+                  <Button
+                    disabled={field.disabled}
+                    variant="contained"
+                    component="label"
+                    sx={{ height: '100%', marginRight: 1 }}
+                  >
+                    {t('form.chooseFile')}
+                    <input
+                      disabled={field.disabled}
+                      hidden
+                      accept="image/*"
+                      multiple
+                      value={undefined}
+                      type="file"
+                      onChange={(event) => {
+                        if (event.target.files.length > 0)
+                          handleChange(field.name, event.target.files[0]);
+                      }}
+                    />
+                  </Button>
+                  {imageName && (
+                    <Button
+                      disabled={field.disabled}
+                      variant="outlined"
+                      onClick={() => handleChange(field.name, new File([], ''))}
+                    >
+                      {t('form.delete')}
+                    </Button>
+                  )}
+                </div>
+                <FormHelperText error={!!error}>
+                  {error || field.description}
+                </FormHelperText>
               </Box>
             );
           case 'date': // date as string
@@ -326,64 +346,37 @@ function FormGroup(props: {
                 dateAdapter={AdapterDayjs}
                 key={field.name}
               >
-                {field.type !== 'date and time' ? (
-                  <DatePicker
-                    label={field.label}
-                    value={values[field.name] && new Date(values[field.name])}
-                    onChange={(val) => {
-                      if (val && val.toString() !== 'Invalid Date') {
-                        handleChange(
-                          field.name,
-                          new Intl.DateTimeFormat('en-GB')
-                            .format(val)
-                            .split('/')
-                            .reverse()
-                            .join('-')
-                        );
-                      } else {
-                        handleChange(field.name, val);
-                      }
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        id={`${field.name}-input`}
-                        name={field.name}
-                        fullWidth={!noFullWidth}
-                        required={field.required}
-                        helperText={error || field.helpText}
-                        error={!!error}
-                        margin="normal"
-                        value={undefined}
-                      />
-                    )}
-                  />
-                ) : (
-                  <DateTimePicker
-                    label={field.label}
-                    value={values[field.name] && new Date(values[field.name])}
-                    onChange={(val) => {
-                      if (val && val.toString() !== 'Invalid Date') {
-                        handleChange(field.name, new Date(val.toISOString()));
-                      } else {
-                        handleChange(field.name, val);
-                      }
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        id={`${field.name}-input`}
-                        name={field.name}
-                        fullWidth={!noFullWidth}
-                        required={field.required}
-                        helperText={error || field.helpText}
-                        error={!!error}
-                        margin="normal"
-                        value={undefined}
-                      />
-                    )}
-                  />
-                )}
+                <DatePicker
+                  label={field.label}
+                  value={values[field.name] && new Date(values[field.name])}
+                  onChange={(val) => {
+                    if (val && val.toString() !== 'Invalid Date') {
+                      handleChange(
+                        field.name,
+                        new Intl.DateTimeFormat('en-GB')
+                          .format(val)
+                          .split('/')
+                          .reverse()
+                          .join('-')
+                      );
+                    } else {
+                      handleChange(field.name, val);
+                    }
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      id={`${field.name}-input`}
+                      name={field.name}
+                      fullWidth={!noFullWidth}
+                      required={field.required}
+                      helperText={error || field.helpText}
+                      error={!!error}
+                      margin="normal"
+                      value={undefined}
+                    />
+                  )}
+                />
               </LocalizationProvider>
             );
           case 'boolean':
@@ -411,17 +404,11 @@ function FormGroup(props: {
                     handleChange(field.name, e.target.checked)
                   }
                   value={values[field.name]}
-                  control={
-                    field.type === 'switch' ? (
-                      <Switch name={field.name} />
-                    ) : (
-                      <Checkbox name={field.name} />
-                    )
-                  }
+                  control={<Checkbox name={field.name} />}
                 />
               </FormControl>
             );
-          case 'CKEditor':
+          case 'richtext':
             return (
               <Box
                 key={field.name}
@@ -431,9 +418,7 @@ function FormGroup(props: {
                   position: 'relative',
                 }}
               >
-                <Typography variant="caption" color="inherit">
-                  {field.label}
-                </Typography>
+                <FormLabel error={!!error}>{field.label}</FormLabel>
                 <div style={{ color: 'black' }}>
                   <CKEditor
                     editor={ClassicEditor}
@@ -444,12 +429,9 @@ function FormGroup(props: {
                     }}
                   />
                 </div>
-                <Typography
-                  color="gray"
-                  className="css-1wc848c-MuiFormHelperText-root"
-                >
-                  {field.helpText}
-                </Typography>
+                <FormHelperText sx={{ m: 0 }}>
+                  {error || field.helpText}
+                </FormHelperText>
               </Box>
             );
 
@@ -467,7 +449,7 @@ function FormGroup(props: {
           case 'datetime':
             return (
               <LocalizationProvider
-                adapterLocale={'fr'}
+                adapterLocale="fr"
                 dateAdapter={AdapterDayjs}
                 key={field.name}
               >
@@ -485,9 +467,11 @@ function FormGroup(props: {
                       name={field.name}
                       fullWidth={!noFullWidth}
                       required={field.required}
-                      helperText={error ? error : field.helpText}
+                      helperText={error || field.helpText}
                       error={!!error}
                       margin="normal"
+                      value={undefined}
+                      disabled={field.disabled}
                     />
                   )}
                 />

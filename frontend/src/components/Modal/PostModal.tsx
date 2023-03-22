@@ -63,7 +63,7 @@ export function PostModal(props: {
                 </Link>
               )}
               <div>
-                <h2 id="post-title">
+                <h2 className="post-title">
                   {post.publicity === 'Mem' && <MembersIcon />}
                   {post.title}
                 </h2>
@@ -92,13 +92,13 @@ export function PostModal(props: {
               {`${t('post.published')} ${timeFromNow(post.publicationDate)}`}
             </Typography>
             {post.publicationDate.toDateString() !==
-              post.editDate.toDateString() && (
+              post.updatedAt.toDateString() && (
               <Typography
                 variant="caption"
                 textAlign="right"
                 fontStyle="italic"
               >
-                {` • ${t('post.updated')} ${timeFromNow(post.editDate)}`}
+                {` • ${t('post.updated')} ${timeFromNow(post.updatedAt)}`}
               </Typography>
             )}
           </div>

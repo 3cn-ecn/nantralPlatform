@@ -7,7 +7,7 @@ export interface PostProps {
   description: string;
   publicationDate: Date;
   /** Date of last modification */
-  editDate: Date;
+  updatedAt: Date;
   image: string | File;
   /** Id of the group */
   group: number;
@@ -20,6 +20,6 @@ export interface PostProps {
 
 export function postsToCamelCase(posts: Array<any>): void {
   posts.forEach((post) => {
-    snakeToCamelCase(post, { publicationDate: 'Date', editDate: 'Date' });
+    snakeToCamelCase(post, { publicationDate: 'Date', updatedAt: 'Date' });
   });
 }

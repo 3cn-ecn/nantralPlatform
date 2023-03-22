@@ -20,7 +20,7 @@ class PostSerializer(serializers.ModelSerializer):
             'slug',
             'title',
             'publication_date',
-            'edit_date',
+            'updated_at',
             'group',
             'group_slug',
             'color',
