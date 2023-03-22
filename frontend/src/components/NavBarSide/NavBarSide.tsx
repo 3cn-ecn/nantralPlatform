@@ -19,7 +19,6 @@ import { ReactComponent as FamilyIcon } from '../../assets/scalable/family.svg';
 import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
 import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
 import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
-import { ReactComponent as AcademicIcon } from '../../assets/scalable/academic.svg';
 import { ReactComponent as HomeIcon } from '../../assets/scalable/accueil.svg';
 
 /** Interface for all links */
