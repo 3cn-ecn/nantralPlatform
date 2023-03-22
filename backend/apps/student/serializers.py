@@ -20,7 +20,7 @@ class StudentSerializer(serializers.ModelSerializer):
         return obj.get_absolute_url()
 
     def get_staff(self, obj: Student) -> bool:
-        return obj.staff
+        return obj.user.is_staff
 
 
 class SimpleStudentSerializer(serializers.ModelSerializer):
