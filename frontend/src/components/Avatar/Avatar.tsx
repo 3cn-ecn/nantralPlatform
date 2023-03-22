@@ -30,6 +30,7 @@ function stringToColor(string: string): string {
  * @param props.icon (optional) - An icon to show inside the avatar
  * @param props.size (optional) - The size of the avatar (small, medium, large)
  * @returns
+ * @returns
  */
 function Avatar(props: {
   title: string;
@@ -61,5 +62,11 @@ function Avatar(props: {
     />
   );
 }
+
+Avatar.defaultProps = {
+  url: null,
+  icon: null,
+  size: 'large',
+};
 
 export default Avatar;
