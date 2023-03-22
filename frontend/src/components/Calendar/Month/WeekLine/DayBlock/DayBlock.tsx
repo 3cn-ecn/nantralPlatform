@@ -42,8 +42,8 @@ export function DayBlock(props: {
               }}
               data-testid={`${event.slug}DateBoxButtonTestId`}
             >
-              <div className="imageEventBlur">
-                <div className="eventBlockTitleDisplay">{event.title}</div>
+              <div className="imageMonthEventBlur">
+                <div className="dayBlockTitleDisplay">{event.title}</div>
               </div>
             </Button>
           );

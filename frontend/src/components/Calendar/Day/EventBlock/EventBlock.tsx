@@ -48,6 +48,7 @@ export function EventBlock(props: {
   }
 
   const navigate = useNavigate();
+  const size = Math.min(duration, startTime);
   return (
     <Button
       className="eventButton"
@@ -58,7 +59,7 @@ export function EventBlock(props: {
       }}
       style={{
         minWidth: `1px`,
-        height: `${Math.min(duration, startTime) * 1.2}rem`,
+        height: `${size * 1.2}rem`,
         padding: '0px',
         background: `url(${event.image})`,
         backgroundSize: 'cover',
@@ -69,8 +70,13 @@ export function EventBlock(props: {
       }}
     >
       <div className="imageEventBlur">
-        <div className="eventBlockTitleDisplay">
-          {Math.min(duration, startTime) >= 1 ? event.title : ''}
+        <div
+          className="eventBlockTitleDisplay"
+          style={{
+            WebkitLineClamp: size < 2 ? 1 : Math.floor(size * 0.8),
+          }}
+        >
+          {size >= 1 ? event.title : ''}
         </div>
       </div>
     </Button>
