@@ -2,10 +2,11 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
-import { SvgIcon, Typography, Grid, Avatar, Button, Box } from '@mui/material';
+import { SvgIcon, Typography, Grid, Button, Box } from '@mui/material';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { MembershipsStudent } from '../../components/Group/MembershipsStudent/';
 import { EditProfilModal } from '../../components/FormProfil/FormProfil';
+import Avatar from '../../components/Avatar/Avatar';
 
 const API_URL = '../../api/student/student/';
 
@@ -55,8 +56,10 @@ function Profile() {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={5} lg={2.3} xl={2.3}>
           <Avatar
-            sx={{ width: 250, height: 250 }}
-            src={student !== null ? student.picture : ''}
+            url={student !== null ? student.picture : ''}
+            title={student !== null ? student.name : ''}
+            width={250}
+            height={250}
           />
         </Grid>
         <Grid item xs={12} lg={9} sx={{ mt: 2, ml: 5 }}>

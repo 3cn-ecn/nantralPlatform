@@ -77,6 +77,7 @@ function NavBarTop(props: {
   const [isProfilePicture, setIsProfilePicture] =
     React.useState<boolean>(false);
   const [student, setStudent] = React.useState();
+  const [isStaff, setIsStaff] = React.useState<boolean>(false);
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
   const openD = Boolean(anchorElDark);
@@ -139,16 +140,17 @@ function NavBarTop(props: {
   const pathnames = `/home${location.pathname}`.split('/').filter((x) => x);
 
   React.useEffect(() => {
-    getLoggedUser();
+    getLoggedStudent();
   }, []);
 
-  async function getLoggedUser() {
+  async function getLoggedStudent() {
     axios
       .get('/api/student/student/me/')
       .then((res) => {
         setLoggedId(res.data.id.toString());
         setIsProfilePicture(res.data.picture !== null);
         setStudent(res.data);
+        setIsStaff(res.data.staff);
       })
       .catch((err) => {
         console.error(err);
@@ -156,7 +158,6 @@ function NavBarTop(props: {
   }
 
   async function createSuggestion(suggestion: Suggestion) {
-    console.log(suggestion);
     return axios.post('/api/home/suggestion', suggestion);
   }
 
@@ -294,21 +295,26 @@ function NavBarTop(props: {
               <NavigateNextIcon />
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleClose}>
-              <SvgIcon component={AdminPanelSettingsIcon} />
-              <ListItem
-                component={Link}
-                to="/admin/"
-                className="menuItem"
-                disablePadding
-                reloadDocument={isOnBackend}
-                sx={{
-                  color: 'text.primary',
-                }}
-              >
-                {t('user_menu.admin')}
-              </ListItem>
-            </MenuItem>
+            {isStaff ? (
+              <MenuItem onClick={handleClose}>
+                <SvgIcon component={AdminPanelSettingsIcon} />
+                <ListItem
+                  component={Link}
+                  to="/admin/"
+                  className="menuItem"
+                  disablePadding
+                  reloadDocument={isOnBackend}
+                  sx={{
+                    color: 'text.primary',
+                  }}
+                >
+                  {t('user_menu.admin')}
+                </ListItem>
+              </MenuItem>
+            ) : (
+              // eslint-disable-next-line react/jsx-no-useless-fragment
+              <></>
+            )}
             <MenuItem onClick={() => setOpenS(true)}>
               <SvgIcon component={ErrorRoundedIcon} />
               <ListItem
