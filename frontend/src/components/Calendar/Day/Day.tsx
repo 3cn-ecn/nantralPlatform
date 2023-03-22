@@ -108,7 +108,6 @@ export function Day(props: {
       }
     }
     eventDate.push(startTime);
-    console.log(startTime, event.beginDate);
   });
 
   return (
