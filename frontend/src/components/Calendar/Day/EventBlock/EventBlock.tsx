@@ -64,6 +64,8 @@ export function EventBlock(props: {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        verticalAlign: 'top',
+        textTransform: 'none',
       }}
     >
       <div className="imageEventBlur">

@@ -2,6 +2,7 @@ import React from 'react';
 import { EventProps } from 'Props/Event';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
+import './DayBlock.scss';
 
 export function DayBlock(props: {
   day: { day: number; date: number; events: Array<EventProps> } | null;
@@ -33,10 +34,17 @@ export function DayBlock(props: {
                 minWidth: `1px`,
                 height: `3rem`,
                 padding: '0px',
+                background: `url(${event.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                textTransform: 'none',
               }}
               data-testid={`${event.slug}DateBoxButtonTestId`}
             >
-              {event.title[0]}
+              <div className="imageEventBlur">
+                <div className="eventBlockTitleDisplay">{event.title}</div>
+              </div>
             </Button>
           );
         })}
