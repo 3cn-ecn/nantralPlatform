@@ -802,20 +802,17 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
       event.endDate.getDate() === event.beginDate.getDate() &&
       event.endDate.getMonth() === event.beginDate.getMonth() &&
       event.endDate.getFullYear() === event.beginDate.getFullYear() &&
-      event.endDate.getTime() - event.beginDate.getTime() < 7200000
+      event.endDate.getTime() - event.beginDate.getTime() < 2 * 60 * 60 * 1000
     ) {
       if (event.beginDate.getHours() < 22) {
-        event.endDate.setHours(event.beginDate.getHours() + 2);
-        event.endDate.setMinutes(event.beginDate.getMinutes());
-        event.endDate.setSeconds(event.beginDate.getSeconds());
+        event.endDate = new Date(
+          event.beginDate.getTime() + 2 * 60 * 60 * 1000
+        );
       } else {
         event.endDate.setHours(23);
         event.endDate.setMinutes(59);
         event.endDate.setSeconds(59);
       }
-      event.endDate.setHours(event.beginDate.getHours() + 2);
-      event.endDate.setMinutes(event.beginDate.getMinutes());
-      event.endDate.setSeconds(event.beginDate.getSeconds());
     } else if (event.endDate.getHours() < 2) {
       event.endDate.setHours(2);
       event.endDate.setMinutes(0);
