@@ -56,8 +56,8 @@ describe('<DayBlock />', () => {
       ).toBe('3rem');
       expect(
         component.getByTestId(`${event.slug}DateBoxButtonTestId`).textContent
-      ).toBe(event.title[0]);
-      innerHTMLString += event.title[0];
+      ).toBe(event.title);
+      innerHTMLString += event.title;
     });
     expect(component.getByTestId('DateBoxTestId').textContent).toBe(
       innerHTMLString
@@ -85,8 +85,8 @@ describe('<DayBlock />', () => {
       ).toBe('3rem');
       expect(
         component.getByTestId(`${event.slug}DateBoxButtonTestId`).textContent
-      ).toBe(event.title[0]);
-      innerHTMLString += event.title[0];
+      ).toBe(event.title);
+      innerHTMLString += event.title;
     });
     expect(component.getByTestId('DateBoxTestId').textContent).toBe(
       innerHTMLString

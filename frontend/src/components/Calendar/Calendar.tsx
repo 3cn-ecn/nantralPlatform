@@ -796,6 +796,28 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
     beginDate: 0,
   });
 
+  // Resize events duration to have a better display in calendar
+  events.forEach((event) => {
+    if (
+      event.endDate.getDate() === event.beginDate.getDate() &&
+      event.endDate.getMonth() === event.beginDate.getMonth() &&
+      event.endDate.getFullYear() === event.beginDate.getFullYear() &&
+      event.endDate.getTime() - event.beginDate.getTime() < 60 * 60 * 1000
+    ) {
+      if (event.beginDate.getHours() < 23) {
+        event.endDate = new Date(event.beginDate.getTime() + 60 * 60 * 1000);
+      } else {
+        event.endDate.setHours(23);
+        event.endDate.setMinutes(59);
+        event.endDate.setSeconds(59);
+      }
+    } else if (event.endDate.getHours() < 1) {
+      event.endDate.setHours(1);
+      event.endDate.setMinutes(0);
+      event.endDate.setSeconds(0);
+    }
+  });
+
   const tempMondayOfTheWeek = new Date();
   tempMondayOfTheWeek.setDate(
     tempMondayOfTheWeek.getDate() - ((tempMondayOfTheWeek.getDay() - 1) % 7)
@@ -869,14 +891,15 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
       <div id="Calendar" style={{ display: 'flex' }}>
         {displayData.type !== 'month' ? (
           <Grid container spacing={0}>
-            <Grid item xs={1}>
+            <Grid item xs={2} sm={1}>
               <DayInfos />
             </Grid>
             {displaySize.map((day, number: number) => {
               return (
                 <Grid
                   item
-                  xs={10.5 / displaySize.length}
+                  xs={9.5 / displaySize.length}
+                  sm={10.5 / displaySize.length}
                   key={`dayGrid${day.toLocaleDateString('en-EN', {
                     weekday: 'long',
                     month: 'long',

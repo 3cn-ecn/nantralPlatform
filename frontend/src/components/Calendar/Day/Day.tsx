@@ -113,7 +113,7 @@ export function Day(props: {
   return (
     <div id={`${day}`} className="blockDisplay">
       <div className="dayData">
-        {day.toLocaleDateString('fr-FR', { weekday: 'short' })}
+        {day.toLocaleDateString('fr-FR', { weekday: 'narrow' })}
       </div>
       <div className="dayData">{day.getDate()}</div>
       {dayChain}
@@ -178,7 +178,7 @@ export function Day(props: {
                 key={eventKey}
                 xs={(-eventKey * 12) / events[0].globalSize}
                 sx={{
-                  height: `1px`,
+                  height: `0px`,
                 }}
               ></Grid>
             );
