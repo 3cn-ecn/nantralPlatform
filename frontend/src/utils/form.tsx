@@ -16,7 +16,6 @@ import {
   AutocompleteInputChangeReason,
   Input,
   Button,
-  Switch,
   FormLabel,
 } from '@mui/material';
 import { Dayjs } from 'dayjs';
