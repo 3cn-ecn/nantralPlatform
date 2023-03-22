@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Grid } from '@mui/material';
 import { createEvents, EventAttributes } from 'ics';
-import './Calendar.scss';
 import { EventProps } from 'Props/Event';
 import { modulo, ppcm } from '../../utils/maths';
 import { numberOfDayInDateMonth } from './utils';
@@ -11,6 +10,7 @@ import { DayInfos } from './DayInfos/DayInfos';
 import { ChooseWeek } from './ChooseWeek/ChooseWeek';
 import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';
 import { Month } from './Month/Month';
+import './Calendar.scss';
 
 /**
  * Function that sort event date-wise.
@@ -723,8 +723,8 @@ function updateWeekToDisplay(
   },
   beginOfWeek: Date,
   endOfWeek: Date
-): Array<Array<any>> | Array<Array<[string, number]>> {
-  const week = [
+): Array<Array<[string, number]>> | Array<Date> {
+  const week: Array<[string, number]> = [
     ['Lundi', 1],
     ['Mardi', 2],
     ['Mercredi', 3],
@@ -733,26 +733,28 @@ function updateWeekToDisplay(
     ['Samedi', 6],
     ['Dimanche', 7],
   ];
-  let displaySize: Array<Array<any>> | Array<Array<Array<any>>>;
+  let displaySize: Array<Array<[string, number]>> | Array<Date>;
 
+  const date = new Date(
+    beginOfWeek.getFullYear(),
+    beginOfWeek.getMonth(),
+    beginOfWeek.getDate()
+  );
+  displaySize = [new Date(date)];
   switch (displayData.type) {
     case 'day':
-      displaySize = week.slice(
-        displayData.beginDate,
-        displayData.beginDate + 1
-      );
       break;
     case '3Days':
-      displaySize = week.slice(
-        displayData.beginDate,
-        displayData.beginDate + 3
-      );
-      if (displayData.beginDate + 3 > 6) {
-        displaySize = displaySize.concat(week.slice(0, endOfWeek.getDay() - 1));
+      for (let i = 1; i < 3; i++) {
+        date.setDate(date.getDate() + 1);
+        displaySize.push(new Date(date));
       }
       break;
     case 'week':
-      displaySize = week.slice();
+      for (let i = 1; i < 7; i++) {
+        date.setDate(date.getDate() + 1);
+        displaySize.push(new Date(date));
+      }
       break;
     case 'month':
       if (beginOfWeek.getDate() === 1 && endOfWeek.getDate() === 1) {
@@ -848,7 +850,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   React.useEffect(() => {
     changeDisplay(displayData.type, beginOfWeek, setBeginOfWeek, setEndOfWeek);
   }, [displayData]);
-
   return (
     <>
       <ChooseWeek
@@ -863,6 +864,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
       <ChooseDisplay
         display={displayData}
         updateDisplay={updateDisplay}
+        beginDate={beginOfWeek}
       ></ChooseDisplay>
       <div id="Calendar" style={{ display: 'flex' }}>
         {displayData.type !== 'month' ? (
@@ -870,13 +872,25 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
             <Grid item xs={1}>
               <DayInfos />
             </Grid>
-            {displaySize.map((day, number) => {
+            {displaySize.map((day, number: number) => {
               return (
-                <Grid item xs={10.5 / displaySize.length} key={day[0]}>
+                <Grid
+                  item
+                  xs={10.5 / displaySize.length}
+                  key={`dayGrid${day.toLocaleDateString('en-EN', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                  })}`}
+                >
                   <Day
-                    key={day[0]}
-                    dayValue={day[1]}
-                    day={day[0]}
+                    key={`day${day.toLocaleDateString('en-EN', {
+                      weekday: 'long',
+                      month: 'long',
+                      day: 'numeric',
+                    })}`}
+                    dayValue={modulo(day.getDay() - 1, 7) + 1}
+                    day={day}
                     events={newSortEvents[number]}
                     chains={eventsBlockedChain[number]}
                   />

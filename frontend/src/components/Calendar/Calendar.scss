@@ -1,18 +1,8 @@
 #Calendar
 {
   text-align: center;
-  // width : 10px;
-} 
-
-.TimeBlockEven {
-  border: 1px solid gray;
-  border-bottom: 0px;
-  // width: 120px;
-  height: 20px;
 }
 
-.TimeBlockOdd {
-  border: 1px solid gray;
-  // width: 120px;
-  height: 20px;
+.blockDisplay {
+  display: block;
 }

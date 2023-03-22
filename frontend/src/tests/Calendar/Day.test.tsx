@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { EventProps } from '../../Props/Event';
 import { createTestEvent } from './testElements/testElements';
 import { Day, sortWithPos } from '../../components/Calendar/Day/Day';
@@ -69,16 +70,18 @@ events.push(
 describe('<Day />', () => {
   it('should display a Day', async () => {
     const component = render(
-      <Day
-        dayValue={5}
-        day="Vendredi"
-        events={events}
-        chains={[
-          [0, 1, 2],
-          [2, -1, 3],
-          [3, 4],
-        ]}
-      />
+      <BrowserRouter>
+        <Day
+          dayValue={5}
+          day={new Date('2023-02-10T13:21:00')}
+          events={events}
+          chains={[
+            [0, 1, 2],
+            [2, -1, 3],
+            [3, 4],
+          ]}
+        />
+      </BrowserRouter>
     );
     expect(component).toMatchSnapshot();
   });

@@ -3,6 +3,7 @@ import { Grid } from '@mui/material';
 import { EventProps } from '../../../Props/Event';
 import { EventBlock } from './EventBlock/EventBlock';
 import { TimeBlock } from './TimeBlock/TimeBlock';
+import './Day.scss';
 
 /**
  * Sort events according to their position.
@@ -67,7 +68,8 @@ export function sortWithPos(
  */
 export function Day(props: {
   dayValue: number;
-  day: string;
+  // day: string;
+  day: Date;
   events: Array<EventProps>;
   chains: Array<Array<number>>;
 }): JSX.Element {
@@ -109,10 +111,13 @@ export function Day(props: {
   });
 
   return (
-    <div id={day} style={{ display: 'block' }}>
-      {day[0]}
+    <div id={`${day}`} className="blockDisplay">
+      <div className="dayData">
+        {day.toLocaleDateString('fr-FR', { weekday: 'short' })}
+      </div>
+      <div className="dayData">{day.getDate()}</div>
       {dayChain}
-      {chains.map((chain, number) => (
+      {chains.map((chain) => (
         <Grid
           container
           key={`Chain${chain}Day${day}`}
@@ -132,10 +137,10 @@ export function Day(props: {
                       events[eventKey].globalSize
                     }
                     sx={{
-                      height: `1px`,
+                      height: `0px`,
                       transform: `translate(0px, -${
-                        number + 20 * eventDate[eventKey]
-                      }px)`,
+                        1.2 * eventDate[eventKey]
+                      }rem)`,
                     }}
                   >
                     <EventBlock
@@ -157,10 +162,10 @@ export function Day(props: {
                     events[eventKey].globalSize
                   }
                   sx={{
-                    height: `1px`,
+                    height: `0px`,
                     transform: `translate(0px, -${
-                      number + 20 * eventDate[eventKey]
-                    }px)`,
+                      1.2 * eventDate[eventKey]
+                    }rem)`,
                   }}
                 ></Grid>
               );

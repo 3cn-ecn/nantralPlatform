@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { EventProps } from '../../Props/Event';
 import { createTestEvent } from './testElements/testElements';
 import { Month } from '../../components/Calendar/Month/Month';
@@ -84,9 +85,11 @@ monthWeeks.push();
 monthWeeks.push(week.slice(0, 5));
 
 describe('<Month />', () => {
-  it('should display an Month', async () => {
+  it('should display a Month', async () => {
     const component = render(
-      <Month key="MonthTest" monthWeeks={monthWeeks} events={eventsInWeek} />
+      <BrowserRouter>
+        <Month key="MonthTest" monthWeeks={monthWeeks} events={eventsInWeek} />
+      </BrowserRouter>
     );
     expect(component).toMatchSnapshot();
   });
