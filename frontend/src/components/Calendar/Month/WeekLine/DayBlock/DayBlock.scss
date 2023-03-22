@@ -1,4 +1,4 @@
-.imageEventBlur {
+.imageMonthEventBlur {
   width: inherit;
   height: inherit;
   backdrop-filter: blur(3px) brightness(65%);
@@ -8,9 +8,10 @@
   border-radius: inherit;
 }
 
-.eventBlockTitleDisplay {
+.dayBlockTitleDisplay {
   overflow: hidden;
   overflow-wrap: break-word;
   display: -webkit-box;
+   -webkit-line-clamp: 2; // Allow the title on 2 lines maximum
    -webkit-box-orient: vertical;
 }
