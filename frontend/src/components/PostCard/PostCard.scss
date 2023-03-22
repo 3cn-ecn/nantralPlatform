@@ -5,6 +5,17 @@
   text-align: center;
 }
 
+.post-icons {
+  position: absolute;
+  top : 0;
+  right : 0;
+  display: flex;
+  column-gap: 0.6em;
+  margin: 0.5em 0.5em;
+
+}
+
+
 #image-container {
   display: flex;
   flex-direction: column;
@@ -29,14 +40,24 @@
   align-items: flex-start;
 }
 
-#post-title {
+.post-title {
   font-size: 18px;
   margin : 0px;
   align-items: center;
-  display: flex;
+  line-height: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  margin-bottom: 5px;
+  word-break: break-word;
 }
 #post-club {
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
 }
 #image {
   width: 100%;

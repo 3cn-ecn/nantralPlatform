@@ -23,6 +23,8 @@ export function timeFromNow(date: Date): string {
   const days: number = hours / 24;
   const months: number = days / 30;
   const years: number = months / 12;
+  if (seconds < 0)
+    return `${date.toLocaleString(i18n.language, { dateStyle: 'medium' })}`;
   if (seconds < 60)
     time = `${Math.round(seconds).toString()} ${t('time.seconds')}`;
   else if (minutes < 60)

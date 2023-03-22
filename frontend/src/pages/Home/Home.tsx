@@ -2,8 +2,9 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { ClubProps } from 'Props/Group';
 import * as React from 'react';
-import { Box, SvgIcon, Typography } from '@mui/material';
+import { Box, Fab, SvgIcon, Typography } from '@mui/material';
 import { Container } from '@mui/system';
+import { Add } from '@mui/icons-material';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
@@ -13,6 +14,7 @@ import { isThisWeek } from '../../utils/date';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
 import { PostProps, postsToCamelCase } from '../../Props/Post';
 import { LoadStatus } from '../../Props/GenericTypes';
+import { FormPost } from '../../components/FormPost/FormPost';
 
 /**
  * Home Page, with Welcome message, next events, etc...
@@ -20,11 +22,16 @@ import { LoadStatus } from '../../Props/GenericTypes';
  */
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [eventsStatus, setEventsStatus] = React.useState<Status>('load');
+  const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
   const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
   const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
   const [postsStatus, setPostsStatus] = React.useState<LoadStatus>('load');
+  const [postsPinned, setPostsPinned] = React.useState<Array<PostProps>>([]);
+  const [postsPinnedStatus, setPostsPinnedStatus] =
+    React.useState<LoadStatus>('load');
+
+  const [postFormOpen, setPostFormOpen] = React.useState<boolean>(false);
   const { t } = useTranslation('translation'); // translation module
   const today = new Date();
   const postDateLimit = new Date();
@@ -33,6 +40,7 @@ function Home() {
     getEvent();
     getMyClubs();
     getPosts();
+    getPinnedPosts();
   }, []);
 
   async function getEvent() {
@@ -75,6 +83,7 @@ function Home() {
       .get('/api/post', {
         params: {
           from_date: postDateLimit.toISOString(),
+          pinned: false,
         },
       })
       .then((res) => {
@@ -85,6 +94,25 @@ function Home() {
       .catch((err) => {
         console.error(err);
         setPostsStatus('fail');
+      });
+  }
+
+  async function getPinnedPosts() {
+    // fetch posts
+    axios
+      .get('/api/post', {
+        params: {
+          pinned: true,
+        },
+      })
+      .then((res) => {
+        postsToCamelCase(res.data);
+        setPostsPinned(res.data);
+        setPostsPinnedStatus('success');
+      })
+      .catch((err) => {
+        console.error(err);
+        setPostsPinnedStatus('fail');
       });
   }
 
@@ -106,7 +134,11 @@ function Home() {
             <Typography id="main-title">Nantral Platform</Typography>
           </div>
         </div>
-        <div className="header-image" />
+        <img
+          className="header-image"
+          alt=""
+          src="/static/img/central_background.jpg"
+        />
       </div>
       <Box
         bgcolor="background.default"
@@ -117,11 +149,18 @@ function Home() {
           paddingTop: 20,
         }}
       >
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={() => setPostFormOpen(true)}
+          sx={{ bottom: 0, right: 0, position: 'fixed', margin: 4 }}
+        >
+          <Add />
+        </Fab>
         <Container sx={{ marginBottom: 3 }}>
-          {(postsStatus === 'load' ||
-            posts.filter((post) => post.pinned).length > 0) && (
+          {(postsPinnedStatus === 'load' || postsPinned.length > 0) && (
             <PostSection
-              posts={posts.filter((post) => post.pinned)}
+              posts={postsPinned}
               title={t('home.highlighted')}
               status={postsStatus}
             />
@@ -138,9 +177,7 @@ function Home() {
               isThisWeek(new Date(item.beginDate))
             )}
             status={eventsStatus}
-            seeMoreUrl="/event"
             title={t('home.thisWeek')}
-            accordion
           />
           <EventSection
             events={events.filter(
@@ -148,19 +185,24 @@ function Home() {
             )}
             status={eventsStatus}
             maxItem={6}
-            seeMoreUrl="/event"
             title={t('home.upcomingEvents')}
-            accordion
           />
           <ClubSection
             clubs={myClubs}
             status={clubsStatus}
             title={t('home.myClubs')}
-            seeMoreUrl="/club"
-            accordion
           />
         </Container>
       </Box>
+      <FormPost
+        open={postFormOpen}
+        onClose={() => setPostFormOpen(false)}
+        mode="create"
+        onUpdate={() => {
+          getPosts();
+          getPinnedPosts();
+        }}
+      />
     </>
   );
 }

@@ -13,10 +13,10 @@ describe('<DayInfos />', () => {
     );
     expect(
       oddComponent.getByTestId('TimeBlockOddTestId').className.slice(0, 12)
-    ).toBe('TimeBlockOdd');
+    ).toBe('timeBlockOdd');
     expect(
       evenComponent.getByTestId('TimeBlockEvenTestId').className.slice(0, 13)
-    ).toBe('TimeBlockEven');
+    ).toBe('timeBlockEven');
 
     expect(evenComponent).toMatchSnapshot();
     expect(oddComponent).toMatchSnapshot();

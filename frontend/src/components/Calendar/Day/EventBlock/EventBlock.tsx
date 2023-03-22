@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { EventProps } from '../../../../Props/Event';
 import './EventBlock.scss';
 
@@ -46,26 +47,36 @@ export function EventBlock(props: {
     duration = 24;
   }
 
+  const navigate = useNavigate();
+  const size = Math.min(duration, startTime);
   return (
     <Button
+      className="eventButton"
       variant="contained"
       fullWidth
       onClick={() => {
-        console.log(event);
+        navigate(`/event/${event.id}/`);
       }}
       style={{
         minWidth: `1px`,
-        height: `${Math.min(duration, startTime) * 1.2}rem`,
+        height: `${size * 1.2}rem`,
         padding: '0px',
         background: `url(${event.image})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
+        verticalAlign: 'top',
+        textTransform: 'none',
       }}
     >
       <div className="imageEventBlur">
-        <div className="eventBlockTitleDisplay">
-          {Math.min(duration, startTime) > 1 ? event.title : ''}
+        <div
+          className="eventBlockTitleDisplay"
+          style={{
+            WebkitLineClamp: size < 2 ? 1 : Math.floor(size * 0.8),
+          }}
+        >
+          {size >= 1 ? event.title : ''}
         </div>
       </div>
     </Button>

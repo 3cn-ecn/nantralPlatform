@@ -1,7 +1,8 @@
-from rest_framework import serializers
-
+from rest_framework import serializers, exceptions
+from datetime import datetime
 from .models import Event
 from apps.student.models import Student
+from django.utils.translation import gettext as _
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -13,13 +14,19 @@ class EventSerializer(serializers.ModelSerializer):
     is_member = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
 
+    def validate_date(self, value: datetime) -> datetime:
+        if value.time() < datetime.today().time():
+            raise exceptions.ValidationError(
+                _("Can't create an event in the past."))
+        return value
+
     def validate(self, attrs):
         if (not attrs["group"].is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
                 "You have to be admin to add or update an event")
         if (attrs["end_date"] and attrs["date"] > attrs["end_date"]):
-            raise serializers.ValidationError(
-                "End date should be greater than begin date")
+            raise exceptions.ValidationError(_(
+                "The end date must be after the begin date."))
         if (attrs["begin_inscription"] and attrs["end_inscription"]
                 and attrs["begin_inscription"] > attrs["end_inscription"]):
             raise serializers.ValidationError(

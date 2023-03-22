@@ -29,30 +29,44 @@ function stringToColor(string: string): string {
  * @param props.urls (optional) - The url of the picure
  * @param props.icon (optional) - An icon to show inside the avatar
  * @param props.size (optional) - The size of the avatar (small, medium, large)
- * @returns 
+ * @returns
+ * @returns
  */
 function Avatar(props: {
   title: string;
   url?: string;
   icon?: JSX.Element;
   size?: 'small' | 'medium' | 'large';
+  width?: number;
+  height?: number;
 }) {
-  const { title, url, icon, size } = props;
+  const { title, url, icon, size, width, height } = props;
   const words = title.split(' ');
-  const initials = words.length > 1
-    ? `${words[0][0]}${words[1][0]}`
-    : words[0].substring(0, 2);
+  const initials =
+    words.length > 1
+      ? `${words[0][0]}${words[1][0]}`
+      : words[0].substring(0, 2);
   const sx = {};
   if (size === 'small')
     Object.assign(sx, { width: 30, height: 30, fontSize: 13 });
   if (size === 'large')
     Object.assign(sx, { width: 56, height: 56, fontSize: 24 });
-  return <MUIAvatar 
-    src={url}
-    alt={title}
-    children={icon ? icon : initials.toUpperCase()}
-    sx={{...sx, bgcolor: stringToColor(title)}}
-  />
+  if (width !== null) Object.assign(sx, { width: width });
+  if (height !== null) Object.assign(sx, { height: height });
+  return (
+    <MUIAvatar
+      src={url}
+      alt={title}
+      children={icon ? icon : initials.toUpperCase()}
+      sx={{ ...sx, bgcolor: stringToColor(title) }}
+    />
+  );
 }
+
+Avatar.defaultProps = {
+  url: null,
+  icon: null,
+  size: 'large',
+};
 
 export default Avatar;

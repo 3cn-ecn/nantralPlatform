@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {
   TextField,
   Checkbox,
@@ -14,38 +16,71 @@ import {
   AutocompleteInputChangeReason,
   Input,
   Button,
+  FormLabel,
 } from '@mui/material';
+import { Dayjs } from 'dayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 export type FieldType =
   | {
-      kind: 'text' | 'integer' | 'float' | 'boolean' | 'date';
+      kind: 'text' | 'integer' | 'float';
       name: string;
       label: string;
       required?: boolean;
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
-      rows: int;
+      rows: number;
+      disabled?: boolean;
+    }
+  | {
+      kind: 'boolean';
+      name: string;
+      label: string;
+      required?: boolean;
+      maxLength?: number;
+      helpText?: string;
+      multiline?: boolean;
+      rows: number;
+      disabled?: boolean;
+      type?: 'checkbox' | 'switch';
+    }
+  | {
+      kind: 'date' | 'datetime';
+      name: string;
+      label: string;
+      required?: boolean;
+      maxLength?: number;
+      helpText?: string;
+      multiline?: boolean;
+      disabled?: boolean;
+      disablePast?: boolean;
+      rows?: number;
     }
   | {
       kind: 'number';
       name: string;
       label: string;
       required?: boolean;
-      min: float;
-      max: float;
-      step: float;
-      default: float;
+      min: number;
+      max?: number;
+      step: number;
+      default?: number;
+      disabled?: boolean;
     }
   | {
-      kind: 'picture';
-      title: string;
+      kind: 'file';
+      label: string;
       description: string;
+      disabled?: boolean;
+      name: string;
+      required?: boolean;
     }
   | {
       kind: 'select';
@@ -56,6 +91,14 @@ export type FieldType =
       helpText?: string;
       multiline?: boolean;
       item?: Array<Array<string>>;
+      disabled?: boolean;
+    }
+  | {
+      kind: 'richtext';
+      name: string;
+      label: string;
+      helpText?: string;
+      disabled?: boolean;
     }
   | {
       kind: 'group';
@@ -67,6 +110,11 @@ export type FieldType =
       component: (props: { error?: boolean }) => JSX.Element;
     }
   | {
+      kind: 'comment';
+      name: string;
+      text: string;
+    }
+  | {
       kind: 'autocomplete';
       name: string;
       label: string;
@@ -76,6 +124,7 @@ export type FieldType =
       freeSolo?: boolean;
       getOptionLabel: (option: any) => string;
       pk?: any;
+      disabled?: boolean;
     };
 
 /**
@@ -96,19 +145,19 @@ function FormGroup(props: {
   noFullWidth?: boolean;
 }) {
   const { fields, values, errors, setValues, noFullWidth } = props;
-
+  const { t } = useTranslation('translation');
   /**
    * Update the value of a key in the values object.
    *
    * @param name - the name of the field, and the key of the object in 'values'
    * @param value - the new value for this field
    */
-  function handleChange(name: string, value: any) {
+  const handleChange = (name: string, value: any) => {
     setValues({
       ...values,
       [name]: value,
     });
-  }
+  };
 
   return (
     <>
@@ -135,7 +184,7 @@ function FormGroup(props: {
             );
           case 'number':
             return (
-              <Box sx={{ minWidth: 120, mt: 2 }}>
+              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
                 <FormControl fullWidth>
                   <InputLabel id={`${field.name}-number`}>
                     {field.label}
@@ -144,12 +193,12 @@ function FormGroup(props: {
                     key={field.name}
                     id={`${field.name}-number`}
                     name={field.name}
-                    label={field.label}
                     value={values[field.name]}
                     onChange={(e) => handleChange(field.name, e.target.value)}
                     required={field.required}
-                    margin="normal"
+                    margin="dense"
                     type="number"
+                    disabled={field.disabled}
                     defaultValue={field.default}
                     slotProps={{
                       input: {
@@ -162,9 +211,21 @@ function FormGroup(props: {
                 </FormControl>
               </Box>
             );
+          case 'comment':
+            return (
+              <Typography
+                sx={{
+                  overflowWrap: 'break-word',
+                  marginTop: 3,
+                  marginBottom: 3,
+                }}
+              >
+                {field.text}
+              </Typography>
+            );
           case 'select':
             return (
-              <Box sx={{ minWidth: 120, mt: 2 }}>
+              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
                 <FormControl fullWidth>
                   <InputLabel id={`${field.name}-input`}>
                     {field.label}
@@ -178,10 +239,11 @@ function FormGroup(props: {
                     value={values[field.name]}
                     onChange={(e) => handleChange(field.name, e.target.value)}
                     required={field.required}
-                    margin="normal"
+                    margin="dense"
+                    disabled={field.disabled}
                   >
                     {field.item.map((name) => (
-                      <MenuItem key={name} value={name[1]}>
+                      <MenuItem key={name.toString()} value={name[1]}>
                         {name[0]}
                       </MenuItem>
                     ))}
@@ -206,17 +268,74 @@ function FormGroup(props: {
                 margin="normal"
                 multiline={field.multiline}
                 rows={field.rows}
+                disabled={field.disabled}
               />
             );
-          case 'picture':
+          case 'file':
+            // eslint-disable-next-line no-case-declarations
+            const imageName: string =
+              values[field.name]?.name ||
+              (typeof values[field.name] === 'string' && values[field.name]);
             return (
-              <Box sx={{ minWidth: 120, mt: 2 }}>
-                <FormControl fullWidth row>
-                  <Button variant="contained" component="label">
-                    {field.description}
-                    <input hidden accept="image/*" multiple type="file" />
+              <Box
+                sx={{
+                  minWidth: 120,
+                  mt: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+                key={field.name}
+              >
+                {imageName ? (
+                  <TextField
+                    variant="outlined"
+                    disabled
+                    fullWidth
+                    spellCheck={false}
+                    contentEditable={false}
+                    label={field.label}
+                    required={field.required}
+                    value={imageName}
+                    error={!!error}
+                    sx={{ marginBottom: 1 }}
+                  />
+                ) : (
+                  <FormLabel error={!!error}>{field.label}</FormLabel>
+                )}
+                <div>
+                  <Button
+                    disabled={field.disabled}
+                    variant="contained"
+                    component="label"
+                    sx={{ height: '100%', marginRight: 1 }}
+                  >
+                    {t('form.chooseFile')}
+                    <input
+                      disabled={field.disabled}
+                      hidden
+                      accept="image/*"
+                      multiple
+                      value={undefined}
+                      type="file"
+                      onChange={(event) => {
+                        if (event.target.files.length > 0)
+                          handleChange(field.name, event.target.files[0]);
+                      }}
+                    />
                   </Button>
-                </FormControl>
+                  {imageName && (
+                    <Button
+                      disabled={field.disabled}
+                      variant="outlined"
+                      onClick={() => handleChange(field.name, new File([], ''))}
+                    >
+                      {t('form.delete')}
+                    </Button>
+                  )}
+                </div>
+                <FormHelperText error={!!error}>
+                  {error || field.description}
+                </FormHelperText>
               </Box>
             );
           case 'date': // date as string
@@ -253,6 +372,7 @@ function FormGroup(props: {
                       helperText={error || field.helpText}
                       error={!!error}
                       margin="normal"
+                      value={undefined}
                     />
                   )}
                 />
@@ -282,10 +402,38 @@ function FormGroup(props: {
                   onChange={(e: any) =>
                     handleChange(field.name, e.target.checked)
                   }
+                  value={values[field.name]}
                   control={<Checkbox name={field.name} />}
                 />
               </FormControl>
             );
+          case 'richtext':
+            return (
+              <Box
+                key={field.name}
+                sx={{
+                  minWidth: 120,
+                  backgroundColor: 'primary',
+                  position: 'relative',
+                }}
+              >
+                <FormLabel error={!!error}>{field.label}</FormLabel>
+                <div style={{ color: 'black' }}>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={values[field.name]}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      handleChange(field.name, data);
+                    }}
+                  />
+                </div>
+                <FormHelperText sx={{ m: 0 }}>
+                  {error || field.helpText}
+                </FormHelperText>
+              </Box>
+            );
+
           case 'autocomplete':
             return (
               <AutocompleteField
@@ -293,14 +441,45 @@ function FormGroup(props: {
                 field={field}
                 value={values[field.name]}
                 error={error}
-                handleChange={() => handleChange}
+                handleChange={handleChange}
                 noFullWidth={noFullWidth}
               />
+            );
+          case 'datetime':
+            return (
+              <LocalizationProvider
+                adapterLocale="fr"
+                dateAdapter={AdapterDayjs}
+                key={field.name}
+              >
+                <DateTimePicker
+                  label={field.label}
+                  value={values[field.name] && new Date(values[field.name])}
+                  disablePast={field.disablePast}
+                  onChange={(newValue: Dayjs | null) => {
+                    handleChange(field.name, newValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      id={`${field.name}-input`}
+                      name={field.name}
+                      fullWidth={!noFullWidth}
+                      required={field.required}
+                      helperText={error || field.helpText}
+                      error={!!error}
+                      margin="normal"
+                      value={undefined}
+                      disabled={field.disabled}
+                    />
+                  )}
+                />
+              </LocalizationProvider>
             );
           case 'custom':
             return <field.component error={!!error} />;
           default:
-            return <></>;
+            return null;
         }
       })}
     </>
@@ -338,17 +517,19 @@ function AutocompleteField<T>(props: {
     }
   }, []);
 
-  function updateOptions(
+  const updateOptions = (
     event: React.SyntheticEvent,
-    value: string,
+    newValue: string,
     reason: AutocompleteInputChangeReason
-  ): void {
-    if (reason !== 'input' || value.length < 3) return;
+  ): void => {
+    if (reason !== 'input' || newValue.length < 3) return;
     axios
-      .get<any[]>(`${field.endPoint}/search/`, { params: { q: value } })
+      .get<any[]>(`${field.endPoint}/search/`, { params: { q: newValue } })
       .then((res) => setOptions(res.data))
-      .catch(() => {});
-  }
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   return (
     <Autocomplete
@@ -366,6 +547,7 @@ function AutocompleteField<T>(props: {
       fullWidth={!noFullWidth}
       freeSolo={field.freeSolo}
       onInputChange={updateOptions}
+      disabled={field.disabled}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -380,5 +562,10 @@ function AutocompleteField<T>(props: {
     />
   );
 }
+
+FormGroup.defaultProps = {
+  errors: {},
+  noFullWidth: false,
+};
 
 export default FormGroup;

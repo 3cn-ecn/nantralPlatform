@@ -23,7 +23,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import * as React from 'react';
 import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
-import { UnsuscribeModal } from '../Modal/UnsuscribeModal';
+import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 import theme from '../../theme';
 
@@ -34,7 +34,7 @@ interface JoinButtonProps {
   person: number;
   sx?: SxProps<Theme>;
   participating: boolean;
-  eventSlug: string;
+  eventId: number;
   beginInscription: string | null;
   endInscription: string | null;
   unregisterOnly?: boolean;
@@ -49,7 +49,7 @@ function JoinButton({
   person,
   sx,
   participating,
-  eventSlug,
+  eventId,
   beginInscription,
   endInscription,
   unregisterOnly,
@@ -85,7 +85,7 @@ function JoinButton({
     Date.now() < new Date(beginInscription).getTime();
   const participate = async () => {
     axios
-      .post(`/api/event/${eventSlug}/participate`)
+      .post(`/api/event/${eventId}/participate`)
       .then((res) => {
         if (res.data.success) {
           setSelected(true);
@@ -100,7 +100,7 @@ function JoinButton({
 
   const quit = async () => {
     axios
-      .delete(`/api/event/${eventSlug}/participate`)
+      .delete(`/api/event/${eventId}/participate`)
       .then((res) => {
         if (res.data.success) {
           setSelected(false);
@@ -255,7 +255,12 @@ function JoinButton({
           />
           {t('event.action_menu.unsubscribe')}
         </MenuItem>
-        <UnsuscribeModal open={open} onClose={handleClose} />
+        <ConfirmationModal
+          open={open}
+          title={t('button.joinButton.unsuscribe')}
+          content={t('button.joinButton.title')}
+          onClose={handleClose}
+        />
       </>
     );
   }
@@ -327,7 +332,12 @@ function JoinButton({
           </Button>
         )}
       </div>
-      <UnsuscribeModal open={open} onClose={handleClose} />
+      <ConfirmationModal
+        open={open}
+        title={t('button.joinButton.unsuscribe')}
+        content={t('button.joinButton.title')}
+        onClose={handleClose}
+      />
     </>
   );
 }
