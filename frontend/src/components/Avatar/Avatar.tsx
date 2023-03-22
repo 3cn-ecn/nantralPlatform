@@ -35,7 +35,7 @@ function Avatar(props: {
   title: string;
   url?: string;
   icon?: JSX.Element;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'extra_large';
   width?: number;
   height?: number;
 }) {
@@ -50,8 +50,8 @@ function Avatar(props: {
     Object.assign(sx, { width: 30, height: 30, fontSize: 13 });
   if (size === 'large')
     Object.assign(sx, { width: 56, height: 56, fontSize: 24 });
-  if (width !== null) Object.assign(sx, { width: width });
-  if (height !== null) Object.assign(sx, { height: height });
+  if (size === 'extra_large')
+    Object.assign(sx, { width: 250, height: 250, fontSize: 24 });
   return (
     <MUIAvatar
       src={url}

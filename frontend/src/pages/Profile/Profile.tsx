@@ -58,8 +58,7 @@ function Profile() {
           <Avatar
             url={student !== null ? student.picture : ''}
             title={student !== null ? student.name : ''}
-            width={250}
-            height={250}
+            size="extra_large"
           />
         </Grid>
         <Grid item xs={12} lg={9} sx={{ mt: 2, ml: 5 }}>
