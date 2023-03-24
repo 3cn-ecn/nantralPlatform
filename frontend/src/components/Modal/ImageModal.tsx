@@ -3,7 +3,6 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  makeStyles,
   useMediaQuery,
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
