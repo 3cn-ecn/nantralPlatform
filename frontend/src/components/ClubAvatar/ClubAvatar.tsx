@@ -28,7 +28,7 @@ export function ClubAvatar(props: {
         justifyContent: 'center',
         flexDirection: textPosition === 'bottom' ? 'column' : 'row',
         display: 'flex',
-        maxWidth: 'min-content',
+        maxWidth: 'max-content',
       }}
     >
       <IconButton href={clubUrl} sx={{ padding: 0, margin: 1 }}>
