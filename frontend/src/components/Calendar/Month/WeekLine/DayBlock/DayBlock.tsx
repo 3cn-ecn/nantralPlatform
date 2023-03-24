@@ -1,6 +1,8 @@
 import React from 'react';
 import { EventProps } from 'Props/Event';
+import { useNavigate } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
+import './DayBlock.scss';
 
 export function DayBlock(props: {
   day: { day: number; date: number; events: Array<EventProps> } | null;
@@ -8,11 +10,12 @@ export function DayBlock(props: {
   maxEventsInDayWeek: number;
 }): JSX.Element {
   const { day, inMonth, maxEventsInDayWeek } = props;
+  const navigate = useNavigate();
   if (inMonth) {
     return (
       <Box
         sx={{
-          height: `${(maxEventsInDayWeek + 1) * 40}px`,
+          height: `${(maxEventsInDayWeek + 0.6) * 3}rem`,
           border: '1px solid gray',
         }}
         data-testid="DateBoxTestId"
@@ -25,16 +28,23 @@ export function DayBlock(props: {
               variant="contained"
               fullWidth
               onClick={() => {
-                console.log(event);
+                navigate(`/event/${event.id}/`);
               }}
               style={{
                 minWidth: `1px`,
-                height: `40px`,
+                height: `3rem`,
                 padding: '0px',
+                background: `url(${event.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                textTransform: 'none',
               }}
               data-testid={`${event.slug}DateBoxButtonTestId`}
             >
-              {event.title[0]}
+              <div className="imageMonthEventBlur">
+                <div className="dayBlockTitleDisplay">{event.title}</div>
+              </div>
             </Button>
           );
         })}

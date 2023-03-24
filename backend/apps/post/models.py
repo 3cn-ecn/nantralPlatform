@@ -11,7 +11,7 @@ from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
-
+from apps.student.models import Student
 
 path_and_rename = PathAndRename("posts/pictures")
 
@@ -53,6 +53,10 @@ class AbstractPost(models.Model, SlugModel):
                               upload_to=path_and_rename, null=True, blank=True)
     notification = models.ForeignKey(
         to=Notification, on_delete=models.SET_NULL, blank=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(
+        Student, blank=True, null=True,
+        on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
         abstract = True
@@ -90,12 +94,6 @@ class AbstractPost(models.Model, SlugModel):
                       if self.group.icon else None),
             publicity=self.publicity
         )
-        # add image
-        # if self.image:
-        #     self.notification.icon_url = compress_model_image(
-        #         self, 'image', size=(960, 540), contains=True)
-        #     self.notification.save()
-        # add actions to the notification
         NotificationAction.objects.create(
             notification=self.notification,
             title="Ouvrir",

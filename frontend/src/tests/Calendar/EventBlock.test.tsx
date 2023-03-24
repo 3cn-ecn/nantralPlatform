@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { EventProps } from '../../Props/Event';
 import { createTestEvent } from './testElements/testElements';
 import { EventBlock } from '../../components/Calendar/Day/EventBlock/EventBlock';
@@ -32,7 +33,9 @@ const eventMiddleInDay: EventProps = createTestEvent(
 describe('<EventBlock />', () => {
   it('should display an EventBlock in the day', async () => {
     const component = render(
-      <EventBlock day={eventInDay.beginDate.getDay()} event={eventInDay} />
+      <BrowserRouter>
+        <EventBlock day={eventInDay.beginDate.getDay()} event={eventInDay} />
+      </BrowserRouter>
     );
     expect(component.getByRole('button').style.height).toBe('1.2rem');
     expect(component.getByRole('button').style.padding).toBe('0px');
@@ -48,10 +51,12 @@ describe('<EventBlock />', () => {
 
   it('should display an EventBlock in the end of the day', async () => {
     const component = render(
-      <EventBlock
-        day={eventBeginInDay.beginDate.getDay()}
-        event={eventBeginInDay}
-      />
+      <BrowserRouter>
+        <EventBlock
+          day={eventBeginInDay.beginDate.getDay()}
+          event={eventBeginInDay}
+        />
+      </BrowserRouter>
     );
     expect(component.getByRole('button').style.height).toBe('25.2rem');
     expect(component.getByRole('button').style.padding).toBe('0px');
@@ -67,7 +72,12 @@ describe('<EventBlock />', () => {
 
   it('should display an EventBlock in the begin the day', async () => {
     const component = render(
-      <EventBlock day={eventEndInDay.endDate.getDay()} event={eventEndInDay} />
+      <BrowserRouter>
+        <EventBlock
+          day={eventEndInDay.endDate.getDay()}
+          event={eventEndInDay}
+        />
+      </BrowserRouter>
     );
     expect(component.getByRole('button').style.height).toBe('4.8rem');
     expect(component.getByRole('button').style.padding).toBe('0px');
@@ -83,10 +93,12 @@ describe('<EventBlock />', () => {
 
   it('should display an EventBlock in the all day', async () => {
     const component = render(
-      <EventBlock
-        day={eventMiddleInDay.beginDate.getDay() + 1}
-        event={eventMiddleInDay}
-      />
+      <BrowserRouter>
+        <EventBlock
+          day={eventMiddleInDay.beginDate.getDay() + 1}
+          event={eventMiddleInDay}
+        />
+      </BrowserRouter>
     );
     // expect(component.getByRole('button').style.height).toBe('480px');
     expect(component.getByRole('button').style.padding).toBe('0px');

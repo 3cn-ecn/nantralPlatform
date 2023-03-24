@@ -9,7 +9,7 @@ class PostSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if (not attrs["group"].is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
-                "You have to be admin to add or update an event")
+                "You have to be admin to add or update a post")
         return super().validate(attrs)
 
     class Meta:
@@ -20,6 +20,7 @@ class PostSerializer(serializers.ModelSerializer):
             'slug',
             'title',
             'publication_date',
+            'updated_at',
             'group',
             'group_slug',
             'color',

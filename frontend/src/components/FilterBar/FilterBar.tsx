@@ -206,7 +206,7 @@ function FilterBar(props: { getFilter: any }) {
       {(['right'] as const).map((anchor) => (
         <React.Fragment key={anchor}>
           <Button
-            style={{ textTransform: 'none', padding: '2px 8px' }}
+            style={{ padding: '2px 8px' }}
             variant="contained"
             onClick={() => {
               setOpen(true);

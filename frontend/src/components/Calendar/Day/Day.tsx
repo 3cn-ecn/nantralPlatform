@@ -3,6 +3,7 @@ import { Grid } from '@mui/material';
 import { EventProps } from '../../../Props/Event';
 import { EventBlock } from './EventBlock/EventBlock';
 import { TimeBlock } from './TimeBlock/TimeBlock';
+import './Day.scss';
 
 /**
  * Sort events according to their position.
@@ -110,11 +111,11 @@ export function Day(props: {
   });
 
   return (
-    <div id={`${day}`} style={{ display: 'block' }}>
-      <div style={{ height: '1.2rem' }}>
-        {day.toLocaleDateString('fr-FR', { weekday: 'short' })}
+    <div id={`${day}`} className="blockDisplay">
+      <div className="dayData">
+        {day.toLocaleDateString('fr-FR', { weekday: 'narrow' })}
       </div>
-      <div style={{ height: '1.2rem' }}>{day.getDate()}</div>
+      <div className="dayData">{day.getDate()}</div>
       {dayChain}
       {chains.map((chain) => (
         <Grid
@@ -177,7 +178,7 @@ export function Day(props: {
                 key={eventKey}
                 xs={(-eventKey * 12) / events[0].globalSize}
                 sx={{
-                  height: `1px`,
+                  height: `0px`,
                 }}
               ></Grid>
             );

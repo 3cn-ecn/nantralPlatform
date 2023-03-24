@@ -271,7 +271,7 @@ function EventDetails() {
               person={event.numberOfParticipants}
               maxPerson={event.maxParticipant}
               participating={participating}
-              eventSlug={event.slug}
+              eventId={event.id}
               link={event.formUrl}
               beginInscription={event.beginInscription}
               endInscription={event.endInscription}
@@ -288,7 +288,7 @@ function EventDetails() {
           >
             <div>
               <FavButton
-                eventSlug={event.slug}
+                eventId={event.id}
                 selected={event.isFavorite}
                 size="2rem"
               />

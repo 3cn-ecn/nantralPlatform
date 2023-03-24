@@ -9,12 +9,12 @@ import { useTranslation } from 'react-i18next';
 import theme from '../../theme';
 
 function FavButton(props: {
-  eventSlug: string;
+  eventId: number;
   selected: boolean;
   iconized?: boolean;
   size?: string;
 }) {
-  const { eventSlug, selected, size, iconized } = props;
+  const { eventId, selected, size, iconized } = props;
   const [fav, setFav] = useState(selected);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation('translation');
@@ -22,13 +22,13 @@ function FavButton(props: {
     setLoading(true);
     if (fav) {
       axios
-        .delete(`/api/event/${eventSlug}/favorite`)
+        .delete(`/api/event/${eventId}/favorite`)
         .then(() => setFav(false))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     } else {
       axios
-        .post(`/api/event/${eventSlug}/favorite`)
+        .post(`/api/event/${eventId}/favorite`)
         .then(() => setFav(true))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));

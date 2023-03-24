@@ -35,12 +35,10 @@ export function EventSection(props: {
   title?: string;
   /** Nombre maximal d'événement à afficher */
   maxItem?: number;
-  /** url relative du bouton voir plus */
-  seeMoreUrl?: string;
   accordion?: boolean;
 }) {
   const { t } = useTranslation('translation'); // translation module
-  const { status, events, title, maxItem, seeMoreUrl, accordion } = props;
+  const { status, events, title, maxItem, accordion } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allEvents = maxItem ? events.slice(0, maxItem) : events;
   switch (status) {
@@ -73,19 +71,12 @@ export function EventSection(props: {
       content = null;
   }
   return (
-    <AccordionSection
-      title={title}
-      badge={events.length}
-      content={content}
-      url={seeMoreUrl}
-      accordion={accordion}
-    />
+    <AccordionSection title={title} content={content} accordion={accordion} />
   );
 }
 
 EventSection.defaultProps = {
   title: null,
   maxItem: null,
-  seeMoreUrl: null,
   accordion: false,
 };

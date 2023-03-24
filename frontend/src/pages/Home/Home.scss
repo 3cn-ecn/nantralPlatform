@@ -15,14 +15,15 @@ $image-url : url("/static/img/central_background.jpg");
 .header-image {
   position: fixed;
   width : 100%;
-  background-image: $image-url;
-  height: 100%;
-  filter: blur(4px);
-  background-size: cover;
-  background-position: center;
+  background-color: white;
+  height: $header-height;
+  filter: blur(4px) opacity(0.8);
+  transform: scale(1.1);
+  object-fit: cover;
   z-index: -1;
-
+  overflow: inherit;
 }
+
 #header-title {
   background-color: rgba(255, 255, 255, 0.4);
   width: 100%;

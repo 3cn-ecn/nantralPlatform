@@ -6,8 +6,11 @@ export interface PostProps {
   title: string;
   description: string;
   publicationDate: Date;
-  image: string;
-  group: number; // id of the group
+  /** Date of last modification */
+  updatedAt: Date;
+  image: string | File;
+  /** Id of the group */
+  group: number;
   groupSlug: string;
   slug: string;
   publicity: 'Pub' | 'Mem';
@@ -17,6 +20,6 @@ export interface PostProps {
 
 export function postsToCamelCase(posts: Array<any>): void {
   posts.forEach((post) => {
-    snakeToCamelCase(post, { publicationDate: 'Date' });
+    snakeToCamelCase(post, { publicationDate: 'Date', updatedAt: 'Date' });
   });
 }
