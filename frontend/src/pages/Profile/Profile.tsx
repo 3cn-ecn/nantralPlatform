@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import * as React from 'react';
+import { LoadStatus } from 'Props/GenericTypes';
 import { useParams } from 'react-router-dom';
-import { SvgIcon, Typography, Grid, Button, Box } from '@mui/material';
+import { SvgIcon, Typography, Grid, Box, Skeleton } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { MembershipsStudent } from '../../components/Group/MembershipsStudent/';
 import { EditProfilModal } from '../../components/FormProfil/FormProfil';
@@ -17,6 +19,8 @@ function Profile() {
 
   const { t } = useTranslation('translation');
 
+  const [eventStatus, setEventStatus] = React.useState<LoadStatus>('load');
+
   React.useEffect(() => {
     getProfile();
     console.log(student);
@@ -25,9 +29,13 @@ function Profile() {
   async function getProfile() {
     axios
       .get(url)
-      .then((res) => setStudent(res.data))
+      .then((res) => {
+        setStudent(res.data);
+        setEventStatus('success');
+      })
       .catch((err) => {
         console.error(err);
+        setEventStatus('fail');
       });
   }
 
@@ -55,31 +63,44 @@ function Profile() {
     <Box container sx={{ mt: 5, ml: 5, mr: 5 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={5} lg={2.3} xl={2.3}>
-          <Avatar
-            url={student !== null ? student.picture : ''}
-            title={student !== null ? student.name : ''}
-            size="extra_large"
-          />
+          {eventStatus === 'load' ? (
+            <Skeleton variant="circular" height={250} />
+          ) : (
+            <Avatar
+              url={student.picture}
+              title={student.name}
+              size="extra_large"
+            />
+          )}
         </Grid>
         <Grid item xs={12} lg={9} sx={{ mt: 2, ml: 5 }}>
           <Grid>
-            <Typography variant="h4">
-              {student !== null ? student.name : ''}
-            </Typography>
+            {eventStatus === 'load' ? (
+              <Skeleton width={600} />
+            ) : (
+              <Typography variant="h4">{student.name}</Typography>
+            )}
           </Grid>
           <Grid>
-            <Typography variant="h7">
-              {student === null ? 'Chargement en cours' : fac[student.faculty]}
-            </Typography>
+            {eventStatus === 'load' ? (
+              <Skeleton width={300} />
+            ) : (
+              <Typography variant="h7">{fac[student.faculty]}</Typography>
+            )}
           </Grid>
           <Grid>
-            <Typography variant="h7">
-              {t('profile.promo')}
-              {student !== null ? student.promo : ''}
-            </Typography>
+            {eventStatus === 'load' ? (
+              <Skeleton width={300} />
+            ) : (
+              <Typography variant="h7">
+                {t('profile.promo')}
+                {student.promo}
+              </Typography>
+            )}
           </Grid>
           <Grid>
-            <Button
+            <LoadingButton
+              loading={eventStatus === 'load'}
               variant="contained"
               size="small"
               sx={{ mt: 2 }}
@@ -92,7 +113,7 @@ function Profile() {
                 component={ModeEditIcon}
                 inheritViewBox
               />
-            </Button>
+            </LoadingButton>
             <EditProfilModal
               open={openS}
               closeModal={handleCloseS}
