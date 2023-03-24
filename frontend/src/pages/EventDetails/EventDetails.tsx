@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   CircularProgress,
   Container,
@@ -29,6 +30,7 @@ import FavButton from '../../components/Button/FavButton';
 import JoinButton from '../../components/Button/JoinButton';
 import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
 import { EventParticipantsModal } from '../../components/Modal/EventParticipantsModal';
+import { ImageModal } from '../../components/Modal/ImageModal';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -44,6 +46,7 @@ function EventDetails() {
   const [event, setEvent] = useState<EventProps>(undefined);
   const [participating, setParticipating] = useState(false);
   const [openCopyNotif, setOpenCopyNotif] = useState(false);
+  const [openImageModal, setOpenImageModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -252,7 +255,15 @@ function EventDetails() {
   return (
     <>
       <Container>
-        <img className="banner" src={banner} alt="Banner" />
+        <Box
+          component="img"
+          className="banner"
+          src={banner}
+          alt="Banner"
+          onClick={() => {
+            setOpenImageModal(true);
+          }}
+        />
         <Typography
           className="adaptativeText"
           variant="h3"
@@ -357,7 +368,11 @@ function EventDetails() {
 
         <Typography variant="caption" sx={{ textAlign: 'justify' }}>
           <div
-            style={{ marginTop: '2rem', fontSize: '1rem' }}
+            style={{
+              marginTop: '2rem',
+              marginBottom: '10rem',
+              fontSize: '1rem',
+            }}
             dangerouslySetInnerHTML={{
               __html: event.description,
             }}
@@ -381,6 +396,13 @@ function EventDetails() {
         onClose={() => {
           setOpenModal(false);
         }}
+      />
+      <ImageModal
+        open={openImageModal}
+        onClose={() => {
+          setOpenImageModal(false);
+        }}
+        url={banner}
       />
     </>
   );
