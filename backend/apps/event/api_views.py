@@ -86,31 +86,31 @@ class EventViewSet(viewsets.ModelViewSet):
             return []
         # query params
         order_by: list[str] = self.request.query_params.get(
-            "order_by", "date").split(',')
-        groups: str = self.request.query_params.get("group")
+            'order_by', 'date').split(',')
+        groups: str = self.request.query_params.get('group')
         organizers_slug: list[str] = groups.split(',') if groups else []
         is_member: bool = self.request.query_params.get(
-            "is_member") in TRUE_ARGUMENTS
+            'is_member') in TRUE_ARGUMENTS
         is_shotgun: bool = self.request.query_params.get(
-            "is_shotgun") in TRUE_ARGUMENTS
+            'is_shotgun') in TRUE_ARGUMENTS
         is_form: bool = self.request.query_params.get(
-            "is_form") in TRUE_ARGUMENTS
+            'is_form') in TRUE_ARGUMENTS
         is_favorite: bool = self.request.query_params.get(
-            "is_favorite") in TRUE_ARGUMENTS
+            'is_favorite') in TRUE_ARGUMENTS
         is_participating: bool = self.request.query_params.get(
-            "is_participating") in TRUE_ARGUMENTS
+            'is_participating') in TRUE_ARGUMENTS
         from_date: str = self.request.query_params.get(
-            "from_date")
+            'from_date')
         to_date: str = self.request.query_params.get(
-            "to_date")
+            'to_date')
         from_begin_inscription: str = self.request.query_params.get(
-            "from_begin_inscription")
+            'from_begin_inscription')
         to_begin_inscription: str = self.request.query_params.get(
-            "to_begin_inscription")
+            'to_begin_inscription')
         min_participants: int = self.request.query_params.get(
-            "min_participants")
+            'min_participants')
         max_participants: int = self.request.query_params.get(
-            "max_participants")
+            'max_participants')
         visibility: str = self.request.query_params.get('publicity')
         # query
         order_by = filter(lambda ord: ord in ORDERS or (
@@ -187,13 +187,13 @@ class ParticipateAPIView(APIView):
     """
     Actions
     -------
-    - POST .../event/<slug>/participate : participate to an event
-    - DELETE .../event/<slug>/participate : remove participation of an event
+    - POST .../event/<id>/participate : participate to an event
+    - DELETE .../event/<id>/participate : remove participation of an event
     """
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, id=self.kwargs['event_id'])
         inscription_finished: bool = event.end_inscription is not None and\
             timezone.now() > event.end_inscription
         inscription_not_started: bool = event.begin_inscription is not None and\
@@ -223,7 +223,7 @@ class ParticipateAPIView(APIView):
                       "message": "You have been added to this event"})
 
     def delete(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, id=self.kwargs['event_id'])
         event.participants.remove(request.user.student)
         return Response(
             status='200',
@@ -235,9 +235,15 @@ class ParticipateAPIView(APIView):
 
 class FavoriteAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+    """
+    Actions
+    -------
+    - POST .../event/<id>/favorite : add event to your favorites
+    - DELETE .../event/<id>/favorite : remove event to your favorites
+    """
 
     def post(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, id=self.kwargs['event_id'])
         student = request.user.student
         if (student is None):
             return Response(status='404', data={
@@ -252,7 +258,7 @@ class FavoriteAPIView(APIView):
             })
 
     def delete(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, slug=self.kwargs['event_slug'])
+        event = get_object_or_404(Event, id=self.kwargs['event_id'])
         student = request.user.student
         if (student is None):
             return Response(status='404', data={
