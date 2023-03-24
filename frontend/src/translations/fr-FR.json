@@ -23,6 +23,16 @@
     "showLess": "Afficher moins",
     "yes": "oui"
   },
+  "calendar":{
+    "export": "Exporter les évènements",
+    "to": "au",
+    "view":{
+      "day": "Jour",
+      "3Days": "3 Jours",
+      "week": "Semaine",
+      "month": "Mois"
+    }
+  },
   "club": {
     "joinNow": "Rejoindre maintenant",
     "noClub": "Vous n'avez rejoint aucun groupe pour le moment"

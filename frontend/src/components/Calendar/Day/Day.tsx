@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid } from '@mui/material';
+import i18n from 'i18next';
 import { EventProps } from '../../../Props/Event';
 import { EventBlock } from './EventBlock/EventBlock';
 import { TimeBlock } from './TimeBlock/TimeBlock';
@@ -113,7 +114,7 @@ export function Day(props: {
   return (
     <div id={`${day}`} className="blockDisplay">
       <div className="dayData">
-        {day.toLocaleDateString('fr-FR', { weekday: 'narrow' })}
+        {day.toLocaleDateString(i18n.language, { weekday: 'narrow' })}
       </div>
       <div className="dayData">{day.getDate()}</div>
       {dayChain}

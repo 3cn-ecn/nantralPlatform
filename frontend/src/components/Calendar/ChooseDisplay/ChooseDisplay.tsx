@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { modulo } from '../../../utils/maths';
 import { CalendarView } from '../CalendarProps/CalendarProps';
 import { firstMonthDay } from '../utils';
@@ -18,6 +19,7 @@ export function ChooseDisplay(props: {
   beginDate: Date;
 }): JSX.Element {
   const { display, updateDisplay, beginDate } = props;
+  const { t } = useTranslation('translation');
   return (
     <>
       <Button
@@ -28,7 +30,7 @@ export function ChooseDisplay(props: {
           }
         }}
       >
-        day
+        {t('calendar.view.day')}
       </Button>
       <Button
         data-testid="monthButtonTestId"
@@ -38,7 +40,7 @@ export function ChooseDisplay(props: {
           }
         }}
       >
-        3Days
+        {t('calendar.view.3Days')}
       </Button>
       <Button
         data-testid="weekButtonTestId"
@@ -48,7 +50,7 @@ export function ChooseDisplay(props: {
           }
         }}
       >
-        week
+        {t('calendar.view.week')}
       </Button>
       <Button
         data-testid="monthButtonTestId"
@@ -61,7 +63,7 @@ export function ChooseDisplay(props: {
           }
         }}
       >
-        month
+        {t('calendar.view.month')}
       </Button>
     </>
   );

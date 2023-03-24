@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Grid } from '@mui/material';
 import { createEvents, EventAttributes } from 'ics';
+import { useTranslation } from 'react-i18next';
 import { EventProps } from 'Props/Event';
 import { modulo, ppcm } from '../../utils/maths';
 import { numberOfDayInDateMonth } from './utils';
@@ -788,6 +789,7 @@ function updateWeekToDisplay(
  */
 function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { events } = props;
+  const { t } = useTranslation('translation');
   const [displayData, updateDisplay] = useState<{
     type: CalendarView;
     beginDate: number;
@@ -940,7 +942,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
             callICS(sortEvents);
           }}
         >
-          Exporter les évènements
+          {t('calendar.export')}
         </Button>
       </div>
     </>
