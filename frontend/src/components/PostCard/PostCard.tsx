@@ -19,7 +19,7 @@ import { PostModal } from '../Modal/PostModal';
 import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
 
-const POST_HEIGHT = 180;
+const POST_HEIGHT = 190;
 export const POST_AVATAR_SIZE = 35;
 export function SeePageButton(props: {
   link: string;
@@ -64,8 +64,8 @@ export function MembersIcon() {
 SeePageButton.defaultProps = {
   style: null,
 };
-export function PostCard(props: { post: PostProps }) {
-  const { post } = props;
+export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
+  const { post, onDelete } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
   const [postValue, setPostValue] = React.useState(post);
@@ -81,6 +81,16 @@ export function PostCard(props: { post: PostProps }) {
       .then((res) => setClubDetails(res.data))
       .catch((err) => console.error(err));
   }, []);
+
+  const updatePost = (newPost: PostProps) => {
+    console.log('heyyyyyy', newPost);
+    if (newPost) setPostValue(newPost);
+    else {
+      onDelete();
+      setOpen(false);
+      console.log('OUIIIIIIIIIIIIIIIIIIIIIII');
+    }
+  };
 
   return (
     <>
@@ -178,11 +188,15 @@ export function PostCard(props: { post: PostProps }) {
         clubDetails={clubDetails}
         open={open}
         onClose={() => setOpen(false)}
-        onUpdate={setPostValue}
+        onUpdate={updatePost}
       />
     </>
   );
 }
+
+PostCard.defaultProps = {
+  onDelete: () => null,
+};
 
 export function PostCardSkeleton() {
   return <Skeleton variant="rectangular" width="100%" height={POST_HEIGHT} />;

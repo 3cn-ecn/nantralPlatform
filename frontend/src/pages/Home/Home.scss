@@ -1,6 +1,5 @@
-$header-height : 11.5em;
-$image-url : url("/static/img/central_background.jpg");
-// $image-url : url("https://wallpaper.dog/large/10886189.jpg");
+$header-height : 12em;
+
 
 .header {
   display : flex;
@@ -12,61 +11,62 @@ $image-url : url("/static/img/central_background.jpg");
   overflow: hidden;
   z-index: -1;
 }
+
 .header-image {
   position: fixed;
   width : 100%;
-  background-color: white;
   height: $header-height;
-  filter: blur(4px) opacity(0.8);
-  transform: scale(1.1);
+  filter: blur(0px);
   object-fit: cover;
   z-index: -1;
   overflow: inherit;
 }
 
 #header-title {
-  background-color: rgba(255, 255, 255, 0.4);
+  // background-color: rgba(255, 255, 255, 0.4);
   width: 100%;
   height: 100%;
+  transition: all 0.25s ease-out;
   align-items: center;
   flex-direction: column;
   justify-content: center;
   display: flex;
+  user-select: none;
+  color: #cd2323;
+  text-shadow: 10px 10px 15px #81818188, 
+  10px -5px 15px #8181816f,
+  -10px -5px 15px #8181813f;
 }
 #main-title {
   display: flex;
-  font-size: min(10vw,3.4em);
+  font-size: min(11vw,4em);
   font-family: "Heebo", sans-serif;
   font-weight: bold;
-  line-height: 0.1em;
-  color : #232323;
+  line-height: 0.8em;
   text-align: center;
-  text-shadow: 10px 10px 25px rgb(163, 163, 163),
-  -10px 10px 25px rgb(149, 147, 137);
   word-break: keep-all;
   justify-content: center;
-  margin : 0px;
   padding-left: 0.2em;
   position: relative;
 }
 #second-title {
-  font-size: min(6vw,1.6em);
+  font-size: min(5vw,1.3em);
   position: relative;
   width: 100%;
   display: block;
   font-family: "Heebo", sans-serif;
   font-weight: 900;
-  color : #232323;
+  // color : #232323;
   text-align: center;
-  text-shadow: 10px 10px 25px rgb(163, 163, 163),
-  -10px 10px 25px rgb(149, 147, 137);
+  // text-shadow: 10px 10px 25px rgb(163, 163, 163),
+  // -10px 10px 25px rgb(149, 147, 137);
   margin : 0px;
   padding: 0px;
 }
 #header-logo {
   border-radius: 50%;
-    box-shadow: 10px 10px 25px rgb(163, 163, 163),
-        -10px 10px 25px rgb(149, 147, 137);
+    // box-shadow: 10px 10px 25px rgb(163, 163, 163),
+    //     -10px 10px 25px rgb(149, 147, 137);
 }
 #home-container {
   align-content: center;

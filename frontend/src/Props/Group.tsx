@@ -11,6 +11,7 @@ export interface SimpleGroupProps {
   slug: string;
   url: string;
   icon?: string;
+  category: string;
 }
 
 export interface GroupProps extends SimpleGroupProps {

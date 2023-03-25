@@ -30,7 +30,7 @@ function createFormFields(): FieldType[] {
       maxLength: 50,
       helpText: 'Attention vous devez être admin pour créer un événement',
       required: true,
-      endPoint: '/api/group/group/',
+      endPoint: '/api/group/group',
       getOptionLabel: (m) => m?.name || '',
     },
     {
@@ -167,6 +167,7 @@ function EditEventModal(props: {
   /** Function called on submit to save data */
   function onSubmit(e: FormEvent) {
     e.preventDefault(); // prevent default action from browser
+    console.log(e);
     setSaving(true); // show loading
     saveEvent(formValues) // save data
       .then(() => {

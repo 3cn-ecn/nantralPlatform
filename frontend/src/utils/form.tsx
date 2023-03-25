@@ -119,8 +119,11 @@ export type FieldType =
       name: string;
       label: string;
       required?: boolean;
+      minLetterCount?: number;
+      filter?: (any) => boolean;
       helpText?: string;
       endPoint: string;
+      queryParams?: object;
       freeSolo?: boolean;
       getOptionLabel: (option: any) => string;
       pk?: any;
@@ -241,6 +244,7 @@ function FormGroup(props: {
                     required={field.required}
                     margin="dense"
                     disabled={field.disabled}
+                    error={!!error}
                   >
                     {field.item.map((name) => (
                       <MenuItem key={name.toString()} value={name[1]}>
@@ -248,6 +252,9 @@ function FormGroup(props: {
                       </MenuItem>
                     ))}
                   </Select>
+                  <FormHelperText error={!!error}>
+                    {error || field.helpText}
+                  </FormHelperText>
                 </FormControl>
               </Box>
             );
@@ -522,10 +529,16 @@ function AutocompleteField<T>(props: {
     newValue: string,
     reason: AutocompleteInputChangeReason
   ): void => {
-    if (reason !== 'input' || newValue.length < 3) return;
+    if (reason !== 'input' || newValue.length < field.minLetterCount) return;
     axios
-      .get<any[]>(`${field.endPoint}/search/`, { params: { q: newValue } })
-      .then((res) => setOptions(res.data))
+      .get<any[]>(`${field.endPoint}/search/`, {
+        params: { q: newValue, ...field.queryParams },
+      })
+      .then((res) =>
+        setOptions(
+          res.data.filter((item) => !field.filter || field.filter(item))
+        )
+      )
       .catch((err) => {
         console.error(err);
       });

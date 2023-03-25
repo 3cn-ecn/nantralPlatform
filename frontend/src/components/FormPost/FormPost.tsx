@@ -27,17 +27,27 @@ export function FormPost(props: {
 }) {
   const { open, onClose, post, onUpdate, mode } = props;
   const { t } = useTranslation('translation');
+  const [values, setValues] = React.useState<PostProps>(
+    post
+      ? structuredClone(post)
+      : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
+  );
+  const [errors, setErrors] = React.useState<any>({});
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
+  const [confirmationOpen, setConfirmationOpen] =
+    React.useState<boolean>(false);
+  const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const defaultFields: FieldType[] = [
     {
-      kind: 'autocomplete',
-      endPoint: 'api/group/group',
+      kind: 'select',
       label: t('form.group'),
-      name: mode === 'edit' ? 'groupSlug' : 'group', // Clumbsy
-      getOptionLabel: (option: GroupProps) => {
-        return option.name;
-      },
       required: true,
-      helpText: mode === 'edit' ? '' : t('form.groupHelpText'),
+      name: 'group',
+      item: adminGroup?.map((group: GroupProps) => [
+        group.name,
+        group.id.toString(),
+      ]),
       disabled: mode === 'edit',
     },
     {
@@ -83,26 +93,33 @@ export function FormPost(props: {
       type: 'checkbox',
     },
   ];
-  const [values, setValues] = React.useState<PostProps>(
-    post
-      ? structuredClone(post)
-      : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
-  );
-  const [errors, setErrors] = React.useState<any>({});
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [confirmationOpen, setConfirmationOpen] =
-    React.useState<boolean>(false);
-  const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
 
   React.useEffect(() => {
     setErrors({});
   }, [open]);
+
+  React.useEffect(() => {
+    axios
+      .get('/api/group/group/', {
+        params: { admin: true },
+      })
+      .then((res) => setAdminGroup(res.data.results));
+  }, []);
+
+  React.useEffect(() => {
+    setValues(
+      post
+        ? structuredClone(post)
+        : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
+    );
+  }, [post]);
 
   const deletePost = () => {
     setLoading(true);
     axios
       .delete(`/api/post/${post.id}/`)
       .then(() => {
+        onUpdate(null);
         onClose();
         setLoading(false);
       })
@@ -147,7 +164,6 @@ export function FormPost(props: {
   };
   const updatePost = () => {
     setLoading(true);
-    console.log(values);
     const formData = new FormData();
     // To avoid typescript error
     if (values.image && typeof values.image !== 'string')
@@ -220,11 +236,12 @@ export function FormPost(props: {
           sx={{ display: 'flex', flexDirection: 'column' }}
         >
           {errors.non_field_errors &&
-            errors.non_field_errors.map((text, key) => (
+            errors.non_field_errors.map((text) => (
               <Alert variant="filled" severity="error" key={text}>
                 {text}
               </Alert>
             ))}
+
           <div>
             <FormGroup
               fields={defaultFields}
@@ -268,6 +285,7 @@ export function FormPost(props: {
               </>
             ) : (
               <Button
+                type="submit"
                 disabled={loading}
                 color="info"
                 variant="contained"

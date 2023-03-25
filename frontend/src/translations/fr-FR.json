@@ -40,6 +40,7 @@
     "endInscription": "L'inscription est ouverte jusqu'au",
     "endTime": "Se termine le :",
     "error": "Erreur lors du chargement des évènements",
+    "event": "Évènement",
     "membersOnly": "Membres uniquement",
     "no_event": "Aucun évènement",
     "participants": "Participants",
@@ -168,7 +169,8 @@
   "post": {
     "confirmDelete": "Êtes vous sûr de vouloir supprimer le post (cette action est irréversible).",
     "edited": "édité",
-    "noPost": "Il n'y a pas de post récents",
+    "noPost": "Il n'y a pas de posts récents",
+    "post": "Post",
     "published": "publié",
     "updated": "mis à jour"
   },

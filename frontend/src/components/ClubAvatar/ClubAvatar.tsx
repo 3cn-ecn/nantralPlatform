@@ -2,6 +2,7 @@ import { Skeleton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton/IconButton';
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { stringToColor } from '../../utils/formatText';
 
 export function ClubAvatar(props: {
@@ -29,21 +30,24 @@ export function ClubAvatar(props: {
         flexDirection: textPosition === 'bottom' ? 'column' : 'row',
         display: 'flex',
         maxWidth: 'max-content',
+        textAlign: textPosition === 'bottom' ? 'center' : 'left',
       }}
     >
-      <IconButton href={clubUrl} sx={{ padding: 0, margin: 1 }}>
-        <Avatar
-          alt=""
-          src={logoUrl}
-          sx={{
-            height: size,
-            width: size,
-            bgcolor: logoUrl ? 'transparent' : stringToColor(name),
-            color: 'white',
-          }}
-        >
-          {!logoUrl && initials}
-        </Avatar>
+      <IconButton sx={{ padding: 0, margin: 1 }}>
+        <Link to={clubUrl} style={{ textDecorationLine: 'none' }}>
+          <Avatar
+            alt=""
+            src={logoUrl}
+            sx={{
+              height: size,
+              width: size,
+              bgcolor: logoUrl ? 'transparent' : stringToColor(name),
+              color: 'white',
+            }}
+          >
+            {!logoUrl && initials}
+          </Avatar>
+        </Link>
       </IconButton>
       {nameArea}
     </div>

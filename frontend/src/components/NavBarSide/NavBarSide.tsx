@@ -62,7 +62,7 @@ function NavBarSide(props: {
       text: t('navbar.group'),
       url: '/group/',
       icon: ClubIcon,
-      isOnBackend: true,
+      isOnBackend: false,
     },
     {
       text: t('navbar.flatshare'),
@@ -95,9 +95,7 @@ function NavBarSide(props: {
       variant={variant}
       open={menuOpen}
       anchor="left"
-      onAbort={onClose}
-      onAbortCapture={onClose}
-      onAuxClick={onClose}
+      onClick={onClose}
       sx={{
         width: drawerWidth,
         flexShrink: 0,

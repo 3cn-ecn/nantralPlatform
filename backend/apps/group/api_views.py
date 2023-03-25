@@ -20,7 +20,8 @@ from .serializers import (
     MembershipSerializer,
     NewMembershipSerializer,
     GroupSerializer,
-    SimpleGroupSerializer)
+    SimpleGroupSerializer,
+    GroupTypeSerializer)
 
 
 class GroupPermission(permissions.BasePermission):
@@ -48,6 +49,17 @@ class GroupPermission(permissions.BasePermission):
         return obj.is_admin(request.user)
 
 
+class GroupTypeViewSet(viewsets.ModelViewSet):
+    # permission_classes = [GroupPermission]
+    pagination_class = pagination.LimitOffsetPagination
+    serializer_class = GroupTypeSerializer
+    lookup_field = 'slug'
+    lookup_url_kwarg = 'slug'
+
+    def get_queryset(self) -> QuerySet[GroupType]:
+        return GroupType.objects.all()
+
+
 class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
     """An API endpoint for groups.
 
@@ -55,6 +67,8 @@ class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
     ----------------
     type: slug
         The group-type we want to limit the query to.
+    is_admin: bool
+        Returns only group where the user is admin
     simple: bool
         Returns only name, short_name, slug, icon and url for each group.
     limit: int
@@ -88,33 +102,36 @@ class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
         group_type = GroupType.objects.filter(
             slug=self.request.query_params.get('type')).first()
         filter_is_member = self.request.query_params.get('is_member', False)
-        return (Group.objects
-                # filter by group_type
-                .filter(Q(group_type=group_type) if group_type else Q())
-                # remove the sub-groups to keep only parent groups
-                .filter(Q(parent=None)
-                        | Q(parent__in=F('group_type__extra_parents')))
-                # hide archived groups
-                .filter(archived=False)
-                # filter by groups where current user is member
-                .filter(Q(members=user.student) if filter_is_member else Q())
-                # hide private groups unless user is member
-                # and hide non-public group if user is not authenticated
-                .filter(Q(private=False) | Q(members=user.student)
-                        if user.is_authenticated
-                        else Q(public=True))
-                # hide groups without active members (ie end_date > today)
-                .annotate(num_active_members=Count(
-                    'membership_set',
-                    filter=Q(membership_set__end_date__gte=timezone.now())))
-                .filter(Q(num_active_members__gt=0)
-                        | Q(group_type__hide_no_active_members=False))
-                # prefetch type and parent group for better performances
-                .prefetch_related('group_type', 'parent')
-                # order by category, order and then name
-                .order_by(*group_type.sort_fields.split(',')
-                          if group_type else '')
-                .distinct())
+        queryset = (Group.objects
+                    # filter by group_type
+                    .filter(Q(group_type=group_type) if group_type else Q())
+                    # remove the sub-groups to keep only parent groups
+                    .filter(Q(parent=None)
+                            | Q(parent__in=F('group_type__extra_parents')))
+                    # hide archived groups
+                    .filter(archived=False)
+                    # filter by groups where current user is member
+                    .filter(Q(members=user.student)
+                            if filter_is_member else Q())
+                    # hide private groups unless user is member
+                    # and hide non-public group if user is not authenticated
+                    .filter(Q(private=False) | Q(members=user.student)
+                            if user.is_authenticated
+                            else Q(public=True))
+                    # hide groups without active members (ie end_date > today)
+                    .annotate(num_active_members=Count(
+                        'membership_set',
+                        filter=Q(membership_set__end_date__gte=timezone.now())))
+                    .filter(Q(num_active_members__gt=0)
+                            | Q(group_type__hide_no_active_members=False))
+                    # prefetch type and parent group for better performances
+                    .prefetch_related('group_type', 'parent')
+                    # order by category, order and then name
+                    .order_by(*group_type.sort_fields.split(',')
+                              if group_type else '')
+                    .distinct())
+        queryset = [group.pk for group in queryset if group.is_admin(user)]
+        return Group.objects.all().filter(pk__in=queryset)
 
     def get_object(self):
         obj = get_object_or_404(Group, slug=self.kwargs['slug'])

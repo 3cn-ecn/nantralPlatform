@@ -365,7 +365,8 @@ class Group(models.Model, SlugModel):
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
-        return reverse('group:detail', kwargs={'slug': self.slug})
+        return '/group/@' + self.slug
+        # return reverse('group:detail', kwargs={'slug': self.slug})
 
 
 class Membership(models.Model):

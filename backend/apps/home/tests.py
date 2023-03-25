@@ -57,6 +57,7 @@ class TestHomeView(TestCase, TestMixin):
         self.client.login(username=self.u1.username, password=self.PASSWORD)
         # Test if / loads
         url = reverse("home:home")
+        print('HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO', url)
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         # Test if /api/event/ loads

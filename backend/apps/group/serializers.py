@@ -42,14 +42,19 @@ class GroupTypeSerializer(serializers.ModelSerializer):
 
 class SimpleGroupSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ['name', 'short_name', 'slug', 'url', 'icon']
-        read_only_fields = ['name', 'short_name', 'slug', 'url', 'icon']
+        fields = ['name', 'short_name', 'slug', 'url', 'icon', 'category']
+        read_only_fields = ['name', 'short_name',
+                            'slug', 'url', 'icon', 'category']
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
+
+    def get_category(self, obj: Group) -> str:
+        return obj.get_category()
 
 
 class GroupSerializer(serializers.ModelSerializer):

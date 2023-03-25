@@ -21,8 +21,9 @@ export function PostSection(props: {
   maxItem?: number;
   /** Nombre d'item à afficher de base */
   shownItem?: number;
+  onUpdate?: (post: null | PostProps) => void;
 }) {
-  const { posts, title, maxItem, status, shownItem } = props;
+  const { posts, title, maxItem, status, shownItem, onUpdate } = props;
   const allPosts = maxItem ? posts.slice(0, maxItem) : posts;
   const { t } = useTranslation('translation');
   const [showAll, setShowAll] = React.useState<boolean>(false);
@@ -44,7 +45,7 @@ export function PostSection(props: {
           .slice(0, showAll ? allPosts.length : shownItem)
           .map((post) => (
             <Grid key={post.slug} xs={12} md={4} item>
-              <PostCard post={post} />
+              <PostCard post={post} onDelete={() => onUpdate(post)} />
             </Grid>
           ));
       else
@@ -79,4 +80,5 @@ PostSection.defaultProps = {
   title: null,
   maxItem: null,
   shownItem: 3,
+  onUpdate: () => null,
 };

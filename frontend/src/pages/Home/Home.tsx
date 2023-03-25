@@ -1,10 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { ClubProps } from 'Props/Group';
+import { ClubProps, GroupProps, SimpleGroupProps } from 'Props/Group';
 import * as React from 'react';
-import { Box, Fab, SvgIcon, Typography } from '@mui/material';
-import { Container } from '@mui/system';
-import { Add } from '@mui/icons-material';
+import {
+  Box,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+  SvgIcon,
+  Typography,
+  Container,
+} from '@mui/material';
+import { Event, PostAdd } from '@mui/icons-material';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
@@ -15,6 +22,7 @@ import { PostSection } from '../../components/Section/PostSection/PostSection';
 import { PostProps, postsToCamelCase } from '../../Props/Post';
 import { LoadStatus } from '../../Props/GenericTypes';
 import { FormPost } from '../../components/FormPost/FormPost';
+import EditEventModal from '../../components/FormularEvent/CreateEvent';
 
 /**
  * Home Page, with Welcome message, next events, etc...
@@ -23,7 +31,9 @@ import { FormPost } from '../../components/FormPost/FormPost';
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
   const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
-  const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
+  const [myClubs, setMyClubs] = React.useState<
+    Array<GroupProps | SimpleGroupProps>
+  >([]);
   const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
   const [postsStatus, setPostsStatus] = React.useState<LoadStatus>('load');
@@ -32,6 +42,7 @@ function Home() {
     React.useState<LoadStatus>('load');
 
   const [postFormOpen, setPostFormOpen] = React.useState<boolean>(false);
+  const [eventFormOpen, setEventFormOpen] = React.useState<boolean>(false);
   const { t } = useTranslation('translation'); // translation module
   const today = new Date();
   const postDateLimit = new Date();
@@ -116,13 +127,26 @@ function Home() {
       });
   }
 
+  const actions = [
+    {
+      icon: <Event />,
+      name: t('event.event'),
+      onClick: () => setEventFormOpen(true),
+    },
+    {
+      icon: <PostAdd />,
+      name: t('post.post'),
+      onClick: () => setPostFormOpen(true),
+    },
+  ];
+
   return (
-    <>
+    <Box>
       <div className="header">
         <div id="header-title">
           <Typography id="second-title">{t('home.welcomeTo')}</Typography>
           <div id="title">
-            <SvgIcon
+            {/* <SvgIcon
               component={NantralIcon}
               inheritViewBox
               id="header-logo"
@@ -130,15 +154,11 @@ function Home() {
                 height: 50,
                 width: 50,
               }}
-            />
+            /> */}
             <Typography id="main-title">Nantral Platform</Typography>
           </div>
         </div>
-        <img
-          className="header-image"
-          alt=""
-          src="/static/img/central_background.jpg"
-        />
+        <img className="header-image" alt="" src="/static/img/header.png" />
       </div>
       <Box
         bgcolor="background.default"
@@ -149,20 +169,28 @@ function Home() {
           paddingTop: 20,
         }}
       >
-        <Fab
-          color="primary"
-          aria-label="add"
-          onClick={() => setPostFormOpen(true)}
-          sx={{ bottom: 0, right: 0, position: 'fixed', margin: 4 }}
+        <SpeedDial
+          ariaLabel="SpeedDial"
+          sx={{ position: 'fixed', bottom: 24, right: 24, flexGrow: 1 }}
+          icon={<SpeedDialIcon />}
         >
-          <Add />
-        </Fab>
+          {actions.map((action) => (
+            <SpeedDialAction
+              onClick={action.onClick}
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              tooltipOpen
+            />
+          ))}
+        </SpeedDial>
         <Container sx={{ marginBottom: 3 }}>
           {(postsPinnedStatus === 'load' || postsPinned.length > 0) && (
             <PostSection
               posts={postsPinned}
               title={t('home.highlighted')}
               status={postsStatus}
+              onUpdate={() => getPinnedPosts()}
             />
           )}
           {posts.filter((post) => !post.pinned) && (
@@ -170,6 +198,7 @@ function Home() {
               posts={posts.filter((post) => !post.pinned)}
               title={t('home.announcement')}
               status={postsStatus}
+              onUpdate={() => getPosts()}
             />
           )}
           <EventSection
@@ -203,7 +232,13 @@ function Home() {
           getPinnedPosts();
         }}
       />
-    </>
+      <EditEventModal
+        open={eventFormOpen}
+        closeModal={() => setEventFormOpen(false)}
+        openDeleteModal={() => null}
+        saveEvent={() => null}
+      />
+    </Box>
   );
 }
 
