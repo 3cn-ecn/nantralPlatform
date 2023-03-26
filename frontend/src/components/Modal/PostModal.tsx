@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ClubProps } from '../../Props/Group';
 import { theme } from '../style/palette';
-import { EditButton, MembersIcon, SeePageButton } from '../PostCard/PostCard';
+import { EditButton, PostBadges, SeePageButton } from '../PostCard/PostCard';
 import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
 import { FormPost } from '../FormPost/FormPost';
@@ -63,10 +63,7 @@ export function PostModal(props: {
                 </Link>
               )}
               <div>
-                <h2 className="post-title">
-                  {post.publicity === 'Mem' && <MembersIcon />}
-                  {post.title}
-                </h2>
+                <h2 className="post-title">{post.title}</h2>
                 <div style={{ fontSize: 12 }}>
                   {clubDetails && clubDetails.name}
                 </div>
@@ -84,22 +81,37 @@ export function PostModal(props: {
         <DialogActions
           sx={{
             justifyContent: 'space-between',
-            paddingLeft: 4,
           }}
         >
-          <div>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              columnGap: 10,
+            }}
+          >
+            <PostBadges pinned={post.pinned} publicity={post.publicity} />
             <Typography variant="caption" textAlign="right" fontStyle="italic">
               {`${t('post.published')} ${timeFromNow(post.publicationDate)}`}
             </Typography>
             {post.publicationDate.toDateString() !==
               post.updatedAt.toDateString() && (
-              <Typography
-                variant="caption"
-                textAlign="right"
-                fontStyle="italic"
-              >
-                {` • ${t('post.updated')} ${timeFromNow(post.updatedAt)}`}
-              </Typography>
+              <>
+                <Typography
+                  variant="caption"
+                  textAlign="right"
+                  fontStyle="italic"
+                >
+                  •
+                </Typography>
+                <Typography
+                  variant="caption"
+                  textAlign="right"
+                  fontStyle="italic"
+                >
+                  {`${t('post.updated')} ${timeFromNow(post.updatedAt)}`}
+                </Typography>
+              </>
             )}
           </div>
 

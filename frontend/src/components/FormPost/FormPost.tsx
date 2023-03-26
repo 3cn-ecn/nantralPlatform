@@ -49,6 +49,7 @@ export function FormPost(props: {
         group.id.toString(),
       ]),
       disabled: mode === 'edit',
+      helpText: t('form.groupHelpText'),
     },
     {
       kind: 'text',

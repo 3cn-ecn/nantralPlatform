@@ -68,7 +68,7 @@
     "description": "Description",
     "editPost": "Edit post",
     "group": "Group",
-    "groupHelpText": "Type the first 3 letters of your group",
+    "groupHelpText": "You must be an admin of your group to post a post.",
     "image": "Picture",
     "imageDescription": "A picture, a banner, a poster",
     "membersOnly": "Club members only",

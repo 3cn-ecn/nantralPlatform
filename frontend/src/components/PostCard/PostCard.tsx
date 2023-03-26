@@ -61,6 +61,47 @@ export function MembersIcon() {
     </Tooltip>
   );
 }
+
+export function PostBadges(props: {
+  pinned: boolean;
+  className?: string;
+  style?: any;
+  publicity: PostProps['publicity'];
+}) {
+  const { pinned, publicity, className, style } = props;
+  return (
+    <div
+      className={className}
+      style={{ display: 'flex', columnGap: '0.6em', ...style }}
+    >
+      {publicity === 'Mem' && (
+        <Groups
+          sx={{
+            padding: 0.4,
+            color: 'white',
+            borderRadius: '50%',
+            backgroundColor: 'primary.main',
+          }}
+        />
+      )}
+      {pinned && (
+        <PushPin
+          sx={{
+            padding: 0.4,
+            color: 'white',
+            borderRadius: '50%',
+            backgroundColor: 'primary.main',
+          }}
+        />
+      )}
+    </div>
+  );
+}
+PostBadges.defaultProps = {
+  className: null,
+  style: {},
+};
+
 SeePageButton.defaultProps = {
   style: null,
 };
@@ -83,12 +124,10 @@ export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
   }, []);
 
   const updatePost = (newPost: PostProps) => {
-    console.log('heyyyyyy', newPost);
     if (newPost) setPostValue(newPost);
     else {
       onDelete();
       setOpen(false);
-      console.log('OUIIIIIIIIIIIIIIIIIIIIIII');
     }
   };
 
@@ -104,28 +143,11 @@ export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
           onClick={() => setOpen(true)}
           sx={{ display: 'flex', height: '100%' }}
         >
-          <div className="post-icons">
-            {postValue.publicity === 'Mem' && (
-              <Groups
-                sx={{
-                  padding: 0.4,
-                  color: 'white',
-                  borderRadius: '50%',
-                  backgroundColor: 'primary.main',
-                }}
-              />
-            )}
-            {post.pinned && (
-              <PushPin
-                sx={{
-                  padding: 0.4,
-                  color: 'white',
-                  borderRadius: '50%',
-                  backgroundColor: 'primary.main',
-                }}
-              />
-            )}
-          </div>
+          <PostBadges
+            pinned={postValue.pinned}
+            publicity={postValue.publicity}
+            className="post-icons"
+          />
           <CardContent
             style={{
               borderColor: 'red',

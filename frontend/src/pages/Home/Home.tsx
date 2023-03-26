@@ -146,19 +146,12 @@ function Home() {
         <div id="header-title">
           <Typography id="second-title">{t('home.welcomeTo')}</Typography>
           <div id="title">
-            {/* <SvgIcon
-              component={NantralIcon}
-              inheritViewBox
-              id="header-logo"
-              sx={{
-                height: 50,
-                width: 50,
-              }}
-            /> */}
             <Typography id="main-title">Nantral Platform</Typography>
           </div>
         </div>
-        <img className="header-image" alt="" src="/static/img/header.png" />
+        <div className="header-image-container">
+          <img className="header-image" alt="" src="/static/img/header.png" />
+        </div>
       </div>
       <Box
         bgcolor="background.default"
