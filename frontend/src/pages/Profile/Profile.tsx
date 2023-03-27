@@ -10,7 +10,7 @@ import { MembershipsStudent } from '../../components/Group/MembershipsStudent/';
 import { EditProfilModal } from '../../components/FormProfil/FormProfil';
 import Avatar from '../../components/Avatar/Avatar';
 
-const API_URL = '../../api/student/student/';
+const API_URL = '/api/student/student/';
 
 function Profile() {
   const [student, setStudent] = React.useState(null);
@@ -23,7 +23,6 @@ function Profile() {
 
   React.useEffect(() => {
     getProfile();
-    console.log(student);
   }, []);
 
   async function getProfile() {
