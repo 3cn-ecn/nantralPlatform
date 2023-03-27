@@ -4,6 +4,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
 import { FilterInterface } from 'Props/Filter';
+import { useSearchParams } from 'react-router-dom';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
@@ -26,9 +27,13 @@ function EventCalendar(props: { events: any }) {
   return <Calendar events={events}></Calendar>;
 }
 
-function EventView(props: { filter: any }) {
-  const { filter } = props;
-  const [value, setValue] = React.useState('1');
+function EventView(props: {
+  filter: any;
+  selectedTab: string | null;
+  onChangeTab: (tab: string) => void;
+}) {
+  const { filter, selectedTab, onChangeTab } = props;
+  const [value, setValue] = React.useState(selectedTab || '1');
   const [status, setStatus] = React.useState<LoadStatus>('load');
   const [eventsList, setEventsList] = React.useState<Array<EventProps>>([]);
   const [eventsCalendar, setEventsCalendar] = React.useState<Array<EventProps>>(
@@ -36,6 +41,7 @@ function EventView(props: { filter: any }) {
   );
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+    onChangeTab(newValue);
   };
 
   const today = new Date();
@@ -134,7 +140,6 @@ function EventView(props: { filter: any }) {
         });
     }
   }, [filter]);
-
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -158,11 +163,30 @@ function EventView(props: { filter: any }) {
  * @returns Event page component
  */
 function Event() {
-  const [filter, setFilter] = React.useState<FilterInterface | null>(null);
+  const [queryParameters, setQueryParams] = useSearchParams();
+  const [tab, setTab] = React.useState(queryParameters.get('tab') || '1');
+  const [filter, setFilter] = React.useState<FilterInterface | null>({
+    dateBegin: queryParameters.get('dateBegin'),
+    dateEnd: queryParameters.get('dateEnd'),
+    favorite: queryParameters.get('favorite') ? true : null,
+    organiser: queryParameters.get('organiser'),
+    participate: queryParameters.get('participate') ? true : null,
+    shotgun: queryParameters.get('shotgun') ? true : null,
+  });
   const [openAddModal, setOpenAddModal] = useState(false);
 
-  const getFilter = (validateFilter) => {
+  function updateParameters(attributes: object) {
+    const pairs = Object.entries(attributes);
+    pairs.forEach(([key, value]) => {
+      if (value) queryParameters.set(key, value.toString());
+      else queryParameters.delete(key);
+    });
+    setQueryParams(queryParameters);
+  }
+
+  const getFilter = (validateFilter: FilterInterface) => {
     setFilter(validateFilter);
+    updateParameters(validateFilter);
   };
 
   return (
@@ -171,7 +195,7 @@ function Event() {
       <Box
         style={{
           display: 'flex',
-          alignitems: 'center',
+          alignItems: 'center',
           justifyContent: 'space-between',
           marginBottom: 20,
         }}
@@ -191,10 +215,14 @@ function Event() {
           />
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <FilterBar getFilter={getFilter} />
+          <FilterBar filter={filter} getFilter={getFilter} />
         </div>
       </Box>
-      <EventView filter={filter} />
+      <EventView
+        filter={filter}
+        selectedTab={queryParameters.get('tab')}
+        onChangeTab={(value) => updateParameters({ tab: value })}
+      />
     </Container>
   );
 }

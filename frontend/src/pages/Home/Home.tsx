@@ -31,9 +31,7 @@ import EditEventModal from '../../components/FormularEvent/CreateEvent';
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
   const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
-  const [myClubs, setMyClubs] = React.useState<
-    Array<GroupProps | SimpleGroupProps>
-  >([]);
+  const [myClubs, setMyClubs] = React.useState<Array<SimpleGroupProps>>([]);
   const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
   const [postsStatus, setPostsStatus] = React.useState<LoadStatus>('load');
@@ -77,7 +75,21 @@ function Home() {
   async function getMyClubs() {
     // fetch my clubs
     axios
-      .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
+      .get('/api/group/group/', { params: { is_member: true, simple: true } })
+      .then((res) => {
+        setMyClubs(res.data.results);
+        setClubsStatus('success');
+      })
+      .catch((err) => {
+        console.error(err);
+        setClubsStatus('fail');
+      });
+  }
+
+  async function getMyGroups() {
+    // fetch my clubs
+    axios
+      .get('/api/group/group/', { params: { is_member: true, type: '' } })
       .then((res) => {
         setMyClubs(res.data.results);
         setClubsStatus('success');
