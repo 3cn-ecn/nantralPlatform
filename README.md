@@ -2,7 +2,8 @@
 [![Deploy Staging](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/deploy-staging.yml/badge.svg?branch=staging)](https://dev.nantral-platform.fr)
 [![Deploy Docs](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/deploy-docs.yml/badge.svg?branch=master)](https://docs.nantral-platform.fr)
 
-![Test Django](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/test-django.yml/badge.svg)
+![Test Back End](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/test-backend.yml/badge.svg)
+![Test Front End](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/test-frontend.yml/badge.svg)
 ![Test Docs](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/test-docs.yml/badge.svg)
 
 # Nantral Platform
@@ -12,16 +13,16 @@
 
 ## Get started
 
-* Requirements: `python3`, `pipenv`, and `nodejs`
-* Set up the project (for *Windows* users, replace `unix` by `win`):
+* Requirements: `python3`, `pipenv` (be sure its in your PATH!), and `nodejs`
+* Set up the project:
     ```
-    make unix-install
+    make install
     ```
 * Start the server:
     ```
     cd backend/ && pipenv run start
     ```
-    The server is launch on [http://localhost:8000](http://localhost:8000). The administration panel is available at [http://localhost:8000/admin](http://localhost:8000/admin), with the default account `admin/admin`.
+    The server is launch on [http://localhost:8000](http://localhost:8000). The administration panel is available at [http://localhost:8000/admin](http://localhost:8000/admin), with the default account `admin/admin`. Be careful: the default account is not usable for the website (only for the administration panel), you have to create your own account (verification emails are sent to console).
 
 ## Contribute
 
@@ -51,6 +52,7 @@ All these commands are done from the `backend` directory. Please first move into
 
 All these commands are done from the `frontend` directory. Please first move into it with `cd ./frontend/`.
 * `npm run start`: start the live compilation in dev mode of the files. Each time you edit a file, the new file is automatically compiled.
+* `npm run test`: launch tests for the front end
 * `npm run build`: build the production compilation of the files. This is useful to check the weight of the files.
 * `npm run build:dev`: compile the files in dev mode (like the start option, except that it doesn't refresh when you edit a file).
 * `npm install --save[-dev] <package_name>`: add a package to the (dev) dependencies

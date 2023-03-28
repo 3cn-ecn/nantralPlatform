@@ -94,7 +94,7 @@ function MembershipsStudent(props: {}): JSX.Element {
         ? <Button
             variant='text'
             onClick={() => {
-              setFilters({ ...filters, from: undefined });
+              filters.from = undefined;
               getMemberships();
             }}
           >
@@ -103,7 +103,7 @@ function MembershipsStudent(props: {}): JSX.Element {
         : <Button
             variant='text'
             onClick={() => {
-              setFilters({ ...filters, from: new Date().toISOString() });
+              filters.from = new Date().toISOString();
               getMemberships();
             }}
           >
