@@ -37,6 +37,7 @@
       "share": "Share",
       "unsubscribe": "Unregister"
     },
+    "adminWarning": "You must be an admin of your club to create an event",
     "endInscription": "Registration is open until",
     "endTime": "Will end on :",
     "error": "Error while loading the events",
@@ -72,6 +73,7 @@
     "image": "Picture",
     "imageDescription": "A picture, a banner, a poster",
     "membersOnly": "Club members only",
+    "noFile": "No file",
     "pinned": "Pinned post",
     "public": "Public",
     "publicationDate": "Publication date",

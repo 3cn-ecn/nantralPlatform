@@ -10,10 +10,20 @@ import {
   Box,
   CircularProgress,
   Alert,
+  useMediaQuery,
+  Paper,
+  ToggleButton,
+  ToggleButtonGroup,
 } from '@mui/material';
-import { Close as CloseIcon } from '@mui/icons-material';
-import FormGroup, { FieldType } from '../../utils/form';
-import { Event, Group } from '../../Props';
+import axios from 'axios';
+import { Close as CloseIcon, Info } from '@mui/icons-material';
+import { EventProps, FormEventProps } from 'Props/Event';
+import { GroupProps, SimpleGroupProps } from 'Props/Group';
+import { useTranslation } from 'react-i18next';
+import { FieldType } from 'Props/GenericTypes';
+import { SimpleGroup } from 'components/Group/interfaces';
+import { theme } from '../style/palette';
+import FormGroup from '../../utils/form';
 
 /**
  * Fonction permettant de générer le formulaire de création d'un événement.
@@ -21,16 +31,18 @@ import { Event, Group } from '../../Props';
  *
  * @returns The default list of fields
  */
-function createFormFields(): FieldType[] {
-  const defaultFields: FieldType[] = [
+function getFormFields(groups: Array<SimpleGroupProps>) {
+  const { t } = useTranslation('translation');
+
+  const mainFields: FieldType[] = [
     {
-      kind: 'autocomplete',
+      kind: 'image-autocomplete',
       name: 'group',
-      label: 'Groupe',
-      maxLength: 50,
-      helpText: 'Attention vous devez être admin pour créer un événement',
+      label: t('form.group'),
+      helpText: t('event.adminWarning'),
       required: true,
-      endPoint: '/api/group/group',
+      options: groups,
+      getIcon: (group: SimpleGroup) => group.icon,
       getOptionLabel: (m) => m?.name || '',
     },
     {
@@ -44,7 +56,7 @@ function createFormFields(): FieldType[] {
       fields: [
         {
           kind: 'datetime',
-          name: 'begin_date',
+          name: 'date',
           label: 'Date et Heure de début',
           required: true,
           disablePast: true,
@@ -60,17 +72,20 @@ function createFormFields(): FieldType[] {
     },
     {
       kind: 'text',
-      name: 'place',
+      name: 'location',
       label: "Lieu de l'évenement",
       required: true,
     },
     {
-      kind: 'text',
+      kind: 'richtext',
       name: 'description',
       label: 'Description',
-      required: true,
-      multiline: true,
-      row: 3,
+    },
+    {
+      kind: 'file',
+      description: t('form.imageDescription'),
+      label: t('form.image'),
+      name: 'image',
     },
     {
       kind: 'datetime',
@@ -80,11 +95,11 @@ function createFormFields(): FieldType[] {
     },
     {
       kind: 'select',
-      name: 'type_evenement',
-      label: "Type de l'événement",
+      name: 'publicity',
+      label: t('form.publicity'),
       item: [
-        ['réservé aux membres', 'Mem'],
-        ['visible par tout le monde', 'Pub'],
+        [t('form.public'), 'Pub'],
+        [t('form.membersOnly'), 'Mem'],
       ],
       required: true,
     },
@@ -93,27 +108,38 @@ function createFormFields(): FieldType[] {
       name: 'help_shotgun',
       text: "Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre le lien d'un form, soit définir un nombre max de participants",
     },
-    {
-      kind: 'datetime',
-      name: 'shotgun_date',
-      label: 'Date et Heure du Shotgun',
-      disablePast: true,
-    },
-    {
-      kind: 'text',
-      name: 'lien_shotgun',
-      label: 'Lien du formulaire Shotgun',
-      multiline: true,
-    },
+  ];
+
+  const shotgunFields: FieldType[] = [
     {
       kind: 'number',
-      name: 'Max_participants',
+      name: 'max_participant',
       label: 'Nombre max de participants',
+      required: true,
       min: 0,
       step: 1,
     },
+    {
+      kind: 'datetime',
+      name: 'beginInscription',
+      label: 'Date et Heure du Shotgun',
+      disablePast: true,
+    },
   ];
-  return defaultFields;
+
+  const formFields: FieldType[] = [
+    {
+      kind: 'link',
+      name: 'form_url',
+      label: 'Lien du formulaire Shotgun',
+      multiline: true,
+    },
+  ];
+  return {
+    mainFields: mainFields,
+    shotgunFields: shotgunFields,
+    formFields: formFields,
+  };
 }
 
 /**
@@ -121,55 +147,101 @@ function createFormFields(): FieldType[] {
  *
  * @returns A blank event
  */
-function createBlankEvent(): Event {
-  const event = {
-    group: '',
-    begin_inscription: '',
-    color: '',
-    date: '',
+function createBlankEvent(): FormEventProps {
+  const event: FormEventProps = {
+    group: null,
+    begin_inscription: null,
+    date: null,
     description: '',
-    end_date: '',
-    end_inscription: '',
-    get_absolute_url: '',
-    group_slug: '',
-    id: null,
+    end_date: null,
+    end_inscription: null,
     image: '',
     location: '',
     max_participant: null,
-    number_of_participants: null,
-    publication_date: '',
-    publicity: '',
-    slug: '',
-    ticketing: '',
+    publicity: 'Pub',
     title: '',
-    begin_date: '',
+    form_url: null,
   };
   return event;
 }
 
 function EditEventModal(props: {
   open: boolean;
-  event?: Event;
-  group?: Group;
-  saveEvent: (member: Event) => Promise<any>;
+  event?: EventProps;
+  group?: GroupProps;
+  mode?: 'create' | 'edit';
+  saveEvent: (member: EventProps) => Promise<any>;
   closeModal: () => void;
-  openDeleteModal?: () => void;
 }) {
-  const { open, group, saveEvent, closeModal } = props;
-  const event = props.event || createBlankEvent(group);
-  const formFields = createFormFields();
-
-  const [formValues, setFormValues] = useState<Event>(structuredClone(event));
+  const { open, group, saveEvent, closeModal, event, mode } = props;
+  const eventDisplayed = event || createBlankEvent();
+  const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
+  const [formValues, setFormValues] = useState<FormEventProps>(
+    structuredClone(eventDisplayed)
+  );
   const [formErrors, setFormErrors] = useState({});
   const [saving, setSaving] = useState(false);
   const [globalErrors, setGlobalErrors] = useState('');
+  const [shotgunMode, setShotgunMode] = React.useState<
+    'normal' | 'shotgun' | 'form'
+  >('normal');
+  const fields = getFormFields(adminGroup);
 
+  React.useEffect(() => {
+    axios
+      .get('/api/group/group/', { params: { admin: true, simple: true } })
+      .then((res) => setAdminGroup(res.data.results))
+      .catch((err) => console.error(err));
+  }, []);
+  const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   /** Function called on submit to save data */
-  function onSubmit(e: FormEvent) {
-    e.preventDefault(); // prevent default action from browser
-    console.log(e);
+  function createForm(): FormData {
+    console.log(formValues);
+    const formData = new FormData();
+    if (formValues.image && typeof formValues.image !== 'string')
+      formData.append('image', formValues.image, formValues.image.name);
+    if (formValues.group && mode === 'create')
+      formData.append('group', formValues.group.toString());
+    if (event?.group && mode === 'edit')
+      formData.append('group', event.group.toString());
+    formData.append('publicity', formValues.publicity);
+    formData.append('title', formValues.title || '');
+    console.log(formValues.description);
+    formData.append('description', formValues.description || '<p></p>');
+    if (formValues.date) formData.append('date', formValues.date.toISOString());
+    if (formValues.end_date)
+      formData.append('end_date', formValues.end_date.toISOString());
+    formData.append('location', formValues.location);
+    formData.append(
+      'form_url',
+      shotgunMode === 'form' ? formValues.form_url : ' '
+    );
+    formData.append(
+      'max_participant',
+      shotgunMode === 'shotgun' && formValues.max_participant
+        ? formValues.max_participant.toString()
+        : ''
+    );
+    // formData.append(
+    //   'begin_inscription',
+    //   shotgunMode === 'shotgun'
+    //     ? formValues.begin_inscription.toISOString()
+    //     : ''
+    // );
+    return formData;
+  }
+
+  function onSubmit() {
     setSaving(true); // show loading
-    saveEvent(formValues) // save data
+    console.log('saving');
+    const formData = createForm();
+    console.log('data', formData);
+    axios
+      .post(`/api/event/`, formData, {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+      })
       .then(() => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
@@ -180,7 +252,7 @@ function EditEventModal(props: {
       .catch((err) => {
         setSaving(false);
         if (err.response) {
-          console.log('Il y a une erreur');
+          // snakeToCamelCase(err.response.data, {});
           setFormErrors(err.response.data); // show errors per fields
           if (err.response.data.non_field_errors)
             // show form errors
@@ -193,13 +265,18 @@ function EditEventModal(props: {
       });
   }
   return (
-    <Dialog
-      aria-labelledby="customized-dialog-title"
-      open={open}
-      onClose={closeModal}
-    >
-      <form onSubmit={onSubmit}>
-        <DialogTitle sx={{ m: 0, p: 2 }}>
+    <form onSubmit={onSubmit}>
+      <Dialog
+        aria-labelledby="customized-dialog-title"
+        open={open}
+        onClose={closeModal}
+        scroll="paper"
+        fullWidth
+        fullScreen={fullScreen}
+        maxWidth="md"
+        sx={{ margin: 0 }}
+      >
+        <DialogTitle id="scroll-dialog-title">
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
@@ -211,7 +288,7 @@ function EditEventModal(props: {
               onClick={closeModal}
               sx={{
                 marginLeft: 'auto',
-                color: (theme) => theme.palette.grey[500],
+                color: (themes) => themes.palette.grey[500],
               }}
             >
               <CloseIcon />
@@ -222,14 +299,64 @@ function EditEventModal(props: {
           {globalErrors !== '' && (
             <Alert severity="error">{globalErrors}</Alert>
           )}
-          <Box>
-            <FormGroup
-              fields={formFields}
-              values={formValues}
-              errors={formErrors}
-              setValues={setFormValues}
-            />
-          </Box>
+          <FormGroup
+            fields={fields.mainFields}
+            values={formValues}
+            errors={formErrors}
+            setValues={setFormValues}
+          />
+          <Paper sx={{ padding: 2 }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+              }}
+            >
+              <Typography
+                variant="h5"
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                }}
+              >
+                Inscription
+                <IconButton>
+                  <Info />
+                </IconButton>
+              </Typography>
+              <ToggleButtonGroup
+                value={shotgunMode}
+                exclusive
+                onChange={(_, value) => {
+                  if (value) setShotgunMode(value);
+                }}
+                aria-label="text alignment"
+                color="primary"
+                sx={{ wordBreak: 'break-all' }}
+              >
+                <ToggleButton value="normal">Inscription libre</ToggleButton>
+                <ToggleButton value="shotgun">Shotgun</ToggleButton>
+                <ToggleButton value="form">Form</ToggleButton>
+              </ToggleButtonGroup>
+            </div>
+            {shotgunMode === 'shotgun' && (
+              <FormGroup
+                fields={fields.shotgunFields}
+                values={formValues}
+                errors={formErrors}
+                setValues={setFormValues}
+              />
+            )}
+            {shotgunMode === 'form' && (
+              <FormGroup
+                fields={fields.formFields}
+                values={formValues}
+                errors={formErrors}
+                setValues={setFormValues}
+              />
+            )}
+          </Paper>
         </DialogContent>
         <DialogActions>
           <Button
@@ -242,23 +369,28 @@ function EditEventModal(props: {
           </Button>
           <Button
             type="submit"
+            onClick={() => onSubmit()}
             variant="contained"
             color="success"
             disabled={saving}
             endIcon={
-              saving ? (
+              saving && (
                 <CircularProgress size="1em" sx={{ color: 'inherit' }} />
-              ) : (
-                <></>
               )
             }
           >
             {saving ? 'Sauvegarde...' : 'Valider'}
           </Button>
         </DialogActions>
-      </form>
-    </Dialog>
+      </Dialog>
+    </form>
   );
 }
+
+EditEventModal.defaultProps = {
+  group: null,
+  event: null,
+  mode: 'create',
+};
 
 export default EditEventModal;

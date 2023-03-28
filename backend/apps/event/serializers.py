@@ -1,5 +1,4 @@
 from rest_framework import serializers, exceptions
-from datetime import datetime
 from .models import Event
 from apps.student.models import Student
 from django.utils.translation import gettext as _
@@ -14,20 +13,29 @@ class EventSerializer(serializers.ModelSerializer):
     is_member = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
 
-    def validate_date(self, value: datetime) -> datetime:
-        if value.time() < datetime.today().time():
+    # def validate_date(self, value: datetime) -> datetime:
+    #     print()
+    #     if value.microsecond < datetime.today().microsecond:
+    #         raise exceptions.ValidationError(
+    #             _("Can't create an event in the past."))
+    #     return value
+    def validate_max_participant(self, value: int) -> int:
+        print()
+        if value and value < 1:
             raise exceptions.ValidationError(
-                _("Can't create an event in the past."))
+                _("Must be a positive integer"))
         return value
 
     def validate(self, attrs):
         if (not attrs["group"].is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
                 "You have to be admin to add or update an event")
-        if (attrs["end_date"] and attrs["date"] > attrs["end_date"]):
+        if ("end_date" in attrs and attrs["end_date"]
+                and attrs["date"] > attrs["end_date"]):
             raise exceptions.ValidationError(_(
                 "The end date must be after the begin date."))
-        if (attrs["begin_inscription"] and attrs["end_inscription"]
+        if ("begin_inscription" in attrs and attrs["begin_inscription"]
+            and "end_inscription" in attrs and attrs["end_inscription"]
                 and attrs["begin_inscription"] > attrs["end_inscription"]):
             raise serializers.ValidationError(
                 "End inscription date should be greater than begin inscription\

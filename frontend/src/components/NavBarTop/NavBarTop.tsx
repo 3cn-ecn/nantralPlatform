@@ -210,7 +210,6 @@ function NavBarTop(props: {
           {pathnames.map((value, index) => {
             const last = index === pathnames.length - 1;
             const to = `/${pathnames.slice(0, index + 1).join('/')}/`;
-            console.log(to);
             return last ? (
               <Typography key={to} variant="h6">
                 {breadcrumbNameMap[to]}

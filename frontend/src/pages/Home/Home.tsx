@@ -63,6 +63,7 @@ function Home() {
       })
       .then((res) => {
         eventsToCamelCase(res.data);
+        console.log(res.data);
         setEvents(res.data);
         setEventsStatus('success');
       })
@@ -240,7 +241,6 @@ function Home() {
       <EditEventModal
         open={eventFormOpen}
         closeModal={() => setEventFormOpen(false)}
-        openDeleteModal={() => null}
         saveEvent={() => null}
       />
     </Box>

@@ -13,7 +13,8 @@ import {
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { Suggestion } from 'components/Suggestion/interfacesSuggestion';
-import FormGroup, { FieldType } from '../../utils/form';
+import { FieldType } from 'Props/GenericTypes';
+import FormGroup from '../../utils/form';
 
 interface Profile {
   promo: number;

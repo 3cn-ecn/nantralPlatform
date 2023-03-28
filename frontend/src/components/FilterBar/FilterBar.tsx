@@ -32,7 +32,7 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
   const { getFilter, filter } = props;
   const { t } = useTranslation('translation'); // translation module
   const [open, setOpen] = React.useState(false); // set true to open the drawer
-  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(s); // date from which the events are filtered
+  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(); // date from which the events are filtered
   const [dateBeginFormat, setDateBeginFormat] = React.useState(
     filter.dateBegin
   ); // date from which the events are filtered, as a string

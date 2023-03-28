@@ -46,7 +46,7 @@ class SimpleGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['name', 'short_name', 'slug', 'url', 'icon', 'category']
+        fields = ['name', 'short_name', 'slug', 'url', 'icon', 'category', 'id']
         read_only_fields = ['name', 'short_name',
                             'slug', 'url', 'icon', 'category']
 

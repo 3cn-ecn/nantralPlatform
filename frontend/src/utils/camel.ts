@@ -35,7 +35,7 @@ function convertType<T>(
 ): void {
   switch (convert[key]) {
     case 'Date':
-      data[key] = new Date(data[key]);
+      if (data[key]) data[key] = new Date(data[key]); // Don't convert if null
       break;
     case 'string':
       data[key] = String(data[key]);
@@ -56,7 +56,7 @@ export function snakeToCamelCase<T>(
 ): void {
   // Convert all elements for array
   if (isArray(data)) {
-    data.foreach((val: any) => snakeToCamelCase(val, convert));
+    data.forEach((val: any) => snakeToCamelCase(val, convert));
   } else {
     // Convert all keys in camelCase format
     Object.keys(data).forEach((key) => {

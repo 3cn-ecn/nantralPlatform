@@ -12,25 +12,45 @@ import {
 import axios from 'axios';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { PostProps, postsToCamelCase } from '../../Props/Post';
+import { FieldType } from 'Props/GenericTypes';
+import { FormPostProps, PostProps, postsToCamelCase } from '../../Props/Post';
 import { theme } from '../style/palette';
-import FormGroup, { FieldType } from '../../utils/form';
-import { GroupProps } from '../../Props/Group';
+import FormGroup from '../../utils/form';
+import { GroupProps, SimpleGroupProps } from '../../Props/Group';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 export function FormPost(props: {
+  /** The mode to use this form */
   mode?: 'create' | 'edit';
+  /** Whether the form is open */
   open: boolean;
+  /**  */
   onClose: () => void;
   post?: PostProps;
+  /** Send the new post updated */
   onUpdate?: (post: PostProps) => void;
 }) {
   const { open, onClose, post, onUpdate, mode } = props;
   const { t } = useTranslation('translation');
-  const [values, setValues] = React.useState<PostProps>(
+  const [values, setValues] = React.useState<FormPostProps>(
     post
-      ? structuredClone(post)
-      : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
+      ? {
+          description: post.description,
+          group: post.group,
+          image: post.image,
+          pageSuggestion: post.pageSuggestion,
+          pinned: post.pinned,
+          publicationDate: post.publicationDate,
+          publicity: post.publicity,
+          title: post.title,
+        }
+      : {
+          title: null,
+          group: null,
+          publicity: 'Pub',
+          publicationDate: new Date(),
+          description: '',
+        }
   );
   const [errors, setErrors] = React.useState<any>({});
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -40,14 +60,13 @@ export function FormPost(props: {
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const defaultFields: FieldType[] = [
     {
-      kind: 'select',
+      kind: 'image-autocomplete',
       label: t('form.group'),
       required: true,
       name: 'group',
-      item: adminGroup?.map((group: GroupProps) => [
-        group.name,
-        group.id.toString(),
-      ]),
+      options: adminGroup,
+      getIcon: (object: SimpleGroupProps) => object.icon,
+      getOptionLabel: (object: SimpleGroupProps) => object.name,
       disabled: mode === 'edit',
       helpText: t('form.groupHelpText'),
     },
@@ -91,7 +110,6 @@ export function FormPost(props: {
       label: t('form.pinned'),
       name: 'pinned',
       rows: 1,
-      type: 'checkbox',
     },
   ];
 
@@ -102,7 +120,7 @@ export function FormPost(props: {
   React.useEffect(() => {
     axios
       .get('/api/group/group/', {
-        params: { admin: true },
+        params: { admin: true, simple: true },
       })
       .then((res) => setAdminGroup(res.data.results));
   }, []);
@@ -130,11 +148,15 @@ export function FormPost(props: {
         setLoading(false);
       });
   };
-  const createPost = () => {
+  function createForm(): FormData {
+    console.log(values);
     const formData = new FormData();
     if (values.image && typeof values.image !== 'string')
       formData.append('image', values.image, values.image.name);
-    if (values.group) formData.append('group', values.group.toString());
+    if (values.group && mode === 'create')
+      formData.append('group', values.group.toString());
+    if (post?.group && mode === 'edit')
+      formData.append('group', post.group.toString());
     formData.append('publicity', values.publicity);
     formData.append('title', values.title || '');
     console.log(values.description);
@@ -143,8 +165,12 @@ export function FormPost(props: {
       formData.append('page_suggestion', values.pageSuggestion);
     formData.append('publication_date', values.publicationDate.toISOString());
     formData.append('pinned', values.pinned ? 'true' : 'false');
+    return formData;
+  }
+
+  const createPost = () => {
     axios
-      .post(`/api/post/`, formData, {
+      .post(`/api/post/`, createForm(), {
         headers: {
           'content-type': 'multipart/form-data',
         },
@@ -165,21 +191,8 @@ export function FormPost(props: {
   };
   const updatePost = () => {
     setLoading(true);
-    const formData = new FormData();
-    // To avoid typescript error
-    if (values.image && typeof values.image !== 'string')
-      formData.append('image', values.image, values.image.name);
-
-    if (values.group) formData.append('group', post.group.toString());
-    formData.append('publicity', values.publicity);
-    formData.append('title', values.title);
-    formData.append('description', values.description || '<p></p>');
-    if (values.pageSuggestion)
-      formData.append('page_suggestion', values.pageSuggestion);
-    formData.append('publication_date', values.publicationDate.toISOString());
-    formData.append('pinned', values.pinned ? 'true' : 'false');
     axios
-      .put(`/api/post/${post.id}/`, formData, {
+      .put(`/api/post/${post.id}/`, createForm(), {
         headers: {
           'content-type': 'multipart/form-data',
         },
