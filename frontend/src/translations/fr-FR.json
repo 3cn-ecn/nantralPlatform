@@ -45,7 +45,8 @@
     "membersOnly": "Membres uniquement",
     "no_event": "Aucun évènement",
     "participants": "Participants",
-    "participantsList": "Liste des participants"
+    "participantsList": "Liste des participants",
+    "shotgunDatails": "Détails du shotgun"
   },
   "filterbar": {
     "button_filter": "Filtrer",
@@ -64,10 +65,12 @@
     "cancel": "Annuler",
     "chooseFile": "Choisir un fichier",
     "createAPost": "Créer un post",
+    "createEvent": "Créer l'évènement",
     "createPost": "Créer le post",
     "delete": "Supprimer",
     "deletePost": "Supprimer le post",
     "description": "Description",
+    "editEvent": "Modifier l'évènement",
     "editPost": "Modifier le post",
     "group": "Groupe",
     "groupHelpText": "Vous devez être admin de votre groupe pour pouvoir publier un post",
@@ -78,7 +81,8 @@
     "pinned": "Annonce épinglée",
     "public": "Public",
     "publicationDate": "Date de publication",
-    "publicity": "Visibilité"
+    "publicity": "Visibilité",
+    "saving": "Sauvegarde..."
   },
   "home": {
     "announcement": "Annonces",

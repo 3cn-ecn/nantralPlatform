@@ -176,20 +176,20 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       <h2>{t('filterbar.title_filter')}</h2>
 
       <List>
-        {filters.map((filter) => (
-          <ListItem component="div" key={filter.id} disablePadding>
+        {filters.map((filterItem) => (
+          <ListItem component="div" key={filterItem.id} disablePadding>
             <ListItem className="auto-fit">
-              {filter.isMenu ? (
+              {filterItem.isMenu ? (
                 <SimpleAccordion
-                  label={filter.name}
-                  content={filter.content}
-                  icon={filter.icon}
+                  label={filterItem.name}
+                  content={filterItem.content}
+                  icon={filterItem.icon}
                 />
               ) : (
                 <CheckboxButton
-                  label={filter.name}
-                  icon={filter.icon}
-                  id={filter.id}
+                  label={filterItem.name}
+                  icon={filterItem.icon}
+                  id={filterItem.id}
                   getChecked={getChecked}
                 />
               )}

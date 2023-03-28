@@ -45,7 +45,8 @@
     "membersOnly": "Members only",
     "no_event": "No Event",
     "participants": "Participants",
-    "participantsList": "List of participants"
+    "participantsList": "List of participants",
+    "shotgunDatails": "Shotgun Details"
   },
   "filterbar": {
     "date": "Date",
@@ -63,10 +64,12 @@
     "cancel": "Cancel",
     "chooseFile": "Choose file",
     "createAPost": "Create a post",
+    "createEvent": "Create event",
     "createPost": "Create post",
     "delete": "Delete",
     "deletePost": "Delete post",
     "description": "Description",
+    "editEvent": "Edit event",
     "editPost": "Edit post",
     "group": "Group",
     "groupHelpText": "You must be an admin of your group to post a post.",
@@ -77,7 +80,8 @@
     "pinned": "Pinned post",
     "public": "Public",
     "publicationDate": "Publication date",
-    "publicity": "Publicity"
+    "publicity": "Publicity",
+    "saving": "Saving..."
   },
   "home": {
     "announcement": "Announcement",

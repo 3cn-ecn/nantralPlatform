@@ -121,7 +121,7 @@ function getFormFields(groups: Array<SimpleGroupProps>) {
     },
     {
       kind: 'datetime',
-      name: 'beginInscription',
+      name: 'begin_inscription',
       label: 'Date et Heure du Shotgun',
       disablePast: true,
     },
@@ -175,6 +175,7 @@ function EditEventModal(props: {
 }) {
   const { open, group, saveEvent, closeModal, event, mode } = props;
   const eventDisplayed = event || createBlankEvent();
+  const { t } = useTranslation('translation');
   const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
   const [formValues, setFormValues] = useState<FormEventProps>(
     structuredClone(eventDisplayed)
@@ -196,7 +197,6 @@ function EditEventModal(props: {
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   /** Function called on submit to save data */
   function createForm(): FormData {
-    console.log(formValues);
     const formData = new FormData();
     if (formValues.image && typeof formValues.image !== 'string')
       formData.append('image', formValues.image, formValues.image.name);
@@ -211,31 +211,36 @@ function EditEventModal(props: {
     if (formValues.date) formData.append('date', formValues.date.toISOString());
     if (formValues.end_date)
       formData.append('end_date', formValues.end_date.toISOString());
+    formData.append(
+      'end_inscription',
+      formValues.end_inscription ? formValues.end_inscription.toISOString() : ''
+    );
     formData.append('location', formValues.location);
+    // Form
     formData.append(
       'form_url',
       shotgunMode === 'form' ? formValues.form_url : ' '
     );
+    // Shotgun
     formData.append(
       'max_participant',
       shotgunMode === 'shotgun' && formValues.max_participant
         ? formValues.max_participant.toString()
         : ''
     );
-    // formData.append(
-    //   'begin_inscription',
-    //   shotgunMode === 'shotgun'
-    //     ? formValues.begin_inscription.toISOString()
-    //     : ''
-    // );
+    formData.append(
+      'begin_inscription',
+      shotgunMode === 'shotgun' && formValues.begin_inscription
+        ? formValues.begin_inscription.toISOString()
+        : ''
+    );
     return formData;
   }
 
-  function onSubmit() {
+  function createEvent() {
+    if (saving) return;
     setSaving(true); // show loading
-    console.log('saving');
-    const formData = createForm();
-    console.log('data', formData);
+    const formData = createForm(); // format date
     axios
       .post(`/api/event/`, formData, {
         headers: {
@@ -265,7 +270,7 @@ function EditEventModal(props: {
       });
   }
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={createEvent}>
       <Dialog
         aria-labelledby="customized-dialog-title"
         open={open}
@@ -362,25 +367,42 @@ function EditEventModal(props: {
           <Button
             onClick={closeModal}
             variant="text"
-            color="error"
+            color="inherit"
             disabled={saving}
           >
             Annuler
           </Button>
-          <Button
-            type="submit"
-            onClick={() => onSubmit()}
-            variant="contained"
-            color="success"
-            disabled={saving}
-            endIcon={
-              saving && (
-                <CircularProgress size="1em" sx={{ color: 'inherit' }} />
-              )
-            }
-          >
-            {saving ? 'Sauvegarde...' : 'Valider'}
-          </Button>
+          {mode === 'create' ? (
+            <Button
+              type="submit"
+              onClick={() => createEvent()}
+              variant="contained"
+              color="info"
+              disabled={saving}
+              endIcon={
+                saving && (
+                  <CircularProgress size="1em" sx={{ color: 'inherit' }} />
+                )
+              }
+            >
+              {saving ? t('form.saving') : t('form.createEvent')}
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              onClick={() => createEvent()}
+              variant="contained"
+              color="info"
+              disabled={saving}
+              endIcon={
+                saving && (
+                  <CircularProgress size="1em" sx={{ color: 'inherit' }} />
+                )
+              }
+            >
+              {saving ? t('form.saving') : t('form.editEvent')}
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </form>

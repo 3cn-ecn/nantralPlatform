@@ -288,6 +288,7 @@ function EventDetails() {
               endInscription={event.endInscription}
               setParticipating={setParticipating}
               sx={{ width: '100%' }}
+              hideInfoButton
             />
           </Grid>
           <Grid

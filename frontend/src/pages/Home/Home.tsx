@@ -1,20 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { ClubProps, GroupProps, SimpleGroupProps } from 'Props/Group';
+import { SimpleGroupProps } from 'Props/Group';
 import * as React from 'react';
 import {
   Box,
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
-  SvgIcon,
   Typography,
   Container,
 } from '@mui/material';
 import { Event, PostAdd } from '@mui/icons-material';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import './Home.scss';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { isThisWeek } from '../../utils/date';
@@ -57,8 +55,8 @@ function Home() {
     axios
       .get('/api/event/', {
         params: {
-          from_date: new Date().toISOString(),
-          order_by: 'begin_inscription',
+          from_end_date: new Date().toISOString(),
+          order_by: 'date',
         },
       })
       .then((res) => {

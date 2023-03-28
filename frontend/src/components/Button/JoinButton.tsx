@@ -16,6 +16,7 @@ import {
   MenuItem,
   rgbToHex,
   Popover,
+  IconButton,
 } from '@mui/material';
 import axios from 'axios';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -26,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 import theme from '../../theme';
+import { EventPopover, TextPopover } from './InformationPopover';
 
 interface JoinButtonProps {
   variant?: 'shotgun' | 'normal' | 'form';
@@ -35,11 +37,12 @@ interface JoinButtonProps {
   sx?: SxProps<Theme>;
   participating: boolean;
   eventId: number;
-  beginInscription: string | null;
-  endInscription: string | null;
+  beginInscription: Date | null;
+  endInscription: Date | null;
   unregisterOnly?: boolean;
   setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
   handleClick?: () => void;
+  hideInfoButton?: boolean;
 }
 
 function JoinButton({
@@ -55,6 +58,7 @@ function JoinButton({
   unregisterOnly,
   setParticipating,
   handleClick,
+  hideInfoButton,
 }: JoinButtonProps): JSX.Element {
   const [selected, setSelected] = React.useState(participating);
   const [people, setPeople] = React.useState(person);
@@ -76,10 +80,10 @@ function JoinButton({
   }, [participating]);
 
   const { t } = useTranslation('translation');
-  const closed: boolean =
-    (variant === 'shotgun' && person >= maxPerson) ||
-    (endInscription !== null &&
-      Date.now() > new Date(endInscription).getTime());
+  const inscriptionFinished: boolean =
+    endInscription !== null && Date.now() > new Date(endInscription).getTime();
+  const shotgunFull = variant === 'shotgun' && person >= maxPerson;
+  const closed: boolean = shotgunFull || inscriptionFinished;
   const inscriptionNotStarted: boolean =
     beginInscription !== null &&
     Date.now() < new Date(beginInscription).getTime();
@@ -149,7 +153,7 @@ function JoinButton({
   };
 
   const getFirstIcon = () => {
-    if (inscriptionNotStarted) return null;
+    // if (inscriptionNotStarted) return null;
     switch (variant) {
       case 'shotgun':
         return (
@@ -289,47 +293,34 @@ function JoinButton({
             <CircularProgress size={25} style={{ position: 'absolute' }} />
           )}
         </Button>
-        <Popover
-          id="id"
-          anchorEl={buttonRef.current}
-          open={tootlTipOpen}
-          onClose={() => setTooltipOpen(false)}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-        >
-          {`${new Date(beginInscription).toLocaleDateString(i18n.language, {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-          })}`}
-          <div>
-            {`${new Date(beginInscription).toLocaleTimeString(i18n.language, {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}`}
-          </div>
-          <div>
-            {maxPerson}
-            <PeopleIcon />
-          </div>
-        </Popover>
-        {inscriptionNotStarted && (
-          <Button
+        {inscriptionNotStarted ? (
+          <EventPopover
+            anchorRef={buttonRef}
+            beginInscription={beginInscription}
+            maxParticipant={maxPerson}
+            onClose={() => setTooltipOpen(false)}
+            open={tootlTipOpen}
+          />
+        ) : (
+          <TextPopover
+            anchorRef={buttonRef}
+            onClose={() => setTooltipOpen(false)}
+            open={tootlTipOpen}
+          >
+            {shotgunFull
+              ? "l'évènement est complet"
+              : 'les inscriptions sont terminées'}
+          </TextPopover>
+        )}
+        {!hideInfoButton && (closed || inscriptionNotStarted) && (
+          <IconButton
             sx={{ marginLeft: 1 }}
-            color="info"
-            variant="contained"
             ref={buttonRef}
             aria-describedby="id"
             onClick={() => setTooltipOpen(!tootlTipOpen)}
           >
             <Info color="secondary" />
-          </Button>
+          </IconButton>
         )}
       </div>
       <ConfirmationModal
@@ -349,6 +340,7 @@ JoinButton.defaultProps = {
   sx: {},
   unregisterOnly: false,
   handleClick: {},
+  hideInfoButton: false,
 };
 
 export default JoinButton;
