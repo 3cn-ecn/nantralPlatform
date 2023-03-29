@@ -10,6 +10,7 @@ import axios from '../utils/axios';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 
 // passed through django template
+declare const studentId: string;
 
 interface QueryParams {
   student: string;
@@ -22,16 +23,13 @@ interface QueryParams {
 /**
  * Main table component for editing members in the admin page of groups.
  */
-export function MembershipsStudent(props: { Id: int }): JSX.Element {
+function MembershipsStudent(props: {}): JSX.Element {
   // data
-  const { Id } = props;
   const [student, setStudent] = useState<Student | null>(null);
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
     'load'
   );
-
-  const studentId = Id.toString();
   // status of modals
   const [message, setMessage] = useState<{ type: any; text: string }>({
     type: null,
@@ -92,7 +90,7 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
           <Button
             variant="text"
             onClick={() => {
-              setFilters({ ...filters, from: undefined });
+              filters.from = undefined;
               getMemberships();
             }}
           >
@@ -102,7 +100,7 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
           <Button
             variant="text"
             onClick={() => {
-              setFilters({ ...filters, from: new Date().toISOString() });
+              filters.from = new Date().toISOString();
               getMemberships();
             }}
           >
