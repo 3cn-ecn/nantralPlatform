@@ -14,7 +14,8 @@ from rest_framework import (
     status,
     viewsets)
 
-from apps.utils.searchAPIMixin import SearchAPIMixin
+from apps.utils.api_mixins import SearchViewMixin
+
 from .models import Group, Membership, GroupType
 from .serializers import (
     MembershipSerializer,
@@ -60,17 +61,21 @@ class GroupTypeViewSet(viewsets.ModelViewSet):
         return GroupType.objects.all()
 
 
-class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
+class GroupViewSet(SearchViewMixin, viewsets.ModelViewSet):
     """An API endpoint for groups.
 
     Query Parameters
     ----------------
     type: slug
-        The group-type we want to limit the query to.
+        Filter by group type
+    is_member: bool
+        Filter by groups where user is member
     is_admin: bool
-        Returns only group where the user is admin
-    simple: bool
-        Returns only name, short_name, slug, icon and url for each group.
+        Filter by groups where user is an admin member
+    fields: list[str]
+        Restrict the request to certains fields only, separated by ','
+    fields!: list[str]
+        Fields to exclude from the request, separated by ','
     limit: int
         The max number of items to return
     offset: int
@@ -101,37 +106,37 @@ class GroupViewSet(SearchAPIMixin, viewsets.ModelViewSet):
         user = self.request.user
         group_type = GroupType.objects.filter(
             slug=self.request.query_params.get('type')).first()
-        filter_is_member = self.request.query_params.get('is_member', False)
-        queryset = (Group.objects
-                    # filter by group_type
-                    .filter(Q(group_type=group_type) if group_type else Q())
-                    # remove the sub-groups to keep only parent groups
-                    .filter(Q(parent=None)
-                            | Q(parent__in=F('group_type__extra_parents')))
-                    # hide archived groups
-                    .filter(archived=False)
-                    # filter by groups where current user is member
-                    .filter(Q(members=user.student)
-                            if filter_is_member else Q())
-                    # hide private groups unless user is member
-                    # and hide non-public group if user is not authenticated
-                    .filter(Q(private=False) | Q(members=user.student)
-                            if user.is_authenticated
-                            else Q(public=True))
-                    # hide groups without active members (ie end_date > today)
-                    .annotate(num_active_members=Count(
-                        'membership_set',
-                        filter=Q(membership_set__end_date__gte=timezone.now())))
-                    .filter(Q(num_active_members__gt=0)
-                            | Q(group_type__hide_no_active_members=False))
-                    # prefetch type and parent group for better performances
-                    .prefetch_related('group_type', 'parent')
-                    # order by category, order and then name
-                    .order_by(*group_type.sort_fields.split(',')
-                              if group_type else '')
-                    .distinct())
-        queryset = [group.pk for group in queryset if group.is_admin(user)]
-        return Group.objects.all().filter(pk__in=queryset)
+        is_member = self.request.query_params.get('is_member', False)
+        is_admin = self.request.query_params.get('is_admin', False)
+        return (Group.objects
+                # filter by group_type
+                .filter(Q(group_type=group_type) if group_type else Q())
+                # remove the sub-groups to keep only parent groups
+                .filter(Q(parent=None)
+                        | Q(parent__in=F('group_type__extra_parents')))
+                # hide archived groups
+                .filter(archived=False)
+                # filter by groups where current user is member
+                .filter(Q(members=user.student) if is_member else Q())
+                # filter by groups where current user is admin
+                .filter(Q(membership_set__student=user.student, membership_set__admin=True) if is_admin else Q())
+                # hide private groups unless user is member
+                # and hide non-public group if user is not authenticated
+                .filter(Q(private=False) | Q(members=user.student)
+                        if user.is_authenticated
+                        else Q(public=True))
+                # hide groups without active members (ie end_date > today)
+                .annotate(num_active_members=Count(
+                    'membership_set',
+                    filter=Q(membership_set__end_date__gte=timezone.now())))
+                .filter(Q(num_active_members__gt=0)
+                        | Q(group_type__hide_no_active_members=False))
+                # prefetch type and parent group for better performances
+                .prefetch_related('group_type', 'parent')
+                # order by category, order and then name
+                .order_by(*group_type.sort_fields.split(',')
+                          if group_type else '')
+                .distinct())
 
     def get_object(self):
         obj = get_object_or_404(Group, slug=self.kwargs['slug'])
@@ -148,7 +153,7 @@ class MembershipPermission(permissions.BasePermission):
                 or obj.group.is_admin(request.user))
 
 
-class MembershipViewSet(SearchAPIMixin, viewsets.ModelViewSet):
+class MembershipViewSet(SearchViewMixin, viewsets.ModelViewSet):
     """An API viewset to get memberships of a group. This viewset ignore all
     logic related with admin requests.
 

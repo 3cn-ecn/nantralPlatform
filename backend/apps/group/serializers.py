@@ -5,6 +5,7 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers, exceptions
 
 from apps.student.serializers import SimpleStudentSerializer
+from apps.utils.api_mixins import QueryFieldsMixin
 
 from .models import Group, Membership, GroupType
 
@@ -57,7 +58,7 @@ class SimpleGroupSerializer(serializers.ModelSerializer):
         return obj.get_category()
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     is_admin = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
