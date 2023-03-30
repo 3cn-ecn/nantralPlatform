@@ -1,5 +1,4 @@
 import { snakeToCamelCase } from '../utils/camel';
-import { GroupProps, SimpleGroupProps } from './Group';
 
 export interface PostProps {
   id: number;

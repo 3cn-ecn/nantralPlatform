@@ -254,16 +254,16 @@ function EventDetails() {
 
   return (
     <>
+      <Box
+        component="img"
+        className="banner"
+        src={banner}
+        alt="Banner"
+        onClick={() => {
+          setOpenImageModal(true);
+        }}
+      />
       <Container>
-        <Box
-          component="img"
-          className="banner"
-          src={banner}
-          alt="Banner"
-          onClick={() => {
-            setOpenImageModal(true);
-          }}
-        />
         <Typography
           className="adaptativeText"
           variant="h3"

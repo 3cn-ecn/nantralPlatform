@@ -210,7 +210,6 @@ function Event() {
           </Button>
           <ModalEditEvent
             open={openAddModal}
-            saveEvent={(event: Event) => createEvent()}
             closeModal={() => setOpenAddModal(false)}
           />
         </div>

@@ -13,12 +13,6 @@ class EventSerializer(serializers.ModelSerializer):
     is_member = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
 
-    # def validate_date(self, value: datetime) -> datetime:
-    #     print()
-    #     if value.microsecond < datetime.today().microsecond:
-    #         raise exceptions.ValidationError(
-    #             _("Can't create an event in the past."))
-    #     return value
     def validate_max_participant(self, value: int) -> int:
         print()
         if value and value < 1:

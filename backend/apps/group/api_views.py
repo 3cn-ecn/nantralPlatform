@@ -50,15 +50,12 @@ class GroupPermission(permissions.BasePermission):
         return obj.is_admin(request.user)
 
 
-class GroupTypeViewSet(viewsets.ModelViewSet):
-    # permission_classes = [GroupPermission]
+class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = pagination.LimitOffsetPagination
     serializer_class = GroupTypeSerializer
     lookup_field = 'slug'
     lookup_url_kwarg = 'slug'
-
-    def get_queryset(self) -> QuerySet[GroupType]:
-        return GroupType.objects.all()
+    queryset = GroupType.objects.all()
 
 
 class GroupViewSet(SearchViewMixin, viewsets.ModelViewSet):
@@ -119,7 +116,8 @@ class GroupViewSet(SearchViewMixin, viewsets.ModelViewSet):
                 # filter by groups where current user is member
                 .filter(Q(members=user.student) if is_member else Q())
                 # filter by groups where current user is admin
-                .filter(Q(membership_set__student=user.student, membership_set__admin=True) if is_admin else Q())
+                .filter(Q(membership_set__student=user.student,
+                          membership_set__admin=True) if is_admin else Q())
                 # hide private groups unless user is member
                 # and hide non-public group if user is not authenticated
                 .filter(Q(private=False) | Q(members=user.student)

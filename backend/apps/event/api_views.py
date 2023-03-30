@@ -35,6 +35,10 @@ ORDERS: list[str] = ['participants_count',
                      'location',
                      'title']
 
+DATE_FIELDS: list[str] = ['end_date', 'date',
+                          'begin_inscription', 'end_inscription']
+
+
 TRUE_ARGUMENTS: list[str] = ['true', 'True', '1']
 
 
@@ -49,14 +53,12 @@ class EventViewSet(viewsets.ModelViewSet):
     spaces to sort by descending order
     - group : list[str] = None ->
     the slug list of organizers of the form "organizer=a,b,c"
-    - from_date : 'yyyy-MM-dd HH-mm-ss' = None ->
+    - from_date : ISO or UTC datestring = None ->
     filter event whose begin date is greater or equal to from_date
-    - to_date : 'yyyy-MM-dd HH-mm-ss' = None ->
+    - to_date : ISO or UTC datestring = None ->
     filter event whose begin date is less or equal to to_date
-    - from_end_date : 'yyyy-MM-dd' = None ->
-    filter event whose end date is greater or equal to from_date
-    - to_end_date : 'yyyy-MM-dd' = None ->
-    filter event whose end date is less or equal to to_date
+    - date_field : 'date' | 'end_date' | 'begin_inscription' | 'end_inscription'
+     = 'end_date' -> the target date field for the time window
     - min_participants : int = None ->
     lower bound for participants count
     - max_participants : int = None ->
@@ -107,10 +109,8 @@ class EventViewSet(viewsets.ModelViewSet):
             'from_date')
         to_date: str = self.request.query_params.get(
             'to_date')
-        from_end_date: str = self.request.query_params.get(
-            'from_end_date')
-        to_end_date: str = self.request.query_params.get(
-            'to_end_date')
+        time_field: str = self.request.query_params.get(
+            'time_field', 'end_date')
         from_begin_inscription: str = self.request.query_params.get(
             'from_begin_inscription')
         to_begin_inscription: str = self.request.query_params.get(
@@ -120,6 +120,10 @@ class EventViewSet(viewsets.ModelViewSet):
         max_participants: int = self.request.query_params.get(
             'max_participants')
         visibility: str = self.request.query_params.get('publicity')
+        # format quary params
+        if time_field not in DATE_FIELDS:
+            time_field = 'end_date'
+        print(time_field)
         # query
         order_by = filter(lambda ord: ord in ORDERS or (
             ord[0] == '-' and ord[1:]) in ORDERS, order_by)
@@ -139,10 +143,8 @@ class EventViewSet(viewsets.ModelViewSet):
             .filter(Q(group__slug__in=organizers_slug)
                     if len(organizers_slug) > 0 else Q())
             .filter(~Q(form_url__isnull=True) if is_form else Q())
-            .filter(Q(date__gte=from_date) if from_date else Q())
-            .filter(Q(date__lte=to_date) if to_date else Q())
-            .filter(Q(end_date__gte=from_end_date) if from_end_date else Q())
-            .filter(Q(end_date__lte=to_end_date) if to_end_date else Q())
+            .filter(Q(**{time_field + "__gte": from_date}) if from_date else Q())
+            .filter(Q(**{time_field + "__lte": to_date}) if to_date else Q())
             .filter(Q(begin_inscription__gte=from_begin_inscription)
                     if from_begin_inscription else Q())
             .filter(Q(begin_inscription_date__lte=to_begin_inscription)

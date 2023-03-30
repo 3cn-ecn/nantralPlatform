@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import * as React from 'react';
 import {
   Button,
   Dialog,
@@ -31,9 +31,10 @@ import FormGroup from '../../utils/form';
  *
  * @returns The default list of fields
  */
-function getFormFields(groups: Array<SimpleGroupProps>) {
-  const { t } = useTranslation('translation');
-
+function getFormFields(
+  groups: Array<SimpleGroupProps>,
+  t: (name: string) => string
+) {
   const mainFields: FieldType[] = [
     {
       kind: 'image-autocomplete',
@@ -168,29 +169,29 @@ function createBlankEvent(): FormEventProps {
 function EditEventModal(props: {
   open: boolean;
   event?: EventProps;
-  group?: GroupProps;
   mode?: 'create' | 'edit';
-  saveEvent: (member: EventProps) => Promise<any>;
   closeModal: () => void;
 }) {
-  const { open, group, saveEvent, closeModal, event, mode } = props;
+  const { open, closeModal, event, mode } = props;
   const eventDisplayed = event || createBlankEvent();
   const { t } = useTranslation('translation');
   const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
-  const [formValues, setFormValues] = useState<FormEventProps>(
+  const [formValues, setFormValues] = React.useState<FormEventProps>(
     structuredClone(eventDisplayed)
   );
-  const [formErrors, setFormErrors] = useState({});
-  const [saving, setSaving] = useState(false);
-  const [globalErrors, setGlobalErrors] = useState('');
+  const [formErrors, setFormErrors] = React.useState({});
+  const [saving, setSaving] = React.useState(false);
+  const [globalErrors, setGlobalErrors] = React.useState('');
   const [shotgunMode, setShotgunMode] = React.useState<
     'normal' | 'shotgun' | 'form'
   >('normal');
-  const fields = getFormFields(adminGroup);
+  const fields = getFormFields(adminGroup, t);
 
   React.useEffect(() => {
     axios
-      .get('/api/group/group/', { params: { admin: true, simple: true } })
+      .get('/api/group/group/', {
+        params: { is_admin: true, simple: true, limit: 20 },
+      })
       .then((res) => setAdminGroup(res.data.results))
       .catch((err) => console.error(err));
   }, []);
@@ -240,7 +241,7 @@ function EditEventModal(props: {
   function createEvent() {
     if (saving) return;
     setSaving(true); // show loading
-    const formData = createForm(); // format date
+    const formData = createForm(); // format data
     axios
       .post(`/api/event/`, formData, {
         headers: {
@@ -410,7 +411,6 @@ function EditEventModal(props: {
 }
 
 EditEventModal.defaultProps = {
-  group: null,
   event: null,
   mode: 'create',
 };
