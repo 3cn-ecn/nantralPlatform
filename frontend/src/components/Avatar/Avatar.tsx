@@ -52,7 +52,7 @@ function Avatar(props: {
   if (size === 'large')
     Object.assign(sx, { width: 56, height: 56, fontSize: 24 });
   if (size === 'extra_large')
-    Object.assign(sx, { width: 250, height: 250, fontSize: 24 });
+    Object.assign(sx, { width: 250, height: 250, fontSize: 150 });
   return (
     <MUIAvatar
       src={url}
