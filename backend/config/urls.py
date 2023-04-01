@@ -79,5 +79,4 @@ urlpatterns += static(
 
 handler403 = 'apps.home.views.handler403'
 handler404 = 'apps.home.views.handler404'
-handler413 = 'apps.home.views.handler413'
 handler500 = 'apps.home.views.handler500'
