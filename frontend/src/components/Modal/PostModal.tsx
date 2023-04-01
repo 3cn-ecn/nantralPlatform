@@ -5,10 +5,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   Typography,
   useMediaQuery,
 } from '@mui/material';
+import IconButton from '@mui/material/IconButton/IconButton';
 import { PostProps } from 'Props/Post';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -54,13 +54,13 @@ export function PostModal(props: {
               style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}
             >
               {clubDetails && (
-                <Link to={clubDetails.url} style={{ textDecoration: 'none' }}>
+                <IconButton href={clubDetails.url}>
                   <Avatar
                     title={clubDetails.name}
                     url={clubDetails.icon}
                     size="medium"
                   />
-                </Link>
+                </IconButton>
               )}
               <div>
                 <h2 className="post-title">{post.title}</h2>

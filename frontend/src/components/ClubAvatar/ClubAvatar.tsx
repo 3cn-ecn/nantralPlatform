@@ -33,21 +33,21 @@ export function ClubAvatar(props: {
         textAlign: textPosition === 'bottom' ? 'center' : 'left',
       }}
     >
-      <IconButton sx={{ padding: 0, margin: 1 }}>
-        <Link to={clubUrl} style={{ textDecorationLine: 'none' }}>
-          <Avatar
-            alt=""
-            src={logoUrl}
-            sx={{
-              height: size,
-              width: size,
-              bgcolor: logoUrl ? 'transparent' : stringToColor(name),
-              color: 'white',
-            }}
-          >
-            {!logoUrl && initials}
-          </Avatar>
-        </Link>
+      <IconButton href={clubUrl} sx={{ padding: 0, margin: 1 }}>
+        {/* <Link to={clubUrl} style={{ textDecorationLine: 'none' }}> */}
+        <Avatar
+          alt=""
+          src={logoUrl}
+          sx={{
+            height: size,
+            width: size,
+            bgcolor: logoUrl ? 'transparent' : stringToColor(name),
+            color: 'white',
+          }}
+        >
+          {!logoUrl && initials}
+        </Avatar>
+        {/* </Link> */}
       </IconButton>
       {nameArea}
     </div>

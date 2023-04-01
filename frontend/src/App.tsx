@@ -110,7 +110,7 @@ function App() {
             <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="/tools/signature" element={<Sign />} />
             <Route path="/student/:studentId" element={<Profile />} />
-            <Route path="/group/:groupTypeSlug" element={<GroupList />} />
+            {/* <Route path="/group/:groupTypeSlug" element={<GroupList />} /> */}
           </Routes>
         </Box>
       </Box>
