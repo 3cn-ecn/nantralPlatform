@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
+from django.apps import apps
 
 
 FACULTIES = [
@@ -78,6 +79,15 @@ class Student(models.Model):
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self) -> str:
         return reverse('student:detail', args=[self.pk])
+
+    def can_pin(self) -> bool:
+        membership = apps.get_model('group.Membership')
+        return (membership.objects
+                .filter(student=self,
+                        admin=True,
+                        group__can_pin=True,
+                        group__archived=False)
+                .exists() or self.user.is_staff)
 
     def save(self, *args, **kwargs):
         self.picture = compress_model_image(self, 'picture')

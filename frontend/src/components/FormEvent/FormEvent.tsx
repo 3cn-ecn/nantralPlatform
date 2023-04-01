@@ -223,7 +223,6 @@ function EditEventModal(props: {
       formData.append('group', event.group.toString());
     formData.append('publicity', formValues.publicity);
     formData.append('title', formValues.title || '');
-    console.log(formValues.description);
     formData.append('description', formValues.description || '<p></p>');
     if (formValues.beginDate)
       formData.append('date', formValues.beginDate.toISOString());
@@ -255,16 +254,6 @@ function EditEventModal(props: {
     return formData;
   }
 
-  const handleClick = () => {
-    if (mode === 'edit') {
-      console.log('hey');
-      editEvent();
-    } else {
-      createEvent();
-    }
-  };
-  console.log(event);
-
   function createEvent() {
     if (saving) return;
     setSaving(true); // show loading
@@ -287,7 +276,6 @@ function EditEventModal(props: {
         if (err.response) {
           setFormErrors(err.response.data); // show errors per fields
           snakeToCamelCase(err.response.data, {});
-          console.log(err.response.data);
           if (err.response.data.non_field_errors)
             // show form errors
             setGlobalErrors(err.response.data.non_field_errors);

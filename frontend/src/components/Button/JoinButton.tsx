@@ -314,7 +314,7 @@ function JoinButton({
         )}
         {!hideInfoButton && (closed || inscriptionNotStarted) && (
           <IconButton
-            sx={{ marginLeft: 1 }}
+            sx={{ marginLeft: 1, padding: 0 }}
             ref={buttonRef}
             aria-describedby="id"
             onClick={() => setTooltipOpen(!tootlTipOpen)}

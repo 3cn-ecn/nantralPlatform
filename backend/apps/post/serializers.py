@@ -32,7 +32,7 @@ class PostSerializer(serializers.ModelSerializer):
             'page_suggestion',
             'description',
             'can_edit',
-            'can_pin'
+            'can_pin',
         ]
 
     def get_group_slug(self, obj: Post) -> str:
@@ -44,4 +44,5 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_can_pin(self, obj: Post) -> str:
         user = self.context['request'].user
-        return obj.group.can_pin_post(user)
+        print(user.student.can_pin())
+        return user.student.can_pin()

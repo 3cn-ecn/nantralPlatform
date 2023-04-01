@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Tab, Button, Container } from '@mui/material';
+import { Box, Tab, Button, Container, Pagination } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
@@ -10,14 +10,33 @@ import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import ModalEditEvent from '../../components/FormEvent/FormEvent';
-import { LoadStatus } from '../../Props/GenericTypes';
+import { ListResults, LoadStatus } from '../../Props/GenericTypes';
 
-function EventList(props: { status: LoadStatus; events: any }) {
-  const { events, status } = props;
+const EVENT_PER_PAGE = 6;
+
+function EventList(props: {
+  status: LoadStatus;
+  events: ListResults<EventProps>;
+  onChangePage: (page: number) => void;
+  page: number;
+}) {
+  const { events, status, onChangePage, page } = props;
+  const handleNextPage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    if (page !== newPage) onChangePage(newPage);
+  };
   return (
     <>
       <div style={{ height: 30 }}></div>
-      <EventSection status={status} events={events}></EventSection>
+      <EventSection status={status} events={events.results}></EventSection>
+      <Pagination
+        sx={{ marginBottom: 1 }}
+        count={Math.floor(events.count / EVENT_PER_PAGE + 1) || 1}
+        page={page}
+        onChange={handleNextPage}
+      />
     </>
   );
 }
@@ -35,7 +54,13 @@ function EventView(props: {
   const { filter, selectedTab, onChangeTab } = props;
   const [value, setValue] = React.useState(selectedTab || '1');
   const [status, setStatus] = React.useState<LoadStatus>('load');
-  const [eventsList, setEventsList] = React.useState<Array<EventProps>>([]);
+  const [currentPage, setCurrentPage] = React.useState<number>(1);
+  const [eventsList, setEventsList] = React.useState<ListResults<EventProps>>({
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
+  });
   const [eventsCalendar, setEventsCalendar] = React.useState<Array<EventProps>>(
     []
   );
@@ -44,11 +69,33 @@ function EventView(props: {
     onChangeTab(newValue);
   };
 
-  const today = new Date();
+  function getListEvents(queryFilter?: any, offset = 0) {
+    axios
+      .get('/api/event', {
+        params: {
+          is_shotgun: queryFilter.shotgun,
+          is_favorite: queryFilter.favorite,
+          from_date: queryFilter.from_date,
+          group: filter.organiser,
+          limit: EVENT_PER_PAGE,
+          offset: offset,
+        },
+      })
+      .then((res: any) => {
+        eventsToCamelCase(res.data.results);
+        setEventsList(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
+      });
+  }
 
+  const today = new Date();
   // Request to get Events to display, depending of the filter.
   // If no date filter, only current and futur events are displayed.
   React.useEffect(() => {
+    setStatus('load');
     if (filter !== null) {
       // filtered calendar
       axios
@@ -58,11 +105,12 @@ function EventView(props: {
             is_favorite: filter.favorite,
             is_participating: filter.participate,
             group: filter.organiser,
+            limit: EVENT_PER_PAGE,
           },
         })
         .then((res: any) => {
-          eventsToCamelCase(res.data);
-          setEventsCalendar(res.data);
+          eventsToCamelCase(res.data.results);
+          setEventsCalendar(res.data.results);
           setStatus('success');
         })
         .catch(() => {
@@ -78,10 +126,11 @@ function EventView(props: {
               is_participating: filter.participate,
               from_date: today,
               group: filter.organiser,
+              limit: EVENT_PER_PAGE,
             },
           })
           .then((res: any) => {
-            eventsToCamelCase(res.data);
+            eventsToCamelCase(res.data.results);
             setEventsList(res.data);
             setStatus('success');
           })
@@ -99,10 +148,11 @@ function EventView(props: {
               from_date: filter.dateBegin,
               to_date: filter.dateEnd,
               group: filter.organiser,
+              limit: EVENT_PER_PAGE,
             },
           })
           .then((res: any) => {
-            eventsToCamelCase(res.data);
+            eventsToCamelCase(res.data.results);
             setEventsList(res.data);
             setStatus('success');
           })
@@ -116,10 +166,11 @@ function EventView(props: {
         .get('/api/event/', {
           params: {
             from_date: today,
+            limit: EVENT_PER_PAGE,
           },
         })
         .then((res: any) => {
-          eventsToCamelCase(res.data);
+          eventsToCamelCase(res.data.results);
           setEventsList(res.data);
           setStatus('success');
         })
@@ -131,8 +182,8 @@ function EventView(props: {
       axios
         .get('/api/event/')
         .then((res: any) => {
-          eventsToCamelCase(res.data);
-          setEventsCalendar(res.data);
+          eventsToCamelCase(res.data.results);
+          setEventsCalendar(res.data.results);
           setStatus('success');
         })
         .catch(() => {
@@ -140,6 +191,22 @@ function EventView(props: {
         });
     }
   }, [filter]);
+  const handleNextPage = (newPage: number) => {
+    if (currentPage === newPage) return;
+    setCurrentPage(newPage);
+    axios
+      .get(eventsList.next || eventsList.previous, {
+        params: { offset: (newPage - 1) * EVENT_PER_PAGE },
+      })
+      .then((res: any) => {
+        eventsToCamelCase(res.data.results);
+        setEventsList(res.data);
+        setStatus('success');
+      })
+      .catch(() => {
+        setStatus('fail');
+      });
+  };
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -149,7 +216,12 @@ function EventView(props: {
         </TabList>
       </Box>
       <TabPanel value="1" sx={{ padding: 0 }}>
-        <EventList status={status} events={eventsList}></EventList>
+        <EventList
+          status={status}
+          events={eventsList}
+          onChangePage={handleNextPage}
+          page={currentPage}
+        ></EventList>
       </TabPanel>
       <TabPanel value="2" sx={{ padding: 0 }}>
         <EventCalendar events={eventsCalendar}></EventCalendar>

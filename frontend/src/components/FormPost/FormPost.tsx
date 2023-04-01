@@ -110,7 +110,7 @@ export function FormPost(props: {
       label: t('form.pinned'),
       name: 'pinned',
       rows: 1,
-      disabled: !post?.canPin || true,
+      disabled: !post?.canPin,
     },
   ];
 
@@ -150,7 +150,6 @@ export function FormPost(props: {
       });
   };
   function createForm(): FormData {
-    console.log(values);
     const formData = new FormData();
     if (values.image && typeof values.image !== 'string')
       formData.append('image', values.image, values.image.name);
@@ -160,7 +159,6 @@ export function FormPost(props: {
       formData.append('group', post.group.toString());
     formData.append('publicity', values.publicity);
     formData.append('title', values.title || '');
-    console.log(values.description);
     formData.append('description', values.description || '<p></p>');
     if (values.pageSuggestion)
       formData.append('page_suggestion', values.pageSuggestion);

@@ -37,7 +37,7 @@ export function EventParticipantsModal(props: {
         setParticipantsStatus('success');
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         setParticipantsStatus('error');
       });
   }

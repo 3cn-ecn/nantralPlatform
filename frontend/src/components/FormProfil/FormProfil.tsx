@@ -103,7 +103,6 @@ export function EditProfilModal(props: {
   /** Function called on submit to save data */
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log(formValues);
     saveProfile(formValues)
       .then(() => {
         // reset all errors messages, saving loading and close modal

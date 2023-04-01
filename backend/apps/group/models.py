@@ -329,21 +329,6 @@ class Group(models.Model, SlugModel):
                 and self.membership_set.get(student=user.student).admin
                 or self.parent and self.parent.is_admin(user))
 
-    def can_pin_post(self, user: User) -> bool:
-        """Check if the user can pin a post.
-
-        Parameters
-        ----------
-        user : User
-            The user to check for.
-
-        Returns
-        -------
-        bool
-            True if the user has admin rights.
-        """
-        return
-
     def is_member(self, user: User) -> bool:
         """Check if a user is a member for this group.
 

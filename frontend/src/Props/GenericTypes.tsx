@@ -1,5 +1,6 @@
 export type LoadStatus = 'load' | 'fail' | 'success';
 
+/** Props for multi-page response */
 export interface ListResults<T> {
   count: number;
   next: string;
