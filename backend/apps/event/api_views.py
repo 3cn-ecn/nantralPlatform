@@ -1,9 +1,12 @@
 from django.db.models import Q, Count
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import (
+    pagination,
+    permissions,
+    viewsets)
 
 from apps.post.models import VISIBILITY
 from .models import Event
@@ -47,6 +50,8 @@ class EventViewSet(viewsets.ModelViewSet):
 
     Query Parameters
     ----------------
+    - limit : int = 50 ->
+    maximum number of results
     - order_by : list[str] = date ->
     list of attributes to order the result in the form "order=a,b,c".
     In ascending order by defaut. Add "-" in front of row name without
@@ -57,7 +62,7 @@ class EventViewSet(viewsets.ModelViewSet):
     filter event whose begin date is greater or equal to from_date
     - to_date : ISO or UTC datestring = None ->
     filter event whose begin date is less or equal to to_date
-    - date_field : 'date' | 'end_date' | 'begin_inscription' | 'end_inscription'
+    - time_field : 'date' | 'end_date' | 'begin_inscription' | 'end_inscription'
      = 'end_date' -> the target date field for the time window
     - min_participants : int = None ->
     lower bound for participants count
@@ -86,6 +91,7 @@ class EventViewSet(viewsets.ModelViewSet):
     """
     permission_classes = [permissions.IsAuthenticated, EventPermission]
     serializer_class = EventSerializer
+    pagination_class = pagination.LimitOffsetPagination
 
     def get_queryset(self) -> list[Event]:
         if not hasattr(self.request.user, 'student'):
@@ -143,7 +149,8 @@ class EventViewSet(viewsets.ModelViewSet):
             .filter(Q(group__slug__in=organizers_slug)
                     if len(organizers_slug) > 0 else Q())
             .filter(~Q(form_url__isnull=True) if is_form else Q())
-            .filter(Q(**{time_field + "__gte": from_date}) if from_date else Q())
+            .filter(Q(**{time_field + "__gte": from_date})
+                    if from_date else Q())
             .filter(Q(**{time_field + "__lte": to_date}) if to_date else Q())
             .filter(Q(begin_inscription__gte=from_begin_inscription)
                     if from_begin_inscription else Q())

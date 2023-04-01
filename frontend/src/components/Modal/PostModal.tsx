@@ -12,7 +12,7 @@ import {
 import { PostProps } from 'Props/Post';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ClubProps } from '../../Props/Group';
+import { SimpleGroupProps } from '../../Props/Group';
 import { theme } from '../style/palette';
 import { EditButton, PostBadges, SeePageButton } from '../PostCard/PostCard';
 import { timeFromNow } from '../../utils/date';
@@ -23,7 +23,7 @@ export function PostModal(props: {
   post: PostProps;
   open: boolean;
   onClose: () => void;
-  clubDetails: ClubProps;
+  clubDetails: SimpleGroupProps;
   onUpdate?: (post: PostProps) => void;
 }): JSX.Element {
   const { post, open, clubDetails, onClose, onUpdate } = props;
@@ -116,7 +116,7 @@ export function PostModal(props: {
           </div>
 
           <div style={{ display: 'flex', columnGap: 10 }}>
-            {clubDetails && clubDetails.is_admin && (
+            {post.canEdit && (
               <EditButton onClick={() => setEditModalOpen(true)} />
             )}
             {post.pageSuggestion && (

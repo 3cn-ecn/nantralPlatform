@@ -110,6 +110,7 @@ export function FormPost(props: {
       label: t('form.pinned'),
       name: 'pinned',
       rows: 1,
+      disabled: !post?.canPin || true,
     },
   ];
 
@@ -120,7 +121,7 @@ export function FormPost(props: {
   React.useEffect(() => {
     axios
       .get('/api/group/group/', {
-        params: { admin: true, simple: true },
+        params: { is_admin: true, simple: true, limit: 20 },
       })
       .then((res) => setAdminGroup(res.data.results));
   }, []);

@@ -95,7 +95,7 @@ function FormGroup(props: {
                     id={`${field.name}-number`}
                     name={field.name}
                     label={field.label}
-                    value={values[field.name] || ''}
+                    value={values[field.name] ?? ''}
                     onChange={(e) =>
                       handleChange(
                         field.name,
@@ -324,6 +324,7 @@ function FormGroup(props: {
                 required={field.required}
                 error={!!error}
                 margin="normal"
+                disabled={field.disabled}
               >
                 <FormControlLabel
                   label={

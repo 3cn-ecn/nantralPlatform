@@ -10,7 +10,7 @@ export interface EventProps {
   group: number; // id of the group
   groupSlug?: string; // slug of the organiser
   groupName?: string; // name of the organiser
-  image: string | null; // uri of the banner
+  image: string; // uri of the banner
   isMember?: boolean;
   isParticipating?: boolean; // whether connected user particpate at this event
   location: string; // where the event is taking place
@@ -30,35 +30,39 @@ export interface EventProps {
 }
 
 export interface FormEventProps {
-  date: Date; // Event begin date in Date format
-  end_date: Date; // Event begin date in Date format
+  beginDate: Date; // Event begin date in Date format
+  endDate: Date; // Event begin date in Date format
   description: string; // Description of the event in html
   group: number; // id of the group
   image: string | File; // uri of the banner
   location: string; // where the event is taking place
   publicity: 'Pub' | 'Mem';
   title: string;
-  max_participant?: number | null; // number max of participant
-  end_inscription: Date | null; // date of the end of inscription
-  begin_inscription: Date | null; // date of the beginning of inscription
-  form_url: string | null; // url of inscription form
+  maxParticipant?: number | null; // number max of participant
+  endInscription: Date | null; // date of the end of inscription
+  beginInscription: Date | null; // date of the beginning of inscription
+  formUrl: string | null; // url of inscription form
 }
 
 export function eventsToCamelCase(events: Array<any>): void {
   events.forEach((event) => {
-    // delete when date update to beginDate
-    event.begin_date = event.date;
+    eventToCamelCase(event);
+  });
+}
 
-    // delete when endDate defined forEach event
-    if (event.end_date === null) {
-      event.end_date = new Date(new Date(event.date).getTime() + 3600000);
-    }
+export function eventToCamelCase(event: any): void {
+  // delete when date update to beginDate
+  event.begin_date = event.date;
 
-    snakeToCamelCase(event, {
-      beginDate: 'Date',
-      endDate: 'Date',
-      beginInscription: 'Date',
-      endInscription: 'Date',
-    });
+  // delete when endDate defined forEach event
+  if (event.end_date === null) {
+    event.end_date = new Date(new Date(event.date).getTime() + 3600000);
+  }
+
+  snakeToCamelCase(event, {
+    beginDate: 'Date',
+    endDate: 'Date',
+    beginInscription: 'Date',
+    endInscription: 'Date',
   });
 }

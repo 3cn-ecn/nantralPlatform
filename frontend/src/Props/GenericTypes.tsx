@@ -1,5 +1,12 @@
 export type LoadStatus = 'load' | 'fail' | 'success';
 
+export interface ListResults<T> {
+  count: number;
+  next: string;
+  previous: string;
+  results: Array<T>;
+}
+
 export type FieldType =
   | {
       kind: 'text' | 'integer' | 'float' | 'link';

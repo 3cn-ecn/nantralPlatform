@@ -1,4 +1,5 @@
 from rest_framework import serializers, exceptions
+from django.utils import timezone
 from .models import Event
 from apps.student.models import Student
 from django.utils.translation import gettext as _
@@ -12,9 +13,9 @@ class EventSerializer(serializers.ModelSerializer):
     is_participating = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
+    form_url = serializers.SerializerMethodField()
 
     def validate_max_participant(self, value: int) -> int:
-        print()
         if value and value < 1:
             raise exceptions.ValidationError(
                 _("Must be a positive integer"))
@@ -84,6 +85,13 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_absolute_url(self, obj: Event):
         return obj.get_absolute_url()
+
+    def get_form_url(self, obj: Event):
+        # don't send url if inscription not open
+        if (obj.form_url and obj.begin_inscription
+                and obj.begin_inscription > timezone.now()):
+            return "/"
+        return obj.form_url
 
 
 class EventParticipatingSerializer(serializers.ModelSerializer):

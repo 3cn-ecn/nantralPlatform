@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { SimpleGroupProps } from 'Props/Group';
+import { GroupProps, SimpleGroupProps } from 'Props/Group';
 import * as React from 'react';
 import {
   Box,
@@ -18,10 +18,11 @@ import { EventSection } from '../../components/Section/EventSection/EventSection
 import { isThisWeek } from '../../utils/date';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
 import { PostProps, postsToCamelCase } from '../../Props/Post';
-import { LoadStatus } from '../../Props/GenericTypes';
+import { ListResults, LoadStatus } from '../../Props/GenericTypes';
 import { FormPost } from '../../components/FormPost/FormPost';
-import EditEventModal from '../../components/FormularEvent/CreateEvent';
+import EditEventModal from '../../components/FormEvent/FormEvent';
 
+const MAX_EVENT_SHOWN = 6;
 /**
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
@@ -29,6 +30,11 @@ import EditEventModal from '../../components/FormularEvent/CreateEvent';
 function Home() {
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
   const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
+  const [upcomingEvents, setUpcomingEvents] = React.useState<Array<EventProps>>(
+    []
+  );
+  const [upcomingEventsStatus, setUpcomingEventsStatus] =
+    React.useState<LoadStatus>('load');
   const [myClubs, setMyClubs] = React.useState<Array<SimpleGroupProps>>([]);
   const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
   const [posts, setPosts] = React.useState<Array<PostProps>>([]);
@@ -45,6 +51,7 @@ function Home() {
   postDateLimit.setDate(today.getDay() - 15);
   React.useEffect(() => {
     getEvent();
+    getUpcomingEvent();
     getMyClubs();
     getPosts();
     getPinnedPosts();
@@ -55,14 +62,15 @@ function Home() {
     axios
       .get('/api/event/', {
         params: {
-          from_end_date: new Date().toISOString(),
+          from_date: new Date().toISOString(),
+          time_field: 'end_date',
           order_by: 'date',
         },
       })
       .then((res) => {
-        eventsToCamelCase(res.data);
-        console.log(res.data);
-        setEvents(res.data);
+        const results: ListResults<EventProps> = res.data;
+        eventsToCamelCase(results.results);
+        setEvents(results.results);
         setEventsStatus('success');
       })
       .catch((err) => {
@@ -71,26 +79,37 @@ function Home() {
       });
   }
 
+  async function getUpcomingEvent() {
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+    axios
+      .get('/api/event/', {
+        params: {
+          from_date: date.toISOString(),
+          order_by: 'date',
+          time_field: 'date',
+          limit: MAX_EVENT_SHOWN,
+        },
+      })
+      .then((res) => {
+        const results: ListResults<EventProps> = res.data;
+        eventsToCamelCase(results.results);
+        setUpcomingEvents(results.results);
+        setUpcomingEventsStatus('success');
+      })
+      .catch((err) => {
+        console.error(err);
+        setUpcomingEventsStatus('fail');
+      });
+  }
+
   async function getMyClubs() {
     // fetch my clubs
     axios
       .get('/api/group/group/', { params: { is_member: true, simple: true } })
       .then((res) => {
-        setMyClubs(res.data.results);
-        setClubsStatus('success');
-      })
-      .catch((err) => {
-        console.error(err);
-        setClubsStatus('fail');
-      });
-  }
-
-  async function getMyGroups() {
-    // fetch my clubs
-    axios
-      .get('/api/group/group/', { params: { is_member: true, type: '' } })
-      .then((res) => {
-        setMyClubs(res.data.results);
+        const results: ListResults<SimpleGroupProps> = res.data;
+        setMyClubs(results.results);
         setClubsStatus('success');
       })
       .catch((err) => {
@@ -102,7 +121,7 @@ function Home() {
   async function getPosts() {
     // fetch posts
     axios
-      .get('/api/post', {
+      .get('/api/post/', {
         params: {
           from_date: postDateLimit.toISOString(),
           pinned: false,
@@ -122,7 +141,7 @@ function Home() {
   async function getPinnedPosts() {
     // fetch posts
     axios
-      .get('/api/post', {
+      .get('/api/post/', {
         params: {
           pinned: true,
         },
@@ -213,10 +232,8 @@ function Home() {
             title={t('home.thisWeek')}
           />
           <EventSection
-            events={events.filter(
-              (item: EventProps) => !isThisWeek(new Date(item.beginDate))
-            )}
-            status={eventsStatus}
+            events={upcomingEvents}
+            status={upcomingEventsStatus}
             maxItem={6}
             title={t('home.upcomingEvents')}
           />
@@ -239,7 +256,6 @@ function Home() {
       <EditEventModal
         open={eventFormOpen}
         closeModal={() => setEventFormOpen(false)}
-        saveEvent={() => null}
       />
     </Box>
   );

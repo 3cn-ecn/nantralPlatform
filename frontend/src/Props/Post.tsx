@@ -16,6 +16,8 @@ export interface PostProps {
   publicity: 'Pub' | 'Mem';
   pinned: boolean;
   pageSuggestion: string;
+  canPin: boolean;
+  canEdit: boolean;
 }
 
 export interface FormPostProps {

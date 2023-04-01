@@ -9,7 +9,7 @@ import { EventSection } from '../../components/Section/EventSection/EventSection
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
-import ModalEditEvent from '../../components/FormularEvent/CreateEvent';
+import ModalEditEvent from '../../components/FormEvent/FormEvent';
 import { LoadStatus } from '../../Props/GenericTypes';
 
 function EventList(props: { status: LoadStatus; events: any }) {

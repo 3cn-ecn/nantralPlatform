@@ -57,7 +57,9 @@ export function EventPopover(props: {
               }
             )}`}
           />
-          <Chip avatar={<PeopleIcon />} label={maxParticipant} />
+          {maxParticipant && (
+            <Chip avatar={<PeopleIcon />} label={maxParticipant} />
+          )}
         </Box>
       </Box>
     </Popover>

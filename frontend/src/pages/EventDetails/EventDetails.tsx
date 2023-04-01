@@ -26,6 +26,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import EditEventModal from '../../components/FormEvent/FormEvent';
 import FavButton from '../../components/Button/FavButton';
 import JoinButton from '../../components/Button/JoinButton';
 import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
@@ -72,6 +73,7 @@ function EventDetails() {
     getGroup();
   }, [event]);
   const [eventStatus, setEventStatus] = useState<LoadStatus>('load');
+  const [formEventOpen, setFormEventOpen] = React.useState<boolean>(false);
 
   async function getEvent() {
     await axios
@@ -229,7 +231,8 @@ function EventDetails() {
       >
         <MenuItem
           onClick={() => {
-            window.open(`/event/${event.id}/edit`, '_blank', 'noreferrer');
+            // window.open(`/event/${event.id}/edit`, '_blank', 'noreferrer');
+            setFormEventOpen(true);
             handleCloseMenu();
           }}
         >
@@ -254,15 +257,17 @@ function EventDetails() {
 
   return (
     <>
-      <Box
-        component="img"
-        className="banner"
-        src={banner}
-        alt="Banner"
-        onClick={() => {
-          setOpenImageModal(true);
-        }}
-      />
+      <Container disableGutters>
+        <Box
+          component="img"
+          className="banner"
+          src={banner}
+          alt="Banner"
+          onClick={() => {
+            setOpenImageModal(true);
+          }}
+        />
+      </Container>
       <Container>
         <Typography
           className="adaptativeText"
@@ -404,6 +409,12 @@ function EventDetails() {
           setOpenImageModal(false);
         }}
         url={banner}
+      />
+      <EditEventModal
+        closeModal={() => setFormEventOpen(false)}
+        open={formEventOpen}
+        event={event}
+        mode="edit"
       />
     </>
   );

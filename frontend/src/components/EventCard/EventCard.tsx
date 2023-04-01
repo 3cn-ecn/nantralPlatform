@@ -94,7 +94,9 @@ function EventCard(props: { event: EventProps }) {
   }, []);
 
   async function getGroup() {
-    const response = await axios.get(`/api/group/group/${groupSlug}/`);
+    const response = await axios.get(`/api/group/group/${groupSlug}/`, {
+      params: { simple: true },
+    });
     setGroup(response.data);
   }
 

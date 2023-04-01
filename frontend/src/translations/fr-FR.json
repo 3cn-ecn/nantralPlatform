@@ -68,6 +68,8 @@
     "createEvent": "Créer l'évènement",
     "createPost": "Créer le post",
     "delete": "Supprimer",
+    "deleteEvent": "Supprimer l'évènement",
+    "deleteEventConfirmation": "Etes vous sûr de vouloir supprimer cet évènement ? Cette action est irréversible.",
     "deletePost": "Supprimer le post",
     "description": "Description",
     "editEvent": "Modifier l'évènement",

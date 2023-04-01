@@ -12,7 +12,7 @@ import * as React from 'react';
 import './PostCard.scss';
 import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
 import axios from 'axios';
-import { ClubProps } from 'Props/Group';
+import { ClubProps, SimpleGroupProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
 import { PostProps } from '../../Props/Post';
 import { PostModal } from '../Modal/PostModal';
@@ -108,7 +108,8 @@ SeePageButton.defaultProps = {
 export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
   const { post, onDelete } = props;
   const [open, setOpen] = React.useState<boolean>(false);
-  const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
+  const [clubDetails, setClubDetails] =
+    React.useState<SimpleGroupProps>(undefined);
   const [postValue, setPostValue] = React.useState(post);
   const { t } = useTranslation('translation');
 
@@ -118,7 +119,9 @@ export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
 
   React.useEffect(() => {
     axios
-      .get(`/api/group/group/${postValue.groupSlug}/`)
+      .get(`/api/group/group/${postValue.groupSlug}/`, {
+        params: { simple: true },
+      })
       .then((res) => setClubDetails(res.data))
       .catch((err) => console.error(err));
   }, []);
