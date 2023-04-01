@@ -12,7 +12,7 @@ import Calendar from '../../components/Calendar/Calendar';
 import ModalEditEvent from '../../components/FormEvent/FormEvent';
 import { ListResults, LoadStatus } from '../../Props/GenericTypes';
 
-const EVENT_PER_PAGE = 6;
+const EVENT_PER_PAGE = 12;
 
 function EventList(props: {
   status: LoadStatus;
@@ -30,7 +30,11 @@ function EventList(props: {
   return (
     <>
       <div style={{ height: 30 }}></div>
-      <EventSection status={status} events={events.results}></EventSection>
+      <EventSection
+        status={status}
+        events={events.results}
+        loadingItemCount={EVENT_PER_PAGE}
+      ></EventSection>
       <Pagination
         sx={{ marginBottom: 1 }}
         count={Math.floor(events.count / EVENT_PER_PAGE + 1) || 1}
@@ -154,7 +158,7 @@ function EventView(props: {
           .then((res: any) => {
             eventsToCamelCase(res.data.results);
             setEventsList(res.data);
-            setStatus('success');
+            // setStatus('success');
           })
           .catch(() => {
             setStatus('fail');
@@ -193,6 +197,7 @@ function EventView(props: {
   }, [filter]);
   const handleNextPage = (newPage: number) => {
     if (currentPage === newPage) return;
+    setStatus('load');
     setCurrentPage(newPage);
     axios
       .get(eventsList.next || eventsList.previous, {
@@ -207,6 +212,7 @@ function EventView(props: {
         setStatus('fail');
       });
   };
+  console.log(status, eventsList.count);
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

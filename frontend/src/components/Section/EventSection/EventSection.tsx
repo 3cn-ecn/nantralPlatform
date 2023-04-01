@@ -7,19 +7,29 @@ import './EventSection.scss';
 import { AccordionSection } from '../AccordionSection';
 import { LoadStatus } from '../../../Props/GenericTypes';
 
-const LoadingSkeleton = (
-  <>
-    {[0, 1, 2].map((item) => (
-      <Grid item xs={12} sm={6} md={4} sx={{ maxWidth: '700px' }} key={item}>
-        <Skeleton
-          variant="rectangular"
-          key={item}
-          style={{ borderRadius: 5, height: '18.75em' }}
-        />
-      </Grid>
-    ))}
-  </>
-);
+function LoadingSkeleton(props: { count: number }) {
+  const { count } = props;
+  return (
+    <>
+      {[...Array(count).keys()].map((item, index) => (
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={4}
+          sx={{ maxWidth: '700px' }}
+          key={item + index.toString()}
+        >
+          <Skeleton
+            variant="rectangular"
+            key={item}
+            style={{ borderRadius: 5, height: '18.75em' }}
+          />
+        </Grid>
+      ))}
+    </>
+  );
+}
 /**
  * Une section comportant
  * un titre,
@@ -36,9 +46,11 @@ export function EventSection(props: {
   /** Nombre maximal d'événement à afficher */
   maxItem?: number;
   accordion?: boolean;
+  /** How many event skeleton to display when loading */
+  loadingItemCount?: number;
 }) {
   const { t } = useTranslation('translation'); // translation module
-  const { status, events, title, maxItem, accordion } = props;
+  const { status, events, title, maxItem, accordion, loadingItemCount } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allEvents = maxItem ? events.slice(0, maxItem) : events;
   switch (status) {
@@ -50,7 +62,7 @@ export function EventSection(props: {
       );
       break;
     case 'load':
-      content = LoadingSkeleton;
+      content = <LoadingSkeleton count={loadingItemCount} />;
       break;
     case 'success':
       if (events.length > 0) {
@@ -79,4 +91,5 @@ EventSection.defaultProps = {
   title: null,
   maxItem: null,
   accordion: false,
+  loadingItemCount: 3,
 };

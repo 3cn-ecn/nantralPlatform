@@ -59,6 +59,11 @@ function Home() {
 
   async function getEvent() {
     // fetch events
+    const prevEvent = JSON.parse(localStorage.getItem('pastEvents'));
+    if (prevEvent) {
+      setEventsStatus('success');
+      setEvents(prevEvent);
+    }
     axios
       .get('/api/event/', {
         params: {
@@ -71,6 +76,7 @@ function Home() {
         const results: ListResults<EventProps> = res.data;
         eventsToCamelCase(results.results);
         setEvents(results.results);
+        localStorage.setItem('pastEvents', JSON.stringify(results.results));
         setEventsStatus('success');
       })
       .catch((err) => {
@@ -80,6 +86,12 @@ function Home() {
   }
 
   async function getUpcomingEvent() {
+    const prev = JSON.parse(localStorage.getItem('upcomingEvents'));
+    if (prev) {
+      setUpcomingEventsStatus('success');
+      eventsToCamelCase(prev);
+      setUpcomingEvents(prev);
+    }
     const date = new Date();
     date.setDate(date.getDate() + 7);
     axios
@@ -95,6 +107,7 @@ function Home() {
         const results: ListResults<EventProps> = res.data;
         eventsToCamelCase(results.results);
         setUpcomingEvents(results.results);
+        localStorage.setItem('upcomingEvents', JSON.stringify(results.results));
         setUpcomingEventsStatus('success');
       })
       .catch((err) => {
@@ -105,11 +118,17 @@ function Home() {
 
   async function getMyClubs() {
     // fetch my clubs
+    const prev = JSON.parse(localStorage.getItem('myClubs'));
+    if (prev) {
+      setClubsStatus('success');
+      setMyClubs(prev);
+    }
     axios
       .get('/api/group/group/', { params: { is_member: true, simple: true } })
       .then((res) => {
         const results: ListResults<SimpleGroupProps> = res.data;
         setMyClubs(results.results);
+        localStorage.setItem('myClubs', JSON.stringify(results.results));
         setClubsStatus('success');
       })
       .catch((err) => {
@@ -120,6 +139,12 @@ function Home() {
 
   async function getPosts() {
     // fetch posts
+    const prev = JSON.parse(localStorage.getItem('posts'));
+    if (prev) {
+      setPostsStatus('success');
+      postsToCamelCase(prev);
+      setPosts(prev);
+    }
     axios
       .get('/api/post/', {
         params: {
@@ -130,6 +155,7 @@ function Home() {
       .then((res) => {
         postsToCamelCase(res.data);
         setPosts(res.data);
+        localStorage.setItem('posts', JSON.stringify(res.data));
         setPostsStatus('success');
       })
       .catch((err) => {
@@ -140,6 +166,12 @@ function Home() {
 
   async function getPinnedPosts() {
     // fetch posts
+    const prev = JSON.parse(localStorage.getItem('pinnedPosts'));
+    if (prev) {
+      setPostsPinnedStatus('success');
+      postsToCamelCase(prev);
+      setPostsPinned(prev);
+    }
     axios
       .get('/api/post/', {
         params: {
@@ -149,6 +181,7 @@ function Home() {
       .then((res) => {
         postsToCamelCase(res.data);
         setPostsPinned(res.data);
+        localStorage.setItem('pinnedPosts', JSON.stringify(res.data));
         setPostsPinnedStatus('success');
       })
       .catch((err) => {
@@ -212,7 +245,7 @@ function Home() {
             <PostSection
               posts={postsPinned}
               title={t('home.highlighted')}
-              status={postsStatus}
+              status={postsPinnedStatus}
               onUpdate={() => getPinnedPosts()}
             />
           )}
