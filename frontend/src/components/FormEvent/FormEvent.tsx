@@ -12,21 +12,30 @@ import {
   Alert,
   useMediaQuery,
   Paper,
-  ToggleButton,
-  ToggleButtonGroup,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import axios from 'axios';
-import { Close as CloseIcon, Info } from '@mui/icons-material';
+import {
+  Close as CloseIcon,
+  People as FreeIcon,
+  Link as LinkIcon,
+  LocalFireDepartment as ShotgunIcon,
+} from '@mui/icons-material';
 import { GroupProps, SimpleGroupProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
 import { FieldType } from 'Props/GenericTypes';
 import { SimpleGroup } from 'components/Group/interfaces';
-import { EventProps, FormEventProps } from '../../Props/Event';
+import {
+  EventProps,
+  FormEventProps,
+  eventToCamelCase,
+} from '../../Props/Event';
 import { theme } from '../style/palette';
 import FormGroup from '../../utils/form';
 import { snakeToCamelCase } from '../../utils/camel';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
-
+import './FormEvent.scss';
 /**
  * Fonction permettant de générer le formulaire de création d'un événement.
  * Elle ne vérifie pas que l'utilisateur soit bien admin du groupe.
@@ -53,7 +62,7 @@ function getFormFields(
     {
       kind: 'text',
       name: 'title',
-      label: "Titre de l'événement",
+      label: t('form.eventTitle'),
       required: true,
     },
     {
@@ -62,14 +71,14 @@ function getFormFields(
         {
           kind: 'datetime',
           name: 'beginDate',
-          label: 'Date et Heure de début',
+          label: t('form.beginDatetime'),
           required: true,
           disablePast: true,
         },
         {
           kind: 'datetime',
           name: 'endDate',
-          label: 'Date et Heure de fin',
+          label: t('form.endDatetime'),
           required: true,
           disablePast: true,
         },
@@ -78,13 +87,13 @@ function getFormFields(
     {
       kind: 'text',
       name: 'location',
-      label: "Lieu de l'évenement",
+      label: t('form.place'),
       required: true,
     },
     {
       kind: 'richtext',
       name: 'description',
-      label: 'Description',
+      label: t('form.description'),
     },
     {
       kind: 'file',
@@ -181,8 +190,10 @@ function EditEventModal(props: {
   event?: EventProps;
   mode?: 'create' | 'edit';
   closeModal: () => void;
+  onUpdate?: (event: EventProps) => void;
+  onDelete?: () => void;
 }) {
-  const { open, closeModal, event, mode } = props;
+  const { open, closeModal, event, mode, onUpdate, onDelete } = props;
   const eventDisplayed = event || createBlankEvent();
   const { t } = useTranslation('translation');
   const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
@@ -198,8 +209,9 @@ function EditEventModal(props: {
     'normal' | 'shotgun' | 'form'
   >('normal');
   React.useEffect(() => {
-    if (formValues.formUrl) setShotgunMode('form');
-    else if (formValues.maxParticipant) setShotgunMode('shotgun');
+    if (event?.formUrl) setShotgunMode('form');
+    else if (event?.maxParticipant) setShotgunMode('shotgun');
+    else setShotgunMode('normal');
   }, [event]);
   const fields = getFormFields(adminGroup, t, mode);
   React.useEffect(() => {
@@ -264,11 +276,13 @@ function EditEventModal(props: {
           'content-type': 'multipart/form-data',
         },
       })
-      .then(() => {
+      .then((res) => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
         setGlobalErrors('');
         setSaving(false);
+        eventToCamelCase(res.data);
+        onUpdate(res.data);
         closeModal();
       })
       .catch((err) => {
@@ -296,10 +310,12 @@ function EditEventModal(props: {
           'content-type': 'multipart/form-data',
         },
       })
-      .then(() => {
+      .then((res) => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
         setGlobalErrors('');
+        eventToCamelCase(res.data);
+        onUpdate(res.data);
         setSaving(false);
         closeModal();
       })
@@ -325,6 +341,7 @@ function EditEventModal(props: {
       .then(() => {
         setSaving(false);
         closeModal();
+        onDelete();
       })
       .catch((err) => {
         setSaving(false);
@@ -388,6 +405,7 @@ function EditEventModal(props: {
                   display: 'flex',
                   alignItems: 'center',
                   flexWrap: 'wrap',
+                  columnGap: '1ex',
                 }}
               >
                 <Typography
@@ -398,11 +416,31 @@ function EditEventModal(props: {
                   }}
                 >
                   Inscription
-                  <IconButton>
-                    <Info />
-                  </IconButton>
                 </Typography>
-                <ToggleButtonGroup
+                <Select
+                  value={shotgunMode}
+                  onChange={(evt) =>
+                    setShotgunMode(
+                      evt.target.value as 'normal' | 'shotgun' | 'form'
+                    )
+                  }
+                  id="shotgun-type"
+                  sx={{ display: 'flex', alignItems: 'center', columnGap: 1 }}
+                >
+                  <MenuItem sx={{ columnGap: 1 }} value="normal">
+                    <FreeIcon />
+                    Inscription Libre
+                  </MenuItem>
+                  <MenuItem sx={{ columnGap: 1 }} value="shotgun">
+                    <ShotgunIcon />
+                    Shotgun
+                  </MenuItem>
+                  <MenuItem sx={{ columnGap: 1 }} value="form">
+                    <LinkIcon />
+                    Lien exterieur
+                  </MenuItem>
+                </Select>
+                {/* <ToggleButtonGroup
                   value={shotgunMode}
                   exclusive
                   onChange={(_, value) => {
@@ -415,7 +453,7 @@ function EditEventModal(props: {
                   <ToggleButton value="normal">Inscription libre</ToggleButton>
                   <ToggleButton value="shotgun">Shotgun</ToggleButton>
                   <ToggleButton value="form">Form</ToggleButton>
-                </ToggleButtonGroup>
+                </ToggleButtonGroup> */}
               </div>
               {shotgunMode === 'shotgun' && (
                 <FormGroup
@@ -504,6 +542,8 @@ function EditEventModal(props: {
 EditEventModal.defaultProps = {
   event: null,
   mode: 'create',
+  onUpdate: () => null,
+  onDelete: () => null,
 };
 
 export default EditEventModal;

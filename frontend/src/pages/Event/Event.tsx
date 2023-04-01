@@ -12,7 +12,7 @@ import Calendar from '../../components/Calendar/Calendar';
 import ModalEditEvent from '../../components/FormEvent/FormEvent';
 import { ListResults, LoadStatus } from '../../Props/GenericTypes';
 
-const EVENT_PER_PAGE = 12;
+const EVENT_PER_PAGE = 6;
 
 function EventList(props: {
   status: LoadStatus;

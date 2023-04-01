@@ -29,8 +29,9 @@ export function FormPost(props: {
   post?: PostProps;
   /** Send the new post updated */
   onUpdate?: (post: PostProps) => void;
+  onDelete?: () => void;
 }) {
-  const { open, onClose, post, onUpdate, mode } = props;
+  const { open, onClose, post, onUpdate, mode, onDelete } = props;
   const { t } = useTranslation('translation');
   const [values, setValues] = React.useState<FormPostProps>(
     post
@@ -142,6 +143,7 @@ export function FormPost(props: {
         onUpdate(null);
         onClose();
         setLoading(false);
+        onDelete();
       })
       .catch((err) => {
         console.error(err);
@@ -248,8 +250,8 @@ export function FormPost(props: {
           dividers
           sx={{ display: 'flex', flexDirection: 'column' }}
         >
-          {errors.non_field_errors &&
-            errors.non_field_errors.map((text) => (
+          {errors.nonFieldErrors &&
+            errors.nonFieldErrors.map((text) => (
               <Alert variant="filled" severity="error" key={text}>
                 {text}
               </Alert>
@@ -328,4 +330,5 @@ FormPost.defaultProps = {
   mode: 'edit',
   post: null,
   onUpdate: () => null,
+  onDelete: () => null,
 };

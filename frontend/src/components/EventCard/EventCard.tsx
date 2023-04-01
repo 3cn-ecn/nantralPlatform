@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Typography,
   CardActionArea,
+  Skeleton,
 } from '@mui/material/';
 
 import { EventProps } from 'Props/Event';
@@ -207,6 +208,16 @@ function EventCard(props: { event: EventProps }) {
         />
       </div>
     </div>
+  );
+}
+
+export function EventCardSkeleton() {
+  return (
+    <Skeleton
+      variant="rectangular"
+      height="22.85rem"
+      sx={{ fontSize: '1rem' }}
+    />
   );
 }
 

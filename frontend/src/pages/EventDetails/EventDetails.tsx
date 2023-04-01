@@ -415,6 +415,9 @@ function EventDetails() {
         open={formEventOpen}
         event={event}
         mode="edit"
+        onUpdate={(newEvent: EventProps) => setEvent(newEvent)}
+        // eslint-disable-next-line no-restricted-globals
+        onDelete={() => history.back()}
       />
     </>
   );

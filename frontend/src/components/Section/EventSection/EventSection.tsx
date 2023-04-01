@@ -2,7 +2,7 @@ import { EventProps } from 'Props/Event';
 import * as React from 'react';
 import { Alert, Grid, Skeleton, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import EventCard from '../../EventCard/EventCard';
+import EventCard, { EventCardSkeleton } from '../../EventCard/EventCard';
 import './EventSection.scss';
 import { AccordionSection } from '../AccordionSection';
 import { LoadStatus } from '../../../Props/GenericTypes';
@@ -20,11 +20,7 @@ function LoadingSkeleton(props: { count: number }) {
           sx={{ maxWidth: '700px' }}
           key={item + index.toString()}
         >
-          <Skeleton
-            variant="rectangular"
-            key={item}
-            style={{ borderRadius: 5, height: '18.75em' }}
-          />
+          <EventCardSkeleton />
         </Grid>
       ))}
     </>

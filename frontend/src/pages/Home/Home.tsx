@@ -50,14 +50,14 @@ function Home() {
   const postDateLimit = new Date();
   postDateLimit.setDate(today.getDay() - 15);
   React.useEffect(() => {
-    getEvent();
+    getEvents();
     getUpcomingEvent();
     getMyClubs();
     getPosts();
     getPinnedPosts();
   }, []);
 
-  async function getEvent() {
+  async function getEvents() {
     // fetch events
     const prevEvent = JSON.parse(localStorage.getItem('pastEvents'));
     if (prevEvent) {
@@ -287,6 +287,10 @@ function Home() {
         }}
       />
       <EditEventModal
+        onUpdate={() => {
+          getUpcomingEvent();
+          getEvents();
+        }}
         open={eventFormOpen}
         closeModal={() => setEventFormOpen(false)}
       />
