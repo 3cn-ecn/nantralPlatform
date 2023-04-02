@@ -102,12 +102,6 @@ function getFormFields(
       name: 'image',
     },
     {
-      kind: 'datetime',
-      name: 'endInscription',
-      label: 'Date et Heure de fin des inscriptions',
-      disablePast: true,
-    },
-    {
       kind: 'select',
       name: 'publicity',
       label: t('form.publicity'),
@@ -124,6 +118,26 @@ function getFormFields(
     },
   ];
 
+  const normalFields: FieldType[] = [
+    {
+      kind: 'group',
+      fields: [
+        {
+          kind: 'datetime',
+          name: 'beginInscription',
+          label: "Date heure d'ouverture des inscriptions",
+          disablePast: true,
+        },
+        {
+          kind: 'datetime',
+          name: 'endInscription',
+          label: 'Date et Heure de fin des inscriptions',
+          disablePast: true,
+        },
+      ],
+    },
+  ];
+
   const shotgunFields: FieldType[] = [
     {
       kind: 'number',
@@ -134,10 +148,21 @@ function getFormFields(
       step: 1,
     },
     {
-      kind: 'datetime',
-      name: 'beginInscription',
-      label: 'Date et Heure du Shotgun',
-      disablePast: true,
+      kind: 'group',
+      fields: [
+        {
+          kind: 'datetime',
+          name: 'beginInscription',
+          label: 'Date et Heure du Shotgun',
+          disablePast: true,
+        },
+        {
+          kind: 'datetime',
+          name: 'endInscription',
+          label: 'Date et Heure de fin des inscriptions',
+          disablePast: true,
+        },
+      ],
     },
   ];
 
@@ -149,16 +174,28 @@ function getFormFields(
       multiline: true,
     },
     {
-      kind: 'datetime',
-      name: 'beginInscription',
-      label: "Date heure d'ouverture des inscriptions",
-      disablePast: true,
+      kind: 'group',
+      fields: [
+        {
+          kind: 'datetime',
+          name: 'beginInscription',
+          label: "Date heure d'ouverture des inscriptions",
+          disablePast: true,
+        },
+        {
+          kind: 'datetime',
+          name: 'endInscription',
+          label: 'Date et Heure de fin des inscriptions',
+          disablePast: true,
+        },
+      ],
     },
   ];
   return {
     mainFields: mainFields,
     shotgunFields: shotgunFields,
     formFields: formFields,
+    normalFields: normalFields,
   };
 }
 
@@ -259,7 +296,7 @@ function EditEventModal(props: {
     );
     formData.append(
       'begin_inscription',
-      shotgunMode !== 'normal' && formValues.beginInscription
+      formValues.beginInscription
         ? formValues.beginInscription.toISOString()
         : ''
     );
@@ -437,23 +474,9 @@ function EditEventModal(props: {
                   </MenuItem>
                   <MenuItem sx={{ columnGap: 1 }} value="form">
                     <LinkIcon />
-                    Lien exterieur
+                    Lien externe
                   </MenuItem>
                 </Select>
-                {/* <ToggleButtonGroup
-                  value={shotgunMode}
-                  exclusive
-                  onChange={(_, value) => {
-                    if (value) setShotgunMode(value);
-                  }}
-                  aria-label="text alignment"
-                  color="primary"
-                  sx={{ wordBreak: 'break-all' }}
-                >
-                  <ToggleButton value="normal">Inscription libre</ToggleButton>
-                  <ToggleButton value="shotgun">Shotgun</ToggleButton>
-                  <ToggleButton value="form">Form</ToggleButton>
-                </ToggleButtonGroup> */}
               </div>
               {shotgunMode === 'shotgun' && (
                 <FormGroup
@@ -466,6 +489,14 @@ function EditEventModal(props: {
               {shotgunMode === 'form' && (
                 <FormGroup
                   fields={fields.formFields}
+                  values={formValues}
+                  errors={formErrors}
+                  setValues={setFormValues}
+                />
+              )}
+              {shotgunMode === 'normal' && (
+                <FormGroup
+                  fields={fields.normalFields}
                   values={formValues}
                   errors={formErrors}
                   setValues={setFormValues}

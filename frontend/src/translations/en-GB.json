@@ -42,6 +42,8 @@
     "endTime": "Will end on :",
     "error": "Error while loading the events",
     "event": "Event",
+    "eventIsFull": "This event is full",
+    "inscriptionsBeginAt": "Registration opens on",
     "membersOnly": "Members only",
     "no_event": "No Event",
     "participants": "Participants",

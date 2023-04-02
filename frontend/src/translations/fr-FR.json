@@ -42,6 +42,8 @@
     "endTime": "Se termine le :",
     "error": "Erreur lors du chargement des évènements",
     "event": "Évènement",
+    "eventIsFull": "Cet évènement est complet",
+    "inscriptionsBeginAt": "Les inscriptions ouvrent le",
     "membersOnly": "Membres uniquement",
     "no_event": "Aucun évènement",
     "participants": "Participants",

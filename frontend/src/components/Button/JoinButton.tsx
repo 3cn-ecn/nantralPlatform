@@ -195,6 +195,16 @@ function JoinButton({
     return null;
   };
   const getText = () => {
+    if (inscriptionNotStarted)
+      return (
+        <Typography sx={{ color: '#fff' }}>
+          {new Date(beginInscription).toLocaleDateString(i18n.language, {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+          })}
+        </Typography>
+      );
     switch (variant) {
       case 'normal':
         return (
@@ -205,13 +215,7 @@ function JoinButton({
       case 'shotgun':
         return (
           <Typography sx={{ color: '#fff' }}>
-            {inscriptionNotStarted
-              ? new Date(beginInscription).toLocaleDateString(i18n.language, {
-                  weekday: 'short',
-                  day: 'numeric',
-                  month: 'short',
-                })
-              : `${people}/${maxPerson}`}
+            {`${people}/${maxPerson}`}
           </Typography>
         );
       case 'form':

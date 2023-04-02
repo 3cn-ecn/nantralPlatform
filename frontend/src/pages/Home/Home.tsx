@@ -204,7 +204,7 @@ function Home() {
   ];
 
   return (
-    <Box>
+    <>
       <div className="header">
         <div id="header-title">
           <Typography id="second-title">{t('home.welcomeTo')}</Typography>
@@ -294,7 +294,7 @@ function Home() {
         open={eventFormOpen}
         closeModal={() => setEventFormOpen(false)}
       />
-    </Box>
+    </>
   );
 }
 

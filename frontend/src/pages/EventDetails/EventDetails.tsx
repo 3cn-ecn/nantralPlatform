@@ -1,11 +1,14 @@
 import {
   Box,
   Button,
+  Chip,
   CircularProgress,
   Container,
   Grid,
   Menu,
   MenuItem,
+  Tab,
+  Tabs,
   Typography,
   useMediaQuery,
 } from '@mui/material';
@@ -58,6 +61,7 @@ function EventDetails() {
     url: '',
     is_admin: false,
   });
+  const today = new Date();
   const handleClickMenu = (mouseEvent: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(mouseEvent.currentTarget);
   };
@@ -75,6 +79,8 @@ function EventDetails() {
   const [eventStatus, setEventStatus] = useState<LoadStatus>('load');
   const [formEventOpen, setFormEventOpen] = React.useState<boolean>(false);
 
+  const [infoTab, setInfoTab] = React.useState<number>(0);
+
   async function getEvent() {
     await axios
       .get(`/api/event/${id}`)
@@ -85,6 +91,7 @@ function EventDetails() {
         setEventStatus('success');
       })
       .catch((error) => {
+        console.error(error);
         setEventStatus('fail');
       });
   }
@@ -141,39 +148,94 @@ function EventDetails() {
     timeStyle: 'short',
   });
 
+  const registrationStarted =
+    !event.beginInscription ||
+    event.beginInscription.getTime() < today.getTime();
+
+  const registrationEnded =
+    event.endInscription && event.endInscription.getTime() < today.getTime();
+
   const endSameDay = endDateText === beginDateText ? ` - ${endHourText}` : null;
 
+  const beginSection = (
+    <div
+      style={{
+        display: 'flex',
+        marginTop: '1rem',
+        flexDirection: matches ? 'row' : 'column',
+        rowGap: '1rem',
+        columnGap: '1rem',
+        flexGrow: 1,
+      }}
+    >
+      <Chip
+        icon={<CalendarTodayIcon />}
+        sx={{
+          height: 'auto',
+          padding: 1,
+          '& .MuiChip-label': {
+            display: 'block',
+            whiteSpace: 'normal',
+          },
+        }}
+        label={beginDateText}
+      />
+      <Chip
+        icon={<AccessTimeIcon />}
+        sx={{
+          height: 'auto',
+          padding: 1,
+          '& .MuiChip-label': {
+            display: 'block',
+            whiteSpace: 'normal',
+          },
+        }}
+        label={`${beginHourText} ${endSameDay}`}
+      />
+    </div>
+  );
   const endSection =
     endDateText !== beginDateText ? (
       <>
-        <Typography
+        {/* <Typography
           className="adaptativeText"
           variant="h5"
           sx={{ marginTop: '1rem', marginBottom: '0.5rem' }}
         >
           {t('event.endTime')}
-        </Typography>
+        </Typography> */}
         <div
           style={{
             display: 'flex',
             marginTop: '1rem',
             flexDirection: matches ? 'row' : 'column',
+            gap: '1rem',
           }}
         >
-          <div className="infoElement">
-            <CalendarTodayIcon
-              sx={{ fontSize: '1.5rem', marginRight: '1rem' }}
-            />
-            <Typography className="adaptativeText" variant="h5">
-              {endDateText}
-            </Typography>
-          </div>
-          <div className="infoElement">
-            <AccessTimeIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
-            <Typography className="adaptativeText" variant="h5">
-              {endHourText}
-            </Typography>
-          </div>
+          <Chip
+            icon={<CalendarTodayIcon />}
+            sx={{
+              height: 'auto',
+              padding: 1,
+              '& .MuiChip-label': {
+                display: 'block',
+                whiteSpace: 'normal',
+              },
+            }}
+            label={endDateText}
+          />
+          <Chip
+            icon={<AccessTimeIcon />}
+            sx={{
+              height: 'auto',
+              padding: 1,
+              '& .MuiChip-label': {
+                display: 'block',
+                whiteSpace: 'normal',
+              },
+            }}
+            label={endHourText}
+          />
         </div>
       </>
     ) : null;
@@ -194,13 +256,33 @@ function EventDetails() {
     );
 
     endInscriptionSection =
-      event.endInscription !== null ? (
+      !registrationEnded && registrationStarted ? (
         <Alert variant="outlined" severity="info" sx={{ marginTop: '1rem' }}>
           {t('event.endInscription')} {endInscriptioneText} -{' '}
           {endInscriptionText}
         </Alert>
       ) : null;
   }
+
+  const beginInsciptionAlert = !registrationStarted && (
+    <Alert variant="outlined" severity="info" sx={{ marginTop: '1rem' }}>
+      {`${t(
+        'event.inscriptionsBeginAt'
+      )} ${event.beginInscription.toLocaleDateString(
+        i18n.language,
+        dateFormat
+      )} - ${event.beginInscription.toLocaleTimeString(i18n.language, {
+        timeStyle: 'short',
+      })}`}
+    </Alert>
+  );
+
+  const fullEventAlert = event.maxParticipant &&
+    event.numberOfParticipants >= event.maxParticipant && (
+      <Alert variant="outlined" severity="warning" sx={{ marginTop: '1rem' }}>
+        {t('event.eventIsFull')}
+      </Alert>
+    );
 
   const adminSection = groupData.is_admin ? (
     <>
@@ -255,6 +337,35 @@ function EventDetails() {
   const banner =
     event.image === null ? '/static/img/default-banner.png' : event.image;
 
+  const infoSection = (
+    <Box sx={{ width: '100%', marginTop: 1 }}>
+      <Chip
+        icon={<PlaceIcon />}
+        sx={{
+          height: 'auto',
+          padding: 1,
+          '& .MuiChip-label': {
+            display: 'block',
+            whiteSpace: 'normal',
+          },
+        }}
+        label={event.location}
+      />
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs
+          value={infoTab}
+          onChange={(_, newValue: number) => setInfoTab(newValue)}
+          aria-label="basic tabs example"
+        >
+          <Tab label={endSection ? 'Begin' : 'Hours'} />
+          {endSection && <Tab label="End" />}
+          <Tab label="Registration" />
+        </Tabs>
+      </Box>
+      {infoTab === 0 && beginSection}
+      {infoTab === 1 && endSection}
+    </Box>
+  );
   return (
     <>
       <Container disableGutters>
@@ -331,46 +442,12 @@ function EventDetails() {
           logoUrl={groupData.icon}
           name={groupData.name}
           textPosition="right"
-          size="3.75rem"
+          size="3rem"
         />
+        {fullEventAlert}
+        {beginInsciptionAlert}
         {endInscriptionSection}
-        <div
-          style={{
-            display: 'flex',
-            marginTop: '1rem',
-            flexDirection: matches ? 'row' : 'column',
-          }}
-        >
-          <div className="infoElement">
-            <CalendarTodayIcon
-              sx={{ fontSize: '1.5rem', marginRight: '1rem' }}
-            />
-            <Typography className="adaptativeText" variant="h5">
-              {beginDateText}
-            </Typography>
-          </div>
-          <div className="infoElement">
-            <AccessTimeIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
-            <Typography className="adaptativeText" variant="h5">
-              {beginHourText} {endSameDay}
-            </Typography>
-          </div>
-          <div className="infoElement" style={{ minWidth: 0 }}>
-            <PlaceIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
-            <Typography
-              className="adaptativeText"
-              variant="h5"
-              sx={{ minWidth: 0 }}
-            >
-              {event.location}
-            </Typography>
-          </div>
-        </div>
-        {endSection}
-
-        <Grid container spacing={1}>
-          <Grid item xs={12} sm={3}></Grid>
-        </Grid>
+        {infoSection}
 
         <Typography variant="caption" sx={{ textAlign: 'justify' }}>
           <div
