@@ -73,6 +73,9 @@ class Event(AbstractPost):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self) -> str:
+        return f'/event/{str(self.id)}'
+
     def save(self, *args, **kwargs):
         # create the slug
         self.set_slug(
@@ -84,11 +87,10 @@ class Event(AbstractPost):
         if (self.end_date is None):
             self.end_date = self.date + timedelta(hours=1)
         # save the notification
-        self.create_notification(
-            title=self.group.name,
-            body=f'Nouvel event : {self.title}')
+        print('HEEEEEEEEEEEEEEEEEEE', self.get_absolute_url(), self.pk, self)
         # save again the event
         super(Event, self).save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return '/event/' + str(self.pk)
+        self.create_notification(
+            title=self.group.name,
+            body=f'Nouvel event : {self.title}',
+            url=self.get_absolute_url())

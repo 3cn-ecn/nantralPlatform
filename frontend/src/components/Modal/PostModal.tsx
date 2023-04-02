@@ -63,7 +63,7 @@ export function PostModal(props: {
                 </IconButton>
               )}
               <div>
-                <h2 className="post-title">{post.title}</h2>
+                <h2 className="post-title">{post?.title}</h2>
                 <div style={{ fontSize: 12 }}>
                   {clubDetails && clubDetails.name}
                 </div>
@@ -75,8 +75,8 @@ export function PostModal(props: {
           </div>
         </DialogTitle>
         <DialogContent dividers>
-          {post.image && <img alt="" src={post.image.toString()} id="image" />}
-          <div dangerouslySetInnerHTML={{ __html: post.description }}></div>
+          {post?.image && <img alt="" src={post.image.toString()} id="image" />}
+          <div dangerouslySetInnerHTML={{ __html: post?.description }}></div>
         </DialogContent>
         <DialogActions
           sx={{
@@ -90,12 +90,12 @@ export function PostModal(props: {
               columnGap: 10,
             }}
           >
-            <PostBadges pinned={post.pinned} publicity={post.publicity} />
+            <PostBadges pinned={post?.pinned} publicity={post?.publicity} />
             <Typography variant="caption" textAlign="right" fontStyle="italic">
-              {`${t('post.published')} ${timeFromNow(post.publicationDate)}`}
+              {`${t('post.published')} ${timeFromNow(post?.publicationDate)}`}
             </Typography>
-            {post.publicationDate.toDateString() !==
-              post.updatedAt.toDateString() && (
+            {post?.publicationDate.toDateString() !==
+              post?.updatedAt.toDateString() && (
               <>
                 <Typography
                   variant="caption"
@@ -109,17 +109,17 @@ export function PostModal(props: {
                   textAlign="right"
                   fontStyle="italic"
                 >
-                  {`${t('post.updated')} ${timeFromNow(post.updatedAt)}`}
+                  {`${t('post.updated')} ${timeFromNow(post?.updatedAt)}`}
                 </Typography>
               </>
             )}
           </div>
 
           <div style={{ display: 'flex', columnGap: 10 }}>
-            {post.canEdit && (
+            {post?.canEdit && (
               <EditButton onClick={() => setEditModalOpen(true)} />
             )}
-            {post.pageSuggestion && (
+            {post?.pageSuggestion && (
               <SeePageButton link={post.pageSuggestion} />
             )}
           </div>

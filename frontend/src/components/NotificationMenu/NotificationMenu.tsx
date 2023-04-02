@@ -81,9 +81,8 @@ export function NotificationMenu(props) {
       start: start,
       nb: step,
     };
-    const params = new URLSearchParams(queryParams);
-    const urlf = `/api/notification/get_notifications?${params}`;
-    axios.get(urlf).then((res) => {
+    const urlf = `/api/notification/get_notifications`;
+    axios.get(urlf, { params: queryParams }).then((res) => {
       if (listNotifs.length === checkNotif) {
         const merging = merge(listNotifs, res.data);
         setListNotifs(merging);
@@ -101,11 +100,9 @@ export function NotificationMenu(props) {
   });
   if (listToShow.length === 0) {
     content = (
-      <MenuItem>
-        <ListItem>
-          <Typography sx={{ width: 278 }}>Aucune Notification 😢</Typography>
-        </ListItem>
-      </MenuItem>
+      <ListItem>
+        <Typography className="spanno">Aucune Notification 😢</Typography>
+      </ListItem>
     );
   } else {
     content = listToShow.map((sn) => (
@@ -161,9 +158,7 @@ export function NotificationMenu(props) {
         }}
       >
         <ListItem>
-          <Typography className="menuTitle" variant="h6">
-            {t('notif.title')}
-          </Typography>
+          <Typography variant="h6">{t('notif.title')}</Typography>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton
             aria-label="show 17 new notifications"
@@ -178,14 +173,14 @@ export function NotificationMenu(props) {
         </ListItem>
         <ListItem>
           <Chip
-            variant={!subscribeFilter ? 'outlined' : 'contained'}
+            variant={!subscribeFilter ? 'outlined' : 'filled'}
             label={t('notif.subscribed')}
             color="primary"
             sx={[{ mr: 1 }]}
             onClick={() => setSubscribeFilter(!subscribeFilter)}
           />
           <Chip
-            variant={!unseenFilter ? 'outlined' : 'contained'}
+            variant={!unseenFilter ? 'outlined' : 'filled'}
             label={t('notif.unread')}
             color="primary"
             onClick={() => setUnseenFilter(!unseenFilter)}

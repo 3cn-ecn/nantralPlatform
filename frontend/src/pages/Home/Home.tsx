@@ -11,6 +11,7 @@ import {
   Container,
 } from '@mui/material';
 import { Event, PostAdd } from '@mui/icons-material';
+import { useSearchParams } from 'react-router-dom';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import './Home.scss';
@@ -21,6 +22,7 @@ import { PostProps, postsToCamelCase } from '../../Props/Post';
 import { ListResults, LoadStatus } from '../../Props/GenericTypes';
 import { FormPost } from '../../components/FormPost/FormPost';
 import EditEventModal from '../../components/FormEvent/FormEvent';
+import { PostModal } from '../../components/Modal/PostModal';
 
 const MAX_EVENT_SHOWN = 6;
 /**
@@ -28,6 +30,7 @@ const MAX_EVENT_SHOWN = 6;
  * @returns Home page component
  */
 function Home() {
+  const [queryParams, setQueryParams] = useSearchParams();
   const [events, setEvents] = React.useState<Array<EventProps>>([]);
   const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
   const [upcomingEvents, setUpcomingEvents] = React.useState<Array<EventProps>>(
@@ -45,17 +48,41 @@ function Home() {
 
   const [postFormOpen, setPostFormOpen] = React.useState<boolean>(false);
   const [eventFormOpen, setEventFormOpen] = React.useState<boolean>(false);
+  const [selectedPost, setSelectedPost] = React.useState<PostProps>(null);
   const { t } = useTranslation('translation'); // translation module
   const today = new Date();
   const postDateLimit = new Date();
   postDateLimit.setDate(today.getDay() - 15);
   React.useEffect(() => {
+    const postId = queryParams.get('post');
+    if (postId) {
+      axios
+        .get(`/api/post/${postId}`)
+        .then((res) => {
+          postsToCamelCase([res.data]);
+          setSelectedPost(res.data);
+        })
+        .catch((err) => console.error(err));
+    }
     getEvents();
     getUpcomingEvent();
     getMyClubs();
     getPosts();
     getPinnedPosts();
   }, []);
+
+  React.useEffect(() => {
+    const postId = queryParams.get('post');
+    if (postId) {
+      axios
+        .get(`/api/post/${postId}`)
+        .then((res) => {
+          postsToCamelCase([res.data]);
+          setSelectedPost(res.data);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [queryParams]);
 
   async function getEvents() {
     // fetch events
@@ -294,6 +321,18 @@ function Home() {
         open={eventFormOpen}
         closeModal={() => setEventFormOpen(false)}
       />
+      {selectedPost && (
+        <PostModal
+          clubDetails={null}
+          onClose={() => {
+            setSelectedPost(null);
+            queryParams.delete('post');
+            setQueryParams(queryParams);
+          }}
+          open={!!selectedPost}
+          post={selectedPost}
+        />
+      )}
     </>
   );
 }

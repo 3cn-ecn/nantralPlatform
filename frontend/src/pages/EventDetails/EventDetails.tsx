@@ -36,6 +36,7 @@ import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
 import { EventParticipantsModal } from '../../components/Modal/EventParticipantsModal';
 import { ImageModal } from '../../components/Modal/ImageModal';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
+import NotFound from '../NotFound/NotFound';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -69,10 +70,10 @@ function EventDetails() {
     setAnchorEl(null);
   };
   const matches = useMediaQuery('(min-width:600px)');
-
+  // update each time id changes
   useEffect(() => {
     getEvent();
-  }, []);
+  }, [id]);
   useEffect(() => {
     getGroup();
   }, [event]);
@@ -94,6 +95,9 @@ function EventDetails() {
         console.error(error);
         setEventStatus('fail');
       });
+  }
+  if (eventStatus === 'fail') {
+    return <NotFound />;
   }
 
   async function getGroup() {
@@ -196,48 +200,39 @@ function EventDetails() {
   );
   const endSection =
     endDateText !== beginDateText ? (
-      <>
-        {/* <Typography
-          className="adaptativeText"
-          variant="h5"
-          sx={{ marginTop: '1rem', marginBottom: '0.5rem' }}
-        >
-          {t('event.endTime')}
-        </Typography> */}
-        <div
-          style={{
-            display: 'flex',
-            marginTop: '1rem',
-            flexDirection: matches ? 'row' : 'column',
-            gap: '1rem',
+      <div
+        style={{
+          display: 'flex',
+          marginTop: '1rem',
+          flexDirection: matches ? 'row' : 'column',
+          gap: '1rem',
+        }}
+      >
+        <Chip
+          icon={<CalendarTodayIcon />}
+          sx={{
+            height: 'auto',
+            padding: 1,
+            '& .MuiChip-label': {
+              display: 'block',
+              whiteSpace: 'normal',
+            },
           }}
-        >
-          <Chip
-            icon={<CalendarTodayIcon />}
-            sx={{
-              height: 'auto',
-              padding: 1,
-              '& .MuiChip-label': {
-                display: 'block',
-                whiteSpace: 'normal',
-              },
-            }}
-            label={endDateText}
-          />
-          <Chip
-            icon={<AccessTimeIcon />}
-            sx={{
-              height: 'auto',
-              padding: 1,
-              '& .MuiChip-label': {
-                display: 'block',
-                whiteSpace: 'normal',
-              },
-            }}
-            label={endHourText}
-          />
-        </div>
-      </>
+          label={endDateText}
+        />
+        <Chip
+          icon={<AccessTimeIcon />}
+          sx={{
+            height: 'auto',
+            padding: 1,
+            '& .MuiChip-label': {
+              display: 'block',
+              whiteSpace: 'normal',
+            },
+          }}
+          label={endHourText}
+        />
+      </div>
     ) : null;
 
   let endInscriptionSection = null;
