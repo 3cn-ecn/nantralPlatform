@@ -15,7 +15,6 @@ import {
   Typography,
   MenuItem,
   rgbToHex,
-  Popover,
   IconButton,
 } from '@mui/material';
 import axios from 'axios';
@@ -153,7 +152,6 @@ function JoinButton({
   };
 
   const getFirstIcon = () => {
-    // if (inscriptionNotStarted) return null;
     switch (variant) {
       case 'shotgun':
         return (

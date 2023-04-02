@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { PostProps } from 'Props/Post';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { SimpleGroupProps } from '../../Props/Group';
 import { theme } from '../style/palette';

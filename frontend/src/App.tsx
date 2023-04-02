@@ -21,7 +21,6 @@ import EventDetails from './pages/EventDetails/EventDetails';
 import Profile from './pages/Profile/Profile';
 import theme from './theme';
 import darktheme from './darktheme';
-import { GroupList } from './pages/GroupList/GroupList';
 
 /**
  * Main component of the application. It is composed of:

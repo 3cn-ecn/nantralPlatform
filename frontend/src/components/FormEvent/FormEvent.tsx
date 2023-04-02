@@ -254,7 +254,7 @@ function EditEventModal(props: {
   React.useEffect(() => {
     axios
       .get('/api/group/group/', {
-        params: { simple: true, limit: 20 },
+        params: { simple: true, limit: 20, is_admin: true },
       })
       .then((res) => setAdminGroup(res.data.results))
       .catch((err) => console.error(err));

@@ -72,7 +72,7 @@ function EventView(props: {
     setValue(newValue);
     onChangeTab(newValue);
   };
-
+  // TO DO Merging of code
   function getListEvents(queryFilter?: any, offset = 0) {
     axios
       .get('/api/event', {

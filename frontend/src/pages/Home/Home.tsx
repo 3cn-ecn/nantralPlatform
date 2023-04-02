@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { GroupProps, SimpleGroupProps } from 'Props/Group';
+import { SimpleGroupProps } from 'Props/Group';
 import * as React from 'react';
 import {
   Box,

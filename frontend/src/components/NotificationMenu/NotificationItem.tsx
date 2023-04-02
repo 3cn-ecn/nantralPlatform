@@ -4,17 +4,12 @@ import { Link } from 'react-router-dom';
 import {
   Typography,
   Box,
-  MenuItem,
-  Button,
   ListItem,
   Card,
   IconButton,
-  CardContent,
   CardActionArea,
 } from '@mui/material';
-import SvgIcon from '@mui/material/SvgIcon';
 import axios from 'axios';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import './NotificationItem.scss';
 import Avatar from '../Avatar/Avatar';
 
@@ -70,6 +65,7 @@ function NotificationItem(props) {
               component="div"
               whiteSpace="normal"
               sx={{ typography: 'subtitle2', lineHeight: 1, marginTop: 0.5 }}
+              className="notification-body"
             >
               {n.body}
             </Box>

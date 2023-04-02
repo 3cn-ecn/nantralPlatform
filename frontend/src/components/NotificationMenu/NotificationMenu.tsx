@@ -6,7 +6,6 @@ import {
   Box,
   Badge,
   Menu,
-  MenuItem,
   ListItem,
   Button,
   Chip,
@@ -43,7 +42,7 @@ interface SentNotification {
   seen: boolean;
 }
 
-export function NotificationMenu(props) {
+export function NotificationMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -71,7 +70,7 @@ export function NotificationMenu(props) {
     axios
       .get(GET_NOTIFICATIONS_URL, { params: { mode: 1 } })
       .then((res) => setNbNotifs(res.data))
-      .catch((err) => setNbNotifs(null));
+      .catch(() => setNbNotifs(null));
   }
 
   async function getListNotifs(): Promise<void> {

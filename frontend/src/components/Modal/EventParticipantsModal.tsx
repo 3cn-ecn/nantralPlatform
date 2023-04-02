@@ -5,8 +5,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { Container } from '@mui/system';
-import { CircularProgress, IconButton, List, ListItem } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
+import {
+  Card,
+  CardActionArea,
+  CircularProgress,
+  IconButton,
+  List,
+  ListItem,
+} from '@mui/material';
+import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -42,7 +49,6 @@ export function EventParticipantsModal(props: {
         setParticipantsStatus('error');
       });
   }
-  const navigate = useNavigate();
   const listOfParticipants =
     participantsStatus === 'success' ? (
       <List>
@@ -52,21 +58,35 @@ export function EventParticipantsModal(props: {
               key={participant.id}
               sx={{
                 color: 'text.primary',
-                paddingTop: '0',
-                paddingBottom: '0',
+                padding: 0,
                 margin: '1rem 0',
-                justifyContent: 'space-between',
               }}
             >
-              <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-                <IconButton component={NavLink} to={participant.url}>
-                  <Avatar title={participant.name} url={participant.picture} />
+              <Card
+                sx={{
+                  width: '100%',
+                  justifyContent: 'space-between',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                }}
+              >
+                <CardActionArea
+                  sx={{ width: '100%', padding: 1, paddingRight: 4 }}
+                  component={NavLink}
+                  to={participant.url}
+                >
+                  <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+                    <Avatar
+                      title={participant.name}
+                      url={participant.picture}
+                    />
+                    <div style={{ marginLeft: '1rem' }}>{participant.name}</div>
+                  </div>
+                </CardActionArea>
+                <IconButton sx={{ position: 'absolute', right: 0 }}>
+                  <Delete color="error" />
                 </IconButton>
-                <div style={{ marginLeft: '1rem' }}>{participant.name}</div>
-              </div>
-              <IconButton style={{ marginLeft: '1rem' }}>
-                <Delete color="error" />
-              </IconButton>
+              </Card>
             </ListItem>
           );
         })}
