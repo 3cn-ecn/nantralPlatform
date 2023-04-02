@@ -62,7 +62,7 @@ function NavBarSide(props: {
       text: t('navbar.group'),
       url: '/group/',
       icon: ClubIcon,
-      isOnBackend: false,
+      isOnBackend: true,
     },
     {
       text: t('navbar.flatshare'),

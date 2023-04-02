@@ -322,10 +322,7 @@ function NavBarTop(props: {
                   {t('user_menu.admin')}
                 </ListItem>
               </MenuItem>
-            ) : (
-              // eslint-disable-next-line react/jsx-no-useless-fragment
-              <></>
-            )}
+            ) : null}
             <MenuItem onClick={() => setOpenS(true)}>
               <SvgIcon component={ErrorRoundedIcon} />
               <ListItem
