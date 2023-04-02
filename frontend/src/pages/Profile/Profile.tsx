@@ -19,7 +19,6 @@ function Profile() {
 
   React.useEffect(() => {
     getProfile();
-    console.log(student);
   }, []);
 
   async function getProfile() {

@@ -11,7 +11,7 @@ import Event from './pages/Event/Event';
 import Academics from './pages/Academics/Academics';
 import Admin from './pages/Admin/Admin';
 import BDX from './pages/BDX/BDX';
-import Club from './pages/Club/Club';
+import Group from './pages/Group/Group';
 import Family from './pages/Family/Family';
 import Map from './pages/Map/Map';
 import Sign from './pages/Sign/Sign';
@@ -96,7 +96,7 @@ function App() {
           <Toolbar />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/club" element={<Club />} />
+            <Route path="/group" element={<Group />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/event" element={<Event />} />
             <Route path="/event/:id" element={<EventDetails />} />
@@ -109,6 +109,7 @@ function App() {
             <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="/tools/signature" element={<Sign />} />
             <Route path="/student/:studentId" element={<Profile />} />
+            {/* <Route path="/group/:groupTypeSlug" element={<GroupList />} /> */}
           </Routes>
         </Box>
       </Box>

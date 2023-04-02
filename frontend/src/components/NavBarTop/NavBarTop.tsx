@@ -14,6 +14,7 @@ import {
   ListItem,
   ListItemText,
   Link as LinkMui,
+  useMediaQuery,
 } from '@mui/material';
 import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
@@ -41,6 +42,7 @@ import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
 import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import EditSuggestionModal from '../Suggestion/Suggestion';
 import { Suggestion } from '../Suggestion/interfacesSuggestion';
+import { theme } from '../style/palette';
 /**
  * The top bar for navigation
  *
@@ -76,7 +78,7 @@ function NavBarTop(props: {
   const [loggedId, setLoggedId] = React.useState<string>();
   const [isProfilePicture, setIsProfilePicture] =
     React.useState<boolean>(false);
-  const [student, setStudent] = React.useState();
+  const [student, setStudent] = React.useState<any>();
   const [isStaff, setIsStaff] = React.useState<boolean>(false);
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
@@ -121,6 +123,7 @@ function NavBarTop(props: {
   const isOnBackend = true;
 
   const { t } = useTranslation('translation');
+  const md = useMediaQuery(theme.breakpoints.down('md'));
 
   const breadcrumbNameMap: { [key: string]: string } = {
     '/home/': t('navbar.home'),
@@ -135,9 +138,13 @@ function NavBarTop(props: {
     '/tools/signature': t('navbar.signature'),
     '/suggestions/': 'Bug',
     '/legal_mentions/': 'Legal',
+    '/event/:id/': 'Oui',
   };
   const location = useLocation();
-  const pathnames = `/home${location.pathname}`.split('/').filter((x) => x);
+  let pathnames = `${location.pathname}`.split('/').filter((x) => x);
+  if (pathnames.length === 0) pathnames = ['home'];
+  else if (pathnames.length > 1 && md)
+    pathnames = pathnames.slice(pathnames.length - 2, pathnames.length - 1);
 
   React.useEffect(() => {
     getLoggedStudent();
@@ -157,9 +164,9 @@ function NavBarTop(props: {
       });
   }
 
-  async function createSuggestion(suggestion: Suggestion) {
+  const createSuggestion = async (suggestion: Suggestion) => {
     return axios.post('/api/home/suggestion', suggestion);
-  }
+  };
 
   return (
     <AppBar position="fixed" color="secondary">
@@ -174,31 +181,35 @@ function NavBarTop(props: {
         >
           <SvgIcon component={MenuIcon} inheritViewBox />
         </IconButton>
-        <SvgIcon
-          sx={{ display: { xs: 'none', md: 'flex' } }}
-          component={NantralIcon}
-          inheritViewBox
-        />
         <Box sx={{ flexGrow: 0.02 }} />
         <Breadcrumbs
           aria-label="breadcrumb"
+          className="breadcrumbs"
           separator={<NavigateNextIcon fontSize="small" />}
         >
           <LinkMui
-            variant="h6"
             component={Link}
             to="/"
             color="textPrimary"
             underline="hover"
-            sx={{ display: { xs: 'none', md: 'flex' } }}
+            sx={{ display: 'flex', alignItems: 'center', columnGap: 1 }}
           >
-            Nantral Platform
+            <SvgIcon
+              sx={{ display: 'flex' }}
+              component={NantralIcon}
+              inheritViewBox
+            />
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              sx={{ display: { xs: 'none', sm: 'flex' } }}
+            >
+              Nantral Platform
+            </Typography>
           </LinkMui>
           {pathnames.map((value, index) => {
             const last = index === pathnames.length - 1;
-            const to =
-              index === 0 ? '/home/' : `/${pathnames.slice(1, index + 1)}/`;
-
+            const to = `/${pathnames.slice(0, index + 1).join('/')}/`;
             return last ? (
               <Typography key={to} variant="h6">
                 {breadcrumbNameMap[to]}
@@ -231,7 +242,7 @@ function NavBarTop(props: {
             component="span"
             ref={spanRef}
           >
-            {!isProfilePicture ? (
+            {!isProfilePicture || !student ? (
               <SvgIcon component={PeopleIcon} inheritViewBox />
             ) : (
               <Avatar title={student.name} url={student.picture} />
@@ -311,10 +322,7 @@ function NavBarTop(props: {
                   {t('user_menu.admin')}
                 </ListItem>
               </MenuItem>
-            ) : (
-              // eslint-disable-next-line react/jsx-no-useless-fragment
-              <></>
-            )}
+            ) : null}
             <MenuItem onClick={() => setOpenS(true)}>
               <SvgIcon component={ErrorRoundedIcon} />
               <ListItem

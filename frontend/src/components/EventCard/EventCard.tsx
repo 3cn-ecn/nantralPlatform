@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Typography,
   CardActionArea,
+  Skeleton,
 } from '@mui/material/';
 
 import { EventProps } from 'Props/Event';
@@ -94,7 +95,9 @@ function EventCard(props: { event: EventProps }) {
   }, []);
 
   async function getGroup() {
-    const response = await axios.get(`/api/group/group/${groupSlug}/`);
+    const response = await axios.get(`/api/group/group/${groupSlug}/`, {
+      params: { simple: true },
+    });
     setGroup(response.data);
   }
 
@@ -205,6 +208,16 @@ function EventCard(props: { event: EventProps }) {
         />
       </div>
     </div>
+  );
+}
+
+export function EventCardSkeleton() {
+  return (
+    <Skeleton
+      variant="rectangular"
+      height="22.85rem"
+      sx={{ fontSize: '1rem' }}
+    />
   );
 }
 

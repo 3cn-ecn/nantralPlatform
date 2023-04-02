@@ -202,7 +202,11 @@ class Group(models.Model, SlugModel):
         help_text=_("If ticked, the group page can be seen by everyone, "
                     "including non-authenticated users. Members, events and "
                     "posts still however hidden."))
-
+    can_pin = models.BooleanField(
+        verbose_name=_("Can pin"),
+        default=False,
+        help_text=_("Whether admin members can pin a post"),
+        editable=True)
     # Profile
     summary = models.CharField(
         verbose_name=_("Summary"),
@@ -365,7 +369,7 @@ class Group(models.Model, SlugModel):
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
-        return reverse('group:detail', kwargs={'slug': self.slug})
+        return f'/group/@{self.slug}'
 
 
 class Membership(models.Model):

@@ -70,7 +70,7 @@ function MoreActionsButton(props: {
       maxPerson={2}
       participating={participating}
       setParticipating={setParticipating}
-      eventSlug={slug}
+      eventId={id}
       link=""
       beginInscription=""
       endInscription=""

@@ -1,27 +1,19 @@
-export interface ClubProps {
+export interface SimpleGroup {
   name: string;
-  icon: string;
-  url: string;
-  is_admin: boolean;
-}
-
-export interface SimpleGroupProps {
-  name: string;
-  id: number;
   short_name: string;
   slug: string;
   url: string;
   icon?: string;
-  category: string;
 }
 
-export interface GroupProps extends SimpleGroupProps {
+export interface Group extends SimpleGroup {
+  id: number;
   group_type: {
     name: string;
     slug: string;
     no_membership_dates: boolean;
   };
-  parent?: SimpleGroupProps;
+  parent?: SimpleGroup;
   creation_year?: number;
   archived: boolean;
   private: boolean;
@@ -38,14 +30,14 @@ export interface GroupProps extends SimpleGroupProps {
   lock_memberships: boolean;
 }
 
-export interface SimpleStudentProps {
+export interface SimpleStudent {
   id: number;
   full_name: string;
   url: string;
   picture: string;
 }
 
-export interface StudentProps {
+export interface Student {
   id: number;
   name: string;
   promo: number;
@@ -54,7 +46,7 @@ export interface StudentProps {
   path: string;
 }
 
-export interface MembershipProps {
+export interface Membership {
   id: number;
   student: {
     id: number;
@@ -70,8 +62,8 @@ export interface MembershipProps {
   };
   summary: string;
   description: string;
-  begin_date?: string; // date as ISO string
-  end_date?: string; // date as ISO string
+  begin_date?: string;  // date as ISO string
+  end_date?: string;  // date as ISO string
   priority: number;
   admin: boolean;
   admin_request?: boolean;

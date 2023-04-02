@@ -5,11 +5,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { Container } from '@mui/system';
-import { CircularProgress, List, ListItem } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom';
+import {
+  Card,
+  CardActionArea,
+  CircularProgress,
+  IconButton,
+  List,
+  ListItem,
+} from '@mui/material';
+import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Delete } from '@mui/icons-material';
 import Avatar from '../Avatar/Avatar';
 import { EventProps } from '../../Props/Event';
 
@@ -37,11 +45,10 @@ export function EventParticipantsModal(props: {
         setParticipantsStatus('success');
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         setParticipantsStatus('error');
       });
   }
-  const navigate = useNavigate();
   const listOfParticipants =
     participantsStatus === 'success' ? (
       <List>
@@ -49,20 +56,38 @@ export function EventParticipantsModal(props: {
           return (
             <ListItem
               key={participant.id}
-              component={NavLink}
-              to={participant.url}
               sx={{
                 color: 'text.primary',
-                paddingTop: '0',
-                paddingBottom: '0',
+                padding: 0,
                 margin: '1rem 0',
               }}
-              onClick={() => {
-                navigate(participant.url);
-              }}
             >
-              <Avatar title={participant.name} url={participant.picture} />
-              <div style={{ marginLeft: '1rem' }}>{participant.name}</div>
+              <Card
+                sx={{
+                  width: '100%',
+                  justifyContent: 'space-between',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                }}
+              >
+                <CardActionArea
+                  sx={{ width: '100%', padding: 1, paddingRight: 4 }}
+                  component={NavLink}
+                  to={participant.url}
+                >
+                  <div style={{ display: 'inline-flex', alignItems: 'center' }}>
+                    <Avatar
+                      title={participant.name}
+                      url={participant.picture}
+                    />
+                    <div style={{ marginLeft: '1rem' }}>{participant.name}</div>
+                  </div>
+                </CardActionArea>
+                {/* TO DO LATER Remove participant option */}
+                {/* <IconButton sx={{ position: 'absolute', right: 0 }}>
+                  <Delete color="error" />
+                </IconButton> */}
+              </Card>
             </ListItem>
           );
         })}
@@ -82,7 +107,8 @@ export function EventParticipantsModal(props: {
       onClose={() => onClose()}
     >
       <DialogTitle id="responsive-dialog-title">
-        {t('event.participantsList')}
+        {`${t('event.participantsList')} (${event.numberOfParticipants}`}
+        {event.maxParticipant ? `/${event.maxParticipant})` : ')'}
       </DialogTitle>
       <DialogContent>{listOfParticipants}</DialogContent>
       <DialogActions>

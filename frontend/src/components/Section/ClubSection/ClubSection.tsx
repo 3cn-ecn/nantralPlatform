@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ClubProps } from '../../../Props/Group';
+import { Group, SimpleGroup } from 'components/Group/interfaces';
 import { ClubAvatar, ClubAvatarSkeleton } from '../../ClubAvatar/ClubAvatar';
 import { AccordionSection } from '../AccordionSection';
 
@@ -27,7 +27,7 @@ export function ClubSection(props: {
   /** L'état de chargement des événements */
   status: 'success' | 'fail' | 'load';
   /** La liste des événements à afficher */
-  clubs: Array<ClubProps>;
+  clubs: Array<Group | SimpleGroup>;
   /** Titre de la section */
   title?: string;
   /** Nombre maximal d'événement à afficher */
@@ -55,7 +55,11 @@ export function ClubSection(props: {
             md={3}
             lg={2}
             key={club.name}
-            sx={{ justifyContent: 'center', display: 'flex' }}
+            sx={{
+              justifyContent: 'center',
+              display: 'flex',
+              alignItems: 'baseline',
+            }}
           >
             <ClubAvatar
               name={club.name}

@@ -95,9 +95,7 @@ function NavBarSide(props: {
       variant={variant}
       open={menuOpen}
       anchor="left"
-      onAbort={onClose}
-      onAbortCapture={onClose}
-      onAuxClick={onClose}
+      onClick={onClose}
       sx={{
         width: drawerWidth,
         flexShrink: 0,

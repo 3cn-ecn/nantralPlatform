@@ -37,13 +37,18 @@
       "share": "Share",
       "unsubscribe": "Unregister"
     },
+    "adminWarning": "You must be an admin of your club to create an event",
     "endInscription": "Registration is open until",
     "endTime": "Will end on :",
     "error": "Error while loading the events",
+    "event": "Event",
+    "eventIsFull": "This event is full",
+    "inscriptionsBeginAt": "Registration opens on",
     "membersOnly": "Members only",
     "no_event": "No Event",
     "participants": "Participants",
-    "participantsList": "List of participants"
+    "participantsList": "List of participants",
+    "shotgunDatails": "Shotgun Details"
   },
   "filterbar": {
     "date": "Date",
@@ -58,23 +63,33 @@
   },
   "form": {
     "PostTitle": "Post title",
+    "beginDatetime": "Start date and time",
     "cancel": "Cancel",
     "chooseFile": "Choose file",
     "createAPost": "Create a post",
+    "createEvent": "Create event",
     "createPost": "Create post",
     "delete": "Delete",
+    "deleteEvent": "Delete event",
+    "deleteEventConfirmation": "Are you sure you want to delete this event? \nThis action is irreversible.",
     "deletePost": "Delete post",
     "description": "Description",
+    "editEvent": "Edit event",
     "editPost": "Edit post",
+    "endDatetime": "End date and time",
+    "eventTitle": "Event title",
     "group": "Group",
-    "groupHelpText": "Type the first 3 letters of your group",
+    "groupHelpText": "You must be an admin of your group to post a post.",
     "image": "Picture",
     "imageDescription": "A picture, a banner, a poster",
     "membersOnly": "Club members only",
+    "noFile": "No file",
     "pinned": "Pinned post",
+    "place": "Place",
     "public": "Public",
     "publicationDate": "Publication date",
-    "publicity": "Publicity"
+    "publicity": "Publicity",
+    "saving": "Saving..."
   },
   "home": {
     "announcement": "Announcement",
@@ -168,6 +183,7 @@
     "confirmDelete": "Are you sure you want to delete the post (this action is irreversible).",
     "edited": "edited",
     "noPost": "There are no recent posts",
+    "post": "Post",
     "published": "posted",
     "updated": "updated"
   },

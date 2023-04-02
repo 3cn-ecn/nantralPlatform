@@ -3,10 +3,11 @@
 }
 
 .spanno {
+  height: 100%;
   display:flex;
-    width: 300px;
-    overflow-wrap:normal;
-    align-items: center;
+  width: 300px;
+  overflow-wrap:normal;
+  align-items: center;
 }
 
 
@@ -36,4 +37,10 @@ p.body {
 .bob {
   display: flex;
   align-items: center;
+}
+.notification-body {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }

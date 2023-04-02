@@ -12,14 +12,14 @@ import * as React from 'react';
 import './PostCard.scss';
 import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
 import axios from 'axios';
-import { ClubProps } from 'Props/Group';
+import { ClubProps, SimpleGroupProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
 import { PostProps } from '../../Props/Post';
 import { PostModal } from '../Modal/PostModal';
 import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
 
-const POST_HEIGHT = 180;
+const POST_HEIGHT = 190;
 export const POST_AVATAR_SIZE = 35;
 export function SeePageButton(props: {
   link: string;
@@ -61,13 +61,55 @@ export function MembersIcon() {
     </Tooltip>
   );
 }
+
+export function PostBadges(props: {
+  pinned: boolean;
+  className?: string;
+  style?: any;
+  publicity: PostProps['publicity'];
+}) {
+  const { pinned, publicity, className, style } = props;
+  return (
+    <div
+      className={className}
+      style={{ display: 'flex', columnGap: '0.6em', ...style }}
+    >
+      {publicity === 'Mem' && (
+        <Groups
+          sx={{
+            padding: 0.4,
+            color: 'white',
+            borderRadius: '50%',
+            backgroundColor: 'primary.main',
+          }}
+        />
+      )}
+      {pinned && (
+        <PushPin
+          sx={{
+            padding: 0.4,
+            color: 'white',
+            borderRadius: '50%',
+            backgroundColor: 'primary.main',
+          }}
+        />
+      )}
+    </div>
+  );
+}
+PostBadges.defaultProps = {
+  className: null,
+  style: {},
+};
+
 SeePageButton.defaultProps = {
   style: null,
 };
-export function PostCard(props: { post: PostProps }) {
-  const { post } = props;
+export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
+  const { post, onDelete } = props;
   const [open, setOpen] = React.useState<boolean>(false);
-  const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
+  const [clubDetails, setClubDetails] =
+    React.useState<SimpleGroupProps>(undefined);
   const [postValue, setPostValue] = React.useState(post);
   const { t } = useTranslation('translation');
 
@@ -77,10 +119,20 @@ export function PostCard(props: { post: PostProps }) {
 
   React.useEffect(() => {
     axios
-      .get(`/api/group/group/${postValue.groupSlug}/`)
+      .get(`/api/group/group/${postValue.groupSlug}/`, {
+        params: { simple: true },
+      })
       .then((res) => setClubDetails(res.data))
       .catch((err) => console.error(err));
   }, []);
+
+  const updatePost = (newPost: PostProps) => {
+    if (newPost) setPostValue(newPost);
+    else {
+      onDelete();
+      setOpen(false);
+    }
+  };
 
   return (
     <>
@@ -94,28 +146,11 @@ export function PostCard(props: { post: PostProps }) {
           onClick={() => setOpen(true)}
           sx={{ display: 'flex', height: '100%' }}
         >
-          <div className="post-icons">
-            {postValue.publicity === 'Mem' && (
-              <Groups
-                sx={{
-                  padding: 0.4,
-                  color: 'white',
-                  borderRadius: '50%',
-                  backgroundColor: 'primary.main',
-                }}
-              />
-            )}
-            {post.pinned && (
-              <PushPin
-                sx={{
-                  padding: 0.4,
-                  color: 'white',
-                  borderRadius: '50%',
-                  backgroundColor: 'primary.main',
-                }}
-              />
-            )}
-          </div>
+          <PostBadges
+            pinned={postValue.pinned}
+            publicity={postValue.publicity}
+            className="post-icons"
+          />
           <CardContent
             style={{
               borderColor: 'red',
@@ -178,11 +213,15 @@ export function PostCard(props: { post: PostProps }) {
         clubDetails={clubDetails}
         open={open}
         onClose={() => setOpen(false)}
-        onUpdate={setPostValue}
+        onUpdate={updatePost}
       />
     </>
   );
 }
+
+PostCard.defaultProps = {
+  onDelete: () => null,
+};
 
 export function PostCardSkeleton() {
   return <Skeleton variant="rectangular" width="100%" height={POST_HEIGHT} />;
