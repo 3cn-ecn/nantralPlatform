@@ -83,9 +83,10 @@ export function EventParticipantsModal(props: {
                     <div style={{ marginLeft: '1rem' }}>{participant.name}</div>
                   </div>
                 </CardActionArea>
-                <IconButton sx={{ position: 'absolute', right: 0 }}>
+                {/* TO DO LATER Remove participant option */}
+                {/* <IconButton sx={{ position: 'absolute', right: 0 }}>
                   <Delete color="error" />
-                </IconButton>
+                </IconButton> */}
               </Card>
             </ListItem>
           );
