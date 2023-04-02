@@ -87,7 +87,7 @@ class Student(models.Model):
                         admin=True,
                         group__can_pin=True,
                         group__archived=False)
-                .exists() or self.user.is_staff)
+                .exists() or self.user.is_superuser)
 
     def save(self, *args, **kwargs):
         self.picture = compress_model_image(self, 'picture')
