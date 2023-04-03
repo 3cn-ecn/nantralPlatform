@@ -3,7 +3,6 @@ import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   IconButton,
   AppBar,
@@ -113,9 +112,6 @@ function NavBarTop(props: {
     setAnchorElDark(null);
   };
 
-  const matches = useMediaQuery((theme) => theme.breakpoints.only('xs'));
-  console.log(matches);
-
   const [openS, setOpenS] = React.useState(false);
 
   const handleCloseS = () => {
@@ -186,7 +182,6 @@ function NavBarTop(props: {
         <Box sx={{ flexGrow: 0.02 }} />
         <Breadcrumbs
           aria-label="breadcrumb"
-          maxItems={matches ? 1 : 10}
           separator={<NavigateNextIcon fontSize="small" />}
         >
           <LinkMui
