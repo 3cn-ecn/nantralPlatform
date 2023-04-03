@@ -12,14 +12,14 @@ import {
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
-import { ReactComponent as EventIcon } from '../../assets/scalable/event.svg';
-import { ReactComponent as ClubIcon } from '../../assets/scalable/club.svg';
-import { ReactComponent as MapIcon } from '../../assets/scalable/roommates.svg';
-import { ReactComponent as FamilyIcon } from '../../assets/scalable/family.svg';
-import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
-import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
-import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
-import { ReactComponent as HomeIcon } from '../../assets/scalable/accueil.svg';
+import { ReactComponent as EventIcon } from '../../assets/icons/scalable/event.svg';
+import { ReactComponent as ClubIcon } from '../../assets/icons/scalable/club.svg';
+import { ReactComponent as MapIcon } from '../../assets/icons/scalable/roommates.svg';
+import { ReactComponent as FamilyIcon } from '../../assets/icons/scalable/family.svg';
+import { ReactComponent as ListIcon } from '../../assets/icons/scalable/list.svg';
+import { ReactComponent as SignIcon } from '../../assets/icons/scalable/sign.svg';
+import { ReactComponent as LinkIcon } from '../../assets/icons/scalable/link.svg';
+import { ReactComponent as HomeIcon } from '../../assets/icons/scalable/accueil.svg';
 
 /** Interface for all links */
 interface LinksInterface {
@@ -126,7 +126,11 @@ function NavBarSide(props: {
               <ListItemButton onClick={onClose}>
                 <ListItemIcon>
                   {link.icon ? (
-                    <SvgIcon component={link.icon} inheritViewBox />
+                    <SvgIcon
+                      component={link.icon}
+                      className="svg"
+                      inheritViewBox
+                    />
                   ) : (
                     <SvgIcon component={LinkIcon} inheritViewBox />
                   )}

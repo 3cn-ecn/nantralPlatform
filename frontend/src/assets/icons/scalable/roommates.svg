@@ -38,8 +38,8 @@
 <style
    type="text/css"
    id="style13952">
-	.roomst0{fill:url(#SVGID_1_);}
-	.roomst1{fill:#DC3545;}
+	.st0{fill:url(#SVGID_1_);}
+	.st1{fill:#DC3545;}
 </style>
 <linearGradient
    id="SVGID_1_"
@@ -62,14 +62,14 @@
 <g
    id="g14450"
    transform="matrix(36,0,0,36,-144,-144)"><ellipse
-     class="roomst0"
+     class="st0"
      cx="12"
      cy="17"
      rx="8"
      ry="2"
      id="ellipse13959"
      style="fill:url(#SVGID_1_)" /><path
-     class="roomst1"
+     class="st1"
      d="M 12,5 C 9.8,5 8,6.8 8,9 c 0,1.8 2.6,5.8 3.6,7.4 0.1,0.2 0.5,0.3 0.7,0.1 0.1,0 0.1,-0.1 0.1,-0.1 C 13.4,14.8 16,10.8 16,9 16,6.8 14.2,5 12,5 Z m 0,5 c -0.6,0 -1,-0.4 -1,-1 0,-0.6 0.4,-1 1,-1 0.6,0 1,0.4 1,1 0,0.6 -0.4,1 -1,1 z"
      id="path13961" /></g>
 </svg>
