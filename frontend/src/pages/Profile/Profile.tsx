@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import * as React from 'react';
 import { LoadStatus } from 'Props/GenericTypes';
-import { useParams } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 import { SvgIcon, Typography, Grid, Box, Skeleton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -20,10 +20,23 @@ function Profile() {
   const { t } = useTranslation('translation');
 
   const [eventStatus, setEventStatus] = React.useState<LoadStatus>('load');
+  const [idMe, setIdMe] = React.useState<number>(2);
 
   React.useEffect(() => {
+    getMe();
     getProfile();
   }, []);
+
+  async function getMe() {
+    axios
+      .get('/api/student/student/me/')
+      .then((res) => {
+        setIdMe(res.data.id);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
   async function getProfile() {
     axios
@@ -98,21 +111,25 @@ function Profile() {
             )}
           </Grid>
           <Grid>
-            <LoadingButton
-              loading={eventStatus === 'load'}
-              variant="contained"
-              size="small"
-              sx={{ mt: 2 }}
-              onClick={handleClickOpen}
-            >
-              {t('profile.edit')}
-              <SvgIcon
-                sx={{ display: { xs: 'none', md: 'flex' }, ml: 1 }}
-                fontSize="small"
-                component={ModeEditIcon}
-                inheritViewBox
-              />
-            </LoadingButton>
+            {eventStatus !== 'load' && idMe === student.id && (
+              <LoadingButton
+                loading={eventStatus === 'load'}
+                variant="contained"
+                component={NavLink}
+                reloadDocument
+                to="edit/"
+                size="small"
+                sx={{ mt: 2 }}
+              >
+                {t('profile.edit')}
+                <SvgIcon
+                  sx={{ display: { xs: 'none', md: 'flex' }, ml: 1 }}
+                  fontSize="small"
+                  component={ModeEditIcon}
+                  inheritViewBox
+                />
+              </LoadingButton>
+            )}
             <EditProfilModal
               open={openS}
               closeModal={handleCloseS}
