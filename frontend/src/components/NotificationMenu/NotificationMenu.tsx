@@ -17,6 +17,7 @@ import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
 import axios from 'axios';
 import { ReactComponent as NotifIcon } from '../../assets/icons/scalable/notification.svg';
+import { ReactComponent as HomeIcon } from '../../assets/icons/scalable/accueil.svg';
 import { NotificationItem } from './NotificationItem';
 import merge from '../../legacy/notification/utils';
 import './NotificationItem.scss';
@@ -142,6 +143,7 @@ export function NotificationMenu(props) {
         aria-label="show 17 new notifications"
         color="inherit"
         onClick={handleClick}
+        sx={{ mt: 2, mb: 2, mr: 2 }}
       >
         <Badge badgeContent={nbNotifs} color="error">
           <SvgIcon component={NotifIcon} inheritViewBox />
