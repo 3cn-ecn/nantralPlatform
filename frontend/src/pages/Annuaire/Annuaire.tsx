@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Tab, Button, Container, Typography } from '@mui/material';
+import {
+  Box,
+  Tab,
+  Button,
+  Container,
+  Typography,
+  CircularProgress,
+  Grid,
+} from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Table from '@mui/material/Table';
@@ -11,6 +19,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import axios from 'axios';
+import './Annuaire.scss';
 import { FilterInterface } from 'Props/Filter';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { StudentProps } from '../../Props/Student';
@@ -93,6 +102,11 @@ function Annuaire() {
             </TableBody>
           </Table>
         </TableContainer>
+        {studentStatus === 'load' && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+            <CircularProgress className="loading" />
+          </Box>
+        )}
       </Container>
     </Box>
   );
