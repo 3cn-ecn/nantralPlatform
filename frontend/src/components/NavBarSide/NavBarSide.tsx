@@ -80,7 +80,7 @@ function NavBarSide(props: {
       text: t('navbar.student'),
       url: '/student/',
       icon: ListIcon,
-      isOnBackend: true,
+      isOnBackend: false,
     },
     {
       text: t('navbar.signature'),

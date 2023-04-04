@@ -230,11 +230,16 @@ function NavBarTop(props: {
             onClick={handleClick}
             component="span"
             ref={spanRef}
+            sx={{ mt: 1, mb: 1 }}
           >
             {!isProfilePicture ? (
               <SvgIcon component={PeopleIcon} inheritViewBox />
             ) : (
-              <Avatar title={student.name} url={student.picture} />
+              <Avatar
+                size="medium"
+                title={student.name}
+                url={student.picture}
+              />
             )}
           </IconButton>
           <Menu
