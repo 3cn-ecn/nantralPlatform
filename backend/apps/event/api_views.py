@@ -78,6 +78,8 @@ class EventViewSet(viewsets.ModelViewSet):
     filter events current user is participating
     - publicity : 'Mem' | 'Pub' = None ->
     visibility of the event
+    - registration : 'open' | 'closed' = None ->
+    whether registration is open
 
     Actions
     -------
@@ -149,10 +151,16 @@ class EventViewSet(viewsets.ModelViewSet):
                     if min_participants else Q())
             .filter(Q(participants_count__lte=max_participants)
                     if max_participants else Q())
-            .annotate(registration_status=(Q(begin_registration__lte=today)
-                                           & Q(end_registration__gte=today)))
-            .filter(Q(registration_status=(registration == "closed"))
-                    if registration else Q())
+            .annotate(registration_open=(
+                (Q(begin_registration__lte=today)
+                 | Q(begin_registration__isnull=True))
+                & (Q(end_registration__gte=today)
+                   | Q(end_registration__isnull=True))
+            ))
+            .filter(Q(registration_open=True)
+                    if registration == "open" else Q())
+            .filter(Q(registration_open=False)
+                    if registration == "closed" else Q())
             .filter(Q(publicity=visibility) if visibility in
                     [VISIBILITY[i][0] for i in range(len(VISIBILITY))] else Q())
             .filter(Q(publicity=VISIBILITY[0][0]) | Q(member=True))
