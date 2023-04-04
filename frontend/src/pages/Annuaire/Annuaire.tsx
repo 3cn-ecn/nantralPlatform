@@ -17,6 +17,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import axios from 'axios';
 import './Annuaire.scss';
@@ -33,6 +35,9 @@ function Annuaire() {
   const [studentStatus, setStudentStatus] = React.useState<LoadStatus>('load');
 
   const { t } = useTranslation('translation');
+
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
   React.useEffect(() => {
     getListStudent();
@@ -77,10 +82,11 @@ function Annuaire() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Nom et Prénom</TableCell>
-                <TableCell>Promotion Entrante</TableCell>
-                <TableCell>Filière</TableCell>
-                <TableCell>Cursus</TableCell>
+                <TableCell>Nom</TableCell>
+                <TableCell>Prénom </TableCell>
+                {matches && <TableCell>Promotion Entrante</TableCell>}
+                {matches && <TableCell>Filière</TableCell>}
+                {matches && <TableCell>Cursus</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -92,11 +98,14 @@ function Annuaire() {
                   sx={{ textDecoration: 'none' }}
                 >
                   <TableCell component="th" scope="row">
-                    {std.name}
+                    {std.name.substring(std.name.indexOf(' ') + 1)}
                   </TableCell>
-                  <TableCell>{std.promo}</TableCell>
-                  <TableCell>{fac[std.faculty]}</TableCell>
-                  <TableCell>{path[std.path]}</TableCell>
+                  <TableCell component="th" scope="row">
+                    {std.name.substring(0, std.name.indexOf(' '))}
+                  </TableCell>
+                  {matches && <TableCell>{std.promo}</TableCell>}
+                  {matches && <TableCell>{fac[std.faculty]}</TableCell>}
+                  {matches && <TableCell>{path[std.path]}</TableCell>}
                 </TableRow>
               ))}
             </TableBody>
