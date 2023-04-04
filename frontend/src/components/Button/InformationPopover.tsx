@@ -10,11 +10,11 @@ import { useTranslation } from 'react-i18next';
 export function EventPopover(props: {
   anchorRef: any;
   open: boolean;
-  beginInscription;
+  beginRegistration;
   maxParticipant;
   onClose: () => void;
 }) {
-  const { anchorRef, open, onClose, beginInscription, maxParticipant } = props;
+  const { anchorRef, open, onClose, beginRegistration, maxParticipant } = props;
   const { t, i18n } = useTranslation('translation');
   return (
     <Popover
@@ -38,7 +38,7 @@ export function EventPopover(props: {
         >
           <Chip
             avatar={<DateRange />}
-            label={`${new Date(beginInscription).toLocaleDateString(
+            label={`${new Date(beginRegistration).toLocaleDateString(
               i18n.language,
               {
                 weekday: 'long',
@@ -49,7 +49,7 @@ export function EventPopover(props: {
           />
           <Chip
             avatar={<ClockIcon />}
-            label={`${new Date(beginInscription).toLocaleTimeString(
+            label={`${new Date(beginRegistration).toLocaleTimeString(
               i18n.language,
               {
                 hour: '2-digit',

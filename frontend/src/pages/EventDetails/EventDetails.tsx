@@ -153,13 +153,13 @@ function EventDetails() {
   });
 
   const registrationStarted =
-    !event.beginInscription ||
-    event.beginInscription.getTime() < today.getTime();
+    !event.beginRegistration ||
+    event.beginRegistration.getTime() < today.getTime();
 
   const registrationEnded =
-    event.endInscription && event.endInscription.getTime() < today.getTime();
+    event.endRegistration && event.endRegistration.getTime() < today.getTime();
 
-  const endSameDay = endDateText === beginDateText ? ` - ${endHourText}` : null;
+  const endSameDay = endDateText === beginDateText ? ` - ${endHourText}` : '';
 
   const beginSection = (
     <div
@@ -235,26 +235,26 @@ function EventDetails() {
       </div>
     ) : null;
 
-  let endInscriptionSection = null;
+  let endRegistrationSection = null;
 
-  if (event.endInscription !== null) {
-    const endInscriptionValue = new Date(event.endInscription);
-    const endInscriptioneText = endInscriptionValue.toLocaleDateString(
+  if (event.endRegistration !== null) {
+    const endRegistrationValue = new Date(event.endRegistration);
+    const endRegistrationText = endRegistrationValue.toLocaleDateString(
       i18n.language,
       dateFormat
     );
-    const endInscriptionText = endInscriptionValue.toLocaleTimeString(
+    const endRegistrationText2 = endRegistrationValue.toLocaleTimeString(
       i18n.language,
       {
         timeStyle: 'short',
       }
     );
 
-    endInscriptionSection =
+    endRegistrationSection =
       !registrationEnded && registrationStarted ? (
         <Alert variant="outlined" severity="info" sx={{ marginTop: '1rem' }}>
-          {t('event.endInscription')} {endInscriptioneText} -{' '}
-          {endInscriptionText}
+          {t('event.endInscription')} {endRegistrationText} -{' '}
+          {endRegistrationText2}
         </Alert>
       ) : null;
   }
@@ -263,10 +263,10 @@ function EventDetails() {
     <Alert variant="outlined" severity="info" sx={{ marginTop: '1rem' }}>
       {`${t(
         'event.inscriptionsBeginAt'
-      )} ${event.beginInscription.toLocaleDateString(
+      )} ${event.beginRegistration.toLocaleDateString(
         i18n.language,
         dateFormat
-      )} - ${event.beginInscription.toLocaleTimeString(i18n.language, {
+      )} - ${event.beginRegistration.toLocaleTimeString(i18n.language, {
         timeStyle: 'short',
       })}`}
     </Alert>
@@ -395,8 +395,8 @@ function EventDetails() {
               participating={participating}
               eventId={event.id}
               link={event.formUrl}
-              beginInscription={event.beginInscription}
-              endInscription={event.endInscription}
+              beginRegistration={event.beginRegistration}
+              endRegistration={event.endRegistration}
               setParticipating={setParticipating}
               sx={{ width: '100%' }}
               hideInfoButton
@@ -441,7 +441,7 @@ function EventDetails() {
         />
         {fullEventAlert}
         {beginInsciptionAlert}
-        {endInscriptionSection}
+        {endRegistrationSection}
         {infoSection}
 
         <Typography variant="caption" sx={{ textAlign: 'justify' }}>

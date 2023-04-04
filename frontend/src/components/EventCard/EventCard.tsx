@@ -78,8 +78,8 @@ function EventCard(props: { event: EventProps }) {
     slug,
     formUrl,
     isFavorite,
-    endInscription,
-    beginInscription,
+    endRegistration,
+    beginRegistration,
     groupName,
     id,
   } = event;
@@ -184,8 +184,8 @@ function EventCard(props: { event: EventProps }) {
             participating={participating}
             eventId={id}
             link={formUrl}
-            beginInscription={beginInscription}
-            endInscription={endInscription}
+            beginRegistration={beginRegistration}
+            endRegistration={endRegistration}
             setParticipating={setParticipating}
             sx={{ width: '100%' }}
           />

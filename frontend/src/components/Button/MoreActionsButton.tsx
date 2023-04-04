@@ -72,8 +72,8 @@ function MoreActionsButton(props: {
       setParticipating={setParticipating}
       eventId={id}
       link=""
-      beginInscription=""
-      endInscription=""
+      beginRegistration={null}
+      endRegistration={null}
       unregisterOnly
     />
   ) : null;

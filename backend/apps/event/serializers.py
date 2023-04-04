@@ -29,12 +29,12 @@ class EventSerializer(serializers.ModelSerializer):
                 and attrs["date"] > attrs["end_date"]):
             raise exceptions.ValidationError(_(
                 "The end date must be after the begin date."))
-        if ("begin_inscription" in attrs and attrs["begin_inscription"]
-            and "end_inscription" in attrs and attrs["end_inscription"]
-                and attrs["begin_inscription"] > attrs["end_inscription"]):
+        if ("begin_registration" in attrs and attrs["begin_registration"]
+            and "end_registration" in attrs and attrs["end_registration"]
+                and attrs["begin_registration"] > attrs["end_registration"]):
             raise serializers.ValidationError(
-                "End inscription date should be greater than begin inscription\
-                 date")
+                "End registration date should be greater than begin \
+                    registration date")
         return super().validate(attrs)
 
     class Meta:
@@ -59,8 +59,8 @@ class EventSerializer(serializers.ModelSerializer):
             'is_participating',
             'is_member',
             'max_participant',
-            'begin_inscription',
-            'end_inscription',
+            'begin_registration',
+            'end_registration',
             'form_url',
             'is_favorite']
 
@@ -87,9 +87,9 @@ class EventSerializer(serializers.ModelSerializer):
         return obj.get_absolute_url()
 
     def get_form_url(self, obj: Event):
-        # don't send url if inscription not open
-        if (obj.form_url and obj.begin_inscription
-                and obj.begin_inscription > timezone.now()):
+        # don't send url if registration not open
+        if (obj.form_url and obj.begin_registration
+                and obj.begin_registration > timezone.now()):
             return "/"
         return obj.form_url
 

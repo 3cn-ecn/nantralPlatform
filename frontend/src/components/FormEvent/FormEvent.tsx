@@ -124,13 +124,13 @@ function getFormFields(
       fields: [
         {
           kind: 'datetime',
-          name: 'beginInscription',
+          name: 'beginRegistration',
           label: "Date heure d'ouverture des inscriptions",
           disablePast: true,
         },
         {
           kind: 'datetime',
-          name: 'endInscription',
+          name: 'endRegistration',
           label: 'Date et Heure de fin des inscriptions',
           disablePast: true,
         },
@@ -152,13 +152,13 @@ function getFormFields(
       fields: [
         {
           kind: 'datetime',
-          name: 'beginInscription',
+          name: 'beginRegistration',
           label: 'Date et Heure du Shotgun',
           disablePast: true,
         },
         {
           kind: 'datetime',
-          name: 'endInscription',
+          name: 'endRegistration',
           label: 'Date et Heure de fin des inscriptions',
           disablePast: true,
         },
@@ -178,13 +178,13 @@ function getFormFields(
       fields: [
         {
           kind: 'datetime',
-          name: 'beginInscription',
+          name: 'beginRegistration',
           label: "Date heure d'ouverture des inscriptions",
           disablePast: true,
         },
         {
           kind: 'datetime',
-          name: 'endInscription',
+          name: 'endRegistration',
           label: 'Date et Heure de fin des inscriptions',
           disablePast: true,
         },
@@ -207,11 +207,11 @@ function getFormFields(
 function createBlankEvent(): EventProps {
   const event: EventProps = {
     group: null,
-    beginInscription: null,
+    beginRegistration: null,
     beginDate: null,
     description: '',
     endDate: null,
-    endInscription: null,
+    endRegistration: null,
     image: '',
     location: '',
     maxParticipant: null,
@@ -278,8 +278,8 @@ function EditEventModal(props: {
     if (formValues.endDate)
       formData.append('end_date', formValues.endDate.toISOString());
     formData.append(
-      'end_inscription',
-      formValues.endInscription ? formValues.endInscription.toISOString() : ''
+      'end_registration',
+      formValues.endRegistration ? formValues.endRegistration.toISOString() : ''
     );
     formData.append('location', formValues.location);
     // Form
@@ -295,9 +295,9 @@ function EditEventModal(props: {
         : ''
     );
     formData.append(
-      'begin_inscription',
-      formValues.beginInscription
-        ? formValues.beginInscription.toISOString()
+      'begin_registration',
+      formValues.beginRegistration
+        ? formValues.beginRegistration.toISOString()
         : ''
     );
     return formData;
@@ -443,6 +443,7 @@ function EditEventModal(props: {
                   alignItems: 'center',
                   flexWrap: 'wrap',
                   columnGap: '1ex',
+                  justifyContent: 'space-between',
                 }}
               >
                 <Typography
@@ -466,7 +467,7 @@ function EditEventModal(props: {
                 >
                   <MenuItem sx={{ columnGap: 1 }} value="normal">
                     <FreeIcon />
-                    Inscription Libre
+                    {t('form.freeRegistration')}
                   </MenuItem>
                   <MenuItem sx={{ columnGap: 1 }} value="shotgun">
                     <ShotgunIcon />
@@ -474,7 +475,7 @@ function EditEventModal(props: {
                   </MenuItem>
                   <MenuItem sx={{ columnGap: 1 }} value="form">
                     <LinkIcon />
-                    Lien externe
+                    {t('form.externalLink')}
                   </MenuItem>
                 </Select>
               </div>

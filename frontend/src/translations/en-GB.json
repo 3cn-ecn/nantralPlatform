@@ -78,6 +78,8 @@
     "editPost": "Edit post",
     "endDatetime": "End date and time",
     "eventTitle": "Event title",
+    "externalLink": "External link",
+    "freeRegistration": "Free registration",
     "group": "Group",
     "groupHelpText": "You must be an admin of your group to post a post.",
     "image": "Picture",

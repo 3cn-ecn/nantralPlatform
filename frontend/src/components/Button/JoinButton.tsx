@@ -36,8 +36,8 @@ interface JoinButtonProps {
   sx?: SxProps<Theme>;
   participating: boolean;
   eventId: number;
-  beginInscription: Date | null;
-  endInscription: Date | null;
+  beginRegistration: Date | null;
+  endRegistration: Date | null;
   unregisterOnly?: boolean;
   setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
   handleClick?: () => void;
@@ -52,8 +52,8 @@ function JoinButton({
   sx,
   participating,
   eventId,
-  beginInscription,
-  endInscription,
+  beginRegistration,
+  endRegistration,
   unregisterOnly,
   setParticipating,
   handleClick,
@@ -79,13 +79,14 @@ function JoinButton({
   }, [participating]);
 
   const { t } = useTranslation('translation');
-  const inscriptionFinished: boolean =
-    endInscription !== null && Date.now() > new Date(endInscription).getTime();
+  const registrationFinished: boolean =
+    endRegistration !== null &&
+    Date.now() > new Date(endRegistration).getTime();
   const shotgunFull = variant === 'shotgun' && person >= maxPerson;
-  const closed: boolean = shotgunFull || inscriptionFinished;
-  const inscriptionNotStarted: boolean =
-    beginInscription !== null &&
-    Date.now() < new Date(beginInscription).getTime();
+  const closed: boolean = shotgunFull || registrationFinished;
+  const registrationNotStarted: boolean =
+    beginRegistration !== null &&
+    Date.now() < new Date(beginRegistration).getTime();
   const participate = async () => {
     axios
       .post(`/api/event/${eventId}/participate`)
@@ -127,7 +128,7 @@ function JoinButton({
   const onClick = () => {
     switch (variant) {
       case 'normal':
-        if (closed || inscriptionNotStarted) return;
+        if (closed || registrationNotStarted) return;
         if (selected) {
           setOpen(true);
         } else {
@@ -136,7 +137,7 @@ function JoinButton({
         }
         break;
       case 'shotgun':
-        if ((closed && !selected) || inscriptionNotStarted) return;
+        if ((closed && !selected) || registrationNotStarted) return;
         if (selected) {
           setOpen(true);
         } else {
@@ -173,7 +174,7 @@ function JoinButton({
     }
   };
   const getSecondIcon = () => {
-    if (inscriptionNotStarted) return null;
+    if (registrationNotStarted) return null;
     if (closed && variant !== 'form') return <Cross sx={{ color: '#fff' }} />;
     if (variant === 'normal')
       return selected ? (
@@ -193,10 +194,10 @@ function JoinButton({
     return null;
   };
   const getText = () => {
-    if (inscriptionNotStarted)
+    if (registrationNotStarted)
       return (
         <Typography sx={{ color: '#fff' }}>
-          {new Date(beginInscription).toLocaleDateString(i18n.language, {
+          {new Date(beginRegistration).toLocaleDateString(i18n.language, {
             weekday: 'short',
             day: 'numeric',
             month: 'short',
@@ -205,11 +206,7 @@ function JoinButton({
       );
     switch (variant) {
       case 'normal':
-        return (
-          <Typography sx={{ color: '#fff' }}>
-            {inscriptionNotStarted ? 'Inscription' : people}
-          </Typography>
-        );
+        return <Typography sx={{ color: '#fff' }}>{people}</Typography>;
       case 'shotgun':
         return (
           <Typography sx={{ color: '#fff' }}>
@@ -281,7 +278,7 @@ function JoinButton({
         }}
       >
         <Button
-          disabled={loading || inscriptionNotStarted || closed}
+          disabled={loading || registrationNotStarted || closed}
           onClick={() => onClick()}
           variant="contained"
           startIcon={getFirstIcon()}
@@ -295,10 +292,10 @@ function JoinButton({
             <CircularProgress size={25} style={{ position: 'absolute' }} />
           )}
         </Button>
-        {inscriptionNotStarted ? (
+        {registrationNotStarted ? (
           <EventPopover
             anchorRef={buttonRef}
-            beginInscription={beginInscription}
+            beginRegistration={beginRegistration}
             maxParticipant={maxPerson}
             onClose={() => setTooltipOpen(false)}
             open={tootlTipOpen}
@@ -314,7 +311,7 @@ function JoinButton({
               : 'les inscriptions sont terminées'}
           </TextPopover>
         )}
-        {!hideInfoButton && (closed || inscriptionNotStarted) && (
+        {!hideInfoButton && (closed || registrationNotStarted) && (
           <IconButton
             sx={{ marginLeft: 1, padding: 0 }}
             ref={buttonRef}

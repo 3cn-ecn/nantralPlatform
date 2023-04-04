@@ -19,9 +19,9 @@ export interface EventProps {
   slug?: string; // slug of the event
   title: string;
   maxParticipant?: number | null; // number max of participant
-  endInscription: Date | null; // date of the end of inscription
-  beginInscription: Date | null; // date of the beginning of inscription
-  formUrl: string | null; // url of inscription form
+  endRegistration: Date | null; // date of the end of registration
+  beginRegistration: Date | null; // date of the beginning of registration
+  formUrl: string | null; // url of registration form
   isFavorite?: boolean;
   effectiveSize?: number; // The number of horizontal parts the events will used
   globalSize?: number; // The number of parts available
@@ -39,9 +39,9 @@ export interface FormEventProps {
   publicity: 'Pub' | 'Mem';
   title: string;
   maxParticipant?: number | null; // number max of participant
-  endInscription: Date | null; // date of the end of inscription
-  beginInscription: Date | null; // date of the beginning of inscription
-  formUrl: string | null; // url of inscription form
+  endRegistration: Date | null; // date of the end of registration
+  beginRegistration: Date | null; // date of the beginning of registration
+  formUrl: string | null; // url of registration form
 }
 
 export function eventsToCamelCase(events: Array<any>): void {
@@ -62,7 +62,7 @@ export function eventToCamelCase(event: any): void {
   snakeToCamelCase(event, {
     beginDate: 'Date',
     endDate: 'Date',
-    beginInscription: 'Date',
-    endInscription: 'Date',
+    beginRegistration: 'Date',
+    endRegistration: 'Date',
   });
 }

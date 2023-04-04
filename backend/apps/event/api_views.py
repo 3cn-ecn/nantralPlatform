@@ -30,8 +30,8 @@ ORDERS: list[str] = ['participants_count',
                      'publicity',
                      'date',
                      'end_date',
-                     'begin_inscription',
-                     'end_inscription',
+                     'begin_registration',
+                     'end_registration',
                      'slug',
                      'group_name',
                      'max_participant',
@@ -39,7 +39,7 @@ ORDERS: list[str] = ['participants_count',
                      'title']
 
 DATE_FIELDS: list[str] = ['end_date', 'date',
-                          'begin_inscription', 'end_inscription']
+                          'begin_registration', 'end_registration']
 
 
 TRUE_ARGUMENTS: list[str] = ['true', 'True', '1']
@@ -62,8 +62,6 @@ class EventViewSet(viewsets.ModelViewSet):
     filter event whose begin date is greater or equal to from_date
     - to_date : ISO or UTC datestring = None ->
     filter event whose begin date is less or equal to to_date
-    - time_field : 'date' | 'end_date' | 'begin_inscription' | 'end_inscription'
-     = 'end_date' -> the target date field for the time window
     - min_participants : int = None ->
     lower bound for participants count
     - max_participants : int = None ->
@@ -96,6 +94,8 @@ class EventViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> list[Event]:
         if not hasattr(self.request.user, 'student'):
             return []
+        # constant
+        today = timezone.now()
         # query params
         order_by: list[str] = self.request.query_params.get(
             'order_by', 'date').split(',')
@@ -105,6 +105,8 @@ class EventViewSet(viewsets.ModelViewSet):
             'is_member') in TRUE_ARGUMENTS
         is_shotgun: bool = self.request.query_params.get(
             'is_shotgun') in TRUE_ARGUMENTS
+        registration: str = self.request.query_params.get(
+            'registration')
         is_form: bool = self.request.query_params.get(
             'is_form') in TRUE_ARGUMENTS
         is_favorite: bool = self.request.query_params.get(
@@ -115,21 +117,11 @@ class EventViewSet(viewsets.ModelViewSet):
             'from_date')
         to_date: str = self.request.query_params.get(
             'to_date')
-        time_field: str = self.request.query_params.get(
-            'time_field', 'end_date')
-        from_begin_inscription: str = self.request.query_params.get(
-            'from_begin_inscription')
-        to_begin_inscription: str = self.request.query_params.get(
-            'to_begin_inscription')
         min_participants: int = self.request.query_params.get(
             'min_participants')
         max_participants: int = self.request.query_params.get(
             'max_participants')
         visibility: str = self.request.query_params.get('publicity')
-        # format quary params
-        if time_field not in DATE_FIELDS:
-            time_field = 'end_date'
-        print(time_field)
         # query
         order_by = filter(lambda ord: ord in ORDERS or (
             ord[0] == '-' and ord[1:]) in ORDERS, order_by)
@@ -149,18 +141,18 @@ class EventViewSet(viewsets.ModelViewSet):
             .filter(Q(group__slug__in=organizers_slug)
                     if len(organizers_slug) > 0 else Q())
             .filter(~Q(form_url__isnull=True) if is_form else Q())
-            .filter(Q(**{time_field + "__gte": from_date})
+            .filter(Q(end_date__gte=from_date)
                     if from_date else Q())
-            .filter(Q(**{time_field + "__lte": to_date}) if to_date else Q())
-            .filter(Q(begin_inscription__gte=from_begin_inscription)
-                    if from_begin_inscription else Q())
-            .filter(Q(begin_inscription_date__lte=to_begin_inscription)
-                    if to_begin_inscription else Q())
+            .filter(Q(date__lte=to_date) if to_date else Q())
             .annotate(participants_count=Count('participants'))
             .filter(Q(participants_count__gte=min_participants)
                     if min_participants else Q())
             .filter(Q(participants_count__lte=max_participants)
                     if max_participants else Q())
+            .annotate(registration_status=(Q(begin_registration__lte=today)
+                                           & Q(end_registration__gte=today)))
+            .filter(Q(registration_status=(registration == "closed"))
+                    if registration else Q())
             .filter(Q(publicity=visibility) if visibility in
                     [VISIBILITY[i][0] for i in range(len(VISIBILITY))] else Q())
             .filter(Q(publicity=VISIBILITY[0][0]) | Q(member=True))
@@ -213,22 +205,23 @@ class ParticipateAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         event = get_object_or_404(Event, id=self.kwargs['event_id'])
-        inscription_finished: bool = event.end_inscription is not None and\
-            timezone.now() > event.end_inscription
-        inscription_not_started: bool = event.begin_inscription is not None and\
-            timezone.now() < event.begin_inscription
+        registration_finished: bool = (
+            event.end_registration is not None
+            and timezone.now() > event.end_registration)
+        registration_not_started: bool = (
+            event.begin_registration is not None
+            and timezone.now() < event.begin_registration)
         shotgun: bool = event.max_participant is not None
-        print(inscription_finished)
-        if inscription_not_started:
+        if registration_not_started:
             return Response(
                 status='401',
                 data={"success": False,
-                      "message": "Inscription not started"})
-        elif inscription_finished:
+                      "message": "Registration not started"})
+        elif registration_finished:
             return Response(
                 status='401',
                 data={"success": False,
-                      "message": "Inscription finished"})
+                      "message": "Registration finished"})
         elif shotgun and event.max_participant <= event.number_of_participants:
             return Response(
                 status='401',

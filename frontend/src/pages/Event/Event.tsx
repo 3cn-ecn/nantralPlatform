@@ -36,7 +36,7 @@ function EventList(props: {
         loadingItemCount={EVENT_PER_PAGE}
       ></EventSection>
       <Pagination
-        sx={{ marginBottom: 1 }}
+        sx={{ marginBottom: 5 }}
         count={Math.floor(events.count / EVENT_PER_PAGE + 1) || 1}
         page={page}
         onChange={handleNextPage}
@@ -54,8 +54,9 @@ function EventView(props: {
   filter: any;
   selectedTab: string | null;
   onChangeTab: (tab: string) => void;
+  onChangePage: (page: number) => void;
 }) {
-  const { filter, selectedTab, onChangeTab } = props;
+  const { filter, selectedTab, onChangeTab, onChangePage } = props;
   const [value, setValue] = React.useState(selectedTab || '1');
   const [status, setStatus] = React.useState<LoadStatus>('load');
   const [currentPage, setCurrentPage] = React.useState<number>(1);
@@ -110,6 +111,7 @@ function EventView(props: {
             is_participating: filter.participate,
             group: filter.organiser,
             limit: EVENT_PER_PAGE,
+            order_by: '-date',
           },
         })
         .then((res: any) => {
@@ -131,6 +133,7 @@ function EventView(props: {
               from_date: today,
               group: filter.organiser,
               limit: EVENT_PER_PAGE,
+              order_by: '-date',
             },
           })
           .then((res: any) => {
@@ -153,6 +156,7 @@ function EventView(props: {
               to_date: filter.dateEnd,
               group: filter.organiser,
               limit: EVENT_PER_PAGE,
+              order_by: '-date',
             },
           })
           .then((res: any) => {
@@ -171,6 +175,7 @@ function EventView(props: {
           params: {
             from_date: today,
             limit: EVENT_PER_PAGE,
+            order_by: '-date',
           },
         })
         .then((res: any) => {
@@ -199,6 +204,7 @@ function EventView(props: {
     if (currentPage === newPage) return;
     setStatus('load');
     setCurrentPage(newPage);
+    onChangePage(newPage);
     axios
       .get(eventsList.next || eventsList.previous, {
         params: { offset: (newPage - 1) * EVENT_PER_PAGE },
@@ -212,7 +218,6 @@ function EventView(props: {
         setStatus('fail');
       });
   };
-  console.log(status, eventsList.count);
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -299,6 +304,7 @@ function Event() {
         filter={filter}
         selectedTab={queryParameters.get('tab')}
         onChangeTab={(value) => updateParameters({ tab: value })}
+        onChangePage={(page: number) => updateParameters({ page: page })}
       />
     </Container>
   );

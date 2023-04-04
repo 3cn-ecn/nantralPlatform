@@ -79,6 +79,8 @@
     "editPost": "Modifier le post",
     "endDatetime": "Date et heure de fin",
     "eventTitle": "Titre de l'évènement",
+    "externalLink": "Lien externe",
+    "freeRegistration": "Inscription libre",
     "group": "Groupe",
     "groupHelpText": "Vous devez être admin de votre groupe pour pouvoir publier un post",
     "image": "Image",
