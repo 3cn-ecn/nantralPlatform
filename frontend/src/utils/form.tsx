@@ -442,8 +442,12 @@ function ImageAutocompleteField(props: {
   controlValue;
 }) {
   const { field, handleChange, error, controlValue } = props;
-  const [value, setValue] = React.useState();
+  const [value, setValue] = React.useState(controlValue);
   React.useEffect(() => {
+    // if (typeof controlValue !== 'number' || typeof controlValue !== 'string') {
+    //   setValue(controlValue);
+    //   return;
+    // }
     const selectedObject = field.options?.find(
       (item) => (item[field.pk] || item.id) === controlValue
     );
@@ -461,7 +465,7 @@ function ImageAutocompleteField(props: {
       isOptionEqualToValue={(option: any, val: any) =>
         option[field.pk || 'id'] === val[field.pk || 'id']
       }
-      onChange={(e, val, _) => {
+      onChange={(e, val) => {
         setValue(val);
         handleChange(field.name, val ? val[field.pk || 'id'] : null);
       }}

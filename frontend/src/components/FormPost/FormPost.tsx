@@ -122,7 +122,7 @@ export function FormPost(props: {
   React.useEffect(() => {
     axios
       .get('/api/group/group/', {
-        params: { is_admin: true, simple: true, limit: 20 },
+        params: { admin: true, simple: true, limit: 20 },
       })
       .then((res) => setAdminGroup(res.data.results));
   }, []);

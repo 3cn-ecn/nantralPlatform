@@ -467,7 +467,12 @@ function EventDetails() {
         open={formEventOpen}
         event={event}
         mode="edit"
-        onUpdate={(newEvent: EventProps) => setEvent(newEvent)}
+        onUpdate={(newEvent: EventProps) => {
+          Object.entries(newEvent).forEach(([key, value]) => {
+            event[key] = value;
+          });
+          setEvent(event);
+        }}
         // eslint-disable-next-line no-restricted-globals
         onDelete={() => history.back()}
       />

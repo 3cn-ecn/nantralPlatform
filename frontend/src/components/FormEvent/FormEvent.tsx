@@ -234,27 +234,28 @@ function EditEventModal(props: {
   const eventDisplayed = event || createBlankEvent();
   const { t } = useTranslation('translation');
   const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
-  const [formValues, setFormValues] = React.useState<FormEventProps>(
-    structuredClone(eventDisplayed)
-  );
+  const [formValues, setFormValues] = React.useState<FormEventProps>({
+    ...structuredClone(eventDisplayed),
+    group: event?.group.id,
+  });
   const [formErrors, setFormErrors] = React.useState({});
   const [saving, setSaving] = React.useState(false);
   const [globalErrors, setGlobalErrors] = React.useState('');
   const [confirmationOpen, setConfirmationOpen] =
     React.useState<boolean>(false);
-  const [shotgunMode, setShotgunMode] = React.useState<
+  const [registrationMode, setRegistrationMode] = React.useState<
     'normal' | 'shotgun' | 'form'
   >('normal');
   React.useEffect(() => {
-    if (event?.formUrl) setShotgunMode('form');
-    else if (event?.maxParticipant) setShotgunMode('shotgun');
-    else setShotgunMode('normal');
+    if (event?.formUrl) setRegistrationMode('form');
+    else if (event?.maxParticipant) setRegistrationMode('shotgun');
+    else setRegistrationMode('normal');
   }, [event]);
   const fields = getFormFields(adminGroup, t, mode);
   React.useEffect(() => {
     axios
       .get('/api/group/group/', {
-        params: { simple: true, limit: 20, is_admin: true },
+        params: { simple: true, limit: 20, admin: true },
       })
       .then((res) => setAdminGroup(res.data.results))
       .catch((err) => console.error(err));
@@ -269,7 +270,7 @@ function EditEventModal(props: {
     if (formValues.group && mode === 'create')
       formData.append('group', formValues.group.toString());
     if (event?.group && mode === 'edit')
-      formData.append('group', event.group.toString());
+      formData.append('group', event.group.id.toString());
     formData.append('publicity', formValues.publicity);
     formData.append('title', formValues.title || '');
     formData.append('description', formValues.description || '<p></p>');
@@ -285,12 +286,12 @@ function EditEventModal(props: {
     // Form
     formData.append(
       'form_url',
-      shotgunMode === 'form' ? formValues.formUrl : ' '
+      registrationMode === 'form' ? formValues.formUrl : ' '
     );
     // Shotgun
     formData.append(
       'max_participant',
-      shotgunMode === 'shotgun' && formValues.maxParticipant
+      registrationMode === 'shotgun' && formValues.maxParticipant
         ? formValues.maxParticipant.toString()
         : ''
     );
@@ -352,6 +353,9 @@ function EditEventModal(props: {
         setFormErrors({});
         setGlobalErrors('');
         eventToCamelCase(res.data);
+        res.data.group = adminGroup.find(
+          (group) => group.id === res.data.group
+        );
         onUpdate(res.data);
         setSaving(false);
         closeModal();
@@ -456,9 +460,9 @@ function EditEventModal(props: {
                   Inscription
                 </Typography>
                 <Select
-                  value={shotgunMode}
+                  value={registrationMode}
                   onChange={(evt) =>
-                    setShotgunMode(
+                    setRegistrationMode(
                       evt.target.value as 'normal' | 'shotgun' | 'form'
                     )
                   }
@@ -479,7 +483,7 @@ function EditEventModal(props: {
                   </MenuItem>
                 </Select>
               </div>
-              {shotgunMode === 'shotgun' && (
+              {registrationMode === 'shotgun' && (
                 <FormGroup
                   fields={fields.shotgunFields}
                   values={formValues}
@@ -487,7 +491,7 @@ function EditEventModal(props: {
                   setValues={setFormValues}
                 />
               )}
-              {shotgunMode === 'form' && (
+              {registrationMode === 'form' && (
                 <FormGroup
                   fields={fields.formFields}
                   values={formValues}
@@ -495,7 +499,7 @@ function EditEventModal(props: {
                   setValues={setFormValues}
                 />
               )}
-              {shotgunMode === 'normal' && (
+              {registrationMode === 'normal' && (
                 <FormGroup
                   fields={fields.normalFields}
                   values={formValues}
