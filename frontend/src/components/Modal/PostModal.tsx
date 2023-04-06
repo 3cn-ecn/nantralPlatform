@@ -22,10 +22,9 @@ export function PostModal(props: {
   post: PostProps;
   open: boolean;
   onClose: () => void;
-  clubDetails: SimpleGroupProps;
   onUpdate?: (post: PostProps) => void;
 }): JSX.Element {
-  const { post, open, clubDetails, onClose, onUpdate } = props;
+  const { post, open, onClose, onUpdate } = props;
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
   const { t } = useTranslation('translation');
@@ -52,20 +51,16 @@ export function PostModal(props: {
             <div
               style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}
             >
-              {clubDetails && (
-                <IconButton href={clubDetails.url}>
-                  <Avatar
-                    title={clubDetails.name}
-                    url={clubDetails.icon}
-                    size="medium"
-                  />
-                </IconButton>
-              )}
+              <IconButton href={post.group.url}>
+                <Avatar
+                  title={post.group.name}
+                  url={post.group.icon}
+                  size="medium"
+                />
+              </IconButton>
               <div>
                 <h2 className="post-title">{post?.title}</h2>
-                <div style={{ fontSize: 12 }}>
-                  {clubDetails && clubDetails.name}
-                </div>
+                <div style={{ fontSize: 12 }}>{post.group.name}</div>
               </div>
             </div>
             <IconButton onClick={onClose}>
@@ -115,7 +110,7 @@ export function PostModal(props: {
           </div>
 
           <div style={{ display: 'flex', columnGap: 10 }}>
-            {post?.canEdit && (
+            {post?.isAdmin && (
               <EditButton onClick={() => setEditModalOpen(true)} />
             )}
             {post?.pageSuggestion && (

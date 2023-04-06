@@ -1,4 +1,5 @@
 import { snakeToCamelCase } from '../utils/camel';
+import { SimpleGroupProps } from './Group';
 
 export interface PostProps {
   id: number;
@@ -9,15 +10,13 @@ export interface PostProps {
   /** Date of last modification */
   updatedAt: Date;
   image: string | File;
-  /** Id of the group */
-  group: number;
-  groupSlug: string;
+  group: SimpleGroupProps;
   slug: string;
   publicity: 'Pub' | 'Mem';
   pinned: boolean;
   pageSuggestion: string;
   canPin: boolean;
-  canEdit: boolean;
+  isAdmin: boolean;
 }
 
 export interface FormPostProps {

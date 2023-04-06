@@ -28,7 +28,7 @@ export function FormPost(props: {
   onClose: () => void;
   post?: PostProps;
   /** Send the new post updated */
-  onUpdate?: (post: PostProps) => void;
+  onUpdate?: (post: FormPostProps) => void;
   onDelete?: () => void;
 }) {
   const { open, onClose, post, onUpdate, mode, onDelete } = props;
@@ -37,7 +37,7 @@ export function FormPost(props: {
     post
       ? {
           description: post.description,
-          group: post.group,
+          group: post.group.id,
           image: post.image,
           pageSuggestion: post.pageSuggestion,
           pinned: post.pinned,
@@ -59,6 +59,7 @@ export function FormPost(props: {
   const [confirmationOpen, setConfirmationOpen] =
     React.useState<boolean>(false);
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
+  let fetching = false;
   const defaultFields: FieldType[] = [
     {
       kind: 'image-autocomplete',
@@ -119,13 +120,19 @@ export function FormPost(props: {
     setErrors({});
   }, [open]);
 
-  React.useEffect(() => {
-    axios
-      .get('/api/group/group/', {
-        params: { admin: true, simple: true, limit: 20 },
-      })
-      .then((res) => setAdminGroup(res.data.results));
-  }, []);
+  const fetchAdminGroups = () => {
+    if (!fetching) {
+      fetching = true;
+      console.log(new Date().getMilliseconds(), fetching);
+      axios
+        .get('/api/group/group/', {
+          params: { admin: true, simple: true, limit: 20 },
+        })
+        .then((res) => setAdminGroup(res.data.results));
+    }
+  };
+
+  React.useEffect(fetchAdminGroups, []);
 
   React.useEffect(() => {
     setValues(
@@ -158,7 +165,7 @@ export function FormPost(props: {
     if (values.group && mode === 'create')
       formData.append('group', values.group.toString());
     if (post?.group && mode === 'edit')
-      formData.append('group', post.group.toString());
+      formData.append('group', post.group.id.toString());
     formData.append('publicity', values.publicity);
     formData.append('title', values.title || '');
     formData.append('description', values.description || '<p></p>');
