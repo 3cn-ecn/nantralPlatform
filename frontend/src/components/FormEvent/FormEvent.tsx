@@ -204,8 +204,8 @@ function getFormFields(
  *
  * @returns A blank event
  */
-function createBlankEvent(): EventProps {
-  const event: EventProps = {
+function createBlankEvent(): FormEventProps {
+  const event: FormEventProps = {
     group: null,
     beginRegistration: null,
     beginDate: null,

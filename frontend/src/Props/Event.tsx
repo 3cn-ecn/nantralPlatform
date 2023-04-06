@@ -1,4 +1,5 @@
 import { snakeToCamelCase } from '../utils/camel';
+import { SimpleGroupProps } from './Group';
 
 export interface EventProps {
   id?: number; // Id of the event
@@ -7,9 +8,8 @@ export interface EventProps {
   endDate: Date; // Event begin date in Date format
   description: string; // Description of the event in html
   getAbsoluteUrl?: string; // url of the event from root url
-  group: number; // id of the group
-  groupSlug?: string; // slug of the organiser
-  groupName?: string; // name of the organiser
+  group: SimpleGroupProps; // id of the group
+  isAdmin: boolean; // if the user can edit the event
   image: string; // uri of the banner
   isMember?: boolean;
   isParticipating?: boolean; // whether connected user particpate at this event

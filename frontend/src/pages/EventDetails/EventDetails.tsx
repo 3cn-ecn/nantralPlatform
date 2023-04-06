@@ -56,12 +56,7 @@ function EventDetails() {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
-  const [groupData, setGroup] = useState<ClubProps>({
-    name: '',
-    icon: '',
-    url: '',
-    is_admin: false,
-  });
+
   const today = new Date();
   const handleClickMenu = (mouseEvent: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(mouseEvent.currentTarget);
@@ -72,11 +67,9 @@ function EventDetails() {
   const matches = useMediaQuery('(min-width:600px)');
   // update each time id changes
   useEffect(() => {
+    if (event) return;
     getEvent();
   }, [id]);
-  useEffect(() => {
-    getGroup();
-  }, [event]);
   const [eventStatus, setEventStatus] = useState<LoadStatus>('load');
   const [formEventOpen, setFormEventOpen] = React.useState<boolean>(false);
 
@@ -84,7 +77,7 @@ function EventDetails() {
 
   async function getEvent() {
     await axios
-      .get(`/api/event/${id}`)
+      .get(`/api/event/${id}/`)
       .then((response) => {
         eventsToCamelCase([response.data]);
         setEvent(response.data);
@@ -98,19 +91,6 @@ function EventDetails() {
   }
   if (eventStatus === 'fail') {
     return <NotFound />;
-  }
-
-  async function getGroup() {
-    if (event !== undefined) {
-      await axios
-        .get(`/api/group/group/${event.groupSlug}/`)
-        .then((response) => {
-          setGroup(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
   }
 
   if (eventStatus === 'load') {
@@ -279,7 +259,7 @@ function EventDetails() {
       </Alert>
     );
 
-  const adminSection = groupData.is_admin ? (
+  const adminSection = event.isAdmin ? (
     <>
       <Button
         aria-haspopup="true"
@@ -433,9 +413,9 @@ function EventDetails() {
           </Grid>
         </Grid>
         <ClubAvatar
-          clubUrl={groupData.url}
-          logoUrl={groupData.icon}
-          name={groupData.name}
+          clubUrl={event.group.url}
+          logoUrl={event.group.icon}
+          name={event.group.name}
           textPosition="right"
           size="3rem"
         />

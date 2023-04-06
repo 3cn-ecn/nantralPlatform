@@ -3,17 +3,18 @@ from django.utils import timezone
 from .models import Event
 from apps.student.models import Student
 from django.utils.translation import gettext as _
+from apps.group.serializers import SimpleGroupSerializer
 
 
 class EventSerializer(serializers.ModelSerializer):
     number_of_participants = serializers.ReadOnlyField()
     absolute_url = serializers.ReadOnlyField()
-    group_name = serializers.SerializerMethodField()
-    group_slug = serializers.SerializerMethodField()
+    group = SimpleGroupSerializer()
     is_participating = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()
     form_url = serializers.SerializerMethodField()
+    is_admin = serializers.SerializerMethodField()
 
     def validate_max_participant(self, value: int) -> int:
         if value and value < 1:
@@ -25,12 +26,10 @@ class EventSerializer(serializers.ModelSerializer):
         if (not attrs["group"].is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
                 "You have to be admin to add or update an event")
-        if ("end_date" in attrs and attrs["end_date"]
-                and attrs["date"] > attrs["end_date"]):
+        if (attrs["date"] > attrs["end_date"]):
             raise exceptions.ValidationError(_(
                 "The end date must be after the begin date."))
-        if ("begin_registration" in attrs and attrs["begin_registration"]
-            and "end_registration" in attrs and attrs["end_registration"]
+        if (attrs.get("begin_registration") and attrs.get("end_registration")
                 and attrs["begin_registration"] > attrs["end_registration"]):
             raise serializers.ValidationError(
                 "End registration date should be greater than begin \
@@ -54,15 +53,14 @@ class EventSerializer(serializers.ModelSerializer):
             'number_of_participants',
             'absolute_url',
             'group',
-            'group_slug',
-            'group_name',
             'is_participating',
             'is_member',
             'max_participant',
             'begin_registration',
             'end_registration',
             'form_url',
-            'is_favorite']
+            'is_favorite',
+            'is_admin']
 
     def get_is_participating(self, obj: Event):
         user = self.context['request'].user
@@ -77,21 +75,45 @@ class EventSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         return obj.is_favorite(user)
 
-    def get_group_name(self, obj: Event):
-        return obj.group.name
-
-    def get_group_slug(self, obj: Event):
-        return obj.group.slug
+    def get_is_admin(self, obj: Event):
+        user = self.context['request'].user
+        return obj.group.is_admin(user)
 
     def get_absolute_url(self, obj: Event):
         return obj.get_absolute_url()
 
     def get_form_url(self, obj: Event):
-        # don't send url if registration not open
-        if (obj.form_url and obj.begin_registration
-                and obj.begin_registration > timezone.now()):
-            return "/"
+        user = self.context['request'].user
+        registration_open: bool = (
+            (obj.begin_registration is None
+             or obj.begin_registration < timezone.now())
+            and (obj.end_registration is None
+                 or obj.end_registration > timezone.now())
+        )
+        # don't send url if the registrations are not open and user is not admin
+        if (obj.form_url and not registration_open
+                and not obj.group.is_admin(user)):
+            return "#"
         return obj.form_url
+
+
+class WriteEventSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Event
+        fields = [
+            'title',
+            'description',
+            'location',
+            'date',
+            'end_date',
+            'publicity',
+            'image',
+            'group',
+            'max_participant',
+            'begin_registration',
+            'end_registration',
+            'form_url']
 
 
 class EventParticipatingSerializer(serializers.ModelSerializer):

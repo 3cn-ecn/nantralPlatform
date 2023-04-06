@@ -81,6 +81,7 @@ class Student(models.Model):
         return reverse('student:detail', args=[self.pk])
 
     def can_pin(self) -> bool:
+        # to avoid circular import
         membership = apps.get_model('group.Membership')
         return (membership.objects
                 .filter(student=self,

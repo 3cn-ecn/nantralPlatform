@@ -44,5 +44,4 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_can_pin(self, obj: Post) -> str:
         user = self.context['request'].user
-        print(user.student.can_pin())
         return user.student.can_pin()

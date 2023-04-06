@@ -12,7 +12,8 @@ from apps.post.models import VISIBILITY
 from .models import Event
 from apps.student.models import Student
 from apps.group.models import Group
-from .serializers import (EventSerializer, EventParticipatingSerializer)
+from .serializers import (
+    EventSerializer, EventParticipatingSerializer, WriteEventSerializer)
 from apps.student.serializers import StudentSerializer, SimpleStudentSerializer
 
 
@@ -92,6 +93,12 @@ class EventViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, EventPermission]
     serializer_class = EventSerializer
     pagination_class = pagination.LimitOffsetPagination
+
+    def get_serializer_class(self):
+        if self.request.method in ['PUT', 'POST']:
+            return WriteEventSerializer
+        else:
+            return EventSerializer
 
     def get_queryset(self) -> list[Event]:
         if not hasattr(self.request.user, 'student'):
