@@ -9,9 +9,8 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
-import { PostProps } from 'Props/Post';
+import { FormPostProps, PostProps } from 'Props/Post';
 import { useTranslation } from 'react-i18next';
-import { SimpleGroupProps } from '../../Props/Group';
 import { theme } from '../style/palette';
 import { EditButton, PostBadges, SeePageButton } from '../PostCard/PostCard';
 import { timeFromNow } from '../../utils/date';
@@ -22,7 +21,7 @@ export function PostModal(props: {
   post: PostProps;
   open: boolean;
   onClose: () => void;
-  onUpdate?: (post: PostProps) => void;
+  onUpdate?: (post: FormPostProps) => void;
 }): JSX.Element {
   const { post, open, onClose, onUpdate } = props;
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));

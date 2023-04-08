@@ -9,9 +9,11 @@ import {
   SpeedDialIcon,
   Typography,
   Container,
+  Chip,
+  Divider,
 } from '@mui/material';
 import { Event, PostAdd } from '@mui/icons-material';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import './Home.scss';
@@ -62,7 +64,11 @@ function Home() {
           postsToCamelCase([res.data]);
           setSelectedPost(res.data);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          console.error(err);
+          queryParams.delete('post');
+          setQueryParams(queryParams);
+        });
     }
     getEvents();
     getUpcomingEvent();
@@ -284,6 +290,20 @@ function Home() {
               onUpdate={() => getPosts()}
             />
           )}
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            marginBottom={1}
+          >
+            <Typography variant="h4" margin={0}>
+              {t('navbar.events')}
+            </Typography>
+            <Link to="/event" style={{ textDecorationLine: 'none' }}>
+              <Chip label={t('button.seeAll')} clickable />
+            </Link>
+          </Box>
+          <Divider sx={{ marginBottom: 1 }} />
           <EventSection
             events={events.filter((item: EventProps) =>
               isThisWeek(new Date(item.beginDate))
@@ -295,6 +315,7 @@ function Home() {
             events={upcomingEvents}
             status={upcomingEventsStatus}
             maxItem={6}
+            loadingItemCount={MAX_EVENT_SHOWN}
             title={t('home.upcomingEvents')}
           />
           <ClubSection
@@ -323,7 +344,6 @@ function Home() {
       />
       {selectedPost && (
         <PostModal
-          clubDetails={null}
           onClose={() => {
             setSelectedPost(null);
             queryParams.delete('post');

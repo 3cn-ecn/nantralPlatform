@@ -14,7 +14,7 @@ import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
 import axios from 'axios';
 import { ClubProps, SimpleGroupProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
-import { PostProps } from '../../Props/Post';
+import { FormPostProps, PostProps } from '../../Props/Post';
 import { PostModal } from '../Modal/PostModal';
 import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
@@ -115,9 +115,13 @@ export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
     setPostValue(post);
   }, [post]);
 
-  const updatePost = (newPost: PostProps) => {
-    if (newPost) setPostValue(newPost);
-    else {
+  const updatePost = (newPost: FormPostProps) => {
+    if (newPost) {
+      Object.entries(newPost).forEach(([key, value]) => {
+        post[key] = value;
+      });
+      setPostValue(post);
+    } else {
       onDelete();
       setOpen(false);
     }
@@ -170,8 +174,8 @@ export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
             <div id="post-club">
               <div style={{ display: 'contents' }}>
                 <Avatar
-                  title={post.group.name}
-                  url={post.group.icon}
+                  title={post?.group.name}
+                  url={post?.group.icon}
                   size="small"
                 />
                 {post.group.name}

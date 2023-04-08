@@ -18,6 +18,7 @@
       "unsuscribe": "se désinscrire"
     },
     "like": "J'aime",
+    "seeAll": "Voir tous",
     "seePage": "Voir la page",
     "showAll": "Tout afficher",
     "showLess": "Afficher moins",
@@ -97,7 +98,7 @@
   "home": {
     "announcement": "Annonces",
     "highlighted": "À la une",
-    "myClubs": "Mes Clubs & Assos",
+    "myClubs": "Mes groupes",
     "myEvents": "Mes événements",
     "seeMore": "voir plus",
     "thisWeek": "Cette semaine",

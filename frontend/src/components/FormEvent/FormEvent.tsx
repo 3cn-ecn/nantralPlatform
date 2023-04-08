@@ -18,6 +18,7 @@ import {
 import axios from 'axios';
 import {
   Close as CloseIcon,
+  Delete,
   People as FreeIcon,
   Link as LinkIcon,
   LocalFireDepartment as ShotgunIcon,
@@ -512,6 +513,7 @@ function EditEventModal(props: {
               <Button
                 onClick={() => setConfirmationOpen(true)}
                 variant="outlined"
+                startIcon={<Delete />}
                 color="error"
                 disabled={saving}
               >

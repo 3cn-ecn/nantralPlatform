@@ -42,3 +42,26 @@ class PostSerializer(serializers.ModelSerializer):
     def get_can_pin(self, obj: Post) -> str:
         user = self.context['request'].user
         return user.student.can_pin()
+
+
+class WritePostSerializer(serializers.ModelSerializer):
+
+    def validate(self, attrs):
+        if (not attrs["group"].is_admin(self.context['request'].user)):
+            raise serializers.ValidationError(
+                "You have to be admin to add or update a post")
+        return super().validate(attrs)
+
+    class Meta:
+        model = Post
+        fields = [
+            'id',
+            'title',
+            'publication_date',
+            'group',
+            'image',
+            'publicity',
+            'pinned',
+            'page_suggestion',
+            'description',
+        ]

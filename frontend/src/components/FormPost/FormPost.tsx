@@ -1,4 +1,4 @@
-import { Close } from '@mui/icons-material';
+import { Close, Delete } from '@mui/icons-material';
 import {
   Alert,
   Button,
@@ -276,6 +276,7 @@ export function FormPost(props: {
             <Button
               disabled={loading}
               color="warning"
+              startIcon={<Delete />}
               variant="outlined"
               onClick={() => setConfirmationOpen(true)}
             >

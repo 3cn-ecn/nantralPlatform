@@ -18,6 +18,7 @@
       "unsuscribe": "unregister"
     },
     "like": "Like",
+    "seeAll": "See all",
     "seePage": "See page",
     "showAll": "Show all",
     "showLess": "Show less",
@@ -96,7 +97,7 @@
   "home": {
     "announcement": "Announcement",
     "highlighted": "Highlighted",
-    "myClubs": "My clubs & Assos",
+    "myClubs": "My groups",
     "myEvents": "My events",
     "seeMore": "see more",
     "thisWeek": "This week",
