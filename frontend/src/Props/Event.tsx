@@ -44,13 +44,14 @@ export interface FormEventProps {
   formUrl: string | null; // url of registration form
 }
 
-export function eventsToCamelCase(events: Array<any>): void {
+export function eventsToCamelCase(events: Array<any>) {
   events.forEach((event) => {
     eventToCamelCase(event);
   });
+  return events;
 }
 
-export function eventToCamelCase(event: any): void {
+export function eventToCamelCase(event: any) {
   // delete when date update to beginDate
   event.begin_date = event.date;
 
@@ -59,7 +60,7 @@ export function eventToCamelCase(event: any): void {
     event.end_date = new Date(new Date(event.date).getTime() + 3600000);
   }
 
-  convertFromPythonData(event, {
+  return convertFromPythonData(event, {
     beginDate: 'Date',
     endDate: 'Date',
     beginRegistration: 'Date',
