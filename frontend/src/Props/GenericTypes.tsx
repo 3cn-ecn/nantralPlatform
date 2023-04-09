@@ -1,4 +1,4 @@
-export type LoadStatus = 'load' | 'fail' | 'success';
+export type LoadStatus = 'loading' | 'idle' | 'error' | 'success';
 
 /** Props for multi-page response */
 export interface ListResults<T> {

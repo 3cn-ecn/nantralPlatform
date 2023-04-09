@@ -3,6 +3,7 @@ import { Grid, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Group, SimpleGroup } from 'components/Group/interfaces';
+import { LoadStatus } from 'Props/GenericTypes';
 import { ClubAvatar, ClubAvatarSkeleton } from '../../ClubAvatar/ClubAvatar';
 import { AccordionSection } from '../AccordionSection';
 
@@ -25,7 +26,7 @@ const LoadingSkeleton = (
  */
 export function ClubSection(props: {
   /** L'état de chargement des événements */
-  status: 'success' | 'fail' | 'load';
+  status: LoadStatus;
   /** La liste des événements à afficher */
   clubs: Array<Group | SimpleGroup>;
   /** Titre de la section */
@@ -36,13 +37,13 @@ export function ClubSection(props: {
 }) {
   const { status, clubs, title, maxItem, accordion } = props;
   let content: JSX.Element | Array<JSX.Element>;
-  const allclubs = maxItem ? clubs.slice(0, maxItem) : clubs;
+  const allclubs = maxItem && clubs ? clubs.slice(0, maxItem) : clubs;
   const { t } = useTranslation('translation');
   switch (status) {
-    case 'fail':
+    case 'error':
       content = <p className="card">Error</p>;
       break;
-    case 'load':
+    case 'loading':
       content = LoadingSkeleton;
       break;
     case 'success':

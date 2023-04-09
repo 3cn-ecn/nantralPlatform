@@ -48,16 +48,16 @@ export function EventSection(props: {
   const { t } = useTranslation('translation'); // translation module
   const { status, events, title, maxItem, accordion, loadingItemCount } = props;
   let content: JSX.Element | Array<JSX.Element>;
-  const allEvents = maxItem ? events.slice(0, maxItem) : events;
+  const allEvents = maxItem && events ? events.slice(0, maxItem) : events;
   switch (status) {
-    case 'fail':
+    case 'error':
       content = (
         <Alert severity="error" sx={{ marginLeft: 3 }}>
           {t('event.error')}
         </Alert>
       );
       break;
-    case 'load':
+    case 'loading':
       content = <LoadingSkeleton count={loadingItemCount} />;
       break;
     case 'success':

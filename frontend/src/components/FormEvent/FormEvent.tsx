@@ -25,8 +25,9 @@ import {
 } from '@mui/icons-material';
 import { GroupProps, SimpleGroupProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
-import { FieldType } from 'Props/GenericTypes';
+import { FieldType, ListResults } from 'Props/GenericTypes';
 import { SimpleGroup } from 'components/Group/interfaces';
+import { useQuery } from 'react-query';
 import {
   EventProps,
   FormEventProps,
@@ -234,7 +235,7 @@ function EditEventModal(props: {
   const { open, closeModal, event, mode, onUpdate, onDelete } = props;
   const eventDisplayed = event || createBlankEvent();
   const { t } = useTranslation('translation');
-  const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
+  // const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
   const [formValues, setFormValues] = React.useState<FormEventProps>({
     ...structuredClone(eventDisplayed),
     group: event?.group.id,
@@ -252,15 +253,26 @@ function EditEventModal(props: {
     else if (event?.maxParticipant) setRegistrationMode('shotgun');
     else setRegistrationMode('normal');
   }, [event]);
+
+  const { data: adminGroup, status } = useQuery<SimpleGroupProps[], string>({
+    queryKey: 'admin-group',
+    queryFn: () =>
+      axios
+        .get('/api/group/group/', {
+          params: { simple: true, limit: 20, admin: true },
+        })
+        .then((res) => res.data.results),
+  });
+
   const fields = getFormFields(adminGroup, t, mode);
-  React.useEffect(() => {
-    axios
-      .get('/api/group/group/', {
-        params: { simple: true, limit: 20, admin: true },
-      })
-      .then((res) => setAdminGroup(res.data.results))
-      .catch((err) => console.error(err));
-  }, []);
+  // React.useEffect(() => {
+  //   axios
+  //     .get('/api/group/group/', {
+  //       params: { simple: true, limit: 20, admin: true },
+  //     })
+  //     .then((res) => setAdminGroup(res.data.results))
+  //     .catch((err) => console.error(err));
+  // }, []);
 
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   /** Function called on submit to save data */

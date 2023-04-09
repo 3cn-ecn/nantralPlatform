@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { Route, Routes } from 'react-router-dom';
 import { Box, CssBaseline, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
@@ -22,6 +23,7 @@ import Profile from './pages/Profile/Profile';
 import theme from './theme';
 import darktheme from './darktheme';
 
+const queryClient = new QueryClient();
 /**
  * Main component of the application. It is composed of:
  * - the top navbar
@@ -54,66 +56,68 @@ function App() {
   const sideBarVariant =
     window.innerWidth < 2 * drawerWidth ? 'temporary' : 'persistent';
   return (
-    <ThemeProvider theme={choixTheme ? theme : darktheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <NavBarTop
-          menuOpen={menuOpen}
-          setMenuOpen={setMenuOpen}
-          themeApp={themeApp}
-          setThemeApp={setThemeApp}
-          isAutomatic={isAutomatic}
-          setIsAutomatic={setIsAutomatic}
-        />
-        <NavBarSide
-          menuOpen={menuOpen}
-          drawerWidth={drawerWidth}
-          variant={sideBarVariant}
-          onClose={() => setMenuOpen(false)}
-        />
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            width: '100%',
-            padding: 0,
-            paddingTop: 0,
-            transition: theme.transitions.create('margin', {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.leavingScreen,
-            }),
-            marginLeft:
-              sideBarVariant === 'persistent' ? `-${drawerWidth}px` : 0,
-            ...(menuOpen && {
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={choixTheme ? theme : darktheme}>
+        <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <NavBarTop
+            menuOpen={menuOpen}
+            setMenuOpen={setMenuOpen}
+            themeApp={themeApp}
+            setThemeApp={setThemeApp}
+            isAutomatic={isAutomatic}
+            setIsAutomatic={setIsAutomatic}
+          />
+          <NavBarSide
+            menuOpen={menuOpen}
+            drawerWidth={drawerWidth}
+            variant={sideBarVariant}
+            onClose={() => setMenuOpen(false)}
+          />
+          <Box
+            component="main"
+            sx={{
+              flexGrow: 1,
+              width: '100%',
+              padding: 0,
+              paddingTop: 0,
               transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
               }),
-              marginLeft: 0,
-            }),
-          }}
-        >
-          <Toolbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/group" element={<Group />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="/event" element={<Event />} />
-            <Route path="/event/:id" element={<EventDetails />} />
-            <Route path="/academics" element={<Academics />} />
-            <Route path="/administration" element={<Admin />} />
-            <Route path="/liste" element={<BDX />} />
-            <Route path="/parrainage" element={<Family />} />
-            <Route path="/colocs" element={<Map />} />
-            <Route path="/student" element={<Student />} />
-            <Route path="/legal-notice" element={<LegalNotice />} />
-            <Route path="/tools/signature" element={<Sign />} />
-            <Route path="/student/:studentId" element={<Profile />} />
-            {/* <Route path="/group/:groupTypeSlug" element={<GroupList />} /> */}
-          </Routes>
+              marginLeft:
+                sideBarVariant === 'persistent' ? `-${drawerWidth}px` : 0,
+              ...(menuOpen && {
+                transition: theme.transitions.create('margin', {
+                  easing: theme.transitions.easing.easeOut,
+                  duration: theme.transitions.duration.enteringScreen,
+                }),
+                marginLeft: 0,
+              }),
+            }}
+          >
+            <Toolbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/group" element={<Group />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="/event" element={<Event />} />
+              <Route path="/event/:id" element={<EventDetails />} />
+              <Route path="/academics" element={<Academics />} />
+              <Route path="/administration" element={<Admin />} />
+              <Route path="/liste" element={<BDX />} />
+              <Route path="/parrainage" element={<Family />} />
+              <Route path="/colocs" element={<Map />} />
+              <Route path="/student" element={<Student />} />
+              <Route path="/legal-notice" element={<LegalNotice />} />
+              <Route path="/tools/signature" element={<Sign />} />
+              <Route path="/student/:studentId" element={<Profile />} />
+              {/* <Route path="/group/:groupTypeSlug" element={<GroupList />} /> */}
+            </Routes>
+          </Box>
         </Box>
-      </Box>
-    </ThemeProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

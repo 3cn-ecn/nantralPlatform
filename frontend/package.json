@@ -92,6 +92,7 @@
     "react-dom": "^18.1.0",
     "react-i18next": "^12.2.0",
     "react-map-gl": "^6.1.18",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.3.0",
     "rollup-plugin-visualizer": "latest",
     "sass": "^1.55.0",

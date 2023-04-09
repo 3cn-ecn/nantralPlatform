@@ -58,7 +58,7 @@ function EventView(props: {
 }) {
   const { filter, selectedTab, onChangeTab, onChangePage } = props;
   const [value, setValue] = React.useState(selectedTab || '1');
-  const [status, setStatus] = React.useState<LoadStatus>('load');
+  const [status, setStatus] = React.useState<LoadStatus>('loading');
   const [currentPage, setCurrentPage] = React.useState<number>(1);
   const [eventsList, setEventsList] = React.useState<ListResults<EventProps>>({
     count: 0,
@@ -92,7 +92,7 @@ function EventView(props: {
         setStatus('success');
       })
       .catch(() => {
-        setStatus('fail');
+        setStatus('error');
       });
   }
 
@@ -100,7 +100,7 @@ function EventView(props: {
   // Request to get Events to display, depending of the filter.
   // If no date filter, only current and futur events are displayed.
   React.useEffect(() => {
-    setStatus('load');
+    setStatus('loading');
     if (filter !== null) {
       // filtered calendar
       axios
@@ -120,7 +120,7 @@ function EventView(props: {
           setStatus('success');
         })
         .catch(() => {
-          setStatus('fail');
+          setStatus('error');
         });
       if (filter.dateBegin === '' && filter.dateEnd === '') {
         // filtered list without date filters (only current and futur events)
@@ -142,7 +142,7 @@ function EventView(props: {
             setStatus('success');
           })
           .catch(() => {
-            setStatus('fail');
+            setStatus('error');
           });
       } else {
         // filtered list with date filters
@@ -165,7 +165,7 @@ function EventView(props: {
             // setStatus('success');
           })
           .catch(() => {
-            setStatus('fail');
+            setStatus('error');
           });
       }
     } else {
@@ -184,7 +184,7 @@ function EventView(props: {
           setStatus('success');
         })
         .catch(() => {
-          setStatus('fail');
+          setStatus('error');
         });
 
       // non filtered calendar
@@ -196,13 +196,13 @@ function EventView(props: {
           setStatus('success');
         })
         .catch(() => {
-          setStatus('fail');
+          setStatus('error');
         });
     }
   }, [filter]);
   const handleNextPage = (newPage: number) => {
     if (currentPage === newPage) return;
-    setStatus('load');
+    setStatus('loading');
     setCurrentPage(newPage);
     onChangePage(newPage);
     axios
@@ -215,7 +215,7 @@ function EventView(props: {
         setStatus('success');
       })
       .catch(() => {
-        setStatus('fail');
+        setStatus('error');
       });
   };
   return (

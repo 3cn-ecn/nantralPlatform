@@ -11,12 +11,13 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
+import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { FieldType } from 'Props/GenericTypes';
 import { FormPostProps, PostProps, postsToCamelCase } from '../../Props/Post';
 import { theme } from '../style/palette';
 import FormGroup from '../../utils/form';
-import { GroupProps, SimpleGroupProps } from '../../Props/Group';
+import { SimpleGroupProps } from '../../Props/Group';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 export function FormPost(props: {
@@ -55,11 +56,19 @@ export function FormPost(props: {
   );
   const [errors, setErrors] = React.useState<any>({});
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
+  // const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
   const [confirmationOpen, setConfirmationOpen] =
     React.useState<boolean>(false);
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
-  let fetching = false;
+  const { data: adminGroup, status } = useQuery<SimpleGroupProps[], string>({
+    queryKey: 'admin-group',
+    queryFn: () =>
+      axios
+        .get('/api/group/group/', {
+          params: { simple: true, limit: 20, admin: true },
+        })
+        .then((res) => res.data.results),
+  });
   const defaultFields: FieldType[] = [
     {
       kind: 'image-autocomplete',
@@ -119,20 +128,6 @@ export function FormPost(props: {
   React.useEffect(() => {
     setErrors({});
   }, [open]);
-
-  const fetchAdminGroups = () => {
-    if (!fetching) {
-      fetching = true;
-      console.log(new Date().getMilliseconds(), fetching);
-      axios
-        .get('/api/group/group/', {
-          params: { admin: true, simple: true, limit: 20 },
-        })
-        .then((res) => setAdminGroup(res.data.results));
-    }
-  };
-
-  React.useEffect(fetchAdminGroups, []);
 
   React.useEffect(() => {
     setValues(
