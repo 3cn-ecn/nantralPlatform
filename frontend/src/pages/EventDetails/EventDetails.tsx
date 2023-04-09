@@ -14,7 +14,6 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { ClubProps } from 'Props/Group';
 import axios from 'axios';
 import { LoadStatus } from 'Props/GenericTypes';
 import './EventDetails.scss';
@@ -70,7 +69,7 @@ function EventDetails() {
     if (event) return;
     getEvent();
   }, [id]);
-  const [eventStatus, setEventStatus] = useState<LoadStatus>('load');
+  const [eventStatus, setEventStatus] = useState<LoadStatus>('loading');
   const [formEventOpen, setFormEventOpen] = React.useState<boolean>(false);
 
   const [infoTab, setInfoTab] = React.useState<number>(0);
@@ -86,14 +85,14 @@ function EventDetails() {
       })
       .catch((error) => {
         console.error(error);
-        setEventStatus('fail');
+        setEventStatus('error');
       });
   }
-  if (eventStatus === 'fail') {
+  if (eventStatus === 'error') {
     return <NotFound />;
   }
 
-  if (eventStatus === 'load') {
+  if (eventStatus === 'loading') {
     return (
       <div style={{ display: 'flex', height: '100%' }}>
         <Container className="loading" sx={{ display: 'flex' }}>
@@ -431,6 +430,7 @@ function EventDetails() {
               marginBottom: '10rem',
               fontSize: '1rem',
             }}
+            // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: event.description,
             }}
@@ -468,10 +468,11 @@ function EventDetails() {
         event={event}
         mode="edit"
         onUpdate={(newEvent: EventProps) => {
+          const tmp = event;
           Object.entries(newEvent).forEach(([key, value]) => {
-            event[key] = value;
+            tmp[key] = value;
           });
-          setEvent(event);
+          setEvent(tmp);
         }}
         // eslint-disable-next-line no-restricted-globals
         onDelete={() => history.back()}

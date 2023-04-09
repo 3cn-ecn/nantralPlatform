@@ -1,6 +1,6 @@
 import { EventProps } from 'Props/Event';
 import * as React from 'react';
-import { Alert, Grid, Skeleton, Typography } from '@mui/material';
+import { Alert, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import EventCard, { EventCardSkeleton } from '../../EventCard/EventCard';
 import './EventSection.scss';

@@ -444,10 +444,6 @@ function ImageAutocompleteField(props: {
   const { field, handleChange, error, controlValue } = props;
   const [value, setValue] = React.useState(controlValue);
   React.useEffect(() => {
-    // if (typeof controlValue !== 'number' || typeof controlValue !== 'string') {
-    //   setValue(controlValue);
-    //   return;
-    // }
     const selectedObject = field.options?.find(
       (item) => (item[field.pk] || item.id) === controlValue
     );

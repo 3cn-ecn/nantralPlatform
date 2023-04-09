@@ -73,28 +73,6 @@ function EventView(props: {
     setValue(newValue);
     onChangeTab(newValue);
   };
-  // TO DO Merging of code
-  function getListEvents(queryFilter?: any, offset = 0) {
-    axios
-      .get('/api/event', {
-        params: {
-          is_shotgun: queryFilter.shotgun,
-          is_favorite: queryFilter.favorite,
-          from_date: queryFilter.from_date,
-          group: filter.organiser,
-          limit: EVENT_PER_PAGE,
-          offset: offset,
-        },
-      })
-      .then((res: any) => {
-        eventsToCamelCase(res.data.results);
-        setEventsList(res.data);
-        setStatus('success');
-      })
-      .catch(() => {
-        setStatus('error');
-      });
-  }
 
   const today = new Date();
   // Request to get Events to display, depending of the filter.
@@ -162,7 +140,7 @@ function EventView(props: {
           .then((res: any) => {
             eventsToCamelCase(res.data.results);
             setEventsList(res.data);
-            // setStatus('success');
+            setStatus('success');
           })
           .catch(() => {
             setStatus('error');
@@ -247,7 +225,6 @@ function EventView(props: {
  */
 function Event() {
   const [queryParameters, setQueryParams] = useSearchParams();
-  const [tab, setTab] = React.useState(queryParameters.get('tab') || '1');
   const [filter, setFilter] = React.useState<FilterInterface | null>({
     dateBegin: queryParameters.get('dateBegin'),
     dateEnd: queryParameters.get('dateEnd'),

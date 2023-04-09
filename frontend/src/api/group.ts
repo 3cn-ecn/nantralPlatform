@@ -8,9 +8,18 @@ export async function getMyGroups(): Promise<SimpleGroupProps[]> {
   return data.results;
 }
 
-export async function getGroups(): Promise<SimpleGroupProps[] | GroupProps[]> {
+export async function getGroups(options?: {
+  isMember?: boolean;
+  simple?: boolean;
+  limit?: number;
+  order: string;
+}): Promise<SimpleGroupProps[] | GroupProps[]> {
   const { data } = await axios.get('/api/group/group/', {
-    params: { is_member: true, simple: true },
+    params: {
+      is_member: options?.isMember,
+      simple: options?.simple,
+      order: options?.order,
+    },
   });
   return data.results;
 }

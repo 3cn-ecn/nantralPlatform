@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { LoadStatus } from 'Props/GenericTypes';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
-import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
 import { SimpleGroup } from '../../components/Group/interfaces';
 import NotFound from '../NotFound/NotFound';
 
@@ -13,7 +12,7 @@ export function GroupList() {
 
   const [groupCategory, setCategory] = React.useState(undefined);
   const [groups, setGroups] = React.useState<Array<SimpleGroup>>([]);
-  const [groupsStatus, setGroupsStatus] = React.useState<LoadStatus>('load');
+  const [groupsStatus, setGroupsStatus] = React.useState<LoadStatus>('loading');
 
   React.useEffect(() => {
     axios
@@ -25,13 +24,12 @@ export function GroupList() {
         params: { type: groupTypeSlug },
       })
       .then((res) => {
-        // eventsToCamelCase(res.data);
         setGroups(res.data.results);
         setGroupsStatus('success');
       })
       .catch((err) => {
         console.error(err);
-        setGroupsStatus('fail');
+        setGroupsStatus('error');
       });
   }, []);
   if (groupTypeSlug[0] === '@') return <NotFound />;

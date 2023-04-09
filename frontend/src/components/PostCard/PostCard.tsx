@@ -11,8 +11,6 @@ import * as React from 'react';
 
 import './PostCard.scss';
 import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
-import axios from 'axios';
-import { ClubProps, SimpleGroupProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
 import { FormPostProps, PostProps } from '../../Props/Post';
 import { PostModal } from '../Modal/PostModal';

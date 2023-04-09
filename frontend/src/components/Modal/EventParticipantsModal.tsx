@@ -9,7 +9,6 @@ import {
   Card,
   CardActionArea,
   CircularProgress,
-  IconButton,
   List,
   ListItem,
 } from '@mui/material';
@@ -17,7 +16,6 @@ import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Delete } from '@mui/icons-material';
 import Avatar from '../Avatar/Avatar';
 import { EventProps } from '../../Props/Event';
 

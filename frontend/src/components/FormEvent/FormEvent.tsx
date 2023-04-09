@@ -23,9 +23,9 @@ import {
   Link as LinkIcon,
   LocalFireDepartment as ShotgunIcon,
 } from '@mui/icons-material';
-import { GroupProps, SimpleGroupProps } from 'Props/Group';
+import { SimpleGroupProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
-import { FieldType, ListResults } from 'Props/GenericTypes';
+import { FieldType } from 'Props/GenericTypes';
 import { SimpleGroup } from 'components/Group/interfaces';
 import { useQuery } from 'react-query';
 import {
@@ -235,7 +235,6 @@ function EditEventModal(props: {
   const { open, closeModal, event, mode, onUpdate, onDelete } = props;
   const eventDisplayed = event || createBlankEvent();
   const { t } = useTranslation('translation');
-  // const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
   const [formValues, setFormValues] = React.useState<FormEventProps>({
     ...structuredClone(eventDisplayed),
     group: event?.group.id,
@@ -254,7 +253,7 @@ function EditEventModal(props: {
     else setRegistrationMode('normal');
   }, [event]);
 
-  const { data: adminGroup, status } = useQuery<SimpleGroupProps[], string>({
+  const { data: adminGroup } = useQuery<SimpleGroupProps[], string>({
     queryKey: 'admin-group',
     queryFn: () =>
       axios
@@ -265,14 +264,6 @@ function EditEventModal(props: {
   });
 
   const fields = getFormFields(adminGroup, t, mode);
-  // React.useEffect(() => {
-  //   axios
-  //     .get('/api/group/group/', {
-  //       params: { simple: true, limit: 20, admin: true },
-  //     })
-  //     .then((res) => setAdminGroup(res.data.results))
-  //     .catch((err) => console.error(err));
-  // }, []);
 
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   /** Function called on submit to save data */
