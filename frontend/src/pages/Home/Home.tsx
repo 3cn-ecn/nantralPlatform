@@ -20,7 +20,7 @@ import { EventProps } from '../../Props/Event';
 import './Home.scss';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
-import { PostProps, postsToCamelCase } from '../../Props/Post';
+import { PostProps, convertPostFromPythonData } from '../../Props/Post';
 import { LoadStatus } from '../../Props/GenericTypes';
 import { FormPost } from '../../components/FormPost/FormPost';
 import EditEventModal from '../../components/FormEvent/FormEvent';
@@ -55,7 +55,7 @@ function Home() {
       axios
         .get(`/api/post/${postId}`)
         .then((res) => {
-          postsToCamelCase([res.data]);
+          convertPostFromPythonData(res.data);
           setSelectedPost(res.data);
         })
         .catch((err) => {

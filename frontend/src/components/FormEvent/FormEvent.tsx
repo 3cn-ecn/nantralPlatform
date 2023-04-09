@@ -35,7 +35,7 @@ import {
 } from '../../Props/Event';
 import { theme } from '../style/palette';
 import FormGroup from '../../utils/form';
-import { snakeToCamelCase } from '../../utils/camel';
+import { convertFromPythonData } from '../../utils/convertData';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
 /**
@@ -331,7 +331,7 @@ function EditEventModal(props: {
         setSaving(false);
         if (err.response) {
           setFormErrors(err.response.data); // show errors per fields
-          snakeToCamelCase(err.response.data, {});
+          convertFromPythonData(err.response.data);
           if (err.response.data.non_field_errors)
             // show form errors
             setGlobalErrors(err.response.data.non_field_errors);

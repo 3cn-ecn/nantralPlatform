@@ -1,4 +1,4 @@
-import { snakeToCamelCase } from '../utils/camel';
+import { convertFromPythonData } from '../utils/convertData';
 import { SimpleGroupProps } from './Group';
 
 export interface EventProps {
@@ -59,7 +59,7 @@ export function eventToCamelCase(event: any): void {
     event.end_date = new Date(new Date(event.date).getTime() + 3600000);
   }
 
-  snakeToCamelCase(event, {
+  convertFromPythonData(event, {
     beginDate: 'Date',
     endDate: 'Date',
     beginRegistration: 'Date',
