@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 
-class SearchAPIMixin:
+class SearchViewMixin:
 
     search_fields = []
 
@@ -86,3 +86,62 @@ class SearchAPIMixin:
         queryset = queryset.distinct()[:limit]
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class QueryFieldsMixin:
+    """
+    Add possibility for a serializer to limit itself to certain fields,
+    selected by the query parameter 'fields', or to exclude certain fields
+    with parameter 'fields!'.
+    """
+
+    # If using Django filters in the API, these labels mustn't conflict with
+    # any model field names.
+    include_arg_name = 'fields'
+    exclude_arg_name = 'fields!'
+
+    # Split field names by this string.  It doesn't necessarily have to be a
+    # single character. Avoid RFC 1738 reserved characters i.e.
+    # ';', '/', '?', ':', '@', '=' and '&'
+    delimiter = ','
+
+    def __init__(self, *args, **kwargs):
+        super(QueryFieldsMixin, self).__init__(*args, **kwargs)
+
+        try:
+            request: Request = self.context['request']
+            method = request.method
+            query_params = request.query_params
+        except (AttributeError, TypeError, KeyError):
+            # The serializer was not initialized with request context.
+            return
+
+        if method not in ['GET', 'OPTIONS']:
+            return
+
+        include_field_names = {
+            field
+            for field in (self.delimiter
+                          .join(query_params.getlist(self.include_arg_name))
+                          .split(self.delimiter))
+            if field}
+
+        exclude_field_names = set(
+            self.delimiter
+            .join(query_params.getlist(self.exclude_arg_name))
+            .split(self.delimiter)
+        )
+
+        print(include_field_names, exclude_field_names)
+        if not include_field_names and not exclude_field_names:
+            # No user fields filtering was requested, we have nothing to do.
+            return
+
+        serializer_field_names = set(self.fields)
+
+        fields_to_drop = serializer_field_names & exclude_field_names
+        if include_field_names:
+            fields_to_drop |= serializer_field_names - include_field_names
+
+        for field in fields_to_drop:
+            self.fields.pop(field)

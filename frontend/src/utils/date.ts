@@ -29,7 +29,7 @@ export function timeFromNow(date: Date): string {
     time = `${Math.round(seconds).toString()} ${t('time.seconds')}`;
   else if (minutes < 60)
     time = `${Math.round(minutes).toString()} ${t('time.minutes')}`;
-  else if (hours < 60)
+  else if (hours < 24)
     time = `${Math.round(hours).toString()} ${t('time.hours')}`;
   else if (days < 30) time = `${Math.round(days).toString()} ${t('time.days')}`;
   else if (months < 12)

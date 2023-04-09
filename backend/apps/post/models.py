@@ -66,9 +66,9 @@ class AbstractPost(models.Model, SlugModel):
         self.image = compress_model_image(
             self, 'image', size=(960, 540), contains=True)
         # save the notification
-        self.create_notification(
-            title=self.group.name,
-            body=self.title)
+        # self.create_notification(
+        #     title=self.group.name,
+        #     body=self.title)
         # send the notification
         if self.notification and not self.notification.sent:
             self.notification.send()
@@ -79,7 +79,7 @@ class AbstractPost(models.Model, SlugModel):
             return True
         return self.group.is_member(user)
 
-    def create_notification(self, title, body):
+    def create_notification(self, title, body, url):
         """Create a new notification for this post"""
         # create or get the notification linked to this post
         if self.notification:
@@ -87,7 +87,7 @@ class AbstractPost(models.Model, SlugModel):
         self.notification = Notification.objects.create(
             title=title,
             body=body,
-            url=self.get_absolute_url(),
+            url=url,
             sender=self.group.slug,
             date=self.publication_date,
             icon_url=(self.group.icon.url
@@ -127,11 +127,15 @@ class Post(AbstractPost):
         )
         # save agin the post
         super(Post, self).save(*args, **kwargs)
+        self.create_notification(
+            body=f'Nouveau Post : {self.title}',
+            title=self.group.name,
+            url=self.get_absolute_url())
 
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self):
-        return reverse('post:detail', args=[self.slug])
+        return f'/?post={self.pk}'
 
     def __str__(self) -> str:
         return self.group.name + " - " + self.title

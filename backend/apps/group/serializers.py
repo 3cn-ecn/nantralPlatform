@@ -5,6 +5,7 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers, exceptions
 
 from apps.student.serializers import SimpleStudentSerializer
+from apps.utils.api_mixins import QueryFieldsMixin
 
 from .models import Group, Membership, GroupType
 
@@ -45,14 +46,15 @@ class SimpleGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['name', 'short_name', 'slug', 'url', 'icon']
-        read_only_fields = ['name', 'short_name', 'slug', 'url', 'icon']
+        fields = ['name', 'short_name', 'slug', 'url', 'icon', 'id']
+        read_only_fields = ['name', 'short_name',
+                            'slug', 'url', 'icon']
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupSerializer(QueryFieldsMixin, serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
     is_admin = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()

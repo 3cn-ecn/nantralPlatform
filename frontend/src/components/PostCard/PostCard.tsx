@@ -11,15 +11,13 @@ import * as React from 'react';
 
 import './PostCard.scss';
 import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
-import axios from 'axios';
-import { ClubProps } from 'Props/Group';
 import { useTranslation } from 'react-i18next';
-import { PostProps } from '../../Props/Post';
+import { FormPostProps, PostProps } from '../../Props/Post';
 import { PostModal } from '../Modal/PostModal';
 import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
 
-const POST_HEIGHT = 180;
+const POST_HEIGHT = 190;
 export const POST_AVATAR_SIZE = 35;
 export function SeePageButton(props: {
   link: string;
@@ -61,13 +59,53 @@ export function MembersIcon() {
     </Tooltip>
   );
 }
+
+export function PostBadges(props: {
+  pinned: boolean;
+  className?: string;
+  style?: any;
+  publicity: PostProps['publicity'];
+}) {
+  const { pinned, publicity, className, style } = props;
+  return (
+    <div
+      className={className}
+      style={{ display: 'flex', columnGap: '0.6em', ...style }}
+    >
+      {publicity === 'Mem' && (
+        <Groups
+          sx={{
+            padding: 0.4,
+            color: 'white',
+            borderRadius: '50%',
+            backgroundColor: 'primary.main',
+          }}
+        />
+      )}
+      {pinned && (
+        <PushPin
+          sx={{
+            padding: 0.4,
+            color: 'white',
+            borderRadius: '50%',
+            backgroundColor: 'primary.main',
+          }}
+        />
+      )}
+    </div>
+  );
+}
+PostBadges.defaultProps = {
+  className: null,
+  style: {},
+};
+
 SeePageButton.defaultProps = {
   style: null,
 };
-export function PostCard(props: { post: PostProps }) {
-  const { post } = props;
+export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
+  const { post, onDelete } = props;
   const [open, setOpen] = React.useState<boolean>(false);
-  const [clubDetails, setClubDetails] = React.useState<ClubProps>(undefined);
   const [postValue, setPostValue] = React.useState(post);
   const { t } = useTranslation('translation');
 
@@ -75,12 +113,17 @@ export function PostCard(props: { post: PostProps }) {
     setPostValue(post);
   }, [post]);
 
-  React.useEffect(() => {
-    axios
-      .get(`/api/group/group/${postValue.groupSlug}/`)
-      .then((res) => setClubDetails(res.data))
-      .catch((err) => console.error(err));
-  }, []);
+  const updatePost = (newPost: FormPostProps) => {
+    if (newPost) {
+      Object.entries(newPost).forEach(([key, value]) => {
+        post[key] = value;
+      });
+      setPostValue(post);
+    } else {
+      onDelete();
+      setOpen(false);
+    }
+  };
 
   return (
     <>
@@ -94,28 +137,11 @@ export function PostCard(props: { post: PostProps }) {
           onClick={() => setOpen(true)}
           sx={{ display: 'flex', height: '100%' }}
         >
-          <div className="post-icons">
-            {postValue.publicity === 'Mem' && (
-              <Groups
-                sx={{
-                  padding: 0.4,
-                  color: 'white',
-                  borderRadius: '50%',
-                  backgroundColor: 'primary.main',
-                }}
-              />
-            )}
-            {post.pinned && (
-              <PushPin
-                sx={{
-                  padding: 0.4,
-                  color: 'white',
-                  borderRadius: '50%',
-                  backgroundColor: 'primary.main',
-                }}
-              />
-            )}
-          </div>
+          <PostBadges
+            pinned={postValue.pinned}
+            publicity={postValue.publicity}
+            className="post-icons"
+          />
           <CardContent
             style={{
               borderColor: 'red',
@@ -144,23 +170,14 @@ export function PostCard(props: { post: PostProps }) {
               </div>
             </div>
             <div id="post-club">
-              {clubDetails ? (
-                <div style={{ display: 'contents' }}>
-                  <Avatar
-                    title={clubDetails.name}
-                    url={clubDetails.icon}
-                    size="small"
-                  />
-                  {clubDetails.name}
-                </div>
-              ) : (
-                <div style={{ display: 'contents' }}>
-                  <Skeleton variant="circular">
-                    <Avatar title="" size="small" />
-                  </Skeleton>
-                  <Skeleton variant="text" width="5em" height="2em"></Skeleton>
-                </div>
-              )}
+              <div style={{ display: 'contents' }}>
+                <Avatar
+                  title={post?.group.name}
+                  url={post?.group.icon}
+                  size="small"
+                />
+                {post.group.name}
+              </div>
             </div>
           </CardContent>
           {postValue.image && (
@@ -175,14 +192,17 @@ export function PostCard(props: { post: PostProps }) {
       </Card>
       <PostModal
         post={postValue}
-        clubDetails={clubDetails}
         open={open}
         onClose={() => setOpen(false)}
-        onUpdate={setPostValue}
+        onUpdate={updatePost}
       />
     </>
   );
 }
+
+PostCard.defaultProps = {
+  onDelete: () => null,
+};
 
 export function PostCardSkeleton() {
   return <Skeleton variant="rectangular" width="100%" height={POST_HEIGHT} />;

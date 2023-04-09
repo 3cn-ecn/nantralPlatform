@@ -21,17 +21,18 @@ export function PostSection(props: {
   maxItem?: number;
   /** Nombre d'item à afficher de base */
   shownItem?: number;
+  onUpdate?: (post: null | PostProps) => void;
 }) {
-  const { posts, title, maxItem, status, shownItem } = props;
-  const allPosts = maxItem ? posts.slice(0, maxItem) : posts;
+  const { posts, title, maxItem, status, shownItem, onUpdate } = props;
+  const allPosts = maxItem && posts ? posts.slice(0, maxItem) : posts;
   const { t } = useTranslation('translation');
   const [showAll, setShowAll] = React.useState<boolean>(false);
   let content;
   switch (status) {
-    case 'fail':
+    case 'error':
       content = <p>Error</p>;
       break;
-    case 'load':
+    case 'loading':
       content = [0, 1, 2].map((item) => (
         <Grid key={item} xs={12} md={4} item>
           <PostCardSkeleton />
@@ -39,12 +40,12 @@ export function PostSection(props: {
       ));
       break;
     case 'success':
-      if (allPosts.length > 0)
+      if (posts && allPosts?.length > 0)
         content = allPosts
           .slice(0, showAll ? allPosts.length : shownItem)
           .map((post) => (
             <Grid key={post.slug} xs={12} md={4} item>
-              <PostCard post={post} />
+              <PostCard post={post} onDelete={() => onUpdate(post)} />
             </Grid>
           ));
       else
@@ -63,7 +64,7 @@ export function PostSection(props: {
       <Grid sx={{ marginTop: 0, marginBottom: 1 }} spacing={1} container>
         {content}
       </Grid>
-      {allPosts.length > shownItem && (
+      {allPosts?.length > shownItem && (
         <>
           <Divider />
           <Button onClick={() => setShowAll(!showAll)}>
@@ -79,4 +80,5 @@ PostSection.defaultProps = {
   title: null,
   maxItem: null,
   shownItem: 3,
+  onUpdate: () => null,
 };

@@ -28,17 +28,21 @@ import BasicDatePicker from '../DatePicker/BasicDatePicker';
  * @param props getFilter is the function used to get filter from parent component
  * @returns the filter bar
  */
-function FilterBar(props: { getFilter: any }) {
-  const { getFilter } = props;
+function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
+  const { getFilter, filter } = props;
   const { t } = useTranslation('translation'); // translation module
   const [open, setOpen] = React.useState(false); // set true to open the drawer
-  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(null); // date from which the events are filtered
-  const [dateBeginFormat, setDateBeginFormat] = React.useState(''); // date from which the events are filtered, as a string
-  const [dateEndFormat, setDateEndFormat] = React.useState(''); // date until which the events are filtered, as a string
-  const [isFavorite, setIsFavorite] = React.useState(false); // true if the 'Favorite' filter is checked
-  const [isParticipated, setIsParticipated] = React.useState(false); // true if the 'I participate' filter is checked
-  const [isShotgun, setIsShotgun] = React.useState(false); // true if the 'Shotgun' filter is checked
-  const [organiser, setOrganiser] = React.useState(''); // the list of organiser displayed, as a string (a,b,c...)
+  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(); // date from which the events are filtered
+  const [dateBeginFormat, setDateBeginFormat] = React.useState(
+    filter.dateBegin
+  ); // date from which the events are filtered, as a string
+  const [dateEndFormat, setDateEndFormat] = React.useState(filter.dateEnd); // date until which the events are filtered, as a string
+  const [isFavorite, setIsFavorite] = React.useState(filter.favorite); // true if the 'Favorite' filter is checked
+  const [isParticipated, setIsParticipated] = React.useState(
+    filter.participate
+  ); // true if the 'I participate' filter is checked
+  const [isShotgun, setIsShotgun] = React.useState(filter.shotgun); // true if the 'Shotgun' filter is checked
+  const [organiser, setOrganiser] = React.useState(filter.organiser); // the list of organiser displayed, as a string (a,b,c...)
 
   // Functions to get filter values from child components
   const getDateBegin = (newDate) => {
@@ -172,20 +176,20 @@ function FilterBar(props: { getFilter: any }) {
       <h2>{t('filterbar.title_filter')}</h2>
 
       <List>
-        {filters.map((filter) => (
-          <ListItem component="div" key={filter.id} disablePadding>
+        {filters.map((filterItem) => (
+          <ListItem component="div" key={filterItem.id} disablePadding>
             <ListItem className="auto-fit">
-              {filter.isMenu ? (
+              {filterItem.isMenu ? (
                 <SimpleAccordion
-                  label={filter.name}
-                  content={filter.content}
-                  icon={filter.icon}
+                  label={filterItem.name}
+                  content={filterItem.content}
+                  icon={filterItem.icon}
                 />
               ) : (
                 <CheckboxButton
-                  label={filter.name}
-                  icon={filter.icon}
-                  id={filter.id}
+                  label={filterItem.name}
+                  icon={filterItem.icon}
+                  id={filterItem.id}
                   getChecked={getChecked}
                 />
               )}
