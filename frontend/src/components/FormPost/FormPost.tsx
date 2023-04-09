@@ -56,11 +56,10 @@ export function FormPost(props: {
   );
   const [errors, setErrors] = React.useState<any>({});
   const [loading, setLoading] = React.useState<boolean>(false);
-  // const [adminGroup, setAdminGroup] = React.useState<Array<GroupProps>>([]);
   const [confirmationOpen, setConfirmationOpen] =
     React.useState<boolean>(false);
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
-  const { data: adminGroup, status } = useQuery<SimpleGroupProps[], string>({
+  const { data: adminGroup } = useQuery<SimpleGroupProps[], string>({
     queryKey: 'admin-group',
     queryFn: () =>
       axios

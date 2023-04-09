@@ -14,7 +14,7 @@ import {
 function Group() {
   const [groupTypeList, setGroupTypeList] = React.useState([]);
   const [groupTypeStatus, setGroupTypeStatus] =
-    React.useState<LoadStatus>('load');
+    React.useState<LoadStatus>('loading');
 
   React.useEffect(() => {
     axios
@@ -25,7 +25,7 @@ function Group() {
       })
       .catch((err) => {
         console.error(err);
-        setGroupTypeStatus('fail');
+        setGroupTypeStatus('error');
       });
   }, []);
 
@@ -40,16 +40,14 @@ function Group() {
         }}
       >
         <h1>Groupes</h1>
-        {true && (
-          <Button
-            href="/admin/group/grouptype/changelist/"
-            target="_blank"
-            variant="text"
-            sx={{ height: 'fit-content' }}
-          >
-            Voir la liste
-          </Button>
-        )}
+        <Button
+          href="/admin/group/grouptype/changelist/"
+          target="_blank"
+          variant="text"
+          sx={{ height: 'fit-content' }}
+        >
+          Voir la liste
+        </Button>
       </div>
       <Grid container>
         {groupTypeStatus === 'success'

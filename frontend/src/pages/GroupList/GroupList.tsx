@@ -38,14 +38,12 @@ export function GroupList() {
     <Container>
       <h1 className="position-relative">
         {groupCategory && groupCategory.name}
-        {true && (
-          <a
-            href="{% url 'group:create' group_type.slug %}"
-            className="btn btn-success btn-lg position-absolute end-0"
-          >
-            Créer
-          </a>
-        )}
+        <a
+          href="{% url 'group:create' group_type.slug %}"
+          className="btn btn-success btn-lg position-absolute end-0"
+        >
+          Créer
+        </a>
       </h1>
       {/* {% if user.is_superuser %}
     <a href="{% url 'admin:group_grouptype_change' group_type.pk %}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">

@@ -287,7 +287,6 @@ function EventDetails() {
       >
         <MenuItem
           onClick={() => {
-            // window.open(`/event/${event.id}/edit`, '_blank', 'noreferrer');
             setFormEventOpen(true);
             handleCloseMenu();
           }}
