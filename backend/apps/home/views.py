@@ -1,5 +1,3 @@
-from datetime import timedelta
-from typing import List
 from os.path import join
 
 from django.conf import settings
@@ -11,15 +9,13 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
-from django.views.generic import TemplateView, FormView
-from django.urls import reverse, resolve
+from django.views.generic import FormView
+from django.urls import resolve
 from django.utils import timezone
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from apps.account.models import TemporaryAccessRequest
-from apps.post.models import Post
 from apps.roommates.models import Roommates
 from apps.student.models import Student
 from apps.utils.github import create_issue
@@ -28,44 +24,6 @@ from .forms import SuggestionForm
 
 
 # PAGES VIEWS
-
-class HomeView(LoginRequiredMixin, TemplateView):
-    template_name = 'home/home.html'
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            temporary_access_request = TemporaryAccessRequest.objects.filter(
-                user=self.request.user).first()
-            if temporary_access_request:
-                message = (
-                    'Votre compte n\'est pas encore définitif. Veuillez le '
-                    + f'valider <a href="{reverse("account:upgrade-permanent")}'
-                    + '">ici</a>. Attention après le '
-                    + f'{temporary_access_request.approved_until} vous ne '
-                    + 'pourrez plus vous connecter si vous n\'avez pas '
-                    + 'renseigné votre adresse Centrale.')
-                messages.warning(request, message)
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        publication_date = timezone.make_aware(
-            timezone.now().today() - timedelta(days=10))
-        posts: List[Post] = (
-            Post.objects
-            .filter(publication_date__gte=publication_date)
-            .order_by('-publication_date'))
-        context['posts'] = [
-            post for post in posts if post.can_view(self.request.user)]
-        context['ariane'] = [
-            {
-                'target': '#',
-                'label': 'Accueil'
-            }
-        ]
-        return context
-
 
 class SuggestionView(LoginRequiredMixin, FormView):
     template_name = 'home/suggestions.html'
@@ -91,20 +49,6 @@ class SuggestionView(LoginRequiredMixin, FormView):
             {
                 'target': '#',
                 'label': "Suggestions & Bugs"
-            }
-        ]
-        return context
-
-
-class LegalMentionsView(TemplateView):
-    template_name = 'home/mentions.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ariane'] = [
-            {
-                'target': '#',
-                'label': 'Mentions Légales'
             }
         ]
         return context

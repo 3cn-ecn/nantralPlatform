@@ -205,7 +205,8 @@ class Group(models.Model, SlugModel):
     can_pin = models.BooleanField(
         verbose_name=_("Can pin"),
         default=False,
-        help_text=_("Whether admin members can pin a post"))
+        help_text=_("Admin members of this group can pin their posts"))
+
     # Profile
     summary = models.CharField(
         verbose_name=_("Summary"),

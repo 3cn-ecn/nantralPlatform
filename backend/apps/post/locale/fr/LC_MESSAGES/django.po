@@ -1,0 +1,47 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-10 15:11+0200\n"
+"PO-Revision-Date: 2023-04-10 15:24+0200\n"
+"Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#: models.py:35
+msgid "Title"
+msgstr "Titre"
+
+#: models.py:37
+msgid "Description"
+msgstr "Description"
+
+#: models.py:40
+msgid "Organiser"
+msgstr "Organisateur"
+
+#: models.py:43
+msgid "Visibility"
+msgstr "Visibilité"
+
+#: models.py:47
+msgid "Banner"
+msgstr "Bannière"
+
+#: models.py:51
+msgid "Your banner will be displayed at 1320x492 pixels."
+msgstr "Votre bannière sera affichée au format 1320x492 pixels."
+
+#: models.py:123
+msgid "Pin publication"
+msgstr "Épingler la publication"

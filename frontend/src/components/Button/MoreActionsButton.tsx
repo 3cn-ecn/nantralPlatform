@@ -70,7 +70,7 @@ function MoreActionsButton(props: {
       setParticipating={setParticipating}
       eventId={id}
       link=""
-      beginRegistration={null}
+      startRegistration={null}
       endRegistration={null}
       unregisterOnly
     />

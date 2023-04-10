@@ -36,7 +36,7 @@ interface JoinButtonProps {
   sx?: SxProps<Theme>;
   participating: boolean;
   eventId: number;
-  beginRegistration: Date | null;
+  startRegistration: Date | null;
   endRegistration: Date | null;
   unregisterOnly?: boolean;
   setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,7 +52,7 @@ function JoinButton({
   sx,
   participating,
   eventId,
-  beginRegistration,
+  startRegistration,
   endRegistration,
   unregisterOnly,
   setParticipating,
@@ -85,8 +85,8 @@ function JoinButton({
   const shotgunFull = variant === 'shotgun' && person >= maxPerson;
   const closed: boolean = shotgunFull || registrationFinished;
   const registrationNotStarted: boolean =
-    beginRegistration !== null &&
-    Date.now() < new Date(beginRegistration).getTime();
+    startRegistration !== null &&
+    Date.now() < new Date(startRegistration).getTime();
   const participate = async () => {
     axios
       .post(`/api/event/${eventId}/participate`)
@@ -197,7 +197,7 @@ function JoinButton({
     if (registrationNotStarted)
       return (
         <Typography sx={{ color: '#fff' }}>
-          {new Date(beginRegistration).toLocaleDateString(i18n.language, {
+          {new Date(startRegistration).toLocaleDateString(i18n.language, {
             weekday: 'short',
             day: 'numeric',
             month: 'short',
@@ -295,7 +295,7 @@ function JoinButton({
         {registrationNotStarted ? (
           <EventPopover
             anchorRef={buttonRef}
-            beginRegistration={beginRegistration}
+            startRegistration={startRegistration}
             maxParticipant={maxPerson}
             onClose={() => setTooltipOpen(false)}
             open={tootlTipOpen}
