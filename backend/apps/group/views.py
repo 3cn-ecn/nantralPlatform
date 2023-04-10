@@ -153,7 +153,7 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
             # check if there are some events planned for this group
             context['has_events'] = Event.objects.filter(
                 group=group,
-                date__gte=timezone.now()
+                start_date__gte=timezone.now()
             ).exists()
             # members
             context['is_member'] = group.is_member(user)
@@ -534,7 +534,7 @@ class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context['group'] = self.object
         context['posts'] = (Post.objects
-                            .filter(group=self.object.slug)
+                            .filter(group=self.object)
                             .order_by('-created_at'))
         context['ariane'] = [
             {

@@ -84,7 +84,7 @@ function EventCard(props: { event: EventProps }) {
   const { i18n } = useTranslation('translation');
 
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
-  if (formUrl !== null) variant = 'form';
+  if (formUrl) variant = 'form';
   else if (maxParticipant === null) variant = 'normal';
   else variant = 'shotgun';
 

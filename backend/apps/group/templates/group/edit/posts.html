@@ -1,10 +1,13 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% include
-'group/included/navbar_edit.html' with open='posts' %}
+{% extends 'base.html' %}
+{% load static %}
 
-<h2>Posts du group</h2>
+{% block content %}
+{% include 'group/included/navbar_edit.html' with open='posts' %}
+
+<h2>Posts du groupe</h2>
 
 <p>
-  <a href="{% url 'post:create' group.slug %}" class="btn btn-dark">
+  <a href="/?create-post" class="btn btn-dark">
     Ajouter un post
   </a>
 </p>

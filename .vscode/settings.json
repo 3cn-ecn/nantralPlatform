@@ -1,5 +1,6 @@
 {
   "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
   "editor.insertSpaces": true,
   "editor.rulers": [80],
   "files.associations": {
@@ -23,6 +24,9 @@
   },
   "[django-html][html][javascript][javascriptreact][typescript][typescriptreact][json][css][scss]": {
     "editor.tabSize": 2
+  },
+  "[django-html]": {
+    "editor.formatOnSave": false
   },
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/",
   "python.envFile": "${workspaceFolder}/backend/config/settings/.env",

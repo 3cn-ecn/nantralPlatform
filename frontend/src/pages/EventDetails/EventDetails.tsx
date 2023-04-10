@@ -103,7 +103,7 @@ function EventDetails() {
   }
 
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
-  if (event.formUrl !== null) variant = 'form';
+  if (event.formUrl) variant = 'form';
   else if (event.maxParticipant === null) variant = 'normal';
   else variant = 'shotgun';
 
