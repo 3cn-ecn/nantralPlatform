@@ -49,7 +49,6 @@ class EventSerializer(serializers.ModelSerializer):
             'end_date',
             'publicity',
             'image',
-            'slug',
             'number_of_participants',
             'absolute_url',
             'group',
@@ -73,7 +72,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_is_favorite(self, obj: Event):
         user = self.context['request'].user
-        return obj.is_favorite(user)
+        return obj.is_bookmarked(user)
 
     def get_is_admin(self, obj: Event):
         user = self.context['request'].user

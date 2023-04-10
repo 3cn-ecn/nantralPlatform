@@ -136,7 +136,7 @@ class EventViewSet(viewsets.ModelViewSet):
             ord[0] == '-' and ord[1:]) in ORDERS, order_by)
         student: Student = self.request.user.student
         my_groups = Group.objects.filter(members=student)
-        user_event_pk = student.favorite_event.values('pk')
+
         # filtering
         events = (
             Event.objects
@@ -146,7 +146,7 @@ class EventViewSet(viewsets.ModelViewSet):
             .filter(~Q(max_participant=None) if is_shotgun else Q())
             .filter(Q(participants=student)
                     if is_participating else Q())
-            .filter(Q(pk__in=user_event_pk) if is_favorite else Q())
+            .filter(Q(bookmarks=student) if is_favorite else Q())
             .filter(Q(group__slug__in=organizers_slug)
                     if len(organizers_slug) > 0 else Q())
             .filter(~Q(form_url__isnull=True) if is_form else Q())
