@@ -1,9 +1,12 @@
 @import '../../theme.scss';
 
 a.navlink {
-
-  
   &.active {
     color: $primary-red-color;
   }
+}
+
+img.icon-navbar {
+  max-width: 100%;
+  max-height: 100%;
 }

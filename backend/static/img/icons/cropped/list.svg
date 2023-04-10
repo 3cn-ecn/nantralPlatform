@@ -2,35 +2,35 @@
 <svg
    viewBox="0 0 24 24"
    version="1.1"
-   id="svg356"
+   id="svg23"
    sodipodi:docname="list.svg"
-   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
-     id="namedview358"
-     pagecolor="#505050"
-     bordercolor="#eeeeee"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
+     id="namedview25"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#505050"
+     inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="9.8333333"
-     inkscape:cx="-0.71186441"
+     inkscape:zoom="35.625"
+     inkscape:cx="11.985965"
      inkscape:cy="12"
-     inkscape:window-width="1440"
-     inkscape:window-height="872"
+     inkscape:window-width="1920"
+     inkscape:window-height="1030"
      inkscape:window-x="0"
-     inkscape:window-y="28"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg356" />
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg23" />
   <defs
-     id="defs342">
+     id="defs9">
     <linearGradient
        id="a"
        x1="11"
@@ -41,11 +41,11 @@
       <stop
          offset="0"
          stop-color="#b6b7b7"
-         id="stop335" />
+         id="stop2" />
       <stop
          offset="1"
          stop-color="#e0e0df"
-         id="stop337" />
+         id="stop4" />
     </linearGradient>
     <linearGradient
        id="b"
@@ -64,7 +64,7 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#a"
-       id="linearGradient508"
+       id="linearGradient262"
        gradientUnits="userSpaceOnUse"
        x1="11"
        y1="7"
@@ -72,37 +72,37 @@
        y2="7" />
   </defs>
   <g
-     id="g506"
-     transform="matrix(1.5686274,0,0,1.5686274,-7.0588229,-6.8235288)">
+     id="g260"
+     transform="matrix(1.5686274,0,0,1.5686274,-7.0588234,-6.8235288)">
     <circle
        cx="6"
        cy="7"
        r="1.5"
        style="fill:#dc3545"
-       id="circle344" />
+       id="circle11" />
     <circle
        cx="6"
        cy="12"
        r="1.5"
        style="fill:#dc3545"
-       id="circle346" />
+       id="circle13" />
     <circle
        cx="6"
        cy="17"
        r="1.5"
        style="fill:#dc3545"
-       id="circle348" />
+       id="circle15" />
     <path
        d="m 11,7.8 h 7 a 0.8,0.8 0 0 0 0,-1.6 h -7 a 0.8,0.8 0 0 0 0,1.6 z"
-       style="fill:url(#linearGradient508)"
-       id="path350" />
+       style="fill:url(#linearGradient262)"
+       id="path17" />
     <path
        d="m 11,12.8 h 8 a 0.8,0.8 0 0 0 0,-1.6 h -8 a 0.8,0.8 0 0 0 0,1.6 z"
        style="fill:url(#b)"
-       id="path352" />
+       id="path19" />
     <path
        d="m 11,17.8 h 5 a 0.8,0.8 0 0 0 0,-1.6 h -5 a 0.8,0.8 0 0 0 0,1.6 z"
        style="fill:url(#c)"
-       id="path354" />
+       id="path21" />
   </g>
 </svg>

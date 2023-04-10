@@ -2,35 +2,35 @@
 <svg
    viewBox="0 0 24 24"
    version="1.1"
-   id="svg18447"
+   id="svg30"
    sodipodi:docname="form.svg"
-   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
-     id="namedview18449"
-     pagecolor="#505050"
-     bordercolor="#eeeeee"
-     borderopacity="1"
-     inkscape:showpageshadow="0"
-     inkscape:pageopacity="0"
+     id="namedview32"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#505050"
+     inkscape:deskcolor="#d1d1d1"
      showgrid="false"
-     inkscape:zoom="9.8333333"
-     inkscape:cx="8.3389831"
+     inkscape:zoom="35.625"
+     inkscape:cx="11.985965"
      inkscape:cy="12"
-     inkscape:window-width="1440"
-     inkscape:window-height="872"
+     inkscape:window-width="1920"
+     inkscape:window-height="1030"
      inkscape:window-x="0"
-     inkscape:window-y="28"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg18447" />
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg30" />
   <defs
-     id="defs18427">
+     id="defs10">
     <linearGradient
        id="a"
        x1="6.55"
@@ -41,11 +41,11 @@
       <stop
          offset="0"
          stop-color="#b6b7b7"
-         id="stop18419" />
+         id="stop2" />
       <stop
          offset="1"
          stop-color="#e0e0df"
-         id="stop18421" />
+         id="stop4" />
     </linearGradient>
     <linearGradient
        id="b"
@@ -71,7 +71,7 @@
     <linearGradient
        inkscape:collect="always"
        xlink:href="#a"
-       id="linearGradient18944"
+       id="linearGradient272"
        gradientUnits="userSpaceOnUse"
        x1="6.55"
        y1="12.5"
@@ -79,50 +79,50 @@
        y2="12.5" />
   </defs>
   <g
-     id="g18940"
-     transform="matrix(1.661263,0,0,1.661263,-7.7723813,-8.3063152)">
+     id="g270"
+     transform="matrix(1.6714969,0,0,1.6714969,-8.0579628,-8.3574843)">
     <rect
        x="7"
        y="6"
        width="10"
        height="13"
        rx="1"
-       style="fill:none;stroke:url(#linearGradient18944);stroke-width:0.911541px;stroke-miterlimit:10"
-       id="rect18429" />
+       style="fill:none;stroke:url(#linearGradient272);stroke-width:0.911541px;stroke-miterlimit:10"
+       id="rect12" />
     <path
        d="m 9,9.38 h 4 A 0.38,0.38 0 0 0 13,8.63 H 9 a 0.38,0.38 0 0 0 0,0.75 z"
        style="fill:url(#b)"
-       id="path18431" />
+       id="path14" />
     <path
        d="m 9,12.38 h 2 a 0.38,0.38 0 0 0 0,-0.75 H 9 a 0.38,0.38 0 0 0 0,0.75 z"
        style="fill:url(#c)"
-       id="path18433" />
+       id="path16" />
     <path
        d="m 9,15.37 h 3 a 0.38,0.38 0 0 0 0,-0.75 H 9 a 0.38,0.38 0 0 0 0,0.75 z"
        style="fill:url(#d)"
-       id="path18435" />
+       id="path18" />
     <rect
        x="9"
        y="5"
        width="6"
        height="2"
        style="fill:#dc3545"
-       id="rect18437" />
+       id="rect20" />
     <path
        d="m 14.26,9 0.49,0.49 c 0,0 1,-1 1,-1"
        style="fill:none;stroke:#dc3545;stroke-width:0.25px;stroke-miterlimit:10"
-       id="path18439" />
+       id="path22" />
     <path
        d="m 12.26,11.87 0.49,0.5 1,-1"
        style="fill:none;stroke:#dc3545;stroke-width:0.25px;stroke-miterlimit:10"
-       id="path18441" />
+       id="path24" />
     <path
        d="m 13.28,15.49 1,-1"
        style="fill:none;stroke:#dc3545;stroke-width:0.25px;stroke-miterlimit:10"
-       id="path18443" />
+       id="path26" />
     <path
        d="m 14.27,15.49 -1,-1"
        style="fill:none;stroke:#dc3545;stroke-width:0.25px;stroke-miterlimit:10"
-       id="path18445" />
+       id="path28" />
   </g>
 </svg>
