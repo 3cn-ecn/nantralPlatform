@@ -29,9 +29,9 @@ class EventPermission(permissions.BasePermission):
 ORDERS: list[str] = ['participants_count',
                      'form_url',
                      'publicity',
-                     'date',
+                     'start_date',
                      'end_date',
-                     'begin_registration',
+                     'start_registration',
                      'end_registration',
                      'slug',
                      'group_name',
@@ -39,8 +39,8 @@ ORDERS: list[str] = ['participants_count',
                      'location',
                      'title']
 
-DATE_FIELDS: list[str] = ['end_date', 'date',
-                          'begin_registration', 'end_registration']
+DATE_FIELDS: list[str] = ['start_date', 'end_date',
+                          'start_registration', 'end_registration']
 
 
 TRUE_ARGUMENTS: list[str] = ['true', 'True', '1']
@@ -53,7 +53,7 @@ class EventViewSet(viewsets.ModelViewSet):
     ----------------
     - limit : int = 50 ->
     maximum number of results
-    - order_by : list[str] = date ->
+    - order_by : list[str] = start_date ->
     list of attributes to order the result in the form "order=a,b,c".
     In ascending order by defaut. Add "-" in front of row name without
     spaces to sort by descending order
@@ -107,7 +107,7 @@ class EventViewSet(viewsets.ModelViewSet):
         today = timezone.now()
         # query params
         order_by: list[str] = self.request.query_params.get(
-            'order_by', 'date').split(',')
+            'order_by', 'start_date').split(',')
         groups: str = self.request.query_params.get('group')
         organizers_slug: list[str] = groups.split(',') if groups else []
         is_member: bool = self.request.query_params.get(
@@ -152,15 +152,15 @@ class EventViewSet(viewsets.ModelViewSet):
             .filter(~Q(form_url__isnull=True) if is_form else Q())
             .filter(Q(end_date__gte=from_date)
                     if from_date else Q())
-            .filter(Q(date__lte=to_date) if to_date else Q())
+            .filter(Q(start_date__lte=to_date) if to_date else Q())
             .annotate(participants_count=Count('participants'))
             .filter(Q(participants_count__gte=min_participants)
                     if min_participants else Q())
             .filter(Q(participants_count__lte=max_participants)
                     if max_participants else Q())
             .annotate(registration_open=(
-                (Q(begin_registration__lte=today)
-                 | Q(begin_registration__isnull=True))
+                (Q(start_registration__lte=today)
+                 | Q(start_registration__isnull=True))
                 & (Q(end_registration__gte=today)
                    | Q(end_registration__isnull=True))
             ))
@@ -224,8 +224,8 @@ class ParticipateAPIView(APIView):
             event.end_registration is not None
             and timezone.now() > event.end_registration)
         registration_not_started: bool = (
-            event.begin_registration is not None
-            and timezone.now() < event.begin_registration)
+            event.start_registration is not None
+            and timezone.now() < event.start_registration)
         shotgun: bool = event.max_participant is not None
         if registration_not_started:
             return Response(

@@ -126,7 +126,7 @@ function getFormFields(
       fields: [
         {
           kind: 'datetime',
-          name: 'beginRegistration',
+          name: 'startRegistration',
           label: "Date heure d'ouverture des inscriptions",
           disablePast: true,
         },
@@ -154,7 +154,7 @@ function getFormFields(
       fields: [
         {
           kind: 'datetime',
-          name: 'beginRegistration',
+          name: 'startRegistration',
           label: 'Date et Heure du Shotgun',
           disablePast: true,
         },
@@ -180,7 +180,7 @@ function getFormFields(
       fields: [
         {
           kind: 'datetime',
-          name: 'beginRegistration',
+          name: 'startRegistration',
           label: "Date heure d'ouverture des inscriptions",
           disablePast: true,
         },
@@ -209,7 +209,7 @@ function getFormFields(
 function createBlankEvent(): FormEventProps {
   const event: FormEventProps = {
     group: null,
-    beginRegistration: null,
+    startRegistration: null,
     beginDate: null,
     description: '',
     endDate: null,
@@ -300,9 +300,9 @@ function EditEventModal(props: {
         : ''
     );
     formData.append(
-      'begin_registration',
-      formValues.beginRegistration
-        ? formValues.beginRegistration.toISOString()
+      'start_registration',
+      formValues.startRegistration
+        ? formValues.startRegistration.toISOString()
         : ''
     );
     return formData;

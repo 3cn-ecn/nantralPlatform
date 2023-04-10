@@ -169,7 +169,7 @@ export function FormPost(props: {
     formData.append('description', values.description || '<p></p>');
     if (values.pageSuggestion)
       formData.append('page_suggestion', values.pageSuggestion);
-    formData.append('publication_date', values.publicationDate.toISOString());
+    formData.append('created_at', values.publicationDate.toISOString());
     formData.append('pinned', values.pinned ? 'true' : 'false');
     return formData;
   }

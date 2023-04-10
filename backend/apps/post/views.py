@@ -42,7 +42,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
 class PostUpdateView(UserPassesTestMixin, UpdateView):
     """Update a post."""
     template_name = 'post/update.html'
-    fields = ['title', 'description', 'publication_date',
+    fields = ['title', 'description', 'created_at',
               'publicity', 'color', 'image']
     model = Post
     slug_field = 'pk'
@@ -105,7 +105,7 @@ class PostCreateView(UserPassesTestMixin, CreateView):
     """Create a post"""
 
     template_name = 'post/create.html'
-    fields = ['title', 'description', 'publication_date',
+    fields = ['title', 'description', 'created_at',
               'publicity', 'color', 'image']
     model = Post
 

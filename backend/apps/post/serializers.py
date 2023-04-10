@@ -22,7 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
             'id',
             'slug',
             'title',
-            'publication_date',
+            'created_at',
             'updated_at',
             'group',
             'color',
@@ -57,7 +57,7 @@ class WritePostSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'title',
-            'publication_date',
+            'created_at',
             'group',
             'image',
             'publicity',

@@ -22,7 +22,7 @@ class EventTestCase(TestCase, TestMixin):
         self.event = Event.objects.create(
             title="A test event 1",
             group=self.g,
-            date=timezone.now(),
+            start_date=timezone.now(),
             description="Test Desc",
             location="Amphi A")
         # self.assertEqual(len(Event.objects.all()), 1)

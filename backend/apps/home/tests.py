@@ -21,7 +21,7 @@ class TestHomeView(TestCase, TestMixin):
         """Test wether the home view displays events
         correctly."""
         self.past = Event.objects.create(
-            date=timezone.now() - timezone.timedelta(days=1),
+            start_date=timezone.now() - timezone.timedelta(days=1),
             title='An Event in the past',
             description="",
             location="Test",
@@ -29,7 +29,7 @@ class TestHomeView(TestCase, TestMixin):
             publicity=VISIBILITY[0][0],
         )
         self.today = Event.objects.create(
-            date=timezone.now(),
+            start_date=timezone.now(),
             title='An Event today',
             description="",
             location="Test",
@@ -37,7 +37,7 @@ class TestHomeView(TestCase, TestMixin):
             publicity=VISIBILITY[0][0]
         )
         self.tomorrow = Event.objects.create(
-            date=timezone.now() + timezone.timedelta(days=1),
+            start_date=timezone.now() + timezone.timedelta(days=1),
             title='An Event tomorrow',
             description="",
             location="Test",
@@ -45,7 +45,7 @@ class TestHomeView(TestCase, TestMixin):
             publicity=VISIBILITY[0][0]
         )
         self.future = Event.objects.create(
-            date=timezone.now() + timezone.timedelta(days=10),
+            start_date=timezone.now() + timezone.timedelta(days=10),
             title='An Event in the distant future',
             description="",
             location="Test",

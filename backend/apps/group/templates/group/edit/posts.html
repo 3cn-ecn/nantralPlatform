@@ -1,20 +1,22 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
-
-{% include 'group/included/navbar_edit.html' with open='posts' %}
+{% extends 'base.html' %} {% load static %} {% block content %} {% include
+'group/included/navbar_edit.html' with open='posts' %}
 
 <h2>Posts du group</h2>
 
-<p><a href="{% url 'post:create' group.slug %}" class="btn btn-dark">
-  Ajouter un post
-</a></p>
+<p>
+  <a href="{% url 'post:create' group.slug %}" class="btn btn-dark">
+    Ajouter un post
+  </a>
+</p>
 
 <ul>
-{% for post in posts %}
-  <li><a href="{{ post.get_absolute_url }}">{{ post.publication_date }} - {{ post.title }}</a></li>
-{% endfor %}
+  {% for post in posts %}
+  <li>
+    <a href="{{ post.get_absolute_url }}"
+      >{{ post.created_at }} - {{ post.title }}</a
+    >
+  </li>
+  {% endfor %}
 </ul>
 
 {% endblock %}

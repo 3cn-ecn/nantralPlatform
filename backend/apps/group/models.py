@@ -206,6 +206,7 @@ class Group(models.Model, SlugModel):
         verbose_name=_("Can pin"),
         default=False,
         help_text=_("Whether admin members can pin a post"))
+
     # Profile
     summary = models.CharField(
         verbose_name=_("Summary"),

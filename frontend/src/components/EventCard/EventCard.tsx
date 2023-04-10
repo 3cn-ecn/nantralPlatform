@@ -76,7 +76,7 @@ function EventCard(props: { event: EventProps }) {
     formUrl,
     isFavorite,
     endRegistration,
-    beginRegistration,
+    startRegistration,
     id,
   } = event;
   const [participating, setParticipating] = useState(isParticipating);
@@ -164,7 +164,7 @@ function EventCard(props: { event: EventProps }) {
             participating={participating}
             eventId={id}
             link={formUrl}
-            beginRegistration={beginRegistration}
+            startRegistration={startRegistration}
             endRegistration={endRegistration}
             setParticipating={setParticipating}
             sx={{ width: '100%' }}

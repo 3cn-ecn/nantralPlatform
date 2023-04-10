@@ -119,7 +119,7 @@
         <a href="{{post.get_absolute_url }}" style='color:white;' class="mb-1">
             <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
               <div class="card-body">
-                <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'l d F'}}</h5>
+                <h5 class="card-title" >{{post.title}} • {{post.created_at|date:'l d F'}}</h5>
                 <h6 class="card-subtitle mb-2">{{post.group.name}}</h6>
             </h6>
                 <p class="card-text" >{% autoescape off %}{{post.description | truncatewords_html:20}}{% endautoescape %}</p>

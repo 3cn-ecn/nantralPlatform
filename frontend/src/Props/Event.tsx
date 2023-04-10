@@ -20,7 +20,7 @@ export interface EventProps {
   title: string;
   maxParticipant?: number | null; // number max of participant
   endRegistration: Date | null; // date of the end of registration
-  beginRegistration: Date | null; // date of the beginning of registration
+  startRegistration: Date | null; // date of the beginning of registration
   formUrl: string | null; // url of registration form
   isFavorite?: boolean;
   effectiveSize?: number; // The number of horizontal parts the events will used
@@ -40,7 +40,7 @@ export interface FormEventProps {
   title: string;
   maxParticipant?: number | null; // number max of participant
   endRegistration: Date | null; // date of the end of registration
-  beginRegistration: Date | null; // date of the beginning of registration
+  startRegistration: Date | null; // date of the beginning of registration
   formUrl: string | null; // url of registration form
 }
 
@@ -53,7 +53,7 @@ export function eventsToCamelCase(events: Array<any>) {
 
 export function eventToCamelCase(event: any) {
   // delete when date update to beginDate
-  event.begin_date = event.date;
+  event.begin_date = event.start_date;
 
   // delete when endDate defined forEach event
   if (event.end_date === null) {
@@ -63,7 +63,7 @@ export function eventToCamelCase(event: any) {
   return convertFromPythonData(event, {
     beginDate: 'Date',
     endDate: 'Date',
-    beginRegistration: 'Date',
+    startRegistration: 'Date',
     endRegistration: 'Date',
   });
 }

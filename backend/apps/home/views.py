@@ -50,12 +50,12 @@ class HomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
-        publication_date = timezone.make_aware(
+        created_at = timezone.make_aware(
             timezone.now().today() - timedelta(days=10))
         posts: List[Post] = (
             Post.objects
-            .filter(publication_date__gte=publication_date)
-            .order_by('-publication_date'))
+            .filter(created_at__gte=created_at)
+            .order_by('-created_at'))
         context['posts'] = [
             post for post in posts if post.can_view(self.request.user)]
         context['ariane'] = [
