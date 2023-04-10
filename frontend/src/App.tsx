@@ -9,7 +9,6 @@ import NavBarTop from './components/NavBarTop/NavBarTop';
 import NavBarSide from './components/NavBarSide/NavBarSide';
 import NotFound from './pages/NotFound/NotFound';
 import Event from './pages/Event/Event';
-import GroupDetails from './pages/Group/Group';
 import Academics from './pages/Academics/Academics';
 import Admin from './pages/Admin/Admin';
 import BDX from './pages/BDX/BDX';
