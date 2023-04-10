@@ -25,12 +25,13 @@ import './Annuaire.scss';
 import { FilterInterface } from 'Props/Filter';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { StudentProps } from '../../Props/Student';
-import FilterBar from '../../components/FilterBar/FilterBar';
+import FilterBarAnnuaire from '../../components/FilterBarAnnuaire/FilterBarAnnuaire';
 import Calendar from '../../components/Calendar/Calendar';
 import ModalEditEvent from '../../components/FormularEvent/CreateEvent';
 import { LoadStatus } from '../../Props/GenericTypes';
 
-function Annuaire() {
+function AnnuaireTable(props: { filter: any }) {
+  const { filter } = props;
   const [student, setStudent] = React.useState<StudentProps>([]);
   const [studentStatus, setStudentStatus] = React.useState<LoadStatus>('load');
 
@@ -41,19 +42,41 @@ function Annuaire() {
 
   React.useEffect(() => {
     getListStudent();
-  }, []);
+    console.log(student);
+  }, [filter]);
 
   async function getListStudent() {
-    axios
-      .get('/api/student/student/')
-      .then((res) => {
-        setStudent(res.data);
-        setStudentStatus('success');
-      })
-      .catch((err) => {
-        console.error(err);
-        setStudentStatus('fail');
-      });
+    console.log('1');
+    if (filter !== null) {
+      debugger;
+      axios
+        .get('/api/student/student/', {
+          params: {
+            promo: filter.promo,
+            faculty: filter.filiere,
+            path: filter.cursus,
+          },
+        })
+        .then((res) => {
+          setStudent(res.data);
+          setStudentStatus('success');
+        })
+        .catch((err) => {
+          console.error(err);
+          setStudentStatus('fail');
+        });
+    } else {
+      axios
+        .get('/api/student/student/')
+        .then((res) => {
+          setStudent(res.data);
+          setStudentStatus('success');
+        })
+        .catch((err) => {
+          console.error(err);
+          setStudentStatus('fail');
+        });
+    }
   }
 
   const fac = {
@@ -65,57 +88,77 @@ function Annuaire() {
 
   const path = {
     Cla: null,
-    Alt: 'Alternant',
-    'I-M': 'Ingénieur-Manager',
-    'A-I': 'Architecte-Ingénieur',
-    'I-A': 'Ingénieur-Architecte',
-    'I-O': 'Ingénieur-Officier',
-    'O-I': 'Officier-Ingénieur',
-    'M-I': 'Manager-Ingénieur',
+    Alt: t('cursus.alternant'),
+    'I-M': t('cursus.im'),
+    'A-I': t('cursus.ai'),
+    'I-A': t('cursus.ia'),
+    'I-O': t('cursus.io'),
+    'O-I': t('cursus.oi'),
+    'M-I': t('cursus.mi'),
+  };
+
+  return (
+    <>
+      <TableContainer component={Paper} sx={{ mt: 3 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>{t('annuaire.name')}</TableCell>
+              <TableCell>{t('annuaire.surname')} </TableCell>
+              {matches && <TableCell>{t('annuaire.promo_start')}</TableCell>}
+              {matches && <TableCell>{t('annuaire.faculty')}</TableCell>}
+              {matches && <TableCell>{t('annuaire.curriculum')}</TableCell>}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {student.map((std) => (
+              <TableRow
+                key={std.name}
+                component={Link}
+                to={`/student/${std.id}`}
+                sx={{ textDecoration: 'none' }}
+              >
+                <TableCell component="th" scope="row">
+                  {std.name.substring(std.name.indexOf(' ') + 1)}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {std.name.substring(0, std.name.indexOf(' '))}
+                </TableCell>
+                {matches && <TableCell>{std.promo}</TableCell>}
+                {matches && <TableCell>{fac[std.faculty]}</TableCell>}
+                {matches && <TableCell>{path[std.path]}</TableCell>}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {studentStatus === 'load' && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <CircularProgress className="loading" />
+        </Box>
+      )}
+    </>
+  );
+}
+
+function Annuaire() {
+  const [filter, setFilter] = React.useState<FilterInterface | null>(null);
+
+  const { t } = useTranslation('translation');
+
+  const getFilter = (validateFilter) => {
+    setFilter(validateFilter);
+    console.log(filter);
   };
 
   return (
     <Box>
       <Container sx={{ mt: 5 }}>
-        <Typography variant="h4">Annuaire Étudiant </Typography>
-        <TableContainer component={Paper} sx={{ mt: 3 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Nom</TableCell>
-                <TableCell>Prénom </TableCell>
-                {matches && <TableCell>Promotion Entrante</TableCell>}
-                {matches && <TableCell>Filière</TableCell>}
-                {matches && <TableCell>Cursus</TableCell>}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {student.map((std) => (
-                <TableRow
-                  key={std.name}
-                  component={Link}
-                  to={`/student/${std.id}`}
-                  sx={{ textDecoration: 'none' }}
-                >
-                  <TableCell component="th" scope="row">
-                    {std.name.substring(std.name.indexOf(' ') + 1)}
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {std.name.substring(0, std.name.indexOf(' '))}
-                  </TableCell>
-                  {matches && <TableCell>{std.promo}</TableCell>}
-                  {matches && <TableCell>{fac[std.faculty]}</TableCell>}
-                  {matches && <TableCell>{path[std.path]}</TableCell>}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        {studentStatus === 'load' && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-            <CircularProgress className="loading" />
-          </Box>
-        )}
+        <Typography variant="h4">{t('annuaire.student_list')}</Typography>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <FilterBarAnnuaire getFilter={getFilter} />
+        </div>
+        <AnnuaireTable filter={filter} />
       </Container>
     </Box>
   );

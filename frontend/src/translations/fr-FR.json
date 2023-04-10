@@ -212,5 +212,23 @@
     "theme": "Thème",
     "title_language": "Langage",
     "title_theme": "Thème"
+  },
+  "annuaire": {
+    "student_list": "Annuaire",
+    "faculty": "Filière",
+    "name": "Nom",
+    "surname": "Prénom",
+    "curriculum": "Cursus",
+    "promo_start": "Promotion Entrante",
+    "promo": "Promotion"
+  },
+  "cursus": {
+    "im": "Ingénieur-Manager",
+    "mi": "Manager-Ingénieur",
+    "ia": "Ingénieur-Architecte",
+    "ai": "Architecte-Ingénieur",
+    "oi": "Officier-Ingénieur",
+    "io": "Ingénieur-Officier",
+    "alternant": "Alternant"
   }
 }

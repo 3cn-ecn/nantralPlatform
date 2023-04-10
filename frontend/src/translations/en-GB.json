@@ -211,5 +211,23 @@
     "theme": "Theme",
     "title_language": "Language",
     "title_theme": "Theme"
+  },
+  "annuaire": {
+    "student_list": "Student List",
+    "faculty": "Faculty",
+    "name": "Last Name",
+    "surname": "First Name",
+    "curriculum": "Curriculum",
+    "promo_start": "Incoming Promotion",
+    "promo": "Promotion"
+  },
+  "cursus": {
+    "im": "Engineer-Manager",
+    "mi": "Manager-Engineer",
+    "ia": "Engineer-Architect",
+    "ai": "Architect-Engineer",
+    "io": "Engineer-Officer",
+    "oi": "Officer-Engineer",
+    "alternant": "Alternating Student"
   }
 }
