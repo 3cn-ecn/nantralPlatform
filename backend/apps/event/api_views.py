@@ -278,7 +278,7 @@ class FavoriteAPIView(APIView):
                 "message": "Couldn\'t find student"
             })
         else:
-            student.favorite_event.add(event)
+            event.bookmarks.add(student)
             return Response(status='200', data={
                 "success": True,
                 "message": "You have added this event to your favorites"
@@ -293,7 +293,7 @@ class FavoriteAPIView(APIView):
                 "message": "Couldn\'t find student"
             })
         else:
-            student.favorite_event.remove(event)
+            event.bookmarks.remove(student)
             return Response(status='200', data={
                 "success": True,
                 "message": "You have added this event to your favorites"

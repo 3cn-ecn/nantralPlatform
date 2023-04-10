@@ -48,7 +48,7 @@ class EventUpdateView(UserPassesTestMixin, UpdateView):
 
     template_name = 'event/update.html'
     fields = ['title', 'description', 'location',
-              'date', 'publicity', 'color', 'image']
+              'start_date', 'publicity', 'color', 'image']
     model = Event
     slug_field = 'pk'
 
@@ -111,7 +111,7 @@ class EventCreateView(UserPassesTestMixin, CreateView):
 
     template_name = 'event/create.html'
     fields = ['title', 'description', 'location',
-              'date', 'publicity', 'color', 'image']
+              'start_date', 'publicity', 'color', 'image']
     model = Event
 
     def test_func(self) -> bool:
