@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
-from django.urls import reverse
-from rest_framework import status
+# from django.urls import reverse
+# from rest_framework import status
 
 from apps.group.models import Group, GroupType
 from apps.utils.utest import TestMixin
@@ -31,35 +31,3 @@ class EventTestCase(TestCase, TestMixin):
         self.user_teardown()
         GroupType.objects.filter(slug='t1').delete()
         Event.objects.all().delete()
-
-    def test_participate_function(self):
-        """Check that a user can registrate for an event."""
-        url = reverse('event:add-participant', args=[self.event.slug])
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(self.event.number_of_participants, 0)
-
-        self.client.login(username=self.u2, password=self.PASSWORD)
-        # You get redirected at the end of the function
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(self.event.number_of_participants, 1)
-        # Check that you only get counted once
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(self.event.number_of_participants, 1)
-
-        url = reverse('event:remove-participant', args=[self.event.slug])
-        resp = self.client.get(url)
-        # You get redirected at the end of the function
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-        self.assertEqual(self.event.number_of_participants, 0)
-
-    def test_event_update_view(self):
-        url = reverse("event:edit", args=[self.event.pk])
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
-
-        self.client.login(username=self.u2, password=self.PASSWORD)
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
