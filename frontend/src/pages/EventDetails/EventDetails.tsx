@@ -28,6 +28,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { useQuery } from 'react-query';
 import EditEventModal from '../../components/FormEvent/FormEvent';
 import FavButton from '../../components/Button/FavButton';
 import JoinButton from '../../components/Button/JoinButton';
@@ -36,6 +37,7 @@ import { EventParticipantsModal } from '../../components/Modal/EventParticipants
 import { ImageModal } from '../../components/Modal/ImageModal';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import NotFound from '../NotFound/NotFound';
+import { getEvent } from '../../api/event';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -47,7 +49,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 function EventDetails() {
   const { i18n, t } = useTranslation('translation');
   const { id } = useParams();
-  const [event, setEvent] = useState<EventProps>(undefined);
+  // const [event, setEvent] = useState<EventProps>(undefined);
   const [participating, setParticipating] = useState(false);
   const [openCopyNotif, setOpenCopyNotif] = useState(false);
   const [openImageModal, setOpenImageModal] = useState(false);
@@ -65,29 +67,19 @@ function EventDetails() {
   };
   const matches = useMediaQuery('(min-width:600px)');
   // update each time id changes
-  useEffect(() => {
-    if (event) return;
-    getEvent();
-  }, [id]);
-  const [eventStatus, setEventStatus] = useState<LoadStatus>('loading');
+  const {
+    data: event,
+    status: eventStatus,
+    refetch: refetchEvent,
+  } = useQuery({
+    queryKey: `event-${id}`,
+    queryFn: () => getEvent(Number.parseInt(id, 10)),
+    onError: (err) => console.error(err),
+  });
   const [formEventOpen, setFormEventOpen] = React.useState<boolean>(false);
 
   const [infoTab, setInfoTab] = React.useState<number>(0);
 
-  async function getEvent() {
-    await axios
-      .get(`/api/event/${id}/`)
-      .then((response) => {
-        eventsToCamelCase([response.data]);
-        setEvent(response.data);
-        setParticipating(response.data.isParticipating);
-        setEventStatus('success');
-      })
-      .catch((error) => {
-        console.error(error);
-        setEventStatus('error');
-      });
-  }
   if (eventStatus === 'error') {
     return <NotFound />;
   }
@@ -466,13 +458,7 @@ function EventDetails() {
         open={formEventOpen}
         event={event}
         mode="edit"
-        onUpdate={(newEvent: EventProps) => {
-          const tmp = event;
-          Object.entries(newEvent).forEach(([key, value]) => {
-            tmp[key] = value;
-          });
-          setEvent(tmp);
-        }}
+        onUpdate={() => refetchEvent()}
         // eslint-disable-next-line no-restricted-globals
         onDelete={() => history.back()}
       />

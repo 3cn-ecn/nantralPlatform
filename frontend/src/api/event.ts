@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { EventProps, eventsToCamelCase } from '../Props/Event';
+import {
+  EventProps,
+  eventToCamelCase,
+  eventsToCamelCase,
+} from '../Props/Event';
 
 export async function getEvents(options?: {
   orderBy?: string[] | string;
@@ -19,4 +23,10 @@ export async function getEvents(options?: {
   });
   eventsToCamelCase(data.results);
   return data.results;
+}
+
+export async function getEvent(id: number): Promise<EventProps> {
+  const { data } = await axios.get(`/api/event/${id}/`);
+  eventToCamelCase(data);
+  return data;
 }
