@@ -12,14 +12,14 @@ import {
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
-import { ReactComponent as EventIcon } from '../../assets/scalable/event.svg';
-import { ReactComponent as ClubIcon } from '../../assets/scalable/club.svg';
-import { ReactComponent as MapIcon } from '../../assets/scalable/roommates.svg';
-import { ReactComponent as FamilyIcon } from '../../assets/scalable/family.svg';
-import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
-import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
-import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
-import { ReactComponent as HomeIcon } from '../../assets/scalable/accueil.svg';
+import { ReactComponent as EventIcon } from '../../assets/icons/event.svg';
+import { ReactComponent as ClubIcon } from '../../assets/icons/club.svg';
+import { ReactComponent as MapIcon } from '../../assets/icons/roommates.svg';
+import { ReactComponent as FamilyIcon } from '../../assets/icons/family.svg';
+import { ReactComponent as ListIcon } from '../../assets/icons/list.svg';
+import { ReactComponent as SignIcon } from '../../assets/icons/sign.svg';
+import { ReactComponent as LinkIcon } from '../../assets/icons/link.svg';
+import { ReactComponent as HomeIcon } from '../../assets/icons/accueil.svg';
 
 /** Interface for all links */
 interface LinksInterface {
