@@ -12,7 +12,6 @@ import {
   MenuItem,
   ListItem,
   ListItemText,
-  Link as LinkMui,
   useMediaQuery,
   Icon,
   Button,
@@ -180,6 +179,7 @@ function NavBarTop(props: {
           size="large"
           edge="start"
           aria-label="menu"
+          component="span"
         >
           <Icon sx={{ lineHeight: 'initial' }}>
             <img
@@ -247,8 +247,7 @@ function NavBarTop(props: {
             );
           })}
         </Breadcrumbs>
-        <Box sx={{ flexGrow: 0.9 }} />
-        <Box sx={{ flexGrow: 1.0 }} />
+        <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: 'flex' }}>
           <NotificationMenu />
           <IconButton

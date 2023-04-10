@@ -138,6 +138,7 @@ export function NotificationMenu() {
         aria-label="show 17 new notifications"
         color="inherit"
         onClick={handleClick}
+        component="span"
       >
         <Badge badgeContent={nbNotifs} color="error">
           <Icon sx={{ lineHeight: 'initial' }}>
