@@ -64,10 +64,6 @@ function Profile() {
 
   const [openS, setOpenS] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpenS(true);
-  };
-
   const handleCloseS = () => {
     setOpenS(false);
   };

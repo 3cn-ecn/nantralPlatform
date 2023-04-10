@@ -16,7 +16,6 @@ import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
 import axios from 'axios';
 import { ReactComponent as NotifIcon } from '../../assets/icons/scalable/notification.svg';
-import { ReactComponent as HomeIcon } from '../../assets/icons/scalable/accueil.svg';
 import { NotificationItem } from './NotificationItem';
 import merge from '../../legacy/notification/utils';
 import './NotificationItem.scss';

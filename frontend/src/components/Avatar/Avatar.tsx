@@ -37,10 +37,8 @@ function Avatar(props: {
   url?: string;
   icon?: JSX.Element;
   size?: 'small' | 'medium' | 'large' | 'extra_large';
-  width?: number;
-  height?: number;
 }) {
-  const { title, url, icon, size, width, height } = props;
+  const { title, url, icon, size } = props;
   const words = title.split(' ');
   const initials =
     words.length > 1
