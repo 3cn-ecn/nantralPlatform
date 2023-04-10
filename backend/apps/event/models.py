@@ -43,12 +43,12 @@ class Event(AbstractPost):
         blank=True,
         null=True
     )
-    begin_inscription = models.DateTimeField(
+    begin_registration = models.DateTimeField(
         verbose_name='Date de début de l\'inscription',
         blank=True,
         null=True
     )
-    end_inscription = models.DateTimeField(
+    end_registration = models.DateTimeField(
         verbose_name='Date de fin de l\'inscription',
         blank=True,
         null=True
@@ -73,6 +73,9 @@ class Event(AbstractPost):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self) -> str:
+        return f'/event/{str(self.id)}'
+
     def save(self, *args, **kwargs):
         # create the slug
         self.set_slug(
@@ -83,12 +86,10 @@ class Event(AbstractPost):
         # set end date to 1 hour after begin date if not set
         if (self.end_date is None):
             self.end_date = self.date + timedelta(hours=1)
+        # save again the event
+        super(Event, self).save(*args, **kwargs)
         # save the notification
         self.create_notification(
             title=self.group.name,
-            body=f'Nouvel event : {self.title}')
-        # save again the event
-        super(Event, self).save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return '/event/' + str(self.pk)
+            body=f'Nouvel event : {self.title}',
+            url=self.get_absolute_url())

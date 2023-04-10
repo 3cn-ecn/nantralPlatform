@@ -1,17 +1,19 @@
 import {
   Box,
   Button,
+  Chip,
   CircularProgress,
   Container,
   Grid,
   Menu,
   MenuItem,
+  Tab,
+  Tabs,
   Typography,
   useMediaQuery,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { ClubProps } from 'Props/Group';
 import axios from 'axios';
 import { LoadStatus } from 'Props/GenericTypes';
 import './EventDetails.scss';
@@ -26,12 +28,14 @@ import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import EditEventModal from '../../components/FormEvent/FormEvent';
 import FavButton from '../../components/Button/FavButton';
 import JoinButton from '../../components/Button/JoinButton';
 import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
 import { EventParticipantsModal } from '../../components/Modal/EventParticipantsModal';
 import { ImageModal } from '../../components/Modal/ImageModal';
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
+import NotFound from '../NotFound/NotFound';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -51,12 +55,8 @@ function EventDetails() {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
-  const [groupData, setGroup] = useState<ClubProps>({
-    name: '',
-    icon: '',
-    url: '',
-    is_admin: false,
-  });
+
+  const today = new Date();
   const handleClickMenu = (mouseEvent: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(mouseEvent.currentTarget);
   };
@@ -64,18 +64,19 @@ function EventDetails() {
     setAnchorEl(null);
   };
   const matches = useMediaQuery('(min-width:600px)');
-
+  // update each time id changes
   useEffect(() => {
+    if (event) return;
     getEvent();
-  }, []);
-  useEffect(() => {
-    getGroup();
-  }, [event]);
-  const [eventStatus, setEventStatus] = useState<LoadStatus>('load');
+  }, [id]);
+  const [eventStatus, setEventStatus] = useState<LoadStatus>('loading');
+  const [formEventOpen, setFormEventOpen] = React.useState<boolean>(false);
+
+  const [infoTab, setInfoTab] = React.useState<number>(0);
 
   async function getEvent() {
     await axios
-      .get(`/api/event/${id}`)
+      .get(`/api/event/${id}/`)
       .then((response) => {
         eventsToCamelCase([response.data]);
         setEvent(response.data);
@@ -83,24 +84,15 @@ function EventDetails() {
         setEventStatus('success');
       })
       .catch((error) => {
-        setEventStatus('fail');
+        console.error(error);
+        setEventStatus('error');
       });
   }
-
-  async function getGroup() {
-    if (event !== undefined) {
-      await axios
-        .get(`/api/group/group/${event.groupSlug}/`)
-        .then((response) => {
-          setGroup(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+  if (eventStatus === 'error') {
+    return <NotFound />;
   }
 
-  if (eventStatus === 'load') {
+  if (eventStatus === 'loading') {
     return (
       <div style={{ display: 'flex', height: '100%' }}>
         <Container className="loading" sx={{ display: 'flex' }}>
@@ -139,68 +131,134 @@ function EventDetails() {
     timeStyle: 'short',
   });
 
-  const endSameDay = endDateText === beginDateText ? ` - ${endHourText}` : null;
+  const registrationStarted =
+    !event.beginRegistration ||
+    event.beginRegistration.getTime() < today.getTime();
 
+  const registrationEnded =
+    event.endRegistration && event.endRegistration.getTime() < today.getTime();
+
+  const endSameDay = endDateText === beginDateText ? ` - ${endHourText}` : '';
+
+  const beginSection = (
+    <div
+      style={{
+        display: 'flex',
+        marginTop: '1rem',
+        flexDirection: matches ? 'row' : 'column',
+        rowGap: '1rem',
+        columnGap: '1rem',
+        flexGrow: 1,
+      }}
+    >
+      <Chip
+        icon={<CalendarTodayIcon />}
+        sx={{
+          height: 'auto',
+          padding: 1,
+          '& .MuiChip-label': {
+            display: 'block',
+            whiteSpace: 'normal',
+          },
+        }}
+        label={beginDateText}
+      />
+      <Chip
+        icon={<AccessTimeIcon />}
+        sx={{
+          height: 'auto',
+          padding: 1,
+          '& .MuiChip-label': {
+            display: 'block',
+            whiteSpace: 'normal',
+          },
+        }}
+        label={`${beginHourText} ${endSameDay}`}
+      />
+    </div>
+  );
   const endSection =
     endDateText !== beginDateText ? (
-      <>
-        <Typography
-          className="adaptativeText"
-          variant="h5"
-          sx={{ marginTop: '1rem', marginBottom: '0.5rem' }}
-        >
-          {t('event.endTime')}
-        </Typography>
-        <div
-          style={{
-            display: 'flex',
-            marginTop: '1rem',
-            flexDirection: matches ? 'row' : 'column',
+      <div
+        style={{
+          display: 'flex',
+          marginTop: '1rem',
+          flexDirection: matches ? 'row' : 'column',
+          gap: '1rem',
+        }}
+      >
+        <Chip
+          icon={<CalendarTodayIcon />}
+          sx={{
+            height: 'auto',
+            padding: 1,
+            '& .MuiChip-label': {
+              display: 'block',
+              whiteSpace: 'normal',
+            },
           }}
-        >
-          <div className="infoElement">
-            <CalendarTodayIcon
-              sx={{ fontSize: '1.5rem', marginRight: '1rem' }}
-            />
-            <Typography className="adaptativeText" variant="h5">
-              {endDateText}
-            </Typography>
-          </div>
-          <div className="infoElement">
-            <AccessTimeIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
-            <Typography className="adaptativeText" variant="h5">
-              {endHourText}
-            </Typography>
-          </div>
-        </div>
-      </>
+          label={endDateText}
+        />
+        <Chip
+          icon={<AccessTimeIcon />}
+          sx={{
+            height: 'auto',
+            padding: 1,
+            '& .MuiChip-label': {
+              display: 'block',
+              whiteSpace: 'normal',
+            },
+          }}
+          label={endHourText}
+        />
+      </div>
     ) : null;
 
-  let endInscriptionSection = null;
+  let endRegistrationSection = null;
 
-  if (event.endInscription !== null) {
-    const endInscriptionValue = new Date(event.endInscription);
-    const endInscriptioneText = endInscriptionValue.toLocaleDateString(
+  if (event.endRegistration !== null) {
+    const endRegistrationValue = new Date(event.endRegistration);
+    const endRegistrationText = endRegistrationValue.toLocaleDateString(
       i18n.language,
       dateFormat
     );
-    const endInscriptionText = endInscriptionValue.toLocaleTimeString(
+    const endRegistrationText2 = endRegistrationValue.toLocaleTimeString(
       i18n.language,
       {
         timeStyle: 'short',
       }
     );
 
-    endInscriptionSection =
-      event.endInscription !== null ? (
+    endRegistrationSection =
+      !registrationEnded && registrationStarted ? (
         <Alert variant="outlined" severity="info" sx={{ marginTop: '1rem' }}>
-          {t('event.endInscription')} {endInscriptioneText} -{' '}
-          {endInscriptionText}
+          {t('event.endInscription')} {endRegistrationText} -{' '}
+          {endRegistrationText2}
         </Alert>
       ) : null;
   }
 
-  const adminSection = groupData.is_admin ? (
+  const beginInsciptionAlert = !registrationStarted && (
+    <Alert variant="outlined" severity="info" sx={{ marginTop: '1rem' }}>
+      {`${t(
+        'event.inscriptionsBeginAt'
+      )} ${event.beginRegistration.toLocaleDateString(
+        i18n.language,
+        dateFormat
+      )} - ${event.beginRegistration.toLocaleTimeString(i18n.language, {
+        timeStyle: 'short',
+      })}`}
+    </Alert>
+  );
+
+  const fullEventAlert = event.maxParticipant &&
+    event.numberOfParticipants >= event.maxParticipant && (
+      <Alert variant="outlined" severity="warning" sx={{ marginTop: '1rem' }}>
+        {t('event.eventIsFull')}
+      </Alert>
+    );
+
+  const adminSection = event.isAdmin ? (
     <>
       <Button
         aria-haspopup="true"
@@ -229,7 +287,7 @@ function EventDetails() {
       >
         <MenuItem
           onClick={() => {
-            window.open(`/event/${event.id}/edit`, '_blank', 'noreferrer');
+            setFormEventOpen(true);
             handleCloseMenu();
           }}
         >
@@ -252,9 +310,38 @@ function EventDetails() {
   const banner =
     event.image === null ? '/static/img/default-banner.png' : event.image;
 
+  const infoSection = (
+    <Box sx={{ width: '100%', marginTop: 1 }}>
+      <Chip
+        icon={<PlaceIcon />}
+        sx={{
+          height: 'auto',
+          padding: 1,
+          '& .MuiChip-label': {
+            display: 'block',
+            whiteSpace: 'normal',
+          },
+        }}
+        label={event.location}
+      />
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs
+          value={infoTab}
+          onChange={(_, newValue: number) => setInfoTab(newValue)}
+          aria-label="basic tabs example"
+        >
+          <Tab label={endSection ? 'Begin' : 'Hours'} />
+          {endSection && <Tab label="End" />}
+          <Tab label="Registration" />
+        </Tabs>
+      </Box>
+      {infoTab === 0 && beginSection}
+      {infoTab === 1 && endSection}
+    </Box>
+  );
   return (
     <>
-      <Container>
+      <Container disableGutters>
         <Box
           component="img"
           className="banner"
@@ -264,6 +351,8 @@ function EventDetails() {
             setOpenImageModal(true);
           }}
         />
+      </Container>
+      <Container>
         <Typography
           className="adaptativeText"
           variant="h3"
@@ -284,10 +373,11 @@ function EventDetails() {
               participating={participating}
               eventId={event.id}
               link={event.formUrl}
-              beginInscription={event.beginInscription}
-              endInscription={event.endInscription}
+              beginRegistration={event.beginRegistration}
+              endRegistration={event.endRegistration}
               setParticipating={setParticipating}
               sx={{ width: '100%' }}
+              hideInfoButton
             />
           </Grid>
           <Grid
@@ -321,50 +411,16 @@ function EventDetails() {
           </Grid>
         </Grid>
         <ClubAvatar
-          clubUrl={groupData.url}
-          logoUrl={groupData.icon}
-          name={groupData.name}
+          clubUrl={event.group.url}
+          logoUrl={event.group.icon}
+          name={event.group.name}
           textPosition="right"
-          size="3.75rem"
+          size="3rem"
         />
-        {endInscriptionSection}
-        <div
-          style={{
-            display: 'flex',
-            marginTop: '1rem',
-            flexDirection: matches ? 'row' : 'column',
-          }}
-        >
-          <div className="infoElement">
-            <CalendarTodayIcon
-              sx={{ fontSize: '1.5rem', marginRight: '1rem' }}
-            />
-            <Typography className="adaptativeText" variant="h5">
-              {beginDateText}
-            </Typography>
-          </div>
-          <div className="infoElement">
-            <AccessTimeIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
-            <Typography className="adaptativeText" variant="h5">
-              {beginHourText} {endSameDay}
-            </Typography>
-          </div>
-          <div className="infoElement" style={{ minWidth: 0 }}>
-            <PlaceIcon sx={{ fontSize: '1.5rem', marginRight: '1rem' }} />
-            <Typography
-              className="adaptativeText"
-              variant="h5"
-              sx={{ minWidth: 0 }}
-            >
-              {event.location}
-            </Typography>
-          </div>
-        </div>
-        {endSection}
-
-        <Grid container spacing={1}>
-          <Grid item xs={12} sm={3}></Grid>
-        </Grid>
+        {fullEventAlert}
+        {beginInsciptionAlert}
+        {endRegistrationSection}
+        {infoSection}
 
         <Typography variant="caption" sx={{ textAlign: 'justify' }}>
           <div
@@ -373,6 +429,7 @@ function EventDetails() {
               marginBottom: '10rem',
               fontSize: '1rem',
             }}
+            // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
               __html: event.description,
             }}
@@ -403,6 +460,21 @@ function EventDetails() {
           setOpenImageModal(false);
         }}
         url={banner}
+      />
+      <EditEventModal
+        closeModal={() => setFormEventOpen(false)}
+        open={formEventOpen}
+        event={event}
+        mode="edit"
+        onUpdate={(newEvent: EventProps) => {
+          const tmp = event;
+          Object.entries(newEvent).forEach(([key, value]) => {
+            tmp[key] = value;
+          });
+          setEvent(tmp);
+        }}
+        // eslint-disable-next-line no-restricted-globals
+        onDelete={() => history.back()}
       />
     </>
   );

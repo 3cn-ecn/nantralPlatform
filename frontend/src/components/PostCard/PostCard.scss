@@ -9,10 +9,7 @@
   position: absolute;
   top : 0;
   right : 0;
-  display: flex;
-  column-gap: 0.6em;
   margin: 0.5em 0.5em;
-
 }
 
 
@@ -65,4 +62,5 @@
   position: relative;
   align-self: center;
   max-height: 500px;
+  border-radius: 10px;
 }

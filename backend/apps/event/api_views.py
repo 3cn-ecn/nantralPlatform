@@ -1,15 +1,19 @@
 from django.db.models import Q, Count
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import (
+    pagination,
+    permissions,
+    viewsets)
 
 from apps.post.models import VISIBILITY
 from .models import Event
 from apps.student.models import Student
 from apps.group.models import Group
-from .serializers import (EventSerializer, EventParticipatingSerializer)
+from .serializers import (
+    EventSerializer, EventParticipatingSerializer, WriteEventSerializer)
 from apps.student.serializers import StudentSerializer, SimpleStudentSerializer
 
 
@@ -27,13 +31,17 @@ ORDERS: list[str] = ['participants_count',
                      'publicity',
                      'date',
                      'end_date',
-                     'begin_inscription',
-                     'end_inscription',
+                     'begin_registration',
+                     'end_registration',
                      'slug',
                      'group_name',
                      'max_participant',
                      'location',
                      'title']
+
+DATE_FIELDS: list[str] = ['end_date', 'date',
+                          'begin_registration', 'end_registration']
+
 
 TRUE_ARGUMENTS: list[str] = ['true', 'True', '1']
 
@@ -43,16 +51,18 @@ class EventViewSet(viewsets.ModelViewSet):
 
     Query Parameters
     ----------------
+    - limit : int = 50 ->
+    maximum number of results
     - order_by : list[str] = date ->
     list of attributes to order the result in the form "order=a,b,c".
     In ascending order by defaut. Add "-" in front of row name without
     spaces to sort by descending order
     - group : list[str] = None ->
     the slug list of organizers of the form "organizer=a,b,c"
-    - from_date : 'yyyy-MM-dd' = None ->
-    filter event whose date is greater or equal to from_date
-    - to_date : 'yyyy-MM-dd' = None ->
-    filter event whose date is less or equal to to_date
+    - from_date : ISO or UTC datestring = None ->
+    filter event whose begin date is greater or equal to from_date
+    - to_date : ISO or UTC datestring = None ->
+    filter event whose begin date is less or equal to to_date
     - min_participants : int = None ->
     lower bound for participants count
     - max_participants : int = None ->
@@ -69,6 +79,8 @@ class EventViewSet(viewsets.ModelViewSet):
     filter events current user is participating
     - publicity : 'Mem' | 'Pub' = None ->
     visibility of the event
+    - registration : 'open' | 'closed' = None ->
+    whether registration is open
 
     Actions
     -------
@@ -80,10 +92,19 @@ class EventViewSet(viewsets.ModelViewSet):
     """
     permission_classes = [permissions.IsAuthenticated, EventPermission]
     serializer_class = EventSerializer
+    pagination_class = pagination.LimitOffsetPagination
+
+    def get_serializer_class(self):
+        if self.request.method in ['PUT', 'POST']:
+            return WriteEventSerializer
+        else:
+            return EventSerializer
 
     def get_queryset(self) -> list[Event]:
         if not hasattr(self.request.user, 'student'):
             return []
+        # constant
+        today = timezone.now()
         # query params
         order_by: list[str] = self.request.query_params.get(
             'order_by', 'date').split(',')
@@ -93,6 +114,8 @@ class EventViewSet(viewsets.ModelViewSet):
             'is_member') in TRUE_ARGUMENTS
         is_shotgun: bool = self.request.query_params.get(
             'is_shotgun') in TRUE_ARGUMENTS
+        registration: str = self.request.query_params.get(
+            'registration')
         is_form: bool = self.request.query_params.get(
             'is_form') in TRUE_ARGUMENTS
         is_favorite: bool = self.request.query_params.get(
@@ -103,10 +126,6 @@ class EventViewSet(viewsets.ModelViewSet):
             'from_date')
         to_date: str = self.request.query_params.get(
             'to_date')
-        from_begin_inscription: str = self.request.query_params.get(
-            'from_begin_inscription')
-        to_begin_inscription: str = self.request.query_params.get(
-            'to_begin_inscription')
         min_participants: int = self.request.query_params.get(
             'min_participants')
         max_participants: int = self.request.query_params.get(
@@ -131,17 +150,24 @@ class EventViewSet(viewsets.ModelViewSet):
             .filter(Q(group__slug__in=organizers_slug)
                     if len(organizers_slug) > 0 else Q())
             .filter(~Q(form_url__isnull=True) if is_form else Q())
-            .filter(Q(date__gte=from_date) if from_date else Q())
+            .filter(Q(end_date__gte=from_date)
+                    if from_date else Q())
             .filter(Q(date__lte=to_date) if to_date else Q())
-            .filter(Q(begin_inscription__gte=from_begin_inscription)
-                    if from_begin_inscription else Q())
-            .filter(Q(begin_inscription_date__lte=to_begin_inscription)
-                    if to_begin_inscription else Q())
             .annotate(participants_count=Count('participants'))
             .filter(Q(participants_count__gte=min_participants)
                     if min_participants else Q())
             .filter(Q(participants_count__lte=max_participants)
                     if max_participants else Q())
+            .annotate(registration_open=(
+                (Q(begin_registration__lte=today)
+                 | Q(begin_registration__isnull=True))
+                & (Q(end_registration__gte=today)
+                   | Q(end_registration__isnull=True))
+            ))
+            .filter(Q(registration_open=True)
+                    if registration == "open" else Q())
+            .filter(Q(registration_open=False)
+                    if registration == "closed" else Q())
             .filter(Q(publicity=visibility) if visibility in
                     [VISIBILITY[i][0] for i in range(len(VISIBILITY))] else Q())
             .filter(Q(publicity=VISIBILITY[0][0]) | Q(member=True))
@@ -194,22 +220,23 @@ class ParticipateAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         event = get_object_or_404(Event, id=self.kwargs['event_id'])
-        inscription_finished: bool = event.end_inscription is not None and\
-            timezone.now() > event.end_inscription
-        inscription_not_started: bool = event.begin_inscription is not None and\
-            timezone.now() < event.begin_inscription
+        registration_finished: bool = (
+            event.end_registration is not None
+            and timezone.now() > event.end_registration)
+        registration_not_started: bool = (
+            event.begin_registration is not None
+            and timezone.now() < event.begin_registration)
         shotgun: bool = event.max_participant is not None
-        print(inscription_finished)
-        if inscription_not_started:
+        if registration_not_started:
             return Response(
                 status='401',
                 data={"success": False,
-                      "message": "Inscription not started"})
-        elif inscription_finished:
+                      "message": "Registration not started"})
+        elif registration_finished:
             return Response(
                 status='401',
                 data={"success": False,
-                      "message": "Inscription finished"})
+                      "message": "Registration finished"})
         elif shotgun and event.max_participant <= event.number_of_participants:
             return Response(
                 status='401',

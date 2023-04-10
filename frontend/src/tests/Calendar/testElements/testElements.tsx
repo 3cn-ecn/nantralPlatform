@@ -11,8 +11,6 @@ export function createTestEvent(
   position = 0,
   placed = false,
   getAbsoluteUrl = 'https://nantral-platform.fr/account/login/?next=/',
-  groupName = 'Moi-même',
-  groupSlug = 'Mon groupe',
   image = null,
   color = 'blue',
   isMember = true,
@@ -21,11 +19,18 @@ export function createTestEvent(
   numberOfParticipants = 15,
   publicity: 'Pub' = 'Pub',
   maxParticipant = null,
-  endInscription = null,
-  beginInscription = null,
+  endRegistration = null,
+  beginRegistration = null,
   formUrl = null,
   isFavorite = true,
-  group = 1
+  group = {
+    id: 1,
+    name: 'group1',
+    short_name: 'g1',
+    slug: 'g1',
+    icon: null,
+    url: '/group/g1',
+  }
 ) {
   const event: EventProps = {
     color: color,
@@ -33,8 +38,6 @@ export function createTestEvent(
     endDate: endDate,
     description: description,
     getAbsoluteUrl: getAbsoluteUrl,
-    groupName: groupName,
-    groupSlug: groupSlug,
     group: group,
     image: image,
     isMember: isMember,
@@ -45,14 +48,15 @@ export function createTestEvent(
     slug: slug,
     title: title,
     maxParticipant: maxParticipant,
-    endInscription: endInscription,
-    beginInscription: beginInscription,
+    endRegistration: endRegistration,
+    beginRegistration: beginRegistration,
     formUrl: formUrl,
     isFavorite: isFavorite,
     effectiveSize: effectiveSize,
     globalSize: globalSize,
     position: position,
     placed: placed,
+    isAdmin: false,
   };
 
   return event;

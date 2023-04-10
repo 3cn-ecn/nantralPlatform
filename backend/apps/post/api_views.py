@@ -2,7 +2,7 @@ from django.db.models import Q
 from rest_framework import permissions
 from rest_framework import viewsets
 from .models import Post
-from .serializers import PostSerializer
+from .serializers import PostSerializer, WritePostSerializer
 from apps.group.api_views import Group
 from apps.student.api_views import Student
 from apps.post.models import VISIBILITY
@@ -48,6 +48,12 @@ class PostViewSet(viewsets.ModelViewSet):
     """
     permission_classes = [permissions.IsAuthenticated, PostAdminPermission]
     serializer_class = PostSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in ["POST", "PUT"]:
+            return WritePostSerializer
+        else:
+            return PostSerializer
 
     def get_queryset(self) -> list[Post]:
         if not hasattr(self.request.user, 'student'):

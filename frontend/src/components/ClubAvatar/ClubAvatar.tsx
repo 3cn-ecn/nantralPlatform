@@ -29,9 +29,11 @@ export function ClubAvatar(props: {
         flexDirection: textPosition === 'bottom' ? 'column' : 'row',
         display: 'flex',
         maxWidth: 'max-content',
+        textAlign: textPosition === 'bottom' ? 'center' : 'left',
       }}
     >
       <IconButton href={clubUrl} sx={{ padding: 0, margin: 1 }}>
+        {/* <Link to={clubUrl} style={{ textDecorationLine: 'none' }}> */}
         <Avatar
           alt=""
           src={logoUrl}
@@ -44,6 +46,7 @@ export function ClubAvatar(props: {
         >
           {!logoUrl && initials}
         </Avatar>
+        {/* </Link> */}
       </IconButton>
       {nameArea}
     </div>

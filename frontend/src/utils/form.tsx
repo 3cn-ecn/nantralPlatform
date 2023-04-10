@@ -14,9 +14,11 @@ import {
   MenuItem,
   InputLabel,
   AutocompleteInputChangeReason,
-  Input,
   Button,
   FormLabel,
+  InputAdornment,
+  IconButton,
+  Input,
 } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -26,6 +28,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import 'dayjs/locale/fr';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import { FieldType } from 'Props/GenericTypes';
+import { Delete } from '@mui/icons-material';
+import Avatar from '../components/Avatar/Avatar';
 
 export type FieldType =
   | {
@@ -191,23 +196,28 @@ function FormGroup(props: {
           case 'number':
             return (
               <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
-                <FormControl fullWidth>
-                  <InputLabel id={`${field.name}-number`}>
-                    {field.label}
-                  </InputLabel>
-                  <Input
+                <FormControl fullWidth variant="outlined">
+                  <TextField
                     key={field.name}
                     id={`${field.name}-number`}
                     name={field.name}
-                    value={values[field.name]}
-                    onChange={(e) => handleChange(field.name, e.target.value)}
+                    label={field.label}
+                    value={values[field.name] ?? ''}
+                    onChange={(e) =>
+                      handleChange(
+                        field.name,
+                        Number.parseInt(e.target.value, 10) || ''
+                      )
+                    }
+                    error={!!error}
+                    helperText={error}
                     required={field.required}
                     margin="dense"
                     type="number"
                     disabled={field.disabled}
                     defaultValue={field.default}
-                    slotProps={{
-                      input: {
+                    InputProps={{
+                      inputProps: {
                         min: field.min,
                         max: field.max,
                         step: field.step,
@@ -237,6 +247,27 @@ function FormGroup(props: {
                 </FormControl>
               </Box>
             );
+          case 'link':
+            return (
+              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
+                <FormControl fullWidth variant="outlined">
+                  <TextField
+                    key={field.name}
+                    id={`${field.name}-number`}
+                    name={field.name}
+                    label={field.label}
+                    value={values[field.name] || ''}
+                    onChange={(e) => handleChange(field.name, e.target.value)}
+                    required={field.required}
+                    margin="dense"
+                    type="url"
+                    disabled={field.disabled}
+                    error={!!error}
+                    helperText={error || field.helpText}
+                  />
+                </FormControl>
+              </Box>
+            );
           case 'comment':
             return (
               <Typography
@@ -245,6 +276,7 @@ function FormGroup(props: {
                   marginTop: 3,
                   marginBottom: 3,
                 }}
+                key={field.name}
               >
                 {field.text}
               </Typography>
@@ -267,6 +299,7 @@ function FormGroup(props: {
                     required={field.required}
                     margin="dense"
                     disabled={field.disabled}
+                    error={!!error}
                   >
                     {field.item.map((name) => (
                       <MenuItem key={name.toString()} value={name[1]}>
@@ -274,6 +307,9 @@ function FormGroup(props: {
                       </MenuItem>
                     ))}
                   </Select>
+                  <FormHelperText error={!!error}>
+                    {error || field.helpText}
+                  </FormHelperText>
                 </FormControl>
               </Box>
             );
@@ -312,56 +348,59 @@ function FormGroup(props: {
                 }}
                 key={field.name}
               >
-                {imageName ? (
-                  <TextField
-                    variant="outlined"
-                    disabled
-                    fullWidth
-                    spellCheck={false}
-                    contentEditable={false}
-                    label={field.label}
-                    required={field.required}
-                    value={imageName}
-                    error={!!error}
-                    sx={{ marginBottom: 1 }}
-                  />
-                ) : (
-                  <FormLabel error={!!error}>{field.label}</FormLabel>
-                )}
-                <div>
-                  <Button
-                    disabled={field.disabled}
-                    variant="contained"
-                    component="label"
-                    sx={{ height: '100%', marginRight: 1 }}
-                  >
-                    {t('form.chooseFile')}
-                    <input
-                      disabled={field.disabled}
-                      hidden
-                      accept="image/*"
-                      multiple
-                      value={undefined}
-                      type="file"
-                      onChange={(event) => {
-                        if (event.target.files.length > 0)
-                          handleChange(field.name, event.target.files[0]);
-                      }}
-                    />
-                  </Button>
-                  {imageName && (
-                    <Button
-                      disabled={field.disabled}
-                      variant="outlined"
-                      onClick={() => handleChange(field.name, new File([], ''))}
-                    >
-                      {t('form.delete')}
-                    </Button>
-                  )}
-                </div>
-                <FormHelperText error={!!error}>
-                  {error || field.description}
-                </FormHelperText>
+                <TextField
+                  variant="outlined"
+                  disabled
+                  fullWidth
+                  spellCheck={false}
+                  contentEditable={false}
+                  helperText={error || field.description}
+                  label={field.label}
+                  required={field.required}
+                  value={imageName || t('form.noFile')}
+                  InputProps={{
+                    endAdornment: imageName && (
+                      <InputAdornment position="start">
+                        <IconButton
+                          size="small"
+                          sx={{ padding: 0 }}
+                          onClick={() =>
+                            handleChange(field.name, new File([], ''))
+                          }
+                        >
+                          <Delete />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Button
+                          disabled={field.disabled}
+                          variant="contained"
+                          component="label"
+                          size="small"
+                          sx={{ marginRight: 1 }}
+                        >
+                          {t('form.chooseFile')}
+                          <input
+                            disabled={field.disabled}
+                            hidden
+                            accept="image/*"
+                            multiple
+                            value={undefined}
+                            type="file"
+                            onChange={(event) => {
+                              if (event.target.files.length > 0)
+                                handleChange(field.name, event.target.files[0]);
+                            }}
+                          />
+                        </Button>
+                      </InputAdornment>
+                    ),
+                  }}
+                  error={!!error}
+                  sx={{ marginBottom: 1 }}
+                />
               </Box>
             );
           case 'date': // date as string
@@ -412,6 +451,7 @@ function FormGroup(props: {
                 required={field.required}
                 error={!!error}
                 margin="normal"
+                disabled={field.disabled}
               >
                 <FormControlLabel
                   label={
@@ -471,6 +511,16 @@ function FormGroup(props: {
                 noFullWidth={noFullWidth}
               />
             );
+          case 'image-autocomplete':
+            return (
+              <ImageAutocompleteField
+                controlValue={values[field.name]}
+                error={error}
+                field={field}
+                handleChange={handleChange}
+                key={field.name}
+              />
+            );
           case 'datetime':
             return (
               <LocalizationProvider
@@ -512,6 +562,84 @@ function FormGroup(props: {
   );
 }
 
+function ImageAutocompleteField(props: {
+  field;
+  handleChange;
+  error;
+  controlValue;
+}) {
+  const { field, handleChange, error, controlValue } = props;
+  const [value, setValue] = React.useState(controlValue);
+  React.useEffect(() => {
+    const selectedObject = field.options?.find(
+      (item) => (item[field.pk] || item.id) === controlValue
+    );
+    if (selectedObject) setValue(selectedObject);
+  }, [controlValue]);
+
+  return (
+    <Autocomplete
+      key={field.name}
+      value={value || null}
+      options={field.options}
+      fullWidth
+      freeSolo={field.freeSolo}
+      disabled={field.disabled}
+      isOptionEqualToValue={(option: any, val: any) =>
+        option[field.pk || 'id'] === val[field.pk || 'id']
+      }
+      onChange={(e, val) => {
+        setValue(val);
+        handleChange(field.name, val ? val[field.pk || 'id'] : null);
+      }}
+      getOptionLabel={(option) => {
+        return option && field.getOptionLabel(option);
+      }}
+      renderOption={(properties, option) => (
+        <Box
+          component="li"
+          sx={{ display: 'flex', columnGap: 1 }}
+          {...properties}
+        >
+          {field.getIcon && field.getOptionLabel(option) && (
+            <Avatar
+              title={field.getOptionLabel(option)}
+              size="small"
+              url={field.getIcon(option)}
+            />
+          )}
+          {field.getOptionLabel(option)}
+        </Box>
+      )}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          id={`${field.name}-input`}
+          name={field.name}
+          fullWidth
+          required={field.required}
+          helperText={error || field.helpText}
+          error={!!error}
+          margin="normal"
+          disabled={field.disabled}
+          label={field.label}
+          InputProps={{
+            ...params.InputProps,
+            startAdornment: field.getIcon && value && (
+              <InputAdornment position="start">
+                <Avatar
+                  title={field.getOptionLabel(value)}
+                  size="small"
+                  url={field.getIcon(value)}
+                />
+              </InputAdornment>
+            ),
+          }}
+        />
+      )}
+    />
+  );
+}
 /**
  * A field for searching on the API with autocomplete
  *
@@ -548,9 +676,11 @@ function AutocompleteField<T>(props: {
     newValue: string,
     reason: AutocompleteInputChangeReason
   ): void => {
-    if (reason !== 'input' || newValue.length < 3) return;
+    if (reason !== 'input' || newValue.length < field.minLetterCount) return;
     axios
-      .get<any[]>(`${field.endPoint}/search/`, { params: { q: newValue } })
+      .get<any[]>(`${field.endPoint}/search/`, {
+        params: { q: newValue, ...field.queryParams },
+      })
       .then((res) => setOptions(res.data))
       .catch((err) => {
         console.error(err);

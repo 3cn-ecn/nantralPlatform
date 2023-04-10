@@ -57,9 +57,10 @@ function Avatar(props: {
     <MUIAvatar
       src={url}
       alt={title}
-      children={icon ? icon : initials.toUpperCase()}
       sx={{ ...sx, bgcolor: stringToColor(title) }}
-    />
+    >
+      {icon || initials.toUpperCase()}
+    </MUIAvatar>
   );
 }
 
