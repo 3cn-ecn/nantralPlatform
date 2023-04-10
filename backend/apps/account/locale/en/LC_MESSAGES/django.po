@@ -3,211 +3,199 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-15 00:16+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2023-04-10 15:24+0200\n"
+"PO-Revision-Date: 2023-04-10 15:37+0200\n"
+"Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
+"Language-Team: \n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: forms.py:16
+#: forms.py:18
 msgid ""
-"Vous devez avoir une adresse mail de Centrale Nantes finissant par ec-nantes."
-"fr"
-msgstr "You have to use your school email ending in ec-nantes.fr."
+"Invitation invalide : le lien d'invitation a expiré. Veuillez entrer une "
+"adresse en ec-nantes.fr, ou contactez un administrateur."
+msgstr ""
+"Invalid invitation: the invitation link has expired. Please enter an email "
+"finishing by ec-nantes.fr, or contact an administrator."
 
-#: forms.py:29 forms.py:130
+#: forms.py:26
+msgid ""
+"Vous devez utiliser une adresse mail de Centrale Nantes finissant par ec-"
+"nantes.fr"
+msgstr "You have to use your school email ending in ec-nantes.fr"
+
+#: forms.py:42 forms.py:152
 msgid "Les deux mots de passe ne correspondent pas."
-msgstr "The passwords don't match"
+msgstr "The passwords don't match."
 
-#: forms.py:34 forms.py:90
+#: forms.py:48 forms.py:108
 msgid "Votre adresse mail ec-nantes.fr"
-msgstr "Your school mail in ec-nantes.fr"
+msgstr "Your school email in ec-nantes.fr"
 
-#: forms.py:36
+#: forms.py:50
 msgid "Confirmez votre adresse."
-msgstr "Confirm you mail."
+msgstr "Confirm you email."
 
-#: forms.py:42
+#: forms.py:57
 msgid "Vous pourrez modifier cela plus tard"
-msgstr "You can modify this later."
+msgstr "You can modify this later"
 
-#: forms.py:46
+#: forms.py:62
 msgid "Adresse mail"
 msgstr "Email"
 
-#: forms.py:48
+#: forms.py:64
 msgid "Confirmation de l'adresse mail"
 msgstr "Confirm your email"
 
-#: forms.py:49
+#: forms.py:65
 msgid "Prénom"
 msgstr "First name"
 
-#: forms.py:50
+#: forms.py:66
 msgid "NOM"
 msgstr "Last name"
 
-#: forms.py:51 forms.py:95
+#: forms.py:67 forms.py:113
 msgid "Mot de passe"
 msgstr "Password"
 
-#: forms.py:52
+#: forms.py:68
 msgid "Confirmation du mot de passe"
 msgstr "Confirm your password"
 
-#: forms.py:54
+#: forms.py:70
 msgid "Entrez le même mot de passe pour vérification"
-msgstr "Confirm your password"
+msgstr "Enter the same password for verification"
 
-#: forms.py:55
-msgid "Année de promotion entrante"
-msgstr "Year you started at Centrale Nantes"
+#: forms.py:71
+msgid "Année d'arrivée à Centrale"
+msgstr "Year of arrival at Centrale Nantes"
 
-#: forms.py:56
+#: forms.py:72
 msgid "Filière"
-msgstr "Which diploma are you pursuing in the school?"
+msgstr "Formation followed"
 
-#: forms.py:57
+#: forms.py:73
 msgid "Cursus particulier ?"
 msgstr "Are you in a special programm?"
 
-#: forms.py:65
+#: forms.py:81
 msgid "Cet email est déjà utilisé."
 msgstr "This email is already being used."
 
-#: forms.py:70
+#: forms.py:86
 msgid "Les emails ne correspondent pas."
-msgstr "The emails don't match"
+msgstr "The emails don't match."
 
-#: forms.py:106
+#: forms.py:128
 msgid "Entrez l'adresse mail associée au compte"
-msgstr "Enter the email associated with your account."
+msgstr "Enter the email associated with your account"
 
-#: forms.py:119
+#: forms.py:141
 msgid "Votre nouveau mot de passe"
 msgstr "Your new password"
 
-#: forms.py:120
+#: forms.py:142
 msgid "Confirmer le mot de passe"
-msgstr "Confirm your password."
+msgstr "Confirm your password"
 
-#: forms.py:139
+#: forms.py:163
 msgid "Votre adresse mail personnelle."
 msgstr "Your personal email."
 
-#: forms.py:145
-#, fuzzy
-#| msgid "Le site des clubs et assos de Centrale Nantes !"
+#: forms.py:174
 msgid "Votre adresse mail Centrale Nantes."
-msgstr "The student website for Centrale Nantes!"
+msgstr "Your Centrale Nantes email."
 
-#: templates/account/forgotten_pass.html:6
-#, fuzzy
-#| msgid "Confirmation du mot de passe"
+#: templates/account/forgotten_pass.html:10
 msgid "Réinitialisation de mot de passe"
-msgstr "Confirm your password"
+msgstr "Reset your password"
 
-#: templates/account/forgotten_pass.html:11
+#: templates/account/forgotten_pass.html:15
 msgid "Envoyer l'email"
-msgstr "Send an email"
+msgstr "Send the email"
 
-#: templates/account/login.html:14
+#: templates/account/login.html:17
 msgid "Voir les Clubs & Assos"
-msgstr "Clubs & unions browser"
+msgstr "See Clubs and Associations"
 
-#: templates/account/login.html:25
+#: templates/account/login.html:28
 msgid "Le site des clubs et assos de Centrale Nantes !"
 msgstr "The student website for Centrale Nantes!"
 
-#: templates/account/login.html:32
+#: templates/account/login.html:35
 msgid "Se connecter"
-msgstr "Login"
+msgstr "Sign In"
 
-#: templates/account/login.html:33
+#: templates/account/login.html:36
 msgid "Pas de compte ?"
-msgstr "No account ?"
+msgstr "No account?"
 
-#: templates/account/registration.html:6
-msgid "Inscription sur Nantral Platform"
-msgstr "New account for Nantral Platform"
+#: templates/account/permanent_account_upgrade.html:13
+msgid "Valider l'email"
+msgstr "Validate the email"
 
-#: templates/account/registration.html:10
-msgid ""
-"Pour vous inscrire sur Nantral Platform vous devez être affilié à Centrale "
-"Nantes."
-msgstr ""
-"You have to be affiliated with Centrale Nantes in order to register on "
-"Nantral Platform."
+#: templates/account/registration-choice.html:11
+#: templates/account/temp-registration-choice.html:11
+msgid "Avez-vous un mail ECN ?"
+msgstr "Do you have a Centrale Nantes email?"
 
 #: templates/account/registration.html:11
-#, fuzzy
-#| msgid ""
-#| "Vous devez avoir une adresse mail de Centrale Nantes finissant par ec-"
-#| "nantes.fr"
-msgid ""
-"Votre affiliation est determinée en utilisant votre addresse mail Centrale "
-"Nantes @xxxx.ec-nantes.fr."
-msgstr "You have to use your school email ending in ec-nantes.fr."
+msgid "Inscription sur Nantral Platform"
+msgstr "Create your Nantral Platform account"
 
-#: templates/account/registration.html:12
+#: templates/account/registration.html:14
 msgid ""
-"Si vous ne disposez pas encore de votre addresse vous pouvez demander un "
-"accès temporaire."
+"Pour vous inscrire sur Nantral Platform, vous devez être affilié à Centrale "
+"Nantes. Votre affiliation est determinée en utilisant votre adresse mail "
+"Centrale Nantes @eleves.ec-nantes.fr ou @ec-nantes.fr."
 msgstr ""
-"If you don't have your school email yet, you can request a temporary access."
+"To sign up for Nantral Platform, you have to be currently at Centrale "
+"Nantes. To verify it, we use your email address that should end with @eleves."
+"ec-nantes.fr or @ec-nantes.fr."
 
-#: templates/account/registration.html:13
-msgid "Demande d'accès temporaire."
-msgstr "Temporary access request."
-
-#: templates/account/registration.html:19
+#: templates/account/registration.html:20
 msgid "Inscription"
-msgstr "Registration"
+msgstr "Sign Up"
 
-#: templates/account/reset_password.html:9
-#, fuzzy
-#| msgid "Confirmer le mot de passe"
+#: templates/account/reset_password.html:14
 msgid "Changer le mot de passe"
-msgstr "Confirm your password."
+msgstr "Update the password"
 
-#: templates/account/reset_password.html:13
+#: templates/account/reset_password.html:18
 msgid "Lien invalide"
-msgstr "Invalide link."
+msgstr "Invalid link"
 
-#: templates/account/temporary_registration.html:18
-#, fuzzy
-#| msgid ""
-#| "Si vous ne disposez pas encore de votre addresse vous pouvez demander un "
-#| "accès temporaire."
+#: templates/account/temporary_registration.html:15
 msgid ""
 "Pour vous inscrire sur Nantral Platform vous devez être affilié à Centrale "
 "Nantes. Si vous ne disposez pas encore de votre adresse vous pouvez demander "
 "un accès temporaire."
-msgstr "If you don't have your school email yet, you can request a temporary access."
+msgstr ""
+"To sign up for Nantral Platform, you have to be currently at Centrale "
+"Nantes. If you do not have yet access to your school email, you can ask for "
+"a temporary access."
 
-#: templates/account/temporary_registration.html:19
+#: templates/account/temporary_registration.html:18
 msgid "Vous pourrez vous connecter en utilisant votre adresse personelle"
-msgstr "You will be able to connect using your personal email."
+msgstr "You will be able to connect using your personal email"
 
-#: templates/account/temporary_registration.html:19
+#: templates/account/temporary_registration.html:18
 msgid "jusqu'au"
 msgstr "until the"
 
-#: templates/account/temporary_registration.html:20
-#, fuzzy
-#| msgid ""
-#| "Vous devez avoir une adresse mail de Centrale Nantes finissant par ec-"
-#| "nantes.fr"
+#: templates/account/temporary_registration.html:19
 msgid ""
 "Vous devrez avoir renseigné et validé votre adresse Centrale avant cette "
 "date."
-msgstr "You have to use your school email ending in ec-nantes.fr."
+msgstr ""
+"You have to update your email to a Centrale Nantes' one before this date."

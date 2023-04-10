@@ -14,10 +14,10 @@ class Event(AbstractPublication):
     """Extends the Publication model to an Event model."""
 
     start_date = models.DateTimeField(
-        verbose_name=_("Start date of the event"),
+        verbose_name=_("Start date"),
         help_text=_("Enter date in format DD/MM/YYYY HH:MM"))
     end_date = models.DateTimeField(
-        verbose_name=_("End date of the event"),
+        verbose_name=_("End date"),
         help_text=_("If empty, default to one hour after the start date."),
         blank=True)
     location = models.CharField(

@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='end_date',
-            field=models.DateTimeField(blank=True, null=True, help_text='If empty, default to one hour after the start date.', verbose_name='End date of the event'),
+            field=models.DateTimeField(blank=True, null=True, help_text='If empty, default to one hour after the start date.', verbose_name='End date'),
         ),
         migrations.RunPython(
             code=add_end_dates,
@@ -35,6 +35,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='end_date',
-            field=models.DateTimeField(blank=True, help_text='If empty, default to one hour after the start date.', verbose_name='End date of the event'),
+            field=models.DateTimeField(blank=True, help_text='If empty, default to one hour after the start date.', verbose_name='End date'),
         ),
     ]

@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='start_date',
-            field=models.DateTimeField(help_text='Enter date in format DD/MM/YYYY HH:MM', verbose_name='Start date of the event'),
+            field=models.DateTimeField(help_text='Enter date in format DD/MM/YYYY HH:MM', verbose_name='Start date'),
         ),
         # others
         migrations.RemoveField(
