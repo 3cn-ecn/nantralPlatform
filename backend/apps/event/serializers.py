@@ -26,11 +26,11 @@ class EventSerializer(serializers.ModelSerializer):
         if (not attrs["group"].is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
                 "You have to be admin to add or update an event")
-        if (attrs["date"] > attrs["end_date"]):
+        if (attrs["start_date"] > attrs["end_date"]):
             raise exceptions.ValidationError(_(
                 "The end date must be after the begin date."))
-        if (attrs.get("begin_registration") and attrs.get("end_registration")
-                and attrs["begin_registration"] > attrs["end_registration"]):
+        if (attrs.get("start_registration") and attrs.get("end_registration")
+                and attrs["start_registration"] > attrs["end_registration"]):
             raise serializers.ValidationError(
                 "End registration date should be greater than begin \
                     registration date")
@@ -45,18 +45,17 @@ class EventSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'location',
-            'date',
+            'start_date',
             'end_date',
             'publicity',
             'image',
-            'slug',
             'number_of_participants',
             'absolute_url',
             'group',
             'is_participating',
             'is_member',
             'max_participant',
-            'begin_registration',
+            'start_registration',
             'end_registration',
             'form_url',
             'is_favorite',
@@ -73,7 +72,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_is_favorite(self, obj: Event):
         user = self.context['request'].user
-        return obj.is_favorite(user)
+        return obj.is_bookmarked(user)
 
     def get_is_admin(self, obj: Event):
         user = self.context['request'].user
@@ -85,8 +84,8 @@ class EventSerializer(serializers.ModelSerializer):
     def get_form_url(self, obj: Event):
         user = self.context['request'].user
         registration_open: bool = (
-            (obj.begin_registration is None
-             or obj.begin_registration < timezone.now())
+            (obj.start_registration is None
+             or obj.start_registration < timezone.now())
             and (obj.end_registration is None
                  or obj.end_registration > timezone.now())
         )
@@ -105,13 +104,13 @@ class WriteEventSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'location',
-            'date',
+            'start_date',
             'end_date',
             'publicity',
             'image',
             'group',
             'max_participant',
-            'begin_registration',
+            'start_registration',
             'end_registration',
             'form_url']
 

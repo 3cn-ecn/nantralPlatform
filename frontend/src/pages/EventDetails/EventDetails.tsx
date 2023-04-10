@@ -103,7 +103,7 @@ function EventDetails() {
   }
 
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
-  if (event.formUrl !== null) variant = 'form';
+  if (event.formUrl) variant = 'form';
   else if (event.maxParticipant === null) variant = 'normal';
   else variant = 'shotgun';
 
@@ -132,8 +132,8 @@ function EventDetails() {
   });
 
   const registrationStarted =
-    !event.beginRegistration ||
-    event.beginRegistration.getTime() < today.getTime();
+    !event.startRegistration ||
+    event.startRegistration.getTime() < today.getTime();
 
   const registrationEnded =
     event.endRegistration && event.endRegistration.getTime() < today.getTime();
@@ -242,10 +242,10 @@ function EventDetails() {
     <Alert variant="outlined" severity="info" sx={{ marginTop: '1rem' }}>
       {`${t(
         'event.inscriptionsBeginAt'
-      )} ${event.beginRegistration.toLocaleDateString(
+      )} ${event.startRegistration.toLocaleDateString(
         i18n.language,
         dateFormat
-      )} - ${event.beginRegistration.toLocaleTimeString(i18n.language, {
+      )} - ${event.startRegistration.toLocaleTimeString(i18n.language, {
         timeStyle: 'short',
       })}`}
     </Alert>
@@ -373,7 +373,7 @@ function EventDetails() {
               participating={participating}
               eventId={event.id}
               link={event.formUrl}
-              beginRegistration={event.beginRegistration}
+              startRegistration={event.startRegistration}
               endRegistration={event.endRegistration}
               setParticipating={setParticipating}
               sx={{ width: '100%' }}
