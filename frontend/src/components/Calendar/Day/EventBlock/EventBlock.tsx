@@ -6,12 +6,12 @@ import './EventBlock.scss';
 
 /**
  * The EventBlock component, which is an event in the calendar display.
- * @param day The number of the day in the week.
+ * @param day The date of the event.
  * @param event The event object with the event data.
  * @returns The button to display, already placed and resized.
  */
 export function EventBlock(props: {
-  day: number;
+  day: Date;
   event: EventProps;
 }): JSX.Element {
   const { day, event } = props;
@@ -19,7 +19,11 @@ export function EventBlock(props: {
   let startTime = 24;
 
   // Set the time when the event begins in the day.
-  if (event.beginDate.getDay() === day % 7) {
+  if (
+    event.beginDate.getDate() === day.getDate() &&
+    event.beginDate.getMonth() === day.getMonth() &&
+    event.beginDate.getFullYear() === day.getFullYear()
+  ) {
     todayBegin = true;
     if (
       event.beginDate.getHours() !== 0 ||
@@ -38,7 +42,11 @@ export function EventBlock(props: {
   let duration: number;
   if (todayBegin) {
     duration = (event.endDate.getTime() - event.beginDate.getTime()) / 3600000;
-  } else if (event.endDate.getDay() === day % 7) {
+  } else if (
+    event.endDate.getDate() === day.getDate() &&
+    event.endDate.getMonth() === day.getMonth() &&
+    event.endDate.getFullYear() === day.getFullYear()
+  ) {
     duration =
       event.endDate.getHours() +
       event.endDate.getMinutes() / 60 +

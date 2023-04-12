@@ -914,7 +914,6 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
                       month: 'long',
                       day: 'numeric',
                     })}`}
-                    dayValue={modulo(day.getDay() - 1, 7) + 1}
                     day={day}
                     events={newSortEvents[number]}
                     chains={eventsBlockedChain[number]}
