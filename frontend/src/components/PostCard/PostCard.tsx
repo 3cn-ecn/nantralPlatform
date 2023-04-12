@@ -117,19 +117,6 @@ export function PostCard(props: {
     setPostValue(post);
   }, [post]);
 
-  // const updatePost = (newPost: FormPostProps) => {
-  //   if (newPost) {
-  //     const tmp = post;
-  //     Object.entries(newPost).forEach(([key, value]) => {
-  //       tmp[key] = value;
-  //     });
-  //     setPostValue(tmp);
-  //   } else {
-  //     onDelete();
-  //     setOpen(false);
-  //   }
-  // };
-
   return (
     <>
       <Card

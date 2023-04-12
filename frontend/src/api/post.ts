@@ -31,7 +31,7 @@ export async function getPosts(
     })
     .then((res) => convertPostFromPythonData(res.data));
 }
-
+/** Format data to work with django api. Might need to find a more elegant solution in the future */
 function createForm(values: FormPostProps): FormData {
   const formData = new FormData();
   if (values.image && typeof values.image !== 'string')

@@ -100,18 +100,18 @@ function EventDetails() {
   else variant = 'shotgun';
 
   // Conversion of the date to a human redeable format
-  const beginDateValue = new Date(event.beginDate);
+  const startDateValue = new Date(event.startDate);
   const endDateValue = new Date(event.endDate);
   const dateFormat: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
   };
-  const beginDateText = beginDateValue.toLocaleDateString(
+  const startDateText = startDateValue.toLocaleDateString(
     i18n.language,
     dateFormat
   );
-  const beginHourText = beginDateValue.toLocaleTimeString(i18n.language, {
+  const beginHourText = startDateValue.toLocaleTimeString(i18n.language, {
     timeStyle: 'short',
   });
 
@@ -130,7 +130,7 @@ function EventDetails() {
   const registrationEnded =
     event.endRegistration && event.endRegistration.getTime() < today.getTime();
 
-  const endSameDay = endDateText === beginDateText ? ` - ${endHourText}` : '';
+  const endSameDay = endDateText === startDateText ? ` - ${endHourText}` : '';
 
   const beginSection = (
     <div
@@ -153,7 +153,7 @@ function EventDetails() {
             whiteSpace: 'normal',
           },
         }}
-        label={beginDateText}
+        label={startDateText}
       />
       <Chip
         icon={<AccessTimeIcon />}
@@ -170,7 +170,7 @@ function EventDetails() {
     </div>
   );
   const endSection =
-    endDateText !== beginDateText ? (
+    endDateText !== startDateText ? (
       <div
         style={{
           display: 'flex',

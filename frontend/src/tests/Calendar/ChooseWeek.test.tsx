@@ -3,9 +3,9 @@ import { render } from '@testing-library/react';
 import { CalendarView } from 'components/Calendar/CalendarProps/CalendarProps';
 import { ChooseWeek } from '../../components/Calendar/ChooseWeek/ChooseWeek';
 
-let beginDate = new Date('2023-02-17T03:24:00');
-const setBeginDate = (newDate: Date) => {
-  beginDate = newDate;
+let startDate = new Date('2023-02-17T03:24:00');
+const setstartDate = (newDate: Date) => {
+  startDate = newDate;
 };
 let endDate = new Date('2023-02-22T03:24:00');
 const setEndDate = (newDate: Date) => {
@@ -13,14 +13,14 @@ const setEndDate = (newDate: Date) => {
 };
 let displayData: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 } = {
   type: 'week',
-  beginDate: 0,
+  startDate: 0,
 };
 const updateDisplay = (newDisplay: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 }) => {
   displayData = newDisplay;
 };
@@ -32,9 +32,9 @@ describe('<ChooseWeek />', () => {
         key="ChooseWeekTest"
         step={displayData}
         updateDisplay={updateDisplay}
-        beginDate={beginDate}
+        startDate={startDate}
         endDate={endDate}
-        updateBegin={setBeginDate}
+        updateBegin={setstartDate}
         updateEnd={setEndDate}
       />
     );

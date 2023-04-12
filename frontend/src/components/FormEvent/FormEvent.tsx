@@ -28,16 +28,13 @@ import { useTranslation } from 'react-i18next';
 import { FieldType } from 'Props/GenericTypes';
 import { SimpleGroup } from 'components/Group/interfaces';
 import { useQuery } from 'react-query';
-import {
-  EventProps,
-  FormEventProps,
-  eventToCamelCase,
-} from '../../Props/Event';
+import { EventProps, FormEventProps } from '../../Props/Event';
 import { theme } from '../style/palette';
 import FormGroup from '../../utils/form';
 import { convertFromPythonData } from '../../utils/convertData';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
+import { createEvent, deleteEvent, editEvent } from '../../api/event';
 /**
  * Fonction permettant de générer le formulaire de création d'un événement.
  * Elle ne vérifie pas que l'utilisateur soit bien admin du groupe.
@@ -72,8 +69,8 @@ function getFormFields(
       fields: [
         {
           kind: 'datetime',
-          name: 'beginDate',
-          label: t('form.beginDatetime'),
+          name: 'startDate',
+          label: t('form.startDatetime'),
           required: true,
           disablePast: true,
         },
@@ -210,7 +207,7 @@ function createBlankEvent(): FormEventProps {
   const event: FormEventProps = {
     group: null,
     startRegistration: null,
-    beginDate: null,
+    startDate: null,
     description: '',
     endDate: null,
     endRegistration: null,
@@ -229,7 +226,7 @@ function EditEventModal(props: {
   event?: EventProps;
   mode?: 'create' | 'edit';
   closeModal: () => void;
-  onUpdate?: (event: EventProps) => void;
+  onUpdate?: (event: FormEventProps) => void;
   onDelete?: () => void;
 }) {
   const { open, closeModal, event, mode, onUpdate, onDelete } = props;
@@ -266,65 +263,17 @@ function EditEventModal(props: {
   const fields = getFormFields(adminGroup, t, mode);
 
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
-  /** Function called on submit to save data */
-  function createForm(): FormData {
-    const formData = new FormData();
-    if (formValues.image && typeof formValues.image !== 'string')
-      formData.append('image', formValues.image, formValues.image.name);
-    if (formValues.group && mode === 'create')
-      formData.append('group', formValues.group.toString());
-    if (event?.group && mode === 'edit')
-      formData.append('group', event.group.id.toString());
-    formData.append('publicity', formValues.publicity);
-    formData.append('title', formValues.title || '');
-    formData.append('description', formValues.description || '<p></p>');
-    if (formValues.beginDate)
-      formData.append('date', formValues.beginDate.toISOString());
-    if (formValues.endDate)
-      formData.append('end_date', formValues.endDate.toISOString());
-    formData.append(
-      'end_registration',
-      formValues.endRegistration ? formValues.endRegistration.toISOString() : ''
-    );
-    formData.append('location', formValues.location);
-    // Form
-    formData.append(
-      'form_url',
-      registrationMode === 'form' ? formValues.formUrl : ' '
-    );
-    // Shotgun
-    formData.append(
-      'max_participant',
-      registrationMode === 'shotgun' && formValues.maxParticipant
-        ? formValues.maxParticipant.toString()
-        : ''
-    );
-    formData.append(
-      'start_registration',
-      formValues.startRegistration
-        ? formValues.startRegistration.toISOString()
-        : ''
-    );
-    return formData;
-  }
 
-  function createEvent() {
+  function handleCreate() {
     if (saving) return;
     setSaving(true); // show loading
-    const formData = createForm(); // format data
-    axios
-      .post(`/api/event/`, formData, {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      })
-      .then((res) => {
+    createEvent(formValues, registrationMode)
+      .then((res: FormEventProps) => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
         setGlobalErrors('');
         setSaving(false);
-        eventToCamelCase(res.data);
-        onUpdate(res.data);
+        onUpdate(res);
         closeModal();
       })
       .catch((err) => {
@@ -342,25 +291,16 @@ function EditEventModal(props: {
         }
       });
   }
-  function editEvent() {
+  function handleEdit() {
     if (saving) return;
     setSaving(true); // show loading
-    const formData = createForm(); // format data
-    axios
-      .put(`/api/event/${event.id}/`, formData, {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      })
-      .then((res) => {
+    editEvent(event.id, formValues, registrationMode)
+      .then((res: FormEventProps) => {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
         setGlobalErrors('');
-        eventToCamelCase(res.data);
-        res.data.group = adminGroup.find(
-          (group) => group.id === res.data.group
-        );
-        onUpdate(res.data);
+        // res.group = adminGroup.find((group) => group.id === res.group);
+        onUpdate(res);
         setSaving(false);
         closeModal();
       })
@@ -378,11 +318,10 @@ function EditEventModal(props: {
         }
       });
   }
-  function deleteEvent() {
+  function handleDelete() {
     if (saving) return;
     setSaving(true); // show loading
-    axios
-      .delete(`/api/event/${event.id}/`)
+    deleteEvent(event.id)
       .then(() => {
         setSaving(false);
         closeModal();
@@ -404,7 +343,7 @@ function EditEventModal(props: {
   }
   return (
     <>
-      <form onSubmit={createEvent}>
+      <form onSubmit={handleCreate}>
         <Dialog
           aria-labelledby="customized-dialog-title"
           open={open}
@@ -536,7 +475,7 @@ function EditEventModal(props: {
             {mode === 'create' ? (
               <Button
                 type="submit"
-                onClick={() => createEvent()}
+                onClick={() => handleCreate()}
                 variant="contained"
                 color="info"
                 disabled={saving}
@@ -551,7 +490,7 @@ function EditEventModal(props: {
             ) : (
               <Button
                 type="submit"
-                onClick={() => editEvent()}
+                onClick={() => handleEdit()}
                 variant="contained"
                 color="info"
                 disabled={saving}
@@ -571,7 +510,7 @@ function EditEventModal(props: {
         title={t('form.deleteEvent')}
         content={t('form.deleteEventConfirmation')}
         onClose={(value) => {
-          if (value) deleteEvent();
+          if (value) handleDelete();
           setConfirmationOpen(false);
         }}
         open={confirmationOpen}

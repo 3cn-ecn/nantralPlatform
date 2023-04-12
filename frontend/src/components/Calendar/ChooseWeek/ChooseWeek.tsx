@@ -9,23 +9,23 @@ import './ChooseWeek.scss';
  * Create an object to choose the current week.
  * @param step The type and beginning day in the week of the view.
  * @param updateDisplay The callback to update display.
- * @param beginDate The first day of the week.
+ * @param startDate The first day of the week.
  * @param endDate The last day of the week.
  * @param updateBegin The callback to update first day.
- * @param beginDate The callback to update last day.
+ * @param startDate The callback to update last day.
  * @returns The component to change week.
  */
 export function ChooseWeek(props: {
-  step: { type: CalendarView; beginDate: number };
+  step: { type: CalendarView; startDate: number };
   updateDisplay: React.Dispatch<
-    React.SetStateAction<{ type: CalendarView; beginDate: number }>
+    React.SetStateAction<{ type: CalendarView; startDate: number }>
   >;
-  beginDate: Date;
+  startDate: Date;
   endDate: Date;
   updateBegin: any;
   updateEnd: any;
 }): JSX.Element {
-  const { step, updateDisplay, beginDate, endDate, updateBegin, updateEnd } =
+  const { step, updateDisplay, startDate, endDate, updateBegin, updateEnd } =
     props;
   const sunday = new Date(
     endDate.getFullYear(),
@@ -36,7 +36,7 @@ export function ChooseWeek(props: {
   return (
     <>
       <div id="areaOfTimeDisplay">
-        {`${beginDate.toLocaleDateString('fr-FR', {
+        {`${startDate.toLocaleDateString('fr-FR', {
           weekday: 'long',
           month: 'long',
           day: 'numeric',
@@ -54,21 +54,21 @@ export function ChooseWeek(props: {
               action="previous"
               step={step}
               updateDisplay={updateDisplay}
-              beginDate={beginDate}
+              startDate={startDate}
               endDate={endDate}
               updateBegin={updateBegin}
               updateEnd={updateEnd}
             ></ChangeWeek>
           </Grid>
           <Grid item xs={1}>
-            <DateBox date={beginDate} endDate={endDate}></DateBox>
+            <DateBox date={startDate} endDate={endDate}></DateBox>
           </Grid>
           <Grid item xs={1}>
             <ChangeWeek
               action="next"
               step={step}
               updateDisplay={updateDisplay}
-              beginDate={beginDate}
+              startDate={startDate}
               endDate={endDate}
               updateBegin={updateBegin}
               updateEnd={updateEnd}
