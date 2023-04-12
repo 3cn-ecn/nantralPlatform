@@ -15,6 +15,7 @@ import {
 import { Event, PostAdd } from '@mui/icons-material';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { Page } from 'Props/pagination';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import { EventProps } from '../../Props/Event';
 import './Home.scss';
@@ -82,7 +83,7 @@ function Home() {
     status: thisWeekEventsStatus,
     data: thisWeekEvents,
     refetch: refetchThisWeekEvents,
-  } = useQuery<EventProps[]>({
+  } = useQuery<Page<EventProps>>({
     queryKey: 'thisWeekEvents',
     queryFn: () =>
       getEvents({ fromDate: today, toDate: nextWeek, orderBy: ['date'] }),
@@ -92,7 +93,7 @@ function Home() {
     status: upcomingEventsStatus,
     data: upcomingEvents,
     refetch: refetchUpcomingEvents,
-  } = useQuery<EventProps[]>({
+  } = useQuery<Page<EventProps>>({
     queryKey: 'upcomingEvents',
     queryFn: () =>
       getEvents({
@@ -212,12 +213,12 @@ function Home() {
           </Box>
           <Divider sx={{ marginBottom: 1 }} />
           <EventSection
-            events={thisWeekEvents}
+            events={thisWeekEvents?.results}
             status={thisWeekEventsStatus}
             title={t('home.thisWeek')}
           />
           <EventSection
-            events={upcomingEvents}
+            events={upcomingEvents?.results}
             status={upcomingEventsStatus}
             maxItem={6}
             loadingItemCount={MAX_EVENT_SHOWN}
