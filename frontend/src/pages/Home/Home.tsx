@@ -207,7 +207,10 @@ function Home() {
             <Typography variant="h4" margin={0}>
               {t('navbar.events')}
             </Typography>
-            <Link to="/event" style={{ textDecorationLine: 'none' }}>
+            <Link
+              to={`/event/?dateBegin=${today.toISOString()}`}
+              style={{ textDecorationLine: 'none' }}
+            >
               <Chip label={t('button.seeAll')} clickable />
             </Link>
           </Box>

@@ -87,7 +87,6 @@ function getFormFields(
       kind: 'text',
       name: 'location',
       label: t('form.place'),
-      required: true,
     },
     {
       kind: 'richtext',
