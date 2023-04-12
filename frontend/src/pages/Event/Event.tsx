@@ -5,12 +5,15 @@ import './Event.scss';
 import axios from 'axios';
 import { FilterInterface } from 'Props/Filter';
 import { useSearchParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { Page } from 'Props/pagination';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
-import { EventProps, eventsToCamelCase } from '../../Props/Event';
+import { EventProps } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import ModalEditEvent from '../../components/FormEvent/FormEvent';
 import { ListResults, LoadStatus } from '../../Props/GenericTypes';
+import { getEvents } from '../../api/event';
 
 const EVENT_PER_PAGE = 6;
 
@@ -32,12 +35,16 @@ function EventList(props: {
       <div style={{ height: 30 }}></div>
       <EventSection
         status={status}
-        events={events.results}
+        events={events?.results}
         loadingItemCount={EVENT_PER_PAGE}
       ></EventSection>
       <Pagination
         sx={{ marginBottom: 5 }}
-        count={Math.floor(events.count / EVENT_PER_PAGE + 1) || 1}
+        count={
+          (events?.count &&
+            Math.floor((events.count - 1) / EVENT_PER_PAGE + 1)) ||
+          1
+        }
         page={page}
         onChange={handleNextPage}
       />
@@ -55,20 +62,12 @@ function EventView(props: {
   selectedTab: string | null;
   onChangeTab: (tab: string) => void;
   onChangePage: (page: number) => void;
+  initialPage: number;
 }) {
-  const { filter, selectedTab, onChangeTab, onChangePage } = props;
+  const { filter, selectedTab, onChangeTab, onChangePage, initialPage } = props;
   const [value, setValue] = React.useState(selectedTab || '1');
-  const [status, setStatus] = React.useState<LoadStatus>('loading');
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
-  const [eventsList, setEventsList] = React.useState<ListResults<EventProps>>({
-    count: 0,
-    next: null,
-    previous: null,
-    results: [],
-  });
-  const [eventsCalendar, setEventsCalendar] = React.useState<Array<EventProps>>(
-    []
-  );
+  const [currentPage, setCurrentPage] = React.useState<number>(initialPage);
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
     onChangeTab(newValue);
@@ -77,124 +76,47 @@ function EventView(props: {
   const today = new Date();
   // Request to get Events to display, depending of the filter.
   // If no date filter, only current and futur events are displayed.
-  React.useEffect(() => {
-    setStatus('loading');
-    if (filter !== null) {
-      // filtered calendar
-      axios
-        .get('/api/event/', {
-          params: {
-            is_shotgun: filter.shotgun,
-            is_favorite: filter.favorite,
-            is_participating: filter.participate,
-            group: filter.organiser,
-            limit: EVENT_PER_PAGE,
-            order_by: '-date',
-          },
-        })
-        .then((res: any) => {
-          eventsToCamelCase(res.data.results);
-          setEventsCalendar(res.data.results);
-          setStatus('success');
-        })
-        .catch(() => {
-          setStatus('error');
-        });
-      if (filter.dateBegin === '' && filter.dateEnd === '') {
-        // filtered list without date filters (only current and futur events)
-        axios
-          .get('/api/event', {
-            params: {
-              is_shotgun: filter.shotgun,
-              is_favorite: filter.favorite,
-              is_participating: filter.participate,
-              from_date: today,
-              group: filter.organiser,
-              limit: EVENT_PER_PAGE,
-              order_by: '-date',
-            },
-          })
-          .then((res: any) => {
-            eventsToCamelCase(res.data.results);
-            setEventsList(res.data);
-            setStatus('success');
-          })
-          .catch(() => {
-            setStatus('error');
-          });
-      } else {
-        // filtered list with date filters
-        axios
-          .get('/api/event/', {
-            params: {
-              is_shotgun: filter.shotgun,
-              is_favorite: filter.favorite,
-              is_participating: filter.participate,
-              from_date: filter.dateBegin,
-              to_date: filter.dateEnd,
-              group: filter.organiser,
-              limit: EVENT_PER_PAGE,
-              order_by: '-date',
-            },
-          })
-          .then((res: any) => {
-            eventsToCamelCase(res.data.results);
-            setEventsList(res.data);
-            setStatus('success');
-          })
-          .catch(() => {
-            setStatus('error');
-          });
-      }
-    } else {
-      // non filtered list
-      axios
-        .get('/api/event/', {
-          params: {
-            from_date: today,
-            limit: EVENT_PER_PAGE,
-            order_by: '-date',
-          },
-        })
-        .then((res: any) => {
-          eventsToCamelCase(res.data.results);
-          setEventsList(res.data);
-          setStatus('success');
-        })
-        .catch(() => {
-          setStatus('error');
-        });
+  const {
+    data: eventsList,
+    // refetch: refetchEventList,
+    status: eventsListStatus,
+  } = useQuery<Page<EventProps>>({
+    queryKey: ['eventList', filter, currentPage],
+    queryFn: () =>
+      getEvents({
+        limit: EVENT_PER_PAGE,
+        offset: (currentPage - 1) * EVENT_PER_PAGE,
+        orderBy: '-date',
+        isShotgun: filter.shotgun,
+        isFavorite: filter.favorite,
+        isParticipating: filter.participate,
+        fromDate: filter.dateBegin,
+        toDate: filter.dateEnd,
+      }),
+  });
 
-      // non filtered calendar
-      axios
-        .get('/api/event/')
-        .then((res: any) => {
-          eventsToCamelCase(res.data.results);
-          setEventsCalendar(res.data.results);
-          setStatus('success');
-        })
-        .catch(() => {
-          setStatus('error');
-        });
-    }
-  }, [filter]);
+  const {
+    data: eventsCalendar,
+    // TODO Support status in calendar
+    // status: eventsCalendarStatus,
+  } = useQuery<Page<EventProps>>({
+    queryKey: ['eventCalendar', filter],
+    queryFn: () =>
+      getEvents({
+        limit: 100,
+        offset: 0,
+        orderBy: '-date',
+        isShotgun: filter.shotgun,
+        isFavorite: filter.favorite,
+        isParticipating: filter.participate,
+      }),
+    placeholderData: { count: 0, next: null, previous: null, results: [] },
+  });
+
   const handleNextPage = (newPage: number) => {
     if (currentPage === newPage) return;
-    setStatus('loading');
     setCurrentPage(newPage);
     onChangePage(newPage);
-    axios
-      .get(eventsList.next || eventsList.previous, {
-        params: { offset: (newPage - 1) * EVENT_PER_PAGE },
-      })
-      .then((res: any) => {
-        eventsToCamelCase(res.data.results);
-        setEventsList(res.data);
-        setStatus('success');
-      })
-      .catch(() => {
-        setStatus('error');
-      });
   };
   return (
     <TabContext value={value}>
@@ -206,14 +128,14 @@ function EventView(props: {
       </Box>
       <TabPanel value="1" sx={{ padding: 0 }}>
         <EventList
-          status={status}
+          status={eventsListStatus}
           events={eventsList}
           onChangePage={handleNextPage}
           page={currentPage}
         ></EventList>
       </TabPanel>
       <TabPanel value="2" sx={{ padding: 0 }}>
-        <EventCalendar events={eventsCalendar}></EventCalendar>
+        <EventCalendar events={eventsCalendar?.results}></EventCalendar>
       </TabPanel>
     </TabContext>
   );
@@ -279,6 +201,7 @@ function Event() {
       </Box>
       <EventView
         filter={filter}
+        initialPage={Number.parseInt(queryParameters.get('page'), 10) || 1}
         selectedTab={queryParameters.get('tab')}
         onChangeTab={(value) => updateParameters({ tab: value })}
         onChangePage={(page: number) => updateParameters({ page: page })}
