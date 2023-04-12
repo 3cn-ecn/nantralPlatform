@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg10"
+   sodipodi:docname="bookmark.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     id="namedview12"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="25.190679"
+     inkscape:cx="7.661564"
+     inkscape:cy="12.127502"
+     inkscape:window-width="1920"
+     inkscape:window-height="1030"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg10" />
+  <g
+     id="g247"
+     transform="matrix(1.8257404,0,0,1.8257404,-10.06041,-10.461493)">
+    <polygon
+       points="15,18.47 15,8.47 9,8.47 9,18.39 12,16.53 "
+       style="fill:#dc3545"
+       id="polygon2" />
+    <path
+       d="m 9.19,18.71 1.5,-0.93 a 8.42,8.42 0 0 0 0.9,-0.56 c 0.13,-0.1 0.73,-0.3 0.41,-0.34 -0.32,-0.04 0.33,0.3 0.41,0.36 0.28,0.22 0.6,0.39 0.9,0.59 l 1.5,1 A 0.38,0.38 0 0 0 15.37,18.5 V 8.5 A 0.38,0.38 0 0 0 15,8.1 H 9 A 0.38,0.38 0 0 0 8.62,8.47 v 9.92 a 0.38,0.38 0 0 0 0.75,0 v -6.87 c 0,-1 0,-2 0,-3 0,0.54 -0.57,0.14 0.36,0.3 a 14.34,14.34 0 0 0 2.27,0 h 2.13 a 3,3 0 0 0 0.67,0 c 0.38,-0.12 -0.14,0 -0.18,-0.33 a 26.9,26.9 0 0 1 0,2.84 v 7.11 l 0.57,-0.32 -3,-1.94 a 0.37,0.37 0 0 0 -0.38,0 l -3,1.85 C 8.4,18.32 8.78,19 9.19,18.71 Z"
+       style="fill:#dc3545"
+       id="path4" />
+    <rect
+       x="9"
+       y="6.0999999"
+       width="6"
+       height="1.23"
+       style="fill:#dc3545"
+       id="rect6" />
+    <path
+       d="M 15,5.73 H 9 A 0.38,0.38 0 0 0 8.62,6.1 V 7.33 A 0.39,0.39 0 0 0 9,7.71 h 6 A 0.38,0.38 0 0 0 15.37,7.33 V 6.1 a 0.38,0.38 0 0 0 -0.75,0 V 7.33 L 15,7 H 9 L 9.37,7.37 V 6.1 L 9,6.48 h 6 a 0.38,0.38 0 0 0 0,-0.75 z"
+       style="fill:#dc3545"
+       id="path8" />
+  </g>
+</svg>

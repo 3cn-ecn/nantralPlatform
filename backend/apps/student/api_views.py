@@ -2,11 +2,10 @@ from rest_framework import generics, permissions, viewsets, exceptions
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
-from apps.utils.searchAPIMixin import SearchAPIMixin
+from apps.utils.api_mixins import SearchViewMixin
 
 from .models import Student
 from .serializers import StudentSerializer
-from .serializers import SimpleStudentSerializer
 
 
 class StudentListView(generics.ListAPIView):
@@ -28,7 +27,7 @@ class StudentPermission(permissions.BasePermission):
         return request.user == obj.user
 
 
-class StudentViewSet(SearchAPIMixin, viewsets.ModelViewSet):
+class StudentViewSet(SearchViewMixin, viewsets.ModelViewSet):
     """An API endpoint for students."""
 
     permission_classes = [permissions.IsAuthenticated, StudentPermission]

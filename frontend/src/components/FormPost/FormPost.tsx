@@ -1,4 +1,4 @@
-import { Close } from '@mui/icons-material';
+import { Close, Delete } from '@mui/icons-material';
 import {
   Alert,
   Button,
@@ -11,34 +11,78 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
+import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
-import { PostProps, postsToCamelCase } from '../../Props/Post';
+import { FieldType } from 'Props/GenericTypes';
+import {
+  FormPostProps,
+  PostProps,
+  convertPostFromPythonData,
+} from '../../Props/Post';
 import { theme } from '../style/palette';
-import FormGroup, { FieldType } from '../../utils/form';
-import { GroupProps } from '../../Props/Group';
+import FormGroup from '../../utils/form';
+import { SimpleGroupProps } from '../../Props/Group';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 export function FormPost(props: {
+  /** The mode to use this form */
   mode?: 'create' | 'edit';
+  /** Whether the form is open */
   open: boolean;
+  /**  */
   onClose: () => void;
   post?: PostProps;
-  onUpdate?: (post: PostProps) => void;
+  /** Send the new post updated */
+  onUpdate?: (post: FormPostProps) => void;
+  onDelete?: () => void;
 }) {
-  const { open, onClose, post, onUpdate, mode } = props;
+  const { open, onClose, post, onUpdate, mode, onDelete } = props;
   const { t } = useTranslation('translation');
+  const [values, setValues] = React.useState<FormPostProps>(
+    post
+      ? {
+          description: post.description,
+          group: post.group.id,
+          image: post.image,
+          pageSuggestion: post.pageSuggestion,
+          pinned: post.pinned,
+          publicationDate: post.publicationDate,
+          publicity: post.publicity,
+          title: post.title,
+        }
+      : {
+          title: null,
+          group: null,
+          publicity: 'Pub',
+          publicationDate: new Date(),
+          description: '',
+        }
+  );
+  const [errors, setErrors] = React.useState<any>({});
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [confirmationOpen, setConfirmationOpen] =
+    React.useState<boolean>(false);
+  const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
+  const { data: adminGroup } = useQuery<SimpleGroupProps[], string>({
+    queryKey: 'admin-group',
+    queryFn: () =>
+      axios
+        .get('/api/group/group/', {
+          params: { simple: true, limit: 20, admin: true },
+        })
+        .then((res) => res.data.results),
+  });
   const defaultFields: FieldType[] = [
     {
-      kind: 'autocomplete',
-      endPoint: 'api/group/group',
+      kind: 'image-autocomplete',
       label: t('form.group'),
-      name: mode === 'edit' ? 'groupSlug' : 'group', // Clumbsy
-      getOptionLabel: (option: GroupProps) => {
-        return option.name;
-      },
       required: true,
-      helpText: mode === 'edit' ? '' : t('form.groupHelpText'),
+      name: 'group',
+      options: adminGroup,
+      getIcon: (object: SimpleGroupProps) => object.icon,
+      getOptionLabel: (object: SimpleGroupProps) => object.name,
       disabled: mode === 'edit',
+      helpText: t('form.groupHelpText'),
     },
     {
       kind: 'text',
@@ -80,31 +124,31 @@ export function FormPost(props: {
       label: t('form.pinned'),
       name: 'pinned',
       rows: 1,
-      type: 'checkbox',
+      disabled: !post?.canPin,
     },
   ];
-  const [values, setValues] = React.useState<PostProps>(
-    post
-      ? structuredClone(post)
-      : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
-  );
-  const [errors, setErrors] = React.useState<any>({});
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [confirmationOpen, setConfirmationOpen] =
-    React.useState<boolean>(false);
-  const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
 
   React.useEffect(() => {
     setErrors({});
   }, [open]);
+
+  React.useEffect(() => {
+    setValues(
+      post
+        ? structuredClone(post)
+        : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
+    );
+  }, [post]);
 
   const deletePost = () => {
     setLoading(true);
     axios
       .delete(`/api/post/${post.id}/`)
       .then(() => {
+        onUpdate(null);
         onClose();
         setLoading(false);
+        onDelete();
       })
       .catch((err) => {
         console.error(err);
@@ -112,27 +156,33 @@ export function FormPost(props: {
         setLoading(false);
       });
   };
-  const createPost = () => {
+  function createForm(): FormData {
     const formData = new FormData();
     if (values.image && typeof values.image !== 'string')
       formData.append('image', values.image, values.image.name);
-    if (values.group) formData.append('group', values.group.toString());
+    if (values.group && mode === 'create')
+      formData.append('group', values.group.toString());
+    if (post?.group && mode === 'edit')
+      formData.append('group', post.group.id.toString());
     formData.append('publicity', values.publicity);
     formData.append('title', values.title || '');
-    console.log(values.description);
     formData.append('description', values.description || '<p></p>');
     if (values.pageSuggestion)
       formData.append('page_suggestion', values.pageSuggestion);
-    formData.append('publication_date', values.publicationDate.toISOString());
+    formData.append('created_at', values.publicationDate.toISOString());
     formData.append('pinned', values.pinned ? 'true' : 'false');
+    return formData;
+  }
+
+  const createPost = () => {
     axios
-      .post(`/api/post/`, formData, {
+      .post(`/api/post/`, createForm(), {
         headers: {
           'content-type': 'multipart/form-data',
         },
       })
       .then((res) => {
-        postsToCamelCase([res.data]);
+        convertPostFromPythonData(res.data);
         onUpdate(res.data);
       })
       .then(() => {
@@ -147,28 +197,14 @@ export function FormPost(props: {
   };
   const updatePost = () => {
     setLoading(true);
-    console.log(values);
-    const formData = new FormData();
-    // To avoid typescript error
-    if (values.image && typeof values.image !== 'string')
-      formData.append('image', values.image, values.image.name);
-
-    if (values.group) formData.append('group', post.group.toString());
-    formData.append('publicity', values.publicity);
-    formData.append('title', values.title);
-    formData.append('description', values.description || '<p></p>');
-    if (values.pageSuggestion)
-      formData.append('page_suggestion', values.pageSuggestion);
-    formData.append('publication_date', values.publicationDate.toISOString());
-    formData.append('pinned', values.pinned ? 'true' : 'false');
     axios
-      .put(`/api/post/${post.id}/`, formData, {
+      .put(`/api/post/${post.id}/`, createForm(), {
         headers: {
           'content-type': 'multipart/form-data',
         },
       })
       .then((res) => {
-        postsToCamelCase([res.data]);
+        convertPostFromPythonData(res.data);
         setValues(
           post
             ? structuredClone(post)
@@ -219,12 +255,13 @@ export function FormPost(props: {
           dividers
           sx={{ display: 'flex', flexDirection: 'column' }}
         >
-          {errors.non_field_errors &&
-            errors.non_field_errors.map((text, key) => (
+          {errors.nonFieldErrors &&
+            errors.nonFieldErrors.map((text) => (
               <Alert variant="filled" severity="error" key={text}>
                 {text}
               </Alert>
             ))}
+
           <div>
             <FormGroup
               fields={defaultFields}
@@ -237,6 +274,7 @@ export function FormPost(props: {
             <Button
               disabled={loading}
               color="warning"
+              startIcon={<Delete />}
               variant="outlined"
               onClick={() => setConfirmationOpen(true)}
             >
@@ -268,6 +306,7 @@ export function FormPost(props: {
               </>
             ) : (
               <Button
+                type="submit"
                 disabled={loading}
                 color="info"
                 variant="contained"
@@ -297,4 +336,5 @@ FormPost.defaultProps = {
   mode: 'edit',
   post: null,
   onUpdate: () => null,
+  onDelete: () => null,
 };

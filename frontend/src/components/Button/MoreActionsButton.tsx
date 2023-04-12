@@ -24,7 +24,6 @@ function MoreActionsButton(props: {
   className: string;
   isAdmin: boolean; // Show or hide the link to the edit page
   shareUrl: string;
-  slug?: string;
   id: number;
   participating: boolean;
   setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,7 +36,6 @@ function MoreActionsButton(props: {
     shareUrl,
     id,
     size,
-    slug,
     participating,
     setParticipating,
   } = props;
@@ -70,10 +68,10 @@ function MoreActionsButton(props: {
       maxPerson={2}
       participating={participating}
       setParticipating={setParticipating}
-      eventSlug={slug}
+      eventId={id}
       link=""
-      beginInscription=""
-      endInscription=""
+      startRegistration={null}
+      endRegistration={null}
       unregisterOnly
     />
   ) : null;
@@ -137,7 +135,6 @@ function MoreActionsButton(props: {
 
 MoreActionsButton.defaultProps = {
   size: '1.6rem',
-  slug: '',
 };
 
 export default MoreActionsButton;

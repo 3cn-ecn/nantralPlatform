@@ -5,16 +5,14 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import { PostProps } from 'Props/Post';
-import { Link } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton/IconButton';
+import { FormPostProps, PostProps } from 'Props/Post';
 import { useTranslation } from 'react-i18next';
-import { ClubProps } from '../../Props/Group';
 import { theme } from '../style/palette';
-import { EditButton, MembersIcon, SeePageButton } from '../PostCard/PostCard';
+import { EditButton, PostBadges, SeePageButton } from '../PostCard/PostCard';
 import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
 import { FormPost } from '../FormPost/FormPost';
@@ -23,10 +21,9 @@ export function PostModal(props: {
   post: PostProps;
   open: boolean;
   onClose: () => void;
-  clubDetails: ClubProps;
-  onUpdate?: (post: PostProps) => void;
+  onUpdate?: (post: FormPostProps) => void;
 }): JSX.Element {
-  const { post, open, clubDetails, onClose, onUpdate } = props;
+  const { post, open, onClose, onUpdate } = props;
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
   const { t } = useTranslation('translation');
@@ -53,23 +50,16 @@ export function PostModal(props: {
             <div
               style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}
             >
-              {clubDetails && (
-                <Link to={clubDetails.url} style={{ textDecoration: 'none' }}>
-                  <Avatar
-                    title={clubDetails.name}
-                    url={clubDetails.icon}
-                    size="medium"
-                  />
-                </Link>
-              )}
+              <IconButton href={post.group.url}>
+                <Avatar
+                  title={post.group.name}
+                  url={post.group.icon}
+                  size="medium"
+                />
+              </IconButton>
               <div>
-                <h2 className="post-title">
-                  {post.publicity === 'Mem' && <MembersIcon />}
-                  {post.title}
-                </h2>
-                <div style={{ fontSize: 12 }}>
-                  {clubDetails && clubDetails.name}
-                </div>
+                <h2 className="post-title">{post?.title}</h2>
+                <div style={{ fontSize: 12 }}>{post.group.name}</div>
               </div>
             </div>
             <IconButton onClick={onClose}>
@@ -78,36 +68,51 @@ export function PostModal(props: {
           </div>
         </DialogTitle>
         <DialogContent dividers>
-          {post.image && <img alt="" src={post.image.toString()} id="image" />}
-          <div dangerouslySetInnerHTML={{ __html: post.description }}></div>
+          {post?.image && <img alt="" src={post.image.toString()} id="image" />}
+          <div dangerouslySetInnerHTML={{ __html: post?.description }}></div>
         </DialogContent>
         <DialogActions
           sx={{
             justifyContent: 'space-between',
-            paddingLeft: 4,
           }}
         >
-          <div>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              columnGap: 10,
+            }}
+          >
+            <PostBadges pinned={post?.pinned} publicity={post?.publicity} />
             <Typography variant="caption" textAlign="right" fontStyle="italic">
-              {`${t('post.published')} ${timeFromNow(post.publicationDate)}`}
+              {`${t('post.published')} ${timeFromNow(post?.publicationDate)}`}
             </Typography>
-            {post.publicationDate.toDateString() !==
-              post.updatedAt.toDateString() && (
-              <Typography
-                variant="caption"
-                textAlign="right"
-                fontStyle="italic"
-              >
-                {` • ${t('post.updated')} ${timeFromNow(post.updatedAt)}`}
-              </Typography>
+            {post?.publicationDate.toDateString() !==
+              post?.updatedAt.toDateString() && (
+              <>
+                <Typography
+                  variant="caption"
+                  textAlign="right"
+                  fontStyle="italic"
+                >
+                  •
+                </Typography>
+                <Typography
+                  variant="caption"
+                  textAlign="right"
+                  fontStyle="italic"
+                >
+                  {`${t('post.updated')} ${timeFromNow(post?.updatedAt)}`}
+                </Typography>
+              </>
             )}
           </div>
 
           <div style={{ display: 'flex', columnGap: 10 }}>
-            {clubDetails && clubDetails.is_admin && (
+            {post?.isAdmin && (
               <EditButton onClick={() => setEditModalOpen(true)} />
             )}
-            {post.pageSuggestion && (
+            {post?.pageSuggestion && (
               <SeePageButton link={post.pageSuggestion} />
             )}
           </div>

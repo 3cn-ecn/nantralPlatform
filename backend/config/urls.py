@@ -45,12 +45,10 @@ urlpatterns = i18n_patterns(
     path(
         'parrainage/admin/',
         include('apps.family.admin_urls', namespace='family-admin')),
-    path('post/', include('apps.post.urls', namespace='post')),
     path('tools/', include('apps.tools.urls', namespace='tools')),
     path(
         'notification/',
         include('apps.notification.urls', namespace='notification')),
-    path('event/', include('apps.event.urls', namespace='event')),
     # api
     path(
         'api/student/',

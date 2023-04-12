@@ -2,7 +2,6 @@ import * as React from 'react';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import {
   IconButton,
   AppBar,
@@ -13,34 +12,38 @@ import {
   MenuItem,
   ListItem,
   ListItemText,
-  Link as LinkMui,
+  useMediaQuery,
+  Icon,
+  Button,
+  SvgIcon,
+  Collapse,
+  Breadcrumbs,
+  Divider,
 } from '@mui/material';
-import SvgIcon from '@mui/material/SvgIcon';
-import Collapse from '@mui/material/Collapse';
-import { MoreVert as MoreIcon } from '@mui/icons-material';
-import Divider from '@mui/material/Divider';
-import GavelIcon from '@mui/icons-material/Gavel';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import PersonIcon from '@mui/icons-material/Person';
-import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
-import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
-import PaletteIcon from '@mui/icons-material/Palette';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import {
+  MoreVert as MoreIcon,
+  Gavel as GavelIcon,
+  NavigateNext as NavigateNextIcon,
+  Person as PersonIcon,
+  PublicRounded as PublicRoundedIcon,
+  HelpRounded as HelpRoundedIcon,
+  ArrowBack as ArrowBackIcon,
+  ErrorRounded as ErrorRoundedIcon,
+  LogoutRounded as LogoutRoundedIcon,
+  Brightness4 as Brightness4Icon,
+  Brightness7 as Brightness7Icon,
+  BrightnessMedium as BrightnessMediumIcon,
+  Palette as PaletteIcon,
+  AdminPanelSettings as AdminPanelSettingsIcon,
+} from '@mui/icons-material';
 import axios from 'axios';
 import Avatar from '../Avatar/Avatar';
 import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
-import { ReactComponent as MenuIcon } from '../../assets/scalable/menu.svg';
-import { ReactComponent as PeopleIcon } from '../../assets/scalable/people.svg';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import EditSuggestionModal from '../Suggestion/Suggestion';
 import { Suggestion } from '../Suggestion/interfacesSuggestion';
+import { theme } from '../style/palette';
+
 /**
  * The top bar for navigation
  *
@@ -76,7 +79,7 @@ function NavBarTop(props: {
   const [loggedId, setLoggedId] = React.useState<string>();
   const [isProfilePicture, setIsProfilePicture] =
     React.useState<boolean>(false);
-  const [student, setStudent] = React.useState();
+  const [student, setStudent] = React.useState<any>();
   const [isStaff, setIsStaff] = React.useState<boolean>(false);
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
@@ -118,9 +121,9 @@ function NavBarTop(props: {
     setOpenS(false);
   };
 
-  const isOnBackend = true;
-
   const { t } = useTranslation('translation');
+  const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const location = useLocation();
 
   const breadcrumbNameMap: { [key: string]: string } = {
     '/home/': t('navbar.home'),
@@ -135,9 +138,15 @@ function NavBarTop(props: {
     '/tools/signature': t('navbar.signature'),
     '/suggestions/': 'Bug',
     '/legal_mentions/': 'Legal',
+    '/event/:id/': 'Oui',
   };
-  const location = useLocation();
-  const pathnames = `/home${location.pathname}`.split('/').filter((x) => x);
+  let pathnames = location.pathname.split('/').filter((x) => x);
+  if (pathnames.length === 0) {
+    pathnames = ['home'];
+  }
+  if (pathnames.length > 1 && smallScreen) {
+    pathnames = [pathnames.at(-2)];
+  }
 
   React.useEffect(() => {
     getLoggedStudent();
@@ -157,9 +166,9 @@ function NavBarTop(props: {
       });
   }
 
-  async function createSuggestion(suggestion: Suggestion) {
+  const createSuggestion = async (suggestion: Suggestion) => {
     return axios.post('/api/home/suggestion', suggestion);
-  }
+  };
 
   return (
     <AppBar position="fixed" color="secondary">
@@ -170,55 +179,75 @@ function NavBarTop(props: {
           size="large"
           edge="start"
           aria-label="menu"
-          sx={{ mr: 2 }}
+          component="span"
         >
-          <SvgIcon component={MenuIcon} inheritViewBox />
+          <Icon sx={{ lineHeight: 'initial' }}>
+            <img
+              className="icon-navbar"
+              src="/static/img/icons/cropped/menu.svg"
+              alt="Ouvrir le menu"
+            />
+          </Icon>
         </IconButton>
-        <SvgIcon
-          sx={{ display: { xs: 'none', md: 'flex' } }}
-          component={NantralIcon}
-          inheritViewBox
-        />
-        <Box sx={{ flexGrow: 0.02 }} />
         <Breadcrumbs
           aria-label="breadcrumb"
+          className="breadcrumbs"
           separator={<NavigateNextIcon fontSize="small" />}
         >
-          <LinkMui
-            variant="h6"
+          <Button
             component={Link}
             to="/"
-            color="textPrimary"
-            underline="hover"
-            sx={{ display: { xs: 'none', md: 'flex' } }}
+            variant="text"
+            color="inherit"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              columnGap: 1,
+              textTransform: 'none',
+              borderRadius: '5em',
+              minWidth: 'unset',
+              mr: '-8px',
+            }}
           >
-            Nantral Platform
-          </LinkMui>
+            <Icon sx={{ lineHeight: 'initial', display: 'flex' }}>
+              <img
+                className="icon-navbar"
+                src="/static/img/logo/scalable/logo.svg"
+                alt=""
+              />
+            </Icon>
+            <Typography
+              variant="h6"
+              fontWeight="bold"
+              sx={{ display: { xs: 'none', sm: 'flex' } }}
+            >
+              Nantral Platform
+            </Typography>
+          </Button>
           {pathnames.map((value, index) => {
-            const last = index === pathnames.length - 1;
-            const to =
-              index === 0 ? '/home/' : `/${pathnames.slice(1, index + 1)}/`;
-
-            return last ? (
-              <Typography key={to} variant="h6">
-                {breadcrumbNameMap[to]}
-              </Typography>
-            ) : (
-              <LinkMui
-                component={Link}
-                underline="hover"
-                color="textPrimary"
-                to={to === '/home/' ? '/' : to}
+            const isLastItem = index === pathnames.length - 1;
+            const to = `/${pathnames.slice(0, index + 1).join('/')}/`;
+            return (
+              <Button
+                {...(isLastItem
+                  ? { href: '#' }
+                  : { component: Link, to: to === '/home/' ? '/' : to })}
+                color="inherit"
                 key={to}
-                variant="h6"
+                variant="text"
+                sx={{
+                  textTransform: 'none',
+                  borderRadius: '5em',
+                  ml: '-8px',
+                  mr: '-8px',
+                }}
               >
-                {breadcrumbNameMap[to]}
-              </LinkMui>
+                <Typography variant="h6">{breadcrumbNameMap[to]}</Typography>
+              </Button>
             );
           })}
         </Breadcrumbs>
-        <Box sx={{ flexGrow: 0.9 }} />
-        <Box sx={{ flexGrow: 1.0 }} />
+        <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: 'flex' }}>
           <NotificationMenu />
           <IconButton
@@ -231,8 +260,14 @@ function NavBarTop(props: {
             component="span"
             ref={spanRef}
           >
-            {!isProfilePicture ? (
-              <SvgIcon component={PeopleIcon} inheritViewBox />
+            {!isProfilePicture || !student ? (
+              <Icon sx={{ lineHeight: 'initial' }}>
+                <img
+                  className="icon-navbar"
+                  src="/static/img/icons/cropped/people.svg"
+                  alt="Ouvrir le Menu Profil"
+                />
+              </Icon>
             ) : (
               <Avatar title={student.name} url={student.picture} />
             )}
@@ -303,7 +338,7 @@ function NavBarTop(props: {
                   to="/admin/"
                   className="menuItem"
                   disablePadding
-                  reloadDocument={isOnBackend}
+                  reloadDocument
                   sx={{
                     color: 'text.primary',
                   }}
@@ -311,10 +346,7 @@ function NavBarTop(props: {
                   {t('user_menu.admin')}
                 </ListItem>
               </MenuItem>
-            ) : (
-              // eslint-disable-next-line react/jsx-no-useless-fragment
-              <></>
-            )}
+            ) : null}
             <MenuItem onClick={() => setOpenS(true)}>
               <SvgIcon component={ErrorRoundedIcon} />
               <ListItem

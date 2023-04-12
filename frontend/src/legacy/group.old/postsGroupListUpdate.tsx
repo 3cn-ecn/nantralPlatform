@@ -45,9 +45,7 @@ function Root(props: {}) {
                 <Card.Body>
                   <Card.Subtitle>
                     Date :{' '}
-                    {dayjs(post.publication_date).format(
-                      'dddd, MMMM Do YYYY, HH:mm'
-                    )}
+                    {dayjs(post.created_at).format('dddd, MMMM Do YYYY, HH:mm')}
                   </Card.Subtitle>
                   <Card.Subtitle>Visibilité : {post.publicity}</Card.Subtitle>
                   <Card.Subtitle>Description :</Card.Subtitle>
@@ -61,7 +59,7 @@ function Root(props: {}) {
                       updateCurrentPost({
                         title: post.title,
                         slug: post.slug,
-                        publication_date: post.publication_date,
+                        created_at: post.created_at,
                       });
                       handleShow();
                     }}
@@ -70,7 +68,7 @@ function Root(props: {}) {
                   </Button>
                 </Card.Body>
                 <Card.Footer className="text-center text-muted">
-                  {dayjs(post.publication_date).fromNow()}
+                  {dayjs(post.created_at).fromNow()}
                 </Card.Footer>
               </Card>
             </div>

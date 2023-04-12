@@ -4,15 +4,24 @@
   padding-top: 0.1rem;
 }
 
-.menuItem{
+.menuItem {
   padding-left: 10px;
   padding-top: 0px;
   padding-bottom: 0px;
   padding-right: 0px;
 }
 
-.menuTitle{
+.menuTitle {
   padding-left: 15px;
   font-weight: bold;
   padding-right: 35px;
+}
+
+.breadcrumbs {
+  overflow: hidden;
+  padding-right: 8px;
+
+  & > ol {
+    flex-wrap: nowrap;
+  }
 }

@@ -122,7 +122,7 @@ function NotificationMenu(props): JSX.Element {
             {n.icon_url ? (
               <img src={n.icon_url} loading="lazy" />
             ) : (
-              <img src="/static/img/logo/scalable/logo.svg" loading="lazy" />
+              <img src="/static/img/logo/logo.svg" loading="lazy" />
             )}
             <small className="ms-2">
               <strong>{n.title}</strong>
