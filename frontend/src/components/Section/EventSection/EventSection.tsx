@@ -1,4 +1,4 @@
-import { EventProps } from 'Props/Event';
+import { EventProps, FormEventProps } from 'Props/Event';
 import * as React from 'react';
 import { Alert, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -44,9 +44,20 @@ export function EventSection(props: {
   accordion?: boolean;
   /** How many event skeleton to display when loading */
   loadingItemCount?: number;
+  onUpdate?: (newEvent: FormEventProps) => void;
+  onDelete?: () => void;
 }) {
   const { t } = useTranslation('translation'); // translation module
-  const { status, events, title, maxItem, accordion, loadingItemCount } = props;
+  const {
+    status,
+    events,
+    title,
+    maxItem,
+    accordion,
+    loadingItemCount,
+    onUpdate,
+    onDelete,
+  } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allEvents = maxItem && events ? events.slice(0, maxItem) : events;
   switch (status) {
@@ -63,8 +74,8 @@ export function EventSection(props: {
     case 'success':
       if (events.length > 0) {
         content = allEvents.map((event) => (
-          <Grid item xs={12} sm={6} md={4} key={event.slug} flexGrow={1}>
-            <EventCard event={event} />
+          <Grid item xs={12} sm={6} md={4} key={event.id} flexGrow={1}>
+            <EventCard event={event} onUpdate={onUpdate} onDelete={onDelete} />
           </Grid>
         ));
       } else {
@@ -88,4 +99,6 @@ EventSection.defaultProps = {
   maxItem: null,
   accordion: false,
   loadingItemCount: 3,
+  onUpdate: () => null,
+  onDelete: () => null,
 };

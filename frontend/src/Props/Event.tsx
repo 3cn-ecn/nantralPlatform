@@ -1,10 +1,11 @@
 import { convertFromPythonData } from '../utils/convertData';
 import { SimpleGroupProps } from './Group';
 
+export type registrationType = 'normal' | 'form' | 'shotgun';
 export interface EventProps {
   id?: number; // Id of the event
   color?: string | null; // Color of the event card
-  beginDate: Date; // Event begin date in Date format
+  startDate: Date; // Event begin date in Date format
   endDate: Date; // Event begin date in Date format
   description: string; // Description of the event in html
   getAbsoluteUrl?: string; // url of the event from root url
@@ -30,7 +31,7 @@ export interface EventProps {
 }
 
 export interface FormEventProps {
-  beginDate: Date; // Event begin date in Date format
+  startDate: Date; // Event begin date in Date format
   endDate: Date; // Event begin date in Date format
   description: string; // Description of the event in html
   group: number; // id of the group
@@ -52,16 +53,13 @@ export function eventsToCamelCase(events: Array<any>) {
 }
 
 export function eventToCamelCase(event: any) {
-  // delete when date update to beginDate
-  event.begin_date = event.start_date;
-
   // delete when endDate defined forEach event
   if (event.end_date === null) {
     event.end_date = new Date(new Date(event.date).getTime() + 3600000);
   }
 
   return convertFromPythonData(event, {
-    beginDate: 'Date',
+    startDate: 'Date',
     endDate: 'Date',
     startRegistration: 'Date',
     endRegistration: 'Date',

@@ -15,21 +15,21 @@ import './Calendar.scss';
 /**
  * Function that sort event date-wise.
  * @param events The list of the events to sort.
- * @param beginDate The minimal date.
+ * @param startDate The minimal date.
  * @param endDate The maximal date.
- * @returns The list of events which take place between the beginDate and the Date.
+ * @returns The list of events which take place between the startDate and the Date.
  */
 function getEventWithDate(
   events: Array<EventProps>,
-  beginDate: Date,
+  startDate: Date,
   endDate: Date
 ): Array<EventProps> {
   const sortedEvents = new Array<EventProps>();
   events.forEach((event) => {
     // Sort with end date too.
     if (
-      (beginDate <= event.beginDate && event.beginDate < endDate) ||
-      (event.beginDate <= beginDate && beginDate < event.endDate)
+      (startDate <= event.startDate && event.startDate < endDate) ||
+      (event.startDate <= startDate && startDate < event.endDate)
     ) {
       sortedEvents.push(event);
     }
@@ -48,14 +48,14 @@ function sameTime(
   event2Compare: EventDataProps
 ): boolean {
   if (
-    (event.beginDate < event2Compare.beginDate &&
-      event2Compare.beginDate < event.endDate) ||
-    (event.beginDate < event2Compare.endDate &&
-      event2Compare.beginDate < event.endDate) ||
-    (event2Compare.beginDate < event.beginDate &&
-      event.beginDate < event2Compare.endDate) ||
-    (event2Compare.beginDate < event.endDate &&
-      event.beginDate < event2Compare.endDate)
+    (event.startDate < event2Compare.startDate &&
+      event2Compare.startDate < event.endDate) ||
+    (event.startDate < event2Compare.endDate &&
+      event2Compare.startDate < event.endDate) ||
+    (event2Compare.startDate < event.startDate &&
+      event.startDate < event2Compare.endDate) ||
+    (event2Compare.startDate < event.endDate &&
+      event.startDate < event2Compare.endDate)
   ) {
     return true;
   }
@@ -429,7 +429,7 @@ function setSameTimeEvents(
     // Create an eventData object which will be used to treat simultaneous events.
     eventsData.push({
       key: i,
-      beginDate: events[i].beginDate,
+      startDate: events[i].startDate,
       endDate: events[i].endDate,
       blocked: false,
       size: 1,
@@ -482,16 +482,16 @@ function setSameTimeEvents(
 
 function isInDayWeek(
   event: EventProps,
-  checkBeginDate: Date,
+  checkstartDate: Date,
   checkEndDate: Date,
   sortEvents: Array<Array<EventProps>>
 ) {
   for (let i = 1; i < 7; i++) {
-    checkBeginDate.setDate(checkBeginDate.getDate() + 1);
+    checkstartDate.setDate(checkstartDate.getDate() + 1);
     checkEndDate.setDate(checkEndDate.getDate() + 1);
     if (
-      (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
-      (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
+      (checkstartDate <= event.startDate && event.startDate < checkEndDate) ||
+      (event.startDate <= checkstartDate && checkstartDate < event.endDate)
     ) {
       sortEvents[i].push({ ...event });
     }
@@ -499,16 +499,16 @@ function isInDayWeek(
 }
 function isInDayMonth(
   event: EventProps,
-  checkBeginDate: Date,
+  checkstartDate: Date,
   checkEndDate: Date,
   sortEvents: Array<Array<EventProps>>
 ) {
-  for (let i = 1; i < numberOfDayInDateMonth(checkBeginDate); i++) {
-    checkBeginDate.setDate(checkBeginDate.getDate() + 1);
+  for (let i = 1; i < numberOfDayInDateMonth(checkstartDate); i++) {
+    checkstartDate.setDate(checkstartDate.getDate() + 1);
     checkEndDate.setDate(checkEndDate.getDate() + 1);
     if (
-      (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
-      (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
+      (checkstartDate <= event.startDate && event.startDate < checkEndDate) ||
+      (event.startDate <= checkstartDate && checkstartDate < event.endDate)
     ) {
       sortEvents[i].push({ ...event });
     }
@@ -527,7 +527,7 @@ function isInDay(
   sortEvents: Array<Array<EventProps>>,
   mode: 'week' | 'month'
 ): void {
-  const checkBeginDate = new Date(
+  const checkstartDate = new Date(
     mondayDate.getFullYear(),
     mondayDate.getMonth(),
     mondayDate.getDate()
@@ -539,15 +539,15 @@ function isInDay(
   );
   checkEndDate.setDate(checkEndDate.getDate() + 1);
   if (
-    (checkBeginDate <= event.beginDate && event.beginDate < checkEndDate) ||
-    (event.beginDate <= checkBeginDate && checkBeginDate < event.endDate)
+    (checkstartDate <= event.startDate && event.startDate < checkEndDate) ||
+    (event.startDate <= checkstartDate && checkstartDate < event.endDate)
   ) {
     sortEvents[0].push(event);
   }
   if (mode === 'week') {
-    isInDayWeek(event, checkBeginDate, checkEndDate, sortEvents);
+    isInDayWeek(event, checkstartDate, checkEndDate, sortEvents);
   } else if (mode === 'month') {
-    isInDayMonth(event, checkBeginDate, checkEndDate, sortEvents);
+    isInDayMonth(event, checkstartDate, checkEndDate, sortEvents);
   } else {
     throw new Error(`Le mode ${mode} n'existe pas pour la fonction isInDay()`);
   }
@@ -583,17 +583,17 @@ function sortInWeek(
 
 function sortInMonth(
   oldSortEvents: Array<EventProps>,
-  beginDate: Date
+  startDate: Date
 ): {
   sortEvents: Array<Array<EventProps>>;
 } {
   const sortEvents = [];
   const eventsBlockedChain = [];
-  for (let i = 0; i < numberOfDayInDateMonth(beginDate); i++) {
+  for (let i = 0; i < numberOfDayInDateMonth(startDate); i++) {
     sortEvents.push(new Array<EventProps>());
   }
   oldSortEvents.forEach((event) => {
-    isInDay(event, beginDate, sortEvents, 'month');
+    isInDay(event, startDate, sortEvents, 'month');
   });
 
   for (let i = 0; i < 7; i++) {
@@ -609,15 +609,15 @@ function sortInMonth(
  */
 function addEventICS(event: EventProps): EventAttributes {
   const duration = Math.floor(
-    (event.endDate.getTime() - event.beginDate.getTime()) / 60000
+    (event.endDate.getTime() - event.startDate.getTime()) / 60000
   );
   const eventCalendar: EventAttributes = {
     start: [
-      event.beginDate.getFullYear(),
-      event.beginDate.getMonth() + 1,
-      event.beginDate.getDate(),
-      event.beginDate.getHours(),
-      event.beginDate.getMinutes(),
+      event.startDate.getFullYear(),
+      event.startDate.getMonth() + 1,
+      event.startDate.getDate(),
+      event.startDate.getHours(),
+      event.startDate.getMinutes(),
     ],
     duration: { hours: Math.floor(duration / 60), minutes: duration % 60 },
     title: event.title,
@@ -666,49 +666,49 @@ async function callICS(events: Array<EventProps>): Promise<void> {
 /**
  * Change the display to the format asked.
  * @param display The type of display.
- * @param beginDate The first day of the display.
+ * @param startDate The first day of the display.
  * @param updateBegin The callback to update the first day of the display.
  * @param updateEnd The callback to update the last day of the display.
  */
 function changeDisplay(
   display: CalendarView,
-  beginDate: Date,
+  startDate: Date,
   updateBegin: React.Dispatch<React.SetStateAction<Date>>,
   updateEnd: React.Dispatch<React.SetStateAction<Date>>
 ): void {
-  const newBeginDate = new Date(
-    beginDate.getFullYear(),
-    beginDate.getMonth(),
-    beginDate.getDate()
+  const newstartDate = new Date(
+    startDate.getFullYear(),
+    startDate.getMonth(),
+    startDate.getDate()
   );
   const newEndDate = new Date(
-    beginDate.getFullYear(),
-    beginDate.getMonth(),
-    beginDate.getDate()
+    startDate.getFullYear(),
+    startDate.getMonth(),
+    startDate.getDate()
   );
   switch (display) {
     case 'day':
-      newEndDate.setDate(beginDate.getDate() + 1);
+      newEndDate.setDate(startDate.getDate() + 1);
       updateEnd(newEndDate);
       break;
     case '3Days':
-      newEndDate.setDate(beginDate.getDate() + 3);
+      newEndDate.setDate(startDate.getDate() + 3);
       updateEnd(newEndDate);
       break;
     case 'week':
-      newBeginDate.setDate(
-        newBeginDate.getDate() - modulo(newBeginDate.getDay() - 1, 7)
+      newstartDate.setDate(
+        newstartDate.getDate() - modulo(newstartDate.getDay() - 1, 7)
       );
-      newEndDate.setFullYear(newBeginDate.getFullYear());
-      newEndDate.setMonth(newBeginDate.getMonth());
-      newEndDate.setDate(newBeginDate.getDate() + 7);
-      updateBegin(newBeginDate);
+      newEndDate.setFullYear(newstartDate.getFullYear());
+      newEndDate.setMonth(newstartDate.getMonth());
+      newEndDate.setDate(newstartDate.getDate() + 7);
+      updateBegin(newstartDate);
       updateEnd(newEndDate);
       break;
     case 'month':
-      newBeginDate.setDate(1);
-      newEndDate.setDate(numberOfDayInDateMonth(newBeginDate) + 1);
-      updateBegin(newBeginDate);
+      newstartDate.setDate(1);
+      newEndDate.setDate(numberOfDayInDateMonth(newstartDate) + 1);
+      updateBegin(newstartDate);
       updateEnd(newEndDate);
       break;
     default:
@@ -719,7 +719,7 @@ function changeDisplay(
 function updateWeekToDisplay(
   displayData: {
     type: CalendarView;
-    beginDate: number;
+    startDate: number;
   },
   beginOfWeek: Date,
   endOfWeek: Date
@@ -790,22 +790,22 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   const { events } = props;
   const [displayData, updateDisplay] = useState<{
     type: CalendarView;
-    beginDate: number;
+    startDate: number;
   }>({
     type: 'week',
-    beginDate: 0,
+    startDate: 0,
   });
 
   // Resize events duration to have a better display in calendar
   events.forEach((event) => {
     if (
-      event.endDate.getDate() === event.beginDate.getDate() &&
-      event.endDate.getMonth() === event.beginDate.getMonth() &&
-      event.endDate.getFullYear() === event.beginDate.getFullYear() &&
-      event.endDate.getTime() - event.beginDate.getTime() < 60 * 60 * 1000
+      event.endDate.getDate() === event.startDate.getDate() &&
+      event.endDate.getMonth() === event.startDate.getMonth() &&
+      event.endDate.getFullYear() === event.startDate.getFullYear() &&
+      event.endDate.getTime() - event.startDate.getTime() < 60 * 60 * 1000
     ) {
-      if (event.beginDate.getHours() < 23) {
-        event.endDate = new Date(event.beginDate.getTime() + 60 * 60 * 1000);
+      if (event.startDate.getHours() < 23) {
+        event.endDate = new Date(event.startDate.getTime() + 60 * 60 * 1000);
       } else {
         event.endDate.setHours(23);
         event.endDate.setMinutes(59);
@@ -878,7 +878,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
         key="ChooseWeekComponent"
         step={displayData}
         updateDisplay={updateDisplay}
-        beginDate={beginOfWeek}
+        startDate={beginOfWeek}
         endDate={endOfWeek}
         updateBegin={setBeginOfWeek}
         updateEnd={setEndOfWeek}
@@ -886,7 +886,7 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
       <ChooseDisplay
         display={displayData}
         updateDisplay={updateDisplay}
-        beginDate={beginOfWeek}
+        startDate={beginOfWeek}
       ></ChooseDisplay>
       <div id="Calendar" style={{ display: 'flex' }}>
         {displayData.type !== 'month' ? (

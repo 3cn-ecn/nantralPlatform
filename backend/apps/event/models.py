@@ -70,7 +70,7 @@ class Event(AbstractPublication):
     def save(self, *args, **kwargs) -> None:
         # set end date to 1 hour after begin date if not set
         if self.end_date is None:
-            self.end_date = self.date + timezone.timedelta(hours=1)
+            self.end_date = self.start_date + timezone.timedelta(hours=1)
         # save the event
         super(Event, self).save(*args, **kwargs)
         # save the notification

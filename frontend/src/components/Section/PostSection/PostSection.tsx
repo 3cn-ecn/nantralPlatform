@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { PostCard, PostCardSkeleton } from '../../PostCard/PostCard';
-import { PostProps } from '../../../Props/Post';
+import { FormPostProps, PostProps } from '../../../Props/Post';
 import { LoadStatus } from '../../../Props/GenericTypes';
 
 /**
@@ -21,7 +21,7 @@ export function PostSection(props: {
   maxItem?: number;
   /** Nombre d'item à afficher de base */
   shownItem?: number;
-  onUpdate?: (post: null | PostProps) => void;
+  onUpdate?: (post: null | FormPostProps) => void;
 }) {
   const { posts, title, maxItem, status, shownItem, onUpdate } = props;
   const allPosts = maxItem && posts ? posts.slice(0, maxItem) : posts;
@@ -44,8 +44,12 @@ export function PostSection(props: {
         content = allPosts
           .slice(0, showAll ? allPosts.length : shownItem)
           .map((post) => (
-            <Grid key={post.slug} xs={12} md={4} item>
-              <PostCard post={post} onDelete={() => onUpdate(post)} />
+            <Grid key={post.id} xs={12} md={4} item>
+              <PostCard
+                post={post}
+                onUpdate={onUpdate}
+                onDelete={() => onUpdate(null)}
+              />
             </Grid>
           ));
       else

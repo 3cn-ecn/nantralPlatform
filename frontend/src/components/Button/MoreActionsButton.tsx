@@ -63,7 +63,7 @@ function MoreActionsButton(props: {
   const unregisterOption = participating ? (
     <JoinButton
       variant="normal"
-      handleClick={handleCloseMenu}
+      onClick={handleCloseMenu}
       person={1}
       maxPerson={2}
       participating={participating}

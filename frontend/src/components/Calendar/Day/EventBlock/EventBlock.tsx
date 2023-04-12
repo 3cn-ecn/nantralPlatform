@@ -19,25 +19,25 @@ export function EventBlock(props: {
   let startTime = 24;
 
   // Set the time when the event begins in the day.
-  if (event.beginDate.getDay() === day % 7) {
+  if (event.startDate.getDay() === day % 7) {
     todayBegin = true;
     if (
-      event.beginDate.getHours() !== 0 ||
-      event.beginDate.getMinutes() !== 0 ||
-      event.beginDate.getSeconds() !== 0
+      event.startDate.getHours() !== 0 ||
+      event.startDate.getMinutes() !== 0 ||
+      event.startDate.getSeconds() !== 0
     ) {
       startTime =
         23 -
-        event.beginDate.getHours() +
-        (59 - event.beginDate.getMinutes()) / 60 +
-        (60 - event.beginDate.getSeconds()) / 3600;
+        event.startDate.getHours() +
+        (59 - event.startDate.getMinutes()) / 60 +
+        (60 - event.startDate.getSeconds()) / 3600;
     }
   }
 
   // Set the duration of the event.
   let duration: number;
   if (todayBegin) {
-    duration = (event.endDate.getTime() - event.beginDate.getTime()) / 3600000;
+    duration = (event.endDate.getTime() - event.startDate.getTime()) / 3600000;
   } else if (event.endDate.getDay() === day % 7) {
     duration =
       event.endDate.getHours() +

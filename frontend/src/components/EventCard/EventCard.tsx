@@ -11,7 +11,7 @@ import {
   Skeleton,
 } from '@mui/material/';
 
-import { EventProps } from 'Props/Event';
+import { EventProps, FormEventProps } from 'Props/Event';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -63,16 +63,19 @@ function InfoItem(props: { name: string; value: string }) {
   );
 }
 
-function EventCard(props: { event: EventProps }) {
-  const { event } = props;
+function EventCard(props: {
+  event: EventProps;
+  onUpdate?: (newEvent: FormEventProps) => void;
+  onDelete?: () => void;
+}) {
+  const { event, onDelete, onUpdate } = props;
   const {
     title,
     numberOfParticipants,
     maxParticipant,
-    beginDate,
+    startDate,
     image,
     isParticipating,
-    slug,
     formUrl,
     isFavorite,
     endRegistration,
@@ -89,7 +92,7 @@ function EventCard(props: { event: EventProps }) {
   else variant = 'shotgun';
 
   // Conversion of the date to a human redeable format
-  const dateValue = new Date(beginDate);
+  const dateValue = new Date(startDate);
   const dateFormat: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     month: 'long',
@@ -181,7 +184,6 @@ function EventCard(props: { event: EventProps }) {
           className="moreActions"
           shareUrl={`${window.location.origin}/event/${id}`}
           id={id}
-          slug={slug}
           size="2rem"
           participating={participating}
           setParticipating={setParticipating}
@@ -190,6 +192,11 @@ function EventCard(props: { event: EventProps }) {
     </div>
   );
 }
+
+EventCard.defaultProps = {
+  onUpdate: () => null,
+  onDelete: () => null,
+};
 
 export function EventCardSkeleton() {
   return (
