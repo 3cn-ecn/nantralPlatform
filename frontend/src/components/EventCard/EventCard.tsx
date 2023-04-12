@@ -8,16 +8,15 @@ import {
   CircularProgress,
   Typography,
   CardActionArea,
+  Skeleton,
 } from '@mui/material/';
 
 import { EventProps } from 'Props/Event';
-import { ClubProps } from 'Props/Group';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import JoinButton from '../Button/JoinButton';
 
@@ -72,36 +71,20 @@ function EventCard(props: { event: EventProps }) {
     maxParticipant,
     beginDate,
     image,
-    groupSlug,
     isParticipating,
     slug,
     formUrl,
     isFavorite,
-    endInscription,
-    beginInscription,
-    groupName,
+    endRegistration,
+    startRegistration,
     id,
   } = event;
   const [participating, setParticipating] = useState(isParticipating);
-  const [groupData, setGroup] = useState<ClubProps>({
-    name: '',
-    icon: '',
-    url: '',
-    is_admin: false,
-  });
-  useEffect(() => {
-    getGroup();
-  }, []);
-
-  async function getGroup() {
-    const response = await axios.get(`/api/group/group/${groupSlug}/`);
-    setGroup(response.data);
-  }
 
   const { i18n } = useTranslation('translation');
 
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
-  if (formUrl !== null) variant = 'form';
+  if (formUrl) variant = 'form';
   else if (maxParticipant === null) variant = 'normal';
   else variant = 'shotgun';
 
@@ -118,13 +101,13 @@ function EventCard(props: { event: EventProps }) {
   });
   const iconSize = '3.75rem';
   const groupIcon =
-    typeof groupData.icon === 'undefined' ? (
+    typeof event.group.icon === 'undefined' ? (
       <CircularProgress size={iconSize} />
     ) : (
       <ClubAvatar
-        clubUrl={groupData.url}
-        logoUrl={groupData.icon}
-        name={groupData.name}
+        clubUrl={event.group.url}
+        logoUrl={event.group.icon}
+        name={event.group.name}
         textPosition="bottom"
         size={iconSize}
         hideName
@@ -162,7 +145,7 @@ function EventCard(props: { event: EventProps }) {
                     {title}
                   </Typography>
                   <Typography sx={{ fontSize: '1rem' }} variant="caption">
-                    {groupName}
+                    {event.group.name}
                   </Typography>
                 </div>
               </div>
@@ -181,8 +164,8 @@ function EventCard(props: { event: EventProps }) {
             participating={participating}
             eventId={id}
             link={formUrl}
-            beginInscription={beginInscription}
-            endInscription={endInscription}
+            startRegistration={startRegistration}
+            endRegistration={endRegistration}
             setParticipating={setParticipating}
             sx={{ width: '100%' }}
           />
@@ -194,7 +177,7 @@ function EventCard(props: { event: EventProps }) {
           <FavButton eventId={id} selected={isFavorite} size="2rem" iconized />
         </div>
         <MoreActionsButton
-          isAdmin={groupData.is_admin}
+          isAdmin={false}
           className="moreActions"
           shareUrl={`${window.location.origin}/event/${id}`}
           id={id}
@@ -205,6 +188,16 @@ function EventCard(props: { event: EventProps }) {
         />
       </div>
     </div>
+  );
+}
+
+export function EventCardSkeleton() {
+  return (
+    <Skeleton
+      variant="rectangular"
+      height="22.85rem"
+      sx={{ fontSize: '1rem' }}
+    />
   );
 }
 

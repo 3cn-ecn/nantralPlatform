@@ -4,7 +4,7 @@ from .models import Post
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'publication_date', 'group']
+    list_display = ['title', 'created_at', 'group']
     readonly_fields = ['updated_by']
 
     def save_model(self, request, obj, form, change,):

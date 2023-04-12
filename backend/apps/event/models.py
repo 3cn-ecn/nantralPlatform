@@ -1,94 +1,80 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
-from django_ckeditor_5.fields import CKEditor5Field
-
-from apps.post.models import AbstractPost
+from apps.post.models import AbstractPublication
 from apps.student.models import Student
 from apps.utils.upload import PathAndRename
-from datetime import timedelta
 
 path_and_rename = PathAndRename("events/pictures")
 
 
-class Event(AbstractPost):
-    """
-    A basic event model for groups
-    """
-    title = models.CharField(
-        max_length=200, verbose_name='Titre de l\'événement')
-    description = CKEditor5Field(
-        verbose_name='Description de l\'événement', blank=True)
-    date = models.DateTimeField(
-        verbose_name='Date de l\'événement',
-        help_text="Entrez la date au format JJ/MM/AAAA HH:MM")
+class Event(AbstractPublication):
+    """Extends the Publication model to an Event model."""
+
+    start_date = models.DateTimeField(
+        verbose_name=_("Start date"),
+        help_text=_("Enter date in format DD/MM/YYYY HH:MM"))
     end_date = models.DateTimeField(
-        verbose_name='Date de fin de l\'événement',
-        help_text='Par défaut une heure après la date de début',
-        blank=True,
-        null=True)
+        verbose_name=_("End date"),
+        help_text=_("If empty, default to one hour after the start date."),
+        blank=True)
     location = models.CharField(
-        max_length=200, verbose_name='Lieu')
-    slug = models.SlugField(
-        verbose_name='Slug de l\'événement', unique=True, null=True)
+        verbose_name=_("Location"), max_length=200, blank=True, null=True)
     participants = models.ManyToManyField(
-        to=Student, verbose_name='Participants', blank=True)
+        to=Student,
+        verbose_name=_("Participants"),
+        blank=True,
+        related_name='participate_events')
+    bookmarks = models.ManyToManyField(
+        to=Student,
+        verbose_name=_("Bookmarks"),
+        blank=True,
+        help_text=_("Users who have bookmarked this event."),
+        related_name='bookmarked_events')
     form_url = models.URLField(
-        verbose_name='Lien vers la billetterie',
+        verbose_name=_("Link to external form"),
         max_length=200,
+        blank=True)
+    max_participant = models.PositiveIntegerField(
+        verbose_name=_("Maximum number of participants"),
         blank=True,
         null=True)
-    max_participant = models.PositiveIntegerField(
-        verbose_name='Nombre de places maximum',
+    start_registration = models.DateTimeField(
+        verbose_name=_("Start date for registration"),
         blank=True,
-        null=True
-    )
-    begin_inscription = models.DateTimeField(
-        verbose_name='Date de début de l\'inscription',
+        null=True,
+        help_text=_("Users cannot register before this date."))
+    end_registration = models.DateTimeField(
+        verbose_name=_("End date for registration"),
         blank=True,
-        null=True
-    )
-    end_inscription = models.DateTimeField(
-        verbose_name='Date de fin de l\'inscription',
-        blank=True,
-        null=True
-    )
+        null=True,
+        help_text=_("Users cannot register after this date."))
 
     @property
     def number_of_participants(self) -> int:
         return self.participants.all().count()
 
     def is_participating(self, user: User) -> bool:
-        if user.is_anonymous or not user.is_authenticated or not hasattr(
-                user, 'student'):
-            return False
-        return user.student in self.participants.all()
+        return (user.is_authenticated
+                and self.participants.contains(user.student))
 
-    def is_favorite(self, user: User) -> bool:
-        if user.is_anonymous or not user.is_authenticated or not hasattr(
-                user, 'student'):
-            return False
-        return user.student.favorite_event.contains(self)
+    def is_bookmarked(self, user: User) -> bool:
+        return (user.is_authenticated
+                and self.bookmarks.contains(user.student))
 
-    def __str__(self):
-        return self.title
+    def get_absolute_url(self) -> str:
+        return f'/event/{self.id}'
 
-    def save(self, *args, **kwargs):
-        # create the slug
-        self.set_slug(
-            f'{self.date.year}-{self.date.month}-{self.date.day}-{self.title}'
-        )
-        if (self.form_url == ""):
-            self.form_url = None
+    def save(self, *args, **kwargs) -> None:
         # set end date to 1 hour after begin date if not set
-        if (self.end_date is None):
-            self.end_date = self.date + timedelta(hours=1)
+        if self.end_date is None:
+            self.end_date = self.date + timezone.timedelta(hours=1)
+        # save the event
+        super(Event, self).save(*args, **kwargs)
         # save the notification
         self.create_notification(
             title=self.group.name,
-            body=f'Nouvel event : {self.title}')
-        # save again the event
-        super(Event, self).save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return '/event/' + str(self.pk)
+            body=f'Nouvel event : {self.title}',
+            url=self.get_absolute_url())

@@ -7,6 +7,7 @@ export interface ClubProps {
 
 export interface SimpleGroupProps {
   name: string;
+  id: number;
   short_name: string;
   slug: string;
   url: string;
@@ -14,7 +15,6 @@ export interface SimpleGroupProps {
 }
 
 export interface GroupProps extends SimpleGroupProps {
-  id: number;
   group_type: {
     name: string;
     slug: string;

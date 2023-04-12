@@ -2,7 +2,7 @@ from django.db.models import Q
 from rest_framework import permissions
 from rest_framework import viewsets
 from .models import Post
-from .serializers import PostSerializer
+from .serializers import PostSerializer, WritePostSerializer
 from apps.group.api_views import Group
 from apps.student.api_views import Student
 from apps.post.models import VISIBILITY
@@ -49,12 +49,18 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, PostAdminPermission]
     serializer_class = PostSerializer
 
+    def get_serializer_class(self):
+        if self.request.method in ["POST", "PUT"]:
+            return WritePostSerializer
+        else:
+            return PostSerializer
+
     def get_queryset(self) -> list[Post]:
         if not hasattr(self.request.user, 'student'):
             return []
         # query params
         order_by: list[str] = self.request.query_params.get(
-            'order_by', '-publication_date').split(',')
+            'order_by', '-created_at').split(',')
         groups: str = self.request.query_params.get('group')
         visibility: str = self.request.query_params.get('publicity')
         organizers_slug: list[str] = groups.split(',') if groups else []
@@ -78,10 +84,10 @@ class PostViewSet(viewsets.ModelViewSet):
                 Q(member=True) if is_member else Q())
             .filter(Q(group__slug__in=organizers_slug)
                     if len(organizers_slug) > 0 else Q())
-            .filter(Q(publication_date__gte=from_date) if from_date else Q())
-            .filter(Q(publication_date__lte=to_date)
+            .filter(Q(created_at__gte=from_date) if from_date else Q())
+            .filter(Q(created_at__lte=to_date)
                     if to_date
-                    else Q(publication_date__lte=today) | Q(member=True))
+                    else Q(created_at__lte=today) | Q(member=True))
             .filter(Q(publicity=visibility) if visibility in
                     [VISIBILITY[i][0] for i in range(len(VISIBILITY))] else Q())
             .filter(Q(publicity=VISIBILITY[0][0]) | Q(member=True))

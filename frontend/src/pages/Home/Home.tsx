@@ -1,120 +1,139 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { ClubProps } from 'Props/Group';
+import { SimpleGroupProps } from 'Props/Group';
 import * as React from 'react';
-import { Box, Fab, SvgIcon, Typography } from '@mui/material';
-import { Container } from '@mui/system';
-import { Add } from '@mui/icons-material';
+import {
+  Box,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+  Typography,
+  Container,
+  Chip,
+  Divider,
+} from '@mui/material';
+import { Event, PostAdd } from '@mui/icons-material';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
-import { EventProps, eventsToCamelCase } from '../../Props/Event';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
+import { EventProps } from '../../Props/Event';
 import './Home.scss';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
-import { isThisWeek } from '../../utils/date';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
-import { PostProps, postsToCamelCase } from '../../Props/Post';
+import { PostProps, convertPostFromPythonData } from '../../Props/Post';
 import { LoadStatus } from '../../Props/GenericTypes';
 import { FormPost } from '../../components/FormPost/FormPost';
+import EditEventModal from '../../components/FormEvent/FormEvent';
+import { PostModal } from '../../components/Modal/PostModal';
+import { getMyGroups } from '../../api/group';
+import { getEvents } from '../../api/event';
+import { getPosts } from '../../api/post';
 
+const MAX_EVENT_SHOWN = 6;
 /**
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
 function Home() {
-  const [events, setEvents] = React.useState<Array<EventProps>>([]);
-  const [eventsStatus, setEventsStatus] = React.useState<LoadStatus>('load');
-  const [myClubs, setMyClubs] = React.useState<Array<ClubProps>>([]);
-  const [clubsStatus, setClubsStatus] = React.useState<LoadStatus>('load');
-  const [posts, setPosts] = React.useState<Array<PostProps>>([]);
-  const [postsStatus, setPostsStatus] = React.useState<LoadStatus>('load');
-  const [postsPinned, setPostsPinned] = React.useState<Array<PostProps>>([]);
-  const [postsPinnedStatus, setPostsPinnedStatus] =
-    React.useState<LoadStatus>('load');
-
-  const [postFormOpen, setPostFormOpen] = React.useState<boolean>(false);
-  const { t } = useTranslation('translation'); // translation module
+  // Query Params
+  const [queryParams, setQueryParams] = useSearchParams();
+  // Dates
   const today = new Date();
+  const nextWeek = new Date();
+  nextWeek.setDate(today.getDate() + 7);
   const postDateLimit = new Date();
   postDateLimit.setDate(today.getDay() - 15);
+  // Modals
+  const [postFormOpen, setPostFormOpen] = React.useState<boolean>(false);
+  const [eventFormOpen, setEventFormOpen] = React.useState<boolean>(false);
+  const [selectedPost, setSelectedPost] = React.useState<PostProps>(null);
+  const { t } = useTranslation('translation'); // translation module
+
   React.useEffect(() => {
-    getEvent();
-    getMyClubs();
-    getPosts();
-    getPinnedPosts();
-  }, []);
+    const postId = queryParams.get('post');
+    if (postId) {
+      axios
+        .get(`/api/post/${postId}`)
+        .then((res) => {
+          convertPostFromPythonData(res.data);
+          setSelectedPost(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+          queryParams.delete('post');
+          setQueryParams(queryParams);
+        });
+    }
+  }, [queryParams]);
 
-  async function getEvent() {
-    // fetch events
-    axios
-      .get('/api/event/', {
-        params: {
-          from_date: new Date().toISOString(),
-          order_by: 'begin_inscription',
-        },
-      })
-      .then((res) => {
-        eventsToCamelCase(res.data);
-        setEvents(res.data);
-        setEventsStatus('success');
-      })
-      .catch((err) => {
-        console.error(err);
-        setEventsStatus('fail');
-      });
-  }
+  const { status: myGroupsStatus, data: myGroups } = useQuery<
+    SimpleGroupProps[],
+    LoadStatus
+  >({
+    queryKey: 'myGroups',
+    queryFn: getMyGroups,
+  });
 
-  async function getMyClubs() {
-    // fetch my clubs
-    axios
-      .get('/api/group/group/', { params: { is_member: true, type: 'club' } })
-      .then((res) => {
-        setMyClubs(res.data.results);
-        setClubsStatus('success');
-      })
-      .catch((err) => {
-        console.error(err);
-        setClubsStatus('fail');
-      });
-  }
+  const {
+    status: thisWeekEventsStatus,
+    data: thisWeekEvents,
+    refetch: refetchThisWeekEvents,
+  } = useQuery<EventProps[]>({
+    queryKey: 'thisWeekEvents',
+    queryFn: () =>
+      getEvents({ fromDate: today, toDate: nextWeek, orderBy: ['date'] }),
+  });
 
-  async function getPosts() {
-    // fetch posts
-    axios
-      .get('/api/post', {
-        params: {
-          from_date: postDateLimit.toISOString(),
-          pinned: false,
-        },
-      })
-      .then((res) => {
-        postsToCamelCase(res.data);
-        setPosts(res.data);
-        setPostsStatus('success');
-      })
-      .catch((err) => {
-        console.error(err);
-        setPostsStatus('fail');
-      });
-  }
+  const {
+    status: upcomingEventsStatus,
+    data: upcomingEvents,
+    refetch: refetchUpcomingEvents,
+  } = useQuery<EventProps[]>({
+    queryKey: 'upcomingEvents',
+    queryFn: () =>
+      getEvents({
+        fromDate: nextWeek,
+        orderBy: ['date'],
+        limit: MAX_EVENT_SHOWN,
+      }),
+  });
 
-  async function getPinnedPosts() {
-    // fetch posts
-    axios
-      .get('/api/post', {
-        params: {
-          pinned: true,
-        },
-      })
-      .then((res) => {
-        postsToCamelCase(res.data);
-        setPostsPinned(res.data);
-        setPostsPinnedStatus('success');
-      })
-      .catch((err) => {
-        console.error(err);
-        setPostsPinnedStatus('fail');
-      });
-  }
+  const {
+    status: pinnedPostsStatus,
+    data: pinnedPosts,
+    refetch: refetchPinnedPosts,
+  } = useQuery<PostProps[]>({
+    queryKey: 'pinnedPosts',
+    queryFn: () =>
+      getPosts({
+        pinned: true,
+      }),
+  });
+  const {
+    status: postsStatus,
+    data: posts,
+    refetch: refetchPosts,
+  } = useQuery<PostProps[]>({
+    queryKey: 'posts',
+    queryFn: () =>
+      getPosts({
+        pinned: false,
+        fromDate: postDateLimit,
+      }),
+  });
+
+  const actions = [
+    {
+      icon: <Event />,
+      name: t('event.event'),
+      onClick: () => setEventFormOpen(true),
+    },
+    {
+      icon: <PostAdd />,
+      name: t('post.post'),
+      onClick: () => setPostFormOpen(true),
+    },
+  ];
 
   return (
     <>
@@ -122,23 +141,12 @@ function Home() {
         <div id="header-title">
           <Typography id="second-title">{t('home.welcomeTo')}</Typography>
           <div id="title">
-            <SvgIcon
-              component={NantralIcon}
-              inheritViewBox
-              id="header-logo"
-              sx={{
-                height: 50,
-                width: 50,
-              }}
-            />
             <Typography id="main-title">Nantral Platform</Typography>
           </div>
         </div>
-        <img
-          className="header-image"
-          alt=""
-          src="/static/img/central_background.jpg"
-        />
+        <div className="header-image-container">
+          <img className="header-image" alt="" src="/static/img/header.png" />
+        </div>
       </div>
       <Box
         bgcolor="background.default"
@@ -149,47 +157,65 @@ function Home() {
           paddingTop: 20,
         }}
       >
-        <Fab
-          color="primary"
-          aria-label="add"
-          onClick={() => setPostFormOpen(true)}
-          sx={{ bottom: 0, right: 0, position: 'fixed', margin: 4 }}
+        <SpeedDial
+          ariaLabel="SpeedDial"
+          sx={{ position: 'fixed', bottom: 24, right: 24, flexGrow: 1 }}
+          icon={<SpeedDialIcon />}
         >
-          <Add />
-        </Fab>
+          {actions.map((action) => (
+            <SpeedDialAction
+              onClick={action.onClick}
+              key={action.name}
+              icon={action.icon}
+              tooltipTitle={action.name}
+              tooltipOpen
+            />
+          ))}
+        </SpeedDial>
         <Container sx={{ marginBottom: 3 }}>
-          {(postsPinnedStatus === 'load' || postsPinned.length > 0) && (
+          {(pinnedPostsStatus === 'loading' || pinnedPosts.length > 0) && (
             <PostSection
-              posts={postsPinned}
+              posts={pinnedPosts}
               title={t('home.highlighted')}
-              status={postsStatus}
+              status={pinnedPostsStatus}
+              onUpdate={() => refetchPinnedPosts()}
             />
           )}
-          {posts.filter((post) => !post.pinned) && (
-            <PostSection
-              posts={posts.filter((post) => !post.pinned)}
-              title={t('home.announcement')}
-              status={postsStatus}
-            />
-          )}
+          <PostSection
+            posts={posts}
+            title={t('home.announcement')}
+            status={postsStatus}
+            onUpdate={() => refetchPosts()}
+          />
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            marginBottom={1}
+          >
+            <Typography variant="h4" margin={0}>
+              {t('navbar.events')}
+            </Typography>
+            <Link to="/event" style={{ textDecorationLine: 'none' }}>
+              <Chip label={t('button.seeAll')} clickable />
+            </Link>
+          </Box>
+          <Divider sx={{ marginBottom: 1 }} />
           <EventSection
-            events={events.filter((item: EventProps) =>
-              isThisWeek(new Date(item.beginDate))
-            )}
-            status={eventsStatus}
+            events={thisWeekEvents}
+            status={thisWeekEventsStatus}
             title={t('home.thisWeek')}
           />
           <EventSection
-            events={events.filter(
-              (item: EventProps) => !isThisWeek(new Date(item.beginDate))
-            )}
-            status={eventsStatus}
+            events={upcomingEvents}
+            status={upcomingEventsStatus}
             maxItem={6}
+            loadingItemCount={MAX_EVENT_SHOWN}
             title={t('home.upcomingEvents')}
           />
           <ClubSection
-            clubs={myClubs}
-            status={clubsStatus}
+            clubs={myGroups}
+            status={myGroupsStatus}
             title={t('home.myClubs')}
           />
         </Container>
@@ -199,10 +225,29 @@ function Home() {
         onClose={() => setPostFormOpen(false)}
         mode="create"
         onUpdate={() => {
-          getPosts();
-          getPinnedPosts();
+          refetchPosts();
+          refetchPinnedPosts();
         }}
       />
+      <EditEventModal
+        onUpdate={() => {
+          refetchUpcomingEvents();
+          refetchThisWeekEvents();
+        }}
+        open={eventFormOpen}
+        closeModal={() => setEventFormOpen(false)}
+      />
+      {selectedPost && (
+        <PostModal
+          onClose={() => {
+            setSelectedPost(null);
+            queryParams.delete('post');
+            setQueryParams(queryParams);
+          }}
+          open={!!selectedPost}
+          post={selectedPost}
+        />
+      )}
     </>
   );
 }

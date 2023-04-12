@@ -7,19 +7,11 @@ import {
   ListItem,
   ListItemButton,
   ListItemIcon,
-  SvgIcon,
+  Icon,
 } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './NavBarSide.scss';
-import { ReactComponent as EventIcon } from '../../assets/scalable/event.svg';
-import { ReactComponent as ClubIcon } from '../../assets/scalable/club.svg';
-import { ReactComponent as MapIcon } from '../../assets/scalable/roommates.svg';
-import { ReactComponent as FamilyIcon } from '../../assets/scalable/family.svg';
-import { ReactComponent as ListIcon } from '../../assets/scalable/list.svg';
-import { ReactComponent as SignIcon } from '../../assets/scalable/sign.svg';
-import { ReactComponent as LinkIcon } from '../../assets/scalable/link.svg';
-import { ReactComponent as HomeIcon } from '../../assets/scalable/accueil.svg';
 
 /** Interface for all links */
 interface LinksInterface {
@@ -51,41 +43,41 @@ function NavBarSide(props: {
     {
       text: t('navbar.home'),
       url: '/',
-      icon: HomeIcon,
+      icon: '/static/img/icons/cropped/home.svg',
     },
     {
       text: t('navbar.events'),
       url: '/event/',
-      icon: EventIcon,
+      icon: '/static/img/icons/cropped/event.svg',
     },
     {
       text: t('navbar.group'),
       url: '/group/',
-      icon: ClubIcon,
+      icon: '/static/img/icons/cropped/club.svg',
       isOnBackend: true,
     },
     {
       text: t('navbar.flatshare'),
       url: '/colocs/',
-      icon: MapIcon,
+      icon: '/static/img/icons/cropped/roommates.svg',
       isOnBackend: true,
     },
     {
       text: t('navbar.family'),
       url: '/parrainage/',
-      icon: FamilyIcon,
+      icon: '/static/img/icons/cropped/family.svg',
       isOnBackend: true,
     },
     {
       text: t('navbar.student'),
       url: '/student/',
-      icon: ListIcon,
+      icon: '/static/img/icons/cropped/list.svg',
       isOnBackend: true,
     },
     {
       text: t('navbar.signature'),
       url: '/tools/signature/',
-      icon: SignIcon,
+      icon: '/static/img/icons/cropped/sign.svg',
       isOnBackend: true,
     },
   ];
@@ -95,9 +87,7 @@ function NavBarSide(props: {
       variant={variant}
       open={menuOpen}
       anchor="left"
-      onAbort={onClose}
-      onAbortCapture={onClose}
-      onAuxClick={onClose}
+      onClick={onClose}
       sx={{
         width: drawerWidth,
         flexShrink: 0,
@@ -125,11 +115,13 @@ function NavBarSide(props: {
             >
               <ListItemButton onClick={onClose}>
                 <ListItemIcon>
-                  {link.icon ? (
-                    <SvgIcon component={link.icon} inheritViewBox />
-                  ) : (
-                    <SvgIcon component={LinkIcon} inheritViewBox />
-                  )}
+                  <Icon sx={{ lineHeight: 'initial' }}>
+                    <img
+                      className="icon-navbar"
+                      src={link.icon ?? '/static/img/icons/cropped/link.svg'}
+                      alt=""
+                    />
+                  </Icon>
                 </ListItemIcon>
                 {link.text}
               </ListItemButton>

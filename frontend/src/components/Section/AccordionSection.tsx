@@ -6,6 +6,7 @@ import {
   AccordionSummary,
   Box,
   Grid,
+  Typography,
 } from '@mui/material';
 import './AccordionSection.scss';
 
@@ -20,9 +21,13 @@ export function AccordionSection(props: {
     return (
       <Box marginBottom={2}>
         {title && (
-          <h1 className="section-title" style={{ marginBottom: '0.5em' }}>
+          <Typography
+            variant="h5"
+            className="section-title"
+            sx={{ marginBottom: '0.5em' }}
+          >
             {title}
-          </h1>
+          </Typography>
         )}
         <Grid spacing={2} container alignItems="stretch">
           {content}
