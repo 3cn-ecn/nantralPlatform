@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-23 00:17+0100\n"
-"PO-Revision-Date: 2023-02-23 00:18+0100\n"
+"POT-Creation-Date: 2023-04-10 15:11+0200\n"
+"PO-Revision-Date: 2023-04-10 15:17+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: api_views.py:186
-msgid "Provides either 'group' or 'student' as params."
-msgstr "Ajoutez soit 'group', soit 'student' comme paramètres de requête."
+#: api_views.py:38
+msgid "You must specify a valid group type in query parameters."
+msgstr "Spécifiez un type de groupe valide dans les paramètres de requête."
 
-#: api_views.py:212
+#: api_views.py:257
 msgid "All memberships objects must be from the same group."
 msgstr "Tous les objets membres doivent être du même groupe."
 
@@ -30,7 +30,7 @@ msgstr "Tous les objets membres doivent être du même groupe."
 msgid "Type name"
 msgstr "Nom du type"
 
-#: models.py:39 models.py:223
+#: models.py:39 models.py:227
 msgid "Icon"
 msgstr "Icône"
 
@@ -114,7 +114,7 @@ msgstr "types de groupes"
 msgid "Label Name"
 msgstr "Nom du label"
 
-#: models.py:103 models.py:180 models.py:395
+#: models.py:103 models.py:180 models.py:399
 msgid "Priority"
 msgstr "Priorité"
 
@@ -211,91 +211,104 @@ msgstr ""
 "utilisateurs non-connectés. Les membres, évènements et posts restent "
 "toutefois masqués."
 
-#: models.py:208 models.py:383
+#: models.py:206
+msgid "Can pin"
+msgstr "Peut épingler"
+
+#: models.py:208
+msgid "Admin members of this group can pin their posts"
+msgstr ""
+"Les admins du groupe peuvent épingler leurs posts sur la page d'accueil"
+
+#: models.py:212 models.py:387
 msgid "Summary"
 msgstr "Résumé"
 
-#: models.py:212 models.py:387
+#: models.py:216 models.py:391
 msgid "Description"
 msgstr "Description"
 
-#: models.py:215
+#: models.py:219
 msgid "Meeting place"
 msgstr "Lieu de réunion"
 
-#: models.py:219
+#: models.py:223
 msgid "Meeting hours"
 msgstr "Heure de réunion"
 
-#: models.py:227
+#: models.py:231
 msgid "Your icon will be displayed at 306x306 pixels."
 msgstr "Votre icon sera affiché au format 306x306 pixels."
 
-#: models.py:229
+#: models.py:233
 msgid "Banner"
 msgstr "Bannière"
 
-#: models.py:233
+#: models.py:237
 msgid "Your banner will be displayed at 1320x492 pixels."
 msgstr "Votre bannière sera affichée au format 1320x492 pixels."
 
-#: models.py:235
+#: models.py:239
 msgid "Video link 1"
 msgstr "Lien vidéo 1"
 
-#: models.py:237
+#: models.py:241
 msgid "Video link 2"
 msgstr "Lien vidéo 2"
 
-#: models.py:240
+#: models.py:244
 msgid "Social networks"
 msgstr "Réseaux Sociaux"
 
-#: models.py:287
+#: models.py:291
 msgid "You cannot set both 'public' and 'private' properties to True."
 msgstr "Les champs 'public' et 'privé' sont incompatibles entre eux."
 
-#: models.py:390
+#: models.py:394
 msgid "Begin date"
 msgstr "Date de début"
 
-#: models.py:393
+#: models.py:397
 msgid "End date"
 msgstr "Date de fin"
 
-#: models.py:396
+#: models.py:400
 msgid "Admin"
 msgstr "Admin"
 
-#: models.py:398
+#: models.py:402
 msgid "Asked to become admin"
 msgstr "A demandé à devenir admin"
 
-#: models.py:400
+#: models.py:404
 msgid "Request message"
 msgstr "Raison de la demande à devenir admin"
 
-#: models.py:431
+#: models.py:435
 #, python-format
 msgid "Your admin request for %(group)s has been accepted."
 msgstr "Votre demande d'admin pour %(group)s a été acceptée."
 
-#: models.py:455
+#: models.py:459
 #, python-format
 msgid "Your admin request for %(group)s has been denied."
 msgstr "Votre demande d'admin pour %(group)s a été refusée."
 
-#: serializers.py:31
+#: serializers.py:34
 msgid "Some fields cannot be updated by non-admins."
 msgstr ""
 "Certains champs ne peuvent pas être modifiés par des utilisateurs qui ne "
 "sont pas admins."
 
-#: serializers.py:100 serializers.py:129
+#: serializers.py:103 serializers.py:109
+msgid "This field is required."
+msgstr "Ce champ est obligatoire."
+
+#: serializers.py:116 serializers.py:145
 msgid "The end date must be after the begin date."
 msgstr "La date de fin doit être située après la date de début."
 
-#: serializers.py:119
+#: serializers.py:135
 msgid ""
 "You can only create new membership for yourself or for someone else inside a "
 "group where you are admin."
@@ -303,7 +316,7 @@ msgstr ""
 "Vous pouvez uniquement créer de nouveaux objets membres pour vous-même ou "
 "pour un groupe dont vous êtes admin."
 
-#: serializers.py:124
+#: serializers.py:140
 msgid ""
 "You cannot create create a new membership inside a private group if you are "
 "not admin of this group."
@@ -311,66 +324,66 @@ msgstr ""
 "Vous ne pouvez pas créer d'objets membres dans un groupe privé si vous "
 "n'êtes pas déjà admin du groupe."
 
-#: serializers.py:132
+#: serializers.py:148
 msgid "You must provides 'begin_date' and 'end_date'."
 msgstr "Vous devez indiquer une date de début et une date de fin."
 
-#: views.py:74 views.py:120 views.py:175 views.py:220 views.py:250 views.py:287
-#: views.py:327 views.py:385 views.py:420 views.py:468 views.py:504
-#: views.py:540
+#: views.py:74 views.py:121 views.py:176 views.py:222 views.py:252 views.py:289
+#: views.py:329 views.py:387 views.py:422 views.py:470 views.py:506
+#: views.py:542
 msgid "Groups"
 msgstr "Groupes"
 
-#: views.py:262 views.py:299 views.py:397 views.py:432 views.py:480
-#: views.py:516 views.py:552
+#: views.py:264 views.py:301 views.py:399 views.py:434 views.py:482
+#: views.py:518 views.py:554
 msgid "Edit"
 msgstr "Modifier"
 
-#: views.py:335
+#: views.py:337
 msgid "Create"
 msgstr "Créer"
 
-#: views.py:447
+#: views.py:449
 msgid "Social links updated"
 msgstr "Liens mis à jour"
 
-#: views.py:604
+#: views.py:606
 msgid "You are no longer a member of this group."
 msgstr "Vous n'êtes plus membre du groupe."
 
-#: views.py:611
+#: views.py:613
 msgid "Welcome in the group!"
 msgstr "Bienvenue dans le groupe !"
 
-#: views.py:614
+#: views.py:616
 msgid "Your modifications have been saved!"
 msgstr "Vos modifications ont bien été modifiées !"
 
-#: views.py:619
+#: views.py:621
 msgid "Modifications failed... 😥"
 msgstr "Les modifications ont échoué... 😥"
 
-#: views.py:643
+#: views.py:645
 msgid ""
 "Your admin request has been sent! You will receive the answer soon by email."
 msgstr ""
 "Votre demande a bien été envoyée ! Vous recevrez une réponse rapidement par "
 "mail."
 
-#: views.py:667
+#: views.py:669
 msgid "An error occurred... 😥"
 msgstr "Une erreur s'est produite... 😥"
 
-#: views.py:677
+#: views.py:679
 #, python-format
 msgid "The user %(user)s is now admin!"
 msgstr "L'utilisateur %(user)s est maintenant admin !"
 
-#: views.py:680 views.py:693
+#: views.py:682 views.py:695
 msgid "Request already answered!"
 msgstr "Cette demande d'admin a déjà été traitée!"
 
-#: views.py:690
+#: views.py:692
 #, python-format
 msgid "The admin request from %(user)s has been denied."
 msgstr "La demande d'admin de %(user)s a été refusée."

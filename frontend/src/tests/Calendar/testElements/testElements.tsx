@@ -20,7 +20,7 @@ export function createTestEvent(
   publicity: 'Pub' = 'Pub',
   maxParticipant = null,
   endRegistration = null,
-  beginRegistration = null,
+  startRegistration = null,
   formUrl = null,
   isFavorite = true,
   group = {
@@ -49,7 +49,7 @@ export function createTestEvent(
     title: title,
     maxParticipant: maxParticipant,
     endRegistration: endRegistration,
-    beginRegistration: beginRegistration,
+    startRegistration: startRegistration,
     formUrl: formUrl,
     isFavorite: isFavorite,
     effectiveSize: effectiveSize,

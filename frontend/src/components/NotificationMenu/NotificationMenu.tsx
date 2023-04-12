@@ -9,13 +9,13 @@ import {
   ListItem,
   Button,
   Chip,
+  Icon,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
 import axios from 'axios';
-import { ReactComponent as NotifIcon } from '../../assets/scalable/notification.svg';
 import { NotificationItem } from './NotificationItem';
 import merge from '../../legacy/notification/utils';
 import './NotificationItem.scss';
@@ -138,9 +138,16 @@ export function NotificationMenu() {
         aria-label="show 17 new notifications"
         color="inherit"
         onClick={handleClick}
+        component="span"
       >
         <Badge badgeContent={nbNotifs} color="error">
-          <SvgIcon component={NotifIcon} inheritViewBox />
+          <Icon sx={{ lineHeight: 'initial' }}>
+            <img
+              className="icon-navbar"
+              src="/static/img/icons/cropped/notification.svg"
+              alt="Notifications"
+            />
+          </Icon>
         </Badge>
       </IconButton>
       <Menu

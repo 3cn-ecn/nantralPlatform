@@ -6,42 +6,34 @@ import { getGroupDate } from './eventsView/utils';
 import { Event } from './eventsView/event';
 import { EventInfos } from './eventsView/interfaces';
 
-declare const eventsApiUrl: string;
-declare const eventsRemoveParticipant: string;
-declare const eventsAddParticipant: string;
-declare const eventListParticipants: string;
+declare const groupSlug: string;
 
-// const eventsApiUrl: string = "api/event/";
-// const eventsRemoveParticipant: string = "api/event/participating/1";
-// const eventsAddParticipant: string = "/event/1/participants/delete/";
-// const eventListParticipants: string = "/event/1/participants/add";
-
-function Root(props: {}): JSX.Element {
+function Root(): JSX.Element {
   const [eventInfos, setEventInfos] = useState(new Map());
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function getEvents(): Promise<void> {
-      await fetch(eventsApiUrl)
+      await fetch(`/api/event/?group=${groupSlug}`)
         .then((resp) => {
           resp.json().then((data) => {
-            let events: EventInfos[] = data;
-            let orderedEventsInfoMap = new Map();
-            for (let event of events) {
-              let eventReadableDate = getGroupDate(event.date);
-              let orderedEventsInfo =
+            const events: EventInfos[] = data.results;
+            const orderedEventsInfoMap = new Map();
+            events.forEach((event) => {
+              const eventReadableDate = getGroupDate(event.start_date);
+              const orderedEventsInfo =
                 orderedEventsInfoMap.get(eventReadableDate);
-              if (orderedEventsInfo != undefined) {
+              if (orderedEventsInfo !== undefined) {
                 orderedEventsInfo.push(event);
                 orderedEventsInfoMap.set(eventReadableDate, orderedEventsInfo);
               } else {
                 orderedEventsInfoMap.set(eventReadableDate, [event]);
               }
-            }
+            });
             setEventInfos(orderedEventsInfoMap);
           });
         })
-        .catch((err) => {
+        .catch(() => {
           setEventInfos(new Map());
         })
         .finally(() => setIsLoading(false));
@@ -57,7 +49,7 @@ function Root(props: {}): JSX.Element {
     <>
       {Array.from(eventInfos, (events, key) => {
         return (
-          <div key={key + 'outerdiv'}>
+          <div key={`${key}outerdiv`}>
             <h3>{events[0]}</h3>
             <Row className="gx-2 mb-3 events">
               {events[1].map((el, i) => {
@@ -66,17 +58,9 @@ function Root(props: {}): JSX.Element {
                     xs={12}
                     md={6}
                     xl={4}
-                    key={key + i.toString() + 'innerdiv'}
+                    key={`${key + i.toString()}innerdiv`}
                   >
-                    <Event
-                      key={key + i.toString()}
-                      eventInfos={el}
-                      urls={{
-                        add: eventsAddParticipant,
-                        remove: eventsRemoveParticipant,
-                        participants: eventListParticipants,
-                      }}
-                    />
+                    <Event key={key + i.toString()} eventInfos={el} />
                   </Col>
                 );
               })}
@@ -88,4 +72,4 @@ function Root(props: {}): JSX.Element {
   );
 }
 
-render(<Root />, document.getElementById("root-events"));
+render(<Root />, document.getElementById('root-events'));

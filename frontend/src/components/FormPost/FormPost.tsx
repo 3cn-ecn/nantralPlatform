@@ -14,7 +14,11 @@ import * as React from 'react';
 import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { FieldType } from 'Props/GenericTypes';
-import { FormPostProps, PostProps, postsToCamelCase } from '../../Props/Post';
+import {
+  FormPostProps,
+  PostProps,
+  convertPostFromPythonData,
+} from '../../Props/Post';
 import { theme } from '../style/palette';
 import FormGroup from '../../utils/form';
 import { SimpleGroupProps } from '../../Props/Group';
@@ -165,7 +169,7 @@ export function FormPost(props: {
     formData.append('description', values.description || '<p></p>');
     if (values.pageSuggestion)
       formData.append('page_suggestion', values.pageSuggestion);
-    formData.append('publication_date', values.publicationDate.toISOString());
+    formData.append('created_at', values.publicationDate.toISOString());
     formData.append('pinned', values.pinned ? 'true' : 'false');
     return formData;
   }
@@ -178,7 +182,7 @@ export function FormPost(props: {
         },
       })
       .then((res) => {
-        postsToCamelCase([res.data]);
+        convertPostFromPythonData(res.data);
         onUpdate(res.data);
       })
       .then(() => {
@@ -200,7 +204,7 @@ export function FormPost(props: {
         },
       })
       .then((res) => {
-        postsToCamelCase([res.data]);
+        convertPostFromPythonData(res.data);
         setValues(
           post
             ? structuredClone(post)

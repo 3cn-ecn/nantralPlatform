@@ -76,7 +76,7 @@ function EventCard(props: { event: EventProps }) {
     formUrl,
     isFavorite,
     endRegistration,
-    beginRegistration,
+    startRegistration,
     id,
   } = event;
   const [participating, setParticipating] = useState(isParticipating);
@@ -84,7 +84,7 @@ function EventCard(props: { event: EventProps }) {
   const { i18n } = useTranslation('translation');
 
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
-  if (formUrl !== null) variant = 'form';
+  if (formUrl) variant = 'form';
   else if (maxParticipant === null) variant = 'normal';
   else variant = 'shotgun';
 
@@ -164,7 +164,7 @@ function EventCard(props: { event: EventProps }) {
             participating={participating}
             eventId={id}
             link={formUrl}
-            beginRegistration={beginRegistration}
+            startRegistration={startRegistration}
             endRegistration={endRegistration}
             setParticipating={setParticipating}
             sx={{ width: '100%' }}

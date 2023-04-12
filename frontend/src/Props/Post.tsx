@@ -1,4 +1,4 @@
-import { snakeToCamelCase } from '../utils/camel';
+import { convertFromPythonData } from '../utils/convertData';
 import { SimpleGroupProps } from './Group';
 
 export interface PostProps {
@@ -32,8 +32,11 @@ export interface FormPostProps {
   pageSuggestion?: string;
 }
 
-export function postsToCamelCase(posts: Array<any>): void {
-  posts.forEach((post) => {
-    snakeToCamelCase(post, { publicationDate: 'Date', updatedAt: 'Date' });
-  });
+export function convertPostFromPythonData<P = PostProps | PostProps[]>(
+  data: P
+): P {
+  return convertFromPythonData(data, {
+    publicationDate: 'Date',
+    updatedAt: 'Date',
+  } as any);
 }

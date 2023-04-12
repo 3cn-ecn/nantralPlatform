@@ -4,7 +4,7 @@ from .models import Event
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'date']
+    list_display = ['title', 'start_date']
     readonly_fields = ['updated_by']
 
     def save_model(self, request, obj, form, change,):
