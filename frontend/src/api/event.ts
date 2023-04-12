@@ -5,6 +5,7 @@ import {
   FormEventProps,
   eventToCamelCase,
   eventsToCamelCase,
+  registrationType,
 } from '../Props/Event';
 import { Page } from '../Props/pagination';
 
@@ -36,10 +37,7 @@ export async function getEvent(id: number): Promise<EventProps> {
   return data;
 }
 
-function createForm(
-  values: FormEventProps,
-  mode: 'normal' | 'form' | 'shotgun'
-): FormData {
+function createForm(values: FormEventProps, mode: registrationType): FormData {
   const formData = new FormData();
   if (values.image && typeof values.image !== 'string')
     formData.append('image', values.image, values.image.name);
@@ -73,7 +71,7 @@ function createForm(
 
 export async function createEvent(
   options?: FormEventProps,
-  registrationMode: 'form' | 'shotgun' | 'normal' = 'form'
+  registrationMode: registrationType = 'form'
 ): Promise<FormEventProps> {
   return axios
     .post(`/api/event/`, createForm(options, registrationMode), {
@@ -90,7 +88,7 @@ export async function createEvent(
 export async function editEvent(
   id: number,
   options?: FormEventProps,
-  registrationMode: 'form' | 'shotgun' | 'normal' = 'form'
+  registrationMode: registrationType = 'form'
 ): Promise<FormEventProps> {
   return axios
     .put(`/api/event/${id}/`, createForm(options, registrationMode), {

@@ -123,7 +123,7 @@ function JoinButton({
       setLoading(true);
       quit();
     }
-    // onClick();
+    onClick();
   };
   const handleClick = () => {
     switch (variant) {

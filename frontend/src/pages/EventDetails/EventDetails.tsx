@@ -12,10 +12,8 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import { LoadStatus } from 'Props/GenericTypes';
 import './EventDetails.scss';
 import { useTranslation } from 'react-i18next';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -35,7 +33,6 @@ import JoinButton from '../../components/Button/JoinButton';
 import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
 import { EventParticipantsModal } from '../../components/Modal/EventParticipantsModal';
 import { ImageModal } from '../../components/Modal/ImageModal';
-import { EventProps, eventsToCamelCase } from '../../Props/Event';
 import NotFound from '../NotFound/NotFound';
 import { getEvent } from '../../api/event';
 

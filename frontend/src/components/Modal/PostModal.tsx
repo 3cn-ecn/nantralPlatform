@@ -22,8 +22,9 @@ export function PostModal(props: {
   open: boolean;
   onClose: () => void;
   onUpdate?: (post: FormPostProps) => void;
+  onDelete?: () => void;
 }): JSX.Element {
-  const { post, open, onClose, onUpdate } = props;
+  const { post, open, onClose, onUpdate, onDelete } = props;
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
   const { t } = useTranslation('translation');
@@ -123,11 +124,13 @@ export function PostModal(props: {
         onClose={() => setEditModalOpen(false)}
         post={post}
         onUpdate={onUpdate}
+        onDelete={onDelete}
       />
     </>
   );
 }
 
 PostModal.defaultProps = {
-  onUpdate: null,
+  onUpdate: () => null,
+  onDelete: () => null,
 };

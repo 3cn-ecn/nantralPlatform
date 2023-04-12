@@ -299,7 +299,6 @@ function EditEventModal(props: {
         // reset all errors messages, saving loading and close modal
         setFormErrors({});
         setGlobalErrors('');
-        // res.group = adminGroup.find((group) => group.id === res.group);
         onUpdate(res);
         setSaving(false);
         closeModal();

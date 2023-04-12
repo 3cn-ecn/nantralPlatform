@@ -1,6 +1,7 @@
 import { convertFromPythonData } from '../utils/convertData';
 import { SimpleGroupProps } from './Group';
 
+export type registrationType = 'normal' | 'form' | 'shotgun';
 export interface EventProps {
   id?: number; // Id of the event
   color?: string | null; // Color of the event card

@@ -187,6 +187,7 @@ export function PostCard(props: {
         open={open}
         onClose={() => setOpen(false)}
         onUpdate={onUpdate}
+        onDelete={onDelete}
       />
     </>
   );
