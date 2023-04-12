@@ -63,7 +63,7 @@ export function EventSection(props: {
     case 'success':
       if (events.length > 0) {
         content = allEvents.map((event) => (
-          <Grid item xs={12} sm={6} md={4} key={event.slug} flexGrow={1}>
+          <Grid item xs={12} sm={6} md={4} key={event.id} flexGrow={1}>
             <EventCard event={event} />
           </Grid>
         ));

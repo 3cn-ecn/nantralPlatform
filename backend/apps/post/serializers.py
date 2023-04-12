@@ -20,16 +20,13 @@ class PostSerializer(serializers.ModelSerializer):
         read_only_fields = ['slug']
         fields = [
             'id',
-            'slug',
             'title',
             'created_at',
             'updated_at',
             'group',
-            'color',
             'image',
             'publicity',
             'pinned',
-            'page_suggestion',
             'description',
             'is_admin',
             'can_pin',
@@ -62,6 +59,6 @@ class WritePostSerializer(serializers.ModelSerializer):
             'image',
             'publicity',
             'pinned',
-            'page_suggestion',
             'description',
+            'created_at'
         ]

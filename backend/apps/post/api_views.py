@@ -77,7 +77,7 @@ class PostViewSet(viewsets.ModelViewSet):
         student: Student = self.request.user.student
         my_groups = Group.objects.filter(members=student)
         # filtering
-        events = (
+        posts = (
             Post.objects
             .annotate(member=Q(group__in=my_groups))
             .filter(
@@ -96,4 +96,4 @@ class PostViewSet(viewsets.ModelViewSet):
             .order_by(*order_by)
             .distinct()
         )
-        return events
+        return posts

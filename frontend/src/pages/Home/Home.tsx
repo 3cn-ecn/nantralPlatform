@@ -20,7 +20,11 @@ import { EventProps } from '../../Props/Event';
 import './Home.scss';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { PostSection } from '../../components/Section/PostSection/PostSection';
-import { PostProps, convertPostFromPythonData } from '../../Props/Post';
+import {
+  FormPostProps,
+  PostProps,
+  convertPostFromPythonData,
+} from '../../Props/Post';
 import { LoadStatus } from '../../Props/GenericTypes';
 import { FormPost } from '../../components/FormPost/FormPost';
 import EditEventModal from '../../components/FormEvent/FormEvent';
@@ -178,14 +182,20 @@ function Home() {
               posts={pinnedPosts}
               title={t('home.highlighted')}
               status={pinnedPostsStatus}
-              onUpdate={() => refetchPinnedPosts()}
+              onUpdate={(newPost: FormPostProps) => {
+                refetchPinnedPosts();
+                if (!newPost.pinned) refetchPosts();
+              }}
             />
           )}
           <PostSection
             posts={posts}
             title={t('home.announcement')}
             status={postsStatus}
-            onUpdate={() => refetchPosts()}
+            onUpdate={(newPost: FormPostProps) => {
+              refetchPosts();
+              if (newPost.pinned) refetchPinnedPosts();
+            }}
           />
           <Box
             display="flex"
