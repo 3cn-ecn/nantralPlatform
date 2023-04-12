@@ -25,6 +25,7 @@ export async function getEvents(
     isParticipating?: boolean;
     publicity?: 'Mem' | 'Pub';
     registration?: 'open' | 'closed';
+    group?: string | string[];
   } = {}
 ): Promise<Page<EventProps>> {
   return axios
@@ -46,6 +47,7 @@ export async function getEvents(
         is_participating: options.isParticipating || undefined,
         publicity: options.publicity,
         registration: options.registration,
+        group: isArray(options.group) ? options.group.join(',') : options.group,
       },
     })
     .then((res) => {

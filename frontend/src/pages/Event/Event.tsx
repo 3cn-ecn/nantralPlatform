@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Tab, Button, Container, Pagination } from '@mui/material';
+import {
+  Box,
+  Tab,
+  Button,
+  Container,
+  Pagination,
+  Typography,
+} from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import axios from 'axios';
@@ -32,7 +39,11 @@ function EventList(props: {
   };
   return (
     <>
-      <div style={{ height: 30 }}></div>
+      <div style={{ margin: '1rem' }}>
+        <Typography align="right" variant="subtitle2">
+          {events?.count ?? '--'} results
+        </Typography>
+      </div>
       <EventSection
         status={status}
         events={events?.results}
@@ -67,6 +78,7 @@ function EventView(props: {
   const { filter, selectedTab, onChangeTab, onChangePage, initialPage } = props;
   const [value, setValue] = React.useState(selectedTab || '1');
   const [currentPage, setCurrentPage] = React.useState<number>(initialPage);
+  const [first, setFirst] = React.useState(true);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -74,13 +86,19 @@ function EventView(props: {
   };
 
   const today = new Date();
+
+  React.useEffect(() => {
+    if (first) setFirst(false);
+    else {
+      setCurrentPage(1);
+      onChangePage(1);
+    }
+  }, [filter]);
   // Request to get Events to display, depending of the filter.
   // If no date filter, only current and futur events are displayed.
-  const {
-    data: eventsList,
-    // refetch: refetchEventList,
-    status: eventsListStatus,
-  } = useQuery<Page<EventProps>>({
+  const { data: eventsList, status: eventsListStatus } = useQuery<
+    Page<EventProps>
+  >({
     queryKey: ['eventList', filter, currentPage],
     queryFn: () =>
       getEvents({
@@ -92,6 +110,7 @@ function EventView(props: {
         isParticipating: filter.participate,
         fromDate: filter.dateBegin,
         toDate: filter.dateEnd,
+        group: filter.organiser,
       }),
   });
 
@@ -109,6 +128,7 @@ function EventView(props: {
         isShotgun: filter.shotgun,
         isFavorite: filter.favorite,
         isParticipating: filter.participate,
+        group: filter.organiser,
       }),
     placeholderData: { count: 0, next: null, previous: null, results: [] },
   });
@@ -172,41 +192,43 @@ function Event() {
   };
 
   return (
-    <Container className="EventPage">
-      <h1>Évènements</h1>
-      <Box
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: 20,
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'flex-begin' }}>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => setOpenAddModal(true)}
-          >
-            Créer un événement
-          </Button>
-          <ModalEditEvent
-            open={openAddModal}
-            closeModal={() => setOpenAddModal(false)}
-          />
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <FilterBar filter={filter} getFilter={getFilter} />
-        </div>
-      </Box>
-      <EventView
-        filter={filter}
-        initialPage={Number.parseInt(queryParameters.get('page'), 10) || 1}
-        selectedTab={queryParameters.get('tab')}
-        onChangeTab={(value) => updateParameters({ tab: value })}
-        onChangePage={(page: number) => updateParameters({ page: page })}
+    <>
+      <Container className="EventPage">
+        <h1>Évènements</h1>
+        <Box
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: 20,
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'flex-begin' }}>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => setOpenAddModal(true)}
+            >
+              Créer un événement
+            </Button>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <FilterBar filter={filter} getFilter={getFilter} />
+          </div>
+        </Box>
+        <EventView
+          filter={filter}
+          initialPage={Number.parseInt(queryParameters.get('page'), 10) || 1}
+          selectedTab={queryParameters.get('tab')}
+          onChangeTab={(value) => updateParameters({ tab: value })}
+          onChangePage={(page: number) => updateParameters({ page: page })}
+        />
+      </Container>
+      <ModalEditEvent
+        open={openAddModal}
+        closeModal={() => setOpenAddModal(false)}
       />
-    </Container>
+    </>
   );
 }
 
