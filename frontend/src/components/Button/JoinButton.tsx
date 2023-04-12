@@ -40,7 +40,7 @@ interface JoinButtonProps {
   endRegistration: Date | null;
   unregisterOnly?: boolean;
   setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
-  handleClick?: () => void;
+  onClick?: () => void;
   hideInfoButton?: boolean;
 }
 
@@ -56,7 +56,7 @@ function JoinButton({
   endRegistration,
   unregisterOnly,
   setParticipating,
-  handleClick,
+  onClick,
   hideInfoButton,
 }: JoinButtonProps): JSX.Element {
   const [selected, setSelected] = React.useState(participating);
@@ -123,9 +123,9 @@ function JoinButton({
       setLoading(true);
       quit();
     }
-    handleClick();
+    // onClick();
   };
-  const onClick = () => {
+  const handleClick = () => {
     switch (variant) {
       case 'normal':
         if (closed || registrationNotStarted) return;
@@ -249,7 +249,7 @@ function JoinButton({
     return (
       <>
         <MenuItem
-          onClick={() => onClick()}
+          onClick={() => handleClick()}
           style={{ color: rgbToHex(theme.palette.error.main) }}
         >
           <HighlightOffIcon
@@ -279,7 +279,7 @@ function JoinButton({
       >
         <Button
           disabled={loading || registrationNotStarted || closed}
-          onClick={() => onClick()}
+          onClick={() => handleClick()}
           variant="contained"
           startIcon={getFirstIcon()}
           color={color}
@@ -326,7 +326,7 @@ function JoinButton({
         open={open}
         title={t('button.joinButton.unsuscribe')}
         content={t('button.joinButton.title')}
-        onClose={handleClose}
+        onClose={(value: boolean) => handleClose(value)}
       />
     </>
   );
@@ -338,7 +338,7 @@ JoinButton.defaultProps = {
   maxPerson: 0,
   sx: {},
   unregisterOnly: false,
-  handleClick: {},
+  onClick: {},
   hideInfoButton: false,
 };
 
