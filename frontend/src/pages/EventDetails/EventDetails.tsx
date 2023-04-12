@@ -46,7 +46,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 function EventDetails() {
   const { i18n, t } = useTranslation('translation');
   const { id } = useParams();
-  // const [event, setEvent] = useState<EventProps>(undefined);
   const [participating, setParticipating] = useState(false);
   const [openCopyNotif, setOpenCopyNotif] = useState(false);
   const [openImageModal, setOpenImageModal] = useState(false);
