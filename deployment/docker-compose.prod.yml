@@ -139,3 +139,6 @@ networks:
       driver: default
       config:
         - subnet: 192.168.203.0/24
+
+volumes:
+  static_volume_staging:
