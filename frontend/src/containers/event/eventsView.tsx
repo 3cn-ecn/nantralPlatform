@@ -11,6 +11,7 @@ declare const eventsRemoveParticipant: string;
 declare const eventsAddParticipant: string;
 declare const eventListParticipants: string;
 
+
 function Root(props: {}): JSX.Element {
   const [eventInfos, setEventInfos] = useState(new Map());
   const [isLoading, setIsLoading] = useState(true);
