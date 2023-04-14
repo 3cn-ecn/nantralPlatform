@@ -11,6 +11,7 @@ services:
     command: sh run_server_staging.sh
     volumes:
       - ../../nantralPlatform-staging/backend:/var/app
+      - static_volume_staging:/var/app/staticfiles/
     depends_on:
       - database
       - redis
@@ -22,6 +23,7 @@ services:
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot/:ro
+      - static_volume_staging:/var/app/staticfiles_staging/
 
   # Core services
   front:
