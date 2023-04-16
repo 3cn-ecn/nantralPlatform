@@ -14,6 +14,7 @@ import {
   Paper,
   Select,
   MenuItem,
+  useTheme,
 } from '@mui/material';
 import axios from 'axios';
 import {
@@ -29,7 +30,6 @@ import { FieldType } from 'Props/GenericTypes';
 import { SimpleGroup } from 'components/Group/interfaces';
 import { useQuery } from 'react-query';
 import { EventProps, FormEventProps } from '../../Props/Event';
-import { theme } from '../style/palette';
 import FormGroup from '../../utils/form';
 import { convertFromPythonData } from '../../utils/convertData';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
@@ -259,6 +259,8 @@ function EditEventModal(props: {
         })
         .then((res) => res.data.results),
   });
+
+  const theme = useTheme();
 
   const fields = getFormFields(adminGroup, t, mode);
 

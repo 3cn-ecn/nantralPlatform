@@ -7,11 +7,11 @@ import {
   DialogTitle,
   Typography,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { FormPostProps, PostProps } from 'Props/Post';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../style/palette';
 import { EditButton, PostBadges } from '../PostCard/PostCard';
 import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
@@ -25,6 +25,7 @@ export function PostModal(props: {
   onDelete?: () => void;
 }): JSX.Element {
   const { post, open, onClose, onUpdate, onDelete } = props;
+  const theme = useTheme();
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
   const { t } = useTranslation('translation');

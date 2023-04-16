@@ -19,6 +19,7 @@ import {
   Collapse,
   Breadcrumbs,
   Divider,
+  useTheme,
 } from '@mui/material';
 import {
   MoreVert as MoreIcon,
@@ -42,7 +43,6 @@ import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import EditSuggestionModal from '../Suggestion/Suggestion';
 import { Suggestion } from '../Suggestion/interfacesSuggestion';
-import { theme } from '../style/palette';
 
 /**
  * The top bar for navigation
@@ -122,6 +122,7 @@ function NavBarTop(props: {
   };
 
   const { t } = useTranslation('translation');
+  const theme = useTheme();
   const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
 

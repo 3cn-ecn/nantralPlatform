@@ -8,6 +8,7 @@ import {
   DialogTitle,
   IconButton,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
@@ -15,7 +16,6 @@ import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { FieldType } from 'Props/GenericTypes';
 import { FormPostProps, PostProps } from '../../Props/Post';
-import { theme } from '../style/palette';
 import FormGroup from '../../utils/form';
 import { SimpleGroupProps } from '../../Props/Group';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
@@ -60,6 +60,7 @@ export function FormPost(props: {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [confirmationOpen, setConfirmationOpen] =
     React.useState<boolean>(false);
+  const theme = useTheme();
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const { data: adminGroup } = useQuery<SimpleGroupProps[], string>({
     queryKey: 'admin-group',
