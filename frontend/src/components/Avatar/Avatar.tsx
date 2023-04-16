@@ -1,5 +1,8 @@
 import React from 'react';
-import { Avatar as MUIAvatar } from '@mui/material';
+import {
+  AvatarProps as MuiAvatarProps,
+  Avatar as MuiAvatar,
+} from '@mui/material';
 
 /**
  * Create a color from a string.
@@ -22,6 +25,16 @@ function stringToColor(string: string): string {
   return color;
 }
 
+interface AvatarProps {
+  title: string;
+  url?: string;
+  icon?: JSX.Element;
+  size?: 'small' | 'medium' | 'large';
+  width?: number;
+  height?: number;
+  props: MuiAvatarProps;
+}
+
 /**
  * A component for abstract avatar with a picture or initials if no picture.
  *
@@ -32,15 +45,15 @@ function stringToColor(string: string): string {
  * @returns
  * @returns
  */
-function Avatar(props: {
-  title: string;
-  url?: string;
-  icon?: JSX.Element;
-  size?: 'small' | 'medium' | 'large';
-  width?: number;
-  height?: number;
-}) {
-  const { title, url, icon, size, width, height } = props;
+function Avatar({
+  title,
+  url,
+  icon,
+  size = 'medium',
+  width,
+  height,
+  props,
+}: AvatarProps) {
   const words = title.split(' ');
   const initials =
     words.length > 1
@@ -54,20 +67,15 @@ function Avatar(props: {
   if (width !== null) Object.assign(sx, { width: width });
   if (height !== null) Object.assign(sx, { height: height });
   return (
-    <MUIAvatar
+    <MuiAvatar
       src={url}
       alt={title}
       sx={{ ...sx, bgcolor: stringToColor(title) }}
+      {...props}
     >
       {icon || initials.toUpperCase()}
-    </MUIAvatar>
+    </MuiAvatar>
   );
 }
-
-Avatar.defaultProps = {
-  url: null,
-  icon: null,
-  size: 'large',
-};
 
 export default Avatar;
