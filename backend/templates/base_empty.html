@@ -8,16 +8,16 @@
     <link rel="manifest" href="{% static 'manifest.webmanifest' %}" />
     <meta name="vapid-key" content="{{ vapid_key }}" />
 
+    {% if debug %}
     <script type="module">
       import RefreshRuntime from "http://localhost:5173/@react-refresh";
       RefreshRuntime.injectIntoGlobalHook(window);
       window.$RefreshReg$ = () => {};
       window.$RefreshSig$ = () => (type) => type;
       window.__vite_plugin_react_preamble_installed__ = true;
-      console.log(localStorage.getItem("theme-mode"));
-      document.body.style.backgroundColor =
-        localStorage.getItem("theme-mode") === "true" ? "white" : "#212121";
     </script>
+    {% endif %}
+  
     {% vite_hmr_client %}
 
     <!-- favicon -->
@@ -26,23 +26,27 @@
       type="image/svg+xml"
       href="{% static '/img/logo/scalable/logo.svg' %}"
     />
-    <link rel="stylesheet" href="{% static 'css/base_empty.css' %}?v=4.1" />
+    <title>Nantral Platform</title>
     <meta
       name="description"
       content="Bienvenue sur Nantral Platform, le site des étudiant⋅e⋅s de Centrale Nantes !"
     />
-    <title>Nantral Platform</title>
+    <link rel="stylesheet" href="{% static 'css/base_empty.css' %}?v=4.1" />
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script type="text/javascript">
+      const mode = window.localStorage.getItem("theme-mode");
+      const systemIsDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (mode === 'dark' || mode !== 'light' && systemIsDarkMode) {
+        document.body.style.backgroundColor = "#121212";
+      }
+    </script>
     <div id="root">
-      <div
-        style="position: absolute; top: 50%; left: 50%; margin: -50px 0 0 -50px"
-      >
-        <div class="loader">
-          <img src="{% static "/img/logo/scalable/logo.svg" %}" alt=""
-          loading="lazy" />
+      <div class="loader">
+        <div class="spinner">
+          <img src="{% static "/img/logo/scalable/logo.svg" %}" alt="Loading..." />
         </div>
       </div>
     </div>

@@ -115,9 +115,8 @@ function NavBarSide(props: {
             >
               <ListItemButton onClick={onClose}>
                 <ListItemIcon>
-                  <Icon sx={{ lineHeight: 'initial' }}>
+                  <Icon>
                     <img
-                      className="icon-navbar"
                       src={link.icon ?? '/static/img/icons/cropped/link.svg'}
                       alt=""
                     />

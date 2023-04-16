@@ -1,21 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import './theme.scss';
-
-body {
-  margin: 0;
-  font-family: 'Heebo', sans-serif;
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
 
 ::selection {
   background: $primary-red-color;
   color: white;
-} 
+}

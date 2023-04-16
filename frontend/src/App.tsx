@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Route, Routes } from 'react-router-dom';
-import { Box, CssBaseline, Toolbar } from '@mui/material';
+import { Box, CssBaseline, PaletteMode, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Home from './pages/Home/Home';
@@ -20,10 +20,22 @@ import Student from './pages/Student/Student';
 import LegalNotice from './pages/LegalNotice/Legal';
 import EventDetails from './pages/EventDetails/EventDetails';
 import Profile from './pages/Profile/Profile';
-import theme from './theme';
-import darktheme from './darktheme';
+import getTheme from './theme';
 
 const queryClient = new QueryClient();
+
+const getPreferredMode = (): PaletteMode | 'auto' => {
+  const cachedMode = localStorage.getItem('theme-mode');
+  switch (cachedMode) {
+    case 'dark':
+      return 'dark';
+    case 'light':
+      return 'light';
+    default:
+      return 'auto';
+  }
+};
+
 /**
  * Main component of the application. It is composed of:
  * - the top navbar
@@ -32,41 +44,30 @@ const queryClient = new QueryClient();
  * @returns The App Component
  */
 function App() {
-  const jMode = JSON.parse(localStorage.getItem('theme-mode'));
-  let mode;
-  if (jMode !== null) {
-    mode = jMode;
-  } else {
-    mode = true;
-  }
-  const [menuOpen, setMenuOpen] = React.useState(false);
-  const [themeApp, setThemeApp] = React.useState(mode);
-  const jAuto = JSON.parse(localStorage.getItem('theme-auto'));
+  const [preferredMode, setPreferredMode] = useState<PaletteMode | 'auto'>(
+    getPreferredMode()
+  );
+  const systemInDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const theme = useMemo(() => {
+    const systemMode = systemInDarkMode ? 'dark' : 'light';
+    return getTheme(preferredMode === 'auto' ? systemMode : preferredMode);
+  }, [preferredMode, systemInDarkMode]);
 
-  let auto;
-  if (jMode !== null) {
-    auto = jAuto;
-  } else {
-    auto = true;
-  }
-  const [isAutomatic, setIsAutomatic] = React.useState(auto);
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const choixTheme = isAutomatic ? !prefersDarkMode : themeApp;
+  const [menuOpen, setMenuOpen] = useState(false);
   const drawerWidth = 240; // the width of the lateral navbar
   const sideBarVariant =
     window.innerWidth < 2 * drawerWidth ? 'temporary' : 'persistent';
+
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={choixTheme ? theme : darktheme}>
+      <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex' }}>
           <CssBaseline />
           <NavBarTop
             menuOpen={menuOpen}
             setMenuOpen={setMenuOpen}
-            themeApp={themeApp}
-            setThemeApp={setThemeApp}
-            isAutomatic={isAutomatic}
-            setIsAutomatic={setIsAutomatic}
+            colorMode={preferredMode}
+            setColorMode={setPreferredMode}
           />
           <NavBarSide
             menuOpen={menuOpen}
