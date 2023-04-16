@@ -16,6 +16,7 @@ import {
   MenuItem,
   rgbToHex,
   IconButton,
+  useTheme,
 } from '@mui/material';
 import axios from 'axios';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -25,7 +26,6 @@ import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
-import theme from '../../theme';
 import { EventPopover, TextPopover } from './InformationPopover';
 
 interface JoinButtonProps {
@@ -65,6 +65,7 @@ function JoinButton({
   const [loading, setLoading] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
   const [tootlTipOpen, setTooltipOpen] = React.useState(false);
+  const theme = useTheme();
   const buttonRef = React.useRef();
   React.useEffect(() => {
     if (loaded) {
