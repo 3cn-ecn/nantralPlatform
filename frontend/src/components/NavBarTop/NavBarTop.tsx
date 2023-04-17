@@ -19,6 +19,8 @@ import {
   Collapse,
   Breadcrumbs,
   Divider,
+  useTheme,
+  PaletteMode,
 } from '@mui/material';
 import {
   MoreVert as MoreIcon,
@@ -42,7 +44,12 @@ import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import EditSuggestionModal from '../Suggestion/Suggestion';
 import { Suggestion } from '../Suggestion/interfacesSuggestion';
-import { theme } from '../style/palette';
+
+declare module '@mui/material/AppBar' {
+  interface AppBarPropsColorOverrides {
+    neutral: true;
+  }
+}
 
 /**
  * The top bar for navigation
@@ -56,19 +63,10 @@ import { theme } from '../style/palette';
 function NavBarTop(props: {
   menuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  themeApp: boolean;
-  setThemeApp: React.Dispatch<React.SetStateAction<boolean>>;
-  isAutomatic: boolean;
-  setIsAutomatic: React.Dispatch<React.SetStateAction<boolean>>;
+  colorMode: PaletteMode | 'auto';
+  setColorMode: React.Dispatch<React.SetStateAction<PaletteMode | 'auto'>>;
 }) {
-  const {
-    menuOpen,
-    setMenuOpen,
-    themeApp,
-    setThemeApp,
-    isAutomatic,
-    setIsAutomatic,
-  } = props;
+  const { menuOpen, setMenuOpen, colorMode, setColorMode } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElLangue, setAnchorElLangue] =
@@ -122,6 +120,7 @@ function NavBarTop(props: {
   };
 
   const { t } = useTranslation('translation');
+  const theme = useTheme();
   const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
 
@@ -171,7 +170,7 @@ function NavBarTop(props: {
   };
 
   return (
-    <AppBar position="fixed" color="secondary">
+    <AppBar position="fixed" color="neutral">
       <Toolbar>
         <IconButton
           color="inherit"
@@ -181,9 +180,8 @@ function NavBarTop(props: {
           aria-label="menu"
           component="span"
         >
-          <Icon sx={{ lineHeight: 'initial' }}>
+          <Icon>
             <img
-              className="icon-navbar"
               src="/static/img/icons/cropped/menu.svg"
               alt="Ouvrir le menu"
             />
@@ -209,12 +207,8 @@ function NavBarTop(props: {
               mr: '-8px',
             }}
           >
-            <Icon sx={{ lineHeight: 'initial', display: 'flex' }}>
-              <img
-                className="icon-navbar"
-                src="/static/img/logo/scalable/logo.svg"
-                alt=""
-              />
+            <Icon>
+              <img src="/static/img/logo/scalable/logo.svg" alt="" />
             </Icon>
             <Typography
               variant="h6"
@@ -261,9 +255,8 @@ function NavBarTop(props: {
             ref={spanRef}
           >
             {!isProfilePicture || !student ? (
-              <Icon sx={{ lineHeight: 'initial' }}>
+              <Icon>
                 <img
-                  className="icon-navbar"
                   src="/static/img/icons/cropped/people.svg"
                   alt="Ouvrir le Menu Profil"
                 />
@@ -462,12 +455,10 @@ function NavBarTop(props: {
             </ListItem>
             <MenuItem
               onClick={() => {
-                setThemeApp(true);
-                setIsAutomatic(false);
-                localStorage.setItem('theme-auto', JSON.stringify(false));
-                localStorage.setItem('theme-mode', JSON.stringify(true));
+                setColorMode('light');
+                localStorage.setItem('theme-mode', 'light');
               }}
-              selected={themeApp === true && isAutomatic === false}
+              selected={colorMode === 'light'}
             >
               <SvgIcon component={Brightness7Icon} />
               <ListItemText className="menuItem">
@@ -476,12 +467,10 @@ function NavBarTop(props: {
             </MenuItem>
             <MenuItem
               onClick={() => {
-                setThemeApp(false);
-                setIsAutomatic(false);
-                localStorage.setItem('theme-auto', JSON.stringify(false));
-                localStorage.setItem('theme-mode', JSON.stringify(false));
+                setColorMode('dark');
+                localStorage.setItem('theme-mode', 'dark');
               }}
-              selected={themeApp === false && isAutomatic === false}
+              selected={colorMode === 'dark'}
             >
               <SvgIcon component={Brightness4Icon} />
               <ListItemText className="menuItem">
@@ -490,10 +479,10 @@ function NavBarTop(props: {
             </MenuItem>
             <MenuItem
               onClick={() => {
-                setIsAutomatic(true);
-                localStorage.setItem('theme-auto', JSON.stringify(true));
+                setColorMode('auto');
+                localStorage.setItem('theme-mode', 'auto');
               }}
-              selected={isAutomatic === true}
+              selected={colorMode === 'auto'}
             >
               <SvgIcon component={BrightnessMediumIcon} />
               <ListItemText className="menuItem">

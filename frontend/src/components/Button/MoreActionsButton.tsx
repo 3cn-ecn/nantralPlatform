@@ -8,10 +8,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { useTranslation } from 'react-i18next';
-import { IconButton, rgbToHex } from '@mui/material';
+import { IconButton, rgbToHex, useTheme } from '@mui/material';
 
 import JoinButton from './JoinButton';
-import theme from '../../theme';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -41,6 +40,8 @@ function MoreActionsButton(props: {
   } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [openCopyNotif, setOpenCopyNotif] = React.useState(false);
+  const theme = useTheme();
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -63,7 +64,7 @@ function MoreActionsButton(props: {
   const unregisterOption = participating ? (
     <JoinButton
       variant="normal"
-      handleClick={handleCloseMenu}
+      onClick={handleCloseMenu}
       person={1}
       maxPerson={2}
       participating={participating}

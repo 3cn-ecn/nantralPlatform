@@ -11,7 +11,7 @@ import { modulo } from '../../../../utils/maths';
  * @param action Defines whether the component is for last or next week.
  * @param step The type and beginning day in the week of the view.
  * @param updateDisplay The callback to update display.
- * @param beginDate The first day of the week.
+ * @param startDate The first day of the week.
  * @param endDate The last day of the week.
  * @param updateBegin The callback to update first day.
  * @param updateEnd The callback to update last day.
@@ -19,11 +19,11 @@ import { modulo } from '../../../../utils/maths';
  */
 export function ChangeWeek(props: {
   action: 'previous' | 'next';
-  step: { type: CalendarView; beginDate: number };
+  step: { type: CalendarView; startDate: number };
   updateDisplay: React.Dispatch<
-    React.SetStateAction<{ type: CalendarView; beginDate: number }>
+    React.SetStateAction<{ type: CalendarView; startDate: number }>
   >;
-  beginDate: Date;
+  startDate: Date;
   endDate: Date;
   updateBegin: any;
   updateEnd: any;
@@ -32,7 +32,7 @@ export function ChangeWeek(props: {
     step,
     updateDisplay,
     action,
-    beginDate,
+    startDate,
     endDate,
     updateBegin,
     updateEnd,
@@ -51,11 +51,11 @@ export function ChangeWeek(props: {
     case 'month':
       if (action === 'previous') {
         stepValue = numberOfDayInMonth(
-          beginDate.getFullYear(),
-          beginDate.getMonth() - 1
+          startDate.getFullYear(),
+          startDate.getMonth() - 1
         );
       } else {
-        stepValue = numberOfDayInDateMonth(beginDate);
+        stepValue = numberOfDayInDateMonth(startDate);
       }
       break;
     default:
@@ -70,20 +70,20 @@ export function ChangeWeek(props: {
         onClick={() => {
           updateDisplay({
             type: step.type,
-            beginDate: modulo(step.beginDate - stepValue, 7),
+            startDate: modulo(step.startDate - stepValue, 7),
           });
-          const newBeginDate = new Date(
-            beginDate.getFullYear(),
-            beginDate.getMonth(),
-            beginDate.getDate()
+          const newstartDate = new Date(
+            startDate.getFullYear(),
+            startDate.getMonth(),
+            startDate.getDate()
           );
           const newEndDate = new Date(
             endDate.getFullYear(),
             endDate.getMonth(),
             endDate.getDate()
           );
-          newBeginDate.setDate(newBeginDate.getDate() - stepValue);
-          updateBegin(newBeginDate);
+          newstartDate.setDate(newstartDate.getDate() - stepValue);
+          updateBegin(newstartDate);
           newEndDate.setDate(endDate.getDate() - stepValue);
           updateEnd(newEndDate);
         }}
@@ -104,20 +104,20 @@ export function ChangeWeek(props: {
       onClick={() => {
         updateDisplay({
           type: step.type,
-          beginDate: modulo(step.beginDate + stepValue, 7),
+          startDate: modulo(step.startDate + stepValue, 7),
         });
-        const newBeginDate = new Date(
-          beginDate.getFullYear(),
-          beginDate.getMonth(),
-          beginDate.getDate()
+        const newstartDate = new Date(
+          startDate.getFullYear(),
+          startDate.getMonth(),
+          startDate.getDate()
         );
         const newEndDate = new Date(
           endDate.getFullYear(),
           endDate.getMonth(),
           endDate.getDate()
         );
-        newBeginDate.setDate(newBeginDate.getDate() + stepValue);
-        updateBegin(newBeginDate);
+        newstartDate.setDate(newstartDate.getDate() + stepValue);
+        updateBegin(newstartDate);
         newEndDate.setDate(endDate.getDate() + stepValue);
         updateEnd(newEndDate);
       }}

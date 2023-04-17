@@ -141,9 +141,8 @@ export function NotificationMenu() {
         component="span"
       >
         <Badge badgeContent={nbNotifs} color="error">
-          <Icon sx={{ lineHeight: 'initial' }}>
+          <Icon>
             <img
-              className="icon-navbar"
               src="/static/img/icons/cropped/notification.svg"
               alt="Notifications"
             />

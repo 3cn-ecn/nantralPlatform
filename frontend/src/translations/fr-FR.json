@@ -75,7 +75,7 @@
   },
   "form": {
     "PostTitle": "Titre de l'annonce",
-    "beginDatetime": "Date et Heure de début",
+    "startDatetime": "Date et Heure de début",
     "cancel": "Annuler",
     "chooseFile": "Choisir un fichier",
     "createAPost": "Créer un post",

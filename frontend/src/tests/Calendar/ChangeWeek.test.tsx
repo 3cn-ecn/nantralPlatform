@@ -4,9 +4,9 @@ import { CalendarView } from 'components/Calendar/CalendarProps/CalendarProps';
 import userEvent from '@testing-library/user-event';
 import { ChangeWeek } from '../../components/Calendar/ChooseWeek/ChangeWeek/ChangeWeek';
 
-let beginDate = new Date('2023-02-17T03:24:00');
-const setBeginDate = (newDate: Date) => {
-  beginDate = newDate;
+let startDate = new Date('2023-02-17T03:24:00');
+const setstartDate = (newDate: Date) => {
+  startDate = newDate;
 };
 let endDate = new Date('2023-02-22T03:24:00');
 const setEndDate = (newDate: Date) => {
@@ -14,21 +14,21 @@ const setEndDate = (newDate: Date) => {
 };
 let displayData: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 } = {
   type: 'week',
-  beginDate: 0,
+  startDate: 0,
 };
 const updateDisplay = (newDisplay: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 }) => {
   displayData = newDisplay;
 };
 
-let newBeginDate = new Date('2023-02-11T03:24:00');
-const setNewBeginDate = (newDate: Date) => {
-  newBeginDate = newDate;
+let newstartDate = new Date('2023-02-11T03:24:00');
+const setNewstartDate = (newDate: Date) => {
+  newstartDate = newDate;
 };
 let newEndDate = new Date('2023-02-24T03:24:00');
 const setNewEndDate = (newDate: Date) => {
@@ -36,21 +36,21 @@ const setNewEndDate = (newDate: Date) => {
 };
 let newDisplayData: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 } = {
   type: 'day',
-  beginDate: 0,
+  startDate: 0,
 };
 const updateNewDisplay = (newDisplay: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 }) => {
   newDisplayData = newDisplay;
 };
 
-const lastBeginDate = new Date('2023-09-14T03:24:00');
-const setLastBeginDate = (newDate: Date) => {
-  newBeginDate = newDate;
+const laststartDate = new Date('2023-09-14T03:24:00');
+const setLaststartDate = (newDate: Date) => {
+  newstartDate = newDate;
 };
 const lastEndDate = new Date('2023-09-16T03:24:00');
 const setLastEndDate = (newDate: Date) => {
@@ -58,14 +58,14 @@ const setLastEndDate = (newDate: Date) => {
 };
 const lastDisplayData: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 } = {
   type: 'month',
-  beginDate: 0,
+  startDate: 0,
 };
 const updateLastDisplay = (newDisplay: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 }) => {
   newDisplayData = newDisplay;
 };
@@ -80,31 +80,31 @@ describe('<ChangeWeek />; only changes the date of the number of days, does not 
         action="previous"
         step={displayData}
         updateDisplay={updateDisplay}
-        beginDate={beginDate}
+        startDate={startDate}
         endDate={endDate}
-        updateBegin={setBeginDate}
+        updateBegin={setstartDate}
         updateEnd={setEndDate}
       />
     );
 
-    updateDisplay({ type: '3Days', beginDate: displayData.beginDate });
+    updateDisplay({ type: '3Days', startDate: displayData.startDate });
     const nextComponent = render(
       <ChangeWeek
         key="ChangeWeekTest"
         action="next"
         step={displayData}
         updateDisplay={updateDisplay}
-        beginDate={beginDate}
+        startDate={startDate}
         endDate={endDate}
-        updateBegin={setBeginDate}
+        updateBegin={setstartDate}
         updateEnd={setEndDate}
       />
     );
     await user.click(previousComponent.getByTestId('ChangeWeekPreviousTestId'));
-    expect(beginDate.getDate()).toBe(10);
+    expect(startDate.getDate()).toBe(10);
 
     await user.click(nextComponent.getByTestId('ChangeWeekNextTestId'));
-    expect(beginDate.getDate()).toBe(20);
+    expect(startDate.getDate()).toBe(20);
     expect(endDate.getDate()).toBe(25);
 
     expect(previousComponent).toMatchSnapshot();
@@ -118,33 +118,33 @@ describe('<ChangeWeek />; only changes the date of the number of days, does not 
         action="previous"
         step={newDisplayData}
         updateDisplay={updateNewDisplay}
-        beginDate={newBeginDate}
+        startDate={newstartDate}
         endDate={newEndDate}
-        updateBegin={setNewBeginDate}
+        updateBegin={setNewstartDate}
         updateEnd={setNewEndDate}
       />
     );
 
-    updateNewDisplay({ type: 'month', beginDate: displayData.beginDate });
+    updateNewDisplay({ type: 'month', startDate: displayData.startDate });
     const nextComponent = render(
       <ChangeWeek
         key="ChangeWeekTest"
         action="next"
         step={newDisplayData}
         updateDisplay={updateNewDisplay}
-        beginDate={newBeginDate}
+        startDate={newstartDate}
         endDate={newEndDate}
-        updateBegin={setNewBeginDate}
+        updateBegin={setNewstartDate}
         updateEnd={setNewEndDate}
       />
     );
 
     await user.click(previousComponent.getByTestId('ChangeWeekPreviousTestId'));
-    expect(newBeginDate.getDate()).toBe(10);
+    expect(newstartDate.getDate()).toBe(10);
     expect(newEndDate.getDate()).toBe(23);
 
     await user.click(nextComponent.getByTestId('ChangeWeekNextTestId'));
-    expect(newBeginDate.getMonth()).toBe(2);
+    expect(newstartDate.getMonth()).toBe(2);
 
     expect(previousComponent).toMatchSnapshot();
     expect(nextComponent).toMatchSnapshot();
@@ -157,15 +157,15 @@ describe('<ChangeWeek />; only changes the date of the number of days, does not 
         action="previous"
         step={lastDisplayData}
         updateDisplay={updateLastDisplay}
-        beginDate={lastBeginDate}
+        startDate={laststartDate}
         endDate={lastEndDate}
-        updateBegin={setLastBeginDate}
+        updateBegin={setLaststartDate}
         updateEnd={setLastEndDate}
       />
     );
 
     await user.click(component.getByTestId('ChangeWeekPreviousTestId'));
-    expect(newBeginDate.getMonth()).toBe(7);
+    expect(newstartDate.getMonth()).toBe(7);
 
     expect(component).toMatchSnapshot();
   });

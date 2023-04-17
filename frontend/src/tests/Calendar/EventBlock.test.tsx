@@ -29,14 +29,14 @@ const eventMiddleInDay: EventProps = createTestEvent(
   new Date('2023-02-16T03:24:00'),
   new Date('2023-02-18T04:24:00')
 );
-const displayDayEventMiddleInDay = new Date(eventMiddleInDay.beginDate);
-displayDayEventMiddleInDay.setDate(eventMiddleInDay.beginDate.getDate() + 1);
+const displayDayEventMiddleInDay = new Date(eventMiddleInDay.startDate);
+displayDayEventMiddleInDay.setDate(eventMiddleInDay.startDate.getDate() + 1);
 
 describe('<EventBlock />', () => {
   it('should display an EventBlock in the day', async () => {
     const component = render(
       <BrowserRouter>
-        <EventBlock day={eventInDay.beginDate} event={eventInDay} />
+        <EventBlock day={eventInDay.startDate} event={eventInDay} />
       </BrowserRouter>
     );
     expect(component.getByRole('button').style.height).toBe('1.2rem');
@@ -54,7 +54,7 @@ describe('<EventBlock />', () => {
   it('should display an EventBlock in the end of the day', async () => {
     const component = render(
       <BrowserRouter>
-        <EventBlock day={eventBeginInDay.beginDate} event={eventBeginInDay} />
+        <EventBlock day={eventBeginInDay.startDate} event={eventBeginInDay} />
       </BrowserRouter>
     );
     expect(component.getByRole('button').style.height).toBe('25.2rem');

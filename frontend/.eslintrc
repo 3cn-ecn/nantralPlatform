@@ -42,8 +42,12 @@
     "import/prefer-default-export": "off",
     "import/no-unresolved": "off",
     "react/self-closing-comp": "off",
-    "react/jsx-filename-extension": ["warn", { "extensions": [".tsx", ".jsx"] }],
+    "react/jsx-filename-extension": [
+      "warn",
+      { "extensions": [".tsx", ".jsx"] }
+    ],
     "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": [2, { "functions": "ignore" }],
     "@typescript-eslint/no-explicit-any": "off",
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-param-reassign": ["error", { "props": false }],

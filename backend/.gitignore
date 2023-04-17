@@ -74,9 +74,9 @@ venv.bak/
 .mypy_cache/
 
 # Do not push compiled static js from front because it will be compiled by the server
-static/js/
-static/upload/
-static/front/
+static/js/**
+static/upload/**
+static/front/**
 
 # Do not push celerybeat db
 */celerybeat-schedule

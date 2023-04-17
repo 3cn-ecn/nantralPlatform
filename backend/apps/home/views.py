@@ -135,12 +135,6 @@ def handler404(request, *args, **argv):
 
 
 @require_http_methods(["GET", "POST", "PUT", "DELETE"])
-def handler413(request, *args, **argv):
-    response = render(request, 'errors/413.html', context={}, status=404)
-    return response
-
-
-@require_http_methods(["GET", "POST", "PUT", "DELETE"])
 def handler500(request, *args, **argv):
     response = render(request, 'errors/500.html', context={}, status=500)
     return response

@@ -4,43 +4,43 @@ import userEvent from '@testing-library/user-event';
 import { CalendarView } from 'components/Calendar/CalendarProps/CalendarProps';
 import { ChooseDisplay } from '../../components/Calendar/ChooseDisplay/ChooseDisplay';
 
-let dayDisplay: { type: CalendarView; beginDate: number } = {
+let dayDisplay: { type: CalendarView; startDate: number } = {
   type: 'day',
-  beginDate: 6,
+  startDate: 6,
 };
 const updateDayDisplay = (newDisplay: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 }) => {
   dayDisplay = newDisplay;
 };
-let daysDisplay: { type: CalendarView; beginDate: number } = {
+let daysDisplay: { type: CalendarView; startDate: number } = {
   type: '3Days',
-  beginDate: 2,
+  startDate: 2,
 };
 const updateDaysDisplay = (newDisplay: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 }) => {
   daysDisplay = newDisplay;
 };
-let weekDisplay: { type: CalendarView; beginDate: number } = {
+let weekDisplay: { type: CalendarView; startDate: number } = {
   type: 'week',
-  beginDate: 0,
+  startDate: 0,
 };
 const updateWeekDisplay = (newDisplay: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 }) => {
   weekDisplay = newDisplay;
 };
-let monthDisplay: { type: CalendarView; beginDate: number } = {
+let monthDisplay: { type: CalendarView; startDate: number } = {
   type: 'month',
-  beginDate: 0,
+  startDate: 0,
 };
 const updateMonthDisplay = (newDisplay: {
   type: CalendarView;
-  beginDate: number;
+  startDate: number;
 }) => {
   monthDisplay = newDisplay;
 };
@@ -53,7 +53,7 @@ describe('<ChooseDisplay />', () => {
       <ChooseDisplay
         display={dayDisplay}
         updateDisplay={updateDayDisplay}
-        beginDate={new Date('2023-02-26T03:24:00')}
+        startDate={new Date('2023-02-26T03:24:00')}
       ></ChooseDisplay>
     );
 
@@ -76,7 +76,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(dayDisplay).toStrictEqual({
       type: 'day',
-      beginDate: 6,
+      startDate: 6,
     });
 
     // 3Days
@@ -85,7 +85,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(dayDisplay).toStrictEqual({
       type: '3Days',
-      beginDate: 6,
+      startDate: 6,
     });
 
     // week
@@ -94,7 +94,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(dayDisplay).toStrictEqual({
       type: 'week',
-      beginDate: 0,
+      startDate: 0,
     });
 
     // month
@@ -103,7 +103,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(dayDisplay).toStrictEqual({
       type: 'month',
-      beginDate: 2,
+      startDate: 2,
     });
 
     expect(component).toMatchSnapshot();
@@ -113,7 +113,7 @@ describe('<ChooseDisplay />', () => {
       <ChooseDisplay
         display={daysDisplay}
         updateDisplay={updateDaysDisplay}
-        beginDate={new Date('2023-02-22T03:24:00')}
+        startDate={new Date('2023-02-22T03:24:00')}
       ></ChooseDisplay>
     );
 
@@ -123,7 +123,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(daysDisplay).toStrictEqual({
       type: 'day',
-      beginDate: 2,
+      startDate: 2,
     });
 
     // 3Days
@@ -132,7 +132,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(daysDisplay).toStrictEqual({
       type: 'day',
-      beginDate: 2,
+      startDate: 2,
     });
 
     // week
@@ -141,7 +141,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(daysDisplay).toStrictEqual({
       type: 'week',
-      beginDate: 0,
+      startDate: 0,
     });
 
     // month
@@ -150,7 +150,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(daysDisplay).toStrictEqual({
       type: 'month',
-      beginDate: 2,
+      startDate: 2,
     });
 
     expect(component).toMatchSnapshot();
@@ -160,7 +160,7 @@ describe('<ChooseDisplay />', () => {
       <ChooseDisplay
         display={weekDisplay}
         updateDisplay={updateWeekDisplay}
-        beginDate={new Date('2023-02-20T03:24:00')}
+        startDate={new Date('2023-02-20T03:24:00')}
       ></ChooseDisplay>
     );
 
@@ -170,7 +170,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(weekDisplay).toStrictEqual({
       type: 'day',
-      beginDate: 0,
+      startDate: 0,
     });
 
     // 3Days
@@ -179,7 +179,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(weekDisplay).toStrictEqual({
       type: '3Days',
-      beginDate: 0,
+      startDate: 0,
     });
 
     // week
@@ -188,7 +188,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(weekDisplay).toStrictEqual({
       type: '3Days',
-      beginDate: 0,
+      startDate: 0,
     });
 
     // month
@@ -197,7 +197,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(weekDisplay).toStrictEqual({
       type: 'month',
-      beginDate: 2,
+      startDate: 2,
     });
 
     expect(component).toMatchSnapshot();
@@ -207,7 +207,7 @@ describe('<ChooseDisplay />', () => {
       <ChooseDisplay
         display={monthDisplay}
         updateDisplay={updateMonthDisplay}
-        beginDate={new Date('2023-02-20T03:24:00')}
+        startDate={new Date('2023-02-20T03:24:00')}
       ></ChooseDisplay>
     );
 
@@ -217,7 +217,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(monthDisplay).toStrictEqual({
       type: 'day',
-      beginDate: 0,
+      startDate: 0,
     });
 
     // 3Days
@@ -226,7 +226,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(monthDisplay).toStrictEqual({
       type: '3Days',
-      beginDate: 0,
+      startDate: 0,
     });
 
     // week
@@ -235,7 +235,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(monthDisplay).toStrictEqual({
       type: 'week',
-      beginDate: 0,
+      startDate: 0,
     });
 
     // month
@@ -244,7 +244,7 @@ describe('<ChooseDisplay />', () => {
     );
     expect(monthDisplay).toStrictEqual({
       type: 'week',
-      beginDate: 0,
+      startDate: 0,
     });
 
     expect(component).toMatchSnapshot();

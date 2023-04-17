@@ -12,13 +12,13 @@ import { firstMonthDay } from '../utils';
  * @returns The buttons to change the view of the calendar.
  */
 export function ChooseDisplay(props: {
-  display: { type: CalendarView; beginDate: number };
+  display: { type: CalendarView; startDate: number };
   updateDisplay: React.Dispatch<
-    React.SetStateAction<{ type: CalendarView; beginDate: number }>
+    React.SetStateAction<{ type: CalendarView; startDate: number }>
   >;
-  beginDate: Date;
+  startDate: Date;
 }): JSX.Element {
-  const { display, updateDisplay, beginDate } = props;
+  const { display, updateDisplay, startDate } = props;
   const { t } = useTranslation('translation');
   return (
     <>
@@ -26,7 +26,7 @@ export function ChooseDisplay(props: {
         data-testid="dayButtonTestId"
         onClick={() => {
           if (display.type !== 'day') {
-            updateDisplay({ type: 'day', beginDate: display.beginDate });
+            updateDisplay({ type: 'day', startDate: display.startDate });
           }
         }}
       >
@@ -36,7 +36,7 @@ export function ChooseDisplay(props: {
         data-testid="monthButtonTestId"
         onClick={() => {
           if (display.type !== '3Days') {
-            updateDisplay({ type: '3Days', beginDate: display.beginDate });
+            updateDisplay({ type: '3Days', startDate: display.startDate });
           }
         }}
       >
@@ -46,7 +46,7 @@ export function ChooseDisplay(props: {
         data-testid="weekButtonTestId"
         onClick={() => {
           if (display.type !== 'week') {
-            updateDisplay({ type: 'week', beginDate: 0 });
+            updateDisplay({ type: 'week', startDate: 0 });
           }
         }}
       >
@@ -58,7 +58,7 @@ export function ChooseDisplay(props: {
           if (display.type !== 'month') {
             updateDisplay({
               type: 'month',
-              beginDate: modulo(firstMonthDay(beginDate).getDay() - 1, 7) + 1,
+              startDate: modulo(firstMonthDay(startDate).getDay() - 1, 7) + 1,
             });
           }
         }}

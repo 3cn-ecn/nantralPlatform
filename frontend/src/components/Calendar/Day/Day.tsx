@@ -93,20 +93,20 @@ export function Day(props: {
   events.forEach((event) => {
     let startTime = 24;
     if (
-      event.beginDate.getDate() === day.getDate() &&
-      event.beginDate.getMonth() === day.getMonth() &&
-      event.beginDate.getFullYear() === day.getFullYear()
+      event.startDate.getDate() === day.getDate() &&
+      event.startDate.getMonth() === day.getMonth() &&
+      event.startDate.getFullYear() === day.getFullYear()
     ) {
       if (
-        event.beginDate.getHours() !== 0 ||
-        event.beginDate.getMinutes() !== 0 ||
-        event.beginDate.getSeconds() !== 0
+        event.startDate.getHours() !== 0 ||
+        event.startDate.getMinutes() !== 0 ||
+        event.startDate.getSeconds() !== 0
       ) {
         startTime =
           23 -
-          event.beginDate.getHours() +
-          (59 - event.beginDate.getMinutes()) / 60 +
-          (60 - event.beginDate.getSeconds()) / 3600;
+          event.startDate.getHours() +
+          (59 - event.startDate.getMinutes()) / 60 +
+          (60 - event.startDate.getSeconds()) / 3600;
       }
     }
     eventsBeginTime.push(startTime);

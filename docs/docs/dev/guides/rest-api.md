@@ -164,7 +164,7 @@ import { Page } from "../types";
 
 interface Event {
   title: string;
-  beginDate: Date;
+  startDate: Date;
   endDate: Date;
   isParticipating: boolean;
 }
@@ -177,14 +177,12 @@ function MyComponent(props: {}): JSX.Element {
   const eventsQuery = useQuery<Page<Event>, AxiosError>({
     queryKey: ["events"],
     queryFn: () =>
-      axios
-        .get<Page<Event>>("/api/event/event/")
-        .then((res) =>
-          convertFromPythonData(res.data, {
-            beginDate: "Date",
-            endDate: "Date",
-          })
-        ),
+      axios.get<Page<Event>>("/api/event/event/").then((res) =>
+        convertFromPythonData(res.data, {
+          startDate: "Date",
+          endDate: "Date",
+        })
+      ),
   });
 
   // check if the query is loading
@@ -222,7 +220,7 @@ Some explanations on this code:
   and convert dates from string to Date objects with the `convertFromPythonData`
   function:
   ```js
-  [ { title: 'Title 1', beginDate: Date('2022-01-01T16:54:000Z'), ...}, ...]
+  [ { title: 'Title 1', startDate: Date('2022-01-01T16:54:000Z'), ...}, ...]
   ```
 - We check for errors.
 - And finally we render the data.

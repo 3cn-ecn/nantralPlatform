@@ -74,7 +74,7 @@
   },
   "form": {
     "PostTitle": "Post title",
-    "beginDatetime": "Start date and time",
+    "startDatetime": "Start date and time",
     "cancel": "Cancel",
     "chooseFile": "Choose file",
     "createAPost": "Create a post",
