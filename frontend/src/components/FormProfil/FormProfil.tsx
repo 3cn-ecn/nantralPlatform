@@ -153,9 +153,14 @@ export function EditProfilModal(props: {
           </Box>
         </DialogTitle>
         <DialogContent dividers>
-          <Alert severity="error" hidden={!globalErrors}>
-            {globalErrors}
-          </Alert>
+          {globalErrors ? (
+            <Alert severity="error" hidden={!globalErrors}>
+              {globalErrors}
+            </Alert>
+          ) : (
+            // eslint-disable-next-line react/jsx-no-useless-fragment
+            <></>
+          )}
           <Box sx={{ minWidth: 500 }}>
             <FormGroup
               fields={formFields}

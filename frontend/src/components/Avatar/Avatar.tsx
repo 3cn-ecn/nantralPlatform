@@ -45,15 +45,13 @@ interface AvatarProps {
  * @returns
  * @returns
  */
-function Avatar({
-  title,
-  url,
-  icon,
-  size = 'medium',
-  width,
-  height,
-  props,
-}: AvatarProps) {
+function Avatar(props: {
+  title: string;
+  url?: string;
+  icon?: JSX.Element;
+  size?: 'small' | 'medium' | 'large' | 'extra_large';
+}) {
+  const { title, url, icon, size } = props;
   const words = title.split(' ');
   const initials =
     words.length > 1
@@ -64,8 +62,8 @@ function Avatar({
     Object.assign(sx, { width: 30, height: 30, fontSize: 13 });
   if (size === 'large')
     Object.assign(sx, { width: 56, height: 56, fontSize: 24 });
-  if (width !== null) Object.assign(sx, { width: width });
-  if (height !== null) Object.assign(sx, { height: height });
+  if (size === 'extra_large')
+    Object.assign(sx, { width: 250, height: 250, fontSize: 150 });
   return (
     <MuiAvatar
       src={url}

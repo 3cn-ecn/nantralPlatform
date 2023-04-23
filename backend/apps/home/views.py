@@ -68,7 +68,7 @@ def react_app_view(request):
 def current_user_page_view(request):
     """A view to redirect the user to his own page"""
     student = get_object_or_404(Student, pk=request.user.student.pk)
-    response = redirect('student:detail', student.pk)
+    response = redirect(f'/student/{student.pk}')
     return response
 
 
