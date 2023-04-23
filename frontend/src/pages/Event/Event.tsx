@@ -15,6 +15,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Page } from 'Props/pagination';
 import { AutoAwesomeMotion, Today, Upcoming } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { EventProps } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
@@ -22,7 +23,6 @@ import Calendar from '../../components/Calendar/Calendar';
 import ModalEditEvent from '../../components/FormEvent/FormEvent';
 import { ListResults, LoadStatus } from '../../Props/GenericTypes';
 import { getEvents } from '../../api/event';
-import { useTranslation } from 'react-i18next';
 
 const EVENT_PER_PAGE = 6;
 
