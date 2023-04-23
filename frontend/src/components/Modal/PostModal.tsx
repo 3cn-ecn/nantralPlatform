@@ -62,8 +62,16 @@ export function PostModal(props: {
                 )}
               </IconButton>
               <div>
-                <h2 className="post-title">{post?.title}</h2>
-                <div style={{ fontSize: 12 }}>{post.group.name}</div>
+                <Typography
+                  variant="h6"
+                  sx={{ lineHeight: 1 }}
+                  className="post-title"
+                >
+                  {post?.title}
+                </Typography>
+                <Typography variant="subtitle2" sx={{ lineHeight: 1 }}>
+                  {post?.group.name}
+                </Typography>
               </div>
             </div>
             <IconButton onClick={onClose}>

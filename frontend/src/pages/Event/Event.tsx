@@ -16,7 +16,13 @@ import { FilterInterface } from 'Props/Filter';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useInfiniteQuery, useQueries, useQuery } from 'react-query';
 import { Page } from 'Props/pagination';
-import { AutoAwesomeMotion, Sort, Today, Upcoming } from '@mui/icons-material';
+import {
+  AutoAwesomeMotion,
+  Favorite,
+  Sort,
+  Today,
+  Upcoming,
+} from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { EventProps } from '../../Props/Event';
@@ -68,7 +74,6 @@ function EventList(props: {
       document.scrollingElement.scrollHeight
     ) {
       handleNextPage(null, page + 1);
-      console.log('oui');
     }
   }
   React.useEffect(() => {
@@ -81,7 +86,7 @@ function EventList(props: {
   oneWeek.setDate(today.getDate() + 7);
   const chips = [
     {
-      label: 'All',
+      label: t('home.all'),
       icon: <AutoAwesomeMotion />,
       onClick: () => {
         onChangeFilter({ dateBegin: undefined, dateEnd: undefined });
@@ -89,7 +94,7 @@ function EventList(props: {
       },
     },
     {
-      label: 'This week',
+      label: t('home.thisWeek'),
       icon: <Today />,
       onClick: () => {
         onChangeFilter({
@@ -100,7 +105,7 @@ function EventList(props: {
       },
     },
     {
-      label: 'Upcoming',
+      label: t('home.upcomingEvents'),
       icon: <Upcoming />,
       onClick: () => {
         onChangeFilter({
@@ -108,6 +113,16 @@ function EventList(props: {
           dateBegin: oneWeek.toISOString(),
         });
         onChangeOrder('start_date');
+      },
+    },
+    {
+      label: t('filterbar.favorite'),
+      icon: <Favorite />,
+      onClick: () => {
+        onChangeFilter({
+          favorite: true,
+        });
+        onChangeOrder('-start_date');
       },
     },
   ];
@@ -149,10 +164,13 @@ function EventList(props: {
           <Box columnGap={1} display="flex" overflow="scroll">
             {filter.dateBegin && (
               <Chip
-                label={`from : ${new Date(filter.dateBegin).toLocaleDateString(
-                  i18n.language,
-                  { weekday: 'long', day: 'numeric', month: 'short' }
-                )}`}
+                label={`${t('filterbar.from')} : ${new Date(
+                  filter.dateBegin
+                ).toLocaleDateString(i18n.language, {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'short',
+                })}`}
                 variant="outlined"
                 onDelete={() =>
                   onChangeFilter({
@@ -164,10 +182,13 @@ function EventList(props: {
             )}
             {filter.dateEnd && (
               <Chip
-                label={`to : ${new Date(filter.dateEnd).toLocaleDateString(
-                  i18n.language,
-                  { weekday: 'long', day: 'numeric', month: 'short' }
-                )}`}
+                label={`${t('filterbar.to')} : ${new Date(
+                  filter.dateEnd
+                ).toLocaleDateString(i18n.language, {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'short',
+                })}`}
                 variant="outlined"
                 onDelete={() =>
                   onChangeFilter({
@@ -177,9 +198,33 @@ function EventList(props: {
                 }
               />
             )}
+            {filter.participate && (
+              <Chip
+                label={t('filterbar.participating')}
+                variant="outlined"
+                onDelete={() =>
+                  onChangeFilter({
+                    ...filter,
+                    participate: undefined,
+                  })
+                }
+              />
+            )}
+            {filter.favorite && (
+              <Chip
+                label={t('filterbar.favorite')}
+                variant="outlined"
+                onDelete={() =>
+                  onChangeFilter({
+                    ...filter,
+                    favorite: undefined,
+                  })
+                }
+              />
+            )}
             {filter.shotgun && (
               <Chip
-                label="Shotgun"
+                label={t('filterbar.shotgun')}
                 variant="outlined"
                 onDelete={() =>
                   onChangeFilter({
@@ -235,9 +280,11 @@ function EventList(props: {
             <MenuItem onClick={() => setOrderOpen(false)}>My account</MenuItem>
             <MenuItem onClick={() => setOrderOpen(false)}>Logout</MenuItem>
           </Menu>
-          <Typography align="right" variant="subtitle2">
-            {events?.length > 0 && events[0].count} results
-          </Typography>
+          {events?.length > 0 && (
+            <Typography align="right" variant="subtitle2">
+              {events[0].count} results
+            </Typography>
+          )}
         </Box>
       </Box>
       {events?.length > 0 &&

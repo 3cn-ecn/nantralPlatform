@@ -101,7 +101,7 @@ export default function BasicDatePicker(props: {
         value={value}
         onChange={handleChange}
         showDaysOutsideCurrentMonth
-        renderInput={(params) => render(params, isEmpty)}
+        textfield={(params) => render(params, isEmpty)}
       />
     </LocalizationProvider>
   );
