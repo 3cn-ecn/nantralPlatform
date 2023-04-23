@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -16,7 +15,7 @@ import './FilterBar.scss';
 import IconButton from '@mui/material/IconButton';
 import { Grid } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { SimpleGroupProps } from 'Props/Group';
 import { FilterFrontInterface, FilterInterface } from 'Props/Filter';
 import SimpleAccordion from '../Accordion/SimpleAccordion';
@@ -32,7 +31,9 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
   const { getFilter, filter } = props;
   const { t } = useTranslation('translation'); // translation module
   const [open, setOpen] = React.useState(false); // set true to open the drawer
-  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(); // date from which the events are filtered
+  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(
+    dayjs(filter.dateBegin)
+  ); // date from which the events are filtered
   const [dateBeginFormat, setDateBeginFormat] = React.useState(
     filter.dateBegin
   ); // date from which the events are filtered, as a string
@@ -44,6 +45,14 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
   const [isShotgun, setIsShotgun] = React.useState(filter.shotgun); // true if the 'Shotgun' filter is checked
   const [organiser, setOrganiser] = React.useState(filter.organiser); // the list of organiser displayed, as a string (a,b,c...)
 
+  React.useEffect(() => {
+    setIsFavorite(filter.favorite);
+    setIsParticipated(filter.participate);
+    setOrganiser(filter.organiser);
+    setDateBegin(dayjs(filter.dateBegin));
+    setDateEndFormat(filter.dateEnd);
+    console.log(filter, dateBegin, dateEndFormat);
+  }, [filter]);
   // Functions to get filter values from child components
   const getDateBegin = (newDate) => {
     setDateBegin(newDate);
@@ -94,6 +103,7 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       icon: <FavoriteIcon />,
       isMenu: false,
       content: null,
+      value: currentFilter.favorite,
     },
     {
       id: 'participate',
@@ -101,6 +111,7 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       icon: <PersonIcon />,
       isMenu: false,
       content: null,
+      value: currentFilter.participate,
     },
     {
       id: 'shotgun',
@@ -108,6 +119,7 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       icon: <TimerIcon />,
       isMenu: false,
       content: null,
+      value: currentFilter.shotgun,
     },
     {
       id: 'organiser',
@@ -140,6 +152,7 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
               label={t('filterbar.from')}
               minDate={null}
               getDate={getDateBegin}
+              controlledValue={dayjs(currentFilter.dateBegin)}
             />
           </Grid>
           <div style={{ height: '15px' }}></div>
@@ -148,6 +161,7 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
               label={t('filterbar.to')}
               minDate={dateBegin}
               getDate={getDateEnd}
+              controlledValue={dayjs(currentFilter.dateEnd)}
             />
           </Grid>
         </>
@@ -187,6 +201,7 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
                 />
               ) : (
                 <CheckboxButton
+                  value={filterItem.value}
                   label={filterItem.name}
                   icon={filterItem.icon}
                   id={filterItem.id}

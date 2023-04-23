@@ -4,6 +4,7 @@ export interface FilterFrontInterface {
   icon: any;
   isMenu?: boolean;
   content: any;
+  value?: any;
 }
 
 export interface FilterInterface {

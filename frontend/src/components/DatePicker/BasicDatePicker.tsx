@@ -22,12 +22,17 @@ export default function BasicDatePicker(props: {
   label: string;
   minDate: any;
   getDate: any;
+  controlledValue: Dayjs | null;
 }) {
-  const { label, minDate, getDate } = props;
+  const { label, minDate, getDate, controlledValue } = props;
   const { t } = useTranslation('translation'); // translation module
   const { i18n } = useTranslation('translation');
   const [value, setValue] = React.useState<Dayjs | null>(null); // value selected
   const [isEmpty, setIsEmpty] = React.useState(true); // true if not date is selected
+
+  React.useEffect(() => {
+    setValue(value);
+  }, [controlledValue]);
 
   const handleChange = (newValue: Dayjs | null) => {
     setValue(newValue);

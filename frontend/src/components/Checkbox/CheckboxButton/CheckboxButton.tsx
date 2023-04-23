@@ -15,9 +15,14 @@ function CheckboxButton(props: {
   label: string;
   icon: any;
   getChecked: any;
+  value: boolean;
 }) {
-  const { id, label, icon, getChecked } = props;
-  const [checkValue, setCheckValue] = React.useState(false); // true if the checkbox is checked
+  const { id, label, icon, getChecked, value } = props;
+  const [checkValue, setCheckValue] = React.useState(value); // true if the checkbox is checked
+
+  React.useEffect(() => {
+    setCheckValue(value);
+  }, [value]);
 
   const handleChange = () => {
     setCheckValue(!checkValue);

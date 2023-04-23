@@ -80,9 +80,11 @@ export function EventSection(props: {
         ));
       } else {
         content = (
-          <Typography sx={{ marginLeft: 3, fontSize: 18 }}>
-            {t('event.no_event')} 🥹
-          </Typography>
+          <Grid item>
+            <Typography sx={{ marginLeft: 3, fontSize: 18 }}>
+              {t('event.no_event')} 🥹
+            </Typography>
+          </Grid>
         );
       }
       break;
