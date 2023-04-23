@@ -6,10 +6,10 @@ import {
   Container,
   Pagination,
   Typography,
+  Chip,
 } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
-import axios from 'axios';
 import { FilterInterface } from 'Props/Filter';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -29,21 +29,73 @@ function EventList(props: {
   events: ListResults<EventProps>;
   onChangePage: (page: number) => void;
   page: number;
+  onChangeFilter: (change) => void;
 }) {
-  const { events, status, onChangePage, page } = props;
+  const { events, status, onChangePage, page, onChangeFilter } = props;
   const handleNextPage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     if (page !== newPage) onChangePage(newPage);
   };
+  const [selectedChip, setSelectedChip] = React.useState<number>(0);
+  const today = new Date();
+  const oneWeek = new Date();
+  oneWeek.setDate(today.getDate() + 7);
+  const chips = [
+    {
+      label: 'All',
+      onClick: () =>
+        onChangeFilter({ dateBegin: undefined, dateEnd: undefined }),
+    },
+    {
+      label: 'This week',
+      onClick: () =>
+        onChangeFilter({
+          dateBegin: today.toISOString(),
+          dateEnd: oneWeek.toISOString(),
+        }),
+    },
+    {
+      label: 'Upcoming',
+      onClick: () =>
+        onChangeFilter({
+          dateEnd: undefined,
+          dateBegin: oneWeek.toISOString(),
+        }),
+    },
+  ];
   return (
     <>
-      <div style={{ margin: '1rem' }}>
+      <Box
+        className="event-list-container"
+        sx={{
+          marginTop: 2,
+          marginBottom: 2,
+          justifyContent: 'space-between',
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: 1,
+        }}
+      >
+        <Box columnGap={1} display="flex" overflow="scroll">
+          {chips.map((chip, index: number) => (
+            <Chip
+              label={chip.label}
+              key={chip.label}
+              variant={index === selectedChip ? 'filled' : 'outlined'}
+              onClick={() => {
+                chip.onClick();
+                setSelectedChip(index);
+              }}
+            />
+          ))}
+        </Box>
         <Typography align="right" variant="subtitle2">
           {events?.count ?? '--'} results
         </Typography>
-      </div>
+      </Box>
       <EventSection
         status={status}
         events={events?.results}
@@ -73,9 +125,17 @@ function EventView(props: {
   selectedTab: string | null;
   onChangeTab: (tab: string) => void;
   onChangePage: (page: number) => void;
+  onChangeFilter: (changes) => void;
   initialPage: number;
 }) {
-  const { filter, selectedTab, onChangeTab, onChangePage, initialPage } = props;
+  const {
+    filter,
+    selectedTab,
+    onChangeTab,
+    onChangePage,
+    initialPage,
+    onChangeFilter,
+  } = props;
   const [value, setValue] = React.useState(selectedTab || '1');
   const [currentPage, setCurrentPage] = React.useState<number>(initialPage);
   const [first, setFirst] = React.useState(true);
@@ -85,8 +145,6 @@ function EventView(props: {
     onChangeTab(newValue);
   };
 
-  const today = new Date();
-
   React.useEffect(() => {
     if (first) setFirst(false);
     else {
@@ -94,8 +152,7 @@ function EventView(props: {
       onChangePage(1);
     }
   }, [filter]);
-  // Request to get Events to display, depending of the filter.
-  // If no date filter, only current and futur events are displayed.
+
   const { data: eventsList, status: eventsListStatus } = useQuery<
     Page<EventProps>
   >({
@@ -104,7 +161,7 @@ function EventView(props: {
       getEvents({
         limit: EVENT_PER_PAGE,
         offset: (currentPage - 1) * EVENT_PER_PAGE,
-        orderBy: '-date',
+        orderBy: '-start_date',
         isShotgun: filter.shotgun,
         isFavorite: filter.favorite,
         isParticipating: filter.participate,
@@ -124,7 +181,7 @@ function EventView(props: {
       getEvents({
         limit: 100,
         offset: 0,
-        orderBy: '-date',
+        orderBy: '-start_date',
         isShotgun: filter.shotgun,
         isFavorite: filter.favorite,
         isParticipating: filter.participate,
@@ -148,6 +205,7 @@ function EventView(props: {
       </Box>
       <TabPanel value="1" sx={{ padding: 0 }}>
         <EventList
+          onChangeFilter={(newChanges) => onChangeFilter(newChanges)}
           status={eventsListStatus}
           events={eventsList}
           onChangePage={handleNextPage}
@@ -217,6 +275,9 @@ function Event() {
           </div>
         </Box>
         <EventView
+          onChangeFilter={(changes) => {
+            getFilter(changes);
+          }}
           filter={filter}
           initialPage={Number.parseInt(queryParameters.get('page'), 10) || 1}
           selectedTab={queryParameters.get('tab')}

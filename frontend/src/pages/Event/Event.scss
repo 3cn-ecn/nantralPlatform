@@ -1,5 +1,11 @@
 @import './../../index.scss';
 
+
+.event-list-container
+::-webkit-scrollbar {
+   display: none;
+}
+
 .EventPage {
   text-align: center;
 }

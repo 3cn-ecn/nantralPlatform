@@ -16,20 +16,18 @@ const theme = createTheme({
     info: {
       main: '#0d6efd',
     },
+    neutral: {
+      main: '#dbdbdb',
+    },
   },
-  overrides: {
-    MuiAppBar: {
-      colorInherit: {
-        backgroundColor: '#689f38',
-        color: '#fff',
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {},
       },
     },
   },
-  props: {
-    MuiAppBar: {
-      color: 'secondary',
-    },
-  },
+  status: { danger: '' },
 });
 
 export default theme;
