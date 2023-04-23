@@ -1,5 +1,8 @@
 import React from 'react';
-import { Avatar as MUIAvatar } from '@mui/material';
+import {
+  AvatarProps as MuiAvatarProps,
+  Avatar as MuiAvatar,
+} from '@mui/material';
 
 /**
  * Create a color from a string.
@@ -20,6 +23,16 @@ function stringToColor(string: string): string {
   }
   /* eslint-enable no-bitwise */
   return color;
+}
+
+interface AvatarProps {
+  title: string;
+  url?: string;
+  icon?: JSX.Element;
+  size?: 'small' | 'medium' | 'large';
+  width?: number;
+  height?: number;
+  props: MuiAvatarProps;
 }
 
 /**
@@ -52,20 +65,15 @@ function Avatar(props: {
   if (size === 'extra_large')
     Object.assign(sx, { width: 250, height: 250, fontSize: 150 });
   return (
-    <MUIAvatar
+    <MuiAvatar
       src={url}
       alt={title}
       sx={{ ...sx, bgcolor: stringToColor(title) }}
+      {...props}
     >
       {icon || initials.toUpperCase()}
-    </MUIAvatar>
+    </MuiAvatar>
   );
 }
-
-Avatar.defaultProps = {
-  url: null,
-  icon: null,
-  size: 'large',
-};
 
 export default Avatar;

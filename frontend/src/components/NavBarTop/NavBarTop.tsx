@@ -2,7 +2,6 @@ import * as React from 'react';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import {
   IconButton,
   AppBar,
@@ -13,36 +12,45 @@ import {
   MenuItem,
   ListItem,
   ListItemText,
-  Link as LinkMui,
   useMediaQuery,
+  Icon,
+  Button,
+  SvgIcon,
+  Collapse,
+  Breadcrumbs,
+  Divider,
+  useTheme,
+  PaletteMode,
 } from '@mui/material';
-import SvgIcon from '@mui/material/SvgIcon';
-import Collapse from '@mui/material/Collapse';
-import { MoreVert as MoreIcon } from '@mui/icons-material';
-import Divider from '@mui/material/Divider';
-import GavelIcon from '@mui/icons-material/Gavel';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import PersonIcon from '@mui/icons-material/Person';
-import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
-import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import BrightnessMediumIcon from '@mui/icons-material/BrightnessMedium';
-import PaletteIcon from '@mui/icons-material/Palette';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import {
+  MoreVert as MoreIcon,
+  Gavel as GavelIcon,
+  NavigateNext as NavigateNextIcon,
+  Person as PersonIcon,
+  PublicRounded as PublicRoundedIcon,
+  HelpRounded as HelpRoundedIcon,
+  ArrowBack as ArrowBackIcon,
+  ErrorRounded as ErrorRoundedIcon,
+  LogoutRounded as LogoutRoundedIcon,
+  Brightness4 as Brightness4Icon,
+  Brightness7 as Brightness7Icon,
+  BrightnessMedium as BrightnessMediumIcon,
+  Palette as PaletteIcon,
+  AdminPanelSettings as AdminPanelSettingsIcon,
+} from '@mui/icons-material';
 import axios from 'axios';
 import Avatar from '../Avatar/Avatar';
 import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
-import { ReactComponent as MenuIcon } from '../../assets/icons/scalable/menu.svg';
-import { ReactComponent as PeopleIcon } from '../../assets/icons/scalable/people.svg';
-import { ReactComponent as NantralIcon } from '../../assets/logo/scalable/logo.svg';
 import EditSuggestionModal from '../Suggestion/Suggestion';
 import { Suggestion } from '../Suggestion/interfacesSuggestion';
-import { theme } from '../style/palette';
+
+declare module '@mui/material/AppBar' {
+  interface AppBarPropsColorOverrides {
+    neutral: true;
+  }
+}
+
 /**
  * The top bar for navigation
  *
@@ -55,19 +63,10 @@ import { theme } from '../style/palette';
 function NavBarTop(props: {
   menuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  themeApp: boolean;
-  setThemeApp: React.Dispatch<React.SetStateAction<boolean>>;
-  isAutomatic: boolean;
-  setIsAutomatic: React.Dispatch<React.SetStateAction<boolean>>;
+  colorMode: PaletteMode | 'auto';
+  setColorMode: React.Dispatch<React.SetStateAction<PaletteMode | 'auto'>>;
 }) {
-  const {
-    menuOpen,
-    setMenuOpen,
-    themeApp,
-    setThemeApp,
-    isAutomatic,
-    setIsAutomatic,
-  } = props;
+  const { menuOpen, setMenuOpen, colorMode, setColorMode } = props;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [anchorElLangue, setAnchorElLangue] =
@@ -120,10 +119,10 @@ function NavBarTop(props: {
     setOpenS(false);
   };
 
-  const isOnBackend = true;
-
   const { t } = useTranslation('translation');
-  const md = useMediaQuery(theme.breakpoints.down('md'));
+  const theme = useTheme();
+  const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const location = useLocation();
 
   const breadcrumbNameMap: { [key: string]: string } = {
     '/home/': t('navbar.home'),
@@ -140,11 +139,13 @@ function NavBarTop(props: {
     '/legal_mentions/': 'Legal',
     '/event/:id/': 'Oui',
   };
-  const location = useLocation();
-  let pathnames = `${location.pathname}`.split('/').filter((x) => x);
-  if (pathnames.length === 0) pathnames = ['home'];
-  else if (pathnames.length > 1 && md)
-    pathnames = pathnames.slice(pathnames.length - 2, pathnames.length - 1);
+  let pathnames = location.pathname.split('/').filter((x) => x);
+  if (pathnames.length === 0) {
+    pathnames = ['home'];
+  }
+  if (pathnames.length > 1 && smallScreen) {
+    pathnames = [pathnames.at(-2)];
+  }
 
   React.useEffect(() => {
     getLoggedStudent();
@@ -169,7 +170,7 @@ function NavBarTop(props: {
   };
 
   return (
-    <AppBar position="fixed" color="secondary">
+    <AppBar position="fixed" color="neutral">
       <Toolbar>
         <IconButton
           color="inherit"
@@ -177,28 +178,38 @@ function NavBarTop(props: {
           size="large"
           edge="start"
           aria-label="menu"
-          sx={{ mr: 2 }}
+          component="span"
         >
-          <SvgIcon component={MenuIcon} inheritViewBox />
+          <Icon>
+            <img
+              src="/static/img/icons/cropped/menu.svg"
+              alt="Ouvrir le menu"
+            />
+          </Icon>
         </IconButton>
-        <Box sx={{ flexGrow: 0.02 }} />
         <Breadcrumbs
           aria-label="breadcrumb"
           className="breadcrumbs"
           separator={<NavigateNextIcon fontSize="small" />}
         >
-          <LinkMui
+          <Button
             component={Link}
             to="/"
-            color="textPrimary"
-            underline="hover"
-            sx={{ display: 'flex', alignItems: 'center', columnGap: 1 }}
+            variant="text"
+            color="inherit"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              columnGap: 1,
+              textTransform: 'none',
+              borderRadius: '5em',
+              minWidth: 'unset',
+              mr: '-8px',
+            }}
           >
-            <SvgIcon
-              sx={{ display: 'flex' }}
-              component={NantralIcon}
-              inheritViewBox
-            />
+            <Icon>
+              <img src="/static/img/logo/scalable/logo.svg" alt="" />
+            </Icon>
             <Typography
               variant="h6"
               fontWeight="bold"
@@ -206,30 +217,31 @@ function NavBarTop(props: {
             >
               Nantral Platform
             </Typography>
-          </LinkMui>
+          </Button>
           {pathnames.map((value, index) => {
-            const last = index === pathnames.length - 1;
+            const isLastItem = index === pathnames.length - 1;
             const to = `/${pathnames.slice(0, index + 1).join('/')}/`;
-            return last ? (
-              <Typography key={to} variant="h6">
-                {breadcrumbNameMap[to]}
-              </Typography>
-            ) : (
-              <LinkMui
-                component={Link}
-                underline="hover"
-                color="textPrimary"
-                to={to === '/home/' ? '/' : to}
+            return (
+              <Button
+                {...(isLastItem
+                  ? { href: '#' }
+                  : { component: Link, to: to === '/home/' ? '/' : to })}
+                color="inherit"
                 key={to}
-                variant="h6"
+                variant="text"
+                sx={{
+                  textTransform: 'none',
+                  borderRadius: '5em',
+                  ml: '-8px',
+                  mr: '-8px',
+                }}
               >
-                {breadcrumbNameMap[to]}
-              </LinkMui>
+                <Typography variant="h6">{breadcrumbNameMap[to]}</Typography>
+              </Button>
             );
           })}
         </Breadcrumbs>
-        <Box sx={{ flexGrow: 0.9 }} />
-        <Box sx={{ flexGrow: 1.0 }} />
+        <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: 'flex' }}>
           <NotificationMenu />
           <IconButton
@@ -243,7 +255,12 @@ function NavBarTop(props: {
             ref={spanRef}
           >
             {!isProfilePicture || !student ? (
-              <SvgIcon component={PeopleIcon} inheritViewBox />
+              <Icon>
+                <img
+                  src="/static/img/icons/cropped/people.svg"
+                  alt="Ouvrir le Menu Profil"
+                />
+              </Icon>
             ) : (
               <Avatar title={student.name} url={student.picture} />
             )}
@@ -314,7 +331,7 @@ function NavBarTop(props: {
                   to="/admin/"
                   className="menuItem"
                   disablePadding
-                  reloadDocument={isOnBackend}
+                  reloadDocument
                   sx={{
                     color: 'text.primary',
                   }}
@@ -438,12 +455,10 @@ function NavBarTop(props: {
             </ListItem>
             <MenuItem
               onClick={() => {
-                setThemeApp(true);
-                setIsAutomatic(false);
-                localStorage.setItem('theme-auto', JSON.stringify(false));
-                localStorage.setItem('theme-mode', JSON.stringify(true));
+                setColorMode('light');
+                localStorage.setItem('theme-mode', 'light');
               }}
-              selected={themeApp === true && isAutomatic === false}
+              selected={colorMode === 'light'}
             >
               <SvgIcon component={Brightness7Icon} />
               <ListItemText className="menuItem">
@@ -452,12 +467,10 @@ function NavBarTop(props: {
             </MenuItem>
             <MenuItem
               onClick={() => {
-                setThemeApp(false);
-                setIsAutomatic(false);
-                localStorage.setItem('theme-auto', JSON.stringify(false));
-                localStorage.setItem('theme-mode', JSON.stringify(false));
+                setColorMode('dark');
+                localStorage.setItem('theme-mode', 'dark');
               }}
-              selected={themeApp === false && isAutomatic === false}
+              selected={colorMode === 'dark'}
             >
               <SvgIcon component={Brightness4Icon} />
               <ListItemText className="menuItem">
@@ -466,10 +479,10 @@ function NavBarTop(props: {
             </MenuItem>
             <MenuItem
               onClick={() => {
-                setIsAutomatic(true);
-                localStorage.setItem('theme-auto', JSON.stringify(true));
+                setColorMode('auto');
+                localStorage.setItem('theme-mode', 'auto');
               }}
-              selected={isAutomatic === true}
+              selected={colorMode === 'auto'}
             >
               <SvgIcon component={BrightnessMediumIcon} />
               <ListItemText className="menuItem">

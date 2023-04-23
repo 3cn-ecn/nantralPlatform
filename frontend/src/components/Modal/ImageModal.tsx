@@ -4,10 +4,10 @@ import {
   DialogTitle,
   IconButton,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import React from 'react';
-import { theme } from '../style/palette';
 
 export function ImageModal(props: {
   url: string;
@@ -15,6 +15,7 @@ export function ImageModal(props: {
   open: boolean;
 }) {
   const { url, onClose, open } = props;
+  const theme = useTheme();
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   return (
     <Dialog

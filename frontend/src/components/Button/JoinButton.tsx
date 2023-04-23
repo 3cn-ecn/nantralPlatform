@@ -16,6 +16,7 @@ import {
   MenuItem,
   rgbToHex,
   IconButton,
+  useTheme,
 } from '@mui/material';
 import axios from 'axios';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -25,7 +26,6 @@ import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
-import theme from '../../theme';
 import { EventPopover, TextPopover } from './InformationPopover';
 
 interface JoinButtonProps {
@@ -40,7 +40,7 @@ interface JoinButtonProps {
   endRegistration: Date | null;
   unregisterOnly?: boolean;
   setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
-  handleClick?: () => void;
+  onClick?: () => void;
   hideInfoButton?: boolean;
 }
 
@@ -56,7 +56,7 @@ function JoinButton({
   endRegistration,
   unregisterOnly,
   setParticipating,
-  handleClick,
+  onClick,
   hideInfoButton,
 }: JoinButtonProps): JSX.Element {
   const [selected, setSelected] = React.useState(participating);
@@ -65,6 +65,7 @@ function JoinButton({
   const [loading, setLoading] = React.useState(false);
   const [loaded, setLoaded] = React.useState(false);
   const [tootlTipOpen, setTooltipOpen] = React.useState(false);
+  const theme = useTheme();
   const buttonRef = React.useRef();
   React.useEffect(() => {
     if (loaded) {
@@ -123,9 +124,9 @@ function JoinButton({
       setLoading(true);
       quit();
     }
-    handleClick();
+    onClick();
   };
-  const onClick = () => {
+  const handleClick = () => {
     switch (variant) {
       case 'normal':
         if (closed || registrationNotStarted) return;
@@ -249,7 +250,7 @@ function JoinButton({
     return (
       <>
         <MenuItem
-          onClick={() => onClick()}
+          onClick={() => handleClick()}
           style={{ color: rgbToHex(theme.palette.error.main) }}
         >
           <HighlightOffIcon
@@ -279,7 +280,7 @@ function JoinButton({
       >
         <Button
           disabled={loading || registrationNotStarted || closed}
-          onClick={() => onClick()}
+          onClick={() => handleClick()}
           variant="contained"
           startIcon={getFirstIcon()}
           color={color}
@@ -326,7 +327,7 @@ function JoinButton({
         open={open}
         title={t('button.joinButton.unsuscribe')}
         content={t('button.joinButton.title')}
-        onClose={handleClose}
+        onClose={(value: boolean) => handleClose(value)}
       />
     </>
   );
@@ -338,7 +339,7 @@ JoinButton.defaultProps = {
   maxPerson: 0,
   sx: {},
   unregisterOnly: false,
-  handleClick: {},
+  onClick: {},
   hideInfoButton: false,
 };
 

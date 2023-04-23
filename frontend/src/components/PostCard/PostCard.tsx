@@ -103,8 +103,12 @@ PostBadges.defaultProps = {
 SeePageButton.defaultProps = {
   style: null,
 };
-export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
-  const { post, onDelete } = props;
+export function PostCard(props: {
+  post: PostProps;
+  onUpdate?: (newPost: FormPostProps) => void;
+  onDelete?: () => void;
+}) {
+  const { post, onDelete, onUpdate } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [postValue, setPostValue] = React.useState(post);
   const { t } = useTranslation('translation');
@@ -112,18 +116,6 @@ export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
   React.useEffect(() => {
     setPostValue(post);
   }, [post]);
-
-  const updatePost = (newPost: FormPostProps) => {
-    if (newPost) {
-      Object.entries(newPost).forEach(([key, value]) => {
-        post[key] = value;
-      });
-      setPostValue(post);
-    } else {
-      onDelete();
-      setOpen(false);
-    }
-  };
 
   return (
     <>
@@ -163,9 +155,9 @@ export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
             >
               <h2 className="post-title">{postValue.title}</h2>
               <div style={{ fontStyle: 'italic', marginBottom: 5 }}>
-                {postValue.publicationDate.toDateString() ===
+                {postValue.createdAt.toDateString() ===
                 postValue.updatedAt.toDateString()
-                  ? timeFromNow(postValue.publicationDate)
+                  ? timeFromNow(postValue.createdAt)
                   : `${t('post.updated')} ${timeFromNow(postValue.updatedAt)}`}
               </div>
             </div>
@@ -194,7 +186,8 @@ export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
         post={postValue}
         open={open}
         onClose={() => setOpen(false)}
-        onUpdate={updatePost}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
       />
     </>
   );
@@ -202,6 +195,7 @@ export function PostCard(props: { post: PostProps; onDelete?: () => void }) {
 
 PostCard.defaultProps = {
   onDelete: () => null,
+  onUpdate: () => null,
 };
 
 export function PostCardSkeleton() {

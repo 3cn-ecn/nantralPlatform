@@ -18,7 +18,7 @@ export function EditGroupMembersModal(
   } = props;
 
   const [role, setRole] = useState(selectedMember.function);
-  const [beginDate, setBeginDate] = useState(
+  const [startDate, setstartDate] = useState(
     selectedMember.date_begin
       ? selectedMember.date_begin.replaceAll('/', '-')
       : null
@@ -41,7 +41,7 @@ export function EditGroupMembersModal(
       membersURL,
       selectedMember,
       role,
-      beginDate,
+      startDate,
       endDate,
       admin,
       handleClose,
@@ -72,8 +72,8 @@ export function EditGroupMembersModal(
             <Form.Label>Date de début</Form.Label>
             <Form.Control
               type="date"
-              defaultValue={beginDate}
-              onChange={({ target: { value } }) => setBeginDate(value)}
+              defaultValue={startDate}
+              onChange={({ target: { value } }) => setstartDate(value)}
             />
           </Form.Group>
 

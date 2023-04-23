@@ -7,12 +7,12 @@ import {
   DialogTitle,
   Typography,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { FormPostProps, PostProps } from 'Props/Post';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../style/palette';
-import { EditButton, PostBadges, SeePageButton } from '../PostCard/PostCard';
+import { EditButton, PostBadges } from '../PostCard/PostCard';
 import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
 import { FormPost } from '../FormPost/FormPost';
@@ -22,8 +22,10 @@ export function PostModal(props: {
   open: boolean;
   onClose: () => void;
   onUpdate?: (post: FormPostProps) => void;
+  onDelete?: () => void;
 }): JSX.Element {
-  const { post, open, onClose, onUpdate } = props;
+  const { post, open, onClose, onUpdate, onDelete } = props;
+  const theme = useTheme();
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
   const { t } = useTranslation('translation');
@@ -50,12 +52,14 @@ export function PostModal(props: {
             <div
               style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}
             >
-              <IconButton href={post.group.url}>
-                <Avatar
-                  title={post.group.name}
-                  url={post.group.icon}
-                  size="medium"
-                />
+              <IconButton href={post?.group.url}>
+                {post?.group?.name && (
+                  <Avatar
+                    title={post.group.name}
+                    url={post.group.icon}
+                    size="medium"
+                  />
+                )}
               </IconButton>
               <div>
                 <h2 className="post-title">{post?.title}</h2>
@@ -69,6 +73,7 @@ export function PostModal(props: {
         </DialogTitle>
         <DialogContent dividers>
           {post?.image && <img alt="" src={post.image.toString()} id="image" />}
+          {/* eslint-disable-next-line react/no-danger */}
           <div dangerouslySetInnerHTML={{ __html: post?.description }}></div>
         </DialogContent>
         <DialogActions
@@ -85,9 +90,9 @@ export function PostModal(props: {
           >
             <PostBadges pinned={post?.pinned} publicity={post?.publicity} />
             <Typography variant="caption" textAlign="right" fontStyle="italic">
-              {`${t('post.published')} ${timeFromNow(post?.publicationDate)}`}
+              {`${t('post.published')} ${timeFromNow(post?.createdAt)}`}
             </Typography>
-            {post?.publicationDate.toDateString() !==
+            {post?.createdAt.toDateString() !==
               post?.updatedAt.toDateString() && (
               <>
                 <Typography
@@ -112,9 +117,6 @@ export function PostModal(props: {
             {post?.isAdmin && (
               <EditButton onClick={() => setEditModalOpen(true)} />
             )}
-            {post?.pageSuggestion && (
-              <SeePageButton link={post.pageSuggestion} />
-            )}
           </div>
         </DialogActions>
       </Dialog>
@@ -123,11 +125,13 @@ export function PostModal(props: {
         onClose={() => setEditModalOpen(false)}
         post={post}
         onUpdate={onUpdate}
+        onDelete={onDelete}
       />
     </>
   );
 }
 
 PostModal.defaultProps = {
-  onUpdate: null,
+  onUpdate: () => null,
+  onDelete: () => null,
 };

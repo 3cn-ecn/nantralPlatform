@@ -3,11 +3,7 @@ import { GroupProps, SimpleGroupProps } from '../Props/Group';
 import { Page } from '../Props/pagination';
 
 export async function getMyGroups() {
-  return axios
-    .get<Page<SimpleGroupProps>>('/api/group/group/', {
-      params: { is_member: true, simple: true },
-    })
-    .then((res) => res.data.results);
+  return getGroups({ isMember: true });
 }
 
 export async function getGroups(

@@ -15,7 +15,6 @@ urlpatterns = [
     # errors pages
     path('404/', views.handler404),
     path('403/', views.handler403),
-    path('413/', views.handler413),
     path('500/', views.handler500),
     path('offline.html/', views.offline_view),
 

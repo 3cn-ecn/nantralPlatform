@@ -8,32 +8,31 @@ import {
   DialogTitle,
   IconButton,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import axios from 'axios';
 import * as React from 'react';
 import { useQuery } from 'react-query';
 import { useTranslation } from 'react-i18next';
 import { FieldType } from 'Props/GenericTypes';
-import {
-  FormPostProps,
-  PostProps,
-  convertPostFromPythonData,
-} from '../../Props/Post';
-import { theme } from '../style/palette';
+import { FormPostProps, PostProps } from '../../Props/Post';
 import FormGroup from '../../utils/form';
 import { SimpleGroupProps } from '../../Props/Group';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
+import { createPost, deletePost, updatePost } from '../../api/post';
 
 export function FormPost(props: {
   /** The mode to use this form */
   mode?: 'create' | 'edit';
   /** Whether the form is open */
   open: boolean;
-  /**  */
+  /** When form is closed */
   onClose: () => void;
+  /** Pre-filled post values */
   post?: PostProps;
   /** Send the new post updated */
   onUpdate?: (post: FormPostProps) => void;
+  /** When the post is deleted */
   onDelete?: () => void;
 }) {
   const { open, onClose, post, onUpdate, mode, onDelete } = props;
@@ -44,9 +43,8 @@ export function FormPost(props: {
           description: post.description,
           group: post.group.id,
           image: post.image,
-          pageSuggestion: post.pageSuggestion,
           pinned: post.pinned,
-          publicationDate: post.publicationDate,
+          createdAt: post.createdAt,
           publicity: post.publicity,
           title: post.title,
         }
@@ -54,7 +52,7 @@ export function FormPost(props: {
           title: null,
           group: null,
           publicity: 'Pub',
-          publicationDate: new Date(),
+          createdAt: new Date(),
           description: '',
         }
   );
@@ -62,6 +60,7 @@ export function FormPost(props: {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [confirmationOpen, setConfirmationOpen] =
     React.useState<boolean>(false);
+  const theme = useTheme();
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const { data: adminGroup } = useQuery<SimpleGroupProps[], string>({
     queryKey: 'admin-group',
@@ -98,7 +97,7 @@ export function FormPost(props: {
     },
     {
       kind: 'datetime',
-      name: 'publicationDate',
+      name: 'createdAt',
       label: t('form.publicationDate'),
       rows: 2,
       disablePast: true,
@@ -136,14 +135,13 @@ export function FormPost(props: {
     setValues(
       post
         ? structuredClone(post)
-        : { group: undefined, publicity: 'Pub', publicationDate: new Date() }
+        : { group: undefined, publicity: 'Pub', createdAt: new Date() }
     );
   }, [post]);
 
-  const deletePost = () => {
+  const handleDelete = () => {
     setLoading(true);
-    axios
-      .delete(`/api/post/${post.id}/`)
+    deletePost(post.id)
       .then(() => {
         onUpdate(null);
         onClose();
@@ -156,36 +154,11 @@ export function FormPost(props: {
         setLoading(false);
       });
   };
-  function createForm(): FormData {
-    const formData = new FormData();
-    if (values.image && typeof values.image !== 'string')
-      formData.append('image', values.image, values.image.name);
-    if (values.group && mode === 'create')
-      formData.append('group', values.group.toString());
-    if (post?.group && mode === 'edit')
-      formData.append('group', post.group.id.toString());
-    formData.append('publicity', values.publicity);
-    formData.append('title', values.title || '');
-    formData.append('description', values.description || '<p></p>');
-    if (values.pageSuggestion)
-      formData.append('page_suggestion', values.pageSuggestion);
-    formData.append('created_at', values.publicationDate.toISOString());
-    formData.append('pinned', values.pinned ? 'true' : 'false');
-    return formData;
-  }
 
-  const createPost = () => {
-    axios
-      .post(`/api/post/`, createForm(), {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      })
+  const handleCreate = () => {
+    createPost(values)
       .then((res) => {
-        convertPostFromPythonData(res.data);
-        onUpdate(res.data);
-      })
-      .then(() => {
+        onUpdate(res);
         onClose();
         setLoading(false);
       })
@@ -195,28 +168,24 @@ export function FormPost(props: {
         setLoading(false);
       });
   };
-  const updatePost = () => {
+  const handleUpdate = () => {
     setLoading(true);
-    axios
-      .put(`/api/post/${post.id}/`, createForm(), {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      })
-      .then((res) => {
-        convertPostFromPythonData(res.data);
+    // Making sure group is group id
+    values.group = post.group.id;
+    setValues({ ...values, group: post.group.id });
+    updatePost(post.id, values)
+      .then((res: FormPostProps) => {
+        console.log('hey', res);
         setValues(
           post
             ? structuredClone(post)
             : {
                 group: undefined,
                 publicity: 'Pub',
-                publicationDate: new Date(),
+                createdAt: new Date(),
               }
         );
-        onUpdate(res.data);
-      })
-      .then(() => {
+        onUpdate(res);
         onClose();
         setLoading(false);
       })
@@ -299,7 +268,7 @@ export function FormPost(props: {
                   disabled={loading}
                   color="info"
                   variant="contained"
-                  onClick={updatePost}
+                  onClick={handleUpdate}
                 >
                   {t('form.editPost')}
                 </Button>
@@ -310,7 +279,7 @@ export function FormPost(props: {
                 disabled={loading}
                 color="info"
                 variant="contained"
-                onClick={createPost}
+                onClick={handleCreate}
                 sx={{ marginRight: 1 }}
               >
                 {t('form.createPost')}
@@ -323,7 +292,7 @@ export function FormPost(props: {
         title={t('form.deletePost')}
         open={confirmationOpen}
         onClose={(value) => {
-          if (value) deletePost();
+          if (value) handleDelete();
           setConfirmationOpen(false);
         }}
         content={t('post.confirmDelete')}

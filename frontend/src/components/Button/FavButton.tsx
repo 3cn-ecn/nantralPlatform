@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import IconButton from '@mui/material/IconButton/IconButton';
 import Zoom from '@mui/material/Zoom/Zoom';
 import axios from 'axios';
-import { Button, CircularProgress, rgbToHex } from '@mui/material';
+import { Button, CircularProgress, rgbToHex, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import theme from '../../theme';
 
 function FavButton(props: {
   eventId: number;
@@ -18,6 +17,8 @@ function FavButton(props: {
   const [fav, setFav] = useState(selected);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation('translation');
+  const theme = useTheme();
+
   const handlePress = async () => {
     setLoading(true);
     if (fav) {

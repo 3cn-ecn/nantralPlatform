@@ -3,7 +3,7 @@ import { EventProps } from '../../../Props/Event';
 export function createTestEvent(
   slug = 'The slug',
   title = 'The test event',
-  beginDate = new Date('2023-02-17T03:24:00'),
+  startDate = new Date('2023-02-17T03:24:00'),
   endDate = new Date('2023-02-17T04:24:00'),
   description = 'This is an event to test',
   effectiveSize = 1,
@@ -34,7 +34,7 @@ export function createTestEvent(
 ) {
   const event: EventProps = {
     color: color,
-    beginDate: beginDate,
+    startDate: startDate,
     endDate: endDate,
     description: description,
     getAbsoluteUrl: getAbsoluteUrl,

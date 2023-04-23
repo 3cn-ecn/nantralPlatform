@@ -7,7 +7,7 @@ export function updateMember(
   membersUrl: string,
   member: Member,
   role: string,
-  beginDate: string,
+  startDate: string,
   endDate: string,
   admin: boolean,
   handleClose: () => void,
@@ -21,7 +21,7 @@ export function updateMember(
       editMode: 2,
       id: member.id,
       role: role,
-      beginDate: beginDate,
+      startDate: startDate,
       endDate: endDate,
       admin: admin,
     })
