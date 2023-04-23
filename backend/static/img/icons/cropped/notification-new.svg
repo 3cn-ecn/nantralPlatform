@@ -36,11 +36,7 @@
    inkscape:current-layer="Calque_1" />
 <style
    type="text/css"
-<<<<<<<< HEAD:frontend/src/assets/icons/scalable/notification-new.svg
-   id="style487">
-========
    id="style2">
->>>>>>>> origin/react-app:backend/static/img/icons/cropped/notification-new.svg
 	.st0{fill:#DC3545;}
 	.st1{fill:url(#SVGID_1_);}
 	.st2{fill:url(#SVGID_2_);}
@@ -85,19 +81,11 @@
 </linearGradient>
 
 <g
-<<<<<<<< HEAD:frontend/src/assets/icons/scalable/notification-new.svg
-   id="g642"
-   transform="matrix(1.4733656,0,0,1.4733656,-5.6803872,-5.0357897)"><path
-     class="st0"
-     d="m 16.7,16.7 c 0,1.7 -1.3,3 -3,3 -1.7,0 -3,-1.3 -3,-3 0,-1.7 1.3,-2 3,-2 1.7,0 3,0.4 3,2"
-     id="path489" /><ellipse
-========
    id="g344"
    transform="matrix(1.4736141,0,0,1.4736141,-5.6833692,-5.0301977)"><path
      class="st0"
      d="m 16.7,16.7 c 0,1.7 -1.3,3 -3,3 -1.7,0 -3,-1.3 -3,-3 0,-1.7 1.3,-2 3,-2 1.7,0 3,0.4 3,2"
      id="path4" /><ellipse
->>>>>>>> origin/react-app:backend/static/img/icons/cropped/notification-new.svg
      class="st1"
      cx="12"
      cy="16"

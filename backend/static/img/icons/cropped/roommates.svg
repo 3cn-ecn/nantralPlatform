@@ -36,11 +36,7 @@
    inkscape:current-layer="Calque_1" />
 <style
    type="text/css"
-<<<<<<<< HEAD:frontend/src/assets/icons/scalable/roommates.svg
-   id="style13952">
-========
    id="style2">
->>>>>>>> origin/react-app:backend/static/img/icons/cropped/roommates.svg
 	.st0{fill:url(#SVGID_1_);}
 	.st1{fill:#DC3545;}
 </style>
@@ -63,13 +59,8 @@
 </linearGradient>
 
 <g
-<<<<<<<< HEAD:frontend/src/assets/icons/scalable/roommates.svg
-   id="g14450"
-   transform="matrix(36,0,0,36,-144,-144)"><ellipse
-========
    id="g247"
    transform="matrix(1.5,0,0,1.5,-6,-6)"><ellipse
->>>>>>>> origin/react-app:backend/static/img/icons/cropped/roommates.svg
      class="st0"
      cx="12"
      cy="17"

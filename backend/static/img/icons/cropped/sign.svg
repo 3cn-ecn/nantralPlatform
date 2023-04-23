@@ -36,11 +36,7 @@
    inkscape:current-layer="Calque_1" />
 <style
    type="text/css"
-<<<<<<<< HEAD:frontend/src/assets/icons/scalable/sign.svg
-   id="style1738">
-========
    id="style2">
->>>>>>>> origin/react-app:backend/static/img/icons/cropped/sign.svg
 	.st0{fill:#DC3545;}
 	.st1{fill:url(#SVGID_1_);}
 	.st2{fill:url(#SVGID_2_);}

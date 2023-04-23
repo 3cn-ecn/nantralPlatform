@@ -36,11 +36,7 @@
    inkscape:current-layer="Calque_1" />
 <style
    type="text/css"
-<<<<<<<< HEAD:frontend/src/assets/icons/scalable/event.svg
-   id="style17296">
-========
    id="style2">
->>>>>>>> origin/react-app:backend/static/img/icons/cropped/event.svg
 	.st0{fill:#FFFFFF;stroke:#B6B7B7;stroke-width:0.25;stroke-miterlimit:10;}
 	.st1{fill:url(#SVGID_1_);stroke:#B6B7B7;stroke-width:0.25;stroke-miterlimit:10;}
 	.st2{fill:#DC3545;}
@@ -70,11 +66,7 @@
    transform="matrix(1.476923,0,0,1.476923,-5.7230767,-5.7230767)"><path
      class="st0"
      d="m 20,8.4 v 9.8 c 0,1 -0.8,1.8 -1.8,1.8 v 0 H 5.8 C 4.8,20 4,19.2 4,18.2 v 0 -9.8"
-<<<<<<<< HEAD:frontend/src/assets/icons/scalable/event.svg
-     id="path17298" /><path
-========
      id="path4" /><path
->>>>>>>> origin/react-app:backend/static/img/icons/cropped/event.svg
      class="st1"
      d="M 4,8.4 V 5.8 C 4,4.8 4.8,4 5.8,4 h 12.4 c 1,0 1.8,0.8 1.8,1.8 0,0 0,0 0,0 v 2.6"
      id="path11"
@@ -83,11 +75,7 @@
      cx="12"
      cy="17"
      r="1"
-<<<<<<<< HEAD:frontend/src/assets/icons/scalable/event.svg
-     id="circle17307" /><path
-========
      id="circle13" /><path
->>>>>>>> origin/react-app:backend/static/img/icons/cropped/event.svg
      class="st2"
      d="m 11.3,14.6 -1,-3.6 c -0.1,-0.4 0.1,-0.8 0.5,-0.9 0.1,0 0.1,0 0.2,0 h 2 c 0.4,0 0.7,0.3 0.7,0.7 0,0.1 0,0.1 0,0.2 l -1,3.6 C 12.6,15 12.2,15.2 11.8,15.1 11.6,15 11.4,14.8 11.3,14.6 Z"
      id="path15" /></g>
