@@ -1,14 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import * as React from 'react';
-import { useParams } from 'react-router-dom';
-import { SvgIcon, Typography, Grid, Button, Box } from '@mui/material';
+import { LoadStatus } from 'Props/GenericTypes';
+import { useParams, NavLink } from 'react-router-dom';
+import { SvgIcon, Typography, Grid, Box, Skeleton } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { MembershipsStudent } from '../../components/Group/MembershipsStudent/';
+import { MembershipsStudent } from '../../components/Group/MembershipsStudent';
 import { EditProfilModal } from '../../components/FormProfil/FormProfil';
 import Avatar from '../../components/Avatar/Avatar';
 
-const API_URL = '../../api/student/student/';
+const API_URL = '/api/student/student/';
 
 function Profile() {
   const [student, setStudent] = React.useState(null);
@@ -17,21 +19,37 @@ function Profile() {
 
   const { t } = useTranslation('translation');
 
+  const [profileStatus, setProfileStatus] =
+    React.useState<LoadStatus>('loading');
+  const [idMe, setIdMe] = React.useState<number>(2);
+
   React.useEffect(() => {
+    getMe();
     getProfile();
   }, []);
 
-  async function getProfile() {
+  async function getMe() {
     axios
-      .get(url)
-      .then((res) => setStudent(res.data))
+      .get('/api/student/student/me/')
+      .then((res) => {
+        setIdMe(res.data.id);
+      })
       .catch((err) => {
         console.error(err);
       });
   }
 
-  async function createProfile(suggestion: Suggestion) {
-    return console.log('test');
+  async function getProfile() {
+    axios
+      .get(url)
+      .then((res) => {
+        setStudent(res.data);
+        setProfileStatus('success');
+      })
+      .catch((err) => {
+        console.error(err);
+        setProfileStatus('error');
+      });
   }
 
   const fac = {
@@ -43,60 +61,71 @@ function Profile() {
 
   const [openS, setOpenS] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpenS(true);
-  };
-
   const handleCloseS = () => {
     setOpenS(false);
   };
   return (
-    <Box container sx={{ mt: 5, ml: 5, mr: 5 }}>
+    <Box sx={{ mt: 5, ml: 5, mr: 5 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={5} lg={2.3} xl={2.3}>
-          <Avatar
-            url={student !== null ? student.picture : ''}
-            title={student !== null ? student.name : ''}
-            width={250}
-            height={250}
-          />
+          {profileStatus === 'loading' ? (
+            <Skeleton variant="circular" height={250} />
+          ) : (
+            <Avatar
+              url={student?.picture}
+              title={student.name}
+              size="extra_large"
+            />
+          )}
         </Grid>
         <Grid item xs={12} lg={9} sx={{ mt: 2, ml: 5 }}>
           <Grid>
-            <Typography variant="h4">
-              {student !== null ? student.name : ''}
-            </Typography>
+            {profileStatus === 'loading' ? (
+              <Skeleton width={600} />
+            ) : (
+              <Typography variant="h4">{student?.name}</Typography>
+            )}
           </Grid>
           <Grid>
-            <Typography variant="h7">
-              {student === null ? 'Chargement en cours' : fac[student.faculty]}
-            </Typography>
+            {profileStatus === 'loading' ? (
+              <Skeleton width={300} />
+            ) : (
+              <Typography variant="h6">{fac[student.faculty]}</Typography>
+            )}
           </Grid>
           <Grid>
-            <Typography variant="h7">
-              {t('profile.promo')}
-              {student !== null ? student.promo : ''}
-            </Typography>
+            {profileStatus === 'loading' ? (
+              <Skeleton width={300} />
+            ) : (
+              <Typography variant="h6">
+                {t('profile.promo')}
+                {student.promo}
+              </Typography>
+            )}
           </Grid>
           <Grid>
-            <Button
-              variant="contained"
-              size="small"
-              sx={{ mt: 2 }}
-              onClick={handleClickOpen}
-            >
-              {t('profile.edit')}
-              <SvgIcon
-                sx={{ display: { xs: 'none', md: 'flex' }, ml: 1 }}
-                fontSize="small"
-                component={ModeEditIcon}
-                inheritViewBox
-              />
-            </Button>
+            {profileStatus !== 'loading' && idMe === student.id && (
+              <LoadingButton
+                variant="contained"
+                component={NavLink}
+                reloadDocument
+                to={`/student/${studentId}/edit/`}
+                size="small"
+                sx={{ mt: 2 }}
+              >
+                {t('profile.edit')}
+                <SvgIcon
+                  sx={{ display: { xs: 'none', md: 'flex' }, ml: 1 }}
+                  fontSize="small"
+                  component={ModeEditIcon}
+                  inheritViewBox
+                />
+              </LoadingButton>
+            )}
             <EditProfilModal
               open={openS}
               closeModal={handleCloseS}
-              saveProfile={createProfile}
+              saveProfile={() => null} // TODO
             />
           </Grid>
         </Grid>

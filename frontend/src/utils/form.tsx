@@ -18,6 +18,7 @@ import {
   FormLabel,
   InputAdornment,
   IconButton,
+  Input,
 } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
@@ -116,6 +117,26 @@ function FormGroup(props: {
                         step: field.step,
                       },
                     }}
+                  />
+                </FormControl>
+              </Box>
+            );
+          case 'password':
+            return (
+              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
+                <FormControl fullWidth>
+                  <InputLabel id={`${field.name}-password`}>
+                    {field.label}
+                  </InputLabel>
+                  <Input
+                    key={field.name}
+                    id={`${field.name}-password`}
+                    name={field.name}
+                    value={values[field.name]}
+                    onChange={(e) => handleChange(field.name, e.target.value)}
+                    margin="dense"
+                    type="password"
+                    disabled={field.disabled}
                   />
                 </FormControl>
               </Box>
