@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.urls import reverse
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
 from django.apps import apps
@@ -76,7 +75,7 @@ class Student(models.Model):
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self) -> str:
-        return reverse('student:detail', args=[self.pk])
+        return f'/student/{self.pk}'
 
     def can_pin(self) -> bool:
         # to avoid circular import

@@ -102,7 +102,7 @@
             {% if request.user.is_authenticated %}
               {% if request.user.student.pk %}
                 <li>
-                  <a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}">
+                  <a class="dropdown-item" href="/student/{{ request.user.student.pk }}">
                     <i class="fas fa-user" aria-hidden="true"></i>&nbsp; Mon Profil
                   </a>
                 </li>

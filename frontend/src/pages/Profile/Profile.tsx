@@ -6,7 +6,7 @@ import { useParams, NavLink } from 'react-router-dom';
 import { SvgIcon, Typography, Grid, Box, Skeleton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { MembershipsStudent } from '../../components/Group/MembershipsStudent/';
+import { MembershipsStudent } from '../../components/Group/MembershipsStudent';
 import { EditProfilModal } from '../../components/FormProfil/FormProfil';
 import Avatar from '../../components/Avatar/Avatar';
 
@@ -19,7 +19,8 @@ function Profile() {
 
   const { t } = useTranslation('translation');
 
-  const [eventStatus, setEventStatus] = React.useState<LoadStatus>('load');
+  const [profileStatus, setProfileStatus] =
+    React.useState<LoadStatus>('loading');
   const [idMe, setIdMe] = React.useState<number>(2);
 
   React.useEffect(() => {
@@ -43,16 +44,12 @@ function Profile() {
       .get(url)
       .then((res) => {
         setStudent(res.data);
-        setEventStatus('success');
+        setProfileStatus('success');
       })
       .catch((err) => {
         console.error(err);
-        setEventStatus('fail');
+        setProfileStatus('error');
       });
-  }
-
-  async function createProfile(suggestion: Suggestion) {
-    return console.log('test');
   }
 
   const fac = {
@@ -68,14 +65,14 @@ function Profile() {
     setOpenS(false);
   };
   return (
-    <Box container sx={{ mt: 5, ml: 5, mr: 5 }}>
+    <Box sx={{ mt: 5, ml: 5, mr: 5 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} md={5} lg={2.3} xl={2.3}>
-          {eventStatus === 'load' ? (
+          {profileStatus === 'loading' ? (
             <Skeleton variant="circular" height={250} />
           ) : (
             <Avatar
-              url={student.picture}
+              url={student?.picture}
               title={student.name}
               size="extra_large"
             />
@@ -83,37 +80,36 @@ function Profile() {
         </Grid>
         <Grid item xs={12} lg={9} sx={{ mt: 2, ml: 5 }}>
           <Grid>
-            {eventStatus === 'load' ? (
+            {profileStatus === 'loading' ? (
               <Skeleton width={600} />
             ) : (
-              <Typography variant="h4">{student.name}</Typography>
+              <Typography variant="h4">{student?.name}</Typography>
             )}
           </Grid>
           <Grid>
-            {eventStatus === 'load' ? (
+            {profileStatus === 'loading' ? (
               <Skeleton width={300} />
             ) : (
-              <Typography variant="h7">{fac[student.faculty]}</Typography>
+              <Typography variant="h6">{fac[student.faculty]}</Typography>
             )}
           </Grid>
           <Grid>
-            {eventStatus === 'load' ? (
+            {profileStatus === 'loading' ? (
               <Skeleton width={300} />
             ) : (
-              <Typography variant="h7">
+              <Typography variant="h6">
                 {t('profile.promo')}
                 {student.promo}
               </Typography>
             )}
           </Grid>
           <Grid>
-            {eventStatus !== 'load' && idMe === student.id && (
+            {profileStatus !== 'loading' && idMe === student.id && (
               <LoadingButton
-                loading={eventStatus === 'load'}
                 variant="contained"
                 component={NavLink}
                 reloadDocument
-                to="edit/"
+                to={`/student/${studentId}/edit/`}
                 size="small"
                 sx={{ mt: 2 }}
               >
@@ -129,7 +125,7 @@ function Profile() {
             <EditProfilModal
               open={openS}
               closeModal={handleCloseS}
-              saveProfile={createProfile}
+              saveProfile={() => null} // TODO
             />
           </Grid>
         </Grid>
