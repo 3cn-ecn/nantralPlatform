@@ -20,7 +20,7 @@ import {
   IconButton,
   Input,
 } from '@mui/material';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -306,7 +306,7 @@ function FormGroup(props: {
               >
                 <DatePicker
                   label={field.label}
-                  value={values[field.name] && new Date(values[field.name])}
+                  value={values[field.name] && dayjs(values[field.name])}
                   onChange={(val) => {
                     if (val && val.toString() !== 'Invalid Date') {
                       handleChange(
@@ -321,19 +321,19 @@ function FormGroup(props: {
                       handleChange(field.name, val);
                     }
                   }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      id={`${field.name}-input`}
-                      name={field.name}
-                      fullWidth={!noFullWidth}
-                      required={field.required}
-                      helperText={error || field.helpText}
-                      error={!!error}
-                      margin="normal"
-                      value={undefined}
-                    />
-                  )}
+                  // renderInput={(params) => (
+                  //   <TextField
+                  //     {...params}
+                  //     id={`${field.name}-input`}
+                  //     name={field.name}
+                  //     fullWidth={!noFullWidth}
+                  //     required={field.required}
+                  //     helperText={error || field.helpText}
+                  //     error={!!error}
+                  //     margin="normal"
+                  //     value={undefined}
+                  //   />
+                  // )}
                 />
               </LocalizationProvider>
             );
@@ -424,25 +424,24 @@ function FormGroup(props: {
               >
                 <DateTimePicker
                   label={field.label}
-                  value={values[field.name] && new Date(values[field.name])}
+                  value={values[field.name] && dayjs(values[field.name])}
                   disablePast={field.disablePast}
                   onChange={(newValue: Dayjs | null) => {
                     handleChange(field.name, newValue);
                   }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      id={`${field.name}-input`}
-                      name={field.name}
-                      fullWidth={!noFullWidth}
-                      required={field.required}
-                      helperText={error || field.helpText}
-                      error={!!error}
-                      margin="normal"
-                      value={undefined}
-                      disabled={field.disabled}
-                    />
-                  )}
+                  // text={() => (
+                  //   <TextField
+                  //     id={`${field.name}-input`}
+                  //     name={field.name}
+                  //     fullWidth={!noFullWidth}
+                  //     required={field.required}
+                  //     helperText={error || field.helpText}
+                  //     error={!!error}
+                  //     margin="normal"
+                  //     value={undefined}
+                  //     disabled={field.disabled}
+                  //   />
+                  // )}
                 />
               </LocalizationProvider>
             );

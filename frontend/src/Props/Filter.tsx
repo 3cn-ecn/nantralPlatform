@@ -1,3 +1,5 @@
+import { SimpleGroupProps } from './Group';
+
 export interface FilterFrontInterface {
   id: string;
   name: string;
@@ -5,6 +7,7 @@ export interface FilterFrontInterface {
   isMenu?: boolean;
   content: any;
   value?: any;
+  onChangeValue?: (arg: any) => void;
 }
 
 export interface FilterInterface {
@@ -13,5 +16,5 @@ export interface FilterInterface {
   favorite: boolean;
   participate: boolean;
   shotgun: boolean;
-  organiser: string;
+  organiser: SimpleGroupProps[];
 }

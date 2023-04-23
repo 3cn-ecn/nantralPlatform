@@ -11,6 +11,7 @@ import {
   Container,
   Chip,
   Divider,
+  Button,
 } from '@mui/material';
 import { Event, PostAdd } from '@mui/icons-material';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -211,7 +212,7 @@ function Home() {
               to={`/event/?dateBegin=${today.toISOString()}`}
               style={{ textDecorationLine: 'none' }}
             >
-              <Chip label={t('button.seeAll')} clickable />
+              <Button variant="contained">{t('button.seeAll')}</Button>
             </Link>
           </Box>
           <Divider sx={{ marginBottom: 1 }} />
@@ -227,11 +228,21 @@ function Home() {
             loadingItemCount={MAX_EVENT_SHOWN}
             title={t('home.upcomingEvents')}
           />
-          <ClubSection
-            clubs={myGroups}
-            status={myGroupsStatus}
-            title={t('home.myClubs')}
-          />
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            marginBottom={1}
+          >
+            <Typography variant="h4" margin={0}>
+              {t('home.myClubs')}
+            </Typography>
+            <Link to="/group" style={{ textDecorationLine: 'none' }}>
+              <Button variant="contained">{t('button.seeAll')}</Button>
+            </Link>
+          </Box>
+          <Divider sx={{ marginBottom: 1 }} />
+          <ClubSection clubs={myGroups} status={myGroupsStatus} />
         </Container>
       </Box>
       <FormPost

@@ -4,44 +4,78 @@ import {
   Tab,
   Button,
   Container,
-  Pagination,
   Typography,
   Chip,
+  IconButton,
+  Menu,
+  MenuItem,
 } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import './Event.scss';
 import { FilterInterface } from 'Props/Filter';
-import { useSearchParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { useInfiniteQuery, useQueries, useQuery } from 'react-query';
 import { Page } from 'Props/pagination';
-import { AutoAwesomeMotion, Today, Upcoming } from '@mui/icons-material';
+import { AutoAwesomeMotion, Sort, Today, Upcoming } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
 import { EventProps } from '../../Props/Event';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import Calendar from '../../components/Calendar/Calendar';
 import ModalEditEvent from '../../components/FormEvent/FormEvent';
-import { ListResults, LoadStatus } from '../../Props/GenericTypes';
+import { LoadStatus } from '../../Props/GenericTypes';
 import { getEvents } from '../../api/event';
+import { GroupProps, SimpleGroupProps } from '../../Props/Group';
+import { getGroup } from '../../api/group';
+import Avatar from '../../components/Avatar/Avatar';
 
 const EVENT_PER_PAGE = 6;
 
 function EventList(props: {
   status: LoadStatus;
-  events: ListResults<EventProps>;
+  events: Page<EventProps>[];
   onChangePage: (page: number) => void;
+  onChangeOrder: (newOrder: string) => void;
+  order: string;
   page: number;
   onChangeFilter: (change) => void;
-  filter;
+  filter: FilterInterface;
+  fetchingNextPage: boolean;
 }) {
-  const { events, status, onChangePage, page, onChangeFilter, filter } = props;
+  const {
+    events,
+    status,
+    onChangePage,
+    page,
+    onChangeFilter,
+    onChangeOrder,
+    order,
+    filter,
+    fetchingNextPage,
+  } = props;
   const { t, i18n } = useTranslation('translation');
+  const [orderOpen, setOrderOpen] = React.useState<boolean>(false);
+  const anchorEl = React.useRef();
   const handleNextPage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    if (page !== newPage) onChangePage(newPage);
+    onChangePage(newPage);
   };
+  function loadMore() {
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.scrollingElement.scrollHeight
+    ) {
+      handleNextPage(null, page + 1);
+      console.log('oui');
+    }
+  }
+  React.useEffect(() => {
+    window.addEventListener('scroll', loadMore);
+    return () => window.removeEventListener('scroll', loadMore);
+  });
+
   const today = new Date();
   const oneWeek = new Date();
   oneWeek.setDate(today.getDate() + 7);
@@ -49,29 +83,34 @@ function EventList(props: {
     {
       label: 'All',
       icon: <AutoAwesomeMotion />,
-      onClick: () =>
-        onChangeFilter({ dateBegin: undefined, dateEnd: undefined }),
+      onClick: () => {
+        onChangeFilter({ dateBegin: undefined, dateEnd: undefined });
+        onChangeOrder('-start_date');
+      },
     },
     {
       label: 'This week',
       icon: <Today />,
-      onClick: () =>
+      onClick: () => {
         onChangeFilter({
           dateBegin: today.toISOString(),
           dateEnd: oneWeek.toISOString(),
-        }),
+        });
+        onChangeOrder('-start_date');
+      },
     },
     {
       label: 'Upcoming',
       icon: <Upcoming />,
-      onClick: () =>
+      onClick: () => {
         onChangeFilter({
           dateEnd: undefined,
           dateBegin: oneWeek.toISOString(),
-        }),
+        });
+        onChangeOrder('start_date');
+      },
     },
   ];
-  console.log(filter);
   return (
     <>
       <Box
@@ -90,10 +129,10 @@ function EventList(props: {
           className="event-list-container"
           sx={{
             // justifyContent: 'space-between',
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
+            display: 'inline-flex',
             gap: 1,
+            overflow: 'hidden',
+            flexDirection: 'column',
           }}
         >
           <Box columnGap={1} display="flex" overflow="scroll">
@@ -150,27 +189,73 @@ function EventList(props: {
                 }
               />
             )}
+            {filter?.organiser &&
+              filter?.organiser.map((group: SimpleGroupProps) => (
+                <Chip
+                  label={group.name}
+                  variant="outlined"
+                  onDelete={() => {
+                    let tmp = filter.organiser;
+                    tmp = tmp.filter((item) => group.id !== item.id);
+                    onChangeFilter({
+                      ...filter,
+                      organiser: tmp,
+                    });
+                  }}
+                  icon={
+                    <Avatar url={group.icon} size="small" title={group.name} />
+                  }
+                  key={group.id}
+                />
+              ))}
           </Box>
         </Box>
-        <Typography align="right" variant="subtitle2">
-          {events?.count ?? '--'} results
-        </Typography>
+        <Box display="flex" alignItems="center">
+          <IconButton ref={anchorEl} onClick={() => setOrderOpen(!orderOpen)}>
+            <Sort />
+          </IconButton>
+          <Menu
+            id="demo-positioned-menu"
+            aria-labelledby="demo-positioned-button"
+            anchorEl={anchorEl.current}
+            open={orderOpen}
+            onClose={() => setOrderOpen(false)}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+          >
+            <MenuItem color="primary" onClick={() => setOrderOpen(false)}>
+              Profile
+            </MenuItem>
+            <MenuItem onClick={() => setOrderOpen(false)}>My account</MenuItem>
+            <MenuItem onClick={() => setOrderOpen(false)}>Logout</MenuItem>
+          </Menu>
+          <Typography align="right" variant="subtitle2">
+            {events?.length > 0 && events[0].count} results
+          </Typography>
+        </Box>
       </Box>
-      <EventSection
-        status={status}
-        events={events?.results}
-        loadingItemCount={EVENT_PER_PAGE}
-      ></EventSection>
-      <Pagination
-        sx={{ marginBottom: 5 }}
-        count={
-          (events?.count &&
-            Math.floor((events.count - 1) / EVENT_PER_PAGE + 1)) ||
-          1
-        }
-        page={page}
-        onChange={handleNextPage}
-      />
+      {events?.length > 0 &&
+        events?.map((eventPage) => (
+          <EventSection
+            status={status}
+            events={eventPage?.results}
+            loadingItemCount={EVENT_PER_PAGE}
+            key={eventPage.results[0]?.id || 'eventId'}
+          />
+        ))}
+      {(fetchingNextPage || status === 'loading') && (
+        <EventSection
+          events={Array(0)}
+          status="loading"
+          loadingItemCount={EVENT_PER_PAGE}
+        />
+      )}
     </>
   );
 }
@@ -181,7 +266,7 @@ function EventCalendar(props: { events: any }) {
 }
 
 function EventView(props: {
-  filter: any;
+  filter: FilterInterface;
   selectedTab: string | null;
   onChangeTab: (tab: string) => void;
   onChangePage: (page: number) => void;
@@ -199,6 +284,7 @@ function EventView(props: {
   const [value, setValue] = React.useState(selectedTab || '1');
   const [currentPage, setCurrentPage] = React.useState<number>(initialPage);
   const [first, setFirst] = React.useState(true);
+  const [order, setOrder] = React.useState<string>('-start_date');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -213,21 +299,24 @@ function EventView(props: {
     }
   }, [filter]);
 
-  const { data: eventsList, status: eventsListStatus } = useQuery<
-    Page<EventProps>
-  >({
-    queryKey: ['eventList', filter, currentPage],
-    queryFn: () =>
+  const {
+    data: eventsList,
+    status: eventsListStatus,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<Page<EventProps>>({
+    queryKey: ['eventList', filter],
+    queryFn: ({ pageParam = 1 }) =>
       getEvents({
         limit: EVENT_PER_PAGE,
-        offset: (currentPage - 1) * EVENT_PER_PAGE,
-        orderBy: '-start_date',
+        offset: (pageParam - 1) * EVENT_PER_PAGE,
+        orderBy: order,
         isShotgun: filter.shotgun,
         isFavorite: filter.favorite,
         isParticipating: filter.participate,
         fromDate: filter.dateBegin,
         toDate: filter.dateEnd,
-        group: filter.organiser,
+        group: filter?.organiser?.map((group) => group.slug),
       }),
   });
 
@@ -245,15 +334,16 @@ function EventView(props: {
         isShotgun: filter.shotgun,
         isFavorite: filter.favorite,
         isParticipating: filter.participate,
-        group: filter.organiser,
+        group: filter?.organiser?.map((group) => group.slug),
       }),
     placeholderData: { count: 0, next: null, previous: null, results: [] },
   });
 
   const handleNextPage = (newPage: number) => {
-    if (currentPage === newPage) return;
-    setCurrentPage(newPage);
-    onChangePage(newPage);
+    if (currentPage * EVENT_PER_PAGE >= eventsList.pages[0].count) return;
+    setCurrentPage(currentPage + 1);
+    // onChangePage(newPage);
+    fetchNextPage({ pageParam: currentPage + 1 });
   };
   return (
     <TabContext value={value}>
@@ -265,12 +355,15 @@ function EventView(props: {
       </Box>
       <TabPanel value="1" sx={{ padding: 0 }}>
         <EventList
+          order={order}
+          onChangeOrder={setOrder}
           filter={filter}
           onChangeFilter={(newChanges) => onChangeFilter(newChanges)}
           status={eventsListStatus}
-          events={eventsList}
+          events={eventsList?.pages}
           onChangePage={handleNextPage}
           page={currentPage}
+          fetchingNextPage={isFetchingNextPage}
         ></EventList>
       </TabPanel>
       <TabPanel value="2" sx={{ padding: 0 }}>
@@ -290,11 +383,20 @@ function Event() {
     dateBegin: queryParameters.get('dateBegin'),
     dateEnd: queryParameters.get('dateEnd'),
     favorite: queryParameters.get('favorite') ? true : null,
-    organiser: queryParameters.get('organiser'),
+    organiser: [],
     participate: queryParameters.get('participate') ? true : null,
     shotgun: queryParameters.get('shotgun') ? true : null,
   });
   const [openAddModal, setOpenAddModal] = useState(false);
+
+  // Get organisers
+  React.useEffect(() => {
+    const organisers = queryParameters.get('organiser');
+    if (organisers)
+      Promise.all(
+        organisers?.split(',')?.map((slug) => getGroup(slug, { simple: true }))
+      ).then((groups) => setFilter({ ...filter, organiser: groups }));
+  }, []);
 
   function updateParameters(attributes: object) {
     const pairs = Object.entries(attributes);
@@ -307,7 +409,12 @@ function Event() {
 
   const getFilter = (validateFilter: FilterInterface) => {
     setFilter(validateFilter);
-    updateParameters(validateFilter);
+    updateParameters({
+      ...validateFilter,
+      organiser: validateFilter?.organiser
+        ?.map((group) => group.slug)
+        .join(','),
+    });
   };
 
   return (
@@ -332,7 +439,7 @@ function Event() {
             </Button>
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <FilterBar filter={filter} getFilter={getFilter} />
+            <FilterBar filter={filter} onChangeFilter={getFilter} />
           </div>
         </Box>
         <EventView

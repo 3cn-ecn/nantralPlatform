@@ -12,6 +12,7 @@ export async function getGroups(
     simple?: boolean;
     limit?: number;
     order?: string;
+    admin?: boolean;
   } = {}
 ) {
   return axios
@@ -20,7 +21,19 @@ export async function getGroups(
         is_member: options.isMember,
         simple: options.simple,
         order: options.order,
+        is_admin: options.admin,
       },
     })
     .then((res) => res.data.results);
+}
+
+export async function getGroup(
+  slug: string,
+  options?: { simple?: boolean }
+): Promise<GroupProps> {
+  return axios
+    .get<GroupProps>(`/api/group/group/${slug}`, {
+      params: { simple: options.simple },
+    })
+    .then((res) => res.data);
 }

@@ -27,74 +27,21 @@ import BasicDatePicker from '../DatePicker/BasicDatePicker';
  * @param props getFilter is the function used to get filter from parent component
  * @returns the filter bar
  */
-function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
-  const { getFilter, filter } = props;
+function FilterBar(props: {
+  onChangeFilter: (newFilter: FilterInterface) => void;
+  filter: FilterInterface;
+}) {
+  const { onChangeFilter: getFilter, filter } = props;
   const { t } = useTranslation('translation'); // translation module
   const [open, setOpen] = React.useState(false); // set true to open the drawer
-  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(
-    dayjs(filter.dateBegin)
-  ); // date from which the events are filtered
-  const [dateBeginFormat, setDateBeginFormat] = React.useState(
-    filter.dateBegin
-  ); // date from which the events are filtered, as a string
-  const [dateEndFormat, setDateEndFormat] = React.useState(filter.dateEnd); // date until which the events are filtered, as a string
-  const [isFavorite, setIsFavorite] = React.useState(filter.favorite); // true if the 'Favorite' filter is checked
-  const [isParticipated, setIsParticipated] = React.useState(
-    filter.participate
-  ); // true if the 'I participate' filter is checked
-  const [isShotgun, setIsShotgun] = React.useState(filter.shotgun); // true if the 'Shotgun' filter is checked
-  const [organiser, setOrganiser] = React.useState(filter.organiser); // the list of organiser displayed, as a string (a,b,c...)
 
+  const [currentFilter, setCurrentFilter] =
+    React.useState<FilterInterface>(filter);
+
+  // Update current filter if changed outside of the component
   React.useEffect(() => {
-    setIsFavorite(filter.favorite);
-    setIsParticipated(filter.participate);
-    setOrganiser(filter.organiser);
-    setDateBegin(dayjs(filter.dateBegin));
-    setDateEndFormat(filter.dateEnd);
-    console.log(filter, dateBegin, dateEndFormat);
+    setCurrentFilter(filter);
   }, [filter]);
-  // Functions to get filter values from child components
-  const getDateBegin = (newDate) => {
-    setDateBegin(newDate);
-    if (newDate !== null) {
-      setDateBeginFormat(newDate.format('YYYY-MM-DD'));
-    } else {
-      setDateBeginFormat('');
-    }
-  };
-  const getDateEnd = (newDate) => {
-    if (newDate !== null) {
-      // we want to include events from endDate
-      setDateEndFormat(newDate.format('YYYY-MM-DD').concat(' ', '23:59:59'));
-    } else {
-      setDateEndFormat('');
-    }
-  };
-  const getChecked = (id, checked) => {
-    if (id === 'favorite') {
-      setIsFavorite(checked);
-    }
-    if (id === 'participate') {
-      setIsParticipated(checked);
-    }
-    if (id === 'shotgun') {
-      setIsShotgun(checked);
-    }
-  };
-  const getOrganiser = (organiserList: Array<SimpleGroupProps>) => {
-    setOrganiser(organiserList.map((elem) => elem.slug).join(','));
-  };
-
-  // value of the current filter
-  const currentFilter: FilterInterface = {
-    dateBegin: dateBeginFormat,
-    dateEnd: dateEndFormat,
-    favorite: isFavorite,
-    participate: isParticipated,
-    shotgun: isShotgun,
-    organiser: organiser,
-  };
-
   // filter interface with every filter to display
   const filters: FilterFrontInterface[] = [
     {
@@ -104,6 +51,8 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       isMenu: false,
       content: null,
       value: currentFilter.favorite,
+      onChangeValue: (value) =>
+        setCurrentFilter({ ...currentFilter, favorite: value }),
     },
     {
       id: 'participate',
@@ -112,6 +61,8 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       isMenu: false,
       content: null,
       value: currentFilter.participate,
+      onChangeValue: (value) =>
+        setCurrentFilter({ ...currentFilter, participate: value }),
     },
     {
       id: 'shotgun',
@@ -120,17 +71,23 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       isMenu: false,
       content: null,
       value: currentFilter.shotgun,
+      onChangeValue: (value) =>
+        setCurrentFilter({ ...currentFilter, shotgun: value }),
     },
     {
       id: 'organiser',
       name: t('filterbar.organiser'),
       icon: <GroupsIcon />,
       isMenu: true,
+      value: filter.organiser,
       content: (
         <Grid item xs="auto">
           <CheckboxesTags
             label={t('filterbar.organiser')}
-            getResult={getOrganiser}
+            getResult={(results) => {
+              console.log(results);
+              setCurrentFilter({ ...currentFilter, organiser: results });
+            }}
             updated
             request="/api/group/group/"
             pkField="slug"
@@ -151,7 +108,7 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
             <BasicDatePicker
               label={t('filterbar.from')}
               minDate={null}
-              getDate={getDateBegin}
+              getDate={() => null}
               controlledValue={dayjs(currentFilter.dateBegin)}
             />
           </Grid>
@@ -159,8 +116,8 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
           <Grid item xs="auto">
             <BasicDatePicker
               label={t('filterbar.to')}
-              minDate={dateBegin}
-              getDate={getDateEnd}
+              minDate={currentFilter.dateBegin}
+              getDate={currentFilter.dateEnd}
               controlledValue={dayjs(currentFilter.dateEnd)}
             />
           </Grid>
@@ -205,7 +162,7 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
                   label={filterItem.name}
                   icon={filterItem.icon}
                   id={filterItem.id}
-                  getChecked={getChecked}
+                  onChangeValue={filterItem.onChangeValue}
                 />
               )}
             </ListItem>

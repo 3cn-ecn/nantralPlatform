@@ -14,26 +14,20 @@ function CheckboxButton(props: {
   id: string;
   label: string;
   icon: any;
-  getChecked: any;
+  onChangeValue: (value: boolean) => void;
   value: boolean;
 }) {
-  const { id, label, icon, getChecked, value } = props;
-  const [checkValue, setCheckValue] = React.useState(value); // true if the checkbox is checked
-
-  React.useEffect(() => {
-    setCheckValue(value);
-  }, [value]);
-
-  const handleChange = () => {
-    setCheckValue(!checkValue);
-    getChecked(id, !checkValue);
-  };
+  const { id, label, icon, onChangeValue, value } = props;
 
   return (
-    <ListItemButton disableRipple className="checkbox" onClick={handleChange}>
+    <ListItemButton
+      disableRipple
+      className="checkbox"
+      onClick={() => onChangeValue(!value)}
+    >
       <ListItemIcon>{icon}</ListItemIcon>
       <ListItemText>{label}</ListItemText>
-      <Checkbox style={{ margin: 0 }} size="small" checked={checkValue} />
+      <Checkbox style={{ margin: 0 }} size="small" checked={!!value} />
     </ListItemButton>
   );
 }
