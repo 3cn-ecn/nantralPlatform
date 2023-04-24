@@ -29,12 +29,14 @@ const eventMiddleInDay: EventProps = createTestEvent(
   new Date('2023-02-16T03:24:00'),
   new Date('2023-02-18T04:24:00')
 );
+const displayDayEventMiddleInDay = new Date(eventMiddleInDay.startDate);
+displayDayEventMiddleInDay.setDate(eventMiddleInDay.startDate.getDate() + 1);
 
 describe('<EventBlock />', () => {
   it('should display an EventBlock in the day', async () => {
     const component = render(
       <BrowserRouter>
-        <EventBlock day={eventInDay.startDate.getDay()} event={eventInDay} />
+        <EventBlock day={eventInDay.startDate} event={eventInDay} />
       </BrowserRouter>
     );
     expect(component.getByRole('button').style.height).toBe('1.2rem');
@@ -52,10 +54,7 @@ describe('<EventBlock />', () => {
   it('should display an EventBlock in the end of the day', async () => {
     const component = render(
       <BrowserRouter>
-        <EventBlock
-          day={eventBeginInDay.startDate.getDay()}
-          event={eventBeginInDay}
-        />
+        <EventBlock day={eventBeginInDay.startDate} event={eventBeginInDay} />
       </BrowserRouter>
     );
     expect(component.getByRole('button').style.height).toBe('25.2rem');
@@ -73,10 +72,7 @@ describe('<EventBlock />', () => {
   it('should display an EventBlock in the begin the day', async () => {
     const component = render(
       <BrowserRouter>
-        <EventBlock
-          day={eventEndInDay.endDate.getDay()}
-          event={eventEndInDay}
-        />
+        <EventBlock day={eventEndInDay.endDate} event={eventEndInDay} />
       </BrowserRouter>
     );
     expect(component.getByRole('button').style.height).toBe('4.8rem');
@@ -94,10 +90,7 @@ describe('<EventBlock />', () => {
   it('should display an EventBlock in the all day', async () => {
     const component = render(
       <BrowserRouter>
-        <EventBlock
-          day={eventMiddleInDay.startDate.getDay() + 1}
-          event={eventMiddleInDay}
-        />
+        <EventBlock day={displayDayEventMiddleInDay} event={eventMiddleInDay} />
       </BrowserRouter>
     );
     // expect(component.getByRole('button').style.height).toBe('480px');

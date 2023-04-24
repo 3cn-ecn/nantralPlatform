@@ -57,42 +57,50 @@ describe('<ChooseDisplay />', () => {
       ></ChooseDisplay>
     );
 
-    expect(component.getByRole('button', { name: 'day' }).textContent).toBe(
-      'day'
-    );
-    expect(component.getByRole('button', { name: '3Days' }).textContent).toBe(
-      '3Days'
-    );
-    expect(component.getByRole('button', { name: 'week' }).textContent).toBe(
-      'week'
-    );
-    expect(component.getByRole('button', { name: 'month' }).textContent).toBe(
-      'month'
-    );
+    expect(
+      component.getByRole('button', { name: 'calendar.view.day' }).textContent
+    ).toBe('calendar.view.day');
+    expect(
+      component.getByRole('button', { name: 'calendar.view.3Days' }).textContent
+    ).toBe('calendar.view.3Days');
+    expect(
+      component.getByRole('button', { name: 'calendar.view.week' }).textContent
+    ).toBe('calendar.view.week');
+    expect(
+      component.getByRole('button', { name: 'calendar.view.month' }).textContent
+    ).toBe('calendar.view.month');
 
     // day
-    await user.click(component.getByRole('button', { name: 'day' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.day' })
+    );
     expect(dayDisplay).toStrictEqual({
       type: 'day',
       startDate: 6,
     });
 
     // 3Days
-    await user.click(component.getByRole('button', { name: '3Days' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.3Days' })
+    );
     expect(dayDisplay).toStrictEqual({
       type: '3Days',
       startDate: 6,
     });
 
     // week
-    await user.click(component.getByRole('button', { name: 'week' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.week' })
+    );
     expect(dayDisplay).toStrictEqual({
       type: 'week',
       startDate: 0,
     });
 
     // month
-    await user.click(component.getByRole('button', { name: 'month' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.month' })
+    );
     expect(dayDisplay).toStrictEqual({
       type: 'month',
       startDate: 2,
@@ -110,28 +118,36 @@ describe('<ChooseDisplay />', () => {
     );
 
     // day
-    await user.click(component.getByRole('button', { name: 'day' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.day' })
+    );
     expect(daysDisplay).toStrictEqual({
       type: 'day',
       startDate: 2,
     });
 
     // 3Days
-    await user.click(component.getByRole('button', { name: '3Days' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.3Days' })
+    );
     expect(daysDisplay).toStrictEqual({
       type: 'day',
       startDate: 2,
     });
 
     // week
-    await user.click(component.getByRole('button', { name: 'week' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.week' })
+    );
     expect(daysDisplay).toStrictEqual({
       type: 'week',
       startDate: 0,
     });
 
     // month
-    await user.click(component.getByRole('button', { name: 'month' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.month' })
+    );
     expect(daysDisplay).toStrictEqual({
       type: 'month',
       startDate: 2,
@@ -149,28 +165,36 @@ describe('<ChooseDisplay />', () => {
     );
 
     // day
-    await user.click(component.getByRole('button', { name: 'day' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.day' })
+    );
     expect(weekDisplay).toStrictEqual({
       type: 'day',
       startDate: 0,
     });
 
     // 3Days
-    await user.click(component.getByRole('button', { name: '3Days' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.3Days' })
+    );
     expect(weekDisplay).toStrictEqual({
       type: '3Days',
       startDate: 0,
     });
 
     // week
-    await user.click(component.getByRole('button', { name: 'week' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.week' })
+    );
     expect(weekDisplay).toStrictEqual({
       type: '3Days',
       startDate: 0,
     });
 
     // month
-    await user.click(component.getByRole('button', { name: 'month' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.month' })
+    );
     expect(weekDisplay).toStrictEqual({
       type: 'month',
       startDate: 2,
@@ -188,28 +212,36 @@ describe('<ChooseDisplay />', () => {
     );
 
     // day
-    await user.click(component.getByRole('button', { name: 'day' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.day' })
+    );
     expect(monthDisplay).toStrictEqual({
       type: 'day',
       startDate: 0,
     });
 
     // 3Days
-    await user.click(component.getByRole('button', { name: '3Days' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.3Days' })
+    );
     expect(monthDisplay).toStrictEqual({
       type: '3Days',
       startDate: 0,
     });
 
     // week
-    await user.click(component.getByRole('button', { name: 'week' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.week' })
+    );
     expect(monthDisplay).toStrictEqual({
       type: 'week',
       startDate: 0,
     });
 
     // month
-    await user.click(component.getByRole('button', { name: 'month' }));
+    await user.click(
+      component.getByRole('button', { name: 'calendar.view.month' })
+    );
     expect(monthDisplay).toStrictEqual({
       type: 'week',
       startDate: 0,
