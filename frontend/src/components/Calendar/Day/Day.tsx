@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid } from '@mui/material';
+import i18n from 'i18next';
 import { EventProps } from '../../../Props/Event';
 import { EventBlock } from './EventBlock/EventBlock';
 import { TimeBlock } from './TimeBlock/TimeBlock';
@@ -60,23 +61,20 @@ export function sortWithPos(
 
 /**
  * The Day component which contains all the TimeBlocks and EventBlocks of this day.
- * @param dayValue The value of the day in the week.
- * @param day The day in the week.
+ * @param day The date of the events.
  * @param events The list of events in corresponding day.
  * @param chains The list of blocked chains.
  * @returns The Day component.
  */
 export function Day(props: {
-  dayValue: number;
-  // day: string;
   day: Date;
   events: Array<EventProps>;
   chains: Array<Array<number>>;
 }): JSX.Element {
-  const { dayValue, day, events, chains } = props;
-  const dayChain = [];
+  const { day, events, chains } = props;
+  const hourBlockChain = [];
   for (let hour = 0; hour < 24; hour++) {
-    dayChain.push(<TimeBlock key={hour} startTime={hour}></TimeBlock>);
+    hourBlockChain.push(<TimeBlock key={hour} startTime={hour}></TimeBlock>);
   }
 
   // Sort Event chains
@@ -90,11 +88,15 @@ export function Day(props: {
     toPlace.push(i);
   }
 
-  const eventDate = [];
+  const eventsBeginTime = [];
 
   events.forEach((event) => {
     let startTime = 24;
-    if (event.startDate.getDay() === dayValue % 7) {
+    if (
+      event.startDate.getDate() === day.getDate() &&
+      event.startDate.getMonth() === day.getMonth() &&
+      event.startDate.getFullYear() === day.getFullYear()
+    ) {
       if (
         event.startDate.getHours() !== 0 ||
         event.startDate.getMinutes() !== 0 ||
@@ -107,21 +109,36 @@ export function Day(props: {
           (60 - event.startDate.getSeconds()) / 3600;
       }
     }
-    eventDate.push(startTime);
+    eventsBeginTime.push(startTime);
   });
 
   return (
-    <div id={`${day}`} className="blockDisplay">
+    <div
+      id={`${day.toLocaleDateString('en-EN', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+      })}`}
+      className="blockDisplay"
+    >
       <div className="dayData">
-        {day.toLocaleDateString('fr-FR', { weekday: 'narrow' })}
+        {day.toLocaleDateString(i18n.language, { weekday: 'narrow' })}
       </div>
       <div className="dayData">{day.getDate()}</div>
-      {dayChain}
+      {hourBlockChain}
       {chains.map((chain) => (
         <Grid
           container
-          key={`Chain${chain}Day${day}`}
-          data-testid={`GlobalDayContainer${day}TestId`}
+          key={`Chain${chain}Day${day.toLocaleDateString('en-EN', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+          })}`}
+          data-testid={`GlobalDayContainer${day.toLocaleDateString('en-EN', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric',
+          })}TestId`}
         >
           {chain.map((eventKey) => {
             if (eventKey >= 0) {
@@ -139,13 +156,13 @@ export function Day(props: {
                     sx={{
                       height: `0px`,
                       transform: `translate(0px, -${
-                        1.2 * eventDate[eventKey]
+                        1.2 * eventsBeginTime[eventKey]
                       }rem)`,
                     }}
                   >
                     <EventBlock
                       key={events[eventKey].slug}
-                      day={dayValue}
+                      day={day}
                       event={events[eventKey]}
                     />
                   </Grid>
@@ -164,7 +181,7 @@ export function Day(props: {
                   sx={{
                     height: `0px`,
                     transform: `translate(0px, -${
-                      1.2 * eventDate[eventKey]
+                      1.2 * eventsBeginTime[eventKey]
                     }rem)`,
                   }}
                 ></Grid>

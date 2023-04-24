@@ -24,6 +24,16 @@
     "showLess": "Show less",
     "yes": "Yes"
   },
+  "calendar":{
+    "export": "Export events",
+    "to": "to",
+    "view":{
+      "day": "Day",
+      "3Days": "3 Days",
+      "week": "Week",
+      "month": "Month"
+    }
+  },
   "club": {
     "joinNow": "Join now",
     "noClub": "You haven't joined any groups yet"
