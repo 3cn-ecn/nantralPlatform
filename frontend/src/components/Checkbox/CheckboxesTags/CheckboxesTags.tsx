@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';

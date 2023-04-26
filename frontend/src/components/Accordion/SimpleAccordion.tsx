@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ListItemIcon } from '@mui/material';

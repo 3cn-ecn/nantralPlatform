@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { Skeleton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';

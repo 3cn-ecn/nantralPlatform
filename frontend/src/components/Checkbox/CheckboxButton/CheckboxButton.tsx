@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
