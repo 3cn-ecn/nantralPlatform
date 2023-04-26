@@ -5,12 +5,12 @@ import { NavLink, useParams } from 'react-router-dom';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { LoadingButton } from '@mui/lab';
 import { Box, Grid, Skeleton, SvgIcon, Typography } from '@mui/material';
-import { LoadStatus } from 'Props/GenericTypes';
 import axios from 'axios';
 
 import Avatar from '#components/Avatar/Avatar';
 import { EditProfilModal } from '#components/FormProfil/FormProfil';
 import { MembershipsStudent } from '#components/Group/MembershipsStudent';
+import { LoadStatus } from '#types/GenericTypes';
 
 const API_URL = '/api/student/student/';
 

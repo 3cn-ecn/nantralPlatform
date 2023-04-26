@@ -27,12 +27,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { FieldType } from 'Props/GenericTypes';
 import axios from 'axios';
 import { Dayjs } from 'dayjs';
 import 'dayjs/locale/fr';
 
 import Avatar from '#components/Avatar/Avatar';
+import { FieldType } from '#types/GenericTypes';
 
 /**
  * A component to create a group of fields for a form

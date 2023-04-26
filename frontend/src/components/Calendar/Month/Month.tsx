@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { EventProps } from '../../../Props/Event';
+import { EventProps } from '#types/Event';
+
 import { WeekLine } from './WeekLine/WeekLine';
 
 export function Month(props: {

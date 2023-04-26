@@ -3,11 +3,12 @@ import { useSearchParams } from 'react-router-dom';
 
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Button, Container, Pagination, Tab } from '@mui/material';
-import { FilterInterface } from 'Props/Filter';
 import axios from 'axios';
 
-import { EventProps, eventsToCamelCase } from '../../Props/Event';
-import { ListResults, LoadStatus } from '../../Props/GenericTypes';
+import { EventProps, eventsToCamelCase } from '#types/Event';
+import { FilterInterface } from '#types/Filter';
+import { ListResults, LoadStatus } from '#types/GenericTypes';
+
 import Calendar from '../../components/Calendar/Calendar';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import ModalEditEvent from '../../components/FormEvent/FormEvent';

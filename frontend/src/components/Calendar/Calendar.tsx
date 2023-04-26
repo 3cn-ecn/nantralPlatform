@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Grid } from '@mui/material';
-import { EventProps } from 'Props/Event';
 import { EventAttributes, createEvents } from 'ics';
 
+import { EventProps } from '#types/Event';
 import { modulo, ppcm } from '#utils/maths';
 
 import './Calendar.scss';

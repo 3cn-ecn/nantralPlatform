@@ -26,16 +26,16 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { FieldType } from 'Props/GenericTypes';
-import { SimpleGroupProps } from 'Props/Group';
 import axios from 'axios';
 
 import { createEvent, deleteEvent, editEvent } from '#api/event';
 import { SimpleGroup } from '#components/Group/interfaces';
+import { EventProps, FormEventProps } from '#types/Event';
+import { FieldType } from '#types/GenericTypes';
+import { SimpleGroupProps } from '#types/Group';
 import { convertFromPythonData } from '#utils/convertData';
 import FormGroup from '#utils/form';
 
-import { EventProps, FormEventProps } from '../../Props/Event';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
 

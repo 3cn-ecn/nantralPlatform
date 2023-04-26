@@ -3,7 +3,8 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import i18n from 'i18next';
 
-import { EventProps } from '../../../Props/Event';
+import { EventProps } from '#types/Event';
+
 import './Day.scss';
 import { EventBlock } from './EventBlock/EventBlock';
 import { TimeBlock } from './TimeBlock/TimeBlock';

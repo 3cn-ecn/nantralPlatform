@@ -2,9 +2,10 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Alert, Grid, Typography } from '@mui/material';
-import { EventProps, FormEventProps } from 'Props/Event';
 
-import { LoadStatus } from '../../../Props/GenericTypes';
+import { EventProps, FormEventProps } from '#types/Event';
+import { LoadStatus } from '#types/GenericTypes';
+
 import EventCard, { EventCardSkeleton } from '../../EventCard/EventCard';
 import { AccordionSection } from '../AccordionSection';
 import './EventSection.scss';

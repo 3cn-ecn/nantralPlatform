@@ -12,8 +12,8 @@ import {
   useTheme,
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
-import { FormPostProps, PostProps } from 'Props/Post';
 
+import { FormPostProps, PostProps } from '#types/Post';
 import { timeFromNow } from '#utils/date';
 
 import Avatar from '../Avatar/Avatar';

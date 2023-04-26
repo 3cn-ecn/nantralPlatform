@@ -18,7 +18,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Container } from '@mui/system';
 import axios from 'axios';
 
-import { EventProps } from '../../Props/Event';
+import { EventProps } from '#types/Event';
+
 import Avatar from '../Avatar/Avatar';
 
 export function EventParticipantsModal(props: {

@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 
-import { LoadStatus } from '../../../Props/GenericTypes';
-import { FormPostProps, PostProps } from '../../../Props/Post';
+import { LoadStatus } from '#types/GenericTypes';
+import { FormPostProps, PostProps } from '#types/Post';
+
 import { PostCard, PostCardSkeleton } from '../../PostCard/PostCard';
 
 /**

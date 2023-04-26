@@ -3,8 +3,9 @@ import * as React from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { Autocomplete, Checkbox, TextField } from '@mui/material';
-import { Page } from 'Props/Group';
 import axios from 'axios';
+
+import { Page } from '#types/Group';
 
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;

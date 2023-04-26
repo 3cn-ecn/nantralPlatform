@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Button } from '@mui/material';
-import { EventProps } from 'Props/Event';
+
+import { EventProps } from '#types/Event';
 
 import './DayBlock.scss';
 

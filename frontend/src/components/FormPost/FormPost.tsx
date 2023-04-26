@@ -14,14 +14,14 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { FieldType } from 'Props/GenericTypes';
 import axios from 'axios';
 
 import { createPost, deletePost, updatePost } from '#api/post';
+import { FieldType } from '#types/GenericTypes';
+import { SimpleGroupProps } from '#types/Group';
+import { FormPostProps, PostProps } from '#types/Post';
 import FormGroup from '#utils/form';
 
-import { SimpleGroupProps } from '../../Props/Group';
-import { FormPostProps, PostProps } from '../../Props/Post';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 export function FormPost(props: {

@@ -14,7 +14,8 @@ import {
   Skeleton,
   Typography,
 } from '@mui/material/';
-import { EventProps, FormEventProps } from 'Props/Event';
+
+import { EventProps, FormEventProps } from '#types/Event';
 
 import FavButton from '../Button/FavButton';
 import JoinButton from '../Button/JoinButton';

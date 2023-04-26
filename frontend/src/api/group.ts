@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { GroupProps, SimpleGroupProps } from '../Props/Group';
-import { Page } from '../Props/pagination';
+import { GroupProps, SimpleGroupProps } from '#types/Group';
+import { Page } from '#types/pagination';
 
 export async function getMyGroups() {
   return getGroups({ isMember: true });

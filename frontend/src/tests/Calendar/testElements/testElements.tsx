@@ -1,4 +1,4 @@
-import { EventProps } from '../../../Props/Event';
+import { EventProps } from '#types/Event';
 
 export function createTestEvent(
   slug = 'The slug',

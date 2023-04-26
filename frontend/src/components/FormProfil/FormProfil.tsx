@@ -13,9 +13,9 @@ import {
   IconButton,
   Typography,
 } from '@mui/material';
-import { FieldType } from 'Props/GenericTypes';
 
 import { Suggestion } from '#components/Suggestion/interfacesSuggestion';
+import { FieldType } from '#types/GenericTypes';
 import FormGroup from '#utils/form';
 
 interface Profile {

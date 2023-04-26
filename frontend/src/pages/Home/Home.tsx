@@ -14,7 +14,6 @@ import {
   SpeedDialIcon,
   Typography,
 } from '@mui/material';
-import { SimpleGroupProps } from 'Props/Group';
 import axios from 'axios';
 
 import { getEvents } from '#api/event';
@@ -26,14 +25,15 @@ import { PostModal } from '#components/Modal/PostModal';
 import { ClubSection } from '#components/Section/ClubSection/ClubSection';
 import { EventSection } from '#components/Section/EventSection/EventSection';
 import { PostSection } from '#components/Section/PostSection/PostSection';
-
-import { EventProps } from '../../Props/Event';
-import { LoadStatus } from '../../Props/GenericTypes';
+import { EventProps } from '#types/Event';
+import { LoadStatus } from '#types/GenericTypes';
+import { SimpleGroupProps } from '#types/Group';
 import {
   FormPostProps,
   PostProps,
   convertPostFromPythonData,
-} from '../../Props/Post';
+} from '#types/Post';
+
 import './Home.scss';
 
 const MAX_EVENT_SHOWN = 6;

@@ -4,8 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 
 import { Month } from '#components/Calendar/Month/Month';
+import { EventProps } from '#types/Event';
 
-import { EventProps } from '../../Props/Event';
 import { createTestEvent } from './testElements/testElements';
 
 // Create the list of events in the month

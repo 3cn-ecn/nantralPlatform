@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Container } from '@mui/material';
-import { LoadStatus } from 'Props/GenericTypes';
 import axios from 'axios';
 
 import { SimpleGroup } from '#components/Group/interfaces';
 import { ClubSection } from '#components/Section/ClubSection/ClubSection';
+import { LoadStatus } from '#types/GenericTypes';
 
 import NotFound from '../NotFound/NotFound';
 

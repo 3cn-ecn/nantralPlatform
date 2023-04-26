@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { Grid, Typography } from '@mui/material';
-import { LoadStatus } from 'Props/GenericTypes';
 
 import { Group, SimpleGroup } from '#components/Group/interfaces';
+import { LoadStatus } from '#types/GenericTypes';
 
 import { ClubAvatar, ClubAvatarSkeleton } from '../../ClubAvatar/ClubAvatar';
 import { AccordionSection } from '../AccordionSection';

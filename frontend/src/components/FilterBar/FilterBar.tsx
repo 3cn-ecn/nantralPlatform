@@ -15,10 +15,11 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import { FilterFrontInterface, FilterInterface } from 'Props/Filter';
-import { SimpleGroupProps } from 'Props/Group';
 import axios from 'axios';
 import { Dayjs } from 'dayjs';
+
+import { FilterFrontInterface, FilterInterface } from '#types/Filter';
+import { SimpleGroupProps } from '#types/Group';
 
 import SimpleAccordion from '../Accordion/SimpleAccordion';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';

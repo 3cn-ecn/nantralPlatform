@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@mui/material';
 
-import { EventProps } from '../../../../Props/Event';
+import { EventProps } from '#types/Event';
+
 import './EventBlock.scss';
 
 /**

@@ -2,13 +2,13 @@ import React from 'react';
 
 import { Button, Grid } from '@mui/material';
 import Container from '@mui/material/Container';
-import { LoadStatus } from 'Props/GenericTypes';
 import axios from 'axios';
 
 import {
   ClubAvatar,
   ClubAvatarSkeleton,
 } from '#components/ClubAvatar/ClubAvatar';
+import { LoadStatus } from '#types/GenericTypes';
 
 /**
  * Home Page, with Welcome message, next events, etc...
