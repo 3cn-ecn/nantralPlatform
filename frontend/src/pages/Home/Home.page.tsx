@@ -34,7 +34,7 @@ import {
   convertPostFromPythonData,
 } from '#types/Post';
 
-import './Home.scss';
+import './Home.page.scss';
 
 const MAX_EVENT_SHOWN = 6;
 /**

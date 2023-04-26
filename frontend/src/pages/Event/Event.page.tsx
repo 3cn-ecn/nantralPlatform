@@ -13,7 +13,7 @@ import Calendar from '../../components/Calendar/Calendar';
 import FilterBar from '../../components/FilterBar/FilterBar';
 import ModalEditEvent from '../../components/FormEvent/FormEvent';
 import { EventSection } from '../../components/Section/EventSection/EventSection';
-import './Event.scss';
+import './Event.page.scss';
 
 const EVENT_PER_PAGE = 6;
 

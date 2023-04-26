@@ -8,7 +8,7 @@ import { SimpleGroup } from '#components/Group/interfaces';
 import { ClubSection } from '#components/Section/ClubSection/ClubSection';
 import { LoadStatus } from '#types/GenericTypes';
 
-import NotFound from '../NotFound/NotFound';
+import NotFound from '../NotFound/NotFound.page';
 
 export function GroupList() {
   const { groupTypeSlug } = useParams();

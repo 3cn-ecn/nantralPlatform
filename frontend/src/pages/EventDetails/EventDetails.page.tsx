@@ -35,8 +35,8 @@ import EditEventModal from '#components/FormEvent/FormEvent';
 import { EventParticipantsModal } from '#components/Modal/EventParticipantsModal';
 import { ImageModal } from '#components/Modal/ImageModal';
 
-import NotFound from '../NotFound/NotFound';
-import './EventDetails.scss';
+import NotFound from '../NotFound/NotFound.page';
+import './EventDetails.page.scss';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
