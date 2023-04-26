@@ -4,7 +4,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Button } from '@mui/material';
 
-import { modulo } from '../../../../utils/maths';
+import { modulo } from '#utils/maths';
+
 import { CalendarView } from '../../CalendarProps/CalendarProps';
 import { numberOfDayInDateMonth, numberOfDayInMonth } from '../../utils';
 

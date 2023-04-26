@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 
 import { Grid, Typography } from '@mui/material';
 import { LoadStatus } from 'Props/GenericTypes';
-import { Group, SimpleGroup } from 'components/Group/interfaces';
+
+import { Group, SimpleGroup } from '#components/Group/interfaces';
 
 import { ClubAvatar, ClubAvatarSkeleton } from '../../ClubAvatar/ClubAvatar';
 import { AccordionSection } from '../AccordionSection';

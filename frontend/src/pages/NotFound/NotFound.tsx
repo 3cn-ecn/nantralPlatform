@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Alert, AlertTitle, Button } from '@mui/material';
 import { Container } from '@mui/system';
 
-import EditSuggestionModal from '../../components/Suggestion/Suggestion';
+import EditSuggestionModal from '#components/Suggestion/Suggestion';
 
 /**
  * The 404 error page when the requested page is not found.

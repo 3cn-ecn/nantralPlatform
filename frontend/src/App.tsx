@@ -6,16 +6,17 @@ import { Box, CssBaseline, PaletteMode, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import NavBarSide from './components/NavBarSide/NavBarSide';
-import NavBarTop from './components/NavBarTop/NavBarTop';
-import Event from './pages/Event/Event';
-import EventDetails from './pages/EventDetails/EventDetails';
-import Group from './pages/Group/Group';
-import Home from './pages/Home/Home';
-import LegalNotice from './pages/LegalNotice/Legal';
-import NotFound from './pages/NotFound/NotFound';
-import Profile from './pages/Profile/Profile';
-import Student from './pages/Student/Student';
+import NavBarSide from '#components/NavBarSide/NavBarSide';
+import NavBarTop from '#components/NavBarTop/NavBarTop';
+import Event from '#pages/Event/Event';
+import EventDetails from '#pages/EventDetails/EventDetails';
+import Group from '#pages/Group/Group';
+import Home from '#pages/Home/Home';
+import LegalNotice from '#pages/LegalNotice/Legal';
+import NotFound from '#pages/NotFound/NotFound';
+import Profile from '#pages/Profile/Profile';
+import Student from '#pages/Student/Student';
+
 import getTheme from './theme';
 
 const queryClient = new QueryClient();

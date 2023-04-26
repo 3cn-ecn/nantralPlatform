@@ -17,10 +17,11 @@ import {
 import { FieldType } from 'Props/GenericTypes';
 import axios from 'axios';
 
+import { createPost, deletePost, updatePost } from '#api/post';
+import FormGroup from '#utils/form';
+
 import { SimpleGroupProps } from '../../Props/Group';
 import { FormPostProps, PostProps } from '../../Props/Post';
-import { createPost, deletePost, updatePost } from '../../api/post';
-import FormGroup from '../../utils/form';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 export function FormPost(props: {

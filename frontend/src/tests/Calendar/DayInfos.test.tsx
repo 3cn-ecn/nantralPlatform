@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render } from '@testing-library/react';
 
-import { DayInfos } from '../../components/Calendar/DayInfos/DayInfos';
+import { DayInfos } from '#components/Calendar/DayInfos/DayInfos';
 
 describe('<DayInfos />', () => {
   it('should display a DayInfos', async () => {

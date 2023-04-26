@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render } from '@testing-library/react';
 
-import { DateBox } from '../../components/Calendar/ChooseWeek/DateBox/DateBox';
+import { DateBox } from '#components/Calendar/ChooseWeek/DateBox/DateBox';
 
 describe('<DateBox />', () => {
   it('should display a DateBox', async () => {

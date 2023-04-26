@@ -12,8 +12,9 @@ import {
   Tooltip,
 } from '@mui/material';
 
+import { timeFromNow } from '#utils/date';
+
 import { FormPostProps, PostProps } from '../../Props/Post';
-import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
 import { PostModal } from '../Modal/PostModal';
 import './PostCard.scss';

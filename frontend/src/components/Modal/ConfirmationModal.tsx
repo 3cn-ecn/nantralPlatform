@@ -8,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import { CapitalizeFirstLetter } from '../../utils/formatText';
+import { CapitalizeFirstLetter } from '#utils/formatText';
 
 export function ConfirmationModal(props: {
   open: boolean;

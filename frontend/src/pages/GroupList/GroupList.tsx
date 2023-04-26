@@ -5,8 +5,9 @@ import { Container } from '@mui/material';
 import { LoadStatus } from 'Props/GenericTypes';
 import axios from 'axios';
 
-import { SimpleGroup } from '../../components/Group/interfaces';
-import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
+import { SimpleGroup } from '#components/Group/interfaces';
+import { ClubSection } from '#components/Section/ClubSection/ClubSection';
+
 import NotFound from '../NotFound/NotFound';
 
 export function GroupList() {

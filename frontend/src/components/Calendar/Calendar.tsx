@@ -5,7 +5,8 @@ import { Button, Grid } from '@mui/material';
 import { EventProps } from 'Props/Event';
 import { EventAttributes, createEvents } from 'ics';
 
-import { modulo, ppcm } from '../../utils/maths';
+import { modulo, ppcm } from '#utils/maths';
+
 import './Calendar.scss';
 import { CalendarView, EventDataProps } from './CalendarProps/CalendarProps';
 import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';

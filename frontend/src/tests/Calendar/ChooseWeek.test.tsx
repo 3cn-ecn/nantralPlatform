@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { render } from '@testing-library/react';
-import { CalendarView } from 'components/Calendar/CalendarProps/CalendarProps';
 
-import { ChooseWeek } from '../../components/Calendar/ChooseWeek/ChooseWeek';
+import { CalendarView } from '#components/Calendar/CalendarProps/CalendarProps';
+import { ChooseWeek } from '#components/Calendar/ChooseWeek/ChooseWeek';
 
 let startDate = new Date('2023-02-17T03:24:00');
 const setstartDate = (newDate: Date) => {

@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { visualizer } from 'rollup-plugin-visualizer';
-import svgr from 'vite-plugin-svgr';
 import path from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
+import { defineConfig } from 'vite';
+import svgr from 'vite-plugin-svgr';
 
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -28,6 +28,15 @@ const legacyEntryPoints = [
 export default defineConfig({
   plugins: [svgr(), react(), visualizer({ template: 'sunburst' })],
   base: '/static/',
+  resolve: {
+    alias: {
+      '#api': path.resolve(__dirname, './src/api/'),
+      '#components': path.resolve(__dirname, './src/components/'),
+      '#pages': path.resolve(__dirname, './src/pages'),
+      '#types': path.resolve(__dirname, './src/types'),
+      '#utils': path.resolve(__dirname, './src/utils'),
+    },
+  },
   server: {
     host: 'localhost',
     port: 5173,

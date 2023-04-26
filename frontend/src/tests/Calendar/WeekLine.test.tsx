@@ -3,8 +3,9 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
 
+import { WeekLine } from '#components/Calendar/Month/WeekLine/WeekLine';
+
 import { EventProps } from '../../Props/Event';
-import { WeekLine } from '../../components/Calendar/Month/WeekLine/WeekLine';
 import { createTestEvent } from './testElements/testElements';
 
 // Create some weeks

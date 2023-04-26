@@ -27,13 +27,14 @@ import {
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
-import { getEvent } from '../../api/event';
-import FavButton from '../../components/Button/FavButton';
-import JoinButton from '../../components/Button/JoinButton';
-import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
-import EditEventModal from '../../components/FormEvent/FormEvent';
-import { EventParticipantsModal } from '../../components/Modal/EventParticipantsModal';
-import { ImageModal } from '../../components/Modal/ImageModal';
+import { getEvent } from '#api/event';
+import FavButton from '#components/Button/FavButton';
+import JoinButton from '#components/Button/JoinButton';
+import { ClubAvatar } from '#components/ClubAvatar/ClubAvatar';
+import EditEventModal from '#components/FormEvent/FormEvent';
+import { EventParticipantsModal } from '#components/Modal/EventParticipantsModal';
+import { ImageModal } from '#components/Modal/ImageModal';
+
 import NotFound from '../NotFound/NotFound';
 import './EventDetails.scss';
 

@@ -3,8 +3,9 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
 
+import { Day, sortWithPos } from '#components/Calendar/Day/Day';
+
 import { EventProps } from '../../Props/Event';
-import { Day, sortWithPos } from '../../components/Calendar/Day/Day';
 import { createTestEvent } from './testElements/testElements';
 
 // Create some events

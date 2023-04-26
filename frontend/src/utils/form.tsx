@@ -32,7 +32,7 @@ import axios from 'axios';
 import { Dayjs } from 'dayjs';
 import 'dayjs/locale/fr';
 
-import Avatar from '../components/Avatar/Avatar';
+import Avatar from '#components/Avatar/Avatar';
 
 /**
  * A component to create a group of fields for a form

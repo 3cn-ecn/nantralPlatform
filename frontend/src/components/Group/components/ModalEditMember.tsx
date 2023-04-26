@@ -14,7 +14,8 @@ import {
   Typography,
 } from '@mui/material';
 
-import FormGroup, { FieldType } from '../../../utils/form';
+import FormGroup, { FieldType } from '#utils/form';
+
 import Avatar from '../../Avatar/Avatar';
 import { Group, Membership, Student } from '../interfaces';
 

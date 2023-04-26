@@ -14,9 +14,9 @@ import {
   Typography,
 } from '@mui/material';
 import { FieldType } from 'Props/GenericTypes';
-import { Suggestion } from 'components/Suggestion/interfacesSuggestion';
 
-import FormGroup from '../../utils/form';
+import { Suggestion } from '#components/Suggestion/interfacesSuggestion';
+import FormGroup from '#utils/form';
 
 interface Profile {
   promo: number;

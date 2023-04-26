@@ -14,7 +14,8 @@ import {
 import IconButton from '@mui/material/IconButton/IconButton';
 import { FormPostProps, PostProps } from 'Props/Post';
 
-import { timeFromNow } from '../../utils/date';
+import { timeFromNow } from '#utils/date';
+
 import Avatar from '../Avatar/Avatar';
 import { FormPost } from '../FormPost/FormPost';
 import { EditButton, PostBadges } from '../PostCard/PostCard';

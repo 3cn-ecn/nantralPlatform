@@ -2,9 +2,9 @@ import React from 'react';
 
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { CalendarView } from 'components/Calendar/CalendarProps/CalendarProps';
 
-import { ChangeWeek } from '../../components/Calendar/ChooseWeek/ChangeWeek/ChangeWeek';
+import { CalendarView } from '#components/Calendar/CalendarProps/CalendarProps';
+import { ChangeWeek } from '#components/Calendar/ChooseWeek/ChangeWeek/ChangeWeek';
 
 let startDate = new Date('2023-02-17T03:24:00');
 const setstartDate = (newDate: Date) => {

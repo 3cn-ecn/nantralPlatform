@@ -17,6 +17,16 @@ import {
 import { SimpleGroupProps } from 'Props/Group';
 import axios from 'axios';
 
+import { getEvents } from '#api/event';
+import { getMyGroups } from '#api/group';
+import { getPosts } from '#api/post';
+import EditEventModal from '#components/FormEvent/FormEvent';
+import { FormPost } from '#components/FormPost/FormPost';
+import { PostModal } from '#components/Modal/PostModal';
+import { ClubSection } from '#components/Section/ClubSection/ClubSection';
+import { EventSection } from '#components/Section/EventSection/EventSection';
+import { PostSection } from '#components/Section/PostSection/PostSection';
+
 import { EventProps } from '../../Props/Event';
 import { LoadStatus } from '../../Props/GenericTypes';
 import {
@@ -24,15 +34,6 @@ import {
   PostProps,
   convertPostFromPythonData,
 } from '../../Props/Post';
-import { getEvents } from '../../api/event';
-import { getMyGroups } from '../../api/group';
-import { getPosts } from '../../api/post';
-import EditEventModal from '../../components/FormEvent/FormEvent';
-import { FormPost } from '../../components/FormPost/FormPost';
-import { PostModal } from '../../components/Modal/PostModal';
-import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
-import { EventSection } from '../../components/Section/EventSection/EventSection';
-import { PostSection } from '../../components/Section/PostSection/PostSection';
 import './Home.scss';
 
 const MAX_EVENT_SHOWN = 6;

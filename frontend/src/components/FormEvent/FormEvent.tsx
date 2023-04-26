@@ -29,12 +29,13 @@ import {
 import { FieldType } from 'Props/GenericTypes';
 import { SimpleGroupProps } from 'Props/Group';
 import axios from 'axios';
-import { SimpleGroup } from 'components/Group/interfaces';
+
+import { createEvent, deleteEvent, editEvent } from '#api/event';
+import { SimpleGroup } from '#components/Group/interfaces';
+import { convertFromPythonData } from '#utils/convertData';
+import FormGroup from '#utils/form';
 
 import { EventProps, FormEventProps } from '../../Props/Event';
-import { createEvent, deleteEvent, editEvent } from '../../api/event';
-import { convertFromPythonData } from '../../utils/convertData';
-import FormGroup from '../../utils/form';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
 

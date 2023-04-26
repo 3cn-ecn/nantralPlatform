@@ -3,8 +3,9 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
 
+import { DayBlock } from '#components/Calendar/Month/WeekLine/DayBlock/DayBlock';
+
 import { EventProps } from '../../Props/Event';
-import { DayBlock } from '../../components/Calendar/Month/WeekLine/DayBlock/DayBlock';
 import { createTestEvent } from './testElements/testElements';
 
 const events: Array<EventProps> = [];

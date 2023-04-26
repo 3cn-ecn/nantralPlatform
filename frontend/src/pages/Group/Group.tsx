@@ -8,7 +8,7 @@ import axios from 'axios';
 import {
   ClubAvatar,
   ClubAvatarSkeleton,
-} from '../../components/ClubAvatar/ClubAvatar';
+} from '#components/ClubAvatar/ClubAvatar';
 
 /**
  * Home Page, with Welcome message, next events, etc...
