@@ -9,7 +9,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import NavBarSide from '#components/NavBarSide/NavBarSide';
 import NavBarTop from '#components/NavBarTop/NavBarTop';
 import Event from '#pages/Event/Event.page';
-import EventDetails from '#pages/EventDetails/EventDetails.page';
+import EventDetails from '#pages/Event/EventDetails/EventDetails.page';
 import Group from '#pages/Group/Group.page';
 import Home from '#pages/Home/Home.page';
 import LegalNotice from '#pages/LegalNotice/Legal.page';
