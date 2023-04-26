@@ -1,9 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+
+import { render } from '@testing-library/react';
+
 import { EventProps } from '../../Props/Event';
-import { createTestEvent } from './testElements/testElements';
 import { WeekLine } from '../../components/Calendar/Month/WeekLine/WeekLine';
+import { createTestEvent } from './testElements/testElements';
 
 // Create some weeks
 const week: Array<{ day: number; date: number; events: Array<EventProps> }> =

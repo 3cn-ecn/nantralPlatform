@@ -1,49 +1,51 @@
 import * as React from 'react';
-import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
+
 import {
-  IconButton,
-  AppBar,
-  Typography,
-  Box,
-  Toolbar,
-  Menu,
-  MenuItem,
-  ListItem,
-  ListItemText,
-  useMediaQuery,
-  Icon,
-  Button,
-  SvgIcon,
-  Collapse,
-  Breadcrumbs,
-  Divider,
-  useTheme,
-  PaletteMode,
-} from '@mui/material';
-import {
-  MoreVert as MoreIcon,
-  Gavel as GavelIcon,
-  NavigateNext as NavigateNextIcon,
-  Person as PersonIcon,
-  PublicRounded as PublicRoundedIcon,
-  HelpRounded as HelpRoundedIcon,
+  AdminPanelSettings as AdminPanelSettingsIcon,
   ArrowBack as ArrowBackIcon,
-  ErrorRounded as ErrorRoundedIcon,
-  LogoutRounded as LogoutRoundedIcon,
   Brightness4 as Brightness4Icon,
   Brightness7 as Brightness7Icon,
   BrightnessMedium as BrightnessMediumIcon,
+  ErrorRounded as ErrorRoundedIcon,
+  Gavel as GavelIcon,
+  HelpRounded as HelpRoundedIcon,
+  LogoutRounded as LogoutRoundedIcon,
+  MoreVert as MoreIcon,
+  NavigateNext as NavigateNextIcon,
   Palette as PaletteIcon,
-  AdminPanelSettings as AdminPanelSettingsIcon,
+  Person as PersonIcon,
+  PublicRounded as PublicRoundedIcon,
 } from '@mui/icons-material';
+import {
+  AppBar,
+  Box,
+  Breadcrumbs,
+  Button,
+  Collapse,
+  Divider,
+  Icon,
+  IconButton,
+  ListItem,
+  ListItemText,
+  Menu,
+  MenuItem,
+  PaletteMode,
+  SvgIcon,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import axios from 'axios';
+import i18next from 'i18next';
+
 import Avatar from '../Avatar/Avatar';
-import './NavBarTop.scss';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import EditSuggestionModal from '../Suggestion/Suggestion';
 import { Suggestion } from '../Suggestion/interfacesSuggestion';
+import './NavBarTop.scss';
 
 declare module '@mui/material/AppBar' {
   interface AppBarPropsColorOverrides {

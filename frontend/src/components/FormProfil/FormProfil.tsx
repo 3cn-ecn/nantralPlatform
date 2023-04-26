@@ -1,19 +1,21 @@
 import React, { FormEvent, useState } from 'react';
+
+import { Close as CloseIcon } from '@mui/icons-material';
 import {
+  Alert,
+  Box,
   Button,
+  CircularProgress,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   Typography,
-  Box,
-  Alert,
-  CircularProgress,
 } from '@mui/material';
-import { Close as CloseIcon } from '@mui/icons-material';
-import { Suggestion } from 'components/Suggestion/interfacesSuggestion';
 import { FieldType } from 'Props/GenericTypes';
+import { Suggestion } from 'components/Suggestion/interfacesSuggestion';
+
 import FormGroup from '../../utils/form';
 
 interface Profile {

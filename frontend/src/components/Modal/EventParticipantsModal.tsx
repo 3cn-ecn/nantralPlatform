@@ -1,10 +1,8 @@
 import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import { Container } from '@mui/system';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
+
 import {
   Card,
   CardActionArea,
@@ -12,12 +10,16 @@ import {
   List,
   ListItem,
 } from '@mui/material';
-import { NavLink } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Container } from '@mui/system';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import Avatar from '../Avatar/Avatar';
+
 import { EventProps } from '../../Props/Event';
+import Avatar from '../Avatar/Avatar';
 
 export function EventParticipantsModal(props: {
   open: boolean;

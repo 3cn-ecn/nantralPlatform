@@ -1,37 +1,39 @@
-import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import { SimpleGroupProps } from 'Props/Group';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
+import { Link, useSearchParams } from 'react-router-dom';
+
+import { Event, PostAdd } from '@mui/icons-material';
 import {
   Box,
+  Chip,
+  Container,
+  Divider,
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
   Typography,
-  Container,
-  Chip,
-  Divider,
 } from '@mui/material';
-import { Event, PostAdd } from '@mui/icons-material';
-import { Link, useSearchParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
+import { SimpleGroupProps } from 'Props/Group';
+import axios from 'axios';
+
 import { EventProps } from '../../Props/Event';
-import './Home.scss';
-import { EventSection } from '../../components/Section/EventSection/EventSection';
-import { PostSection } from '../../components/Section/PostSection/PostSection';
+import { LoadStatus } from '../../Props/GenericTypes';
 import {
   FormPostProps,
   PostProps,
   convertPostFromPythonData,
 } from '../../Props/Post';
-import { LoadStatus } from '../../Props/GenericTypes';
-import { FormPost } from '../../components/FormPost/FormPost';
-import EditEventModal from '../../components/FormEvent/FormEvent';
-import { PostModal } from '../../components/Modal/PostModal';
-import { getMyGroups } from '../../api/group';
 import { getEvents } from '../../api/event';
+import { getMyGroups } from '../../api/group';
 import { getPosts } from '../../api/post';
+import EditEventModal from '../../components/FormEvent/FormEvent';
+import { FormPost } from '../../components/FormPost/FormPost';
+import { PostModal } from '../../components/Modal/PostModal';
+import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
+import { EventSection } from '../../components/Section/EventSection/EventSection';
+import { PostSection } from '../../components/Section/PostSection/PostSection';
+import './Home.scss';
 
 const MAX_EVENT_SHOWN = 6;
 /**

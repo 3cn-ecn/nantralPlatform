@@ -1,20 +1,20 @@
 import React from 'react';
-import { Grid } from '@mui/material';
-import CardMembership from './CardMembership';
-import { Group, Membership, Student } from '../interfaces';
 
+import { Grid } from '@mui/material';
+
+import { Group, Membership, Student } from '../interfaces';
+import CardMembership from './CardMembership';
 
 /**
  * Main table component for editing members in the admin page of groups.
  */
 function ListMembershipsGrid(props: {
-  members: Membership[],
-  group?: Group,
-  student: Student,
-  updateMembership?: (member: Membership) => Promise<void>,
-  deleteMembership?: (member: Membership) => Promise<void>,
+  members: Membership[];
+  group?: Group;
+  student: Student;
+  updateMembership?: (member: Membership) => Promise<void>;
+  deleteMembership?: (member: Membership) => Promise<void>;
 }): JSX.Element {
-
   const { members, group, student, updateMembership, deleteMembership } = props;
 
   return (

@@ -1,9 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+
+import { render } from '@testing-library/react';
+
 import { EventProps } from '../../Props/Event';
-import { createTestEvent } from './testElements/testElements';
 import { DayBlock } from '../../components/Calendar/Month/WeekLine/DayBlock/DayBlock';
+import { createTestEvent } from './testElements/testElements';
 
 const events: Array<EventProps> = [];
 events.push(

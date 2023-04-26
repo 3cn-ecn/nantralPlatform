@@ -1,10 +1,12 @@
-import { Container } from '@mui/material';
-import axios from 'axios';
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
+
+import { Container } from '@mui/material';
 import { LoadStatus } from 'Props/GenericTypes';
-import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
+import axios from 'axios';
+
 import { SimpleGroup } from '../../components/Group/interfaces';
+import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
 import NotFound from '../NotFound/NotFound';
 
 export function GroupList() {

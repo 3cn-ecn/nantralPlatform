@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { render } from '@testing-library/react';
+
 import { TimeBlock } from '../../components/Calendar/Day/TimeBlock/TimeBlock';
 
 describe('<DayInfos />', () => {

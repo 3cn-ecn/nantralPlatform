@@ -1,3 +1,15 @@
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import EditIcon from '@mui/icons-material/Edit';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import PeopleIcon from '@mui/icons-material/People';
+import PlaceIcon from '@mui/icons-material/Place';
+import ShareIcon from '@mui/icons-material/Share';
 import {
   Box,
   Button,
@@ -12,29 +24,18 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import './EventDetails.scss';
-import { useTranslation } from 'react-i18next';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import PlaceIcon from '@mui/icons-material/Place';
-import PeopleIcon from '@mui/icons-material/People';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-
-import ShareIcon from '@mui/icons-material/Share';
-import EditIcon from '@mui/icons-material/Edit';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import { useQuery } from 'react-query';
-import EditEventModal from '../../components/FormEvent/FormEvent';
+
+import { getEvent } from '../../api/event';
 import FavButton from '../../components/Button/FavButton';
 import JoinButton from '../../components/Button/JoinButton';
 import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
+import EditEventModal from '../../components/FormEvent/FormEvent';
 import { EventParticipantsModal } from '../../components/Modal/EventParticipantsModal';
 import { ImageModal } from '../../components/Modal/ImageModal';
 import NotFound from '../NotFound/NotFound';
-import { getEvent } from '../../api/event';
+import './EventDetails.scss';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,

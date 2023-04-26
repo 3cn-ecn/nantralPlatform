@@ -1,7 +1,9 @@
 import * as React from 'react';
-import Checkbox from '@mui/material/Checkbox';
-import './CheckboxButton.scss';
+
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import Checkbox from '@mui/material/Checkbox';
+
+import './CheckboxButton.scss';
 
 /**
  * Function to display a button with a checkbox

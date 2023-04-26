@@ -1,7 +1,9 @@
+import * as React from 'react';
+
 import { Skeleton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton/IconButton';
-import * as React from 'react';
+
 import { stringToColor } from '../../utils/formatText';
 
 export function ClubAvatar(props: {

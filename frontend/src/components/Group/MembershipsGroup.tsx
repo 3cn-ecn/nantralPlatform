@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
-import { Snackbar, Alert, Button, Box, IconButton } from '@mui/material';
+
 import {
   Edit as EditIcon,
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
+import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
 import axios from 'axios';
-import ModalEditMember from './components/ModalEditMember';
-import { Group, Membership, Student, Page } from './interfaces';
+
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import ListMembershipsTable from './components/ListMembershipsTable';
+import ModalEditMember from './components/ModalEditMember';
+import { Group, Membership, Page, Student } from './interfaces';
 
 // passed through django template
 declare const groupSlug: string;

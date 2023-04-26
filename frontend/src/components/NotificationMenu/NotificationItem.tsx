@@ -1,17 +1,19 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+
 import {
-  Typography,
   Box,
-  ListItem,
   Card,
-  IconButton,
   CardActionArea,
+  IconButton,
+  ListItem,
+  Typography,
 } from '@mui/material';
 import axios from 'axios';
-import './NotificationItem.scss';
+
 import Avatar from '../Avatar/Avatar';
+import './NotificationItem.scss';
 
 const app = '/api/notification/';
 const MANAGE_NOTIFICATION_URL = `${app}notification/`;

@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Grid } from '@mui/material';
 import { EventProps } from 'Props/Event';
+
 import { DayBlock } from './DayBlock/DayBlock';
 
 /**

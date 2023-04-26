@@ -1,25 +1,21 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Route, Routes } from 'react-router-dom';
+
 import { Box, CssBaseline, PaletteMode, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Home from './pages/Home/Home';
-import NavBarTop from './components/NavBarTop/NavBarTop';
+
 import NavBarSide from './components/NavBarSide/NavBarSide';
-import NotFound from './pages/NotFound/NotFound';
+import NavBarTop from './components/NavBarTop/NavBarTop';
 import Event from './pages/Event/Event';
-import Academics from './pages/Academics/Academics';
-import Admin from './pages/Admin/Admin';
-import BDX from './pages/BDX/BDX';
-import Group from './pages/Group/Group';
-import Family from './pages/Family/Family';
-import Map from './pages/Map/Map';
-import Sign from './pages/Sign/Sign';
-import Student from './pages/Student/Student';
-import LegalNotice from './pages/LegalNotice/Legal';
 import EventDetails from './pages/EventDetails/EventDetails';
+import Group from './pages/Group/Group';
+import Home from './pages/Home/Home';
+import LegalNotice from './pages/LegalNotice/Legal';
+import NotFound from './pages/NotFound/NotFound';
 import Profile from './pages/Profile/Profile';
+import Student from './pages/Student/Student';
 import getTheme from './theme';
 
 const queryClient = new QueryClient();
@@ -101,18 +97,12 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/group" element={<Group />} />
-              <Route path="*" element={<NotFound />} />
               <Route path="/event" element={<Event />} />
               <Route path="/event/:id" element={<EventDetails />} />
-              <Route path="/academics" element={<Academics />} />
-              <Route path="/administration" element={<Admin />} />
-              <Route path="/liste" element={<BDX />} />
-              <Route path="/parrainage" element={<Family />} />
-              <Route path="/colocs" element={<Map />} />
               <Route path="/student" element={<Student />} />
               <Route path="/legal-notice" element={<LegalNotice />} />
-              <Route path="/tools/signature" element={<Sign />} />
               <Route path="/student/:studentId" element={<Profile />} />
+              <Route path="*" element={<NotFound />} />
               {/* <Route path="/group/:groupTypeSlug" element={<GroupList />} /> */}
             </Routes>
           </Box>

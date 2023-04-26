@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
+
 import {
-  Grid,
+  Box,
   Card,
   CardActionArea,
   CardContent,
-  Box,
+  Grid,
   Typography,
 } from '@mui/material';
+
 import Avatar from '../../Avatar/Avatar';
+import { Group, Membership, Student } from '../interfaces';
+import ModalDeleteMember from './ModalDeleteMember';
 import ModalDisplayMember from './ModalDisplayMember';
 import ModalEditMember from './ModalEditMember';
-import ModalDeleteMember from './ModalDeleteMember';
-import { Membership, Group, Student } from '../interfaces';
 
 /**
  * A row of the table with a membership

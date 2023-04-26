@@ -1,7 +1,8 @@
 import React from 'react';
+
 import {
-  AvatarProps as MuiAvatarProps,
   Avatar as MuiAvatar,
+  AvatarProps as MuiAvatarProps,
 } from '@mui/material';
 
 /**

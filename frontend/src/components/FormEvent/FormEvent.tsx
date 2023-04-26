@@ -1,22 +1,7 @@
 import * as React from 'react';
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
-  Typography,
-  Box,
-  CircularProgress,
-  Alert,
-  useMediaQuery,
-  Paper,
-  Select,
-  MenuItem,
-  useTheme,
-} from '@mui/material';
-import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
+
 import {
   Close as CloseIcon,
   Delete,
@@ -24,17 +9,35 @@ import {
   Link as LinkIcon,
   LocalFireDepartment as ShotgunIcon,
 } from '@mui/icons-material';
-import { SimpleGroupProps } from 'Props/Group';
-import { useTranslation } from 'react-i18next';
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  MenuItem,
+  Paper,
+  Select,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import { FieldType } from 'Props/GenericTypes';
+import { SimpleGroupProps } from 'Props/Group';
+import axios from 'axios';
 import { SimpleGroup } from 'components/Group/interfaces';
-import { useQuery } from 'react-query';
+
 import { EventProps, FormEventProps } from '../../Props/Event';
-import FormGroup from '../../utils/form';
+import { createEvent, deleteEvent, editEvent } from '../../api/event';
 import { convertFromPythonData } from '../../utils/convertData';
+import FormGroup from '../../utils/form';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
-import { createEvent, deleteEvent, editEvent } from '../../api/event';
+
 /**
  * Fonction permettant de générer le formulaire de création d'un événement.
  * Elle ne vérifie pas que l'utilisateur soit bien admin du groupe.

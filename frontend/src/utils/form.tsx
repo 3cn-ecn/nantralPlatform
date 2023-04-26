@@ -1,35 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { useTranslation } from 'react-i18next';
+
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { Delete } from '@mui/icons-material';
 import {
-  TextField,
-  Checkbox,
+  Autocomplete,
+  AutocompleteInputChangeReason,
   Box,
-  Select,
+  Button,
+  Checkbox,
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Typography,
-  Autocomplete,
-  MenuItem,
-  InputLabel,
-  AutocompleteInputChangeReason,
-  Button,
   FormLabel,
-  InputAdornment,
   IconButton,
   Input,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
 } from '@mui/material';
-import { Dayjs } from 'dayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import 'dayjs/locale/fr';
-import axios from 'axios';
-import { useTranslation } from 'react-i18next';
 import { FieldType } from 'Props/GenericTypes';
-import { Delete } from '@mui/icons-material';
+import axios from 'axios';
+import { Dayjs } from 'dayjs';
+import 'dayjs/locale/fr';
+
 import Avatar from '../components/Avatar/Avatar';
 
 /**

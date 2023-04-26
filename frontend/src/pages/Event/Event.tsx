@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Box, Tab, Button, Container, Pagination } from '@mui/material';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import './Event.scss';
-import axios from 'axios';
-import { FilterInterface } from 'Props/Filter';
 import { useSearchParams } from 'react-router-dom';
-import { EventSection } from '../../components/Section/EventSection/EventSection';
+
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { Box, Button, Container, Pagination, Tab } from '@mui/material';
+import { FilterInterface } from 'Props/Filter';
+import axios from 'axios';
+
 import { EventProps, eventsToCamelCase } from '../../Props/Event';
-import FilterBar from '../../components/FilterBar/FilterBar';
-import Calendar from '../../components/Calendar/Calendar';
-import ModalEditEvent from '../../components/FormEvent/FormEvent';
 import { ListResults, LoadStatus } from '../../Props/GenericTypes';
+import Calendar from '../../components/Calendar/Calendar';
+import FilterBar from '../../components/FilterBar/FilterBar';
+import ModalEditEvent from '../../components/FormEvent/FormEvent';
+import { EventSection } from '../../components/Section/EventSection/EventSection';
+import './Event.scss';
 
 const EVENT_PER_PAGE = 6;
 

@@ -1,6 +1,7 @@
-import { useTranslation } from 'react-i18next';
-import Container from '@mui/material/Container';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import Container from '@mui/material/Container';
 
 /**
  * Legal Notice, like the name and owner of the site, etc.

@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Close } from '@mui/icons-material';
 import {
   Dialog,
@@ -11,11 +13,11 @@ import {
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import { FormPostProps, PostProps } from 'Props/Post';
-import { useTranslation } from 'react-i18next';
-import { EditButton, PostBadges } from '../PostCard/PostCard';
+
 import { timeFromNow } from '../../utils/date';
 import Avatar from '../Avatar/Avatar';
 import { FormPost } from '../FormPost/FormPost';
+import { EditButton, PostBadges } from '../PostCard/PostCard';
 
 export function PostModal(props: {
   post: PostProps;

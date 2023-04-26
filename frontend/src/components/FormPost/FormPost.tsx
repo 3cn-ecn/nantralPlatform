@@ -1,3 +1,7 @@
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
+
 import { Close, Delete } from '@mui/icons-material';
 import {
   Alert,
@@ -10,16 +14,14 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import axios from 'axios';
-import * as React from 'react';
-import { useQuery } from 'react-query';
-import { useTranslation } from 'react-i18next';
 import { FieldType } from 'Props/GenericTypes';
-import { FormPostProps, PostProps } from '../../Props/Post';
-import FormGroup from '../../utils/form';
+import axios from 'axios';
+
 import { SimpleGroupProps } from '../../Props/Group';
-import { ConfirmationModal } from '../Modal/ConfirmationModal';
+import { FormPostProps, PostProps } from '../../Props/Post';
 import { createPost, deletePost, updatePost } from '../../api/post';
+import FormGroup from '../../utils/form';
+import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
 export function FormPost(props: {
   /** The mode to use this form */

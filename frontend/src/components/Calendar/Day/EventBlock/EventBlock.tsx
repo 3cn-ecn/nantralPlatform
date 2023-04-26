@@ -1,6 +1,8 @@
 import React from 'react';
-import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+
+import { Button } from '@mui/material';
+
 import { EventProps } from '../../../../Props/Event';
 import './EventBlock.scss';
 

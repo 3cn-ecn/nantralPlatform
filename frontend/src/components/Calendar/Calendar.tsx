@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { Button, Grid } from '@mui/material';
-import { createEvents, EventAttributes } from 'ics';
 import { useTranslation } from 'react-i18next';
+
+import { Button, Grid } from '@mui/material';
 import { EventProps } from 'Props/Event';
+import { EventAttributes, createEvents } from 'ics';
+
 import { modulo, ppcm } from '../../utils/maths';
-import { numberOfDayInDateMonth } from './utils';
-import { Day } from './Day/Day';
-import { EventDataProps, CalendarView } from './CalendarProps/CalendarProps';
-import { DayInfos } from './DayInfos/DayInfos';
-import { ChooseWeek } from './ChooseWeek/ChooseWeek';
-import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';
-import { Month } from './Month/Month';
 import './Calendar.scss';
+import { CalendarView, EventDataProps } from './CalendarProps/CalendarProps';
+import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';
+import { ChooseWeek } from './ChooseWeek/ChooseWeek';
+import { Day } from './Day/Day';
+import { DayInfos } from './DayInfos/DayInfos';
+import { Month } from './Month/Month';
+import { numberOfDayInDateMonth } from './utils';
 
 /**
  * Function that sort event date-wise.

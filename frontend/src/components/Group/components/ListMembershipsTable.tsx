@@ -1,36 +1,38 @@
 import React, { useState } from 'react';
 import {
-  TableContainer,
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+  OnDragEndResponder,
+} from 'react-beautiful-dnd';
+
+import {
+  CheckCircle as CheckCircleIcon,
+  Delete as DeleteIcon,
+  DragIndicator as DragIndicatorIcon,
+  Edit as EditIcon,
+  Help as HelpIcon,
+  Visibility as VisibilityIcon,
+} from '@mui/icons-material';
+import {
+  Box,
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  IconButton,
-  Box,
   Typography,
 } from '@mui/material';
-import {
-  CheckCircle as CheckCircleIcon,
-  Help as HelpIcon,
-  DragIndicator as DragIndicatorIcon,
-  Edit as EditIcon,
-  Visibility as VisibilityIcon,
-  Delete as DeleteIcon,
-} from '@mui/icons-material';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  OnDragEndResponder,
-  DropResult,
-} from 'react-beautiful-dnd';
+
 import Avatar from '../../Avatar/Avatar';
+import { Group, Membership, Student } from '../interfaces';
+import ModalDeleteMember from './ModalDeleteMember';
 import ModalDisplayMember from './ModalDisplayMember';
 import ModalEditMember from './ModalEditMember';
-import ModalDeleteMember from './ModalDeleteMember';
-import { Group, Membership, Student } from '../interfaces';
 
 /**
  * A little function to help us reorder items

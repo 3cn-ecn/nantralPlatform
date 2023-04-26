@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Grid, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Group, SimpleGroup } from 'components/Group/interfaces';
+import { Link } from 'react-router-dom';
+
+import { Grid, Typography } from '@mui/material';
 import { LoadStatus } from 'Props/GenericTypes';
+import { Group, SimpleGroup } from 'components/Group/interfaces';
+
 import { ClubAvatar, ClubAvatarSkeleton } from '../../ClubAvatar/ClubAvatar';
 import { AccordionSection } from '../AccordionSection';
 
