@@ -14,7 +14,7 @@ import { LoadStatus } from '#types/GenericTypes';
 
 const API_URL = '/api/student/student/';
 
-function Profile() {
+export default function ProfilePage() {
   const [student, setStudent] = React.useState(null);
   const { studentId } = useParams();
   const url = API_URL + studentId;
@@ -136,5 +136,3 @@ function Profile() {
     </Box>
   );
 }
-
-export default Profile;

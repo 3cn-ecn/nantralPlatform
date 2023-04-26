@@ -8,14 +8,14 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 import NavBarSide from '#components/NavBarSide/NavBarSide';
 import NavBarTop from '#components/NavBarTop/NavBarTop';
-import Event from '#pages/Event/Event.page';
-import EventDetails from '#pages/Event/EventDetails/EventDetails.page';
-import Group from '#pages/Group/Group.page';
+import EventPage from '#pages/Event/Event.page';
+import EventDetailsPage from '#pages/Event/EventDetails/EventDetails.page';
+import GroupPage from '#pages/Group/Group.page';
 import HomePage from '#pages/Home/Home.page';
-import LegalNotice from '#pages/LegalNotice/Legal.page';
-import NotFound from '#pages/NotFound/NotFound.page';
-import Profile from '#pages/Profile/Profile.page';
-import Student from '#pages/Student/Student.page';
+import LegalNoticePage from '#pages/LegalNotice/Legal.page';
+import NotFoundPage from '#pages/NotFound/NotFound.page';
+import ProfilePage from '#pages/Profile/Profile.page';
+import StudentPage from '#pages/Student/Student.page';
 
 import getTheme from './theme';
 
@@ -97,14 +97,14 @@ function App() {
             <Toolbar />
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/group" element={<Group />} />
-              <Route path="/event" element={<Event />} />
-              <Route path="/event/:id" element={<EventDetails />} />
-              <Route path="/student" element={<Student />} />
-              <Route path="/legal-notice" element={<LegalNotice />} />
-              <Route path="/student/:studentId" element={<Profile />} />
-              <Route path="*" element={<NotFound />} />
-              {/* <Route path="/group/:groupTypeSlug" element={<GroupList />} /> */}
+              <Route path="/group" element={<GroupPage />} />
+              <Route path="/event" element={<EventPage />} />
+              <Route path="/event/:id" element={<EventDetailsPage />} />
+              <Route path="/student" element={<StudentPage />} />
+              <Route path="/legal-notice" element={<LegalNoticePage />} />
+              <Route path="/student/:studentId" element={<ProfilePage />} />
+              <Route path="*" element={<NotFoundPage />} />
+              {/* <Route path="/group/:groupTypeSlug" element={<GroupListPage />} /> */}
             </Routes>
           </Box>
         </Box>

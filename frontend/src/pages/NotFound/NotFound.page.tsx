@@ -12,7 +12,7 @@ import EditSuggestionModal from '#components/Suggestion/Suggestion';
  *
  * @returns The NotFound component
  */
-function NotFound() {
+export default function NotFoundPage() {
   const { t } = useTranslation('translation');
   const [open, setOpen] = React.useState<boolean>(false);
   return (
@@ -56,5 +56,3 @@ function NotFound() {
     </>
   );
 }
-
-export default NotFound;

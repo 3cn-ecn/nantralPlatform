@@ -14,7 +14,7 @@ import { LoadStatus } from '#types/GenericTypes';
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
-function Group() {
+export default function GroupPage() {
   const [groupTypeList, setGroupTypeList] = React.useState([]);
   const [groupTypeStatus, setGroupTypeStatus] =
     React.useState<LoadStatus>('loading');
@@ -86,5 +86,3 @@ function Group() {
     </Container>
   );
 }
-
-export default Group;

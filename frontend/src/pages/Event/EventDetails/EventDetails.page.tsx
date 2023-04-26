@@ -48,7 +48,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function EventDetails() {
+export default function EventDetailsPage() {
   const { i18n, t } = useTranslation('translation');
   const { id } = useParams();
   const [participating, setParticipating] = useState(false);
@@ -466,5 +466,3 @@ function EventDetails() {
     </>
   );
 }
-
-export default EventDetails;

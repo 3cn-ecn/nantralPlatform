@@ -10,7 +10,7 @@ import { LoadStatus } from '#types/GenericTypes';
 
 import NotFound from '../NotFound/NotFound.page';
 
-export function GroupList() {
+export default function GroupListPage() {
   const { groupTypeSlug } = useParams();
 
   const [groupCategory, setCategory] = React.useState(undefined);
