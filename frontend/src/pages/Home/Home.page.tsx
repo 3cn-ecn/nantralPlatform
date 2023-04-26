@@ -37,11 +37,12 @@ import {
 import './Home.page.scss';
 
 const MAX_EVENT_SHOWN = 6;
+
 /**
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
-function Home() {
+export default function HomePage() {
   // Query Params
   const [queryParams, setQueryParams] = useSearchParams();
   // Dates
@@ -264,5 +265,3 @@ function Home() {
     </>
   );
 }
-
-export default Home;

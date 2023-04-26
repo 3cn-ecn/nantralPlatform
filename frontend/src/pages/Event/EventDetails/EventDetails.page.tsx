@@ -3,13 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import EditIcon from '@mui/icons-material/Edit';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import PeopleIcon from '@mui/icons-material/People';
-import PlaceIcon from '@mui/icons-material/Place';
-import ShareIcon from '@mui/icons-material/Share';
+import {
+  AccessTime as AccessTimeIcon,
+  CalendarToday as CalendarTodayIcon,
+  Edit as EditIcon,
+  MoreHoriz as MoreHorizIcon,
+  People as PeopleIcon,
+  Place as PlaceIcon,
+  Share as ShareIcon,
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -19,13 +21,14 @@ import {
   Grid,
   Menu,
   MenuItem,
+  Alert as MuiAlert,
+  Snackbar,
   Tab,
   Tabs,
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
+import type { AlertProps } from '@mui/material/Alert';
 
 import { getEvent } from '#api/event';
 import FavButton from '#components/Button/FavButton';
@@ -34,8 +37,8 @@ import { ClubAvatar } from '#components/ClubAvatar/ClubAvatar';
 import EditEventModal from '#components/FormEvent/FormEvent';
 import { EventParticipantsModal } from '#components/Modal/EventParticipantsModal';
 import { ImageModal } from '#components/Modal/ImageModal';
+import NotFound from '#pages/NotFound/NotFound.page';
 
-import NotFound from '../../NotFound/NotFound.page';
 import './EventDetails.page.scss';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(

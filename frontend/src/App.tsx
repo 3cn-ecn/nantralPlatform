@@ -11,7 +11,7 @@ import NavBarTop from '#components/NavBarTop/NavBarTop';
 import Event from '#pages/Event/Event.page';
 import EventDetails from '#pages/Event/EventDetails/EventDetails.page';
 import Group from '#pages/Group/Group.page';
-import Home from '#pages/Home/Home.page';
+import HomePage from '#pages/Home/Home.page';
 import LegalNotice from '#pages/LegalNotice/Legal.page';
 import NotFound from '#pages/NotFound/NotFound.page';
 import Profile from '#pages/Profile/Profile.page';
@@ -96,7 +96,7 @@ function App() {
           >
             <Toolbar />
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<HomePage />} />
               <Route path="/group" element={<Group />} />
               <Route path="/event" element={<Event />} />
               <Route path="/event/:id" element={<EventDetails />} />
