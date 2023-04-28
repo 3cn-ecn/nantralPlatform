@@ -24,6 +24,10 @@
   "[django-html][html][javascript][javascriptreact][typescript][typescriptreact][json]": {
     "editor.tabSize": 2
   },
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#c02837",
+    "statusBar.foreground": "#fcfcfc"
+  },
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/",
   "python.envFile": "${workspaceFolder}/backend/config/settings/.env",
   "python.terminal.activateEnvironment": false,
