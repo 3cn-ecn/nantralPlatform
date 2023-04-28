@@ -89,6 +89,7 @@ function FilterBar(props: {
               setCurrentFilter({ ...currentFilter, organiser: results });
             }}
             updated
+            value={currentFilter.organiser}
             request="/api/group/group/"
             pkField="slug"
             labelField="name"
@@ -108,8 +109,13 @@ function FilterBar(props: {
             <BasicDatePicker
               label={t('filterbar.from')}
               minDate={null}
-              getDate={() => null}
-              controlledValue={dayjs(currentFilter.dateBegin)}
+              onChange={(value) =>
+                setCurrentFilter({
+                  ...currentFilter,
+                  dateBegin: value ? value.toDate() : undefined,
+                })
+              }
+              value={dayjs(currentFilter.dateBegin)}
             />
           </Grid>
           <div style={{ height: '15px' }}></div>
@@ -117,8 +123,13 @@ function FilterBar(props: {
             <BasicDatePicker
               label={t('filterbar.to')}
               minDate={currentFilter.dateBegin}
-              getDate={currentFilter.dateEnd}
-              controlledValue={dayjs(currentFilter.dateEnd)}
+              onChange={(value) =>
+                setCurrentFilter({
+                  ...currentFilter,
+                  dateEnd: value ? value.toDate() : undefined,
+                })
+              }
+              value={dayjs(currentFilter.dateEnd)}
             />
           </Grid>
         </>

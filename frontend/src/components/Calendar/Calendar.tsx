@@ -787,8 +787,11 @@ function updateWeekToDisplay(
  * @param event The list of events.
  * @returns The calendar component.
  */
-function Calendar(props: { events: Array<EventProps> }): JSX.Element {
-  const { events } = props;
+function Calendar(props: {
+  events: Array<EventProps>;
+  onChangeRange: (period: { from: Date; to: Date }) => void;
+}): JSX.Element {
+  const { events, onChangeRange: onChangePeriod } = props;
   const { t } = useTranslation('translation');
   const [displayData, updateDisplay] = useState<{
     type: CalendarView;
@@ -874,6 +877,10 @@ function Calendar(props: { events: Array<EventProps> }): JSX.Element {
   React.useEffect(() => {
     changeDisplay(displayData.type, beginOfWeek, setBeginOfWeek, setEndOfWeek);
   }, [displayData]);
+
+  React.useEffect(() => {
+    onChangePeriod({ from: beginOfWeek, to: endOfWeek });
+  }, [beginOfWeek, endOfWeek]);
   return (
     <>
       <ChooseWeek

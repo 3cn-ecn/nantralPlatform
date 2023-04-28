@@ -130,3 +130,11 @@ export async function editEvent(
 export function deleteEvent(id: number): Promise<void> {
   return axios.delete(`/api/event/${id}/`);
 }
+
+export async function register(id: number): Promise<{ success: boolean }> {
+  return axios.post(`/api/event/${id}/participate`).then((res) => res.data);
+}
+
+export async function unregister(id: number): Promise<{ success: boolean }> {
+  return axios.delete(`/api/event/${id}/participate`).then((res) => res.data);
+}

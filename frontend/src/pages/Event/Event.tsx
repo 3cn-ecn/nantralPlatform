@@ -307,11 +307,6 @@ function EventList(props: {
   );
 }
 
-function EventCalendar(props: { events: any }) {
-  const { events } = props;
-  return <Calendar events={events}></Calendar>;
-}
-
 function EventView(props: {
   filter: FilterInterface;
   selectedTab: string | null;
@@ -332,6 +327,10 @@ function EventView(props: {
   const [currentPage, setCurrentPage] = React.useState<number>(initialPage);
   const [first, setFirst] = React.useState(true);
   const [order, setOrder] = React.useState<string>('-start_date');
+  const [calendarRange, setCalendarRange] = React.useState<{
+    from: Date;
+    to: Date;
+  }>({ from: new Date(), to: new Date() });
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -372,11 +371,13 @@ function EventView(props: {
     // TODO Support status in calendar
     // status: eventsCalendarStatus,
   } = useQuery<Page<EventProps>>({
-    queryKey: ['eventCalendar', filter],
+    queryKey: ['eventCalendar', filter, calendarRange],
     queryFn: () =>
       getEvents({
         limit: 100,
         offset: 0,
+        fromDate: calendarRange.from,
+        toDate: calendarRange.to,
         orderBy: '-start_date',
         isShotgun: filter.shotgun,
         isFavorite: filter.favorite,
@@ -414,7 +415,10 @@ function EventView(props: {
         ></EventList>
       </TabPanel>
       <TabPanel value="2" sx={{ padding: 0 }}>
-        <EventCalendar events={eventsCalendar?.results}></EventCalendar>
+        <Calendar
+          events={eventsCalendar?.results}
+          onChangeRange={setCalendarRange}
+        />
       </TabPanel>
     </TabContext>
   );
@@ -427,8 +431,12 @@ function EventView(props: {
 function Event() {
   const [queryParameters, setQueryParams] = useSearchParams();
   const [filter, setFilter] = React.useState<FilterInterface | null>({
-    dateBegin: queryParameters.get('dateBegin'),
-    dateEnd: queryParameters.get('dateEnd'),
+    dateBegin: queryParameters.get('dateBegin')
+      ? new Date(queryParameters.get('dateBegin'))
+      : undefined,
+    dateEnd: queryParameters.get('dateEnd')
+      ? new Date(queryParameters.get('dateEnd'))
+      : undefined,
     favorite: queryParameters.get('favorite') ? true : null,
     organiser: [],
     participate: queryParameters.get('participate') ? true : null,

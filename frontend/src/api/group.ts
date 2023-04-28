@@ -14,7 +14,7 @@ export async function getGroups(
     order?: string;
     admin?: boolean;
   } = {}
-) {
+): Promise<Array<SimpleGroupProps | GroupProps>> {
   return axios
     .get<Page<SimpleGroupProps | GroupProps>>('/api/group/group/', {
       params: {

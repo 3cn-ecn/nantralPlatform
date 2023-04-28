@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/fr';
@@ -21,22 +21,20 @@ import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 export default function BasicDatePicker(props: {
   label: string;
   minDate: any;
-  getDate: any;
-  controlledValue: Dayjs | null;
+  value: Dayjs | null;
+  onChange: (value: Dayjs | null) => void;
 }) {
-  const { label, minDate, getDate, controlledValue } = props;
+  const { label, minDate, value, onChange } = props;
   const { t } = useTranslation('translation'); // translation module
   const { i18n } = useTranslation('translation');
-  const [value, setValue] = React.useState<Dayjs | null>(null); // value selected
   const [isEmpty, setIsEmpty] = React.useState(true); // true if not date is selected
 
-  React.useEffect(() => {
-    setValue(value);
-  }, [controlledValue]);
+  // React.useEffect(() => {
+  //   setValue(value);
+  // }, [controlledValue]);
 
   const handleChange = (newValue: Dayjs | null) => {
-    setValue(newValue);
-    getDate(newValue);
+    onChange(newValue);
     if (newValue === null) {
       setIsEmpty(true);
     } else {
@@ -46,8 +44,7 @@ export default function BasicDatePicker(props: {
 
   // function used to clear date. Only possible when value is not null
   const clearDate = () => {
-    setValue(null);
-    getDate(null);
+    onChange(null);
     setIsEmpty(true);
   };
 
@@ -95,13 +92,13 @@ export default function BasicDatePicker(props: {
       adapterLocale={i18n.language.substring(0, 2)} // TO CHANGE: when en-GB and fr_FR are supported, delete substring
     >
       <DesktopDatePicker
-        minDate={minDate}
-        inputFormat="DD/MM/YYYY" // TO CHANGE : when en-GB is supported, delete this line
+        minDate={dayjs(minDate)}
+        // inputFormat="DD/MM/YYYY" // TO CHANGE : when en-GB is supported, delete this line
         label={label}
         value={value}
         onChange={handleChange}
         showDaysOutsideCurrentMonth
-        textfield={(params) => render(params, isEmpty)}
+        slotProps={{ textField: (params) => render(params, isEmpty) }}
       />
     </LocalizationProvider>
   );

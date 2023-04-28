@@ -11,8 +11,8 @@ export interface FilterFrontInterface {
 }
 
 export interface FilterInterface {
-  dateBegin: string;
-  dateEnd: string;
+  dateBegin: Date;
+  dateEnd: Date;
   favorite: boolean;
   participate: boolean;
   shotgun: boolean;

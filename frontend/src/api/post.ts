@@ -65,7 +65,7 @@ export async function createPost(
 export async function updatePost(
   id: number,
   options?: FormPostProps
-): Promise<void | FormPostProps> {
+): Promise<FormPostProps> {
   return axios
     .put(`/api/post/${id}/`, createForm(options), {
       headers: {

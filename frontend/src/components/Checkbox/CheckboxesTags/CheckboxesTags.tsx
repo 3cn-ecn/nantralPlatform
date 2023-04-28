@@ -4,6 +4,7 @@ import { TextField, Checkbox, Autocomplete } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { Page } from 'Props/Group';
+import Avatar from '../../Avatar/Avatar';
 
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -16,6 +17,7 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 function CheckboxesTags<T>(props: {
   label: string; // the label displayed on the component
   getResult: any; // function to get result back into parent component
+  value: Array<T>;
   updated: boolean; // true if you use a request need to update the content
   request: string; // the request used to get your options from database
   optionsList: Array<T>; // a list of options that you put directly in the Autocomplete
@@ -30,6 +32,7 @@ function CheckboxesTags<T>(props: {
     optionsList,
     pkField,
     labelField,
+    value,
   } = props;
   const [options, setOptions] = React.useState<Array<T>>([]); // options displayed
   const [chosen, setChosen] = React.useState<Array<T>>([]); // options chosen
@@ -40,6 +43,12 @@ function CheckboxesTags<T>(props: {
     getResult(selected);
   };
 
+  React.useEffect(() => {
+    setChosen(value);
+    console.log(value);
+    setReload(true);
+  }, [value]);
+  console.log(options, chosen);
   // function used to know if an element is in chosen. Returns null if it is, the element if not.
   const inChosenFunction = (element: T) => {
     let isThere: boolean;
@@ -71,10 +80,10 @@ function CheckboxesTags<T>(props: {
   }, []);
 
   // function used to update options of the autocomplete. It filters options depending on chosen.
-  const updateOptions = (event: React.SyntheticEvent, value: string) => {
+  const updateOptions = (event: React.SyntheticEvent, newValue: string) => {
     axios
       .get<T[]>(`${request}search/`, {
-        params: { simple: true, q: value, limit: 10 },
+        params: { simple: true, q: newValue, limit: 10 },
       })
       .then((res) => {
         setOptions(res.data.filter((element) => inChosenFunction(element)));
@@ -115,13 +124,14 @@ function CheckboxesTags<T>(props: {
       disableCloseOnSelect
       renderOption={(content, option, { selected }) => (
         <li {...content}>
-          <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
+          {/* <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} /> */}
+          <Avatar title={option?.name} url={option?.icon} size="small" />
           {option[labelField]}
         </li>
       )}
       renderInput={(params) => (
         <TextField {...params} name={label} label={label} placeholder={label} />
-      )}
+      )}f
     />
   );
 }
