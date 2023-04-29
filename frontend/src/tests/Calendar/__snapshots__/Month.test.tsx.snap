@@ -1,0 +1,364 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Month /> should display a Month 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div>
+        <div
+          class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+        >
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div />
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div />
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-v6msvb"
+              data-testid="DateBoxTestId"
+            >
+              1
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-v6msvb"
+              data-testid="DateBoxTestId"
+            >
+              2
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-v6msvb"
+              data-testid="DateBoxTestId"
+            >
+              3
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-v6msvb"
+              data-testid="DateBoxTestId"
+            >
+              4
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-v6msvb"
+              data-testid="DateBoxTestId"
+            >
+              5
+            </div>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+        >
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-qwy2ic"
+              data-testid="DateBoxTestId"
+            >
+              6
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-qwy2ic"
+              data-testid="DateBoxTestId"
+            >
+              7
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+                data-testid="The slug1DateBoxButtonTestId"
+                style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
+                tabindex="0"
+                type="button"
+              >
+                <div
+                  class="imageMonthEventBlur"
+                >
+                  <div
+                    class="dayBlockTitleDisplay"
+                  >
+                    The test event1
+                  </div>
+                </div>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-qwy2ic"
+              data-testid="DateBoxTestId"
+            >
+              8
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-qwy2ic"
+              data-testid="DateBoxTestId"
+            >
+              9
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div
+              class="MuiBox-root css-qwy2ic"
+              data-testid="DateBoxTestId"
+            >
+              10
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div />
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          >
+            <div />
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div>
+      <div
+        class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div />
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div />
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-v6msvb"
+            data-testid="DateBoxTestId"
+          >
+            1
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-v6msvb"
+            data-testid="DateBoxTestId"
+          >
+            2
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-v6msvb"
+            data-testid="DateBoxTestId"
+          >
+            3
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-v6msvb"
+            data-testid="DateBoxTestId"
+          >
+            4
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-v6msvb"
+            data-testid="DateBoxTestId"
+          >
+            5
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-qwy2ic"
+            data-testid="DateBoxTestId"
+          >
+            6
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-qwy2ic"
+            data-testid="DateBoxTestId"
+          >
+            7
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+              data-testid="The slug1DateBoxButtonTestId"
+              style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="imageMonthEventBlur"
+              >
+                <div
+                  class="dayBlockTitleDisplay"
+                >
+                  The test event1
+                </div>
+              </div>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-qwy2ic"
+            data-testid="DateBoxTestId"
+          >
+            8
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-qwy2ic"
+            data-testid="DateBoxTestId"
+          >
+            9
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div
+            class="MuiBox-root css-qwy2ic"
+            data-testid="DateBoxTestId"
+          >
+            10
+          </div>
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div />
+        </div>
+        <div
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        >
+          <div />
+        </div>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
