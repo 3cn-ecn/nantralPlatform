@@ -25,7 +25,7 @@ jobs:
         run: npm install
       - name: Test and coverage
         working-directory: ${{ env.working-directory }}
-        run: npm test
+        run: npm run jest
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
