@@ -27,7 +27,7 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
           >
             11
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
               data-testid="The slugDateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -67,7 +67,7 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
           >
             13
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
               data-testid="The slug1DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -87,7 +87,7 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
               />
             </button>
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
               data-testid="The slug2DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -107,7 +107,7 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
               />
             </button>
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
               data-testid="The slug3DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -184,7 +184,7 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
         >
           11
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
             data-testid="The slugDateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -224,7 +224,7 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
         >
           13
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
             data-testid="The slug1DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -244,7 +244,7 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
             />
           </button>
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
             data-testid="The slug2DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -264,7 +264,7 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
             />
           </button>
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
             data-testid="The slug3DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -398,7 +398,7 @@ exports[`<WeekLine /> should display a WeekLine without end 1`] = `
           >
             28
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
               data-testid="The slug5DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -438,7 +438,7 @@ exports[`<WeekLine /> should display a WeekLine without end 1`] = `
           >
             30
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
               data-testid="The slug6DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -500,7 +500,7 @@ exports[`<WeekLine /> should display a WeekLine without end 1`] = `
         >
           28
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
             data-testid="The slug5DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -540,7 +540,7 @@ exports[`<WeekLine /> should display a WeekLine without end 1`] = `
         >
           30
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
             data-testid="The slug6DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -679,7 +679,7 @@ exports[`<WeekLine /> should display a WeekLine withoutbegin 1`] = `
           >
             2
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
               data-testid="The slug4DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -756,7 +756,7 @@ exports[`<WeekLine /> should display a WeekLine withoutbegin 1`] = `
         >
           2
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
             data-testid="The slug4DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"

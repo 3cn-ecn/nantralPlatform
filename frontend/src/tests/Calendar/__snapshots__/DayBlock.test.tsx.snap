@@ -11,7 +11,7 @@ exports[`<DayBlock /> should display a DayBlock 1`] = `
       >
         17
         <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
           data-testid="The slugDateBoxButtonTestId"
           style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
           tabindex="0"
@@ -31,7 +31,7 @@ exports[`<DayBlock /> should display a DayBlock 1`] = `
           />
         </button>
         <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
           data-testid="The new slugDateBoxButtonTestId"
           style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
           tabindex="0"
@@ -60,7 +60,7 @@ exports[`<DayBlock /> should display a DayBlock 1`] = `
     >
       17
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
         data-testid="The slugDateBoxButtonTestId"
         style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
         tabindex="0"
@@ -80,7 +80,7 @@ exports[`<DayBlock /> should display a DayBlock 1`] = `
         />
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
         data-testid="The new slugDateBoxButtonTestId"
         style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
         tabindex="0"
@@ -306,7 +306,7 @@ exports[`<DayBlock /> should display an unfullfilled DayBlock 1`] = `
       >
         17
         <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+          class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
           data-testid="The slugDateBoxButtonTestId"
           style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
           tabindex="0"
@@ -335,7 +335,7 @@ exports[`<DayBlock /> should display an unfullfilled DayBlock 1`] = `
     >
       17
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-1fu7jd5-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
         data-testid="The slugDateBoxButtonTestId"
         style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
         tabindex="0"

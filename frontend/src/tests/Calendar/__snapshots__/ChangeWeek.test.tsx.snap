@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rerender should display a ChangeWeek (week and 3Daays) 1`] = `
+exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rewrapAndRender should display a ChangeWeek (week and 3Daays) 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
         data-testid="ChangeWeekPreviousTestId"
         style="min-width: 1px; padding: 0px;"
         tabindex="0"
@@ -40,7 +40,7 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
     </div>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
         data-testid="ChangeWeekNextTestId"
         style="min-width: 1px; padding: 0px;"
         tabindex="0"
@@ -75,7 +75,7 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
   </body>,
   "container": <div>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
       data-testid="ChangeWeekPreviousTestId"
       style="min-width: 1px; padding: 0px;"
       tabindex="0"
@@ -161,13 +161,13 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
 }
 `;
 
-exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rerender should display a ChangeWeek (week and 3Daays) 2`] = `
+exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rewrapAndRender should display a ChangeWeek (week and 3Daays) 2`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
         data-testid="ChangeWeekPreviousTestId"
         style="min-width: 1px; padding: 0px;"
         tabindex="0"
@@ -201,7 +201,7 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
     </div>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
         data-testid="ChangeWeekNextTestId"
         style="min-width: 1px; padding: 0px;"
         tabindex="0"
@@ -236,7 +236,7 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
   </body>,
   "container": <div>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
       data-testid="ChangeWeekNextTestId"
       style="min-width: 1px; padding: 0px;"
       tabindex="0"
@@ -322,13 +322,13 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
 }
 `;
 
-exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rerender should display an other ChangeWeek (day and month) 1`] = `
+exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rewrapAndRender should display an other ChangeWeek (day and month) 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
         data-testid="ChangeWeekPreviousTestId"
         style="min-width: 1px; padding: 0px;"
         tabindex="0"
@@ -362,7 +362,7 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
     </div>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
         data-testid="ChangeWeekNextTestId"
         style="min-width: 1px; padding: 0px;"
         tabindex="0"
@@ -397,7 +397,7 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
   </body>,
   "container": <div>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
       data-testid="ChangeWeekPreviousTestId"
       style="min-width: 1px; padding: 0px;"
       tabindex="0"
@@ -483,13 +483,13 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
 }
 `;
 
-exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rerender should display an other ChangeWeek (day and month) 2`] = `
+exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rewrapAndRender should display an other ChangeWeek (day and month) 2`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
         data-testid="ChangeWeekPreviousTestId"
         style="min-width: 1px; padding: 0px;"
         tabindex="0"
@@ -523,7 +523,7 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
     </div>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
         data-testid="ChangeWeekNextTestId"
         style="min-width: 1px; padding: 0px;"
         tabindex="0"
@@ -558,7 +558,7 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
   </body>,
   "container": <div>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
       data-testid="ChangeWeekNextTestId"
       style="min-width: 1px; padding: 0px;"
       tabindex="0"
@@ -644,13 +644,13 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
 }
 `;
 
-exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rerender should display an other ChangeWeek (month previous) 1`] = `
+exports[`<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rewrapAndRender should display an other ChangeWeek (month previous) 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+        class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
         data-testid="ChangeWeekPreviousTestId"
         style="min-width: 1px; padding: 0px;"
         tabindex="0"
@@ -685,7 +685,7 @@ exports[`<ChangeWeek />; only changes the date of the number of days, does not r
   </body>,
   "container": <div>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-xsqe0f-MuiButtonBase-root-MuiButton-root"
+      class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-fullWidth css-8fhsb6-MuiButtonBase-root-MuiButton-root"
       data-testid="ChangeWeekPreviousTestId"
       style="min-width: 1px; padding: 0px;"
       tabindex="0"
