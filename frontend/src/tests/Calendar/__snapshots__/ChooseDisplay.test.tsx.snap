@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 3Days; Components does not rerender, so wwe can do only few tests 1`] = `
+exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 3Days 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="dayButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="day-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.day
+        Day
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -26,12 +26,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="monthButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="3days-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.3Days
+        3 Days
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -46,12 +46,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="weekButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="week-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.week
+        Week
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -66,12 +66,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="monthButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="month-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.month
+        Month
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -89,12 +89,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   </body>,
   "container": <div>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="dayButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="day-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.day
+      Day
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -109,12 +109,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="monthButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="3days-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.3Days
+      3 Days
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -129,12 +129,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="weekButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="week-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.week
+      Week
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -149,12 +149,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="monthButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="month-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.month
+      Month
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -223,18 +223,18 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
 }
 `;
 
-exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable day; Components does not rerender, so we can do only few tests 1`] = `
+exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable day 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="dayButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="day-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.day
+        Day
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -249,12 +249,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="monthButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="3days-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.3Days
+        3 Days
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -269,12 +269,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="weekButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="week-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.week
+        Week
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -289,12 +289,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="monthButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="month-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.month
+        Month
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -312,12 +312,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   </body>,
   "container": <div>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="dayButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="day-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.day
+      Day
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -332,12 +332,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="monthButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="3days-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.3Days
+      3 Days
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -352,12 +352,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="weekButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="week-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.week
+      Week
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -372,12 +372,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="monthButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="month-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.month
+      Month
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -446,18 +446,18 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
 }
 `;
 
-exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable month; Components does not rerender, so wwe can do only few tests 1`] = `
+exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable month 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="dayButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="day-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.day
+        Day
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -472,12 +472,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="monthButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="3days-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.3Days
+        3 Days
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -492,12 +492,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="weekButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="week-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.week
+        Week
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -512,12 +512,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="monthButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="month-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.month
+        Month
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -535,12 +535,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   </body>,
   "container": <div>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="dayButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="day-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.day
+      Day
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -555,12 +555,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="monthButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="3days-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.3Days
+      3 Days
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -575,12 +575,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="weekButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="week-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.week
+      Week
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -595,12 +595,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="monthButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="month-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.month
+      Month
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -669,18 +669,18 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
 }
 `;
 
-exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable week; Components does not rerender, so wwe can do only few tests 1`] = `
+exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable week 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="dayButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="day-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.day
+        Day
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -695,12 +695,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="monthButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="3days-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.3Days
+        3 Days
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -715,12 +715,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="weekButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="week-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.week
+        Week
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -735,12 +735,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
         </span>
       </button>
       <button
-        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-        data-testid="monthButtonTestId"
+        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+        data-testid="month-view-button"
         tabindex="0"
         type="button"
       >
-        calendar.view.month
+        Month
         <span
           class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
         >
@@ -758,12 +758,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   </body>,
   "container": <div>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="dayButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="day-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.day
+      Day
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -778,12 +778,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="monthButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="3days-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.3Days
+      3 Days
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -798,12 +798,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="weekButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="week-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.week
+      Week
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
@@ -818,12 +818,12 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
       </span>
     </button>
     <button
-      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1e6y48t-MuiButtonBase-root-MuiButton-root"
-      data-testid="monthButtonTestId"
+      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-n0o87-MuiButtonBase-root-MuiButton-root"
+      data-testid="month-view-button"
       tabindex="0"
       type="button"
     >
-      calendar.view.month
+      Month
       <span
         class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
       >
