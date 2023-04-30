@@ -2,11 +2,10 @@ import React from 'react';
 
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import { Autocomplete, Checkbox, TextField } from '@mui/material';
+import { Autocomplete, TextField } from '@mui/material';
 import axios from 'axios';
 
 import { Page } from '#types/Group';
-import Avatar from '../../Avatar/Avatar';
 
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -47,10 +46,8 @@ function CheckboxesTags<T>(props: {
 
   React.useEffect(() => {
     setChosen(value);
-    console.log(value);
     setReload(true);
   }, [value]);
-  console.log(options, chosen);
   // function used to know if an element is in chosen. Returns null if it is, the element if not.
   const inChosenFunction = (element: T) => {
     let isThere: boolean;

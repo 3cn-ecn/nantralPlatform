@@ -22,9 +22,6 @@ export function DateBox(props: { date: Date; endDate: Date }): JSX.Element {
       <Button
         variant="outlined"
         fullWidth
-        onClick={() => {
-          console.log('tap');
-        }}
         data-testid="DateBoxTestId"
         style={{
           minWidth: `1px`,

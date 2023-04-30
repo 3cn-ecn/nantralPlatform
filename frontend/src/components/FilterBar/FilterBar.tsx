@@ -90,7 +90,6 @@ function FilterBar(props: {
           <CheckboxesTags
             label={t('filterbar.organiser')}
             getResult={(results) => {
-              console.log(results);
               setCurrentFilter({ ...currentFilter, organiser: results });
             }}
             updated

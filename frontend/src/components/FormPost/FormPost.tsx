@@ -173,7 +173,6 @@ export function FormPost(props: {
     setValues({ ...values, group: post.group.id });
     updatePost(post.id, values)
       .then((res: FormPostProps) => {
-        console.log('hey', res);
         setValues(
           post
             ? structuredClone(post)
