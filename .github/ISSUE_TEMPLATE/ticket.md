@@ -2,7 +2,7 @@
 name: Ticket
 about: Describe things to do for developpers
 title: "[TICKET] "
-labels: ''
+labels: to do
 assignees: ''
 
 ---
@@ -23,5 +23,5 @@ assignees: ''
 
 *Describe in multiple steps how you will implement your ticket*
 
-- [ ] ...
+- [ ] ...
 - [ ] ...
