@@ -1,15 +1,15 @@
 import React from 'react';
+
 import Container from '@mui/material/Container';
+
 /**
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
-function Family() {
+export default function StudentPage() {
   return (
     <Container maxWidth="sm">
-      <h1>Family</h1>
+      <h1>Student</h1>
     </Container>
   );
 }
-
-export default Family;

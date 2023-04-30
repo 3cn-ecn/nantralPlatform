@@ -1,30 +1,30 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
-  PeopleAlt as PeopleIcon,
-  AddCircle as PlusIcon,
   CheckCircle as CheckIcon,
-  LinkOutlined as LinkIcon,
-  LocalFireDepartment as ShotgunIcon,
   Cancel as Cross,
   Info,
+  LinkOutlined as LinkIcon,
+  PeopleAlt as PeopleIcon,
+  AddCircle as PlusIcon,
+  LocalFireDepartment as ShotgunIcon,
 } from '@mui/icons-material';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {
   Button,
-  Theme,
-  SxProps,
   CircularProgress,
-  Typography,
-  MenuItem,
-  rgbToHex,
   IconButton,
+  MenuItem,
+  SxProps,
+  Theme,
+  Typography,
+  rgbToHex,
   useTheme,
 } from '@mui/material';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-
-import * as React from 'react';
 import i18n from 'i18next';
-import { useTranslation } from 'react-i18next';
-import { ConfirmationModal } from '../Modal/ConfirmationModal';
 
+import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import { EventPopover, TextPopover } from './InformationPopover';
 import { register, unregister } from '../../api/event';
 

@@ -1,3 +1,7 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
+
 import { Close, Delete } from '@mui/icons-material';
 import {
   Alert,
@@ -10,13 +14,13 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import * as React from 'react';
-import { useQuery } from 'react-query';
-import { useTranslation } from 'react-i18next';
-import { FieldType } from 'Props/GenericTypes';
-import { FormPostProps, PostProps } from '../../Props/Post';
-import FormGroup from '../../utils/form';
-import { SimpleGroupProps } from '../../Props/Group';
+
+import { createPost, deletePost, updatePost } from '#api/post';
+import { FieldType } from '#types/GenericTypes';
+import { SimpleGroupProps } from '#types/Group';
+import { FormPostProps, PostProps } from '#types/Post';
+import FormGroup from '#utils/form';
+
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import { createPost, deletePost, updatePost } from '../../api/post';
 import { getGroups } from '../../api/group';

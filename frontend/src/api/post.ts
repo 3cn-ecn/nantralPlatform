@@ -1,9 +1,10 @@
 import axios from 'axios';
+
 import {
   FormPostProps,
   PostProps,
   convertPostFromPythonData,
-} from '../Props/Post';
+} from '#types/Post';
 
 export async function getPost(id: number) {
   return axios

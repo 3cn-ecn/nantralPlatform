@@ -1,22 +1,7 @@
-import * as React from 'react';
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
-  Typography,
-  Box,
-  CircularProgress,
-  Alert,
-  useMediaQuery,
-  Paper,
-  Select,
-  MenuItem,
-  useTheme,
-} from '@mui/material';
-import axios from 'axios';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
+
 import {
   Close as CloseIcon,
   Delete,
@@ -24,14 +9,33 @@ import {
   Link as LinkIcon,
   LocalFireDepartment as ShotgunIcon,
 } from '@mui/icons-material';
-import { SimpleGroupProps } from 'Props/Group';
-import { useTranslation } from 'react-i18next';
-import { FieldType } from 'Props/GenericTypes';
-import { SimpleGroup } from 'components/Group/interfaces';
-import { useQuery } from 'react-query';
-import { EventProps, FormEventProps } from '../../Props/Event';
-import FormGroup from '../../utils/form';
-import { convertFromPythonData } from '../../utils/convertData';
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  MenuItem,
+  Paper,
+  Select,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import axios from 'axios';
+
+import { createEvent, deleteEvent, editEvent } from '#api/event';
+import { SimpleGroup } from '#components/Group/interfaces';
+import { EventProps, FormEventProps } from '#types/Event';
+import { FieldType } from '#types/GenericTypes';
+import { SimpleGroupProps } from '#types/Group';
+import { convertFromPythonData } from '#utils/convertData';
+import FormGroup from '#utils/form';
+
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
 import { createEvent, deleteEvent, editEvent } from '../../api/event';

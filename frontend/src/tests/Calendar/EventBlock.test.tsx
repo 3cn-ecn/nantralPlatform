@@ -1,9 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { EventProps } from '../../Props/Event';
+
+import { EventBlock } from '#components/Calendar/Day/EventBlock/EventBlock';
+import { EventProps } from '#types/Event';
+import { wrapAndRender } from '#utils/tests';
+
 import { createTestEvent } from './testElements/testElements';
-import { EventBlock } from '../../components/Calendar/Day/EventBlock/EventBlock';
 
 const eventInDay: EventProps = createTestEvent(
   'The slug',
@@ -34,7 +36,7 @@ displayDayEventMiddleInDay.setDate(eventMiddleInDay.startDate.getDate() + 1);
 
 describe('<EventBlock />', () => {
   it('should display an EventBlock in the day', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <EventBlock day={eventInDay.startDate} event={eventInDay} />
       </BrowserRouter>
@@ -52,7 +54,7 @@ describe('<EventBlock />', () => {
   });
 
   it('should display an EventBlock in the end of the day', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <EventBlock day={eventBeginInDay.startDate} event={eventBeginInDay} />
       </BrowserRouter>
@@ -70,7 +72,7 @@ describe('<EventBlock />', () => {
   });
 
   it('should display an EventBlock in the begin the day', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <EventBlock day={eventEndInDay.endDate} event={eventEndInDay} />
       </BrowserRouter>
@@ -88,7 +90,7 @@ describe('<EventBlock />', () => {
   });
 
   it('should display an EventBlock in the all day', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <EventBlock day={displayDayEventMiddleInDay} event={eventMiddleInDay} />
       </BrowserRouter>

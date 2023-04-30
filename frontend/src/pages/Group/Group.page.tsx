@@ -1,17 +1,20 @@
 import React from 'react';
+
+import { Button, Grid } from '@mui/material';
 import Container from '@mui/material/Container';
 import axios from 'axios';
-import { LoadStatus } from 'Props/GenericTypes';
-import { Button, Grid } from '@mui/material';
+
 import {
   ClubAvatar,
   ClubAvatarSkeleton,
-} from '../../components/ClubAvatar/ClubAvatar';
+} from '#components/ClubAvatar/ClubAvatar';
+import { LoadStatus } from '#types/GenericTypes';
+
 /**
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
-function Group() {
+export default function GroupPage() {
   const [groupTypeList, setGroupTypeList] = React.useState([]);
   const [groupTypeStatus, setGroupTypeStatus] =
     React.useState<LoadStatus>('loading');
@@ -83,5 +86,3 @@ function Group() {
     </Container>
   );
 }
-
-export default Group;

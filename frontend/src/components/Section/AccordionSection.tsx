@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+
 import { ExpandMore } from '@mui/icons-material';
 import {
   Accordion,
@@ -8,6 +9,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
+
 import './AccordionSection.scss';
 
 export function AccordionSection(props: {

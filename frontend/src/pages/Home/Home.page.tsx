@@ -1,46 +1,48 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import { SimpleGroupProps } from 'Props/Group';
-import * as React from 'react';
+import { useQuery } from 'react-query';
+import { Link, useSearchParams } from 'react-router-dom';
+
+import { Event, PostAdd } from '@mui/icons-material';
 import {
   Box,
+  Chip,
+  Container,
+  Divider,
   SpeedDial,
   SpeedDialAction,
   SpeedDialIcon,
   Typography,
-  Container,
-  Chip,
-  Divider,
-  Button,
 } from '@mui/material';
-import { Event, PostAdd } from '@mui/icons-material';
-import { Link, useSearchParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { Page } from 'Props/pagination';
-import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
-import { EventProps } from '../../Props/Event';
-import './Home.scss';
-import { EventSection } from '../../components/Section/EventSection/EventSection';
-import { PostSection } from '../../components/Section/PostSection/PostSection';
+import axios from 'axios';
+
+import { getEvents } from '#api/event';
+import { getMyGroups } from '#api/group';
+import { getPosts } from '#api/post';
+import EditEventModal from '#components/FormEvent/FormEvent';
+import { FormPost } from '#components/FormPost/FormPost';
+import { PostModal } from '#components/Modal/PostModal';
+import { ClubSection } from '#components/Section/ClubSection/ClubSection';
+import { EventSection } from '#components/Section/EventSection/EventSection';
+import { PostSection } from '#components/Section/PostSection/PostSection';
+import { EventProps } from '#types/Event';
+import { LoadStatus } from '#types/GenericTypes';
+import { SimpleGroupProps } from '#types/Group';
 import {
   FormPostProps,
   PostProps,
   convertPostFromPythonData,
-} from '../../Props/Post';
-import { LoadStatus } from '../../Props/GenericTypes';
-import { FormPost } from '../../components/FormPost/FormPost';
-import EditEventModal from '../../components/FormEvent/FormEvent';
-import { PostModal } from '../../components/Modal/PostModal';
-import { getMyGroups } from '../../api/group';
-import { getEvents } from '../../api/event';
-import { getPosts } from '../../api/post';
+} from '#types/Post';
+
+import './Home.page.scss';
 
 const MAX_EVENT_SHOWN = 6;
+
 /**
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
-function Home() {
+export default function HomePage() {
   // Query Params
   const [queryParams, setQueryParams] = useSearchParams();
   // Dates
@@ -84,7 +86,7 @@ function Home() {
     status: thisWeekEventsStatus,
     data: thisWeekEvents,
     refetch: refetchThisWeekEvents,
-  } = useQuery<Page<EventProps>>({
+  } = useQuery<EventProps[]>({
     queryKey: 'thisWeekEvents',
     queryFn: () =>
       getEvents({ fromDate: today, toDate: nextWeek, orderBy: ['date'] }),
@@ -94,7 +96,7 @@ function Home() {
     status: upcomingEventsStatus,
     data: upcomingEvents,
     refetch: refetchUpcomingEvents,
-  } = useQuery<Page<EventProps>>({
+  } = useQuery<EventProps[]>({
     queryKey: 'upcomingEvents',
     queryFn: () =>
       getEvents({
@@ -208,41 +210,28 @@ function Home() {
             <Typography variant="h4" margin={0}>
               {t('navbar.events')}
             </Typography>
-            <Link
-              to={`/event/?dateBegin=${today.toISOString()}`}
-              style={{ textDecorationLine: 'none' }}
-            >
-              <Button variant="contained">{t('button.seeAll')}</Button>
+            <Link to="/event" style={{ textDecorationLine: 'none' }}>
+              <Chip label={t('button.seeAll')} clickable />
             </Link>
           </Box>
           <Divider sx={{ marginBottom: 1 }} />
           <EventSection
-            events={thisWeekEvents?.results}
+            events={thisWeekEvents}
             status={thisWeekEventsStatus}
             title={t('home.thisWeek')}
           />
           <EventSection
-            events={upcomingEvents?.results}
+            events={upcomingEvents}
             status={upcomingEventsStatus}
             maxItem={6}
             loadingItemCount={MAX_EVENT_SHOWN}
             title={t('home.upcomingEvents')}
           />
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            marginBottom={1}
-          >
-            <Typography variant="h4" margin={0}>
-              {t('home.myClubs')}
-            </Typography>
-            <Link to="/group" style={{ textDecorationLine: 'none' }}>
-              <Button variant="contained">{t('button.seeAll')}</Button>
-            </Link>
-          </Box>
-          <Divider sx={{ marginBottom: 1 }} />
-          <ClubSection clubs={myGroups} status={myGroupsStatus} />
+          <ClubSection
+            clubs={myGroups}
+            status={myGroupsStatus}
+            title={t('home.myClubs')}
+          />
         </Container>
       </Box>
       <FormPost
@@ -276,5 +265,3 @@ function Home() {
     </>
   );
 }
-
-export default Home;

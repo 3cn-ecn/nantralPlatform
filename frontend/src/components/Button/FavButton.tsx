@@ -1,11 +1,12 @@
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { Button, CircularProgress, rgbToHex, useTheme } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 import Zoom from '@mui/material/Zoom/Zoom';
 import axios from 'axios';
-import { Button, CircularProgress, rgbToHex, useTheme } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 
 function FavButton(props: {
   eventId: number;

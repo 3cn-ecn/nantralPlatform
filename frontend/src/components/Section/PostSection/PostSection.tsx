@@ -1,9 +1,12 @@
-import * as React from 'react';
-import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+
+import { LoadStatus } from '#types/GenericTypes';
+import { FormPostProps, PostProps } from '#types/Post';
+
 import { PostCard, PostCardSkeleton } from '../../PostCard/PostCard';
-import { FormPostProps, PostProps } from '../../../Props/Post';
-import { LoadStatus } from '../../../Props/GenericTypes';
 
 /**
  * Une section comportant

@@ -1,8 +1,10 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+
 import userEvent from '@testing-library/user-event';
-import { CalendarView } from 'components/Calendar/CalendarProps/CalendarProps';
-import { ChooseDisplay } from '../../components/Calendar/ChooseDisplay/ChooseDisplay';
+
+import { CalendarView } from '#components/Calendar/CalendarProps/CalendarProps';
+import { ChooseDisplay } from '#components/Calendar/ChooseDisplay/ChooseDisplay';
+import { wrapAndRender } from '#utils/tests';
 
 let dayDisplay: { type: CalendarView; startDate: number } = {
   type: 'day',
@@ -48,8 +50,8 @@ const updateMonthDisplay = (newDisplay: {
 const user = userEvent.setup();
 
 describe('<ChooseDisplay />', () => {
-  it('should display a ChooseDisplay which update variable day; Components does not rerender, so we can do only few tests', async () => {
-    const component = render(
+  it('should display a ChooseDisplay which update variable day', async () => {
+    const component = wrapAndRender(
       <ChooseDisplay
         display={dayDisplay}
         updateDisplay={updateDayDisplay}
@@ -57,50 +59,29 @@ describe('<ChooseDisplay />', () => {
       ></ChooseDisplay>
     );
 
-    expect(
-      component.getByRole('button', { name: 'calendar.view.day' }).textContent
-    ).toBe('calendar.view.day');
-    expect(
-      component.getByRole('button', { name: 'calendar.view.3Days' }).textContent
-    ).toBe('calendar.view.3Days');
-    expect(
-      component.getByRole('button', { name: 'calendar.view.week' }).textContent
-    ).toBe('calendar.view.week');
-    expect(
-      component.getByRole('button', { name: 'calendar.view.month' }).textContent
-    ).toBe('calendar.view.month');
-
     // day
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.day' })
-    );
+    await user.click(component.getByTestId('day-view-button'));
     expect(dayDisplay).toStrictEqual({
       type: 'day',
       startDate: 6,
     });
 
     // 3Days
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.3Days' })
-    );
+    await user.click(component.getByTestId('3days-view-button'));
     expect(dayDisplay).toStrictEqual({
       type: '3Days',
       startDate: 6,
     });
 
     // week
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.week' })
-    );
+    await user.click(component.getByTestId('week-view-button'));
     expect(dayDisplay).toStrictEqual({
       type: 'week',
       startDate: 0,
     });
 
     // month
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.month' })
-    );
+    await user.click(component.getByTestId('month-view-button'));
     expect(dayDisplay).toStrictEqual({
       type: 'month',
       startDate: 2,
@@ -108,8 +89,8 @@ describe('<ChooseDisplay />', () => {
 
     expect(component).toMatchSnapshot();
   });
-  it('should display a ChooseDisplay which update variable 3Days; Components does not rerender, so wwe can do only few tests', async () => {
-    const component = render(
+  it('should display a ChooseDisplay which update variable 3Days', async () => {
+    const component = wrapAndRender(
       <ChooseDisplay
         display={daysDisplay}
         updateDisplay={updateDaysDisplay}
@@ -118,36 +99,28 @@ describe('<ChooseDisplay />', () => {
     );
 
     // day
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.day' })
-    );
+    await user.click(component.getByTestId('day-view-button'));
     expect(daysDisplay).toStrictEqual({
       type: 'day',
       startDate: 2,
     });
 
     // 3Days
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.3Days' })
-    );
+    await user.click(component.getByTestId('3days-view-button'));
     expect(daysDisplay).toStrictEqual({
       type: 'day',
       startDate: 2,
     });
 
     // week
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.week' })
-    );
+    await user.click(component.getByTestId('week-view-button'));
     expect(daysDisplay).toStrictEqual({
       type: 'week',
       startDate: 0,
     });
 
     // month
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.month' })
-    );
+    await user.click(component.getByTestId('month-view-button'));
     expect(daysDisplay).toStrictEqual({
       type: 'month',
       startDate: 2,
@@ -155,8 +128,8 @@ describe('<ChooseDisplay />', () => {
 
     expect(component).toMatchSnapshot();
   });
-  it('should display a ChooseDisplay which update variable week; Components does not rerender, so wwe can do only few tests', async () => {
-    const component = render(
+  it('should display a ChooseDisplay which update variable week', async () => {
+    const component = wrapAndRender(
       <ChooseDisplay
         display={weekDisplay}
         updateDisplay={updateWeekDisplay}
@@ -165,36 +138,28 @@ describe('<ChooseDisplay />', () => {
     );
 
     // day
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.day' })
-    );
+    await user.click(component.getByTestId('day-view-button'));
     expect(weekDisplay).toStrictEqual({
       type: 'day',
       startDate: 0,
     });
 
     // 3Days
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.3Days' })
-    );
+    await user.click(component.getByTestId('3days-view-button'));
     expect(weekDisplay).toStrictEqual({
       type: '3Days',
       startDate: 0,
     });
 
     // week
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.week' })
-    );
+    await user.click(component.getByTestId('week-view-button'));
     expect(weekDisplay).toStrictEqual({
       type: '3Days',
       startDate: 0,
     });
 
     // month
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.month' })
-    );
+    await user.click(component.getByTestId('month-view-button'));
     expect(weekDisplay).toStrictEqual({
       type: 'month',
       startDate: 2,
@@ -202,8 +167,8 @@ describe('<ChooseDisplay />', () => {
 
     expect(component).toMatchSnapshot();
   });
-  it('should display a ChooseDisplay which update variable month; Components does not rerender, so wwe can do only few tests', async () => {
-    const component = render(
+  it('should display a ChooseDisplay which update variable month', async () => {
+    const component = wrapAndRender(
       <ChooseDisplay
         display={monthDisplay}
         updateDisplay={updateMonthDisplay}
@@ -212,36 +177,28 @@ describe('<ChooseDisplay />', () => {
     );
 
     // day
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.day' })
-    );
+    await user.click(component.getByTestId('day-view-button'));
     expect(monthDisplay).toStrictEqual({
       type: 'day',
       startDate: 0,
     });
 
     // 3Days
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.3Days' })
-    );
+    await user.click(component.getByTestId('3days-view-button'));
     expect(monthDisplay).toStrictEqual({
       type: '3Days',
       startDate: 0,
     });
 
     // week
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.week' })
-    );
+    await user.click(component.getByTestId('week-view-button'));
     expect(monthDisplay).toStrictEqual({
       type: 'week',
       startDate: 0,
     });
 
     // month
-    await user.click(
-      component.getByRole('button', { name: 'calendar.view.month' })
-    );
+    await user.click(component.getByTestId('month-view-button'));
     expect(monthDisplay).toStrictEqual({
       type: 'week',
       startDate: 0,

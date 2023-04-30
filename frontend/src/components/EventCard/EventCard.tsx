@@ -1,28 +1,26 @@
-import * as React from 'react';
-import './EventCard.scss';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import {
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   CircularProgress,
-  Typography,
-  CardActionArea,
   Skeleton,
+  Typography,
 } from '@mui/material/';
 
-import { EventProps, FormEventProps } from 'Props/Event';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import JoinButton from '../Button/JoinButton';
+import { EventProps, FormEventProps } from '#types/Event';
 
 import FavButton from '../Button/FavButton';
+import JoinButton from '../Button/JoinButton';
 import MoreActionsButton from '../Button/MoreActionsButton';
 import { ClubAvatar } from '../ClubAvatar/ClubAvatar';
+import './EventCard.scss';
 
 function InfoItem(props: { name: string; value: string }) {
   let icon = null;

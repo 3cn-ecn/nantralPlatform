@@ -1,10 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import { DayInfos } from '../../components/Calendar/DayInfos/DayInfos';
+
+import { DayInfos } from '#components/Calendar/DayInfos/DayInfos';
+import { wrapAndRender } from '#utils/tests';
 
 describe('<DayInfos />', () => {
   it('should display a DayInfos', async () => {
-    const component = render(<DayInfos key="DayInfosTest" />);
+    const component = wrapAndRender(<DayInfos key="DayInfosTest" />);
 
     for (let i = 0; i < 10; i += 2) {
       expect(

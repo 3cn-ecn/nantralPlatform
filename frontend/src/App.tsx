@@ -1,25 +1,22 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Route, Routes } from 'react-router-dom';
+
 import { Box, CssBaseline, PaletteMode, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Home from './pages/Home/Home';
-import NavBarTop from './components/NavBarTop/NavBarTop';
-import NavBarSide from './components/NavBarSide/NavBarSide';
-import NotFound from './pages/NotFound/NotFound';
-import Event from './pages/Event/Event';
-import Academics from './pages/Academics/Academics';
-import Admin from './pages/Admin/Admin';
-import BDX from './pages/BDX/BDX';
-import Group from './pages/Group/Group';
-import Family from './pages/Family/Family';
-import Map from './pages/Map/Map';
-import Sign from './pages/Sign/Sign';
-import Student from './pages/Student/Student';
-import LegalNotice from './pages/LegalNotice/Legal';
-import EventDetails from './pages/EventDetails/EventDetails';
-import Profile from './pages/Profile/Profile';
+
+import NavBarSide from '#components/NavBarSide/NavBarSide';
+import NavBarTop from '#components/NavBarTop/NavBarTop';
+import EventPage from '#pages/Event/Event.page';
+import EventDetailsPage from '#pages/Event/EventDetails/EventDetails.page';
+import GroupPage from '#pages/Group/Group.page';
+import HomePage from '#pages/Home/Home.page';
+import LegalNoticePage from '#pages/LegalNotice/Legal.page';
+import NotFoundPage from '#pages/NotFound/NotFound.page';
+import ProfilePage from '#pages/Profile/Profile.page';
+import StudentPage from '#pages/Student/Student.page';
+
 import getTheme from './theme';
 
 const queryClient = new QueryClient();
@@ -99,21 +96,15 @@ function App() {
           >
             <Toolbar />
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/group" element={<Group />} />
-              <Route path="*" element={<NotFound />} />
-              <Route path="/event" element={<Event />} />
-              <Route path="/event/:id" element={<EventDetails />} />
-              <Route path="/academics" element={<Academics />} />
-              <Route path="/administration" element={<Admin />} />
-              <Route path="/liste" element={<BDX />} />
-              <Route path="/parrainage" element={<Family />} />
-              <Route path="/colocs" element={<Map />} />
-              <Route path="/student" element={<Student />} />
-              <Route path="/legal-notice" element={<LegalNotice />} />
-              <Route path="/tools/signature" element={<Sign />} />
-              <Route path="/student/:studentId" element={<Profile />} />
-              {/* <Route path="/group/:groupTypeSlug" element={<GroupList />} /> */}
+              <Route path="/" element={<HomePage />} />
+              <Route path="/group" element={<GroupPage />} />
+              <Route path="/event" element={<EventPage />} />
+              <Route path="/event/:id" element={<EventDetailsPage />} />
+              <Route path="/student" element={<StudentPage />} />
+              <Route path="/legal-notice" element={<LegalNoticePage />} />
+              <Route path="/student/:studentId" element={<ProfilePage />} />
+              <Route path="*" element={<NotFoundPage />} />
+              {/* <Route path="/group/:groupTypeSlug" element={<GroupListPage />} /> */}
             </Routes>
           </Box>
         </Box>

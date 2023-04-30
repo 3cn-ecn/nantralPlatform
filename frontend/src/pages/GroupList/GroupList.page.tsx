@@ -1,13 +1,16 @@
+import React from 'react';
+import { useParams } from 'react-router-dom';
+
 import { Container } from '@mui/material';
 import axios from 'axios';
-import * as React from 'react';
-import { useParams } from 'react-router-dom';
-import { LoadStatus } from 'Props/GenericTypes';
-import { ClubSection } from '../../components/Section/ClubSection/ClubSection';
-import { SimpleGroup } from '../../components/Group/interfaces';
-import NotFound from '../NotFound/NotFound';
 
-export function GroupList() {
+import { SimpleGroup } from '#components/Group/interfaces';
+import { ClubSection } from '#components/Section/ClubSection/ClubSection';
+import { LoadStatus } from '#types/GenericTypes';
+
+import NotFound from '../NotFound/NotFound.page';
+
+export default function GroupListPage() {
   const { groupTypeSlug } = useParams();
 
   const [groupCategory, setCategory] = React.useState(undefined);

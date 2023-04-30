@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -7,21 +7,30 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GroupsIcon from '@mui/icons-material/Groups';
-import TimerIcon from '@mui/icons-material/Timer';
-import Close from '@mui/icons-material/Close';
-import './FilterBar.scss';
-import IconButton from '@mui/material/IconButton';
-import { Grid } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import dayjs, { Dayjs } from 'dayjs';
-import { SimpleGroupProps } from 'Props/Group';
-import { FilterFrontInterface, FilterInterface } from 'Props/Filter';
+import TimerIcon from '@mui/icons-material/Timer';
+import { Grid } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import axios from 'axios';
+import { Dayjs } from 'dayjs';
+
+import { FilterFrontInterface, FilterInterface } from '#types/Filter';
+import { SimpleGroupProps } from '#types/Group';
+
 import SimpleAccordion from '../Accordion/SimpleAccordion';
-import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
+import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import BasicDatePicker from '../DatePicker/BasicDatePicker';
+import './FilterBar.scss';
+
 /**
  * Function to display a Filterbar for Event Page. It contains a button and the whole Filter drawer.
  * @param props getFilter is the function used to get filter from parent component

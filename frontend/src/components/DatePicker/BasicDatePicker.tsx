@@ -1,15 +1,17 @@
-import * as React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import dayjs, { Dayjs } from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import 'dayjs/locale/fr';
-import 'dayjs/locale/en';
-import TextField from '@mui/material/TextField';
-import './BasicDatePicker.scss';
-import { IconButton, InputAdornment } from '@mui/material';
+
 import CancelIcon from '@mui/icons-material/Cancel';
+import { IconButton, InputAdornment } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import dayjs, { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { Dayjs } from 'dayjs';
+import 'dayjs/locale/en';
+import 'dayjs/locale/fr';
+
+import './BasicDatePicker.scss';
 
 /**
  * Function to display a basic clearable Desktop DatePicker

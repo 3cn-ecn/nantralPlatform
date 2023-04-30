@@ -1,13 +1,14 @@
 import axios from 'axios';
 import { isArray } from 'lodash-es';
+
 import {
   EventProps,
   FormEventProps,
   eventToCamelCase,
   eventsToCamelCase,
   registrationType,
-} from '../Props/Event';
-import { Page } from '../Props/pagination';
+} from '#types/Event';
+import { Page } from '#types/pagination';
 
 export async function getEvents(
   options: {

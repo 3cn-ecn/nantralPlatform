@@ -1,7 +1,10 @@
+import React from 'react';
+
 import { ChevronLeftRounded, ChevronRightRounded } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import * as React from 'react';
+
 import './Carousel.scss';
+
 // WILL BE USED LATER
 // function loopSlice(arr: Array<any>, a: number, b: number): Array<any> {
 //   const l = arr.length;

@@ -1,15 +1,18 @@
-import { Alert, AlertTitle, Button } from '@mui/material';
-import { Container } from '@mui/system';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import EditSuggestionModal from '../../components/Suggestion/Suggestion';
+
+import { Alert, AlertTitle, Button } from '@mui/material';
+import { Container } from '@mui/system';
+
+import EditSuggestionModal from '#components/Suggestion/Suggestion';
+
 /**
  * The 404 error page when the requested page is not found.
  *
  * @returns The NotFound component
  */
-function NotFound() {
+export default function NotFoundPage() {
   const { t } = useTranslation('translation');
   const [open, setOpen] = React.useState<boolean>(false);
   return (
@@ -53,5 +56,3 @@ function NotFound() {
     </>
   );
 }
-
-export default NotFound;

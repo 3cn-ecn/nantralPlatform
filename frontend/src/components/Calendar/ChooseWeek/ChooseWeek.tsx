@@ -1,11 +1,13 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Grid } from '@mui/material';
 import i18n from 'i18next';
-import { useTranslation } from 'react-i18next';
-import { ChangeWeek } from './ChangeWeek/ChangeWeek';
-import { DateBox } from './DateBox/DateBox';
+
 import { CalendarView } from '../CalendarProps/CalendarProps';
+import { ChangeWeek } from './ChangeWeek/ChangeWeek';
 import './ChooseWeek.scss';
+import { DateBox } from './DateBox/DateBox';
 
 /**
  * Create an object to choose the current week.

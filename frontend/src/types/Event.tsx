@@ -1,4 +1,5 @@
-import { convertFromPythonData } from '../utils/convertData';
+import { convertFromPythonData } from '#utils/convertData';
+
 import { SimpleGroupProps } from './Group';
 
 export type registrationType = 'normal' | 'form' | 'shotgun';

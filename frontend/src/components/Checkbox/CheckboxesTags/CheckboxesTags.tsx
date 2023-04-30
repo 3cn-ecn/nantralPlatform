@@ -1,9 +1,11 @@
-import * as React from 'react';
-import axios from 'axios';
-import { TextField, Checkbox, Autocomplete } from '@mui/material';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import React from 'react';
+
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { Page } from 'Props/Group';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import { Autocomplete, Checkbox, TextField } from '@mui/material';
+import axios from 'axios';
+
+import { Page } from '#types/Group';
 import Avatar from '../../Avatar/Avatar';
 
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -131,7 +133,8 @@ function CheckboxesTags<T>(props: {
       )}
       renderInput={(params) => (
         <TextField {...params} name={label} label={label} placeholder={label} />
-      )}f
+      )}
+      f
     />
   );
 }

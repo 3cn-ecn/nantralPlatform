@@ -1,11 +1,12 @@
-import * as React from 'react';
-import { Box, Chip, Popover, Typography } from '@mui/material';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
-  DateRange,
   AccessTime as ClockIcon,
+  DateRange,
   People as PeopleIcon,
 } from '@mui/icons-material';
-import { useTranslation } from 'react-i18next';
+import { Box, Chip, Popover, Typography } from '@mui/material';
 
 export function EventPopover(props: {
   anchorRef: any;

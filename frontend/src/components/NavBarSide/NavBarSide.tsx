@@ -1,16 +1,18 @@
-import * as React from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { NavLink } from 'react-router-dom';
+
 import {
   Box,
-  Toolbar,
   Drawer,
+  Icon,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
-  Icon,
+  Toolbar,
 } from '@mui/material';
-import { NavLink } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+
 import './NavBarSide.scss';
 
 /** Interface for all links */

@@ -1,8 +1,10 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import { CalendarView } from 'components/Calendar/CalendarProps/CalendarProps';
+
 import userEvent from '@testing-library/user-event';
-import { ChangeWeek } from '../../components/Calendar/ChooseWeek/ChangeWeek/ChangeWeek';
+
+import { CalendarView } from '#components/Calendar/CalendarProps/CalendarProps';
+import { ChangeWeek } from '#components/Calendar/ChooseWeek/ChangeWeek/ChangeWeek';
+import { wrapAndRender } from '#utils/tests';
 
 let startDate = new Date('2023-02-17T03:24:00');
 const setstartDate = (newDate: Date) => {
@@ -72,9 +74,9 @@ const updateLastDisplay = (newDisplay: {
 
 const user = userEvent.setup();
 
-describe('<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rerender', () => {
+describe('<ChangeWeek />; only changes the date of the number of days, does not reajust the end of the area of time; + component does not rewrapAndRender', () => {
   it('should display a ChangeWeek (week and 3Daays)', async () => {
-    const previousComponent = render(
+    const previousComponent = wrapAndRender(
       <ChangeWeek
         key="ChangeWeekTest"
         action="previous"
@@ -88,7 +90,7 @@ describe('<ChangeWeek />; only changes the date of the number of days, does not 
     );
 
     updateDisplay({ type: '3Days', startDate: displayData.startDate });
-    const nextComponent = render(
+    const nextComponent = wrapAndRender(
       <ChangeWeek
         key="ChangeWeekTest"
         action="next"
@@ -112,7 +114,7 @@ describe('<ChangeWeek />; only changes the date of the number of days, does not 
   });
 
   it('should display an other ChangeWeek (day and month)', async () => {
-    const previousComponent = render(
+    const previousComponent = wrapAndRender(
       <ChangeWeek
         key="ChangeWeekTest"
         action="previous"
@@ -126,7 +128,7 @@ describe('<ChangeWeek />; only changes the date of the number of days, does not 
     );
 
     updateNewDisplay({ type: 'month', startDate: displayData.startDate });
-    const nextComponent = render(
+    const nextComponent = wrapAndRender(
       <ChangeWeek
         key="ChangeWeekTest"
         action="next"
@@ -151,7 +153,7 @@ describe('<ChangeWeek />; only changes the date of the number of days, does not 
   });
 
   it('should display an other ChangeWeek (month previous)', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <ChangeWeek
         key="ChangeWeekTest"
         action="previous"

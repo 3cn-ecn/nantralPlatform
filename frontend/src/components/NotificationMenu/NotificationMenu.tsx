@@ -1,23 +1,25 @@
-import * as React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+
+import SettingsIcon from '@mui/icons-material/Settings';
 import {
-  IconButton,
-  Typography,
-  Box,
   Badge,
-  Menu,
-  ListItem,
+  Box,
   Button,
   Chip,
   Icon,
+  IconButton,
+  ListItem,
+  Menu,
+  Typography,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
-import SvgIcon from '@mui/material/SvgIcon';
 import Collapse from '@mui/material/Collapse';
-import SettingsIcon from '@mui/icons-material/Settings';
+import SvgIcon from '@mui/material/SvgIcon';
 import axios from 'axios';
-import { NotificationItem } from './NotificationItem';
+
 import merge from '../../legacy/notification/utils';
+import { NotificationItem } from './NotificationItem';
 import './NotificationItem.scss';
 
 let checkNotif = 0;

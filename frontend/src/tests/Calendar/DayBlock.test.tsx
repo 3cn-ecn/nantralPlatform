@@ -1,9 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { EventProps } from '../../Props/Event';
+
+import { DayBlock } from '#components/Calendar/Month/WeekLine/DayBlock/DayBlock';
+import { EventProps } from '#types/Event';
+import { wrapAndRender } from '#utils/tests';
+
 import { createTestEvent } from './testElements/testElements';
-import { DayBlock } from '../../components/Calendar/Month/WeekLine/DayBlock/DayBlock';
 
 const events: Array<EventProps> = [];
 events.push(
@@ -38,7 +40,7 @@ const otherDay = { day: 5, date: 17, events: otherEvents };
 const newOtherDay = { day: 5, date: 17, events: [] };
 describe('<DayBlock />', () => {
   it('should display a DayBlock', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <DayBlock
           key="DayBlockTest1"
@@ -67,7 +69,7 @@ describe('<DayBlock />', () => {
   });
 
   it('should display an unfullfilled DayBlock', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <DayBlock
           key="DayBlockTest1"
@@ -96,7 +98,7 @@ describe('<DayBlock />', () => {
   });
 
   it('should display an empty DayBlock', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <DayBlock
           key="DayBlockTest1"
@@ -112,7 +114,7 @@ describe('<DayBlock />', () => {
   });
 
   it('should display an out of month DayBlock', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <DayBlock
           key="DayBlockTest4"

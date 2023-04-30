@@ -1,9 +1,11 @@
 import React from 'react';
-import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { EventProps } from '../../Props/Event';
+
+import { Month } from '#components/Calendar/Month/Month';
+import { EventProps } from '#types/Event';
+import { wrapAndRender } from '#utils/tests';
+
 import { createTestEvent } from './testElements/testElements';
-import { Month } from '../../components/Calendar/Month/Month';
 
 // Create the list of events in the month
 const eventsInWeek: Array<Array<EventProps>> = [];
@@ -86,7 +88,7 @@ monthWeeks.push(week.slice(0, 5));
 
 describe('<Month />', () => {
   it('should display a Month', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <Month key="MonthTest" monthWeeks={monthWeeks} events={eventsInWeek} />
       </BrowserRouter>

@@ -1,22 +1,24 @@
 import React from 'react';
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
-  Typography,
-  Box,
-} from '@mui/material';
+
 import {
   Close as CloseIcon,
-  OpenInNew as OpenInNewIcon,
   Edit as EditIcon,
+  OpenInNew as OpenInNewIcon,
   Verified as VerifiedIcon,
 } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+} from '@mui/material';
+
 import Avatar from '../../Avatar/Avatar';
-import { Membership, Group, Student } from '../interfaces';
+import { Group, Membership, Student } from '../interfaces';
 
 function ShowMemberModal(props: {
   closeModal: () => void;

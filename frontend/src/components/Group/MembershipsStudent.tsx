@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Snackbar, Alert, Button, Box, IconButton } from '@mui/material';
+
 import {
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
+import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
 import axios from 'axios';
-import { Membership, Student, Page } from './interfaces';
+
 import ListMembershipsGrid from './components/ListMembershipsGrid';
+import { Membership, Page, Student } from './interfaces';
 
 // passed through django template
 

@@ -1,3 +1,17 @@
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+
+import {
+  AccessTime as AccessTimeIcon,
+  CalendarToday as CalendarTodayIcon,
+  Edit as EditIcon,
+  MoreHoriz as MoreHorizIcon,
+  People as PeopleIcon,
+  Place as PlaceIcon,
+  Share as ShareIcon,
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -7,34 +21,25 @@ import {
   Grid,
   Menu,
   MenuItem,
+  Alert as MuiAlert,
+  Snackbar,
   Tab,
   Tabs,
   Typography,
   useMediaQuery,
 } from '@mui/material';
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import './EventDetails.scss';
-import { useTranslation } from 'react-i18next';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import PlaceIcon from '@mui/icons-material/Place';
-import PeopleIcon from '@mui/icons-material/People';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import type { AlertProps } from '@mui/material/Alert';
 
-import ShareIcon from '@mui/icons-material/Share';
-import EditIcon from '@mui/icons-material/Edit';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
-import { useQuery } from 'react-query';
-import EditEventModal from '../../components/FormEvent/FormEvent';
-import FavButton from '../../components/Button/FavButton';
-import JoinButton from '../../components/Button/JoinButton';
-import { ClubAvatar } from '../../components/ClubAvatar/ClubAvatar';
-import { EventParticipantsModal } from '../../components/Modal/EventParticipantsModal';
-import { ImageModal } from '../../components/Modal/ImageModal';
-import NotFound from '../NotFound/NotFound';
-import { getEvent } from '../../api/event';
+import { getEvent } from '#api/event';
+import FavButton from '#components/Button/FavButton';
+import JoinButton from '#components/Button/JoinButton';
+import { ClubAvatar } from '#components/ClubAvatar/ClubAvatar';
+import EditEventModal from '#components/FormEvent/FormEvent';
+import { EventParticipantsModal } from '#components/Modal/EventParticipantsModal';
+import { ImageModal } from '#components/Modal/ImageModal';
+import NotFound from '#pages/NotFound/NotFound.page';
+
+import './EventDetails.page.scss';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -43,7 +48,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function EventDetails() {
+export default function EventDetailsPage() {
   const { i18n, t } = useTranslation('translation');
   const { id } = useParams();
   const [participating, setParticipating] = useState(false);
@@ -456,5 +461,3 @@ function EventDetails() {
     </>
   );
 }
-
-export default EventDetails;

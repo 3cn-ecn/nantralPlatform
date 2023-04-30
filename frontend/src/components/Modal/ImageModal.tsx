@@ -1,3 +1,6 @@
+import React from 'react';
+
+import { Close } from '@mui/icons-material';
 import {
   Dialog,
   DialogContent,
@@ -6,8 +9,6 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Close } from '@mui/icons-material';
-import React from 'react';
 
 export function ImageModal(props: {
   url: string;

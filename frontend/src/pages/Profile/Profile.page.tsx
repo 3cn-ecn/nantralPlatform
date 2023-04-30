@@ -1,18 +1,20 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import * as React from 'react';
-import { LoadStatus } from 'Props/GenericTypes';
-import { useParams, NavLink } from 'react-router-dom';
-import { SvgIcon, Typography, Grid, Box, Skeleton } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { NavLink, useParams } from 'react-router-dom';
+
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { MembershipsStudent } from '../../components/Group/MembershipsStudent';
-import { EditProfilModal } from '../../components/FormProfil/FormProfil';
-import Avatar from '../../components/Avatar/Avatar';
+import { LoadingButton } from '@mui/lab';
+import { Box, Grid, Skeleton, SvgIcon, Typography } from '@mui/material';
+import axios from 'axios';
+
+import Avatar from '#components/Avatar/Avatar';
+import { EditProfilModal } from '#components/FormProfil/FormProfil';
+import { MembershipsStudent } from '#components/Group/MembershipsStudent';
+import { LoadStatus } from '#types/GenericTypes';
 
 const API_URL = '/api/student/student/';
 
-function Profile() {
+export default function ProfilePage() {
   const [student, setStudent] = React.useState(null);
   const { studentId } = useParams();
   const url = API_URL + studentId;
@@ -134,5 +136,3 @@ function Profile() {
     </Box>
   );
 }
-
-export default Profile;

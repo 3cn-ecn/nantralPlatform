@@ -12,9 +12,16 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false,
+    "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src"
+    "baseUrl": "./src",
+    "paths": {
+      "#api/*": ["api/*"],
+      "#components/*": ["components/*"],
+      "#pages/*": ["pages/*"],
+      "#types/*": ["types/*"],
+      "#utils/*": ["utils/*"]
+    }
   },
   "include": ["src", "custom.d.ts"]
 }

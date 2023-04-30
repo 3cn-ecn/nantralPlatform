@@ -1,16 +1,17 @@
-import * as React from 'react';
-import './MoreActionsButton.scss';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import EditIcon from '@mui/icons-material/Edit';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ShareIcon from '@mui/icons-material/Share';
-import EditIcon from '@mui/icons-material/Edit';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
-import { useTranslation } from 'react-i18next';
 import { IconButton, rgbToHex, useTheme } from '@mui/material';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Snackbar from '@mui/material/Snackbar';
 
 import JoinButton from './JoinButton';
+import './MoreActionsButton.scss';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,

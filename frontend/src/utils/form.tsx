@@ -1,36 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { useTranslation } from 'react-i18next';
+
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { Delete } from '@mui/icons-material';
 import {
-  TextField,
-  Checkbox,
+  Autocomplete,
+  AutocompleteInputChangeReason,
   Box,
-  Select,
+  Button,
+  Checkbox,
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Typography,
-  Autocomplete,
-  MenuItem,
-  InputLabel,
-  AutocompleteInputChangeReason,
-  Button,
   FormLabel,
-  InputAdornment,
   IconButton,
   Input,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
 } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import 'dayjs/locale/fr';
 import axios from 'axios';
-import { useTranslation } from 'react-i18next';
-import { FieldType } from 'Props/GenericTypes';
-import { Delete } from '@mui/icons-material';
-import Avatar from '../components/Avatar/Avatar';
+import 'dayjs/locale/fr';
+
+import Avatar from '#components/Avatar/Avatar';
+import { FieldType } from '#types/GenericTypes';
 
 /**
  * A component to create a group of fields for a form
@@ -121,26 +123,26 @@ function FormGroup(props: {
                 </FormControl>
               </Box>
             );
-          case 'password':
-            return (
-              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
-                <FormControl fullWidth>
-                  <InputLabel id={`${field.name}-password`}>
-                    {field.label}
-                  </InputLabel>
-                  <Input
-                    key={field.name}
-                    id={`${field.name}-password`}
-                    name={field.name}
-                    value={values[field.name]}
-                    onChange={(e) => handleChange(field.name, e.target.value)}
-                    margin="dense"
-                    type="password"
-                    disabled={field.disabled}
-                  />
-                </FormControl>
-              </Box>
-            );
+          // case 'password':
+          //   return (
+          //     <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
+          //       <FormControl fullWidth>
+          //         <InputLabel id={`${field.name}-password`}>
+          //           {field.label}
+          //         </InputLabel>
+          //         <Input
+          //           key={field.name}
+          //           id={`${field.name}-password`}
+          //           name={field.name}
+          //           value={values[field.name]}
+          //           onChange={(e) => handleChange(field.name, e.target.value)}
+          //           margin="dense"
+          //           type="password"
+          //           disabled={field.disabled}
+          //         />
+          //       </FormControl>
+          //     </Box>
+          //   );
           case 'link':
             return (
               <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>

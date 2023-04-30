@@ -1,10 +1,13 @@
 import React from 'react';
-import { Button } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { numberOfDayInMonth, numberOfDayInDateMonth } from '../../utils';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Button } from '@mui/material';
+
+import { modulo } from '#utils/maths';
+
 import { CalendarView } from '../../CalendarProps/CalendarProps';
-import { modulo } from '../../../../utils/maths';
+import { numberOfDayInDateMonth, numberOfDayInMonth } from '../../utils';
 
 /**
  * The component which display the arrow to switch to last and next week.

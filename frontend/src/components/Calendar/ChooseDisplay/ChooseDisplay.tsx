@@ -1,7 +1,10 @@
 import React from 'react';
-import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { modulo } from '../../../utils/maths';
+
+import { Button } from '@mui/material';
+
+import { modulo } from '#utils/maths';
+
 import { CalendarView } from '../CalendarProps/CalendarProps';
 import { firstMonthDay } from '../utils';
 
@@ -23,7 +26,7 @@ export function ChooseDisplay(props: {
   return (
     <>
       <Button
-        data-testid="dayButtonTestId"
+        data-testid="day-view-button"
         onClick={() => {
           if (display.type !== 'day') {
             updateDisplay({ type: 'day', startDate: display.startDate });
@@ -33,7 +36,7 @@ export function ChooseDisplay(props: {
         {t('calendar.view.day')}
       </Button>
       <Button
-        data-testid="monthButtonTestId"
+        data-testid="3days-view-button"
         onClick={() => {
           if (display.type !== '3Days') {
             updateDisplay({ type: '3Days', startDate: display.startDate });
@@ -43,7 +46,7 @@ export function ChooseDisplay(props: {
         {t('calendar.view.3Days')}
       </Button>
       <Button
-        data-testid="weekButtonTestId"
+        data-testid="week-view-button"
         onClick={() => {
           if (display.type !== 'week') {
             updateDisplay({ type: 'week', startDate: 0 });
@@ -53,7 +56,7 @@ export function ChooseDisplay(props: {
         {t('calendar.view.week')}
       </Button>
       <Button
-        data-testid="monthButtonTestId"
+        data-testid="month-view-button"
         onClick={() => {
           if (display.type !== 'month') {
             updateDisplay({

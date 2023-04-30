@@ -1,3 +1,7 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
 import {
   Card,
   CardActionArea,
@@ -8,15 +12,13 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import * as React from 'react';
 
-import './PostCard.scss';
-import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
-import { useTranslation } from 'react-i18next';
-import { FormPostProps, PostProps } from '../../Props/Post';
-import { PostModal } from '../Modal/PostModal';
-import { timeFromNow } from '../../utils/date';
+import { FormPostProps, PostProps } from '#types/Post';
+import { timeFromNow } from '#utils/date';
+
 import Avatar from '../Avatar/Avatar';
+import { PostModal } from '../Modal/PostModal';
+import './PostCard.scss';
 
 const POST_HEIGHT = 190;
 export const POST_AVATAR_SIZE = 35;
