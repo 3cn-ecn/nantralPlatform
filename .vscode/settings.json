@@ -51,13 +51,14 @@
     "coeff",
     "colocathlon",
     "colocathlons",
+    "django",
     "itii",
     "ITII",
     "nantes",
     "nantral",
     "Nantral",
     "pipenv",
-    "django"
+    "testid"
   ],
   "i18n-ally.localesPaths": "frontend/src/translations",
   "i18n-ally.enabledFrameworks": ["react", "general"],

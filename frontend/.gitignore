@@ -1,5 +1,4 @@
 node_modules/
 dist/
-__snapshots__/
 coverage/
 test-report.xml

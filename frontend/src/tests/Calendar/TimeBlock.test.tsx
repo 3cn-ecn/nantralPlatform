@@ -1,16 +1,15 @@
 import React from 'react';
 
-import { render } from '@testing-library/react';
-
 import { TimeBlock } from '#components/Calendar/Day/TimeBlock/TimeBlock';
+import { wrapAndRender } from '#utils/tests';
 
 describe('<DayInfos />', () => {
   it('should display an TimeBlock', async () => {
-    const oddComponent = render(
+    const oddComponent = wrapAndRender(
       <TimeBlock key="TimeBlockOddTest" startTime={5} />
     );
 
-    const evenComponent = render(
+    const evenComponent = wrapAndRender(
       <TimeBlock key="TimeBlockEvenTest" startTime={2} />
     );
     expect(

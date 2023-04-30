@@ -1,10 +1,9 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { render } from '@testing-library/react';
-
 import { Month } from '#components/Calendar/Month/Month';
 import { EventProps } from '#types/Event';
+import { wrapAndRender } from '#utils/tests';
 
 import { createTestEvent } from './testElements/testElements';
 
@@ -89,7 +88,7 @@ monthWeeks.push(week.slice(0, 5));
 
 describe('<Month />', () => {
   it('should display a Month', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <Month key="MonthTest" monthWeeks={monthWeeks} events={eventsInWeek} />
       </BrowserRouter>

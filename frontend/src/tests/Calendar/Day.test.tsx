@@ -1,10 +1,9 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { render } from '@testing-library/react';
-
 import { Day, sortWithPos } from '#components/Calendar/Day/Day';
 import { EventProps } from '#types/Event';
+import { wrapAndRender } from '#utils/tests';
 
 import { createTestEvent } from './testElements/testElements';
 
@@ -72,7 +71,7 @@ events.push(
 );
 describe('<Day />', () => {
   it('should display a Day', async () => {
-    const component = render(
+    const component = wrapAndRender(
       <BrowserRouter>
         <Day
           day={new Date('2023-02-10T13:21:00')}
