@@ -22,8 +22,7 @@ import { FormPostProps, PostProps } from '#types/Post';
 import FormGroup from '#utils/form';
 
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
-import { createPost, deletePost, updatePost } from '../../api/post';
-import { getGroups } from '../../api/group';
+import { getGroups } from '#api/group';
 
 export function FormPost(props: {
   /** The mode to use this form */

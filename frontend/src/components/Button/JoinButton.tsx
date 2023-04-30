@@ -22,8 +22,8 @@ import {
   rgbToHex,
   useTheme,
 } from '@mui/material';
-import i18n from 'i18next';
 
+import i18n from '../../translations/config';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import { EventPopover, TextPopover } from './InformationPopover';
 import { register, unregister } from '../../api/event';

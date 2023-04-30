@@ -127,14 +127,13 @@ function CheckboxesTags<T>(props: {
       renderOption={(content, option, { selected }) => (
         <li {...content}>
           {/* <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} /> */}
-          <Avatar title={option?.name} url={option?.icon} size="small" />
+          {/* <Avatar title={option?.name} url={option?.icon} size="small" /> */}
           {option[labelField]}
         </li>
       )}
       renderInput={(params) => (
         <TextField {...params} name={label} label={label} placeholder={label} />
       )}
-      f
     />
   );
 }

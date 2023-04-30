@@ -26,7 +26,6 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import axios from 'axios';
 
 import { createEvent, deleteEvent, editEvent } from '#api/event';
 import { SimpleGroup } from '#components/Group/interfaces';
@@ -38,8 +37,7 @@ import FormGroup from '#utils/form';
 
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
-import { createEvent, deleteEvent, editEvent } from '../../api/event';
-import { getGroups } from '../../api/group';
+import { getGroups } from '#api/group';
 /**
  * Fonction permettant de générer le formulaire de création d'un événement.
  * Elle ne vérifie pas que l'utilisateur soit bien admin du groupe.

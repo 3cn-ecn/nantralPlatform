@@ -62,7 +62,7 @@ export function EventSection(props: {
     onDelete,
   } = props;
   let content: JSX.Element | Array<JSX.Element>;
-  const allEvents = maxItem && events ? events.slice(0, maxItem) : events;
+  const allEvents = events;
   switch (status) {
     case 'error':
       content = (
