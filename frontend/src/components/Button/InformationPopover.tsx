@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import {
   AccessTime as ClockIcon,
@@ -7,6 +6,8 @@ import {
   People as PeopleIcon,
 } from '@mui/icons-material';
 import { Box, Chip, Popover, Typography } from '@mui/material';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 export function EventPopover(props: {
   anchorRef: any;
@@ -16,7 +17,7 @@ export function EventPopover(props: {
   onClose: () => void;
 }) {
   const { anchorRef, open, onClose, startRegistration, maxParticipant } = props;
-  const { t, i18n } = useTranslation('translation');
+  const { t, i18n } = useTranslation();
   return (
     <Popover
       id="id"

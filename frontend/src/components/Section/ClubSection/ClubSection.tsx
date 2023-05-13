@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { Grid, Typography } from '@mui/material';
 
 import { Group, SimpleGroup } from '#components/Group/interfaces';
+import { useTranslation } from '#i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 
 import { ClubAvatar, ClubAvatarSkeleton } from '../../ClubAvatar/ClubAvatar';
@@ -41,7 +41,7 @@ export function ClubSection(props: {
   const { status, clubs, title, maxItem, accordion } = props;
   let content: JSX.Element | Array<JSX.Element>;
   const allclubs = maxItem && clubs ? clubs.slice(0, maxItem) : clubs;
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   switch (status) {
     case 'error':
       content = <p className="card">Error</p>;

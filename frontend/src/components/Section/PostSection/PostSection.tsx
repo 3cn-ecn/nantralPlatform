@@ -1,8 +1,8 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { FormPostProps, PostProps } from '#types/Post';
 
@@ -28,7 +28,7 @@ export function PostSection(props: {
 }) {
   const { posts, title, maxItem, status, shownItem, onUpdate } = props;
   const allPosts = maxItem && posts ? posts.slice(0, maxItem) : posts;
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   const [showAll, setShowAll] = React.useState<boolean>(false);
   let content;
   switch (status) {

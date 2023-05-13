@@ -1,14 +1,15 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import Container from '@mui/material/Container';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 /**
  * Legal Notice, like the name and owner of the site, etc.
  * @returns Legal Notice page component
  */
 export default function LegalPage() {
-  const { t } = useTranslation('translation'); // translation module
+  const { t } = useTranslation(); // translation module
 
   return (
     <Container>

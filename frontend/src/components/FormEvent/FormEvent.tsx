@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 
 import {
@@ -28,7 +27,9 @@ import {
 } from '@mui/material';
 
 import { createEvent, deleteEvent, editEvent } from '#api/event';
+import { getGroups } from '#api/group';
 import { SimpleGroup } from '#components/Group/interfaces';
+import { useTranslation } from '#i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 import { FieldType } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
@@ -37,7 +38,7 @@ import FormGroup from '#utils/form';
 
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
-import { getGroups } from '#api/group';
+
 /**
  * Fonction permettant de générer le formulaire de création d'un événement.
  * Elle ne vérifie pas que l'utilisateur soit bien admin du groupe.
@@ -233,7 +234,7 @@ function EditEventModal(props: {
 }) {
   const { open, closeModal, event, mode, onUpdate, onDelete } = props;
   const eventDisplayed = event || createBlankEvent();
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   const [formValues, setFormValues] = React.useState<FormEventProps>({
     ...structuredClone(eventDisplayed),
     group: event?.group.id,

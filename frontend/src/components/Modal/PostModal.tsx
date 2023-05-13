@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Close } from '@mui/icons-material';
 import {
@@ -13,6 +12,7 @@ import {
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
 import { timeFromNow } from '#utils/date';
 
@@ -31,7 +31,7 @@ export function PostModal(props: {
   const theme = useTheme();
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   return (
     <>
       <Dialog

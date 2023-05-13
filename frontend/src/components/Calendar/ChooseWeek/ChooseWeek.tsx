@@ -1,8 +1,9 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Grid } from '@mui/material';
 import i18n from 'i18next';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 import { CalendarView } from '../CalendarProps/CalendarProps';
 import { ChangeWeek } from './ChangeWeek/ChangeWeek';
@@ -31,7 +32,7 @@ export function ChooseWeek(props: {
 }): JSX.Element {
   const { step, updateDisplay, startDate, endDate, updateBegin, updateEnd } =
     props;
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   const sunday = new Date(
     endDate.getFullYear(),
     endDate.getMonth(),

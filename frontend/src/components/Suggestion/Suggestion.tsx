@@ -1,5 +1,4 @@
 import React, { FormEvent, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Close as CloseIcon } from '@mui/icons-material';
 import {
@@ -15,6 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 
+import { useTranslation } from '#i18n/useTranslation';
 import FormGroup, { FieldType } from '#utils/form';
 
 import { Suggestion } from './interfacesSuggestion';
@@ -54,7 +54,7 @@ function EditSuggestionModal(props: {
   closeModal: () => void;
   saveSuggestion: (suggestion: Suggestion) => Promise<any>;
 }) {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   function createFormFields() {
     const defaultFields: FieldType[] = [
       {

@@ -1,6 +1,13 @@
 import React from 'react';
 
 import {
+  AutoAwesomeMotion,
+  Favorite,
+  Sort,
+  Today,
+  Upcoming,
+} from '@mui/icons-material';
+import {
   Box,
   Chip,
   IconButton,
@@ -8,20 +15,14 @@ import {
   MenuItem,
   Typography,
 } from '@mui/material';
-import {
-  AutoAwesomeMotion,
-  Favorite,
-  Sort,
-  Today,
-  Upcoming,
-} from '@mui/icons-material';
-import { useTranslation } from 'react-i18next';
+
+import Avatar from '#components/Avatar/Avatar';
 import { EventSection } from '#components/Section/EventSection/EventSection';
+import { useTranslation } from '#i18n/useTranslation';
 import { EventProps } from '#types/Event';
+import { FilterInterface } from '#types/Filter';
 import { ListResults, LoadStatus } from '#types/GenericTypes';
 import { Page, SimpleGroupProps } from '#types/Group';
-import { FilterInterface } from '#types/Filter';
-import Avatar from '#components/Avatar/Avatar';
 
 interface EventGridProps {
   status: LoadStatus;
@@ -54,7 +55,7 @@ export default function EventGrid(props: {
     filter,
     fetchingNextPage,
   } = props;
-  const { t, i18n } = useTranslation('translation');
+  const { t, i18n } = useTranslation();
   const [orderOpen, setOrderOpen] = React.useState<boolean>(false);
   const anchorEl = React.useRef();
   const handleNextPage = (

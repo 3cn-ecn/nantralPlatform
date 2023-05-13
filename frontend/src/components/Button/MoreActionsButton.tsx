@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import EditIcon from '@mui/icons-material/Edit';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -9,6 +8,8 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Snackbar from '@mui/material/Snackbar';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 import JoinButton from './JoinButton';
 import './MoreActionsButton.scss';
@@ -29,7 +30,7 @@ function MoreActionsButton(props: {
   setParticipating: React.Dispatch<React.SetStateAction<boolean>>;
   size?: string;
 }) {
-  const { t } = useTranslation('translation'); // translation module
+  const { t } = useTranslation(); // translation module
   const {
     className,
     isAdmin,

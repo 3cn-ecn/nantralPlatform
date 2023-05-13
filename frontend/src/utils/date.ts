@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from '#i18n/useTranslation';
 
 /**
  * Return true if date is in the 7 next days
@@ -15,7 +15,7 @@ export function isThisWeek(date: Date): boolean {
 }
 
 export function timeFromNow(date: Date): string {
-  const { t, i18n } = useTranslation('translation');
+  const { t, i18n } = useTranslation();
   let time: string;
   const seconds: number = (new Date().getTime() - date.getTime()) / 1000;
   const minutes: number = seconds / 60;

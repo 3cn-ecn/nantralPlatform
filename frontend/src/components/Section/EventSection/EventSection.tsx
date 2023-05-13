@@ -1,8 +1,8 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Alert, Grid, Typography } from '@mui/material';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 import { LoadStatus } from '#types/GenericTypes';
 
@@ -50,7 +50,7 @@ export function EventSection(props: {
   onUpdate?: (newEvent: FormEventProps) => void;
   onDelete?: () => void;
 }) {
-  const { t } = useTranslation('translation'); // translation module
+  const { t } = useTranslation(); // translation module
   const {
     status,
     events,

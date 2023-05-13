@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import CancelIcon from '@mui/icons-material/Cancel';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -10,6 +9,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/en';
 import 'dayjs/locale/fr';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 import './BasicDatePicker.scss';
 
@@ -27,8 +28,8 @@ export default function BasicDatePicker(props: {
   onChange: (value: Dayjs | null) => void;
 }) {
   const { label, minDate, value, onChange } = props;
-  const { t } = useTranslation('translation'); // translation module
-  const { i18n } = useTranslation('translation');
+  const { t } = useTranslation(); // translation module
+  const { i18n } = useTranslation();
   const [isEmpty, setIsEmpty] = React.useState(true); // true if not date is selected
 
   // React.useEffect(() => {

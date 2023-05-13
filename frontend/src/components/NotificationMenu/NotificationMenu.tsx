@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -17,6 +16,8 @@ import {
 import Collapse from '@mui/material/Collapse';
 import SvgIcon from '@mui/material/SvgIcon';
 import axios from 'axios';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 import merge from '../../legacy/notification/utils';
 import { NotificationItem } from './NotificationItem';
@@ -62,7 +63,7 @@ export function NotificationMenu() {
   const step = 5;
   const app = '/api/notification/';
   const GET_NOTIFICATIONS_URL = `${app}get_notifications`;
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
 
   if (nbNotifs === null) {
     getNbNotifs();

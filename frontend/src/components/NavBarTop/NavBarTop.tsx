@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 
 import {
@@ -40,6 +39,8 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import i18next from 'i18next';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 import Avatar from '../Avatar/Avatar';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
@@ -121,7 +122,7 @@ function NavBarTop(props: {
     setOpenS(false);
   };
 
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   const theme = useTheme();
   const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();

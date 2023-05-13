@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import {
@@ -12,6 +11,8 @@ import {
   ListItemIcon,
   Toolbar,
 } from '@mui/material';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 import './NavBarSide.scss';
 
@@ -39,7 +40,7 @@ function NavBarSide(props: {
   onClose: () => any;
 }) {
   const { menuOpen, drawerWidth, variant, onClose } = props;
-  const { t } = useTranslation('translation'); // translation module
+  const { t } = useTranslation(); // translation module
 
   const links: LinksInterface[] = [
     {

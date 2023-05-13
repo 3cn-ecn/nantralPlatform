@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
 import {
@@ -13,6 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
 import { timeFromNow } from '#utils/date';
 
@@ -55,7 +55,7 @@ export function EditButton(props: { onClick }) {
 }
 
 export function MembersIcon() {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   return (
     <Tooltip title={t('event.membersOnly')} arrow>
       <Groups sx={{ marginRight: 1 }} />
@@ -114,7 +114,7 @@ export function PostCard(props: {
   const { post, onDelete, onUpdate } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [postValue, setPostValue] = React.useState(post);
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     setPostValue(post);

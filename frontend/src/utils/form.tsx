@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -23,15 +22,16 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import dayjs, { Dayjs } from 'dayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import axios from 'axios';
+import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/fr';
 
 import Avatar from '#components/Avatar/Avatar';
+import { useTranslation } from '#i18n/useTranslation';
 import { FieldType } from '#types/GenericTypes';
 
 /**
@@ -52,7 +52,7 @@ function FormGroup(props: {
   noFullWidth?: boolean;
 }) {
   const { fields, values, errors, setValues, noFullWidth } = props;
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   /**
    * Update the value of a key in the values object.
    *

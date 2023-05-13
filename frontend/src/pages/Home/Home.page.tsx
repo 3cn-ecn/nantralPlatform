@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -25,6 +24,7 @@ import { PostModal } from '#components/Modal/PostModal';
 import { ClubSection } from '#components/Section/ClubSection/ClubSection';
 import { EventSection } from '#components/Section/EventSection/EventSection';
 import { PostSection } from '#components/Section/PostSection/PostSection';
+import { useTranslation } from '#i18n/useTranslation';
 import { EventProps } from '#types/Event';
 import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
@@ -55,7 +55,7 @@ export default function HomePage() {
   const [postFormOpen, setPostFormOpen] = React.useState<boolean>(false);
   const [eventFormOpen, setEventFormOpen] = React.useState<boolean>(false);
   const [selectedPost, setSelectedPost] = React.useState<PostProps>(null);
-  const { t } = useTranslation('translation'); // translation module
+  const { t } = useTranslation(); // translation module
 
   React.useEffect(() => {
     const postId = queryParams.get('post');

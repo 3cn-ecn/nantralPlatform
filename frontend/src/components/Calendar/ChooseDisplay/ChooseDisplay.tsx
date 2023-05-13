@@ -1,8 +1,8 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Button } from '@mui/material';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { modulo } from '#utils/maths';
 
 import { CalendarView } from '../CalendarProps/CalendarProps';
@@ -22,7 +22,7 @@ export function ChooseDisplay(props: {
   startDate: Date;
 }): JSX.Element {
   const { display, updateDisplay, startDate } = props;
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   return (
     <>
       <Button

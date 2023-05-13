@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
@@ -37,6 +36,7 @@ import { ClubAvatar } from '#components/ClubAvatar/ClubAvatar';
 import EditEventModal from '#components/FormEvent/FormEvent';
 import { EventParticipantsModal } from '#components/Modal/EventParticipantsModal';
 import { ImageModal } from '#components/Modal/ImageModal';
+import { useTranslation } from '#i18n/useTranslation';
 import NotFound from '#pages/NotFound/NotFound.page';
 
 import './EventDetails.page.scss';
@@ -49,7 +49,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 export default function EventDetailsPage() {
-  const { i18n, t } = useTranslation('translation');
+  const { i18n, t } = useTranslation();
   const { id } = useParams();
   const [participating, setParticipating] = useState(false);
   const [openCopyNotif, setOpenCopyNotif] = useState(false);

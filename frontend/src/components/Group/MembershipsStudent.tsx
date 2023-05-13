@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import {
   NavigateBefore as NavigateBeforeIcon,
@@ -7,6 +6,8 @@ import {
 } from '@mui/icons-material';
 import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
 import axios from 'axios';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import { Membership, Page, Student } from './interfaces';
@@ -32,7 +33,7 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
     'load'
   );
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
 
   const studentId = Id.toString();
   // status of modals

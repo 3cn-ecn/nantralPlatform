@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Button, Grid } from '@mui/material';
 import { EventAttributes, createEvents } from 'ics';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { EventProps } from '#types/Event';
 import { modulo, ppcm } from '#utils/maths';
 
@@ -795,7 +795,7 @@ function Calendar(props: {
   onChangeRange: (period: { from: Date; to: Date }) => void;
 }): JSX.Element {
   const { events, onChangeRange: onChangePeriod } = props;
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   const [displayData, updateDisplay] = useState<{
     type: CalendarView;
     startDate: number;

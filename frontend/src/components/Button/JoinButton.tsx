@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import {
   CheckCircle as CheckIcon,
@@ -22,6 +21,8 @@ import {
   rgbToHex,
   useTheme,
 } from '@mui/material';
+
+import { useTranslation } from '#i18n/useTranslation';
 
 import { register, unregister } from '../../api/event';
 import i18n from '../../i18n/config';
@@ -79,7 +80,7 @@ function JoinButton({
     setLoaded(true);
   }, [participating]);
 
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   const registrationFinished: boolean =
     endRegistration !== null &&
     Date.now() > new Date(endRegistration).getTime();

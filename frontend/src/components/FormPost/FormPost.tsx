@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useQuery } from 'react-query';
 
 import { Close, Delete } from '@mui/icons-material';
@@ -15,14 +14,15 @@ import {
   useTheme,
 } from '@mui/material';
 
+import { getGroups } from '#api/group';
 import { createPost, deletePost, updatePost } from '#api/post';
+import { useTranslation } from '#i18n/useTranslation';
 import { FieldType } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
 import { FormPostProps, PostProps } from '#types/Post';
 import FormGroup from '#utils/form';
 
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
-import { getGroups } from '#api/group';
 
 export function FormPost(props: {
   /** The mode to use this form */
@@ -39,7 +39,7 @@ export function FormPost(props: {
   onDelete?: () => void;
 }) {
   const { open, onClose, post, onUpdate, mode, onDelete } = props;
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation();
   const [values, setValues] = React.useState<FormPostProps>(
     post
       ? {

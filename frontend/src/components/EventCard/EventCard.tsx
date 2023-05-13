@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -14,6 +13,7 @@ import {
   Typography,
 } from '@mui/material/';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 
 import FavButton from '../Button/FavButton';
@@ -82,7 +82,7 @@ function EventCard(props: {
   } = event;
   const [participating, setParticipating] = useState(isParticipating);
 
-  const { i18n } = useTranslation('translation');
+  const { i18n } = useTranslation();
 
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
   if (formUrl) variant = 'form';

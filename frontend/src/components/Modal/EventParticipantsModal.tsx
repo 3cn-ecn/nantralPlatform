@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import {
@@ -17,6 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Container } from '@mui/system';
 import axios from 'axios';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { EventProps } from '#types/Event';
 
 import Avatar from '../Avatar/Avatar';
@@ -27,7 +27,7 @@ export function EventParticipantsModal(props: {
   onClose: () => void;
 }) {
   const { open, event, onClose } = props;
-  const { t } = useTranslation('translation'); // translation module
+  const { t } = useTranslation(); // translation module
   const [participants, setParticipants] = useState([]);
   const [participantsStatus, setParticipantsStatus] = useState('loading');
 

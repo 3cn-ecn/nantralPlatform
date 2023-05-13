@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -8,6 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { CapitalizeFirstLetter } from '#utils/formatText';
 
 export function ConfirmationModal(props: {
@@ -17,7 +17,7 @@ export function ConfirmationModal(props: {
   onClose: (boolean) => any;
 }) {
   const { open, onClose, title, content } = props;
-  const { t } = useTranslation('translation'); // translation module
+  const { t } = useTranslation(); // translation module
 
   return (
     <Dialog
