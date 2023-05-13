@@ -38,7 +38,6 @@ import {
   useTheme,
 } from '@mui/material';
 import axios from 'axios';
-import i18next from 'i18next';
 
 import { useTranslation } from '#i18n/useTranslation';
 
@@ -122,7 +121,7 @@ function NavBarTop(props: {
     setOpenS(false);
   };
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
   const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
@@ -414,18 +413,18 @@ function NavBarTop(props: {
             <MenuItem
               value="fr-FR"
               onClick={() => {
-                i18next.changeLanguage('fr-FR');
+                i18n.changeLanguage('fr-FR');
               }}
-              selected={i18next.language === 'fr-FR'}
+              selected={i18n.language === 'fr-FR'}
             >
               Français
             </MenuItem>
             <MenuItem
               value="en-GB"
               onClick={() => {
-                i18next.changeLanguage('en-GB');
+                i18n.changeLanguage('en-GB');
               }}
-              selected={i18next.language === 'en-GB'}
+              selected={i18n.language === 'en-GB'}
             >
               English
             </MenuItem>
