@@ -17,7 +17,7 @@ export function EventPopover(props: {
   onClose: () => void;
 }) {
   const { anchorRef, open, onClose, startRegistration, maxParticipant } = props;
-  const { t, formatDate } = useTranslation();
+  const { t, formatDate, formatTime } = useTranslation();
   return (
     <Popover
       id="id"
@@ -48,7 +48,7 @@ export function EventPopover(props: {
           />
           <Chip
             avatar={<ClockIcon />}
-            label={formatDate(new Date(startRegistration), {
+            label={formatTime(new Date(startRegistration), {
               hour: '2-digit',
               minute: '2-digit',
             })}

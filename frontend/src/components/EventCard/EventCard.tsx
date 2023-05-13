@@ -82,7 +82,7 @@ function EventCard(props: {
   } = event;
   const [participating, setParticipating] = useState(isParticipating);
 
-  const { formatDate } = useTranslation();
+  const { formatDate, formatTime } = useTranslation();
 
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
   if (formUrl) variant = 'form';
@@ -96,7 +96,7 @@ function EventCard(props: {
     month: 'long',
     day: 'numeric',
   });
-  const hourText = formatDate(dateValue, { timeStyle: 'short' });
+  const hourText = formatTime(dateValue, { timeStyle: 'short' });
   const iconSize = '3.75rem';
   const groupIcon =
     typeof event.group.icon === 'undefined' ? (
