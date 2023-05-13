@@ -5,8 +5,8 @@ import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 
 import App from './App';
+import './i18n/config';
 import './index.scss';
-import './translations/config';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';

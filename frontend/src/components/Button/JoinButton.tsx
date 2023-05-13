@@ -23,10 +23,10 @@ import {
   useTheme,
 } from '@mui/material';
 
-import i18n from '../../translations/config';
+import { register, unregister } from '../../api/event';
+import i18n from '../../i18n/config';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import { EventPopover, TextPopover } from './InformationPopover';
-import { register, unregister } from '../../api/event';
 
 interface JoinButtonProps {
   variant?: 'shotgun' | 'normal' | 'form';
