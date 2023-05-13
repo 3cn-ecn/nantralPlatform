@@ -18,6 +18,7 @@
     "paths": {
       "#api/*": ["api/*"],
       "#components/*": ["components/*"],
+      "#i18n/*": ["i18n/*"],
       "#pages/*": ["pages/*"],
       "#types/*": ["types/*"],
       "#utils/*": ["utils/*"]
