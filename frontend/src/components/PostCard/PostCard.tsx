@@ -14,7 +14,6 @@ import {
 
 import { useTranslation } from '#i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
-import { timeFromNow } from '#utils/date';
 
 import Avatar from '../Avatar/Avatar';
 import { PostModal } from '../Modal/PostModal';
@@ -114,7 +113,7 @@ export function PostCard(props: {
   const { post, onDelete, onUpdate } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [postValue, setPostValue] = React.useState(post);
-  const { t } = useTranslation();
+  const { t, formatDuration } = useTranslation();
 
   React.useEffect(() => {
     setPostValue(post);
@@ -166,8 +165,10 @@ export function PostCard(props: {
               <div style={{ fontStyle: 'italic', marginBottom: 5 }}>
                 {postValue.createdAt.toDateString() ===
                 postValue.updatedAt.toDateString()
-                  ? timeFromNow(postValue.createdAt)
-                  : `${t('post.updated')} ${timeFromNow(postValue.updatedAt)}`}
+                  ? formatDuration(postValue.createdAt)
+                  : `${t('post.updated')} ${formatDuration(
+                      postValue.updatedAt
+                    )}`}
               </div>
             </div>
             <div id="post-club">

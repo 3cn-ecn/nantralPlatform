@@ -14,7 +14,6 @@ import IconButton from '@mui/material/IconButton/IconButton';
 
 import { useTranslation } from '#i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
-import { timeFromNow } from '#utils/date';
 
 import Avatar from '../Avatar/Avatar';
 import { FormPost } from '../FormPost/FormPost';
@@ -31,7 +30,7 @@ export function PostModal(props: {
   const theme = useTheme();
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
-  const { t } = useTranslation();
+  const { t, formatDuration } = useTranslation();
   return (
     <>
       <Dialog
@@ -101,7 +100,7 @@ export function PostModal(props: {
           >
             <PostBadges pinned={post?.pinned} publicity={post?.publicity} />
             <Typography variant="caption" textAlign="right" fontStyle="italic">
-              {`${t('post.published')} ${timeFromNow(post?.createdAt)}`}
+              {`${t('post.published')} ${formatDuration(post?.createdAt)}`}
             </Typography>
             {post?.createdAt.toDateString() !==
               post?.updatedAt.toDateString() && (
@@ -118,7 +117,7 @@ export function PostModal(props: {
                   textAlign="right"
                   fontStyle="italic"
                 >
-                  {`${t('post.updated')} ${timeFromNow(post?.updatedAt)}`}
+                  {`${t('post.updated')} ${formatDuration(post?.updatedAt)}`}
                 </Typography>
               </>
             )}
