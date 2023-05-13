@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Grid } from '@mui/material';
-import i18n from 'i18next';
 
+import { useTranslation } from '#i18n/useTranslation';
 import { EventProps } from '#types/Event';
 
 import './Day.scss';
@@ -75,6 +75,8 @@ export function Day(props: {
   chains: Array<Array<number>>;
 }): JSX.Element {
   const { day, events, chains } = props;
+  const { formatDate } = useTranslation();
+
   const hourBlockChain = [];
   for (let hour = 0; hour < 24; hour++) {
     hourBlockChain.push(<TimeBlock key={hour} startTime={hour}></TimeBlock>);
@@ -116,32 +118,15 @@ export function Day(props: {
   });
 
   return (
-    <div
-      id={`${day.toLocaleDateString('en-EN', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-      })}`}
-      className="blockDisplay"
-    >
-      <div className="dayData">
-        {day.toLocaleDateString(i18n.language, { weekday: 'narrow' })}
-      </div>
+    <div id={day.toISOString()} className="blockDisplay">
+      <div className="dayData">{formatDate(day, { weekday: 'narrow' })}</div>
       <div className="dayData">{day.getDate()}</div>
       {hourBlockChain}
       {chains.map((chain) => (
         <Grid
           container
-          key={`Chain${chain}Day${day.toLocaleDateString('en-EN', {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-          })}`}
-          data-testid={`GlobalDayContainer${day.toLocaleDateString('en-EN', {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-          })}TestId`}
+          key={`Chain${chain}Day${day.toISOString()}`}
+          data-testid={`GlobalDayContainer${day.toISOString()}TestId`}
         >
           {chain.map((eventKey) => {
             if (eventKey >= 0) {

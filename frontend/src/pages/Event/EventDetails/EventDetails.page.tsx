@@ -49,7 +49,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 export default function EventDetailsPage() {
-  const { i18n, t } = useTranslation();
+  const { t, formatDate, formatTime } = useTranslation();
   const { id } = useParams();
   const [participating, setParticipating] = useState(false);
   const [openCopyNotif, setOpenCopyNotif] = useState(false);
@@ -108,21 +108,11 @@ export default function EventDetailsPage() {
     month: 'long',
     day: 'numeric',
   };
-  const startDateText = startDateValue.toLocaleDateString(
-    i18n.language,
-    dateFormat
-  );
-  const beginHourText = startDateValue.toLocaleTimeString(i18n.language, {
-    timeStyle: 'short',
-  });
+  const startDateText = formatDate(startDateValue, dateFormat);
+  const beginHourText = formatTime(startDateValue, { timeStyle: 'short' });
 
-  const endDateText = endDateValue.toLocaleDateString(
-    i18n.language,
-    dateFormat
-  );
-  const endHourText = endDateValue.toLocaleTimeString(i18n.language, {
-    timeStyle: 'short',
-  });
+  const endDateText = formatDate(endDateValue, dateFormat);
+  const endHourText = formatTime(endDateValue, { timeStyle: 'short' });
 
   const registrationStarted =
     !event.startRegistration ||
@@ -206,16 +196,10 @@ export default function EventDetailsPage() {
 
   if (event.endRegistration !== null) {
     const endRegistrationValue = new Date(event.endRegistration);
-    const endRegistrationText = endRegistrationValue.toLocaleDateString(
-      i18n.language,
-      dateFormat
-    );
-    const endRegistrationText2 = endRegistrationValue.toLocaleTimeString(
-      i18n.language,
-      {
-        timeStyle: 'short',
-      }
-    );
+    const endRegistrationText = formatDate(endRegistrationValue, dateFormat);
+    const endRegistrationText2 = formatTime(endRegistrationValue, {
+      timeStyle: 'short',
+    });
 
     endRegistrationSection =
       !registrationEnded && registrationStarted ? (
@@ -228,14 +212,10 @@ export default function EventDetailsPage() {
 
   const beginInsciptionAlert = !registrationStarted && (
     <Alert variant="outlined" severity="info" sx={{ marginTop: '1rem' }}>
-      {`${t(
-        'event.inscriptionsBeginAt'
-      )} ${event.startRegistration.toLocaleDateString(
-        i18n.language,
+      {`${t('event.inscriptionsBeginAt')} ${formatDate(
+        event.startRegistration,
         dateFormat
-      )} - ${event.startRegistration.toLocaleTimeString(i18n.language, {
-        timeStyle: 'short',
-      })}`}
+      )} - ${formatTime(event.startRegistration, { timeStyle: 'short' })}`}
     </Alert>
   );
 

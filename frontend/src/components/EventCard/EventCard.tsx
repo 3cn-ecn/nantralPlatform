@@ -82,7 +82,7 @@ function EventCard(props: {
   } = event;
   const [participating, setParticipating] = useState(isParticipating);
 
-  const { i18n } = useTranslation();
+  const { formatDate } = useTranslation();
 
   let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
   if (formUrl) variant = 'form';
@@ -91,15 +91,12 @@ function EventCard(props: {
 
   // Conversion of the date to a human redeable format
   const dateValue = new Date(startDate);
-  const dateFormat: Intl.DateTimeFormatOptions = {
+  const dateText = formatDate(dateValue, {
     weekday: 'long',
     month: 'long',
     day: 'numeric',
-  };
-  const dateText = dateValue.toLocaleDateString(i18n.language, dateFormat);
-  const hourText = dateValue.toLocaleTimeString(i18n.language, {
-    timeStyle: 'short',
   });
+  const hourText = formatDate(dateValue, { timeStyle: 'short' });
   const iconSize = '3.75rem';
   const groupIcon =
     typeof event.group.icon === 'undefined' ? (

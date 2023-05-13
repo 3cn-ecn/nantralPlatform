@@ -25,7 +25,6 @@ import {
 import { useTranslation } from '#i18n/useTranslation';
 
 import { register, unregister } from '../../api/event';
-import i18n from '../../i18n/config';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import { EventPopover, TextPopover } from './InformationPopover';
 
@@ -80,7 +79,7 @@ function JoinButton({
     setLoaded(true);
   }, [participating]);
 
-  const { t } = useTranslation();
+  const { t, formatDate } = useTranslation();
   const registrationFinished: boolean =
     endRegistration !== null &&
     Date.now() > new Date(endRegistration).getTime();
@@ -197,7 +196,7 @@ function JoinButton({
     if (registrationNotStarted)
       return (
         <Typography sx={{ color: '#fff' }}>
-          {new Date(startRegistration).toLocaleDateString(i18n.language, {
+          {formatDate(new Date(startRegistration), {
             weekday: 'short',
             day: 'numeric',
             month: 'short',

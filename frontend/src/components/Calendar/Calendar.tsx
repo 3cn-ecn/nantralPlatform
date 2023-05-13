@@ -912,18 +912,10 @@ function Calendar(props: {
                   item
                   xs={9.5 / displaySize.length}
                   sm={10.5 / displaySize.length}
-                  key={`dayGrid${day.toLocaleDateString('en-EN', {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                  })}`}
+                  key={`dayGrid${day.toISOString()}`}
                 >
                   <Day
-                    key={`day${day.toLocaleDateString('en-EN', {
-                      weekday: 'long',
-                      month: 'long',
-                      day: 'numeric',
-                    })}`}
+                    key={`day${day.toISOString()}`}
                     day={day}
                     events={newSortEvents[number]}
                     chains={eventsBlockedChain[number]}

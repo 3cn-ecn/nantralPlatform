@@ -17,7 +17,7 @@ export function EventPopover(props: {
   onClose: () => void;
 }) {
   const { anchorRef, open, onClose, startRegistration, maxParticipant } = props;
-  const { t, i18n } = useTranslation();
+  const { t, formatDate } = useTranslation();
   return (
     <Popover
       id="id"
@@ -40,24 +40,18 @@ export function EventPopover(props: {
         >
           <Chip
             avatar={<DateRange />}
-            label={`${new Date(startRegistration).toLocaleDateString(
-              i18n.language,
-              {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
-              }
-            )}`}
+            label={formatDate(new Date(startRegistration), {
+              weekday: 'long',
+              month: 'long',
+              day: 'numeric',
+            })}
           />
           <Chip
             avatar={<ClockIcon />}
-            label={`${new Date(startRegistration).toLocaleTimeString(
-              i18n.language,
-              {
-                hour: '2-digit',
-                minute: '2-digit',
-              }
-            )}`}
+            label={formatDate(new Date(startRegistration), {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
           />
           {maxParticipant && (
             <Chip avatar={<PeopleIcon />} label={maxParticipant} />

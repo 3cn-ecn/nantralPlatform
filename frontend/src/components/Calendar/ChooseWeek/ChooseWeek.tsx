@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Grid } from '@mui/material';
-import i18n from 'i18next';
 
 import { useTranslation } from '#i18n/useTranslation';
 
@@ -32,7 +31,7 @@ export function ChooseWeek(props: {
 }): JSX.Element {
   const { step, updateDisplay, startDate, endDate, updateBegin, updateEnd } =
     props;
-  const { t } = useTranslation();
+  const { t, formatDate } = useTranslation();
   const sunday = new Date(
     endDate.getFullYear(),
     endDate.getMonth(),
@@ -42,12 +41,12 @@ export function ChooseWeek(props: {
   return (
     <>
       <div id="areaOfTimeDisplay">
-        {`${startDate.toLocaleDateString(i18n.language, {
+        {`${formatDate(startDate, {
           weekday: 'long',
           month: 'long',
           day: 'numeric',
         })} ${t('calendar.to')} `}
-        {sunday.toLocaleDateString(i18n.language, {
+        {formatDate(sunday, {
           weekday: 'long',
           month: 'long',
           day: 'numeric',

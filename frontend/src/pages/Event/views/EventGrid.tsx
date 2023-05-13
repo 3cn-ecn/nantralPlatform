@@ -55,7 +55,7 @@ export default function EventGrid(props: {
     filter,
     fetchingNextPage,
   } = props;
-  const { t, i18n } = useTranslation();
+  const { t, formatDate } = useTranslation();
   const [orderOpen, setOrderOpen] = React.useState<boolean>(false);
   const anchorEl = React.useRef();
   const handleNextPage = (
@@ -160,13 +160,14 @@ export default function EventGrid(props: {
           <Box columnGap={1} display="flex" overflow="scroll">
             {filter.dateBegin && (
               <Chip
-                label={`${t('filterbar.from')} : ${new Date(
-                  filter.dateBegin
-                ).toLocaleDateString(i18n.language, {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'short',
-                })}`}
+                label={`${t('filterbar.from')} : ${formatDate(
+                  new Date(filter.dateBegin),
+                  {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'short',
+                  }
+                )}`}
                 variant="outlined"
                 onDelete={() =>
                   onChangeFilter({
@@ -178,13 +179,14 @@ export default function EventGrid(props: {
             )}
             {filter.dateEnd && (
               <Chip
-                label={`${t('filterbar.to')} : ${new Date(
-                  filter.dateEnd
-                ).toLocaleDateString(i18n.language, {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'short',
-                })}`}
+                label={`${t('filterbar.to')} : ${formatDate(
+                  new Date(filter.dateEnd),
+                  {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'short',
+                  }
+                )}`}
                 variant="outlined"
                 onDelete={() =>
                   onChangeFilter({
