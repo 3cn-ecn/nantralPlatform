@@ -75,7 +75,6 @@
   },
   "form": {
     "PostTitle": "Titre de l'annonce",
-    "startDatetime": "Date et Heure de début",
     "cancel": "Annuler",
     "chooseFile": "Choisir un fichier",
     "createAPost": "Créer un post",
@@ -103,9 +102,11 @@
     "public": "Public",
     "publicationDate": "Date de publication",
     "publicity": "Visibilité",
-    "saving": "Sauvegarde..."
+    "saving": "Sauvegarde...",
+    "startDatetime": "Date et Heure de début"
   },
   "home": {
+    "all": "Tous",
     "announcement": "Annonces",
     "highlighted": "À la une",
     "myClubs": "Mes groupes",

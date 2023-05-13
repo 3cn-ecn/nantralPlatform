@@ -58,7 +58,7 @@ function getTheme(mode: PaletteMode) {
       },
     },
     shape: {
-      borderRadius: 24,
+      borderRadius: 15,
     },
     overrides: {
       MuiButton: {

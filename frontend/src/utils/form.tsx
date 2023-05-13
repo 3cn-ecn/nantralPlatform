@@ -23,12 +23,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import dayjs, { Dayjs } from 'dayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import axios from 'axios';
-import { Dayjs } from 'dayjs';
 import 'dayjs/locale/fr';
 
 import Avatar from '#components/Avatar/Avatar';
@@ -123,26 +123,26 @@ function FormGroup(props: {
                 </FormControl>
               </Box>
             );
-          case 'password':
-            return (
-              <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
-                <FormControl fullWidth>
-                  <InputLabel id={`${field.name}-password`}>
-                    {field.label}
-                  </InputLabel>
-                  <Input
-                    key={field.name}
-                    id={`${field.name}-password`}
-                    name={field.name}
-                    value={values[field.name]}
-                    onChange={(e) => handleChange(field.name, e.target.value)}
-                    margin="dense"
-                    type="password"
-                    disabled={field.disabled}
-                  />
-                </FormControl>
-              </Box>
-            );
+          // case 'password':
+          //   return (
+          //     <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
+          //       <FormControl fullWidth>
+          //         <InputLabel id={`${field.name}-password`}>
+          //           {field.label}
+          //         </InputLabel>
+          //         <Input
+          //           key={field.name}
+          //           id={`${field.name}-password`}
+          //           name={field.name}
+          //           value={values[field.name]}
+          //           onChange={(e) => handleChange(field.name, e.target.value)}
+          //           margin="dense"
+          //           type="password"
+          //           disabled={field.disabled}
+          //         />
+          //       </FormControl>
+          //     </Box>
+          //   );
           case 'link':
             return (
               <Box sx={{ minWidth: 120, mt: 2 }} key={field.name}>
@@ -308,7 +308,7 @@ function FormGroup(props: {
               >
                 <DatePicker
                   label={field.label}
-                  value={values[field.name] && new Date(values[field.name])}
+                  value={values[field.name] && dayjs(values[field.name])}
                   onChange={(val) => {
                     if (val && val.toString() !== 'Invalid Date') {
                       handleChange(
@@ -323,19 +323,19 @@ function FormGroup(props: {
                       handleChange(field.name, val);
                     }
                   }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      id={`${field.name}-input`}
-                      name={field.name}
-                      fullWidth={!noFullWidth}
-                      required={field.required}
-                      helperText={error || field.helpText}
-                      error={!!error}
-                      margin="normal"
-                      value={undefined}
-                    />
-                  )}
+                  // renderInput={(params) => (
+                  //   <TextField
+                  //     {...params}
+                  //     id={`${field.name}-input`}
+                  //     name={field.name}
+                  //     fullWidth={!noFullWidth}
+                  //     required={field.required}
+                  //     helperText={error || field.helpText}
+                  //     error={!!error}
+                  //     margin="normal"
+                  //     value={undefined}
+                  //   />
+                  // )}
                 />
               </LocalizationProvider>
             );
@@ -426,25 +426,24 @@ function FormGroup(props: {
               >
                 <DateTimePicker
                   label={field.label}
-                  value={values[field.name] && new Date(values[field.name])}
+                  value={values[field.name] && dayjs(values[field.name])}
                   disablePast={field.disablePast}
                   onChange={(newValue: Dayjs | null) => {
                     handleChange(field.name, newValue);
                   }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      id={`${field.name}-input`}
-                      name={field.name}
-                      fullWidth={!noFullWidth}
-                      required={field.required}
-                      helperText={error || field.helpText}
-                      error={!!error}
-                      margin="normal"
-                      value={undefined}
-                      disabled={field.disabled}
-                    />
-                  )}
+                  // text={() => (
+                  //   <TextField
+                  //     id={`${field.name}-input`}
+                  //     name={field.name}
+                  //     fullWidth={!noFullWidth}
+                  //     required={field.required}
+                  //     helperText={error || field.helpText}
+                  //     error={!!error}
+                  //     margin="normal"
+                  //     value={undefined}
+                  //     disabled={field.disabled}
+                  //   />
+                  // )}
                 />
               </LocalizationProvider>
             );

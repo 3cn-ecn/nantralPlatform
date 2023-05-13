@@ -10,6 +10,7 @@ import {
   IconButton,
   Skeleton,
   Tooltip,
+  Typography,
 } from '@mui/material';
 
 import { FormPostProps, PostProps } from '#types/Post';
@@ -155,7 +156,13 @@ export function PostCard(props: {
                 height: '100%',
               }}
             >
-              <h2 className="post-title">{postValue.title}</h2>
+              <Typography
+                variant="h6"
+                sx={{ lineHeight: 1 }}
+                className="post-title"
+              >
+                {postValue.title}
+              </Typography>
               <div style={{ fontStyle: 'italic', marginBottom: 5 }}>
                 {postValue.createdAt.toDateString() ===
                 postValue.updatedAt.toDateString()

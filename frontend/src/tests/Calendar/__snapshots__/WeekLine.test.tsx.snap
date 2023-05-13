@@ -3,31 +3,224 @@
 exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
 {
   "asFragment": [Function],
-  "baseElement": <body>
+  "baseElement": .emotion-0 {
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.emotion-1 {
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-basis: 14.285714%;
+  -ms-flex-preferred-size: 14.285714%;
+  flex-basis: 14.285714%;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  max-width: 14.285714%;
+}
+
+@media (min-width:600px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:900px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1200px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1536px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+.emotion-2 {
+  height: 10.8rem;
+  border: 1px solid gray;
+}
+
+.emotion-5 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  font-family: Heebo,sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  text-transform: uppercase;
+  min-width: 64px;
+  padding: 6px 16px;
+  border-radius: 15px;
+  -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: #fff;
+  background-color: #dc3545;
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+  width: 100%;
+}
+
+.emotion-5::-moz-focus-inner {
+  border-style: none;
+}
+
+.emotion-5.Mui-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+@media print {
+  .emotion-5 {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+}
+
+.emotion-5:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: rgb(154, 37, 48);
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+}
+
+@media (hover: none) {
+  .emotion-5:hover {
+    background-color: #dc3545;
+  }
+}
+
+.emotion-5:active {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+}
+
+.emotion-5.Mui-focusVisible {
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+
+.emotion-5.Mui-disabled {
+  color: rgba(0, 0, 0, 0.26);
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.emotion-6 {
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+}
+
+<body>
     <div>
       <div
-        class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-container emotion-0"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-1vxav2g"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             10
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-1vxav2g"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             11
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
               data-testid="The slugDateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -43,31 +236,31 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
                 </div>
               </div>
               <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiTouchRipple-root emotion-6"
               />
             </button>
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-1vxav2g"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             12
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-1vxav2g"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             13
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
               data-testid="The slug1DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -83,11 +276,11 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
                 </div>
               </div>
               <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiTouchRipple-root emotion-6"
               />
             </button>
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
               data-testid="The slug2DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -103,11 +296,11 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
                 </div>
               </div>
               <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiTouchRipple-root emotion-6"
               />
             </button>
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
               data-testid="The slug3DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -123,36 +316,36 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
                 </div>
               </div>
               <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiTouchRipple-root emotion-6"
               />
             </button>
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-1vxav2g"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             14
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-1vxav2g"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             15
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-1vxav2g"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             16
@@ -161,30 +354,223 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
       </div>
     </div>
   </body>,
-  "container": <div>
+  "container": .emotion-0 {
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.emotion-1 {
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-basis: 14.285714%;
+  -ms-flex-preferred-size: 14.285714%;
+  flex-basis: 14.285714%;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  max-width: 14.285714%;
+}
+
+@media (min-width:600px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:900px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1200px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1536px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+.emotion-2 {
+  height: 10.8rem;
+  border: 1px solid gray;
+}
+
+.emotion-5 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  font-family: Heebo,sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  text-transform: uppercase;
+  min-width: 64px;
+  padding: 6px 16px;
+  border-radius: 15px;
+  -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: #fff;
+  background-color: #dc3545;
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+  width: 100%;
+}
+
+.emotion-5::-moz-focus-inner {
+  border-style: none;
+}
+
+.emotion-5.Mui-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+@media print {
+  .emotion-5 {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+}
+
+.emotion-5:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: rgb(154, 37, 48);
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+}
+
+@media (hover: none) {
+  .emotion-5:hover {
+    background-color: #dc3545;
+  }
+}
+
+.emotion-5:active {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+}
+
+.emotion-5.Mui-focusVisible {
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+
+.emotion-5.Mui-disabled {
+  color: rgba(0, 0, 0, 0.26);
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.emotion-6 {
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+}
+
+<div>
     <div
-      class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container emotion-0"
     >
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-1vxav2g"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           10
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-1vxav2g"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           11
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
             data-testid="The slugDateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -200,31 +586,31 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
               </div>
             </div>
             <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiTouchRipple-root emotion-6"
             />
           </button>
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-1vxav2g"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           12
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-1vxav2g"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           13
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
             data-testid="The slug1DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -240,11 +626,11 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
               </div>
             </div>
             <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiTouchRipple-root emotion-6"
             />
           </button>
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
             data-testid="The slug2DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -260,11 +646,11 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
               </div>
             </div>
             <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiTouchRipple-root emotion-6"
             />
           </button>
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
             data-testid="The slug3DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -280,36 +666,36 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
               </div>
             </div>
             <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiTouchRipple-root emotion-6"
             />
           </button>
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-1vxav2g"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           14
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-1vxav2g"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           15
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-1vxav2g"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           16
@@ -374,31 +760,224 @@ exports[`<WeekLine /> should display a WeekLine with few events 1`] = `
 exports[`<WeekLine /> should display a WeekLine without end 1`] = `
 {
   "asFragment": [Function],
-  "baseElement": <body>
+  "baseElement": .emotion-0 {
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.emotion-1 {
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-basis: 14.285714%;
+  -ms-flex-preferred-size: 14.285714%;
+  flex-basis: 14.285714%;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  max-width: 14.285714%;
+}
+
+@media (min-width:600px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:900px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1200px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1536px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+.emotion-2 {
+  height: 4.800000000000001rem;
+  border: 1px solid gray;
+}
+
+.emotion-5 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  font-family: Heebo,sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  text-transform: uppercase;
+  min-width: 64px;
+  padding: 6px 16px;
+  border-radius: 15px;
+  -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: #fff;
+  background-color: #dc3545;
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+  width: 100%;
+}
+
+.emotion-5::-moz-focus-inner {
+  border-style: none;
+}
+
+.emotion-5.Mui-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+@media print {
+  .emotion-5 {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+}
+
+.emotion-5:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: rgb(154, 37, 48);
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+}
+
+@media (hover: none) {
+  .emotion-5:hover {
+    background-color: #dc3545;
+  }
+}
+
+.emotion-5:active {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+}
+
+.emotion-5.Mui-focusVisible {
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+
+.emotion-5.Mui-disabled {
+  color: rgba(0, 0, 0, 0.26);
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.emotion-6 {
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+}
+
+<body>
     <div>
       <div
-        class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-container emotion-0"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-qwy2ic"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             27
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-qwy2ic"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             28
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
               data-testid="The slug5DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -414,31 +993,31 @@ exports[`<WeekLine /> should display a WeekLine without end 1`] = `
                 </div>
               </div>
               <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiTouchRipple-root emotion-6"
               />
             </button>
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-qwy2ic"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             29
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-qwy2ic"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             30
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
               data-testid="The slug6DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -454,53 +1033,246 @@ exports[`<WeekLine /> should display a WeekLine without end 1`] = `
                 </div>
               </div>
               <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiTouchRipple-root emotion-6"
               />
             </button>
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div />
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div />
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div />
         </div>
       </div>
     </div>
   </body>,
-  "container": <div>
+  "container": .emotion-0 {
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.emotion-1 {
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-basis: 14.285714%;
+  -ms-flex-preferred-size: 14.285714%;
+  flex-basis: 14.285714%;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  max-width: 14.285714%;
+}
+
+@media (min-width:600px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:900px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1200px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1536px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+.emotion-2 {
+  height: 4.800000000000001rem;
+  border: 1px solid gray;
+}
+
+.emotion-5 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  font-family: Heebo,sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  text-transform: uppercase;
+  min-width: 64px;
+  padding: 6px 16px;
+  border-radius: 15px;
+  -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: #fff;
+  background-color: #dc3545;
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+  width: 100%;
+}
+
+.emotion-5::-moz-focus-inner {
+  border-style: none;
+}
+
+.emotion-5.Mui-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+@media print {
+  .emotion-5 {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+}
+
+.emotion-5:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: rgb(154, 37, 48);
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+}
+
+@media (hover: none) {
+  .emotion-5:hover {
+    background-color: #dc3545;
+  }
+}
+
+.emotion-5:active {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+}
+
+.emotion-5.Mui-focusVisible {
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+
+.emotion-5.Mui-disabled {
+  color: rgba(0, 0, 0, 0.26);
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.emotion-6 {
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+}
+
+<div>
     <div
-      class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container emotion-0"
     >
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-qwy2ic"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           27
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-qwy2ic"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           28
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
             data-testid="The slug5DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -516,31 +1288,31 @@ exports[`<WeekLine /> should display a WeekLine without end 1`] = `
               </div>
             </div>
             <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiTouchRipple-root emotion-6"
             />
           </button>
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-qwy2ic"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           29
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-qwy2ic"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           30
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-5"
             data-testid="The slug6DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -556,23 +1328,23 @@ exports[`<WeekLine /> should display a WeekLine without end 1`] = `
               </div>
             </div>
             <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiTouchRipple-root emotion-6"
             />
           </button>
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div />
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div />
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div />
       </div>
@@ -635,51 +1407,244 @@ exports[`<WeekLine /> should display a WeekLine without end 1`] = `
 exports[`<WeekLine /> should display a WeekLine withoutbegin 1`] = `
 {
   "asFragment": [Function],
-  "baseElement": <body>
+  "baseElement": .emotion-0 {
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.emotion-1 {
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-basis: 14.285714%;
+  -ms-flex-preferred-size: 14.285714%;
+  flex-basis: 14.285714%;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  max-width: 14.285714%;
+}
+
+@media (min-width:600px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:900px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1200px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1536px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+.emotion-6 {
+  height: 4.800000000000001rem;
+  border: 1px solid gray;
+}
+
+.emotion-9 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  font-family: Heebo,sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  text-transform: uppercase;
+  min-width: 64px;
+  padding: 6px 16px;
+  border-radius: 15px;
+  -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: #fff;
+  background-color: #dc3545;
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+  width: 100%;
+}
+
+.emotion-9::-moz-focus-inner {
+  border-style: none;
+}
+
+.emotion-9.Mui-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+@media print {
+  .emotion-9 {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+}
+
+.emotion-9:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: rgb(154, 37, 48);
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+}
+
+@media (hover: none) {
+  .emotion-9:hover {
+    background-color: #dc3545;
+  }
+}
+
+.emotion-9:active {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+}
+
+.emotion-9.Mui-focusVisible {
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+
+.emotion-9.Mui-disabled {
+  color: rgba(0, 0, 0, 0.26);
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.emotion-10 {
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+}
+
+<body>
     <div>
       <div
-        class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-container emotion-0"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div />
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div />
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div />
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div />
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-qwy2ic"
+            class="MuiBox-root emotion-6"
             data-testid="DateBoxTestId"
           >
             1
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-qwy2ic"
+            class="MuiBox-root emotion-6"
             data-testid="DateBoxTestId"
           >
             2
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-9"
               data-testid="The slug4DateBoxButtonTestId"
               style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
               tabindex="0"
@@ -695,16 +1660,16 @@ exports[`<WeekLine /> should display a WeekLine withoutbegin 1`] = `
                 </div>
               </div>
               <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                class="MuiTouchRipple-root emotion-10"
               />
             </button>
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-qwy2ic"
+            class="MuiBox-root emotion-6"
             data-testid="DateBoxTestId"
           >
             3
@@ -713,50 +1678,243 @@ exports[`<WeekLine /> should display a WeekLine withoutbegin 1`] = `
       </div>
     </div>
   </body>,
-  "container": <div>
+  "container": .emotion-0 {
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.emotion-1 {
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-basis: 14.285714%;
+  -ms-flex-preferred-size: 14.285714%;
+  flex-basis: 14.285714%;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  max-width: 14.285714%;
+}
+
+@media (min-width:600px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:900px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1200px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1536px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+.emotion-6 {
+  height: 4.800000000000001rem;
+  border: 1px solid gray;
+}
+
+.emotion-9 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  vertical-align: middle;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  font-family: Heebo,sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.75;
+  text-transform: uppercase;
+  min-width: 64px;
+  padding: 6px 16px;
+  border-radius: 15px;
+  -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  color: #fff;
+  background-color: #dc3545;
+  box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);
+  width: 100%;
+}
+
+.emotion-9::-moz-focus-inner {
+  border-style: none;
+}
+
+.emotion-9.Mui-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+@media print {
+  .emotion-9 {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+}
+
+.emotion-9:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: rgb(154, 37, 48);
+  box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+}
+
+@media (hover: none) {
+  .emotion-9:hover {
+    background-color: #dc3545;
+  }
+}
+
+.emotion-9:active {
+  box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);
+}
+
+.emotion-9.Mui-focusVisible {
+  box-shadow: 0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);
+}
+
+.emotion-9.Mui-disabled {
+  color: rgba(0, 0, 0, 0.26);
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+.emotion-10 {
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: inherit;
+}
+
+<div>
     <div
-      class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container emotion-0"
     >
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div />
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div />
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div />
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div />
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-qwy2ic"
+          class="MuiBox-root emotion-6"
           data-testid="DateBoxTestId"
         >
           1
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-qwy2ic"
+          class="MuiBox-root emotion-6"
           data-testid="DateBoxTestId"
         >
           2
           <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth css-17tblrw-MuiButtonBase-root-MuiButton-root"
+            class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-fullWidth emotion-9"
             data-testid="The slug4DateBoxButtonTestId"
             style="min-width: 1px; height: 3rem; padding: 0px; background: url(null); background-size: cover; background-position: center; background-repeat: no-repeat; text-transform: none;"
             tabindex="0"
@@ -772,16 +1930,16 @@ exports[`<WeekLine /> should display a WeekLine withoutbegin 1`] = `
               </div>
             </div>
             <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              class="MuiTouchRipple-root emotion-10"
             />
           </button>
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-qwy2ic"
+          class="MuiBox-root emotion-6"
           data-testid="DateBoxTestId"
         >
           3
@@ -846,76 +2004,165 @@ exports[`<WeekLine /> should display a WeekLine withoutbegin 1`] = `
 exports[`<WeekLine /> should display an empty WeekLine 1`] = `
 {
   "asFragment": [Function],
-  "baseElement": <body>
+  "baseElement": .emotion-0 {
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.emotion-1 {
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-basis: 14.285714%;
+  -ms-flex-preferred-size: 14.285714%;
+  flex-basis: 14.285714%;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  max-width: 14.285714%;
+}
+
+@media (min-width:600px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:900px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1200px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1536px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+.emotion-2 {
+  height: 1.7999999999999998rem;
+  border: 1px solid gray;
+}
+
+<body>
     <div>
       <div
-        class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-container emotion-0"
       >
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-v6msvb"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             10
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-v6msvb"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             11
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-v6msvb"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             12
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-v6msvb"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             13
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-v6msvb"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             14
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-v6msvb"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             15
           </div>
         </div>
         <div
-          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
         >
           <div
-            class="MuiBox-root css-v6msvb"
+            class="MuiBox-root emotion-2"
             data-testid="DateBoxTestId"
           >
             16
@@ -924,75 +2171,164 @@ exports[`<WeekLine /> should display an empty WeekLine 1`] = `
       </div>
     </div>
   </body>,
-  "container": <div>
+  "container": .emotion-0 {
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.emotion-1 {
+  box-sizing: border-box;
+  margin: 0;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-basis: 14.285714%;
+  -ms-flex-preferred-size: 14.285714%;
+  flex-basis: 14.285714%;
+  -webkit-box-flex: 0;
+  -webkit-flex-grow: 0;
+  -ms-flex-positive: 0;
+  flex-grow: 0;
+  max-width: 14.285714%;
+}
+
+@media (min-width:600px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:900px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1200px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+@media (min-width:1536px) {
+  .emotion-1 {
+    -webkit-flex-basis: 14.285714%;
+    -ms-flex-preferred-size: 14.285714%;
+    flex-basis: 14.285714%;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    max-width: 14.285714%;
+  }
+}
+
+.emotion-2 {
+  height: 1.7999999999999998rem;
+  border: 1px solid gray;
+}
+
+<div>
     <div
-      class="MuiGrid-root MuiGrid-container css-11lq3yg-MuiGrid-root"
+      class="MuiGrid-root MuiGrid-container emotion-0"
     >
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-v6msvb"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           10
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-v6msvb"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           11
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-v6msvb"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           12
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-v6msvb"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           13
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-v6msvb"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           14
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-v6msvb"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           15
         </div>
       </div>
       <div
-        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 css-1umt6p6-MuiGrid-root"
+        class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-1.7142857142857142 emotion-1"
       >
         <div
-          class="MuiBox-root css-v6msvb"
+          class="MuiBox-root emotion-2"
           data-testid="DateBoxTestId"
         >
           16

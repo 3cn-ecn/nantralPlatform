@@ -22,11 +22,11 @@ import {
   rgbToHex,
   useTheme,
 } from '@mui/material';
-import axios from 'axios';
-import i18n from 'i18next';
 
+import i18n from '../../translations/config';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import { EventPopover, TextPopover } from './InformationPopover';
+import { register, unregister } from '../../api/event';
 
 interface JoinButtonProps {
   variant?: 'shotgun' | 'normal' | 'form';
@@ -89,10 +89,9 @@ function JoinButton({
     startRegistration !== null &&
     Date.now() < new Date(startRegistration).getTime();
   const participate = async () => {
-    axios
-      .post(`/api/event/${eventId}/participate`)
+    register(eventId)
       .then((res) => {
-        if (res.data.success) {
+        if (res.success) {
           setSelected(true);
           setParticipating(true);
         } else {
@@ -104,10 +103,9 @@ function JoinButton({
   };
 
   const quit = async () => {
-    axios
-      .delete(`/api/event/${eventId}/participate`)
+    unregister(eventId)
       .then((res) => {
-        if (res.data.success) {
+        if (res.success) {
           setSelected(false);
           setParticipating(false);
         } else {

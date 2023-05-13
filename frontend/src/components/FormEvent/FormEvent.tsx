@@ -26,7 +26,6 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import axios from 'axios';
 
 import { createEvent, deleteEvent, editEvent } from '#api/event';
 import { SimpleGroup } from '#components/Group/interfaces';
@@ -38,7 +37,7 @@ import FormGroup from '#utils/form';
 
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
-
+import { getGroups } from '#api/group';
 /**
  * Fonction permettant de générer le formulaire de création d'un événement.
  * Elle ne vérifie pas que l'utilisateur soit bien admin du groupe.
@@ -91,7 +90,6 @@ function getFormFields(
       kind: 'text',
       name: 'location',
       label: t('form.place'),
-      required: true,
     },
     {
       kind: 'richtext',
@@ -256,12 +254,7 @@ function EditEventModal(props: {
 
   const { data: adminGroup } = useQuery<SimpleGroupProps[], string>({
     queryKey: 'admin-group',
-    queryFn: () =>
-      axios
-        .get('/api/group/group/', {
-          params: { simple: true, limit: 20, admin: true },
-        })
-        .then((res) => res.data.results),
+    queryFn: () => getGroups({ admin: true, limit: 20, simple: true }),
   });
 
   const theme = useTheme();

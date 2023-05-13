@@ -147,8 +147,6 @@ export default function EventDetailsPage() {
       <Chip
         icon={<CalendarTodayIcon />}
         sx={{
-          height: 'auto',
-          padding: 1,
           '& .MuiChip-label': {
             display: 'block',
             whiteSpace: 'normal',
@@ -159,8 +157,6 @@ export default function EventDetailsPage() {
       <Chip
         icon={<AccessTimeIcon />}
         sx={{
-          height: 'auto',
-          padding: 1,
           '& .MuiChip-label': {
             display: 'block',
             whiteSpace: 'normal',
@@ -183,7 +179,6 @@ export default function EventDetailsPage() {
         <Chip
           icon={<CalendarTodayIcon />}
           sx={{
-            height: 'auto',
             padding: 1,
             '& .MuiChip-label': {
               display: 'block',

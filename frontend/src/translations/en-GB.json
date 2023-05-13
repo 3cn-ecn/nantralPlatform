@@ -74,7 +74,6 @@
   },
   "form": {
     "PostTitle": "Post title",
-    "startDatetime": "Start date and time",
     "cancel": "Cancel",
     "chooseFile": "Choose file",
     "createAPost": "Create a post",
@@ -102,9 +101,11 @@
     "public": "Public",
     "publicationDate": "Publication date",
     "publicity": "Publicity",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "startDatetime": "Start date and time"
   },
   "home": {
+    "all": "All",
     "announcement": "Announcement",
     "highlighted": "Highlighted",
     "myClubs": "My groups",

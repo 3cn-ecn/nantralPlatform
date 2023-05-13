@@ -14,7 +14,6 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import axios from 'axios';
 
 import { createPost, deletePost, updatePost } from '#api/post';
 import { FieldType } from '#types/GenericTypes';
@@ -23,6 +22,7 @@ import { FormPostProps, PostProps } from '#types/Post';
 import FormGroup from '#utils/form';
 
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
+import { getGroups } from '#api/group';
 
 export function FormPost(props: {
   /** The mode to use this form */
@@ -67,12 +67,7 @@ export function FormPost(props: {
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const { data: adminGroup } = useQuery<SimpleGroupProps[], string>({
     queryKey: 'admin-group',
-    queryFn: () =>
-      axios
-        .get('/api/group/group/', {
-          params: { simple: true, limit: 20, admin: true },
-        })
-        .then((res) => res.data.results),
+    queryFn: () => getGroups({ simple: true, limit: 20, admin: true }),
   });
   const defaultFields: FieldType[] = [
     {
@@ -178,7 +173,6 @@ export function FormPost(props: {
     setValues({ ...values, group: post.group.id });
     updatePost(post.id, values)
       .then((res: FormPostProps) => {
-        console.log('hey', res);
         setValues(
           post
             ? structuredClone(post)

@@ -62,7 +62,7 @@ export function EventSection(props: {
     onDelete,
   } = props;
   let content: JSX.Element | Array<JSX.Element>;
-  const allEvents = maxItem && events ? events.slice(0, maxItem) : events;
+  const allEvents = events;
   switch (status) {
     case 'error':
       content = (
@@ -83,9 +83,11 @@ export function EventSection(props: {
         ));
       } else {
         content = (
-          <Typography sx={{ marginLeft: 3, fontSize: 18 }}>
-            {t('event.no_event')} 🥹
-          </Typography>
+          <Grid item>
+            <Typography sx={{ marginLeft: 3, fontSize: 18 }}>
+              {t('event.no_event')} 🥹
+            </Typography>
+          </Grid>
         );
       }
       break;

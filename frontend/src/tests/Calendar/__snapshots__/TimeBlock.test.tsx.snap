@@ -6,20 +6,20 @@ exports[`<DayInfos /> should display an TimeBlock 1`] = `
   "baseElement": <body>
     <div>
       <div
-        class="timeBlockOdd MuiBox-root css-0"
+        class="timeBlockOdd MuiBox-root emotion-0"
         data-testid="TimeBlockOddTestId"
       />
     </div>
     <div>
       <div
-        class="timeBlockEven MuiBox-root css-0"
+        class="timeBlockEven MuiBox-root emotion-0"
         data-testid="TimeBlockEvenTestId"
       />
     </div>
   </body>,
   "container": <div>
     <div
-      class="timeBlockEven MuiBox-root css-0"
+      class="timeBlockEven MuiBox-root emotion-0"
       data-testid="TimeBlockEvenTestId"
     />
   </div>,
@@ -83,20 +83,20 @@ exports[`<DayInfos /> should display an TimeBlock 2`] = `
   "baseElement": <body>
     <div>
       <div
-        class="timeBlockOdd MuiBox-root css-0"
+        class="timeBlockOdd MuiBox-root emotion-0"
         data-testid="TimeBlockOddTestId"
       />
     </div>
     <div>
       <div
-        class="timeBlockEven MuiBox-root css-0"
+        class="timeBlockEven MuiBox-root emotion-0"
         data-testid="TimeBlockEvenTestId"
       />
     </div>
   </body>,
   "container": <div>
     <div
-      class="timeBlockOdd MuiBox-root css-0"
+      class="timeBlockOdd MuiBox-root emotion-0"
       data-testid="TimeBlockOddTestId"
     />
   </div>,

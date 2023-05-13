@@ -1,9 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import Close from '@mui/icons-material/Close';
-import DateRangeIcon from '@mui/icons-material/DateRange';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PersonIcon from '@mui/icons-material/Person';
@@ -16,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import axios from 'axios';
-import { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 import { FilterFrontInterface, FilterInterface } from '#types/Filter';
 import { SimpleGroupProps } from '#types/Group';
@@ -26,70 +24,29 @@ import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
 import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
 import BasicDatePicker from '../DatePicker/BasicDatePicker';
 import './FilterBar.scss';
+// eslint-disable-next-line import/order
+import { Close } from '@mui/icons-material';
 
 /**
  * Function to display a Filterbar for Event Page. It contains a button and the whole Filter drawer.
  * @param props getFilter is the function used to get filter from parent component
  * @returns the filter bar
  */
-function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
-  const { getFilter, filter } = props;
+function FilterBar(props: {
+  onChangeFilter: (newFilter: FilterInterface) => void;
+  filter: FilterInterface;
+}) {
+  const { onChangeFilter: getFilter, filter } = props;
   const { t } = useTranslation('translation'); // translation module
   const [open, setOpen] = React.useState(false); // set true to open the drawer
-  const [dateBegin, setDateBegin] = React.useState<Dayjs | null>(); // date from which the events are filtered
-  const [dateBeginFormat, setDateBeginFormat] = React.useState(
-    filter.dateBegin
-  ); // date from which the events are filtered, as a string
-  const [dateEndFormat, setDateEndFormat] = React.useState(filter.dateEnd); // date until which the events are filtered, as a string
-  const [isFavorite, setIsFavorite] = React.useState(filter.favorite); // true if the 'Favorite' filter is checked
-  const [isParticipated, setIsParticipated] = React.useState(
-    filter.participate
-  ); // true if the 'I participate' filter is checked
-  const [isShotgun, setIsShotgun] = React.useState(filter.shotgun); // true if the 'Shotgun' filter is checked
-  const [organiser, setOrganiser] = React.useState(filter.organiser); // the list of organiser displayed, as a string (a,b,c...)
 
-  // Functions to get filter values from child components
-  const getDateBegin = (newDate) => {
-    setDateBegin(newDate);
-    if (newDate !== null) {
-      setDateBeginFormat(newDate.format('YYYY-MM-DD'));
-    } else {
-      setDateBeginFormat('');
-    }
-  };
-  const getDateEnd = (newDate) => {
-    if (newDate !== null) {
-      // we want to include events from endDate
-      setDateEndFormat(newDate.format('YYYY-MM-DD').concat(' ', '23:59:59'));
-    } else {
-      setDateEndFormat('');
-    }
-  };
-  const getChecked = (id, checked) => {
-    if (id === 'favorite') {
-      setIsFavorite(checked);
-    }
-    if (id === 'participate') {
-      setIsParticipated(checked);
-    }
-    if (id === 'shotgun') {
-      setIsShotgun(checked);
-    }
-  };
-  const getOrganiser = (organiserList: Array<SimpleGroupProps>) => {
-    setOrganiser(organiserList.map((elem) => elem.slug).join(','));
-  };
+  const [currentFilter, setCurrentFilter] =
+    React.useState<FilterInterface>(filter);
 
-  // value of the current filter
-  const currentFilter: FilterInterface = {
-    dateBegin: dateBeginFormat,
-    dateEnd: dateEndFormat,
-    favorite: isFavorite,
-    participate: isParticipated,
-    shotgun: isShotgun,
-    organiser: organiser,
-  };
-
+  // Update current filter if changed outside of the component
+  React.useEffect(() => {
+    setCurrentFilter(filter);
+  }, [filter]);
   // filter interface with every filter to display
   const filters: FilterFrontInterface[] = [
     {
@@ -98,6 +55,9 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       icon: <FavoriteIcon />,
       isMenu: false,
       content: null,
+      value: currentFilter.favorite,
+      onChangeValue: (value) =>
+        setCurrentFilter({ ...currentFilter, favorite: value }),
     },
     {
       id: 'participate',
@@ -105,6 +65,9 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       icon: <PersonIcon />,
       isMenu: false,
       content: null,
+      value: currentFilter.participate,
+      onChangeValue: (value) =>
+        setCurrentFilter({ ...currentFilter, participate: value }),
     },
     {
       id: 'shotgun',
@@ -112,18 +75,25 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
       icon: <TimerIcon />,
       isMenu: false,
       content: null,
+      value: currentFilter.shotgun,
+      onChangeValue: (value) =>
+        setCurrentFilter({ ...currentFilter, shotgun: value }),
     },
     {
       id: 'organiser',
       name: t('filterbar.organiser'),
       icon: <GroupsIcon />,
       isMenu: true,
+      value: filter.organiser,
       content: (
         <Grid item xs="auto">
           <CheckboxesTags
             label={t('filterbar.organiser')}
-            getResult={getOrganiser}
+            getResult={(results) => {
+              setCurrentFilter({ ...currentFilter, organiser: results });
+            }}
             updated
+            value={currentFilter.organiser}
             request="/api/group/group/"
             pkField="slug"
             labelField="name"
@@ -143,15 +113,27 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
             <BasicDatePicker
               label={t('filterbar.from')}
               minDate={null}
-              getDate={getDateBegin}
+              onChange={(value) =>
+                setCurrentFilter({
+                  ...currentFilter,
+                  dateBegin: value ? value.toDate() : undefined,
+                })
+              }
+              value={dayjs(currentFilter.dateBegin)}
             />
           </Grid>
           <div style={{ height: '15px' }}></div>
           <Grid item xs="auto">
             <BasicDatePicker
               label={t('filterbar.to')}
-              minDate={dateBegin}
-              getDate={getDateEnd}
+              minDate={currentFilter.dateBegin}
+              onChange={(value) =>
+                setCurrentFilter({
+                  ...currentFilter,
+                  dateEnd: value ? value.toDate() : undefined,
+                })
+              }
+              value={dayjs(currentFilter.dateEnd)}
             />
           </Grid>
         </>
@@ -191,10 +173,11 @@ function FilterBar(props: { getFilter: any; filter: FilterInterface }) {
                 />
               ) : (
                 <CheckboxButton
+                  value={filterItem.value}
                   label={filterItem.name}
                   icon={filterItem.icon}
                   id={filterItem.id}
-                  getChecked={getChecked}
+                  onChangeValue={filterItem.onChangeValue}
                 />
               )}
             </ListItem>
