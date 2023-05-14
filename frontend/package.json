@@ -16,8 +16,8 @@
     "types": "tsc",
     "lint": "eslint src --ignore-pattern \"src/legacy/**\"",
     "lint:fix": "eslint src --ignore-pattern \"src/legacy/**\" --fix",
-    "jest": "jest",
-    "jest:update": "jest -u"
+    "jest": "TZ=Europe/Paris jest",
+    "jest:update": "npm run jest -- -u"
   },
   "author": {
     "name": "3CN, a club of Centrale Nantes",

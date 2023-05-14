@@ -30,7 +30,7 @@ export function PostModal(props: {
   const theme = useTheme();
   const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
   const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
-  const { t, formatDuration } = useTranslation();
+  const { t, formatRelativeTime } = useTranslation();
   return (
     <>
       <Dialog
@@ -100,7 +100,7 @@ export function PostModal(props: {
           >
             <PostBadges pinned={post?.pinned} publicity={post?.publicity} />
             <Typography variant="caption" textAlign="right" fontStyle="italic">
-              {`${t('post.published')} ${formatDuration(post?.createdAt)}`}
+              {`${t('post.published')} ${formatRelativeTime(post?.createdAt)}`}
             </Typography>
             {post?.createdAt.toDateString() !==
               post?.updatedAt.toDateString() && (
@@ -117,7 +117,9 @@ export function PostModal(props: {
                   textAlign="right"
                   fontStyle="italic"
                 >
-                  {`${t('post.updated')} ${formatDuration(post?.updatedAt)}`}
+                  {`${t('post.updated')} ${formatRelativeTime(
+                    post?.updatedAt
+                  )}`}
                 </Typography>
               </>
             )}

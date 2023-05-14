@@ -113,7 +113,7 @@ export function PostCard(props: {
   const { post, onDelete, onUpdate } = props;
   const [open, setOpen] = React.useState<boolean>(false);
   const [postValue, setPostValue] = React.useState(post);
-  const { t, formatDuration } = useTranslation();
+  const { t, formatRelativeTime } = useTranslation();
 
   React.useEffect(() => {
     setPostValue(post);
@@ -165,8 +165,8 @@ export function PostCard(props: {
               <div style={{ fontStyle: 'italic', marginBottom: 5 }}>
                 {postValue.createdAt.toDateString() ===
                 postValue.updatedAt.toDateString()
-                  ? formatDuration(postValue.createdAt)
-                  : `${t('post.updated')} ${formatDuration(
+                  ? formatRelativeTime(postValue.createdAt)
+                  : `${t('post.updated')} ${formatRelativeTime(
                       postValue.updatedAt
                     )}`}
               </div>
