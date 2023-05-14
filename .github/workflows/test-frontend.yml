@@ -17,9 +17,14 @@ jobs:
       working-directory: ./frontend
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Pull latest commit
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
       - name: Install dependencies
         working-directory: ${{ env.working-directory }}
         run: npm install
