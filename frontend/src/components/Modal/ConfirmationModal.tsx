@@ -6,9 +6,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { upperFirst } from 'lodash-es';
 
 import { useTranslation } from '#i18n/useTranslation';
-import { CapitalizeFirstLetter } from '#utils/formatText';
 
 export function ConfirmationModal(props: {
   open: boolean;
@@ -26,7 +26,7 @@ export function ConfirmationModal(props: {
       aria-labelledby="responsive-dialog-title"
     >
       <DialogTitle id="responsive-dialog-title">
-        {CapitalizeFirstLetter(title)} ?
+        {upperFirst(title)} ?
       </DialogTitle>
       <DialogContent>
         <DialogContentText>{content}</DialogContentText>

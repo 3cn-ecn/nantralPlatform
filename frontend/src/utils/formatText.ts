@@ -1,13 +1,4 @@
 /**
- * Capitalize the first letter of a word
- * @param str the word you want to capitalize
- * @returns the word with the first letter capitalized
- */
-export function CapitalizeFirstLetter(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-/**
  * Create a color from a string.
  *
  * @param string The string to create the color from
