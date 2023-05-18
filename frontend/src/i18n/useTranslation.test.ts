@@ -69,14 +69,14 @@ describe('useTranslation hook for formatting dates and numbers', () => {
         new Date('2023-01-27T15:34:34Z'),
         new Date('2023-01-27T16:26:56Z')
       )
-    ).toBe('27/01/2023, 16:34 – 17:26');
+    ).toBe('27/01/2023, 16:34 – 17:26');
 
     expect(
       formatDateTimeRange(
         new Date('2023-01-27T15:34:34Z'),
         new Date('2023-02-27T08:26:56Z')
       )
-    ).toBe('27/01/2023, 16:34 – 27/02/2023, 09:26');
+    ).toBe('27/01/2023 16:34 – 27/02/2023 09:26');
   });
 
   // FORMATTING RELATIVE TIME
