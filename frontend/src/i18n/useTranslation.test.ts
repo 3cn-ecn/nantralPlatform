@@ -24,7 +24,6 @@ async function testUseTranslation(): Promise<
 }
 
 describe('useTranslation hook for formatting dates and numbers', () => {
-  // FORMATTING DATES
   it('formats dates', async () => {
     const { formatDate } = await testUseTranslation();
     const date = new Date('2023-01-27');
@@ -40,7 +39,6 @@ describe('useTranslation hook for formatting dates and numbers', () => {
     ).toBe('ven. 27 janv.');
   });
 
-  // FORMATTING TIMES
   it('formats time', async () => {
     const { formatTime } = await testUseTranslation();
     const time = new Date('2023-01-27T15:34:28Z');
@@ -49,7 +47,6 @@ describe('useTranslation hook for formatting dates and numbers', () => {
     expect(formatTime(time, { timeStyle: 'long' })).toBe('16:34:28 UTC+1');
   });
 
-  // FORMATTING DATE-TIME
   it('formats date-time', async () => {
     const { formatDateTime } = await testUseTranslation();
     const date = new Date('2023-01-27T15:34:00Z');
@@ -60,7 +57,6 @@ describe('useTranslation hook for formatting dates and numbers', () => {
     ).toBe('27 janvier 2023 à 16:34');
   });
 
-  // FORMATTING DATE-TIME RANGE
   it('formats date-time range', async () => {
     const { formatDateTimeRange } = await testUseTranslation();
 
@@ -79,7 +75,6 @@ describe('useTranslation hook for formatting dates and numbers', () => {
     ).toBe('27/01/2023 16:34 – 27/02/2023 09:26');
   });
 
-  // FORMATTING RELATIVE TIME
   it('formats relative time', async () => {
     const { formatRelativeTime } = await testUseTranslation();
 
