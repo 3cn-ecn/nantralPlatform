@@ -23,7 +23,7 @@ async function testUseTranslation(): Promise<
   return testComponent.result.current;
 }
 
-describe('useTranslation hook for formatting dates and numbers', () => {
+describe('useTranslation hook to format dates and numbers', () => {
   it('formats dates', async () => {
     const { formatDate } = await testUseTranslation();
     const date = new Date('2023-01-27');

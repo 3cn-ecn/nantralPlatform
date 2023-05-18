@@ -1,42 +1,50 @@
 name: Test Frontend
+
 on:
   push:
-    paths: [frontend/**]
     branches:
       - master
       - react-app
+    paths:
+      - frontend/**
+      - .github/workflows/test-frontend.yml
   pull_request:
     types: [opened, synchronize, reopened]
-    paths: [frontend/**]
+    paths:
+      - frontend/**
+      - .github/workflows/test-frontend.yml
 
 jobs:
-  tests-on-frontend:
-    name: SonarCloud
+  test-frontend:
+    name: Tests on front end
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./frontend
+    defaults:
+      run:
+        working-directory: frontend
 
     steps:
-      - name: Pull latest commit
+      - name: Clone the repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+          # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version-file: frontend/.nvmrc
+          node-version-file: .nvmrc
           cache: npm
-          cache-dependency-path: frontend/
+
       - name: Install dependencies
-        working-directory: ${{ env.working-directory }}
-        run: npm install
-      - name: Test and coverage
-        working-directory: ${{ env.working-directory }}
+        run: npm ci
+
+      - name: Run Tests
         run: npm run jest -- --coverage
-      - name: SonarCloud Scan
+
+      - name: Run SonarCloud scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
-          projectBaseDir: frontend
+          projectBaseDir: frontend/
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
