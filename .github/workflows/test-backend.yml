@@ -1,4 +1,5 @@
 name: Test Backend
+
 on:
   push:
     paths: [backend/**]
@@ -9,47 +10,47 @@ on:
     types: [opened, synchronize, reopened]
     paths: [backend/**]
 
+defaults:
+  run:
+    working-directory: backend
+
 jobs:
-  tests-on-backend:
+  test-backend:
+    name: Tests on back end
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
-      matrix:
-        python-version: ["3.10"]
-    env:
-      working-directory: ./backend
-    
-    steps:
 
-      - name: Pull latest commit
+    steps:
+      - name: Clone the repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      
-      - name: Set up Python ${{ matrix.python-version }}
+          # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
+
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
-          cache: "pipenv"
-      
+          python-version: "3.10"
+          cache: pipenv
+
+      - name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+
       - name: Install dependencies
-        working-directory: ${{ env.working-directory }}
         run: |
-          curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-          pipenv verify
-          pipenv sync
+          pipenv verify && pipenv sync
           pipenv run pip install coverage
-      
-      - name: Coverage
-        working-directory: ${{ env.working-directory }}
+
+      - name: Run tests
         run: |
           pipenv run coverage-test
           pipenv run coverage xml
-      
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
           projectBaseDir: backend
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACKEND }}

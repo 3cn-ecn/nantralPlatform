@@ -1,9 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Deploy Server
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches:
@@ -17,18 +13,15 @@ on:
 jobs:
   check-frontend:
     name: Check for frontend changes
+    runs-on: ubuntu-latest
     outputs:
       run_job: ${{ steps.check_files.outputs.run_job }}
-    # Specify which OS we are running our job on
-    runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # A step can use a GitHub action which is available on the marketplace or simply run a command in the runner's shell.
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Pull latest commit
+      - name: Clone the repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 2
+
       - name: Look for modified files
         id: check_files
         run: |
@@ -50,24 +43,33 @@ jobs:
           done < files.txt
 
   build-frontend:
-    name: Build React bundles
+    name: Build front end
     needs: check-frontend
     if: needs.check-frontend.outputs.run_job == 'true'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
     steps:
-      - name: Pull latest commit
+      - name: Clone the repository
         uses: actions/checkout@v3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version-file: "frontend/.nvmrc"
-          cache: "npm"
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/
+
+      - name: Install dependencies
+        run: npm ci --omit=dev
+
       - name: Build React
         run: |
-          cd frontend
-          npm install --omit=dev
           npm run build
           npm run leg:build
+
       - name: Upload files to the VPS
         uses: appleboy/scp-action@master
         with:
@@ -78,38 +80,41 @@ jobs:
           target: "nantralPlatform"
 
   test-backend:
+    name: Test back end
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
     steps:
-      - name: Pull latest commit
+      - name: Clone the repository
         uses: actions/checkout@v3
-      - name: Set up Python
+
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-          cache: "pipenv"
+          cache: pipenv
+
       - name: Install pipenv
         run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+
       - name: Install dependencies
-        working-directory: ./backend
         run: pipenv verify && pipenv sync
-      - name: Testing
-        working-directory: ./backend
+
+      - name: Run tests
         run: pipenv run test
 
   deploy:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    name: Deploy in production
     if: ${{ always() }}
     needs: [build-frontend, test-backend]
-    strategy:
-      matrix:
-        python-version: ["3.10"]
+    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Pull latest commit
+      - name: Clone the repository
         uses: actions/checkout@v3
+
       - name: Backup before deploy
         uses: appleboy/ssh-action@v0.1.4
         with:
@@ -126,6 +131,7 @@ jobs:
             python3 db_backup.py
             deactivate
             rm -r env
+
       - name: Deploy to the VPS
         uses: appleboy/ssh-action@master
         with:
