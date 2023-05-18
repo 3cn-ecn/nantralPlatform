@@ -24,8 +24,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version-file: "frontend/.nvmrc"
-          cache: "npm"
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/
       - name: Install dependencies
         working-directory: ${{ env.working-directory }}
         run: npm install
