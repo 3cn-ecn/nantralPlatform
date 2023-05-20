@@ -20,6 +20,11 @@ services:
       - STAGING=True
 
   nginx:
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "https://nantral-platform.fr"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot/:ro
