@@ -15,7 +15,6 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
-import { getEvents } from '#api/event';
 import { getMyGroups } from '#api/group';
 import { getPosts } from '#api/post';
 import EditEventModal from '#components/FormEvent/FormEvent';
@@ -25,7 +24,7 @@ import { ClubSection } from '#components/Section/ClubSection/ClubSection';
 import { EventSection } from '#components/Section/EventSection/EventSection';
 import { PostSection } from '#components/Section/PostSection/PostSection';
 import { useTranslation } from '#i18n/useTranslation';
-import { EventProps } from '#types/Event';
+import { getEvents } from '#modules/event/api/getEventList';
 import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
 import {
@@ -86,7 +85,7 @@ export default function HomePage() {
     status: thisWeekEventsStatus,
     data: thisWeekEvents,
     refetch: refetchThisWeekEvents,
-  } = useQuery<EventProps[]>({
+  } = useQuery({
     queryKey: 'thisWeekEvents',
     queryFn: () =>
       getEvents({ fromDate: today, toDate: nextWeek, orderBy: ['date'] }),
@@ -96,7 +95,7 @@ export default function HomePage() {
     status: upcomingEventsStatus,
     data: upcomingEvents,
     refetch: refetchUpcomingEvents,
-  } = useQuery<EventProps[]>({
+  } = useQuery({
     queryKey: 'upcomingEvents',
     queryFn: () =>
       getEvents({
@@ -216,12 +215,12 @@ export default function HomePage() {
           </Box>
           <Divider sx={{ marginBottom: 1 }} />
           <EventSection
-            events={thisWeekEvents}
+            events={thisWeekEvents.results}
             status={thisWeekEventsStatus}
             title={t('home.thisWeek')}
           />
           <EventSection
-            events={upcomingEvents}
+            events={upcomingEvents.results}
             status={upcomingEventsStatus}
             maxItem={6}
             loadingItemCount={MAX_EVENT_SHOWN}

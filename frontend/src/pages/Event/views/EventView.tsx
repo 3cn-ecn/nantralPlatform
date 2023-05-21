@@ -1,18 +1,16 @@
 import React from 'react';
+import { useInfiniteQuery, useQuery } from 'react-query';
 
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
-import axios from 'axios';
 
-import { useInfiniteQuery, useQuery } from 'react-query';
 import Calendar from '#components/Calendar/Calendar';
-import { EventProps, eventsToCamelCase } from '#types/Event';
-import { ListResults, LoadStatus } from '#types/GenericTypes';
+import { getEvents } from '#modules/event/api/getEventList';
+import { PartialEvent } from '#modules/event/event.type';
+import { FilterInterface } from '#types/Filter';
+import { Page } from '#types/Group';
 
 import EventGrid from './EventGrid';
-import { Page } from '#types/Group';
-import { getEvents } from '#api/event';
-import { FilterInterface } from '#types/Filter';
 
 const EVENT_PER_PAGE = 6;
 
@@ -66,7 +64,7 @@ export default function EventView(props: {
     status: eventsListStatus,
     fetchNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery<Page<EventProps>>({
+  } = useInfiniteQuery<Page<PartialEvent>>({
     queryKey: ['eventList', filter],
     queryFn: ({ pageParam = 1 }) =>
       getEvents({
@@ -86,7 +84,7 @@ export default function EventView(props: {
     data: eventsCalendar,
     // TODO Support status in calendar
     // status: eventsCalendarStatus,
-  } = useQuery<Page<EventProps>>({
+  } = useQuery<Page<PartialEvent>>({
     queryKey: ['eventCalendar', filter, calendarRange],
     queryFn: () =>
       getEvents({

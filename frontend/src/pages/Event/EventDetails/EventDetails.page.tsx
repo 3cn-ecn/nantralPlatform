@@ -29,7 +29,6 @@ import {
 } from '@mui/material';
 import type { AlertProps } from '@mui/material/Alert';
 
-import { getEvent } from '#api/event';
 import FavButton from '#components/Button/FavButton';
 import JoinButton from '#components/Button/JoinButton';
 import { ClubAvatar } from '#components/ClubAvatar/ClubAvatar';
@@ -37,6 +36,7 @@ import EditEventModal from '#components/FormEvent/FormEvent';
 import { EventParticipantsModal } from '#components/Modal/EventParticipantsModal';
 import { ImageModal } from '#components/Modal/ImageModal';
 import { useTranslation } from '#i18n/useTranslation';
+import { getEventDetails } from '#modules/event/api/getEventDetails';
 import NotFound from '#pages/NotFound/NotFound.page';
 
 import './EventDetails.page.scss';
@@ -74,7 +74,7 @@ export default function EventDetailsPage() {
     refetch: refetchEvent,
   } = useQuery({
     queryKey: `event-${id}`,
-    queryFn: () => getEvent(Number.parseInt(id, 10)),
+    queryFn: () => getEventDetails(Number.parseInt(id, 10)),
     onError: (err) => console.error(err),
   });
   const [formEventOpen, setFormEventOpen] = React.useState<boolean>(false);

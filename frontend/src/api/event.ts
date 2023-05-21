@@ -1,67 +1,10 @@
 import axios from 'axios';
-import { isArray } from 'lodash-es';
 
 import {
-  EventProps,
   FormEventProps,
   eventToCamelCase,
-  eventsToCamelCase,
   registrationType,
 } from '#types/Event';
-import { Page } from '#types/pagination';
-
-export async function getEvents(
-  options: {
-    orderBy?: string[] | string;
-    fromDate?: Date;
-    toDate?: Date;
-    limit?: number;
-    offset?: number;
-    isShotgun?: boolean;
-    isFavorite?: boolean;
-    minParticipants?: number;
-    maxParticipants?: number;
-    isMember?: boolean;
-    isForm?: boolean;
-    isParticipating?: boolean;
-    publicity?: 'Mem' | 'Pub';
-    registration?: 'open' | 'closed';
-    group?: string | string[];
-  } = {}
-): Promise<Page<EventProps>> {
-  return axios
-    .get<Page<EventProps>>('/api/event/', {
-      params: {
-        from_date: options.fromDate,
-        to_date: options.toDate,
-        order_by: isArray(options.orderBy)
-          ? options.orderBy.join(',')
-          : options.orderBy,
-        limit: options.limit,
-        offset: options.offset,
-        is_shotgun: options.isShotgun || undefined,
-        is_favorite: options.isFavorite || undefined,
-        min_participants: options.minParticipants,
-        max_participants: options.maxParticipants,
-        is_member: options.isMember || undefined,
-        is_form: options.isForm || undefined,
-        is_participating: options.isParticipating || undefined,
-        publicity: options.publicity,
-        registration: options.registration,
-        group: isArray(options.group) ? options.group.join(',') : options.group,
-      },
-    })
-    .then((res) => {
-      eventsToCamelCase(res.data.results);
-      return res.data;
-    });
-}
-
-export async function getEvent(id: number): Promise<EventProps> {
-  const { data } = await axios.get(`/api/event/${id}/`);
-  eventToCamelCase(data);
-  return data;
-}
 
 function createForm(values: FormEventProps, mode: registrationType): FormData {
   const formData = new FormData();
@@ -100,7 +43,7 @@ export async function createEvent(
   registrationMode: registrationType = 'form'
 ): Promise<FormEventProps> {
   return axios
-    .post(`/api/event/`, createForm(options, registrationMode), {
+    .post('/api/event/', createForm(options, registrationMode), {
       headers: {
         'content-type': 'multipart/form-data',
       },
