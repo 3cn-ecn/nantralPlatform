@@ -17,13 +17,10 @@
     "baseUrl": "./src",
     "paths": {
       "#api/*": ["api/*"],
-      "#components/*": ["components/*"],
-      "#i18n/*": ["i18n/*"],
       "#modules/*": ["modules/*"],
       "#pages/*": ["pages/*"],
       "#shared/*": ["shared/*"],
-      "#types/*": ["types/*"],
-      "#utils/*": ["utils/*"]
+      "#types/*": ["types/*"]
     }
   },
   "include": ["src", "custom.d.ts"]
