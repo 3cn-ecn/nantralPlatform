@@ -29,7 +29,7 @@ import {
 import { createEvent, deleteEvent, editEvent } from '#api/event';
 import { getGroups } from '#api/group';
 import { SimpleGroup } from '#components/Group/interfaces';
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 import { FieldType } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
@@ -116,7 +116,7 @@ function getFormFields(
     {
       kind: 'comment',
       name: 'help_shotgun',
-      text: "Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre le lien d'un form, soit définir un nombre max de participants",
+      text: 'Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre le lien d\'un form, soit définir un nombre max de participants',
     },
   ];
 
@@ -127,7 +127,7 @@ function getFormFields(
         {
           kind: 'datetime',
           name: 'startRegistration',
-          label: "Date heure d'ouverture des inscriptions",
+          label: 'Date heure d\'ouverture des inscriptions',
           disablePast: true,
         },
         {
@@ -181,7 +181,7 @@ function getFormFields(
         {
           kind: 'datetime',
           name: 'startRegistration',
-          label: "Date heure d'ouverture des inscriptions",
+          label: 'Date heure d\'ouverture des inscriptions',
           disablePast: true,
         },
         {

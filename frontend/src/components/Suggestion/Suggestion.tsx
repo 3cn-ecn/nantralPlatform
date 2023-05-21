@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import FormGroup, { FieldType } from '#utils/form';
 
 import { Suggestion } from './interfacesSuggestion';

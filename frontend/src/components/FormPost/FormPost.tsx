@@ -16,7 +16,7 @@ import {
 
 import { getGroups } from '#api/group';
 import { createPost, deletePost, updatePost } from '#api/post';
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { FieldType } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
 import { FormPostProps, PostProps } from '#types/Post';

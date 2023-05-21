@@ -35,9 +35,9 @@ import { ClubAvatar } from '#components/ClubAvatar/ClubAvatar';
 import EditEventModal from '#components/FormEvent/FormEvent';
 import { EventParticipantsModal } from '#components/Modal/EventParticipantsModal';
 import { ImageModal } from '#components/Modal/ImageModal';
-import { useTranslation } from '#i18n/useTranslation';
 import { getEventDetails } from '#modules/event/api/getEventDetails';
 import NotFound from '#pages/NotFound/NotFound.page';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import './EventDetails.page.scss';
 

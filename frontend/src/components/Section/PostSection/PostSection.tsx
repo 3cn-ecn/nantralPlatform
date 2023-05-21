@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { FormPostProps, PostProps } from '#types/Post';
 

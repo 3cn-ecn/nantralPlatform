@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material/';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 
 import FavButton from '../Button/FavButton';

@@ -14,13 +14,12 @@ import {
   FormHelperText,
   FormLabel,
   IconButton,
-  Input,
   InputAdornment,
   InputLabel,
   MenuItem,
   Select,
   TextField,
-  Typography,
+  Typography
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -31,7 +30,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/fr';
 
 import Avatar from '#components/Avatar/Avatar';
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { FieldType } from '#types/GenericTypes';
 
 /**

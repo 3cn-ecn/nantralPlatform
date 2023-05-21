@@ -21,6 +21,7 @@
       "#i18n/*": ["i18n/*"],
       "#modules/*": ["modules/*"],
       "#pages/*": ["pages/*"],
+      "#shared/*": ["shared/*"],
       "#types/*": ["types/*"],
       "#utils/*": ["utils/*"]
     }

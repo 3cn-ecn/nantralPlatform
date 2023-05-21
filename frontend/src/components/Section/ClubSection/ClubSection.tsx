@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Typography } from '@mui/material';
 
 import { Group, SimpleGroup } from '#components/Group/interfaces';
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 
 import { ClubAvatar, ClubAvatarSkeleton } from '../../ClubAvatar/ClubAvatar';

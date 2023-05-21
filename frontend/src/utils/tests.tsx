@@ -3,7 +3,7 @@ import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { render } from '@testing-library/react';
 
-import '../i18n/config';
+import '../shared/i18n/config';
 import getTheme from '../theme';
 
 /**

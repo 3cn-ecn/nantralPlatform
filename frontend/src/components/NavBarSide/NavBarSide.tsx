@@ -12,7 +12,7 @@ import {
   Toolbar,
 } from '@mui/material';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import './NavBarSide.scss';
 
@@ -94,7 +94,7 @@ function NavBarSide(props: {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
+        ['& .MuiDrawer-paper']: {
           width: drawerWidth,
           boxSizing: 'border-box',
         },

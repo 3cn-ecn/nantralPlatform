@@ -17,7 +17,7 @@ import Collapse from '@mui/material/Collapse';
 import SvgIcon from '@mui/material/SvgIcon';
 import axios from 'axios';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import merge from '../../legacy/notification/utils';
 import { NotificationItem } from './NotificationItem';
@@ -83,7 +83,7 @@ export function NotificationMenu() {
       start: start,
       nb: step,
     };
-    const urlf = `/api/notification/get_notifications`;
+    const urlf = '/api/notification/get_notifications';
     axios.get(urlf, { params: queryParams }).then((res) => {
       if (listNotifs.length === checkNotif) {
         const merging = merge(listNotifs, res.data);

@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
 
 import Avatar from '../Avatar/Avatar';

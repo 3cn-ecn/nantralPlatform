@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Alert, Grid, Typography } from '@mui/material';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 import { LoadStatus } from '#types/GenericTypes';
 

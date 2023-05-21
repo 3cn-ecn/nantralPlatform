@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CalendarView } from '../CalendarProps/CalendarProps';
 import { ChangeWeek } from './ChangeWeek/ChangeWeek';

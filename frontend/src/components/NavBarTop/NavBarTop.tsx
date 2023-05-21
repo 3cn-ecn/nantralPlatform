@@ -39,7 +39,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import Avatar from '../Avatar/Avatar';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';

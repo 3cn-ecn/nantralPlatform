@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button, Grid } from '@mui/material';
 import { EventAttributes, createEvents } from 'ics';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps } from '#types/Event';
 import { modulo, ppcm } from '#utils/maths';
 

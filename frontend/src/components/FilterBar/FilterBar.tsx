@@ -15,12 +15,10 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import axios from 'axios';
 import dayjs from 'dayjs';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { FilterFrontInterface, FilterInterface } from '#types/Filter';
-import { SimpleGroupProps } from '#types/Group';
 
 import SimpleAccordion from '../Accordion/SimpleAccordion';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
@@ -217,7 +215,7 @@ function FilterBar(props: {
             sx={{
               width: 300,
               flexShrink: 0,
-              [`& .MuiDrawer-paper`]: {
+              ['& .MuiDrawer-paper']: {
                 width: 300,
                 boxSizing: 'border-box',
               },

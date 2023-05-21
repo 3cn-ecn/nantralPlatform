@@ -2,7 +2,7 @@ import React from 'react';
 
 import Container from '@mui/material/Container';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 /**
  * Legal Notice, like the name and owner of the site, etc.

@@ -7,7 +7,7 @@ import {
 import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
 import axios from 'axios';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import { Membership, Page, Student } from './interfaces';

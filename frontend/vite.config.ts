@@ -35,6 +35,7 @@ export default defineConfig({
       '#i18n': path.resolve(__dirname, './src/i18n/'),
       '#modules': path.resolve(__dirname, './src/modules/'),
       '#pages': path.resolve(__dirname, './src/pages'),
+      '#shared': path.resolve(__dirname, './src/shared'),
       '#types': path.resolve(__dirname, './src/types'),
       '#utils': path.resolve(__dirname, './src/utils'),
     },

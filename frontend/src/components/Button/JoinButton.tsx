@@ -22,7 +22,7 @@ import {
   useTheme,
 } from '@mui/material';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { register, unregister } from '../../api/event';
 import { ConfirmationModal } from '../Modal/ConfirmationModal';

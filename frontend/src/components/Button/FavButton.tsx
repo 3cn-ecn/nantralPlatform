@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import Zoom from '@mui/material/Zoom/Zoom';
 import axios from 'axios';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 function FavButton(props: {
   eventId: number;

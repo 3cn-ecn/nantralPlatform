@@ -7,7 +7,7 @@ import {
 } from '@mui/icons-material';
 import { Box, Chip, Popover, Typography } from '@mui/material';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function EventPopover(props: {
   anchorRef: any;

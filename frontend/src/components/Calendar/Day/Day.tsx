@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps } from '#types/Event';
 
 import './Day.scss';
@@ -57,7 +57,7 @@ export function sortWithPos(
     }
   }
   if (currentSize !== globalSize) {
-    throw new Error(`Event chain is wrong`);
+    throw new Error('Event chain is wrong');
   }
   return eventChain;
 }
@@ -142,7 +142,7 @@ export function Day(props: {
                       events[eventKey].globalSize
                     }
                     sx={{
-                      height: `0px`,
+                      height: '0px',
                       transform: `translate(0px, -${
                         1.2 * eventsBeginTime[eventKey]
                       }rem)`,
@@ -167,7 +167,7 @@ export function Day(props: {
                     events[eventKey].globalSize
                   }
                   sx={{
-                    height: `0px`,
+                    height: '0px',
                     transform: `translate(0px, -${
                       1.2 * eventsBeginTime[eventKey]
                     }rem)`,
@@ -183,7 +183,7 @@ export function Day(props: {
                 key={eventKey}
                 xs={(-eventKey * 12) / events[0].globalSize}
                 sx={{
-                  height: `0px`,
+                  height: '0px',
                 }}
               ></Grid>
             );

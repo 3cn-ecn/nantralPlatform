@@ -16,7 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Container } from '@mui/system';
 import axios from 'axios';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps } from '#types/Event';
 
 import Avatar from '../Avatar/Avatar';

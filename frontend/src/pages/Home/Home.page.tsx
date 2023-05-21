@@ -23,8 +23,8 @@ import { PostModal } from '#components/Modal/PostModal';
 import { ClubSection } from '#components/Section/ClubSection/ClubSection';
 import { EventSection } from '#components/Section/EventSection/EventSection';
 import { PostSection } from '#components/Section/PostSection/PostSection';
-import { useTranslation } from '#i18n/useTranslation';
 import { getEvents } from '#modules/event/api/getEventList';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
 import {

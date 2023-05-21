@@ -9,7 +9,7 @@ import axios from 'axios';
 import Avatar from '#components/Avatar/Avatar';
 import { EditProfilModal } from '#components/FormProfil/FormProfil';
 import { MembershipsStudent } from '#components/Group/MembershipsStudent';
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 
 const API_URL = '/api/student/student/';

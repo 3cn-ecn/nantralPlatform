@@ -18,7 +18,7 @@ import {
 
 import Avatar from '#components/Avatar/Avatar';
 import { EventSection } from '#components/Section/EventSection/EventSection';
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps } from '#types/Event';
 import { FilterInterface } from '#types/Filter';
 import { ListResults, LoadStatus } from '#types/GenericTypes';

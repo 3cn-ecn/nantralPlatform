@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
 
 import Avatar from '../Avatar/Avatar';

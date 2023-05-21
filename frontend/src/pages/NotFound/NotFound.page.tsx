@@ -5,7 +5,7 @@ import { Alert, AlertTitle, Button } from '@mui/material';
 import { Container } from '@mui/system';
 
 import EditSuggestionModal from '#components/Suggestion/Suggestion';
-import { useTranslation } from '#i18n/useTranslation';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 /**
  * The 404 error page when the requested page is not found.
