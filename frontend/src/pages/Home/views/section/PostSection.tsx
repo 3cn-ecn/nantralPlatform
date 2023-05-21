@@ -2,11 +2,13 @@ import React from 'react';
 
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 
+import {
+  PostCard,
+  PostCardSkeleton,
+} from '#shared/components/PostCard/PostCard';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { FormPostProps, PostProps } from '#types/Post';
-
-import { PostCard, PostCardSkeleton } from '../../PostCard/PostCard';
 
 /**
  * Une section comportant

@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 
 import { Grid, Typography } from '@mui/material';
 
+import {
+  ClubAvatar,
+  ClubAvatarSkeleton,
+} from '#shared/components/ClubAvatar/ClubAvatar';
 import { Group, SimpleGroup } from '#shared/components/Group/interfaces';
+import { AccordionSection } from '#shared/components/Section/AccordionSection';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
-
-import { ClubAvatar, ClubAvatarSkeleton } from '../../ClubAvatar/ClubAvatar';
-import { AccordionSection } from '../AccordionSection';
 
 const clubAvatarSize = 100;
 

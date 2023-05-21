@@ -2,28 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 
-import { Event, PostAdd } from '@mui/icons-material';
-import {
-  Box,
-  Chip,
-  Container,
-  Divider,
-  SpeedDial,
-  SpeedDialAction,
-  SpeedDialIcon,
-  Typography,
-} from '@mui/material';
+import { Box, Chip, Container, Divider, Typography } from '@mui/material';
 import axios from 'axios';
 
 import { getMyGroups } from '#api/group';
 import { getPosts } from '#api/post';
 import { getEvents } from '#modules/event/api/getEventList';
-import EditEventModal from '#shared/components/FormEvent/FormEvent';
-import { FormPost } from '#shared/components/FormPost/FormPost';
 import { PostModal } from '#shared/components/Modal/PostModal';
-import { ClubSection } from '#shared/components/Section/ClubSection/ClubSection';
-import { EventSection } from '#shared/components/Section/EventSection/EventSection';
-import { PostSection } from '#shared/components/Section/PostSection/PostSection';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
@@ -33,8 +18,11 @@ import {
   convertPostFromPythonData,
 } from '#types/Post';
 
-import './Home.page.scss';
+import { CreateNewButton } from './views/CreateNewButton';
 import { HomeHeader } from './views/HomeHeader';
+import { ClubSection } from './views/section/ClubSection';
+import { EventSection } from './views/section/EventSection';
+import { PostSection } from './views/section/PostSection';
 
 const MAX_EVENT_SHOWN = 6;
 
@@ -52,8 +40,6 @@ export default function HomePage() {
   const postDateLimit = new Date();
   postDateLimit.setDate(today.getDay() - 15);
   // Modals
-  const [postFormOpen, setPostFormOpen] = useState<boolean>(false);
-  const [eventFormOpen, setEventFormOpen] = useState<boolean>(false);
   const [selectedPost, setSelectedPost] = useState<PostProps>(null);
   const { t } = useTranslation(); // translation module
 
@@ -130,38 +116,20 @@ export default function HomePage() {
       }),
   });
 
-  const actions = [
-    {
-      icon: <Event />,
-      name: t('event.event'),
-      onClick: () => setEventFormOpen(true),
-    },
-    {
-      icon: <PostAdd />,
-      name: t('post.post'),
-      onClick: () => setPostFormOpen(true),
-    },
-  ];
-
   return (
     <>
       <HomeHeader />
       <Container sx={{ my: 4 }}>
-        <SpeedDial
-          ariaLabel="SpeedDial"
-          sx={{ position: 'fixed', bottom: 24, right: 24, flexGrow: 1 }}
-          icon={<SpeedDialIcon />}
-        >
-          {actions.map((action) => (
-            <SpeedDialAction
-              onClick={action.onClick}
-              key={action.name}
-              icon={action.icon}
-              tooltipTitle={action.name}
-              tooltipOpen
-            />
-          ))}
-        </SpeedDial>
+        <CreateNewButton
+          onEventCreated={() => {
+            refetchPosts();
+            refetchPinnedPosts();
+          }}
+          onPostCreated={() => {
+            refetchUpcomingEvents();
+            refetchThisWeekEvents();
+          }}
+        />
         {(pinnedPostsStatus === 'loading' || pinnedPosts.length > 0) && (
           <PostSection
             posts={pinnedPosts}
@@ -214,23 +182,6 @@ export default function HomePage() {
           title={t('home.myClubs')}
         />
       </Container>
-      <FormPost
-        open={postFormOpen}
-        onClose={() => setPostFormOpen(false)}
-        mode="create"
-        onUpdate={() => {
-          refetchPosts();
-          refetchPinnedPosts();
-        }}
-      />
-      <EditEventModal
-        onUpdate={() => {
-          refetchUpcomingEvents();
-          refetchThisWeekEvents();
-        }}
-        open={eventFormOpen}
-        closeModal={() => setEventFormOpen(false)}
-      />
       {selectedPost && (
         <PostModal
           onClose={() => {

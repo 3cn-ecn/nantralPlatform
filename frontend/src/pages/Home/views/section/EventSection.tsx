@@ -2,12 +2,14 @@ import React from 'react';
 
 import { Alert, Grid, Typography } from '@mui/material';
 
+import EventCard, {
+  EventCardSkeleton,
+} from '#modules/event/view/EventCard/EventCard';
+import { AccordionSection } from '#shared/components/Section/AccordionSection';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 import { LoadStatus } from '#types/GenericTypes';
 
-import EventCard, { EventCardSkeleton } from '../../../../modules/event/view/EventCard/EventCard';
-import { AccordionSection } from '../AccordionSection';
 import './EventSection.scss';
 
 function LoadingSkeleton(props: { count: number }) {
