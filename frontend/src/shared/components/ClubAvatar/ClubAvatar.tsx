@@ -4,7 +4,7 @@ import { Skeleton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton/IconButton';
 
-import { stringToColor } from '#utils/stringToColor';
+import { stringToColor } from '#shared/utils/stringToColor';
 
 export function ClubAvatar(props: {
   name: string;

@@ -2,19 +2,19 @@ import React, { FormEvent, useState } from 'react';
 
 import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
 import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  Typography,
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Typography,
 } from '@mui/material';
 
-import FormGroup, { FieldType } from '#utils/form';
+import FormGroup, { FieldType } from '#shared/utils/form';
 
 import Avatar from '../../Avatar/Avatar';
 import { Group, Membership, Student } from '../interfaces';

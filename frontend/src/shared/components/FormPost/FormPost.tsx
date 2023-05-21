@@ -3,24 +3,24 @@ import { useQuery } from 'react-query';
 
 import { Close, Delete } from '@mui/icons-material';
 import {
-  Alert,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  useMediaQuery,
-  useTheme,
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 
 import { getGroups } from '#api/group';
 import { createPost, deletePost, updatePost } from '#api/post';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import FormGroup from '#shared/utils/form';
 import { FieldType } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
 import { FormPostProps, PostProps } from '#types/Post';
-import FormGroup from '#utils/form';
 
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 

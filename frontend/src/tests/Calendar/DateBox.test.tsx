@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { DateBox } from '#shared/components/Calendar/ChooseWeek/DateBox/DateBox';
-import { wrapAndRender } from '#utils/tests';
+import { wrapAndRender } from '#shared/utils/tests';
 
 describe('<DateBox />', () => {
   it('should display a DateBox', async () => {

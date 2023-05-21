@@ -30,11 +30,11 @@ import { createEvent, deleteEvent, editEvent } from '#api/event';
 import { getGroups } from '#api/group';
 import { SimpleGroup } from '#shared/components/Group/interfaces';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { convertFromPythonData } from '#shared/utils/convertData';
+import FormGroup from '#shared/utils/form';
 import { EventProps, FormEventProps } from '#types/Event';
 import { FieldType } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
-import { convertFromPythonData } from '#utils/convertData';
-import FormGroup from '#utils/form';
 
 import { ConfirmationModal } from '../Modal/ConfirmationModal';
 import './FormEvent.scss';
@@ -116,7 +116,7 @@ function getFormFields(
     {
       kind: 'comment',
       name: 'help_shotgun',
-      text: 'Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre le lien d\'un form, soit définir un nombre max de participants',
+      text: "Si vous décidez de faire un shotgun vous pouvez au choix, soit mettre le lien d'un form, soit définir un nombre max de participants",
     },
   ];
 
@@ -127,7 +127,7 @@ function getFormFields(
         {
           kind: 'datetime',
           name: 'startRegistration',
-          label: 'Date heure d\'ouverture des inscriptions',
+          label: "Date heure d'ouverture des inscriptions",
           disablePast: true,
         },
         {
@@ -181,7 +181,7 @@ function getFormFields(
         {
           kind: 'datetime',
           name: 'startRegistration',
-          label: 'Date heure d\'ouverture des inscriptions',
+          label: "Date heure d'ouverture des inscriptions",
           disablePast: true,
         },
         {

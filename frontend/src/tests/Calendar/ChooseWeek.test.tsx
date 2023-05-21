@@ -2,7 +2,7 @@ import React from 'react';
 
 import { CalendarView } from '#shared/components/Calendar/CalendarProps/CalendarProps';
 import { ChooseWeek } from '#shared/components/Calendar/ChooseWeek/ChooseWeek';
-import { wrapAndRender } from '#utils/tests';
+import { wrapAndRender } from '#shared/utils/tests';
 
 let startDate = new Date('2023-02-17T03:24:00');
 const setstartDate = (newDate: Date) => {

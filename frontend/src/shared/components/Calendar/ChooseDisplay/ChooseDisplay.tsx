@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { modulo } from '#utils/maths';
+import { modulo } from '#shared/utils/maths';
 
 import { CalendarView } from '../CalendarProps/CalendarProps';
 import { firstMonthDay } from '../utils';

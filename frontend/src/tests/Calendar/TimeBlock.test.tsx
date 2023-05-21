@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { TimeBlock } from '#shared/components/Calendar/Day/TimeBlock/TimeBlock';
-import { wrapAndRender } from '#utils/tests';
+import { wrapAndRender } from '#shared/utils/tests';
 
 describe('<DayInfos />', () => {
   it('should display an TimeBlock', async () => {

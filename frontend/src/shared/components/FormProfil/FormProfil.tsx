@@ -15,8 +15,8 @@ import {
 } from '@mui/material';
 
 import { Suggestion } from '#shared/components/Suggestion/interfacesSuggestion';
+import FormGroup from '#shared/utils/form';
 import { FieldType } from '#types/GenericTypes';
-import FormGroup from '#utils/form';
 
 interface Profile {
   promo: number;

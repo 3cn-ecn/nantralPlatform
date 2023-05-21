@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { Day, sortWithPos } from '#shared/components/Calendar/Day/Day';
+import { wrapAndRender } from '#shared/utils/tests';
 import { EventProps } from '#types/Event';
-import { wrapAndRender } from '#utils/tests';
 
 import { createTestEvent } from './testElements/testElements';
 
@@ -88,6 +88,6 @@ describe('<Day />', () => {
   });
 
   test('sortWithPos should throw an error', async () => {
-    expect(() => sortWithPos([2, 3], events)).toThrow(`Event chain is wrong`);
+    expect(() => sortWithPos([2, 3], events)).toThrow('Event chain is wrong');
   });
 });

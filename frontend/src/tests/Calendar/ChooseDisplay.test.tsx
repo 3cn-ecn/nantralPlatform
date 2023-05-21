@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import { CalendarView } from '#shared/components/Calendar/CalendarProps/CalendarProps';
 import { ChooseDisplay } from '#shared/components/Calendar/ChooseDisplay/ChooseDisplay';
-import { wrapAndRender } from '#utils/tests';
+import { wrapAndRender } from '#shared/utils/tests';
 
 let dayDisplay: { type: CalendarView; startDate: number } = {
   type: 'day',

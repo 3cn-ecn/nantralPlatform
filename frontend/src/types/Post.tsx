@@ -1,4 +1,4 @@
-import { convertFromPythonData } from '#utils/convertData';
+import { convertFromPythonData } from '#shared/utils/convertData';
 
 import { SimpleGroupProps } from './Group';
 

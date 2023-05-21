@@ -4,8 +4,8 @@ import { Button, Grid } from '@mui/material';
 import { EventAttributes, createEvents } from 'ics';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { modulo, ppcm } from '#shared/utils/maths';
 import { EventProps } from '#types/Event';
-import { modulo, ppcm } from '#utils/maths';
 
 import './Calendar.scss';
 import { CalendarView, EventDataProps } from './CalendarProps/CalendarProps';
@@ -480,7 +480,7 @@ function setSameTimeEvents(
 
   // Try to place the events optimally
   if (!placeEvents(events, blockedEventsChain[0], blockedEventsChain, 0)) {
-    console.warn("Some events haven't been rightfully placed");
+    console.warn('Some events haven\'t been rightfully placed');
   }
 }
 

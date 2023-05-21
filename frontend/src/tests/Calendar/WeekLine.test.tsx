@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { WeekLine } from '#shared/components/Calendar/Month/WeekLine/WeekLine';
+import { wrapAndRender } from '#shared/utils/tests';
 import { EventProps } from '#types/Event';
-import { wrapAndRender } from '#utils/tests';
 
 import { createTestEvent } from './testElements/testElements';
 

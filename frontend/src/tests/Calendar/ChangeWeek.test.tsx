@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 
 import { CalendarView } from '#shared/components/Calendar/CalendarProps/CalendarProps';
 import { ChangeWeek } from '#shared/components/Calendar/ChooseWeek/ChangeWeek/ChangeWeek';
-import { wrapAndRender } from '#utils/tests';
+import { wrapAndRender } from '#shared/utils/tests';
 
 let startDate = new Date('2023-02-17T03:24:00');
 const setstartDate = (newDate: Date) => {

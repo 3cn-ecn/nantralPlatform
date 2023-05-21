@@ -3,8 +3,8 @@ import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { render } from '@testing-library/react';
 
-import '../shared/i18n/config';
-import getTheme from '../theme';
+import getTheme from '../../theme';
+import '../i18n/config';
 
 /**
  * Customise the `render` function from '@testing-library/react' but with some
