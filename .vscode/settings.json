@@ -1,7 +1,6 @@
 {
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
   "editor.insertSpaces": true,
+  "editor.codeActionsOnSave": { "source.fixAll": true },
   "editor.rulers": [80],
   "files.associations": {
     "*.html": "html",
