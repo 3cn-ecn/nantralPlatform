@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Alert, AlertTitle, Button } from '@mui/material';
 import { Container } from '@mui/system';
 
-import EditSuggestionModal from '#components/Suggestion/Suggestion';
+import EditSuggestionModal from '#shared/components/Suggestion/Suggestion';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 /**

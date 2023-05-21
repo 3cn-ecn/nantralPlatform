@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { Grid, Typography } from '@mui/material';
 
-import { Group, SimpleGroup } from '#components/Group/interfaces';
+import { Group, SimpleGroup } from '#shared/components/Group/interfaces';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 

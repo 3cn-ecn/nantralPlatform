@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TimeBlock } from '#components/Calendar/Day/TimeBlock/TimeBlock';
+import { TimeBlock } from '#shared/components/Calendar/Day/TimeBlock/TimeBlock';
 import { wrapAndRender } from '#utils/tests';
 
 describe('<DayInfos />', () => {

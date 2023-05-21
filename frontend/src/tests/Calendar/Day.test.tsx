@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { Day, sortWithPos } from '#components/Calendar/Day/Day';
+import { Day, sortWithPos } from '#shared/components/Calendar/Day/Day';
 import { EventProps } from '#types/Event';
 import { wrapAndRender } from '#utils/tests';
 

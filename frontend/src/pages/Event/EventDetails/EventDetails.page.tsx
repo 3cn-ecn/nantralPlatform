@@ -3,40 +3,40 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
 import {
-  AccessTime as AccessTimeIcon,
-  CalendarToday as CalendarTodayIcon,
-  Edit as EditIcon,
-  MoreHoriz as MoreHorizIcon,
-  People as PeopleIcon,
-  Place as PlaceIcon,
-  Share as ShareIcon,
+    AccessTime as AccessTimeIcon,
+    CalendarToday as CalendarTodayIcon,
+    Edit as EditIcon,
+    MoreHoriz as MoreHorizIcon,
+    People as PeopleIcon,
+    Place as PlaceIcon,
+    Share as ShareIcon,
 } from '@mui/icons-material';
 import {
-  Box,
-  Button,
-  Chip,
-  CircularProgress,
-  Container,
-  Grid,
-  Menu,
-  MenuItem,
-  Alert as MuiAlert,
-  Snackbar,
-  Tab,
-  Tabs,
-  Typography,
-  useMediaQuery,
+    Box,
+    Button,
+    Chip,
+    CircularProgress,
+    Container,
+    Grid,
+    Menu,
+    MenuItem,
+    Alert as MuiAlert,
+    Snackbar,
+    Tab,
+    Tabs,
+    Typography,
+    useMediaQuery,
 } from '@mui/material';
 import type { AlertProps } from '@mui/material/Alert';
 
-import FavButton from '#components/Button/FavButton';
-import JoinButton from '#components/Button/JoinButton';
-import { ClubAvatar } from '#components/ClubAvatar/ClubAvatar';
-import EditEventModal from '#components/FormEvent/FormEvent';
-import { EventParticipantsModal } from '#components/Modal/EventParticipantsModal';
-import { ImageModal } from '#components/Modal/ImageModal';
 import { getEventDetails } from '#modules/event/api/getEventDetails';
 import NotFound from '#pages/NotFound/NotFound.page';
+import FavButton from '#shared/components/Button/FavButton';
+import JoinButton from '#shared/components/Button/JoinButton';
+import { ClubAvatar } from '#shared/components/ClubAvatar/ClubAvatar';
+import EditEventModal from '#shared/components/FormEvent/FormEvent';
+import { EventParticipantsModal } from '#shared/components/Modal/EventParticipantsModal';
+import { ImageModal } from '#shared/components/Modal/ImageModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import './EventDetails.page.scss';

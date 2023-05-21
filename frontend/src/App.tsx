@@ -6,8 +6,6 @@ import { Box, CssBaseline, PaletteMode, Toolbar } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import NavBarSide from '#components/NavBarSide/NavBarSide';
-import NavBarTop from '#components/NavBarTop/NavBarTop';
 import EventPage from '#pages/Event/Event.page';
 import EventDetailsPage from '#pages/Event/EventDetails/EventDetails.page';
 import GroupPage from '#pages/Group/Group.page';
@@ -16,6 +14,8 @@ import LegalNoticePage from '#pages/LegalNotice/Legal.page';
 import NotFoundPage from '#pages/NotFound/NotFound.page';
 import ProfilePage from '#pages/Profile/Profile.page';
 import StudentPage from '#pages/Student/Student.page';
+import NavBarSide from '#shared/components/NavBarSide/NavBarSide';
+import NavBarTop from '#shared/components/NavBarTop/NavBarTop';
 
 import getTheme from './theme';
 

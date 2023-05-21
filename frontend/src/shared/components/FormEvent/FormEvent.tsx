@@ -2,33 +2,33 @@ import React from 'react';
 import { useQuery } from 'react-query';
 
 import {
-  Close as CloseIcon,
-  Delete,
-  People as FreeIcon,
-  Link as LinkIcon,
-  LocalFireDepartment as ShotgunIcon,
+    Close as CloseIcon,
+    Delete,
+    People as FreeIcon,
+    Link as LinkIcon,
+    LocalFireDepartment as ShotgunIcon,
 } from '@mui/icons-material';
 import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  MenuItem,
-  Paper,
-  Select,
-  Typography,
-  useMediaQuery,
-  useTheme,
+    Alert,
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    MenuItem,
+    Paper,
+    Select,
+    Typography,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 
 import { createEvent, deleteEvent, editEvent } from '#api/event';
 import { getGroups } from '#api/group';
-import { SimpleGroup } from '#components/Group/interfaces';
+import { SimpleGroup } from '#shared/components/Group/interfaces';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 import { FieldType } from '#types/GenericTypes';

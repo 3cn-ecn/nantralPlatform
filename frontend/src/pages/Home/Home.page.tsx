@@ -4,33 +4,33 @@ import { Link, useSearchParams } from 'react-router-dom';
 
 import { Event, PostAdd } from '@mui/icons-material';
 import {
-  Box,
-  Chip,
-  Container,
-  Divider,
-  SpeedDial,
-  SpeedDialAction,
-  SpeedDialIcon,
-  Typography,
+    Box,
+    Chip,
+    Container,
+    Divider,
+    SpeedDial,
+    SpeedDialAction,
+    SpeedDialIcon,
+    Typography,
 } from '@mui/material';
 import axios from 'axios';
 
 import { getMyGroups } from '#api/group';
 import { getPosts } from '#api/post';
-import EditEventModal from '#components/FormEvent/FormEvent';
-import { FormPost } from '#components/FormPost/FormPost';
-import { PostModal } from '#components/Modal/PostModal';
-import { ClubSection } from '#components/Section/ClubSection/ClubSection';
-import { EventSection } from '#components/Section/EventSection/EventSection';
-import { PostSection } from '#components/Section/PostSection/PostSection';
 import { getEvents } from '#modules/event/api/getEventList';
+import EditEventModal from '#shared/components/FormEvent/FormEvent';
+import { FormPost } from '#shared/components/FormPost/FormPost';
+import { PostModal } from '#shared/components/Modal/PostModal';
+import { ClubSection } from '#shared/components/Section/ClubSection/ClubSection';
+import { EventSection } from '#shared/components/Section/EventSection/EventSection';
+import { PostSection } from '#shared/components/Section/PostSection/PostSection';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
 import {
-  FormPostProps,
-  PostProps,
-  convertPostFromPythonData,
+    FormPostProps,
+    PostProps,
+    convertPostFromPythonData,
 } from '#types/Post';
 
 import './Home.page.scss';

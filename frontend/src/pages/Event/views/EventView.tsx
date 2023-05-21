@@ -4,9 +4,9 @@ import { useInfiniteQuery, useQuery } from 'react-query';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 
-import Calendar from '#components/Calendar/Calendar';
 import { getEvents } from '#modules/event/api/getEventList';
 import { PartialEvent } from '#modules/event/event.type';
+import Calendar from '#shared/components/Calendar/Calendar';
 import { FilterInterface } from '#types/Filter';
 import { Page } from '#types/Group';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DayInfos } from '#components/Calendar/DayInfos/DayInfos';
+import { DayInfos } from '#shared/components/Calendar/DayInfos/DayInfos';
 import { wrapAndRender } from '#utils/tests';
 
 describe('<DayInfos />', () => {

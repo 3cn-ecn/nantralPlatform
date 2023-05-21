@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 
 import SettingsIcon from '@mui/icons-material/Settings';
 import {
-  Badge,
-  Box,
-  Button,
-  Chip,
-  Icon,
-  IconButton,
-  ListItem,
-  Menu,
-  Typography,
+    Badge,
+    Box,
+    Button,
+    Chip,
+    Icon,
+    IconButton,
+    ListItem,
+    Menu,
+    Typography,
 } from '@mui/material';
 import Collapse from '@mui/material/Collapse';
 import SvgIcon from '@mui/material/SvgIcon';
@@ -19,7 +19,7 @@ import axios from 'axios';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import merge from '../../legacy/notification/utils';
+import merge from '../../../legacy/notification/utils';
 import { NotificationItem } from './NotificationItem';
 import './NotificationItem.scss';
 

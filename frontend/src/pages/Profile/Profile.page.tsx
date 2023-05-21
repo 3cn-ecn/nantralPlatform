@@ -6,9 +6,9 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Grid, Skeleton, SvgIcon, Typography } from '@mui/material';
 import axios from 'axios';
 
-import Avatar from '#components/Avatar/Avatar';
-import { EditProfilModal } from '#components/FormProfil/FormProfil';
-import { MembershipsStudent } from '#components/Group/MembershipsStudent';
+import Avatar from '#shared/components/Avatar/Avatar';
+import { EditProfilModal } from '#shared/components/FormProfil/FormProfil';
+import { MembershipsStudent } from '#shared/components/Group/MembershipsStudent';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 

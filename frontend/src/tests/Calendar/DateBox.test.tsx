@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DateBox } from '#components/Calendar/ChooseWeek/DateBox/DateBox';
+import { DateBox } from '#shared/components/Calendar/ChooseWeek/DateBox/DateBox';
 import { wrapAndRender } from '#utils/tests';
 
 describe('<DateBox />', () => {

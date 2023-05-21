@@ -3,13 +3,13 @@ import { useSearchParams } from 'react-router-dom';
 
 import { Box, Button, Container } from '@mui/material';
 
+import { getGroup } from '#api/group';
 import { FilterInterface } from '#types/Filter';
 
-import FilterBar from '../../components/FilterBar/FilterBar';
-import ModalEditEvent from '../../components/FormEvent/FormEvent';
+import FilterBar from '../../shared/components/FilterBar/FilterBar';
+import ModalEditEvent from '../../shared/components/FormEvent/FormEvent';
 import './Event.page.scss';
 import EventView from './views/EventView';
-import { getGroup } from '#api/group';
 
 /**
  * Event Page, with Welcome message, next events, etc...

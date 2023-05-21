@@ -4,22 +4,22 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { Delete } from '@mui/icons-material';
 import {
-  Autocomplete,
-  AutocompleteInputChangeReason,
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography
+    Autocomplete,
+    AutocompleteInputChangeReason,
+    Box,
+    Button,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormHelperText,
+    FormLabel,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+    Typography
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -29,7 +29,7 @@ import axios from 'axios';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/fr';
 
-import Avatar from '#components/Avatar/Avatar';
+import Avatar from '#shared/components/Avatar/Avatar';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { FieldType } from '#types/GenericTypes';
 
