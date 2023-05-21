@@ -24,14 +24,14 @@
     "showLess": "Afficher moins",
     "yes": "oui"
   },
-  "calendar":{
+  "calendar": {
     "export": "Exporter les évènements",
     "to": "au",
-    "view":{
-      "day": "Jour",
+    "view": {
       "3Days": "3 Jours",
-      "week": "Semaine",
-      "month": "Mois"
+      "day": "Jour",
+      "month": "Mois",
+      "week": "Semaine"
     }
   },
   "club": {
@@ -209,6 +209,9 @@
     "iti": "Élève Ingénieur de Spécialité (ITII)",
     "master": "Élève en Master",
     "promo": "Année d'entrée à Centrale: "
+  },
+  "site": {
+    "name": "Nantral Platform"
   },
   "suggestion_menu": {
     "cancel": "Annuler",

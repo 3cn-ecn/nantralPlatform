@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import { Event, PostAdd } from '@mui/icons-material';
 import {
-    Box,
-    Chip,
-    Container,
-    Divider,
-    SpeedDial,
-    SpeedDialAction,
-    SpeedDialIcon,
-    Typography,
+  Box,
+  Chip,
+  Container,
+  Divider,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+  Typography,
 } from '@mui/material';
 import axios from 'axios';
 
@@ -28,12 +28,13 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
 import {
-    FormPostProps,
-    PostProps,
-    convertPostFromPythonData,
+  FormPostProps,
+  PostProps,
+  convertPostFromPythonData,
 } from '#types/Post';
 
 import './Home.page.scss';
+import { HomeHeader } from './views/HomeHeader';
 
 const MAX_EVENT_SHOWN = 6;
 
@@ -51,12 +52,12 @@ export default function HomePage() {
   const postDateLimit = new Date();
   postDateLimit.setDate(today.getDay() - 15);
   // Modals
-  const [postFormOpen, setPostFormOpen] = React.useState<boolean>(false);
-  const [eventFormOpen, setEventFormOpen] = React.useState<boolean>(false);
-  const [selectedPost, setSelectedPost] = React.useState<PostProps>(null);
+  const [postFormOpen, setPostFormOpen] = useState<boolean>(false);
+  const [eventFormOpen, setEventFormOpen] = useState<boolean>(false);
+  const [selectedPost, setSelectedPost] = useState<PostProps>(null);
   const { t } = useTranslation(); // translation module
 
-  React.useEffect(() => {
+  useEffect(() => {
     const postId = queryParams.get('post');
     if (postId) {
       axios
@@ -144,26 +145,8 @@ export default function HomePage() {
 
   return (
     <>
-      <div className="header">
-        <div id="header-title">
-          <Typography id="second-title">{t('home.welcomeTo')}</Typography>
-          <div id="title">
-            <Typography id="main-title">Nantral Platform</Typography>
-          </div>
-        </div>
-        <div className="header-image-container">
-          <img className="header-image" alt="" src="/static/img/header.png" />
-        </div>
-      </div>
-      <Box
-        bgcolor="background.default"
-        id="home-container"
-        style={{
-          alignContent: 'center',
-          display: 'flex',
-          paddingTop: 20,
-        }}
-      >
+      <HomeHeader />
+      <Container sx={{ my: 4 }}>
         <SpeedDial
           ariaLabel="SpeedDial"
           sx={{ position: 'fixed', bottom: 24, right: 24, flexGrow: 1 }}
@@ -179,60 +162,58 @@ export default function HomePage() {
             />
           ))}
         </SpeedDial>
-        <Container sx={{ marginBottom: 3 }}>
-          {(pinnedPostsStatus === 'loading' || pinnedPosts.length > 0) && (
-            <PostSection
-              posts={pinnedPosts}
-              title={t('home.highlighted')}
-              status={pinnedPostsStatus}
-              onUpdate={(newPost: FormPostProps) => {
-                refetchPinnedPosts();
-                if (!newPost.pinned) refetchPosts();
-              }}
-            />
-          )}
+        {(pinnedPostsStatus === 'loading' || pinnedPosts.length > 0) && (
           <PostSection
-            posts={posts}
-            title={t('home.announcement')}
-            status={postsStatus}
+            posts={pinnedPosts}
+            title={t('home.highlighted')}
+            status={pinnedPostsStatus}
             onUpdate={(newPost: FormPostProps) => {
-              refetchPosts();
-              if (newPost.pinned) refetchPinnedPosts();
+              refetchPinnedPosts();
+              if (!newPost.pinned) refetchPosts();
             }}
           />
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            marginBottom={1}
-          >
-            <Typography variant="h4" margin={0}>
-              {t('navbar.events')}
-            </Typography>
-            <Link to="/event" style={{ textDecorationLine: 'none' }}>
-              <Chip label={t('button.seeAll')} clickable />
-            </Link>
-          </Box>
-          <Divider sx={{ marginBottom: 1 }} />
-          <EventSection
-            events={thisWeekEvents.results}
-            status={thisWeekEventsStatus}
-            title={t('home.thisWeek')}
-          />
-          <EventSection
-            events={upcomingEvents.results}
-            status={upcomingEventsStatus}
-            maxItem={6}
-            loadingItemCount={MAX_EVENT_SHOWN}
-            title={t('home.upcomingEvents')}
-          />
-          <ClubSection
-            clubs={myGroups}
-            status={myGroupsStatus}
-            title={t('home.myClubs')}
-          />
-        </Container>
-      </Box>
+        )}
+        <PostSection
+          posts={posts}
+          title={t('home.announcement')}
+          status={postsStatus}
+          onUpdate={(newPost: FormPostProps) => {
+            refetchPosts();
+            if (newPost.pinned) refetchPinnedPosts();
+          }}
+        />
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          marginBottom={1}
+        >
+          <Typography variant="h4" margin={0}>
+            {t('navbar.events')}
+          </Typography>
+          <Link to="/event" style={{ textDecorationLine: 'none' }}>
+            <Chip label={t('button.seeAll')} clickable />
+          </Link>
+        </Box>
+        <Divider sx={{ marginBottom: 1 }} />
+        <EventSection
+          events={thisWeekEvents}
+          status={thisWeekEventsStatus}
+          title={t('home.thisWeek')}
+        />
+        <EventSection
+          events={upcomingEvents}
+          status={upcomingEventsStatus}
+          maxItem={6}
+          loadingItemCount={MAX_EVENT_SHOWN}
+          title={t('home.upcomingEvents')}
+        />
+        <ClubSection
+          clubs={myGroups}
+          status={myGroupsStatus}
+          title={t('home.myClubs')}
+        />
+      </Container>
       <FormPost
         open={postFormOpen}
         onClose={() => setPostFormOpen(false)}

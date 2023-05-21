@@ -24,14 +24,14 @@
     "showLess": "Show less",
     "yes": "Yes"
   },
-  "calendar":{
+  "calendar": {
     "export": "Export events",
     "to": "to",
-    "view":{
-      "day": "Day",
+    "view": {
       "3Days": "3 Days",
-      "week": "Week",
-      "month": "Month"
+      "day": "Day",
+      "month": "Month",
+      "week": "Week"
     }
   },
   "club": {
@@ -208,6 +208,9 @@
     "iti": "Specialty engineering student (ITII)",
     "master": "Student in Master",
     "promo": "Year of entry at Centrale: "
+  },
+  "site": {
+    "name": "Nantral Platform"
   },
   "suggestion_menu": {
     "cancel": "Cancel",

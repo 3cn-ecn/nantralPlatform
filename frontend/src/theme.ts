@@ -1,7 +1,7 @@
-import { PaletteMode, createTheme } from '@mui/material';
+import { PaletteMode, createTheme, responsiveFontSizes } from '@mui/material';
 
 function getTheme(mode: PaletteMode) {
-  return createTheme({
+  const theme = createTheme({
     palette: {
       mode: mode,
       primary: {
@@ -29,19 +29,15 @@ function getTheme(mode: PaletteMode) {
       fontWeightLight: 300,
       fontWeightBold: 800,
       h1: {
-        fontSize: '4rem',
         fontWeight: 600,
       },
       h2: {
-        fontWeight: 600,
         fontSize: '3rem',
       },
       h3: {
-        fontSize: '2.5rem',
         fontWeight: 600,
       },
       h4: {
-        fontSize: '2rem',
         fontWeight: 500,
       },
       h5: {
@@ -105,6 +101,8 @@ function getTheme(mode: PaletteMode) {
       },
     },
   });
+
+  return responsiveFontSizes(theme);
 }
 
 declare module '@mui/material/styles' {

@@ -59,7 +59,7 @@
     "pipenv",
     "testid"
   ],
-  "i18n-ally.localesPaths": "frontend/src/i18n",
+  "i18n-ally.localesPaths": "frontend/src/shared/i18n",
   "i18n-ally.enabledFrameworks": ["react", "general"],
   "i18n-ally.pathMatcher": "{locale}.json",
   "i18n-ally.keystyle": "nested",
