@@ -4,22 +4,22 @@ import { useNavigate } from 'react-router-dom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import {
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  CircularProgress,
-  Skeleton,
-  Typography,
+    Card,
+    CardActionArea,
+    CardContent,
+    CardMedia,
+    CircularProgress,
+    Skeleton,
+    Typography,
 } from '@mui/material/';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 
-import FavButton from '../Button/FavButton';
-import JoinButton from '../Button/JoinButton';
-import MoreActionsButton from '../Button/MoreActionsButton';
-import { ClubAvatar } from '../ClubAvatar/ClubAvatar';
+import FavButton from '../../../../shared/components/Button/FavButton';
+import JoinButton from '../../../../shared/components/Button/JoinButton';
+import MoreActionsButton from '../../../../shared/components/Button/MoreActionsButton';
+import { ClubAvatar } from '../../../../shared/components/ClubAvatar/ClubAvatar';
 import './EventCard.scss';
 
 function InfoItem(props: { name: string; value: string }) {

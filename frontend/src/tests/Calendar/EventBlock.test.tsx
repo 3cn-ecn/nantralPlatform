@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { EventBlock } from '#shared/components/Calendar/Day/EventBlock/EventBlock';
+import { EventBlock } from '#modules/event/view/Calendar/Day/EventBlock/EventBlock';
 import { wrapAndRender } from '#shared/utils/tests';
 import { EventProps } from '#types/Event';
 

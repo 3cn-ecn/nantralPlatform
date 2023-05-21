@@ -6,7 +6,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps, FormEventProps } from '#types/Event';
 import { LoadStatus } from '#types/GenericTypes';
 
-import EventCard, { EventCardSkeleton } from '../../EventCard/EventCard';
+import EventCard, { EventCardSkeleton } from '../../../../modules/event/view/EventCard/EventCard';
 import { AccordionSection } from '../AccordionSection';
 import './EventSection.scss';
 

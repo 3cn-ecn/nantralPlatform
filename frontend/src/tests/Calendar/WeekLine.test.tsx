@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { WeekLine } from '#shared/components/Calendar/Month/WeekLine/WeekLine';
+import { WeekLine } from '#modules/event/view/Calendar/Month/WeekLine/WeekLine';
 import { wrapAndRender } from '#shared/utils/tests';
 import { EventProps } from '#types/Event';
 

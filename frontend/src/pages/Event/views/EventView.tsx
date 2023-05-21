@@ -6,7 +6,7 @@ import { Box, Tab } from '@mui/material';
 
 import { getEvents } from '#modules/event/api/getEventList';
 import { PartialEvent } from '#modules/event/event.type';
-import Calendar from '#shared/components/Calendar/Calendar';
+import Calendar from '#modules/event/view/Calendar/Calendar';
 import { FilterInterface } from '#types/Filter';
 import { Page } from '#types/Group';
 

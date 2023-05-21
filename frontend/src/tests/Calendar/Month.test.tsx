@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import { Month } from '#shared/components/Calendar/Month/Month';
+import { Month } from '#modules/event/view/Calendar/Month/Month';
 import { wrapAndRender } from '#shared/utils/tests';
 import { EventProps } from '#types/Event';
 
