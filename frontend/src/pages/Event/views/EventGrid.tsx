@@ -1,23 +1,23 @@
 import React from 'react';
 
 import {
-    AutoAwesomeMotion,
-    Favorite,
-    Sort,
-    Today,
-    Upcoming,
+  AutoAwesomeMotion,
+  Favorite,
+  Sort,
+  Today,
+  Upcoming,
 } from '@mui/icons-material';
 import {
-    Box,
-    Chip,
-    IconButton,
-    Menu,
-    MenuItem,
-    Typography,
+  Box,
+  Chip,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
 } from '@mui/material';
 
+import { EventSection } from '#pages/Home/views/section/EventSection';
 import Avatar from '#shared/components/Avatar/Avatar';
-import { EventSection } from '#shared/components/Section/EventSection/EventSection';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps } from '#types/Event';
 import { FilterInterface } from '#types/Filter';

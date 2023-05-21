@@ -41,7 +41,7 @@ export function CreateNewButton({
     <>
       <SpeedDial
         ariaLabel="SpeedDial"
-        sx={{ position: 'fixed', bottom: 24, right: 24, flexGrow: 1 }}
+        sx={{ position: 'fixed', bottom: 24, right: 24 }}
         icon={<SpeedDialIcon />}
       >
         {actions.map((action) => (

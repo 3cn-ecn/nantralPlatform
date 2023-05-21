@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import { Container } from '@mui/material';
 import axios from 'axios';
 
+import { ClubSection } from '#pages/Home/views/section/ClubSection';
 import { SimpleGroup } from '#shared/components/Group/interfaces';
-import { ClubSection } from '#shared/components/Section/ClubSection/ClubSection';
 import { LoadStatus } from '#types/GenericTypes';
 
 import NotFound from '../NotFound/NotFound.page';
