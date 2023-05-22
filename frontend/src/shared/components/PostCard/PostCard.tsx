@@ -209,5 +209,5 @@ PostCard.defaultProps = {
 };
 
 export function PostCardSkeleton() {
-  return <Skeleton variant="rectangular" width="100%" height={POST_HEIGHT} />;
+  return <Skeleton variant="rounded" width="100%" height={POST_HEIGHT} />;
 }

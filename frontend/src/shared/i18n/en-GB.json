@@ -20,8 +20,8 @@
     "like": "Like",
     "seeAll": "See all",
     "seePage": "See page",
-    "showAll": "Show all",
     "showLess": "Show less",
+    "showMore": "Show more",
     "yes": "Yes"
   },
   "calendar": {
@@ -106,10 +106,14 @@
   },
   "home": {
     "all": "All",
-    "announcement": "Announcement",
-    "highlighted": "Highlighted",
     "myClubs": "My groups",
     "myEvents": "My events",
+    "postSection": {
+      "error": "Error: posts cannot be loaded 😢",
+      "isEmpty": "No post in the last few days... 🥺 Create a new one!",
+      "pinnedTitle": "Featured",
+      "title": "Posts"
+    },
     "seeMore": "see more",
     "thisWeek": "This week",
     "upcomingEvents": "Upcoming Events",

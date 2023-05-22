@@ -6,18 +6,18 @@ import { Box, Chip, Container, Divider, Typography } from '@mui/material';
 import axios from 'axios';
 
 import { getMyGroups } from '#api/group';
-import { getPosts } from '#api/post';
 import { getEvents } from '#modules/event/api/getEventList';
 import { PostModal } from '#shared/components/Modal/PostModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
 import {
-  FormPostProps,
   PostProps,
-  convertPostFromPythonData,
+  convertPostFromPythonData
 } from '#types/Post';
 
+import { useLastPosts } from './hooks/useLastPosts.hook';
+import { usePinnedPosts } from './hooks/usePinnedPosts.hook';
 import { CreateNewButton } from './views/CreateNewButton';
 import { HomeHeader } from './views/HomeHeader';
 import { ClubSection } from './views/section/ClubSection';
@@ -37,11 +37,13 @@ export default function HomePage() {
   const today = new Date();
   const nextWeek = new Date();
   nextWeek.setDate(today.getDate() + 7);
-  const postDateLimit = new Date();
-  postDateLimit.setDate(today.getDay() - 15);
   // Modals
   const [selectedPost, setSelectedPost] = useState<PostProps>(null);
   const { t } = useTranslation(); // translation module
+
+  const { lastPosts, refetchLastPosts, ...lastPostsQuery } = useLastPosts();
+  const { pinnedPosts, refetchPinnedPosts, ...pinnedPostsQuery } =
+    usePinnedPosts();
 
   useEffect(() => {
     const postId = queryParams.get('post');
@@ -92,37 +94,13 @@ export default function HomePage() {
       }),
   });
 
-  const {
-    status: pinnedPostsStatus,
-    data: pinnedPosts,
-    refetch: refetchPinnedPosts,
-  } = useQuery<PostProps[]>({
-    queryKey: 'pinnedPosts',
-    queryFn: () =>
-      getPosts({
-        pinned: true,
-      }),
-  });
-  const {
-    status: postsStatus,
-    data: posts,
-    refetch: refetchPosts,
-  } = useQuery<PostProps[]>({
-    queryKey: 'posts',
-    queryFn: () =>
-      getPosts({
-        pinned: false,
-        fromDate: postDateLimit,
-      }),
-  });
-
   return (
     <>
       <HomeHeader />
       <Container sx={{ my: 4 }}>
         <CreateNewButton
           onEventCreated={() => {
-            refetchPosts();
+            refetchLastPosts();
             refetchPinnedPosts();
           }}
           onPostCreated={() => {
@@ -130,23 +108,25 @@ export default function HomePage() {
             refetchThisWeekEvents();
           }}
         />
-        {(pinnedPostsStatus === 'loading' || pinnedPosts.length > 0) && (
+        {(pinnedPostsQuery.isLoading ||
+          (pinnedPostsQuery.isSuccess && pinnedPosts.length > 0)) && (
           <PostSection
+            pinnedOnly
             posts={pinnedPosts}
-            title={t('home.highlighted')}
-            status={pinnedPostsStatus}
-            onUpdate={(newPost: FormPostProps) => {
+            isLoading={pinnedPostsQuery.isLoading}
+            isError={pinnedPostsQuery.isError}
+            onUpdate={(newPost) => {
               refetchPinnedPosts();
-              if (!newPost.pinned) refetchPosts();
+              if (!newPost.pinned) refetchLastPosts();
             }}
           />
         )}
         <PostSection
-          posts={posts}
-          title={t('home.announcement')}
-          status={postsStatus}
-          onUpdate={(newPost: FormPostProps) => {
-            refetchPosts();
+          posts={lastPosts}
+          isLoading={lastPostsQuery.isLoading}
+          isError={lastPostsQuery.isError}
+          onUpdate={(newPost) => {
+            refetchLastPosts();
             if (newPost.pinned) refetchPinnedPosts();
           }}
         />

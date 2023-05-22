@@ -1,95 +1,101 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import {
+  ExpandLess as ExpandLessIcon,
+  ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
+import { Alert, Button, Grid, Typography } from '@mui/material';
 
+import { Post } from '#modules/post/post.types';
 import {
   PostCard,
   PostCardSkeleton,
 } from '#shared/components/PostCard/PostCard';
+import { Section } from '#shared/components/Section/Section';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { LoadStatus } from '#types/GenericTypes';
-import { FormPostProps, PostProps } from '#types/Post';
+import { FormPostProps } from '#types/Post';
 
-/**
- * Une section comportant
- * un titre,
- * un bouton __voir plus__ qui redirige vers une autre page du site,
- * et les événements de `events`
- */
-export function PostSection(props: {
-  status: LoadStatus;
-  /** La liste des posts à afficher */
-  posts: Array<PostProps>;
-  /** Titre de la section */
-  title?: string;
-  /** Nombre maximal d'éléments à afficher */
-  maxItem?: number;
-  /** Nombre d'item à afficher de base */
-  shownItem?: number;
-  onUpdate?: (post: null | FormPostProps) => void;
-}) {
-  const { posts, title, maxItem, status, shownItem, onUpdate } = props;
-  const allPosts = maxItem && posts ? posts.slice(0, maxItem) : posts;
+const DEFAULT_POST_NUMBER = 3;
+
+type PostSectionProps = {
+  posts: Array<Post>;
+  isLoading: boolean;
+  isError: boolean;
+  onUpdate?: (post: FormPostProps) => void;
+  pinnedOnly?: boolean;
+};
+
+export function PostSection({
+  posts,
+  isLoading,
+  isError,
+  onUpdate,
+  pinnedOnly = false,
+}: PostSectionProps) {
   const { t } = useTranslation();
-  const [showAll, setShowAll] = React.useState<boolean>(false);
-  let content;
-  switch (status) {
-    case 'error':
-      content = <p>Error</p>;
-      break;
-    case 'loading':
-      content = [0, 1, 2].map((item) => (
-        <Grid key={item} xs={12} md={4} item>
-          <PostCardSkeleton />
-        </Grid>
-      ));
-      break;
-    case 'success':
-      if (posts && allPosts?.length > 0)
-        content = allPosts
-          .slice(0, showAll ? allPosts.length : shownItem)
-          .map((post) => (
-            <Grid key={post.id} xs={12} md={4} item>
-              <PostCard
-                post={post}
-                onUpdate={onUpdate}
-                onDelete={() => onUpdate(null)}
-              />
+  const [showAll, setShowAll] = useState(false);
+
+  const sectionTitle = pinnedOnly
+    ? t('home.postSection.pinnedTitle')
+    : t('home.postSection.title');
+
+  if (isLoading) {
+    return (
+      <Section title={sectionTitle}>
+        <Grid container spacing={1}>
+          {[0, 1, 2].map((item) => (
+            <Grid key={item} xs={12} md={4} item>
+              <PostCardSkeleton />
             </Grid>
-          ));
-      else
-        content = (
-          <Typography sx={{ marginLeft: 3, fontSize: 18 }}>
-            {t('post.noPost')} 🥹
-          </Typography>
-        );
-      break;
-    default:
-      content = [<p key={0}>Nothing to show</p>];
+          ))}
+        </Grid>
+      </Section>
+    );
   }
+
+  if (isError) {
+    return (
+      <Section title={sectionTitle}>
+        <Alert severity="error" sx={{ width: 'max-content' }}>
+          {t('home.postSection.error')}
+        </Alert>
+      </Section>
+    );
+  }
+
+  if (posts.length === 0) {
+    return (
+      <Section title={sectionTitle}>
+        <Typography>{t('home.postSection.isEmpty')}</Typography>
+      </Section>
+    );
+  }
+
+  const postsToShow = posts.slice(0, showAll ? undefined : DEFAULT_POST_NUMBER);
+
   return (
-    <Box marginBottom={2}>
-      <Typography variant="h4" className="section-title">
-        {title}
-      </Typography>
-      <Grid sx={{ marginTop: 0, marginBottom: 1 }} spacing={1} container>
-        {content}
+    <Section title={sectionTitle}>
+      <Grid spacing={1} container>
+        {postsToShow.map((post) => (
+          <Grid key={post.id} xs={12} md={4} item>
+            <PostCard
+              post={post}
+              onUpdate={onUpdate}
+              onDelete={() => onUpdate(null)}
+            />
+          </Grid>
+        ))}
       </Grid>
-      {allPosts?.length > shownItem && (
-        <>
-          <Divider />
-          <Button onClick={() => setShowAll(!showAll)}>
-            {showAll ? t('button.showLess') : t('button.showAll')}
-          </Button>
-        </>
+      {posts.length > DEFAULT_POST_NUMBER && (
+        <Button
+          onClick={() => setShowAll(!showAll)}
+          endIcon={showAll ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          color="secondary"
+          sx={{ mt: 1 }}
+        >
+          {showAll ? t('button.showLess') : t('button.showMore')}
+        </Button>
       )}
-    </Box>
+    </Section>
   );
 }
-
-PostSection.defaultProps = {
-  title: null,
-  maxItem: null,
-  shownItem: 3,
-  onUpdate: () => null,
-};

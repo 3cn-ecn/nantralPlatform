@@ -20,8 +20,8 @@
     "like": "J'aime",
     "seeAll": "Voir tous",
     "seePage": "Voir la page",
-    "showAll": "Tout afficher",
     "showLess": "Afficher moins",
+    "showMore": "Afficher plus",
     "yes": "oui"
   },
   "calendar": {
@@ -107,10 +107,14 @@
   },
   "home": {
     "all": "Tous",
-    "announcement": "Annonces",
-    "highlighted": "À la une",
     "myClubs": "Mes groupes",
     "myEvents": "Mes événements",
+    "postSection": {
+      "error": "Erreur : les annonces n'ont pas pu êre chargées 😢",
+      "isEmpty": "Aucun post ces derniers jours... 🥺 Créez-en un !",
+      "pinnedTitle": "À la une",
+      "title": "Annonces"
+    },
     "seeMore": "voir plus",
     "thisWeek": "Cette semaine",
     "upcomingEvents": "Évènements à venir",
