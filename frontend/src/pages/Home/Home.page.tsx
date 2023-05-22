@@ -11,10 +11,7 @@ import { PostModal } from '#shared/components/Modal/PostModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
-import {
-  PostProps,
-  convertPostFromPythonData
-} from '#types/Post';
+import { PostProps, convertPostFromPythonData } from '#types/Post';
 
 import { useLastPosts } from './hooks/useLastPosts.hook';
 import { usePinnedPosts } from './hooks/usePinnedPosts.hook';

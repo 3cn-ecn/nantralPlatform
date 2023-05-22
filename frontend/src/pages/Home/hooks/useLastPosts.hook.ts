@@ -4,15 +4,16 @@ import { getPosts } from '#api/post';
 
 export function useLastPosts() {
   const today = new Date();
-  const postDateLimit = new Date();
-  postDateLimit.setDate(today.getDay() - 15);
+  const numberOfDays = 15;
+  const fromDate = new Date();
+  fromDate.setDate(today.getDay() - numberOfDays);
 
   const { data, refetch, ...rest } = useQuery({
-    queryKey: ['posts', { pinned: false }],
+    queryKey: ['posts', { pinned: false, numberOfDays: numberOfDays }],
     queryFn: () =>
       getPosts({
         pinned: false,
-        fromDate: postDateLimit,
+        fromDate: fromDate,
       }),
   });
 
