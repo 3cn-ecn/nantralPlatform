@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Typography, styled, useTheme } from '@mui/material';
+import { Container, Typography, styled, useTheme } from '@mui/material';
 
 import { BackgroundImage } from '#shared/components/BackgroundImage/BackgroundImage';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -18,8 +18,10 @@ export function HomeHeader() {
         duration={500}
         height={headerHeight}
       />
-      <Title variant="h5">{t('home.welcomeTo')}</Title>
-      <Title variant="h1">{t('site.name')}</Title>
+      <Container>
+        <Title variant="h5">{t('home.welcomeTo')}</Title>
+        <Title variant="h1">{t('site.name')}</Title>
+      </Container>
     </HeaderContainer>
   );
 }
