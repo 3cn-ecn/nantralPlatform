@@ -1,3 +1,5 @@
+import { PartialGroupDTO } from '#modules/group/infra/group.dto';
+
 export type EventDTO = {
   id: number;
   title: string;
@@ -9,14 +11,7 @@ export type EventDTO = {
   image: string;
   number_of_participants: number | null;
   absolute_url: string;
-  group: {
-    name: string;
-    short_name: string;
-    slug: string;
-    url: string;
-    icon: string | null;
-    id: number;
-  };
+  group: PartialGroupDTO;
   is_participating: boolean;
   is_member: boolean;
   max_participant: number | null;

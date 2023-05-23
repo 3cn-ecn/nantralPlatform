@@ -1,12 +1,12 @@
 import { useQuery } from 'react-query';
 
-import { getPosts } from '#api/post';
+import { getPostList } from '#modules/post/api/getPostList';
 
 export function usePinnedPosts() {
   const { data, refetch, ...rest } = useQuery({
     queryKey: ['posts', { pinned: true }],
     queryFn: () =>
-      getPosts({
+      getPostList({
         pinned: true,
       }),
   });

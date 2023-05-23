@@ -1,3 +1,5 @@
+import { adaptPartialGroup } from '#modules/group/infra/group.adapter';
+
 import { Event, PartialEvent } from '../event.type';
 import { EventDTO, PartialEventDTO } from './event.dto';
 
@@ -13,7 +15,7 @@ export function adaptEvent(eventDto: EventDTO): Event {
     image: eventDto.image,
     numberOfParticipants: eventDto.number_of_participants,
     url: eventDto.absolute_url,
-    group: eventDto.group,
+    group: adaptPartialGroup(eventDto.group),
     isParticipating: eventDto.is_participating,
     maxParticipant: eventDto.max_participant,
     startRegistration:
@@ -33,7 +35,7 @@ export function adaptPartialEvent(eventDto: PartialEventDTO): PartialEvent {
     startDate: new Date(eventDto.start_date),
     endDate: new Date(eventDto.end_date),
     image: eventDto.image,
-    group: eventDto.group,
+    group: adaptPartialGroup(eventDto.group),
     isParticipating: eventDto.is_participating,
     isFavorite: eventDto.is_favorite,
     isAdmin: eventDto.is_admin,

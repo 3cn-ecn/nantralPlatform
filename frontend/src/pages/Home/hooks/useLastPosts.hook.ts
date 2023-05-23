@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 
-import { getPosts } from '#api/post';
+import { getPostList } from '#modules/post/api/getPostList';
 
 export function useLastPosts() {
   const today = new Date();
@@ -11,7 +11,7 @@ export function useLastPosts() {
   const { data, refetch, ...rest } = useQuery({
     queryKey: ['posts', { pinned: false, numberOfDays: numberOfDays }],
     queryFn: () =>
-      getPosts({
+      getPostList({
         pinned: false,
         fromDate: fromDate,
       }),

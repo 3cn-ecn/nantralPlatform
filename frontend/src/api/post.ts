@@ -1,37 +1,7 @@
 import axios from 'axios';
 
-import {
-  FormPostProps,
-  PostProps,
-  convertPostFromPythonData,
-} from '#types/Post';
+import { FormPostProps, convertPostFromPythonData } from '#types/Post';
 
-export async function getPost(id: number) {
-  return axios
-    .get<PostProps>(`/api/post/${id}/`)
-    .then((res) => res.data)
-    .then((data) => convertPostFromPythonData(data));
-}
-
-export async function getPosts(
-  options: {
-    pinned?: boolean;
-    fromDate?: Date;
-    toDate?: Date;
-    limit?: number;
-  } = {}
-) {
-  return axios
-    .get<PostProps[]>(`/api/post/`, {
-      params: {
-        pinned: options.pinned,
-        from_date: options.fromDate,
-        to_date: options.toDate,
-        limit: options.limit,
-      },
-    })
-    .then((res) => convertPostFromPythonData(res.data));
-}
 /** Format data to work with django api. Might need to find a more elegant solution in the future */
 function createForm(values: FormPostProps): FormData {
   const formData = new FormData();
@@ -52,7 +22,7 @@ export async function createPost(
   options?: FormPostProps
 ): Promise<FormPostProps> {
   return axios
-    .post(`/api/post/`, createForm(options), {
+    .post('/api/post/', createForm(options), {
       headers: {
         'content-type': 'multipart/form-data',
       },
