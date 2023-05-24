@@ -6,7 +6,7 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Grid, Skeleton, SvgIcon, Typography } from '@mui/material';
 import axios from 'axios';
 
-import Avatar from '#shared/components/Avatar/Avatar';
+import { Avatar } from '#shared/components/Avatar/Avatar';
 import { EditProfilModal } from '#shared/components/FormProfil/FormProfil';
 import { MembershipsStudent } from '#shared/components/Group/MembershipsStudent';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -73,11 +73,7 @@ export default function ProfilePage() {
           {profileStatus === 'loading' ? (
             <Skeleton variant="circular" height={250} />
           ) : (
-            <Avatar
-              url={student?.picture}
-              title={student.name}
-              size="extra_large"
-            />
+            <Avatar url={student?.picture} title={student.name} size="xxl" />
           )}
         </Grid>
         <Grid item xs={12} lg={9} sx={{ mt: 2, ml: 5 }}>

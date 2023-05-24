@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 
 import { EventSection } from '#pages/Home/views/section/EventSection';
-import Avatar from '#shared/components/Avatar/Avatar';
+import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { EventProps } from '#types/Event';
 import { FilterInterface } from '#types/Filter';
@@ -245,9 +245,7 @@ export default function EventGrid(props: {
                       organiser: tmp,
                     });
                   }}
-                  icon={
-                    <Avatar url={group.icon} size="small" title={group.name} />
-                  }
+                  icon={<Avatar url={group.icon} size="s" title={group.name} />}
                   key={group.id}
                 />
               ))}

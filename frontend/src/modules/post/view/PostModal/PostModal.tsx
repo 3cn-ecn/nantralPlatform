@@ -12,10 +12,10 @@ import {
 } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 
+import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
 
-import Avatar from '../../../../shared/components/Avatar/Avatar';
 import { FormPost } from '../../../../shared/components/FormPost/FormPost';
 import { EditButton, PostBadges } from '../PostCard/PostCard';
 
@@ -59,7 +59,7 @@ export function PostModal(props: {
                   <Avatar
                     title={post.group.name}
                     url={post.group.icon}
-                    size="medium"
+                    size="m"
                   />
                 )}
               </IconButton>

@@ -29,7 +29,7 @@ import axios from 'axios';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/fr';
 
-import Avatar from '#shared/components/Avatar/Avatar';
+import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { FieldType } from '#types/GenericTypes';
 
@@ -498,7 +498,7 @@ function ImageAutocompleteField(props: {
           {field.getIcon && field.getOptionLabel(option) && (
             <Avatar
               title={field.getOptionLabel(option)}
-              size="small"
+              size="s"
               url={field.getIcon(option)}
             />
           )}
@@ -523,7 +523,7 @@ function ImageAutocompleteField(props: {
               <InputAdornment position="start">
                 <Avatar
                   title={field.getOptionLabel(value)}
-                  size="small"
+                  size="s"
                   url={field.getIcon(value)}
                 />
               </InputAdornment>

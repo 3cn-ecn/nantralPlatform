@@ -204,7 +204,7 @@
     "noPost": "Il n'y a pas de posts récents",
     "post": "Post",
     "published": "publié",
-    "updated": "mis à jour"
+    "updated": "mis à jour {{dateRange}}"
   },
   "profile": {
     "doc": "Doctorant",

@@ -17,7 +17,8 @@ import {
   Typography,
 } from '@mui/material';
 
-import Avatar from '../../Avatar/Avatar';
+import { Avatar } from '#shared/components/Avatar/Avatar';
+
 import { Group, Membership, Student } from '../interfaces';
 
 function ShowMemberModal(props: {
@@ -41,7 +42,7 @@ function ShowMemberModal(props: {
           <Avatar
             url={group ? member.student.picture : member.group.icon}
             title={group ? member.student.full_name : member.group.name}
-            size="large"
+            size="l"
           />
           <Box sx={{ minWidth: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>

@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
-import Avatar from '../Avatar/Avatar';
+import { Avatar } from '../Avatar/Avatar';
 import './NotificationItem.scss';
 
 const app = '/api/notification/';
@@ -60,7 +60,7 @@ function NotificationItem(props) {
             width: '100%',
           }}
         >
-          <Avatar title={n.title} url={n.icon_url} size="medium" />
+          <Avatar title={n.title} url={n.icon_url} size="m" />
           <small className="notif">
             {n.title}
             <Box

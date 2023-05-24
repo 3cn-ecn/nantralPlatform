@@ -41,7 +41,7 @@ import axios from 'axios';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import Avatar from '../Avatar/Avatar';
+import { Avatar } from '../Avatar/Avatar';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import EditSuggestionModal from '../Suggestion/Suggestion';
 import { Suggestion } from '../Suggestion/interfacesSuggestion';

@@ -9,7 +9,8 @@ import {
   Typography,
 } from '@mui/material';
 
-import Avatar from '../../Avatar/Avatar';
+import { Avatar } from '#shared/components/Avatar/Avatar';
+
 import { Group, Membership, Student } from '../interfaces';
 import ModalDeleteMember from './ModalDeleteMember';
 import ModalDisplayMember from './ModalDisplayMember';
@@ -43,7 +44,7 @@ function MembershipCard(props: {
             <Avatar
               url={group ? item.student.picture : item.group.icon}
               title={group ? item.student.full_name : item.group.name}
-              size="large"
+              size="l"
             />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h6" sx={{ fontWeight: 500 }} noWrap>

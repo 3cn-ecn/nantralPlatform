@@ -6,20 +6,23 @@ import {
   PushPin as PushPinIcon,
 } from '@mui/icons-material';
 import {
+  Box,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
   IconButton,
   Skeleton,
+  SxProps,
+  Theme,
   Typography,
 } from '@mui/material';
 
 import { Post } from '#modules/post/post.types';
+import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { FormPostProps, PostProps } from '#types/Post';
+import { FormPostProps } from '#types/Post';
 
-import Avatar from '../../../../shared/components/Avatar/Avatar';
 import { PostModal } from '../PostModal/PostModal';
 import './PostCard.scss';
 
@@ -40,45 +43,27 @@ export function EditButton(props: { onClick }) {
   );
 }
 
-export function PostBadges(props: {
+type PostBadgesProps = {
   pinned: boolean;
-  className?: string;
-  style?: any;
-  publicity: PostProps['publicity'];
-}) {
-  const { pinned, publicity, className, style } = props;
+  publicity: Post['publicity'];
+  sx?: SxProps<Theme>;
+};
+
+export function PostBadges({ pinned, publicity, sx = {} }: PostBadgesProps) {
+  const sxIconProp: SxProps<Theme> = {
+    padding: 0.4,
+    color: 'white',
+    borderRadius: '50%',
+    backgroundColor: 'primary.main',
+  };
+
   return (
-    <div
-      className={className}
-      style={{ display: 'flex', columnGap: '0.6em', ...style }}
-    >
-      {publicity === 'Mem' && (
-        <GroupIcon
-          sx={{
-            padding: 0.4,
-            color: 'white',
-            borderRadius: '50%',
-            backgroundColor: 'primary.main',
-          }}
-        />
-      )}
-      {pinned && (
-        <PushPinIcon
-          sx={{
-            padding: 0.4,
-            color: 'white',
-            borderRadius: '50%',
-            backgroundColor: 'primary.main',
-          }}
-        />
-      )}
-    </div>
+    <Box display="flex" gap={1} sx={sx}>
+      {publicity === 'Mem' && <GroupIcon sx={sxIconProp} />}
+      {pinned && <PushPinIcon sx={sxIconProp} />}
+    </Box>
   );
 }
-PostBadges.defaultProps = {
-  className: null,
-  style: {},
-};
 
 type PostCardProps = {
   post: Post;
@@ -96,12 +81,7 @@ export function PostCard({
 
   return (
     <>
-      <Card
-        variant="outlined"
-        sx={{
-          height: POST_HEIGHT,
-        }}
-      >
+      <Card variant="outlined" sx={{ height: '100%' }}>
         <CardActionArea
           onClick={() => setOpenModal(true)}
           sx={{ display: 'flex', height: '100%' }}
@@ -109,56 +89,47 @@ export function PostCard({
           <PostBadges
             pinned={post.pinned}
             publicity={post.publicity}
-            className="post-icons"
+            sx={{ position: 'absolute', top: '1rem', right: '1rem' }}
           />
           <CardContent
-            style={{
-              borderColor: 'red',
-              borderWidth: '10px',
-              flexDirection: 'column',
+            sx={{
               display: 'flex',
-              width: '100%',
+              flexDirection: 'column',
+              flex: 1,
+              gap: 2,
               height: '100%',
-              justifyContent: 'space-between',
             }}
           >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                height: '100%',
-              }}
+            <Box
+              flex={1}
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
             >
-              <Typography
-                variant="h6"
-                sx={{ lineHeight: 1 }}
-                className="post-title"
-              >
+              <Typography variant="h6" lineHeight={1}>
                 {post.title}
               </Typography>
-              <div style={{ fontStyle: 'italic', marginBottom: 5 }}>
-                {post.createdAt.toDateString() === post.updatedAt.toDateString()
-                  ? formatRelativeTime(post.createdAt)
-                  : `${t('post.updated')} ${formatRelativeTime(
-                      post.updatedAt
-                    )}`}
-              </div>
-            </div>
-            <div id="post-club">
-              <div style={{ display: 'contents' }}>
-                <Avatar
-                  title={post?.group.name}
-                  url={post?.group.icon}
-                  size="small"
-                />
-                {post.group.name}
-              </div>
-            </div>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                fontStyle="italic"
+              >
+                {t('post.updated', {
+                  dateRange: formatRelativeTime(post.updatedAt),
+                })}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Avatar
+                title={post?.group.name}
+                url={post?.group.icon}
+                size="s"
+              />
+              <Typography variant="caption">{post.group.name}</Typography>
+            </Box>
           </CardContent>
           {post.image && (
             <CardMedia
-              sx={{ backgroundImage: `url(${post.image})` }}
               id="card-image"
               component="img"
               image={post.image.toString()}
