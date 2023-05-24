@@ -19,8 +19,8 @@ import { Post } from '#modules/post/post.types';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
 
-import Avatar from '../Avatar/Avatar';
-import { PostModal } from '../Modal/PostModal';
+import Avatar from '../../../../shared/components/Avatar/Avatar';
+import { PostModal } from '../PostModal/PostModal';
 import './PostCard.scss';
 
 const POST_HEIGHT = 190;

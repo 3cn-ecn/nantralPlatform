@@ -10,7 +10,7 @@ import { Post } from '#modules/post/post.types';
 import {
   PostCard,
   PostCardSkeleton,
-} from '#shared/components/PostCard/PostCard';
+} from '#modules/post/view/PostCard/PostCard';
 import { Section } from '#shared/components/Section/Section';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { FormPostProps } from '#types/Post';

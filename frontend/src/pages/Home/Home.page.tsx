@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import { getMyGroups } from '#api/group';
 import { getEvents } from '#modules/event/api/getEventList';
-import { PostModal } from '#shared/components/Modal/PostModal';
+import { PostModal } from '#modules/post/view/PostModal/PostModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';

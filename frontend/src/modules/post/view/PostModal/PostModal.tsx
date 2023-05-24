@@ -15,8 +15,8 @@ import IconButton from '@mui/material/IconButton/IconButton';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
 
-import Avatar from '../Avatar/Avatar';
-import { FormPost } from '../FormPost/FormPost';
+import Avatar from '../../../../shared/components/Avatar/Avatar';
+import { FormPost } from '../../../../shared/components/FormPost/FormPost';
 import { EditButton, PostBadges } from '../PostCard/PostCard';
 
 export function PostModal(props: {
