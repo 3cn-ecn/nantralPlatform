@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { Edit, Groups, OpenInNew, PushPin } from '@mui/icons-material';
+import {
+  Edit as EditIcon,
+  Groups as GroupIcon,
+  PushPin as PushPinIcon,
+} from '@mui/icons-material';
 import {
   Card,
   CardActionArea,
@@ -8,10 +12,10 @@ import {
   CardMedia,
   IconButton,
   Skeleton,
-  Tooltip,
   Typography,
 } from '@mui/material';
 
+import { Post } from '#modules/post/post.types';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { FormPostProps, PostProps } from '#types/Post';
 
@@ -21,23 +25,6 @@ import './PostCard.scss';
 
 const POST_HEIGHT = 190;
 export const POST_AVATAR_SIZE = 35;
-export function SeePageButton(props: {
-  link: string;
-  style?: React.CSSProperties;
-}) {
-  const { link, style } = props;
-  return (
-    <IconButton
-      style={style}
-      onClick={(e) => e.stopPropagation()}
-      target="_blank"
-      href={link}
-      sx={{ backgroundColor: '#efefefb2' }}
-    >
-      <OpenInNew color="primary" />
-    </IconButton>
-  );
-}
 
 export function EditButton(props: { onClick }) {
   const { onClick } = props;
@@ -48,17 +35,8 @@ export function EditButton(props: { onClick }) {
       sx={{ background: '#efefefb2' }}
       onClick={onClick}
     >
-      <Edit />
+      <EditIcon />
     </IconButton>
-  );
-}
-
-export function MembersIcon() {
-  const { t } = useTranslation();
-  return (
-    <Tooltip title={t('event.membersOnly')} arrow>
-      <Groups sx={{ marginRight: 1 }} />
-    </Tooltip>
   );
 }
 
@@ -75,7 +53,7 @@ export function PostBadges(props: {
       style={{ display: 'flex', columnGap: '0.6em', ...style }}
     >
       {publicity === 'Mem' && (
-        <Groups
+        <GroupIcon
           sx={{
             padding: 0.4,
             color: 'white',
@@ -85,7 +63,7 @@ export function PostBadges(props: {
         />
       )}
       {pinned && (
-        <PushPin
+        <PushPinIcon
           sx={{
             padding: 0.4,
             color: 'white',
@@ -102,22 +80,19 @@ PostBadges.defaultProps = {
   style: {},
 };
 
-SeePageButton.defaultProps = {
-  style: null,
-};
-export function PostCard(props: {
-  post: PostProps;
+type PostCardProps = {
+  post: Post;
   onUpdate?: (newPost: FormPostProps) => void;
   onDelete?: () => void;
-}) {
-  const { post, onDelete, onUpdate } = props;
-  const [open, setOpen] = React.useState<boolean>(false);
-  const [postValue, setPostValue] = React.useState(post);
-  const { t, formatRelativeTime } = useTranslation();
+};
 
-  React.useEffect(() => {
-    setPostValue(post);
-  }, [post]);
+export function PostCard({
+  post,
+  onUpdate = () => null,
+  onDelete = () => null,
+}: PostCardProps) {
+  const [openModal, setOpenModal] = React.useState(false);
+  const { t, formatRelativeTime } = useTranslation();
 
   return (
     <>
@@ -128,12 +103,12 @@ export function PostCard(props: {
         }}
       >
         <CardActionArea
-          onClick={() => setOpen(true)}
+          onClick={() => setOpenModal(true)}
           sx={{ display: 'flex', height: '100%' }}
         >
           <PostBadges
-            pinned={postValue.pinned}
-            publicity={postValue.publicity}
+            pinned={post.pinned}
+            publicity={post.publicity}
             className="post-icons"
           />
           <CardContent
@@ -160,14 +135,13 @@ export function PostCard(props: {
                 sx={{ lineHeight: 1 }}
                 className="post-title"
               >
-                {postValue.title}
+                {post.title}
               </Typography>
               <div style={{ fontStyle: 'italic', marginBottom: 5 }}>
-                {postValue.createdAt.toDateString() ===
-                postValue.updatedAt.toDateString()
-                  ? formatRelativeTime(postValue.createdAt)
+                {post.createdAt.toDateString() === post.updatedAt.toDateString()
+                  ? formatRelativeTime(post.createdAt)
                   : `${t('post.updated')} ${formatRelativeTime(
-                      postValue.updatedAt
+                      post.updatedAt
                     )}`}
               </div>
             </div>
@@ -182,31 +156,26 @@ export function PostCard(props: {
               </div>
             </div>
           </CardContent>
-          {postValue.image && (
+          {post.image && (
             <CardMedia
-              sx={{ backgroundImage: `url(${postValue.image})` }}
+              sx={{ backgroundImage: `url(${post.image})` }}
               id="card-image"
               component="img"
-              image={postValue.image.toString()}
+              image={post.image.toString()}
             />
           )}
         </CardActionArea>
       </Card>
       <PostModal
-        post={postValue}
-        open={open}
-        onClose={() => setOpen(false)}
+        post={post}
+        open={openModal}
+        onClose={() => setOpenModal(false)}
         onUpdate={onUpdate}
         onDelete={onDelete}
       />
     </>
   );
 }
-
-PostCard.defaultProps = {
-  onDelete: () => null,
-  onUpdate: () => null,
-};
 
 export function PostCardSkeleton() {
   return <Skeleton variant="rounded" width="100%" height={POST_HEIGHT} />;
