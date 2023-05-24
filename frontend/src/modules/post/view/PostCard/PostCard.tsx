@@ -24,7 +24,6 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { FormPostProps } from '#types/Post';
 
 import { PostModal } from '../PostModal/PostModal';
-import './PostCard.scss';
 
 const POST_HEIGHT = 190;
 export const POST_AVATAR_SIZE = 35;
@@ -89,7 +88,7 @@ export function PostCard({
           <PostBadges
             pinned={post.pinned}
             publicity={post.publicity}
-            sx={{ position: 'absolute', top: '1rem', right: '1rem' }}
+            sx={{ position: 'absolute', top: 12, right: 12 }}
           />
           <CardContent
             sx={{
@@ -130,9 +129,16 @@ export function PostCard({
           </CardContent>
           {post.image && (
             <CardMedia
-              id="card-image"
               component="img"
               image={post.image.toString()}
+              sx={{
+                width: 100,
+                aspectRatio: '1',
+                margin: 2,
+                marginLeft: 0,
+                borderRadius: 1,
+                backgroundSize: 'cover',
+              }}
             />
           )}
         </CardActionArea>
