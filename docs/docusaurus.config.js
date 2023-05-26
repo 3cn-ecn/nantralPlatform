@@ -21,7 +21,7 @@ const config = {
   deploymentBranch: "gh-pages",
 
   // plugins
-  plugins: ['docusaurus-plugin-sass'],
+  plugins: ["docusaurus-plugin-sass"],
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -38,7 +38,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          routeBasePath: '/',
+          routeBasePath: "/",
           editUrl:
             "https://github.com/3cn-ecn/nantralPlatform/tree/master/docs/",
         },
@@ -62,8 +62,8 @@ const config = {
       docs: {
         sidebar: {
           hideable: true,
-          autoCollapseCategories: true
-        }
+          autoCollapseCategories: true,
+        },
       },
       navbar: {
         title: "Nantral Platform Docs",
@@ -94,8 +94,9 @@ const config = {
           },
           {
             href: "https://github.com/3cn-ecn/nantralPlatform",
-            label: "GitHub",
             position: "right",
+            className: "header-github-link",
+            "aria-label": "GitHub repository",
           },
         ],
       },
@@ -116,7 +117,7 @@ const config = {
               {
                 label: "Blog",
                 to: "/blog",
-              }
+              },
             ],
           },
           {
@@ -149,7 +150,7 @@ const config = {
               },
               {
                 label: "Nantral Platform",
-                href: "https://nantral-platform.fr/club/nantral-platform/",
+                href: "https://nantral-platform.fr/group/@3cn",
               },
             ],
           },
@@ -159,9 +160,17 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ['powershell', 'django', 'docker'],
+        additionalLanguages: ["powershell", "django", "docker"],
       },
     }),
+
+  themes: [
+    [
+      // search plugin
+      require.resolve("@easyops-cn/docusaurus-search-local"),
+      ({ hashed: true, docsRouteBasePath: "/", indexPages: true }),
+    ],
+  ],
 };
 
 module.exports = config;
