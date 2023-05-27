@@ -1,6 +1,9 @@
 {
   "editor.insertSpaces": true,
-  "editor.codeActionsOnSave": { "source.fixAll": true, "source.organizeImports": true },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  },
   "editor.rulers": [80],
   "files.associations": {
     "*.html": "html",

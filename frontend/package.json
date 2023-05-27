@@ -12,12 +12,12 @@
     "leg:start": "node esbuild.js watch",
     "leg:build": "node esbuild.js",
     "leg:build:dev": "node esbuild.js dev",
-    "test": "npm run types && npm run lint && npm run jest",
     "types": "tsc",
     "lint": "eslint src --ignore-pattern \"src/legacy/**\"",
     "lint:fix": "eslint src --ignore-pattern \"src/legacy/**\" --fix",
-    "jest": "TZ=Europe/Paris jest",
-    "jest:update": "npm run jest -- -u"
+    "test": "TZ=Europe/Paris jest",
+    "test:u": "npm run test -- -u",
+    "test:all": "npm run types && npm run lint && npm run test"
   },
   "author": {
     "name": "3CN, a club of Centrale Nantes",
