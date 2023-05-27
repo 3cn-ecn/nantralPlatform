@@ -4,17 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import {
-    Card,
-    CardActionArea,
-    CardContent,
-    CardMedia,
-    CircularProgress,
-    Skeleton,
-    Typography,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Skeleton,
+  Typography,
 } from '@mui/material/';
 
+import { EventCalendarItem } from '#modules/event/event.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { EventProps, FormEventProps } from '#types/Event';
+import { FormEventProps } from '#types/Event';
 
 import FavButton from '../../../../shared/components/Button/FavButton';
 import JoinButton from '../../../../shared/components/Button/JoinButton';
@@ -62,7 +63,7 @@ function InfoItem(props: { name: string; value: string }) {
 }
 
 function EventCard(props: {
-  event: EventProps;
+  event: EventCalendarItem;
   onUpdate?: (newEvent: FormEventProps) => void;
   onDelete?: () => void;
 }) {

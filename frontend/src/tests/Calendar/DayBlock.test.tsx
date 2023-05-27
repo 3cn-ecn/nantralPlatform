@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { EventCalendarItem } from '#modules/event/event.type';
 import { DayBlock } from '#modules/event/view/Calendar/Month/WeekLine/DayBlock/DayBlock';
 import { wrapAndRender } from '#shared/utils/tests';
-import { EventProps } from '#types/Event';
 
 import { createTestEvent } from './testElements/testElements';
 
-const events: Array<EventProps> = [];
+const events: Array<EventCalendarItem> = [];
 events.push(
   createTestEvent(
     'The slug',
@@ -26,7 +26,7 @@ events.push(
 );
 const day = { day: 5, date: 17, events: events };
 
-const otherEvents: Array<EventProps> = [];
+const otherEvents: Array<EventCalendarItem> = [];
 otherEvents.push(
   createTestEvent(
     undefined,

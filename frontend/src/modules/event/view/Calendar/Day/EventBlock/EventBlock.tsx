@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@mui/material';
 
-import { EventProps } from '#types/Event';
+import { EventCalendarItem } from '#modules/event/event.type';
 
 import './EventBlock.scss';
 
@@ -15,7 +15,7 @@ import './EventBlock.scss';
  */
 export function EventBlock(props: {
   day: Date;
-  event: EventProps;
+  event: EventCalendarItem;
 }): JSX.Element {
   const { day, event } = props;
   let todayBegin = false;
@@ -69,7 +69,7 @@ export function EventBlock(props: {
         navigate(`/event/${event.id}/`);
       }}
       style={{
-        minWidth: `1px`,
+        minWidth: '1px',
         height: `${size * 1.2}rem`,
         padding: '0px',
         background: `url(${event.image})`,

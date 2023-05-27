@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
-import { EventProps } from '#types/Event';
+import { EventCalendarItem } from '#modules/event/event.type';
 
 import { DayBlock } from './DayBlock/DayBlock';
 
@@ -12,7 +12,7 @@ import { DayBlock } from './DayBlock/DayBlock';
  * @returns A WeekLine in the month view of the calendar.
  */
 export function WeekLine(props: {
-  week: Array<{ day: number; date: number; events: Array<EventProps> }>;
+  week: Array<{ day: number; date: number; events: Array<EventCalendarItem> }>;
 }): JSX.Element {
   const { week } = props;
   const weekComponent: Array<JSX.Element> = [];
@@ -23,7 +23,11 @@ export function WeekLine(props: {
 
   if (week.length === 7) {
     week.forEach(
-      (day: { day: number; date: number; events: Array<EventProps> }) => {
+      (day: {
+        day: number;
+        date: number;
+        events: Array<EventCalendarItem>;
+      }) => {
         weekComponent.push(
           <Grid item key={`gridDay${day.date}`} xs={12 / 7}>
             <DayBlock
@@ -50,7 +54,11 @@ export function WeekLine(props: {
       );
     }
     week.forEach(
-      (day: { day: number; date: number; events: Array<EventProps> }) => {
+      (day: {
+        day: number;
+        date: number;
+        events: Array<EventCalendarItem>;
+      }) => {
         weekComponent.push(
           <Grid item key={`gridDay${day.date}`} xs={12 / 7}>
             <DayBlock
@@ -65,7 +73,11 @@ export function WeekLine(props: {
     );
   } else {
     week.forEach(
-      (day: { day: number; date: number; events: Array<EventProps> }) => {
+      (day: {
+        day: number;
+        date: number;
+        events: Array<EventCalendarItem>;
+      }) => {
         weekComponent.push(
           <Grid item key={`gridDay${day.date}`} xs={12 / 7}>
             <DayBlock

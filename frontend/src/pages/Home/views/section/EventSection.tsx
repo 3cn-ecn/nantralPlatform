@@ -2,12 +2,13 @@ import React from 'react';
 
 import { Alert, Grid, Typography } from '@mui/material';
 
+import { Event } from '#modules/event/event.type';
 import EventCard, {
   EventCardSkeleton,
 } from '#modules/event/view/EventCard/EventCard';
 import { AccordionSection } from '#shared/components/Section/AccordionSection';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { EventProps, FormEventProps } from '#types/Event';
+import { FormEventProps } from '#types/Event';
 import { LoadStatus } from '#types/GenericTypes';
 
 import './EventSection.scss';
@@ -41,7 +42,7 @@ export function EventSection(props: {
   /** L'état de chargement des événements */
   status: LoadStatus;
   /** La liste des événements à afficher */
-  events: Array<EventProps>;
+  events: Array<Event>;
   /** Titre de la section */
   title?: string;
   /** Nombre maximal d'événement à afficher */

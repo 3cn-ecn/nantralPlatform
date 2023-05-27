@@ -1,29 +1,32 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { EventCalendarItem } from '#modules/event/event.type';
 import { WeekLine } from '#modules/event/view/Calendar/Month/WeekLine/WeekLine';
 import { wrapAndRender } from '#shared/utils/tests';
-import { EventProps } from '#types/Event';
 
 import { createTestEvent } from './testElements/testElements';
 
 // Create some weeks
-const week: Array<{ day: number; date: number; events: Array<EventProps> }> =
-  [];
+const week: Array<{
+  day: number;
+  date: number;
+  events: Array<EventCalendarItem>;
+}> = [];
 const noBeginWeek: Array<{
   day: number;
   date: number;
-  events: Array<EventProps>;
+  events: Array<EventCalendarItem>;
 }> = [];
 const noEndWeek: Array<{
   day: number;
   date: number;
-  events: Array<EventProps>;
+  events: Array<EventCalendarItem>;
 }> = [];
 const emptyWeek: Array<{
   day: number;
   date: number;
-  events: Array<EventProps>;
+  events: Array<EventCalendarItem>;
 }> = [];
 
 for (let i = 1; i <= 7; i++) {

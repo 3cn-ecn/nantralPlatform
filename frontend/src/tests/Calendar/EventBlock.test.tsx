@@ -1,31 +1,31 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { EventCalendarItem } from '#modules/event/event.type';
 import { EventBlock } from '#modules/event/view/Calendar/Day/EventBlock/EventBlock';
 import { wrapAndRender } from '#shared/utils/tests';
-import { EventProps } from '#types/Event';
 
 import { createTestEvent } from './testElements/testElements';
 
-const eventInDay: EventProps = createTestEvent(
+const eventInDay: EventCalendarItem = createTestEvent(
   'The slug',
   'The test event',
   new Date('2023-02-17T03:24:00'),
   new Date('2023-02-17T04:24:00')
 );
-const eventBeginInDay: EventProps = createTestEvent(
+const eventBeginInDay: EventCalendarItem = createTestEvent(
   'The slug',
   'The test event',
   new Date('2023-02-17T03:00:00'),
   new Date('2023-03-18T04:24:00')
 );
-const eventEndInDay: EventProps = createTestEvent(
+const eventEndInDay: EventCalendarItem = createTestEvent(
   'The slug',
   'The test event',
   new Date('2023-02-16T03:24:00'),
   new Date('2023-02-17T04:00:00')
 );
-const eventMiddleInDay: EventProps = createTestEvent(
+const eventMiddleInDay: EventCalendarItem = createTestEvent(
   'The slug',
   'The test event',
   new Date('2023-02-16T03:24:00'),

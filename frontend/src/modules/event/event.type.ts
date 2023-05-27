@@ -39,4 +39,5 @@ export type EventCalendarItem = Event & {
   globalSize?: number;
   position?: number;
   placed?: boolean;
+  slug?: string;
 };

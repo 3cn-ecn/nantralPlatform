@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { EventCalendarItem } from '#modules/event/event.type';
 import { Day, sortWithPos } from '#modules/event/view/Calendar/Day/Day';
 import { wrapAndRender } from '#shared/utils/tests';
-import { EventProps } from '#types/Event';
 
 import { createTestEvent } from './testElements/testElements';
 
 // Create some events
-const events: Array<EventProps> = [];
+const events: Array<EventCalendarItem> = [];
 events.push(
   createTestEvent(
     'The slug1',

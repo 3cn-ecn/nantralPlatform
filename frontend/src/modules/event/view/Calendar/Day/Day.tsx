@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
+import { EventCalendarItem } from '#modules/event/event.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { EventProps } from '#types/Event';
 
 import './Day.scss';
 import { EventBlock } from './EventBlock/EventBlock';
@@ -17,7 +17,7 @@ import { TimeBlock } from './TimeBlock/TimeBlock';
  */
 export function sortWithPos(
   eventKeyList: Array<number>,
-  events: Array<EventProps>
+  events: Array<EventCalendarItem>
 ): Array<number> {
   const eventChain = [];
   let currentSize = 0;
@@ -71,7 +71,7 @@ export function sortWithPos(
  */
 export function Day(props: {
   day: Date;
-  events: Array<EventProps>;
+  events: Array<EventCalendarItem>;
   chains: Array<Array<number>>;
 }): JSX.Element {
   const { day, events, chains } = props;

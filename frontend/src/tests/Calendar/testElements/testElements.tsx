@@ -1,4 +1,4 @@
-import { EventProps } from '#types/Event';
+import { EventCalendarItem } from '#modules/event/event.type';
 
 export function createTestEvent(
   slug = 'The slug',
@@ -12,8 +12,6 @@ export function createTestEvent(
   placed = false,
   getAbsoluteUrl = 'https://nantral-platform.fr/account/login/?next=/',
   image = null,
-  color = 'blue',
-  isMember = true,
   isParticipating = true,
   location = 'My home',
   numberOfParticipants = 15,
@@ -26,21 +24,21 @@ export function createTestEvent(
   group = {
     id: 1,
     name: 'group1',
-    short_name: 'g1',
+    shortName: 'g1',
     slug: 'g1',
     icon: null,
     url: '/group/g1',
-  }
+  },
+  id = 1
 ) {
-  const event: EventProps = {
-    color: color,
+  const event: EventCalendarItem = {
+    id: id,
     startDate: startDate,
     endDate: endDate,
     description: description,
-    getAbsoluteUrl: getAbsoluteUrl,
+    url: getAbsoluteUrl,
     group: group,
     image: image,
-    isMember: isMember,
     isParticipating: isParticipating,
     location: location,
     numberOfParticipants: numberOfParticipants,

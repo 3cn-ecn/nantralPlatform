@@ -1,20 +1,24 @@
 import React from 'react';
 
-import { EventProps } from '#types/Event';
+import { EventCalendarItem } from '#modules/event/event.type';
 
 import { WeekLine } from './WeekLine/WeekLine';
 
 export function Month(props: {
   monthWeeks: Array<Array<[string, number]>>;
-  events: Array<Array<EventProps>>;
+  events: Array<Array<EventCalendarItem>>;
 }) {
   const { monthWeeks, events } = props;
   let weekIndex = 0;
   let dayCount = 0;
   const weeks: Array<
-    Array<{ day: number; date: number; events: Array<EventProps> }>
+    Array<{ day: number; date: number; events: Array<EventCalendarItem> }>
   > = [];
-  let tempWeek: Array<{ day: number; date: number; events: Array<EventProps> }>;
+  let tempWeek: Array<{
+    day: number;
+    date: number;
+    events: Array<EventCalendarItem>;
+  }>;
   monthWeeks.forEach((week) => {
     tempWeek = [];
     week.forEach((day) => {
@@ -31,7 +35,11 @@ export function Month(props: {
     <div>
       {weeks.map(
         (
-          week: Array<{ day: number; date: number; events: Array<EventProps> }>
+          week: Array<{
+            day: number;
+            date: number;
+            events: Array<EventCalendarItem>;
+          }>
         ) => {
           weekIndex += 1;
           return <WeekLine key={`week${weekIndex}`} week={week} />;

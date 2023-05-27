@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { EventCalendarItem } from '#modules/event/event.type';
 import { Month } from '#modules/event/view/Calendar/Month/Month';
 import { wrapAndRender } from '#shared/utils/tests';
-import { EventProps } from '#types/Event';
 
 import { createTestEvent } from './testElements/testElements';
 
 // Create the list of events in the month
-const eventsInWeek: Array<Array<EventProps>> = [];
+const eventsInWeek: Array<Array<EventCalendarItem>> = [];
 for (let i = 0; i < 30; i++) {
   eventsInWeek.push([]);
 }

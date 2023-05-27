@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Button } from '@mui/material';
 
-import { EventProps } from '#types/Event';
+import { EventCalendarItem } from '#modules/event/event.type';
 
 import './DayBlock.scss';
 
 export function DayBlock(props: {
-  day: { day: number; date: number; events: Array<EventProps> } | null;
+  day: { day: number; date: number; events: Array<EventCalendarItem> } | null;
   inMonth: boolean;
   maxEventsInDayWeek: number;
 }): JSX.Element {
@@ -34,8 +34,8 @@ export function DayBlock(props: {
                 navigate(`/event/${event.id}/`);
               }}
               style={{
-                minWidth: `1px`,
-                height: `3rem`,
+                minWidth: '1px',
+                height: '3rem',
                 padding: '0px',
                 background: `url(${event.image})`,
                 backgroundSize: 'cover',

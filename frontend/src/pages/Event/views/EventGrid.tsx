@@ -16,17 +16,17 @@ import {
   Typography,
 } from '@mui/material';
 
+import { EventCalendarItem } from '#modules/event/event.type';
 import { EventSection } from '#pages/Home/views/section/EventSection';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { EventProps } from '#types/Event';
 import { FilterInterface } from '#types/Filter';
 import { ListResults, LoadStatus } from '#types/GenericTypes';
 import { Page, SimpleGroupProps } from '#types/Group';
 
 interface EventGridProps {
   status: LoadStatus;
-  events: ListResults<EventProps>;
+  events: ListResults<EventCalendarItem>;
   onChangePage: (page: number) => void;
   page: number;
   eventsPerPage: number;
@@ -35,7 +35,7 @@ const EVENT_PER_PAGE = 6;
 
 export default function EventGrid(props: {
   status: LoadStatus;
-  events: Page<EventProps>[];
+  events: Page<EventCalendarItem>[];
   onChangePage: (page: number) => void;
   onChangeOrder: (newOrder: string) => void;
   order: string;

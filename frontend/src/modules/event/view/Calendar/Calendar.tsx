@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { Button, Grid } from '@mui/material';
 import { EventAttributes, createEvents } from 'ics';
 
+import { EventCalendarItem } from '#modules/event/event.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { modulo, ppcm } from '#shared/utils/maths';
-import { EventProps } from '#types/Event';
 
 import './Calendar.scss';
 import { CalendarView, EventDataProps } from './CalendarProps/CalendarProps';
@@ -24,11 +24,11 @@ import { numberOfDayInDateMonth } from './utils';
  * @returns The list of events which take place between the startDate and the Date.
  */
 function getEventWithDate(
-  events: Array<EventProps>,
+  events: Array<EventCalendarItem>,
   startDate: Date,
   endDate: Date
-): Array<EventProps> {
-  const sortedEvents = new Array<EventProps>();
+): Array<EventCalendarItem> {
+  const sortedEvents = new Array<EventCalendarItem>();
   events.forEach((event) => {
     // Sort with end date too.
     if (
@@ -130,7 +130,7 @@ function addInBlockedChains(
  * @returns The couples of events with maximal size foreach events.
  */
 function blockedChains(
-  events: Array<EventProps>,
+  events: Array<EventCalendarItem>,
   eventsData: Array<EventDataProps>
 ): Array<Array<number>> {
   const currentSizeObject = {
@@ -199,7 +199,7 @@ function createCoupleEvents(eventsData: Array<EventDataProps>): void {
  */
 function eventSizeReajust(
   blockedEventsChain: Array<Array<number>>,
-  events: Array<EventProps>,
+  events: Array<EventCalendarItem>,
   eventsData: Array<EventDataProps>
 ): void {
   let event2reajust: Array<number>;
@@ -231,7 +231,7 @@ function eventSizeReajust(
  */
 function addBlankedEvents(
   blockedEventsChain: Array<Array<number>>,
-  events: Array<EventProps>
+  events: Array<EventCalendarItem>
 ): void {
   let cumulateSize: number;
   blockedEventsChain.forEach((chain) => {
@@ -259,7 +259,7 @@ function addBlankedEvents(
  */
 function placeNextEvents(
   blanked: boolean,
-  events: Array<EventProps>,
+  events: Array<EventCalendarItem>,
   chain: Array<number>,
   eventsBlockedChain: Array<Array<number>>,
   position: number,
@@ -318,7 +318,7 @@ function placeNextEvents(
  * @returns Then next index in eventsBlockedChain[0] of the key of the event that will be placed and a boolean to tell if the chain is totally placed
  */
 function placeChainEvent(
-  events: Array<EventProps>,
+  events: Array<EventCalendarItem>,
   chain: Array<number>,
   eventsBlockedChain: Array<Array<number>>,
   position: number,
@@ -371,7 +371,7 @@ function placeChainEvent(
  * @returns If an event has been able to be placed.
  */
 function placeEvents(
-  events: Array<EventProps>,
+  events: Array<EventCalendarItem>,
   chain: Array<number>,
   eventsBlockedChain: Array<Array<number>>,
   position: number
@@ -423,7 +423,7 @@ function placeEvents(
  * @param events List of the events.
  */
 function setSameTimeEvents(
-  events: Array<EventProps>,
+  events: Array<EventCalendarItem>,
   eventsBlockedChain: Array<Array<Array<number>>>
 ): void {
   const eventsData = new Array<EventDataProps>();
@@ -480,15 +480,15 @@ function setSameTimeEvents(
 
   // Try to place the events optimally
   if (!placeEvents(events, blockedEventsChain[0], blockedEventsChain, 0)) {
-    console.warn('Some events haven\'t been rightfully placed');
+    console.warn("Some events haven't been rightfully placed");
   }
 }
 
 function isInDayWeek(
-  event: EventProps,
+  event: EventCalendarItem,
   checkstartDate: Date,
   checkEndDate: Date,
-  sortEvents: Array<Array<EventProps>>
+  sortEvents: Array<Array<EventCalendarItem>>
 ) {
   for (let i = 1; i < 7; i++) {
     checkstartDate.setDate(checkstartDate.getDate() + 1);
@@ -502,10 +502,10 @@ function isInDayWeek(
   }
 }
 function isInDayMonth(
-  event: EventProps,
+  event: EventCalendarItem,
   checkstartDate: Date,
   checkEndDate: Date,
-  sortEvents: Array<Array<EventProps>>
+  sortEvents: Array<Array<EventCalendarItem>>
 ) {
   for (let i = 1; i < numberOfDayInDateMonth(checkstartDate); i++) {
     checkstartDate.setDate(checkstartDate.getDate() + 1);
@@ -526,9 +526,9 @@ function isInDayMonth(
  * @param sortEvents The container of the events of the week sorted by day
  */
 function isInDay(
-  event: EventProps,
+  event: EventCalendarItem,
   mondayDate: Date,
-  sortEvents: Array<Array<EventProps>>,
+  sortEvents: Array<Array<EventCalendarItem>>,
   mode: 'week' | 'month'
 ): void {
   const checkstartDate = new Date(
@@ -564,16 +564,16 @@ function isInDay(
  * @returns The list of events, sorted by day, and the list of events chains by day.
  */
 function sortInWeek(
-  oldSortEvents: Array<EventProps>,
+  oldSortEvents: Array<EventCalendarItem>,
   mondayDate: Date
 ): {
-  sortEvents: Array<Array<EventProps>>;
+  sortEvents: Array<Array<EventCalendarItem>>;
   eventsBlockedChain: Array<Array<Array<number>>>;
 } {
   const sortEvents = [];
   const eventsBlockedChain = [];
   for (let i = 0; i < 7; i++) {
-    sortEvents.push(new Array<EventProps>());
+    sortEvents.push(new Array<EventCalendarItem>());
   }
   oldSortEvents.forEach((event) => {
     isInDay(event, mondayDate, sortEvents, 'week');
@@ -586,15 +586,15 @@ function sortInWeek(
 }
 
 function sortInMonth(
-  oldSortEvents: Array<EventProps>,
+  oldSortEvents: Array<EventCalendarItem>,
   startDate: Date
 ): {
-  sortEvents: Array<Array<EventProps>>;
+  sortEvents: Array<Array<EventCalendarItem>>;
 } {
   const sortEvents = [];
   const eventsBlockedChain = [];
   for (let i = 0; i < numberOfDayInDateMonth(startDate); i++) {
-    sortEvents.push(new Array<EventProps>());
+    sortEvents.push(new Array<EventCalendarItem>());
   }
   oldSortEvents.forEach((event) => {
     isInDay(event, startDate, sortEvents, 'month');
@@ -607,11 +607,11 @@ function sortInMonth(
 }
 
 /**
- * Convert an EventProps in a type that can be exported in ics.
+ * Convert an EventCalendarItem in a type that can be exported in ics.
  * @param event An event to import.
  * @returns An event in EventAttributes type.
  */
-function addEventICS(event: EventProps): EventAttributes {
+function addEventICS(event: EventCalendarItem): EventAttributes {
   const duration = Math.floor(
     (event.endDate.getTime() - event.startDate.getTime()) / 60000
   );
@@ -627,7 +627,7 @@ function addEventICS(event: EventProps): EventAttributes {
     title: event.title,
     description: event.description,
     location: event.location,
-    organizer: { name: event.groupName },
+    organizer: { name: event.group.name },
   };
 
   return eventCalendar;
@@ -637,7 +637,7 @@ function addEventICS(event: EventProps): EventAttributes {
  * Function which imports the events in an ics file.
  * @param events The list of events to import.
  */
-async function callICS(events: Array<EventProps>): Promise<void> {
+async function callICS(events: Array<EventCalendarItem>): Promise<void> {
   const filename = 'EventCalendar.ics';
   const eventsCalendar: Array<EventAttributes> = [];
   events.forEach((event) => {
@@ -791,7 +791,7 @@ function updateWeekToDisplay(
  * @returns The calendar component.
  */
 function Calendar(props: {
-  events: Array<EventProps>;
+  events: Array<EventCalendarItem>;
   onChangeRange: (period: { from: Date; to: Date }) => void;
 }): JSX.Element {
   const { events, onChangeRange: onChangePeriod } = props;
@@ -853,14 +853,14 @@ function Calendar(props: {
     )
   );
 
-  const sortEvents: Array<EventProps> = getEventWithDate(
+  const sortEvents: Array<EventCalendarItem> = getEventWithDate(
     events,
     beginOfWeek,
     endOfWeek
   );
 
   let eventsWeek: {
-    sortEvents: Array<Array<EventProps>>;
+    sortEvents: Array<Array<EventCalendarItem>>;
     eventsBlockedChain?: Array<Array<Array<number>>>;
   };
   let eventsBlockedChain: Array<Array<Array<number>>>;
