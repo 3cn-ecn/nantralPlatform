@@ -3,15 +3,15 @@ import { useQuery } from 'react-query';
 
 import { Close, Delete } from '@mui/icons-material';
 import {
-    Alert,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    IconButton,
-    useMediaQuery,
-    useTheme,
+  Alert,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 
 import { getGroups } from '#api/group';
@@ -75,7 +75,7 @@ export function FormPost(props: {
       label: t('form.group'),
       required: true,
       name: 'group',
-      options: adminGroup,
+      options: adminGroup ?? [],
       getIcon: (object: SimpleGroupProps) => object.icon,
       getOptionLabel: (object: SimpleGroupProps) => object.name,
       disabled: mode === 'edit',

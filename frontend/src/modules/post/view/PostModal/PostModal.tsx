@@ -117,9 +117,9 @@ export function PostModal(props: {
                   textAlign="right"
                   fontStyle="italic"
                 >
-                  {`${t('post.updated')} ${formatRelativeTime(
-                    post?.updatedAt
-                  )}`}
+                  {t('post.updated', {
+                    dateRange: formatRelativeTime(post.updatedAt),
+                  })}
                 </Typography>
               </>
             )}

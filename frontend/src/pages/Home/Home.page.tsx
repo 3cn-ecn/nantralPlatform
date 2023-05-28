@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import { Box, Chip, Container, Divider, Typography } from '@mui/material';
@@ -13,13 +13,11 @@ import { LoadStatus } from '#types/GenericTypes';
 import { SimpleGroupProps } from '#types/Group';
 import { PostProps, convertPostFromPythonData } from '#types/Post';
 
-import { useLastPosts } from './hooks/useLastPosts.hook';
-import { usePinnedPosts } from './hooks/usePinnedPosts.hook';
 import { CreateNewButton } from './views/CreateNewButton';
 import { HomeHeader } from './views/HomeHeader';
-import { ClubSection } from './views/section/ClubSection';
 import { EventSection } from './views/section/EventSection';
-import { PostSection } from './views/section/PostSection';
+import { LastPostSection } from './views/section/LastPostSection';
+import { PinnedPostSection } from './views/section/PinnnedPostSection';
 
 const MAX_EVENT_SHOWN = 6;
 
@@ -38,9 +36,7 @@ export default function HomePage() {
   const [selectedPost, setSelectedPost] = useState<PostProps>(null);
   const { t } = useTranslation(); // translation module
 
-  const { lastPosts, refetchLastPosts, ...lastPostsQuery } = useLastPosts();
-  const { pinnedPosts, refetchPinnedPosts, ...pinnedPostsQuery } =
-    usePinnedPosts();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const postId = queryParams.get('post');
@@ -97,36 +93,14 @@ export default function HomePage() {
       <Container sx={{ my: 4 }}>
         <CreateNewButton
           onEventCreated={() => {
-            refetchLastPosts();
-            refetchPinnedPosts();
+            queryClient.invalidateQueries('posts');
           }}
           onPostCreated={() => {
-            refetchUpcomingEvents();
-            refetchThisWeekEvents();
+            queryClient.invalidateQueries('events');
           }}
         />
-        {(pinnedPostsQuery.isLoading ||
-          (pinnedPostsQuery.isSuccess && pinnedPosts.length > 0)) && (
-          <PostSection
-            pinnedOnly
-            posts={pinnedPosts}
-            isLoading={pinnedPostsQuery.isLoading}
-            isError={pinnedPostsQuery.isError}
-            onUpdate={(newPost) => {
-              refetchPinnedPosts();
-              if (!newPost.pinned) refetchLastPosts();
-            }}
-          />
-        )}
-        <PostSection
-          posts={lastPosts}
-          isLoading={lastPostsQuery.isLoading}
-          isError={lastPostsQuery.isError}
-          onUpdate={(newPost) => {
-            refetchLastPosts();
-            if (newPost.pinned) refetchPinnedPosts();
-          }}
-        />
+        <PinnedPostSection />
+        <LastPostSection />
         <Box
           display="flex"
           alignItems="center"
@@ -153,11 +127,11 @@ export default function HomePage() {
           loadingItemCount={MAX_EVENT_SHOWN}
           title={t('home.upcomingEvents')}
         />
-        <ClubSection
+        {/* <ClubSection
           clubs={myGroups}
           status={myGroupsStatus}
           title={t('home.myClubs')}
-        />
+        /> */}
       </Container>
       {selectedPost && (
         <PostModal

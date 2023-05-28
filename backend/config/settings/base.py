@@ -209,8 +209,9 @@ STAGING = env('STAGING')
 
 # Rest API settings
 REST_FRAMEWORK = {
-    'PAGE_SIZE': 50
+    'DEFAULT_PAGINATION_CLASS': 'apps.utils.api_pagination.CustomPagination',
 }
+
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
 
 # Extra Settings

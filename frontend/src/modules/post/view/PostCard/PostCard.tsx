@@ -1,4 +1,5 @@
 import React from 'react';
+import { useQueryClient } from 'react-query';
 
 import {
   Edit as EditIcon,
@@ -21,7 +22,6 @@ import {
 import { Post } from '#modules/post/post.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { FormPostProps } from '#types/Post';
 
 import { PostModal } from '../PostModal/PostModal';
 
@@ -66,17 +66,16 @@ export function PostBadges({ pinned, publicity, sx = {} }: PostBadgesProps) {
 
 type PostCardProps = {
   post: Post;
-  onUpdate?: (newPost: FormPostProps) => void;
-  onDelete?: () => void;
 };
 
-export function PostCard({
-  post,
-  onUpdate = () => null,
-  onDelete = () => null,
-}: PostCardProps) {
+export function PostCard({ post }: PostCardProps) {
   const [openModal, setOpenModal] = React.useState(false);
   const { t, formatRelativeTime } = useTranslation();
+  const queryClient = useQueryClient();
+  const onUpdate = () => {
+    queryClient.invalidateQueries('posts');
+    queryClient.invalidateQueries(['post', { id: post.id }]);
+  };
 
   return (
     <>
@@ -148,7 +147,7 @@ export function PostCard({
         open={openModal}
         onClose={() => setOpenModal(false)}
         onUpdate={onUpdate}
-        onDelete={onDelete}
+        onDelete={onUpdate}
       />
     </>
   );
