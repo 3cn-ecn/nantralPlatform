@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-import { adaptPage } from '#shared/utils/pagination/page.adapter';
-import { PageDTO } from '#shared/utils/pagination/page.dto';
-import { Page } from '#shared/utils/pagination/page.types';
+import { Page, PageDTO, adaptPage } from '#shared/utils/pagination';
 
 import { adaptPost } from '../infra/post.adapter';
 import { PostDTO } from '../infra/post.dto';
