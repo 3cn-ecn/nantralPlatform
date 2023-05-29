@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Alert, AlertTitle, Button } from '@mui/material';
-import { Container } from '@mui/system';
+import { Alert, AlertTitle, Button, Container } from '@mui/material';
 
 import EditSuggestionModal from '#shared/components/Suggestion/Suggestion';
 import { useTranslation } from '#shared/i18n/useTranslation';
