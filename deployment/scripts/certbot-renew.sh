@@ -21,11 +21,11 @@
 cd /home/ubuntu/nantralPlatform/deployment
 
 # Renew certificates
-certbot certonly --force-renew --webroot --webroot-path ./certbot/www/ -d nantral-platform.fr -d webmail.nantral-platform.fr -d dev.nantral-platform.fr -d www.nantral-platform.fr -d mail.nantral-platform.fr -d docs.nantral-platform.fr
+certbot certonly --force-renew --webroot --webroot-path ./certbot/www/ -d nantral-platform.fr -d webmail.nantral-platform.fr -d dev.nantral-platform.fr -d www.nantral-platform.fr -d mail.nantral-platform.fr
 
 # Move certificates to handle mails
 cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPlatform/deployment/certs/key.pem || exit 1
 cp /etc/letsencrypt/live/nantral-platform.fr/fullchain.pem /home/ubuntu/nantralPlatform/deployment/certs/cert.pem || exit 1
 
 # Reload nginx
-docker-compose exec nginx nginx -s reload
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec nginx nginx -s reload
