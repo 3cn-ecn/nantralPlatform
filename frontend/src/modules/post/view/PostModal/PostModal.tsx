@@ -1,7 +1,14 @@
 import React from 'react';
 
-import { Close } from '@mui/icons-material';
 import {
+  Close,
+  Edit as EditIcon,
+  Group as GroupIcon,
+  PushPin as PushPinIcon,
+} from '@mui/icons-material';
+import {
+  Box,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,137 +20,89 @@ import {
 import IconButton from '@mui/material/IconButton/IconButton';
 
 import { Avatar } from '#shared/components/Avatar/Avatar';
+import { FlexBox } from '#shared/components/FlexBox/FlexBox';
+import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { FormPostProps, PostProps } from '#types/Post';
 
-import { FormPost } from '../../../../shared/components/FormPost/FormPost';
-import { EditButton, PostBadges } from '../PostCard/PostCard';
+import { usePostDetailsQuery } from '../hooks/usePostDetails.query';
+import { BadgeIcon } from '../shared/BadgeIcon';
 
-export function PostModal(props: {
-  post: PostProps;
-  open: boolean;
+type PostModalProps = {
+  postId: number;
   onClose: () => void;
-  onUpdate?: (post: FormPostProps) => void;
-  onDelete?: () => void;
-}): JSX.Element {
-  const { post, open, onClose, onUpdate, onDelete } = props;
-  const theme = useTheme();
-  const fullScreen: boolean = useMediaQuery(theme.breakpoints.down('md'));
-  const [editModalOpen, setEditModalOpen] = React.useState<boolean>(false);
-  const { t, formatRelativeTime } = useTranslation();
-  return (
-    <>
-      <Dialog
-        open={open && !editModalOpen}
-        onClose={onClose}
-        scroll="paper"
-        fullWidth
-        fullScreen={fullScreen}
-        maxWidth="md"
-        sx={{ margin: 0 }}
-      >
-        <DialogTitle id="scroll-dialog-title">
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <div
-              style={{ display: 'flex', columnGap: 10, alignItems: 'center' }}
-            >
-              <IconButton href={post?.group.url}>
-                {post?.group?.name && (
-                  <Avatar
-                    title={post.group.name}
-                    url={post.group.icon}
-                    size="m"
-                  />
-                )}
-              </IconButton>
-              <div>
-                <Typography
-                  variant="h6"
-                  sx={{ lineHeight: 1 }}
-                  className="post-title"
-                >
-                  {post?.title}
-                </Typography>
-                <Typography variant="subtitle2" sx={{ lineHeight: 1 }}>
-                  {post?.group.name}
-                </Typography>
-              </div>
-            </div>
-            <IconButton onClick={onClose}>
-              <Close />
-            </IconButton>
-          </div>
-        </DialogTitle>
-        <DialogContent dividers>
-          {post?.image && <img alt="" src={post.image.toString()} id="image" />}
-          {/* eslint-disable-next-line react/no-danger */}
-          <div dangerouslySetInnerHTML={{ __html: post?.description }}></div>
-        </DialogContent>
-        <DialogActions
-          sx={{
-            justifyContent: 'space-between',
-          }}
-        >
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              columnGap: 10,
-            }}
-          >
-            <PostBadges pinned={post?.pinned} publicity={post?.publicity} />
-            <Typography variant="caption" textAlign="right" fontStyle="italic">
-              {`${t('post.published')} ${formatRelativeTime(post?.createdAt)}`}
-            </Typography>
-            {post?.createdAt.toDateString() !==
-              post?.updatedAt.toDateString() && (
-              <>
-                <Typography
-                  variant="caption"
-                  textAlign="right"
-                  fontStyle="italic"
-                >
-                  •
-                </Typography>
-                <Typography
-                  variant="caption"
-                  textAlign="right"
-                  fontStyle="italic"
-                >
-                  {t('post.updated', {
-                    dateRange: formatRelativeTime(post.updatedAt),
-                  })}
-                </Typography>
-              </>
-            )}
-          </div>
+  onEdit: () => void;
+};
 
-          <div style={{ display: 'flex', columnGap: 10 }}>
-            {post?.isAdmin && (
-              <EditButton onClick={() => setEditModalOpen(true)} />
+export function PostModal({ postId, onClose, onEdit }: PostModalProps) {
+  const theme = useTheme();
+  const { t, formatRelativeTime } = useTranslation();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+  const { post, isLoading, isError } = usePostDetailsQuery(postId);
+
+  if (isLoading || isError) {
+    return null;
+  }
+
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      scroll="paper"
+      fullWidth
+      fullScreen={fullScreen}
+      maxWidth="md"
+    >
+      <DialogTitle>
+        <FlexBox alignItems="center" gap={2}>
+          <IconButton href={post?.group.url} sx={{ p: 0 }}>
+            {post?.group?.name && (
+              <Avatar title={post.group.name} url={post.group.icon} size="m" />
             )}
-          </div>
-        </DialogActions>
-      </Dialog>
-      <FormPost
-        open={editModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        post={post}
-        onUpdate={onUpdate}
-        onDelete={onDelete}
-      />
-    </>
+          </IconButton>
+          <Box>
+            <Typography variant="h6" sx={{ lineHeight: 1 }}>
+              {post.title}
+            </Typography>
+            <Typography variant="caption" sx={{ lineHeight: 1 }}>
+              {post.group.name}
+            </Typography>
+          </Box>
+          <Spacer flex={1} />
+          <FlexBox gap={2}>
+            {post.publicity === 'Mem' && <BadgeIcon Icon={GroupIcon} />}
+            {post.pinned && <BadgeIcon Icon={PushPinIcon} />}
+          </FlexBox>
+          <IconButton onClick={onClose}>
+            <Close />
+          </IconButton>
+        </FlexBox>
+      </DialogTitle>
+      <DialogContent dividers sx={{ p: 0 }}>
+        {post.image && (
+          <img alt="" src={post.image.toString()} style={{ width: '100%' }} />
+        )}
+        <Container
+          dangerouslySetInnerHTML={{ __html: post.description }}
+        ></Container>
+      </DialogContent>
+      <DialogActions sx={{ justifyContent: 'space-between', pl: 3 }}>
+        <Typography variant="caption" color="text.secondary" fontStyle="italic">
+          {`${t('post.modal.metadata.dates', {
+            createdDuration: formatRelativeTime(post.createdAt),
+            updatedDuration: formatRelativeTime(post.updatedAt),
+          })}`}
+        </Typography>
+        {post.isAdmin && (
+          <IconButton
+            color="primary"
+            sx={{ background: '#efefefb2' }}
+            onClick={onEdit}
+          >
+            <EditIcon />
+          </IconButton>
+        )}
+      </DialogActions>
+    </Dialog>
   );
 }
-
-PostModal.defaultProps = {
-  onUpdate: () => null,
-  onDelete: () => null,
-};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 import { Close, Delete } from '@mui/icons-material';
 import {
@@ -69,6 +69,8 @@ export function FormPost(props: {
     queryKey: 'admin-group',
     queryFn: () => getGroups({ simple: true, limit: 20, admin: true }),
   });
+  const queryClient = useQueryClient();
+
   const defaultFields: FieldType[] = [
     {
       kind: 'image-autocomplete',
@@ -165,6 +167,10 @@ export function FormPost(props: {
         setErrors(err.response.data);
         setLoading(false);
       });
+    const onUpdate = () => {
+      queryClient.invalidateQueries('posts');
+      queryClient.invalidateQueries(['post', { id: post.id }]);
+    };
   };
   const handleUpdate = () => {
     setLoading(true);

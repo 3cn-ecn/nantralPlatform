@@ -2,10 +2,8 @@ import React from 'react';
 
 import { Alert, Grid, Pagination, Typography } from '@mui/material';
 
-import {
-  PostCard,
-  PostCardSkeleton,
-} from '#modules/post/view/PostCard/PostCard';
+import { PostCard } from '#modules/post/view/PostCard/PostCard';
+import { PostCardSkeleton } from '#modules/post/view/PostCard/PostCardSkeleton';
 import { useLastPostsQuery } from '#pages/Home/hooks/useLastPosts.query';
 import { Section } from '#shared/components/Section/Section';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -20,7 +18,7 @@ export function LastPostSection() {
       <Section title={t('home.postSection.title')}>
         <Grid container spacing={1}>
           {[0, 1, 2].map((item) => (
-            <Grid key={item} xs={12} md={4} item>
+            <Grid key={item} xs={12} sm={6} md={4} item>
               <PostCardSkeleton />
             </Grid>
           ))}
@@ -52,7 +50,7 @@ export function LastPostSection() {
     <Section title={t('home.postSection.title')}>
       <Grid spacing={1} container>
         {lastPosts.map((post) => (
-          <Grid key={post.id} xs={12} md={4} item>
+          <Grid key={post.id} xs={12} sm={6} md={4} item>
             <PostCard post={post} />
           </Grid>
         ))}

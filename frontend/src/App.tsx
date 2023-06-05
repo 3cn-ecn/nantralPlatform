@@ -19,7 +19,14 @@ import NavBarTop from '#shared/components/NavBarTop/NavBarTop';
 
 import getTheme from './theme';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60, // time before refetching the server
+      cacheTime: 1000 * 60 * 60 * 24 * 7, // time before erasing the cached data
+    },
+  },
+});
 
 const getPreferredMode = (): PaletteMode | 'auto' => {
   const cachedMode = localStorage.getItem('theme-mode');

@@ -20,7 +20,6 @@ export function useLastPostsQuery() {
         page: page,
         pageSize: 3,
       }),
-    keepPreviousData: true,
   });
 
   return {

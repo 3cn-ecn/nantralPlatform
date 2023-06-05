@@ -200,6 +200,11 @@
   "post": {
     "confirmDelete": "Are you sure you want to delete the post (this action is irreversible).",
     "edited": "edited",
+    "modal": {
+      "metadata": {
+        "dates": "Published {{createdDuration}} • Updated {{updatedDuration}}"
+      }
+    },
     "noPost": "There are no recent posts",
     "post": "Post",
     "published": "posted",

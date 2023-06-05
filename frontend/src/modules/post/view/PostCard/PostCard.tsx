@@ -1,8 +1,6 @@
-import React from 'react';
-import { useQueryClient } from 'react-query';
+import React, { useState } from 'react';
 
 import {
-  Edit as EditIcon,
   Groups as GroupIcon,
   PushPin as PushPinIcon,
 } from '@mui/icons-material';
@@ -10,101 +8,41 @@ import {
   Box,
   Card,
   CardActionArea,
-  CardContent,
   CardMedia,
-  IconButton,
-  Skeleton,
-  SxProps,
-  Theme,
   Typography,
+  styled,
 } from '@mui/material';
+import { upperFirst } from 'lodash-es';
 
-import { Post } from '#modules/post/post.types';
+import { PartialPost } from '#modules/post/post.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
+import { FlexBox } from '#shared/components/FlexBox/FlexBox';
+import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { PostModal } from '../PostModal/PostModal';
-
-const POST_HEIGHT = 190;
-export const POST_AVATAR_SIZE = 35;
-
-export function EditButton(props: { onClick }) {
-  const { onClick } = props;
-  return (
-    <IconButton
-      aria-label="settings"
-      color="primary"
-      sx={{ background: '#efefefb2' }}
-      onClick={onClick}
-    >
-      <EditIcon />
-    </IconButton>
-  );
-}
-
-type PostBadgesProps = {
-  pinned: boolean;
-  publicity: Post['publicity'];
-  sx?: SxProps<Theme>;
-};
-
-export function PostBadges({ pinned, publicity, sx = {} }: PostBadgesProps) {
-  const sxIconProp: SxProps<Theme> = {
-    padding: 0.4,
-    color: 'white',
-    borderRadius: '50%',
-    backgroundColor: 'primary.main',
-  };
-
-  return (
-    <Box display="flex" gap={1} sx={sx}>
-      {publicity === 'Mem' && <GroupIcon sx={sxIconProp} />}
-      {pinned && <PushPinIcon sx={sxIconProp} />}
-    </Box>
-  );
-}
+import { BadgeIcon } from '../shared/BadgeIcon';
 
 type PostCardProps = {
-  post: Post;
+  post: PartialPost;
 };
 
 export function PostCard({ post }: PostCardProps) {
-  const [openModal, setOpenModal] = React.useState(false);
-  const { t, formatRelativeTime } = useTranslation();
-  const queryClient = useQueryClient();
-  const onUpdate = () => {
-    queryClient.invalidateQueries('posts');
-    queryClient.invalidateQueries(['post', { id: post.id }]);
-  };
+  const [openModal, setOpenModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const { formatRelativeTime } = useTranslation();
 
   return (
     <>
-      <Card variant="outlined" sx={{ height: '100%' }}>
-        <CardActionArea
-          onClick={() => setOpenModal(true)}
-          sx={{ display: 'flex', height: '100%' }}
-        >
-          <PostBadges
-            pinned={post.pinned}
-            publicity={post.publicity}
-            sx={{ position: 'absolute', top: 12, right: 12 }}
-          />
-          <CardContent
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              flex: 1,
-              gap: 2,
-              height: '100%',
-            }}
-          >
-            <Box
-              flex={1}
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-            >
-              <Typography variant="h6" lineHeight={1}>
+      <StyledCard variant="outlined">
+        <StyledCardActionArea onClick={() => setOpenModal(true)}>
+          <BadgeIconsContainer>
+            {post.publicity === 'Mem' && <BadgeIcon Icon={GroupIcon} />}
+            {post.pinned && <BadgeIcon Icon={PushPinIcon} />}
+          </BadgeIconsContainer>
+          <CardContent>
+            <Box mt={1}>
+              <Typography variant="h6" lineHeight={1.2}>
                 {post.title}
               </Typography>
               <Typography
@@ -112,19 +50,14 @@ export function PostCard({ post }: PostCardProps) {
                 color="text.secondary"
                 fontStyle="italic"
               >
-                {t('post.updated', {
-                  dateRange: formatRelativeTime(post.updatedAt),
-                })}
+                {upperFirst(formatRelativeTime(post.updatedAt))}
               </Typography>
             </Box>
-            <Box display="flex" alignItems="center" gap={1}>
-              <Avatar
-                title={post?.group.name}
-                url={post?.group.icon}
-                size="s"
-              />
+            <Spacer vertical={8} flex={1} />
+            <FlexBox alignItems="center" gap={1}>
+              <Avatar title={post.group.name} url={post.group.icon} size="s" />
               <Typography variant="caption">{post.group.name}</Typography>
-            </Box>
+            </FlexBox>
           </CardContent>
           {post.image && (
             <CardMedia
@@ -140,19 +73,48 @@ export function PostCard({ post }: PostCardProps) {
               }}
             />
           )}
-        </CardActionArea>
-      </Card>
-      <PostModal
+        </StyledCardActionArea>
+      </StyledCard>
+      {openModal && (
+        <PostModal
+          postId={post.id}
+          onClose={() => setOpenModal(false)}
+          onEdit={() => {
+            setOpenModal(false);
+            setOpenEditModal(true);
+          }}
+        />
+      )}
+      {/* <FormPost
+        open={openEditModal}
+        onClose={() => setOpenEditModal(false)}
         post={post}
-        open={openModal}
-        onClose={() => setOpenModal(false)}
         onUpdate={onUpdate}
-        onDelete={onUpdate}
-      />
+        onDelete={onDelete}
+      /> */}
     </>
   );
 }
 
-export function PostCardSkeleton() {
-  return <Skeleton variant="rounded" width="100%" height={POST_HEIGHT} />;
-}
+const StyledCard = styled(Card)({
+  height: '100%',
+});
+
+const StyledCardActionArea = styled(CardActionArea)({
+  display: 'flex',
+  height: '100%',
+});
+
+const CardContent = styled(FlexBox)({
+  padding: 16,
+  flex: 1,
+  flexDirection: 'column',
+  height: '100%',
+});
+
+const BadgeIconsContainer = styled(FlexBox)({
+  position: 'absolute',
+  gap: 8,
+  top: 12,
+  right: 12,
+});

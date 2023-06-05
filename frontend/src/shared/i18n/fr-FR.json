@@ -201,6 +201,11 @@
   "post": {
     "confirmDelete": "Êtes vous sûr de vouloir supprimer le post (cette action est irréversible).",
     "edited": "édité",
+    "modal": {
+      "metadata": {
+        "dates": "Publié {{createdDuration}} • Mis à jour {{updatedDuration}}"
+      }
+    },
     "noPost": "Il n'y a pas de posts récents",
     "post": "Post",
     "published": "publié",

@@ -2,9 +2,9 @@ import axios from 'axios';
 
 import { Page, PageDTO, adaptPage } from '#shared/utils/pagination';
 
-import { adaptPost } from '../infra/post.adapter';
-import { PostDTO } from '../infra/post.dto';
-import { Post } from '../post.types';
+import { adaptPartialPost } from '../infra/post.adapter';
+import { PartialPostDTO } from '../infra/post.dto';
+import { PartialPost } from '../post.types';
 
 type GetPostListParams = {
   pinned?: boolean;
@@ -17,8 +17,8 @@ type GetPostListParams = {
 
 export async function getPostList(
   options: GetPostListParams
-): Promise<Page<Post>> {
-  const { data } = await axios.get<PageDTO<PostDTO>>('/api/post/', {
+): Promise<Page<PartialPost>> {
+  const { data } = await axios.get<PageDTO<PartialPostDTO>>('/api/post/', {
     params: {
       pinned: options.pinned,
       from_date: options.fromDate,
@@ -29,5 +29,5 @@ export async function getPostList(
     },
   });
 
-  return adaptPage(data, adaptPost);
+  return adaptPage(data, adaptPartialPost);
 }
