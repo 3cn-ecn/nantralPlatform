@@ -1,4 +1,7 @@
 ---
+last_update:
+  date: 2023-03-04 00:37:55 +0100
+  author: Alexis Delage
 title: Resources 🔗
 sidebar_position: 99
 ---
