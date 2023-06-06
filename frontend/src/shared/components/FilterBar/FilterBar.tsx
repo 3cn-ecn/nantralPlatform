@@ -1,21 +1,23 @@
 import React from 'react';
 
-// eslint-disable-next-line import/order
-import { Close } from '@mui/icons-material';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import GroupsIcon from '@mui/icons-material/Groups';
-import PersonIcon from '@mui/icons-material/Person';
-import TimerIcon from '@mui/icons-material/Timer';
-import { Grid } from '@mui/material';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import dayjs from 'dayjs';
+import {
+  Close as CloseIcon,
+  DateRange as DateRangeIcon,
+  Favorite as FavoriteIcon,
+  FilterAlt as FilterIcon,
+  Groups as GroupsIcon,
+  Person as PersonIcon,
+  Timer as TimerIcon,
+} from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Drawer,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+} from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { FilterFrontInterface, FilterInterface } from '#types/Filter';
@@ -23,7 +25,7 @@ import { FilterFrontInterface, FilterInterface } from '#types/Filter';
 import SimpleAccordion from '../Accordion/SimpleAccordion';
 import CheckboxButton from '../Checkbox/CheckboxButton/CheckboxButton';
 import CheckboxesTags from '../Checkbox/CheckboxesTags/CheckboxesTags';
-import BasicDatePicker from '../DatePicker/BasicDatePicker';
+import LocalizedDatePicker from '../LocalizedDatePicker/LocalizedDatePicker';
 import './FilterBar.scss';
 
 /**
@@ -109,30 +111,30 @@ function FilterBar(props: {
       content: (
         <>
           <Grid item xs="auto">
-            <BasicDatePicker
+            <LocalizedDatePicker
               label={t('filterbar.from')}
               minDate={null}
               onChange={(value) =>
                 setCurrentFilter({
                   ...currentFilter,
-                  dateBegin: value ? value.toDate() : undefined,
+                  dateBegin: value || undefined,
                 })
               }
-              value={dayjs(currentFilter.dateBegin)}
+              value={currentFilter.dateBegin}
             />
           </Grid>
           <div style={{ height: '15px' }}></div>
           <Grid item xs="auto">
-            <BasicDatePicker
+            <LocalizedDatePicker
               label={t('filterbar.to')}
               minDate={currentFilter.dateBegin}
               onChange={(value) =>
                 setCurrentFilter({
                   ...currentFilter,
-                  dateEnd: value ? value.toDate() : undefined,
+                  dateEnd: value || undefined,
                 })
               }
-              value={dayjs(currentFilter.dateEnd)}
+              value={currentFilter.dateEnd}
             />
           </Grid>
         </>
@@ -155,7 +157,7 @@ function FilterBar(props: {
             setOpen(false);
           }}
         >
-          <Close />
+          <CloseIcon />
         </IconButton>
       </div>
       <h2>{t('filterbar.title_filter')}</h2>
@@ -201,7 +203,7 @@ function FilterBar(props: {
             onClick={() => {
               setOpen(true);
             }}
-            endIcon={<FilterAltIcon />}
+            endIcon={<FilterIcon />}
           >
             {t('filterbar.title_filter')}
           </Button>
