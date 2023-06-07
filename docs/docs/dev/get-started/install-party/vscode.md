@@ -1,4 +1,7 @@
 ---
+last_update:
+  date: 2023-02-07 14:58:56 +0100
+  author: Alexis Delage
 title: VSCode
 sidebar_position: 4
 description: A far better text editor than Notepad.exe
