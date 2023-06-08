@@ -48,3 +48,13 @@ jobs:
     if: ${{ needs.changes.outputs.docs == 'true' }}
     uses: ./.github/workflows/quality-docs.yml
     secrets: inherit
+
+  final-check:
+    name: Final Check
+    needs: [backend, frontend, docs]
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+      - name: Check final status
+        id: check-final-status
+        run: exit 0
