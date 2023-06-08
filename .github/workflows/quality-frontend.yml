@@ -1,0 +1,27 @@
+name: Test Front End Quality
+
+on: workflow_call
+
+jobs:
+  frontend-quality:
+    name: Front End Quality
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # default directory for 'run' actions only in steps
+        working-directory: frontend
+
+    steps:
+      - name: Pull latest commit
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: frontend
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}

@@ -1,9 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Deploy Server
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches:
@@ -15,44 +11,36 @@ on:
       - .github/workflows/deploy-server.yml
 
 jobs:
-  check-frontend:
-    name: Check for frontend changes
-    outputs:
-      run_job: ${{ steps.check_files.outputs.run_job }}
-    # Specify which OS we are running our job on
+  changes:
+    name: Check changes on Front end
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    permissions:
+      push: read
+    outputs:
+      backend: ${{ steps.filter.outputs.backend}}
+      frontend: ${{ steps.filter.outputs.frontend }}
     steps:
-      # A step can use a GitHub action which is available on the marketplace or simply run a command in the runner's shell.
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Pull latest commit
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
         with:
-          fetch-depth: 2
-      - name: Look for modified files
-        id: check_files
-        run: |
-          echo "=============== List modified files ==============="
-          git diff --name-only HEAD^ HEAD
+          base: ${{ github.ref }}
+          filters: |
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'frontend/**'
 
-          echo "========== Check paths of modified files =========="
-          git diff --name-only HEAD^ HEAD > files.txt
-          while IFS= read -r file
-          do
-            echo $file
-            if [[ $file == frontend/* ]]; then
-              echo "This modified file is under the 'frontend' folder."
-              echo "run_job=true" >> $GITHUB_OUTPUT
-              break
-            else
-              echo "run_job=false" >> $GITHUB_OUTPUT
-            fi
-          done < files.txt
+  frontend-quality:
+    name: Test front end quality
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    uses: ./.github/workflows/quality-frontend.yml
+    secrets: inherit
 
-  build-frontend:
+  frontend-build:
     name: Build React bundles
-    needs: check-frontend
-    if: needs.check-frontend.outputs.run_job == 'true'
+    needs: frontend-quality
     runs-on: ubuntu-latest
     steps:
       - name: Pull latest commit
@@ -60,7 +48,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: frontend/.nvmrc
       - name: Build React
         run: |
           cd frontend
@@ -75,37 +63,20 @@ jobs:
           source: "backend/static/js/*/**.js"
           target: "nantralPlatform"
 
-  test-backend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Pull latest commit
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-          cache: "pipenv"
-      - name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-      - name: Install dependencies
-        working-directory: ./backend
-        run: pipenv verify && pipenv sync
-      - name: Testing
-        working-directory: ./backend
-        run: pipenv run test
+  backend-quality:
+    name: Test Back End Quality
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    uses: ./.github/workflows/quality-backend.yml
+    secrets: inherit
 
   deploy:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    name: Deploy on VPS
+    needs: [frontend-build, backend-quality]
     if: ${{ always() }}
-    needs: [build-frontend, test-backend]
-    strategy:
-      matrix:
-        python-version: ["3.10"]
+    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Pull latest commit
         uses: actions/checkout@v3
       - name: Backup before deploy

@@ -51,9 +51,6 @@ coverage.xml
 *.cover
 .hypothesis/
 
-# pyenv
-.python-version
-
 # celery
 celerybeat-schedule.*
 

@@ -1,0 +1,45 @@
+name: Test Back End Quality
+
+on: workflow_call
+
+jobs:
+  backend-quality:
+    name: Back End Quality
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # default directory for 'run' actions only in steps
+        working-directory: backend
+
+    steps:
+      - name: Pull latest commit
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: backend/.python-version
+          cache: "pipenv"
+
+      - name: Install dependencies
+        run: |
+          curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+          pipenv verify
+          pipenv sync
+          pipenv run pip install coverage
+
+      - name: Run tests and collect coverage
+        run: |
+          pipenv run coverage-test
+          pipenv run coverage xml
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: backend
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACKEND }}
