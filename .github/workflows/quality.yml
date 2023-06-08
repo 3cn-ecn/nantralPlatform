@@ -50,19 +50,20 @@ jobs:
     secrets: inherit
 
   check-all:
-    name: Check All Jobs Status
+    name: Check all jobs are successful
     needs: [backend, frontend, docs]
     if: ${{ always() }}
-    run: |
-      const jobsInput = 'backend,frontend,docs';
-      const jobs = jobsInput.split(',');
-
-      for (const job of jobs) {
-        const jobStatus = process.env[`NEEDS_${job}_RESULT`];
-        if (jobStatus && jobStatus.toLowerCase() === 'failure') {
-          console.log("One or more jobs failed.");
-          process.exit(1);
-        }
-      }
-      console.log("All jobs succeeded or were skipped.");
-      process.exit(0);
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Jobs Status and Final Check
+        run: |
+          jobs=("backend" "frontend" "docs")
+          for job in "${jobs[@]}"; do
+            job_status="${{ env.NEEDS_${job}_RESULT }}"
+            if [[ "${job_status,,}" == "failure" ]]; then
+              echo "One or more jobs failed."
+              exit 1
+            fi
+          done
+          echo "All jobs succeeded or were skipped."
+          exit 0
