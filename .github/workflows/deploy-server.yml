@@ -14,8 +14,6 @@ jobs:
   changes:
     name: Check changes on Front end
     runs-on: ubuntu-latest
-    permissions:
-      push: read
     outputs:
       backend: ${{ steps.filter.outputs.backend}}
       frontend: ${{ steps.filter.outputs.frontend }}
