@@ -1,7 +1,4 @@
 ---
-last_update:
-  date: 2023-02-07 14:58:56 +0100
-  author: Alexis Delage
 title: Emails
 description: "A comprehensive description of how mails are handled on the server"
 ---
