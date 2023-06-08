@@ -6,6 +6,8 @@ import MapGL, {
 } from "react-map-gl";
 import { easeCubic } from "react-d3-library";
 
+();
+
 import { geolocateStyle, navControlStyle } from "./styles";
 import { ClusterMarker } from "./clusterMarker";
 import Cluster from "./cluster";
