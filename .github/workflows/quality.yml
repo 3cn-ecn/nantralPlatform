@@ -58,12 +58,19 @@ jobs:
       - name: Check Jobs Status and Final Check
         run: |
           jobs=("backend" "frontend" "docs")
+          overall_status="success"
           for job in "${jobs[@]}"; do
             job_status=$(env | grep -oE "NEEDS_${job}_RESULT=\w+" | cut -d'=' -f2)
             if [[ "${job_status,,}" == "failure" ]]; then
               echo "One or more jobs failed."
-              exit 1
+              overall_status="failure"
+              break
             fi
           done
-          echo "All jobs succeeded or were skipped."
-          exit 0
+          if [[ "${overall_status,,}" == "failure" ]]; then
+            echo "At least one job failed."
+            exit 1
+          else
+            echo "All jobs succeeded or were skipped."
+            exit 0
+          fi
