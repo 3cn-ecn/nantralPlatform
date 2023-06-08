@@ -49,12 +49,64 @@ jobs:
     uses: ./.github/workflows/quality-docs.yml
     secrets: inherit
 
+  final:
+    name: Final Job
+    needs: [backend, frontend, docs]
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    steps:
+      - name: Check previous jobs status
+        run: |
+          status=$(echo "${{ needs.backend.result }}" | tr '[:upper:]' '[:lower:]')
+          status+=" ${{ needs.frontend.result }}" | tr '[:upper:]' '[:lower:]'
+          status+=" ${{ needs.docs.result }}" | tr '[:upper:]' '[:lower:]'
+          if [[ "$status" == *"failure"* ]]; then
+            echo "::set-output name=status::failure"
+          else
+            echo "::set-output name=status::success"
+          fi
+      - name: Set overall status
+        id: overall-status
+        run: |
+          if [[ "${{ needs.backend.result }}" == "skipped" && "${{ needs.frontend.result }}" == "skipped" && "${{ needs.docs.result }}" == "skipped" ]]; then
+            echo "::set-output name=status::skipped"
+          else
+            echo "::set-output name=status::${{ steps.check-previous-jobs.outputs.status }}"
+          fi
+
   final-check:
     name: Final Check
     needs: [backend, frontend, docs]
     runs-on: ubuntu-latest
-    if: ${{ needs.backend.result != 'failure' && needs.frontend.result != 'failure' && needs.docs.result != 'failure' }}
+    if: ${{ always() }}
     steps:
-      - name: Check Jobs Status and Final Check
+      - name: Check previous jobs status
         run: |
-          echo "All jobs succeeded or were skipped."
+          status=$(echo "${{ needs.backend.result }}" | tr '[:upper:]' '[:lower:]')
+          status+=" ${{ needs.frontend.result }}" | tr '[:upper:]' '[:lower:]'
+          status+=" ${{ needs.docs.result }}" | tr '[:upper:]' '[:lower:]'
+          if [[ "$status" == *"failure"* ]]; then
+            echo "::set-output name=status::failure"
+          else
+            echo "::set-output name=status::success"
+          fi
+
+      - name: Set overall status
+        id: overall-status
+        run: |
+          if [[ "${{ needs.backend.result }}" == "skipped" && "${{ needs.frontend.result }}" == "skipped" && "${{ needs.docs.result }}" == "skipped" ]]; then
+            echo "::set-output name=status::skipped"
+          else
+            echo "::set-output name=status::${{ steps.check-previous-jobs.outputs.status }}"
+          fi
+
+      - name: Check final status
+        id: check-final-status
+        run: |
+          if [[ "${{ needs.final.outputs.status }}" == "success" ]]; then
+            echo "All previous jobs succeeded or were skipped."
+            exit 0
+          else
+            echo "One or more previous jobs failed."
+            exit 1
+          fi
