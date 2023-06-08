@@ -61,18 +61,9 @@ jobs:
           status+=" ${{ needs.frontend.result }}" | tr '[:upper:]' '[:lower:]'
           status+=" ${{ needs.docs.result }}" | tr '[:upper:]' '[:lower:]'
           if [[ "$status" == *"failure"* ]]; then
-            echo "::set-output name=status::failure"
-          else
-            echo "::set-output name=status::success"
-          fi
-
-      - name: Check final status
-        id: check-final-status
-        run: |
-          if [[ "${{ steps.check-previous-jobs.outputs.status }}" == "success" ]]; then
-            echo "All previous jobs succeeded or were skipped."
-            exit 0
-          else
             echo "One or more previous jobs failed."
             exit 1
+          else
+            echo "All previous jobs succeeded or were skipped."
+            exit 0
           fi
