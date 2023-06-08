@@ -59,7 +59,7 @@ jobs:
         run: |
           jobs=("backend" "frontend" "docs")
           for job in "${jobs[@]}"; do
-            job_status="${{ env.NEEDS_${job}_RESULT }}"
+            job_status="${{ env['NEEDS_'${job}'_RESULT'] }}"
             if [[ "${job_status,,}" == "failure" ]]; then
               echo "One or more jobs failed."
               exit 1
