@@ -51,9 +51,10 @@ jobs:
 
   final-check:
     name: Final Check
+    description: Check none of previous jobs has failed
     needs: [backend, frontend, docs]
-    runs-on: ubuntu-latest
     if: ${{ always() }}
+    runs-on: ubuntu-latest
     steps:
       - name: Check previous jobs status
         run: |
