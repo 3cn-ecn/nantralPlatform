@@ -48,3 +48,22 @@ jobs:
     if: ${{ needs.changes.outputs.docs == 'true' }}
     uses: ./.github/workflows/quality-docs.yml
     secrets: inherit
+
+  final-check:
+    name: Final Check
+    needs: [backend, frontend, docs]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check previous jobs status
+        run: |
+          status=$(echo "${{ needs.backend.result }}" | tr '[:upper:]' '[:lower:]')
+          status+=" ${{ needs.frontend.result }}" | tr '[:upper:]' '[:lower:]'
+          status+=" ${{ needs.docs.result }}" | tr '[:upper:]' '[:lower:]'
+          if [[ "$status" == *"failure"* ]]; then
+            echo "One or more previous jobs failed."
+            exit 1
+          else
+            echo "All previous jobs succeeded or were skipped."
+            exit 0
+          fi
