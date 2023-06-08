@@ -53,7 +53,7 @@ jobs:
     name: Final Check
     needs: [backend, frontend, docs]
     runs-on: ubuntu-latest
-    if: ${{ always() && needs.backend.result != 'failure' && needs.frontend.result != 'failure' && needs.docs.result != 'failure' }}
+    if: ${{ needs.backend.result != 'failure' && needs.frontend.result != 'failure' && needs.docs.result != 'failure' }}
     steps:
       - name: Check Jobs Status and Final Check
         run: |
