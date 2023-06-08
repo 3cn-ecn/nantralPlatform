@@ -34,7 +34,7 @@ class TestGroups(APITestCase):
         self.client.force_login(self.u1)
         # test an empty list
         res = self.client.get('/api/group/group/', {'type': 't1'})
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.status_code, 401)
         self.assertEqual(len(res.data.get('results')), 0)
         # test with a group
         g = Group.objects.create(name="G1", group_type=self.t1)
