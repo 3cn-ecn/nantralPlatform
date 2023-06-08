@@ -1,9 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Deploy Staging
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches:
@@ -15,7 +11,7 @@ on:
       - .github/workflows/deploy-staging.yml
 
 jobs:
-  build-frontend:
+  frontend-build:
     name: Build React bundles
     runs-on: ubuntu-latest
     steps:
@@ -24,7 +20,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version-file: frontend/.nvmrc
       - name: Build React
         run: |
           cd frontend
@@ -38,25 +34,6 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           source: "backend/static/js/*/**.js"
           target: "nantralPlatform-staging"
-
-  test-backend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Pull latest commit
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-          cache: "pipenv"
-      - name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-      - name: Install dependencies
-        working-directory: ./backend
-        run: pipenv verify && pipenv sync
-      - name: Testing
-        working-directory: ./backend
-        run: pipenv run test
 
   clone-database:
     runs-on: ubuntu-latest
@@ -78,16 +55,10 @@ jobs:
             rm -r env
 
   deploy:
-    # The type of runner that the job will run on
+    needs: [frontend-build, clone-database]
     runs-on: ubuntu-latest
-    needs: [build-frontend, test-backend, clone-database]
-    strategy:
-      matrix:
-        python-version: ["3.10"]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Pull latest commit
         uses: actions/checkout@v3
       - name: Deploy to the VPS

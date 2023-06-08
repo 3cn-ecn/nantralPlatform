@@ -1,0 +1,31 @@
+name: Test Docs Quality
+
+on: workflow_call
+
+jobs:
+  docs-quality:
+    name: Docs Quality
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # default directory for 'run' actions only in steps
+        working-directory: docs
+
+    steps:
+      - name: Pull latest commit
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: docs/.nvmrc
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update dates and authors
+        run: ./update_headers.sh
+
+      - name: Test to build website
+        run: npm run build
