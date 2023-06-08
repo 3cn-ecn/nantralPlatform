@@ -49,12 +49,19 @@ jobs:
     uses: ./.github/workflows/quality-docs.yml
     secrets: inherit
 
-  final-check:
-    name: Final Check
+  - name: Check Jobs Status
     needs: [backend, frontend, docs]
-    runs-on: ubuntu-latest
     if: ${{ always() }}
-    steps:
-      - name: Check final status
-        id: check-final-status
-        run: exit 0
+    run: |
+      const jobsInput = 'backend,frontend,docs';
+      const jobs = jobsInput.split(',');
+
+      for (const job of jobs) {
+        const jobStatus = process.env[`NEEDS_${job}_RESULT`];
+        if (jobStatus && jobStatus.toLowerCase() === 'failure') {
+          console.log("One or more jobs failed.");
+          process.exit(1);
+        }
+      }
+      console.log("All jobs succeeded or were skipped.");
+      process.exit(0);
