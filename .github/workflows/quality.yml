@@ -49,31 +49,6 @@ jobs:
     uses: ./.github/workflows/quality-docs.yml
     secrets: inherit
 
-  final:
-    name: Final Job
-    needs: [backend, frontend, docs]
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
-    steps:
-      - name: Check previous jobs status
-        run: |
-          status=$(echo "${{ needs.backend.result }}" | tr '[:upper:]' '[:lower:]')
-          status+=" ${{ needs.frontend.result }}" | tr '[:upper:]' '[:lower:]'
-          status+=" ${{ needs.docs.result }}" | tr '[:upper:]' '[:lower:]'
-          if [[ "$status" == *"failure"* ]]; then
-            echo "::set-output name=status::failure"
-          else
-            echo "::set-output name=status::success"
-          fi
-      - name: Set overall status
-        id: overall-status
-        run: |
-          if [[ "${{ needs.backend.result }}" == "skipped" && "${{ needs.frontend.result }}" == "skipped" && "${{ needs.docs.result }}" == "skipped" ]]; then
-            echo "::set-output name=status::skipped"
-          else
-            echo "::set-output name=status::${{ steps.check-previous-jobs.outputs.status }}"
-          fi
-
   final-check:
     name: Final Check
     needs: [backend, frontend, docs]
@@ -91,19 +66,10 @@ jobs:
             echo "::set-output name=status::success"
           fi
 
-      - name: Set overall status
-        id: overall-status
-        run: |
-          if [[ "${{ needs.backend.result }}" == "skipped" && "${{ needs.frontend.result }}" == "skipped" && "${{ needs.docs.result }}" == "skipped" ]]; then
-            echo "::set-output name=status::skipped"
-          else
-            echo "::set-output name=status::${{ steps.check-previous-jobs.outputs.status }}"
-          fi
-
       - name: Check final status
         id: check-final-status
         run: |
-          if [[ "${{ needs.final.outputs.status }}" == "success" ]]; then
+          if [[ "${{ steps.check-previous-jobs.outputs.status }}" == "success" ]]; then
             echo "All previous jobs succeeded or were skipped."
             exit 0
           else
