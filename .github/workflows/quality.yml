@@ -49,13 +49,12 @@ jobs:
     uses: ./.github/workflows/quality-docs.yml
     secrets: inherit
 
-  check-all:
-    name: Check all jobs are successful
+  final-check:
+    name: Final Check
     needs: [backend, frontend, docs]
     runs-on: ubuntu-latest
+    if: ${{ needs.backend.result != 'failure' && needs.frontend.result != 'failure' && needs.docs.result != 'failure' }}
     steps:
       - name: Check Jobs Status and Final Check
-        id: check-status
         run: |
           echo "All jobs succeeded or were skipped."
-        if: ${{ success() || needs.backend.result == 'skipped' && needs.frontend.result == 'skipped' && needs.docs.result == 'skipped' }}
