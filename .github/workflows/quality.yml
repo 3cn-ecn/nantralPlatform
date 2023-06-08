@@ -52,25 +52,10 @@ jobs:
   check-all:
     name: Check all jobs are successful
     needs: [backend, frontend, docs]
-    if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
       - name: Check Jobs Status and Final Check
+        id: check-status
         run: |
-          jobs=("backend" "frontend" "docs")
-          overall_status="success"
-          for job in "${jobs[@]}"; do
-            job_status=$(env | grep -oE "NEEDS_${job}_RESULT=\w+" | cut -d'=' -f2)
-            if [[ "${job_status,,}" == "failure" ]]; then
-              echo "One or more jobs failed."
-              overall_status="failure"
-              break
-            fi
-          done
-          if [[ "${overall_status,,}" == "failure" ]]; then
-            echo "At least one job failed."
-            exit 1
-          else
-            echo "All jobs succeeded or were skipped."
-            exit 0
-          fi
+          echo "All jobs succeeded or were skipped."
+        if: ${{ success() || needs.backend.result == 'skipped' && needs.frontend.result == 'skipped' && needs.docs.result == 'skipped' }}
