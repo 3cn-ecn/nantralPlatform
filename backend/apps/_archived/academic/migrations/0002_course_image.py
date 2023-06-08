@@ -16,3 +16,4 @@ class Migration(migrations.Migration):
             field=models.CharField(max_length=200, null=True, verbose_name="Image de l'option"),
         ),
     ]
+
