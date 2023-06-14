@@ -5,7 +5,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 
 import { getEvents } from '#modules/event/api/getEventList';
-import { PartialEvent } from '#modules/event/event.type';
+import { EventPreview } from '#modules/event/event.type';
 import Calendar from '#modules/event/view/Calendar/Calendar';
 import { FilterInterface } from '#types/Filter';
 import { Page } from '#types/Group';
@@ -64,7 +64,7 @@ export default function EventView(props: {
     status: eventsListStatus,
     fetchNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery<Page<PartialEvent>>({
+  } = useInfiniteQuery<Page<EventPreview>>({
     queryKey: ['eventList', filter],
     queryFn: ({ pageParam = 1 }) =>
       getEvents({
@@ -84,7 +84,7 @@ export default function EventView(props: {
     data: eventsCalendar,
     // TODO Support status in calendar
     // status: eventsCalendarStatus,
-  } = useQuery<Page<PartialEvent>>({
+  } = useQuery<Page<EventPreview>>({
     queryKey: ['eventCalendar', filter, calendarRange],
     queryFn: () =>
       getEvents({

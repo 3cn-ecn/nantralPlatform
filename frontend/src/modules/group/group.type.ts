@@ -5,8 +5,8 @@ export type Group = {
   slug: string;
   url: string;
   icon?: string;
-  groupType: PartialGroup;
-  parent?: PartialGroup;
+  groupType: GroupPreview;
+  parent?: GroupPreview;
   creationYear?: number;
   archived: boolean;
   private: boolean;
@@ -23,7 +23,7 @@ export type Group = {
   lockMemberships: boolean;
 };
 
-export type PartialGroup = Pick<
+export type GroupPreview = Pick<
   Group,
   'id' | 'name' | 'shortName' | 'slug' | 'url' | 'icon'
 >;

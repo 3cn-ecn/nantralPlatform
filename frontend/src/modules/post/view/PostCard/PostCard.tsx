@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { upperFirst } from 'lodash-es';
 
-import { PartialPost } from '#modules/post/post.types';
+import { PostPreview } from '#modules/post/post.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexBox } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -24,7 +24,7 @@ import { PostModal } from '../PostModal/PostModal';
 import { BadgeIcon } from '../shared/BadgeIcon';
 
 type PostCardProps = {
-  post: PartialPost;
+  post: PostPreview;
 };
 
 export function PostCard({ post }: PostCardProps) {

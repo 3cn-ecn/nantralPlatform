@@ -1,7 +1,7 @@
-import { adaptPartialGroup } from '#modules/group/infra/group.adapter';
+import { adaptGroupPreview } from '#modules/group/infra/group.adapter';
 
-import { PartialPost, Post } from '../post.types';
-import { PartialPostDTO, PostDTO } from './post.dto';
+import { Post, PostPreview } from '../post.types';
+import { PostDTO, PostPreviewDTO } from './post.dto';
 
 export function adaptPost(postDTO: PostDTO): Post {
   return {
@@ -12,7 +12,7 @@ export function adaptPost(postDTO: PostDTO): Post {
     updatedAt: new Date(postDTO.updated_at),
     image: postDTO.image,
     group: {
-      ...adaptPartialGroup(postDTO.group),
+      ...adaptGroupPreview(postDTO.group),
       canPin: postDTO.can_pin,
     },
     publicity: postDTO.publicity,
@@ -21,7 +21,7 @@ export function adaptPost(postDTO: PostDTO): Post {
   };
 }
 
-export function adaptPartialPost(postDTO: PartialPostDTO): PartialPost {
+export function adaptPostPreview(postDTO: PostPreviewDTO): PostPreview {
   return {
     id: postDTO.id,
     title: postDTO.title,
@@ -29,7 +29,7 @@ export function adaptPartialPost(postDTO: PartialPostDTO): PartialPost {
     updatedAt: new Date(postDTO.updated_at),
     image: postDTO.image,
     group: {
-      ...adaptPartialGroup(postDTO.group),
+      ...adaptGroupPreview(postDTO.group),
       canPin: postDTO.can_pin,
     },
     pinned: postDTO.pinned,

@@ -1,7 +1,7 @@
-import { PartialGroup } from '../group.type';
-import { PartialGroupDTO } from './group.dto';
+import { GroupPreview } from '../group.type';
+import { GroupPreviewDTO } from './group.dto';
 
-export function adaptPartialGroup(groupDTO: PartialGroupDTO): PartialGroup {
+export function adaptGroupPreview(groupDTO: GroupPreviewDTO): GroupPreview {
   return {
     id: groupDTO.id,
     name: groupDTO.name,

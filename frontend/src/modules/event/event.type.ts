@@ -1,11 +1,11 @@
-import { PartialGroup } from '#modules/group/group.type';
+import { GroupPreview } from '#modules/group/group.type';
 
 export type Event = {
   id: number;
   title: string;
   startDate: Date;
   endDate: Date;
-  group: PartialGroup;
+  group: GroupPreview;
   image: string;
   isAdmin: boolean;
   isParticipating: boolean;
@@ -21,7 +21,7 @@ export type Event = {
   formUrl?: string;
 };
 
-export type PartialEvent = Pick<
+export type EventPreview = Pick<
   Event,
   | 'id'
   | 'title'

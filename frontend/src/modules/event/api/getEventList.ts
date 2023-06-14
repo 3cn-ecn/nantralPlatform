@@ -2,9 +2,9 @@ import axios from 'axios';
 
 import { Page } from '#types/Group';
 
-import { PartialEvent } from '../event.type';
-import { adaptPartialEvent } from '../infra/event.adapter';
-import { PartialEventDTO } from '../infra/event.dto';
+import { EventPreview } from '../event.type';
+import { adaptEventPreview } from '../infra/event.adapter';
+import { EventPreviewDTO } from '../infra/event.dto';
 
 type GetEventListParams = {
   orderBy?: string[] | string;
@@ -26,8 +26,8 @@ type GetEventListParams = {
 
 export async function getEvents(
   options: GetEventListParams = {}
-): Promise<Page<PartialEvent>> {
-  const { data } = await axios.get<Page<PartialEventDTO>>('/api/event/', {
+): Promise<Page<EventPreview>> {
+  const { data } = await axios.get<Page<EventPreviewDTO>>('/api/event/', {
     params: {
       from_date: options.fromDate,
       to_date: options.toDate,
@@ -47,7 +47,7 @@ export async function getEvents(
     },
   });
 
-  const events = data.results.map((event) => adaptPartialEvent(event));
+  const events = data.results.map((event) => adaptEventPreview(event));
 
   return {
     results: events,

@@ -1,4 +1,4 @@
-import { PartialGroupDTO } from '#modules/group/infra/group.dto';
+import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
 
 export type EventDTO = {
   id: number;
@@ -11,7 +11,7 @@ export type EventDTO = {
   image: string;
   number_of_participants: number | null;
   absolute_url: string;
-  group: PartialGroupDTO;
+  group: GroupPreviewDTO;
   is_participating: boolean;
   is_member: boolean;
   max_participant: number | null;
@@ -22,7 +22,7 @@ export type EventDTO = {
   is_admin: boolean;
 };
 
-export type PartialEventDTO = Pick<
+export type EventPreviewDTO = Pick<
   EventDTO,
   | 'id'
   | 'title'

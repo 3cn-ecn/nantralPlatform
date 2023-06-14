@@ -1,10 +1,10 @@
-import { PartialGroup } from '#modules/group/group.type';
+import { GroupPreview } from '#modules/group/group.type';
 
 export type Post = {
   id: number;
   title: string;
   description: string;
-  group: PartialGroup & { canPin: boolean };
+  group: GroupPreview & { canPin: boolean };
   publicity: 'Pub' | 'Mem';
   createdAt: Date;
   updatedAt: Date;
@@ -13,7 +13,7 @@ export type Post = {
   isAdmin: boolean;
 };
 
-export type PartialPost = Pick<
+export type PostPreview = Pick<
   Post,
   | 'id'
   | 'title'

@@ -1,7 +1,7 @@
-import { adaptPartialGroup } from '#modules/group/infra/group.adapter';
+import { adaptGroupPreview } from '#modules/group/infra/group.adapter';
 
-import { Event, PartialEvent } from '../event.type';
-import { EventDTO, PartialEventDTO } from './event.dto';
+import { Event, EventPreview } from '../event.type';
+import { EventDTO, EventPreviewDTO } from './event.dto';
 
 export function adaptEvent(eventDto: EventDTO): Event {
   return {
@@ -15,7 +15,7 @@ export function adaptEvent(eventDto: EventDTO): Event {
     image: eventDto.image,
     numberOfParticipants: eventDto.number_of_participants,
     url: eventDto.absolute_url,
-    group: adaptPartialGroup(eventDto.group),
+    group: adaptGroupPreview(eventDto.group),
     isParticipating: eventDto.is_participating,
     maxParticipant: eventDto.max_participant,
     startRegistration:
@@ -28,14 +28,14 @@ export function adaptEvent(eventDto: EventDTO): Event {
   };
 }
 
-export function adaptPartialEvent(eventDto: PartialEventDTO): PartialEvent {
+export function adaptEventPreview(eventDto: EventPreviewDTO): EventPreview {
   return {
     id: eventDto.id,
     title: eventDto.title,
     startDate: new Date(eventDto.start_date),
     endDate: new Date(eventDto.end_date),
     image: eventDto.image,
-    group: adaptPartialGroup(eventDto.group),
+    group: adaptGroupPreview(eventDto.group),
     isParticipating: eventDto.is_participating,
     isFavorite: eventDto.is_favorite,
     isAdmin: eventDto.is_admin,

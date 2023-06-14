@@ -1,10 +1,10 @@
-import { PartialGroupDTO } from '#modules/group/infra/group.dto';
+import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
 
 export type PostDTO = {
   id: number;
   title: string;
   description: string;
-  group: PartialGroupDTO;
+  group: GroupPreviewDTO;
   publicity: 'Pub' | 'Mem';
   image: string;
   created_at: string;
@@ -14,7 +14,7 @@ export type PostDTO = {
   is_admin: boolean;
 };
 
-export type PartialPostDTO = Pick<
+export type PostPreviewDTO = Pick<
   PostDTO,
   | 'id'
   | 'title'

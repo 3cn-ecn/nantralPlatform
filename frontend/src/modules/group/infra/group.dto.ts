@@ -8,7 +8,7 @@ export type GroupDTO = {
   group_type: {
     name: string;
   };
-  parent?: PartialGroupDTO;
+  parent?: GroupPreviewDTO;
   creation_year?: number;
   archived: boolean;
   private: boolean;
@@ -25,7 +25,7 @@ export type GroupDTO = {
   lock_memberships: boolean;
 };
 
-export type PartialGroupDTO = Pick<
+export type GroupPreviewDTO = Pick<
   GroupDTO,
   'id' | 'name' | 'short_name' | 'slug' | 'url' | 'icon'
 >;
