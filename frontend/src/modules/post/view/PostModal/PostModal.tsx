@@ -61,10 +61,10 @@ export function PostModal({ postId, onClose, onEdit }: PostModalProps) {
             )}
           </IconButton>
           <Box>
-            <Typography variant="h6" sx={{ lineHeight: 1 }}>
+            <Typography variant="h6" sx={{ lineHeight: 1, mb: '4px' }}>
               {post.title}
             </Typography>
-            <Typography variant="caption" sx={{ lineHeight: 1 }}>
+            <Typography variant="caption" component="p" sx={{ lineHeight: 1 }}>
               {post.group.name}
             </Typography>
           </Box>
