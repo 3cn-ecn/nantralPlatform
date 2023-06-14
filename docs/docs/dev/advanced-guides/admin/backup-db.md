@@ -1,10 +1,6 @@
 ---
 title: Backup the database
 description: "Instructions on how to backup the production's database"
-published: true
-date: 2022-05-12T15:54:27.753Z
-editor: markdown
-dateCreated: 2021-09-27T21:44:30.053Z
 ---
 
 # Backups

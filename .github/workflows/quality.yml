@@ -1,0 +1,69 @@
+name: Quality Tests
+
+on: pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Check changes
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      docs: ${{ steps.filter.outputs.docs }}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            frontend:
+              - 'frontend/**'
+            docs:
+              - 'docs/**'
+
+  backend:
+    name: Back End Quality
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    uses: ./.github/workflows/quality-backend.yml
+    secrets: inherit
+
+  frontend:
+    name: Front End Quality
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    uses: ./.github/workflows/quality-frontend.yml
+    secrets: inherit
+
+  docs:
+    name: Docs Quality
+    needs: changes
+    if: ${{ needs.changes.outputs.docs == 'true' }}
+    uses: ./.github/workflows/quality-docs.yml
+    secrets: inherit
+
+  final-check:
+    name: Final Check
+    needs: [backend, frontend, docs]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check previous jobs status
+        run: |
+          status=$(echo "${{ needs.backend.result }}" | tr '[:upper:]' '[:lower:]')
+          status+=" ${{ needs.frontend.result }}" | tr '[:upper:]' '[:lower:]'
+          status+=" ${{ needs.docs.result }}" | tr '[:upper:]' '[:lower:]'
+          if [[ "$status" == *"failure"* ]]; then
+            echo "One or more previous jobs failed."
+            exit 1
+          else
+            echo "All previous jobs succeeded or were skipped."
+            exit 0
+          fi

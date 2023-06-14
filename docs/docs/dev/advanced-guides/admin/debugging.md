@@ -1,10 +1,6 @@
 ---
 title: Debugging in production
 description: "How to debug your code in production"
-published: true
-date: 2022-05-06T16:15:20.602Z
-editor: markdown
-dateCreated: 2021-09-27T21:29:14.925Z
 ---
 
 # Debugging in production

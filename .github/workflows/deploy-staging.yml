@@ -11,7 +11,7 @@ on:
       - .github/workflows/deploy-staging.yml
 
 jobs:
-  build-frontend:
+  frontend-build:
     name: Build front end
     runs-on: ubuntu-latest
     defaults:
@@ -46,32 +46,6 @@ jobs:
           source: "backend/static/js/*, backend/static/front/*"
           target: "nantralPlatform-staging"
 
-  test-backend:
-    name: Test back end
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
-
-    steps:
-      - name: Clone the repository
-        uses: actions/checkout@v3
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-          cache: "pipenv"
-
-      - name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-
-      - name: Install dependencies
-        run: pipenv verify && pipenv sync
-
-      - name: Run tests
-        run: pipenv run test
-
   clone-database:
     name: Make a copy of the database
     runs-on: ubuntu-latest
@@ -93,12 +67,12 @@ jobs:
             rm -r env
 
   deploy:
-    name: Deploy in staging
-    needs: [build-frontend, test-backend, clone-database]
+    name: Deploy to staging
+    needs: [frontend-build, clone-database]
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clone the repository
+      - name: Pull latest commit
         uses: actions/checkout@v3
 
       - name: Deploy to the VPS

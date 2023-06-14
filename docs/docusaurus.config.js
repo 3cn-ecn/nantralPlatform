@@ -41,6 +41,8 @@ const config = {
           routeBasePath: "/",
           editUrl:
             "https://github.com/3cn-ecn/nantralPlatform/tree/master/docs/",
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
         },
         blog: {
           showReadingTime: true,

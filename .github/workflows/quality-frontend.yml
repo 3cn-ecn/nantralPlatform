@@ -1,27 +1,16 @@
-name: Test Frontend
+name: Test Front End Quality
 
-on:
-  push:
-    branches:
-      - master
-      - react-app
-    paths:
-      - frontend/**
-      - .github/workflows/test-frontend.yml
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths:
-      - frontend/**
-      - .github/workflows/test-frontend.yml
-
-defaults:
-  run:
-    working-directory: frontend
+on: workflow_call
 
 jobs:
-  test-frontend:
-    name: Tests on front end
+  frontend-quality:
+    name: Front End Quality
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # default directory for 'run' actions only in steps
+        working-directory: frontend
 
     steps:
       - name: Clone the repository

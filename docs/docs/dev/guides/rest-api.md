@@ -1,4 +1,7 @@
 ---
+last_update:
+  date: 2023-02-18 19:28:38 +0100
+  author: Alexis Delage
 sidebar_position: 5
 description: How to share data between the front and the back end
 ---
