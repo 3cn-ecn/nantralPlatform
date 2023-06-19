@@ -1,52 +1,46 @@
 {
-  "editor.formatOnSave": true,
-  "editor.insertSpaces": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
     "source.organizeImports": true
   },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.insertSpaces": true,
   "editor.rulers": [80],
+  "editor.tabSize": 2,
   "files.associations": {
     "*.html": "html",
     "**/backend/**/*.html": "django-html",
     "**/*.py": "python",
     "**/*.js": "javascript",
-    "**/*.jsx": "javascript",
-    "**/src/**/*.js": "javascriptreact",
-    "**/src/**/*.jsx": "javascriptreact",
+    "**/*.jsx": "javascriptreact",
     "**/*.ts": "typescript",
-    "**/*.tsx": "typescript",
-    "**/src/**/*.ts": "typescriptreact",
-    "**/src/**/*.tsx": "typescriptreact",
+    "**/*.tsx": "typescriptreact",
     "**/docs/**/*.md": "mdx",
     "requirements.txt": "pip-requirements",
     "Pipfile": "toml"
-  },
-  "[python]": {
-    "editor.tabSize": 4
-  },
-  "[django-html][html][javascript][javascriptreact][typescript][typescriptreact][json][css][scss]": {
-    "editor.tabSize": 2
-  },
-  "[django-html]": {
-    "editor.formatOnSave": false
   },
   "workbench.colorCustomizations": {
     "statusBar.background": "#c02837",
     "statusBar.foreground": "#fcfcfc"
   },
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "ms-python.autopep8"
+  },
+  "[django-html]": {
+    "editor.formatOnSave": false
+  },
+  "python.analysis.typeCheckingMode": "off",
+  "python.analysis.extraPaths": ["./backend"],
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/",
   "python.envFile": "${workspaceFolder}/backend/config/settings/.env",
+  "python.formatting.provider": "none",
   "python.terminal.activateEnvironment": false,
-  "python.formatting.provider": "autopep8",
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
   "python.linting.pydocstyleEnabled": true,
   "python.linting.pydocstyleArgs": ["--ignore=D100,D102,D213,D400,D407"],
-  "python.analysis.typeCheckingMode": "off",
-  "python.analysis.extraPaths": ["./backend"],
   "autoDocstring.docstringFormat": "numpy",
-  "docwriter.style": "NumPy",
   "cSpell.language": "en,fr",
   "cSpell.enableFiletypes": ["mdx"],
   "cSpell.words": [

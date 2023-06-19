@@ -1,32 +1,33 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=827846 to learn about workspace recommendations.
-  // Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
-
   // List of extensions which should be recommended for users of this workspace.
   "recommendations": [
     // global
+    "eamodio.gitlens",
     "visualstudioexptteam.vscodeintellicode",
-    "esbenp.prettier-vscode",
+    "streetsidesoftware.code-spell-checker",
+    "streetsidesoftware.code-spell-checker-french",
     "mikestead.dotenv",
-    "lokalise.i18n-ally",
-    // python and django
+    "tamasfe.even-better-toml",
+    // python
     "ms-python.python",
     "ms-python.vscode-pylance",
-    "batisteo.vscode-django",
-    "ecmel.vscode-html-css",
+    "ms-python.flake8",
+    "ms-python.autopep8",
+    "ms-python.isort",
     "njpwerner.autodocstring",
-    "tamasfe.even-better-toml",
+    // django
+    "batisteo.vscode-django",
     "mrorz.language-gettext",
-    // npm and react
+    // html
+    "ecmel.vscode-html-css",
+    // js
     "dbaeumer.vscode-eslint",
     "christian-kohler.npm-intellisense",
     "cschlosser.doxdocgen",
+    "esbenp.prettier-vscode",
+    // react
+    "lokalise.i18n-ally",
     // docs
-    "unifiedjs.vscode-mdx",
-    // spell
-    "streetsidesoftware.code-spell-checker",
-    "streetsidesoftware.code-spell-checker-french"
-  ],
-  // List of extensions recommended by VS Code that should not be recommended for users of this workspace.
-  "unwantedRecommendations": []
+    "unifiedjs.vscode-mdx"
+  ]
 }
