@@ -55,7 +55,8 @@
     "nantral",
     "Nantral",
     "pipenv",
-    "testid"
+    "testid",
+    "viewsets"
   ],
   "i18n-ally.localesPaths": "frontend/src/shared/i18n",
   "i18n-ally.enabledFrameworks": ["react", "general"],

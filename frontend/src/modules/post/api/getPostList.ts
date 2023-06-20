@@ -8,22 +8,26 @@ import { PostPreview } from '../post.types';
 
 type GetPostListParams = {
   pinned?: boolean;
-  fromDate?: Date;
-  toDate?: Date;
-  limit?: number;
-  page: number;
+  isMember?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
+  search?: string;
+  ordering?: string;
+  page?: number;
   pageSize?: number;
 };
 
 export async function getPostList(
   options: GetPostListParams
 ): Promise<Page<PostPreview>> {
-  const { data } = await axios.get<PageDTO<PostPreviewDTO>>('/api/post/', {
+  const { data } = await axios.get<PageDTO<PostPreviewDTO>>('/api/post/post/', {
     params: {
       pinned: options.pinned,
-      from_date: options.fromDate,
-      to_date: options.toDate,
-      limit: options.limit,
+      is_member: options.isMember,
+      min_date: options.minDate,
+      max_date: options.maxDate,
+      search: options.search,
+      ordering: options.ordering,
       page: options.page,
       page_size: options.pageSize,
     },

@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from .models import Post
 from apps.group.serializers import SimpleGroupSerializer
+
+from .models import Post
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -9,28 +10,9 @@ class PostSerializer(serializers.ModelSerializer):
     can_pin = serializers.SerializerMethodField()
     group = SimpleGroupSerializer()
 
-    def validate(self, attrs):
-        if (not attrs["group"].is_admin(self.context['request'].user)):
-            raise serializers.ValidationError(
-                "You have to be admin to add or update a post")
-        return super().validate(attrs)
-
     class Meta:
         model = Post
-        read_only_fields = ['slug']
-        fields = [
-            'id',
-            'title',
-            'created_at',
-            'updated_at',
-            'group',
-            'image',
-            'publicity',
-            'pinned',
-            'description',
-            'is_admin',
-            'can_pin',
-        ]
+        exclude = ['notification']
 
     def get_is_admin(self, obj: Post) -> str:
         user = self.context['request'].user
@@ -41,24 +23,22 @@ class PostSerializer(serializers.ModelSerializer):
         return user.student.can_pin()
 
 
-class WritePostSerializer(serializers.ModelSerializer):
+class PostPreviewSerializer(PostSerializer):
+    class Meta(PostSerializer.Meta):
+        fields = ['id', 'title', 'group', 'created_at',
+                  'updated_at', 'image', 'pinned', 'is_admin', 'publicity']
+        exclude = None
+
+
+class PostWriteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Post
+        exclude = ['notification', 'created_at',
+                   'created_by', 'updated_at', 'updated_by']
 
     def validate(self, attrs):
         if (not attrs["group"].is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
                 "You have to be admin to add or update a post")
         return super().validate(attrs)
-
-    class Meta:
-        model = Post
-        fields = [
-            'id',
-            'title',
-            'created_at',
-            'group',
-            'image',
-            'publicity',
-            'pinned',
-            'description',
-            'created_at'
-        ]

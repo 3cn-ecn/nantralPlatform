@@ -1,11 +1,9 @@
 from rest_framework.routers import DefaultRouter
 
-from .api_views import (
-    PostViewSet
-)
+from .api_views import PostViewSet
 
 app_name = "post"
 router = DefaultRouter()
-router.register('', PostViewSet, basename='event')
+router.register('post', PostViewSet, basename='post')
 
 urlpatterns = router.urls
