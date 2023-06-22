@@ -96,6 +96,7 @@
     "react-bootstrap-typeahead": "^6.0.0-rc.3",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.1.0",
+    "react-hook-form": "^7.45.0",
     "react-i18next": "^12.2.0",
     "react-map-gl": "^6.1.18",
     "react-query": "^3.39.3",
