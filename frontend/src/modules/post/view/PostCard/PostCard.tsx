@@ -20,6 +20,7 @@ import { FlexBox } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
+import { PostEditModal } from '../PostEditModal/PostEditModal';
 import { PostModal } from '../PostModal/PostModal';
 import { BadgeIcon } from '../shared/BadgeIcon';
 
@@ -80,8 +81,17 @@ export function PostCard({ post }: PostCardProps) {
           postId={post.id}
           onClose={() => setOpenModal(false)}
           onEdit={() => {
-            setOpenModal(false);
             setOpenEditModal(true);
+            setOpenModal(false);
+          }}
+        />
+      )}
+      {openEditModal && (
+        <PostEditModal
+          postId={post.id}
+          onClose={() => {
+            setOpenModal(true);
+            setOpenEditModal(false);
           }}
         />
       )}

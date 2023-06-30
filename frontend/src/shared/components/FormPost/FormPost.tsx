@@ -81,7 +81,7 @@ export function FormPost(props: {
       getIcon: (object: SimpleGroupProps) => object.icon,
       getOptionLabel: (object: SimpleGroupProps) => object.name,
       disabled: mode === 'edit',
-      helpText: t('form.groupHelpText'),
+      helpText: t('post.form.group.helpText'),
     },
     {
       kind: 'text',

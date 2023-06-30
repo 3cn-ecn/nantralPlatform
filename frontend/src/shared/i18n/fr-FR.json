@@ -92,7 +92,6 @@
     "externalLink": "Lien externe",
     "freeRegistration": "Inscription libre",
     "group": "Groupe",
-    "groupHelpText": "Vous devez être admin de votre groupe pour pouvoir publier un post",
     "image": "Image",
     "imageDescription": "Une image, un poster, une affiche",
     "membersOnly": "Membres du club uniquement",
@@ -200,7 +199,22 @@
   },
   "post": {
     "confirmDelete": "Êtes vous sûr de vouloir supprimer le post (cette action est irréversible).",
+    "edit": {
+      "title": "Modifier le post"
+    },
+    "editModal": {
+      "title": "Modifier le post"
+    },
     "edited": "édité",
+    "form": {
+      "group": {
+        "helpText": "Vous devez être admin de votre groupe pour pouvoir publier un post",
+        "label": "Groupe"
+      },
+      "title": {
+        "label": "Titre du post"
+      }
+    },
     "modal": {
       "metadata": {
         "dates": "Publié {{createdDuration}} • Mis à jour {{updatedDuration}}"

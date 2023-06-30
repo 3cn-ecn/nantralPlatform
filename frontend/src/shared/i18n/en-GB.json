@@ -91,7 +91,6 @@
     "externalLink": "External link",
     "freeRegistration": "Free registration",
     "group": "Group",
-    "groupHelpText": "You must be an admin of your group to post a post.",
     "image": "Picture",
     "imageDescription": "A picture, a banner, a poster",
     "membersOnly": "Club members only",
@@ -199,7 +198,22 @@
   },
   "post": {
     "confirmDelete": "Are you sure you want to delete the post (this action is irreversible).",
+    "edit": {
+      "title": "Edit the post"
+    },
+    "editModal": {
+      "title": "Edit the post"
+    },
     "edited": "edited",
+    "form": {
+      "group": {
+        "helpText": "You must be an admin of your group to post a post.",
+        "label": "Group"
+      },
+      "title": {
+        "label": "Post title"
+      }
+    },
     "modal": {
       "metadata": {
         "dates": "Published {{createdDuration}} • Updated {{updatedDuration}}"

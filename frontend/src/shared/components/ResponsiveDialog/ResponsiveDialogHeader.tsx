@@ -1,8 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import { Close as CloseIcon } from '@mui/icons-material';
-import { DialogTitle, IconButton, Typography } from '@mui/material';
-import { isString } from 'lodash-es';
+import { DialogTitle, IconButton } from '@mui/material';
 
 import { FlexBox } from '../FlexBox/FlexBox';
 
@@ -28,11 +27,7 @@ export function ResponsiveDialogHeader({
     >
       <FlexBox alignItems="center" gap={2} flex={1}>
         {leftIcon}
-        {isString(children) ? (
-          <Typography variant="h2">{children}</Typography>
-        ) : (
-          children
-        )}
+        {children}
       </FlexBox>
       <IconButton onClick={onClose}>
         <CloseIcon />
