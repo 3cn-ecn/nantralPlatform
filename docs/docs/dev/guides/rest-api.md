@@ -158,7 +158,7 @@ You can also add your custom actions (or views) on a ViewSet: see the
 Now, let's see how to use our new API endpoint in a React component:
 
 ```tsx title="MyComponent.tsx"
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import useQuery from "react-query";
 import axios, { AxiosError } from "axios";
 
