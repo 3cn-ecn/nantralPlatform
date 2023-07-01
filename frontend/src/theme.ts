@@ -9,7 +9,7 @@ function getTheme(mode: PaletteMode) {
       },
       secondary: {
         main: '#607d8b',
-        light: '#fff',
+        light: '#FFFFFF',
       },
       neutral: {
         main: '#efefef',
@@ -18,10 +18,10 @@ function getTheme(mode: PaletteMode) {
         main: '#ffc107',
       },
       info: {
-        main: '#0288d1',
+        main: '#0288D1',
       },
       error: {
-        main: '#d84315',
+        main: '#C15700',
       },
     },
     typography: {

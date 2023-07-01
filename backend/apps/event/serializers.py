@@ -1,9 +1,12 @@
-from rest_framework import serializers, exceptions
 from django.utils import timezone
-from .models import Event
-from apps.student.models import Student
 from django.utils.translation import gettext as _
+
+from rest_framework import exceptions, serializers
+
 from apps.group.serializers import SimpleGroupSerializer
+from apps.student.models import Student
+
+from .models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -113,6 +116,26 @@ class WriteEventSerializer(serializers.ModelSerializer):
             'start_registration',
             'end_registration',
             'form_url']
+
+    def validate_max_participant(self, value: int) -> int:
+        if value and value < 1:
+            raise exceptions.ValidationError(
+                _("Must be a positive integer"))
+        return value
+
+    def validate(self, attrs):
+        if (not attrs["group"].is_admin(self.context['request'].user)):
+            raise serializers.ValidationError(
+                "You have to be admin to add or update an event")
+        if (attrs["start_date"] > attrs["end_date"]):
+            raise exceptions.ValidationError(_(
+                "The end date must be after the begin date."))
+        if (attrs.get("start_registration") and attrs.get("end_registration")
+                and attrs["start_registration"] > attrs["end_registration"]):
+            raise serializers.ValidationError(
+                "End registration date should be greater than begin \
+                    registration date")
+        return super().validate(attrs)
 
 
 class EventParticipatingSerializer(serializers.ModelSerializer):
