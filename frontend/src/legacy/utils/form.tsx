@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react';
+
 import {
-  TextField,
-  Checkbox,
+  Autocomplete,
+  AutocompleteInputChangeReason,
   Box,
-  Select,
+  Button,
+  Checkbox,
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Typography,
-  Autocomplete,
-  MenuItem,
-  InputLabel,
-  AutocompleteInputChangeReason,
   Input,
-  Button,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 import 'dayjs/locale/fr';
+import { noop } from 'lodash-es';
+
 import axios from './axios';
 
 export type FieldType =
@@ -30,17 +34,17 @@ export type FieldType =
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
-      rows: int;
+      rows?: number;
     }
   | {
       kind: 'number';
       name: string;
       label: string;
       required?: boolean;
-      min: float;
-      max: float;
-      step: float;
-      default: float;
+      min: number;
+      max: number;
+      step: number;
+      default: number;
     }
   | {
       kind: 'picture';
@@ -113,7 +117,11 @@ function FormGroup(props: {
   return (
     <>
       {fields.map((field) => {
-        const error = field.kind !== 'group' && errors && errors[field.name];
+        const error =
+          field.kind !== 'group' &&
+          field.kind !== 'picture' &&
+          errors &&
+          errors[field.name];
         switch (field.kind) {
           case 'group':
             return (
@@ -144,11 +152,9 @@ function FormGroup(props: {
                     key={field.name}
                     id={`${field.name}-number`}
                     name={field.name}
-                    label={field.label}
                     value={values[field.name]}
                     onChange={(e) => handleChange(field.name, e.target.value)}
                     required={field.required}
-                    margin="normal"
                     type="number"
                     defaultValue={field.default}
                     slotProps={{
@@ -178,7 +184,6 @@ function FormGroup(props: {
                     value={values[field.name]}
                     onChange={(e) => handleChange(field.name, e.target.value)}
                     required={field.required}
-                    margin="normal"
                   >
                     {field.item.map((name) => (
                       <MenuItem key={name} value={name}>
@@ -211,7 +216,7 @@ function FormGroup(props: {
           case 'picture':
             return (
               <Box sx={{ minWidth: 120, mt: 2 }}>
-                <FormControl fullWidth row>
+                <FormControl fullWidth>
                   <Button variant="contained" component="label">
                     {field.description}
                     <input hidden accept="image/*" multiple type="file" />
@@ -228,13 +233,13 @@ function FormGroup(props: {
               >
                 <DatePicker
                   label={field.label}
-                  value={values[field.name] && new Date(values[field.name])}
+                  value={values[field.name] && dayjs(values[field.name])}
                   onChange={(val) => {
                     if (val && val.toString() !== 'Invalid Date') {
                       handleChange(
                         field.name,
                         new Intl.DateTimeFormat('en-GB')
-                          .format(val)
+                          .format(val.toDate())
                           .split('/')
                           .reverse()
                           .join('-')
@@ -243,18 +248,17 @@ function FormGroup(props: {
                       handleChange(field.name, val);
                     }
                   }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      id={`${field.name}-input`}
-                      name={field.name}
-                      fullWidth={!noFullWidth}
-                      required={field.required}
-                      helperText={error || field.helpText}
-                      error={!!error}
-                      margin="normal"
-                    />
-                  )}
+                  slotProps={{
+                    textField: {
+                      id: `${field.name}-input`,
+                      name: field.name,
+                      fullWidth: !noFullWidth,
+                      required: field.required,
+                      helperText: error || field.helpText,
+                      error: !!error,
+                      margin: 'normal',
+                    },
+                  }}
                 />
               </LocalizationProvider>
             );
@@ -336,7 +340,7 @@ function AutocompleteField<T>(props: {
         .get<T>(`${field.endPoint}/${value}/`)
         .then((res) => setSelectedOption(res.data));
     }
-  }, []);
+  }, [field.endPoint, value]);
 
   function updateOptions(
     event: React.SyntheticEvent,
@@ -347,7 +351,7 @@ function AutocompleteField<T>(props: {
     axios
       .get<any[]>(`${field.endPoint}/search/`, { params: { q: value } })
       .then((res) => setOptions(res.data))
-      .catch(() => {});
+      .catch(noop);
   }
 
   return (

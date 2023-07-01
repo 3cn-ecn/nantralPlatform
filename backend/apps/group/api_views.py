@@ -1,28 +1,18 @@
-from django.db.models import Q, F, QuerySet, Count
+from django.db.models import Count, F, Q, QuerySet
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
-from rest_framework import (
-    decorators,
-    exceptions,
-    pagination,
-    permissions,
-    response,
-    serializers,
-    status,
-    viewsets)
+from rest_framework import (decorators, exceptions, pagination, permissions,
+                            response, serializers, status, viewsets)
 
 from apps.utils.api_mixins import SearchViewMixin
 
-from .models import Group, Membership, GroupType
-from .serializers import (
-    MembershipSerializer,
-    NewMembershipSerializer,
-    GroupSerializer,
-    SimpleGroupSerializer,
-    GroupTypeSerializer)
+from .models import Group, GroupType, Membership
+from .serializers import (GroupSerializer, GroupTypeSerializer,
+                          MembershipSerializer, NewMembershipSerializer,
+                          SimpleGroupSerializer)
 
 
 class GroupPermission(permissions.BasePermission):

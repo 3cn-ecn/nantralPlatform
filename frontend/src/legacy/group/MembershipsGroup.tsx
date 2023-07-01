@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { render } from 'react-dom';
-import { Snackbar, Alert, Button, Box, IconButton } from '@mui/material';
+
 import {
   Edit as EditIcon,
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
-import ModalEditMember from './components/ModalEditMember';
-import { Group, Membership, Student, Page } from './interfaces';
+import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
+
 import axios from '../utils/axios';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import ListMembershipsTable from './components/ListMembershipsTable';
+import ModalEditMember from './components/ModalEditMember';
+import { Group, Membership, Page, Student } from './interfaces';
 
 // passed through django template
 declare const groupSlug: string;
@@ -27,7 +29,7 @@ interface QueryParams {
 /**
  * Main table component for editing members in the admin page of groups.
  */
-function MembershipsGroup(props: {}): JSX.Element {
+function MembershipsGroup(): JSX.Element {
   // data
   const [group, setGroup] = useState<Group | null>(null);
   const [student, setStudent] = useState<Student | null>(null);
@@ -49,6 +51,29 @@ function MembershipsGroup(props: {}): JSX.Element {
     from: new Date().toISOString(),
   });
 
+  /** Get the list of members */
+  const getMemberships = useCallback(
+    async function getMemberships(
+      url = '/api/group/membership/',
+      queryParams: Partial<QueryParams> = filters
+    ): Promise<void> {
+      return axios
+        .get<Page<Membership>>(url, { params: queryParams })
+        .then((res) => res.data)
+        .then((data) => {
+          setMembers(
+            data.results.map((item) => {
+              item.dragId = `item-${item.id}`; // add a dragId for the drag-and-drop
+              return item;
+            })
+          );
+          setPrevUrl(data.previous);
+          setNextUrl(data.next);
+        });
+    },
+    [filters]
+  );
+
   useEffect(() => {
     // wait for all request
     Promise.all([
@@ -60,32 +85,12 @@ function MembershipsGroup(props: {}): JSX.Element {
         .then((res) => setGroup(res.data)),
       // fetch student objet
       axios
-        .get<Student>('/api/student/student/me')
+        .get<Student>('/api/student/student/me/')
         .then((res) => setStudent(res.data)),
     ])
       .then(() => setLoadState('success'))
-      .catch(() => setLoadState('fail'));
-  }, []);
-
-  /** Get the list of members */
-  async function getMemberships(
-    url = '/api/group/membership/',
-    queryParams: Partial<QueryParams> = filters
-  ): Promise<void> {
-    return axios
-      .get<Page<Membership>>(url, { params: queryParams })
-      .then((res) => res.data)
-      .then((data) => {
-        setMembers(
-          data.results.map((item) => {
-            item.dragId = `item-${item.id}`; // add a dragId for the drag-and-drop
-            return item;
-          })
-        );
-        setPrevUrl(data.previous);
-        setNextUrl(data.next);
-      });
-  }
+      .catch(console.log);
+  }, [getMemberships]);
 
   /**
    * Reorder memberships

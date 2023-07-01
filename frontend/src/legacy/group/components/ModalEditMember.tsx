@@ -1,20 +1,22 @@
-import React, { FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
+
+import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
 import {
+  Alert,
+  Box,
   Button,
+  CircularProgress,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   Typography,
-  Box,
-  CircularProgress,
-  Alert,
 } from '@mui/material';
-import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
-import Avatar from './Avatar';
+
 import FormGroup, { FieldType } from '../../utils/form';
-import { Membership, Group, Student } from '../interfaces';
+import { Group, Membership, Student } from '../interfaces';
+import Avatar from './Avatar';
 
 /**
  * A function to generate the default fields fot the edit modal form.
