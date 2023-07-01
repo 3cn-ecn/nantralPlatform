@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 import { UpdatePostVariables, updatePost } from '#modules/post/api/updatePost';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
-import { TextFieldInput } from '#shared/components/FormFields/TextFieldInput';
+import { CustomTextField } from '#shared/components/FormFields/CustomTextField';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialogContent,
@@ -71,7 +71,7 @@ export function PostEditModalContent({
   return (
     <form onSubmit={(e) => onSubmit(e, formValues)}>
       <ResponsiveDialogContent>
-        <TextFieldInput
+        <CustomTextField
           name="title"
           label={t('post.form.title.label')}
           value={formValues.title}
