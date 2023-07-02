@@ -9,6 +9,7 @@ import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
 import { AutocompleteSearchField } from '#shared/components/FormFields/AutocompleteSearchField';
 import { CustomTextField } from '#shared/components/FormFields/CustomTextField';
+import { FileField } from '#shared/components/FormFields/FileField';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialogContent,
@@ -34,7 +35,7 @@ export function PostEditModalContent({
   const [formValues, updateFormValues] = useObjectState<PostForm>({
     title: post.title,
     description: post.description,
-    image: post.image,
+    image: null,
     group: post.group.id,
     pinned: post.pinned,
     publicity: post.publicity,
@@ -121,6 +122,15 @@ export function PostEditModalContent({
           errors={error?.description}
           multiline
           minRows={3}
+        />
+        <FileField
+          name="image"
+          label={t('post.form.image.label')}
+          value={formValues.image}
+          onChange={(val) => updateFormValues({ image: val })}
+          prevFileName={post.image}
+          errors={error?.image}
+          accept="image/*"
         />
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter>

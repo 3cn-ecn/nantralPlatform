@@ -31,5 +31,5 @@ export type PostForm = Pick<
   'title' | 'description' | 'publicity' | 'pinned'
 > & {
   group: number;
-  image: string | File;
+  image: File;
 };

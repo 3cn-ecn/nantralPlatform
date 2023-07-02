@@ -80,7 +80,6 @@
       "open": "Open"
     },
     "cancel": "Cancel",
-    "chooseFile": "Choose file",
     "createAPost": "Create a post",
     "createEvent": "Create event",
     "createPost": "Create post",
@@ -97,6 +96,10 @@
     },
     "eventTitle": "Event title",
     "externalLink": "External link",
+    "file": {
+      "label": "Choose file",
+      "placeholder": "Load a file"
+    },
     "freeRegistration": "Free registration",
     "group": "Group",
     "image": "Picture",
@@ -220,6 +223,9 @@
       "group": {
         "helpText": "You must be an admin of a group to publish a post in its name",
         "label": "Publish as"
+      },
+      "image": {
+        "label": "Picture"
       },
       "title": {
         "label": "Post title"

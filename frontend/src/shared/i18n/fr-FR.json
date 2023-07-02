@@ -81,7 +81,6 @@
       "open": "Ouvrir"
     },
     "cancel": "Annuler",
-    "chooseFile": "Choisir un fichier",
     "createAPost": "Créer un post",
     "createEvent": "Créer l'évènement",
     "createPost": "Créer le post",
@@ -98,6 +97,10 @@
     },
     "eventTitle": "Titre de l'évènement",
     "externalLink": "Lien externe",
+    "file": {
+      "label": "Choisir un fichier",
+      "placeholder": "Importer un fichier"
+    },
     "freeRegistration": "Inscription libre",
     "group": "Groupe",
     "image": "Image",
@@ -221,6 +224,9 @@
       "group": {
         "helpText": "Vous devez être admin d'un groupe pour pouvoir publier un post en son nom",
         "label": "Publier en tant que"
+      },
+      "image": {
+        "label": "Image"
       },
       "title": {
         "label": "Titre du post"

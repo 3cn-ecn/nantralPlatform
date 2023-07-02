@@ -21,7 +21,7 @@ function getTheme(mode: PaletteMode) {
         main: '#0288D1',
       },
       error: {
-        main: '#C15700',
+        main: mode === 'light' ? '#C15700' : '#FF7E15',
       },
     },
     typography: {
