@@ -113,6 +113,15 @@ export function PostEditModalContent({
           getOptionLabel={(group) => group.name}
           getOptionImage={(group) => group.icon}
         />
+        <CustomTextField
+          name="description"
+          label={t('post.form.description.label')}
+          value={formValues.description}
+          onValueChange={(val) => updateFormValues({ description: val })}
+          errors={error?.description}
+          multiline
+          minRows={3}
+        />
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter>
         <Button variant="text" onClick={() => onClose()}>

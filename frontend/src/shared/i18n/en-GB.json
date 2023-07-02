@@ -214,6 +214,9 @@
     },
     "edited": "edited",
     "form": {
+      "description": {
+        "label": "Description"
+      },
       "group": {
         "helpText": "You must be an admin of a group to publish a post in its name",
         "label": "Publish as"
