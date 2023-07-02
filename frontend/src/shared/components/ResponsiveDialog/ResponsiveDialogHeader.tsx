@@ -1,9 +1,9 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { Close as CloseIcon } from '@mui/icons-material';
 import { DialogTitle, IconButton } from '@mui/material';
 
-import { FlexBox } from '../FlexBox/FlexBox';
+import { FlexRow } from '../FlexBox/FlexBox';
 
 type ResponsiveDialogHeaderProps = {
   onClose: () => void;
@@ -25,10 +25,10 @@ export function ResponsiveDialogHeader({
         gap: 2,
       }}
     >
-      <FlexBox alignItems="center" gap={2} flex={1}>
+      <FlexRow alignItems="center" gap={2} flex={1}>
         {leftIcon}
         {children}
-      </FlexBox>
+      </FlexRow>
       <IconButton onClick={onClose}>
         <CloseIcon />
       </IconButton>

@@ -1,13 +1,15 @@
-import React from 'react';
+// cspell:ignore Overridable
+import { Box, Theme } from '@mui/material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { BoxTypeMap } from '@mui/system';
 
-import { Box, BoxProps } from '@mui/material';
+// eslint-disable-next-line @typescript-eslint/ban-types
+type FlexBoxComponent = OverridableComponent<BoxTypeMap<{}, 'div', Theme>>;
 
-type FlexBoxProps = BoxProps;
+export const FlexRow: FlexBoxComponent = (props) => {
+  return <Box display="flex" flexDirection="row" {...props} />;
+};
 
-export function FlexBox({ children, ...props }: FlexBoxProps) {
-  return (
-    <Box display="flex" {...props}>
-      {children}
-    </Box>
-  );
-}
+export const FlexCol: FlexBoxComponent = (props) => {
+  return <Box display="flex" flexDirection="column" {...props} />;
+};

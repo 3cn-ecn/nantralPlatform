@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import {
   Groups as GroupIcon,
@@ -16,7 +16,7 @@ import { upperFirst } from 'lodash-es';
 
 import { PostPreview } from '#modules/post/post.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexBox } from '#shared/components/FlexBox/FlexBox';
+import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -55,10 +55,10 @@ export function PostCard({ post }: PostCardProps) {
               </Typography>
             </Box>
             <Spacer vertical={8} flex={1} />
-            <FlexBox alignItems="center" gap={1}>
+            <FlexRow alignItems="center" gap={1}>
               <Avatar title={post.group.name} url={post.group.icon} size="s" />
               <Typography variant="caption">{post.group.name}</Typography>
-            </FlexBox>
+            </FlexRow>
           </CardContent>
           {post.image && (
             <CardMedia
@@ -115,14 +115,13 @@ const StyledCardActionArea = styled(CardActionArea)({
   height: '100%',
 });
 
-const CardContent = styled(FlexBox)({
+const CardContent = styled(FlexCol)({
   padding: 16,
   flex: 1,
-  flexDirection: 'column',
   height: '100%',
 });
 
-const BadgeIconsContainer = styled(FlexBox)({
+const BadgeIconsContainer = styled(FlexRow)({
   position: 'absolute',
   gap: 8,
   top: 12,

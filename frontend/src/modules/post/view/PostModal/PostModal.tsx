@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
   Edit as EditIcon,
   Group as GroupIcon,
@@ -9,7 +7,7 @@ import { Box, Container, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexBox } from '#shared/components/FlexBox/FlexBox';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -58,10 +56,10 @@ export function PostModal({ postId, onClose, onEdit }: PostModalProps) {
           </Typography>
         </Box>
         <Spacer flex={1} />
-        <FlexBox gap={2}>
+        <FlexRow gap={2}>
           {post.publicity === 'Mem' && <BadgeIcon Icon={GroupIcon} />}
           {post.pinned && <BadgeIcon Icon={PushPinIcon} />}
-        </FlexBox>
+        </FlexRow>
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent sx={{ p: 0 }}>
         {post.image && (
