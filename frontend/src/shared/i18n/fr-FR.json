@@ -75,6 +75,11 @@
   },
   "form": {
     "PostTitle": "Titre de l'annonce",
+    "autocomplete": {
+      "clear": "Effacer",
+      "noOptions": "Aucun résultat",
+      "open": "Ouvrir"
+    },
     "cancel": "Annuler",
     "chooseFile": "Choisir un fichier",
     "createAPost": "Créer un post",
@@ -88,6 +93,9 @@
     "editEvent": "Modifier l'évènement",
     "editPost": "Modifier le post",
     "endDatetime": "Date et heure de fin",
+    "errors": {
+      "title": "Le formulaire contient une ou plusieurs erreurs"
+    },
     "eventTitle": "Titre de l'évènement",
     "externalLink": "Lien externe",
     "freeRegistration": "Inscription libre",

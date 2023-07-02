@@ -1,11 +1,13 @@
 import { FormEvent, useCallback } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
-import { Button } from '@mui/material';
+import { Alert, AlertTitle, Button } from '@mui/material';
 
+import { getGroupList } from '#modules/group/api/getGroupList';
 import { UpdatePostVariables, updatePost } from '#modules/post/api/updatePost';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
+import { AutocompleteSearchField } from '#shared/components/FormFields/AutocompleteSearchField';
 import { CustomTextField } from '#shared/components/FormFields/CustomTextField';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
@@ -39,7 +41,7 @@ export function PostEditModalContent({
   });
 
   // create all states for error, loading, etc. while fetching the API
-  const { mutate, error, isError, isLoading } = useMutation<
+  const { mutate, isLoading, isError, error } = useMutation<
     void,
     ApiError<PostFormDTO>,
     UpdatePostVariables
@@ -71,13 +73,43 @@ export function PostEditModalContent({
   return (
     <form onSubmit={(e) => onSubmit(e, formValues)}>
       <ResponsiveDialogContent>
+        {isError && (
+          <Alert severity="error">
+            <AlertTitle>{t('form.errors.title')}</AlertTitle>
+            {!!error.globalErrors?.length && (
+              <ul>
+                {error.globalErrors.map((err, index) => (
+                  <li key={index}>{err}</li>
+                ))}
+              </ul>
+            )}
+          </Alert>
+        )}
+        <AutocompleteSearchField
+          name="group"
+          label={t('post.form.group.label')}
+          value={formValues.group}
+          onValueChange={(val) => updateFormValues({ group: val })}
+          defaultObjectValue={post.group}
+          errors={error?.group}
+          required
+          fetchInitialOptions={() =>
+            getGroupList({ pageSize: 7 }).then((data) => data.results)
+          }
+          fetchOptions={(searchText) =>
+            getGroupList({ search: searchText, pageSize: 10 }).then(
+              (data) => data.results
+            )
+          }
+          getOptionLabel={(group) => group.name}
+          getOptionImage={(group) => group.icon}
+        />
         <CustomTextField
           name="title"
           label={t('post.form.title.label')}
           value={formValues.title}
           onValueChange={(val) => updateFormValues({ title: val })}
-          isError={isError}
-          errorMessage={error?.title}
+          errors={error?.title}
           required
         />
       </ResponsiveDialogContent>

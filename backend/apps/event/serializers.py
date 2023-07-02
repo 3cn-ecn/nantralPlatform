@@ -3,7 +3,7 @@ from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
 
-from apps.group.serializers import SimpleGroupSerializer
+from apps.group.serializers import GroupPreviewSerializer
 from apps.student.models import Student
 
 from .models import Event
@@ -12,7 +12,7 @@ from .models import Event
 class EventSerializer(serializers.ModelSerializer):
     number_of_participants = serializers.ReadOnlyField()
     absolute_url = serializers.ReadOnlyField()
-    group = SimpleGroupSerializer()
+    group = GroupPreviewSerializer()
     is_participating = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     is_favorite = serializers.SerializerMethodField()

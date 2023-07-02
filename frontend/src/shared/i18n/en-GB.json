@@ -74,6 +74,11 @@
   },
   "form": {
     "PostTitle": "Post title",
+    "autocomplete": {
+      "clear": "Clear",
+      "noOptions": "No results",
+      "open": "Open"
+    },
     "cancel": "Cancel",
     "chooseFile": "Choose file",
     "createAPost": "Create a post",
@@ -87,6 +92,9 @@
     "editEvent": "Edit event",
     "editPost": "Edit post",
     "endDatetime": "End date and time",
+    "errors": {
+      "title": "The form contains one or several errors"
+    },
     "eventTitle": "Event title",
     "externalLink": "External link",
     "freeRegistration": "Free registration",
