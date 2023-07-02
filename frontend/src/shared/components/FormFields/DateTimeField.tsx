@@ -6,16 +6,8 @@ import {
   LocalizationProvider,
 } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { Locale } from 'date-fns';
-import { enGB, fr } from 'date-fns/locale';
 
-import { languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
-
-const mapLanguages: Record<(typeof languages)[number], Locale> = {
-  'fr-FR': fr,
-  'en-GB': enGB,
-};
 
 type DateTimeFieldProps = Omit<DateTimePickerProps<Date>, 'error'> & {
   name?: string;
@@ -35,12 +27,12 @@ function DateTimeFieldComponent({
   fullWidth = false,
   ...props
 }: DateTimeFieldProps) {
-  const { i18n } = useTranslation();
+  const { dateFnsLocale } = useTranslation();
   const isError = errors !== undefined;
 
   return (
     <LocalizationProvider
-      adapterLocale={mapLanguages[i18n.language]}
+      adapterLocale={dateFnsLocale}
       dateAdapter={AdapterDateFns}
     >
       <DateTimePicker

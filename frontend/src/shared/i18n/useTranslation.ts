@@ -1,15 +1,19 @@
 import { useTranslation as useI18nextTranslation } from 'react-i18next';
 
-const UNITS: { name: Intl.RelativeTimeFormatUnit; milliseconds: number }[] = [
-  { name: 'year', milliseconds: 365 * 24 * 60 * 60 * 1000 },
-  { name: 'month', milliseconds: 30 * 24 * 60 * 60 * 1000 },
-  { name: 'day', milliseconds: 24 * 60 * 60 * 1000 },
-  { name: 'hour', milliseconds: 60 * 60 * 1000 },
-  { name: 'minute', milliseconds: 60 * 1000 },
-];
+import { formatRelative } from 'date-fns';
+import { enGB, fr } from 'date-fns/locale';
+
+import { languages } from './config';
+
+const mapLocales: Record<(typeof languages)[number], Locale> = {
+  'fr-FR': fr,
+  'en-GB': enGB,
+};
 
 export function useTranslation() {
   const { t, i18n } = useI18nextTranslation('translation');
+
+  const dateFnsLocale = mapLocales[i18n.language];
 
   const formatDate = (
     date: Date,
@@ -41,23 +45,12 @@ export function useTranslation() {
     return intlObject.formatRange(startDate, endDate);
   };
 
-  const formatRelativeTime = (
-    date: Date,
-    options: Intl.RelativeTimeFormatOptions = { numeric: 'auto' }
-  ) => {
+  const formatRelativeTime = (date: Date) => {
     const now = new Date();
-    const duration = date.getTime() - now.getTime();
-    const unit =
-      UNITS.find((u) => Math.abs(duration) >= u.milliseconds) || UNITS.at(-1);
-    const relativeTimeFormatter = new Intl.RelativeTimeFormat(
-      i18n.language,
-      options
-    );
-    const relativeTime = relativeTimeFormatter.format(
-      Math.floor(duration / unit.milliseconds),
-      unit.name
-    );
-    return relativeTime;
+    return formatRelative(date, now, {
+      locale: dateFnsLocale,
+      weekStartsOn: 1,
+    });
   };
 
   const formatNumber = (number: number, options?: Intl.NumberFormatOptions) =>
@@ -82,5 +75,6 @@ export function useTranslation() {
     formatRelativeTime,
     formatNumber,
     formatNumberRange,
+    dateFnsLocale,
   };
 }
