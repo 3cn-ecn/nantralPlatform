@@ -216,8 +216,8 @@
     "edited": "édité",
     "form": {
       "group": {
-        "helpText": "Vous devez être admin de votre groupe pour pouvoir publier un post",
-        "label": "Groupe"
+        "helpText": "Vous devez être admin d'un groupe pour pouvoir publier un post en son nom",
+        "label": "Publier en tant que"
       },
       "title": {
         "label": "Titre du post"

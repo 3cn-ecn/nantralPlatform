@@ -85,9 +85,18 @@ export function PostEditModalContent({
             )}
           </Alert>
         )}
+        <CustomTextField
+          name="title"
+          label={t('post.form.title.label')}
+          value={formValues.title}
+          onValueChange={(val) => updateFormValues({ title: val })}
+          errors={error?.title}
+          required
+        />
         <AutocompleteSearchField
           name="group"
           label={t('post.form.group.label')}
+          helperText={t('post.form.group.helpText')}
           value={formValues.group}
           onValueChange={(val) => updateFormValues({ group: val })}
           defaultObjectValue={post.group}
@@ -103,14 +112,6 @@ export function PostEditModalContent({
           }
           getOptionLabel={(group) => group.name}
           getOptionImage={(group) => group.icon}
-        />
-        <CustomTextField
-          name="title"
-          label={t('post.form.title.label')}
-          value={formValues.title}
-          onValueChange={(val) => updateFormValues({ title: val })}
-          errors={error?.title}
-          required
         />
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter>
