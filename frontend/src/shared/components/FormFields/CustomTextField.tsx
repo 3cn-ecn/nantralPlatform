@@ -3,12 +3,12 @@ import { memo } from 'react';
 import { TextField, TextFieldProps } from '@mui/material';
 
 type CustomTextFieldProps = Omit<TextFieldProps, 'onChange' | 'error'> & {
-  onValueChange: (value: string) => void;
+  onChange: (value: string) => void;
   errors?: string[];
 };
 
 function CustomTextFieldComponent({
-  onValueChange,
+  onChange,
   errors,
   fullWidth = true,
   margin = 'normal',
@@ -19,7 +19,7 @@ function CustomTextFieldComponent({
 
   return (
     <TextField
-      onChange={(e) => onValueChange(e.target.value)}
+      onChange={(e) => onChange(e.target.value)}
       error={isError}
       helperText={isError ? errors.join(', ') : helperText}
       fullWidth={fullWidth}

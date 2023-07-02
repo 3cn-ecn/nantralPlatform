@@ -56,7 +56,7 @@ type AutocompleteSearchFieldProps<
   | 'renderInput'
 > & {
   value: AutocompleteValue<number, Multiple, DisableClearable>;
-  onValueChange: (
+  onChange: (
     value: AutocompleteValue<number, Multiple, DisableClearable>
   ) => void;
   defaultObjectValue?: AutocompleteValue<T, Multiple, DisableClearable>;
@@ -76,7 +76,7 @@ type AutocompleteSearchFieldProps<
  * our django REST API.
  *
  * @param value - The id of the element selected
- * @param onValueChange - When the selected element id is updated
+ * @param onChange - When the selected element id is updated
  * @param defaultObjectValue - The default value, but the whole object (not just the id)
  * @param fetchInitialOptions - Fetch a list of initial elements, only fetch when the field is empty
  * @param fetchOptions - Fetch a list of elements, according to a search text
@@ -87,6 +87,8 @@ type AutocompleteSearchFieldProps<
  * @param errors - A list of error messages, if any
  * @param fullWidth - If the field takes the full width of the container or not
  * @param multiple - If user can select multiple elements or just one
+ * @param getOptionLabel - A function to render the label of an element
+ * @param getOptionImage - A function to get the image url of an element
  */
 function AutocompleteSearchFieldComponent<
   T extends { id: number },
@@ -95,7 +97,7 @@ function AutocompleteSearchFieldComponent<
   ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent']
 >({
   value,
-  onValueChange,
+  onChange,
   defaultObjectValue,
   fetchInitialOptions,
   fetchOptions,
@@ -157,7 +159,7 @@ function AutocompleteSearchFieldComponent<
   ) => {
     if (reason === 'selectOption') {
       setObjectValue(newObjectValue);
-      onValueChange(
+      onChange(
         isMultiple(newObjectValue, multiple)
           ? (newObjectValue.map((objVal) => objVal.id) as AutocompleteValue<
               number,
@@ -172,7 +174,7 @@ function AutocompleteSearchFieldComponent<
       );
     } else {
       setObjectValue(undefined);
-      onValueChange(undefined);
+      onChange(undefined);
     }
   };
 

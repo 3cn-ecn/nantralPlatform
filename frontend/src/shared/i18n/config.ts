@@ -6,6 +6,8 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import translationEn from './en-GB.json';
 import translationFr from './fr-FR.json';
 
+export const languages = ['fr-FR', 'en-GB'] as const;
+
 i18n
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
@@ -15,7 +17,7 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    supportedLngs: ['fr-FR', 'en-GB'],
+    supportedLngs: languages,
     fallbackLng: { 'fr-*': ['fr-FR'], default: ['en-GB'] },
     load: 'currentOnly',
     interpolation: {

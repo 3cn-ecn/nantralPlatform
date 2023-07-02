@@ -89,7 +89,7 @@ export function PostEditModalContent({
           name="title"
           label={t('post.form.title.label')}
           value={formValues.title}
-          onValueChange={(val) => updateFormValues({ title: val })}
+          onChange={(val) => updateFormValues({ title: val })}
           errors={error?.title}
           required
         />
@@ -98,7 +98,7 @@ export function PostEditModalContent({
           label={t('post.form.group.label')}
           helperText={t('post.form.group.helpText')}
           value={formValues.group}
-          onValueChange={(val) => updateFormValues({ group: val })}
+          onChange={(val) => updateFormValues({ group: val })}
           defaultObjectValue={post.group}
           errors={error?.group}
           required
@@ -117,7 +117,7 @@ export function PostEditModalContent({
           name="description"
           label={t('post.form.description.label')}
           value={formValues.description}
-          onValueChange={(val) => updateFormValues({ description: val })}
+          onChange={(val) => updateFormValues({ description: val })}
           errors={error?.description}
           multiline
           minRows={3}
