@@ -90,7 +90,10 @@ export function PostEditModalContent({
           name="title"
           label={t('post.form.title.label')}
           value={formValues.title}
-          onChange={(val) => updateFormValues({ title: val })}
+          onChange={useCallback(
+            (val) => updateFormValues({ title: val }),
+            [updateFormValues]
+          )}
           errors={error?.title}
           required
         />
@@ -99,18 +102,24 @@ export function PostEditModalContent({
           label={t('post.form.group.label')}
           helperText={t('post.form.group.helpText')}
           value={formValues.group}
-          onChange={(val) => updateFormValues({ group: val })}
+          onChange={useCallback(
+            (val) => updateFormValues({ group: val }),
+            [updateFormValues]
+          )}
           defaultObjectValue={post.group}
           errors={error?.group}
           required
-          fetchInitialOptions={() =>
-            getGroupList({ pageSize: 7 }).then((data) => data.results)
-          }
-          fetchOptions={(searchText) =>
-            getGroupList({ search: searchText, pageSize: 10 }).then(
-              (data) => data.results
-            )
-          }
+          fetchInitialOptions={useCallback(
+            () => getGroupList({ pageSize: 7 }).then((data) => data.results),
+            []
+          )}
+          fetchOptions={useCallback(
+            (searchText) =>
+              getGroupList({ search: searchText, pageSize: 10 }).then(
+                (data) => data.results
+              ),
+            []
+          )}
           getOptionLabel={(group) => group.name}
           getOptionImage={(group) => group.icon}
         />
@@ -118,7 +127,10 @@ export function PostEditModalContent({
           name="description"
           label={t('post.form.description.label')}
           value={formValues.description}
-          onChange={(val) => updateFormValues({ description: val })}
+          onChange={useCallback(
+            (val) => updateFormValues({ description: val }),
+            [updateFormValues]
+          )}
           errors={error?.description}
           multiline
           minRows={3}
@@ -127,7 +139,10 @@ export function PostEditModalContent({
           name="image"
           label={t('post.form.image.label')}
           value={formValues.image}
-          onChange={(val) => updateFormValues({ image: val })}
+          onChange={useCallback(
+            (val) => updateFormValues({ image: val }),
+            [updateFormValues]
+          )}
           prevFileName={post.image}
           errors={error?.image}
           accept="image/*"
