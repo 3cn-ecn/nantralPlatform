@@ -1,7 +1,7 @@
 import { FormEvent, useCallback } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 
-import { Alert, AlertTitle, Button } from '@mui/material';
+import { Alert, AlertTitle, Button, MenuItem } from '@mui/material';
 
 import { getGroupList } from '#modules/group/api/getGroupList';
 import { UpdatePostVariables, updatePost } from '#modules/post/api/updatePost';
@@ -10,6 +10,7 @@ import { Post, PostForm } from '#modules/post/post.types';
 import { AutocompleteSearchField } from '#shared/components/FormFields/AutocompleteSearchField';
 import { CustomTextField } from '#shared/components/FormFields/CustomTextField';
 import { FileField } from '#shared/components/FormFields/FileField';
+import { SelectField } from '#shared/components/FormFields/SelectField';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialogContent,
@@ -148,6 +149,23 @@ export function PostEditModalContent({
           errors={error?.image}
           accept="image/*"
         />
+        <SelectField
+          name="publicity"
+          label={t('post.form.publicity.label')}
+          value={formValues.publicity}
+          onChange={useCallback(
+            (val: 'Pub' | 'Mem') => updateFormValues({ publicity: val }),
+            [updateFormValues]
+          )}
+          errors={error?.publicity}
+        >
+          <MenuItem value="Pub">
+            {t('post.form.publicity.options.pub')}
+          </MenuItem>
+          <MenuItem value="Mem">
+            {t('post.form.publicity.options.mem')}
+          </MenuItem>
+        </SelectField>
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter>
         <Button variant="text" onClick={() => onClose()}>

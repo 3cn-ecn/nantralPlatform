@@ -244,6 +244,13 @@
         "helperText": "A picture, a banner or a poster",
         "label": "Picture"
       },
+      "publicity": {
+        "label": "Publicity",
+        "options": {
+          "mem": "Group members",
+          "pub": "Public"
+        }
+      },
       "title": {
         "label": "Post title"
       }

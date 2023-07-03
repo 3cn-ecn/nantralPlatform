@@ -245,6 +245,13 @@
         "helperText": "Une image, un poster ou une affiche",
         "label": "Image"
       },
+      "publicity": {
+        "label": "Visibilité",
+        "options": {
+          "mem": "Membres du groupe",
+          "pub": "Public"
+        }
+      },
       "title": {
         "label": "Titre du post"
       }
