@@ -98,8 +98,24 @@
     "eventTitle": "Titre de l'évènement",
     "externalLink": "Lien externe",
     "file": {
+      "clearButton": {
+        "label": "Effacer le fichier"
+      },
+      "delete": {
+        "warning": "Attention, le fichier sera définitivement supprimé"
+      },
+      "deleteButton": {
+        "label": "Supprimer le fichier"
+      },
+      "deleteFile": "Supprimer le fichier",
+      "error": {
+        "tooHeavy": "Erreur : le fichier dépasse la limite de {{maxSize}}"
+      },
       "label": "Choisir un fichier",
-      "placeholder": "Importer un fichier"
+      "placeholder": "Importer un fichier",
+      "undoButton": {
+        "label": "Annuler"
+      }
     },
     "freeRegistration": "Inscription libre",
     "group": "Groupe",

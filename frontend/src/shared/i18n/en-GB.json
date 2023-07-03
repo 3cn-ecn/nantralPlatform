@@ -97,8 +97,24 @@
     "eventTitle": "Event title",
     "externalLink": "External link",
     "file": {
+      "clearButton": {
+        "label": "Remove the file"
+      },
+      "delete": {
+        "warning": "Be careful, the file will be definitely removed"
+      },
+      "deleteButton": {
+        "label": "Delete the file"
+      },
+      "deleteFile": "Delete the file",
+      "error": {
+        "tooHeavy": "Error: file size exceeds limit of {{maxSize}}"
+      },
       "label": "Choose file",
-      "placeholder": "Load a file"
+      "placeholder": "Load a file",
+      "undoButton": {
+        "label": "Undo"
+      }
     },
     "freeRegistration": "Free registration",
     "group": "Group",
