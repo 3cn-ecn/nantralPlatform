@@ -242,6 +242,7 @@
         "label": "Publier en tant que"
       },
       "image": {
+        "helperText": "Une image, un poster ou une affiche",
         "label": "Image"
       },
       "title": {

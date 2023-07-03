@@ -241,6 +241,7 @@
         "label": "Publish as"
       },
       "image": {
+        "helperText": "A picture, a banner or a poster",
         "label": "Picture"
       },
       "title": {

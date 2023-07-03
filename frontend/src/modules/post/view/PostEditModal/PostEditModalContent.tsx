@@ -138,6 +138,7 @@ export function PostEditModalContent({
         <FileField
           name="image"
           label={t('post.form.image.label')}
+          helperText={t('post.form.image.helperText')}
           value={formValues.image}
           onChange={useCallback(
             (val) => updateFormValues({ image: val }),
