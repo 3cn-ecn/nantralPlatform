@@ -3,6 +3,7 @@ import { memo } from 'react';
 import {
   Clear as ClearIcon,
   Delete as DeleteIcon,
+  SvgIconComponent,
   Undo as UndoIcon,
 } from '@mui/icons-material';
 import {
@@ -94,37 +95,6 @@ function FileFieldComponent({
       }}
       inputProps={{ disabled: true }}
       InputProps={{
-        endAdornment: (value || prevFileName) && !disabled && (
-          <InputAdornment position="start">
-            {/* If a new file is selected, the button proposes to remove it */}
-            {isRealFile(value) && (
-              <Tooltip title={t('form.file.clearButton.label')}>
-                <IconButton onClick={() => onChange(null)} edge="end">
-                  <ClearIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-            {/* If showing the previous file, the button proposes to delete it */}
-            {isNotAFile(value) && prevFileName && (
-              <Tooltip title={t('form.file.deleteButton.label')}>
-                <IconButton
-                  onClick={() => onChange(new File([], ''))}
-                  edge="end"
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-            {/* If the user click to delete the file, the button proposes to undo it */}
-            {isDeletedFile(value) && (
-              <Tooltip title={t('form.file.undoButton.label')}>
-                <IconButton onClick={() => onChange(null)} edge="end">
-                  <UndoIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-          </InputAdornment>
-        ),
         startAdornment: (
           <InputAdornment position="start">
             <Button
@@ -133,6 +103,7 @@ function FileFieldComponent({
               sx={{ mr: 1 }}
               variant="contained"
               component="label"
+              color="secondary"
             >
               {t('form.file.label')}
               <input
@@ -149,9 +120,56 @@ function FileFieldComponent({
             </Button>
           </InputAdornment>
         ),
+        endAdornment: (value || prevFileName) && !disabled && (
+          <InputAdornment position="start">
+            {/* If a new file is selected, the button proposes to remove it */}
+            {isRealFile(value) && (
+              <FileActionButton
+                title={t('form.file.clearButton.label')}
+                onClick={() => onChange(null)}
+                Icon={ClearIcon}
+                key="action-button"
+              />
+            )}
+            {/* If showing the previous file, the button proposes to delete it */}
+            {isNotAFile(value) && prevFileName && (
+              <FileActionButton
+                title={t('form.file.deleteButton.label')}
+                onClick={() => onChange(new File([], ''))}
+                Icon={DeleteIcon}
+                key="action-button"
+              />
+            )}
+            {/* If the user click to delete the file, the button proposes to undo it */}
+            {isDeletedFile(value) && (
+              <FileActionButton
+                title={t('form.file.undoButton.label')}
+                onClick={() => onChange(null)}
+                Icon={UndoIcon}
+                key="action-button"
+              />
+            )}
+          </InputAdornment>
+        ),
       }}
       {...props}
     />
+  );
+}
+
+interface FileActionsButtonProps {
+  title: string;
+  onClick: () => void;
+  Icon?: SvgIconComponent;
+}
+
+function FileActionButton({ title, onClick, Icon }: FileActionsButtonProps) {
+  return (
+    <Tooltip title={title}>
+      <IconButton onClick={onClick} edge="end">
+        <Icon />
+      </IconButton>
+    </Tooltip>
   );
 }
 
