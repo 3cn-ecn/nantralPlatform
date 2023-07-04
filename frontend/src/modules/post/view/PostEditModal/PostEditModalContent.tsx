@@ -8,6 +8,7 @@ import { UpdatePostVariables, updatePost } from '#modules/post/api/updatePost';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
 import { AutocompleteSearchField } from '#shared/components/FormFields/AutocompleteSearchField';
+import { CheckboxField } from '#shared/components/FormFields/CheckboxField';
 import { CustomTextField } from '#shared/components/FormFields/CustomTextField';
 import { FileField } from '#shared/components/FormFields/FileField';
 import { SelectField } from '#shared/components/FormFields/SelectField';
@@ -158,6 +159,7 @@ export function PostEditModalContent({
             [updateFormValues]
           )}
           errors={error?.publicity}
+          defaultValue="Pub"
         >
           <MenuItem value="Pub">
             {t('post.form.publicity.options.pub')}
@@ -166,6 +168,15 @@ export function PostEditModalContent({
             {t('post.form.publicity.options.mem')}
           </MenuItem>
         </SelectField>
+        <CheckboxField
+          name="pinned"
+          label={t('post.form.pinned.label')}
+          value={formValues.pinned}
+          onChange={useCallback(
+            (val) => updateFormValues({ pinned: val }),
+            [updateFormValues]
+          )}
+        />
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter>
         <Button variant="text" onClick={() => onClose()}>
