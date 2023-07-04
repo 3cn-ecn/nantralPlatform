@@ -1,17 +1,17 @@
-import React from 'react';
+import { ComponentProps } from 'react';
 
 import { Avatar as MuiAvatar } from '@mui/material';
 
 import { stringToColor } from '#shared/utils/stringToColor';
 
-type AvatarProps = {
+type AvatarProps = ComponentProps<typeof MuiAvatar> & {
   title: string;
   size?: 's' | 'm' | 'l' | 'xxl';
   url?: string;
   icon?: JSX.Element;
 };
 
-export function Avatar({ title, url, icon, size = 'm' }: AvatarProps) {
+export function Avatar({ title, url, icon, size = 'm', sx }: AvatarProps) {
   const titleWords = title.split(' ');
   const initials = (
     titleWords.length > 1
@@ -35,6 +35,7 @@ export function Avatar({ title, url, icon, size = 'm' }: AvatarProps) {
         height: sizes[size],
         fontSize: sizes[size] * 0.4,
         bgcolor: stringToColor(title),
+        ...sx,
       }}
     >
       {icon || initials}

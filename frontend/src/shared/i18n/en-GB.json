@@ -74,8 +74,12 @@
   },
   "form": {
     "PostTitle": "Post title",
+    "autocomplete": {
+      "clear": "Clear",
+      "noOptions": "No results",
+      "open": "Open"
+    },
     "cancel": "Cancel",
-    "chooseFile": "Choose file",
     "createAPost": "Create a post",
     "createEvent": "Create event",
     "createPost": "Create post",
@@ -87,11 +91,33 @@
     "editEvent": "Edit event",
     "editPost": "Edit post",
     "endDatetime": "End date and time",
+    "errors": {
+      "title": "The form contains one or several errors"
+    },
     "eventTitle": "Event title",
     "externalLink": "External link",
+    "file": {
+      "clearButton": {
+        "label": "Remove the file"
+      },
+      "delete": {
+        "warning": "Be careful, the file will be definitely removed ⚠️"
+      },
+      "deleteButton": {
+        "label": "Delete the file"
+      },
+      "deleteFile": "Delete the file",
+      "error": {
+        "tooHeavy": "Error: file size exceeds limit of {{maxSize}}"
+      },
+      "label": "Choose file",
+      "placeholder": "Load a file",
+      "undoButton": {
+        "label": "Undo"
+      }
+    },
     "freeRegistration": "Free registration",
     "group": "Group",
-    "groupHelpText": "You must be an admin of your group to post a post.",
     "image": "Picture",
     "imageDescription": "A picture, a banner, a poster",
     "membersOnly": "Club members only",
@@ -199,7 +225,39 @@
   },
   "post": {
     "confirmDelete": "Are you sure you want to delete the post (this action is irreversible).",
+    "edit": {
+      "title": "Edit the post"
+    },
+    "editModal": {
+      "title": "Edit the post"
+    },
     "edited": "edited",
+    "form": {
+      "description": {
+        "label": "Description"
+      },
+      "group": {
+        "helpText": "You must be an admin of a group to publish a post in its name",
+        "label": "Publish as"
+      },
+      "image": {
+        "helperText": "A picture, a banner or a poster",
+        "label": "Picture"
+      },
+      "pinned": {
+        "label": "Pin the post"
+      },
+      "publicity": {
+        "label": "Publicity",
+        "options": {
+          "mem": "Group members",
+          "pub": "Public"
+        }
+      },
+      "title": {
+        "label": "Post title"
+      }
+    },
     "modal": {
       "metadata": {
         "dates": "Published {{createdDuration}} • Updated {{updatedDuration}}"

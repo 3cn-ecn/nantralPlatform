@@ -75,8 +75,12 @@
   },
   "form": {
     "PostTitle": "Titre de l'annonce",
+    "autocomplete": {
+      "clear": "Effacer",
+      "noOptions": "Aucun résultat",
+      "open": "Ouvrir"
+    },
     "cancel": "Annuler",
-    "chooseFile": "Choisir un fichier",
     "createAPost": "Créer un post",
     "createEvent": "Créer l'évènement",
     "createPost": "Créer le post",
@@ -88,11 +92,33 @@
     "editEvent": "Modifier l'évènement",
     "editPost": "Modifier le post",
     "endDatetime": "Date et heure de fin",
+    "errors": {
+      "title": "Le formulaire contient une ou plusieurs erreurs"
+    },
     "eventTitle": "Titre de l'évènement",
     "externalLink": "Lien externe",
+    "file": {
+      "clearButton": {
+        "label": "Effacer le fichier"
+      },
+      "delete": {
+        "warning": "Attention, le fichier sera définitivement supprimé ⚠️"
+      },
+      "deleteButton": {
+        "label": "Supprimer le fichier"
+      },
+      "deleteFile": "Supprimer le fichier",
+      "error": {
+        "tooHeavy": "Erreur : le fichier dépasse la limite de {{maxSize}}"
+      },
+      "label": "Choisir un fichier",
+      "placeholder": "Importer un fichier",
+      "undoButton": {
+        "label": "Annuler"
+      }
+    },
     "freeRegistration": "Inscription libre",
     "group": "Groupe",
-    "groupHelpText": "Vous devez être admin de votre groupe pour pouvoir publier un post",
     "image": "Image",
     "imageDescription": "Une image, un poster, une affiche",
     "membersOnly": "Membres du club uniquement",
@@ -200,7 +226,39 @@
   },
   "post": {
     "confirmDelete": "Êtes vous sûr de vouloir supprimer le post (cette action est irréversible).",
+    "edit": {
+      "title": "Modifier le post"
+    },
+    "editModal": {
+      "title": "Modifier le post"
+    },
     "edited": "édité",
+    "form": {
+      "description": {
+        "label": "Description"
+      },
+      "group": {
+        "helpText": "Vous devez être admin d'un groupe pour pouvoir publier un post en son nom",
+        "label": "Publier en tant que"
+      },
+      "image": {
+        "helperText": "Une image, un poster ou une affiche",
+        "label": "Image"
+      },
+      "pinned": {
+        "label": "Épingler l'annonce"
+      },
+      "publicity": {
+        "label": "Visibilité",
+        "options": {
+          "mem": "Membres du groupe",
+          "pub": "Public"
+        }
+      },
+      "title": {
+        "label": "Titre du post"
+      }
+    },
     "modal": {
       "metadata": {
         "dates": "Publié {{createdDuration}} • Mis à jour {{updatedDuration}}"

@@ -60,12 +60,16 @@ class PostViewSet(viewsets.ModelViewSet):
         return self.request.query_params
 
     def get_serializer_class(self):
-        if self.request.method in ["POST", "PUT"]:
+        preview = to_null_bool(self.query_params.get('preview'))
+        if self.request.method in ["POST", "PUT", "PATCH"]:
             return PostWriteSerializer
-        elif not self.detail:
+        if preview is True:
             return PostPreviewSerializer
-        else:
+        if preview is False:
             return PostSerializer
+        if self.detail:
+            return PostSerializer
+        return PostPreviewSerializer
 
     def get_queryset(self) -> QuerySet[Post]:
         group_param = self.query_params.get('group')

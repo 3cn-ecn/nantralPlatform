@@ -27,3 +27,11 @@ export type PostPreviewDTO = Pick<
   | 'can_pin'
   | 'publicity'
 >;
+
+export type PostFormDTO = Pick<
+  PostDTO,
+  'title' | 'description' | 'publicity' | 'pinned'
+> & {
+  group: number;
+  image: string | File;
+};

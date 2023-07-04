@@ -5,8 +5,8 @@ import Container from '@mui/material/Container';
 import axios from 'axios';
 
 import {
-    ClubAvatar,
-    ClubAvatarSkeleton,
+  ClubAvatar,
+  ClubAvatarSkeleton,
 } from '#shared/components/ClubAvatar/ClubAvatar';
 import { LoadStatus } from '#types/GenericTypes';
 

@@ -1,25 +1,25 @@
 import React from 'react';
 
 import {
-    CheckCircle as CheckIcon,
-    Cancel as Cross,
-    Info,
-    LinkOutlined as LinkIcon,
-    PeopleAlt as PeopleIcon,
-    AddCircle as PlusIcon,
-    LocalFireDepartment as ShotgunIcon,
+  CheckCircle as CheckIcon,
+  Cancel as Cross,
+  Info,
+  LinkOutlined as LinkIcon,
+  PeopleAlt as PeopleIcon,
+  AddCircle as PlusIcon,
+  LocalFireDepartment as ShotgunIcon,
 } from '@mui/icons-material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {
-    Button,
-    CircularProgress,
-    IconButton,
-    MenuItem,
-    SxProps,
-    Theme,
-    Typography,
-    rgbToHex,
-    useTheme,
+  Button,
+  CircularProgress,
+  IconButton,
+  MenuItem,
+  SxProps,
+  Theme,
+  Typography,
+  rgbToHex,
+  useTheme,
 } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';

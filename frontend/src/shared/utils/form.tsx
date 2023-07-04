@@ -313,7 +313,7 @@ function FormGroup(props: {
                       handleChange(
                         field.name,
                         new Intl.DateTimeFormat('en-GB')
-                          .format(val)
+                          .format(val.toDate())
                           .split('/')
                           .reverse()
                           .join('-')
@@ -469,7 +469,7 @@ function ImageAutocompleteField(props: {
       (item) => (item[field.pk] || item.id) === controlValue
     );
     if (selectedObject) setValue(selectedObject);
-  }, [controlValue]);
+  }, [controlValue, field.options, field.pk]);
 
   return (
     <Autocomplete
@@ -563,7 +563,7 @@ function AutocompleteField<T>(props: {
         .get<T>(`${field.endPoint}/${value}/`)
         .then((res) => setSelectedOption(res.data));
     }
-  }, []);
+  }, [field.endPoint, value]);
 
   const updateOptions = (
     event: React.SyntheticEvent,

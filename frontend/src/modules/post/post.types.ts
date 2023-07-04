@@ -8,7 +8,7 @@ export type Post = {
   publicity: 'Pub' | 'Mem';
   createdAt: Date;
   updatedAt: Date;
-  image: string | File;
+  image: string;
   pinned: boolean;
   isAdmin: boolean;
 };
@@ -25,3 +25,11 @@ export type PostPreview = Pick<
   | 'isAdmin'
   | 'publicity'
 >;
+
+export type PostForm = Pick<
+  Post,
+  'title' | 'description' | 'publicity' | 'pinned'
+> & {
+  group: number;
+  image: File;
+};

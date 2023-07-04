@@ -24,7 +24,7 @@ export function DateBox(props: { date: Date; endDate: Date }): JSX.Element {
         fullWidth
         data-testid="DateBoxTestId"
         style={{
-          minWidth: `1px`,
+          minWidth: '1px',
           padding: '0px',
         }}
       >

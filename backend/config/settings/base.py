@@ -10,10 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-from datetime import datetime
 import os
-import environ
+from datetime import datetime
+
 from django.urls import reverse_lazy
+
+import environ
 
 # import all the environment variables, defining their type and their default
 # value if they are missing in .env file
@@ -210,6 +212,7 @@ STAGING = env('STAGING')
 # Rest API settings
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'apps.utils.api_pagination.CustomPagination',
+    'PAGE_SIZE': 50,
 }
 
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]

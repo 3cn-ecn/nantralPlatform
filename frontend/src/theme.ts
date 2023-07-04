@@ -5,11 +5,10 @@ function getTheme(mode: PaletteMode) {
     palette: {
       mode: mode,
       primary: {
-        main: '#dc3545',
+        main: mode === 'light' ? '#dc3545' : '#FF3E51',
       },
       secondary: {
         main: '#607d8b',
-        light: '#fff',
       },
       neutral: {
         main: '#efefef',
@@ -18,10 +17,10 @@ function getTheme(mode: PaletteMode) {
         main: '#ffc107',
       },
       info: {
-        main: '#0288d1',
+        main: '#0288D1',
       },
       error: {
-        main: '#d84315',
+        main: mode === 'light' ? '#C15700' : '#FF7E15',
       },
     },
     typography: {

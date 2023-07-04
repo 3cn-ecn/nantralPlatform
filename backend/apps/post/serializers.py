@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.group.serializers import SimpleGroupSerializer
+from apps.group.serializers import GroupPreviewSerializer
 
 from .models import Post
 
@@ -8,7 +8,7 @@ from .models import Post
 class PostSerializer(serializers.ModelSerializer):
     is_admin = serializers.SerializerMethodField()
     can_pin = serializers.SerializerMethodField()
-    group = SimpleGroupSerializer()
+    group = GroupPreviewSerializer()
 
     class Meta:
         model = Post

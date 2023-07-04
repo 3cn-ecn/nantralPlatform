@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button, Grid } from '@mui/material';
 import { EventAttributes, createEvents } from 'ics';
@@ -877,11 +877,11 @@ function Calendar(props: {
   const displaySize = updateWeekToDisplay(displayData, beginOfWeek, endOfWeek);
 
   // Update the display and the view
-  React.useEffect(() => {
+  useEffect(() => {
     changeDisplay(displayData.type, beginOfWeek, setBeginOfWeek, setEndOfWeek);
   }, [displayData]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     onChangePeriod({ from: beginOfWeek, to: endOfWeek });
   }, [beginOfWeek, endOfWeek]);
   return (

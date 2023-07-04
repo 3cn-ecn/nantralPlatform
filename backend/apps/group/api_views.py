@@ -1,28 +1,22 @@
-from django.db.models import Q, F, QuerySet, Count
+from collections import OrderedDict
+
+from django.db.models import Count, F, Q, QuerySet
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
-from rest_framework import (
-    decorators,
-    exceptions,
-    pagination,
-    permissions,
-    response,
-    serializers,
-    status,
-    viewsets)
+from rest_framework import (decorators, exceptions, filters, pagination,
+                            permissions, response, serializers, status,
+                            viewsets)
 
 from apps.utils.api_mixins import SearchViewMixin
+from apps.utils.to_null_bool import to_null_bool
 
-from .models import Group, Membership, GroupType
-from .serializers import (
-    MembershipSerializer,
-    NewMembershipSerializer,
-    GroupSerializer,
-    SimpleGroupSerializer,
-    GroupTypeSerializer)
+from .models import Group, GroupType, Membership
+from .serializers import (GroupPreviewSerializer, GroupSerializer,
+                          GroupTypeSerializer, GroupWriteSerializer,
+                          MembershipSerializer, NewMembershipSerializer)
 
 
 class GroupPermission(permissions.BasePermission):
@@ -58,7 +52,7 @@ class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = GroupType.objects.all()
 
 
-class GroupViewSet(SearchViewMixin, viewsets.ModelViewSet):
+class GroupViewSet(viewsets.ModelViewSet):
     """An API endpoint for groups.
 
     Query Parameters
@@ -69,14 +63,6 @@ class GroupViewSet(SearchViewMixin, viewsets.ModelViewSet):
         Filter by groups where user is member
     is_admin: bool
         Filter by groups where user is an admin member
-    fields: list[str]
-        Restrict the request to certains fields only, separated by ','
-    fields!: list[str]
-        Fields to exclude from the request, separated by ','
-    limit: int
-        The max number of items to return
-    offset: int
-        The index of the first item to return
 
     Actions
     -------
@@ -89,15 +75,26 @@ class GroupViewSet(SearchViewMixin, viewsets.ModelViewSet):
     """
 
     permission_classes = [GroupPermission]
-    pagination_class = pagination.LimitOffsetPagination
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'short_name', 'slug']
     lookup_field = 'slug'
     lookup_url_kwarg = 'slug'
-    search_fields = ['name', 'short_name']
+
+    @property
+    def query_params(self) -> OrderedDict[str, str]:
+        return self.request.query_params
 
     def get_serializer_class(self):
-        if self.request.query_params.get('simple'):
-            return SimpleGroupSerializer
-        return GroupSerializer
+        preview = to_null_bool(self.query_params.get('preview'))
+        if self.request.method in ["POST", "PUT", "PATCH"]:
+            return GroupWriteSerializer
+        if preview is True:
+            return GroupPreviewSerializer
+        if preview is False:
+            return GroupSerializer
+        if self.detail:
+            return GroupSerializer
+        return GroupPreviewSerializer
 
     def get_queryset(self) -> QuerySet[Group]:
         user = self.request.user
@@ -132,7 +129,7 @@ class GroupViewSet(SearchViewMixin, viewsets.ModelViewSet):
                 # prefetch type and parent group for better performances
                 .prefetch_related('group_type', 'parent')
                 # order by category, order and then name
-                .order_by(*group_type.sort_fields.split(',')
+                .order_by('group_type', *group_type.sort_fields.split(',')
                           if group_type else '')
                 .distinct())
 

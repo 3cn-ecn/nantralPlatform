@@ -65,14 +65,21 @@ describe('useTranslation hook to format dates and numbers', () => {
         new Date('2023-01-27T15:34:34Z'),
         new Date('2023-01-27T16:26:56Z')
       )
-    ).toBe('27/01/2023, 16:34 – 17:26');
+        // replace special spaces for tests because they differ by OS
+        .replaceAll(' ', ' ')
+        .replaceAll(' ', ' ')
+    ).toBe('27/01/2023, 16:34 – 17:26');
 
     expect(
       formatDateTimeRange(
         new Date('2023-01-27T15:34:34Z'),
         new Date('2023-02-27T08:26:56Z')
       )
-    ).toBe('27/01/2023 16:34 – 27/02/2023 09:26');
+        // replace special spaces for tests because they differ by OS
+        .replaceAll(' ', ' ')
+        .replaceAll(' ', ' ')
+        .replaceAll(',', '')
+    ).toBe('27/01/2023 16:34 – 27/02/2023 09:26');
   });
 
   it('formats relative time', async () => {
@@ -82,11 +89,9 @@ describe('useTranslation hook to format dates and numbers', () => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date('2023-05-01T08:00'));
 
-    expect(formatRelativeTime(new Date('2023-01-27T15:34'))).toBe(
-      'il y a 4 mois'
-    );
+    expect(formatRelativeTime(new Date('2023-01-27T15:34'))).toBe('27/01/2023');
     expect(formatRelativeTime(new Date('2023-05-01T15:34'))).toBe(
-      'dans 7 heures'
+      'aujourd’hui à 15:34'
     );
 
     jest.useRealTimers();

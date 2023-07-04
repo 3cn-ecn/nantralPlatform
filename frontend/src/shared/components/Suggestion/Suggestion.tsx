@@ -2,16 +2,16 @@ import React, { FormEvent, useState } from 'react';
 
 import { Close as CloseIcon } from '@mui/icons-material';
 import {
-    Alert,
-    Box,
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    IconButton,
-    Typography,
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
 } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
