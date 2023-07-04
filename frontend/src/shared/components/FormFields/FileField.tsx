@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 
 import {
   Clear as ClearIcon,
@@ -34,6 +34,7 @@ function isTooHeavy(file?: File) {
 }
 
 type FileFieldProps = Omit<TextFieldProps, 'error' | 'value' | 'onChange'> & {
+  name: string;
   value: File | null;
   onChange: (value: File | null) => void;
   errors?: string[];
@@ -42,6 +43,7 @@ type FileFieldProps = Omit<TextFieldProps, 'error' | 'value' | 'onChange'> & {
 };
 
 function FileFieldComponent({
+  name,
   value,
   errors,
   helperText,
@@ -53,6 +55,7 @@ function FileFieldComponent({
   ...props
 }: FileFieldProps) {
   const { t, formatNumber } = useTranslation();
+  const inputElementRef = useRef<HTMLInputElement>();
   const isError = errors !== undefined;
   const fileName =
     value?.name ||
@@ -98,26 +101,34 @@ function FileFieldComponent({
         startAdornment: (
           <InputAdornment position="start">
             <Button
+              component="label"
+              htmlFor={name}
+              onKeyDownCapture={(e) => {
+                if (e.code === 'Space' || e.code === 'Enter') {
+                  inputElementRef.current.click();
+                }
+              }}
               disabled={disabled}
+              variant="contained"
+              color="secondary"
               size="small"
               sx={{ mr: 1 }}
-              variant="contained"
-              component="label"
-              color="secondary"
             >
               {t('form.file.label')}
-              <input
-                disabled={disabled}
-                hidden
-                accept={accept}
-                value={undefined}
-                type="file"
-                onChange={(event) => {
-                  if (event.target.files.length > 0)
-                    onChange(event.target.files[0]);
-                }}
-              />
             </Button>
+            <input
+              name={name}
+              id={name}
+              ref={inputElementRef}
+              hidden
+              disabled={disabled}
+              accept={accept}
+              type="file"
+              onChange={(event) => {
+                if (event.target.files.length > 0)
+                  onChange(event.target.files[0]);
+              }}
+            />
           </InputAdornment>
         ),
         endAdornment: (value || prevFileName) && !disabled && (

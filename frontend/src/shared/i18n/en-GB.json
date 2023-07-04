@@ -101,7 +101,7 @@
         "label": "Remove the file"
       },
       "delete": {
-        "warning": "Be careful, the file will be definitely removed"
+        "warning": "Be careful, the file will be definitely removed ⚠️"
       },
       "deleteButton": {
         "label": "Delete the file"
@@ -243,6 +243,9 @@
       "image": {
         "helperText": "A picture, a banner or a poster",
         "label": "Picture"
+      },
+      "pinned": {
+        "label": "Pinned post"
       },
       "publicity": {
         "label": "Publicity",

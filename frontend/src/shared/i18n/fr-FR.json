@@ -102,7 +102,7 @@
         "label": "Effacer le fichier"
       },
       "delete": {
-        "warning": "Attention, le fichier sera définitivement supprimé"
+        "warning": "Attention, le fichier sera définitivement supprimé ⚠️"
       },
       "deleteButton": {
         "label": "Supprimer le fichier"
@@ -244,6 +244,9 @@
       "image": {
         "helperText": "Une image, un poster ou une affiche",
         "label": "Image"
+      },
+      "pinned": {
+        "label": "Annonce épinglée"
       },
       "publicity": {
         "label": "Visibilité",
