@@ -65,6 +65,9 @@ describe('useTranslation hook to format dates and numbers', () => {
         new Date('2023-01-27T15:34:34Z'),
         new Date('2023-01-27T16:26:56Z')
       )
+        // replace special spaces for tests because they differ by OS
+        .replace(' ', ' ')
+        .replace(' ', ' ')
     ).toBe('27/01/2023, 16:34 – 17:26');
 
     expect(
