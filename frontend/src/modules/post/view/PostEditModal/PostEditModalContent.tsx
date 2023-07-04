@@ -51,26 +51,41 @@ export function PostEditModalContent({
   >(updatePost);
 
   // send the form to the server
-  // useCallback allows to not recreate the function on every rerender
-  const onSubmit = useCallback(
-    (event: FormEvent, values: PostForm) => {
-      // prevent the default function of <form>
-      event.preventDefault();
-      // call the updatePost function
-      mutate(
-        { id: post.id, data: values },
-        {
-          onSuccess: () => {
-            // if success, reset the post data in all queries
-            queryClient.invalidateQueries('posts');
-            queryClient.invalidateQueries(['post', { id: post.id }]);
-            // close the modal
-            onClose();
-          },
-        }
-      );
-    },
-    [post.id, mutate, queryClient, onClose]
+  const onSubmit = (event: FormEvent, values: PostForm) => {
+    // prevent the default function of <form>
+    event.preventDefault();
+    // call the updatePost function
+    mutate(
+      { id: post.id, data: values },
+      {
+        onSuccess: () => {
+          // if success, reset the post data in all queries
+          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries(['post', { id: post.id }]);
+          // close the modal
+          onClose();
+        },
+      }
+    );
+  };
+
+  // Use callbacks for every functions passed to a prop of a memoized component,
+  // such as all of our Field components. This allows to optimize performance
+  // (when a field is modified, we only rerender this field and not all of them).
+  const fetchInitialGroupOptions = useCallback(
+    () => getGroupList({ pageSize: 7 }).then((data) => data.results),
+    []
+  );
+  const fetchGroupOptions = useCallback(
+    (searchText: string) =>
+      getGroupList({ search: searchText, pageSize: 10 }).then(
+        (data) => data.results
+      ),
+    []
+  );
+  const onPinnedChange = useCallback(
+    (val: boolean) => updateFormValues({ pinned: val }),
+    [updateFormValues]
   );
 
   return (
@@ -105,25 +120,16 @@ export function PostEditModalContent({
           helperText={t('post.form.group.helpText')}
           value={formValues.group}
           onChange={useCallback(
-            (val) => updateFormValues({ group: val }),
+            (val: number) => updateFormValues({ group: val }),
             [updateFormValues]
           )}
           defaultObjectValue={post.group}
           errors={error?.group}
           required
-          fetchInitialOptions={useCallback(
-            () => getGroupList({ pageSize: 7 }).then((data) => data.results),
-            []
-          )}
-          fetchOptions={useCallback(
-            (searchText) =>
-              getGroupList({ search: searchText, pageSize: 10 }).then(
-                (data) => data.results
-              ),
-            []
-          )}
-          getOptionLabel={(group) => group.name}
-          getOptionImage={(group) => group.icon}
+          fetchInitialOptions={fetchInitialGroupOptions}
+          fetchOptions={fetchGroupOptions}
+          labelPropName="name"
+          imagePropName="icon"
         />
         <CustomTextField
           name="description"
@@ -168,15 +174,14 @@ export function PostEditModalContent({
             {t('post.form.publicity.options.mem')}
           </MenuItem>
         </SelectField>
-        <CheckboxField
-          name="pinned"
-          label={t('post.form.pinned.label')}
-          value={formValues.pinned}
-          onChange={useCallback(
-            (val) => updateFormValues({ pinned: val }),
-            [updateFormValues]
-          )}
-        />
+        {post.group.canPin && (
+          <CheckboxField
+            name="pinned"
+            label={t('post.form.pinned.label')}
+            value={formValues.pinned}
+            onChange={onPinnedChange}
+          />
+        )}
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter>
         <Button variant="text" onClick={() => onClose()}>

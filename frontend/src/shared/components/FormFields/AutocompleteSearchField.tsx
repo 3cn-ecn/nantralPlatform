@@ -67,8 +67,8 @@ type AutocompleteSearchFieldProps<
   helperText?: string;
   required?: boolean;
   errors?: string[];
-  getOptionLabel: (option: T) => string;
-  getOptionImage?: (option: T) => string;
+  labelPropName: keyof T;
+  imagePropName?: keyof T;
 };
 
 /**
@@ -108,8 +108,8 @@ function AutocompleteSearchFieldComponent<
   errors,
   fullWidth = true,
   multiple,
-  getOptionLabel,
-  getOptionImage,
+  labelPropName,
+  imagePropName,
   ...props
 }: AutocompleteSearchFieldProps<T, Multiple, DisableClearable, ChipComponent>) {
   const { t } = useTranslation();
@@ -207,19 +207,19 @@ function AutocompleteSearchFieldComponent<
           }}
         />
       )}
-      getOptionLabel={getOptionLabel}
+      getOptionLabel={(option) => option[labelPropName]?.toString()}
       renderOption={(props, option) => {
         return (
           <FlexRow component="li" {...props}>
-            {getOptionImage && (
+            {imagePropName !== undefined && (
               <Avatar
-                title={getOptionLabel(option)}
-                url={getOptionImage(option)}
+                title={option[labelPropName]?.toString()}
+                url={option[imagePropName]?.toString()}
                 size="s"
                 sx={{ mr: 1 }}
               />
             )}
-            {getOptionLabel(option)}
+            {option[labelPropName]?.toString()}
           </FlexRow>
         );
       }}
