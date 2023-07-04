@@ -75,7 +75,11 @@ describe('useTranslation hook to format dates and numbers', () => {
         new Date('2023-01-27T15:34:34Z'),
         new Date('2023-02-27T08:26:56Z')
       )
-    ).toBe('27/01/2023, 16:34 – 27/02/2023, 09:26');
+        // replace special spaces for tests because they differ by OS
+        .replaceAll(' ', ' ')
+        .replaceAll(' ', ' ')
+        .replaceAll(',', '')
+    ).toBe('27/01/2023 16:34 – 27/02/2023 09:26');
   });
 
   it('formats relative time', async () => {
