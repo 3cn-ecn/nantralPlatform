@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { UseQueryOptions, useQuery } from 'react-query';
 
 import { getPostList } from '#modules/post/api/getPostList';
+import { PostPreview } from '#modules/post/post.types';
+import { Page } from '#shared/infra/pagination';
 
-export function usePinnedPostsQuery() {
+export function usePinnedPostsQuery(
+  options?: UseQueryOptions<Page<PostPreview>>
+) {
   const [page, setPage] = useState(1);
 
   const { data, ...rest } = useQuery({
@@ -14,6 +18,7 @@ export function usePinnedPostsQuery() {
         page: page,
         pageSize: 3,
       }),
+    ...options,
   });
 
   return {

@@ -1,13 +1,15 @@
 import { ReactNode } from 'react';
 
 import { Close as CloseIcon } from '@mui/icons-material';
-import { DialogTitle, IconButton } from '@mui/material';
+import { DialogTitle, IconButton, Tooltip } from '@mui/material';
+
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { FlexRow } from '../FlexBox/FlexBox';
 
 type ResponsiveDialogHeaderProps = {
   onClose: () => void;
-  children: ReactNode | string;
+  children?: ReactNode | string;
   leftIcon?: ReactNode;
 };
 
@@ -16,6 +18,8 @@ export function ResponsiveDialogHeader({
   leftIcon,
   children,
 }: ResponsiveDialogHeaderProps) {
+  const { t } = useTranslation();
+
   return (
     <DialogTitle
       sx={{
@@ -29,9 +33,11 @@ export function ResponsiveDialogHeader({
         {leftIcon}
         {children}
       </FlexRow>
-      <IconButton onClick={onClose}>
-        <CloseIcon />
-      </IconButton>
+      <Tooltip title={t('modal.closeButton.label')}>
+        <IconButton onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      </Tooltip>
     </DialogTitle>
   );
 }

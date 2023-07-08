@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Alert, Grid, Pagination, Typography } from '@mui/material';
 
 import { PostCard } from '#modules/post/view/PostCard/PostCard';
@@ -8,12 +6,16 @@ import { useLastPostsQuery } from '#pages/Home/hooks/useLastPosts.query';
 import { Section } from '#shared/components/Section/Section';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export function LastPostSection() {
-  const { t } = useTranslation();
-  const { lastPosts, isLoading, isError, numPages, page, setPage } =
-    useLastPostsQuery();
+interface LastPostSectionProps {
+  enabled: boolean;
+}
 
-  if (isLoading) {
+export function LastPostSection({ enabled }: LastPostSectionProps) {
+  const { t } = useTranslation();
+  const { lastPosts, isLoading, isIdle, isError, numPages, page, setPage } =
+    useLastPostsQuery({ enabled });
+
+  if (isLoading || isIdle) {
     return (
       <Section title={t('home.postSection.title')}>
         <Grid container spacing={1}>

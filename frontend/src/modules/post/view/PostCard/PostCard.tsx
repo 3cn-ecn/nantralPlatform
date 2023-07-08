@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import {
   Groups as GroupIcon,
@@ -20,8 +20,6 @@ import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import { PostEditModal } from '../PostEditModal/PostEditModal';
-import { PostModal } from '../PostModal/PostModal';
 import { BadgeIcon } from '../shared/BadgeIcon';
 
 type PostCardProps = {
@@ -29,14 +27,17 @@ type PostCardProps = {
 };
 
 export function PostCard({ post }: PostCardProps) {
-  const [openModal, setOpenModal] = useState(false);
-  const [openEditModal, setOpenEditModal] = useState(false);
   const { formatRelativeTime } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const openModal = () => {
+    searchParams.set('post', post.id.toString());
+    setSearchParams(searchParams);
+  };
 
   return (
     <>
       <StyledCard variant="outlined">
-        <StyledCardActionArea onClick={() => setOpenModal(true)}>
+        <StyledCardActionArea onClick={openModal}>
           <BadgeIconsContainer>
             {post.publicity === 'Mem' && <BadgeIcon Icon={GroupIcon} />}
             {post.pinned && <BadgeIcon Icon={PushPinIcon} />}
@@ -76,32 +77,6 @@ export function PostCard({ post }: PostCardProps) {
           )}
         </StyledCardActionArea>
       </StyledCard>
-      {openModal && (
-        <PostModal
-          postId={post.id}
-          onClose={() => setOpenModal(false)}
-          onEdit={() => {
-            setOpenEditModal(true);
-            setOpenModal(false);
-          }}
-        />
-      )}
-      {openEditModal && (
-        <PostEditModal
-          postId={post.id}
-          onClose={() => {
-            setOpenModal(true);
-            setOpenEditModal(false);
-          }}
-        />
-      )}
-      {/* <FormPost
-        open={openEditModal}
-        onClose={() => setOpenEditModal(false)}
-        post={post}
-        onUpdate={onUpdate}
-        onDelete={onDelete}
-      /> */}
     </>
   );
 }

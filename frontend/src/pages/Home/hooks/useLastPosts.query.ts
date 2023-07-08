@@ -1,25 +1,24 @@
 import { useState } from 'react';
-import { useQuery } from 'react-query';
-
-import { sub as subtractDates } from 'date-fns';
+import { UseQueryOptions, useQuery } from 'react-query';
 
 import { getPostList } from '#modules/post/api/getPostList';
+import { PostPreview } from '#modules/post/post.types';
+import { Page } from '#shared/infra/pagination';
 
-export function useLastPostsQuery() {
+export function useLastPostsQuery(
+  options?: UseQueryOptions<Page<PostPreview>>
+) {
   const [page, setPage] = useState(1);
-
-  const today = new Date();
-  const minDate = subtractDates(today, { days: 15 });
 
   const { data, ...rest } = useQuery({
     queryKey: ['posts', 'last-posts', page],
     queryFn: () =>
       getPostList({
         pinned: false,
-        minDate: minDate,
         page: page,
         pageSize: 3,
       }),
+    ...options,
   });
 
   return {

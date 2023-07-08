@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Alert, Grid, Pagination } from '@mui/material';
 
 import { PostCard } from '#modules/post/view/PostCard/PostCard';
@@ -8,12 +6,16 @@ import { usePinnedPostsQuery } from '#pages/Home/hooks/usePinnedPosts.query';
 import { Section } from '#shared/components/Section/Section';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export function PinnedPostSection() {
-  const { t } = useTranslation();
-  const { pinnedPosts, isLoading, isError, numPages, page, setPage } =
-    usePinnedPostsQuery();
+interface PinnedPostSectionProps {
+  enabled: boolean;
+}
 
-  if (isLoading) {
+export function PinnedPostSection({ enabled = true }: PinnedPostSectionProps) {
+  const { t } = useTranslation();
+  const { pinnedPosts, isLoading, isIdle, isError, numPages, page, setPage } =
+    usePinnedPostsQuery({ enabled });
+
+  if (isLoading || isIdle) {
     return (
       <Section title={t('home.postSection.pinnedTitle')}>
         <Grid container spacing={1}>

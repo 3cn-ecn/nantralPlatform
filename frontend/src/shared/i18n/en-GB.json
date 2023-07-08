@@ -204,6 +204,11 @@
     "show_old": "Show the old groups",
     "title": "Groups"
   },
+  "modal": {
+    "closeButton": {
+      "label": "Close"
+    }
+  },
   "navbar": {
     "academics": "Academics",
     "administration": "Administration",
@@ -259,6 +264,9 @@
       }
     },
     "modal": {
+      "editButton": {
+        "label": "Edit the post"
+      },
       "metadata": {
         "dates": "Published {{createdDuration}} • Updated {{updatedDuration}}"
       }

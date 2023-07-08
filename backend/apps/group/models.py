@@ -6,15 +6,14 @@ from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
 
+from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
-from discord_webhook import DiscordWebhook, DiscordEmbed
 
 from apps.sociallink.models import SocialLink
 from apps.student.models import Student
-from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
 from apps.utils.slug import SlugModel
-
+from apps.utils.upload import PathAndRename
 
 path_and_rename_group = PathAndRename('groups/logo')
 path_and_rename_group_banner = PathAndRename('groups/banniere')

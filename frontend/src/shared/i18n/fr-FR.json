@@ -205,6 +205,11 @@
     "show_old": "Afficher les anciens groupes",
     "title": "Groupes"
   },
+  "modal": {
+    "closeButton": {
+      "label": "Fermer"
+    }
+  },
   "navbar": {
     "academics": "Cours et Formations",
     "administration": "Administration",
@@ -260,6 +265,9 @@
       }
     },
     "modal": {
+      "editButton": {
+        "label": "Modifier le post"
+      },
       "metadata": {
         "dates": "Publié {{createdDuration}} • Mis à jour {{updatedDuration}}"
       }
