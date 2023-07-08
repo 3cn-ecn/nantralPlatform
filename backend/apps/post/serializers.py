@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from rest_framework import serializers
 
 from apps.group.serializers import GroupPreviewSerializer
@@ -40,5 +42,5 @@ class PostWriteSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if (not attrs["group"].is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
-                "You have to be admin to add or update a post")
+                _("You have to be admin to add or update a post"))
         return super().validate(attrs)

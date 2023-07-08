@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import {
   Event as EventIcon,
@@ -6,23 +7,20 @@ import {
 } from '@mui/icons-material';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 
+import { CreatePostModal } from '#modules/post/view/CreatePostModal/CreatePostModal';
 import EditEventModal from '#shared/components/FormEvent/FormEvent';
-import { FormPost } from '#shared/components/FormPost/FormPost';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 type CreateNewButtonProps = {
   onEventCreated: () => void;
-  onPostCreated: () => void;
 };
 
-export function CreateNewButton({
-  onEventCreated,
-  onPostCreated,
-}: CreateNewButtonProps) {
+export function CreateNewButton({ onEventCreated }: CreateNewButtonProps) {
   const [postFormOpen, setPostFormOpen] = useState<boolean>(false);
   const [eventFormOpen, setEventFormOpen] = useState<boolean>(false);
 
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const actions = [
     {
@@ -54,12 +52,16 @@ export function CreateNewButton({
           />
         ))}
       </SpeedDial>
-      <FormPost
-        open={postFormOpen}
-        onClose={() => setPostFormOpen(false)}
-        mode="create"
-        onUpdate={onPostCreated}
-      />
+      {postFormOpen && (
+        <CreatePostModal
+          onClose={() => setPostFormOpen(false)}
+          onCreated={(postId) => {
+            searchParams.set('post', postId.toString());
+            setSearchParams(searchParams);
+            setPostFormOpen(false);
+          }}
+        />
+      )}
       <EditEventModal
         open={eventFormOpen}
         closeModal={() => setEventFormOpen(false)}

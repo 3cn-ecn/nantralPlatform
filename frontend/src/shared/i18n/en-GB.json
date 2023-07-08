@@ -230,6 +230,9 @@
   },
   "post": {
     "confirmDelete": "Are you sure you want to delete the post (this action is irreversible).",
+    "createModal": {
+      "title": "Create new post"
+    },
     "edit": {
       "title": "Edit the post"
     },

@@ -76,9 +76,6 @@ export default function HomePage() {
           onEventCreated={() => {
             queryClient.invalidateQueries('posts');
           }}
-          onPostCreated={() => {
-            queryClient.invalidateQueries('events');
-          }}
         />
         <PinnedPostSection enabled={!openedPostId} />
         <LastPostSection enabled={!openedPostId} />

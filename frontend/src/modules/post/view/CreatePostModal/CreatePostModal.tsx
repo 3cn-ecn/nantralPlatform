@@ -4,11 +4,12 @@ import { useMutation, useQueryClient } from 'react-query';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 
-import { UpdatePostVariables, updatePost } from '#modules/post/api/updatePost';
+import { createPost } from '#modules/post/api/createPost';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
+  ResponsiveDialog,
   ResponsiveDialogContent,
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
@@ -19,59 +20,50 @@ import { useObjectState } from '#shared/utils/useObjectState';
 
 import { PostFormFields } from '../shared/PostForm';
 
-type EditPostModalContentProps = {
-  post: Post;
+type CreatePostModalProps = {
   onClose: () => void;
-  onFinish: () => void;
+  onCreated: (postId: number) => void;
 };
 
-export function EditPostModalContent({
-  post,
-  onClose,
-  onFinish,
-}: EditPostModalContentProps) {
+export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
   // the values currently in our form
   const [formValues, updateFormValues] = useObjectState<PostForm>({
-    title: post.title,
-    description: post.description,
+    title: null,
+    description: null,
     image: null,
-    group: post.group.id,
-    pinned: post.pinned,
-    publicity: post.publicity,
+    group: null,
+    pinned: false,
+    publicity: 'Pub',
   });
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
-    void,
+    Post,
     ApiError<PostFormDTO>,
-    UpdatePostVariables
-  >(updatePost);
+    PostForm
+  >(createPost);
 
   // send the form to the server
   const onSubmit = (event: FormEvent, values: PostForm) => {
     // prevent the default function of <form>
     event.preventDefault();
     // call the updatePost function
-    mutate(
-      { id: post.id, data: values },
-      {
-        onSuccess: () => {
-          // if success, reset the post data in all queries
-          queryClient.invalidateQueries('posts');
-          queryClient.invalidateQueries(['post', { id: post.id }]);
-          // close the modal
-          onFinish();
-        },
-      }
-    );
+    mutate(values, {
+      onSuccess: (data) => {
+        // if success, reset the post data in all queries
+        queryClient.invalidateQueries('posts');
+        // close the modal
+        onCreated(data.id);
+      },
+    });
   };
 
   return (
-    <>
+    <ResponsiveDialog onClose={onClose}>
       <ResponsiveDialogHeader
         onClose={onClose}
         leftIcon={
@@ -80,7 +72,7 @@ export function EditPostModalContent({
           </Avatar>
         }
       >
-        {t('post.editModal.title')}
+        {t('post.createModal.title')}
       </ResponsiveDialogHeader>
       <form onSubmit={(e) => onSubmit(e, formValues)}>
         <ResponsiveDialogContent>
@@ -89,11 +81,10 @@ export function EditPostModalContent({
             error={error}
             formValues={formValues}
             updateFormValues={updateFormValues}
-            prevData={post}
           />
         </ResponsiveDialogContent>
         <ResponsiveDialogFooter>
-          <Button variant="text" onClick={() => onFinish()}>
+          <Button variant="text" onClick={() => onClose()}>
             Annuler
           </Button>
           <LoadingButton loading={isLoading} type="submit" variant="contained">
@@ -101,6 +92,6 @@ export function EditPostModalContent({
           </LoadingButton>
         </ResponsiveDialogFooter>
       </form>
-    </>
+    </ResponsiveDialog>
   );
 }

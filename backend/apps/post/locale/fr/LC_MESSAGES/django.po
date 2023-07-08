@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 15:11+0200\n"
+"POT-Creation-Date: 2023-07-08 10:37+0200\n"
 "PO-Revision-Date: 2023-04-10 15:24+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -45,3 +45,7 @@ msgstr "Votre bannière sera affichée au format 1320x492 pixels."
 #: models.py:123
 msgid "Pin publication"
 msgstr "Épingler la publication"
+
+#: serializers.py:45
+msgid "You have to be admin to add or update a post"
+msgstr "Vous devez être admin du groupe pour créer ou modifier un post"
