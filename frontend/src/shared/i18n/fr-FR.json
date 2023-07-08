@@ -19,9 +19,6 @@
     },
     "like": "J'aime",
     "seeAll": "Voir tous",
-    "seePage": "Voir la page",
-    "showLess": "Afficher moins",
-    "showMore": "Afficher plus",
     "yes": "oui"
   },
   "calendar": {
@@ -39,7 +36,6 @@
     "noClub": "Vous n'avez rejoint aucun groupe pour le moment"
   },
   "date_picker": {
-    "language": "fr"
   },
   "event": {
     "action_menu": {
@@ -50,19 +46,16 @@
     },
     "adminWarning": "Vous devez être admin de votre club pour créer un évènement",
     "endInscription": "L'inscription est ouverte jusqu'au",
-    "endTime": "Se termine le :",
     "error": "Erreur lors du chargement des évènements",
     "event": "Évènement",
     "eventIsFull": "Cet évènement est complet",
     "inscriptionsBeginAt": "Les inscriptions ouvrent le",
-    "membersOnly": "Membres uniquement",
     "no_event": "Aucun évènement",
     "participants": "Participants",
     "participantsList": "Liste des participants",
     "shotgunDatails": "Détails du shotgun"
   },
   "filterbar": {
-    "button_filter": "Filtrer",
     "date": "Date",
     "favorite": "Favoris",
     "from": "À partir du",
@@ -74,23 +67,17 @@
     "validate_button": "Valider"
   },
   "form": {
-    "PostTitle": "Titre de l'annonce",
     "autocomplete": {
       "clear": "Effacer",
       "noOptions": "Aucun résultat",
       "open": "Ouvrir"
     },
     "cancel": "Annuler",
-    "createAPost": "Créer un post",
     "createEvent": "Créer l'évènement",
-    "createPost": "Créer le post",
-    "delete": "Supprimer",
     "deleteEvent": "Supprimer l'évènement",
     "deleteEventConfirmation": "Etes vous sûr de vouloir supprimer cet évènement ? Cette action est irréversible.",
-    "deletePost": "Supprimer le post",
     "description": "Description",
     "editEvent": "Modifier l'évènement",
-    "editPost": "Modifier le post",
     "endDatetime": "Date et heure de fin",
     "errors": {
       "title": "Le formulaire contient une ou plusieurs erreurs"
@@ -107,7 +94,6 @@
       "deleteButton": {
         "label": "Supprimer le fichier"
       },
-      "deleteFile": "Supprimer le fichier",
       "error": {
         "tooHeavy": "Erreur : le fichier dépasse la limite de {{maxSize}}"
       },
@@ -123,10 +109,8 @@
     "imageDescription": "Une image, un poster, une affiche",
     "membersOnly": "Membres du club uniquement",
     "noFile": "Aucun fichier",
-    "pinned": "Annonce épinglée",
     "place": "Lieu",
     "public": "Public",
-    "publicationDate": "Date de publication",
     "publicity": "Visibilité",
     "saving": "Sauvegarde...",
     "startDatetime": "Date et Heure de début"
@@ -134,14 +118,12 @@
   "home": {
     "all": "Tous",
     "myClubs": "Mes groupes",
-    "myEvents": "Mes événements",
     "postSection": {
       "error": "Erreur : les annonces n'ont pas pu êre chargées 😢",
       "isEmpty": "Aucun post ces derniers jours... 🥺 Créez-en un !",
       "pinnedTitle": "À la une",
       "title": "Annonces"
     },
-    "seeMore": "voir plus",
     "thisWeek": "Cette semaine",
     "upcomingEvents": "Évènements à venir",
     "welcomeTo": "Bienvenue sur"
@@ -201,7 +183,6 @@
     "title": "Mentions Légales"
   },
   "membership_student": {
-    "mask_old": "Masquer les anciens groupes",
     "show_old": "Afficher les anciens groupes",
     "title": "Groupes"
   },
@@ -230,17 +211,14 @@
     "unread": "Non Lu"
   },
   "post": {
-    "confirmDelete": "Êtes vous sûr de vouloir supprimer le post (cette action est irréversible).",
     "createModal": {
       "title": "Créer un post"
     },
     "edit": {
-      "title": "Modifier le post"
     },
     "editModal": {
       "title": "Modifier le post"
     },
-    "edited": "édité",
     "form": {
       "description": {
         "label": "Description"
@@ -275,10 +253,7 @@
         "dates": "Publié {{createdDuration}} • Mis à jour {{updatedDuration}}"
       }
     },
-    "noPost": "Il n'y a pas de posts récents",
-    "post": "Post",
-    "published": "publié",
-    "updated": "mis à jour {{dateRange}}"
+    "post": "Post"
   },
   "profile": {
     "doc": "Doctorant",
@@ -300,12 +275,6 @@
     "type": "Type"
   },
   "time": {
-    "days": "jours",
-    "hours": "heures",
-    "minutes": "minutes",
-    "months": "mois",
-    "seconds": "secondes",
-    "years": "années"
   },
   "user_menu": {
     "admin": "Interface Admin",
@@ -313,8 +282,6 @@
     "bug": "Suggestion / Bug",
     "dark": "Thème sombre",
     "doc": "Documentation",
-    "english": "Anglais",
-    "french": "Français",
     "language": "Langue",
     "legal": "Mentions Légales",
     "light": "Thème clair",
