@@ -6,11 +6,9 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
-from rest_framework import (decorators, exceptions, filters, pagination,
-                            permissions, response, serializers, status,
-                            viewsets)
+from rest_framework import (decorators, exceptions, filters, permissions,
+                            response, serializers, status, viewsets)
 
-from apps.utils.api_mixins import SearchViewMixin
 from apps.utils.to_null_bool import to_null_bool
 
 from .models import Group, GroupType, Membership
@@ -45,7 +43,6 @@ class GroupPermission(permissions.BasePermission):
 
 
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
-    pagination_class = pagination.LimitOffsetPagination
     serializer_class = GroupTypeSerializer
     lookup_field = 'slug'
     lookup_url_kwarg = 'slug'
@@ -63,6 +60,10 @@ class GroupViewSet(viewsets.ModelViewSet):
         Filter by groups where user is member
     is_admin: bool
         Filter by groups where user is an admin member
+    page: int
+        The page to get
+    pageSize: int
+        The max number of items to return per page
 
     Actions
     -------
@@ -98,34 +99,47 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self) -> QuerySet[Group]:
         user = self.request.user
-        group_type = GroupType.objects.filter(
-            slug=self.request.query_params.get('type')).first()
-        is_member = self.request.query_params.get('is_member', False)
-        is_admin = self.request.query_params.get('is_admin', False)
-        return (Group.objects
-                # filter by group_type
-                .filter(Q(group_type=group_type) if group_type else Q())
-                # remove the sub-groups to keep only parent groups
-                .filter(Q(parent=None)
-                        | Q(parent__in=F('group_type__extra_parents')))
-                # hide archived groups
-                .filter(archived=False)
-                # filter by groups where current user is member
-                .filter(Q(members=user.student) if is_member else Q())
-                # filter by groups where current user is admin
-                .filter(Q(membership_set__student=user.student,
-                          membership_set__admin=True) if is_admin else Q())
-                # hide private groups unless user is member
-                # and hide non-public group if user is not authenticated
-                .filter(Q(private=False) | Q(members=user.student)
-                        if user.is_authenticated
-                        else Q(public=True))
-                # hide groups without active members (ie end_date > today)
-                .annotate(num_active_members=Count(
-                    'membership_set',
-                    filter=Q(membership_set__end_date__gte=timezone.now())))
-                .filter(Q(num_active_members__gt=0)
-                        | Q(group_type__hide_no_active_members=False))
+        group_type = (GroupType
+                      .objects
+                      .filter(slug=self.query_params.get('type'))
+                      .first())
+        is_member = self.query_params.get('is_member', False)
+        is_admin = self.query_params.get('is_admin', False)
+
+        queryset = (
+            Group.objects
+            # remove the sub-groups to keep only parent groups
+            .filter(Q(parent=None)
+                    | Q(parent__in=F('group_type__extra_parents')))
+            # hide archived groups
+            .filter(archived=False)
+            # hide groups without active members (ie end_date > today)
+            .annotate(num_active_members=Count(
+                'membership_set',
+                filter=Q(membership_set__end_date__gte=timezone.now())
+            ))
+            .filter(Q(num_active_members__gt=0)
+                    | Q(group_type__hide_no_active_members=False))
+        )
+        # filter by group_type
+        if group_type:
+            queryset = queryset.filter(group_type=group_type)
+        # filter by groups where current user is member
+        if is_member:
+            queryset = queryset.filter(members=user.student)
+        # filter by groups where current user is admin
+        if is_admin:
+            queryset = queryset.filter(membership_set__student=user.student,
+                                       membership_set__admin=True)
+        # hide private groups unless user is member
+        if user.is_authenticated:
+            queryset = queryset.filter(
+                Q(private=False) | Q(members=user.student))
+        # and hide non-public group if user is not authenticated
+        else:
+            queryset = queryset.filter(public=True)
+
+        return (queryset
                 # prefetch type and parent group for better performances
                 .prefetch_related('group_type', 'parent')
                 # order by category, order and then name
@@ -148,7 +162,7 @@ class MembershipPermission(permissions.BasePermission):
                 or obj.group.is_admin(request.user))
 
 
-class MembershipViewSet(SearchViewMixin, viewsets.ModelViewSet):
+class MembershipViewSet(viewsets.ModelViewSet):
     """An API viewset to get memberships of a group. This viewset ignore all
     logic related with admin requests.
 
@@ -162,10 +176,10 @@ class MembershipViewSet(SearchViewMixin, viewsets.ModelViewSet):
         The date from which we want to filter the member list
     to: Date
         The date to which we want to filter the member list
-    limit: int
-        The max number of items to return
-    offset: int
-        The index of the first item to return
+    page: int
+        The page to get
+    pageSize: int
+        The max number of items to return per page
 
     Actions
     -------
@@ -178,18 +192,22 @@ class MembershipViewSet(SearchViewMixin, viewsets.ModelViewSet):
     """
 
     permission_classes = [permissions.IsAuthenticated, MembershipPermission]
-    pagination_class = pagination.LimitOffsetPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['student__user__first_name', 'student__user__last_name',
                      'group__name', 'group__short_name', 'summary']
+    ordering_fields = []
+    ordering = ['-priority', 'student__user__first_name',
+                'student__user__last_name']
+
+    @property
+    def query_params(self) -> OrderedDict[str, str]:
+        return self.request.query_params
 
     def get_serializer_class(self) -> serializers.ModelSerializer:
         if self.action == 'create':
             return NewMembershipSerializer
         else:
             return MembershipSerializer
-
-    def get_query_param(self, param: str, default=None) -> any:
-        return self.request.query_params.get(param, default)
 
     def get_queryset(self) -> QuerySet[Membership]:
         """
@@ -200,32 +218,32 @@ class MembershipViewSet(SearchViewMixin, viewsets.ModelViewSet):
             return self.queryset
         user = self.request.user
         # parse params
-        from_date = parse_datetime(self.get_query_param('from', ''))
-        to_date = parse_datetime(self.get_query_param('to', ''))
-        group_slug = self.get_query_param('group')
-        student_id = self.get_query_param('student')
+        from_date = parse_datetime(self.query_params.get('from', ''))
+        to_date = parse_datetime(self.query_params.get('to', ''))
+        group_slug = self.query_params.get('group')
+        student_id = self.query_params.get('student')
         # make queryset
         self.queryset = (
             Membership.objects
-            # filter by memberships you are allowed to see
-            .filter(
+
+        )
+        # filter by memberships you are allowed to see
+        if not user.is_superuser:
+            self.queryset = self.queryset.filter(
                 Q(group__private=False)
                 | Q(group__members=user.student)
-                if not user.is_superuser else Q())
-            # filter by params
-            .filter(
-                Q(group__slug=group_slug) if group_slug else Q(),
-                Q(student__id=student_id) if student_id else Q(),
-                (Q(end_date__gte=from_date) | Q(end_date__isnull=True))
-                if from_date else Q(),
-                (Q(begin_date__lt=to_date) | Q(begin_date__isnull=True))
-                if to_date else Q())
-            # order fields
-            .order_by('-priority',
-                      'student__user__first_name',
-                      'student__user__last_name')
-            .prefetch_related('student__user')
-            .distinct())
+            )
+        # filter by params
+        if group_slug:
+            self.queryset = self.queryset.filter(group__slug=group_slug)
+        if student_id:
+            self.queryset = self.queryset.filter(student__id=student_id)
+        if from_date:
+            self.queryset = self.queryset.filter(
+                Q(end_date__gte=from_date) | Q(end_date__isnull=True))
+        if to_date:
+            self.queryset = self.queryset.filter(
+                Q(begin_date__lt=to_date) | Q(begin_date__isnull=True))
         return self.queryset
 
     @decorators.action(detail=False, methods=['post'])
@@ -249,7 +267,7 @@ class MembershipViewSet(SearchViewMixin, viewsets.ModelViewSet):
             id=request.data.get('lower', None)).first()
         # check that memberships are from same group
         if (lower and lower.group != member.group
-                or self.get_query_param('group') != member.group.slug):
+                or self.query_params.get('group') != member.group.slug):
             raise exceptions.ValidationError(_(
                 "All memberships objects must be from the same group."))
         # check user is admin

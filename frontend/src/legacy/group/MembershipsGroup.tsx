@@ -22,8 +22,8 @@ interface QueryParams {
   group: string;
   from?: string;
   to?: string;
-  limit?: number;
-  offset?: number;
+  page?: number;
+  pageSize?: number;
 }
 
 /**
@@ -46,7 +46,7 @@ function MembershipsGroup(): JSX.Element {
   // urls and filters passed as query parameters
   const [prevUrl, setPrevUrl] = useState('');
   const [nextUrl, setNextUrl] = useState('');
-  const [filters, _] = useState<QueryParams>({
+  const [filters] = useState<QueryParams>({
     group: groupSlug,
     from: new Date().toISOString(),
   });

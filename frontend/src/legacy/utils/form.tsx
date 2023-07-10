@@ -297,7 +297,7 @@ function FormGroup(props: {
                 field={field}
                 value={values[field.name]}
                 error={error}
-                handleChange={() => handleChange}
+                handleChange={handleChange}
                 noFullWidth={noFullWidth}
               />
             );

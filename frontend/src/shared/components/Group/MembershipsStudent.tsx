@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   NavigateBefore as NavigateBeforeIcon,
@@ -18,14 +18,14 @@ interface QueryParams {
   student: string;
   from?: string;
   to?: string;
-  limit?: number;
-  offset?: number;
+  page?: number;
+  pageSize?: number;
 }
 
 /**
  * Main table component for editing members in the admin page of groups.
  */
-export function MembershipsStudent(props: { Id: int }): JSX.Element {
+export function MembershipsStudent(props: { Id: number }): JSX.Element {
   // data
   const { Id } = props;
   const [student, setStudent] = useState<Student | null>(null);
@@ -49,6 +49,29 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
     from: new Date().toISOString(),
   });
 
+  /** Get the list of members */
+  const getMemberships = useCallback(
+    async function getMemberships(
+      url = '/api/group/membership/',
+      query_params: Partial<QueryParams> = filters
+    ): Promise<void> {
+      return axios
+        .get<Page<Membership>>(url, { params: query_params })
+        .then((res) => res.data)
+        .then((data) => {
+          setMembers(
+            data.results.map((item) => {
+              item.dragId = `item-${item.id}`; // add a dragId for the drag-and-drop
+              return item;
+            })
+          );
+          setPrevUrl(data.previous);
+          setNextUrl(data.next);
+        });
+    },
+    [filters]
+  );
+
   useEffect(() => {
     // wait for all request
     Promise.all([
@@ -61,27 +84,7 @@ export function MembershipsStudent(props: { Id: int }): JSX.Element {
     ])
       .then(() => setLoadState('success'))
       .catch(() => setLoadState('fail'));
-  }, []);
-
-  /** Get the list of members */
-  async function getMemberships(
-    url = '/api/group/membership/',
-    query_params: Partial<QueryParams> = filters
-  ): Promise<void> {
-    return axios
-      .get<Page<Membership>>(url, { params: query_params })
-      .then((res) => res.data)
-      .then((data) => {
-        setMembers(
-          data.results.map((item) => {
-            item.dragId = `item-${item.id}`; // add a dragId for the drag-and-drop
-            return item;
-          })
-        );
-        setPrevUrl(data.previous);
-        setNextUrl(data.next);
-      });
-  }
+  }, [getMemberships]);
 
   if (loadState === 'load' || !student) return <p>Chargement en cours... ⏳</p>;
 

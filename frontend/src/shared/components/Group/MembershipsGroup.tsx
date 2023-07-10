@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { render } from 'react-dom';
 
 import {
@@ -22,14 +22,14 @@ interface QueryParams {
   group: string;
   from?: string;
   to?: string;
-  limit?: number;
-  offset?: number;
+  page?: number;
+  pageSize?: number;
 }
 
 /**
  * Main table component for editing members in the admin page of groups.
  */
-function MembershipsGroup(props: {}): JSX.Element {
+function MembershipsGroup(): JSX.Element {
   // data
   const [group, setGroup] = useState<Group | null>(null);
   const [student, setStudent] = useState<Student | null>(null);
@@ -51,6 +51,29 @@ function MembershipsGroup(props: {}): JSX.Element {
     from: new Date().toISOString(),
   });
 
+  /** Get the list of members */
+  const getMemberships = useCallback(
+    async function getMemberships(
+      url = '/api/group/membership/',
+      queryParams: Partial<QueryParams> = filters
+    ): Promise<void> {
+      return axios
+        .get<Page<Membership>>(url, { params: queryParams })
+        .then((res) => res.data)
+        .then((data) => {
+          setMembers(
+            data.results.map((item) => {
+              item.dragId = `item-${item.id}`; // add a dragId for the drag-and-drop
+              return item;
+            })
+          );
+          setPrevUrl(data.previous);
+          setNextUrl(data.next);
+        });
+    },
+    [filters]
+  );
+
   useEffect(() => {
     // wait for all request
     Promise.all([
@@ -67,27 +90,7 @@ function MembershipsGroup(props: {}): JSX.Element {
     ])
       .then(() => setLoadState('success'))
       .catch(() => setLoadState('fail'));
-  }, []);
-
-  /** Get the list of members */
-  async function getMemberships(
-    url = '/api/group/membership/',
-    queryParams: Partial<QueryParams> = filters
-  ): Promise<void> {
-    return axios
-      .get<Page<Membership>>(url, { params: queryParams })
-      .then((res) => res.data)
-      .then((data) => {
-        setMembers(
-          data.results.map((item) => {
-            item.dragId = `item-${item.id}`; // add a dragId for the drag-and-drop
-            return item;
-          })
-        );
-        setPrevUrl(data.previous);
-        setNextUrl(data.next);
-      });
-  }
+  }, [getMemberships]);
 
   /**
    * Reorder memberships

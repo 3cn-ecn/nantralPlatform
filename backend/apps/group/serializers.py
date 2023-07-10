@@ -87,8 +87,8 @@ class GroupWriteSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if not self.instance:
-            data['group_type'] = GroupType.objects.get(
-                slug=self.context['request'].query_params.get('type', None))
+            group_type = self.context['request'].query_params.get('type')
+            data['group_type'] = GroupType.objects.get(slug=group_type)
         return super().validate(data)
 
 
