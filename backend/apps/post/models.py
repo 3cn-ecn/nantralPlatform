@@ -82,7 +82,7 @@ class AbstractPublication(models.Model, SlugModel):
         return f"{self.title} ({self.group.short_name})"
 
     def can_view(self, user: User) -> bool:
-        if self.publicity == VISIBILITY[0][0]:
+        if self.publicity == 'Pub':
             return True
         return self.group.is_member(user)
 

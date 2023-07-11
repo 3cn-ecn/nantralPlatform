@@ -326,7 +326,7 @@ class Group(models.Model, SlugModel):
         return (user.is_superuser
                 or self.is_member(user)
                 and self.membership_set.get(student=user.student).admin
-                or self.parent and self.parent.is_admin(user))
+                or self.parent is not None and self.parent.is_admin(user))
 
     def is_member(self, user: User) -> bool:
         """Check if a user is a member for this group.

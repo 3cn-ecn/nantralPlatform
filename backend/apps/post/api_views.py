@@ -1,6 +1,5 @@
-from collections import OrderedDict
-
 from django.db.models import Q, QuerySet
+from django.http.request import QueryDict
 
 from rest_framework import filters, permissions, request, viewsets
 
@@ -56,7 +55,7 @@ class PostViewSet(viewsets.ModelViewSet):
     ordering = ["-updated_at"]
 
     @property
-    def query_params(self) -> OrderedDict[str, str]:
+    def query_params(self) -> QueryDict:
         return self.request.query_params
 
     def get_serializer_class(self):

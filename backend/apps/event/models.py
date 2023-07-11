@@ -1,7 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.post.models import AbstractPublication
 from apps.student.models import Student
@@ -18,15 +17,14 @@ class Event(AbstractPublication):
         help_text=_("Enter date in format DD/MM/YYYY HH:MM"))
     end_date = models.DateTimeField(
         verbose_name=_("End date"),
-        help_text=_("If empty, default to one hour after the start date."),
-        blank=True)
+        help_text=_("Enter date in format DD/MM/YYYY HH:MM"))
     location = models.CharField(
-        verbose_name=_("Location"), max_length=200, blank=True, null=True)
+        verbose_name=_("Location"), max_length=200, blank=True)
     participants = models.ManyToManyField(
         to=Student,
         verbose_name=_("Participants"),
         blank=True,
-        related_name='participate_events')
+        related_name='participating_events')
     bookmarks = models.ManyToManyField(
         to=Student,
         verbose_name=_("Bookmarks"),
@@ -55,14 +53,6 @@ class Event(AbstractPublication):
     @property
     def number_of_participants(self) -> int:
         return self.participants.all().count()
-
-    def is_participating(self, user: User) -> bool:
-        return (user.is_authenticated
-                and self.participants.contains(user.student))
-
-    def is_bookmarked(self, user: User) -> bool:
-        return (user.is_authenticated
-                and self.bookmarks.contains(user.student))
 
     def get_absolute_url(self) -> str:
         return f'/event/{self.id}'

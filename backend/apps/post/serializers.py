@@ -39,8 +39,8 @@ class PostWriteSerializer(serializers.ModelSerializer):
         exclude = ['notification', 'created_at',
                    'created_by', 'updated_at', 'updated_by']
 
-    def validate(self, attrs):
-        if (not attrs["group"].is_admin(self.context['request'].user)):
+    def validate_group(self, value):
+        if (not value.is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
                 _("You have to be admin to add or update a post"))
-        return super().validate(attrs)
+        return value

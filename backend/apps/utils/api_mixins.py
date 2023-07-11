@@ -11,7 +11,7 @@ class SearchViewMixin:
 
     search_fields = []
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['GET'])
     def search(self, request: Request, *args, **kwargs):
         """
         A view to search through elements of the table, filtered by the

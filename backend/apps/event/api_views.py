@@ -1,49 +1,34 @@
-from django.db.models import Q, Count
-from django.utils import timezone
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import (
-    pagination,
-    permissions,
-    viewsets)
+from django.db.models import Q
+from django.http.request import QueryDict
+from django.utils import formats, timezone
+from django.utils.translation import gettext as _
 
-from apps.post.models import VISIBILITY
+from rest_framework import exceptions, filters, permissions, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from apps.student.serializers import SimpleStudentSerializer
+from apps.utils.to_null_bool import to_null_bool
+
 from .models import Event
-from apps.student.models import Student
-from apps.group.models import Group
-from .serializers import (
-    EventSerializer, EventParticipatingSerializer, WriteEventSerializer)
-from apps.student.serializers import StudentSerializer, SimpleStudentSerializer
+from .serializers import (EventPreviewSerializer, EventSerializer,
+                          EventWriteSerializer)
+
+
+def format_date(date) -> str:
+    return formats.date_format(date, 'DATETIME_FORMAT')
 
 
 class EventPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj: Event):
-        if request.method in permissions.SAFE_METHODS:
-            return obj.can_view(request.user)
-        else:
+        if view.action == 'participants':
             return obj.group.is_admin(request.user)
-
-
-ORDERS: list[str] = ['participants_count',
-                     'form_url',
-                     'publicity',
-                     'start_date',
-                     'end_date',
-                     'start_registration',
-                     'end_registration',
-                     'slug',
-                     'group_name',
-                     'max_participant',
-                     'location',
-                     'title']
-
-DATE_FIELDS: list[str] = ['start_date', 'end_date',
-                          'start_registration', 'end_registration']
-
-
-TRUE_ARGUMENTS: list[str] = ['true', 'True', '1']
+        if view.action in ('participate', 'bookmark'):
+            return obj.can_view(request.user)
+        if request.method not in permissions.SAFE_METHODS:
+            return obj.group.is_admin(request.user)
+        return obj.can_view(request.user)
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -51,36 +36,26 @@ class EventViewSet(viewsets.ModelViewSet):
 
     Query Parameters
     ----------------
-    - limit : int = 50 ->
-    maximum number of results
-    - order_by : list[str] = start_date ->
-    list of attributes to order the result in the form "order=a,b,c".
-    In ascending order by defaut. Add "-" in front of row name without
-    spaces to sort by descending order
-    - group : list[str] = None ->
-    the slug list of organizers of the form "organizer=a,b,c"
-    - from_date : ISO or UTC datestring = None ->
-    filter event whose begin date is greater or equal to from_date
-    - to_date : ISO or UTC datestring = None ->
-    filter event whose begin date is less or equal to to_date
-    - min_participants : int = None ->
-    lower bound for participants count
-    - max_participants : int = None ->
-    upper bound for participants count
-    - is_member : bool = None ->
-    whether user is member of the organizer group
-    - is_favorite : bool = None ->
-    filter your favorite event
-    - is_shotgun : bool = None ->
-    filter shotgun events
-    - is_form : bool = None ->
-    filter events containing a form link
-    - is_participating : bool = None ->
-    filter events current user is participating
-    - publicity : 'Mem' | 'Pub' = None ->
-    visibility of the event
-    - registration : 'open' | 'closed' = None ->
-    whether registration is open
+    - ordering : list[str] = start_date
+        list of attributes to order the result in the form "order=a,b,c".
+        In ascending order by default. Add "-" in front of row name without
+        spaces to sort by descending order
+    - group : list[str] = None
+        the slug list of organizers of the form "organizer=a,b,c"
+    - from_date : ISO or UTC date string = None
+        filter event whose begin date is greater or equal to from_date
+    - to_date : ISO or UTC date string = None
+        filter event whose begin date is less or equal to to_date
+    - is_member : bool = False
+        whether user is member of the organizer group
+    - is_bookmarked : bool = False
+        filter your favorite event
+    - is_shotgun : bool = False
+        filter shotgun events
+    - is_participating : bool = False
+        filter events current user is participating
+    - registration_open : bool = None
+        whether registration is open or closed
 
     Actions
     -------
@@ -91,210 +66,127 @@ class EventViewSet(viewsets.ModelViewSet):
     - DELETE .../event/<id>/ : delete an event
     """
     permission_classes = [permissions.IsAuthenticated, EventPermission]
-    serializer_class = EventSerializer
-    pagination_class = pagination.LimitOffsetPagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'group__name', 'group__short_name']
+    ordering_fields = [
+        'created_at',
+        'end_date',
+        'end_registration'
+        'group__name',
+        'group__short_name',
+        'participants_count',
+        'start_date',
+        'start_registration',
+        'title',
+        'updated_at',
+    ]
+    ordering = ["start_date"]
+
+    @property
+    def query_params(self) -> QueryDict:
+        return self.request.query_params
 
     def get_serializer_class(self):
-        if self.request.method in ['PUT', 'POST']:
-            return WriteEventSerializer
-        else:
+        preview = to_null_bool(self.query_params.get('preview'))
+        if self.request.method in ["POST", "PUT", "PATCH"]:
+            return EventWriteSerializer
+        if preview is True:
+            return EventPreviewSerializer
+        if preview is False:
             return EventSerializer
+        if self.detail:
+            return EventSerializer
+        return EventPreviewSerializer
 
     def get_queryset(self) -> list[Event]:
-        if not hasattr(self.request.user, 'student'):
-            return []
-        # constant
         today = timezone.now()
+        user = self.request.user
+
         # query params
-        order_by: list[str] = self.request.query_params.get(
-            'order_by', 'start_date').split(',')
-        groups: str = self.request.query_params.get('group')
-        organizers_slug: list[str] = groups.split(',') if groups else []
-        is_member: bool = self.request.query_params.get(
-            'is_member') in TRUE_ARGUMENTS
-        is_shotgun: bool = self.request.query_params.get(
-            'is_shotgun') in TRUE_ARGUMENTS
-        registration: str = self.request.query_params.get(
-            'registration')
-        is_form: bool = self.request.query_params.get(
-            'is_form') in TRUE_ARGUMENTS
-        is_favorite: bool = self.request.query_params.get(
-            'is_favorite') in TRUE_ARGUMENTS
-        is_participating: bool = self.request.query_params.get(
-            'is_participating') in TRUE_ARGUMENTS
-        from_date: str = self.request.query_params.get(
-            'from_date')
-        to_date: str = self.request.query_params.get(
-            'to_date')
-        min_participants: int = self.request.query_params.get(
-            'min_participants')
-        max_participants: int = self.request.query_params.get(
-            'max_participants')
-        visibility: str = self.request.query_params.get('publicity')
-        # query
-        order_by = filter(lambda ord: ord in ORDERS or (
-            ord[0] == '-' and ord[1:]) in ORDERS, order_by)
-        student: Student = self.request.user.student
-        my_groups = Group.objects.filter(members=student)
+        groups_params = self.query_params.getlist('group', [])
+        groups = ','.join(groups_params).split(',') if groups_params else []
+        is_member = to_null_bool(self.query_params.get('is_member'), False)
+        is_shotgun = to_null_bool(self.query_params.get('is_shotgun'), False)
+        is_bookmarked = to_null_bool(
+            self.query_params.get('is_bookmarked'), False)
+        is_participating = self.query_params.get('is_participating', False)
+        registration_open = to_null_bool(self.query_params.get('registration'))
+        from_date = self.query_params.get('from_date')
+        to_date = self.query_params.get('to_date')
 
         # filtering
-        events = (
-            Event.objects
-            .annotate(member=Q(group__in=my_groups))
-            .filter(
-                Q(member=True) if is_member else Q())
-            .filter(~Q(max_participant=None) if is_shotgun else Q())
-            .filter(Q(participants=student)
-                    if is_participating else Q())
-            .filter(Q(bookmarks=student) if is_favorite else Q())
-            .filter(Q(group__slug__in=organizers_slug)
-                    if len(organizers_slug) > 0 else Q())
-            .filter(~Q(form_url__isnull=True) if is_form else Q())
-            .filter(Q(end_date__gte=from_date)
-                    if from_date else Q())
-            .filter(Q(start_date__lte=to_date) if to_date else Q())
-            .annotate(participants_count=Count('participants'))
-            .filter(Q(participants_count__gte=min_participants)
-                    if min_participants else Q())
-            .filter(Q(participants_count__lte=max_participants)
-                    if max_participants else Q())
-            .annotate(registration_open=(
-                (Q(start_registration__lte=today)
-                 | Q(start_registration__isnull=True))
-                & (Q(end_registration__gte=today)
-                   | Q(end_registration__isnull=True))
-            ))
-            .filter(Q(registration_open=True)
-                    if registration == "open" else Q())
-            .filter(Q(registration_open=False)
-                    if registration == "closed" else Q())
-            .filter(Q(publicity=visibility) if visibility in
-                    [VISIBILITY[i][0] for i in range(len(VISIBILITY))] else Q())
-            .filter(Q(publicity=VISIBILITY[0][0]) | Q(member=True))
-            .order_by(*order_by)
-            .distinct()
-        )
-        return events
+        qs = Event.objects.filter(
+            Q(publicity='Pub') | Q(group__members=user.student))
+        if is_member:
+            qs = qs.filter(group__members=user.student)
+        if is_shotgun:
+            qs = qs.filter(max_participant__isnull=False)
+        if is_participating:
+            qs = qs.filter(participants=user.student)
+        if is_bookmarked:
+            qs = qs.filter(bookmarks=user.student)
+        if len(groups) > 0:
+            qs = qs.filter(group__slug__in=groups)
+        if from_date:
+            qs = qs.filter(end_date__gte=from_date)
+        if to_date:
+            qs = qs.filter(start_date__lte=to_date)
+        if registration_open is not None:
+            qs = (qs
+                  .annotate(registration_open=(
+                      (Q(start_registration__lte=today)
+                       | Q(start_registration__isnull=True))
+                      & (Q(end_registration__gte=today)
+                         | Q(end_registration__isnull=True))
+                  ))
+                  .filter(registration_open=registration_open))
+        return qs.distinct()
 
+    @action(detail=True, filter_backends=[])
+    def participants(self, request, pk=None):
+        event: Event = self.get_object()
+        page = self.paginate_queryset(event.participants.all())
+        serializer = SimpleStudentSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
-class ListEventsParticipantsAPIView(viewsets.ViewSet):
-    """List the persons participating to an event.
-    Only allowed to members of the group to which the event belongs.7
+    @action(detail=True, methods=['POST', 'DELETE'])
+    def participate(self, request, pk=None):
+        """
+        A view to add the user to the list of participants or remove him/her \
+        from the list.
+        """
+        event: Event = self.get_object()
+        # user asks to remove himself from participants
+        if request.method == 'DELETE':
+            event.participants.remove(request.user.student)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        # user asks to add himself to participants
+        now = timezone.now()
+        if event.start_registration and event.start_registration > now:
+            raise exceptions.PermissionDenied(
+                _("Too soon! Registration will start at %(datetime)s.")
+                % {'datetime': format_date(event.start_registration)})
+        if event.end_registration and event.end_registration < now:
+            raise exceptions.PermissionDenied(
+                _("Too late! Registration has ended at %(datetime)s.")
+                % {'datetime': format_date(event.end_registration)})
+        if (event.max_participant
+                and event.participants.count() >= event.max_participant):
+            raise exceptions.PermissionDenied(
+                _("Too late! The maximum number of participants "
+                  "have been reached."))
+        # if we pass all criteria, add the user
+        event.participants.add(request.user.student)
+        return Response(status=status.HTTP_201_CREATED)
 
-    Query Parameters
-    ----------------
-    - simple : bool = false ->
-    Simple student format
-
-    Actions
-    -------
-    - GET .../event/<id>/participants"""
-    serializer_class = EventParticipatingSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def list(self, request, *args, **kwargs):
-        simple: bool = request.query_params.get('simple')
-        user = self.request.user
-        event = get_object_or_404(Event, id=self.kwargs['event_id'])
-        group = event.group
-        if group.is_admin(user):
-            if simple:
-                serializer = SimpleStudentSerializer(
-                    event.participants, many=True)
-            else:
-                serializer = StudentSerializer(
-                    event.participants, many=True)
-            return Response(serializer.data)
-        return Response(status=403,
-                        data={"detail": "You are not admin of this club"})
-
-
-class ParticipateAPIView(APIView):
-    """
-    Actions
-    -------
-    - POST .../event/<id>/participate : participate to an event
-    - DELETE .../event/<id>/participate : remove participation of an event
-    """
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, id=self.kwargs['event_id'])
-        registration_finished: bool = (
-            event.end_registration is not None
-            and timezone.now() > event.end_registration)
-        registration_not_started: bool = (
-            event.start_registration is not None
-            and timezone.now() < event.start_registration)
-        shotgun: bool = event.max_participant is not None
-        if registration_not_started:
-            return Response(
-                status='401',
-                data={"success": False,
-                      "message": "Registration not started"})
-        elif registration_finished:
-            return Response(
-                status='401',
-                data={"success": False,
-                      "message": "Registration finished"})
-        elif shotgun and event.max_participant <= event.number_of_participants:
-            return Response(
-                status='401',
-                data={"success": False,
-                      "message": "Shotgun full"})
-        else:
-            event.participants.add(request.user.student)
-            return Response(
-                status='200',
-                data={"success": True,
-                      "message": "You have been added to this event"})
-
-    def delete(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, id=self.kwargs['event_id'])
-        event.participants.remove(request.user.student)
-        return Response(
-            status='200',
-            data={
-                "success": True,
-                "message": "You have been removed from this event"
-            })
-
-
-class FavoriteAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    """
-    Actions
-    -------
-    - POST .../event/<id>/favorite : add event to your favorites
-    - DELETE .../event/<id>/favorite : remove event to your favorites
-    """
-
-    def post(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, id=self.kwargs['event_id'])
-        student = request.user.student
-        if (student is None):
-            return Response(status='404', data={
-                "success": False,
-                "message": "Couldn\'t find student"
-            })
-        else:
-            event.bookmarks.add(student)
-            return Response(status='200', data={
-                "success": True,
-                "message": "You have added this event to your favorites"
-            })
-
-    def delete(self, request, *args, **kwargs):
-        event = get_object_or_404(Event, id=self.kwargs['event_id'])
-        student = request.user.student
-        if (student is None):
-            return Response(status='404', data={
-                "success": False,
-                "message": "Couldn\'t find student"
-            })
-        else:
-            event.bookmarks.remove(student)
-            return Response(status='200', data={
-                "success": True,
-                "message": "You have added this event to your favorites"
-            })
+    @action(detail=True, methods=['POST', 'DELETE'])
+    def bookmark(self, request, pk=None):
+        """
+        A view to add or remove this event to the bookmarks of the user.
+        """
+        event: Event = self.get_object()
+        if request.method == 'DELETE':
+            event.bookmarks.remove(request.user.student)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        event.bookmarks.add(request.user.student)
+        return Response(status=status.HTTP_201_CREATED)

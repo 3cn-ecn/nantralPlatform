@@ -1,6 +1,6 @@
-from rest_framework import generics, permissions, viewsets, exceptions
-from rest_framework.response import Response
+from rest_framework import exceptions, generics, permissions, viewsets
 from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from apps.utils.api_mixins import SearchViewMixin
 
@@ -39,7 +39,7 @@ class StudentViewSet(SearchViewMixin, viewsets.ModelViewSet):
         """Remove the 'create' method from default methods."""
         raise exceptions.MethodNotAllowed(method="create")
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['GET'])
     def me(self, request, *args, **kwargs):
         """A view to get the current user."""
         serializer = self.get_serializer(request.user.student)

@@ -3,21 +3,21 @@ from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
 
+from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
-from apps.student.models import Student
 
 from .models import Event
 
 
 class EventSerializer(serializers.ModelSerializer):
     number_of_participants = serializers.ReadOnlyField()
-    absolute_url = serializers.ReadOnlyField()
+    url = serializers.ReadOnlyField()
     group = GroupPreviewSerializer()
+    is_group_member = serializers.SerializerMethodField()
+    is_group_admin = serializers.SerializerMethodField()
     is_participating = serializers.SerializerMethodField()
-    is_member = serializers.SerializerMethodField()
-    is_favorite = serializers.SerializerMethodField()
+    is_bookmarked = serializers.SerializerMethodField()
     form_url = serializers.SerializerMethodField()
-    is_admin = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
@@ -33,53 +33,56 @@ class EventSerializer(serializers.ModelSerializer):
             'publicity',
             'image',
             'number_of_participants',
-            'absolute_url',
+            'url',
             'group',
+            'is_group_member',
+            'is_group_admin',
             'is_participating',
-            'is_member',
+            'is_bookmarked',
             'max_participant',
             'start_registration',
             'end_registration',
-            'form_url',
-            'is_favorite',
-            'is_admin']
+            'form_url']
 
     def get_is_participating(self, obj: Event):
         user = self.context['request'].user
-        return obj.is_participating(user)
+        return obj.participants.contains(user.student)
 
-    def get_is_member(self, obj: Event):
+    def get_is_group_member(self, obj: Event):
         user = self.context['request'].user
-        group = obj.group
-        return group.is_member(user)
+        return obj.group.is_member(user)
 
-    def get_is_favorite(self, obj: Event):
-        user = self.context['request'].user
-        return obj.is_bookmarked(user)
-
-    def get_is_admin(self, obj: Event):
+    def get_is_group_admin(self, obj: Event):
         user = self.context['request'].user
         return obj.group.is_admin(user)
 
-    def get_absolute_url(self, obj: Event):
+    def get_is_bookmarked(self, obj: Event):
+        user = self.context['request'].user
+        return obj.bookmarks.contains(user.student)
+
+    def get_url(self, obj: Event):
         return obj.get_absolute_url()
 
     def get_form_url(self, obj: Event):
         user = self.context['request'].user
-        registration_open: bool = (
+        registration_open = (
             (obj.start_registration is None
              or obj.start_registration < timezone.now())
             and (obj.end_registration is None
                  or obj.end_registration > timezone.now())
         )
-        # don't send url if the registrations are not open and user is not admin
-        if (obj.form_url and not registration_open
-                and not obj.group.is_admin(user)):
-            return "#"
-        return obj.form_url
+        if registration_open or obj.group.is_admin(user):
+            return obj.form_url
+        return ""
 
 
-class WriteEventSerializer(serializers.ModelSerializer):
+class EventPreviewSerializer(EventSerializer):
+    class Meta(EventSerializer.Meta):
+        fields = ['id', 'title', 'group', 'created_at', 'updated_at',
+                  'image', 'is_group_admin', 'publicity']
+
+
+class EventWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
@@ -103,25 +106,19 @@ class WriteEventSerializer(serializers.ModelSerializer):
                 _("Must be a positive integer"))
         return value
 
-    def validate(self, attrs):
-        if (not attrs["group"].is_admin(self.context['request'].user)):
+    def validate_group(self, value: Group):
+        if (not value.is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
-                "You have to be admin to add or update an event")
-        if (attrs["start_date"] > attrs["end_date"]):
+                _("You have to be admin to add or update an event"))
+        return value
+
+    def validate(self, data):
+        if (data["start_date"] > data["end_date"]):
             raise exceptions.ValidationError(_(
                 "The end date must be after the begin date."))
-        if (attrs.get("start_registration") and attrs.get("end_registration")
-                and attrs["start_registration"] > attrs["end_registration"]):
+        if (data.get("start_registration") and data.get("end_registration")
+                and data["start_registration"] > data["end_registration"]):
             raise serializers.ValidationError(
                 "End registration date should be greater than begin \
                     registration date")
-        return super().validate(attrs)
-
-
-class EventParticipatingSerializer(serializers.ModelSerializer):
-    name = serializers.ReadOnlyField()
-    get_absolute_url = serializers.ReadOnlyField()
-
-    class Meta:
-        model = Student
-        fields = ['name', 'get_absolute_url', 'id']
+        return super().validate(data)

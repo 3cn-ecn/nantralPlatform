@@ -1,6 +1,5 @@
-from collections import OrderedDict
-
 from django.db.models import Count, F, Q, QuerySet
+from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
@@ -82,7 +81,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     lookup_url_kwarg = 'slug'
 
     @property
-    def query_params(self) -> OrderedDict[str, str]:
+    def query_params(self) -> QueryDict:
         return self.request.query_params
 
     def get_serializer_class(self):
@@ -103,8 +102,8 @@ class GroupViewSet(viewsets.ModelViewSet):
                       .objects
                       .filter(slug=self.query_params.get('type'))
                       .first())
-        is_member = self.query_params.get('is_member', False)
-        is_admin = self.query_params.get('is_admin', False)
+        is_member = to_null_bool(self.query_params.get('is_member'), False)
+        is_admin = to_null_bool(self.query_params.get('is_admin'), False)
 
         queryset = (
             Group.objects
@@ -200,7 +199,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
                 'student__user__last_name']
 
     @property
-    def query_params(self) -> OrderedDict[str, str]:
+    def query_params(self) -> QueryDict:
         return self.request.query_params
 
     def get_serializer_class(self) -> serializers.ModelSerializer:
@@ -246,7 +245,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
                 Q(begin_date__lt=to_date) | Q(begin_date__isnull=True))
         return self.queryset
 
-    @decorators.action(detail=False, methods=['post'])
+    @decorators.action(detail=False, methods=['POST'])
     def reorder(self, request, *args, **kwargs):
         """
         Action to reorder a membership. It changes the 'priority' fields for all
