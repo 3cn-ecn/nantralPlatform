@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.student.serializers import SimpleStudentSerializer
-from apps.utils.to_null_bool import to_null_bool
+from apps.utils.parse_bool import parse_bool
 
 from .models import Event
 from .serializers import (EventPreviewSerializer, EventSerializer,
@@ -87,7 +87,7 @@ class EventViewSet(viewsets.ModelViewSet):
         return self.request.query_params
 
     def get_serializer_class(self):
-        preview = to_null_bool(self.query_params.get('preview'))
+        preview = parse_bool(self.query_params.get('preview'))
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return EventWriteSerializer
         if preview is True:
@@ -105,12 +105,12 @@ class EventViewSet(viewsets.ModelViewSet):
         # query params
         groups_params = self.query_params.getlist('group', [])
         groups = ','.join(groups_params).split(',') if groups_params else []
-        is_member = to_null_bool(self.query_params.get('is_member'), False)
-        is_shotgun = to_null_bool(self.query_params.get('is_shotgun'), False)
-        is_bookmarked = to_null_bool(
+        is_member = parse_bool(self.query_params.get('is_member'), False)
+        is_shotgun = parse_bool(self.query_params.get('is_shotgun'), False)
+        is_bookmarked = parse_bool(
             self.query_params.get('is_bookmarked'), False)
         is_participating = self.query_params.get('is_participating', False)
-        registration_open = to_null_bool(self.query_params.get('registration'))
+        registration_open = parse_bool(self.query_params.get('registration'))
         from_date = self.query_params.get('from_date')
         to_date = self.query_params.get('to_date')
 

@@ -3,7 +3,7 @@ from django.http.request import QueryDict
 
 from rest_framework import filters, permissions, request, viewsets
 
-from apps.utils.to_null_bool import to_null_bool
+from apps.utils.parse_bool import parse_bool
 
 from .models import Post
 from .serializers import (PostPreviewSerializer, PostSerializer,
@@ -59,7 +59,7 @@ class PostViewSet(viewsets.ModelViewSet):
         return self.request.query_params
 
     def get_serializer_class(self):
-        preview = to_null_bool(self.query_params.get('preview'))
+        preview = parse_bool(self.query_params.get('preview'))
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return PostWriteSerializer
         if preview is True:
@@ -73,8 +73,8 @@ class PostViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> QuerySet[Post]:
         group_param = self.query_params.get('group')
         group_filter = group_param.split(',') if group_param else []
-        is_member = to_null_bool(self.query_params.get('is_member'))
-        pinned = to_null_bool(self.query_params.get('pinned'))
+        is_member = parse_bool(self.query_params.get('is_member'))
+        pinned = parse_bool(self.query_params.get('pinned'))
         min_date = self.query_params.get('min_date')
         max_date = self.query_params.get('max_date')
 

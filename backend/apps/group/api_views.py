@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 from rest_framework import (decorators, exceptions, filters, permissions,
                             response, serializers, status, viewsets)
 
-from apps.utils.to_null_bool import to_null_bool
+from apps.utils.parse_bool import parse_bool
 
 from .models import Group, GroupType, Membership
 from .serializers import (GroupPreviewSerializer, GroupSerializer,
@@ -85,7 +85,7 @@ class GroupViewSet(viewsets.ModelViewSet):
         return self.request.query_params
 
     def get_serializer_class(self):
-        preview = to_null_bool(self.query_params.get('preview'))
+        preview = parse_bool(self.query_params.get('preview'))
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
         if preview is True:
@@ -102,8 +102,8 @@ class GroupViewSet(viewsets.ModelViewSet):
                       .objects
                       .filter(slug=self.query_params.get('type'))
                       .first())
-        is_member = to_null_bool(self.query_params.get('is_member'), False)
-        is_admin = to_null_bool(self.query_params.get('is_admin'), False)
+        is_member = parse_bool(self.query_params.get('is_member'), False)
+        is_admin = parse_bool(self.query_params.get('is_admin'), False)
 
         queryset = (
             Group.objects
