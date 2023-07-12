@@ -222,28 +222,26 @@ class MembershipViewSet(viewsets.ModelViewSet):
         group_slug = self.query_params.get('group')
         student_id = self.query_params.get('student')
         # make queryset
-        self.queryset = (
-            Membership.objects
-
-        )
+        qs = Membership.objects.all()
         # filter by memberships you are allowed to see
         if not user.is_superuser:
-            self.queryset = self.queryset.filter(
-                Q(group__private=False)
-                | Q(group__members=user.student)
-            )
+            qs = qs.filter(Q(group__private=False)
+                           | Q(group__members=user.student))
         # filter by params
         if group_slug:
-            self.queryset = self.queryset.filter(group__slug=group_slug)
+            qs = qs.filter(group__slug=group_slug)
         if student_id:
-            self.queryset = self.queryset.filter(student__id=student_id)
+            qs = qs.filter(student__id=student_id)
         if from_date:
-            self.queryset = self.queryset.filter(
-                Q(end_date__gte=from_date) | Q(end_date__isnull=True))
+            qs = qs.filter(Q(end_date__gte=from_date)
+                           | Q(end_date__isnull=True))
         if to_date:
-            self.queryset = self.queryset.filter(
-                Q(begin_date__lt=to_date) | Q(begin_date__isnull=True))
-        return self.queryset
+            qs = qs.filter(Q(begin_date__lt=to_date)
+                           | Q(begin_date__isnull=True))
+
+        qs = qs.prefetch_related('student__user').distinct()
+        self.queryset = qs
+        return qs
 
     @decorators.action(detail=False, methods=['POST'])
     def reorder(self, request, *args, **kwargs):

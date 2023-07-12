@@ -78,13 +78,16 @@ class PostViewSet(viewsets.ModelViewSet):
         min_date = self.query_params.get('min_date')
         max_date = self.query_params.get('max_date')
 
+        user = self.request.user
+
         query = (
             Post.objects
-            .annotate(is_member=Q(group__members=self.request.user.student))
-            .filter(Q(publicity='Pub') | Q(is_member=True))
+            .filter(Q(publicity='Pub') | Q(group__members__user=user))
         )
-        if is_member is not None:
-            query = query.filter(is_member=is_member)
+        if is_member is True:
+            query = query.filter(group__members__user=user)
+        if is_member is False:
+            query = query.exclude(group__members__user=user)
         if pinned is not None:
             query = query.filter(pinned=pinned)
         if len(group_filter) > 0:
@@ -94,4 +97,4 @@ class PostViewSet(viewsets.ModelViewSet):
         if max_date:
             query = query.filter(created_at__lte=max_date)
 
-        return query
+        return query.select_related('group').distinct()

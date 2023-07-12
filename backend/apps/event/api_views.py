@@ -46,13 +46,13 @@ class EventViewSet(viewsets.ModelViewSet):
         filter event whose begin date is greater or equal to from_date
     - to_date : ISO or UTC date string = None
         filter event whose begin date is less or equal to to_date
-    - is_member : bool = False
+    - is_member : bool = None
         whether user is member of the organizer group
-    - is_bookmarked : bool = False
+    - is_bookmarked : bool = None
         filter your favorite event
-    - is_shotgun : bool = False
+    - is_shotgun : bool = None
         filter shotgun events
-    - is_participating : bool = False
+    - is_participating : bool = None
         filter events current user is participating
     - registration_open : bool = None
         whether registration is open or closed
@@ -105,26 +105,32 @@ class EventViewSet(viewsets.ModelViewSet):
         # query params
         groups_params = self.query_params.getlist('group', [])
         groups = ','.join(groups_params).split(',') if groups_params else []
-        is_member = parse_bool(self.query_params.get('is_member'), False)
-        is_shotgun = parse_bool(self.query_params.get('is_shotgun'), False)
-        is_bookmarked = parse_bool(
-            self.query_params.get('is_bookmarked'), False)
-        is_participating = self.query_params.get('is_participating', False)
-        registration_open = parse_bool(self.query_params.get('registration'))
+        is_member = parse_bool(self.query_params.get('is_member'))
+        is_shotgun = parse_bool(self.query_params.get('is_shotgun'))
+        is_bookmarked = parse_bool(self.query_params.get('is_bookmarked'))
+        is_participating = self.query_params.get('is_participating')
+        registration_open = parse_bool(
+            self.query_params.get('registration_open'))
         from_date = self.query_params.get('from_date')
         to_date = self.query_params.get('to_date')
 
         # filtering
         qs = Event.objects.filter(
-            Q(publicity='Pub') | Q(group__members=user.student))
-        if is_member:
-            qs = qs.filter(group__members=user.student)
-        if is_shotgun:
-            qs = qs.filter(max_participant__isnull=False)
-        if is_participating:
-            qs = qs.filter(participants=user.student)
-        if is_bookmarked:
-            qs = qs.filter(bookmarks=user.student)
+            Q(publicity='Pub') | Q(group__members__user=user))
+        if is_member is True:
+            qs = qs.filter(group__members__user=user)
+        if is_member is False:
+            qs = qs.exclude(group__members__user=user)
+        if is_shotgun is not None:
+            qs = qs.filter(max_participant__isnull=not is_shotgun)
+        if is_participating is True:
+            qs = qs.filter(participants__user=user)
+        if is_participating is False:
+            qs = qs.exclude(participants__user=user)
+        if is_bookmarked is True:
+            qs = qs.filter(bookmarks__user=user)
+        if is_bookmarked is False:
+            qs = qs.exclude(bookmarks__user=user)
         if len(groups) > 0:
             qs = qs.filter(group__slug__in=groups)
         if from_date:
@@ -140,7 +146,7 @@ class EventViewSet(viewsets.ModelViewSet):
                          | Q(end_registration__isnull=True))
                   ))
                   .filter(registration_open=registration_open))
-        return qs.distinct()
+        return qs.select_related('group').distinct()
 
     @action(detail=True, filter_backends=[])
     def participants(self, request, pk=None):
