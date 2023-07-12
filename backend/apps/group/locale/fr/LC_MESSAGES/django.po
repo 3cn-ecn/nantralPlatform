@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 15:11+0200\n"
+"POT-Creation-Date: 2023-07-12 23:09+0200\n"
 "PO-Revision-Date: 2023-04-10 15:17+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -18,52 +18,52 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: api_views.py:38
+#: api_views.py:29
 msgid "You must specify a valid group type in query parameters."
 msgstr "Spécifiez un type de groupe valide dans les paramètres de requête."
 
-#: api_views.py:257
+#: api_views.py:269
 msgid "All memberships objects must be from the same group."
 msgstr "Tous les objets membres doivent être du même groupe."
 
-#: models.py:32
+#: models.py:31
 msgid "Type name"
 msgstr "Nom du type"
 
-#: models.py:39 models.py:227
+#: models.py:38 models.py:226
 msgid "Icon"
 msgstr "Icône"
 
-#: models.py:46
+#: models.py:45
 msgid "No dates for memberships"
 msgstr "Membres sans dates"
 
-#: models.py:48
+#: models.py:47
 msgid "Do not ask dates for members."
 msgstr "Ne pas demander de dates pour les membres."
 
-#: models.py:50
+#: models.py:49
 msgid "Private by default"
 msgstr "Privé par défaut"
 
-#: models.py:52
+#: models.py:51
 msgid "New groups are private by default."
 msgstr "Les nouveaux groupes sont privés par défaut."
 
-#: models.py:57
+#: models.py:56
 msgid "Additional parent groups"
 msgstr "Groupes parents supplémentaires"
 
-#: models.py:60
+#: models.py:59
 msgid ""
 "Children groups of these groups will be displayed in the list of all groups."
 msgstr "Les groupes enfants de ces groupes seront affichés dans la liste."
 
-#: models.py:63
+#: models.py:62
 msgid "Sort Fields"
 msgstr "Trier selon"
 
-#: models.py:66
+#: models.py:65
 msgid ""
 "Fields used to sort groups in the list, separated by ',' and without spaces. "
 "If categories are defined, you must also reflect them here."
@@ -72,117 +72,117 @@ msgstr ""
 "sans espaces. Si des catégories sont définies, vous devez aussi le prendre "
 "en compte ici."
 
-#: models.py:70
+#: models.py:69
 msgid "Category expression"
 msgstr "Label des catégories"
 
-#: models.py:73
+#: models.py:72
 msgid "A python expression to get the category label."
 msgstr "Une expression python renvoyant le label de la catégorie."
 
-#: models.py:75
+#: models.py:74
 msgid "Sub category expression"
 msgstr "Label des sous-catégories"
 
-#: models.py:78
+#: models.py:77
 msgid "A python expression to get the sub-category label."
 msgstr "Une expression python renvoyant le label des sous-catégories."
 
-#: models.py:80
+#: models.py:79
 msgid "Hide groups without active members"
 msgstr "Cacher les groupes sans membres actifs"
 
-#: models.py:82
+#: models.py:81
 msgid "Hide groups where all 'end_date' from members are past."
 msgstr ""
 "Cache les groupes où le champ `end_date` de chaque membre est inférieur à la "
 "date d'aujourd'hui."
 
-#: models.py:86
+#: models.py:85
 msgid "Everyone can create new group"
 msgstr "Tout le monde peut créer un groupe"
 
-#: models.py:90
+#: models.py:89
 msgid "group type"
 msgstr "type de groupe"
 
-#: models.py:91
+#: models.py:90
 msgid "group types"
 msgstr "types de groupes"
 
-#: models.py:102
+#: models.py:101
 msgid "Label Name"
 msgstr "Nom du label"
 
-#: models.py:103 models.py:180 models.py:399
+#: models.py:102 models.py:179 models.py:398
 msgid "Priority"
 msgstr "Priorité"
 
-#: models.py:106 models.py:117 models.py:152
+#: models.py:105 models.py:116 models.py:151
 msgid "Type of group"
 msgstr "Type de groupe"
 
-#: models.py:114
+#: models.py:113
 msgid "Tag Name"
 msgstr "Nom du tag"
 
-#: models.py:129
+#: models.py:128
 msgid "Name"
 msgstr "Nom"
 
-#: models.py:133
+#: models.py:132
 msgid "Short name"
 msgstr "Nom raccourci"
 
-#: models.py:136
+#: models.py:135
 msgid "This name will be used in the list of groups."
 msgstr "Ce nom sera affiché dans la liste des groupes."
 
-#: models.py:139
+#: models.py:138
 msgid "Members"
 msgstr "Membres"
 
-#: models.py:145
+#: models.py:144
 msgid "Subscribers"
 msgstr "Abonnés"
 
-#: models.py:156
+#: models.py:155
 msgid "Label"
 msgstr "Label"
 
-#: models.py:162
+#: models.py:161
 msgid "Tags"
 msgstr "Tags"
 
-#: models.py:166
+#: models.py:165
 msgid "Parent group"
 msgstr "Groupe parent"
 
-#: models.py:172
+#: models.py:171
 msgid "Children groups label"
 msgstr "Label des groupes enfants"
 
-#: models.py:176
+#: models.py:175
 msgid "Lock memberships"
 msgstr "Verrouiller les membres"
 
-#: models.py:178
+#: models.py:177
 msgid "Users cannot add themselves as members of this group."
 msgstr "Les utilisateurs ne peuvent plus s'ajouter eux-mêmes au groupe."
 
-#: models.py:183
+#: models.py:182
 msgid "Year of creation"
 msgstr "Année de création"
 
-#: models.py:186
+#: models.py:185
 msgid "The year the group has been created."
 msgstr "L'année où le groupe a été créé."
 
-#: models.py:189
+#: models.py:188
 msgid "Archived group"
 msgstr "Groupe archivé"
 
-#: models.py:191
+#: models.py:190
 msgid ""
 "An archived group cannot have new members and is hidden from the displayed "
 "list."
@@ -190,19 +190,19 @@ msgstr ""
 "Un groupe archivé ne peut plus avoir de nouveaux membres et est masqué de la "
 "liste."
 
-#: models.py:196
+#: models.py:195
 msgid "Private group"
 msgstr "Groupe privé"
 
-#: models.py:198
+#: models.py:197
 msgid "A private group is only visible by group members."
 msgstr "Un groupe privé n'est visible que par les membres du groupe."
 
-#: models.py:200
+#: models.py:199
 msgid "Public group"
 msgstr "Groupe public"
 
-#: models.py:202
+#: models.py:201
 msgid ""
 "If ticked, the group page can be seen by everyone, including non-"
 "authenticated users. Members, events and posts still however hidden."
@@ -211,104 +211,104 @@ msgstr ""
 "utilisateurs non-connectés. Les membres, évènements et posts restent "
 "toutefois masqués."
 
-#: models.py:206
+#: models.py:205
 msgid "Can pin"
 msgstr "Peut épingler"
 
-#: models.py:208
+#: models.py:207
 msgid "Admin members of this group can pin their posts"
 msgstr ""
 "Les admins du groupe peuvent épingler leurs posts sur la page d'accueil"
 
-#: models.py:212 models.py:387
+#: models.py:211 models.py:386
 msgid "Summary"
 msgstr "Résumé"
 
-#: models.py:216 models.py:391
+#: models.py:215 models.py:390
 msgid "Description"
 msgstr "Description"
 
-#: models.py:219
+#: models.py:218
 msgid "Meeting place"
 msgstr "Lieu de réunion"
 
-#: models.py:223
+#: models.py:222
 msgid "Meeting hours"
 msgstr "Heure de réunion"
 
-#: models.py:231
+#: models.py:230
 msgid "Your icon will be displayed at 306x306 pixels."
 msgstr "Votre icon sera affiché au format 306x306 pixels."
 
-#: models.py:233
+#: models.py:232
 msgid "Banner"
 msgstr "Bannière"
 
-#: models.py:237
+#: models.py:236
 msgid "Your banner will be displayed at 1320x492 pixels."
 msgstr "Votre bannière sera affichée au format 1320x492 pixels."
 
-#: models.py:239
+#: models.py:238
 msgid "Video link 1"
 msgstr "Lien vidéo 1"
 
-#: models.py:241
+#: models.py:240
 msgid "Video link 2"
 msgstr "Lien vidéo 2"
 
-#: models.py:244
+#: models.py:243
 msgid "Social networks"
 msgstr "Réseaux Sociaux"
 
-#: models.py:291
+#: models.py:290
 msgid "You cannot set both 'public' and 'private' properties to True."
 msgstr "Les champs 'public' et 'privé' sont incompatibles entre eux."
 
-#: models.py:394
+#: models.py:393
 msgid "Begin date"
 msgstr "Date de début"
 
-#: models.py:397
+#: models.py:396
 msgid "End date"
 msgstr "Date de fin"
 
-#: models.py:400
+#: models.py:399
 msgid "Admin"
 msgstr "Admin"
 
-#: models.py:402
+#: models.py:401
 msgid "Asked to become admin"
 msgstr "A demandé à devenir admin"
 
-#: models.py:404
+#: models.py:403
 msgid "Request message"
 msgstr "Raison de la demande à devenir admin"
 
-#: models.py:435
+#: models.py:434
 #, python-format
 msgid "Your admin request for %(group)s has been accepted."
 msgstr "Votre demande d'admin pour %(group)s a été acceptée."
 
-#: models.py:459
+#: models.py:458
 #, python-format
 msgid "Your admin request for %(group)s has been denied."
 msgstr "Votre demande d'admin pour %(group)s a été refusée."
 
-#: serializers.py:34
+#: serializers.py:33
 msgid "Some fields cannot be updated by non-admins."
 msgstr ""
 "Certains champs ne peuvent pas être modifiés par des utilisateurs qui ne "
 "sont pas admins."
 
-#: serializers.py:103 serializers.py:109
+#: serializers.py:111 serializers.py:117
 msgid "This field is required."
 msgstr "Ce champ est obligatoire."
 
-#: serializers.py:116 serializers.py:145
+#: serializers.py:124 serializers.py:153
 msgid "The end date must be after the begin date."
 msgstr "La date de fin doit être située après la date de début."
 
-#: serializers.py:135
+#: serializers.py:143
 msgid ""
 "You can only create new membership for yourself or for someone else inside a "
 "group where you are admin."
@@ -316,7 +316,7 @@ msgstr ""
 "Vous pouvez uniquement créer de nouveaux objets membres pour vous-même ou "
 "pour un groupe dont vous êtes admin."
 
-#: serializers.py:140
+#: serializers.py:148
 msgid ""
 "You cannot create create a new membership inside a private group if you are "
 "not admin of this group."
@@ -324,7 +324,7 @@ msgstr ""
 "Vous ne pouvez pas créer d'objets membres dans un groupe privé si vous "
 "n'êtes pas déjà admin du groupe."
 
-#: serializers.py:148
+#: serializers.py:156
 msgid "You must provides 'begin_date' and 'end_date'."
 msgstr "Vous devez indiquer une date de début et une date de fin."
 

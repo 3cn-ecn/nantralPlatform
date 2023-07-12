@@ -23,6 +23,11 @@ i18n
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },
+    detection: {
+      caches: ['localStorage', 'cookie'],
+      lookupCookie: 'language',
+      cookieMinutes: 60 * 3,
+    },
     resources: {
       'fr-FR': {
         translation: translationFr,

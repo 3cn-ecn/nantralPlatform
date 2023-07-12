@@ -163,6 +163,7 @@ LANGUAGES = [
     ('fr', "Français"),
     ('en', "English"),
 ]
+LANGUAGE_COOKIE_NAME = 'language'
 TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_L10N = True
