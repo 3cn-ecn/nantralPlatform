@@ -10,6 +10,7 @@ import './shared/i18n/config';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.paramsSerializer = { indexes: null };
 
 /**
  * This is the root of all the code: this line allows to replace the

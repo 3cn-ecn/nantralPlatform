@@ -1,6 +1,8 @@
-import React, { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 
-import { Box, Divider, Typography, styled } from '@mui/material';
+import { Box, Typography, styled } from '@mui/material';
+
+import { FlexRow } from '../FlexBox/FlexBox';
 
 type SectionProps = PropsWithChildren & {
   title: string;
@@ -14,15 +16,15 @@ export function Section({ title, button, children }: SectionProps) {
         <Typography variant="h4">{title}</Typography>
         {button}
       </Header>
-      <Divider sx={{ marginBottom: 1 }} />
       {children}
     </Box>
   );
 }
 
-const Header = styled(Box)({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
+const Header = styled(FlexRow)({
+  flexWrap: 'wrap',
+  rowGap: 4,
+  columnGap: 16,
   alignItems: 'center',
+  marginBottom: 8,
 });

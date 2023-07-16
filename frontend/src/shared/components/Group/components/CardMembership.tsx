@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import {
   Box,
@@ -42,8 +42,8 @@ function MembershipCard(props: {
             sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5 }}
           >
             <Avatar
-              url={group ? item.student.picture : item.group.icon}
-              title={group ? item.student.full_name : item.group.name}
+              src={group ? item.student.picture : item.group.icon}
+              alt={group ? item.student.full_name : item.group.name}
               size="l"
             />
             <Box sx={{ minWidth: 0 }}>

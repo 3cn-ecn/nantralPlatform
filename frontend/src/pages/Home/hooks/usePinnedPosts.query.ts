@@ -6,6 +6,7 @@ import { PostPreview } from '#modules/post/post.types';
 import { Page } from '#shared/infra/pagination';
 
 export function usePinnedPostsQuery(
+  numberOfPosts: number,
   options?: UseQueryOptions<Page<PostPreview>>
 ) {
   const [page, setPage] = useState(1);
@@ -16,7 +17,7 @@ export function usePinnedPostsQuery(
       getPostList({
         pinned: true,
         page: page,
-        pageSize: 3,
+        pageSize: numberOfPosts,
       }),
     ...options,
   });

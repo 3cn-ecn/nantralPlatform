@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 
-import React, { Box } from '@mui/material';
+import { Box } from '@mui/material';
 
 type SpacerProps = {
   horizontal?: CSSProperties['minWidth'];

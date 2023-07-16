@@ -8,8 +8,9 @@
     "whatYouCanDo": "What you can do now:"
   },
   "button": {
-    "cancel": "cancel",
+    "cancel": "Cancel",
     "close": "Close",
+    "confirm": "OK",
     "joinButton": {
       "register": "register",
       "registerLink": "register link",
@@ -18,7 +19,6 @@
       "unsuscribe": "unregister"
     },
     "like": "Like",
-    "seeAll": "See all",
     "yes": "Yes"
   },
   "calendar": {
@@ -35,8 +35,6 @@
     "joinNow": "Join now",
     "noClub": "You haven't joined any groups yet"
   },
-  "date_picker": {
-  },
   "event": {
     "action_menu": {
       "edit": "Edit",
@@ -45,6 +43,13 @@
       "unsubscribe": "Unregister"
     },
     "adminWarning": "You must be an admin of your club to create an event",
+    "bookmarkButton": {
+      "label": "Is in bookmarks",
+      "tooltip": {
+        "add": "Add to bookmarks",
+        "remove": "Remove from bookmarks"
+      }
+    },
     "endInscription": "Registration is open until",
     "error": "Error while loading the events",
     "event": "Event",
@@ -53,6 +58,26 @@
     "no_event": "No Event",
     "participants": "Participants",
     "participantsList": "List of participants",
+    "participateButton": {
+      "isParticipating": "Participant",
+      "openForm": "Registration",
+      "participate": "Participate",
+      "registrationEnded": "Shotgun over",
+      "shotgun": "Shotgun!",
+      "unregisterModal": {
+        "message": "Do you really want to unregister from this event?",
+        "title": "Unregister from the event 😿"
+      },
+      "willStartOn": "Shotgun {{date}}"
+    },
+    "registration": {
+      "register": {
+        "success": "Your registration has been saved!"
+      },
+      "unregister": {
+        "success": "You have been unregistered."
+      }
+    },
     "shotgunDatails": "Shotgun Details"
   },
   "filterbar": {
@@ -117,6 +142,14 @@
   },
   "home": {
     "all": "All",
+    "eventSection": {
+      "error": "Error: events cannot be loaded 😢",
+      "isEmpty": "No upcoming event... 🥺 Create a new one!",
+      "openEventPageButton": {
+        "label": "See all"
+      },
+      "title": "Upcoming events"
+    },
     "myClubs": "My groups",
     "postSection": {
       "error": "Error: posts cannot be loaded 😢",
@@ -125,7 +158,6 @@
       "title": "Posts"
     },
     "thisWeek": "This week",
-    "upcomingEvents": "Upcoming Events",
     "welcomeTo": "Welcome to"
   },
   "legalNotice": {
@@ -214,8 +246,6 @@
     "createModal": {
       "title": "Create new post"
     },
-    "edit": {
-    },
     "editModal": {
       "title": "Edit the post"
     },
@@ -273,8 +303,6 @@
     "header": "Suggest / Bug",
     "title": "Title",
     "type": "Type"
-  },
-  "time": {
   },
   "user_menu": {
     "admin": "Admin Interface",

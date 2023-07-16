@@ -94,10 +94,10 @@ export function EditPostModalContent({
         </ResponsiveDialogContent>
         <ResponsiveDialogFooter>
           <Button variant="text" onClick={() => onFinish()}>
-            Annuler
+            {t('button.cancel')}
           </Button>
           <LoadingButton loading={isLoading} type="submit" variant="contained">
-            Valider
+            {t('button.confirm')}
           </LoadingButton>
         </ResponsiveDialogFooter>
       </form>

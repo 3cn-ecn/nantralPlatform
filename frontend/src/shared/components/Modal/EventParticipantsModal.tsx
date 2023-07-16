@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import {
@@ -76,10 +76,7 @@ export function EventParticipantsModal(props: {
                   to={participant.url}
                 >
                   <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-                    <Avatar
-                      title={participant.name}
-                      url={participant.picture}
-                    />
+                    <Avatar alt={participant.name} src={participant.picture} />
                     <div style={{ marginLeft: '1rem' }}>{participant.name}</div>
                   </div>
                 </CardActionArea>

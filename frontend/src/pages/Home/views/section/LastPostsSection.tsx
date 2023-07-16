@@ -5,22 +5,25 @@ import { PostCardSkeleton } from '#modules/post/view/PostCard/PostCardSkeleton';
 import { useLastPostsQuery } from '#pages/Home/hooks/useLastPosts.query';
 import { Section } from '#shared/components/Section/Section';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { arrayRange } from '#shared/utils/arrayRange';
 
-interface LastPostSectionProps {
+const NUMBER_OF_POSTS = 3;
+
+interface LastPostsSectionProps {
   enabled: boolean;
 }
 
-export function LastPostSection({ enabled }: LastPostSectionProps) {
+export function LastPostsSection({ enabled }: LastPostsSectionProps) {
   const { t } = useTranslation();
   const { lastPosts, isLoading, isIdle, isError, numPages, page, setPage } =
-    useLastPostsQuery({ enabled });
+    useLastPostsQuery(NUMBER_OF_POSTS, { enabled });
 
   if (isLoading || isIdle) {
     return (
       <Section title={t('home.postSection.title')}>
         <Grid container spacing={1}>
-          {[0, 1, 2].map((item) => (
-            <Grid key={item} xs={12} sm={6} md={4} item>
+          {arrayRange(NUMBER_OF_POSTS).map((_, index) => (
+            <Grid key={index} xs={12} sm={6} md={4} item>
               <PostCardSkeleton />
             </Grid>
           ))}

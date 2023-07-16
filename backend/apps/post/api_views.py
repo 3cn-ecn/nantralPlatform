@@ -24,8 +24,8 @@ class PostViewSet(viewsets.ModelViewSet):
 
     Query Parameters
     ----------------
-    - group: list[str]
-        Filter by a list of organizing groups
+    - group: str (accepted multiple times)
+        Filter by an organizing group slug
     - min_date: 'yyyy-MM-dd'
         Filter by a minimal date
     - max_date: 'yyyy-MM-dd'
@@ -36,8 +36,9 @@ class PostViewSet(viewsets.ModelViewSet):
         Filter posts where user is member of the organizing group
     - search: str
         Perform a search query on a list
-    - ordering: list[str]
-        List of fields to order by
+    - ordering: str = "-updated_at"
+        List of fields to order by, separated by ','. Prefix a field by '-' to
+        use descending order.
 
     Actions
     -------
@@ -50,7 +51,7 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, PostPermission]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title', 'group__name', 'group__short_name']
-    ordering_fields = ['title', 'group__name',
+    ordering_fields = ['title', 'group__name', 'pinned',
                        'group__short_name', 'created_at', 'updated_at']
     ordering = ["-updated_at"]
 
@@ -71,8 +72,8 @@ class PostViewSet(viewsets.ModelViewSet):
         return PostPreviewSerializer
 
     def get_queryset(self) -> QuerySet[Post]:
-        group_param = self.query_params.get('group')
-        group_filter = group_param.split(',') if group_param else []
+        group_params = self.query_params.getlist('group')
+        groups = ','.join(group_params).split(',') if group_params else []
         is_member = parse_bool(self.query_params.get('is_member'))
         pinned = parse_bool(self.query_params.get('pinned'))
         min_date = self.query_params.get('min_date')
@@ -90,8 +91,8 @@ class PostViewSet(viewsets.ModelViewSet):
             query = query.exclude(group__members__user=user)
         if pinned is not None:
             query = query.filter(pinned=pinned)
-        if len(group_filter) > 0:
-            query = query.filter(group__slug__in=group_filter)
+        if len(groups) > 0:
+            query = query.filter(group__slug__in=groups)
         if min_date:
             query = query.filter(created_at__gte=min_date)
         if max_date:

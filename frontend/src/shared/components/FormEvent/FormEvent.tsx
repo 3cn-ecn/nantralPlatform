@@ -506,15 +506,16 @@ function EditEventModal(props: {
           </DialogActions>
         </Dialog>
       </form>
-      <ConfirmationModal
-        title={t('form.deleteEvent')}
-        content={t('form.deleteEventConfirmation')}
-        onClose={(value) => {
-          if (value) handleDelete();
-          setConfirmationOpen(false);
-        }}
-        open={confirmationOpen}
-      />
+      {confirmationOpen && (
+        <ConfirmationModal
+          title={t('form.deleteEvent')}
+          body={t('form.deleteEventConfirmation')}
+          onClose={() => {
+            setConfirmationOpen(false);
+          }}
+          onValidCallback={handleDelete}
+        />
+      )}
     </>
   );
 }

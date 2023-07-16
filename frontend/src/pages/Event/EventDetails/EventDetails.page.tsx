@@ -30,9 +30,9 @@ import {
 import type { AlertProps } from '@mui/material/Alert';
 
 import { getEventDetails } from '#modules/event/api/getEventDetails';
+import { FavButton } from '#modules/event/view/shared/FavButton';
+import { ParticipateButton } from '#modules/event/view/shared/ParticipateButton';
 import NotFound from '#pages/NotFound/NotFound.page';
-import FavButton from '#shared/components/Button/FavButton';
-import JoinButton from '#shared/components/Button/JoinButton';
 import { ClubAvatar } from '#shared/components/ClubAvatar/ClubAvatar';
 import EditEventModal from '#shared/components/FormEvent/FormEvent';
 import { EventParticipantsModal } from '#shared/components/Modal/EventParticipantsModal';
@@ -334,19 +334,7 @@ export default function EventDetailsPage() {
 
         <Grid container rowSpacing={1} columnSpacing={6}>
           <Grid item xs={12} sm={5} md={3}>
-            <JoinButton
-              variant={variant}
-              person={event.numberOfParticipants}
-              maxPerson={event.maxParticipant}
-              participating={participating}
-              eventId={event.id}
-              link={event.formUrl}
-              startRegistration={event.startRegistration}
-              endRegistration={event.endRegistration}
-              setParticipating={setParticipating}
-              sx={{ width: '100%' }}
-              hideInfoButton
-            />
+            <ParticipateButton event={event} />
           </Grid>
           <Grid
             item

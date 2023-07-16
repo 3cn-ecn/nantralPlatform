@@ -78,8 +78,10 @@ class EventSerializer(serializers.ModelSerializer):
 
 class EventPreviewSerializer(EventSerializer):
     class Meta(EventSerializer.Meta):
-        fields = ['id', 'title', 'group', 'created_at', 'updated_at',
-                  'image', 'is_group_admin', 'publicity']
+        fields = ['id', 'title', 'start_date', 'end_date', 'group', 'image',
+                  'is_group_admin', 'is_participating', 'is_bookmarked',
+                  'number_of_participants', 'max_participant', 'form_url',
+                  'start_registration', 'end_registration', 'url']
 
 
 class EventWriteSerializer(serializers.ModelSerializer):

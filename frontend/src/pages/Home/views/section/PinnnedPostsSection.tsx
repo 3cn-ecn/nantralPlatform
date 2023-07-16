@@ -5,22 +5,27 @@ import { PostCardSkeleton } from '#modules/post/view/PostCard/PostCardSkeleton';
 import { usePinnedPostsQuery } from '#pages/Home/hooks/usePinnedPosts.query';
 import { Section } from '#shared/components/Section/Section';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { arrayRange } from '#shared/utils/arrayRange';
 
-interface PinnedPostSectionProps {
+const NUMBER_OF_POSTS = 3;
+
+interface PinnedPostsSectionProps {
   enabled: boolean;
 }
 
-export function PinnedPostSection({ enabled = true }: PinnedPostSectionProps) {
+export function PinnedPostsSection({
+  enabled = true,
+}: PinnedPostsSectionProps) {
   const { t } = useTranslation();
   const { pinnedPosts, isLoading, isIdle, isError, numPages, page, setPage } =
-    usePinnedPostsQuery({ enabled });
+    usePinnedPostsQuery(NUMBER_OF_POSTS, { enabled });
 
   if (isLoading || isIdle) {
     return (
       <Section title={t('home.postSection.pinnedTitle')}>
         <Grid container spacing={1}>
-          {[0, 1, 2].map((item) => (
-            <Grid key={item} xs={12} sm={6} md={4} item>
+          {arrayRange(NUMBER_OF_POSTS).map((_, index) => (
+            <Grid key={index} xs={12} sm={6} md={4} item>
               <PostCardSkeleton />
             </Grid>
           ))}

@@ -8,7 +8,7 @@ function getTheme(mode: PaletteMode) {
         main: mode === 'light' ? '#dc3545' : '#FF3E51',
       },
       secondary: {
-        main: '#607d8b',
+        main: mode === 'light' ? '#607d8b' : '#99AEB8',
       },
       neutral: {
         main: '#efefef',
@@ -22,16 +22,20 @@ function getTheme(mode: PaletteMode) {
       error: {
         main: mode === 'light' ? '#C15700' : '#FF7E15',
       },
+      background: {
+        default: mode == 'light' ? '#FFFFFF' : '#1A1A1A',
+        paper: mode === 'light' ? '#FCFCFC' : '#262626',
+      },
     },
     typography: {
       fontFamily: 'Heebo, sans-serif',
       fontWeightLight: 300,
-      fontWeightBold: 800,
+      fontWeightBold: 600,
       h1: {
         fontWeight: 600,
       },
       h2: {
-        fontSize: '3rem',
+        fontWeight: 600,
       },
       h3: {
         fontWeight: 600,
@@ -49,7 +53,7 @@ function getTheme(mode: PaletteMode) {
         fontWeight: 400,
       },
       button: {
-        fontWeight: 600,
+        fontWeight: 500,
       },
     },
     shape: {

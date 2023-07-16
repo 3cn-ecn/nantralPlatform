@@ -73,7 +73,7 @@ export default function ProfilePage() {
           {profileStatus === 'loading' ? (
             <Skeleton variant="circular" height={250} />
           ) : (
-            <Avatar url={student?.picture} title={student.name} size="xxl" />
+            <Avatar src={student?.picture} alt={student.name} size="xxl" />
           )}
         </Grid>
         <Grid item xs={12} lg={9} sx={{ mt: 2, ml: 5 }}>

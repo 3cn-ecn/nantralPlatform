@@ -1,14 +1,15 @@
 import { useState } from 'react';
 
-import { CircularProgress } from '@mui/material';
+import { Alert, CircularProgress } from '@mui/material';
 
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   ResponsiveDialog,
+  ResponsiveDialogContent,
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
 
-import { usePostDetailsQuery } from '../hooks/usePostDetails.query';
+import { usePostDetailsQuery } from '../../hooks/usePostDetails.query';
 import { EditPostModalContent } from './EditPostModalContent';
 import { ReadPostModalContent } from './ReadPostModalContent';
 
@@ -20,9 +21,9 @@ type PostModalProps = {
 export function PostModal({ postId, onClose }: PostModalProps) {
   const [editMode, setEditMode] = useState(false);
 
-  const { post, isLoading, isError } = usePostDetailsQuery(postId);
+  const { post, isLoading, isError, error } = usePostDetailsQuery(postId);
 
-  if (isLoading || isError) {
+  if (isLoading) {
     return (
       <ResponsiveDialog onClose={onClose}>
         <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>
@@ -33,6 +34,17 @@ export function PostModal({ postId, onClose }: PostModalProps) {
         >
           <CircularProgress />
         </FlexRow>
+      </ResponsiveDialog>
+    );
+  }
+
+  if (isError) {
+    return (
+      <ResponsiveDialog onClose={onClose}>
+        <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>
+        <ResponsiveDialogContent>
+          <Alert severity="error">{error.message}</Alert>
+        </ResponsiveDialogContent>
       </ResponsiveDialog>
     );
   }

@@ -1,22 +1,43 @@
 import { ComponentProps } from 'react';
 
-import { Avatar as MuiAvatar } from '@mui/material';
+import { SvgIconComponent } from '@mui/icons-material';
+import { AvatarTypeMap, Avatar as MuiAvatar } from '@mui/material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { stringToColor } from '#shared/utils/stringToColor';
 
-type AvatarProps = ComponentProps<typeof MuiAvatar> & {
-  title: string;
-  size?: 's' | 'm' | 'l' | 'xxl';
-  url?: string;
-  icon?: JSX.Element;
-};
+// the type is more complex than usual because we want to keep the 'component'
+// props of the MuiAvatar
+type AvatarComponentType<
+  P = object,
+  D extends React.ElementType = 'div'
+> = OverridableComponent<
+  AvatarTypeMap<
+    P & {
+      size?: 's' | 'm' | 'l' | 'xxl';
+      Icon?: SvgIconComponent;
+    },
+    D
+  >
+>;
 
-export function Avatar({ title, url, icon, size = 'm', sx }: AvatarProps) {
-  const titleWords = title.split(' ');
+/**
+ * A custom Avatar extending the default MUI Avatar with:
+ * - initials extracted from the alt text
+ * - the background color generated from the hash of the alt.
+ */
+export const Avatar: AvatarComponentType = ({
+  alt,
+  Icon,
+  size,
+  sx,
+  ...props
+}: ComponentProps<AvatarComponentType>) => {
+  const altWords = alt ? alt.split(' ') : '  ';
   const initials = (
-    titleWords.length > 1
-      ? `${titleWords[0][0]}${titleWords[1][0]}`
-      : titleWords[0].substring(0, 2)
+    altWords.length > 1
+      ? `${altWords[0][0]}${altWords[1][0]}`
+      : altWords[0].substring(0, 2)
   ).toLocaleUpperCase();
 
   const sizes = {
@@ -28,17 +49,18 @@ export function Avatar({ title, url, icon, size = 'm', sx }: AvatarProps) {
 
   return (
     <MuiAvatar
-      src={url}
-      alt={title}
+      alt={alt}
       sx={{
         width: sizes[size],
         height: sizes[size],
         fontSize: sizes[size] * 0.4,
-        bgcolor: stringToColor(title),
+        bgcolor: stringToColor(alt),
+        textDecoration: 'none',
         ...sx,
       }}
+      {...props}
     >
-      {icon || initials}
+      {Icon ? <Icon /> : initials}
     </MuiAvatar>
   );
-}
+};

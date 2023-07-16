@@ -36,26 +36,33 @@ class EventViewSet(viewsets.ModelViewSet):
 
     Query Parameters
     ----------------
-    - ordering : list[str] = start_date
-        list of attributes to order the result in the form "order=a,b,c".
-        In ascending order by default. Add "-" in front of row name without
-        spaces to sort by descending order
-    - group : list[str] = None
-        the slug list of organizers of the form "organizer=a,b,c"
-    - from_date : ISO or UTC date string = None
+    - ordering: str = "start_date"
+        List of fields to order by, separated by ','. Prefix a field by '-' to
+        use descending order.
+    - search: str
+        search through all events
+    - preview: bool
+        limit the query to some fields
+    - group: str (accepted multiple times)
+        Filter by an organizing group slug
+    - from_date: ISO or UTC date string = None
         filter event whose begin date is greater or equal to from_date
-    - to_date : ISO or UTC date string = None
+    - to_date: ISO or UTC date string = None
         filter event whose begin date is less or equal to to_date
-    - is_member : bool = None
+    - is_member: bool = None
         whether user is member of the organizer group
-    - is_bookmarked : bool = None
+    - is_bookmarked: bool = None
         filter your favorite event
-    - is_shotgun : bool = None
+    - is_shotgun: bool = None
         filter shotgun events
-    - is_participating : bool = None
+    - is_participating: bool = None
         filter events current user is participating
-    - registration_open : bool = None
+    - is_registration_open: bool = None
         whether registration is open or closed
+    - page: int
+        the index of the page
+    - page_size: int
+        the number of temps per page
 
     Actions
     -------
@@ -99,30 +106,34 @@ class EventViewSet(viewsets.ModelViewSet):
         return EventPreviewSerializer
 
     def get_queryset(self) -> list[Event]:
-        today = timezone.now()
+        now = timezone.now()
         user = self.request.user
 
         # query params
-        groups_params = self.query_params.getlist('group', [])
-        groups = ','.join(groups_params).split(',') if groups_params else []
+        group_params = self.query_params.getlist('group', [])
+        groups = ','.join(group_params).split(',') if group_params else []
         is_member = parse_bool(self.query_params.get('is_member'))
         is_shotgun = parse_bool(self.query_params.get('is_shotgun'))
         is_bookmarked = parse_bool(self.query_params.get('is_bookmarked'))
         is_participating = self.query_params.get('is_participating')
-        registration_open = parse_bool(
-            self.query_params.get('registration_open'))
+        is_registration_open = parse_bool(
+            self.query_params.get('is_registration_open'))
         from_date = self.query_params.get('from_date')
         to_date = self.query_params.get('to_date')
 
         # filtering
         qs = Event.objects.filter(
             Q(publicity='Pub') | Q(group__members__user=user))
+        if len(groups) > 0:
+            qs = qs.filter(group__slug__in=groups)
+        if from_date:
+            qs = qs.filter(end_date__gte=from_date)
+        if to_date:
+            qs = qs.filter(start_date__lte=to_date)
         if is_member is True:
             qs = qs.filter(group__members__user=user)
         if is_member is False:
             qs = qs.exclude(group__members__user=user)
-        if is_shotgun is not None:
-            qs = qs.filter(max_participant__isnull=not is_shotgun)
         if is_participating is True:
             qs = qs.filter(participants__user=user)
         if is_participating is False:
@@ -131,21 +142,15 @@ class EventViewSet(viewsets.ModelViewSet):
             qs = qs.filter(bookmarks__user=user)
         if is_bookmarked is False:
             qs = qs.exclude(bookmarks__user=user)
-        if len(groups) > 0:
-            qs = qs.filter(group__slug__in=groups)
-        if from_date:
-            qs = qs.filter(end_date__gte=from_date)
-        if to_date:
-            qs = qs.filter(start_date__lte=to_date)
-        if registration_open is not None:
-            qs = (qs
-                  .annotate(registration_open=(
-                      (Q(start_registration__lte=today)
-                       | Q(start_registration__isnull=True))
-                      & (Q(end_registration__gte=today)
-                         | Q(end_registration__isnull=True))
-                  ))
-                  .filter(registration_open=registration_open))
+        if is_shotgun is not None:
+            qs = qs.filter(max_participant__isnull=not is_shotgun)
+        if is_registration_open is not None:
+            condition = ((Q(start_registration__lte=now)
+                          | Q(start_registration__isnull=True))
+                         & (Q(end_registration__gte=now)
+                            | Q(end_registration__isnull=True)))
+            qs = qs.filter(condition if is_registration_open else ~condition)
+
         return qs.select_related('group').distinct()
 
     @action(detail=True, filter_backends=[])

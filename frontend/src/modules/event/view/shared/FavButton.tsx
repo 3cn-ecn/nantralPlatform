@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -9,7 +9,7 @@ import axios from 'axios';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-function FavButton(props: {
+export function FavButton(props: {
   eventId: number;
   selected: boolean;
   iconized?: boolean;
@@ -25,13 +25,13 @@ function FavButton(props: {
     setLoading(true);
     if (fav) {
       axios
-        .delete(`/api/event/${eventId}/favorite`)
+        .delete(`/api/event/event/${eventId}/bookmark/`)
         .then(() => setFav(false))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     } else {
       axios
-        .post(`/api/event/${eventId}/favorite`)
+        .post(`/api/event/event/${eventId}/bookmark/`)
         .then(() => setFav(true))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
@@ -102,5 +102,3 @@ FavButton.defaultProps = {
   size: '1.5625rem',
   iconized: false,
 };
-
-export default FavButton;

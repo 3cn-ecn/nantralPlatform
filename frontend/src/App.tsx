@@ -16,6 +16,7 @@ import ProfilePage from '#pages/Profile/Profile.page';
 import StudentPage from '#pages/Student/Student.page';
 import NavBarSide from '#shared/components/NavBarSide/NavBarSide';
 import NavBarTop from '#shared/components/NavBarTop/NavBarTop';
+import { ToastProvider } from '#shared/context/Toast.context';
 
 import getTheme from './theme';
 
@@ -65,56 +66,58 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-          <NavBarTop
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-            colorMode={preferredMode}
-            setColorMode={setPreferredMode}
-          />
-          <NavBarSide
-            menuOpen={menuOpen}
-            drawerWidth={drawerWidth}
-            variant={sideBarVariant}
-            onClose={() => setMenuOpen(false)}
-          />
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              width: '100%',
-              padding: 0,
-              paddingTop: 0,
-              transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-              }),
-              marginLeft:
-                sideBarVariant === 'persistent' ? `-${drawerWidth}px` : 0,
-              ...(menuOpen && {
+        <ToastProvider>
+          <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
+            <NavBarTop
+              menuOpen={menuOpen}
+              setMenuOpen={setMenuOpen}
+              colorMode={preferredMode}
+              setColorMode={setPreferredMode}
+            />
+            <NavBarSide
+              menuOpen={menuOpen}
+              drawerWidth={drawerWidth}
+              variant={sideBarVariant}
+              onClose={() => setMenuOpen(false)}
+            />
+            <Box
+              component="main"
+              sx={{
+                flexGrow: 1,
+                width: '100%',
+                padding: 0,
+                paddingTop: 0,
                 transition: theme.transitions.create('margin', {
-                  easing: theme.transitions.easing.easeOut,
-                  duration: theme.transitions.duration.enteringScreen,
+                  easing: theme.transitions.easing.sharp,
+                  duration: theme.transitions.duration.leavingScreen,
                 }),
-                marginLeft: 0,
-              }),
-            }}
-          >
-            <Toolbar />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/group" element={<GroupPage />} />
-              <Route path="/event" element={<EventPage />} />
-              <Route path="/event/:id" element={<EventDetailsPage />} />
-              <Route path="/student" element={<StudentPage />} />
-              <Route path="/legal-notice" element={<LegalNoticePage />} />
-              <Route path="/student/:studentId" element={<ProfilePage />} />
-              <Route path="*" element={<NotFoundPage />} />
-              {/* <Route path="/group/:groupTypeSlug" element={<GroupListPage />} /> */}
-            </Routes>
+                marginLeft:
+                  sideBarVariant === 'persistent' ? `-${drawerWidth}px` : 0,
+                ...(menuOpen && {
+                  transition: theme.transitions.create('margin', {
+                    easing: theme.transitions.easing.easeOut,
+                    duration: theme.transitions.duration.enteringScreen,
+                  }),
+                  marginLeft: 0,
+                }),
+              }}
+            >
+              <Toolbar />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/group" element={<GroupPage />} />
+                <Route path="/event" element={<EventPage />} />
+                <Route path="/event/:id" element={<EventDetailsPage />} />
+                <Route path="/student" element={<StudentPage />} />
+                <Route path="/legal-notice" element={<LegalNoticePage />} />
+                <Route path="/student/:studentId" element={<ProfilePage />} />
+                <Route path="*" element={<NotFoundPage />} />
+                {/* <Route path="/group/:groupTypeSlug" element={<GroupListPage />} /> */}
+              </Routes>
+            </Box>
           </Box>
-        </Box>
+        </ToastProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

@@ -1,11 +1,8 @@
-import React from 'react';
-
 import { Alert, Grid, Typography } from '@mui/material';
 
 import { Event } from '#modules/event/event.type';
-import EventCard, {
-  EventCardSkeleton,
-} from '#modules/event/view/EventCard/EventCard';
+import { EventCard } from '#modules/event/view/EventCard/EventCard';
+import { EventCardSkeleton } from '#modules/event/view/EventCard/EventCardSkeleton';
 import { AccordionSection } from '#shared/components/Section/AccordionSection';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { FormEventProps } from '#types/Event';
@@ -81,7 +78,7 @@ export function EventSection(props: {
       if (events.length > 0) {
         content = allEvents.map((event) => (
           <Grid item xs={12} sm={6} md={4} key={event.id} flexGrow={1}>
-            <EventCard event={event} onUpdate={onUpdate} onDelete={onDelete} />
+            <EventCard event={event} />
           </Grid>
         ));
       } else {

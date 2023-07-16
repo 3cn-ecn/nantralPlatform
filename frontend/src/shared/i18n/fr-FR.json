@@ -8,8 +8,9 @@
     "whatYouCanDo": "Ce que vous pouvez faire maintenant :"
   },
   "button": {
-    "cancel": "annuler",
+    "cancel": "Annuler",
     "close": "Fermer",
+    "confirm": "Valider",
     "joinButton": {
       "register": "s'inscrire",
       "registerLink": "lien d'inscription",
@@ -18,7 +19,6 @@
       "unsuscribe": "se désinscrire"
     },
     "like": "J'aime",
-    "seeAll": "Voir tous",
     "yes": "oui"
   },
   "calendar": {
@@ -35,8 +35,6 @@
     "joinNow": "Rejoindre maintenant",
     "noClub": "Vous n'avez rejoint aucun groupe pour le moment"
   },
-  "date_picker": {
-  },
   "event": {
     "action_menu": {
       "edit": "Modifier",
@@ -45,6 +43,13 @@
       "unsubscribe": "Se désinscrire"
     },
     "adminWarning": "Vous devez être admin de votre club pour créer un évènement",
+    "bookmarkButton": {
+      "label": "Est dans les favoris",
+      "tooltip": {
+        "add": "Ajouter aux favoris",
+        "remove": "Retirer des favoris"
+      }
+    },
     "endInscription": "L'inscription est ouverte jusqu'au",
     "error": "Erreur lors du chargement des évènements",
     "event": "Évènement",
@@ -53,6 +58,26 @@
     "no_event": "Aucun évènement",
     "participants": "Participants",
     "participantsList": "Liste des participants",
+    "participateButton": {
+      "isParticipating": "Participant",
+      "openForm": "Inscription",
+      "participate": "Je participe",
+      "registrationEnded": "Shotgun terminé",
+      "shotgun": "Shotgun !",
+      "unregisterModal": {
+        "message": "Voulez-vous vraiment vous désinscrire de l'évènement ?",
+        "title": "Se désinscrire de l'évènement 😿"
+      },
+      "willStartOn": "Shotgun {{date}}"
+    },
+    "registration": {
+      "register": {
+        "success": "Votre inscription a bien été enregistrée !"
+      },
+      "unregister": {
+        "success": "Vous avez bien été désinscrit."
+      }
+    },
     "shotgunDatails": "Détails du shotgun"
   },
   "filterbar": {
@@ -117,9 +142,17 @@
   },
   "home": {
     "all": "Tous",
+    "eventSection": {
+      "error": "Erreur : les évènements n'ont pas pu êre chargés 😢",
+      "isEmpty": "Aucun évènement à venir... 🥺 Créez-en un !",
+      "openEventPageButton": {
+        "label": "Voir tous"
+      },
+      "title": "Évènements à venir"
+    },
     "myClubs": "Mes groupes",
     "postSection": {
-      "error": "Erreur : les annonces n'ont pas pu êre chargées 😢",
+      "error": "Erreur : les annonces n'ont pas pu être chargées 😢",
       "isEmpty": "Aucun post ces derniers jours... 🥺 Créez-en un !",
       "pinnedTitle": "À la une",
       "title": "Annonces"
@@ -214,8 +247,6 @@
     "createModal": {
       "title": "Créer un post"
     },
-    "edit": {
-    },
     "editModal": {
       "title": "Modifier le post"
     },
@@ -273,8 +304,6 @@
     "header": "Suggestions / Bug",
     "title": "Titre",
     "type": "Type"
-  },
-  "time": {
   },
   "user_menu": {
     "admin": "Interface Admin",

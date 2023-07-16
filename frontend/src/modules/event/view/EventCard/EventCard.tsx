@@ -1,207 +1,94 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import {
+  Event as MaterialEventIcon,
+  Schedule as ScheduleIcon,
+} from '@mui/icons-material';
 import {
   Card,
   CardActionArea,
+  CardActions,
   CardContent,
   CardMedia,
-  CircularProgress,
-  Skeleton,
   Typography,
 } from '@mui/material/';
+import { differenceInHours } from 'date-fns';
 
-import { EventCalendarItem } from '#modules/event/event.type';
+import { EventPreview } from '#modules/event/event.type';
+import { Avatar } from '#shared/components/Avatar/Avatar';
+import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { FormEventProps } from '#types/Event';
 
-import FavButton from '../../../../shared/components/Button/FavButton';
-import JoinButton from '../../../../shared/components/Button/JoinButton';
-import MoreActionsButton from '../../../../shared/components/Button/MoreActionsButton';
-import { ClubAvatar } from '../../../../shared/components/ClubAvatar/ClubAvatar';
-import './EventCard.scss';
+import { BookmarkedButton } from '../shared/BookmarkedButton';
+import { MoreActionsButton } from '../shared/MoreActionsButton';
+import { ParticipateButton } from '../shared/ParticipateButton';
 
-function InfoItem(props: { name: string; value: string }) {
-  let icon = null;
-  const { name, value } = props;
-  const text = value;
+const DEFAULT_EVENT_IMAGE = '/static/img/default-banner.png';
 
-  switch (name) {
-    case 'date':
-      icon = (
-        <CalendarTodayIcon
-          className="infoItemElement"
-          sx={{ fontSize: '1.5em' }}
-        />
-      );
-      break;
-    case 'time':
-      icon = (
-        <AccessTimeIcon
-          className="infoItemElement"
-          sx={{ fontSize: '1.5em' }}
-        />
-      );
-      break;
-    default:
-  }
-  return (
-    <div className="infoItem">
-      {icon}
-      <Typography
-        sx={{ fontSize: '1.2em', paddingLeft: '7px' }}
-        variant="subtitle2"
-        className="infoItemElement"
-        style={{ paddingLeft: '7px' }}
-      >
-        {text}
-      </Typography>
-    </div>
-  );
-}
-
-function EventCard(props: {
-  event: EventCalendarItem;
-  onUpdate?: (newEvent: FormEventProps) => void;
-  onDelete?: () => void;
-}) {
-  const { event, onDelete, onUpdate } = props;
-  const {
-    title,
-    numberOfParticipants,
-    maxParticipant,
-    startDate,
-    image,
-    isParticipating,
-    formUrl,
-    isFavorite,
-    endRegistration,
-    startRegistration,
-    id,
-  } = event;
-  const [participating, setParticipating] = useState(isParticipating);
-
-  const { formatDate, formatTime } = useTranslation();
-
-  let variant: 'shotgun' | 'normal' | 'form'; // Variant of the event : form, normal or shotgun
-  if (formUrl) variant = 'form';
-  else if (maxParticipant === null) variant = 'normal';
-  else variant = 'shotgun';
-
-  // Conversion of the date to a human redeable format
-  const dateValue = new Date(startDate);
-  const dateText = formatDate(dateValue, {
-    weekday: 'long',
-    month: 'long',
-    day: 'numeric',
-  });
-  const hourText = formatTime(dateValue, { timeStyle: 'short' });
-  const iconSize = '3.75rem';
-  const groupIcon =
-    typeof event.group.icon === 'undefined' ? (
-      <CircularProgress size={iconSize} />
-    ) : (
-      <ClubAvatar
-        clubUrl={event.group.url}
-        logoUrl={event.group.icon}
-        name={event.group.name}
-        textPosition="bottom"
-        size={iconSize}
-        hideName
-      />
-    );
-  const navigate = useNavigate();
-  const banner = image === null ? '/static/img/default-banner.png' : image;
-  return (
-    <div style={{ position: 'relative' }}>
-      <Card className="eventCard" sx={{ fontSize: '1rem' }}>
-        <CardActionArea
-          disableRipple
-          sx={{ fontSize: '1rem' }}
-          onClick={() => {
-            navigate(`/event/${id}/`);
-          }}
-        >
-          <CardMedia
-            className="eventBanner"
-            component="img"
-            image={banner}
-            alt="Banner"
-          />
-          <CardContent sx={{ padding: 0 }}>
-            <div className="infoContainer">
-              <div className="infoMain">
-                <div style={{ minWidth: iconSize, minHeight: iconSize }}></div>
-
-                <div className="infos">
-                  <Typography
-                    sx={{ fontSize: '1.3rem', marginBottom: '0.2rem' }}
-                    variant="h5"
-                    className="eventTitle"
-                  >
-                    {title}
-                  </Typography>
-                  <Typography sx={{ fontSize: '1rem' }} variant="caption">
-                    {event.group.name}
-                  </Typography>
-                </div>
-              </div>
-              <div className="infoDetails">
-                <InfoItem name="date" value={dateText} />
-                <InfoItem name="time" value={hourText} />
-              </div>
-            </div>
-          </CardContent>
-        </CardActionArea>
-        <div className="joinButton">
-          <JoinButton
-            variant={variant}
-            person={numberOfParticipants}
-            maxPerson={maxParticipant}
-            participating={participating}
-            eventId={id}
-            link={formUrl}
-            startRegistration={startRegistration}
-            endRegistration={endRegistration}
-            setParticipating={setParticipating}
-            sx={{ width: '100%' }}
-          />
-        </div>
-      </Card>
-      <div className="groupIcon">{groupIcon}</div>
-      <div className="topButtons">
-        <div className="favIcon">
-          <FavButton eventId={id} selected={isFavorite} size="2rem" iconized />
-        </div>
-        <MoreActionsButton
-          isAdmin={false}
-          className="moreActions"
-          shareUrl={`${window.location.origin}/event/${id}`}
-          id={id}
-          size="2rem"
-          participating={participating}
-          setParticipating={setParticipating}
-        />
-      </div>
-    </div>
-  );
-}
-
-EventCard.defaultProps = {
-  onUpdate: () => null,
-  onDelete: () => null,
+type EventCardProps = {
+  event: EventPreview;
 };
 
-export function EventCardSkeleton() {
+export function EventCard({ event }: EventCardProps) {
+  const { formatDate, formatTime } = useTranslation();
+  const formatShortDate = (date: Date) =>
+    formatDate(date, { weekday: 'short', day: 'numeric', month: 'long' });
+  const isLongerThanADay =
+    differenceInHours(event.endDate, event.startDate) > 24;
+
   return (
-    <Skeleton
-      variant="rectangular"
-      height="22.85rem"
-      sx={{ fontSize: '1rem' }}
-    />
+    <Card variant="outlined">
+      <CardActionArea component={Link} to={`/event/${event.id}`}>
+        <CardMedia
+          component="img"
+          image={event.image || DEFAULT_EVENT_IMAGE}
+          alt=""
+          height={140}
+        />
+        <CardContent sx={{ pb: 1 }}>
+          <FlexRow gap={1} alignItems="center">
+            <Avatar alt={event.group.shortName} src={event.group.icon} />
+            <FlexCol>
+              <Typography variant="h6" lineHeight={1} mb="4px" noWrap>
+                {event.title}
+              </Typography>
+              <Typography variant="caption" lineHeight={1} noWrap>
+                {event.group.name}
+              </Typography>
+            </FlexCol>
+          </FlexRow>
+          <FlexRow mt={2} gap={2} flexWrap="wrap">
+            <FlexRow gap={1} alignItems="center">
+              <MaterialEventIcon />
+              <Typography variant="body2">
+                {isLongerThanADay
+                  ? `${formatShortDate(event.startDate)} - ${formatShortDate(
+                      event.endDate
+                    )}`
+                  : formatShortDate(event.startDate)}
+              </Typography>
+            </FlexRow>
+            {!isLongerThanADay && (
+              <FlexRow gap={1} alignItems="center">
+                <ScheduleIcon />
+                <Typography variant="body2">
+                  {formatTime(event.startDate)}
+                </Typography>
+              </FlexRow>
+            )}
+          </FlexRow>
+        </CardContent>
+      </CardActionArea>
+      <CardActions disableSpacing>
+        <ParticipateButton event={event} sx={{ width: '100%', mr: 1 }} />
+        <BookmarkedButton eventId={event.id} selected={event.isBookmarked} />
+        <MoreActionsButton
+          isAdmin={event.group.isAdmin}
+          shareUrl={`${window.location.origin}/event/${event.id}`}
+          eventId={event.id}
+          isParticipating={event.isParticipating}
+        />
+      </CardActions>
+    </Card>
   );
 }
-
-export default EventCard;

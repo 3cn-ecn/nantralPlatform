@@ -264,7 +264,7 @@ function NavBarTop(props: {
                 />
               </Icon>
             ) : (
-              <Avatar title={student.name} url={student.picture} />
+              <Avatar alt={student.name} src={student.picture} />
             )}
           </IconButton>
           <Menu

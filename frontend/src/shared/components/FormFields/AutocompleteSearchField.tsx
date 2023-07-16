@@ -213,8 +213,8 @@ function AutocompleteSearchFieldComponent<
           <FlexRow component="li" {...props}>
             {imagePropName !== undefined && (
               <Avatar
-                title={option[labelPropName]?.toString()}
-                url={option[imagePropName]?.toString()}
+                alt={option[labelPropName]?.toString()}
+                src={option[imagePropName]?.toString()}
                 size="s"
                 sx={{ mr: 1 }}
               />

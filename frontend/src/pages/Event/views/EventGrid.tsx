@@ -245,7 +245,7 @@ export default function EventGrid(props: {
                       organiser: tmp,
                     });
                   }}
-                  icon={<Avatar url={group.icon} size="s" title={group.name} />}
+                  icon={<Avatar src={group.icon} size="s" alt={group.name} />}
                   key={group.id}
                 />
               ))}

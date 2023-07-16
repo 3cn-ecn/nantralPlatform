@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -60,7 +59,7 @@ function NotificationItem(props) {
             width: '100%',
           }}
         >
-          <Avatar title={n.title} url={n.icon_url} size="m" />
+          <Avatar alt={n.title} src={n.icon_url} size="m" />
           <small className="notif">
             {n.title}
             <Box

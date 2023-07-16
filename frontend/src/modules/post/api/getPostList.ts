@@ -1,18 +1,20 @@
 import axios from 'axios';
 
+import { OrderingFields } from '#shared/api/orderingFields.types';
 import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
 
 import { adaptPostPreview } from '../infra/post.adapter';
-import { PostPreviewDTO } from '../infra/post.dto';
+import { PostDTO, PostPreviewDTO } from '../infra/post.dto';
 import { PostPreview } from '../post.types';
 
 type GetPostListParams = {
+  group?: string[];
   pinned?: boolean;
   isMember?: boolean;
   minDate?: Date;
   maxDate?: Date;
   search?: string;
-  ordering?: string;
+  ordering?: OrderingFields<PostDTO>;
   page?: number;
   pageSize?: number;
 };
@@ -22,12 +24,13 @@ export async function getPostList(
 ): Promise<Page<PostPreview>> {
   const { data } = await axios.get<PageDTO<PostPreviewDTO>>('/api/post/post/', {
     params: {
+      group: options.group,
       pinned: options.pinned,
       is_member: options.isMember,
       min_date: options.minDate,
       max_date: options.maxDate,
       search: options.search,
-      ordering: options.ordering,
+      ordering: options.ordering?.join(','),
       page: options.page,
       page_size: options.pageSize,
     },

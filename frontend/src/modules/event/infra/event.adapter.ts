@@ -14,17 +14,20 @@ export function adaptEvent(eventDto: EventDTO): Event {
     publicity: eventDto.publicity,
     image: eventDto.image,
     numberOfParticipants: eventDto.number_of_participants,
-    url: eventDto.absolute_url,
-    group: adaptGroupPreview(eventDto.group),
+    url: eventDto.url,
+    group: {
+      ...adaptGroupPreview(eventDto.group),
+      isAdmin: eventDto.is_group_admin,
+      isMember: eventDto.is_group_member,
+    },
     isParticipating: eventDto.is_participating,
+    isBookmarked: eventDto.is_bookmarked,
     maxParticipant: eventDto.max_participant,
     startRegistration:
       eventDto.start_registration && new Date(eventDto.start_registration),
     endRegistration:
       eventDto.end_registration && new Date(eventDto.end_registration),
     formUrl: eventDto.form_url,
-    isFavorite: eventDto.is_favorite,
-    isAdmin: eventDto.is_admin,
   };
 }
 
@@ -35,9 +38,19 @@ export function adaptEventPreview(eventDto: EventPreviewDTO): EventPreview {
     startDate: new Date(eventDto.start_date),
     endDate: new Date(eventDto.end_date),
     image: eventDto.image,
-    group: adaptGroupPreview(eventDto.group),
+    group: {
+      ...adaptGroupPreview(eventDto.group),
+      isAdmin: eventDto.is_group_admin,
+    },
     isParticipating: eventDto.is_participating,
-    isFavorite: eventDto.is_favorite,
-    isAdmin: eventDto.is_admin,
+    isBookmarked: eventDto.is_bookmarked,
+    url: eventDto.url,
+    numberOfParticipants: eventDto.number_of_participants,
+    maxParticipant: eventDto.max_participant,
+    startRegistration:
+      eventDto.start_registration && new Date(eventDto.start_registration),
+    endRegistration:
+      eventDto.end_registration && new Date(eventDto.end_registration),
+    formUrl: eventDto.form_url,
   };
 }

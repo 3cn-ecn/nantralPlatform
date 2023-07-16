@@ -16,4 +16,5 @@ type DjangoRestApiError<DTO> = DjangoRestApiGenericError &
   DjangoRestApiFieldValidationError<DTO> &
   DjangoRestApiNonFieldValidationError;
 
-export type ApiErrorDTO<DTO> = AxiosError<DjangoRestApiError<DTO> | null>;
+export type ApiErrorDTO<DTO = Record<string, never>> =
+  AxiosError<DjangoRestApiError<DTO> | null>;

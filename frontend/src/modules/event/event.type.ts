@@ -3,22 +3,21 @@ import { GroupPreview } from '#modules/group/group.type';
 export type Event = {
   id: number;
   title: string;
-  startDate: Date;
-  endDate: Date;
-  group: GroupPreview;
-  image: string;
-  isAdmin: boolean;
-  isParticipating: boolean;
-  isFavorite?: boolean;
-  url: string;
   description: string;
   location: string;
-  publicity: 'Pub' | 'Mem';
-  numberOfParticipants: number;
-  maxParticipant?: number;
-  startRegistration?: Date;
-  endRegistration?: Date;
-  formUrl?: string;
+  startDate: Date;
+  endDate: Date;
+  publicity: 'Mem' | 'Pub';
+  image: string;
+  numberOfParticipants: number | null;
+  url: string;
+  group: GroupPreview & { isAdmin: boolean; isMember: boolean };
+  isParticipating: boolean;
+  isBookmarked: boolean;
+  maxParticipant: number | null;
+  startRegistration: Date | null;
+  endRegistration: Date | null;
+  formUrl: string;
 };
 
 export type EventPreview = Pick<
@@ -27,17 +26,32 @@ export type EventPreview = Pick<
   | 'title'
   | 'startDate'
   | 'endDate'
-  | 'group'
   | 'image'
-  | 'isAdmin'
   | 'isParticipating'
-  | 'isFavorite'
->;
+  | 'isBookmarked'
+  | 'numberOfParticipants'
+  | 'maxParticipant'
+  | 'formUrl'
+  | 'startRegistration'
+  | 'endRegistration'
+  | 'url'
+> & {
+  group: GroupPreview & { isAdmin: boolean };
+};
 
-export type EventCalendarItem = Event & {
-  effectiveSize?: number;
-  globalSize?: number;
-  position?: number;
-  placed?: boolean;
-  slug?: string;
+export type EventForm = Pick<
+  Event,
+  | 'title'
+  | 'description'
+  | 'location'
+  | 'startDate'
+  | 'endDate'
+  | 'publicity'
+  | 'maxParticipant'
+  | 'startRegistration'
+  | 'endRegistration'
+  | 'formUrl'
+> & {
+  group: number;
+  image: File;
 };

@@ -6,17 +6,19 @@ export function LoadingButton({
   loading = false,
   disabled,
   color,
+  startIcon,
   endIcon,
   ...props
 }: LoadingButtonProps) {
+  const loadingIcon = <CircularProgress color={color} size="1em" />;
+
   return (
     <Button
       {...props}
       disabled={disabled || loading}
       color={color}
-      endIcon={
-        loading ? <CircularProgress color={color} size="1em" /> : endIcon
-      }
+      startIcon={loading && startIcon ? loadingIcon : startIcon}
+      endIcon={loading && !startIcon ? loadingIcon : endIcon}
     />
   );
 }

@@ -1,9 +1,11 @@
+import { Link } from 'react-router-dom';
+
 import {
   Edit as EditIcon,
   Group as GroupIcon,
   PushPin as PushPinIcon,
 } from '@mui/icons-material';
-import { Box, Container, Tooltip, Typography } from '@mui/material';
+import { Box, Tooltip, Typography } from '@mui/material';
 import IconButton from '@mui/material/IconButton/IconButton';
 
 import { Post } from '#modules/post/post.types';
@@ -37,11 +39,13 @@ export function ReadPostModalContent({
       <ResponsiveDialogHeader
         onClose={onClose}
         leftIcon={
-          <IconButton href={post?.group.url} sx={{ p: 0 }}>
-            {post?.group?.name && (
-              <Avatar title={post.group.name} url={post.group.icon} size="m" />
-            )}
-          </IconButton>
+          <Avatar
+            alt={post.group.shortName}
+            src={post.group.icon}
+            component={Link}
+            to={post.group.url}
+            reloadDocument
+          />
         }
       >
         <Box>
@@ -62,9 +66,11 @@ export function ReadPostModalContent({
         {post.image && (
           <img alt="" src={post.image.toString()} style={{ width: '100%' }} />
         )}
-        <Container
+        <Box
+          paddingX={3}
+          paddingY={2}
           dangerouslySetInnerHTML={{ __html: post.description }}
-        ></Container>
+        />
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter sx={{ justifyContent: 'space-between', pl: 3 }}>
         <Typography variant="caption" color="text.secondary" fontStyle="italic">
