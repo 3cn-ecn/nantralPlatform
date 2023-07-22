@@ -1,5 +1,14 @@
-import { DjangoRestApiFieldValidationError } from './errors.dto';
+import {
+  ApiErrorDTO,
+  ApiFormErrorDTO,
+  DjangoRestApiFieldValidationError,
+} from './errors.dto';
 
-export type ApiError<DTO> = DjangoRestApiFieldValidationError<DTO> & {
+export type ApiFormError<DTO> = ApiFormErrorDTO<DTO> & {
+  fields: DjangoRestApiFieldValidationError<DTO>;
   globalErrors?: string[];
+};
+
+export type ApiError = ApiErrorDTO & {
+  message: string;
 };

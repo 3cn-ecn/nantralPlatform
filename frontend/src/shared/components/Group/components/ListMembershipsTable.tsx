@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -145,11 +145,11 @@ function MembershipRow(props: {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Avatar
             url={item.student.picture}
-            title={item.student.full_name}
+            title={item.student.name}
             size="small"
           />
           <Typography noWrap fontWeight="lg">
-            {item.student.full_name}
+            {item.student.name}
           </Typography>
         </Box>
       </TableCell>

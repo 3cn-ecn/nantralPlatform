@@ -11,11 +11,11 @@ import { CustomTextField } from '#shared/components/FormFields/CustomTextField';
 import { FileField } from '#shared/components/FormFields/FileField';
 import { SelectField } from '#shared/components/FormFields/SelectField';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { ApiError } from '#shared/infra/errors';
+import { ApiFormError } from '#shared/infra/errors';
 
 type PostFormFieldsProps = {
   isError: boolean;
-  error: ApiError<PostFormDTO>;
+  error: ApiFormError<PostFormDTO>;
   formValues: PostForm;
   updateFormValues: Dispatch<Partial<PostForm>>;
   prevData?: Post;
@@ -34,7 +34,8 @@ export function PostFormFields({
   // such as all of our Field components. This allows to optimize performance
   // (when a field is modified, we only rerender this field and not all of them).
   const fetchInitialGroupOptions = useCallback(
-    () => getGroupList({ pageSize: 7 }).then((data) => data.results),
+    () =>
+      getGroupList({ pageSize: 7, isAdmin: true }).then((data) => data.results),
     []
   );
   const fetchGroupOptions = useCallback(
@@ -71,7 +72,7 @@ export function PostFormFields({
           (val) => updateFormValues({ title: val }),
           [updateFormValues]
         )}
-        errors={error?.title}
+        errors={error?.fields?.title}
         required
       />
       <AutocompleteSearchField
@@ -84,7 +85,7 @@ export function PostFormFields({
           [updateFormValues]
         )}
         defaultObjectValue={prevData?.group}
-        errors={error?.group}
+        errors={error?.fields?.group}
         required
         fetchInitialOptions={fetchInitialGroupOptions}
         fetchOptions={fetchGroupOptions}
@@ -99,7 +100,7 @@ export function PostFormFields({
           (val) => updateFormValues({ description: val }),
           [updateFormValues]
         )}
-        errors={error?.description}
+        errors={error?.fields?.description}
         multiline
         minRows={3}
       />
@@ -113,7 +114,7 @@ export function PostFormFields({
           [updateFormValues]
         )}
         prevFileName={prevData?.image}
-        errors={error?.image}
+        errors={error?.fields?.image}
         accept="image/*"
       />
       <SelectField
@@ -124,7 +125,7 @@ export function PostFormFields({
           (val: 'Pub' | 'Mem') => updateFormValues({ publicity: val }),
           [updateFormValues]
         )}
-        errors={error?.publicity}
+        errors={error?.fields?.publicity}
         defaultValue="Pub"
       >
         <MenuItem value="Pub">{t('post.form.publicity.options.pub')}</MenuItem>

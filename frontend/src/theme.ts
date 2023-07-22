@@ -32,7 +32,7 @@ function getTheme(mode: PaletteMode) {
       fontWeightLight: 300,
       fontWeightBold: 600,
       h1: {
-        fontWeight: 600,
+        fontWeight: 800,
       },
       h2: {
         fontWeight: 600,

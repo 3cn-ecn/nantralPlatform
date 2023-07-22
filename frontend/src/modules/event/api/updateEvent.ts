@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
+import { ApiFormErrorDTO, adaptApiFormErrors } from '#shared/infra/errors';
 
 import { EventForm } from '../event.type';
 import { convertEventForm } from '../infra/event.converter';
@@ -14,7 +14,7 @@ export type UpdateEventVariables = {
 export async function updateEvent({ id, data }: UpdateEventVariables) {
   await axios
     .putForm<EventFormDTO>(`/api/event/event/${id}/`, convertEventForm(data))
-    .catch((err: ApiErrorDTO<EventFormDTO>) => {
-      throw adaptApiErrors(err);
+    .catch((err: ApiFormErrorDTO<EventFormDTO>) => {
+      throw adaptApiFormErrors(err);
     });
 }

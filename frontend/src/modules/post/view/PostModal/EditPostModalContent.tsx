@@ -14,10 +14,10 @@ import {
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { ApiError } from '#shared/infra/errors';
+import { ApiFormError } from '#shared/infra/errors';
 import { useObjectState } from '#shared/utils/useObjectState';
 
-import { PostFormFields } from '../shared/PostForm';
+import { PostFormFields } from '../shared/PostFormFields';
 
 type EditPostModalContentProps = {
   post: Post;
@@ -47,7 +47,7 @@ export function EditPostModalContent({
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
     void,
-    ApiError<PostFormDTO>,
+    ApiFormError<PostFormDTO>,
     UpdatePostVariables
   >(updatePost);
 

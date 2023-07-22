@@ -32,7 +32,7 @@ export interface Group extends SimpleGroup {
 
 export interface SimpleStudent {
   id: number;
-  full_name: string;
+  name: string;
   url: string;
   picture: string;
 }
@@ -50,7 +50,7 @@ export interface Membership {
   id: number;
   student: {
     id: number;
-    full_name: string;
+    name: string;
     url: string;
     picture: string;
   };

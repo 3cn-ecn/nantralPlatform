@@ -12,16 +12,16 @@ import { LoadingButton } from '../LoadingButton/LoadingButton';
 type ConfirmationModalProps = {
   title: string;
   body: string;
-  onClose: () => void;
-  onValidCallback: () => void;
+  onCancel: () => void;
+  onConfirm: () => void;
   loading?: boolean;
 };
 
 export function ConfirmationModal({
   title,
   body,
-  onClose,
-  onValidCallback,
+  onCancel,
+  onConfirm,
   loading = false,
 }: ConfirmationModalProps) {
   const { t } = useTranslation();
@@ -29,7 +29,7 @@ export function ConfirmationModal({
   return (
     <Dialog
       open
-      onClose={() => onClose()}
+      onClose={() => onCancel()}
       aria-labelledby="responsive-dialog-title"
     >
       <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
@@ -37,12 +37,12 @@ export function ConfirmationModal({
         <DialogContentText>{body}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose()} variant="text">
+        <Button onClick={() => onCancel()} variant="text">
           {t('button.cancel')}
         </Button>
         <LoadingButton
           loading={loading}
-          onClick={() => onValidCallback()}
+          onClick={() => onConfirm()}
           variant="contained"
           autoFocus
         >

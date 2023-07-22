@@ -25,6 +25,8 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 1000 * 60, // time before refetching the server
       cacheTime: 1000 * 60 * 60 * 24 * 7, // time before erasing the cached data
+      retry: 1,
+      retryDelay: 1000,
     },
   },
 });

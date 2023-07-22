@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useState } from 'react';
 
 import {
   AddCircle as AddCircleIcon,
@@ -6,7 +6,7 @@ import {
   OpenInNew as OpenInNewIcon,
   LocalFireDepartment as ShotgunIcon,
 } from '@mui/icons-material';
-import { SxProps, Theme } from '@mui/material';
+import { ButtonProps, SxProps, Theme } from '@mui/material';
 import { differenceInHours } from 'date-fns';
 
 import { EventPreview } from '#modules/event/event.type';
@@ -18,14 +18,15 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 interface ParticipateButtonProps {
   event: EventPreview;
   sx?: SxProps<Theme>;
+  participatingVariant?: ButtonProps['variant'];
 }
 
-export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
-  const [isParticipating, setIsParticipating] = useState(event.isParticipating);
-  const [isOpenConfirmationModal, toggleConfirmationModal] = useReducer(
-    (prev) => !prev,
-    false
-  );
+export function ParticipateButton({
+  event,
+  sx,
+  participatingVariant = 'outlined',
+}: ParticipateButtonProps) {
+  const [isOpenConfirmationModal, setIsOpenConfirmationModal] = useState(false);
 
   const { register, unregister, isLoading } = useRegistrationMutation(event.id);
   const { t, formatDate, formatTime } = useTranslation();
@@ -43,22 +44,28 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
       event.numberOfParticipants >= event.maxParticipant) ||
     (!!event.endRegistration && event.endRegistration < now);
 
-  const participate = () =>
-    register({ onSuccess: () => setIsParticipating(true) });
+  const onRegisterAction = () => register({});
 
-  const quit = () =>
+  const onUnregisterAction = () => {
+    setIsOpenConfirmationModal(true);
+  };
+
+  const onUnregisterModalConfirm = () =>
     unregister({
       onSuccess: () => {
-        setIsParticipating(false);
-        toggleConfirmationModal();
+        setIsOpenConfirmationModal(false);
       },
     });
+
+  const onUnregisterModalCancel = () => {
+    setIsOpenConfirmationModal(false);
+  };
 
   const getStartIcon = () => {
     if (isShotgun) {
       return <ShotgunIcon />;
     }
-    if (isParticipating) {
+    if (event.isParticipating) {
       return <CheckCircleIcon />;
     }
     if (!event.formUrl) {
@@ -74,14 +81,14 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
     if (event.formUrl) {
       return <OpenInNewIcon />;
     }
-    if (isShotgun && isParticipating) {
+    if (isShotgun && event.isParticipating) {
       return <CheckCircleIcon />;
     }
     return undefined;
   };
 
   const getLabel = () => {
-    if (isParticipating) {
+    if (event.isParticipating) {
       return t('event.participateButton.isParticipating');
     }
     if (isShotgun && isShotgunNotStarted) {
@@ -112,10 +119,10 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
       <LoadingButton
         loading={isLoading}
         disabled={isShotgunNotStarted || isShotgunFinish}
-        onClick={isParticipating ? toggleConfirmationModal : participate}
+        onClick={event.isParticipating ? onUnregisterAction : onRegisterAction}
         startIcon={getStartIcon()}
         endIcon={getEndIcon()}
-        variant={isParticipating ? 'outlined' : 'contained'}
+        variant={event.isParticipating ? participatingVariant : 'contained'}
         sx={sx}
       >
         {getLabel()}
@@ -124,8 +131,8 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
         <ConfirmationModal
           title={t('event.participateButton.unregisterModal.title')}
           body={t('event.participateButton.unregisterModal.message')}
-          onClose={toggleConfirmationModal}
-          onValidCallback={quit}
+          onCancel={onUnregisterModalCancel}
+          onConfirm={onUnregisterModalConfirm}
           loading={isLoading}
         />
       )}

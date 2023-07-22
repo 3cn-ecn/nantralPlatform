@@ -1,25 +1,8 @@
 {
-  "404": {
-    "bug": "If you think it's a bug, you can",
-    "error": "Error 404 - Page Not Found",
-    "home": "Else, go back to home page by clicking on the sheep:",
-    "notFound": "Sorry, it seems that this page does not exist...",
-    "report": "report it here",
-    "whatYouCanDo": "What you can do now:"
-  },
   "button": {
     "cancel": "Cancel",
-    "close": "Close",
     "confirm": "OK",
-    "joinButton": {
-      "register": "register",
-      "registerLink": "register link",
-      "shotgunClosed": "shotgun closed",
-      "title": "Do you want to unregister from this event?",
-      "unsuscribe": "unregister"
-    },
-    "like": "Like",
-    "yes": "Yes"
+    "like": "Like"
   },
   "calendar": {
     "export": "Export events",
@@ -35,10 +18,17 @@
     "joinNow": "Join now",
     "noClub": "You haven't joined any groups yet"
   },
+  "error": {
+    "errorMessage": "Error: {{errorMessage}}",
+    "feedback": "Report a bug",
+    "goToHome": "Go home",
+    "notFoundMessage": "Sorry, it seems that this page does not exist...",
+    "oups": "Oops",
+    "retry": "Retry"
+  },
   "event": {
     "action_menu": {
       "edit": "Edit",
-      "linkCopied": "Link copied",
       "share": "Share",
       "unsubscribe": "Unregister"
     },
@@ -50,14 +40,15 @@
         "remove": "Remove from bookmarks"
       }
     },
-    "endInscription": "Registration is open until",
     "error": "Error while loading the events",
     "event": "Event",
-    "eventIsFull": "This event is full",
-    "inscriptionsBeginAt": "Registration opens on",
     "no_event": "No Event",
-    "participants": "Participants",
-    "participantsList": "List of participants",
+    "participants": {
+      "noParticipants": "No participants 😔",
+      "title": "Participants",
+      "titleWithMax": "{{number}}/{{max}} participants",
+      "titleWithNumber": "{{number}} participants"
+    },
     "participateButton": {
       "isParticipating": "Participant",
       "openForm": "Registration",
@@ -70,6 +61,12 @@
       },
       "willStartOn": "Shotgun {{date}}"
     },
+    "popupAlerts": {
+      "maxParticipantReached": "Shotgun finished! The maximum number of participants ({{max}}) has been reached.",
+      "registrationHasEnded": "Shotgun finished! Registrations were until {{date}}.",
+      "registrationNotStarted": "Registration will open on {{date}}.",
+      "registrationWillBeSoonEnded": "Registrations are open until {{date}}."
+    },
     "registration": {
       "register": {
         "success": "Your registration has been saved!"
@@ -77,8 +74,7 @@
       "unregister": {
         "success": "You have been unregistered."
       }
-    },
-    "shotgunDatails": "Shotgun Details"
+    }
   },
   "filterbar": {
     "date": "Date",
@@ -318,5 +314,11 @@
     "theme": "Theme",
     "title_language": "Language",
     "title_theme": "Theme"
+  },
+  "utils": {
+    "shareLink": {
+      "failure": "The link could not be copied",
+      "success": "Link copied!"
+    }
   }
 }

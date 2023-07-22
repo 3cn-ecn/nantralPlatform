@@ -87,7 +87,7 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
   font-family: Heebo,sans-serif;
   font-size: 0.875rem;
   line-height: 1.75;
@@ -371,7 +371,7 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
   font-family: Heebo,sans-serif;
   font-size: 0.875rem;
   line-height: 1.75;
@@ -710,7 +710,7 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
   font-family: Heebo,sans-serif;
   font-size: 0.875rem;
   line-height: 1.75;
@@ -994,7 +994,7 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
   font-family: Heebo,sans-serif;
   font-size: 0.875rem;
   line-height: 1.75;
@@ -1333,7 +1333,7 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
   font-family: Heebo,sans-serif;
   font-size: 0.875rem;
   line-height: 1.75;
@@ -1617,7 +1617,7 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
   font-family: Heebo,sans-serif;
   font-size: 0.875rem;
   line-height: 1.75;
@@ -1956,7 +1956,7 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
   font-family: Heebo,sans-serif;
   font-size: 0.875rem;
   line-height: 1.75;
@@ -2240,7 +2240,7 @@ exports[`<ChooseDisplay /> should display a ChooseDisplay which update variable 
   -webkit-text-decoration: none;
   text-decoration: none;
   color: inherit;
-  font-weight: 600;
+  font-weight: 500;
   font-family: Heebo,sans-serif;
   font-size: 0.875rem;
   line-height: 1.75;

@@ -1,25 +1,8 @@
 {
-  "404": {
-    "bug": "Si vous pensez que c'est un bug, vous pouvez",
-    "error": "Erreur 404 - Page introuvable",
-    "home": "Sinon, retournez à la page d'accueil en cliquant sur le mouton :",
-    "notFound": "Désolé, il semblerait que cette page n'existe pas...",
-    "report": "nous le signaler ici",
-    "whatYouCanDo": "Ce que vous pouvez faire maintenant :"
-  },
   "button": {
     "cancel": "Annuler",
-    "close": "Fermer",
     "confirm": "Valider",
-    "joinButton": {
-      "register": "s'inscrire",
-      "registerLink": "lien d'inscription",
-      "shotgunClosed": "shotgun fermé",
-      "title": "Voulez-vous vous désinscrire de cet événements ?",
-      "unsuscribe": "se désinscrire"
-    },
-    "like": "J'aime",
-    "yes": "oui"
+    "like": "J'aime"
   },
   "calendar": {
     "export": "Exporter les évènements",
@@ -35,10 +18,17 @@
     "joinNow": "Rejoindre maintenant",
     "noClub": "Vous n'avez rejoint aucun groupe pour le moment"
   },
+  "error": {
+    "errorMessage": "Erreur : {{errorMessage}}",
+    "feedback": "Signaler un bug",
+    "goToHome": "Retour à l'accueil",
+    "notFoundMessage": "Désolé, il semblerait que cette page n'existe pas...",
+    "oups": "Oops",
+    "retry": "Réessayer"
+  },
   "event": {
     "action_menu": {
       "edit": "Modifier",
-      "linkCopied": "Lien copié",
       "share": "Partager",
       "unsubscribe": "Se désinscrire"
     },
@@ -50,14 +40,15 @@
         "remove": "Retirer des favoris"
       }
     },
-    "endInscription": "L'inscription est ouverte jusqu'au",
     "error": "Erreur lors du chargement des évènements",
     "event": "Évènement",
-    "eventIsFull": "Cet évènement est complet",
-    "inscriptionsBeginAt": "Les inscriptions ouvrent le",
     "no_event": "Aucun évènement",
-    "participants": "Participants",
-    "participantsList": "Liste des participants",
+    "participants": {
+      "noParticipants": "Aucun participant 😔",
+      "title": "Participants",
+      "titleWithMax": "{{number}}/{{max}} participants",
+      "titleWithNumber": "{{number}} participants"
+    },
     "participateButton": {
       "isParticipating": "Participant",
       "openForm": "Inscription",
@@ -70,6 +61,12 @@
       },
       "willStartOn": "Shotgun {{date}}"
     },
+    "popupAlerts": {
+      "maxParticipantReached": "Shotgun terminé ! Le nombre max de participant ({{max}}) a été atteint.",
+      "registrationHasEnded": "Shotgun terminé ! Les inscriptions étaient jusqu'au {{date}}.",
+      "registrationNotStarted": "Les inscriptions ouvriront le {{date}}.",
+      "registrationWillBeSoonEnded": "Les inscriptions sont ouvertes jusqu'au {{date}}."
+    },
     "registration": {
       "register": {
         "success": "Votre inscription a bien été enregistrée !"
@@ -77,8 +74,7 @@
       "unregister": {
         "success": "Vous avez bien été désinscrit."
       }
-    },
-    "shotgunDatails": "Détails du shotgun"
+    }
   },
   "filterbar": {
     "date": "Date",
@@ -319,5 +315,11 @@
     "theme": "Thème",
     "title_language": "Langage",
     "title_theme": "Thème"
+  },
+  "utils": {
+    "shareLink": {
+      "failure": "Le lien n'a pas pu être copié",
+      "success": "Lien copié !"
+    }
   }
 }

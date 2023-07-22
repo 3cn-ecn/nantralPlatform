@@ -2,36 +2,60 @@ import { UseMutationOptions, useMutation, useQueryClient } from 'react-query';
 
 import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { ApiErrorDTO } from '#shared/infra/errors';
+import { ApiError } from '#shared/infra/errors';
+import { Page } from '#shared/infra/pagination';
 
 import { registerAsParticipant } from '../api/registerAsParticipant';
 import { unregisterAsParticipant } from '../api/unregisterAsParticipant';
+import { Event } from '../event.type';
 
-type OptionsType = UseMutationOptions<number, ApiErrorDTO, number>;
+type OptionsType = UseMutationOptions<number, ApiError, number>;
 
 export function useRegistrationMutation(eventId: number) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  const { showToast } = useToast();
+  const showToast = useToast();
 
-  const registerMutation = useMutation<number, ApiErrorDTO, number>(
+  const registerMutation = useMutation<number, ApiError, number>(
     registerAsParticipant
   );
-  const unregisterMutation = useMutation<number, ApiErrorDTO, number>(
+  const unregisterMutation = useMutation<number, ApiError, number>(
     unregisterAsParticipant
   );
+
+  const updateCachedQueries = (newData: Partial<Event>) => {
+    // update data NOW so that it is displayed to the user
+    queryClient.setQueriesData(
+      ['events'],
+      (eventListObj?: Page<Event>) =>
+        eventListObj && {
+          ...eventListObj,
+          results: eventListObj.results.map((e) =>
+            e.id === eventId ? { ...e, ...newData } : e
+          ),
+        }
+    );
+    queryClient.setQueriesData(
+      ['event', { id: eventId }],
+      (event?: Event) =>
+        event && {
+          ...event,
+          ...newData,
+        }
+    );
+    // invalidate queries to force reload the queries we have modified
+    queryClient.invalidateQueries(['events']);
+    queryClient.invalidateQueries(['event', { id: eventId }]);
+  };
 
   const register = ({ onSuccess, ...options }: OptionsType) => {
     registerMutation.mutate(eventId, {
       onSuccess: (...args) => {
-        // show a confirmation
         showToast({
           message: t('event.registration.register.success'),
           variant: 'success',
         });
-        // invalidate queries to force reload the queries we have modified
-        queryClient.invalidateQueries('events');
-        queryClient.invalidateQueries(['event', { id: eventId }]);
+        updateCachedQueries({ isParticipating: true });
         return onSuccess(...args);
       },
       ...options,
@@ -46,9 +70,7 @@ export function useRegistrationMutation(eventId: number) {
           message: t('event.registration.unregister.success'),
           variant: 'success',
         });
-        // invalidate queries to force reload the queries we have modified
-        queryClient.invalidateQueries('events');
-        queryClient.invalidateQueries(['event', { id: eventId }]);
+        updateCachedQueries({ isParticipating: false });
         return onSuccess(...args);
       },
       ...options,

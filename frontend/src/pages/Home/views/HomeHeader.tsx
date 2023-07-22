@@ -1,40 +1,28 @@
-import React from 'react';
-
-import { Container, Typography, styled, useTheme } from '@mui/material';
+import { Container, Typography, styled } from '@mui/material';
 
 import { BackgroundImage } from '#shared/components/BackgroundImage/BackgroundImage';
+import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function HomeHeader() {
   const { t } = useTranslation();
-  const theme = useTheme();
-  const headerHeight = theme.spacing(30);
 
   return (
-    <HeaderContainer sx={{ minHeight: headerHeight }}>
+    <FlexCol alignItems="center" justifyContent="center" position="relative">
       <BackgroundImage
         src="/static/img/header.png"
         errorIcon={null}
-        duration={500}
-        height={headerHeight}
+        shift="top"
       />
-      <Container>
-        <Title variant="h5">{t('home.welcomeTo')}</Title>
-        <Title variant="h1">{t('site.name')}</Title>
+      <Container sx={{ my: 8 }}>
+        <TitleTypography variant="h5">{t('home.welcomeTo')}</TitleTypography>
+        <TitleTypography variant="h1">{t('site.name')}</TitleTypography>
       </Container>
-    </HeaderContainer>
+    </FlexCol>
   );
 }
 
-const HeaderContainer = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100%',
-});
-
-const Title = styled(Typography)(({ theme }) => ({
+const TitleTypography = styled(Typography)(({ theme }) => ({
   color: theme.palette.primary.main,
   textAlign: 'center',
   textShadow: '2px 4px 15px rgba(0,0,0,0.3);',

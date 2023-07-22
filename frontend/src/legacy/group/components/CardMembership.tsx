@@ -42,12 +42,12 @@ function MembershipCard(props: {
           >
             <Avatar
               url={group ? item.student.picture : item.group.icon}
-              title={group ? item.student.full_name : item.group.name}
+              title={group ? item.student.name : item.group.name}
               size="large"
             />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="h6" sx={{ fontWeight: 500 }} noWrap>
-                {group ? item.student.full_name : item.group.name}
+                {group ? item.student.name : item.group.name}
               </Typography>
               <Typography
                 sx={{ fontSize: '0.9em' }}

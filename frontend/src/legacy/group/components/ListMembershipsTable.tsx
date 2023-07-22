@@ -1,37 +1,39 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-  TableContainer,
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+  OnDragEndResponder,
+} from 'react-beautiful-dnd';
+
+import {
+  Archive as ArchiveIcon,
+  CheckCircle as CheckCircleIcon,
+  DragIndicator as DragIndicatorIcon,
+  Edit as EditIcon,
+  Help as HelpIcon,
+  Visibility as VisibilityIcon,
+} from '@mui/icons-material';
+import {
+  Box,
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  IconButton,
-  Box,
   Typography,
 } from '@mui/material';
-import {
-  CheckCircle as CheckCircleIcon,
-  Help as HelpIcon,
-  DragIndicator as DragIndicatorIcon,
-  Edit as EditIcon,
-  Visibility as VisibilityIcon,
-  Archive as ArchiveIcon,
-} from '@mui/icons-material';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  OnDragEndResponder,
-  DropResult,
-} from 'react-beautiful-dnd';
+
+import { Group, Membership, Student } from '../interfaces';
 import Avatar from './Avatar';
+import ModalArchiveMember from './ModalArchiveMember';
+import ModalDeleteMember from './ModalDeleteMember';
 import ModalDisplayMember from './ModalDisplayMember';
 import ModalEditMember from './ModalEditMember';
-import ModalDeleteMember from './ModalDeleteMember';
-import ModalArchiveMember from './ModalArchiveMember';
-import { Group, Membership, Student } from '../interfaces';
 
 /**
  * A little function to help us reorder items
@@ -146,11 +148,11 @@ function MembershipRow(props: {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Avatar
             url={item.student.picture}
-            title={item.student.full_name}
+            title={item.student.name}
             size="small"
           />
           <Typography noWrap fontWeight="lg">
-            {item.student.full_name}
+            {item.student.name}
           </Typography>
         </Box>
       </TableCell>

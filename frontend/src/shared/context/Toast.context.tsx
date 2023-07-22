@@ -1,4 +1,10 @@
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 
@@ -8,7 +14,7 @@ type Toast = {
   autoHideDuration?: number;
 };
 
-type ToastContextActions = { showToast: (toast: Toast) => void };
+type ToastContextActions = (toast: Toast) => void;
 
 const ToastContext = createContext<ToastContextActions | null>(null);
 
@@ -16,17 +22,20 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
   const [open, setOpen] = useState(false);
   const [toast, setToast] = useState<Toast | undefined>();
 
-  const showToast = (toast: Toast) => {
-    setToast(toast);
-    setOpen(true);
-  };
+  const showToast = useCallback(
+    (toast: Toast) => {
+      setToast(toast);
+      setOpen(true);
+    },
+    [setToast, setOpen]
+  );
 
   const handleClose = () => {
     setOpen(false);
   };
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={showToast}>
       <Snackbar
         open={open}
         autoHideDuration={toast?.autoHideDuration ?? 6000}

@@ -4,7 +4,7 @@ from django.utils.translation import gettext as _
 
 from rest_framework import exceptions, serializers
 
-from apps.student.serializers import SimpleStudentSerializer
+from apps.student.serializers import StudentPreviewSerializer
 
 from .models import Group, GroupType, Membership
 
@@ -94,7 +94,7 @@ class GroupWriteSerializer(serializers.ModelSerializer):
 
 class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     """Membership serializer for getting or editing objects."""
-    student = SimpleStudentSerializer(read_only=True)
+    student = StudentPreviewSerializer(read_only=True)
     group = GroupPreviewSerializer(read_only=True)
 
     class Meta:

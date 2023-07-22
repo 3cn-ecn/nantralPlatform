@@ -64,7 +64,9 @@ export function PostCard({ post }: PostCardProps) {
           {post.image && (
             <CardMedia
               component="img"
-              image={post.image.toString()}
+              src={post.image}
+              loading="lazy"
+              alt=""
               sx={{
                 width: 100,
                 aspectRatio: '1',

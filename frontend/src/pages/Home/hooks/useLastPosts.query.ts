@@ -3,6 +3,7 @@ import { UseQueryOptions, useQuery } from 'react-query';
 
 import { getPostList } from '#modules/post/api/getPostList';
 import { PostPreview } from '#modules/post/post.types';
+import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
 
 export function useLastPostsQuery(
@@ -11,7 +12,7 @@ export function useLastPostsQuery(
 ) {
   const [page, setPage] = useState(1);
 
-  const { data, ...rest } = useQuery({
+  const { data, ...rest } = useQuery<Page<PostPreview>, ApiError>({
     queryKey: ['posts', 'last-posts', page],
     queryFn: () =>
       getPostList({

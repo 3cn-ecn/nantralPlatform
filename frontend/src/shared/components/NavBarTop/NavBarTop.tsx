@@ -1,4 +1,5 @@
 import React from 'react';
+import { useQueryClient } from 'react-query';
 import { Link, useLocation } from 'react-router-dom';
 
 import {
@@ -81,6 +82,8 @@ function NavBarTop(props: {
     React.useState<boolean>(false);
   const [student, setStudent] = React.useState<any>();
   const [isStaff, setIsStaff] = React.useState<boolean>(false);
+  const queryClient = useQueryClient();
+
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
   const openD = Boolean(anchorElDark);
@@ -414,6 +417,7 @@ function NavBarTop(props: {
               value="fr-FR"
               onClick={() => {
                 i18n.changeLanguage('fr-FR');
+                queryClient.invalidateQueries();
               }}
               selected={i18n.language === 'fr-FR'}
             >
@@ -423,6 +427,7 @@ function NavBarTop(props: {
               value="en-GB"
               onClick={() => {
                 i18n.changeLanguage('en-GB');
+                queryClient.invalidateQueries();
               }}
               selected={i18n.language === 'en-GB'}
             >

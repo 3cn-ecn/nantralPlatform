@@ -1,12 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Grid, Typography } from '@mui/material';
+import { Grid, Skeleton, Typography } from '@mui/material';
 
-import {
-  ClubAvatar,
-  ClubAvatarSkeleton,
-} from '#shared/components/ClubAvatar/ClubAvatar';
+import { Avatar } from '#shared/components/Avatar/Avatar';
 import { Group, SimpleGroup } from '#shared/components/Group/interfaces';
 import { AccordionSection } from '#shared/components/Section/AccordionSection';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -18,7 +14,7 @@ const LoadingSkeleton = (
   <>
     {[0, 1, 2].map((club) => (
       <Grid item xs={6} sm={4} md={3} lg={2} key={club}>
-        <ClubAvatarSkeleton key={club} size={clubAvatarSize} />
+        <Skeleton variant="circular" key={club} />
       </Grid>
     ))}
   </>
@@ -67,12 +63,13 @@ export function ClubSection(props: {
               alignItems: 'baseline',
             }}
           >
-            <ClubAvatar
-              name={club.name}
-              clubUrl={club.url}
-              logoUrl={club.icon}
+            <Avatar
+              alt={club.name}
+              to={club.url}
+              src={club.icon}
               key={club.name}
-              size={clubAvatarSize}
+              component={Link}
+              reloadDocument
             />
           </Grid>
         ));

@@ -7,7 +7,7 @@ from rest_framework import exceptions, filters, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from apps.student.serializers import SimpleStudentSerializer
+from apps.student.serializers import StudentPreviewSerializer
 from apps.utils.parse_bool import parse_bool
 
 from .models import Event
@@ -22,11 +22,9 @@ def format_date(date) -> str:
 class EventPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj: Event):
-        if view.action == 'participants':
-            return obj.group.is_admin(request.user)
-        if view.action in ('participate', 'bookmark'):
-            return obj.can_view(request.user)
         if request.method not in permissions.SAFE_METHODS:
+            if view.action in ('participate', 'bookmark'):
+                return obj.can_view(request.user)
             return obj.group.is_admin(request.user)
         return obj.can_view(request.user)
 
@@ -157,7 +155,7 @@ class EventViewSet(viewsets.ModelViewSet):
     def participants(self, request, pk=None):
         event: Event = self.get_object()
         page = self.paginate_queryset(event.participants.all())
-        serializer = SimpleStudentSerializer(page, many=True)
+        serializer = StudentPreviewSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
     @action(detail=True, methods=['POST', 'DELETE'])

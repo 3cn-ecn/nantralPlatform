@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import { Alert, CircularProgress } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
+import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   ResponsiveDialog,
@@ -21,7 +22,8 @@ type PostModalProps = {
 export function PostModal({ postId, onClose }: PostModalProps) {
   const [editMode, setEditMode] = useState(false);
 
-  const { post, isLoading, isError, error } = usePostDetailsQuery(postId);
+  const { post, isLoading, isError, error, refetch } =
+    usePostDetailsQuery(postId);
 
   if (isLoading) {
     return (
@@ -43,7 +45,11 @@ export function PostModal({ postId, onClose }: PostModalProps) {
       <ResponsiveDialog onClose={onClose}>
         <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>
         <ResponsiveDialogContent>
-          <Alert severity="error">{error.message}</Alert>
+          <ErrorPageContent
+            status={error.status}
+            errorMessage={error.message}
+            retryFn={refetch}
+          />
         </ResponsiveDialogContent>
       </ResponsiveDialog>
     );

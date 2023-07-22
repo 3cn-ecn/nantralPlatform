@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
+import { ApiFormErrorDTO, adaptApiFormErrors } from '#shared/infra/errors';
 
 import { adaptPost } from '../infra/post.adapter';
 import { convertPostForm } from '../infra/post.converter';
@@ -13,8 +13,8 @@ export async function createPost(formData: PostForm) {
       '/api/post/post/',
       convertPostForm(formData)
     )
-    .catch((err: ApiErrorDTO<PostFormDTO>) => {
-      throw adaptApiErrors(err);
+    .catch((err: ApiFormErrorDTO<PostFormDTO>) => {
+      throw adaptApiFormErrors(err);
     });
   return adaptPost(data);
 }

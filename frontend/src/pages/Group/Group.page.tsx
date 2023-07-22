@@ -1,13 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Skeleton } from '@mui/material';
 import Container from '@mui/material/Container';
 import axios from 'axios';
 
-import {
-  ClubAvatar,
-  ClubAvatarSkeleton,
-} from '#shared/components/ClubAvatar/ClubAvatar';
+import { Avatar } from '#shared/components/Avatar/Avatar';
 import { LoadStatus } from '#types/GenericTypes';
 
 /**
@@ -63,10 +61,12 @@ export default function GroupPage() {
                 key={groupType.slug}
                 sx={{ justifyContent: 'center', display: 'flex' }}
               >
-                <ClubAvatar
-                  name={groupType.name}
-                  clubUrl={`/group/${groupType.slug}`}
-                  logoUrl={groupType.icon}
+                <Avatar
+                  alt={groupType.name}
+                  to={`/group/${groupType.slug}`}
+                  src={groupType.icon}
+                  component={Link}
+                  reloadDocument
                 />
               </Grid>
             ))
@@ -79,7 +79,7 @@ export default function GroupPage() {
                 key={groupType.slug}
                 sx={{ justifyContent: 'center', display: 'flex' }}
               >
-                <ClubAvatarSkeleton />
+                <Skeleton variant="circular" />
               </Grid>
             ))}
       </Grid>

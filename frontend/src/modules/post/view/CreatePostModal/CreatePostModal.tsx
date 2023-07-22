@@ -15,10 +15,10 @@ import {
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { ApiError } from '#shared/infra/errors';
+import { ApiFormError } from '#shared/infra/errors';
 import { useObjectState } from '#shared/utils/useObjectState';
 
-import { PostFormFields } from '../shared/PostForm';
+import { PostFormFields } from '../shared/PostFormFields';
 
 type CreatePostModalProps = {
   onClose: () => void;
@@ -43,7 +43,7 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
     Post,
-    ApiError<PostFormDTO>,
+    ApiFormError<PostFormDTO>,
     PostForm
   >(createPost);
 

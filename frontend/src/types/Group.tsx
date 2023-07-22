@@ -39,7 +39,7 @@ export interface GroupProps extends SimpleGroupProps {
 
 export interface SimpleStudentProps {
   id: number;
-  full_name: string;
+  name: string;
   url: string;
   picture: string;
 }
@@ -57,7 +57,7 @@ export interface MembershipProps {
   id: number;
   student: {
     id: number;
-    full_name: string;
+    name: string;
     url: string;
     picture: string;
   };

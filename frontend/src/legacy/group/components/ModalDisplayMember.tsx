@@ -38,13 +38,13 @@ function ShowMemberModal(props: {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Avatar
             url={group ? member.student.picture : member.group.icon}
-            title={group ? member.student.full_name : member.group.name}
+            title={group ? member.student.name : member.group.name}
             size="large"
           />
           <Box sx={{ minWidth: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                {group ? member.student.full_name : member.group.name}
+                {group ? member.student.name : member.group.name}
               </Typography>
               {member.admin ? <VerifiedIcon color="secondary" /> : <></>}
             </Box>

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Dialog, DialogProps, useMediaQuery, useTheme } from '@mui/material';
 
 type ResponsiveDialogProps = Omit<DialogProps, 'fullScreen' | 'open'> & {

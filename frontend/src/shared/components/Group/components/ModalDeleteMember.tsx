@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import {
   Alert,
@@ -46,8 +46,8 @@ function DeleteMemberModal(props: {
           {globalErrors}
         </Alert>
         <DialogContentText>
-          Voulez-vous vraiment supprimer {member.student.full_name} des membres
-          de {member.group.name} ?
+          Voulez-vous vraiment supprimer {member.student.name} des membres de{' '}
+          {member.group.name} ?
         </DialogContentText>
       </DialogContent>
       <DialogActions>

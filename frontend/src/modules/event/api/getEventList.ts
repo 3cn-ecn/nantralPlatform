@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { OrderingFields } from '#shared/api/orderingFields.types';
+import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
 
 import { EventPreview } from '../event.type';
@@ -25,9 +26,8 @@ type GetEventListParams = {
 export async function getEventList(
   options: GetEventListParams = {}
 ): Promise<Page<EventPreview>> {
-  const { data } = await axios.get<PageDTO<EventPreviewDTO>>(
-    '/api/event/event/',
-    {
+  const { data } = await axios
+    .get<PageDTO<EventPreviewDTO>>('/api/event/event/', {
       params: {
         group: options.group,
         from_date: options.fromDate,
@@ -42,8 +42,10 @@ export async function getEventList(
         page: options.page,
         page_size: options.pageSize,
       },
-    }
-  );
+    })
+    .catch((err: ApiErrorDTO) => {
+      throw adaptApiErrors(err);
+    });
 
   return adaptPage(data, adaptEventPreview);
 }

@@ -32,7 +32,7 @@ export interface Group extends SimpleGroup {
 
 export interface SimpleStudent {
   id: number;
-  full_name: string;
+  name: string;
   url: string;
   picture: string;
 }
@@ -50,7 +50,7 @@ export interface Membership {
   id: number;
   student: {
     id: number;
-    full_name: string;
+    name: string;
     url: string;
     picture: string;
   };
@@ -62,8 +62,8 @@ export interface Membership {
   };
   summary: string;
   description: string;
-  begin_date?: string;  // date as ISO string
-  end_date?: string;  // date as ISO string
+  begin_date?: string; // date as ISO string
+  end_date?: string; // date as ISO string
   priority: number;
   admin: boolean;
   admin_request?: boolean;
