@@ -12,7 +12,7 @@ export function useLastPostsQuery(
 ) {
   const [page, setPage] = useState(1);
 
-  const { data, ...rest } = useQuery<Page<PostPreview>, ApiError>({
+  const query = useQuery<Page<PostPreview>, ApiError>({
     queryKey: ['posts', 'last-posts', page],
     queryFn: () =>
       getPostList({
@@ -24,10 +24,8 @@ export function useLastPostsQuery(
   });
 
   return {
-    lastPosts: data && data.results,
-    numPages: data && data.numPages,
+    ...query,
     page,
     setPage,
-    ...rest,
   };
 }

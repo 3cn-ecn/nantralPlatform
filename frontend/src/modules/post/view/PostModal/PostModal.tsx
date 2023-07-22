@@ -22,10 +22,9 @@ type PostModalProps = {
 export function PostModal({ postId, onClose }: PostModalProps) {
   const [editMode, setEditMode] = useState(false);
 
-  const { post, isLoading, isError, error, refetch } =
-    usePostDetailsQuery(postId);
+  const postQuery = usePostDetailsQuery(postId);
 
-  if (isLoading) {
+  if (postQuery.isLoading || postQuery.isIdle) {
     return (
       <ResponsiveDialog onClose={onClose}>
         <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>
@@ -40,20 +39,22 @@ export function PostModal({ postId, onClose }: PostModalProps) {
     );
   }
 
-  if (isError) {
+  if (postQuery.isError) {
     return (
       <ResponsiveDialog onClose={onClose}>
         <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>
         <ResponsiveDialogContent>
           <ErrorPageContent
-            status={error.status}
-            errorMessage={error.message}
-            retryFn={refetch}
+            status={postQuery.error.status}
+            errorMessage={postQuery.error.message}
+            retryFn={postQuery.refetch}
           />
         </ResponsiveDialogContent>
       </ResponsiveDialog>
     );
   }
+
+  const post = postQuery.data;
 
   return (
     <ResponsiveDialog onClose={onClose}>

@@ -19,10 +19,10 @@ import { FlexRow } from '../FlexBox/FlexBox';
 
 // just a function to make typescript work
 function isMultiple<T, Multiple extends boolean>(
-  objectValue: T[] | T,
-  multiple: Multiple
-): objectValue is T[] {
-  return multiple;
+  objectValue: T | T[] | null,
+  multiple?: Multiple
+): objectValue is Array<T> {
+  return !!multiple;
 }
 
 // duplicate the type to have 3 arguments instead of 4 (the last one is not used)
@@ -42,7 +42,9 @@ type AutocompleteSearchFieldProps<
   T,
   Multiple extends boolean,
   DisableClearable extends boolean,
-  ChipComponent extends React.ElementType
+  ChipComponent extends React.ElementType,
+  LabelPropName,
+  ImagePropName
 > = Omit<
   AutocompleteProps<T, Multiple, DisableClearable, false, ChipComponent>,
   | 'error'
@@ -59,16 +61,18 @@ type AutocompleteSearchFieldProps<
   onChange: (
     value: AutocompleteValue<number, Multiple, DisableClearable>
   ) => void;
-  defaultObjectValue?: AutocompleteValue<T, Multiple, DisableClearable>;
+  defaultObjectValue: DisableClearable extends true
+    ? AutocompleteValue<T, Multiple, DisableClearable>
+    : AutocompleteValue<T, Multiple, DisableClearable> | undefined;
   fetchInitialOptions?: () => Promise<T[]>;
   fetchOptions: (inputValue: string) => Promise<T[]>;
   name?: string;
-  label?: string;
+  label: string;
   helperText?: string;
   required?: boolean;
   errors?: string[];
-  labelPropName: keyof T;
-  imagePropName?: keyof T;
+  labelPropName: LabelPropName;
+  imagePropName?: ImagePropName;
 };
 
 /**
@@ -92,13 +96,28 @@ type AutocompleteSearchFieldProps<
  */
 function AutocompleteSearchFieldComponent<
   T extends { id: number },
+  LabelPropName extends {
+    [LabelPropName in keyof T]: T[LabelPropName] extends string
+      ? LabelPropName
+      : never;
+  }[keyof T],
+  ImagePropName extends {
+    [ImagePropName in keyof T]: T[ImagePropName] extends string | undefined
+      ? ImagePropName
+      : never;
+  }[keyof T],
   Multiple extends boolean = false,
   DisableClearable extends boolean = false,
   ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent']
 >({
   value,
   onChange,
-  defaultObjectValue,
+  multiple,
+  defaultObjectValue = (multiple ? [] : null) as AutocompleteValue<
+    T,
+    Multiple,
+    DisableClearable
+  >,
   fetchInitialOptions,
   fetchOptions,
   name,
@@ -107,19 +126,25 @@ function AutocompleteSearchFieldComponent<
   required = false,
   errors,
   fullWidth = true,
-  multiple,
   labelPropName,
   imagePropName,
   ...props
-}: AutocompleteSearchFieldProps<T, Multiple, DisableClearable, ChipComponent>) {
+}: AutocompleteSearchFieldProps<
+  T,
+  Multiple,
+  DisableClearable,
+  ChipComponent,
+  LabelPropName,
+  ImagePropName
+>) {
   const { t } = useTranslation();
 
   const [options, setOptions] = useState<T[]>([]);
-  const [objectValue, setObjectValue] =
-    useState<AutocompleteValue<T, Multiple, DisableClearable>>(
-      defaultObjectValue
-    );
   const [isLoading, setIsLoading] = useState(false);
+  const [objectValue, setObjectValue] = useState<
+    AutocompleteValue<T, Multiple, DisableClearable>
+  >(defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>);
+
   const isError = errors !== undefined;
 
   useEffect(() => {
@@ -166,21 +191,33 @@ function AutocompleteSearchFieldComponent<
               Multiple,
               DisableClearable
             >)
-          : (newObjectValue.id as AutocompleteValue<
+          : (newObjectValue?.id as AutocompleteValue<
               number,
               Multiple,
               DisableClearable
             >)
       );
     } else {
-      setObjectValue(undefined);
-      onChange(undefined);
+      setObjectValue(
+        (multiple ? [] : null) as AutocompleteValue<
+          T,
+          Multiple,
+          DisableClearable
+        >
+      );
+      onChange(
+        (multiple ? [] : null) as AutocompleteValue<
+          number,
+          Multiple,
+          DisableClearable
+        >
+      );
     }
   };
 
   return (
     <Autocomplete
-      value={objectValue ?? null}
+      value={objectValue}
       onChange={updateValue}
       options={options}
       filterOptions={(x) => x}
@@ -207,14 +244,14 @@ function AutocompleteSearchFieldComponent<
           }}
         />
       )}
-      getOptionLabel={(option) => option[labelPropName]?.toString()}
+      getOptionLabel={(option) => option[labelPropName]?.toString() || ''}
       renderOption={(props, option) => {
         return (
           <FlexRow component="li" {...props}>
             {imagePropName !== undefined && (
               <Avatar
-                alt={option[labelPropName]?.toString()}
-                src={option[imagePropName]?.toString()}
+                alt={option[labelPropName] as string}
+                src={option[imagePropName] as string | undefined}
                 size="s"
                 sx={{ mr: 1 }}
               />

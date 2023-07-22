@@ -8,14 +8,11 @@ export function usePostDetailsQuery(
   postId: number,
   options?: UseQueryOptions<Post>
 ) {
-  const { data, ...rest } = useQuery<Post, ApiError>({
+  const query = useQuery<Post, ApiError>({
     queryKey: ['post', { id: postId }],
     queryFn: () => getPostDetails(postId),
     ...options,
   });
 
-  return {
-    post: data,
-    ...rest,
-  };
+  return query;
 }

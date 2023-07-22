@@ -6,7 +6,7 @@ import {
 
 export type ApiFormError<DTO> = ApiFormErrorDTO<DTO> & {
   fields: DjangoRestApiFieldValidationError<DTO>;
-  globalErrors?: string[];
+  globalErrors: string[];
 };
 
 export type ApiError = ApiErrorDTO & {

@@ -12,7 +12,7 @@ export function usePinnedPostsQuery(
 ) {
   const [page, setPage] = useState(1);
 
-  const { data, ...rest } = useQuery<Page<PostPreview>, ApiError>({
+  const query = useQuery<Page<PostPreview>, ApiError>({
     queryKey: ['posts', { pinned: true }, page],
     queryFn: () =>
       getPostList({
@@ -24,10 +24,8 @@ export function usePinnedPostsQuery(
   });
 
   return {
-    pinnedPosts: data && data.results,
-    numPages: data && data.numPages,
+    ...query,
     page,
     setPage,
-    ...rest,
   };
 }

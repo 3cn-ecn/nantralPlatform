@@ -23,12 +23,10 @@ import { useEventDetailsQuery } from './hooks/useEventDetails.query';
 
 export default function EventDetailsPage() {
   const { id: eventId } = useParams();
-  const { event, isLoading, isError, error, refetch } = useEventDetailsQuery(
-    Number(eventId)
-  );
+  const eventQuery = useEventDetailsQuery(Number(eventId));
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
-  if (isLoading) {
+  if (eventQuery.isLoading || eventQuery.isIdle) {
     return (
       <Container>
         <FlexRow justifyContent="center" mt={8}>
@@ -38,15 +36,17 @@ export default function EventDetailsPage() {
     );
   }
 
-  if (isError) {
+  if (eventQuery.isError) {
     return (
       <ErrorPageContent
-        status={error.status}
-        errorMessage={error.message}
-        retryFn={refetch}
+        status={eventQuery.error.status}
+        errorMessage={eventQuery.error.message}
+        retryFn={eventQuery.refetch}
       />
     );
   }
+
+  const event = eventQuery.data;
 
   return (
     <Box position="relative">

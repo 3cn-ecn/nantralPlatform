@@ -9,7 +9,7 @@ export type Event = {
   endDate: Date;
   publicity: 'Mem' | 'Pub';
   image: string;
-  numberOfParticipants: number | null;
+  numberOfParticipants: number;
   url: string;
   group: GroupPreview & { isAdmin: boolean; isMember: boolean };
   isParticipating: boolean;

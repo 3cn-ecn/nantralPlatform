@@ -3,6 +3,7 @@
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext", "webworker"],
     "allowJs": true,
+    "strictNullChecks": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

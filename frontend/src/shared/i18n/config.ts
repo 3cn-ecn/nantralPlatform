@@ -8,6 +8,12 @@ import translationFr from './fr-FR.json';
 
 export const languages = ['fr-FR', 'en-GB'] as const;
 
+declare module 'i18next' {
+  interface CustomTypeOptions {
+    returnNull: false;
+  }
+}
+
 i18n
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
@@ -36,6 +42,7 @@ i18n
         translation: translationEn,
       },
     },
+    returnNull: false,
   });
 
 export default i18n;

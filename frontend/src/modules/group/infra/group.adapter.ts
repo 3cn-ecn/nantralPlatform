@@ -8,5 +8,6 @@ export function adaptGroupPreview(groupDTO: GroupPreviewDTO): GroupPreview {
     shortName: groupDTO.short_name,
     slug: groupDTO.slug,
     url: groupDTO.url,
+    icon: groupDTO.icon,
   };
 }

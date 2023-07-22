@@ -32,6 +32,6 @@ export type PostFormDTO = Pick<
   PostDTO,
   'title' | 'description' | 'publicity' | 'pinned'
 > & {
-  group: number;
-  image: File;
+  group: number | null;
+  image: File | null;
 };

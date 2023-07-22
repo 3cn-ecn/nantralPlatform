@@ -12,8 +12,8 @@ export function convertEventForm(event: EventForm): EventFormDTO {
     end_date: event.endDate.toISOString(),
     publicity: event.publicity,
     max_participant: event.maxParticipant,
-    start_registration: event.startRegistration.toISOString(),
-    end_registration: event.endRegistration.toISOString(),
+    start_registration: event.startRegistration?.toISOString() || null,
+    end_registration: event.endRegistration?.toISOString() || null,
     form_url: event.formUrl,
   };
 }

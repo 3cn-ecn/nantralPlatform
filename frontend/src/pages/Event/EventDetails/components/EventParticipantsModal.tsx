@@ -33,16 +33,9 @@ export function EventParticipantsModal({
   onClose,
 }: EventParticipantsModalProps) {
   const { t } = useTranslation();
-  const {
-    participants,
-    numberOfParticipants,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useParticipantList(event.id);
+  const participantsQuery = useParticipantList(event.id);
 
-  if (isLoading) {
+  if (participantsQuery.isLoading || participantsQuery.isIdle) {
     return (
       <ResponsiveDialog onClose={onClose} maxWidth="xs">
         <ResponsiveDialogHeader onClose={onClose}>
@@ -59,7 +52,7 @@ export function EventParticipantsModal({
     );
   }
 
-  if (isError) {
+  if (participantsQuery.isError) {
     return (
       <ResponsiveDialog onClose={onClose} maxWidth="xs">
         <ResponsiveDialogHeader onClose={onClose}>
@@ -67,14 +60,17 @@ export function EventParticipantsModal({
         </ResponsiveDialogHeader>
         <ResponsiveDialogContent>
           <ErrorPageContent
-            status={error.status}
-            errorMessage={error.message}
-            retryFn={refetch}
+            status={participantsQuery.error.status}
+            errorMessage={participantsQuery.error.message}
+            retryFn={participantsQuery.refetch}
           />
         </ResponsiveDialogContent>
       </ResponsiveDialog>
     );
   }
+
+  const participants = participantsQuery.data.results;
+  const numberOfParticipants = participantsQuery.data.count;
 
   if (numberOfParticipants === 0) {
     return (

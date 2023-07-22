@@ -44,18 +44,20 @@ export function ParticipateButton({
       event.numberOfParticipants >= event.maxParticipant) ||
     (!!event.endRegistration && event.endRegistration < now);
 
-  const onRegisterAction = () => register({});
-
-  const onUnregisterAction = () => {
-    setIsOpenConfirmationModal(true);
+  const handleClick = () => {
+    if (event.isParticipating) {
+      return setIsOpenConfirmationModal(true);
+    }
+    return register({});
   };
 
-  const onUnregisterModalConfirm = () =>
+  const onUnregisterModalConfirm = () => {
     unregister({
       onSuccess: () => {
         setIsOpenConfirmationModal(false);
       },
     });
+  };
 
   const onUnregisterModalCancel = () => {
     setIsOpenConfirmationModal(false);
@@ -91,7 +93,7 @@ export function ParticipateButton({
     if (event.isParticipating) {
       return t('event.participateButton.isParticipating');
     }
-    if (isShotgun && isShotgunNotStarted) {
+    if (isShotgun && isShotgunNotStarted && event.startRegistration) {
       return t('event.participateButton.willStartOn', {
         date:
           differenceInHours(event.startRegistration, now) < 20
@@ -119,11 +121,18 @@ export function ParticipateButton({
       <LoadingButton
         loading={isLoading}
         disabled={isShotgunNotStarted || isShotgunFinish}
-        onClick={event.isParticipating ? onUnregisterAction : onRegisterAction}
+        onClick={!event.formUrl ? handleClick : undefined}
         startIcon={getStartIcon()}
         endIcon={getEndIcon()}
         variant={event.isParticipating ? participatingVariant : 'contained'}
         sx={sx}
+        {...(event.formUrl
+          ? {
+              href: event.formUrl,
+              target: '_blank',
+              rel: 'noopener noreferrer',
+            }
+          : {})}
       >
         {getLabel()}
       </LoadingButton>

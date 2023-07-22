@@ -17,10 +17,9 @@ export function PinnedPostsSection({
   enabled = true,
 }: PinnedPostsSectionProps) {
   const { t } = useTranslation();
-  const { pinnedPosts, isLoading, isIdle, isError, numPages, page, setPage } =
-    usePinnedPostsQuery(NUMBER_OF_POSTS, { enabled });
+  const postsQuery = usePinnedPostsQuery(NUMBER_OF_POSTS, { enabled });
 
-  if (isLoading || isIdle) {
+  if (postsQuery.isLoading || postsQuery.isIdle) {
     return (
       <Section title={t('home.postSection.pinnedTitle')}>
         <Grid container spacing={1}>
@@ -34,8 +33,8 @@ export function PinnedPostsSection({
     );
   }
 
-  if (isError) {
-    if (page > 1) setPage(1);
+  if (postsQuery.isError) {
+    if (postsQuery.page > 1) postsQuery.setPage(1);
     return (
       <Section title={t('home.postSection.pinnedTitle')}>
         <Alert severity="error" sx={{ width: 'max-content' }}>
@@ -44,6 +43,8 @@ export function PinnedPostsSection({
       </Section>
     );
   }
+
+  const pinnedPosts = postsQuery.data.results;
 
   if (pinnedPosts.length === 0) {
     return null;
@@ -58,11 +59,11 @@ export function PinnedPostsSection({
           </Grid>
         ))}
       </Grid>
-      {numPages > 1 && (
+      {postsQuery.data.numPages > 1 && (
         <Pagination
-          count={numPages}
-          page={page}
-          onChange={(e, val) => setPage(val)}
+          count={postsQuery.data.numPages}
+          page={postsQuery.page}
+          onChange={(e, val) => postsQuery.setPage(val)}
         />
       )}
     </Section>

@@ -26,7 +26,7 @@ export default function HomePage() {
   // Modals
   // const { t } = useTranslation(); // translation module
 
-  const openedPostId = parseInt(queryParams.get('post'));
+  const openedPostId = queryParams.get('post');
 
   const queryClient = useQueryClient();
 
@@ -59,7 +59,7 @@ export default function HomePage() {
       </Container>
       {!!openedPostId && (
         <PostModal
-          postId={openedPostId}
+          postId={parseInt(openedPostId)}
           onClose={() => {
             queryParams.delete('post');
             setQueryParams(queryParams);

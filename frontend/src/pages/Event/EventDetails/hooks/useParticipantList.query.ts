@@ -12,7 +12,7 @@ export function useParticipantList(
 ) {
   const [page, setPage] = useState(1);
 
-  const { data, ...rest } = useQuery<Page<StudentPreview>, ApiError>({
+  const query = useQuery<Page<StudentPreview>, ApiError>({
     queryKey: ['event', { id: eventId }, 'participants', page],
     queryFn: () =>
       getParticipantList(eventId, {
@@ -23,11 +23,8 @@ export function useParticipantList(
   });
 
   return {
-    participants: data && data.results,
-    numberOfParticipants: data && data.count,
-    numPages: data && data.numPages,
+    ...query,
     page,
     setPage,
-    ...rest,
   };
 }

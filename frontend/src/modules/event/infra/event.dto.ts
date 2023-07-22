@@ -9,7 +9,7 @@ export type EventDTO = {
   end_date: string;
   publicity: 'Mem' | 'Pub';
   image: string;
-  number_of_participants: number | null;
+  number_of_participants: number;
   url: string;
   group: GroupPreviewDTO;
   is_group_member: boolean;

@@ -20,16 +20,16 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 const MEGA_BYTE = 2 ** 20;
 const MAX_FILE_SIZE = 4 * MEGA_BYTE;
 
-function isDeletedFile(file?: File) {
+function isDeletedFile(file: File | null) {
   return !!file && !file.name;
 }
-function isRealFile(file?: File) {
+function isRealFile(file: File | null) {
   return !!file?.name;
 }
-function isNotAFile(file?: File) {
+function isNotAFile(file: File | null) {
   return !file;
 }
-function isTooHeavy(file?: File) {
+function isTooHeavy(file: File | null) {
   return !!file && file.size > MAX_FILE_SIZE;
 }
 
@@ -55,7 +55,7 @@ function FileFieldComponent({
   ...props
 }: FileFieldProps) {
   const { t, formatNumber } = useTranslation();
-  const inputElementRef = useRef<HTMLInputElement>();
+  const inputElementRef = useRef<HTMLInputElement>(null);
   const isError = errors !== undefined;
   const fileName =
     value?.name ||
@@ -105,7 +105,7 @@ function FileFieldComponent({
               htmlFor={name}
               onKeyDownCapture={(e) => {
                 if (e.code === 'Space' || e.code === 'Enter') {
-                  inputElementRef.current.click();
+                  inputElementRef.current?.click();
                 }
               }}
               disabled={disabled}
@@ -125,7 +125,7 @@ function FileFieldComponent({
               accept={accept}
               type="file"
               onChange={(event) => {
-                if (event.target.files.length > 0)
+                if (event.target.files && event.target.files.length > 0)
                   onChange(event.target.files[0]);
               }}
             />
@@ -171,7 +171,7 @@ function FileFieldComponent({
 interface FileActionsButtonProps {
   title: string;
   onClick: () => void;
-  Icon?: SvgIconComponent;
+  Icon: SvgIconComponent;
 }
 
 function FileActionButton({ title, onClick, Icon }: FileActionsButtonProps) {

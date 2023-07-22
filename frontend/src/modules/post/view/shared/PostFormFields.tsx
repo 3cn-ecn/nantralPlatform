@@ -15,7 +15,7 @@ import { ApiFormError } from '#shared/infra/errors';
 
 type PostFormFieldsProps = {
   isError: boolean;
-  error: ApiFormError<PostFormDTO>;
+  error: ApiFormError<PostFormDTO> | null;
   formValues: PostForm;
   updateFormValues: Dispatch<Partial<PostForm>>;
   prevData?: Post;
@@ -55,7 +55,7 @@ export function PostFormFields({
       {isError && (
         <Alert severity="error">
           <AlertTitle>{t('form.errors.title')}</AlertTitle>
-          {!!error.globalErrors?.length && (
+          {!!error?.globalErrors?.length && (
             <ul>
               {error.globalErrors.map((err, index) => (
                 <li key={index}>{err}</li>
@@ -84,7 +84,7 @@ export function PostFormFields({
           (val: number) => updateFormValues({ group: val }),
           [updateFormValues]
         )}
-        defaultObjectValue={prevData?.group}
+        defaultObjectValue={prevData?.group || null}
         errors={error?.fields?.group}
         required
         fetchInitialOptions={fetchInitialGroupOptions}

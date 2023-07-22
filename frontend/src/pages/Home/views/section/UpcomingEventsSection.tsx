@@ -5,7 +5,7 @@ import { Alert, Button, Grid, Pagination, Typography } from '@mui/material';
 
 import { EventCard } from '#modules/event/view/EventCard/EventCard';
 import { EventCardSkeleton } from '#modules/event/view/EventCard/EventCardSkeleton';
-import { useUpcomingEvents } from '#pages/Home/hooks/useUpcomingEvents.query';
+import { useUpcomingEventsQuery } from '#pages/Home/hooks/useUpcomingEvents.query';
 import { Section } from '#shared/components/Section/Section';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { arrayRange } from '#shared/utils/arrayRange';
@@ -34,17 +34,9 @@ interface UpcomingEventsSectionProps {
 
 export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
   const { t } = useTranslation();
-  const {
-    upcomingEvents,
-    isLoading,
-    isIdle,
-    isError,
-    numPages,
-    page,
-    setPage,
-  } = useUpcomingEvents(NUMBER_OF_EVENTS, { enabled });
+  const eventsQuery = useUpcomingEventsQuery(NUMBER_OF_EVENTS, { enabled });
 
-  if (isLoading || isIdle) {
+  if (eventsQuery.isLoading || eventsQuery.isIdle) {
     return (
       <Section
         title={t('home.eventSection.title')}
@@ -61,8 +53,8 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
     );
   }
 
-  if (isError) {
-    if (page > 1) setPage(1);
+  if (eventsQuery.isError) {
+    if (eventsQuery.page > 1) eventsQuery.setPage(1);
     return (
       <Section
         title={t('home.eventSection.title')}
@@ -74,6 +66,8 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
       </Section>
     );
   }
+
+  const upcomingEvents = eventsQuery.data.results;
 
   if (upcomingEvents.length === 0) {
     return (
@@ -98,11 +92,11 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
           </Grid>
         ))}
       </Grid>
-      {numPages > 1 && (
+      {eventsQuery.data.numPages > 1 && (
         <Pagination
-          count={numPages}
-          page={page}
-          onChange={(e, val) => setPage(val)}
+          count={eventsQuery.data.numPages}
+          page={eventsQuery.page}
+          onChange={(e, val) => eventsQuery.setPage(val)}
           sx={{ mt: 1 }}
         />
       )}

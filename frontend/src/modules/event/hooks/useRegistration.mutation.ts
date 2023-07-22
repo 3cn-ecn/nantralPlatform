@@ -56,7 +56,7 @@ export function useRegistrationMutation(eventId: number) {
           variant: 'success',
         });
         updateCachedQueries({ isParticipating: true });
-        return onSuccess(...args);
+        if (onSuccess) return onSuccess(...args);
       },
       ...options,
     });
@@ -71,7 +71,7 @@ export function useRegistrationMutation(eventId: number) {
           variant: 'success',
         });
         updateCachedQueries({ isParticipating: false });
-        return onSuccess(...args);
+        if (onSuccess) return onSuccess(...args);
       },
       ...options,
     });

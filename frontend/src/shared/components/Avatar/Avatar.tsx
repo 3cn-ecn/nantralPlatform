@@ -14,8 +14,9 @@ type AvatarComponentType<
 > = OverridableComponent<
   AvatarTypeMap<
     P & {
-      size?: 's' | 'm' | 'l' | 'xxl';
+      alt: string;
       Icon?: SvgIconComponent;
+      size?: 's' | 'm' | 'l' | 'xxl';
     },
     D
   >
@@ -29,7 +30,7 @@ type AvatarComponentType<
 export const Avatar: AvatarComponentType = ({
   alt,
   Icon,
-  size,
+  size = 'm',
   sx,
   ...props
 }: ComponentProps<AvatarComponentType>) => {

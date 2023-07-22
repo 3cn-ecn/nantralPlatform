@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { SvgIcon, styled } from '@mui/material';
 
 type BadgeIconProps = {

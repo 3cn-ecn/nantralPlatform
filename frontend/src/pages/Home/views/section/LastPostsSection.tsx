@@ -15,10 +15,9 @@ interface LastPostsSectionProps {
 
 export function LastPostsSection({ enabled }: LastPostsSectionProps) {
   const { t } = useTranslation();
-  const { lastPosts, isLoading, isIdle, isError, numPages, page, setPage } =
-    useLastPostsQuery(NUMBER_OF_POSTS, { enabled });
+  const postsQuery = useLastPostsQuery(NUMBER_OF_POSTS, { enabled });
 
-  if (isLoading || isIdle) {
+  if (postsQuery.isLoading || postsQuery.isIdle) {
     return (
       <Section title={t('home.postSection.title')}>
         <Grid container spacing={1}>
@@ -32,8 +31,8 @@ export function LastPostsSection({ enabled }: LastPostsSectionProps) {
     );
   }
 
-  if (isError) {
-    if (page > 1) setPage(1);
+  if (postsQuery.isError) {
+    if (postsQuery.page > 1) postsQuery.setPage(1);
     return (
       <Section title={t('home.postSection.title')}>
         <Alert severity="error" sx={{ width: 'max-content' }}>
@@ -42,6 +41,8 @@ export function LastPostsSection({ enabled }: LastPostsSectionProps) {
       </Section>
     );
   }
+
+  const lastPosts = postsQuery.data.results;
 
   if (lastPosts.length === 0) {
     return (
@@ -60,11 +61,11 @@ export function LastPostsSection({ enabled }: LastPostsSectionProps) {
           </Grid>
         ))}
       </Grid>
-      {numPages > 1 && (
+      {postsQuery.data.numPages > 1 && (
         <Pagination
-          count={numPages}
-          page={page}
-          onChange={(e, val) => setPage(val)}
+          count={postsQuery.data.numPages}
+          page={postsQuery.page}
+          onChange={(e, val) => postsQuery.setPage(val)}
           sx={{ mt: 1 }}
         />
       )}

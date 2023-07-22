@@ -2,7 +2,7 @@ import { ApiErrorDTO, ApiFormErrorDTO } from './errors.dto';
 import { ApiError, ApiFormError } from './errors.types';
 
 export function adaptApiFormErrors<DTO>(
-  error?: ApiFormErrorDTO<DTO>
+  error: ApiFormErrorDTO<DTO>
 ): ApiFormError<DTO> {
   if (error.response) {
     if (error.response.data) {
@@ -34,7 +34,7 @@ export function adaptApiFormErrors<DTO>(
   return { fields: {}, globalErrors: ['Unknown error'], ...error };
 }
 
-export function adaptApiErrors(error?: ApiErrorDTO): ApiError {
+export function adaptApiErrors(error: ApiErrorDTO): ApiError {
   const adaptedError = adaptApiFormErrors(error);
   return {
     ...adaptedError,

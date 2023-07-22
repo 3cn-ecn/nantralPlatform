@@ -6,14 +6,14 @@ import { EventPreview } from '#modules/event/event.type';
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
 
-export function useUpcomingEvents(
+export function useUpcomingEventsQuery(
   numberOfEvents: number,
   options?: UseQueryOptions<Page<EventPreview>>
 ) {
   const [page, setPage] = useState(1);
   const now = new Date();
 
-  const { data, ...rest } = useQuery<Page<EventPreview>, ApiError>({
+  const query = useQuery<Page<EventPreview>, ApiError>({
     queryKey: ['events', 'upcoming-events', page],
     queryFn: () =>
       getEventList({
@@ -25,10 +25,8 @@ export function useUpcomingEvents(
   });
 
   return {
-    upcomingEvents: data && data.results,
-    numPages: data && data.numPages,
+    ...query,
     page,
     setPage,
-    ...rest,
   };
 }

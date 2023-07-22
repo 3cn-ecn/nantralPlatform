@@ -8,14 +8,11 @@ export function useEventDetailsQuery(
   eventId: number,
   options?: UseQueryOptions<Event>
 ) {
-  const { data, ...rest } = useQuery<Event, ApiError>({
+  const query = useQuery<Event, ApiError>({
     queryKey: ['event', { id: eventId }],
     queryFn: () => getEventDetails(eventId),
     ...options,
   });
 
-  return {
-    event: data,
-    ...rest,
-  };
+  return query;
 }

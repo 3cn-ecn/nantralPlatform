@@ -23,10 +23,12 @@ export function adaptEvent(eventDto: EventDTO): Event {
     isParticipating: eventDto.is_participating,
     isBookmarked: eventDto.is_bookmarked,
     maxParticipant: eventDto.max_participant,
-    startRegistration:
-      eventDto.start_registration && new Date(eventDto.start_registration),
-    endRegistration:
-      eventDto.end_registration && new Date(eventDto.end_registration),
+    startRegistration: eventDto.start_registration
+      ? new Date(eventDto.start_registration)
+      : null,
+    endRegistration: eventDto.end_registration
+      ? new Date(eventDto.end_registration)
+      : null,
     formUrl: eventDto.form_url,
   };
 }
@@ -47,10 +49,12 @@ export function adaptEventPreview(eventDto: EventPreviewDTO): EventPreview {
     url: eventDto.url,
     numberOfParticipants: eventDto.number_of_participants,
     maxParticipant: eventDto.max_participant,
-    startRegistration:
-      eventDto.start_registration && new Date(eventDto.start_registration),
-    endRegistration:
-      eventDto.end_registration && new Date(eventDto.end_registration),
+    startRegistration: eventDto.start_registration
+      ? new Date(eventDto.start_registration)
+      : null,
+    endRegistration: eventDto.end_registration
+      ? new Date(eventDto.end_registration)
+      : null,
     formUrl: eventDto.form_url,
   };
 }
