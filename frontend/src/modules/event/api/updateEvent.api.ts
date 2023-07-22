@@ -11,7 +11,7 @@ export type UpdateEventVariables = {
   data: EventForm;
 };
 
-export async function updateEvent({ id, data }: UpdateEventVariables) {
+export async function updateEventApi({ id, data }: UpdateEventVariables) {
   await axios
     .putForm<EventFormDTO>(`/api/event/event/${id}/`, convertEventForm(data))
     .catch((err: ApiFormErrorDTO<EventFormDTO>) => {

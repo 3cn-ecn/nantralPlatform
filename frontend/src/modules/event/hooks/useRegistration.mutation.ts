@@ -5,8 +5,8 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
 
-import { registerAsParticipant } from '../api/registerAsParticipant';
-import { unregisterAsParticipant } from '../api/unregisterAsParticipant';
+import { registerAsParticipantApi } from '../api/registerAsParticipant.api';
+import { unregisterAsParticipantApi } from '../api/unregisterAsParticipant.api';
 import { Event } from '../event.type';
 
 type OptionsType = UseMutationOptions<number, ApiError, number>;
@@ -17,10 +17,10 @@ export function useRegistrationMutation(eventId: number) {
   const showToast = useToast();
 
   const registerMutation = useMutation<number, ApiError, number>(
-    registerAsParticipant
+    registerAsParticipantApi
   );
   const unregisterMutation = useMutation<number, ApiError, number>(
-    unregisterAsParticipant
+    unregisterAsParticipantApi
   );
 
   const updateCachedQueries = (newData: Partial<Event>) => {

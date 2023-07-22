@@ -7,7 +7,7 @@ import { adaptEvent } from '../infra/event.adapter';
 import { convertEventForm } from '../infra/event.converter';
 import { EventDTO, EventFormDTO } from '../infra/event.dto';
 
-export async function createEvent(formData: EventForm) {
+export async function createEventApi(formData: EventForm) {
   const { data } = await axios
     .postForm<EventFormDTO, AxiosResponse<EventDTO>>(
       '/api/event/event/',

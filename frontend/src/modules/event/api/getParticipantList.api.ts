@@ -11,7 +11,7 @@ type GetParticipantListOptions = {
   pageSize?: number;
 };
 
-export async function getParticipantList(
+export async function getParticipantListApi(
   eventId: number,
   options: GetParticipantListOptions
 ): Promise<Page<StudentPreview>> {

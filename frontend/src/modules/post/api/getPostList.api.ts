@@ -20,7 +20,7 @@ type GetPostListParams = {
   pageSize?: number;
 };
 
-export async function getPostList(
+export async function getPostListApi(
   options: GetPostListParams
 ): Promise<Page<PostPreview>> {
   const { data } = await axios

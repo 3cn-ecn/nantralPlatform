@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { UseQueryOptions, useQuery } from 'react-query';
 
-import { getPostList } from '#modules/post/api/getPostList';
+import { getPostListApi } from '#modules/post/api/getPostList.api';
 import { PostPreview } from '#modules/post/post.types';
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
@@ -15,7 +15,7 @@ export function usePinnedPostsQuery(
   const query = useQuery<Page<PostPreview>, ApiError>({
     queryKey: ['posts', { pinned: true }, page],
     queryFn: () =>
-      getPostList({
+      getPostListApi({
         pinned: true,
         page: page,
         pageSize: numberOfPosts,

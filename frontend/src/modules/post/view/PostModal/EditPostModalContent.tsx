@@ -4,7 +4,10 @@ import { useMutation, useQueryClient } from 'react-query';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 
-import { UpdatePostVariables, updatePost } from '#modules/post/api/updatePost';
+import {
+  UpdatePostApiVariables,
+  updatePostApi,
+} from '#modules/post/api/updatePost.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
@@ -48,8 +51,8 @@ export function EditPostModalContent({
   const { mutate, isLoading, isError, error } = useMutation<
     void,
     ApiFormError<PostFormDTO>,
-    UpdatePostVariables
-  >(updatePost);
+    UpdatePostApiVariables
+  >(updatePostApi);
 
   // send the form to the server
   const onSubmit = (event: FormEvent, values: PostForm) => {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { UseQueryOptions, useQuery } from 'react-query';
 
-import { getEventList } from '#modules/event/api/getEventList';
+import { getEventListApi } from '#modules/event/api/getEventList.api';
 import { EventPreview } from '#modules/event/event.type';
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
@@ -16,7 +16,7 @@ export function useUpcomingEventsQuery(
   const query = useQuery<Page<EventPreview>, ApiError>({
     queryKey: ['events', 'upcoming-events', page],
     queryFn: () =>
-      getEventList({
+      getEventListApi({
         fromDate: now,
         page: page,
         pageSize: numberOfEvents,

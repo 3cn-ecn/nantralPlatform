@@ -7,7 +7,7 @@ import { convertPostForm } from '../infra/post.converter';
 import { PostDTO, PostFormDTO } from '../infra/post.dto';
 import { PostForm } from '../post.types';
 
-export async function createPost(formData: PostForm) {
+export async function createPostApi(formData: PostForm) {
   const { data } = await axios
     .postForm<PostFormDTO, AxiosResponse<PostDTO>>(
       '/api/post/post/',

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { UseQueryOptions, useQuery } from 'react-query';
 
-import { getParticipantList } from '#modules/event/api/getParticipantList';
+import { getParticipantListApi } from '#modules/event/api/getParticipantList.api';
 import { StudentPreview } from '#modules/student/student.types';
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
@@ -15,7 +15,7 @@ export function useParticipantList(
   const query = useQuery<Page<StudentPreview>, ApiError>({
     queryKey: ['event', { id: eventId }, 'participants', page],
     queryFn: () =>
-      getParticipantList(eventId, {
+      getParticipantListApi(eventId, {
         page: page,
         pageSize: 100,
       }),

@@ -3,8 +3,8 @@ import { UseMutationOptions, useMutation, useQueryClient } from 'react-query';
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
 
-import { addBookmark } from '../api/addBookmark';
-import { removeBookmark } from '../api/removeBookmark';
+import { addBookmarkApi } from '../api/addBookmark.api';
+import { removeBookmarkApi } from '../api/removeBookmark.api';
 import { Event } from '../event.type';
 
 type OptionsType = UseMutationOptions<number, ApiError, number>;
@@ -12,8 +12,10 @@ type OptionsType = UseMutationOptions<number, ApiError, number>;
 export function useBookmarkMutation(eventId: number) {
   const queryClient = useQueryClient();
 
-  const removeMutation = useMutation<number, ApiError, number>(removeBookmark);
-  const addMutation = useMutation<number, ApiError, number>(addBookmark);
+  const removeMutation = useMutation<number, ApiError, number>(
+    removeBookmarkApi
+  );
+  const addMutation = useMutation<number, ApiError, number>(addBookmarkApi);
 
   const updateCachedQueries = (newData: Partial<Event>) => {
     // update data NOW so that it is displayed to the user
@@ -40,7 +42,7 @@ export function useBookmarkMutation(eventId: number) {
     queryClient.invalidateQueries(['event', { id: eventId }]);
   };
 
-  const addBookmarkMutate = ({ onSuccess, ...options }: OptionsType) => {
+  const addBookmark = ({ onSuccess, ...options }: OptionsType) => {
     addMutation.mutate(eventId, {
       onSuccess: (...args) => {
         updateCachedQueries({ isBookmarked: true });
@@ -50,7 +52,7 @@ export function useBookmarkMutation(eventId: number) {
     });
   };
 
-  const removeBookmarkMutate = ({ onSuccess, ...options }: OptionsType) => {
+  const removeBookmark = ({ onSuccess, ...options }: OptionsType) => {
     removeMutation.mutate(eventId, {
       onSuccess: (...args) => {
         updateCachedQueries({ isBookmarked: false });
@@ -61,8 +63,8 @@ export function useBookmarkMutation(eventId: number) {
   };
 
   return {
-    addBookmark: addBookmarkMutate,
-    removeBookmark: removeBookmarkMutate,
+    addBookmark,
+    removeBookmark,
     isLoading: removeMutation.isLoading || addMutation.isLoading,
     isError: removeMutation.isError || addMutation.isError,
     error: removeMutation.error || addMutation.error,

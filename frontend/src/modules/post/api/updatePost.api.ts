@@ -6,12 +6,12 @@ import { convertPostForm } from '../infra/post.converter';
 import { PostFormDTO } from '../infra/post.dto';
 import { PostForm } from '../post.types';
 
-export type UpdatePostVariables = {
+export type UpdatePostApiVariables = {
   id: number;
   data: PostForm;
 };
 
-export async function updatePost({ id, data }: UpdatePostVariables) {
+export async function updatePostApi({ id, data }: UpdatePostApiVariables) {
   await axios
     .putForm<PostFormDTO>(`/api/post/post/${id}/`, convertPostForm(data))
     .catch((err: ApiFormErrorDTO<PostFormDTO>) => {

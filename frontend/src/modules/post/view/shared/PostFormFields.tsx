@@ -2,7 +2,7 @@ import { Dispatch, useCallback } from 'react';
 
 import { Alert, AlertTitle, MenuItem } from '@mui/material';
 
-import { getGroupList } from '#modules/group/api/getGroupList';
+import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
 import { AutocompleteSearchField } from '#shared/components/FormFields/AutocompleteSearchField';
@@ -35,12 +35,14 @@ export function PostFormFields({
   // (when a field is modified, we only rerender this field and not all of them).
   const fetchInitialGroupOptions = useCallback(
     () =>
-      getGroupList({ pageSize: 7, isAdmin: true }).then((data) => data.results),
+      getGroupListApi({ pageSize: 7, isAdmin: true }).then(
+        (data) => data.results
+      ),
     []
   );
   const fetchGroupOptions = useCallback(
     (searchText: string) =>
-      getGroupList({ search: searchText, pageSize: 10 }).then(
+      getGroupListApi({ search: searchText, pageSize: 10 }).then(
         (data) => data.results
       ),
     []

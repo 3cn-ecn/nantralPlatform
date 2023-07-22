@@ -4,7 +4,7 @@ import { useInfiniteQuery, useQuery } from 'react-query';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 
-import { getEventList } from '#modules/event/api/getEventList';
+import { getEventListApi } from '#modules/event/api/getEventList.api';
 import { EventPreview } from '#modules/event/event.type';
 import Calendar from '#modules/event/view/Calendar/Calendar';
 import { FilterInterface } from '#types/Filter';
@@ -87,7 +87,7 @@ export default function EventView(props: {
   } = useQuery<Page<EventPreview>>({
     queryKey: ['eventCalendar', filter, calendarRange],
     queryFn: () =>
-      getEventList({
+      getEventListApi({
         limit: 100,
         offset: 0,
         fromDate: calendarRange.from,

@@ -8,7 +8,7 @@ import { EventPreview } from '../event.type';
 import { adaptEventPreview } from '../infra/event.adapter';
 import { EventDTO, EventPreviewDTO } from '../infra/event.dto';
 
-type GetEventListParams = {
+type GetEventListApiParams = {
   group?: string[];
   fromDate?: Date;
   toDate?: Date;
@@ -23,8 +23,8 @@ type GetEventListParams = {
   pageSize?: number;
 };
 
-export async function getEventList(
-  options: GetEventListParams = {}
+export async function getEventListApi(
+  options: GetEventListApiParams = {}
 ): Promise<Page<EventPreview>> {
   const { data } = await axios
     .get<PageDTO<EventPreviewDTO>>('/api/event/event/', {

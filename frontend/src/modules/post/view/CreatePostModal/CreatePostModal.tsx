@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 
-import { createPost } from '#modules/post/api/createPost';
+import { createPostApi } from '#modules/post/api/createPost.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
@@ -45,7 +45,7 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
     Post,
     ApiFormError<PostFormDTO>,
     PostForm
-  >(createPost);
+  >(createPostApi);
 
   // send the form to the server
   const onSubmit = (event: FormEvent, values: PostForm) => {
