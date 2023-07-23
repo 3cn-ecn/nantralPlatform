@@ -1,8 +1,7 @@
 {
   "button": {
     "cancel": "Cancel",
-    "confirm": "OK",
-    "like": "Like"
+    "confirm": "OK"
   },
   "calendar": {
     "export": "Export events",
@@ -40,8 +39,64 @@
         "remove": "Remove from bookmarks"
       }
     },
+    "editModal": {
+      "title": "Edit event"
+    },
     "error": "Error while loading the events",
     "event": "Event",
+    "form": {
+      "description": {
+        "label": "Description"
+      },
+      "endDate": {
+        "label": "to"
+      },
+      "endRegistration": {
+        "label": "End of registrations"
+      },
+      "formUrl": {
+        "helperText": "If necessary, you can use an external form for registration. Nantral Platform will then not save any registrations.",
+        "label": "Form for registration (optional)"
+      },
+      "group": {
+        "helpText": "You must be an admin of a group to publish an event in its name",
+        "label": "Publish as"
+      },
+      "image": {
+        "helperText": "A picture, a banner or a poster in a 16/9 format.",
+        "label": "Picture"
+      },
+      "location": {
+        "label": "Location of the event"
+      },
+      "maxParticipant": {
+        "disabledHelperText": "You can't define a limit if you use an external form.",
+        "label": "Maximum number of participants"
+      },
+      "pinned": {
+      },
+      "publicity": {
+        "helperText": "Define who can see this event.",
+        "label": "Publicity",
+        "options": {
+          "mem": "Group members",
+          "pub": "Public"
+        }
+      },
+      "shotgunSection": {
+        "helper": "Create a shotgun by using these optional parameters!",
+        "title": "Shotgun settings"
+      },
+      "startDate": {
+        "label": "From"
+      },
+      "startRegistration": {
+        "label": "Start of registrations"
+      },
+      "title": {
+        "label": "Event title"
+      }
+    },
     "no_event": "No Event",
     "participants": {
       "noParticipants": "No participants 😔",

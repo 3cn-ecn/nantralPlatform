@@ -21,7 +21,7 @@ export function ActionButtonsBar({ event }: ActionButtonsBarProps) {
       <FlexRow gap={1} flexWrap="wrap">
         <ShareButton eventId={event.id} />
         {!event.formUrl && <ParticipantsButton event={event} />}
-        {event.group.isAdmin && <EditButton />}
+        {event.group.isAdmin && <EditButton eventId={event.id} />}
       </FlexRow>
     </FlexRow>
   );

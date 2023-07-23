@@ -9,6 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 
+import { useEventDetailsQuery } from '#modules/event/hooks/useEventDetails.query';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import EditEventModal from '#shared/components/FormEvent/FormEvent';
@@ -19,7 +20,6 @@ import { BackgroundImageOverlay } from './components/BackgroundImageOverlay';
 import { EventInfo } from './components/EventInfo';
 import { EventPopupAlerts } from './components/EventPopupAlerts';
 import { TopImage } from './components/TopImage';
-import { useEventDetailsQuery } from './hooks/useEventDetails.query';
 
 export default function EventDetailsPage() {
   const { id: eventId } = useParams();

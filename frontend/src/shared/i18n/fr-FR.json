@@ -1,8 +1,7 @@
 {
   "button": {
     "cancel": "Annuler",
-    "confirm": "Valider",
-    "like": "J'aime"
+    "confirm": "Valider"
   },
   "calendar": {
     "export": "Exporter les évènements",
@@ -40,8 +39,64 @@
         "remove": "Retirer des favoris"
       }
     },
+    "editModal": {
+      "title": "Modifier l'évènement"
+    },
     "error": "Erreur lors du chargement des évènements",
     "event": "Évènement",
+    "form": {
+      "description": {
+        "label": "Description"
+      },
+      "endDate": {
+        "label": "au"
+      },
+      "endRegistration": {
+        "label": "Fin programmée des inscriptions"
+      },
+      "formUrl": {
+        "helperText": "Si nécessaire, vous pouvez utiliser un formulaire d'inscription externe. Nantral Platform n'enregistrera alors pas les inscriptions.",
+        "label": "Formulaire ou billetterie (optionnel)"
+      },
+      "group": {
+        "helpText": "Vous devez être admin d'un groupe pour pouvoir publier un évènement en son nom",
+        "label": "Publier en tant que"
+      },
+      "image": {
+        "helperText": "Une image, un poster ou une affiche, au format 19/9 de préférence.",
+        "label": "Image"
+      },
+      "location": {
+        "label": "Lieu de l'évènement"
+      },
+      "maxParticipant": {
+        "disabledHelperText": "Vous ne pouvez pas définir de limite si vous utilisez un form externe.",
+        "label": "Nombre maximum de participants"
+      },
+      "pinned": {
+      },
+      "publicity": {
+        "helperText": "Définit qui peut voir cet évènement.",
+        "label": "Visibilité",
+        "options": {
+          "mem": "Membres du groupe",
+          "pub": "Public"
+        }
+      },
+      "shotgunSection": {
+        "helper": "Créez un shotgun en utilisant ces paramètres optionels !",
+        "title": "Paramètres Shotgun"
+      },
+      "startDate": {
+        "label": "Du"
+      },
+      "startRegistration": {
+        "label": "Début programmé des inscriptions"
+      },
+      "title": {
+        "label": "Titre de l'évènement"
+      }
+    },
     "no_event": "Aucun évènement",
     "participants": {
       "noParticipants": "Aucun participant 😔",

@@ -1,26 +1,36 @@
+import { useState } from 'react';
+
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Button } from '@mui/material';
 
-import { useToast } from '#shared/context/Toast.context';
+import { EditEventModal } from '#modules/event/view/Modals/EditEventModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export function EditButton() {
+type EditButtonProps = {
+  eventId: number;
+};
+
+export function EditButton({ eventId }: EditButtonProps) {
   const { t } = useTranslation();
-  const showToast = useToast();
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
   return (
-    <Button
-      startIcon={<EditIcon />}
-      variant="outlined"
-      color="secondary"
-      onClick={() =>
-        showToast({
-          message: 'Not yet implemented...',
-          variant: 'warning',
-        })
-      }
-    >
-      {t('event.action_menu.edit')}
-    </Button>
+    <>
+      <Button
+        startIcon={<EditIcon />}
+        variant="outlined"
+        color="secondary"
+        onClick={() => setIsOpenEditModal(true)}
+      >
+        {t('event.action_menu.edit')}
+      </Button>
+
+      {isOpenEditModal && (
+        <EditEventModal
+          eventId={eventId}
+          onClose={() => setIsOpenEditModal(false)}
+        />
+      )}
+    </>
   );
 }

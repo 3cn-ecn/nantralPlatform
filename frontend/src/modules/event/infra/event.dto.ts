@@ -54,6 +54,6 @@ export type EventFormDTO = Pick<
   | 'end_registration'
   | 'form_url'
 > & {
-  group: number;
-  image: File;
+  group: number | null;
+  image: File | null;
 };
