@@ -41,7 +41,6 @@ export function EditPostModalContent({
   const [formValues, updateFormValues] = useObjectState<PostForm>({
     title: post.title,
     description: post.description,
-    image: null,
     group: post.group.id,
     pinned: post.pinned,
     publicity: post.publicity,

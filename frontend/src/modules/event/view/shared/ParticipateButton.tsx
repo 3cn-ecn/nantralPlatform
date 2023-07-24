@@ -77,14 +77,14 @@ export function ParticipateButton({
   };
 
   const getEndIcon = () => {
+    if (isShotgun && event.isParticipating) {
+      return <CheckCircleIcon />;
+    }
     if (isShotgunNotStarted || isShotgunFinish) {
       return undefined;
     }
     if (event.formUrl) {
       return <OpenInNewIcon />;
-    }
-    if (isShotgun && event.isParticipating) {
-      return <CheckCircleIcon />;
     }
     return undefined;
   };
@@ -94,14 +94,16 @@ export function ParticipateButton({
       return t('event.participateButton.isParticipating');
     }
     if (isShotgun && isShotgunNotStarted && event.startRegistration) {
-      return t('event.participateButton.willStartOn', {
-        date:
-          differenceInHours(event.startRegistration, now) < 20
-            ? formatTime(event.startRegistration)
-            : formatDate(event.startRegistration, {
-                day: 'numeric',
-                month: 'numeric',
-              }),
+      if (differenceInHours(event.startRegistration, now) < 20) {
+        return t('event.participateButton.willStartAtHour', {
+          time: formatTime(event.startRegistration),
+        });
+      }
+      return t('event.participateButton.willStartOnDate', {
+        date: formatDate(event.startRegistration, {
+          day: 'numeric',
+          month: 'numeric',
+        }),
       });
     }
     if (isShotgun && isShotgunFinish) {
@@ -120,7 +122,9 @@ export function ParticipateButton({
     <>
       <LoadingButton
         loading={isLoading}
-        disabled={isShotgunNotStarted || isShotgunFinish}
+        disabled={
+          (isShotgunNotStarted || isShotgunFinish) && !event.isParticipating
+        }
         onClick={!event.formUrl ? handleClick : undefined}
         startIcon={getStartIcon()}
         endIcon={getEndIcon()}

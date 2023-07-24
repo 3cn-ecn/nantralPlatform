@@ -39,6 +39,17 @@
         "remove": "Remove from bookmarks"
       }
     },
+    "details": {
+      "day": {
+        "label": "Date"
+      },
+      "place": {
+        "label": "Place"
+      },
+      "time": {
+        "label": "Heure"
+      }
+    },
     "editModal": {
       "title": "Edit event"
     },
@@ -72,8 +83,6 @@
       "maxParticipant": {
         "disabledHelperText": "You can't define a limit if you use an external form.",
         "label": "Maximum number of participants"
-      },
-      "pinned": {
       },
       "publicity": {
         "helperText": "Define who can see this event.",
@@ -114,7 +123,8 @@
         "message": "Do you really want to unregister from this event?",
         "title": "Unregister from the event 😿"
       },
-      "willStartOn": "Shotgun {{date}}"
+      "willStartAtHour": "Shotgun at {{time}}",
+      "willStartOnDate": "Shotgun on {{date}}"
     },
     "popupAlerts": {
       "maxParticipantReached": "Shotgun finished! The maximum number of participants ({{max}}) has been reached.",
@@ -185,6 +195,9 @@
     "imageDescription": "A picture, a banner, a poster",
     "membersOnly": "Club members only",
     "noFile": "No file",
+    "number": {
+      "wrongFormat": "Invalid format"
+    },
     "place": "Place",
     "public": "Public",
     "publicity": "Publicity",

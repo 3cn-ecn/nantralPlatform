@@ -48,7 +48,7 @@ export function useRegistrationMutation(eventId: number) {
     queryClient.invalidateQueries(['event', { id: eventId }]);
   };
 
-  const register = ({ onSuccess, ...options }: OptionsType) => {
+  const register = ({ onSuccess, onError, ...options }: OptionsType) => {
     registerMutation.mutate(eventId, {
       onSuccess: (...args) => {
         showToast({
@@ -58,11 +58,19 @@ export function useRegistrationMutation(eventId: number) {
         updateCachedQueries({ isParticipating: true });
         if (onSuccess) return onSuccess(...args);
       },
+      onError: (error, variables, context) => {
+        showToast({
+          message: error.message,
+          variant: 'error',
+        });
+        updateCachedQueries({});
+        if (onError) return onError(error, variables, context);
+      },
       ...options,
     });
   };
 
-  const unregister = ({ onSuccess, ...options }: OptionsType) => {
+  const unregister = ({ onSuccess, onError, ...options }: OptionsType) => {
     unregisterMutation.mutate(eventId, {
       onSuccess: (...args) => {
         // show a confirmation
@@ -72,6 +80,14 @@ export function useRegistrationMutation(eventId: number) {
         });
         updateCachedQueries({ isParticipating: false });
         if (onSuccess) return onSuccess(...args);
+      },
+      onError: (error, variables, context) => {
+        showToast({
+          message: error.message,
+          variant: 'error',
+        });
+        updateCachedQueries({});
+        if (onError) return onError(error, variables, context);
       },
       ...options,
     });

@@ -13,7 +13,11 @@ export type UpdatePostApiVariables = {
 
 export async function updatePostApi({ id, data }: UpdatePostApiVariables) {
   await axios
-    .putForm<PostFormDTO>(`/api/post/post/${id}/`, convertPostForm(data))
+    .put<PostFormDTO>(`/api/post/post/${id}/`, convertPostForm(data), {
+      // convert data to FormData object only if there is an image,
+      // because FormData removes fields with null values
+      headers: data.image ? { 'Content-Type': 'multipart/form-data' } : {},
+    })
     .catch((err: ApiFormErrorDTO<PostFormDTO>) => {
       throw adaptApiFormErrors(err);
     });

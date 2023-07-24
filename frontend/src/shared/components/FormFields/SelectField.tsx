@@ -14,12 +14,12 @@ type SelectFieldProps<ValueType extends string> = Omit<
 > & {
   errors?: string[];
   helperText?: string;
-  onChange: (value: string) => void;
+  handleChange: (value: string) => void;
 };
 
 function SelectFieldComponent<ValueType extends string>({
   label,
-  onChange,
+  handleChange,
   errors,
   helperText,
   disabled,
@@ -41,7 +41,7 @@ function SelectFieldComponent<ValueType extends string>({
       <Select
         labelId={labelId}
         label={label}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => handleChange(e.target.value)}
         {...props}
       >
         {children}

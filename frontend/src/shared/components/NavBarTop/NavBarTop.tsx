@@ -1,4 +1,11 @@
-import React from 'react';
+import {
+  Dispatch,
+  MouseEvent,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useQueryClient } from 'react-query';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -40,7 +47,9 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
+import { languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { getNativeLanguageName } from '#shared/utils/getNativeLanguageName';
 
 import { Avatar } from '../Avatar/Avatar';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
@@ -54,6 +63,13 @@ declare module '@mui/material/AppBar' {
   }
 }
 
+type NavBarTopProps = {
+  menuOpen: boolean;
+  setMenuOpen: Dispatch<SetStateAction<boolean>>;
+  colorMode: PaletteMode | 'auto';
+  setColorMode: Dispatch<SetStateAction<PaletteMode | 'auto'>>;
+};
+
 /**
  * The top bar for navigation
  *
@@ -63,32 +79,28 @@ declare module '@mui/material/AppBar' {
  * @params props.setMenuOpen - A function to change the state of the menu.
  * @returns The top bar component
  */
-function NavBarTop(props: {
-  menuOpen: boolean;
-  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  colorMode: PaletteMode | 'auto';
-  setColorMode: React.Dispatch<React.SetStateAction<PaletteMode | 'auto'>>;
-}) {
-  const { menuOpen, setMenuOpen, colorMode, setColorMode } = props;
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [anchorElLangue, setAnchorElLangue] =
-    React.useState<null | HTMLElement>(null);
-  const [anchorElDark, setAnchorElDark] = React.useState<null | HTMLElement>(
+function NavBarTop({
+  menuOpen,
+  setMenuOpen,
+  colorMode,
+  setColorMode,
+}: NavBarTopProps) {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorElLangue, setAnchorElLangue] = useState<null | HTMLElement>(
     null
   );
-  const [loggedId, setLoggedId] = React.useState<string>();
-  const [isProfilePicture, setIsProfilePicture] =
-    React.useState<boolean>(false);
-  const [student, setStudent] = React.useState<any>();
-  const [isStaff, setIsStaff] = React.useState<boolean>(false);
+  const [anchorElDark, setAnchorElDark] = useState<null | HTMLElement>(null);
+  const [loggedId, setLoggedId] = useState<string>();
+  const [isProfilePicture, setIsProfilePicture] = useState<boolean>(false);
+  const [student, setStudent] = useState<any>();
+  const [isStaff, setIsStaff] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
   const open = Boolean(anchorEl);
   const openL = Boolean(anchorElLangue);
   const openD = Boolean(anchorElDark);
-  const spanRef = React.useRef();
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const spanRef = useRef(null);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClickL = () => {
@@ -118,7 +130,7 @@ function NavBarTop(props: {
     setAnchorElDark(null);
   };
 
-  const [openS, setOpenS] = React.useState(false);
+  const [openS, setOpenS] = useState(false);
 
   const handleCloseS = () => {
     setOpenS(false);
@@ -149,10 +161,10 @@ function NavBarTop(props: {
     pathnames = ['home'];
   }
   if (pathnames.length > 1 && smallScreen) {
-    pathnames = [pathnames.at(-2)];
+    pathnames = [pathnames.at(-2) || ''];
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     getLoggedStudent();
   }, []);
 
@@ -413,26 +425,19 @@ function NavBarTop(props: {
                 {t('user_menu.title_language')}
               </Typography>
             </ListItem>
-            <MenuItem
-              value="fr-FR"
-              onClick={() => {
-                i18n.changeLanguage('fr-FR');
-                queryClient.invalidateQueries();
-              }}
-              selected={i18n.language === 'fr-FR'}
-            >
-              Français
-            </MenuItem>
-            <MenuItem
-              value="en-GB"
-              onClick={() => {
-                i18n.changeLanguage('en-GB');
-                queryClient.invalidateQueries();
-              }}
-              selected={i18n.language === 'en-GB'}
-            >
-              English
-            </MenuItem>
+            {languages.map((lng) => (
+              <MenuItem
+                key={lng}
+                value={lng}
+                onClick={() => {
+                  i18n.changeLanguage(lng);
+                  queryClient.invalidateQueries();
+                }}
+                selected={i18n.language === lng}
+              >
+                {getNativeLanguageName(lng)}
+              </MenuItem>
+            ))}
           </Menu>
           <Menu
             id="menu-dark-mode"

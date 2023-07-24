@@ -7,11 +7,15 @@ import { Event, EventForm } from '#modules/event/event.type';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
-import { AutocompleteSearchField } from '#shared/components/FormFields/AutocompleteSearchField';
-import { CustomTextField } from '#shared/components/FormFields/CustomTextField';
-import { DateTimeField } from '#shared/components/FormFields/DateTimeField';
-import { FileField } from '#shared/components/FormFields/FileField';
-import { SelectField } from '#shared/components/FormFields/SelectField';
+import {
+  AutocompleteSearchField,
+  DateTimeField,
+  FileField,
+  SelectField,
+  TextField,
+} from '#shared/components/FormFields';
+import { NumberField } from '#shared/components/FormFields/NumberField';
+import { RichTextField } from '#shared/components/FormFields/RichTextField';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -64,11 +68,11 @@ export function EventFormFields({
           )}
         </Alert>
       )}
-      <CustomTextField
+      <TextField
         name="title"
         label={t('event.form.title.label')}
         value={formValues.title}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val) => updateFormValues({ title: val }),
           [updateFormValues]
         )}
@@ -80,7 +84,7 @@ export function EventFormFields({
         label={t('event.form.group.label')}
         helperText={t('event.form.group.helpText')}
         value={formValues.group}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val: number) => updateFormValues({ group: val }),
           [updateFormValues]
         )}
@@ -118,11 +122,11 @@ export function EventFormFields({
           fullWidth
         />
       </FlexAuto>
-      <CustomTextField
+      <TextField
         name="location"
         label={t('event.form.location.label')}
         value={formValues.location}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val) => updateFormValues({ location: val }),
           [updateFormValues]
         )}
@@ -133,7 +137,7 @@ export function EventFormFields({
         label={t('event.form.image.label')}
         helperText={t('event.form.image.helperText')}
         value={formValues.image}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val) => updateFormValues({ image: val }),
           [updateFormValues]
         )}
@@ -141,37 +145,36 @@ export function EventFormFields({
         errors={error?.fields?.image}
         accept="image/*"
       />
-      <CustomTextField
+      <RichTextField
         name="description"
         label={t('event.form.description.label')}
         value={formValues.description}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val) => updateFormValues({ description: val }),
           [updateFormValues]
         )}
         errors={error?.fields?.description}
-        multiline
-        minRows={3}
       />
-      <CustomTextField
+      <TextField
         name="form_url"
         label={t('event.form.formUrl.label')}
         helperText={t('event.form.formUrl.helperText')}
         value={formValues.formUrl}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val) => updateFormValues({ formUrl: val }),
           [updateFormValues]
         )}
         errors={error?.fields?.form_url}
+        type="url"
       />
-      <Paper sx={{ p: 2, my: 1 }}>
+      <Paper sx={{ p: 2, my: 1 }} variant="outlined">
         <FlexRow alignItems="center" gap={1} mb={1}>
           <LocalFireDepartment />
           <Typography variant="h5">
             {t('event.form.shotgunSection.title')}
           </Typography>
         </FlexRow>
-        <Typography>{t('event.form.shotgunSection.helper')}</Typography>
+        <Typography mb={1}>{t('event.form.shotgunSection.helper')}</Typography>
         <FlexAuto columnGap={2} breakPoint="sm">
           <DateTimeField
             name="start_registration"
@@ -196,7 +199,7 @@ export function EventFormFields({
             fullWidth
           />
         </FlexAuto>
-        <CustomTextField
+        <NumberField
           name="max_participant"
           label={t('event.form.maxParticipant.label')}
           helperText={
@@ -205,14 +208,11 @@ export function EventFormFields({
               : undefined
           }
           value={formValues.maxParticipant}
-          onChange={useCallback(
-            (val) =>
-              updateFormValues({ maxParticipant: val ? parseInt(val) : null }),
+          handleChange={useCallback(
+            (val) => updateFormValues({ maxParticipant: val }),
             [updateFormValues]
           )}
           errors={error?.fields?.max_participant}
-          inputMode="numeric"
-          type="number"
           disabled={!!formValues.formUrl}
         />
       </Paper>
@@ -221,7 +221,7 @@ export function EventFormFields({
         label={t('event.form.publicity.label')}
         helperText={t('event.form.publicity.helperText')}
         value={formValues.publicity}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val: 'Pub' | 'Mem') => updateFormValues({ publicity: val }),
           [updateFormValues]
         )}

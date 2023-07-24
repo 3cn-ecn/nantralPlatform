@@ -43,8 +43,8 @@ type AutocompleteSearchFieldProps<
   Multiple extends boolean,
   DisableClearable extends boolean,
   ChipComponent extends React.ElementType,
-  LabelPropName,
-  ImagePropName
+  LabelPropName extends string,
+  ImagePropName extends string
 > = Omit<
   AutocompleteProps<T, Multiple, DisableClearable, false, ChipComponent>,
   | 'error'
@@ -58,7 +58,7 @@ type AutocompleteSearchFieldProps<
   | 'renderInput'
 > & {
   value: AutocompleteValue<number, Multiple, DisableClearable>;
-  onChange: (
+  handleChange: (
     value: AutocompleteValue<number, Multiple, DisableClearable>
   ) => void;
   defaultObjectValue: DisableClearable extends true
@@ -96,22 +96,24 @@ type AutocompleteSearchFieldProps<
  */
 function AutocompleteSearchFieldComponent<
   T extends { id: number },
-  LabelPropName extends {
-    [LabelPropName in keyof T]: T[LabelPropName] extends string
-      ? LabelPropName
-      : never;
-  }[keyof T],
-  ImagePropName extends {
-    [ImagePropName in keyof T]: T[ImagePropName] extends string | undefined
-      ? ImagePropName
-      : never;
-  }[keyof T],
+  LabelPropName extends string &
+    {
+      [LabelPropName in keyof T]: T[LabelPropName] extends string
+        ? LabelPropName
+        : never;
+    }[keyof T],
+  ImagePropName extends string &
+    {
+      [ImagePropName in keyof T]: T[ImagePropName] extends string | undefined
+        ? ImagePropName
+        : never;
+    }[keyof T],
   Multiple extends boolean = false,
   DisableClearable extends boolean = false,
   ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent']
 >({
   value,
-  onChange,
+  handleChange,
   multiple,
   defaultObjectValue = (multiple ? [] : null) as AutocompleteValue<
     T,
@@ -184,7 +186,7 @@ function AutocompleteSearchFieldComponent<
   ) => {
     if (reason === 'selectOption') {
       setObjectValue(newObjectValue);
-      onChange(
+      handleChange(
         isMultiple(newObjectValue, multiple)
           ? (newObjectValue.map((objVal) => objVal.id) as AutocompleteValue<
               number,
@@ -205,7 +207,7 @@ function AutocompleteSearchFieldComponent<
           DisableClearable
         >
       );
-      onChange(
+      handleChange(
         (multiple ? [] : null) as AutocompleteValue<
           number,
           Multiple,
@@ -235,6 +237,20 @@ function AutocompleteSearchFieldComponent<
           margin="normal"
           InputProps={{
             ...params.InputProps,
+            startAdornment: (
+              <>
+                {!isMultiple(objectValue, multiple) &&
+                  !!imagePropName &&
+                  objectValue && (
+                    <Avatar
+                      alt={objectValue[labelPropName as string]}
+                      src={objectValue[imagePropName as string]}
+                      size="s"
+                    />
+                  )}
+                {params.InputProps.startAdornment}
+              </>
+            ),
             endAdornment: (
               <>
                 {isLoading && <CircularProgress color="inherit" size={20} />}
@@ -247,13 +263,12 @@ function AutocompleteSearchFieldComponent<
       getOptionLabel={(option) => option[labelPropName]?.toString() || ''}
       renderOption={(props, option) => {
         return (
-          <FlexRow component="li" {...props}>
-            {imagePropName !== undefined && (
+          <FlexRow component="li" gap={1} {...props}>
+            {!!imagePropName && (
               <Avatar
                 alt={option[labelPropName] as string}
                 src={option[imagePropName] as string | undefined}
                 size="s"
-                sx={{ mr: 1 }}
               />
             )}
             {option[labelPropName]?.toString()}

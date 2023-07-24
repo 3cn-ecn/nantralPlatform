@@ -58,7 +58,9 @@ export default function EventDetailsPage() {
         maxWidth="md"
         sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}
       >
-        <Typography variant="h3">{event.title}</Typography>
+        <Typography variant="h3" component="h1">
+          {event.title}
+        </Typography>
         <ActionButtonsBar event={event} />
         <EventInfo
           startDate={event.startDate}

@@ -1,13 +1,14 @@
 import { useTranslation as useI18nextTranslation } from 'react-i18next';
 
-import { formatRelative } from 'date-fns';
-import { enGB, fr } from 'date-fns/locale';
+import { Locale, formatRelative } from 'date-fns';
+import { enGB, enUS, fr } from 'date-fns/locale';
 
 import { languages } from './config';
 
 const mapLocales: Record<(typeof languages)[number], Locale> = {
   'fr-FR': fr,
   'en-GB': enGB,
+  'en-US': enUS,
 };
 
 export function useTranslation() {

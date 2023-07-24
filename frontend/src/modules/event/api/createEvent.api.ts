@@ -9,9 +9,16 @@ import { EventDTO, EventFormDTO } from '../infra/event.dto';
 
 export async function createEventApi(formData: EventForm) {
   const { data } = await axios
-    .postForm<EventFormDTO, AxiosResponse<EventDTO>>(
+    .post<EventFormDTO, AxiosResponse<EventDTO>>(
       '/api/event/event/',
-      convertEventForm(formData)
+      convertEventForm(formData),
+      {
+        // convert data to FormData object only if there is an image,
+        // because FormData removes fields with null values
+        headers: formData.image
+          ? { 'Content-Type': 'multipart/form-data' }
+          : {},
+      }
     )
     .catch((err: ApiFormErrorDTO<EventFormDTO>) => {
       throw adaptApiFormErrors(err);

@@ -23,15 +23,19 @@ export const FlexCol: FlexBoxComponent = (
 
 export const FlexAuto: FlexBoxComponent<{ breakPoint?: Breakpoint }> = ({
   breakPoint = 'md',
+  alignItems,
+  justifyContent,
   ...props
 }: ComponentProps<FlexBoxComponent<{ breakPoint?: Breakpoint }>>) => {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down(breakPoint));
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up(breakPoint));
 
   return (
     <Box
       display="flex"
-      flexDirection={isSmallScreen ? 'column' : 'row'}
+      flexDirection={isLargeScreen ? 'row' : 'column'}
+      alignItems={isLargeScreen ? alignItems : justifyContent}
+      justifyContent={isLargeScreen ? justifyContent : alignItems}
       {...props}
     />
   );

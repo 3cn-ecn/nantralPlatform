@@ -39,7 +39,6 @@ export function EditEventModalContent({
   const [formValues, updateFormValues] = useObjectState<EventForm>({
     title: event.title,
     description: event.description,
-    image: null,
     group: event.group.id,
     publicity: event.publicity,
     location: event.location,

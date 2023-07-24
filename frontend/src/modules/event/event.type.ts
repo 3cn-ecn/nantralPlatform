@@ -53,5 +53,5 @@ export type EventForm = Pick<
   | 'formUrl'
 > & {
   group: number | null;
-  image: File | null;
+  image?: File;
 };

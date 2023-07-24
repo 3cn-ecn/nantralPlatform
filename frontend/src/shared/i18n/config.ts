@@ -6,7 +6,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import translationEn from './en-GB.json';
 import translationFr from './fr-FR.json';
 
-export const languages = ['fr-FR', 'en-GB'] as const;
+export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
 
 declare module 'i18next' {
   interface CustomTypeOptions {
@@ -35,12 +35,8 @@ i18n
       cookieMinutes: 60 * 3,
     },
     resources: {
-      'fr-FR': {
-        translation: translationFr,
-      },
-      'en-GB': {
-        translation: translationEn,
-      },
+      'fr-FR': { translation: translationFr },
+      'en-GB': { translation: translationEn },
     },
     returnNull: false,
   });

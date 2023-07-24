@@ -1,0 +1,18 @@
+:root {
+  --ck-color-button-on-color: #dc3545 !important;
+  --ck-color-button-on-background: #f7d0d4 !important;
+  --ck-color-button-default-hover-background: #f7d0d4 !important;
+  --ck-color-button-on-hover-background: #f7d0d4 !important;
+  --ck-color-focus-outer-shadow: #f7d0d4 !important;
+  --ck-focus-ring: 1px solid #dc3545 !important;
+
+  .ck.ck-editor {
+    --ck-border-radius: 15px;
+
+    .ck.ck-editor__main > .ck-editor__editable.ck-content {
+      --ck-focus-ring: 2px solid #dc3545;
+      background-color: #00000000;
+      --ck-border-radius: 20px;
+    }
+  }
+}

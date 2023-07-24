@@ -20,23 +20,23 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 const MEGA_BYTE = 2 ** 20;
 const MAX_FILE_SIZE = 4 * MEGA_BYTE;
 
-function isDeletedFile(file: File | null) {
+function isDeletedFile(file?: File) {
   return !!file && !file.name;
 }
-function isRealFile(file: File | null) {
+function isRealFile(file?: File) {
   return !!file?.name;
 }
-function isNotAFile(file: File | null) {
+function isNotAFile(file?: File) {
   return !file;
 }
-function isTooHeavy(file: File | null) {
+function isTooHeavy(file?: File) {
   return !!file && file.size > MAX_FILE_SIZE;
 }
 
 type FileFieldProps = Omit<TextFieldProps, 'error' | 'value' | 'onChange'> & {
   name: string;
-  value: File | null;
-  onChange: (value: File | null) => void;
+  value?: File;
+  handleChange: (value?: File) => void;
   errors?: string[];
   prevFileName?: string;
   accept?: string;
@@ -49,7 +49,7 @@ function FileFieldComponent({
   helperText,
   prevFileName,
   accept,
-  onChange,
+  handleChange,
   disabled,
   fullWidth = true,
   ...props
@@ -126,7 +126,7 @@ function FileFieldComponent({
               type="file"
               onChange={(event) => {
                 if (event.target.files && event.target.files.length > 0)
-                  onChange(event.target.files[0]);
+                  handleChange(event.target.files[0]);
               }}
             />
           </InputAdornment>
@@ -137,7 +137,7 @@ function FileFieldComponent({
             {isRealFile(value) && (
               <FileActionButton
                 title={t('form.file.clearButton.label')}
-                onClick={() => onChange(null)}
+                onClick={() => handleChange(undefined)}
                 Icon={ClearIcon}
                 key="action-button"
               />
@@ -146,7 +146,7 @@ function FileFieldComponent({
             {isNotAFile(value) && prevFileName && (
               <FileActionButton
                 title={t('form.file.deleteButton.label')}
-                onClick={() => onChange(new File([], ''))}
+                onClick={() => handleChange(new File([], ''))}
                 Icon={DeleteIcon}
                 key="action-button"
               />
@@ -155,7 +155,7 @@ function FileFieldComponent({
             {isDeletedFile(value) && (
               <FileActionButton
                 title={t('form.file.undoButton.label')}
-                onClick={() => onChange(null)}
+                onClick={() => handleChange(undefined)}
                 Icon={UndoIcon}
                 key="action-button"
               />

@@ -13,7 +13,11 @@ export type UpdateEventApiVariables = {
 
 export async function updateEventApi({ id, data }: UpdateEventApiVariables) {
   await axios
-    .putForm<EventFormDTO>(`/api/event/event/${id}/`, convertEventForm(data))
+    .put<EventFormDTO>(`/api/event/event/${id}/`, convertEventForm(data), {
+      // convert data to FormData object only if there is an image,
+      // because FormData removes fields with null values
+      headers: data.image ? { 'Content-Type': 'multipart/form-data' } : {},
+    })
     .catch((err: ApiFormErrorDTO<EventFormDTO>) => {
       throw adaptApiFormErrors(err);
     });

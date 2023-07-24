@@ -39,6 +39,17 @@
         "remove": "Retirer des favoris"
       }
     },
+    "details": {
+      "day": {
+        "label": "Date"
+      },
+      "place": {
+        "label": "Lieu"
+      },
+      "time": {
+        "label": "Heure"
+      }
+    },
     "editModal": {
       "title": "Modifier l'évènement"
     },
@@ -72,8 +83,6 @@
       "maxParticipant": {
         "disabledHelperText": "Vous ne pouvez pas définir de limite si vous utilisez un form externe.",
         "label": "Nombre maximum de participants"
-      },
-      "pinned": {
       },
       "publicity": {
         "helperText": "Définit qui peut voir cet évènement.",
@@ -114,7 +123,8 @@
         "message": "Voulez-vous vraiment vous désinscrire de l'évènement ?",
         "title": "Se désinscrire de l'évènement 😿"
       },
-      "willStartOn": "Shotgun {{date}}"
+      "willStartAtHour": "Shotgun à {{time}}",
+      "willStartOnDate": "Shotgun le {{date}}"
     },
     "popupAlerts": {
       "maxParticipantReached": "Shotgun terminé ! Le nombre max de participant ({{max}}) a été atteint.",
@@ -185,6 +195,9 @@
     "imageDescription": "Une image, un poster, une affiche",
     "membersOnly": "Membres du club uniquement",
     "noFile": "Aucun fichier",
+    "number": {
+      "wrongFormat": "Format invalide"
+    },
     "place": "Lieu",
     "public": "Public",
     "publicity": "Visibilité",
@@ -368,7 +381,7 @@
     "logout": "Se déconnecter",
     "profile": "Mon Profil",
     "theme": "Thème",
-    "title_language": "Langage",
+    "title_language": "Langue",
     "title_theme": "Thème"
   },
   "utils": {

@@ -5,11 +5,14 @@ import { Alert, AlertTitle, MenuItem } from '@mui/material';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
-import { AutocompleteSearchField } from '#shared/components/FormFields/AutocompleteSearchField';
-import { CheckboxField } from '#shared/components/FormFields/CheckboxField';
-import { CustomTextField } from '#shared/components/FormFields/CustomTextField';
-import { FileField } from '#shared/components/FormFields/FileField';
-import { SelectField } from '#shared/components/FormFields/SelectField';
+import {
+  AutocompleteSearchField,
+  CheckboxField,
+  FileField,
+  SelectField,
+  TextField,
+} from '#shared/components/FormFields';
+import { RichTextField } from '#shared/components/FormFields/RichTextField';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -66,11 +69,11 @@ export function PostFormFields({
           )}
         </Alert>
       )}
-      <CustomTextField
+      <TextField
         name="title"
         label={t('post.form.title.label')}
         value={formValues.title}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val) => updateFormValues({ title: val }),
           [updateFormValues]
         )}
@@ -82,7 +85,7 @@ export function PostFormFields({
         label={t('post.form.group.label')}
         helperText={t('post.form.group.helpText')}
         value={formValues.group}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val: number) => updateFormValues({ group: val }),
           [updateFormValues]
         )}
@@ -94,24 +97,22 @@ export function PostFormFields({
         labelPropName="name"
         imagePropName="icon"
       />
-      <CustomTextField
+      <RichTextField
         name="description"
         label={t('post.form.description.label')}
         value={formValues.description}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val) => updateFormValues({ description: val }),
           [updateFormValues]
         )}
         errors={error?.fields?.description}
-        multiline
-        minRows={3}
       />
       <FileField
         name="image"
         label={t('post.form.image.label')}
         helperText={t('post.form.image.helperText')}
         value={formValues.image}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val) => updateFormValues({ image: val }),
           [updateFormValues]
         )}
@@ -123,7 +124,7 @@ export function PostFormFields({
         name="publicity"
         label={t('post.form.publicity.label')}
         value={formValues.publicity}
-        onChange={useCallback(
+        handleChange={useCallback(
           (val: 'Pub' | 'Mem') => updateFormValues({ publicity: val }),
           [updateFormValues]
         )}
@@ -138,7 +139,7 @@ export function PostFormFields({
           name="pinned"
           label={t('post.form.pinned.label')}
           value={formValues.pinned}
-          onChange={onPinnedChange}
+          handleChange={onPinnedChange}
         />
       )}
     </>

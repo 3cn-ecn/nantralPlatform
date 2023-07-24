@@ -16,13 +16,13 @@ type CheckboxFieldProps = Omit<
   value?: boolean;
   errors?: string[];
   helperText?: string;
-  onChange: (value: boolean) => void;
+  handleChange: (value: boolean) => void;
 };
 
 function CheckboxFieldComponent({
   label,
   value = false,
-  onChange,
+  handleChange,
   errors,
   helperText,
   ...props
@@ -41,7 +41,7 @@ function CheckboxFieldComponent({
       }
       checked={value}
       onChange={(e: ChangeEvent<HTMLInputElement>) =>
-        onChange(e.target.checked)
+        handleChange(e.target.checked)
       }
       value={value}
       control={<Checkbox />}

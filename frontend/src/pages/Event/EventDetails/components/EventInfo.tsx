@@ -10,7 +10,7 @@ import { isSameDay as dateFnsIsSameDay, differenceInMonths } from 'date-fns';
 
 import { Event } from '#modules/event/event.type';
 import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 type EventInfoProps = Pick<
@@ -24,7 +24,7 @@ export function EventInfo({
   group,
   location,
 }: EventInfoProps) {
-  const { formatDate, formatDateTimeRange } = useTranslation();
+  const { t, formatDate, formatDateTimeRange } = useTranslation();
 
   const isSameDay = dateFnsIsSameDay(endDate, startDate);
 
@@ -34,7 +34,7 @@ export function EventInfo({
   const formatDateOptions: Intl.DateTimeFormatOptions =
     isLessThanTwoMonthsFromNow
       ? { weekday: 'short', day: 'numeric', month: 'long' }
-      : { dateStyle: 'short' };
+      : { dateStyle: 'long' };
 
   const formatDateTimeOptions: Intl.DateTimeFormatOptions =
     isLessThanTwoMonthsFromNow
@@ -48,7 +48,13 @@ export function EventInfo({
       : { dateStyle: 'long', timeStyle: 'short' };
 
   return (
-    <FlexRow columnGap={5} rowGap={2} alignItems="center" flexWrap="wrap">
+    <FlexAuto
+      breakPoint="sm"
+      columnGap={5}
+      rowGap={2}
+      alignItems="center"
+      flexWrap="wrap"
+    >
       <FlexRow gap={1} alignItems="center">
         <Avatar
           src={group.icon}
@@ -59,13 +65,15 @@ export function EventInfo({
         />
         <Typography>{group.name}</Typography>
       </FlexRow>
+      {!!location && (
+        <FlexRow gap={1} alignItems="center">
+          <PlaceIcon titleAccess={t('event.details.place.label')} id="place" />
+          <Typography aria-labelledby="place">{location}</Typography>
+        </FlexRow>
+      )}
       <FlexRow gap={1} alignItems="center">
-        <PlaceIcon />
-        <Typography>{location}</Typography>
-      </FlexRow>
-      <FlexRow gap={1} alignItems="center">
-        <EventIcon />
-        <Typography>
+        <EventIcon titleAccess={t('event.details.day.label')} id="date" />
+        <Typography aria-labelledby="date">
           {isSameDay
             ? formatDate(startDate, formatDateOptions)
             : formatDateTimeRange(startDate, endDate, formatDateTimeOptions)}
@@ -73,14 +81,12 @@ export function EventInfo({
       </FlexRow>
       {isSameDay && (
         <FlexRow gap={1} alignItems="center">
-          <ScheduleIcon />
-          <Typography>
-            {formatDateTimeRange(startDate, endDate, {
-              timeStyle: 'short',
-            })}
+          <ScheduleIcon titleAccess={t('event.details.time.label')} id="time" />
+          <Typography aria-labelledby="time">
+            {formatDateTimeRange(startDate, endDate, { timeStyle: 'short' })}
           </Typography>
         </FlexRow>
       )}
-    </FlexRow>
+    </FlexAuto>
   );
 }
