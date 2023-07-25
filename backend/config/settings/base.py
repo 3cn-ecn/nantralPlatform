@@ -250,7 +250,6 @@ CKEDITOR_5_CONFIGS = {
                 'alignRight',
                 'alignCenter',
             ]
-
         },
         'link': {
             'addTargetToExternalLinks': True,  # open in new tab by default

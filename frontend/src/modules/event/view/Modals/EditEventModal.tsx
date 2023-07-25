@@ -52,7 +52,7 @@ export function EditEventModal({ eventId, onClose }: EditEventModalProps) {
   const event = eventQuery.data;
 
   return (
-    <ResponsiveDialog onClose={onClose}>
+    <ResponsiveDialog onClose={onClose} disableEnforceFocus>
       <EditEventModalContent event={event} onClose={onClose} />
     </ResponsiveDialog>
   );

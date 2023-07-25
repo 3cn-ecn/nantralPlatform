@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -12,7 +11,6 @@ import {
 import { useEventDetailsQuery } from '#modules/event/hooks/useEventDetails.query';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
-import EditEventModal from '#shared/components/FormEvent/FormEvent';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { ActionButtonsBar } from './components/ActionButtonsBar';
@@ -24,7 +22,6 @@ import { TopImage } from './components/TopImage';
 export default function EventDetailsPage() {
   const { id: eventId } = useParams();
   const eventQuery = useEventDetailsQuery(Number(eventId));
-  const [isOpenEditModal, setIsOpenEditModal] = useState(false);
 
   if (eventQuery.isLoading || eventQuery.isIdle) {
     return (
@@ -73,13 +70,6 @@ export default function EventDetailsPage() {
         <Typography dangerouslySetInnerHTML={{ __html: event.description }} />
         <Spacer vertical={200} />
       </Container>
-      <EditEventModal
-        closeModal={() => setIsOpenEditModal(false)}
-        open={isOpenEditModal}
-        event={event}
-        mode="edit"
-        onDelete={() => history.back()}
-      />
     </Box>
   );
 }

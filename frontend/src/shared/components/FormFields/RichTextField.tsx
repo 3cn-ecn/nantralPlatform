@@ -1,10 +1,28 @@
-import { memo } from 'react';
+import { forwardRef, memo } from 'react';
 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import { FormControl, FormHelperText, FormLabel } from '@mui/material';
+import {
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  OutlinedInput,
+} from '@mui/material';
+
+import { CustomEditor, getCKEditorLanguage } from '#shared/ckeditor';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import './RichTextField.scss';
+
+const CKEditorWithRef = forwardRef<HTMLInputElement>((props, ref) => {
+  return (
+    <>
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <CKEditor {...(props as any)} />
+      <input hidden ref={ref} />
+    </>
+  );
+});
+CKEditorWithRef.displayName = 'CKEditorWithRef';
 
 type RichTextFieldProps = {
   value: string;
@@ -23,21 +41,41 @@ function RichTextFieldComponent({
   errors,
   helperText,
 }: RichTextFieldProps) {
+  const { i18n } = useTranslation();
+
   const isError = errors !== undefined;
 
   return (
-    <FormControl sx={{ my: 1 }}>
-      <FormLabel error={isError}>{label}</FormLabel>
-      <CKEditor
-        name={name}
-        editor={ClassicEditor}
-        data={value}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          handleChange(data);
+    <FormControl margin="normal" variant="outlined">
+      <InputLabel
+        htmlFor="richtext-input"
+        error={isError}
+        style={{ transform: 'translate(14px, -18px) scale(0.75)' }}
+      >
+        {label}
+      </InputLabel>
+      <OutlinedInput
+        id="richtext-input"
+        value={value}
+        slots={{ input: CKEditorWithRef }}
+        slotProps={{
+          input: {
+            name: name,
+            editor: CustomEditor,
+            data: value,
+            config: { language: getCKEditorLanguage(i18n) },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } as any,
         }}
+        onChange={
+          ((event, editor) => {
+            const data = editor.getData();
+            handleChange(data);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          }) as any
+        }
       />
-      <FormHelperText sx={{ m: 0 }}>
+      <FormHelperText>
         {isError ? errors.join(', ') : helperText}
       </FormHelperText>
     </FormControl>

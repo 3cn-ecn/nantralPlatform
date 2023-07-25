@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { Delete } from '@mui/icons-material';
 import {
   Autocomplete,
@@ -12,7 +10,6 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  FormLabel,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -368,32 +365,32 @@ function FormGroup(props: {
                 />
               </FormControl>
             );
-          case 'richtext':
-            return (
-              <Box
-                key={field.name}
-                sx={{
-                  minWidth: 120,
-                  backgroundColor: 'primary',
-                  position: 'relative',
-                }}
-              >
-                <FormLabel error={!!error}>{field.label}</FormLabel>
-                <div style={{ color: 'black' }}>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={values[field.name]}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      handleChange(field.name, data);
-                    }}
-                  />
-                </div>
-                <FormHelperText sx={{ m: 0 }}>
-                  {error || field.helpText}
-                </FormHelperText>
-              </Box>
-            );
+          // case 'richtext':
+          //   return (
+          //     <Box
+          //       key={field.name}
+          //       sx={{
+          //         minWidth: 120,
+          //         backgroundColor: 'primary',
+          //         position: 'relative',
+          //       }}
+          //     >
+          //       <FormLabel error={!!error}>{field.label}</FormLabel>
+          //       <div style={{ color: 'black' }}>
+          //         <CKEditor
+          //           editor={Editor}
+          //           data={values[field.name]}
+          //           onChange={(event, editor) => {
+          //             const data = editor.getData();
+          //             handleChange(field.name, data);
+          //           }}
+          //         />
+          //       </div>
+          //       <FormHelperText sx={{ m: 0 }}>
+          //         {error || field.helpText}
+          //       </FormHelperText>
+          //     </Box>
+          //   );
 
           case 'autocomplete':
             return (

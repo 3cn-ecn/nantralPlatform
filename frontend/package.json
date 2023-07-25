@@ -30,6 +30,11 @@
     "url": "github:nantral-platform/nantralPlatform",
     "directory": "frontend/"
   },
+  "workspaces": [
+    "./lib/ckeditor5",
+    "."
+  ],
+  "private": true,
   "devDependencies": {
     "@emotion/jest": "^11.11.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -61,8 +66,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^36.0.1",
-    "@ckeditor/ckeditor5-react": "^5.1.0",
+    "@ckeditor/ckeditor5-react": "^6.1.0",
     "@dnd-kit/core": "^5.0.3",
     "@dnd-kit/sortable": "^6.0.1",
     "@dnd-kit/utilities": "^3.0.0",

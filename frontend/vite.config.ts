@@ -31,6 +31,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '#api': path.resolve(__dirname, './src/api/'),
+      '#lib': path.resolve(__dirname, './lib'),
       '#modules': path.resolve(__dirname, './src/modules/'),
       '#pages': path.resolve(__dirname, './src/pages'),
       '#shared': path.resolve(__dirname, './src/shared'),
