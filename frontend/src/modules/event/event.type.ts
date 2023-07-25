@@ -44,14 +44,14 @@ export type EventForm = Pick<
   | 'title'
   | 'description'
   | 'location'
-  | 'startDate'
-  | 'endDate'
   | 'publicity'
   | 'maxParticipant'
   | 'startRegistration'
   | 'endRegistration'
   | 'formUrl'
 > & {
+  startDate: Date | null;
+  endDate: Date | null;
   group: number | null;
   image?: File;
 };

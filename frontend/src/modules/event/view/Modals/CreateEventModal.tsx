@@ -4,14 +4,12 @@ import { useMutation, useQueryClient } from 'react-query';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 
-import {
-  UpdateEventApiVariables,
-  updateEventApi,
-} from '#modules/event/api/updateEvent.api';
+import { createEventApi } from '#modules/event/api/createEvent.api';
 import { Event, EventForm } from '#modules/event/event.type';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
+  ResponsiveDialog,
   ResponsiveDialogContent,
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
@@ -22,63 +20,55 @@ import { useObjectState } from '#shared/utils/useObjectState';
 
 import { EventFormFields } from '../shared/EventFormFields';
 
-type EditEventModalContentProps = {
-  event: Event;
+type CreateEventModalProps = {
   onClose: () => void;
 };
 
-export function EditEventModalContent({
-  event,
-  onClose,
-}: EditEventModalContentProps) {
+export function CreateEventModal({ onClose }: CreateEventModalProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
   // the values currently in our form
   const [formValues, updateFormValues] = useObjectState<EventForm>({
-    title: event.title,
-    description: event.description,
-    group: event.group.id,
-    publicity: event.publicity,
-    location: event.location,
+    title: '',
+    description: '',
+    group: null,
+    publicity: 'Pub',
+    location: '',
     image: undefined,
-    startDate: event.startDate,
-    endDate: event.endDate,
-    startRegistration: event.startRegistration,
-    endRegistration: event.endRegistration,
-    maxParticipant: event.maxParticipant,
-    formUrl: event.formUrl,
+    startDate: null,
+    endDate: null,
+    startRegistration: null,
+    endRegistration: null,
+    maxParticipant: null,
+    formUrl: '',
   });
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
-    void,
+    Event,
     ApiFormError<EventFormDTO>,
-    UpdateEventApiVariables
-  >(updateEventApi);
+    EventForm
+  >(createEventApi);
 
   // send the form to the server
   const onSubmit = (e: FormEvent, values: EventForm) => {
     // prevent the default function of <form>
     e.preventDefault();
     // call the updatePost function
-    mutate(
-      { id: event.id, data: values },
-      {
-        onSuccess: () => {
-          // if success, reset the event data in all queries
-          queryClient.invalidateQueries('events');
-          queryClient.invalidateQueries(['event', { id: event.id }]);
-          // close the modal
-          onClose();
-        },
-      }
-    );
+    mutate(values, {
+      onSuccess: () => {
+        // if success, reset the event data in all queries
+        queryClient.invalidateQueries('events');
+        // close the modal
+        onClose();
+      },
+    });
   };
 
   return (
-    <>
+    <ResponsiveDialog onClose={onClose} disableEnforceFocus>
       <ResponsiveDialogHeader
         onClose={onClose}
         leftIcon={
@@ -87,7 +77,7 @@ export function EditEventModalContent({
           </Avatar>
         }
       >
-        {t('event.editModal.title')}
+        {t('event.createModal.title')}
       </ResponsiveDialogHeader>
       <form onSubmit={(e) => onSubmit(e, formValues)}>
         <ResponsiveDialogContent>
@@ -96,7 +86,6 @@ export function EditEventModalContent({
             error={error}
             formValues={formValues}
             updateFormValues={updateFormValues}
-            prevData={event}
           />
         </ResponsiveDialogContent>
         <ResponsiveDialogFooter>
@@ -108,6 +97,6 @@ export function EditEventModalContent({
           </LoadingButton>
         </ResponsiveDialogFooter>
       </form>
-    </>
+    </ResponsiveDialog>
   );
 }

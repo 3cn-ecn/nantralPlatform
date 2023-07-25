@@ -39,6 +39,9 @@
         "remove": "Retirer des favoris"
       }
     },
+    "createModal": {
+      "title": "Créer un évènement"
+    },
     "details": {
       "day": {
         "label": "Date"

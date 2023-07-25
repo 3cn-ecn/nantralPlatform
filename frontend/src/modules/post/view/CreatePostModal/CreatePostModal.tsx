@@ -34,7 +34,7 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
   const [formValues, updateFormValues] = useObjectState<PostForm>({
     title: '',
     description: '',
-    image: null,
+    image: undefined,
     group: null,
     pinned: false,
     publicity: 'Pub',

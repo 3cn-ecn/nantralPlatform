@@ -1,4 +1,3 @@
-import { useQueryClient } from 'react-query';
 import { useSearchParams } from 'react-router-dom';
 
 import { Container } from '@mui/material';
@@ -28,8 +27,6 @@ export default function HomePage() {
 
   const openedPostId = queryParams.get('post');
 
-  const queryClient = useQueryClient();
-
   // const { status: myGroupsStatus, data: myGroups } = useQuery<
   //   SimpleGroupProps[],
   //   LoadStatus
@@ -42,11 +39,7 @@ export default function HomePage() {
     <>
       <HomeHeader />
       <Container sx={{ my: 4 }}>
-        <CreateNewButton
-          onEventCreated={() => {
-            queryClient.invalidateQueries('posts');
-          }}
-        />
+        <CreateNewButton />
         <PinnedPostsSection enabled={!openedPostId} />
         <LastPostsSection enabled={!openedPostId} />
         <UpcomingEventsSection enabled={!openedPostId} />

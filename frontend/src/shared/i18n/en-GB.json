@@ -39,6 +39,9 @@
         "remove": "Remove from bookmarks"
       }
     },
+    "createModal": {
+      "title": "Create an event"
+    },
     "details": {
       "day": {
         "label": "Date"

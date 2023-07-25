@@ -7,15 +7,11 @@ import {
 } from '@mui/icons-material';
 import { SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
 
+import { CreateEventModal } from '#modules/event/view/Modals/CreateEventModal';
 import { CreatePostModal } from '#modules/post/view/CreatePostModal/CreatePostModal';
-import EditEventModal from '#shared/components/FormEvent/FormEvent';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-type CreateNewButtonProps = {
-  onEventCreated: () => void;
-};
-
-export function CreateNewButton({ onEventCreated }: CreateNewButtonProps) {
+export function CreateNewButton() {
   const [postFormOpen, setPostFormOpen] = useState<boolean>(false);
   const [eventFormOpen, setEventFormOpen] = useState<boolean>(false);
 
@@ -62,11 +58,9 @@ export function CreateNewButton({ onEventCreated }: CreateNewButtonProps) {
           }}
         />
       )}
-      <EditEventModal
-        open={eventFormOpen}
-        closeModal={() => setEventFormOpen(false)}
-        onUpdate={onEventCreated}
-      />
+      {eventFormOpen && (
+        <CreateEventModal onClose={() => setEventFormOpen(false)} />
+      )}
     </>
   );
 }
