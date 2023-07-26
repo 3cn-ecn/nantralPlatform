@@ -6,43 +6,44 @@ import {
   OpenInNew as OpenInNewIcon,
   LocalFireDepartment as ShotgunIcon,
 } from '@mui/icons-material';
-import { ButtonProps, SxProps, Theme } from '@mui/material';
+import { SxProps, Theme } from '@mui/material';
 import { differenceInHours } from 'date-fns';
 
 import { EventPreview } from '#modules/event/event.type';
 import { useRegistrationMutation } from '#modules/event/hooks/useRegistration.mutation';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
+import './ParticipateButton.scss';
+
 interface ParticipateButtonProps {
   event: EventPreview;
   sx?: SxProps<Theme>;
-  participatingVariant?: ButtonProps['variant'];
 }
 
-export function ParticipateButton({
-  event,
-  sx,
-  participatingVariant = 'outlined',
-}: ParticipateButtonProps) {
+export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
   const [isOpenConfirmationModal, setIsOpenConfirmationModal] = useState(false);
 
   const { register, unregister, isLoading } = useRegistrationMutation(event.id);
   const { t, formatDate, formatTime } = useTranslation();
 
   const now = new Date();
+
   const isShotgun =
     !!event.maxParticipant ||
     !!event.startRegistration ||
     !!event.endRegistration;
-
   const isShotgunNotStarted =
     !!event.startRegistration && event.startRegistration > now;
   const isShotgunFinish =
     (!!event.maxParticipant &&
       event.numberOfParticipants >= event.maxParticipant) ||
     (!!event.endRegistration && event.endRegistration < now);
+
+  const isDisabled =
+    (isShotgunNotStarted || isShotgunFinish) && !event.isParticipating;
 
   const handleClick = () => {
     if (event.isParticipating) {
@@ -64,11 +65,11 @@ export function ParticipateButton({
   };
 
   const getStartIcon = () => {
-    if (isShotgun) {
-      return <ShotgunIcon />;
-    }
     if (event.isParticipating) {
       return <CheckCircleIcon />;
+    }
+    if (isShotgun) {
+      return <ShotgunIcon />;
     }
     if (!event.formUrl) {
       return <AddCircleIcon />;
@@ -78,7 +79,7 @@ export function ParticipateButton({
 
   const getEndIcon = () => {
     if (isShotgun && event.isParticipating) {
-      return <CheckCircleIcon />;
+      return <ShotgunIcon />;
     }
     if (isShotgunNotStarted || isShotgunFinish) {
       return undefined;
@@ -120,26 +121,34 @@ export function ParticipateButton({
 
   return (
     <>
-      <LoadingButton
-        loading={isLoading}
-        disabled={
-          (isShotgunNotStarted || isShotgunFinish) && !event.isParticipating
+      <FlexRow
+        className={
+          isShotgun && !isDisabled && !isLoading && !event.formUrl
+            ? 'button-shotgun-style'
+            : undefined
         }
-        onClick={!event.formUrl ? handleClick : undefined}
-        startIcon={getStartIcon()}
-        endIcon={getEndIcon()}
-        variant={event.isParticipating ? participatingVariant : 'contained'}
         sx={sx}
-        {...(event.formUrl
-          ? {
-              href: event.formUrl,
-              target: '_blank',
-              rel: 'noopener noreferrer',
-            }
-          : {})}
       >
-        {getLabel()}
-      </LoadingButton>
+        <LoadingButton
+          loading={isLoading}
+          disabled={isDisabled}
+          onClick={!event.formUrl ? handleClick : undefined}
+          startIcon={getStartIcon()}
+          endIcon={getEndIcon()}
+          variant={event.isParticipating ? 'outlined' : 'contained'}
+          color={event.formUrl ? 'info' : 'primary'}
+          sx={{ width: '100%' }}
+          {...(event.formUrl
+            ? {
+                href: event.formUrl,
+                target: '_blank',
+                rel: 'noopener noreferrer',
+              }
+            : {})}
+        >
+          {getLabel()}
+        </LoadingButton>
+      </FlexRow>
       {isOpenConfirmationModal && (
         <ConfirmationModal
           title={t('event.participateButton.unregisterModal.title')}

@@ -1,0 +1,85 @@
+// define colors depending on the color theme, based on theme.ts
+.global-light-theme {
+  --default-bg: #ffffff;
+  .MuiPaper-root {
+    --default-bg: #fcfcfc; // override background in paper components
+  }
+}
+.global-dark-theme {
+  --default-bg: #1a1a1a;
+  .MuiPaper-root {
+    --default-bg: #262626;
+  }
+}
+
+// define the style of the button with gradient for shotguns
+.button-shotgun-style {
+  --gradient: linear-gradient(300deg, #dc3545, #ffc107);
+  --gradient-dark: linear-gradient(300deg, #b52e3c, #c89909);
+
+  // style of the wrapper: will be used to display a gradient border
+  background: var(--gradient);
+  border-radius: 20px;
+  position: relative;
+
+  &:before {
+    // add before pseudo-element to hide previous background, except a border
+    // of 1px around the element to show the gradient as a border
+    position: absolute;
+    top: 1px;
+    bottom: 1px;
+    left: 1px;
+    right: 1px;
+    content: '';
+    background: var(--default-bg);
+    border-radius: 20px;
+  }
+
+  & > button,
+  & > a {
+    // on the real button (or link if form), remove border
+    border: none;
+
+    // if 'contained' style,
+    &.MuiButton-contained {
+      background: var(--gradient); // gradient background
+    }
+
+    // if 'outlined' style
+    &.MuiButton-outlined {
+      // add gradient background and invert colors to have the gradient
+      // in the text
+      background: var(--gradient);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      // default color + color for the ripple effect
+      color: #ee7b36;
+      // correct padding
+      padding: 6px 16px;
+
+      // colors for icons
+      & > .MuiButton-startIcon {
+        color: #f5982a;
+      }
+      & > .MuiButton-endIcon {
+        color: #e25c34;
+      }
+    }
+  }
+
+  // on hover, use a darker version of the gradient
+  &:hover {
+    background: var(--gradient-dark);
+    &:before {
+      opacity: 95%;
+    }
+    & > button,
+    & > a {
+      border: none !important;
+      &.MuiButton-contained {
+        background: var(--gradient-dark);
+      }
+    }
+  }
+}

@@ -54,11 +54,13 @@ function App() {
   const [preferredMode, setPreferredMode] = useState<PaletteMode | 'auto'>(
     getPreferredMode()
   );
-  const systemInDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const theme = useMemo(() => {
-    const systemMode = systemInDarkMode ? 'dark' : 'light';
-    return getTheme(preferredMode === 'auto' ? systemMode : preferredMode);
-  }, [preferredMode, systemInDarkMode]);
+  const systemMode = useMediaQuery('(prefers-color-scheme: dark)')
+    ? 'dark'
+    : 'light';
+  const theme = useMemo(
+    () => getTheme(preferredMode === 'auto' ? systemMode : preferredMode),
+    [preferredMode, systemMode]
+  );
 
   const [menuOpen, setMenuOpen] = useState(false);
   const drawerWidth = 240; // the width of the lateral navbar
@@ -69,7 +71,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <ToastProvider>
-          <Box sx={{ display: 'flex' }}>
+          <Box
+            sx={{ display: 'flex' }}
+            className={`global-${theme.palette.mode}-theme`}
+          >
             <CssBaseline />
             <NavBarTop
               menuOpen={menuOpen}

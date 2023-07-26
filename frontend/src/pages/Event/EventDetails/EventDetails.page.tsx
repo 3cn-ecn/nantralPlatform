@@ -11,6 +11,7 @@ import {
 import { useEventDetailsQuery } from '#modules/event/hooks/useEventDetails.query';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { ActionButtonsBar } from './components/ActionButtonsBar';
@@ -67,7 +68,7 @@ export default function EventDetailsPage() {
         />
         <EventPopupAlerts event={event} />
         <Divider />
-        <Typography dangerouslySetInnerHTML={{ __html: event.description }} />
+        <RichTextRenderer content={event.description} />
         <Spacer vertical={200} />
       </Container>
     </Box>

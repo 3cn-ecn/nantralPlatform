@@ -82,4 +82,7 @@ Editor.defaultConfig = {
       },
     },
   },
+  mediaEmbed: {
+    previewsInData: true,
+  },
 };

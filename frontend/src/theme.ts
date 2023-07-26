@@ -59,6 +59,13 @@ function getTheme(mode: PaletteMode) {
     shape: {
       borderRadius: 20,
     },
+    components: {
+      MuiButton: {
+        defaultProps: {
+          disableElevation: true,
+        },
+      },
+    },
     overrides: {
       MuiSwitch: {
         root: {

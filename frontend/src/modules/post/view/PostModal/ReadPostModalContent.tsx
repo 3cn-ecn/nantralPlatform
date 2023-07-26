@@ -16,6 +16,7 @@ import {
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
+import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -66,11 +67,9 @@ export function ReadPostModalContent({
         {post.image && (
           <img alt="" src={post.image.toString()} style={{ width: '100%' }} />
         )}
-        <Box
-          paddingX={3}
-          paddingY={2}
-          dangerouslySetInnerHTML={{ __html: post.description }}
-        />
+        <Box paddingX={3} paddingTop={1} paddingBottom={6}>
+          <RichTextRenderer content={post.description} />
+        </Box>
       </ResponsiveDialogContent>
       <ResponsiveDialogFooter sx={{ justifyContent: 'space-between', pl: 3 }}>
         <Typography variant="caption" color="text.secondary" fontStyle="italic">
