@@ -13,7 +13,7 @@ export function Section({ title, button, children }: SectionProps) {
   return (
     <Box marginBottom={3}>
       <Header>
-        <Typography variant="h4">{title}</Typography>
+        <Typography variant="h3">{title}</Typography>
         {button}
       </Header>
       {children}

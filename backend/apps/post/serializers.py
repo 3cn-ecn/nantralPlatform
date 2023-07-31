@@ -2,6 +2,7 @@ from django.utils.translation import gettext as _
 
 from rest_framework import serializers
 
+from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
 
 from .models import Post
@@ -16,7 +17,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         exclude = ['notification']
 
-    def get_is_admin(self, obj: Post) -> str:
+    def get_is_admin(self, obj: Post) -> bool:
         user = self.context['request'].user
         return obj.group.is_admin(user)
 
@@ -39,7 +40,7 @@ class PostWriteSerializer(serializers.ModelSerializer):
         exclude = ['notification', 'created_at',
                    'created_by', 'updated_at', 'updated_by']
 
-    def validate_group(self, value):
+    def validate_group(self, value: Group) -> Group:
         if (not value.is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
                 _("You have to be admin to add or update a post"))

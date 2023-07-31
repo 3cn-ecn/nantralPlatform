@@ -1,9 +1,11 @@
 // cspell:ignore Overridable
 import { ComponentProps } from 'react';
 
-import { Box, Breakpoint, Theme, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Breakpoint, Theme } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { BoxTypeMap } from '@mui/system';
+
+import { useBreakpoint } from '#shared/utils/useBreakpoint';
 
 type FlexBoxComponent<Extra = object> = OverridableComponent<
   BoxTypeMap<Extra, 'div', Theme>
@@ -27,15 +29,14 @@ export const FlexAuto: FlexBoxComponent<{ breakPoint?: Breakpoint }> = ({
   justifyContent,
   ...props
 }: ComponentProps<FlexBoxComponent<{ breakPoint?: Breakpoint }>>) => {
-  const theme = useTheme();
-  const isLargeScreen = useMediaQuery(theme.breakpoints.up(breakPoint));
+  const bk = useBreakpoint(breakPoint);
 
   return (
     <Box
       display="flex"
-      flexDirection={isLargeScreen ? 'row' : 'column'}
-      alignItems={isLargeScreen ? alignItems : justifyContent}
-      justifyContent={isLargeScreen ? justifyContent : alignItems}
+      flexDirection={bk.isLarger ? 'row' : 'column'}
+      alignItems={bk.isLarger ? alignItems : justifyContent}
+      justifyContent={bk.isLarger ? justifyContent : alignItems}
       {...props}
     />
   );

@@ -8,12 +8,14 @@ import {
 import { Button, Container, Typography } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { useBreakpoint } from '#shared/utils/useBreakpoint';
 
 import { FlexCol, FlexRow } from '../FlexBox/FlexBox';
 
 type ErrorPageContentProps = {
   status?: number;
   retryFn: () => void;
+  reloadDocument?: boolean;
 } & (
   | { message: string; errorMessage?: never }
   | { errorMessage: string; message?: never }
@@ -24,13 +26,21 @@ export function ErrorPageContent({
   message,
   errorMessage,
   retryFn,
+  // use this option if the error is not inside a <Routes> component
+  reloadDocument = false,
 }: ErrorPageContentProps) {
   const { t } = useTranslation();
+  const smallBk = useBreakpoint('sm');
 
   return (
     <Container>
       <FlexCol alignItems="center" gap={4} my={8}>
-        <Typography variant="h1" fontSize={[100, '!important']}>
+        <Typography
+          component="h1"
+          fontSize={smallBk.isSmaller ? 90 : 110}
+          fontWeight={700}
+          lineHeight={1.1}
+        >
           {status || t('error.oups')}
         </Typography>
         <Typography textAlign="center">
@@ -45,6 +55,7 @@ export function ErrorPageContent({
             to="/"
             startIcon={<HomeIcon />}
             color="secondary"
+            reloadDocument={reloadDocument}
           >
             {t('error.goToHome')}
           </Button>
@@ -53,6 +64,7 @@ export function ErrorPageContent({
             to="/feedback"
             startIcon={<BugReportIcon />}
             color="secondary"
+            reloadDocument={reloadDocument}
           >
             {t('error.feedback')}
           </Button>

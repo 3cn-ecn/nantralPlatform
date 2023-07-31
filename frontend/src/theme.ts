@@ -8,7 +8,7 @@ function getTheme(mode: PaletteMode) {
         main: mode === 'light' ? '#dc3545' : '#FF3E51',
       },
       secondary: {
-        main: mode === 'light' ? '#607d8b' : '#99AEB8',
+        main: mode === 'light' ? '#536873' : '#99AEB8',
       },
       neutral: {
         main: '#efefef',
@@ -31,20 +31,30 @@ function getTheme(mode: PaletteMode) {
       fontFamily: 'Heebo, sans-serif',
       fontWeightLight: 300,
       fontWeightBold: 600,
+      poster: {
+        fontWeight: 800,
+        fontSize: '6rem',
+        lineHeight: 1.167,
+      },
       h1: {
         fontWeight: 800,
+        fontSize: '3.5rem',
       },
       h2: {
         fontWeight: 600,
+        fontSize: '3rem',
       },
       h3: {
         fontWeight: 600,
+        fontSize: '2.125rem',
       },
       h4: {
         fontWeight: 500,
+        fontSize: '1.5rem',
       },
       h5: {
         fontWeight: 500,
+        fontSize: '1.25rem',
       },
       h6: {
         fontWeight: 400,
@@ -65,56 +75,55 @@ function getTheme(mode: PaletteMode) {
           disableElevation: true,
         },
       },
-    },
-    overrides: {
-      MuiSwitch: {
-        root: {
-          width: 42,
-          height: 26,
-          padding: 0,
-          margin: 8,
-        },
-        switchBase: {
-          padding: 1,
-          '&$checked, &$colorPrimary$checked, &$colorSecondary$checked': {
-            transform: 'translateX(16px)',
-            color: '#fff',
-            '& + $track': {
-              opacity: 1,
-              border: 'none',
-            },
+      MuiTypography: {
+        defaultProps: {
+          variantMapping: {
+            // Map the new variant to render a <h1> by default
+            poster: 'h1',
           },
-        },
-        thumb: {
-          width: 24,
-          height: 24,
-        },
-        track: {
-          borderRadius: 13,
-          border: '1px solid #bdbdbd',
-          backgroundColor: '#fafafa',
-          opacity: 1,
-          transition:
-            'background-color 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
         },
       },
     },
   });
 
-  return responsiveFontSizes(theme);
+  return responsiveFontSizes(theme, {
+    variants: [
+      'poster',
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      'subtitle1',
+      'subtitle2',
+      'body1',
+      'body2',
+      'caption',
+      'button',
+      'overline',
+    ],
+  });
 }
 
 declare module '@mui/material/styles' {
   interface Palette {
     neutral: Palette['primary'];
   }
-
   interface PaletteOptions {
     neutral: PaletteOptions['primary'];
   }
+  interface TypographyVariants {
+    poster: React.CSSProperties;
+  }
+  interface TypographyVariantsOptions {
+    poster?: React.CSSProperties;
+  }
+}
 
-  interface ThemeOptions {
-    overrides: object;
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    poster: true;
   }
 }
 

@@ -1,4 +1,9 @@
-import { UseMutationOptions, useMutation, useQueryClient } from 'react-query';
+import {
+  InfiniteData,
+  UseMutationOptions,
+  useMutation,
+  useQueryClient,
+} from 'react-query';
 
 import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -26,20 +31,36 @@ export function useRegistrationMutation(eventId: number) {
   const updateCachedQueries = (newData: Partial<Event>) => {
     // update data NOW so that it is displayed to the user
     queryClient.setQueriesData(
-      ['events'],
-      (eventListObj?: Page<Event>) =>
-        eventListObj && {
-          ...eventListObj,
-          results: eventListObj.results.map((e) =>
+      ['events', 'infiniteList'],
+      (data?: InfiniteData<Page<Event>>) =>
+        data && {
+          ...data,
+          pages: data.pages.map((page) => ({
+            ...page,
+            results: page.results.map((e) =>
+              e.id === eventId ? { ...e, ...newData } : e
+            ),
+          })),
+        }
+    );
+    queryClient.setQueriesData(
+      {
+        queryKey: 'events',
+        predicate: (query) => query.queryKey[1] !== 'infiniteList',
+      },
+      (data?: Page<Event>) =>
+        data && {
+          ...data,
+          results: data.results.map((e) =>
             e.id === eventId ? { ...e, ...newData } : e
           ),
         }
     );
     queryClient.setQueriesData(
       ['event', { id: eventId }],
-      (event?: Event) =>
-        event && {
-          ...event,
+      (data?: Event) =>
+        data && {
+          ...data,
           ...newData,
         }
     );

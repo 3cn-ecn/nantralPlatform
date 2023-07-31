@@ -48,7 +48,7 @@ export default function HomePage() {
           status={myGroupsStatus}
           title={t('home.myClubs')}
         /> */}
-        <Spacer vertical="48px" />
+        <Spacer vertical={6} />
       </Container>
       {!!openedPostId && (
         <PostModal

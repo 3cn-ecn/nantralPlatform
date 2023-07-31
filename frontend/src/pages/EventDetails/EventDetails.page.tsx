@@ -56,9 +56,7 @@ export default function EventDetailsPage() {
         maxWidth="md"
         sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}
       >
-        <Typography variant="h3" component="h1">
-          {event.title}
-        </Typography>
+        <Typography variant="h1">{event.title}</Typography>
         <ActionButtonsBar event={event} />
         <EventInfo
           startDate={event.startDate}
@@ -69,7 +67,7 @@ export default function EventDetailsPage() {
         <EventPopupAlerts event={event} />
         <Divider />
         <RichTextRenderer content={event.description} />
-        <Spacer vertical={200} />
+        <Spacer vertical={25} />
       </Container>
     </Box>
   );

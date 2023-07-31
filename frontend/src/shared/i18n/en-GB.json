@@ -22,8 +22,9 @@
     "feedback": "Report a bug",
     "goToHome": "Go home",
     "notFoundMessage": "Sorry, it seems that this page does not exist...",
-    "oups": "Oops",
-    "retry": "Retry"
+    "oups": "Whoops",
+    "retry": "Retry",
+    "unexpected": "An unknown error has occurred"
   },
   "event": {
     "action_menu": {
@@ -39,9 +40,13 @@
         "remove": "Remove from bookmarks"
       }
     },
+    "calendar": {
+      "label": "Calendar"
+    },
     "createModal": {
       "title": "Create an event"
     },
+    "createNewEvent": "Create a new event",
     "details": {
       "day": {
         "label": "Date"
@@ -58,6 +63,20 @@
     },
     "error": "Error while loading the events",
     "event": "Event",
+    "filters": {
+      "date": {
+        "fromDate": "From",
+        "toDate": "To"
+      },
+      "isBookmarked": "Bookmarked",
+      "isParticipating": "My events",
+      "isShotgun": "Shotgun",
+      "more": "More filters",
+      "organizer": "Organiser",
+      "pastEvents": "Past events",
+      "reset": "Reset",
+      "title_filter": "Filters"
+    },
     "form": {
       "description": {
         "label": "Description"
@@ -73,11 +92,11 @@
         "label": "Form for registration (optional)"
       },
       "group": {
-        "helpText": "You must be an admin of a group to publish an event in its name",
+        "helpText": "You must be an admin of a group to be able to post an event on its behalf.",
         "label": "Publish as"
       },
       "image": {
-        "helperText": "A picture, a banner or a poster in a 16/9 format.",
+        "helperText": "Recommendation: photo or image without text, 16/9 format.",
         "label": "Picture"
       },
       "location": {
@@ -108,6 +127,15 @@
       "title": {
         "label": "Event title"
       }
+    },
+    "grid": {
+      "label": "Grid",
+      "title": "Events"
+    },
+    "list": {
+      "allIsLoaded": "End of the list 🥳",
+      "loadMore": "Load more",
+      "noEventFound": "No events 😿"
     },
     "no_event": "No Event",
     "participants": {
@@ -142,18 +170,10 @@
       "unregister": {
         "success": "You have been unregistered."
       }
+    },
+    "search": {
+      "placeholder": "Search for an event"
     }
-  },
-  "filterbar": {
-    "date": "Date",
-    "favorite": "Favorites",
-    "from": "From",
-    "organiser": "Organiser",
-    "participating": "I participate",
-    "shotgun": "Shotgun",
-    "title_filter": "Filters",
-    "to": "To",
-    "validate_button": "Validate"
   },
   "form": {
     "autocomplete": {
@@ -208,7 +228,6 @@
     "startDatetime": "Start date and time"
   },
   "home": {
-    "all": "All",
     "eventSection": {
       "error": "Error: events cannot be loaded 😢",
       "isEmpty": "No upcoming event... 🥺 Create a new one!",
@@ -224,7 +243,6 @@
       "pinnedTitle": "Featured",
       "title": "Posts"
     },
-    "thisWeek": "This week",
     "welcomeTo": "Welcome to"
   },
   "legalNotice": {

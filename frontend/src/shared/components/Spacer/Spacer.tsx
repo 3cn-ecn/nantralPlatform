@@ -1,13 +1,23 @@
 import { CSSProperties } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 type SpacerProps = {
-  horizontal?: CSSProperties['minWidth'];
-  vertical?: CSSProperties['minHeight'];
+  horizontal?: number;
+  vertical?: number;
   flex?: CSSProperties['flex'];
 };
 
 export function Spacer({ horizontal, vertical, flex }: SpacerProps) {
-  return <Box sx={{ minWidth: horizontal, minHeight: vertical, flex }} />;
+  const theme = useTheme();
+
+  return (
+    <Box
+      sx={{
+        minWidth: horizontal && theme.spacing(horizontal),
+        minHeight: vertical && theme.spacing(vertical),
+        flex,
+      }}
+    />
+  );
 }

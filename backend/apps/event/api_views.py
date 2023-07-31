@@ -113,7 +113,7 @@ class EventViewSet(viewsets.ModelViewSet):
         is_member = parse_bool(self.query_params.get('is_member'))
         is_shotgun = parse_bool(self.query_params.get('is_shotgun'))
         is_bookmarked = parse_bool(self.query_params.get('is_bookmarked'))
-        is_participating = self.query_params.get('is_participating')
+        is_participating = parse_bool(self.query_params.get('is_participating'))
         is_registration_open = parse_bool(
             self.query_params.get('is_registration_open'))
         from_date = self.query_params.get('from_date')

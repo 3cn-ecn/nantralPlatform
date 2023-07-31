@@ -1,10 +1,10 @@
 export * from './AutocompleteSearchField';
 export * from './CheckboxField';
-export * from './TextField';
 // export * from './DateField';
 export * from './DateTimeField';
 export * from './FileField';
-// export * from './NumberField';
-// export * from './RichTextField';
+export * from './NumberField';
+export * from './RichTextField';
+export * from './SearchField';
 export * from './SelectField';
-// export * from './URLField';
+export * from './TextField';

@@ -1,104 +1,30 @@
-import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
-import { Box, Button, Container } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 
-import { getGroup } from '#api/group';
-import { FilterInterface } from '#types/Filter';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
-import FilterBar from '../../shared/components/FilterBar/FilterBar';
-import ModalEditEvent from '../../shared/components/FormEvent/FormEvent';
-import './Event.page.scss';
-import EventView from './views/EventView';
+import { CreateNewEventButton } from './components/CreateNewEventButton';
+import { ToggleEventViewButton } from './components/ToggleEventViewButton';
 
 /**
  * Event Page, with Welcome message, next events, etc...
  * @returns Event page component
  */
 export default function Event() {
-  const [queryParameters, setQueryParams] = useSearchParams();
-  const [filter, setFilter] = React.useState<FilterInterface | null>({
-    dateBegin: queryParameters.get('dateBegin')
-      ? new Date(queryParameters.get('dateBegin'))
-      : undefined,
-    dateEnd: queryParameters.get('dateEnd')
-      ? new Date(queryParameters.get('dateEnd'))
-      : undefined,
-    favorite: queryParameters.get('favorite') ? true : null,
-    organiser: [],
-    participate: queryParameters.get('participate') ? true : null,
-    shotgun: queryParameters.get('shotgun') ? true : null,
-  });
-  const [openAddModal, setOpenAddModal] = useState(false);
-
-  // Get organisers
-  React.useEffect(() => {
-    const organisers = queryParameters.get('organiser');
-    if (organisers)
-      Promise.all(
-        organisers?.split(',')?.map((slug) => getGroup(slug, { simple: true }))
-      ).then((groups) => setFilter({ ...filter, organiser: groups }));
-  }, []);
-
-  function updateParameters(attributes: object) {
-    const pairs = Object.entries(attributes);
-    pairs.forEach(([key, value]) => {
-      if (value) queryParameters.set(key, value.toString());
-      else queryParameters.delete(key);
-    });
-    setQueryParams(queryParameters);
-  }
-
-  const getFilter = (validateFilter: FilterInterface) => {
-    setFilter(validateFilter);
-    updateParameters({
-      ...validateFilter,
-      organiser: validateFilter?.organiser
-        ?.map((group) => group.slug)
-        .join(','),
-    });
-  };
+  const { t } = useTranslation();
 
   return (
-    <>
-      <Container className="EventPage">
-        <h1>Évènements</h1>
-        <Box
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 20,
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'flex-begin' }}>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => setOpenAddModal(true)}
-            >
-              Créer un événement
-            </Button>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <FilterBar filter={filter} onChangeFilter={getFilter} />
-          </div>
-        </Box>
-        <EventView
-          onChangeFilter={(changes) => {
-            getFilter(changes);
-          }}
-          filter={filter}
-          initialPage={Number.parseInt(queryParameters.get('page'), 10) || 1}
-          selectedTab={queryParameters.get('tab')}
-          onChangeTab={(value) => updateParameters({ tab: value })}
-          onChangePage={(page: number) => updateParameters({ page: page })}
-        />
-      </Container>
-      <ModalEditEvent
-        open={openAddModal}
-        closeModal={() => setOpenAddModal(false)}
-      />
-    </>
+    <Container sx={{ my: 4 }}>
+      <FlexRow justifyContent="space-between" flexWrap="wrap" gap={1}>
+        <Typography variant="h1">{t('event.grid.title')}</Typography>
+        <ToggleEventViewButton />
+      </FlexRow>
+      <Outlet />
+      <CreateNewEventButton />
+      <Spacer vertical={6} />
+    </Container>
   );
 }

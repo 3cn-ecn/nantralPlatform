@@ -113,6 +113,7 @@ export function EventFormFields({
           name="end_date"
           label={t('event.form.endDate.label')}
           value={formValues.endDate}
+          minDateTime={formValues.startDate || undefined}
           onChange={useCallback(
             (val) => updateFormValues({ endDate: val }),
             [updateFormValues]
@@ -166,6 +167,7 @@ export function EventFormFields({
         )}
         errors={error?.fields?.form_url}
         type="url"
+        placeholder="https://example.com"
       />
       <Paper sx={{ p: 2, my: 1 }} variant="outlined">
         <FlexRow alignItems="center" gap={1} mb={1}>

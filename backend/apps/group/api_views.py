@@ -59,6 +59,8 @@ class GroupViewSet(viewsets.ModelViewSet):
         Filter by groups where user is member
     is_admin: bool
         Filter by groups where user is an admin member
+    slug: string (multiple)
+        Filter by one or multiple slug
     page: int
         The page to get
     pageSize: int
@@ -104,6 +106,7 @@ class GroupViewSet(viewsets.ModelViewSet):
                       .first())
         is_member = parse_bool(self.query_params.get('is_member'), False)
         is_admin = parse_bool(self.query_params.get('is_admin'), False)
+        slugs = self.query_params.getlist('slug')
 
         queryset = (
             Group.objects
@@ -120,6 +123,13 @@ class GroupViewSet(viewsets.ModelViewSet):
             .filter(Q(num_active_members__gt=0)
                     | Q(group_type__hide_no_active_members=False))
         )
+        # hide private groups unless user is member
+        if user.is_authenticated:
+            queryset = queryset.filter(
+                Q(private=False) | Q(members=user.student))
+        # and hide non-public group if user is not authenticated
+        else:
+            queryset = queryset.filter(public=True)
         # filter by group_type
         if group_type:
             queryset = queryset.filter(group_type=group_type)
@@ -130,13 +140,9 @@ class GroupViewSet(viewsets.ModelViewSet):
         if is_admin:
             queryset = queryset.filter(membership_set__student=user.student,
                                        membership_set__admin=True)
-        # hide private groups unless user is member
-        if user.is_authenticated:
-            queryset = queryset.filter(
-                Q(private=False) | Q(members=user.student))
-        # and hide non-public group if user is not authenticated
-        else:
-            queryset = queryset.filter(public=True)
+        # filter by slug
+        if slugs:
+            queryset = queryset.filter(slug__in=slugs)
 
         return (queryset
                 # prefetch type and parent group for better performances

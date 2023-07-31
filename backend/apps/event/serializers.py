@@ -1,7 +1,7 @@
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
-from rest_framework import exceptions, serializers
+from rest_framework import serializers
 
 from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
@@ -44,26 +44,26 @@ class EventSerializer(serializers.ModelSerializer):
             'end_registration',
             'form_url']
 
-    def get_is_participating(self, obj: Event):
+    def get_is_participating(self, obj: Event) -> bool:
         user = self.context['request'].user
         return obj.participants.contains(user.student)
 
-    def get_is_group_member(self, obj: Event):
+    def get_is_group_member(self, obj: Event) -> bool:
         user = self.context['request'].user
         return obj.group.is_member(user)
 
-    def get_is_group_admin(self, obj: Event):
+    def get_is_group_admin(self, obj: Event) -> bool:
         user = self.context['request'].user
         return obj.group.is_admin(user)
 
-    def get_is_bookmarked(self, obj: Event):
+    def get_is_bookmarked(self, obj: Event) -> bool:
         user = self.context['request'].user
         return obj.bookmarks.contains(user.student)
 
-    def get_url(self, obj: Event):
+    def get_url(self, obj: Event) -> str:
         return obj.get_absolute_url()
 
-    def get_form_url(self, obj: Event):
+    def get_form_url(self, obj: Event) -> str:
         user = self.context['request'].user
         registration_open = (
             (obj.start_registration is None
@@ -89,6 +89,7 @@ class EventWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = [
+            'id',
             'title',
             'description',
             'location',
@@ -104,23 +105,23 @@ class EventWriteSerializer(serializers.ModelSerializer):
 
     def validate_max_participant(self, value: int) -> int:
         if value and value < 1:
-            raise exceptions.ValidationError(
+            raise serializers.ValidationError(
                 _("Must be a positive integer"))
         return value
 
-    def validate_group(self, value: Group):
+    def validate_group(self, value: Group) -> Group:
         if (not value.is_admin(self.context['request'].user)):
             raise serializers.ValidationError(
                 _("You have to be admin to add or update an event"))
         return value
 
-    def validate(self, data):
+    def validate(self, data: dict) -> dict:
         if (data["start_date"] > data["end_date"]):
-            raise exceptions.ValidationError(_(
+            raise serializers.ValidationError(_(
                 "The end date must be after the begin date."))
         if (data.get("start_registration") and data.get("end_registration")
                 and data["start_registration"] > data["end_registration"]):
-            raise serializers.ValidationError(
-                "End registration date should be greater than begin \
-                    registration date")
+            raise serializers.ValidationError(_(
+                "The end-registration date must be after the start-"
+                "registration date."))
         return super().validate(data)

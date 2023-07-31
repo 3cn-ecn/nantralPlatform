@@ -6,13 +6,14 @@ import { GroupPreview } from '../group.type';
 import { adaptGroupPreview } from '../infra/group.adapter';
 import { GroupPreviewDTO } from '../infra/group.dto';
 
-type GetGroupListApiParams = {
-  groupTypeSlug?: string;
-  isMember?: boolean;
-  isAdmin?: boolean;
-  search?: string;
-  page?: number;
-  pageSize?: number;
+export type GetGroupListApiParams = {
+  type?: string | null;
+  isMember?: boolean | null;
+  isAdmin?: boolean | null;
+  slug?: string | string[] | null;
+  search?: string | null;
+  page?: number | null;
+  pageSize?: number | null;
 };
 
 export async function getGroupListApi(
@@ -22,9 +23,10 @@ export async function getGroupListApi(
     '/api/group/group/',
     {
       params: {
-        type: options.groupTypeSlug,
+        type: options.type,
         is_member: options.isMember,
         is_admin: options.isAdmin,
+        slug: options.slug,
         search: options.search,
         page: options.page,
         page_size: options.pageSize,

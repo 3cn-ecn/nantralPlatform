@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios, { GenericAbortSignal } from 'axios';
 
-import { OrderingFields } from '#shared/api/orderingFields.types';
+import { OrderingField } from '#shared/api/orderingFields.types';
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
 
@@ -8,40 +8,42 @@ import { EventPreview } from '../event.type';
 import { adaptEventPreview } from '../infra/event.adapter';
 import { EventDTO, EventPreviewDTO } from '../infra/event.dto';
 
-type GetEventListApiParams = {
-  group?: string[];
-  fromDate?: Date;
-  toDate?: Date;
-  isMember?: boolean;
-  isShotgun?: boolean;
-  isBookmarked?: boolean;
-  isParticipating?: boolean;
-  isRegistrationOpen?: boolean;
-  search?: string;
-  ordering?: OrderingFields<EventDTO>;
-  page?: number;
-  pageSize?: number;
+export type EventListQueryParams = {
+  group?: string[] | null;
+  fromDate?: Date | null;
+  toDate?: Date | null;
+  isMember?: boolean | null;
+  isShotgun?: boolean | null;
+  isBookmarked?: boolean | null;
+  isParticipating?: boolean | null;
+  isRegistrationOpen?: boolean | null;
+  search?: string | null;
+  ordering?: OrderingField<EventDTO> | null;
+  page?: number | null;
+  pageSize?: number | null;
 };
 
 export async function getEventListApi(
-  options: GetEventListApiParams = {}
+  params: EventListQueryParams = {},
+  signal?: GenericAbortSignal
 ): Promise<Page<EventPreview>> {
   const { data } = await axios
     .get<PageDTO<EventPreviewDTO>>('/api/event/event/', {
       params: {
-        group: options.group,
-        from_date: options.fromDate,
-        to_date: options.toDate,
-        is_member: options.isMember,
-        is_shotgun: options.isShotgun,
-        is_bookmarked: options.isBookmarked,
-        is_participating: options.isParticipating,
-        is_registration_open: options.isRegistrationOpen,
-        search: options.search,
-        ordering: options.ordering?.join(','),
-        page: options.page,
-        page_size: options.pageSize,
+        group: params.group,
+        from_date: params.fromDate,
+        to_date: params.toDate,
+        is_member: params.isMember,
+        is_shotgun: params.isShotgun,
+        is_bookmarked: params.isBookmarked,
+        is_participating: params.isParticipating,
+        is_registration_open: params.isRegistrationOpen,
+        search: params.search,
+        ordering: params.ordering,
+        page: params.page,
+        page_size: params.pageSize,
       },
+      signal: signal,
     })
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);

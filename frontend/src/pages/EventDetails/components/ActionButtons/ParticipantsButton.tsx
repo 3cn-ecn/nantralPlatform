@@ -4,7 +4,7 @@ import { People as PeopleIcon } from '@mui/icons-material';
 import { Button } from '@mui/material';
 
 import { Event } from '#modules/event/event.type';
-import { EventParticipantsModal } from '#pages/Event/EventDetails/components/EventParticipantsModal';
+import { EventParticipantsModal } from '#pages/EventDetails/components/EventParticipantsModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 type ParticipantsButtonProps = {

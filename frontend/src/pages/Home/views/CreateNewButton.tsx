@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   Event as EventIcon,
@@ -17,6 +17,7 @@ export function CreateNewButton() {
 
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const actions = [
     {
@@ -59,7 +60,13 @@ export function CreateNewButton() {
         />
       )}
       {eventFormOpen && (
-        <CreateEventModal onClose={() => setEventFormOpen(false)} />
+        <CreateEventModal
+          onClose={() => setEventFormOpen(false)}
+          onCreated={(id) => {
+            navigate(`/event/${id}`);
+            setEventFormOpen(false);
+          }}
+        />
       )}
     </>
   );

@@ -1,4 +1,6 @@
-import { Dialog, DialogProps, useMediaQuery, useTheme } from '@mui/material';
+import { Dialog, DialogProps } from '@mui/material';
+
+import { useBreakpoint } from '#shared/utils/useBreakpoint';
 
 type ResponsiveDialogProps = Omit<DialogProps, 'fullScreen' | 'open'> & {
   open?: boolean;
@@ -12,8 +14,7 @@ export function ResponsiveDialog({
   children,
   ...props
 }: ResponsiveDialogProps) {
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const fullScreen = useBreakpoint('md').isSmaller;
 
   return (
     <Dialog

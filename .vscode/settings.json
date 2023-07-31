@@ -67,5 +67,5 @@
   "i18n-ally.sortKeys": true,
   "i18n-ally.indent": 2,
   "i18n-ally.tabStyle": "space",
-  "i18n-ally.usage.scanningIgnore": ["backend/", "docs/"]
+  "i18n-ally.usage.scanningIgnore": ["backend/", "docs/", "ckeditor.js"]
 }

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { ChevronRight as ChevronRightIcon } from '@mui/icons-material';
-import { Alert, Button, Grid, Pagination, Typography } from '@mui/material';
+import { Alert, Button, Grid, Typography } from '@mui/material';
 
 import { EventCard } from '#modules/event/view/EventCard/EventCard';
 import { EventCardSkeleton } from '#modules/event/view/EventCard/EventCardSkeleton';
@@ -54,7 +54,6 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
   }
 
   if (eventsQuery.isError) {
-    if (eventsQuery.page > 1) eventsQuery.setPage(1);
     return (
       <Section
         title={t('home.eventSection.title')}
@@ -92,14 +91,6 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
           </Grid>
         ))}
       </Grid>
-      {eventsQuery.data.numPages > 1 && (
-        <Pagination
-          count={eventsQuery.data.numPages}
-          page={eventsQuery.page}
-          onChange={(e, val) => eventsQuery.setPage(val)}
-          sx={{ mt: 1 }}
-        />
-      )}
     </Section>
   );
 }

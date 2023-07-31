@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { OrderingFields } from '#shared/api/orderingFields.types';
+import { OrderingField } from '#shared/api/orderingFields.types';
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
 
@@ -15,7 +15,7 @@ type GetPostListParams = {
   minDate?: Date;
   maxDate?: Date;
   search?: string;
-  ordering?: OrderingFields<PostDTO>;
+  ordering?: OrderingField<PostDTO>[];
   page?: number;
   pageSize?: number;
 };

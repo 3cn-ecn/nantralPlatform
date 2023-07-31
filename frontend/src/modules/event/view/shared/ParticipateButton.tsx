@@ -43,7 +43,8 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
     (!!event.endRegistration && event.endRegistration < now);
 
   const isDisabled =
-    (isShotgunNotStarted || isShotgunFinish) && !event.isParticipating;
+    (isShotgunNotStarted || isShotgunFinish || event.endDate < now) &&
+    !event.isParticipating;
 
   const handleClick = () => {
     if (event.isParticipating) {

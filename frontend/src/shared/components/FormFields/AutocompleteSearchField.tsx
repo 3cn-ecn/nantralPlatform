@@ -2,7 +2,6 @@ import { SyntheticEvent, memo, useEffect, useState } from 'react';
 
 import {
   Autocomplete,
-  AutocompleteChangeReason,
   AutocompleteInputChangeReason,
   AutocompleteProps,
   ChipTypeMap,
@@ -10,7 +9,7 @@ import {
   AutocompleteValue as MuiAutocompleteValue,
   TextField,
 } from '@mui/material';
-import { debounce, isNil } from 'lodash-es';
+import { debounce, isNil, uniqBy } from 'lodash-es';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -59,7 +58,8 @@ type AutocompleteSearchFieldProps<
 > & {
   value: AutocompleteValue<number, Multiple, DisableClearable>;
   handleChange: (
-    value: AutocompleteValue<number, Multiple, DisableClearable>
+    value: AutocompleteValue<number, Multiple, DisableClearable>,
+    objectValue: AutocompleteValue<T, Multiple, DisableClearable>
   ) => void;
   defaultObjectValue: DisableClearable extends true
     ? AutocompleteValue<T, Multiple, DisableClearable>
@@ -73,6 +73,7 @@ type AutocompleteSearchFieldProps<
   errors?: string[];
   labelPropName: LabelPropName;
   imagePropName?: ImagePropName;
+  loading?: boolean;
 };
 
 /**
@@ -130,6 +131,7 @@ function AutocompleteSearchFieldComponent<
   fullWidth = true,
   labelPropName,
   imagePropName,
+  loading = false,
   ...props
 }: AutocompleteSearchFieldProps<
   T,
@@ -142,12 +144,27 @@ function AutocompleteSearchFieldComponent<
   const { t } = useTranslation();
 
   const [options, setOptions] = useState<T[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(loading);
   const [objectValue, setObjectValue] = useState<
     AutocompleteValue<T, Multiple, DisableClearable>
   >(defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>);
 
   const isError = errors !== undefined;
+
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [loading]);
+
+  useEffect(() => {
+    if (
+      (isMultiple(objectValue, multiple) && !objectValue.length) ||
+      (!isMultiple(objectValue, multiple) && isNil(objectValue))
+    ) {
+      setObjectValue(
+        defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>
+      );
+    }
+  }, [defaultObjectValue, objectValue, multiple]);
 
   useEffect(() => {
     if (fetchInitialOptions && isNil(value)) {
@@ -171,7 +188,11 @@ function AutocompleteSearchFieldComponent<
       setIsLoading(true);
       fetchOptions(inputValue)
         .then((data) => {
-          setOptions(data);
+          setOptions(
+            isMultiple(objectValue, multiple)
+              ? uniqBy(data.concat(...objectValue), (obj) => obj.id)
+              : data
+          );
           setIsLoading(false);
         })
         .catch((err) => console.error(err));
@@ -181,40 +202,23 @@ function AutocompleteSearchFieldComponent<
 
   const updateValue = (
     event: SyntheticEvent,
-    newObjectValue: AutocompleteValue<T, Multiple, DisableClearable>,
-    reason: AutocompleteChangeReason
+    newObjectValue: AutocompleteValue<T, Multiple, DisableClearable>
   ) => {
-    if (reason === 'selectOption') {
-      setObjectValue(newObjectValue);
-      handleChange(
-        isMultiple(newObjectValue, multiple)
-          ? (newObjectValue.map((objVal) => objVal.id) as AutocompleteValue<
-              number,
-              Multiple,
-              DisableClearable
-            >)
-          : (newObjectValue?.id as AutocompleteValue<
-              number,
-              Multiple,
-              DisableClearable
-            >)
-      );
-    } else {
-      setObjectValue(
-        (multiple ? [] : null) as AutocompleteValue<
-          T,
-          Multiple,
-          DisableClearable
-        >
-      );
-      handleChange(
-        (multiple ? [] : null) as AutocompleteValue<
-          number,
-          Multiple,
-          DisableClearable
-        >
-      );
-    }
+    setObjectValue(newObjectValue);
+    handleChange(
+      isMultiple(newObjectValue, multiple)
+        ? (newObjectValue.map((objVal) => objVal.id) as AutocompleteValue<
+            number,
+            Multiple,
+            DisableClearable
+          >)
+        : (newObjectValue?.id as AutocompleteValue<
+            number,
+            Multiple,
+            DisableClearable
+          >),
+      newObjectValue
+    );
   };
 
   return (
@@ -226,6 +230,7 @@ function AutocompleteSearchFieldComponent<
       isOptionEqualToValue={(option, value) => option.id === value.id}
       fullWidth={fullWidth}
       onInputChange={updateOptions}
+      multiple={multiple}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -237,20 +242,16 @@ function AutocompleteSearchFieldComponent<
           margin="normal"
           InputProps={{
             ...params.InputProps,
-            startAdornment: (
-              <>
-                {!isMultiple(objectValue, multiple) &&
-                  !!imagePropName &&
-                  objectValue && (
-                    <Avatar
-                      alt={objectValue[labelPropName as string]}
-                      src={objectValue[imagePropName as string]}
-                      size="s"
-                    />
-                  )}
-                {params.InputProps.startAdornment}
-              </>
-            ),
+            startAdornment: isMultiple(objectValue, multiple)
+              ? params.InputProps.startAdornment
+              : !!imagePropName &&
+                !!objectValue && (
+                  <Avatar
+                    alt={objectValue[labelPropName as string]}
+                    src={objectValue[imagePropName as string]}
+                    size="s"
+                  />
+                ),
             endAdornment: (
               <>
                 {isLoading && <CircularProgress color="inherit" size={20} />}

@@ -22,9 +22,13 @@ import { EventFormFields } from '../shared/EventFormFields';
 
 type CreateEventModalProps = {
   onClose: () => void;
+  onCreated?: (id?: number) => void;
 };
 
-export function CreateEventModal({ onClose }: CreateEventModalProps) {
+export function CreateEventModal({
+  onClose,
+  onCreated = onClose,
+}: CreateEventModalProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
@@ -58,11 +62,11 @@ export function CreateEventModal({ onClose }: CreateEventModalProps) {
     e.preventDefault();
     // call the updatePost function
     mutate(values, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         // if success, reset the event data in all queries
         queryClient.invalidateQueries('events');
         // close the modal
-        onClose();
+        onCreated(data.id);
       },
     });
   };

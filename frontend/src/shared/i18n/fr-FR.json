@@ -22,8 +22,9 @@
     "feedback": "Signaler un bug",
     "goToHome": "Retour à l'accueil",
     "notFoundMessage": "Désolé, il semblerait que cette page n'existe pas...",
-    "oups": "Oops",
-    "retry": "Réessayer"
+    "oups": "Oups",
+    "retry": "Réessayer",
+    "unexpected": "Une erreur inconnue s'est produite"
   },
   "event": {
     "action_menu": {
@@ -39,9 +40,13 @@
         "remove": "Retirer des favoris"
       }
     },
+    "calendar": {
+      "label": "Calendrier"
+    },
     "createModal": {
       "title": "Créer un évènement"
     },
+    "createNewEvent": "Créer un nouvel évènement",
     "details": {
       "day": {
         "label": "Date"
@@ -58,6 +63,20 @@
     },
     "error": "Erreur lors du chargement des évènements",
     "event": "Évènement",
+    "filters": {
+      "date": {
+        "fromDate": "Du",
+        "toDate": "Jusqu'au"
+      },
+      "isBookmarked": "Favoris",
+      "isParticipating": "Mes évènements",
+      "isShotgun": "Shotgun",
+      "more": "Plus de filtres",
+      "organizer": "Organisateur",
+      "pastEvents": "Évènements passés",
+      "reset": "Réinitialiser",
+      "title_filter": "Filtres"
+    },
     "form": {
       "description": {
         "label": "Description"
@@ -73,11 +92,11 @@
         "label": "Formulaire ou billetterie (optionnel)"
       },
       "group": {
-        "helpText": "Vous devez être admin d'un groupe pour pouvoir publier un évènement en son nom",
+        "helpText": "Vous devez être admin d'un groupe pour pouvoir publier un évènement en son nom.",
         "label": "Publier en tant que"
       },
       "image": {
-        "helperText": "Une image, un poster ou une affiche, au format 19/9 de préférence.",
+        "helperText": "Recommandation : photo ou image sans texte, format 16/9.",
         "label": "Image"
       },
       "location": {
@@ -108,6 +127,15 @@
       "title": {
         "label": "Titre de l'évènement"
       }
+    },
+    "grid": {
+      "label": "Grille",
+      "title": "Évènements"
+    },
+    "list": {
+      "allIsLoaded": "Fin de la liste 🥳",
+      "loadMore": "Charger plus",
+      "noEventFound": "Aucun évènement 😿"
     },
     "no_event": "Aucun évènement",
     "participants": {
@@ -142,18 +170,10 @@
       "unregister": {
         "success": "Vous avez bien été désinscrit."
       }
+    },
+    "search": {
+      "placeholder": "Rechercher un évènement"
     }
-  },
-  "filterbar": {
-    "date": "Date",
-    "favorite": "Favoris",
-    "from": "À partir du",
-    "organiser": "Organisateur",
-    "participating": "Je participe",
-    "shotgun": "Shotgun",
-    "title_filter": "Filtres",
-    "to": "Jusqu'au",
-    "validate_button": "Valider"
   },
   "form": {
     "autocomplete": {
@@ -208,7 +228,6 @@
     "startDatetime": "Date et Heure de début"
   },
   "home": {
-    "all": "Tous",
     "eventSection": {
       "error": "Erreur : les évènements n'ont pas pu êre chargés 😢",
       "isEmpty": "Aucun évènement à venir... 🥺 Créez-en un !",
@@ -224,8 +243,6 @@
       "pinnedTitle": "À la une",
       "title": "Annonces"
     },
-    "thisWeek": "Cette semaine",
-    "upcomingEvents": "Évènements à venir",
     "welcomeTo": "Bienvenue sur"
   },
   "legalNotice": {

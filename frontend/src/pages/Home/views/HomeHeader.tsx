@@ -15,8 +15,8 @@ export function HomeHeader() {
         shift="top"
       />
       <Container sx={{ my: 8 }}>
-        <TitleTypography variant="h5">{t('home.welcomeTo')}</TitleTypography>
-        <TitleTypography variant="h1">{t('site.name')}</TitleTypography>
+        <TitleTypography variant="h4">{t('home.welcomeTo')}</TitleTypography>
+        <TitleTypography variant="poster">{t('site.name')}</TitleTypography>
       </Container>
     </FlexCol>
   );

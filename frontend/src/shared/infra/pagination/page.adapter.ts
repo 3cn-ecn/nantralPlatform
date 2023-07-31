@@ -9,5 +9,7 @@ export function adaptPage<DTO, ObjectType>(
     count: pageDto.count,
     numPages: pageDto.num_pages,
     results: pageDto.results.map(resultsAdapterFunction),
+    next: pageDto.next,
+    previous: pageDto.previous,
   };
 }
