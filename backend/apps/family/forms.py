@@ -104,7 +104,7 @@ class FamilyQuestionItiiForm(FamilyQuestionsForm):
 
 class MemberQuestionsForm(forms.Form):
 
-    def __init__(self, page, is_2A_plus, initial, *args, **kwargs):  # noqa:N803
+    def __init__(self, page, is_2Aplus, initial, *args, **kwargs):  # noqa:N803
         super(MemberQuestionsForm, self).__init__(
             initial=initial, *args, **kwargs)
         self.use_required_attribute = False
@@ -113,7 +113,7 @@ class MemberQuestionsForm(forms.Form):
         for question in questions:
             try:
                 show_question = (
-                    not is_2A_plus or question.equivalent.quota < 100)
+                    not is_2Aplus or question.equivalent.quota < 100)
             except Exception:
                 show_question = True
             if show_question:
