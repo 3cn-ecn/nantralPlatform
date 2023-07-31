@@ -20,7 +20,7 @@ class UpdateFamilyForm(forms.ModelForm):
     """Modifier une famille existante"""
     class Meta:
         model = Family
-        fields = ['name', 'summary', 'non_subscribed_members']
+        fields = ['name', 'summary',]
 
 
 class MemberForDeleteForm(forms.BaseInlineFormSet):
