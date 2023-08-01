@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Button, Grid } from '@mui/material';
 import { EventAttributes, createEvents } from 'ics';
@@ -7,6 +7,8 @@ import { EventCalendarItem } from '#modules/event/event.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { modulo, ppcm } from '#shared/utils/maths';
 
+import { useEventListQuery } from '../hooks/useEventList.query';
+import { useFilters } from '../hooks/useFilters';
 import './Calendar.scss';
 import { CalendarView, EventDataProps } from './CalendarProps/CalendarProps';
 import { ChooseDisplay } from './ChooseDisplay/ChooseDisplay';
@@ -790,11 +792,16 @@ function updateWeekToDisplay(
  * @param event The list of events.
  * @returns The calendar component.
  */
-function Calendar(props: {
-  events: Array<EventCalendarItem>;
-  onChangeRange: (period: { from: Date; to: Date }) => void;
-}): JSX.Element {
-  const { events, onChangeRange: onChangePeriod } = props;
+function Calendar(): JSX.Element {
+  // const { events = [], onChangeRange: onChangePeriod = () => {} } = props;
+  const [filters, , updateFilters] = useFilters();
+  const eventsQuery = useEventListQuery(filters);
+  const events = eventsQuery.isSuccess ? eventsQuery.data.results : [];
+  const onChangePeriod = useCallback(
+    (range: { from?: Date; to?: Date }) =>
+      updateFilters({ fromDate: range.from, toDate: range.to }),
+    [updateFilters]
+  );
   const { t } = useTranslation();
   const [displayData, updateDisplay] = useState<{
     type: CalendarView;
@@ -879,11 +886,11 @@ function Calendar(props: {
   // Update the display and the view
   useEffect(() => {
     changeDisplay(displayData.type, beginOfWeek, setBeginOfWeek, setEndOfWeek);
-  }, [displayData]);
+  }, [displayData, beginOfWeek]);
 
   useEffect(() => {
     onChangePeriod({ from: beginOfWeek, to: endOfWeek });
-  }, [beginOfWeek, endOfWeek]);
+  }, [beginOfWeek, endOfWeek, onChangePeriod]);
   return (
     <>
       <ChooseWeek

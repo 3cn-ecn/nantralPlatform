@@ -1,9 +1,7 @@
-import React from 'react';
-
 import userEvent from '@testing-library/user-event';
 
-import { CalendarView } from '#modules/event/view/Calendar/CalendarProps/CalendarProps';
 import { ChangeWeek } from '#modules/event/view/Calendar/ChooseWeek/ChangeWeek/ChangeWeek';
+import { CalendarView } from '#pages/Event/EventCalendar/CalendarProps/CalendarProps';
 import { wrapAndRender } from '#shared/utils/tests';
 
 let startDate = new Date('2023-02-17T03:24:00');

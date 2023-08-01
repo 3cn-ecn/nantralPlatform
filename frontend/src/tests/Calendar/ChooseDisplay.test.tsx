@@ -1,9 +1,7 @@
-import React from 'react';
-
 import userEvent from '@testing-library/user-event';
 
-import { CalendarView } from '#modules/event/view/Calendar/CalendarProps/CalendarProps';
 import { ChooseDisplay } from '#modules/event/view/Calendar/ChooseDisplay/ChooseDisplay';
+import { CalendarView } from '#pages/Event/EventCalendar/CalendarProps/CalendarProps';
 import { wrapAndRender } from '#shared/utils/tests';
 
 let dayDisplay: { type: CalendarView; startDate: number } = {

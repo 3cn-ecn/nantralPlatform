@@ -8,6 +8,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import EventPage from '#pages/Event/Event.page';
+import Calendar from '#pages/Event/EventCalendar/Calendar';
 import EventGridViewPage from '#pages/Event/EventGrid/EventGridView.page';
 import EventDetailsPage from '#pages/EventDetails/EventDetails.page';
 import GroupPage from '#pages/Group/Group.page';
@@ -132,7 +133,7 @@ function App() {
                   <Route path="/group" element={<GroupPage />} />
                   <Route path="/event/" element={<EventPage />}>
                     <Route path="" element={<EventGridViewPage />} />
-                    <Route path="calendar" element={<div>Calendar</div>} />
+                    <Route path="calendar" element={<Calendar />} />
                   </Route>
                   <Route path="/event/:id" element={<EventDetailsPage />} />
                   <Route path="/student" element={<StudentPage />} />
