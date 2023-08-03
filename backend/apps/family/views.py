@@ -253,13 +253,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
             FamilyQuestionsForm(data=request.POST)
         ]
         if forms[0].is_valid() and forms[1].is_valid() and forms[2].is_valid():
-            # on vérifie le nb de membres
-            non_subscribed_list = forms[0].cleaned_data[
-                'non_subscribed_members']
-            if non_subscribed_list:
-                nb_non_subscribed = len((non_subscribed_list).split(','))
-            else:
-                nb_non_subscribed = 0
+            nb_non_subscribed = 0
             nb_subscribed = 0
             for form in forms[1]:
                 if hasattr(form.instance, 'student'):
