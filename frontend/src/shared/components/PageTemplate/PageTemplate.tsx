@@ -2,8 +2,6 @@ import { ReactNode, useState } from 'react';
 
 import { Box, CssBaseline, Toolbar, useTheme } from '@mui/material';
 
-import { useChangeTheme } from '#shared/context/CustomTheme.context';
-
 import { ScrollToTop } from '../ScrollToTop/ScrollToTop';
 import NavBarSide from './components/NavBarSide/NavBarSide';
 import NavBarTop from './components/NavBarTop/NavBarTop';
@@ -14,7 +12,6 @@ type PageTemplateProps = {
 
 export function PageTemplate({ children }: PageTemplateProps) {
   const theme = useTheme();
-  const changeTheme = useChangeTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const drawerWidth = 240; // the width of the lateral navbar
   const sideBarVariant =
@@ -26,12 +23,7 @@ export function PageTemplate({ children }: PageTemplateProps) {
       className={`global-${theme.palette.mode}-theme`}
     >
       <CssBaseline />
-      <NavBarTop
-        menuOpen={menuOpen}
-        setMenuOpen={setMenuOpen}
-        colorMode={theme.palette.mode}
-        setColorMode={changeTheme}
-      />
+      <NavBarTop menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <NavBarSide
         menuOpen={menuOpen}
         drawerWidth={drawerWidth}

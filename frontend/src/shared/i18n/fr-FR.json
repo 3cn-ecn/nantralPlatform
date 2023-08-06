@@ -21,7 +21,9 @@
   },
   "button": {
     "cancel": "Annuler",
-    "confirm": "Valider"
+    "confirm": "Valider",
+    "next": "Suivant",
+    "previous": "Précédent"
   },
   "error": {
     "errorMessage": "Erreur : {{errorMessage}}",
@@ -125,7 +127,7 @@
         }
       },
       "shotgunSection": {
-        "helper": "Créez un shotgun en utilisant ces paramètres optionels !",
+        "helper": "Créez un shotgun en utilisant ces paramètres optionnels !",
         "title": "Paramètres Shotgun"
       },
       "startDate": {
@@ -225,6 +227,14 @@
       },
       "title": "Évènements à venir"
     },
+    "helpUsSection": {
+      "android": "Donne-nous 5 étoiles sur le Play Store !",
+      "contribute": "Contribue au développement !",
+      "github": "Mets-nous une étoile sur Github !",
+      "giveFeedback": "Propose des améliorations",
+      "level": "Niveau {{level}} : ",
+      "title": "Tu aimes ce site ? Aide-nous !"
+    },
     "myClubs": "Mes groupes",
     "postSection": {
       "error": "Erreur : les annonces n'ont pas pu être chargées 😢",
@@ -294,10 +304,6 @@
     }
   },
   "navbar": {
-    "academics": "Cours et Formations",
-    "administration": "Administration",
-    "bdx": "Listes BDX",
-    "clubs": "Clubs et assos",
     "events": "Évènements",
     "family": "Parrainage",
     "flatshare": "Carte des colocs",
@@ -358,28 +364,27 @@
   "site": {
     "name": "Nantral Platform"
   },
-  "suggestion_menu": {
-    "cancel": "Annuler",
-    "confirm": "Valider",
-    "description": "Description",
-    "header": "Suggestions / Bug",
-    "title": "Titre",
-    "type": "Type"
-  },
-  "user_menu": {
-    "admin": "Interface Admin",
-    "automatic": "Automatique",
-    "bug": "Suggestion / Bug",
-    "dark": "Thème sombre",
-    "doc": "Documentation",
-    "language": "Langue",
-    "legal": "Mentions Légales",
-    "light": "Thème clair",
-    "logout": "Se déconnecter",
-    "profile": "Mon Profil",
-    "theme": "Thème",
-    "title_language": "Langue",
-    "title_theme": "Thème"
+  "userMenu": {
+    "button": {
+      "label": "Ouvrir le menu utilisateur"
+    },
+    "menu": {
+      "adminInterface": "Interface Admin",
+      "documentation": "Documentation",
+      "language": {
+        "title": "Langue"
+      },
+      "legalNotice": "Mentions légales",
+      "profile": "Mon profil",
+      "report": "Suggestion / Bug",
+      "signOut": "Se déconnecter",
+      "theme": {
+        "auto": "Thème de l'appareil",
+        "dark": "Thème sombre",
+        "light": "Thème clair",
+        "title": "Apparence"
+      }
+    }
   },
   "utils": {
     "shareLink": {

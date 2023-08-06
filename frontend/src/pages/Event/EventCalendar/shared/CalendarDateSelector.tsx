@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { Button, Dialog, IconButton, Typography } from '@mui/material';
+import { Button, Dialog, IconButton, Tooltip, Typography } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import {
@@ -36,7 +36,7 @@ export function CalendarDateSelector({
   updateFilters,
   viewMode,
 }: CalendarDateSelectorProps) {
-  const { formatDateTimeRange, formatDate, dateFnsLocale, startOfWeek } =
+  const { t, formatDateTimeRange, formatDate, dateFnsLocale, startOfWeek } =
     useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -79,12 +79,16 @@ export function CalendarDateSelector({
   return (
     <>
       <FlexRow alignItems="center" overflow="auto">
-        <IconButton onClick={handlePrev}>
-          <ChevronLeft />
-        </IconButton>
-        <IconButton onClick={handleNext}>
-          <ChevronRight />
-        </IconButton>
+        <Tooltip title={t('button.previous')}>
+          <IconButton onClick={handlePrev}>
+            <ChevronLeft />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={t('button.next')}>
+          <IconButton onClick={handleNext}>
+            <ChevronRight />
+          </IconButton>
+        </Tooltip>
         <Button
           color="inherit"
           sx={{

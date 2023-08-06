@@ -29,8 +29,10 @@ import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { GroupPreview } from '#modules/group/group.type';
 import { useGroupListQuery } from '#modules/group/hooks/useGroupList.query';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
-import { AutocompleteSearchField } from '#shared/components/FormFields';
-import { DateField } from '#shared/components/FormFields/DateField';
+import {
+  AutocompleteSearchField,
+  DateField,
+} from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { Page } from '#shared/infra/pagination';
 

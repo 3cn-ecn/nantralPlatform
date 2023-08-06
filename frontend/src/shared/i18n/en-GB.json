@@ -21,7 +21,9 @@
   },
   "button": {
     "cancel": "Cancel",
-    "confirm": "OK"
+    "confirm": "OK",
+    "next": "Next",
+    "previous": "Previous"
   },
   "error": {
     "errorMessage": "Error: {{errorMessage}}",
@@ -225,6 +227,14 @@
       },
       "title": "Upcoming events"
     },
+    "helpUsSection": {
+      "android": "Give us 5 stars on the Play Store!",
+      "contribute": "Help to code!",
+      "github": "Give us a star on Github!",
+      "giveFeedback": "Suggest improvements",
+      "level": "Level {{level}}: ",
+      "title": "Do you like this site? Help us!"
+    },
     "myClubs": "My groups",
     "postSection": {
       "error": "Error: posts cannot be loaded 😢",
@@ -284,7 +294,7 @@
       "5": "Intellectual property",
       "6": "Cookies",
       "7": "Embedded content from other sites",
-      "8": "Personnal data usage"
+      "8": "Personal data usage"
     },
     "title": "Legal Notice"
   },
@@ -294,10 +304,6 @@
     }
   },
   "navbar": {
-    "academics": "Academics",
-    "administration": "Administration",
-    "bdx": "BDX Lists",
-    "clubs": "Clubs and Assos",
     "events": "Events",
     "family": "Family",
     "flatshare": "Flatshares Map",
@@ -308,7 +314,7 @@
   },
   "notif": {
     "load": "Loading More",
-    "subscribed": "Suscribed",
+    "subscribed": "Subscribed",
     "title": "Notifications",
     "unread": "Unread"
   },
@@ -358,28 +364,27 @@
   "site": {
     "name": "Nantral Platform"
   },
-  "suggestion_menu": {
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "description": "Description",
-    "header": "Suggest / Bug",
-    "title": "Title",
-    "type": "Type"
-  },
-  "user_menu": {
-    "admin": "Admin Interface",
-    "automatic": "Automatic",
-    "bug": "Suggest / Bug",
-    "dark": "Dark Theme",
-    "doc": "Documentation",
-    "language": "Language",
-    "legal": "Legal Notice",
-    "light": "Light Theme",
-    "logout": "Log Out",
-    "profile": "My Profile",
-    "theme": "Theme",
-    "title_language": "Language",
-    "title_theme": "Theme"
+  "userMenu": {
+    "button": {
+      "label": "Open user menu"
+    },
+    "menu": {
+      "adminInterface": "Admin interface",
+      "documentation": "Documentation",
+      "language": {
+        "title": "Language"
+      },
+      "legalNotice": "Legal Notice",
+      "profile": "My profile",
+      "report": "Suggestion / Bug",
+      "signOut": "Sign out",
+      "theme": {
+        "auto": "Device Theme",
+        "dark": "Dark theme",
+        "light": "Light theme",
+        "title": "Appearance"
+      }
+    }
   },
   "utils": {
     "shareLink": {

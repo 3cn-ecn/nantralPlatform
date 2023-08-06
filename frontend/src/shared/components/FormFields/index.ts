@@ -1,6 +1,6 @@
 export * from './AutocompleteSearchField';
 export * from './CheckboxField';
-// export * from './DateField';
+export * from './DateField';
 export * from './DateTimeField';
 export * from './FileField';
 export * from './NumberField';

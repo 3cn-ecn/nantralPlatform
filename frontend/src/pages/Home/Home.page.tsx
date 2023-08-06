@@ -8,6 +8,7 @@ import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { CreateNewButton } from './views/CreateNewButton';
 import { HomeHeader } from './views/HomeHeader';
+import { HelpUsSection } from './views/section/HelpUsSection';
 import { LastPostsSection } from './views/section/LastPostsSection';
 import { PinnedPostsSection } from './views/section/PinnnedPostsSection';
 import { UpcomingEventsSection } from './views/section/UpcomingEventsSection';
@@ -49,6 +50,8 @@ export function HomePage() {
           status={myGroupsStatus}
           title={t('home.myClubs')}
         /> */}
+        <Spacer vertical={3} />
+        <HelpUsSection />
         <Spacer vertical={6} />
       </Container>
       {!!openedPostId && (
