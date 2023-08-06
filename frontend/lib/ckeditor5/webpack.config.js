@@ -34,17 +34,35 @@ module.exports = {
 
   optimization: {
     minimizer: [
-      new TerserWebpackPlugin({
-        sourceMap: true,
-        terserOptions: {
-          output: {
-            // Preserve CKEditor 5 license comments.
-            comments: /^!/,
-          },
-        },
-        extractComments: false,
-      }),
+      (compiler) => {
+        return () => {
+          return {
+            sourceMap: true,
+            extractComments: false,
+            terserOptions: {
+              mangle: {
+                output: {
+                  // Preserve CKEditor 5 license comments.
+                  comments: /^!/,
+                },
+              },
+            },
+          };
+        };
+      },
     ],
+    // minimizer: [
+    //   new TerserWebpackPlugin({
+    //     sourceMap: true,
+    //     terserOptions: {
+    //       output: {
+    //         // Preserve CKEditor 5 license comments.
+    //         comments: /^!/,
+    //       },
+    //     },
+    //     extractComments: false,
+    //   }),
+    // ],
   },
 
   plugins: [
