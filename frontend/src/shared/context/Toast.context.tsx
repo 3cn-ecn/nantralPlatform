@@ -18,7 +18,7 @@ type ToastContextActions = (toast: Toast) => void;
 
 const ToastContext = createContext<ToastContextActions | null>(null);
 
-const ToastProvider = ({ children }: PropsWithChildren) => {
+export function ToastProvider({ children }: PropsWithChildren) {
   const [open, setOpen] = useState(false);
   const [toast, setToast] = useState<Toast | undefined>();
 
@@ -56,16 +56,14 @@ const ToastProvider = ({ children }: PropsWithChildren) => {
       {children}
     </ToastContext.Provider>
   );
-};
+}
 
-const useToast = (): ToastContextActions => {
+export function useToast(): ToastContextActions {
   const context = useContext(ToastContext);
 
   if (!context) {
-    throw new Error('useSnackBar must be used within an SnackBarProvider');
+    throw new Error('useToast must be used within an ToastProvider');
   }
 
   return context;
-};
-
-export { ToastProvider, useToast };
+}

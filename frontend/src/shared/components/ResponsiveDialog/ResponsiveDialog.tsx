@@ -1,6 +1,6 @@
 import { Dialog, DialogProps } from '@mui/material';
 
-import { useBreakpoint } from '#shared/utils/useBreakpoint';
+import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 
 type ResponsiveDialogProps = Omit<DialogProps, 'fullScreen' | 'open'> & {
   open?: boolean;

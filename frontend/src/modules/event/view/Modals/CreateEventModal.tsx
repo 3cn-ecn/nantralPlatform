@@ -14,9 +14,9 @@ import {
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
+import { useObjectState } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
-import { useObjectState } from '#shared/utils/useObjectState';
 
 import { EventFormFields } from '../shared/EventFormFields';
 

@@ -11,8 +11,8 @@ import { isSameDay, roundToNearestMinutes } from 'date-fns';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { useBreakpoint } from '#shared/utils/useBreakpoint';
 
 import { FilterDrawer } from './FilterDrawer';
 

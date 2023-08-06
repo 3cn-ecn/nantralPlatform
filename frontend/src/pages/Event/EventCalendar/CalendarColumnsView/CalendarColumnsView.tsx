@@ -62,14 +62,13 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
   });
 
   const eventsByDay = days.map((date) =>
-    events.filter((e) => {
-      console.dir({ start: e.startDate, end: e.endDate });
-      return areIntervalsOverlapping(
+    events.filter((e) =>
+      areIntervalsOverlapping(
         { start: e.startDate, end: e.endDate },
         { start: startOfDay(date), end: endOfDay(date) },
         { inclusive: true }
-      );
-    })
+      )
+    )
   );
 
   const columns = zipWith(days, eventsByDay, (date, events) => ({

@@ -1,21 +1,27 @@
 {
+  "breadcrumbs": {
+    "events": {
+      "calendar": {
+        "index": "Calendar"
+      },
+      "details": {
+        "index": "Details"
+      },
+      "index": "Events"
+    },
+    "home": {
+      "index": "Home"
+    },
+    "legal": {
+      "index": "Legal Notice"
+    },
+    "notFound": {
+      "index": "404 error"
+    }
+  },
   "button": {
     "cancel": "Cancel",
     "confirm": "OK"
-  },
-  "calendar": {
-    "export": "Export events",
-    "to": "to",
-    "view": {
-      "3days": "3 Days",
-      "day": "Day",
-      "month": "Month",
-      "week": "Week"
-    }
-  },
-  "club": {
-    "joinNow": "Join now",
-    "noClub": "You haven't joined any groups yet"
   },
   "error": {
     "errorMessage": "Error: {{errorMessage}}",
@@ -32,7 +38,6 @@
       "share": "Share",
       "unsubscribe": "Unregister"
     },
-    "adminWarning": "You must be an admin of your club to create an event",
     "bookmarkButton": {
       "label": "Is in bookmarks",
       "tooltip": {
@@ -67,7 +72,6 @@
     "editModal": {
       "title": "Edit event"
     },
-    "error": "Error while loading the events",
     "event": "Event",
     "filters": {
       "date": {
@@ -143,7 +147,6 @@
       "loadMore": "Load more",
       "noEventFound": "No events 😿"
     },
-    "no_event": "No Event",
     "participants": {
       "noParticipants": "No participants 😔",
       "title": "Participants",
@@ -187,18 +190,9 @@
       "noOptions": "No results",
       "open": "Open"
     },
-    "cancel": "Cancel",
-    "createEvent": "Create event",
-    "deleteEvent": "Delete event",
-    "deleteEventConfirmation": "Are you sure you want to delete this event? \nThis action is irreversible.",
-    "description": "Description",
-    "editEvent": "Edit event",
-    "endDatetime": "End date and time",
     "errors": {
       "title": "The form contains one or several errors"
     },
-    "eventTitle": "Event title",
-    "externalLink": "External link",
     "file": {
       "clearButton": {
         "label": "Remove the file"
@@ -218,20 +212,9 @@
         "label": "Undo"
       }
     },
-    "freeRegistration": "Free registration",
-    "group": "Group",
-    "image": "Picture",
-    "imageDescription": "A picture, a banner, a poster",
-    "membersOnly": "Club members only",
-    "noFile": "No file",
     "number": {
       "wrongFormat": "Invalid format"
-    },
-    "place": "Place",
-    "public": "Public",
-    "publicity": "Publicity",
-    "saving": "Saving...",
-    "startDatetime": "Start date and time"
+    }
   },
   "home": {
     "eventSection": {
@@ -305,10 +288,6 @@
     },
     "title": "Legal Notice"
   },
-  "membership_student": {
-    "show_old": "Show the old groups",
-    "title": "Groups"
-  },
   "modal": {
     "closeButton": {
       "label": "Close"
@@ -375,14 +354,6 @@
       }
     },
     "post": "Post"
-  },
-  "profile": {
-    "doc": "Doctoral student",
-    "edit": "Edit my profile",
-    "gene": "Student Engineer Generalist",
-    "iti": "Specialty engineering student (ITII)",
-    "master": "Student in Master",
-    "promo": "Year of entry at Centrale: "
   },
   "site": {
     "name": "Nantral Platform"

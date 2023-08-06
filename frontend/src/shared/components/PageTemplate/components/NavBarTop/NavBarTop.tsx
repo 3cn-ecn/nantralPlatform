@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { useQueryClient } from 'react-query';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useMatches } from 'react-router-dom';
 
 import {
   AdminPanelSettings as AdminPanelSettingsIcon,
@@ -42,19 +42,18 @@ import {
   SvgIcon,
   Toolbar,
   Typography,
-  useMediaQuery,
   useTheme,
 } from '@mui/material';
 import axios from 'axios';
 
+import { Avatar } from '#shared/components/Avatar/Avatar';
+import EditSuggestionModal from '#shared/components/Suggestion/Suggestion';
+import { Suggestion } from '#shared/components/Suggestion/interfacesSuggestion';
 import { languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { getNativeLanguageName } from '#shared/utils/getNativeLanguageName';
 
-import { Avatar } from '../Avatar/Avatar';
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
-import EditSuggestionModal from '../Suggestion/Suggestion';
-import { Suggestion } from '../Suggestion/interfacesSuggestion';
 import './NavBarTop.scss';
 
 declare module '@mui/material/AppBar' {
@@ -85,6 +84,7 @@ function NavBarTop({
   colorMode,
   setColorMode,
 }: NavBarTopProps) {
+  const matches = useMatches();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [anchorElLangue, setAnchorElLangue] = useState<null | HTMLElement>(
     null
@@ -138,31 +138,14 @@ function NavBarTop({
 
   const { t, i18n } = useTranslation();
   const theme = useTheme();
-  const smallScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const location = useLocation();
 
-  const breadcrumbNameMap: { [key: string]: string } = {
-    '/home/': t('navbar.home'),
-    '/event/': t('navbar.events'),
-    '/club/': t('navbar.clubs'),
-    '/colocs/': t('navbar.flatshare'),
-    '/parrainage/': t('navbar.family'),
-    '/liste/': t('navbar.bdx'),
-    '/academics/': t('navbar.academics'),
-    '/administration/': t('navbar.administration'),
-    '/student/': t('navbar.student'),
-    '/tools/signature': t('navbar.signature'),
-    '/suggestions/': 'Bug',
-    '/legal_mentions/': 'Legal',
-    '/event/:id/': 'Oui',
-  };
-  let pathnames = location.pathname.split('/').filter((x) => x);
-  if (pathnames.length === 0) {
-    pathnames = ['home'];
-  }
-  if (pathnames.length > 1 && smallScreen) {
-    pathnames = [pathnames.at(-2) || ''];
-  }
+  const crumbs = matches
+    .filter((match) => (match.handle as { crumb?: string })?.crumb)
+    .map((match) => ({
+      id: match.id,
+      label: t((match.handle as { crumb: string }).crumb),
+      path: match.pathname,
+    }));
 
   useEffect(() => {
     getLoggedStudent();
@@ -235,16 +218,13 @@ function NavBarTop({
               Nantral Platform
             </Typography>
           </Button>
-          {pathnames.map((value, index) => {
-            const isLastItem = index === pathnames.length - 1;
-            const to = `/${pathnames.slice(0, index + 1).join('/')}/`;
+          {crumbs.map((crumb) => {
             return (
               <Button
-                {...(isLastItem
-                  ? { href: '#' }
-                  : { component: Link, to: to === '/home/' ? '/' : to })}
+                component={Link}
+                to={crumb.path}
                 color="inherit"
-                key={to}
+                key={crumb.path}
                 variant="text"
                 sx={{
                   textTransform: 'none',
@@ -253,7 +233,7 @@ function NavBarTop({
                   mr: '-8px',
                 }}
               >
-                <Typography variant="h6">{breadcrumbNameMap[to]}</Typography>
+                <Typography variant="h6">{crumb.label}</Typography>
               </Button>
             );
           })}

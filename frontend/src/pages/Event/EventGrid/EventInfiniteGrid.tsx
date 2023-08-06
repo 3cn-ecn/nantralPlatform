@@ -7,9 +7,9 @@ import { EventCard } from '#modules/event/view/EventCard/EventCard';
 import { EventCardSkeleton } from '#modules/event/view/EventCard/EventCardSkeleton';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { arrayRange } from '#shared/utils/arrayRange';
-import { useBreakpoint } from '#shared/utils/useBreakpoint';
 
 import { useInfiniteEventListQuery } from '../hooks/useInfiniteEventList.query';
 

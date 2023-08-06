@@ -12,8 +12,8 @@ import { ListItemIcon, ListItemText, MenuItem } from '@mui/material';
 import { useRegistrationMutation } from '#modules/event/hooks/useRegistration.mutation';
 import { ConfirmationModal } from '#shared/components/Modal/ConfirmationModal';
 import { MoreActionsButton } from '#shared/components/MoreActionsButton/MoreActionsButton';
+import { useShareLink } from '#shared/hooks/useShareLink';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { useShareLink } from '#shared/utils/useShareLink';
 
 import { EditEventModal } from '../Modals/EditEventModal';
 

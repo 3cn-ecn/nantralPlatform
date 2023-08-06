@@ -7,8 +7,8 @@ import {
 } from '@mui/icons-material';
 import { Button, Container, Typography } from '@mui/material';
 
+import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { useBreakpoint } from '#shared/utils/useBreakpoint';
 
 import { FlexCol, FlexRow } from '../FlexBox/FlexBox';
 

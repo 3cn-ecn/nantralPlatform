@@ -1,21 +1,27 @@
 {
+  "breadcrumbs": {
+    "events": {
+      "calendar": {
+        "index": "Calendrier"
+      },
+      "details": {
+        "index": "Détails"
+      },
+      "index": "Évènements"
+    },
+    "home": {
+      "index": "Accueil"
+    },
+    "legal": {
+      "index": "Mentions légales"
+    },
+    "notFound": {
+      "index": "Erreur 404"
+    }
+  },
   "button": {
     "cancel": "Annuler",
     "confirm": "Valider"
-  },
-  "calendar": {
-    "export": "Exporter les évènements",
-    "to": "au",
-    "view": {
-      "3days": "3 Jours",
-      "day": "Jour",
-      "month": "Mois",
-      "week": "Semaine"
-    }
-  },
-  "club": {
-    "joinNow": "Rejoindre maintenant",
-    "noClub": "Vous n'avez rejoint aucun groupe pour le moment"
   },
   "error": {
     "errorMessage": "Erreur : {{errorMessage}}",
@@ -32,7 +38,6 @@
       "share": "Partager",
       "unsubscribe": "Se désinscrire"
     },
-    "adminWarning": "Vous devez être admin de votre club pour créer un évènement",
     "bookmarkButton": {
       "label": "Est dans les favoris",
       "tooltip": {
@@ -67,7 +72,6 @@
     "editModal": {
       "title": "Modifier l'évènement"
     },
-    "error": "Erreur lors du chargement des évènements",
     "event": "Évènement",
     "filters": {
       "date": {
@@ -143,7 +147,6 @@
       "loadMore": "Charger plus",
       "noEventFound": "Aucun évènement 😿"
     },
-    "no_event": "Aucun évènement",
     "participants": {
       "noParticipants": "Aucun participant 😔",
       "title": "Participants",
@@ -187,18 +190,9 @@
       "noOptions": "Aucun résultat",
       "open": "Ouvrir"
     },
-    "cancel": "Annuler",
-    "createEvent": "Créer l'évènement",
-    "deleteEvent": "Supprimer l'évènement",
-    "deleteEventConfirmation": "Etes vous sûr de vouloir supprimer cet évènement ? Cette action est irréversible.",
-    "description": "Description",
-    "editEvent": "Modifier l'évènement",
-    "endDatetime": "Date et heure de fin",
     "errors": {
       "title": "Le formulaire contient une ou plusieurs erreurs"
     },
-    "eventTitle": "Titre de l'évènement",
-    "externalLink": "Lien externe",
     "file": {
       "clearButton": {
         "label": "Effacer le fichier"
@@ -218,20 +212,9 @@
         "label": "Annuler"
       }
     },
-    "freeRegistration": "Inscription libre",
-    "group": "Groupe",
-    "image": "Image",
-    "imageDescription": "Une image, un poster, une affiche",
-    "membersOnly": "Membres du club uniquement",
-    "noFile": "Aucun fichier",
     "number": {
       "wrongFormat": "Format invalide"
-    },
-    "place": "Lieu",
-    "public": "Public",
-    "publicity": "Visibilité",
-    "saving": "Sauvegarde...",
-    "startDatetime": "Date et Heure de début"
+    }
   },
   "home": {
     "eventSection": {
@@ -305,10 +288,6 @@
     },
     "title": "Mentions Légales"
   },
-  "membership_student": {
-    "show_old": "Afficher les anciens groupes",
-    "title": "Groupes"
-  },
   "modal": {
     "closeButton": {
       "label": "Fermer"
@@ -375,14 +354,6 @@
       }
     },
     "post": "Post"
-  },
-  "profile": {
-    "doc": "Doctorant",
-    "edit": "Modifier mon profil",
-    "gene": "Élève Ingénieur Généraliste",
-    "iti": "Élève Ingénieur de Spécialité (ITII)",
-    "master": "Élève en Master",
-    "promo": "Année d'entrée à Centrale: "
   },
   "site": {
     "name": "Nantral Platform"

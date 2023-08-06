@@ -5,7 +5,7 @@ import { Box, Breakpoint, Theme } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { BoxTypeMap } from '@mui/system';
 
-import { useBreakpoint } from '#shared/utils/useBreakpoint';
+import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 
 type FlexBoxComponent<Extra = object> = OverridableComponent<
   BoxTypeMap<Extra, 'div', Theme>

@@ -19,7 +19,7 @@ import axios from 'axios';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import merge from '../../../legacy/notification/utils';
+import merge from '../../../../../legacy/notification/utils';
 import { NotificationItem } from './NotificationItem';
 import './NotificationItem.scss';
 

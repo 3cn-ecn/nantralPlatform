@@ -1,8 +1,8 @@
 import { Share as ShareIcon } from '@mui/icons-material';
 import { Button } from '@mui/material';
 
+import { useShareLink } from '#shared/hooks/useShareLink';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { useShareLink } from '#shared/utils/useShareLink';
 
 type ShareButtonProps = {
   eventId: number;

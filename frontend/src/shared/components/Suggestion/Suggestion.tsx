@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
 
 import { Close as CloseIcon } from '@mui/icons-material';
 import {
@@ -15,9 +15,10 @@ import {
 } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
-import FormGroup, { FieldType } from '#shared/utils/form';
 
-import { Suggestion } from './interfacesSuggestion';
+// import FormGroup, { FieldType } from '#shared/utils/form';
+
+// import { Suggestion } from './interfacesSuggestion';
 
 /**
  * A function to generate the default fields fot the edit modal form.
@@ -157,12 +158,12 @@ function EditSuggestionModal(props: {
             <></>
           )}
           <Box sx={{ maxWidth: 500 }}>
-            <FormGroup
+            {/* <FormGroup
               fields={formFields}
               values={formValues}
               errors={formErrors}
               setValues={setFormValues}
-            />
+            /> */}
           </Box>
         </DialogContent>
         <DialogActions>

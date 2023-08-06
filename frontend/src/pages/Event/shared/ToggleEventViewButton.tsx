@@ -7,8 +7,8 @@ import {
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 import { FlexCol } from '#shared/components/FlexBox/FlexBox';
+import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { useBreakpoint } from '#shared/utils/useBreakpoint';
 
 export function ToggleEventViewButton() {
   const { t } = useTranslation();

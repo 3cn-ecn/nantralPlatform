@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
-import { Avatar } from '../Avatar/Avatar';
+import { Avatar } from '../../../Avatar/Avatar';
 import './NotificationItem.scss';
 
 const app = '/api/notification/';

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
-import { useBreakpoint } from '#shared/utils/useBreakpoint';
+import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 
 import { useCalendarFilters } from '../hooks/useCalendarFilters';
 import { FilterBar } from '../shared/FilterBar';
@@ -11,7 +11,7 @@ import { CalendarGridView } from './CalendarGridView/CalendarGridView';
 import { CalendarDateSelector } from './shared/CalendarDateSelector';
 import { CalendarToolBar } from './shared/CalendarToolBar';
 
-export function Calendar() {
+export function EventCalendarViewPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [filters, updateFilters, resetFilters, viewMode] = useCalendarFilters();
   const bk = useBreakpoint('sm');

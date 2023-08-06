@@ -13,7 +13,7 @@ export function BackgroundImageOverlay({ src }: BackgroundImageOverlayProps) {
   if (!src) return null;
 
   return (
-    <>
+    <Box position="relative">
       <BackgroundImage
         src={src}
         alt=""
@@ -31,6 +31,6 @@ export function BackgroundImageOverlay({ src }: BackgroundImageOverlayProps) {
           zIndex: -1,
         }}
       />
-    </>
+    </Box>
   );
 }
