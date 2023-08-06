@@ -1,6 +1,11 @@
 import { useTranslation as useI18nextTranslation } from 'react-i18next';
 
-import { Locale, formatRelative } from 'date-fns';
+import {
+  Locale,
+  endOfWeek as fnsEndOfWeek,
+  startOfWeek as fnsStartOfWeek,
+  formatRelative,
+} from 'date-fns';
 import { enGB, enUS, fr } from 'date-fns/locale';
 
 import { languages } from './config';
@@ -14,7 +19,7 @@ const mapLocales: Record<(typeof languages)[number], Locale> = {
 export function useTranslation() {
   const { t, i18n } = useI18nextTranslation('translation');
 
-  const dateFnsLocale = mapLocales[i18n.language];
+  const dateFnsLocale: Locale = mapLocales[i18n.language] || enGB;
 
   const formatDate = (
     date: Date,
@@ -66,6 +71,12 @@ export function useTranslation() {
     return intlObject.formatRange(startNumber, endNumber);
   };
 
+  const startOfWeek = (date: Date) =>
+    fnsStartOfWeek(date, { locale: dateFnsLocale });
+
+  const endOfWeek = (date: Date) =>
+    fnsEndOfWeek(date, { locale: dateFnsLocale });
+
   return {
     t,
     i18n,
@@ -77,5 +88,7 @@ export function useTranslation() {
     formatNumber,
     formatNumberRange,
     dateFnsLocale,
+    startOfWeek,
+    endOfWeek,
   };
 }

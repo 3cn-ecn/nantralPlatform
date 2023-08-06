@@ -1,23 +1,17 @@
 import { useEffect } from 'react';
-import { useInfiniteQuery } from 'react-query';
 
 import { Button, Grid, Typography } from '@mui/material';
-import { roundToNearestMinutes } from 'date-fns';
 
-import {
-  EventListQueryParams,
-  getEventListApi,
-} from '#modules/event/api/getEventList.api';
-import { EventPreview } from '#modules/event/event.type';
+import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { EventCard } from '#modules/event/view/EventCard/EventCard';
 import { EventCardSkeleton } from '#modules/event/view/EventCard/EventCardSkeleton';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { ApiError } from '#shared/infra/errors';
-import { Page } from '#shared/infra/pagination';
 import { arrayRange } from '#shared/utils/arrayRange';
 import { useBreakpoint } from '#shared/utils/useBreakpoint';
+
+import { useInfiniteEventListQuery } from '../hooks/useInfiniteEventList.query';
 
 type EventInfiniteGridProps = {
   filters: EventListQueryParams;
@@ -33,30 +27,10 @@ export function EventInfiniteGrid({
 
   const eventsPerPage = bk.isLarger ? 8 : 6;
 
-  const eventsQuery = useInfiniteQuery<Page<EventPreview>, ApiError>({
-    queryKey: ['events', 'infiniteList', filters],
-    queryFn: ({ pageParam = 1, signal }) =>
-      getEventListApi(
-        {
-          pageSize: eventsPerPage,
-          page: pageParam,
-          ...filters,
-          ordering: filters.ordering
-            ? filters.ordering
-            : filters.toDate && !filters.fromDate
-            ? '-start_date'
-            : null,
-          // add a fromDate if there is no dates
-          ...(!filters.fromDate && !filters.toDate
-            ? { fromDate: roundToNearestMinutes(new Date()) }
-            : {}),
-        },
-        signal
-      ),
-    getNextPageParam: (lastPage, pages) =>
-      lastPage.next ? pages.length + 1 : undefined,
-    enabled: !disableLoading,
-  });
+  const eventsQuery = useInfiniteEventListQuery(
+    { ...filters, pageSize: eventsPerPage },
+    { enabled: !disableLoading }
+  );
 
   function loadMore() {
     if (

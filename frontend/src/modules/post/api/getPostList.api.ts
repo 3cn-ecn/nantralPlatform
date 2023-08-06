@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { OrderingField } from '#shared/api/orderingFields.types';
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
+import { OrderingField } from '#shared/infra/orderingFields.types';
 import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
 
 import { adaptPostPreview } from '../infra/post.adapter';

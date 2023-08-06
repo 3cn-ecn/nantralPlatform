@@ -1,10 +1,11 @@
+import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { isSameMinute, roundToNearestMinutes } from 'date-fns';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { EventDTO } from '#modules/event/infra/event.dto';
-import { OrderingField } from '#shared/api/orderingFields.types';
+import { OrderingField } from '#shared/infra/orderingFields.types';
 import {
   convertCamelToSnakeCase,
   convertToURLSearchParams,
@@ -41,26 +42,33 @@ function parseQueryParams(queryParams: URLSearchParams): EventListQueryParams {
  */
 export function useFilters() {
   const [queryParams, setQueryParams] = useSearchParams();
-  const now = new Date();
 
   // do not use a state for filter, since queryParams is already a state
-  const filters = parseQueryParams(queryParams);
+  const filters = useMemo(() => parseQueryParams(queryParams), [queryParams]);
 
-  const setFilters = (newFilter: Partial<EventListQueryParams>) => {
-    const convertedFilter = convertCamelToSnakeCase({
-      ...newFilter,
-      // handle fromDate differently to hide it from params when equals to now
-      ...(newFilter.fromDate && isSameMinute(newFilter.fromDate, now)
-        ? { fromDate: null }
-        : {}),
-    });
-    const params = convertToURLSearchParams(convertedFilter);
-    setQueryParams(params);
-  };
+  const setFilters = useCallback(
+    (newFilter: Partial<EventListQueryParams>) => {
+      const convertedFilter = convertCamelToSnakeCase({
+        ...newFilter,
+        // handle fromDate differently to hide it from params when equals to now
+        ...(newFilter.fromDate && isSameMinute(newFilter.fromDate, new Date())
+          ? { fromDate: null }
+          : {}),
+      });
+      const params = convertToURLSearchParams(convertedFilter);
+      setQueryParams(params, { preventScrollReset: true });
+    },
+    [setQueryParams]
+  );
 
-  const updateFilters = (newFilter: Partial<EventListQueryParams>) => {
-    setFilters({ ...filters, ...newFilter });
-  };
+  const updateFilters = useCallback(
+    (newFilter: Partial<EventListQueryParams>) => {
+      setFilters({ ...filters, ...newFilter });
+    },
+    [filters, setFilters]
+  );
 
-  return [filters, setFilters, updateFilters] as const;
+  const resetFilters = useCallback(() => setFilters({}), [setFilters]);
+
+  return [filters, updateFilters, resetFilters] as const;
 }

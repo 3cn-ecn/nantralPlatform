@@ -7,7 +7,7 @@
     "export": "Export events",
     "to": "to",
     "view": {
-      "3Days": "3 Days",
+      "3days": "3 Days",
       "day": "Day",
       "month": "Month",
       "week": "Week"
@@ -41,7 +41,13 @@
       }
     },
     "calendar": {
-      "label": "Calendar"
+      "label": "Calendar",
+      "viewMode": {
+        "days": "{{nbOfDays}} days",
+        "month": "Month",
+        "oneDay": "Day",
+        "week": "Week"
+      }
     },
     "createModal": {
       "title": "Create an event"
@@ -75,7 +81,7 @@
       "organizer": "Organiser",
       "pastEvents": "Past events",
       "reset": "Reset",
-      "title_filter": "Filters"
+      "title": "Filters"
     },
     "form": {
       "description": {

@@ -6,8 +6,8 @@ import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import { CreateNewEventButton } from './components/CreateNewEventButton';
-import { ToggleEventViewButton } from './components/ToggleEventViewButton';
+import { CreateNewEventButton } from './shared/CreateNewEventButton';
+import { ToggleEventViewButton } from './shared/ToggleEventViewButton';
 
 /**
  * Event Page, with Welcome message, next events, etc...
@@ -18,10 +18,13 @@ export default function Event() {
 
   return (
     <Container sx={{ my: 4 }}>
-      <FlexRow justifyContent="space-between" flexWrap="wrap" gap={1}>
-        <Typography variant="h1">{t('event.grid.title')}</Typography>
+      <FlexRow gap={1}>
+        <Typography variant="h1" flex={1} noWrap>
+          {t('event.grid.title')}
+        </Typography>
         <ToggleEventViewButton />
       </FlexRow>
+      <Spacer vertical={2} />
       <Outlet />
       <CreateNewEventButton />
       <Spacer vertical={6} />

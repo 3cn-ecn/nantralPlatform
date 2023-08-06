@@ -8,7 +8,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import EventPage from '#pages/Event/Event.page';
-import Calendar from '#pages/Event/EventCalendar/Calendar';
+import { Calendar } from '#pages/Event/EventCalendar/Calendar';
 import EventGridViewPage from '#pages/Event/EventGrid/EventGridView.page';
 import EventDetailsPage from '#pages/EventDetails/EventDetails.page';
 import GroupPage from '#pages/Group/Group.page';
@@ -57,7 +57,7 @@ const getPreferredMode = (): PaletteMode | 'auto' => {
  * @returns The App Component
  */
 function App() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [preferredMode, setPreferredMode] = useState<PaletteMode | 'auto'>(
     getPreferredMode()
   );
@@ -65,8 +65,12 @@ function App() {
     ? 'dark'
     : 'light';
   const theme = useMemo(
-    () => getTheme(preferredMode === 'auto' ? systemMode : preferredMode),
-    [preferredMode, systemMode]
+    () =>
+      getTheme(
+        preferredMode === 'auto' ? systemMode : preferredMode,
+        i18n.language
+      ),
+    [preferredMode, systemMode, i18n.language]
   );
 
   const [menuOpen, setMenuOpen] = useState(false);

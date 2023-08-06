@@ -7,7 +7,7 @@
     "export": "Exporter les évènements",
     "to": "au",
     "view": {
-      "3Days": "3 Jours",
+      "3days": "3 Jours",
       "day": "Jour",
       "month": "Mois",
       "week": "Semaine"
@@ -41,7 +41,13 @@
       }
     },
     "calendar": {
-      "label": "Calendrier"
+      "label": "Calendrier",
+      "viewMode": {
+        "days": "{{nbOfDays}} jours",
+        "month": "Mois",
+        "oneDay": "Jour",
+        "week": "Semaine"
+      }
     },
     "createModal": {
       "title": "Créer un évènement"
@@ -75,7 +81,7 @@
       "organizer": "Organisateur",
       "pastEvents": "Évènements passés",
       "reset": "Réinitialiser",
-      "title_filter": "Filtres"
+      "title": "Filtres"
     },
     "form": {
       "description": {

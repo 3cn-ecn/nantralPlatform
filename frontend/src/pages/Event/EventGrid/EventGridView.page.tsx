@@ -3,15 +3,17 @@ import { useState } from 'react';
 import { SearchField } from '#shared/components/FormFields';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { useDesktopMode } from '#shared/utils/useDesktopMode';
 
-import { FilterBar } from '../components/FilterBar';
 import { useFilters } from '../hooks/useFilters';
+import { FilterBar } from '../shared/FilterBar';
 import { EventInfiniteGrid } from './EventInfiniteGrid';
 
 export default function EventGridViewPage() {
   const { t } = useTranslation();
-  const [filters, setFilters, updateFilters] = useFilters();
+  const [filters, updateFilters, resetFilters] = useFilters();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isDesktopMode = useDesktopMode();
 
   return (
     <>
@@ -20,11 +22,14 @@ export default function EventGridViewPage() {
         handleChange={(val) => updateFilters({ search: val })}
         size="small"
         placeholder={t('event.search.placeholder')}
+        margin="none"
+        autoFocus={isDesktopMode}
       />
+      <Spacer vertical={1.5} />
       <FilterBar
         filters={filters}
         updateFilters={updateFilters}
-        resetFilters={() => setFilters({})}
+        resetFilters={resetFilters}
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
       />

@@ -11,13 +11,13 @@ from .models import Event
 
 class EventSerializer(serializers.ModelSerializer):
     number_of_participants = serializers.ReadOnlyField()
-    url = serializers.ReadOnlyField()
     group = GroupPreviewSerializer()
     is_group_member = serializers.SerializerMethodField()
     is_group_admin = serializers.SerializerMethodField()
     is_participating = serializers.SerializerMethodField()
     is_bookmarked = serializers.SerializerMethodField()
     form_url = serializers.SerializerMethodField()
+    url = serializers.SerializerMethodField()
 
     class Meta:
         model = Event

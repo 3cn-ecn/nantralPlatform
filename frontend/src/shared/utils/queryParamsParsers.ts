@@ -1,3 +1,4 @@
+import { isValid } from 'date-fns';
 import { isArray, isDate, snakeCase } from 'lodash';
 
 export const parseNullBool = (value: string | null): boolean | null => {
@@ -58,6 +59,7 @@ export const convertToURLSearchParams = (
     } else if (isArray(value)) {
       value.forEach((item) => searchParams.append(key, item.toString()));
     } else if (isDate(value)) {
+      if (!isValid(value)) continue;
       searchParams.append(key, value.toISOString());
     } else {
       searchParams.append(key, value.toString());

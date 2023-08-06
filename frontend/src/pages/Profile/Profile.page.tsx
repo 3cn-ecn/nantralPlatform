@@ -2,8 +2,14 @@ import React from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import { LoadingButton } from '@mui/lab';
-import { Box, Grid, Skeleton, SvgIcon, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Grid,
+  Skeleton,
+  SvgIcon,
+  Typography,
+} from '@mui/material';
 import axios from 'axios';
 
 import { Avatar } from '#shared/components/Avatar/Avatar';
@@ -103,7 +109,7 @@ export default function ProfilePage() {
           </Grid>
           <Grid>
             {profileStatus !== 'loading' && idMe === student.id && (
-              <LoadingButton
+              <Button
                 variant="contained"
                 component={NavLink}
                 reloadDocument
@@ -118,7 +124,7 @@ export default function ProfilePage() {
                   component={ModeEditIcon}
                   inheritViewBox
                 />
-              </LoadingButton>
+              </Button>
             )}
             <EditProfilModal
               open={openS}
