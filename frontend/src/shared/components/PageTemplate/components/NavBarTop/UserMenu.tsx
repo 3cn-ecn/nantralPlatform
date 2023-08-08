@@ -129,17 +129,17 @@ export function UserMenu() {
           />
         )}
         <CustomMenuItem
-          label={t('userMenu.menu.report')}
-          icon={<FeedbackIcon />}
-          component={Link}
-          to="/suggestions"
-          reloadDocument
-        />
-        <CustomMenuItem
           label={t('userMenu.menu.documentation')}
           icon={<MenuBookIcon />}
           component={Link}
           to="https://docs.nantral-platform.fr/"
+          reloadDocument
+        />
+        <CustomMenuItem
+          label={t('userMenu.menu.report')}
+          icon={<FeedbackIcon />}
+          component={Link}
+          to="/suggestions"
           reloadDocument
         />
         <CustomMenuItem

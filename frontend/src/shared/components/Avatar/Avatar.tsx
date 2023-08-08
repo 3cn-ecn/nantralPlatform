@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react';
 
 import { SvgIconComponent } from '@mui/icons-material';
-import { AvatarTypeMap, Avatar as MuiAvatar } from '@mui/material';
+import { AvatarTypeMap, Avatar as MuiAvatar, useTheme } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 import { stringToColor } from '#shared/utils/stringToColor';
@@ -34,6 +34,8 @@ export const Avatar: AvatarComponentType = ({
   sx,
   ...props
 }: ComponentProps<AvatarComponentType>) => {
+  const theme = useTheme();
+
   const altWords = alt ? alt.split(' ') : '  ';
   const initials = (
     altWords.length > 1
@@ -44,9 +46,10 @@ export const Avatar: AvatarComponentType = ({
   const sizes = {
     s: 28,
     m: 40,
-    l: 56,
-    xxl: 250,
+    l: 48,
   };
+
+  const bgColor = stringToColor(alt);
 
   return (
     <MuiAvatar
@@ -55,7 +58,8 @@ export const Avatar: AvatarComponentType = ({
         width: sizes[size],
         height: sizes[size],
         fontSize: sizes[size] * 0.4,
-        bgcolor: stringToColor(alt),
+        backgroundColor: bgColor,
+        color: theme.palette.getContrastText(bgColor),
         textDecoration: 'none',
         ...sx,
       }}

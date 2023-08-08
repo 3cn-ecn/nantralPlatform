@@ -35,7 +35,7 @@ export function HelpUsSection() {
         </li>
         <li>
           {t('home.helpUsSection.level', { level: '4 🤩' })}
-          <Link href="https://docs.nantral-platform.fr/dev/">
+          <Link href="https://docs.nantral-platform.fr/">
             {t('home.helpUsSection.contribute')}
           </Link>
         </li>

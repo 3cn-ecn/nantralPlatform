@@ -13,11 +13,11 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import './RichTextField.scss';
 
-const CKEditorWithRef = forwardRef<HTMLInputElement>((props, ref) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CKEditorWithRef = forwardRef<HTMLInputElement>((props: any, ref) => {
   return (
     <>
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <CKEditor {...(props as any)} />
+      <CKEditor {...props} />
       <input hidden ref={ref} />
     </>
   );

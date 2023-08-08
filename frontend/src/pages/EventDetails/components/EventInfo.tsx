@@ -5,12 +5,13 @@ import {
   Place as PlaceIcon,
   Schedule as ScheduleIcon,
 } from '@mui/icons-material';
-import { Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import { isSameDay as dateFnsIsSameDay, differenceInMonths } from 'date-fns';
 
 import { Event } from '#modules/event/event.type';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 type EventInfoProps = Pick<
@@ -25,6 +26,7 @@ export function EventInfo({
   location,
 }: EventInfoProps) {
   const { t, formatDate, formatDateTimeRange } = useTranslation();
+  const bk = useBreakpoint('md');
 
   const isSameDay = dateFnsIsSameDay(endDate, startDate);
 
@@ -56,13 +58,18 @@ export function EventInfo({
       flexWrap="wrap"
     >
       <FlexRow gap={1} alignItems="center">
-        <Avatar
-          src={group.icon}
-          alt={group.shortName}
+        <IconButton
           component={Link}
           to={group.url}
           reloadDocument
-        />
+          sx={{ p: 0.5 }}
+        >
+          <Avatar
+            src={group.icon}
+            alt={group.shortName}
+            size={bk.isLarger ? 'l' : 'm'}
+          />
+        </IconButton>
         <Typography>{group.name}</Typography>
       </FlexRow>
       {!!location && (

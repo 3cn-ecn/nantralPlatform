@@ -96,6 +96,16 @@ export function EventFormFields({
         labelPropName="name"
         imagePropName="icon"
       />
+      <RichTextField
+        name="description"
+        label={t('event.form.description.label')}
+        value={formValues.description}
+        handleChange={useCallback(
+          (val) => updateFormValues({ description: val }),
+          [updateFormValues]
+        )}
+        errors={error?.fields?.description}
+      />
       <FlexAuto columnGap={2} breakPoint="sm">
         <DateTimeField
           name="start_date"
@@ -145,16 +155,6 @@ export function EventFormFields({
         prevFileName={prevData?.image}
         errors={error?.fields?.image}
         accept="image/*"
-      />
-      <RichTextField
-        name="description"
-        label={t('event.form.description.label')}
-        value={formValues.description}
-        handleChange={useCallback(
-          (val) => updateFormValues({ description: val }),
-          [updateFormValues]
-        )}
-        errors={error?.fields?.description}
       />
       <TextField
         name="form_url"

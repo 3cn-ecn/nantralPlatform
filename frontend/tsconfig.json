@@ -25,5 +25,6 @@
       "#types/*": ["types/*"]
     }
   },
-  "include": ["src", "custom.d.ts", "lib"]
+  "include": ["src", "custom.d.ts", "lib"],
+  "exclude": ["src/legacy"]
 }

@@ -43,8 +43,8 @@ export function HomePage() {
       <Container sx={{ my: 4 }}>
         <CreateNewButton />
         <PinnedPostsSection enabled={!openedPostId} />
-        <LastPostsSection enabled={!openedPostId} />
         <UpcomingEventsSection enabled={!openedPostId} />
+        <LastPostsSection enabled={!openedPostId} />
         {/* <ClubSection
           clubs={myGroups}
           status={myGroupsStatus}

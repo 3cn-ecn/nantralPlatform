@@ -1,4 +1,4 @@
-import { UseQueryOptions, useInfiniteQuery } from 'react-query';
+import { UseInfiniteQueryOptions, useInfiniteQuery } from 'react-query';
 
 import {
   EventListQueryParams,
@@ -9,21 +9,17 @@ import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
 
 export function useInfiniteEventListQuery(
-  filters: EventListQueryParams,
-  options?: UseQueryOptions<Page<EventPreview>>
+  filters: Omit<EventListQueryParams, 'page' | 'ordering'>,
+  options?: UseInfiniteQueryOptions<Page<EventPreview>>
 ) {
   const query = useInfiniteQuery<Page<EventPreview>, ApiError>({
     queryKey: ['events', 'infiniteList', filters],
     queryFn: ({ pageParam = 1, signal }) =>
       getEventListApi(
         {
-          page: pageParam,
           ...filters,
-          ordering: filters.ordering
-            ? filters.ordering
-            : filters.toDate && !filters.fromDate
-            ? '-start_date'
-            : null,
+          page: pageParam,
+          ordering: filters.toDate && !filters.fromDate ? '-start_date' : null,
         },
         signal
       ),

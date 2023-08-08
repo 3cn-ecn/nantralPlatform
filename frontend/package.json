@@ -1,6 +1,6 @@
 {
   "name": "nantralplatform-frontend",
-  "version": "2.0.0-beta",
+  "version": "2.0.1",
   "description": "Frontend of the nantral platform application",
   "main": "index.js",
   "mode": "production",
@@ -15,9 +15,9 @@
     "types": "tsc",
     "lint": "eslint src --ignore-pattern \"src/legacy/**\"",
     "lint:fix": "eslint src --ignore-pattern \"src/legacy/**\" --fix",
-    "test": "TZ=Europe/Paris jest",
-    "test:u": "npm run test -- -u",
-    "test:all": "npm run types && npm run lint && npm run test"
+    "jest": "TZ=Europe/Paris jest",
+    "jest:u": "npm run jest -- -u",
+    "test": "npm run types && npm run lint && npm run jest"
   },
   "author": {
     "name": "3CN, a club of Centrale Nantes",

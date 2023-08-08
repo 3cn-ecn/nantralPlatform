@@ -19,7 +19,7 @@ import './NavBarSide.scss';
 interface LinksInterface {
   text: string; // the text of the link
   url: string;
-  icon?: any;
+  icon?: string;
   isOnBackend?: boolean; // true if the page is not in the React application
 }
 
@@ -36,7 +36,7 @@ function NavBarSide(props: {
   menuOpen: boolean;
   drawerWidth: number;
   variant: 'permanent' | 'persistent' | 'temporary';
-  onClose: () => any;
+  onClose: () => void;
 }) {
   const { menuOpen, drawerWidth, variant, onClose } = props;
   const { t } = useTranslation(); // translation module

@@ -55,7 +55,7 @@ export function NotificationMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [nbNotifs, setNbNotifs] = React.useState<number>(null);
+  const [nbNotifs, setNbNotifs] = React.useState<number | null>(null);
   const [listNotifs, setListNotifs] = React.useState<SentNotification[]>([]);
   const [subscribeFilter, setSubscribeFilter] = React.useState<boolean>(false);
   const [unseenFilter, setUnseenFilter] = React.useState<boolean>(false);
