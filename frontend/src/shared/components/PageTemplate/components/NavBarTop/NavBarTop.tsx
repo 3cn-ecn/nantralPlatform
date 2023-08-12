@@ -31,12 +31,11 @@ export function NavBarTop({ menuOpen, setMenuOpen }: NavBarTopProps) {
           aria-label="menu"
           component="span"
         >
-          <Icon>
-            <img
-              src="/static/img/icons/cropped/menu.svg"
-              alt="Ouvrir le menu"
-            />
-          </Icon>
+          <Icon
+            component="img"
+            src="/static/img/icons/cropped/menu.svg"
+            alt="Ouvrir le menu"
+          />
         </IconButton>
         <BreadcrumbsNav />
         <Spacer flex={1} />

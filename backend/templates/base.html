@@ -36,26 +36,12 @@
   
   <nav class="navbar navbar-expand sticky-top navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
     <div class="container">
-      <div id="goBackButton" class="d-inline-block"></div>
-      <div id="fil-dariane" class="navbar-brand">
-        {# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
-        <a class="ariane-link" href="/" style="font-weight: 900;"><!--
-          --><img src="{% static '/img/logo/scalable/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="" loading="lazy"><!--
-          --><span class="ms-0">Nantral Platform.</span><!--
-        --></a><!--
-        -->{% for link in ariane %}<!--
-          --><i class="fas fa-angle-right"></i><!--
-          --><a class="ariane-link" href="{{ link.target }}" style="font: 'Heebo'; font-weight: 900;"><span>{{ link.label }}</span></a><!--
-        -->{% empty %}
-          <span></span><span></span>
-        {% endfor %}
-      </div>
-      <ul id="menuSet" class="navbar-nav ms-auto">
+      <ul class="menuSet navbar-nav pe-2">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown" >
             <img src='{% static "/img/icons/scalable/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">
           </a>
-          <ul class="dropdown-menu dropdown-menu-end" onclick="event.stopPropagation()" style="right:-84px;">
+          <ul class="dropdown-menu" onclick="event.stopPropagation()">
             <li><a class="dropdown-item" href="/event/">
               <img src='{% static "/img/icons/scalable/event.svg" %}' class="align-middle" loading="lazy" alt="">
               Posts et Évènements
@@ -82,6 +68,21 @@
             </a></li>
           </ul>
         </li>
+      </ul>
+      <div id="fil-dariane" class="navbar-brand">
+        {# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
+        <a class="ariane-link" href="/" style="font-weight: 900;"><!--
+          --><img src="{% static '/img/logo/scalable/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="" loading="lazy"><!--
+          --><span class="ms-0">Nantral Platform.</span><!--
+        --></a><!--
+        -->{% for link in ariane %}<!--
+          --><i class="fas fa-angle-right"></i><!--
+          --><a class="ariane-link" href="{{ link.target }}" style="font: 'Heebo'; font-weight: 900;"><span>{{ link.label }}</span></a><!--
+        -->{% empty %}
+          <span></span><span></span>
+        {% endfor %}
+      </div>
+      <ul class="menuSet navbar-nav ms-auto">
         <li id="notificationPanel" class="nav-item">
           <a id="notification-icon" class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown">
             <img src='{% static "/img/icons/scalable/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
