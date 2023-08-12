@@ -1,5 +1,6 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { RouterProvider, createMemoryRouter } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
 
@@ -30,11 +31,23 @@ const queryClient = new QueryClient({
  * @param element - the element to render
  * @returns
  */
-export function renderWithProviders(element: React.ReactElement) {
+export function renderWithProviders(element: React.ReactElement, route = '/') {
+  const router = createMemoryRouter(
+    [
+      {
+        path: route,
+        element: element,
+      },
+    ],
+    { initialEntries: [route] }
+  );
+
   return render(
     <CustomThemeProvider>
       <QueryClientProvider client={queryClient}>
-        <ToastProvider>{element}</ToastProvider>
+        <ToastProvider>
+          <RouterProvider router={router} />
+        </ToastProvider>
       </QueryClientProvider>
     </CustomThemeProvider>
   );

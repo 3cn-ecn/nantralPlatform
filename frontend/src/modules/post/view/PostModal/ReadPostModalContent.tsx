@@ -5,8 +5,7 @@ import {
   Group as GroupIcon,
   PushPin as PushPinIcon,
 } from '@mui/icons-material';
-import { Box, Tooltip, Typography } from '@mui/material';
-import IconButton from '@mui/material/IconButton/IconButton';
+import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 
 import { Post } from '#modules/post/post.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { CircularProgress, Tooltip } from '@mui/material';
-import IconButton from '@mui/material/IconButton/IconButton';
-import Zoom from '@mui/material/Zoom/Zoom';
+import {
+  Favorite as FavoriteIcon,
+  FavoriteBorder as FavoriteBorderIcon,
+} from '@mui/icons-material';
+import { CircularProgress, IconButton, Tooltip, Zoom } from '@mui/material';
 
 import { useBookmarkMutation } from '#modules/event/hooks/useBookmark.mutation';
 import { useTranslation } from '#shared/i18n/useTranslation';

@@ -11,7 +11,7 @@ import { CalendarGridView } from './CalendarGridView/CalendarGridView';
 import { CalendarDateSelector } from './shared/CalendarDateSelector';
 import { CalendarToolBar } from './shared/CalendarToolBar';
 
-export function EventCalendarViewPage() {
+export default function EventCalendarViewPage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [filters, updateFilters, resetFilters, viewMode] = useCalendarFilters();
   const bk = useBreakpoint('sm');

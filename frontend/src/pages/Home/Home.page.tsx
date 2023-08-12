@@ -17,7 +17,7 @@ import { UpcomingEventsSection } from './views/section/UpcomingEventsSection';
  * Home Page, with Welcome message, next events, etc...
  * @returns Home page component
  */
-export function HomePage() {
+export default function HomePage() {
   // Query Params
   const [queryParams, setQueryParams] = useSearchParams();
   // Dates

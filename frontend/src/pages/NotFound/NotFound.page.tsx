@@ -7,7 +7,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
  *
  * @returns The NotFound component
  */
-export function NotFoundPage() {
+export default function NotFoundPage() {
   const { t } = useTranslation();
 
   return (

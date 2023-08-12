@@ -14,7 +14,7 @@ import { ToggleEventViewButton } from './shared/ToggleEventViewButton';
  * Event Page, with Welcome message, next events, etc...
  * @returns Event page component
  */
-export function EventPage() {
+export default function EventPage() {
   const { t } = useTranslation();
 
   return (

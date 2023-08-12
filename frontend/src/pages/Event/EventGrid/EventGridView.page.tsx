@@ -9,7 +9,7 @@ import { useFilters } from '../hooks/useFilters';
 import { FilterBar } from '../shared/FilterBar';
 import { EventInfiniteGrid } from './EventInfiniteGrid';
 
-export function EventGridViewPage() {
+export default function EventGridViewPage() {
   const { t } = useTranslation();
   const [filters, updateFilters, resetFilters] = useFilters();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

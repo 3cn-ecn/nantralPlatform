@@ -57,7 +57,11 @@ export function PostCard({ post }: PostCardProps) {
             </Box>
             <Spacer vertical={1} flex={1} />
             <FlexRow alignItems="center" gap={1}>
-              <Avatar alt={post.group.name} src={post.group.icon} size="s" />
+              <Avatar
+                alt={post.group.shortName}
+                src={post.group.icon}
+                size="s"
+              />
               <Typography variant="caption">{post.group.name}</Typography>
             </FlexRow>
           </CardContent>

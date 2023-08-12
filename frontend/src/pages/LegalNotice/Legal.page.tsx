@@ -8,7 +8,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
  * Legal Notice, like the name and owner of the site, etc.
  * @returns Legal Notice page component
  */
-export function LegalNoticePage() {
+export default function LegalNoticePage() {
   const { t } = useTranslation(); // translation module
 
   return (

@@ -1,12 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import { EventPage } from '#pages/Event/Event.page';
-import { EventCalendarViewPage } from '#pages/Event/EventCalendar/EventCalendarView.page';
-import { EventGridViewPage } from '#pages/Event/EventGrid/EventGridView.page';
-import { EventDetailsPage } from '#pages/EventDetails/EventDetails.page';
-import { HomePage } from '#pages/Home/Home.page';
-import { LegalNoticePage } from '#pages/LegalNotice/Legal.page';
-import { NotFoundPage } from '#pages/NotFound/NotFound.page';
+import EventPage from '#pages/Event/Event.page';
+import EventCalendarViewPage from '#pages/Event/EventCalendar/EventCalendarView.page';
+import EventGridViewPage from '#pages/Event/EventGrid/EventGridView.page';
+import EventDetailsPage from '#pages/EventDetails/EventDetails.page';
+import HomePage from '#pages/Home/Home.page';
+import LegalNoticePage from '#pages/LegalNotice/Legal.page';
+import NotFoundPage from '#pages/NotFound/NotFound.page';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { useTranslation } from '#shared/i18n/useTranslation';
 

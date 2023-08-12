@@ -20,7 +20,7 @@ import { EventInfo } from './components/EventInfo';
 import { EventPopupAlerts } from './components/EventPopupAlerts';
 import { TopImage } from './components/TopImage';
 
-export function EventDetailsPage() {
+export default function EventDetailsPage() {
   const { id: eventId } = useParams();
   const eventQuery = useEventDetailsQuery(Number(eventId));
 

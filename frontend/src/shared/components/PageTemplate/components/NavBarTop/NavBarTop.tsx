@@ -6,7 +6,6 @@ import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import { BreadcrumbsNav } from './BreadcrumbsNav';
-import './NavBarTop.scss';
 import { UserMenu } from './UserMenu';
 
 declare module '@mui/material/AppBar' {
