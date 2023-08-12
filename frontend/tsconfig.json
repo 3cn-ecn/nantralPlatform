@@ -18,13 +18,12 @@
     "baseUrl": "./src",
     "paths": {
       "#api/*": ["api/*"],
-      "#lib/*": ["../lib/*"],
       "#modules/*": ["modules/*"],
       "#pages/*": ["pages/*"],
       "#shared/*": ["shared/*"],
       "#types/*": ["types/*"]
     }
   },
-  "include": ["src", "custom.d.ts", "lib"],
+  "include": ["src", "custom.d.ts"],
   "exclude": ["src/legacy"]
 }

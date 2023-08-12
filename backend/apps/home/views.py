@@ -57,7 +57,8 @@ class SuggestionView(LoginRequiredMixin, FormView):
 @login_required
 @require_http_methods(["GET"])
 def react_app_view(request):
-    response = render(request, 'base_empty.html')
+    context = {'DJANGO_VITE_DEV_MODE': settings.DJANGO_VITE_DEV_MODE}
+    response = render(request, 'base_empty.html', context)
     return response
 
 

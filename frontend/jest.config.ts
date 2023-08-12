@@ -16,11 +16,7 @@ export default {
   transform: {
     '^.+\\.(tsx?|jsx?)$': 'ts-jest',
   },
-  transformIgnorePatterns: [
-    'node_modules',
-    '^.+\\.module\\.(css|sass|scss)$',
-    '/lib/',
-  ],
+  transformIgnorePatterns: ['node_modules', '^.+\\.module\\.(css|sass|scss)$'],
   modulePaths: [],
   moduleNameMapper: {
     ...pathsToModuleNameMapper(compilerOptions.paths, {

@@ -172,7 +172,7 @@ USE_TZ = True
 
 # Compile frontend with VITE
 DJANGO_VITE_ASSETS_PATH = os.path.join(BASE_DIR, 'static/front')
-DJANGO_VITE_DEV_MODE = True
+DJANGO_VITE_DEV_MODE = False
 DJANGO_VITE_DEV_SERVER_PORT = 5173
 
 

@@ -1,5 +1,5 @@
 import { isValid } from 'date-fns';
-import { isArray, isDate, snakeCase } from 'lodash';
+import { isArray, isDate, snakeCase } from 'lodash-es';
 
 export const parseNullBool = (value: string | null): boolean | null => {
   if (value === 'true') {

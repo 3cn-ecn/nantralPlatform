@@ -8,7 +8,7 @@ import {
   OutlinedInput,
 } from '@mui/material';
 
-import { CustomEditor, getCKEditorLanguage } from '#shared/ckeditor/ckeditor';
+import { CustomEditor, getCKEditorLanguage } from '#shared/ckeditor';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import './RichTextField.scss';

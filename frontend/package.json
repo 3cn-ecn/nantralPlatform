@@ -30,10 +30,6 @@
     "url": "github:nantral-platform/nantralPlatform",
     "directory": "frontend/"
   },
-  "workspaces": [
-    "./lib/ckeditor5",
-    "."
-  ],
   "private": true,
   "devDependencies": {
     "@emotion/jest": "^11.11.0",
@@ -70,7 +66,25 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-autoformat": "^39.0.0",
+    "@ckeditor/ckeditor5-basic-styles": "^39.0.0",
+    "@ckeditor/ckeditor5-block-quote": "^39.0.0",
+    "@ckeditor/ckeditor5-dev-translations": "^38.2.1",
+    "@ckeditor/ckeditor5-dev-utils": "^38.2.1",
+    "@ckeditor/ckeditor5-editor-classic": "^39.0.0",
+    "@ckeditor/ckeditor5-essentials": "^39.0.0",
+    "@ckeditor/ckeditor5-heading": "^39.0.0",
+    "@ckeditor/ckeditor5-horizontal-line": "^39.0.0",
+    "@ckeditor/ckeditor5-indent": "^39.0.0",
+    "@ckeditor/ckeditor5-link": "^39.0.0",
+    "@ckeditor/ckeditor5-list": "^39.0.0",
+    "@ckeditor/ckeditor5-media-embed": "^39.0.0",
+    "@ckeditor/ckeditor5-mention": "^39.0.0",
+    "@ckeditor/ckeditor5-paragraph": "^39.0.0",
     "@ckeditor/ckeditor5-react": "^6.1.0",
+    "@ckeditor/ckeditor5-theme-lark": "^39.0.0",
+    "@ckeditor/ckeditor5-typing": "^39.0.0",
+    "@ckeditor/vite-plugin-ckeditor5": "^0.1.3",
     "@dnd-kit/core": "^5.0.3",
     "@dnd-kit/sortable": "^6.0.1",
     "@dnd-kit/utilities": "^3.0.0",
