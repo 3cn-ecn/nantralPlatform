@@ -19,16 +19,7 @@ type NavBarTopProps = {
   setMenuOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-/**
- * The top bar for navigation
- *
- * @param props Component Properties
- * @param {boolean} props.menuOpen - A boolean to indicate if the lateral menu
- * is open or not.
- * @params props.setMenuOpen - A function to change the state of the menu.
- * @returns The top bar component
- */
-function NavBarTop({ menuOpen, setMenuOpen }: NavBarTopProps) {
+export function NavBarTop({ menuOpen, setMenuOpen }: NavBarTopProps) {
   return (
     <AppBar position="fixed" color="neutral">
       <Toolbar>
@@ -55,5 +46,3 @@ function NavBarTop({ menuOpen, setMenuOpen }: NavBarTopProps) {
     </AppBar>
   );
 }
-
-export default NavBarTop;

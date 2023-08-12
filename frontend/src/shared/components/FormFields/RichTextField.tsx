@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 
+import { CircularProgress } from '@mui/material';
 import { noop } from 'lodash-es';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -23,6 +24,9 @@ export function RichTextField(props: RichTextFieldProps) {
           handleChange={noop}
           helperText={props.helperText}
           disabled
+          InputProps={{
+            endAdornment: <CircularProgress color="inherit" size={20} />,
+          }}
         />
       }
     >

@@ -380,7 +380,7 @@
       "report": "Suggestion / Bug",
       "signOut": "Sign out",
       "theme": {
-        "auto": "Device Theme",
+        "auto": "Use device theme",
         "dark": "Dark theme",
         "light": "Light theme",
         "title": "Appearance"

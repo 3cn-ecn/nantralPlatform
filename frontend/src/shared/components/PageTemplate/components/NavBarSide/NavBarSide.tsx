@@ -1,137 +1,125 @@
 import { NavLink } from 'react-router-dom';
 
 import {
-  Box,
   Drawer,
   Icon,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
+  ListItemText,
   Toolbar,
 } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import './NavBarSide.scss';
-
-/** Interface for all links */
-interface LinksInterface {
-  text: string; // the text of the link
-  url: string;
-  icon?: string;
-  isOnBackend?: boolean; // true if the page is not in the React application
-}
-
-/**
- * The side bar for navigation
- *
- * @param props Component Properties
- * @param {boolean} props.menuOpen - A boolean to indicate if the lateral menu
- * is open or not.
- * @params props.drawerWidth - The width that the drawer should be.
- * @returns The side bar component
- */
-function NavBarSide(props: {
+type NavBarSideProps = {
   menuOpen: boolean;
-  drawerWidth: number;
-  variant: 'permanent' | 'persistent' | 'temporary';
   onClose: () => void;
-}) {
-  const { menuOpen, drawerWidth, variant, onClose } = props;
-  const { t } = useTranslation(); // translation module
+};
 
-  const links: LinksInterface[] = [
-    {
-      text: t('navbar.home'),
-      url: '/',
-      icon: '/static/img/icons/cropped/home.svg',
-    },
-    {
-      text: t('navbar.events'),
-      url: '/event/',
-      icon: '/static/img/icons/cropped/event.svg',
-    },
-    {
-      text: t('navbar.group'),
-      url: '/group/',
-      icon: '/static/img/icons/cropped/club.svg',
-      isOnBackend: true,
-    },
-    {
-      text: t('navbar.flatshare'),
-      url: '/colocs/',
-      icon: '/static/img/icons/cropped/roommates.svg',
-      isOnBackend: true,
-    },
-    {
-      text: t('navbar.family'),
-      url: '/parrainage/',
-      icon: '/static/img/icons/cropped/family.svg',
-      isOnBackend: true,
-    },
-    {
-      text: t('navbar.student'),
-      url: '/student/',
-      icon: '/static/img/icons/cropped/list.svg',
-      isOnBackend: true,
-    },
-    {
-      text: t('navbar.signature'),
-      url: '/tools/signature/',
-      icon: '/static/img/icons/cropped/sign.svg',
-      isOnBackend: true,
-    },
-  ];
+export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
+  const { t } = useTranslation();
 
   return (
     <Drawer
-      variant={variant}
       open={menuOpen}
-      anchor="left"
-      onClick={onClose}
+      onClose={onClose}
       sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        ['& .MuiDrawer-paper']: {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-        },
         zIndex: 0,
+        ['& .MuiDrawer-paper']: {
+          width: 240,
+        },
       }}
     >
       <Toolbar />
-      <Box sx={{ overflow: 'auto' }}>
-        <List>
-          {links.map((link) => (
-            <ListItem
-              key={link.text}
-              disablePadding
-              component={NavLink}
-              to={link.url}
-              reloadDocument={link.isOnBackend}
-              className="navlink"
-              sx={{
-                color: 'text.primary',
-              }}
-            >
-              <ListItemButton onClick={onClose}>
-                <ListItemIcon>
-                  <Icon>
-                    <img
-                      src={link.icon ?? '/static/img/icons/cropped/link.svg'}
-                      alt=""
-                    />
-                  </Icon>
-                </ListItemIcon>
-                {link.text}
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+      <List>
+        <NavBarSideItem
+          label={t('navbar.home')}
+          path="/"
+          iconPath="/static/img/icons/cropped/home.svg"
+          closeMenu={onClose}
+        />
+        <NavBarSideItem
+          label={t('navbar.events')}
+          path="/event/"
+          iconPath="/static/img/icons/cropped/event.svg"
+          closeMenu={onClose}
+        />
+        <NavBarSideItem
+          label={t('navbar.group')}
+          path="/group/"
+          iconPath="/static/img/icons/cropped/club.svg"
+          isOnBackend
+          closeMenu={onClose}
+        />
+        <NavBarSideItem
+          label={t('navbar.flatshare')}
+          path="/colocs/"
+          iconPath="/static/img/icons/cropped/roommates.svg"
+          isOnBackend
+          closeMenu={onClose}
+        />
+        <NavBarSideItem
+          label={t('navbar.family')}
+          path="/parrainage/"
+          iconPath="/static/img/icons/cropped/family.svg"
+          isOnBackend
+          closeMenu={onClose}
+        />
+        <NavBarSideItem
+          label={t('navbar.student')}
+          path="/student/"
+          iconPath="/static/img/icons/cropped/list.svg"
+          isOnBackend
+          closeMenu={onClose}
+        />
+        <NavBarSideItem
+          label={t('navbar.signature')}
+          path="/tools/signature/"
+          iconPath="/static/img/icons/cropped/sign.svg"
+          isOnBackend
+          closeMenu={onClose}
+        />
+      </List>
     </Drawer>
   );
 }
 
-export default NavBarSide;
+type NavBarSideItemProps = {
+  label: string;
+  path: string;
+  iconPath?: string;
+  isOnBackend?: boolean;
+  closeMenu: () => void;
+};
+
+function NavBarSideItem({
+  label,
+  path,
+  iconPath = '/static/img/icons/cropped/link.svg',
+  isOnBackend = false,
+  closeMenu,
+}: NavBarSideItemProps) {
+  return (
+    <ListItem disablePadding>
+      <ListItemButton
+        component={NavLink}
+        to={path}
+        reloadDocument={isOnBackend}
+        onClick={closeMenu}
+        sx={{
+          '&.active': {
+            color: 'primary.main',
+            '& span': { fontWeight: 500 },
+          },
+        }}
+      >
+        <ListItemIcon>
+          <Icon component="img" src={iconPath} alt="" />
+        </ListItemIcon>
+        <ListItemText>{label}</ListItemText>
+      </ListItemButton>
+    </ListItem>
+  );
+}

@@ -23,7 +23,7 @@ export function useCurrentUserData() {
   });
 
   if (query.isError)
-    window.open(`/login?next=${window.location.pathname}`, '_self');
+    window.open(`/account/login?next=${window.location.pathname}`, '_self');
 
   return query.data || emptyUser;
 }
