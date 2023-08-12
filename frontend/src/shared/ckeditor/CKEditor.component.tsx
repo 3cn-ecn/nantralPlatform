@@ -1,4 +1,4 @@
-import { forwardRef, memo } from 'react';
+import { forwardRef } from 'react';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import {
@@ -8,10 +8,12 @@ import {
   OutlinedInput,
 } from '@mui/material';
 
-import { CustomEditor, getCKEditorLanguage } from '#shared/ckeditor';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import './RichTextField.internal.scss';
+import { CustomEditor } from './CustomEditor';
+import { getCKEditorLanguage } from './getCKEditorLanguage';
+import './styles/base.styles.scss';
+import './styles/editor.styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CKEditorWithRef = forwardRef<HTMLInputElement>((props: any, ref) => {
@@ -24,7 +26,7 @@ const CKEditorWithRef = forwardRef<HTMLInputElement>((props: any, ref) => {
 });
 CKEditorWithRef.displayName = 'CKEditorWithRef';
 
-export type RichTextFieldInternalProps = {
+type CKEditorComponentProps = {
   value: string;
   handleChange: (val: string) => void;
   name?: string;
@@ -33,14 +35,14 @@ export type RichTextFieldInternalProps = {
   helperText?: string;
 };
 
-function RichTextFieldInternalComponent({
+export default function CKEditorComponent({
   value,
   handleChange,
   name,
   label,
   errors,
   helperText,
-}: RichTextFieldInternalProps) {
+}: CKEditorComponentProps) {
   const { i18n } = useTranslation();
 
   const isError = errors !== undefined;
@@ -81,6 +83,3 @@ function RichTextFieldInternalComponent({
     </FormControl>
   );
 }
-
-const RichTextFieldInternal = memo(RichTextFieldInternalComponent);
-export default RichTextFieldInternal;

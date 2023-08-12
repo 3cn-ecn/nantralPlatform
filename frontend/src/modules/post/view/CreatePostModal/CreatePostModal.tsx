@@ -63,7 +63,7 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
   };
 
   return (
-    <ResponsiveDialog onClose={onClose}>
+    <ResponsiveDialog onClose={onClose} disableEnforceFocus>
       <ResponsiveDialogHeader
         onClose={onClose}
         leftIcon={

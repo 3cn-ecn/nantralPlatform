@@ -57,7 +57,7 @@ export function PostModal({ postId, onClose }: PostModalProps) {
   const post = postQuery.data;
 
   return (
-    <ResponsiveDialog onClose={onClose}>
+    <ResponsiveDialog onClose={onClose} disableEnforceFocus>
       {editMode ? (
         <EditPostModalContent
           post={post}

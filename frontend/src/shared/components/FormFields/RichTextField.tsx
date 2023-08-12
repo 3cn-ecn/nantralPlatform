@@ -1,18 +1,26 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, memo } from 'react';
 
 import { CircularProgress } from '@mui/material';
 import { noop } from 'lodash-es';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import { RichTextFieldInternalProps } from './RichTextField.internal';
 import { TextField } from './TextField';
 
-const RichTextFieldInternal = lazy(() => import('./RichTextField.internal'));
+const CKEditorComponent = lazy(
+  () => import('#shared/ckeditor/CKEditor.component')
+);
 
-type RichTextFieldProps = RichTextFieldInternalProps;
+type RichTextFieldProps = {
+  value: string;
+  handleChange: (val: string) => void;
+  name?: string;
+  label: string;
+  errors?: string[];
+  helperText?: string;
+};
 
-export function RichTextField(props: RichTextFieldProps) {
+function RichTextFieldComponent(props: RichTextFieldProps) {
   const { t } = useTranslation();
 
   return (
@@ -30,7 +38,9 @@ export function RichTextField(props: RichTextFieldProps) {
         />
       }
     >
-      <RichTextFieldInternal {...props} />
+      <CKEditorComponent {...props} />
     </Suspense>
   );
 }
+
+export const RichTextField = memo(RichTextFieldComponent);
