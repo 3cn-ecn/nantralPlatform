@@ -1,16 +1,9 @@
 import { useParams } from 'react-router-dom';
 
-import {
-  CircularProgress,
-  Container,
-  Divider,
-  Typography,
-} from '@mui/material';
+import { Container, Divider, Typography } from '@mui/material';
 
 import { useEventDetailsQuery } from '#modules/event/hooks/useEventDetails.query';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
-import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
@@ -22,36 +15,30 @@ import { TopImage } from './components/TopImage';
 
 export default function EventDetailsPage() {
   const { id: eventId } = useParams();
-  const eventQuery = useEventDetailsQuery(Number(eventId));
-
-  if (eventQuery.isLoading || eventQuery.isIdle) {
-    return (
-      <PageTemplate>
-        <Container>
-          <FlexRow justifyContent="center" mt={8}>
-            <CircularProgress />
-          </FlexRow>
-        </Container>
-      </PageTemplate>
-    );
-  }
+  // Using suspense: true allows to skip isLoading and isIdle states: they are
+  // catch by the nearest <Suspense> boundary, in this case the one
+  // from <PageTemplate />
+  const eventQuery = useEventDetailsQuery(Number(eventId), { suspense: true });
 
   if (eventQuery.isError) {
     return (
-      <PageTemplate>
-        <ErrorPageContent
-          status={eventQuery.error.status}
-          errorMessage={eventQuery.error.message}
-          retryFn={eventQuery.refetch}
-        />
-      </PageTemplate>
+      <ErrorPageContent
+        status={eventQuery.error.status}
+        errorMessage={eventQuery.error.message}
+        retryFn={eventQuery.refetch}
+      />
     );
+  }
+
+  if (!eventQuery.isSuccess) {
+    // this case should never happen, thanks to the suspense option
+    throw new Error('Something went wrong');
   }
 
   const event = eventQuery.data;
 
   return (
-    <PageTemplate>
+    <>
       <BackgroundImageOverlay src={event.image} />
       <Container maxWidth="md" disableGutters>
         <TopImage src={event.image} />
@@ -73,6 +60,6 @@ export default function EventDetailsPage() {
         <RichTextRenderer content={event.description} />
         <Spacer vertical={25} />
       </Container>
-    </PageTemplate>
+    </>
   );
 }

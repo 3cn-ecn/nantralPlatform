@@ -1,16 +1,20 @@
-import { ReactNode, useState } from 'react';
+import { Suspense, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
-import { Box, CssBaseline, Toolbar, useTheme } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  CssBaseline,
+  Toolbar,
+  useTheme,
+} from '@mui/material';
 
+import { FlexRow } from '../FlexBox/FlexBox';
 import { ScrollToTop } from '../ScrollToTop/ScrollToTop';
 import NavBarSide from './components/NavBarSide/NavBarSide';
 import NavBarTop from './components/NavBarTop/NavBarTop';
 
-type PageTemplateProps = {
-  children: ReactNode;
-};
-
-export function PageTemplate({ children }: PageTemplateProps) {
+export function PageTemplate() {
   const theme = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const drawerWidth = 240; // the width of the lateral navbar
@@ -53,7 +57,15 @@ export function PageTemplate({ children }: PageTemplateProps) {
       >
         <Toolbar />
         <ScrollToTop />
-        {children}
+        <Suspense
+          fallback={
+            <FlexRow justifyContent="center" mt={8}>
+              <CircularProgress />
+            </FlexRow>
+          }
+        >
+          <Outlet />
+        </Suspense>
       </Box>
     </Box>
   );

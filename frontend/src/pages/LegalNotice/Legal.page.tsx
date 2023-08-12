@@ -1,7 +1,6 @@
 import { Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 
-import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 /**
@@ -12,7 +11,7 @@ export default function LegalNoticePage() {
   const { t } = useTranslation(); // translation module
 
   return (
-    <PageTemplate>
+    <>
       <Container maxWidth="sm" sx={{ my: 4 }}>
         <Typography variant="h1">{t('legalNotice.title')}</Typography>
         <Typography variant="h4" mt={3} mb={2}>
@@ -70,6 +69,6 @@ export default function LegalNoticePage() {
         </Typography>
         <Typography>{t('legalNotice.paragraphs.8')}</Typography>
       </Container>
-    </PageTemplate>
+    </>
   );
 }

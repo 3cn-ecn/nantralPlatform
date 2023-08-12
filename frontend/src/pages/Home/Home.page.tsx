@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom';
 import { Container } from '@mui/material';
 
 import { PostModal } from '#modules/post/view/PostModal/PostModal';
-import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { CreateNewButton } from './views/CreateNewButton';
@@ -38,7 +37,7 @@ export default function HomePage() {
   // });
 
   return (
-    <PageTemplate>
+    <>
       <HomeHeader />
       <Container sx={{ my: 4 }}>
         <CreateNewButton />
@@ -63,6 +62,6 @@ export default function HomePage() {
           }}
         />
       )}
-    </PageTemplate>
+    </>
   );
 }

@@ -298,6 +298,7 @@
     },
     "title": "Mentions Légales"
   },
+  "loading": "Chargement...",
   "modal": {
     "closeButton": {
       "label": "Fermer"

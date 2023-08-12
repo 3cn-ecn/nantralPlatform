@@ -1,14 +1,23 @@
+import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import EventPage from '#pages/Event/Event.page';
-import EventCalendarViewPage from '#pages/Event/EventCalendar/EventCalendarView.page';
-import EventGridViewPage from '#pages/Event/EventGrid/EventGridView.page';
-import EventDetailsPage from '#pages/EventDetails/EventDetails.page';
-import HomePage from '#pages/Home/Home.page';
-import LegalNoticePage from '#pages/LegalNotice/Legal.page';
-import NotFoundPage from '#pages/NotFound/NotFound.page';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
+import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 import { useTranslation } from '#shared/i18n/useTranslation';
+
+const EventPage = lazy(() => import('#pages/Event/Event.page'));
+const EventCalendarViewPage = lazy(
+  () => import('#pages/Event/EventCalendar/EventCalendarView.page')
+);
+const EventGridViewPage = lazy(
+  () => import('#pages/Event/EventGrid/EventGridView.page')
+);
+const EventDetailsPage = lazy(
+  () => import('#pages/EventDetails/EventDetails.page')
+);
+const HomePage = lazy(() => import('#pages/Home/Home.page'));
+const LegalNoticePage = lazy(() => import('#pages/LegalNotice/Legal.page'));
+const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
 
 // create a fake t function so that vscode can show translations in editor
 const t = (key: string) => key;
@@ -16,6 +25,7 @@ const t = (key: string) => key;
 export const router = createBrowserRouter([
   {
     errorElement: <ErrorBoundary />,
+    element: <PageTemplate />,
     children: [
       {
         path: '/',

@@ -1,5 +1,4 @@
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
-import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 /**
@@ -11,12 +10,10 @@ export default function NotFoundPage() {
   const { t } = useTranslation();
 
   return (
-    <PageTemplate>
-      <ErrorPageContent
-        status={404}
-        message={t('error.notFoundMessage')}
-        retryFn={() => window.location.reload()}
-      />
-    </PageTemplate>
+    <ErrorPageContent
+      status={404}
+      message={t('error.notFoundMessage')}
+      retryFn={() => window.location.reload()}
+    />
   );
 }

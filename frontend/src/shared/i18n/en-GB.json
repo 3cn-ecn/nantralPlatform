@@ -298,6 +298,7 @@
     },
     "title": "Legal Notice"
   },
+  "loading": "Loading...",
   "modal": {
     "closeButton": {
       "label": "Close"

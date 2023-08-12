@@ -1,85 +1,32 @@
-import { forwardRef, memo } from 'react';
+import { Suspense, lazy } from 'react';
 
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import {
-  FormControl,
-  FormHelperText,
-  InputLabel,
-  OutlinedInput,
-} from '@mui/material';
+import { noop } from 'lodash-es';
 
-import { CustomEditor, getCKEditorLanguage } from '#shared/ckeditor';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import './RichTextField.scss';
+import { RichTextFieldInternalProps } from './RichTextField.internal';
+import { TextField } from './TextField';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CKEditorWithRef = forwardRef<HTMLInputElement>((props: any, ref) => {
-  return (
-    <>
-      <CKEditor {...props} />
-      <input hidden ref={ref} />
-    </>
-  );
-});
-CKEditorWithRef.displayName = 'CKEditorWithRef';
+const RichTextFieldInternal = lazy(() => import('./RichTextField.internal'));
 
-type RichTextFieldProps = {
-  value: string;
-  handleChange: (val: string) => void;
-  name?: string;
-  label: string;
-  errors?: string[];
-  helperText?: string;
-};
+type RichTextFieldProps = RichTextFieldInternalProps;
 
-function RichTextFieldComponent({
-  value,
-  handleChange,
-  name,
-  label,
-  errors,
-  helperText,
-}: RichTextFieldProps) {
-  const { i18n } = useTranslation();
-
-  const isError = errors !== undefined;
+export function RichTextField(props: RichTextFieldProps) {
+  const { t } = useTranslation();
 
   return (
-    <FormControl margin="normal" variant="outlined">
-      <InputLabel
-        htmlFor="richtext-input"
-        error={isError}
-        style={{ transform: 'translate(14px, -18px) scale(0.75)' }}
-      >
-        {label}
-      </InputLabel>
-      <OutlinedInput
-        id="richtext-input"
-        value={value}
-        slots={{ input: CKEditorWithRef }}
-        slotProps={{
-          input: {
-            name: name,
-            editor: CustomEditor,
-            data: value,
-            config: { language: getCKEditorLanguage(i18n) },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
-        }}
-        onChange={
-          ((event, editor) => {
-            const data = editor.getData();
-            handleChange(data);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          }) as any
-        }
-      />
-      <FormHelperText>
-        {isError ? errors.join(', ') : helperText}
-      </FormHelperText>
-    </FormControl>
+    <Suspense
+      fallback={
+        <TextField
+          label={props.label}
+          value={t('loading')}
+          handleChange={noop}
+          helperText={props.helperText}
+          disabled
+        />
+      }
+    >
+      <RichTextFieldInternal {...props} />
+    </Suspense>
   );
 }
-
-export const RichTextField = memo(RichTextFieldComponent);
