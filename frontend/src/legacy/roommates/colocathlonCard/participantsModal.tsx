@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Modal } from 'react-bootstrap';
 
-import { ParticipantsModalProps } from './interfaces';
 import { ExportButton } from '../../event/eventsView/exportButton';
 import { Student } from '../../event/eventsView/interfaces';
+import { ParticipantsModalProps } from './interfaces';
 
 export function ParticipantsModal(props: ParticipantsModalProps): JSX.Element {
   return (

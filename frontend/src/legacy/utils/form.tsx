@@ -349,8 +349,8 @@ function AutocompleteField<T>(props: {
   ): void {
     if (reason !== 'input' || value.length < 3) return;
     axios
-      .get<any[]>(`${field.endPoint}/search/`, { params: { q: value } })
-      .then((res) => setOptions(res.data))
+      .get<any[]>(`${field.endPoint}/`, { params: { search: value } })
+      .then((res) => setOptions(res.data.results))
       .catch(noop);
   }
 

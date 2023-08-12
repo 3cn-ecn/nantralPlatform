@@ -16,6 +16,9 @@ from .serializers import (EventPreviewSerializer, EventSerializer,
 
 
 def format_date(date) -> str:
+    """
+    Format and translate a date according to the locale.
+    """
     return formats.date_format(date, 'DATETIME_FORMAT')
 
 

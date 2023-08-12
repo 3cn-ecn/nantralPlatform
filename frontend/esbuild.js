@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+
 /**
  *
  * This script allows to transpile React elements of Nantral-Platform.
@@ -21,7 +23,6 @@
  * @author Charles Zablit <zablitcharles@gmail.com>
  * @date July 2022
  */
-
 import esbuild from 'esbuild';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -34,10 +35,8 @@ const entryPoints = [
   'app/sw.ts',
   'app/app.ts',
   'club/clubsList.tsx',
-  'group.old/eventsGroupListUpdate.tsx',
   'group/MembershipsGroup.tsx',
   'group/MembershipsStudent.tsx',
-  'event/eventsView.tsx',
   'roommates/colocathlonCard.tsx',
   'roommates/housingMap.tsx',
   'roommates/createHousing.tsx',

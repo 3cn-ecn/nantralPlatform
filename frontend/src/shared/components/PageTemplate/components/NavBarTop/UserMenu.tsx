@@ -74,12 +74,11 @@ export function UserMenu() {
         {currentUser.picture ? (
           <Avatar alt={currentUser.name} src={currentUser.picture} />
         ) : (
-          <Icon>
-            <img
-              src="/static/img/icons/cropped/people.svg"
-              alt="Ouvrir le Menu Profil"
-            />
-          </Icon>
+          <Icon
+            component="img"
+            src="/static/img/icons/cropped/people.svg"
+            alt="Ouvrir le Menu Profil"
+          />
         )}
       </IconButton>
       <Menu

@@ -1,8 +1,6 @@
-from rest_framework import exceptions, generics, permissions, viewsets
+from rest_framework import exceptions, generics, permissions, viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
-from apps.utils.api_mixins import SearchViewMixin
 
 from .models import Student
 from .serializers import StudentSerializer
@@ -27,13 +25,14 @@ class StudentPermission(permissions.BasePermission):
         return request.user == obj.user
 
 
-class StudentViewSet(SearchViewMixin, viewsets.ModelViewSet):
+class StudentViewSet(viewsets.ModelViewSet):
     """An API endpoint for students."""
 
     permission_classes = [permissions.IsAuthenticated, StudentPermission]
     serializer_class = StudentSerializer
     search_fields = ['user__first_name', 'user__last_name']
     queryset = Student.objects.all()
+    filter_backends = [filters.SearchFilter]
 
     def create(self, request, *args, **kwargs):
         """Remove the 'create' method from default methods."""

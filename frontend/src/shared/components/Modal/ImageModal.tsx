@@ -40,7 +40,7 @@ export function ImageModal(props: {
         </div>
       </DialogTitle>
       <DialogContent dividers>
-        <img alt="" src={url} style={{ width: '100%' }} />
+        <img alt="" src={url} style={{ maxWidth: '100%' }} />
       </DialogContent>
     </Dialog>
   );

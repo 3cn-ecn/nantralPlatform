@@ -144,12 +144,11 @@ export function NotificationMenu() {
         component="span"
       >
         <Badge badgeContent={nbNotifs} color="error">
-          <Icon>
-            <img
-              src="/static/img/icons/cropped/notification.svg"
-              alt="Notifications"
-            />
-          </Icon>
+          <Icon
+            component="img"
+            src="/static/img/icons/cropped/notification.svg"
+            alt="Notifications"
+          />
         </Badge>
       </IconButton>
       <Menu

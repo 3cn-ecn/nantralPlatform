@@ -65,7 +65,7 @@ export function ReadPostModalContent({
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent sx={{ p: 0 }}>
         {post.image && (
-          <img alt="" src={post.image.toString()} style={{ width: '100%' }} />
+          <img alt="" src={post.image} style={{ maxWidth: '100%' }} />
         )}
         <Box paddingX={3} paddingTop={1} paddingBottom={6}>
           <RichTextRenderer content={post.description} />

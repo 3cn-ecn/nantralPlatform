@@ -1,13 +1,13 @@
 ﻿import * as React from 'react';
 import { useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
+
 import { AxiosError, AxiosResponse } from 'axios';
 
 import axios from '../../utils/axios';
-import { ParticipantsModal } from './participantsModal';
 import { ParticipateButtonProps } from './interfaces';
+import { ParticipantsModal } from './participantsModal';
 import { spinnerStyle } from './styles';
-
 
 export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
   const [isParticipating, setIsParticipating] = useState(props.isParticipating);
@@ -58,7 +58,8 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
               }
             })
             .finally(() => setIsLoading(false));
-        }}>
+        }}
+      >
         {error ? (
           // I am sorry for this
           <>

@@ -149,12 +149,12 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
                     timezone.now() - timezone.timedelta(days=6 * 30)),
                 created_at__lte=timezone.now()
             ).order_by('-created_at')
-            context['posts'] = [p for p in all_posts if p.can_view(user)][:3]
-            # check if there are some events planned for this group
-            context['has_events'] = Event.objects.filter(
+            all_events = Event.objects.filter(
                 group=group,
-                start_date__gte=timezone.now()
-            ).exists()
+                end_date__gte=timezone.now()
+            ).order_by('start_date')
+            context['posts'] = [p for p in all_posts if p.can_view(user)][:3]
+            context['events'] = [e for e in all_events if e.can_view(user)][:3]
             # members
             context['is_member'] = group.is_member(user)
             context['is_admin'] = group.is_admin(user)
