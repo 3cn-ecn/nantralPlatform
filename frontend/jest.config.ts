@@ -5,7 +5,11 @@ import { compilerOptions } from './tsconfig.json';
 export default {
   roots: ['<rootDir>/src'],
   preset: 'ts-jest/presets/js-with-ts',
-  collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx,ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/legacy/**/*',
+  ],
   setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/src/shared/testing/setupTests.ts'],
   testEnvironment: 'jsdom',
