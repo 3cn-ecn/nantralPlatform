@@ -1,13 +1,14 @@
+from django.db.models import Q
+from django.utils import timezone
+
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import HousingLastRoommatesSerializer, RoommatesSerializer
-from .models import Housing, Roommates
 from apps.utils.geocoding import geocode
 
-from django.utils import timezone
-from django.db.models import Q
+from .models import Housing, Roommates
+from .serializers import HousingLastRoommatesSerializer, RoommatesSerializer
 
 
 class SearchGeocodingView(APIView):
@@ -22,6 +23,7 @@ class HousingView(generics.ListCreateAPIView):
     """API View to get all the housing and their current roommates"""
     serializer_class = HousingLastRoommatesSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
 
     def get_queryset(self):
         now = timezone.now()

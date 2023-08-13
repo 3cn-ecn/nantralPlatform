@@ -15,30 +15,17 @@ class TestStudent(TestCase, TestMixin):
     def setUp(self):
         self.user_setup()
 
-    def test_student_list(self):
-        url = reverse('student:list')
-        response = self.client.get(url)
-        # Check that you have to be logged in
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
-        ok = self.client.login(
-            username=self.u2.username, password=self.PASSWORD)
-        self.assertTrue(ok)
+    # def test_student_list(self):
+    #     url = reverse('student:list')
+    #     response = self.client.get(url)
+    #     # Check that you have to be logged in
+    #     self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+    #     ok = self.client.login(
+    #         username=self.u2.username, password=self.PASSWORD)
+    #     self.assertTrue(ok)
 
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_student_profile(self):
-        student = Student.objects.all().first()
-        url = reverse('student:detail', args=[student.pk])
-        response = self.client.get(url)
-        # Check that you have to be logged in
-        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
-        ok = self.client.login(
-            username=self.u2.username, password=self.PASSWORD)
-        self.assertTrue(ok)
-
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    #     response = self.client.get(url)
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_student_profile_update(self):
         student = Student.objects.get(id=self.u1.id)

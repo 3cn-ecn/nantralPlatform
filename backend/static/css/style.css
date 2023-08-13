@@ -4,7 +4,7 @@
 ::selection {
   background: var(--bs-red) !important;
   color: white !important;
-} 
+}
 
 html {
   margin: 0px;
@@ -19,18 +19,24 @@ body {
   width: 100%;
 }
 
-h1, .h1,
-h2, .h2,
-h4, .h4,
+h1,
+.h1,
+h2,
+.h2,
+h4,
+.h4,
 .student h5,
 .bold {
   font-family: "Heebo", sans-serif;
   font-weight: 900;
 }
 
-h3, .h3,
-h5, .h5,
-h6, .h6 {
+h3,
+.h3,
+h5,
+.h5,
+h6,
+.h6 {
   font-family: "Heebo", sans-serif;
   font-weight: 500;
 }
@@ -57,19 +63,19 @@ table.table-sort th {
 }
 #fil-dariane a.ariane-link {
   margin-right: 0;
-  color: rgba(0, 0, 0, .9);
-  padding-top: .3125rem;
-  padding-bottom: .3125rem;
-  border-radius: .5rem;
+  color: rgba(0, 0, 0, 0.9);
+  padding-top: 0.3125rem;
+  padding-bottom: 0.3125rem;
+  border-radius: 0.5rem;
 }
 #fil-dariane a.ariane-link span {
-  margin: 0 .3rem;
+  margin: 0 0.3rem;
 }
 #fil-dariane a.ariane-link:hover {
   background-color: #eee;
 }
 #fil-dariane i {
-  margin: 0 .3rem;
+  margin: 0 0.3rem;
 }
 @media all and (max-width: 768px) {
   #fil-dariane a.ariane-link span,
@@ -82,22 +88,21 @@ table.table-sort th {
   }
 }
 
-
-#menuSet .dropdown > .nav-link {
+.menuSet .dropdown > .nav-link {
   border-radius: 50%;
-  padding: .2rem;
+  padding: 0.2rem;
 }
-#menuSet .dropdown > .nav-link:hover {
+.menuSet .dropdown > .nav-link:hover {
   background-color: #eee;
 }
-#menuSet .dropdown > .nav-link img {
+.menuSet .dropdown > .nav-link img {
   width: 35px;
   height: 35px;
 }
-#menuSet .dropdown-toggle::after {
+.menuSet .dropdown-toggle::after {
   display: none;
 }
-#menuSet #notificationPanel .dropdown-menu {
+.menuSet #notificationPanel .dropdown-menu {
   right: -42px !important;
   width: 20rem;
   max-width: 90vw;
@@ -105,20 +110,20 @@ table.table-sort th {
   max-height: calc(calc(100vh - 43px - 8px) * 0.9);
   overflow: auto;
 }
-#menuSet .dropdown-menu {
-  box-shadow: 3px 3px 6px #AAA;
+.menuSet .dropdown-menu {
+  box-shadow: 3px 3px 6px #aaa;
 }
-#menuSet .dropdown-menu img {
+.menuSet .dropdown-menu img {
   width: 2rem;
   height: 2rem;
   border-radius: 20%;
   object-fit: contain;
 }
-#menuSet .dropdown-item:hover {
+.menuSet .dropdown-item:hover {
   cursor: pointer;
 }
 /* bouton pour mettre en lu les notifications */
-#menuSet .dropdown-item .read-button {
+.menuSet .dropdown-item .read-button {
   display: flex;
   flex-shrink: 0;
   width: 2rem;
@@ -195,14 +200,15 @@ img.logo {
 p.infos > span {
   margin-right: 2rem;
 }
-p.infos > span, p.infos a {
+p.infos > span,
+p.infos a {
   color: #707070;
 }
 p.infos > span > span {
   background-color: #eeeeee;
-  border-radius:100%;
+  border-radius: 100%;
   width: 1.7rem;
-  height:1.7rem;
+  height: 1.7rem;
   text-align: center;
   display: inline-block;
   transform: translateY(-0.2rem);
@@ -259,12 +265,11 @@ a.rs:hover span {
   z-index: 1;
 }
 
-
 /* ÉVÈNEMENTS ET POSTS */
 /* ------------------- */
 
 .container .events .card {
-  box-shadow: 0 0 5px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   overflow: hidden;
 }
@@ -272,14 +277,15 @@ a.rs:hover span {
   transition: all 0.3s ease;
 }
 .container .events .card:hover {
-  box-shadow: 0 0 5px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 0 5px 4px rgba(0, 0, 0, 0.3);
 }
 .container .events .card:hover img {
   transform: scale(1.02);
 }
-.container .events a.card-body, .container a:hover.card-image {
+.container .events a.card-body,
+.container a:hover.card-image {
   text-decoration: none;
-  color:inherit;
+  color: inherit;
 }
 .container .events .card-date {
   color: #222;
@@ -287,7 +293,6 @@ a.rs:hover span {
 .container .events .card-subtitle {
   color: #333;
 }
-
 
 /* PIED DE PAGE HORS-CONNEXION */
 /*-----------------------------*/

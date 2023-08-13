@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg36"
+   sodipodi:docname="search.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview38"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="25.190679"
+     inkscape:cx="8.8127835"
+     inkscape:cy="10.539613"
+     inkscape:window-width="1920"
+     inkscape:window-height="1030"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg36" />
+  <defs
+     id="defs26">
+    <linearGradient
+       id="a"
+       x1="16.43"
+       y1="17.11"
+       x2="16.43"
+       y2="14.89"
+       gradientTransform="matrix(0.92,0,0,0.76,0.98,3.87)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#b6b7b7"
+         id="stop2" />
+      <stop
+         offset="1"
+         stop-color="#e0e0df"
+         id="stop4" />
+    </linearGradient>
+    <filter
+       id="c"
+       x="4"
+       y="4"
+       width="11"
+       height="11"
+       filterUnits="userSpaceOnUse"
+       color-interpolation-filters="sRGB">
+      <feColorMatrix
+         values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0"
+         result="invert"
+         id="feColorMatrix7" />
+      <feFlood
+         flood-color="#fff"
+         result="bg"
+         id="feFlood9" />
+      <feBlend
+         in="invert"
+         in2="bg"
+         id="feBlend11" />
+    </filter>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask362">
+      <g
+         id="g374">
+        <g
+           id="g372">
+          <g
+             style="filter:url(#c)"
+             id="g370">
+            <rect
+               x="4"
+               y="4"
+               width="11"
+               height="11"
+               id="rect364" />
+            <g
+               style="isolation:isolate"
+               id="g368">
+              <path
+                 d="M 13.9,9.5 A 4.4,4.4 0 1 1 9.5,5.1 4.4,4.4 0 0 1 13.9,9.5"
+                 style="fill:#ffffff"
+                 id="path366" />
+            </g>
+          </g>
+        </g>
+      </g>
+    </mask>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath376">
+      <g
+         id="g380">
+        <rect
+           x="4"
+           y="4"
+           width="11"
+           height="11"
+           style="fill:none"
+           id="rect378" />
+      </g>
+    </clipPath>
+  </defs>
+  <g
+     id="g406"
+     transform="matrix(1.5184156,0,0,1.5184156,-6.0736627,-6.0736232)">
+    <rect
+       x="11.45"
+       y="15.27"
+       width="9.1599998"
+       height="1.52"
+       transform="rotate(45,16.030189,16.029922)"
+       style="fill:url(#a)"
+       id="rect28" />
+    <path
+       d="M 15,9.5 A 5.5,5.5 0 1 1 9.5,4 5.5,5.5 0 0 1 15,9.5"
+       style="fill:#dc3545"
+       id="path30"
+       mask="url(#mask362)"
+       clip-path="url(#clipPath376)" />
+  </g>
+</svg>

@@ -1,1 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6,16a2,2,0,1,1-2,2,2,2,0,0,1,2-2" style="fill:#e0e0df"/><path d="M6,4A2,2,0,1,1,4,6,2,2,0,0,1,6,4" style="fill:#dc3545"/><path d="M6,10a2,2,0,1,1-2,2,2,2,0,0,1,2-2" style="fill:#b6b7b7"/><path d="M12,16a2,2,0,1,1-2,2,2,2,0,0,1,2-2" style="fill:#e0e0df"/><path d="M12,4a2,2,0,1,1-2,2,2,2,0,0,1,2-2" style="fill:#dc3545"/><path d="M12,10a2,2,0,1,1-2,2,2,2,0,0,1,2-2" style="fill:#b6b7b7"/><path d="M18,16a2,2,0,1,1-2,2,2,2,0,0,1,2-2" style="fill:#e0e0df"/><path d="M18,4a2,2,0,1,1-2,2,2,2,0,0,1,2-2" style="fill:#dc3545"/><path d="M18,10a2,2,0,1,1-2,2,2,2,0,0,1,2-2" style="fill:#b6b7b7"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+   <rect
+      style="fill:#dc3545;fill-opacity:1;stroke-width:10;stroke-linecap:square;stroke-linejoin:bevel;paint-order:stroke markers fill"
+      id="rect6147"
+      width="18.245613"
+      height="2.7508771"
+      x="2.8771935"
+      y="5.1087718"
+      ry="1.3754386" />
+   <rect
+      style="fill:#dc3545;fill-opacity:1;stroke-width:10;stroke-linecap:square;stroke-linejoin:bevel;paint-order:stroke markers fill"
+      id="rect6147-2"
+      width="18.245613"
+      height="2.7508771"
+      x="2.8771935"
+      y="10.624561"
+      ry="1.3754386" />
+   <rect
+      style="fill:#dc3545;fill-opacity:1;stroke-width:10;stroke-linecap:square;stroke-linejoin:bevel;paint-order:stroke markers fill"
+      id="rect6147-7"
+      width="18.245613"
+      height="2.7508771"
+      x="2.8771935"
+      y="16.14035"
+      ry="1.3754386" />
+</svg>

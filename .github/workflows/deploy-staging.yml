@@ -12,33 +12,43 @@ on:
 
 jobs:
   frontend-build:
-    name: Build React bundles
+    name: Build front end
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
     steps:
-      - name: Pull latest commit
+      - name: Clone the repository
         uses: actions/checkout@v3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/
+
+      - name: Install dependencies
+        run: npm ci --omit=dev
+
       - name: Build React
-        run: |
-          cd frontend
-          npm install --omit=dev
-          npm run build
+        run: npm run build
+
       - name: Upload files to the VPS
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.INSTANCE_ADDRESS }}
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
-          source: "backend/static/js/*/**.js"
+          source: "backend/static/js/*, backend/static/front/*"
           target: "nantralPlatform-staging"
 
   clone-database:
+    name: Make a copy of the database
     runs-on: ubuntu-latest
     steps:
-      - name: Clone before staging
+      - name: Clone the prod database to staging database
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.INSTANCE_ADDRESS }}
@@ -55,12 +65,14 @@ jobs:
             rm -r env
 
   deploy:
+    name: Deploy to staging
     needs: [frontend-build, clone-database]
     runs-on: ubuntu-latest
 
     steps:
       - name: Pull latest commit
         uses: actions/checkout@v3
+
       - name: Deploy to the VPS
         uses: appleboy/ssh-action@master
         with:
@@ -68,7 +80,7 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
-            cd nantralPlatform-staging/deployment
+            cd nantralPlatform-staging
             git checkout staging && git pull origin staging
             cd ~/nantralPlatform/deployment
             sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build backend-staging

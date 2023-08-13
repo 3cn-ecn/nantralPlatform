@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
@@ -7,8 +7,6 @@ app_name = 'home'
 urlpatterns = [
     # pages
     path('suggestions/', views.SuggestionView.as_view(), name='suggestions'),
-    path('legal_mentions/', views.LegalMentionsView.as_view(), name='mentions'),
-    path('', views.HomeView.as_view(), name='home'),
 
     # shortcuts
     path('me/', views.current_user_page_view, name='me'),
@@ -26,4 +24,7 @@ urlpatterns = [
 
     # api
     path('doihavetologin/', views.DoIHaveToLoginView.as_view()),
+
+    # use the react router if nothing match
+    re_path(r'^(?:(?!api).*/)?$', views.react_app_view, name='home'),
 ]

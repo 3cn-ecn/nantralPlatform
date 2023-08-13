@@ -2,11 +2,11 @@ from datetime import date
 
 from django.utils.translation import gettext as _
 
-from rest_framework import serializers, exceptions
+from rest_framework import exceptions, serializers
 
-from apps.student.serializers import SimpleStudentSerializer
+from apps.student.serializers import StudentPreviewSerializer
 
-from .models import Group, Membership, GroupType
+from .models import Group, GroupType, Membership
 
 
 class AdminFieldsMixin:
@@ -40,13 +40,14 @@ class GroupTypeSerializer(serializers.ModelSerializer):
         fields = ['name', 'slug', 'no_membership_dates']
 
 
-class SimpleGroupSerializer(serializers.ModelSerializer):
+class GroupPreviewSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ['name', 'short_name', 'slug', 'url', 'icon']
-        read_only_fields = ['name', 'short_name', 'slug', 'url', 'icon']
+        fields = ['name', 'short_name', 'slug', 'url', 'icon', 'id']
+        read_only_fields = ['name', 'short_name',
+                            'slug', 'url', 'icon']
 
     def get_url(self, obj: Group) -> str:
         return obj.get_absolute_url()
@@ -57,7 +58,7 @@ class GroupSerializer(serializers.ModelSerializer):
     is_admin = serializers.SerializerMethodField()
     is_member = serializers.SerializerMethodField()
     group_type = GroupTypeSerializer(read_only=True)
-    parent = SimpleGroupSerializer(read_only=True)
+    parent = GroupPreviewSerializer(read_only=True)
 
     class Meta:
         model = Group
@@ -75,17 +76,26 @@ class GroupSerializer(serializers.ModelSerializer):
     def get_is_member(self, obj: Group) -> bool:
         return obj.is_member(self.context['request'].user)
 
+
+class GroupWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        exclude = ['members', 'subscribers', 'priority', 'social_links',
+                   'created_at', 'created_by', 'updated_at', 'updated_by',
+                   'lock_memberships']
+        read_only_fields = ['group_type', 'parent', 'url']
+
     def validate(self, data):
         if not self.instance:
-            data['group_type'] = GroupType.objects.get(
-                slug=self.context['request'].query_params.get('type', None))
+            group_type = self.context['request'].query_params.get('type')
+            data['group_type'] = GroupType.objects.get(slug=group_type)
         return super().validate(data)
 
 
 class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
     """Membership serializer for getting or editing objects."""
-    student = SimpleStudentSerializer(read_only=True)
-    group = SimpleGroupSerializer(read_only=True)
+    student = StudentPreviewSerializer(read_only=True)
+    group = GroupPreviewSerializer(read_only=True)
 
     class Meta:
         model = Membership

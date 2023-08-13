@@ -66,7 +66,6 @@ class FamilyQuestionsForm(forms.Form):
         """Save the answers"""
         if self.is_valid():
             answers = self.cleaned_data.items()
-            print(answers)
             for question, val in answers:
                 id = int(question[9:])
                 try:

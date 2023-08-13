@@ -1,6 +1,6 @@
 {% load static %}
 {% load file_url %}
-
+{% load django_vite %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -13,6 +13,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/style.css' %}?v=4.1">
   <!-- js --> 
+  {% vite_hmr_client %}
+  {% vite_react_refresh %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
   <!-- fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet"> 
@@ -36,27 +38,13 @@
   
   <nav class="navbar navbar-expand sticky-top navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
     <div class="container">
-      <div id="goBackButton" class="d-inline-block"></div>
-      <div id="fil-dariane" class="navbar-brand">
-        {# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
-        <a class="ariane-link" href="{% url 'home:home' %}" style="font-weight: 900;"><!--
-          --><img src="{% static '/img/logo/scalable/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="" loading="lazy"><!--
-          --><span class="ms-0">Nantral Platform.</span><!--
-        --></a><!--
-        -->{% for link in ariane %}<!--
-          --><i class="fas fa-angle-right"></i><!--
-          --><a class="ariane-link" href="{{ link.target }}" style="font: 'Heebo'; font-weight: 900;"><span>{{ link.label }}</span></a><!--
-        -->{% empty %}
-          <span></span><span></span>
-        {% endfor %}
-      </div>
-      <ul id="menuSet" class="navbar-nav ms-auto">
+      <ul class="menuSet navbar-nav pe-2">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown" >
             <img src='{% static "/img/icons/scalable/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">
           </a>
-          <ul class="dropdown-menu dropdown-menu-end" onclick="event.stopPropagation()" style="right:-84px;">
-            <li><a class="dropdown-item" href="{% url 'home:home' %}">
+          <ul class="dropdown-menu" onclick="event.stopPropagation()">
+            <li><a class="dropdown-item" href="/event/">
               <img src='{% static "/img/icons/scalable/event.svg" %}' class="align-middle" loading="lazy" alt="">
               Posts et Évènements
             </a></li>
@@ -82,6 +70,21 @@
             </a></li>
           </ul>
         </li>
+      </ul>
+      <div id="fil-dariane" class="navbar-brand">
+        {# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
+        <a class="ariane-link" href="/" style="font-weight: 900;"><!--
+          --><img src="{% static '/img/logo/scalable/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="" loading="lazy"><!--
+          --><span class="ms-0">Nantral Platform.</span><!--
+        --></a><!--
+        -->{% for link in ariane %}<!--
+          --><i class="fas fa-angle-right"></i><!--
+          --><a class="ariane-link" href="{{ link.target }}" style="font: 'Heebo'; font-weight: 900;"><span>{{ link.label }}</span></a><!--
+        -->{% empty %}
+          <span></span><span></span>
+        {% endfor %}
+      </div>
+      <ul class="menuSet navbar-nav ms-auto">
         <li id="notificationPanel" class="nav-item">
           <a id="notification-icon" class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown">
             <img src='{% static "/img/icons/scalable/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
@@ -102,7 +105,7 @@
             {% if request.user.is_authenticated %}
               {% if request.user.student.pk %}
                 <li>
-                  <a class="dropdown-item" href="{% url 'student:detail' request.user.student.pk %}">
+                  <a class="dropdown-item" href="/student/{{ request.user.student.pk }}">
                     <i class="fas fa-user" aria-hidden="true"></i>&nbsp; Mon Profil
                   </a>
                 </li>
@@ -144,7 +147,7 @@
               </a>
             </li>
             <li>
-              <a class="dropdown-item" href="{% url 'home:mentions' %}">
+              <a class="dropdown-item" href="/legal-notice/">
                 <i class="fas fa-gavel" aria-hidden="true"></i>&nbsp; Mentions Légales
               </a>
             </li>
@@ -177,7 +180,7 @@
   <footer id="footer-install-app"></footer>
   <footer id="footer-offline"></footer>
 
-  <script type = "text/javascript" src="{% static 'js/app/app.js' %}?v=1.1"></script>
+  {% vite_asset 'src/legacy/app/app.ts' %}
 
   {% block script %}
   {% endblock %}

@@ -104,13 +104,12 @@ class TestNotification(TransactionTestCase, TestMixin):
         )
         # test subscribed notifs withoutlimit
         self.client.login(username=self.u2.username, password=self.PASSWORD)
-        url = reverse('notification_api:get_notifications') + "?mode=2&sub=True"
+        url = '/api/notification/notification/?subscribed=true'
         resp = self.client.get(url)
-        self.assertEqual(len(resp.data), 1)
+        self.assertEqual(len(resp.data['results']), 1)
         self.assertEqual(
-            resp.data[0]['notification']['body'], "Notif de test 2")
+            resp.data['results'][0]['notification']['body'], "Notif de test 2")
         # test all notifs with limit of 2
-        url = reverse('notification_api:get_notifications')
-        url += "?mode=2&sub=False&start=0&nb=2"
+        url = '/api/notification/notification/?page_size=2'
         resp = self.client.get(url)
-        self.assertEqual(len(resp.data), 2)
+        self.assertEqual(len(resp.data['results']), 2)

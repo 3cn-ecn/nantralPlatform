@@ -13,15 +13,35 @@ jobs:
         working-directory: frontend
 
     steps:
-      - name: Pull latest commit
+      - name: Clone the repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+          # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
 
-      - name: SonarCloud Scan
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Types test
+        run: npm run types
+
+      - name: Lint test
+        run: npm run lint
+
+      - name: Unit test
+        run: npm run jest -- --coverage
+
+      - name: Run SonarCloud scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
-          projectBaseDir: frontend
+          projectBaseDir: frontend/
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}

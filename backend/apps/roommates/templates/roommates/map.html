@@ -1,5 +1,6 @@
 ﻿{% extends 'base.html'%} 
 {% load static %} 
+{% load django_vite %}
 
 {% block head %}
 <link
@@ -50,6 +51,6 @@
   const CURRENT_COLOC = "{{CURRENT_COLOC}}"
   const CURRENT_COLOC_URL = "{{CURRENT_COLOC_URL}}"
 </script>
-<script src='{% static "js/roommates/housingMap.js" %}'></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
+{% vite_asset 'src/legacy/roommates/housingMap.tsx' %}
 {% endblock %}

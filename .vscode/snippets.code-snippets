@@ -1,0 +1,16 @@
+{
+  "React Function Component": {
+    "prefix": "comp",
+    "body": [
+      "type ${TM_FILENAME_BASE}Props = {",
+      "  // TODO: define props here",
+      "};",
+      "",
+      "export function ${TM_FILENAME_BASE}({}: ${TM_FILENAME_BASE}Props) {",
+      "  // TODO: component implementation here",
+      "  return null;",
+      "}"
+    ],
+    "description": "Create a new React function component with prop types"
+  }
+}

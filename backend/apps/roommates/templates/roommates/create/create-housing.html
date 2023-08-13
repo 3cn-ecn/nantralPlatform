@@ -1,6 +1,6 @@
 {% extends 'base.html'%}
 {% load static %}
-
+{% load django_vite %}
 
 {% block content%}
   <div id="root"></div>
@@ -13,5 +13,5 @@
     const GEO_URL = '{% url "roommates_api:geocoding" %}';
     const CREATE_URL = '{% url "roommates:create-roommates" 0 %}';
   </script>
-  <script src='{% static "js/roommates/createHousing.js" %}'></script>
+  {% vite_asset 'src/legacy/roommates/createHousing.tsx' %}
 {% endblock %}

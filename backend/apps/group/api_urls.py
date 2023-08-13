@@ -2,7 +2,8 @@ from rest_framework.routers import DefaultRouter
 
 from .api_views import (
     MembershipViewSet,
-    GroupViewSet)
+    GroupViewSet,
+    GroupTypeViewSet)
 
 app_name = 'api_group'
 
@@ -12,5 +13,6 @@ app_name = 'api_group'
 router = DefaultRouter()
 router.register('membership', MembershipViewSet, basename='membership')
 router.register('group', GroupViewSet, basename='group')
+router.register('grouptype', GroupTypeViewSet, basename='grouptype')
 
 urlpatterns = router.urls

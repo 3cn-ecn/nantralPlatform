@@ -16,16 +16,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-import debug_toolbar
-from django.contrib import admin
-from django.urls import path, include
 # pour importer les fichiers en dev local
 from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import include, path
 
+import debug_toolbar
 
-urlpatterns = i18n_patterns(
+urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
     # default and third-party apps
@@ -45,13 +44,10 @@ urlpatterns = i18n_patterns(
     path(
         'parrainage/admin/',
         include('apps.family.admin_urls', namespace='family-admin')),
-    path('post/', include('apps.post.urls', namespace='post')),
-    path('event/', include('apps.event.urls', namespace='event')),
     path('tools/', include('apps.tools.urls', namespace='tools')),
     path(
         'notification/',
         include('apps.notification.urls', namespace='notification')),
-
     # api
     path(
         'api/student/',
@@ -61,16 +57,15 @@ urlpatterns = i18n_patterns(
         include('apps.roommates.api_urls', namespace='roommates_api')),
     path('api/post/', include('apps.post.api_urls', namespace='post_api')),
     path('api/event/', include('apps.event.api_urls', namespace='event_api')),
+
     path(
         'api/notification/',
         include('apps.notification.api_urls', namespace='notification_api')),
     path('api/group/', include('apps.group.api_urls', namespace='group_api')),
-
+    path('api/home/', include('apps.home.api_urls', namespace='home_api')),
     # homepage
-    path('', include('apps.home.urls', namespace='home')),
-
-    prefix_default_language=False
-)
+    path('', include('apps.home.urls', namespace='home'))
+]
 
 urlpatterns += static(
     settings.MEDIA_URL,
