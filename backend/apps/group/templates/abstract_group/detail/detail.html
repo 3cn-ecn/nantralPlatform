@@ -2,6 +2,7 @@
 {% load static %}
 {% load file_url %}
 {% load video %}
+{% load django_vite %}
 
 {% block head %}
     <meta name="description" CONTENT="{{object.summary}} - {{object.name}} ({{object.alt_name}}) - Centrale Nantes">
@@ -152,7 +153,6 @@
     const isAdmin = {{ is_admin|yesno:"true,false,false" }};
     const membersURL = "{% url object.app|add:'_api:list-members' %}?slug={{ object.slug }}";
 </script>
-<script src='{% static "js/group/groupMembers.js" %}'></script>
-<script src='{% static "js/notification/subscribeButton.js" %}'></script>
+{% vite_asset 'src/legacy/group/groupMembers.tsx' %}
+{% vite_asset 'src/legacy/notification/subscribeButton.tsx' %}
 {% endblock %}
-

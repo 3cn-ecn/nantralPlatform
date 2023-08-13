@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load i18n %}
 {% load static %}
+{% load django_vite %}
 
 {% block content %}
 
@@ -23,5 +24,5 @@
 {% endblock %}
 
 {% block script %}
-    <script type = "text/javascript" src="{% static 'js/notification/deviceSubscribeButton.js' %}?v=1"></script>
+{% vite_asset 'src/legacy/notification/deviceSubscribeButton.tsx' %}
 {% endblock %}

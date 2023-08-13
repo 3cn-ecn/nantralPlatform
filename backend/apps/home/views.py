@@ -1,4 +1,6 @@
 from os.path import join
+from urllib.parse import urlparse
+import requests
 
 from django.conf import settings
 from django.contrib import messages
@@ -6,12 +8,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView
 from django.urls import resolve
 from django.utils import timezone
+from django_vite.apps import DjangoViteAssetLoader
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -97,9 +100,21 @@ def current_user_roommates_view(request):
 @require_http_methods(["GET"])
 def service_worker(request):
     """A view to serve the service worker"""
-    file_path = join(settings.BASE_DIR, "static/js/app/sw.js")
-    with open(file_path) as file:
-        return HttpResponse(file.read(), content_type='application/javascript')
+    vite_loader = DjangoViteAssetLoader.instance()
+    service_worker_url = vite_loader.generate_vite_asset_url(
+        'src/legacy/app/sw.ts')
+    if settings.DJANGO_VITE_DEV_MODE:
+        response = requests.get(service_worker_url)
+        return HttpResponse(
+            response.content,
+            content_type="application/javascript")
+    else:
+        parsed_url = urlparse(service_worker_url)
+        path_to_file = join(
+            settings.STATIC_ROOT,
+            parsed_url.path.replace(settings.STATIC_URL, "", 1)
+        )
+        return FileResponse(open(path_to_file, 'rb'))
 
 
 @require_http_methods(["GET"])

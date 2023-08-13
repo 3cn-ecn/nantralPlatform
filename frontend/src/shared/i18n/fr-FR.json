@@ -145,9 +145,9 @@
       "title": "Évènements"
     },
     "list": {
-      "allIsLoaded": "Fin de la liste 🥳",
+      "allIsLoaded": "Fin de la liste 🥳",
       "loadMore": "Charger plus",
-      "noEventFound": "Aucun évènement 😿"
+      "noEventFound": "Aucun évènement 😿"
     },
     "participants": {
       "noParticipants": "Aucun participant 😔",
@@ -163,7 +163,7 @@
       "shotgun": "Shotgun !",
       "unregisterModal": {
         "message": "Voulez-vous vraiment vous désinscrire de l'évènement ?",
-        "title": "Se désinscrire de l'évènement 😿"
+        "title": "Se désinscrire de l'évènement 😿"
       },
       "willStartAtHour": "Shotgun à {{time}}",
       "willStartOnDate": "Shotgun le {{date}}"
@@ -313,15 +313,9 @@
     "signature": "Signature ECN",
     "student": "Annuaire Étudiant"
   },
-  "notif": {
-    "load": "Charger Plus",
-    "subscribed": "Abonné",
-    "title": "Notifications",
-    "unread": "Non Lu"
-  },
   "notification": {
     "aria-label": "Afficher les {{ nb }} nouvelles notifications",
-    "endOfList": "Fin de la liste 🥳",
+    "endOfList": "Fin de la liste 🥳",
     "loadMore": "Charger plus",
     "markAllAsSeen": "Tout marquer comme lu",
     "settings": "Paramètres des notifications",

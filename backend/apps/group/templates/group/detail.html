@@ -2,6 +2,7 @@
 {% load static %}
 {% load file_url %}
 {% load video %}
+{% load django_vite %}
 
 {% block head %}
     <meta name="description" CONTENT="{{group.summary}} - {{group.name}} - Centrale Nantes">
@@ -208,7 +209,7 @@
             const groupSlug = "{{ group.slug }}";
             const displayType = 'grid';
         </script>
-        <script src='{% static "js/group/MembershipsGroup.js" %}?v=1.1'></script>
+        {% vite_asset 'src/legacy/group/MembershipsGroup.tsx' %}
     {% endif %}
 
     {# Bouton pour faire une demande pour devenir admin #}

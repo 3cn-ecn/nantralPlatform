@@ -145,12 +145,12 @@
       "title": "Events"
     },
     "list": {
-      "allIsLoaded": "End of the list 🥳",
+      "allIsLoaded": "End of the list 🥳",
       "loadMore": "Load more",
-      "noEventFound": "No events 😿"
+      "noEventFound": "No events 😿"
     },
     "participants": {
-      "noParticipants": "No participants 😔",
+      "noParticipants": "No participants 😔",
       "title": "Participants",
       "titleWithMax": "{{number}}/{{max}} participants",
       "titleWithNumber": "{{number}} participants"
@@ -313,14 +313,9 @@
     "signature": "Signature",
     "student": "Student List"
   },
-  "notif": {
-    "load": "Loading More",
-    "subscribed": "Subscribed",
-    "title": "Notifications",
-    "unread": "Unread"
-  },
   "notification": {
     "aria-label": "Show {{ nb }} new notifications",
+    "endOfList": "End of the list 🥳",
     "loadMore": "Load more",
     "markAllAsSeen": "Mark all as read",
     "settings": "Notification settings",
