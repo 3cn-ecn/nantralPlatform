@@ -220,7 +220,7 @@
   },
   "home": {
     "eventSection": {
-      "error": "Erreur : les évènements n'ont pas pu êre chargés 😢",
+      "error": "Erreur : les évènements n'ont pas pu être chargés 😢",
       "isEmpty": "Aucun évènement à venir... 🥺 Créez-en un !",
       "openEventPageButton": {
         "label": "Voir tous"
@@ -318,6 +318,16 @@
     "subscribed": "Abonné",
     "title": "Notifications",
     "unread": "Non Lu"
+  },
+  "notification": {
+    "aria-label": "Afficher les {{ nb }} nouvelles notifications",
+    "endOfList": "Fin de la liste 🥳",
+    "loadMore": "Charger plus",
+    "markAllAsSeen": "Tout marquer comme lu",
+    "settings": "Paramètres des notifications",
+    "subscribed": "Abonnements",
+    "title": "Notifications",
+    "unseen": "Non lues"
   },
   "post": {
     "createModal": {

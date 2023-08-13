@@ -65,6 +65,7 @@ export function EditPostModalContent({
           // if success, reset the post data in all queries
           queryClient.invalidateQueries('posts');
           queryClient.invalidateQueries(['post', { id: post.id }]);
+          queryClient.invalidateQueries('notifications');
           // close the modal
           onFinish();
         },

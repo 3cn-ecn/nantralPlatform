@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 
+import { useToast } from '#shared/context/Toast.context';
 import { ApiError } from '#shared/infra/errors';
 
 import { getCurrentUserApi } from '../api/getCurrentUser.api';
@@ -22,8 +23,14 @@ export function useCurrentUserData() {
     queryFn: ({ signal }) => getCurrentUserApi({ signal }),
   });
 
-  if (query.isError)
-    window.open(`/account/login?next=${window.location.pathname}`, '_self');
+  const showToast = useToast();
+
+  if (query.isError) {
+    showToast({
+      message: query.error.message,
+      variant: 'error',
+    });
+  }
 
   return query.data || emptyUser;
 }

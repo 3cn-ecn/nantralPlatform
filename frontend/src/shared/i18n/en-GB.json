@@ -319,6 +319,15 @@
     "title": "Notifications",
     "unread": "Unread"
   },
+  "notification": {
+    "aria-label": "Show {{ nb }} new notifications",
+    "loadMore": "Load more",
+    "markAllAsSeen": "Mark all as read",
+    "settings": "Notification settings",
+    "subscribed": "Subscriptions",
+    "title": "Notifications",
+    "unseen": "Unread"
+  },
   "post": {
     "createModal": {
       "title": "Create new post"

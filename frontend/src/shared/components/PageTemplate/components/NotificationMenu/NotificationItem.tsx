@@ -1,91 +1,89 @@
-/* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 
 import {
   Box,
-  Card,
-  CardActionArea,
+  CircularProgress,
   IconButton,
   ListItem,
+  ListItemButton,
   Typography,
 } from '@mui/material';
-import axios from 'axios';
 
-import { Avatar } from '../../../Avatar/Avatar';
-import './NotificationItem.scss';
+import { useMarkAsSeenMutation } from '#modules/notification/hooks/useMarkAsSeen.mutation';
+import { SentNotification } from '#modules/notification/notification.types';
+import { Avatar } from '#shared/components/Avatar/Avatar';
+import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 
-const app = '/api/notification/';
-const MANAGE_NOTIFICATION_URL = `${app}notification/`;
+type NotificationItemProps = {
+  notification: SentNotification;
+  onClose: () => void;
+};
 
-function NotificationItem(props) {
-  const { sn, nbNotifs, setNbNotifs } = props;
-  const n = sn.notification;
+export function NotificationItem({
+  notification,
+  onClose,
+}: NotificationItemProps) {
+  const { markAsSeen, markAsUnseen, isLoading } = useMarkAsSeenMutation(
+    notification.id
+  );
 
-  async function updateSeen() {
-    // update the seen property
-    const previous = sn.seen;
-    sn.seen = null;
-    const url = `${MANAGE_NOTIFICATION_URL}${[n.id]}`;
-    // mettre à jour la liste des notifs
-    if (!previous) {
-      const response = await axios.post(url, { seen: true });
-      sn.seen = response.data;
-      // mettre à jour le compteur
-      if (response.data) {
-        setNbNotifs(nbNotifs - 1);
-      } else {
-        setNbNotifs(nbNotifs + 1);
-      }
-    } else {
-      sn.seen = previous;
-    }
+  const handleItemClick = () => {
+    markAsSeen();
+    onClose();
+  };
 
-    return true;
-  }
+  const handleSeenMarkClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    notification.seen ? markAsUnseen() : markAsSeen();
+  };
 
   return (
-    <ListItem sx={{ height: 80 }}>
-      <Card className="spanno">
-        <CardActionArea
-          component={Link}
-          to={n.url}
-          onClick={() => updateSeen()}
-          sx={{
-            display: 'flex',
-            justifyContent: 'left',
-            gap: 1,
-            padding: 1,
-            height: '100%',
-            width: '100%',
-          }}
-        >
-          <Avatar alt={n.title} src={n.icon_url} size="m" />
-          <small className="notif">
-            {n.title}
-            <Box
-              component="div"
-              whiteSpace="normal"
-              sx={{ typography: 'subtitle2', lineHeight: 1, marginTop: 0.5 }}
-              className="notification-body"
-            >
-              {n.body}
-            </Box>
-          </small>
-        </CardActionArea>
-        {!sn.seen && (
-          <IconButton
-            onClick={() => updateSeen()}
-            sx={{ zindex: 20, position: 'absolute', right: 0, marginRight: 3 }}
+    <ListItem disablePadding>
+      <ListItemButton
+        component={Link}
+        to={notification.url}
+        onClick={handleItemClick}
+        sx={{ gap: 1 }}
+      >
+        <Avatar alt={notification.title} src={notification.iconUrl} size="m" />
+        <FlexCol flex={1} overflow="hidden">
+          <Typography variant="caption" noWrap>
+            {notification.title}
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              overflow: 'hidden',
+              display: '-webkit-box',
+              '-webkit-line-clamp': '2',
+              '-webkit-box-orient': 'vertical',
+            }}
           >
-            <Typography color="primary" component="span">
-              ●
-            </Typography>
+            {notification.body}
+          </Typography>
+        </FlexCol>
+        <Box>
+          <IconButton
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={handleSeenMarkClick}
+            edge="end"
+            sx={{ width: 28, height: 28 }}
+          >
+            {isLoading ? (
+              <CircularProgress size={12} thickness={6} />
+            ) : (
+              <Typography
+                color={notification.seen ? 'text.disabled' : 'primary'}
+                component="span"
+                sx={{ opacity: notification.seen ? 0.3 : 1 }}
+              >
+                ●
+              </Typography>
+            )}
           </IconButton>
-        )}
-      </Card>
-      <Box component="span"></Box>
+        </Box>
+      </ListItemButton>
     </ListItem>
   );
 }
-
-export { NotificationItem };

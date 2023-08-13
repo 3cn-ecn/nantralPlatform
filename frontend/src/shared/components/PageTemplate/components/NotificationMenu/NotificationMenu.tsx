@@ -1,149 +1,61 @@
-import React from 'react';
+import { MouseEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import SettingsIcon from '@mui/icons-material/Settings';
+import {
+  DoneAll as DoneAllIcon,
+  SettingsOutlined as SettingsOutlinedIcon,
+} from '@mui/icons-material';
 import {
   Badge,
-  Box,
-  Button,
   Chip,
+  CircularProgress,
+  Collapse,
   Icon,
   IconButton,
-  ListItem,
-  Menu,
+  Popover,
+  Tooltip,
   Typography,
 } from '@mui/material';
-import Collapse from '@mui/material/Collapse';
-import SvgIcon from '@mui/material/SvgIcon';
-import axios from 'axios';
 
+import { useMarkAllAsSeenMutation } from '#modules/notification/hooks/useMarkAllAsSeen.mutation';
+import { useNotificationCountQuery } from '#modules/notification/hooks/useNotificationCount.query';
+import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import merge from '../../../../../legacy/notification/utils';
-import { NotificationItem } from './NotificationItem';
-import './NotificationItem.scss';
-
-let checkNotif = 0;
-
-interface Notification {
-  id: number;
-  title: string;
-  body: string;
-  url: string;
-  icon_url: string;
-  date: Date;
-  high_priority: boolean;
-  action1_label: string;
-  action1_url: string;
-  action2_label: string;
-  action2_url: string;
-}
-
-interface SentNotification {
-  notification: Notification;
-  subscribed: boolean;
-  seen: boolean;
-}
+import { NotificationMenuContent } from './NotificationMenuContent';
 
 export function NotificationMenu() {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const { t } = useTranslation();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [subscribedFilter, setSubscribedFilter] = useState(true);
+  const [unseenFilter, setUnseenFilter] = useState(false);
+
+  const isMenuOpen = Boolean(anchorEl);
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
-    getListNotifs();
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [nbNotifs, setNbNotifs] = React.useState<number | null>(null);
-  const [listNotifs, setListNotifs] = React.useState<SentNotification[]>([]);
-  const [subscribeFilter, setSubscribeFilter] = React.useState<boolean>(false);
-  const [unseenFilter, setUnseenFilter] = React.useState<boolean>(false);
-  const [allLoaded, setAllLoaded] = React.useState<boolean>(false);
-  const step = 5;
-  const app = '/api/notification/';
-  const GET_NOTIFICATIONS_URL = `${app}get_notifications`;
-  const { t } = useTranslation();
 
-  if (nbNotifs === null) {
-    getNbNotifs();
-  }
-
-  async function getNbNotifs(): Promise<void> {
-    axios
-      .get(GET_NOTIFICATIONS_URL, { params: { mode: 1 } })
-      .then((res) => setNbNotifs(res.data))
-      .catch(() => setNbNotifs(null));
-  }
-
-  async function getListNotifs(): Promise<void> {
-    const start = listNotifs.length;
-    const queryParams = {
-      mode: 2,
-      start: start,
-      nb: step,
-    };
-    const urlf = '/api/notification/get_notifications';
-    axios.get(urlf, { params: queryParams }).then((res) => {
-      if (listNotifs.length === checkNotif) {
-        const merging = merge(listNotifs, res.data);
-        setListNotifs(merging);
-        if (merging.length < start + step) setAllLoaded(true);
-      }
-    });
-  }
-
-  let content;
-  const listToShow = listNotifs.filter((sn: SentNotification) => {
-    let res = true;
-    if (unseenFilter) res = res && !sn.seen;
-    if (subscribeFilter) res = res && sn.subscribed;
-    return res;
+  const newNotificationCountQuery = useNotificationCountQuery({
+    subscribed: true,
+    seen: false,
   });
-  if (listToShow.length === 0) {
-    content = (
-      <ListItem>
-        <Typography className="spanno">Aucune Notification 😢</Typography>
-      </ListItem>
-    );
-  } else {
-    content = listToShow.map((sn) => (
-      <NotificationItem
-        key={sn.notification.id}
-        sn={sn}
-        nbNotifs={nbNotifs}
-        setNbNotifs={setNbNotifs}
-      />
-    ));
-  }
-  let contentMore;
-  if (!allLoaded) {
-    contentMore = (
-      <ListItem>
-        <Box sx={{ flexGrow: 0.5 }} />
-        <Button
-          size="small"
-          onClick={() => {
-            checkNotif += step;
-            getListNotifs();
-          }}
-        >
-          {t('notif.load')}
-        </Button>
-        <Box sx={{ flexGrow: 0.5 }} />
-      </ListItem>
-    );
-  }
+  const { markAllAsSeen, isLoading } = useMarkAllAsSeenMutation();
+
+  const nbNewNotifications = newNotificationCountQuery.data || 0;
+
   return (
     <>
       <IconButton
         size="large"
-        aria-label="show 17 new notifications"
-        color="inherit"
+        aria-label={t('notification.aria-label', { nb: nbNewNotifications })}
         onClick={handleClick}
-        component="span"
+        id="notification-button"
       >
-        <Badge badgeContent={nbNotifs} color="error">
+        <Badge badgeContent={nbNewNotifications} color="error">
           <Icon
             component="img"
             src="/static/img/icons/cropped/notification.svg"
@@ -151,51 +63,81 @@ export function NotificationMenu() {
           />
         </Badge>
       </IconButton>
-      <Menu
-        id="notif-menu"
+      <Popover
         anchorEl={anchorEl}
-        open={open}
+        open={isMenuOpen}
         onClose={handleClose}
-        MenuListProps={{ 'aria-labelledby': 'basic-button' }}
         TransitionComponent={Collapse}
-        PaperProps={{
-          style: {
-            maxHeight: 600,
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: 300,
+              maxWidth: '90%',
+              height: 600,
+              maxHeight: '90%',
+            },
           },
         }}
       >
-        <ListItem>
-          <Typography variant="h6">{t('notif.title')}</Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <IconButton
-            aria-label="show 17 new notifications"
-            color="inherit"
-            onClick={handleClose}
-            component={Link}
-            reloadDocument
-            to="/notification/settings/"
-          >
-            <SvgIcon component={SettingsIcon} inheritViewBox />
-          </IconButton>
-        </ListItem>
-        <ListItem>
-          <Chip
-            variant={!subscribeFilter ? 'outlined' : 'filled'}
-            label={t('notif.subscribed')}
-            color="primary"
-            sx={[{ mr: 1 }]}
-            onClick={() => setSubscribeFilter(!subscribeFilter)}
+        <FlexCol height="100%">
+          <FlexRow alignItems="center" px={2} py={1}>
+            <Typography variant="h6" sx={{ flex: 1 }}>
+              {t('notification.title')}
+            </Typography>
+            <Tooltip title={t('notification.markAllAsSeen')}>
+              <IconButton
+                color="secondary"
+                onClick={() => markAllAsSeen()}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <CircularProgress
+                    color="secondary"
+                    size="0.9em"
+                    thickness={5}
+                  />
+                ) : (
+                  <DoneAllIcon />
+                )}
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={t('notification.settings')}>
+              <IconButton
+                component={Link}
+                to="/notification/settings/"
+                reloadDocument
+                onClick={handleClose}
+                color="secondary"
+                edge="end"
+              >
+                <SettingsOutlinedIcon />
+              </IconButton>
+            </Tooltip>
+          </FlexRow>
+          <FlexRow gap={1} px={2} pb={1}>
+            <Chip
+              variant={subscribedFilter ? 'filled' : 'outlined'}
+              label={t('notification.subscribed')}
+              color="primary"
+              onClick={() => setSubscribedFilter(!subscribedFilter)}
+            />
+            <Chip
+              variant={unseenFilter ? 'filled' : 'outlined'}
+              label={t('notification.unseen')}
+              color="primary"
+              onClick={() => setUnseenFilter(!unseenFilter)}
+            />
+          </FlexRow>
+          <NotificationMenuContent
+            isOpen={isMenuOpen}
+            onClose={handleClose}
+            subscribedFilter={subscribedFilter}
+            unseenFilter={unseenFilter}
           />
-          <Chip
-            variant={!unseenFilter ? 'outlined' : 'filled'}
-            label={t('notif.unread')}
-            color="primary"
-            onClick={() => setUnseenFilter(!unseenFilter)}
-          />
-        </ListItem>
-        {content}
-        {contentMore}
-      </Menu>
+        </FlexCol>
+      </Popover>
     </>
   );
 }

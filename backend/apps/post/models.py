@@ -69,10 +69,6 @@ class AbstractPublication(models.Model, SlugModel):
         # compression des images
         self.image = compress_model_image(
             self, 'image', size=(960, 540), contains=True)
-        # save the notification
-        # self.create_notification(
-        #     title=self.group.name,
-        #     body=self.title)
         # send the notification
         if self.notification and not self.notification.sent:
             self.notification.send()
@@ -112,6 +108,17 @@ class AbstractPublication(models.Model, SlugModel):
             url=reverse("notification:settings")
         )
 
+    def update_notification(self, title: str, body: str, url: str) -> None:
+        """Create a new notification for this post"""
+        self.notification.title = title
+        self.notification.body = body
+        self.notification.url = url
+        self.notification.sender = self.group.slug
+        self.notification.icon_url = (self.group.icon.url
+                                      if self.group.icon else None)
+        self.notification.publicity = self.publicity
+        self.notification.save()
+
     def delete(self, *args, **kwargs):
         if self.notification:
             self.notification.delete()
@@ -123,12 +130,17 @@ class Post(AbstractPublication):
         verbose_name=_("Pin publication"), default=False)
 
     def save(self, *args, **kwargs) -> None:
-        # save again the post
+        if not self.notification:
+            self.create_notification(
+                body=f'Annonce : {self.title}',
+                title=self.group.name,
+                url=self.get_absolute_url())
+        else:
+            self.update_notification(
+                body=f'Annonce : {self.title}',
+                title=self.group.name,
+                url=self.get_absolute_url())
         super(Post, self).save(*args, **kwargs)
-        self.create_notification(
-            body=f'Nouveau Post : {self.title}',
-            title=self.group.name,
-            url=self.get_absolute_url())
 
     def get_absolute_url(self) -> str:
         return f'/?post={self.pk}'

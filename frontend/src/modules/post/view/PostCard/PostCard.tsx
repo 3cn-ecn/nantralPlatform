@@ -44,7 +44,7 @@ export function PostCard({ post }: PostCardProps) {
           </BadgeIconsContainer>
           <CardContent>
             <Box mt={1}>
-              <Typography variant="h6" lineHeight={1.2}>
+              <Typography variant="h6" lineHeight={1.2} mb={1}>
                 {post.title}
               </Typography>
               <Typography

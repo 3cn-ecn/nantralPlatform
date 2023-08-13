@@ -1,4 +1,4 @@
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.http.request import QueryDict
 from django.utils import formats, timezone
 from django.utils.translation import gettext as _
@@ -63,7 +63,7 @@ class EventViewSet(viewsets.ModelViewSet):
     - page: int
         the index of the page
     - page_size: int
-        the number of temps per page
+        the number of events per page
 
     Actions
     -------
@@ -106,7 +106,7 @@ class EventViewSet(viewsets.ModelViewSet):
             return EventSerializer
         return EventPreviewSerializer
 
-    def get_queryset(self) -> list[Event]:
+    def get_queryset(self) -> QuerySet[Event]:
         now = timezone.now()
         user = self.request.user
 

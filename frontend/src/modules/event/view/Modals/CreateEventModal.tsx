@@ -65,6 +65,7 @@ export function CreateEventModal({
       onSuccess: (data) => {
         // if success, reset the event data in all queries
         queryClient.invalidateQueries('events');
+        queryClient.invalidateQueries('notifications');
         // close the modal
         onCreated(data.id);
       },

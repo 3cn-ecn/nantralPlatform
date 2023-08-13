@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import ReactDOM, { render } from 'react-dom';
 import { Spinner, Dropdown, Button } from 'react-bootstrap';
-import { Settings, SettingsOutlined } from '@mui/icons-material';
+import ReactDOM, { render } from 'react-dom';
 
+import { Settings, SettingsOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
+
 import axios from '../utils/axios';
 import formatUrl from '../utils/formatUrl';
-
+import { GET_NOTIFICATIONS_URL } from './api_urls';
 import { SentNotification } from './interfaces';
 import merge from './utils';
-import { GET_NOTIFICATIONS_URL, MANAGE_NOTIFICATION_URL } from './api_urls';
 
 /**
  * Fonction principale de chargement des notifications
- * @param props Propriétés de l'élément html
  * @returns Le code html à afficher
  */
-function NotificationMenu(props): JSX.Element {
+function NotificationMenu(): JSX.Element {
   const [onLoad, setOnLoad] = useState<boolean>(true);
   const [notifOnLoad, setNotifOnLoad] = useState<boolean>(false);
   const [nbNotifs, setNbNotifs] = useState<number>(null);
@@ -29,15 +28,14 @@ function NotificationMenu(props): JSX.Element {
       ? true
       : false
   );
-  const step: number = 10;
+  const step = 10;
 
   if (nbNotifs === null) {
     getNbNotifs();
   }
 
   async function getNbNotifs(): Promise<void> {
-    const url = formatUrl(GET_NOTIFICATIONS_URL, [], { mode: 1 });
-    fetch(url)
+    fetch('/api/notification/notification/count/?seen=false&subscribed=true')
       .then((resp) => resp.json().then((data) => setNbNotifs(data)))
       .catch((err) => setNbNotifs(null));
   }
@@ -46,14 +44,13 @@ function NotificationMenu(props): JSX.Element {
     setOnLoad(true);
     const start = listNotifs.length;
     const url = formatUrl(GET_NOTIFICATIONS_URL, [], {
-      mode: 2,
-      start: start,
-      nb: step,
+      page: Math.floor(start / step) + 1,
+      page_size: step,
     });
     fetch(url)
       .then((resp) =>
         resp.json().then((data) => {
-          let merging = merge(listNotifs, data);
+          const merging = merge(listNotifs, data.results);
           setListNotifs(merging);
           setOnLoad(false);
           if (merging.length < start + step) setAllLoaded(true);
@@ -72,23 +69,22 @@ function NotificationMenu(props): JSX.Element {
 
   // component for one notification in the list
   function NotificationItem(props): JSX.Element {
-    let sn = props.sn;
-    let n = sn.notification;
+    const sn = props.sn;
+    const n = sn.notification;
+    const url = `/api/notification/notification/${n.id}/seen/`;
 
     async function updateSeen(event: React.MouseEvent<HTMLLinkElement>) {
       // update the seen property
       event.stopPropagation();
-      var previous = sn.seen;
+      const previous = sn.seen;
       sn.seen = null;
       setNotifOnLoad(true);
-      const url = formatUrl(MANAGE_NOTIFICATION_URL, [n.id]);
-      axios
-        .post(url, {})
-        .then((resp) => {
+      axios(url, { method: previous ? 'DELETE' : 'POST' })
+        .then(() => {
           // mettre à jour la liste des notifs
-          sn.seen = resp.data;
+          sn.seen = !previous;
           // mettre à jour le compteur
-          if (resp.data) {
+          if (sn.seen) {
             setNbNotifs(nbNotifs - 1);
           } else {
             setNbNotifs(nbNotifs + 1);
@@ -102,12 +98,12 @@ function NotificationMenu(props): JSX.Element {
     function openItem() {
       // update the seen property
       setNotifOnLoad(true);
+      const prev = sn.seen;
       sn.seen = null;
-      if (sn.seen) {
+      if (prev) {
         window.open(n.url, '_self');
       } else {
-        const url = formatUrl(MANAGE_NOTIFICATION_URL, [n.id]);
-        axios.post(url, {}).finally(() => window.open(n.url, '_self'));
+        axios.post(url).finally(() => window.open(n.url, '_self'));
       }
     }
 
@@ -122,7 +118,7 @@ function NotificationMenu(props): JSX.Element {
             {n.icon_url ? (
               <img src={n.icon_url} loading="lazy" />
             ) : (
-              <img src="/static/img/logo/logo.svg" loading="lazy" />
+              <img src="/static/img/logo/scalable/logo.svg" loading="lazy" />
             )}
             <small className="ms-2">
               <strong>{n.title}</strong>
@@ -154,7 +150,7 @@ function NotificationMenu(props): JSX.Element {
   // component for the list of all notifications
   function NotificationPanel(props): JSX.Element {
     let content;
-    let listToShow = listNotifs.filter((sn: SentNotification) => {
+    const listToShow = listNotifs.filter((sn: SentNotification) => {
       let res = true;
       if (unseenFilter) res = res && !sn.seen;
       if (subscribeFilter) res = res && sn.subscribed;
