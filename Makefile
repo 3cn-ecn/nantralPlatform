@@ -39,8 +39,7 @@ install:
 update:
 	$(PYTHON) -m pip install --upgrade --user pipenv
 	cd frontend && \
-		npm install && \
-		npm run leg:build:dev
+		npm install
 	cd backend && \
 		$(PIPENV) sync --dev && \
 		$(PIPENV) run migrate

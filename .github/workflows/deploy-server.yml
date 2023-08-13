@@ -59,9 +59,7 @@ jobs:
         run: npm ci --omit=dev
 
       - name: Build React
-        run: |
-          npm run build
-          npm run leg:build
+        run: npm run build
 
       - name: Upload files to the VPS
         uses: appleboy/scp-action@master
