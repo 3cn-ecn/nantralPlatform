@@ -70,8 +70,7 @@ function BreadcrumbsItem({
   minimized = false,
 }: BreadcrumbsItemProps) {
   const { pathname } = useLocation();
-  const isCurrentPage =
-    path.replace(/\/+$/, '') === pathname.replace(/\/+$/, '');
+  const isCurrentPage = path.replace(/\/$/, '') === pathname.replace(/\/$/, '');
 
   const scrollToTop = (e) => {
     e.preventDefault();
