@@ -1,13 +1,22 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { RouterProvider, createMemoryRouter } from 'react-router-dom';
+import {
+  RouteObject,
+  RouterProvider,
+  createMemoryRouter,
+} from 'react-router-dom';
 
 import { render } from '@testing-library/react';
+import axios from 'axios';
 
 import { CustomThemeProvider } from '#shared/context/CustomTheme.context';
 import { ToastProvider } from '#shared/context/Toast.context';
 
 import '../i18n/config';
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.paramsSerializer = { indexes: null };
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,16 +40,14 @@ const queryClient = new QueryClient({
  * @param element - the element to render
  * @returns
  */
-export function renderWithProviders(element: React.ReactElement, route = '/') {
-  const router = createMemoryRouter(
-    [
-      {
-        path: route,
-        element: element,
-      },
-    ],
-    { initialEntries: [route] }
-  );
+export function renderWithProviders(
+  element: React.ReactElement,
+  otherRoutes: RouteObject[] = [],
+  path = '/'
+) {
+  const router = createMemoryRouter([{ path, element }, ...otherRoutes], {
+    initialEntries: [path],
+  });
 
   return render(
     <CustomThemeProvider>

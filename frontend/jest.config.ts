@@ -8,23 +8,29 @@ export default {
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
   setupFiles: ['react-app-polyfill/jsdom'],
   setupFilesAfterEnv: ['<rootDir>/src/shared/testing/setupTests.ts'],
-  testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}',
-    '<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}',
-  ],
   testEnvironment: 'jsdom',
   transform: {
     '^.+\\.(tsx?|jsx?)$': 'ts-jest',
   },
-  transformIgnorePatterns: ['node_modules', '^.+\\.module\\.(css|sass|scss)$'],
+  transformIgnorePatterns: ['node_modules'],
   modulePaths: [],
+
+  /** the test files to run **/
+  testMatch: ['<rootDir>/src/**/*.test.{js,jsx,ts,tsx}'],
+
+  /** the imports to replace in the code **/
   moduleNameMapper: {
+    // lodash-es not supported by jest
+    '^lodash-es$': 'lodash',
+    // mock css imports
+    '\\.(css|sass|scss)$':
+      '<rootDir>/src/shared/testing/__mocks__/styleMock.ts',
+    // path aliases from tsconfig.json (#shared, #modules, etc.)
     ...pathsToModuleNameMapper(compilerOptions.paths, {
       prefix: '<rootDir>/src/',
     }),
-    '^.+\\.(css|sass|scss)$': 'identity-obj-proxy',
-    '^lodash-es$': 'lodash',
   },
+
   moduleFileExtensions: [
     'web.js',
     'js',

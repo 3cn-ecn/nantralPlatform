@@ -28,7 +28,7 @@ export function NotificationMenu() {
   const { t } = useTranslation();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [subscribedFilter, setSubscribedFilter] = useState(true);
+  const [subscribedFilter, setSubscribedFilter] = useState(false);
   const [unseenFilter, setUnseenFilter] = useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
@@ -40,7 +40,6 @@ export function NotificationMenu() {
   };
 
   const newNotificationCountQuery = useNotificationCountQuery({
-    subscribed: true,
     seen: false,
   });
   const { markAllAsSeen, isLoading } = useMarkAllAsSeenMutation();

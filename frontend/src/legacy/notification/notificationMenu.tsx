@@ -35,7 +35,7 @@ function NotificationMenu(): JSX.Element {
   }
 
   async function getNbNotifs(): Promise<void> {
-    fetch('/api/notification/notification/count/?seen=false&subscribed=true')
+    fetch('/api/notification/notification/count/?seen=false')
       .then((resp) => resp.json().then((data) => setNbNotifs(data)))
       .catch((err) => setNbNotifs(null));
   }

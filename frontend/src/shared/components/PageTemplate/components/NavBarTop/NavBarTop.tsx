@@ -2,9 +2,9 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { AppBar, Icon, IconButton, Toolbar } from '@mui/material';
 
+import { NotificationMenu } from '#modules/notification/view/NotificationMenu/NotificationMenu';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
-import { NotificationMenu } from '../NotificationMenu/NotificationMenu';
 import { BreadcrumbsNav } from './BreadcrumbsNav';
 import { UserMenu } from './UserMenu';
 
