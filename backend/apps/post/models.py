@@ -92,7 +92,6 @@ class AbstractPublication(models.Model, SlugModel):
             body=body,
             url=url,
             sender=self.group.slug,
-            date=self.created_at,
             icon_url=(self.group.icon.url
                       if self.group.icon else None),
             publicity=self.publicity
