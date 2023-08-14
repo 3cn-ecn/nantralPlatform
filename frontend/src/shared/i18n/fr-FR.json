@@ -222,9 +222,8 @@
     "eventSection": {
       "error": "Erreur : les évènements n'ont pas pu être chargés 😢",
       "isEmpty": "Aucun évènement à venir... 🥺 Créez-en un !",
-      "openEventPageButton": {
-        "label": "Voir tous"
-      },
+      "seeAll": "Voir tous",
+      "seeMore": "Voir plus",
       "title": "Évènements à venir"
     },
     "helpUsSection": {
@@ -235,7 +234,6 @@
       "level": "Niveau {{level}} : ",
       "title": "Tu aimes ce site ? Dis-le nous !"
     },
-    "myClubs": "Mes groupes",
     "postSection": {
       "error": "Erreur : les annonces n'ont pas pu être chargées 😢",
       "isEmpty": "Aucun post ces derniers jours... 🥺 Créez-en un !",

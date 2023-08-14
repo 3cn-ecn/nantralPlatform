@@ -7,14 +7,12 @@ import { EventCard } from '#modules/event/view/EventCard/EventCard';
 import { EventCardSkeleton } from '#modules/event/view/EventCard/EventCardSkeleton';
 import { useUpcomingEventsQuery } from '#pages/Home/hooks/useUpcomingEvents.query';
 import { Section } from '#shared/components/Section/Section';
+import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { arrayRange } from '#shared/utils/arrayRange';
 
-const NUMBER_OF_EVENTS = 6;
-
-function SeeAllEventsButton() {
-  const { t } = useTranslation();
-
+function SeeAllEventsButton({ label }: { label: string }) {
   return (
     <Button
       component={Link}
@@ -23,7 +21,7 @@ function SeeAllEventsButton() {
       color="secondary"
       endIcon={<ChevronRightIcon />}
     >
-      {t('home.eventSection.openEventPageButton.label')}
+      {label}
     </Button>
   );
 }
@@ -34,16 +32,20 @@ interface UpcomingEventsSectionProps {
 
 export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
   const { t } = useTranslation();
-  const eventsQuery = useUpcomingEventsQuery(NUMBER_OF_EVENTS, { enabled });
+  const smBk = useBreakpoint('sm');
+  const mdBk = useBreakpoint('md');
+  const numberOfEvents = mdBk.isLarger ? 6 : smBk.isLarger ? 4 : 3;
+
+  const eventsQuery = useUpcomingEventsQuery(numberOfEvents, { enabled });
 
   if (eventsQuery.isLoading || eventsQuery.isIdle) {
     return (
       <Section
         title={t('home.eventSection.title')}
-        button={<SeeAllEventsButton />}
+        button={<SeeAllEventsButton label={t('home.eventSection.seeAll')} />}
       >
         <Grid container spacing={1}>
-          {arrayRange(NUMBER_OF_EVENTS).map((_, index) => (
+          {arrayRange(numberOfEvents).map((_, index) => (
             <Grid key={index} xs={12} sm={6} md={4} item>
               <EventCardSkeleton />
             </Grid>
@@ -57,7 +59,7 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
     return (
       <Section
         title={t('home.eventSection.title')}
-        button={<SeeAllEventsButton />}
+        button={<SeeAllEventsButton label={t('home.eventSection.seeAll')} />}
       >
         <Alert severity="error" sx={{ width: 'max-content' }}>
           {t('home.eventSection.error')}
@@ -72,7 +74,7 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
     return (
       <Section
         title={t('home.eventSection.title')}
-        button={<SeeAllEventsButton />}
+        button={<SeeAllEventsButton label={t('home.eventSection.seeAll')} />}
       >
         <Typography>{t('home.eventSection.isEmpty')}</Typography>
       </Section>
@@ -82,7 +84,7 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
   return (
     <Section
       title={t('home.eventSection.title')}
-      button={<SeeAllEventsButton />}
+      button={<SeeAllEventsButton label={t('home.eventSection.seeAll')} />}
     >
       <Grid spacing={1} container>
         {upcomingEvents.map((event) => (
@@ -91,6 +93,12 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
           </Grid>
         ))}
       </Grid>
+      {eventsQuery.data.count > numberOfEvents && (
+        <>
+          <Spacer vertical={1} />
+          <SeeAllEventsButton label={t('home.eventSection.seeMore')} />
+        </>
+      )}
     </Section>
   );
 }

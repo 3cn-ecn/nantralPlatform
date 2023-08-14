@@ -96,6 +96,7 @@ export function UserMenu() {
           component={Link}
           to={`/student/${currentUser.id}`}
           reloadDocument
+          onClick={() => setMenuOpen(null)}
         />
         <CustomMenuItem
           label={t('userMenu.menu.signOut')}
@@ -103,6 +104,7 @@ export function UserMenu() {
           component={Link}
           to="/account/logout/"
           reloadDocument
+          onClick={() => setMenuOpen(null)}
         />
         <Divider />
         <CustomMenuItem
@@ -125,6 +127,7 @@ export function UserMenu() {
             component={Link}
             to="/admin"
             reloadDocument
+            onClick={() => setMenuOpen(null)}
           />
         )}
         <CustomMenuItem
@@ -133,6 +136,7 @@ export function UserMenu() {
           component={Link}
           to="https://docs.nantral-platform.fr/"
           reloadDocument
+          onClick={() => setMenuOpen(null)}
         />
         <CustomMenuItem
           label={t('userMenu.menu.report')}
@@ -140,12 +144,14 @@ export function UserMenu() {
           component={Link}
           to="/suggestions"
           reloadDocument
+          onClick={() => setMenuOpen(null)}
         />
         <CustomMenuItem
           label={t('userMenu.menu.legalNotice')}
           icon={<LegalIcon />}
           component={Link}
           to="/legal-notice/"
+          onClick={() => setMenuOpen(null)}
         />
       </Menu>
       <Menu
@@ -169,6 +175,7 @@ export function UserMenu() {
             onClick={() => {
               i18n.changeLanguage(lng);
               queryClient.invalidateQueries();
+              setMenuOpen(null);
             }}
           />
         ))}
@@ -190,19 +197,28 @@ export function UserMenu() {
           label={t('userMenu.menu.theme.auto')}
           icon={<DeviceModeIcon />}
           selected={themeMode === 'auto'}
-          onClick={() => changeThemeMode('auto')}
+          onClick={() => {
+            changeThemeMode('auto');
+            setMenuOpen(null);
+          }}
         />
         <CustomMenuItem
           label={t('userMenu.menu.theme.light')}
           icon={<LightModeIcon />}
           selected={themeMode === 'light'}
-          onClick={() => changeThemeMode('light')}
+          onClick={() => {
+            changeThemeMode('light');
+            setMenuOpen(null);
+          }}
         />
         <CustomMenuItem
           label={t('userMenu.menu.theme.dark')}
           icon={<DarkModeIcon />}
           selected={themeMode === 'dark'}
-          onClick={() => changeThemeMode('dark')}
+          onClick={() => {
+            changeThemeMode('dark');
+            setMenuOpen(null);
+          }}
         />
       </Menu>
     </>
