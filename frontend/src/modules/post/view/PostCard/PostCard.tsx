@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Groups as GroupIcon,
@@ -28,10 +28,10 @@ type PostCardProps = {
 
 export function PostCard({ post }: PostCardProps) {
   const { formatRelativeTime } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const openModal = () => {
-    searchParams.set('post', post.id.toString());
-    setSearchParams(searchParams);
+    navigate({ search: `?post=${post.id}` }, { preventScrollReset: true });
   };
 
   return (
@@ -52,7 +52,7 @@ export function PostCard({ post }: PostCardProps) {
                 color="text.secondary"
                 fontStyle="italic"
               >
-                {upperFirst(formatRelativeTime(post.updatedAt))}
+                {upperFirst(formatRelativeTime(post.createdAt))}
               </Typography>
             </Box>
             <Spacer vertical={1} flex={1} />

@@ -19,7 +19,7 @@ type ChangeThemeCallback = {
 };
 
 const getCachedThemeMode = (): PaletteMode | 'auto' => {
-  const mode = localStorage.getItem('theme-mode');
+  const mode = localStorage.getItem('theme');
   if (mode === 'light' || mode === 'dark') {
     return mode;
   }
@@ -50,7 +50,7 @@ export function CustomThemeProvider({ children }: PropsWithChildren) {
   const changeThemeMode = useCallback(
     (mode: PaletteMode | 'auto') => {
       setThemeMode(mode);
-      localStorage.setItem('theme-mode', mode);
+      localStorage.setItem('theme', mode);
     },
     [setThemeMode]
   );

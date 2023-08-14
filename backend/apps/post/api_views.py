@@ -53,7 +53,7 @@ class PostViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'group__name', 'group__short_name']
     ordering_fields = ['title', 'group__name', 'pinned',
                        'group__short_name', 'created_at', 'updated_at']
-    ordering = ["-updated_at"]
+    ordering = ["-created_at"]
 
     @property
     def query_params(self) -> QueryDict:
