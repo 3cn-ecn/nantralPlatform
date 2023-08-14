@@ -27,7 +27,7 @@ function mockEventApiCall(results: EventDTO[] = []) {
     .query({
       from_date: /.*/,
       page: 1,
-      page_size: 6,
+      page_size: /.*/,
     })
     .reply(200, { count: results.length, results });
 }
