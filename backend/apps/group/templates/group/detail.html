@@ -2,6 +2,7 @@
 {% load static %}
 {% load file_url %}
 {% load video %}
+{% load django_vite %}
 
 {% block head %}
     <meta name="description" CONTENT="{{group.summary}} - {{group.name}} - Centrale Nantes">
@@ -97,37 +98,43 @@
     </div>
 
     {# Events #}
-    {% if has_events and user.is_authenticated %}
-        <br/>   
-        <h2>Évènements</h2>
-        <div id="root-events"></div>
-        <script>
-            const eventsApiUrl = "{% url 'event_api:list-all-group-events' group.slug %}";
-            const eventListParticipants = "{% url 'event_api:list-participants' '1' %}";
-            const eventsRemoveParticipant = "{% url 'event:remove-participant' '1' %}";
-            const eventsAddParticipant = "{% url 'event:add-participant' '1' %}";
-            const isAdmin = {{ is_admin|yesno:"true,false,false" }};
-        </script>
-        <script src='{% static "js/event/eventsView.js" %}?v=1'></script>
+    {% if events and user.is_authenticated %}
+        <br/>
+        <h2>Prochains évènements</h2>
+        <div class="row">
+            {% for event in events %}
+            <div class="col-12 col-sm-6 col-md-4 mb-1">
+                <a href="{{ event.get_absolute_url }}" class="card" style="color: black">
+                    {% if event.image %}
+                        <img src="{{ event.image|file_url }}" class="card-img-top" alt="" height="110" style="object-fit: cover;">
+                    {% else %}
+                        <img src="/static/img/default-banner.png" class="card-img-top" alt="" height="110" style="object-fit: cover;">
+                    {% endif %}                    <div class="card-body">
+                        <h5 class="card-title" >{{event.title}}</h5>
+                        <p class="card-text mb-2">{{event.start_date|date:'l d F'}}</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
     {% endif %}
     
     {# Anonces #}
     {% if posts and user.is_authenticated %}
         <br/>
-        <h2>Annonces</h2>
-        {% for post in posts %}
-        <a href="{{post.get_absolute_url }}" style='color:white;' class="mb-1">
-            <div class="card pt-0 bg-{{post.color}}" style="box-shadow: 1px 1px 7px #999">
-              <div class="card-body">
-                <h5 class="card-title" >{{post.title}} • {{post.publication_date|date:'l d F'}}</h5>
-                <h6 class="card-subtitle mb-2">{{post.group.name}}</h6>
-            </h6>
-                <p class="card-text" >{% autoescape off %}{{post.description | truncatewords_html:20}}{% endautoescape %}</p>
-              </div>
+        <h2>Dernières annonces</h2>
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-12 col-md-6 col-lg-4 mb-1">
+                <a href="{{ post.get_absolute_url }}" class="card" style="color: black">
+                    <div class="card-body">
+                        <h5 class="card-title" >{{post.title}}</h5>
+                        <p class="card-text mb-2">{{post.created_at|date:'l d F'}}</p>
+                    </div>
+                </a>
             </div>
-          </a>
-          <br/>
-        {% endfor %}
+            {% endfor %}
+        </div>
     {% endif %}
 
     {# Vidéos s'il y en a 2 #}
@@ -168,6 +175,7 @@
 
     {# Sous-groupes #}
     {% if group.children.count %}
+        <br />
         <h2>{{ group.children_label }}</h2>
         {% if group.children.count < 10 %}
             <div class="grille mb-0">
@@ -201,7 +209,7 @@
             const groupSlug = "{{ group.slug }}";
             const displayType = 'grid';
         </script>
-        <script src='{% static "js/group/MembershipsGroup.js" %}?v=1.1'></script>
+        {% vite_asset 'src/legacy/group/MembershipsGroup.tsx' %}
     {% endif %}
 
     {# Bouton pour faire une demande pour devenir admin #}

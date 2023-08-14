@@ -2,19 +2,24 @@
 {% load static %}
 
 {% block content %}
-
 {% include 'group/included/navbar_edit.html' with open='events' %}
 
 <h2>Évènements du group</h2>
 
-<p><a href="{% url 'event:create' group.slug %}" class="btn btn-dark">
-  Ajouter un évènement
-</a></p>
+<p>
+  <a href="/?create-event" class="btn btn-dark">
+    Ajouter un évènement
+  </a>
+</p>
 
 <ul>
-{% for event in events %}
-  <li><a href="{{ event.get_absolute_url }}">{{ event.date }} - {{ event.title }}</a></li>
-{% endfor %}
+  {% for event in events %}
+  <li>
+    <a href="{{ event.get_absolute_url }}"
+      >{{ event.start_date }} - {{ event.title }}</a
+    >
+  </li>
+  {% endfor %}
 </ul>
 
 {% endblock %}

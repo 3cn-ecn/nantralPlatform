@@ -1,20 +1,18 @@
-from django.db import models
-from django.utils import timezone
-
-from django.shortcuts import get_object_or_404, reverse
 from django.contrib.auth.models import User
+from django.db import models
+from django.shortcuts import reverse
+from django.utils.translation import gettext_lazy as _
 
 from django_ckeditor_5.fields import CKEditor5Field
 
-from apps.utils.slug import SlugModel
-from apps.utils.upload import PathAndRename
-from apps.utils.compress import compress_model_image
-from apps.group.abstract.models import AbstractGroup
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
+from apps.student.models import Student
+from apps.utils.compress import compress_model_image
+from apps.utils.slug import SlugModel
+from apps.utils.upload import PathAndRename
 
-
-path_and_rename = PathAndRename("posts/pictures")
+path_and_rename = PathAndRename('posts/pictures')
 
 VISIBILITY = [
     ('Pub', 'Public - Visible par tous'),
@@ -31,51 +29,60 @@ COLORS = [
 ]
 
 
-class AbstractPost(models.Model, SlugModel):
-    publication_date = models.DateTimeField(
-        verbose_name="Date de publication",
-        default=timezone.now,
-        help_text="Entrez la date au format JJ/MM/AAAA HH:MM")
+class AbstractPublication(models.Model, SlugModel):
+    """Abstract model for posts and events."""
     title = models.CharField(
-        max_length=200, verbose_name='Titre de l\'annonce')
+        verbose_name=_("Title"), max_length=200)
     description = CKEditor5Field(
-        verbose_name='Texte de l\'annonce', blank=True)
-    group_slug = models.SlugField(verbose_name='Groupe publiant l\'annonce')
-    slug = models.SlugField(verbose_name='Slug de l\'annonce',
-                            unique=True, null=True)
-    color = models.CharField(max_length=200, verbose_name='Couleur de fond',
-                             choices=COLORS, null=True, default='primary')
+        verbose_name=_("Description"), blank=True)
+    group = models.ForeignKey(
+        to=Group,
+        verbose_name=_("Organiser"),
+        on_delete=models.CASCADE)
     publicity = models.CharField(
+        verbose_name=_("Visibility"),
         max_length=200,
-        verbose_name='Visibilité de l\'annonce',
         choices=VISIBILITY)
-    image = models.ImageField(verbose_name="Une image, une affiche en lien ?",
-                              upload_to=path_and_rename, null=True, blank=True)
+    image = models.ImageField(
+        verbose_name=_("Banner"),
+        upload_to=path_and_rename,
+        null=True,
+        blank=True,
+        help_text=_("Your banner will be displayed at 1320x492 pixels."))
     notification = models.ForeignKey(
         to=Notification, on_delete=models.SET_NULL, blank=True, null=True)
+
+    # Log infos
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(
+        Student, blank=True, null=True,
+        on_delete=models.SET_NULL, related_name='+')
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(
+        Student, blank=True, null=True,
+        on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
         abstract = True
 
-    @property
-    def group(self) -> AbstractGroup:
-        return get_object_or_404(Group, slug=self.group_slug)
-
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         # compression des images
         self.image = compress_model_image(
-            self, 'image', size=(1320, 492), contains=False)
-        super(AbstractPost, self).save(*args, **kwargs)
+            self, 'image', size=(960, 540), contains=True)
         # send the notification
-        if not self.notification.sent:
+        if self.notification and not self.notification.sent:
             self.notification.send()
+        super(AbstractPublication, self).save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f"{self.title} ({self.group.short_name})"
 
     def can_view(self, user: User) -> bool:
-        if self.publicity == VISIBILITY[0][0]:
+        if self.publicity == 'Pub':
             return True
         return self.group.is_member(user)
 
-    def create_notification(self, title, body):
+    def create_notification(self, title: str, body: str, url: str) -> None:
         """Create a new notification for this post"""
         # create or get the notification linked to this post
         if self.notification:
@@ -83,18 +90,13 @@ class AbstractPost(models.Model, SlugModel):
         self.notification = Notification.objects.create(
             title=title,
             body=body,
-            url=self.get_absolute_url(),
-            sender=self.group_slug,
-            date=self.publication_date,
+            url=url,
+            sender=self.group.slug,
+            date=self.created_at,
             icon_url=(self.group.icon.url
                       if self.group.icon else None),
             publicity=self.publicity
         )
-        # add image
-        if self.image:
-            self.notification.image_url = self.image.url
-            self.notification.save()
-        # add actions to the notification
         NotificationAction.objects.create(
             notification=self.notification,
             title="Ouvrir",
@@ -106,32 +108,39 @@ class AbstractPost(models.Model, SlugModel):
             url=reverse("notification:settings")
         )
 
-    def delete(self, *args, **kwargs) -> tuple[int, dict[str, int]]:
-        self.notification.delete()
+    def update_notification(self, title: str, body: str, url: str) -> None:
+        """Create a new notification for this post"""
+        self.notification.title = title
+        self.notification.body = body
+        self.notification.url = url
+        self.notification.sender = self.group.slug
+        self.notification.icon_url = (self.group.icon.url
+                                      if self.group.icon else None)
+        self.notification.publicity = self.publicity
+        self.notification.save()
+
+    def delete(self, *args, **kwargs):
+        if self.notification:
+            self.notification.delete()
         return super().delete(*args, **kwargs)
 
 
-class Post(AbstractPost):
+class Post(AbstractPublication):
+    pinned = models.BooleanField(
+        verbose_name=_("Pin publication"), default=False)
 
-    def save(self, *args, **kwargs):
-        # create the slug
-        d = self.publication_date
-        self.set_slug(
-            f'{d.year}-{d.month}-{d.day}-{self.title}'
-        )
-        # save the notification
-        self.create_notification(
-            title=self.group.name,
-            body=self.title)
-        # save agin the post
+    def save(self, *args, **kwargs) -> None:
+        if not self.notification:
+            self.create_notification(
+                body=f'Annonce : {self.title}',
+                title=self.group.name,
+                url=self.get_absolute_url())
+        else:
+            self.update_notification(
+                body=f'Annonce : {self.title}',
+                title=self.group.name,
+                url=self.get_absolute_url())
         super(Post, self).save(*args, **kwargs)
 
-    # Don't make this a property, Django expects it to be a method.
-    # Making it a property can cause a 500 error (see issue #553).
-    def get_absolute_url(self):
-        return reverse('post:detail', args=[self.slug])
-
-    @staticmethod
-    def get_post_by_slug(slug: str):
-        """Get a group from a slug."""
-        return get_object_or_404(Post, slug=slug)
+    def get_absolute_url(self) -> str:
+        return f'/?post={self.pk}'

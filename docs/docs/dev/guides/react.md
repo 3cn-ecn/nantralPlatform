@@ -3,14 +3,14 @@ last_update:
   date: 2023-02-17 16:11:25 +0100
   author: Alexis Delage
 sidebar_position: 4
-description: A JavaScript library for building user interfaces. 
+description: A JavaScript library for building user interfaces.
 ---
 
 # React
 
-* **[OpenClassrooms Tutorial](https://openclassrooms.com/fr/courses/7008001-debutez-avec-react)** (recommended, in French)
-* **[MDN Tutorial](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_getting_started)** (available in multiple languages)
-* **[Official Documentation](https://reactjs.org/)**
+- **[OpenClassrooms Tutorial](https://openclassrooms.com/fr/courses/7008001-debutez-avec-react)** (recommended, in French)
+- **[MDN Tutorial](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_getting_started)** (available in multiple languages)
+- **[Official Documentation](https://reactjs.org/)**
 
 <iframe 
     className="youtube margin-bottom--md"
@@ -80,7 +80,6 @@ For a good example of how a React component should be structured, checkout `club
 To create a component called `foo`, create the `foo.tsx` file in the `src/` folder. Add the following to the file:
 
 ```jsx
-import * as React from "react";
 import ReactDOM, { render } from "react-dom";
 
 function Root(props): JSX.Element {

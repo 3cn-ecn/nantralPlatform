@@ -1,0 +1,398 @@
+{
+  "breadcrumbs": {
+    "events": {
+      "calendar": {
+        "index": "Calendrier"
+      },
+      "details": {
+        "index": "Détails"
+      },
+      "index": "Évènements"
+    },
+    "home": {
+      "index": "Accueil"
+    },
+    "legal": {
+      "index": "Mentions légales"
+    },
+    "notFound": {
+      "index": "Erreur 404"
+    }
+  },
+  "button": {
+    "cancel": "Annuler",
+    "confirm": "Valider",
+    "next": "Suivant",
+    "previous": "Précédent"
+  },
+  "error": {
+    "errorMessage": "Erreur : {{errorMessage}}",
+    "feedback": "Signaler un bug",
+    "goToHome": "Retour à l'accueil",
+    "notFoundMessage": "Désolé, il semblerait que cette page n'existe pas...",
+    "oups": "Oups",
+    "retry": "Réessayer",
+    "unexpected": "Une erreur inconnue s'est produite"
+  },
+  "event": {
+    "action_menu": {
+      "edit": "Modifier",
+      "share": "Partager",
+      "unsubscribe": "Se désinscrire"
+    },
+    "bookmarkButton": {
+      "label": "Est dans les favoris",
+      "tooltip": {
+        "add": "Ajouter aux favoris",
+        "remove": "Retirer des favoris"
+      }
+    },
+    "calendar": {
+      "label": "Calendrier",
+      "viewMode": {
+        "days": "{{nbOfDays}} jours",
+        "month": "Mois",
+        "oneDay": "Jour",
+        "week": "Semaine"
+      }
+    },
+    "createModal": {
+      "title": "Créer un évènement"
+    },
+    "createNewEvent": "Créer un nouvel évènement",
+    "details": {
+      "day": {
+        "label": "Date"
+      },
+      "place": {
+        "label": "Lieu"
+      },
+      "time": {
+        "label": "Heure"
+      }
+    },
+    "editModal": {
+      "title": "Modifier l'évènement"
+    },
+    "event": "Évènement",
+    "filters": {
+      "date": {
+        "fromDate": "Du",
+        "toDate": "Jusqu'au"
+      },
+      "isBookmarked": "Favoris",
+      "isParticipating": "Mes évènements",
+      "isShotgun": "Shotgun",
+      "more": "Plus de filtres",
+      "organizer": "Organisateur",
+      "pastEvents": "Évènements passés",
+      "reset": "Réinitialiser",
+      "title": "Filtres"
+    },
+    "form": {
+      "description": {
+        "label": "Description"
+      },
+      "endDate": {
+        "label": "au"
+      },
+      "endRegistration": {
+        "label": "Fin programmée des inscriptions"
+      },
+      "formUrl": {
+        "helperText": "Si nécessaire, vous pouvez utiliser un formulaire d'inscription externe. Nantral Platform n'enregistrera alors pas les inscriptions.",
+        "label": "Formulaire ou billetterie (optionnel)"
+      },
+      "group": {
+        "helpText": "Vous devez être admin d'un groupe pour pouvoir publier un évènement en son nom.",
+        "label": "Publier en tant que"
+      },
+      "image": {
+        "helperText": "Recommandation : photo ou image sans texte, format 16/9.",
+        "label": "Image"
+      },
+      "location": {
+        "label": "Lieu de l'évènement"
+      },
+      "maxParticipant": {
+        "disabledHelperText": "Vous ne pouvez pas définir de limite si vous utilisez un form externe.",
+        "label": "Nombre maximum de participants"
+      },
+      "publicity": {
+        "helperText": "Définit qui peut voir cet évènement.",
+        "label": "Visibilité",
+        "options": {
+          "mem": "Membres du groupe",
+          "pub": "Public"
+        }
+      },
+      "shotgunSection": {
+        "helper": "Créez un shotgun en utilisant ces paramètres optionnels !",
+        "title": "Paramètres Shotgun"
+      },
+      "startDate": {
+        "label": "Du"
+      },
+      "startRegistration": {
+        "label": "Début programmé des inscriptions"
+      },
+      "title": {
+        "label": "Titre de l'évènement"
+      }
+    },
+    "grid": {
+      "label": "Grille",
+      "title": "Évènements"
+    },
+    "list": {
+      "allIsLoaded": "Fin de la liste 🥳",
+      "loadMore": "Charger plus",
+      "noEventFound": "Aucun évènement 😿"
+    },
+    "participants": {
+      "noParticipants": "Aucun participant 😔",
+      "title": "Participants",
+      "titleWithMax": "{{number}}/{{max}} participants",
+      "titleWithNumber": "{{number}} participants"
+    },
+    "participateButton": {
+      "isParticipating": "Participant",
+      "openForm": "Inscription",
+      "participate": "Je participe",
+      "registrationEnded": "Shotgun terminé",
+      "shotgun": "Shotgun !",
+      "unregisterModal": {
+        "message": "Voulez-vous vraiment vous désinscrire de l'évènement ?",
+        "title": "Se désinscrire de l'évènement 😿"
+      },
+      "willStartAtHour": "Shotgun à {{time}}",
+      "willStartOnDate": "Shotgun le {{date}}"
+    },
+    "popupAlerts": {
+      "maxParticipantReached": "Shotgun terminé ! Le nombre max de participant ({{max}}) a été atteint.",
+      "registrationHasEnded": "Shotgun terminé ! Les inscriptions étaient jusqu'au {{date}}.",
+      "registrationNotStarted": "Les inscriptions ouvriront le {{date}}.",
+      "registrationWillBeSoonEnded": "Les inscriptions sont ouvertes jusqu'au {{date}}."
+    },
+    "registration": {
+      "register": {
+        "success": "Votre inscription a bien été enregistrée !"
+      },
+      "unregister": {
+        "success": "Vous avez bien été désinscrit."
+      }
+    },
+    "search": {
+      "placeholder": "Rechercher un évènement"
+    }
+  },
+  "form": {
+    "autocomplete": {
+      "clear": "Effacer",
+      "noOptions": "Aucun résultat",
+      "open": "Ouvrir"
+    },
+    "errors": {
+      "title": "Le formulaire contient une ou plusieurs erreurs"
+    },
+    "file": {
+      "clearButton": {
+        "label": "Effacer le fichier"
+      },
+      "delete": {
+        "warning": "Attention, le fichier sera définitivement supprimé ⚠️"
+      },
+      "deleteButton": {
+        "label": "Supprimer le fichier"
+      },
+      "error": {
+        "tooHeavy": "Erreur : le fichier dépasse la limite de {{maxSize}}"
+      },
+      "label": "Choisir un fichier",
+      "placeholder": "Importer un fichier",
+      "undoButton": {
+        "label": "Annuler"
+      }
+    },
+    "number": {
+      "wrongFormat": "Format invalide"
+    }
+  },
+  "home": {
+    "eventSection": {
+      "error": "Erreur : les évènements n'ont pas pu être chargés 😢",
+      "isEmpty": "Aucun évènement à venir... 🥺 Créez-en un !",
+      "seeAll": "Voir tous",
+      "seeMore": "Voir plus",
+      "title": "Évènements à venir"
+    },
+    "helpUsSection": {
+      "android": "Donne-nous 5 étoiles sur le Play Store !",
+      "contribute": "Contribue au développement !",
+      "github": "Mets-nous une étoile sur Github !",
+      "giveFeedback": "Propose des améliorations",
+      "level": "Niveau {{level}} : ",
+      "title": "Tu aimes ce site ? Dis-le nous !"
+    },
+    "postSection": {
+      "error": "Erreur : les annonces n'ont pas pu être chargées 😢",
+      "isEmpty": "Aucun post ces derniers jours... 🥺 Créez-en un !",
+      "pinnedTitle": "À la une",
+      "title": "Annonces"
+    },
+    "welcomeTo": "Bienvenue sur"
+  },
+  "legalNotice": {
+    "paragraphs": {
+      "1": {
+        "lines": {
+          "1": "Nom du site web : Nantral Platform",
+          "2": "Adresse : https://www.nantral-platform.fr",
+          "3": "Propriétaire : Association des Étudiants de l'École Centrale de Nantes"
+        }
+      },
+      "2": {
+        "lines": {
+          "1": "ASSOCIATION DES ÉTUDIANTS DE L'ÉCOLE CENTRALE DE NANTES",
+          "2": "École Centrale de Nantes, 1 rue de la Noë, 44300 Nantes",
+          "3": "SIREN : 790 010 078",
+          "4": "APE : 9499Z",
+          "5": "N° TVA Intra : FR 49 79 00 10 07 8",
+          "6": "Mail : bde@ec-nantes.fr"
+        }
+      },
+      "3": "CLUB NANTRAL PLATFORM",
+      "4": {
+        "lines": {
+          "1": "OVH",
+          "2": "SAS au capital de 10 069 020 €",
+          "3": "RCS Lille Métropole 424 761 419 00045",
+          "4": "Code APE : 2620Z",
+          "5": "N° TVA : FR 22 42 47 61 41 9",
+          "6": "Siège social : 2 rue Kellermann - 59100 Roubaix - France"
+        }
+      },
+      "5": {
+        "lines": {
+          "1": "Sauf mention contraire, tous les éléments accessibles sur le site (textes, images, logo, icônes, sons, logiciels, etc.) restent la propriété exclusive de leurs auteurs, en ce qui concerne les droits de propriété intellectuelle ou les droits d’usage.",
+          "2": "Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de l’auteur.",
+          "3": "Toute exploitation non autorisée du site ou d'un quelconque élément qu’il contient est considérée comme constitutive d’une contrefaçon et poursuivie.",
+          "4": "Les marques et logos reproduits sur le site sont déposés par les sociétés qui en sont propriétaires."
+        }
+      },
+      "6": "Seul un cookie de session est utilisé sur le site et expire après 14 jours.",
+      "7": "Les contenus de ce site peuvent inclure du contenu provenant de sources extérieures (par exemple les vidéos, images, etc…). Ces contenus embarqués agissent de la même manière que si le visiteur avait visité le site original où repose ce contenu. Ces sites peuvent donc utiliser des cookies supplémentaires.",
+      "8": "Lors de votre inscription sur le site, les données personnelles que vous nous transmettez seront stockées et conservées par l’Association des Étudiants de l’École Centrale de Nantes jusqu’à demande de suppression de votre compte utilisateur à l’aide du formulaire de contact"
+    },
+    "subtitles": {
+      "1": "Identité du site",
+      "2": "L'association",
+      "3": "Conception et réalisation",
+      "4": "Hébergement",
+      "5": "Propriété intellectuelle",
+      "6": "Cookies",
+      "7": "Contenu embarqué depuis d'autres sites",
+      "8": "Traitement des données personnelles"
+    },
+    "title": "Mentions Légales"
+  },
+  "loading": "Chargement...",
+  "modal": {
+    "closeButton": {
+      "label": "Fermer"
+    }
+  },
+  "navbar": {
+    "events": "Évènements",
+    "family": "Parrainage",
+    "flatshare": "Carte des colocs",
+    "group": "Groupes",
+    "home": "Accueil",
+    "signature": "Signature ECN",
+    "student": "Annuaire Étudiant"
+  },
+  "notification": {
+    "aria-label": "Afficher les {{ nb }} nouvelles notifications",
+    "endOfList": "Fin de la liste 🥳",
+    "loadMore": "Charger plus",
+    "markAllAsSeen": "Tout marquer comme lu",
+    "settings": "Paramètres des notifications",
+    "subscribed": "Abonnements",
+    "title": "Notifications",
+    "unseen": "Non lues"
+  },
+  "post": {
+    "createModal": {
+      "title": "Créer un post"
+    },
+    "editModal": {
+      "title": "Modifier le post"
+    },
+    "form": {
+      "description": {
+        "label": "Description"
+      },
+      "group": {
+        "helpText": "Vous devez être admin d'un groupe pour pouvoir publier un post en son nom",
+        "label": "Publier en tant que"
+      },
+      "image": {
+        "helperText": "Une image, un poster ou une affiche",
+        "label": "Image"
+      },
+      "pinned": {
+        "label": "Épingler l'annonce"
+      },
+      "publicity": {
+        "label": "Visibilité",
+        "options": {
+          "mem": "Membres du groupe",
+          "pub": "Public"
+        }
+      },
+      "title": {
+        "label": "Titre du post"
+      }
+    },
+    "modal": {
+      "editButton": {
+        "label": "Modifier le post"
+      },
+      "metadata": {
+        "dates": "Publié {{createdDuration}} • Mis à jour {{updatedDuration}}"
+      }
+    },
+    "post": "Post"
+  },
+  "site": {
+    "name": "Nantral Platform"
+  },
+  "userMenu": {
+    "button": {
+      "label": "Ouvrir le menu utilisateur"
+    },
+    "menu": {
+      "adminInterface": "Interface Admin",
+      "documentation": "Documentation",
+      "language": {
+        "title": "Langue"
+      },
+      "legalNotice": "Mentions légales",
+      "profile": "Mon profil",
+      "report": "Suggestion / Bug",
+      "signOut": "Se déconnecter",
+      "theme": {
+        "auto": "Thème de l'appareil",
+        "dark": "Thème sombre",
+        "light": "Thème clair",
+        "title": "Apparence"
+      }
+    }
+  },
+  "utils": {
+    "shareLink": {
+      "failure": "Le lien n'a pas pu être copié",
+      "success": "Lien copié !"
+    }
+  }
+}

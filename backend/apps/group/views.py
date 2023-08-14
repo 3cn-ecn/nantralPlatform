@@ -144,17 +144,17 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
         if user.is_authenticated:
             # show the posts from last 6 months (3 maximum)
             all_posts = Post.objects.filter(
-                group_slug=group.slug,
-                publication_date__gte=(
+                group=group,
+                created_at__gte=(
                     timezone.now() - timezone.timedelta(days=6 * 30)),
-                publication_date__lte=timezone.now()
-            ).order_by('-publication_date')
+                created_at__lte=timezone.now()
+            ).order_by('-created_at')
+            all_events = Event.objects.filter(
+                group=group,
+                end_date__gte=timezone.now()
+            ).order_by('start_date')
             context['posts'] = [p for p in all_posts if p.can_view(user)][:3]
-            # check if there are some events planned for this group
-            context['has_events'] = Event.objects.filter(
-                group_slug=group.slug,
-                date__gte=timezone.now()
-            ).exists()
+            context['events'] = [e for e in all_events if e.can_view(user)][:3]
             # members
             context['is_member'] = group.is_member(user)
             context['is_admin'] = group.is_admin(user)
@@ -498,8 +498,8 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context['group'] = self.object
         context['events'] = (Event.objects
-                             .filter(group_slug=self.object.slug)
-                             .order_by('-date'))
+                             .filter(group=self.object)
+                             .order_by('-start_date'))
         context['ariane'] = [
             {
                 'target': reverse('group:index'),
@@ -534,8 +534,8 @@ class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context['group'] = self.object
         context['posts'] = (Post.objects
-                            .filter(group_slug=self.object.slug)
-                            .order_by('-publication_date'))
+                            .filter(group=self.object)
+                            .order_by('-created_at'))
         context['ariane'] = [
             {
                 'target': reverse('group:index'),

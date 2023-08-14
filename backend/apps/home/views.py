@@ -1,6 +1,6 @@
-from datetime import timedelta
-from typing import List
 from os.path import join
+from urllib.parse import urlparse
+import requests
 
 from django.conf import settings
 from django.contrib import messages
@@ -8,18 +8,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
-from django.views.generic import TemplateView, FormView
-from django.urls import reverse, resolve
+from django.views.generic import FormView
+from django.urls import resolve
 from django.utils import timezone
+from django_vite.apps import DjangoViteAssetLoader
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from apps.account.models import TemporaryAccessRequest
-from apps.post.models import Post
 from apps.roommates.models import Roommates
 from apps.student.models import Student
 from apps.utils.github import create_issue
@@ -28,44 +27,6 @@ from .forms import SuggestionForm
 
 
 # PAGES VIEWS
-
-class HomeView(LoginRequiredMixin, TemplateView):
-    template_name = 'home/home.html'
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            temporary_access_request = TemporaryAccessRequest.objects.filter(
-                user=self.request.user).first()
-            if temporary_access_request:
-                message = (
-                    'Votre compte n\'est pas encore définitif. Veuillez le '
-                    + f'valider <a href="{reverse("account:upgrade-permanent")}'
-                    + '">ici</a>. Attention après le '
-                    + f'{temporary_access_request.approved_until} vous ne '
-                    + 'pourrez plus vous connecter si vous n\'avez pas '
-                    + 'renseigné votre adresse Centrale.')
-                messages.warning(request, message)
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        publication_date = timezone.make_aware(
-            timezone.now().today() - timedelta(days=10))
-        posts: List[Post] = (
-            Post.objects
-            .filter(publication_date__gte=publication_date)
-            .order_by('-publication_date'))
-        context['posts'] = [
-            post for post in posts if post.can_view(self.request.user)]
-        context['ariane'] = [
-            {
-                'target': '#',
-                'label': 'Accueil'
-            }
-        ]
-        return context
-
 
 class SuggestionView(LoginRequiredMixin, FormView):
     template_name = 'home/suggestions.html'
@@ -96,18 +57,12 @@ class SuggestionView(LoginRequiredMixin, FormView):
         return context
 
 
-class LegalMentionsView(TemplateView):
-    template_name = 'home/mentions.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['ariane'] = [
-            {
-                'target': '#',
-                'label': 'Mentions Légales'
-            }
-        ]
-        return context
+@login_required
+@require_http_methods(["GET"])
+def react_app_view(request):
+    context = {'DJANGO_VITE_DEV_MODE': settings.DJANGO_VITE_DEV_MODE}
+    response = render(request, 'base_empty.html', context)
+    return response
 
 
 # SHORTCUT AND REDIRECT VIEWS
@@ -117,7 +72,7 @@ class LegalMentionsView(TemplateView):
 def current_user_page_view(request):
     """A view to redirect the user to his own page"""
     student = get_object_or_404(Student, pk=request.user.student.pk)
-    response = redirect('student:detail', student.pk)
+    response = redirect(f'/student/{student.pk}')
     return response
 
 
@@ -145,9 +100,21 @@ def current_user_roommates_view(request):
 @require_http_methods(["GET"])
 def service_worker(request):
     """A view to serve the service worker"""
-    file_path = join(settings.BASE_DIR, "static/js/app/sw.js")
-    with open(file_path) as file:
-        return HttpResponse(file.read(), content_type='application/javascript')
+    vite_loader = DjangoViteAssetLoader.instance()
+    service_worker_url = vite_loader.generate_vite_asset_url(
+        'src/legacy/app/sw.ts')
+    if settings.DJANGO_VITE_DEV_MODE:
+        response = requests.get(service_worker_url)
+        return HttpResponse(
+            response.content,
+            content_type="application/javascript")
+    else:
+        parsed_url = urlparse(service_worker_url)
+        path_to_file = join(
+            settings.STATIC_ROOT,
+            parsed_url.path.replace(settings.STATIC_URL, "", 1)
+        )
+        return FileResponse(open(path_to_file, 'rb'))
 
 
 @require_http_methods(["GET"])
@@ -168,6 +135,8 @@ def offline_view(request):
     response = render(request, 'home/offline.html')
     return response
 
+
+# ERROR PAGES VIEWS
 
 @require_http_methods(["GET", "POST", "PUT", "DELETE"])
 def handler403(request, *args, **argv):

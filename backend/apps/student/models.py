@@ -2,10 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.urls import reverse
-
 from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
+from django.apps import apps
 
 
 FACULTIES = [
@@ -30,6 +29,7 @@ path_and_rename = PathAndRename("students/profile_pictures")
 
 
 class Student(models.Model):
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     promo = models.IntegerField(
         verbose_name='Année de promotion entrante', null=True, blank=True)
@@ -75,7 +75,17 @@ class Student(models.Model):
     # Don't make this a property, Django expects it to be a method.
     # Making it a property can cause a 500 error (see issue #553).
     def get_absolute_url(self) -> str:
-        return reverse('student:detail', args=[self.pk])
+        return f'/student/{self.pk}'
+
+    def can_pin(self) -> bool:
+        # to avoid circular import
+        membership = apps.get_model('group.Membership')
+        return (membership.objects
+                .filter(student=self,
+                        admin=True,
+                        group__can_pin=True,
+                        group__archived=False)
+                .exists() or self.user.is_superuser)
 
     def save(self, *args, **kwargs):
         self.picture = compress_model_image(self, 'picture')

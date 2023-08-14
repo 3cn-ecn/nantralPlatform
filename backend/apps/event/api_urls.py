@@ -1,28 +1,10 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from .api_views import (
-    ListEventsHomeAPIView,
-    ListAllEventsGroupAPIView,
-    ListEventsGroupAPIView,
-    ListEventsParticipantsAPIView)
+from .api_views import EventViewSet
 
 app_name = 'event'
 
-urlpatterns = [
-    path(
-        '',
-        ListEventsHomeAPIView.as_view(),
-        name='list-home-events'),
-    path(
-        'group/all/<slug:group>',
-        ListAllEventsGroupAPIView.as_view(),
-        name='list-all-group-events'),
-    path(
-        'group/<slug:group>',
-        ListEventsGroupAPIView.as_view(),
-        name='list-group-events'),
-    path(
-        'participating/<slug:event_slug>',
-        ListEventsParticipantsAPIView.as_view(),
-        name='list-participants'),
-]
+router = DefaultRouter()
+router.register('event', EventViewSet, basename='event')
+
+urlpatterns = router.urls

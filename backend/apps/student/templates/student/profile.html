@@ -1,6 +1,8 @@
 {% extends 'base.html'%}
 {% load file_url %}
 {% load static %}
+{% load django_vite %}
+
 
 {% block  content%}
     <div class="row">
@@ -53,5 +55,5 @@
 <script>
     const studentId = "{{ object.id }}";
 </script>
-<script src='{% static "js/group/MembershipsStudent.js" %}?v=1'></script>
+{% vite_asset 'src/legacy/group/MembershipsStudent.tsx' %}
 {% endblock %}

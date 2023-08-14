@@ -1,32 +1,27 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
+
 
 from .api_views import (
     RegisterAPIView,
     SubscriptionAPIView,
-    GetNotificationsAPIView,
-    ManageNotificationAPIView)
+    NotificationsViewSet)
 
 app_name = 'notification_api'
 
+router = DefaultRouter()
+router.register('notification', NotificationsViewSet, basename='notification')
+
+
 urlpatterns = [
-    path(
-        'register',
-        RegisterAPIView.as_view(),
-        name='register'
-    ),
     path(
         'subscription/<slug:slug>',
         SubscriptionAPIView.as_view(),
         name='subscription'
     ),
     path(
-        'get_notifications',
-        GetNotificationsAPIView.as_view(),
-        name='get_notifications'
+        'register',
+        RegisterAPIView.as_view(),
+        name='register'
     ),
-    path(
-        'notification/<int:notif_id>',
-        ManageNotificationAPIView.as_view(),
-        name="manage_notification"
-    )
-]
+] + router.urls

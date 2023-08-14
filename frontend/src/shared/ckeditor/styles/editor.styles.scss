@@ -1,0 +1,30 @@
+:root {
+  --ck-color-base-focus: #d14654 !important;
+  --ck-color-base-active: #dc3545 !important;
+  --ck-color-base-active-focus: #d72234 !important;
+  --ck-color-button-on-color: #dc3545 !important;
+  --ck-color-focus-border: #dc3545 !important;
+  --ck-color-button-on-background: #fff0f0 !important;
+  --ck-color-button-on-hover-background: #ffe0e0 !important;
+  --ck-color-button-on-active-background: #ffe0e0 !important;
+  --ck-color-focus-outer-shadow: #f7d0d4 !important;
+  --ck-z-modal: 1600 !important;
+
+  .ck.ck-editor {
+    --ck-border-radius: 15px;
+    width: 100%;
+
+    .ck.ck-toolbar {
+      border: none;
+      border-top-left-radius: 20px !important;
+      border-top-right-radius: 20px !important;
+    }
+
+    .ck.ck-content {
+      background-color: transparent;
+      border: none;
+      border-top: 1px solid var(--ck-color-toolbar-border);
+      min-height: 7em;
+    }
+  }
+}

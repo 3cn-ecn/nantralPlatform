@@ -6,15 +6,14 @@ from django.template.loader import render_to_string
 from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
 
+from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
-from discord_webhook import DiscordWebhook, DiscordEmbed
 
 from apps.sociallink.models import SocialLink
 from apps.student.models import Student
-from apps.utils.upload import PathAndRename
 from apps.utils.compress import compress_model_image
 from apps.utils.slug import SlugModel
-
+from apps.utils.upload import PathAndRename
 
 path_and_rename_group = PathAndRename('groups/logo')
 path_and_rename_group_banner = PathAndRename('groups/banniere')
@@ -202,6 +201,10 @@ class Group(models.Model, SlugModel):
         help_text=_("If ticked, the group page can be seen by everyone, "
                     "including non-authenticated users. Members, events and "
                     "posts still however hidden."))
+    can_pin = models.BooleanField(
+        verbose_name=_("Can pin"),
+        default=False,
+        help_text=_("Admin members of this group can pin their posts"))
 
     # Profile
     summary = models.CharField(
@@ -323,7 +326,7 @@ class Group(models.Model, SlugModel):
         return (user.is_superuser
                 or self.is_member(user)
                 and self.membership_set.get(student=user.student).admin
-                or self.parent and self.parent.is_admin(user))
+                or self.parent is not None and self.parent.is_admin(user))
 
     def is_member(self, user: User) -> bool:
         """Check if a user is a member for this group.
@@ -365,7 +368,7 @@ class Group(models.Model, SlugModel):
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
-        return reverse('group:detail', kwargs={'slug': self.slug})
+        return f'/group/@{self.slug}'
 
 
 class Membership(models.Model):

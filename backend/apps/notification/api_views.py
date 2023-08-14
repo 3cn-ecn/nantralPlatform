@@ -1,17 +1,19 @@
 # spell-checker: words notif
 
+from django.db.models import QuerySet
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from push_notifications.models import WebPushDevice
-from rest_framework import permissions, status
+from rest_framework import permissions, status, filters
+from rest_framework.decorators import action
+from rest_framework.request import QueryDict
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.exceptions import (
-    ValidationError,
-    NotFound)
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from apps.group.models import Group
+from apps.utils.parse_bool import parse_bool
 from .models import SentNotification
 from .serializers import SentNotificationSerializer
 
@@ -62,119 +64,76 @@ class SubscriptionAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT, data=False)
 
 
-class GetNotificationsAPIView(APIView):
+class NotificationsViewSet(ReadOnlyModelViewSet):
     """API endpoint to get all notifications sent to a user.
-
-    Query Paramaters
-    ----------------
-    mode : int
-        Indicate the mode: 1 for counting notifications, 2 for getting content
-    sub : boolean (optional)
-        Indicate if we get only the notifications from pages user has subscribed
-        or from all pages.
-        Default to False
-    start : int (optional)
-        For mode 2 only. In the list of notifications, index of the first item
-        to get. Default to 0.
-    nb : int (optional)
-        For mode 2 only. Indicate the number of notifications to get.
-
-    Methods
-    -------
-    GET
-        Get a count of notifications or the notifications content according to
-        the selected mode.
-    """
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, format=None):
-        """Get the notifications themselves or the number of them"""
-        student = request.user.student
-        # firstly we get parameters
-        try:
-            mode = int(request.query_params.get('mode'))
-        except ValueError:
-            raise ValidationError(
-                "Please indicate a correct mode : "
-                "1 (count only) or 2 (get content)")
-        sub_only_str = request.query_params.get('sub', 'false').lower()
-        if sub_only_str != "true" and sub_only_str != "false":
-            raise ValidationError("The 'sub' attribute must be a boolean")
-        sub_only = (sub_only_str == "true")
-        # then we make the query
-        query = SentNotification.objects.filter(
-            student=student).order_by('-notification__date')
-        if sub_only:
-            query = query.filter(subscribed=True)
-        # if we are in mode 1, we count
-        if mode == 1:
-            n = query.filter(seen=False).count()
-            return Response(data=n)
-        # else for mode 2
-        # we define the range of notifications we want to send
-        n = query.count()
-        start = int(request.query_params.get('start', 0))
-        nb = int(request.query_params.get('nb', 20))
-        if start > n:
-            start = n
-        if start + nb > n:
-            nb = n - start
-        # we select the ones in the range and send them
-        query = query[start:start + nb]
-        serializer = SentNotificationSerializer(query, many=True)
-        return Response(serializer.data)
-
-
-class ManageNotificationAPIView(APIView):
-    """API endpoint to mark or un-mark a SentNotification of a user as seen.
-
-    Path Parameters
-    ---------------
-    id : int
-        The id of the notification object to mark
 
     Query Parameters
     ----------------
-    markAsSeen : boolean (optional)
-        Indicate if we must force the notifications to be marked as seen
-        Default to false
-
-    Methods
-    -------
-    POST
-        Mark if not marked (or unmarked if already marked and markAsSeen is
-        false) a notification as seen by the authenticated user.
+    - subscribed : boolean (optional)
+        Indicate if we get only the notifications from pages user has subscribed
+        or from other pages.
+        Default to False
+    - seen : boolean (optional)
+        Include only notifications which have been seen or not.
+    - page: int
+        the index of the page
+    - page_size: int
+        the number of notifications per page
     """
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['notification__title', 'notification__body']
+    serializer_class = SentNotificationSerializer
+    lookup_field = 'notification__id'
 
-    def post(self, request, notif_id, format=None):
-        """Mark or un-mark a notification as read"""
-        student = request.user.student
-        mark_as_seen_str = request.query_params.get(
-            'markAsSeen', "false").lower()
-        if mark_as_seen_str != "true" and mark_as_seen_str != "false":
-            raise ValidationError(
-                "The 'markAsSeen' attribute must be a boolean")
-        mark_as_seen = (mark_as_seen_str == "true")
-        try:
-            obj = SentNotification.objects.get(
-                student=student,
-                notification=notif_id
-            )
-            if mark_as_seen:
-                obj.seen = True
-            else:
-                obj.seen = not (obj.seen)
-            obj.save()
-            return Response(status=status.HTTP_202_ACCEPTED, data=obj.seen)
-        except SentNotification.DoesNotExist:
-            raise NotFound(f"The requested notification {notif_id} does not "
-                           "exist in database or has not been sent to the "
-                           "user.")
+    @property
+    def query_params(self) -> QueryDict:
+        return self.request.query_params
+
+    def get_queryset(self) -> QuerySet[SentNotification]:
+        user = self.request.user
+        subscribed = parse_bool(self.query_params.get('subscribed'))
+        seen = parse_bool(self.query_params.get('seen'))
+
+        query = SentNotification.objects.filter(student__user=user)
+        if subscribed is not None:
+            query = query.filter(subscribed=subscribed)
+        if seen is not None:
+            query = query.filter(seen=seen)
+        return query.order_by('-notification__date')
+
+    @action(detail=False, methods=['GET'])
+    def count(self, request, *args, **kwargs):
+        total = self.get_queryset().count()
+        return Response(data=total)
+
+    @action(detail=False, methods=['POST'])
+    def all_seen(self, request, *args, **kwargs):
+        (SentNotification.objects
+            .filter(student__user=request.user)
+            .update(seen=True)
+         )
+        return Response(status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST', 'DELETE'])
+    def seen(self, request, *args, **kwargs):
+        """
+        A view to check or uncheck a notification as seen by the user.
+        """
+        sent_notification = self.get_object()
+
+        if request.method == 'DELETE':
+            sent_notification.seen = False
+            sent_notification.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        sent_notification.seen = True
+        sent_notification.save()
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class RegisterAPIView(APIView):
-    """View to register a user for notifications."""
+    """View to register a user for device notifications."""
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):

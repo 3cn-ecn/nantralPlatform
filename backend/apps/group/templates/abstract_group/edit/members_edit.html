@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% load django_vite %}
 
 {% block content %}
 {% include 'abstract_group/included/navbar_edit.html' with open='members' %}
@@ -26,5 +27,5 @@
   const membersURL = "{% url object.app|add:'_api:list-members' %}?slug={{ object.slug }}";
   const studentsURL = "{% url 'student_api:list' %}";
 </script>
-<script src='{% static "js/group/editGroupMembers.js" %}'></script>
+{% vite_asset 'src/legacy/group/editGroupMembers.tsx' %}
 {% endblock %}

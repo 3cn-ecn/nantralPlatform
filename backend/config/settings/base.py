@@ -10,10 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-from datetime import datetime
 import os
-import environ
+from datetime import datetime
+
 from django.urls import reverse_lazy
+
+import environ
 
 # import all the environment variables, defining their type and their default
 # value if they are missing in .env file
@@ -83,6 +85,7 @@ THIRD_PARTY_APPS = [
     'push_notifications',
     'rest_framework',
     'storages',
+    'django_vite'
 ]
 COMMON_APPS = [
     'apps.account',
@@ -160,10 +163,17 @@ LANGUAGES = [
     ('fr', "Français"),
     ('en', "English"),
 ]
+LANGUAGE_COOKIE_NAME = 'language'
 TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+
+# Compile frontend with VITE
+DJANGO_VITE_ASSETS_PATH = os.path.join(BASE_DIR, 'static/front')
+DJANGO_VITE_DEV_MODE = True
+DJANGO_VITE_DEV_SERVER_PORT = 5173
 
 
 # Static files (CSS, JavaScript, Images)
@@ -172,6 +182,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
+    DJANGO_VITE_ASSETS_PATH,
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -201,8 +212,10 @@ STAGING = env('STAGING')
 
 # Rest API settings
 REST_FRAMEWORK = {
-    'PAGE_SIZE': 50
+    'DEFAULT_PAGINATION_CLASS': 'apps.utils.api_pagination.CustomPagination',
+    'PAGE_SIZE': 20,
 }
+
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
 
 # Extra Settings
@@ -237,7 +250,6 @@ CKEDITOR_5_CONFIGS = {
                 'alignRight',
                 'alignCenter',
             ]
-
         },
         'link': {
             'addTargetToExternalLinks': True,  # open in new tab by default

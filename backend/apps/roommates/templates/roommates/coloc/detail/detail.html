@@ -1,7 +1,7 @@
 {% extends 'abstract_group/detail/detail.html' %}
 {% load static %}
 {% load file_url %}
-
+{% load django_vite %}
 
 {% block object_name %}
     <h1>{{object.name}} ({{object.begin_date|date:'Y'}})</h1>
@@ -120,5 +120,5 @@
   const IS_ADMIN = "{{is_member}}";
   const USER_ID = {{user.id}};
 </script>
-<script src='{% static "js/roommates/colocathlonCard.js" %}'></script>
+{% vite_asset 'src/legacy/roommates/colocathlonCard.tsx' %}
 {% endblock %}
