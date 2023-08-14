@@ -24,9 +24,7 @@ const queryClient = new QueryClient({
       retry: false,
       cacheTime: 0,
       suspense: true,
-      useErrorBoundary(_, query) {
-        return query.state.data === undefined;
-      },
+      useErrorBoundary: false,
     },
   },
 });

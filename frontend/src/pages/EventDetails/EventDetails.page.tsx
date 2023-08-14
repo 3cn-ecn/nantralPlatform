@@ -15,10 +15,14 @@ import { TopImage } from './components/TopImage';
 
 export default function EventDetailsPage() {
   const { id: eventId } = useParams();
-  // Using suspense: true allows to skip isLoading and isIdle states: they are
-  // catch by the nearest <Suspense> boundary, in this case the one
-  // from <PageTemplate />
-  const eventQuery = useEventDetailsQuery(Number(eventId), { suspense: true });
+  // Using suspense: true allows to skip isLoading, isIdle, isError states: they
+  // are catch by the nearest <Suspense> boundary, in this case the one
+  // from <PageTemplate />.
+  // We add useErrorBoundary: false to remove the isError state from suspense
+  const eventQuery = useEventDetailsQuery(Number(eventId), {
+    suspense: true,
+    useErrorBoundary: false,
+  });
 
   if (eventQuery.isError) {
     return (
