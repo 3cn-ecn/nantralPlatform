@@ -65,14 +65,47 @@ class AbstractPublication(models.Model, SlugModel):
     class Meta:
         abstract = True
 
-    def save(self, *args, **kwargs) -> None:
+    def save(
+        self,
+        *args,
+        notification_body: str,
+        **kwargs
+    ) -> None:
         # compression des images
         self.image = compress_model_image(
             self, 'image', size=(960, 540), contains=True)
-        # send the notification
-        if self.notification and not self.notification.sent:
-            self.notification.send()
+        # create the notification object
+        if not self.notification:
+            self.notification = Notification.objects.create(
+                title=self.group.name,
+                body=notification_body,
+                url="",
+                sender=self.group.slug)
+            NotificationAction.objects.create(
+                notification=self.notification,
+                title="Ouvrir",
+                url=self.notification.url)
+            NotificationAction.objects.create(
+                notification=self.notification,
+                title="Gérer",
+                url=reverse("notification:settings"))
+
+        # save the object
         super(AbstractPublication, self).save(*args, **kwargs)
+
+        # update the notification (after saving, to use the id in url)
+        n = self.notification
+        n.title = self.group.name
+        n.body = notification_body
+        n.url = self.get_absolute_url()
+        n.sender = self.group.slug
+        n.icon_url = (self.group.icon.url if self.group.icon else None)
+        n.image_url = (self.image.url if self.image else None)
+        n.publicity = self.publicity
+        n.save()
+        # send the notification
+        if not self.notification.sent:
+            self.notification.send()
 
     def __str__(self) -> str:
         return f"{self.title} ({self.group.short_name})"
@@ -82,46 +115,13 @@ class AbstractPublication(models.Model, SlugModel):
             return True
         return self.group.is_member(user)
 
-    def create_notification(self, title: str, body: str, url: str) -> None:
-        """Create a new notification for this post"""
-        # create or get the notification linked to this post
-        if self.notification:
-            return
-        self.notification = Notification.objects.create(
-            title=title,
-            body=body,
-            url=url,
-            sender=self.group.slug,
-            icon_url=(self.group.icon.url
-                      if self.group.icon else None),
-            publicity=self.publicity
-        )
-        NotificationAction.objects.create(
-            notification=self.notification,
-            title="Ouvrir",
-            url=self.notification.url
-        )
-        NotificationAction.objects.create(
-            notification=self.notification,
-            title="Gérer",
-            url=reverse("notification:settings")
-        )
-
-    def update_notification(self, title: str, body: str, url: str) -> None:
-        """Create a new notification for this post"""
-        self.notification.title = title
-        self.notification.body = body
-        self.notification.url = url
-        self.notification.sender = self.group.slug
-        self.notification.icon_url = (self.group.icon.url
-                                      if self.group.icon else None)
-        self.notification.publicity = self.publicity
-        self.notification.save()
-
     def delete(self, *args, **kwargs):
         if self.notification:
             self.notification.delete()
         return super().delete(*args, **kwargs)
+
+    def get_absolute_url(self) -> str:
+        raise NotImplementedError(self.get_absolute_url)
 
 
 class Post(AbstractPublication):
@@ -129,17 +129,11 @@ class Post(AbstractPublication):
         verbose_name=_("Pin publication"), default=False)
 
     def save(self, *args, **kwargs) -> None:
-        if not self.notification:
-            self.create_notification(
-                body=f'Annonce : {self.title}',
-                title=self.group.name,
-                url=self.get_absolute_url())
-        else:
-            self.update_notification(
-                body=f'Annonce : {self.title}',
-                title=self.group.name,
-                url=self.get_absolute_url())
-        super(Post, self).save(*args, **kwargs)
+        super(Post, self).save(
+            *args,
+            notification_body=f'Annonce : {self.title}',
+            **kwargs
+        )
 
     def get_absolute_url(self) -> str:
         return f'/?post={self.pk}'

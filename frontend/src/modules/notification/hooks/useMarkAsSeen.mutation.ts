@@ -13,9 +13,11 @@ import { markNotificationAsSeenApi } from '../api/markNotificationAsSeen.api';
 import { markNotificationAsUnseenApi } from '../api/markNotificationAsUnseen.api';
 import { SentNotification } from '../notification.types';
 
-type OptionsType = UseMutationOptions<number, ApiError, number>;
+type OptionsType = UseMutationOptions<number, ApiError, number> & {
+  notificationId?: number;
+};
 
-export function useMarkAsSeenMutation(notificationId: number) {
+export function useMarkAsSeenMutation(defaultNotificationId?: number) {
   const queryClient = useQueryClient();
   const showToast = useToast();
 
@@ -26,7 +28,10 @@ export function useMarkAsSeenMutation(notificationId: number) {
     markNotificationAsUnseenApi
   );
 
-  const updateCachedQueries = (newData: Partial<SentNotification>) => {
+  const updateCachedQueries = (
+    notificationId: number,
+    newData: Partial<SentNotification>
+  ) => {
     // update data NOW so that it is displayed to the user
     queryClient.setQueriesData(
       ['notifications', 'list'],
@@ -45,18 +50,27 @@ export function useMarkAsSeenMutation(notificationId: number) {
     queryClient.invalidateQueries(['notifications']);
   };
 
-  const markAsSeen = ({ onSuccess, onError, ...options }: OptionsType = {}) => {
-    markAsSeenMutation.mutate(notificationId, {
+  const markAsSeen = ({
+    onSuccess,
+    onError,
+    notificationId,
+    ...options
+  }: OptionsType = {}) => {
+    const id = notificationId || defaultNotificationId;
+    if (id === undefined) {
+      throw new Error('You must provide a notification id.');
+    }
+    markAsSeenMutation.mutate(id, {
       onSuccess: (...args) => {
-        updateCachedQueries({ seen: true });
-        if (onSuccess) return onSuccess(...args);
+        updateCachedQueries(id, { seen: true });
+        return onSuccess?.(...args);
       },
       onError: (error, variables, context) => {
         showToast({
           message: error.message,
           variant: 'error',
         });
-        updateCachedQueries({});
+        updateCachedQueries(id, {});
         if (onError) return onError(error, variables, context);
       },
       ...options,
@@ -66,19 +80,24 @@ export function useMarkAsSeenMutation(notificationId: number) {
   const markAsUnseen = ({
     onSuccess,
     onError,
+    notificationId,
     ...options
   }: OptionsType = {}) => {
-    markAsUnseenMutation.mutate(notificationId, {
+    const id = notificationId || defaultNotificationId;
+    if (id === undefined) {
+      throw new Error('You must provide a notification id.');
+    }
+    markAsUnseenMutation.mutate(id, {
       onSuccess: (...args) => {
-        updateCachedQueries({ seen: false });
-        if (onSuccess) return onSuccess(...args);
+        updateCachedQueries(id, { seen: false });
+        return onSuccess?.(...args);
       },
       onError: (error, variables, context) => {
         showToast({
           message: error.message,
           variant: 'error',
         });
-        updateCachedQueries({});
+        updateCachedQueries(id, {});
         if (onError) return onError(error, variables, context);
       },
       ...options,

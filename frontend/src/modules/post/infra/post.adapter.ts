@@ -24,5 +24,6 @@ export function adaptPost(postDTO: PostDTO): Post {
   return {
     ...adaptPostPreview(postDTO),
     description: postDTO.description,
+    notificationId: postDTO.notification,
   };
 }

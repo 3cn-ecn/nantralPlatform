@@ -12,6 +12,7 @@ export type PostDTO = {
   pinned: boolean;
   can_pin: boolean;
   is_admin: boolean;
+  notification: number | null;
 };
 
 export type PostPreviewDTO = Pick<

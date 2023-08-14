@@ -67,7 +67,7 @@ export function useBookmarkMutation(eventId: number) {
     addMutation.mutate(eventId, {
       onSuccess: (...args) => {
         updateCachedQueries({ isBookmarked: true });
-        if (onSuccess) return onSuccess(...args);
+        return onSuccess?.(...args);
       },
       ...options,
     });
@@ -77,7 +77,7 @@ export function useBookmarkMutation(eventId: number) {
     removeMutation.mutate(eventId, {
       onSuccess: (...args) => {
         updateCachedQueries({ isBookmarked: false });
-        if (onSuccess) return onSuccess(...args);
+        return onSuccess?.(...args);
       },
       ...options,
     });

@@ -313,6 +313,10 @@
   },
   "notification": {
     "aria-label": "Afficher les {{ nb }} nouvelles notifications",
+    "askConsentBanner": {
+      "button": "Activer",
+      "warning": "Les notifications sont désactivées"
+    },
     "endOfList": "Fin de la liste 🥳",
     "loadMore": "Charger plus",
     "markAllAsSeen": "Tout marquer comme lu",

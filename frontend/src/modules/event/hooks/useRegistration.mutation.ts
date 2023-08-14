@@ -77,7 +77,7 @@ export function useRegistrationMutation(eventId: number) {
           variant: 'success',
         });
         updateCachedQueries({ isParticipating: true });
-        if (onSuccess) return onSuccess(...args);
+        return onSuccess?.(...args);
       },
       onError: (error, variables, context) => {
         showToast({
@@ -100,7 +100,7 @@ export function useRegistrationMutation(eventId: number) {
           variant: 'success',
         });
         updateCachedQueries({ isParticipating: false });
-        if (onSuccess) return onSuccess(...args);
+        return onSuccess?.(...args);
       },
       onError: (error, variables, context) => {
         showToast({

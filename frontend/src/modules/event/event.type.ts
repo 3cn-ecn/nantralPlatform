@@ -18,6 +18,7 @@ export type Event = {
   startRegistration: Date | null;
   endRegistration: Date | null;
   formUrl: string;
+  notificationId: number | null;
 };
 
 export type EventPreview = Pick<

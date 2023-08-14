@@ -44,7 +44,7 @@ export function useNotificationListQuery(
         ],
         (prevCount: number) => data?.pages.at(-1)?.count || prevCount
       );
-      if (onSuccess) return onSuccess(data);
+      return onSuccess?.(data);
     },
     ...options,
   });

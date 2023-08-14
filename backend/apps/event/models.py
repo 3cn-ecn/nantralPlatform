@@ -61,16 +61,8 @@ class Event(AbstractPublication):
         # set end date to 1 hour after begin date if not set
         if self.end_date is None:
             self.end_date = self.start_date + timezone.timedelta(hours=1)
-        # set the notification
-        if not self.notification:
-            self.create_notification(
-                title=self.group.name,
-                body=f'Event : {self.title}',
-                url=self.get_absolute_url())
-        else:
-            self.update_notification(
-                title=self.group.name,
-                body=f'Event : {self.title}',
-                url=self.get_absolute_url())
-        # save the event
-        super(Event, self).save(*args, **kwargs)
+        super(Event, self).save(
+            *args,
+            notification_body=f'Event : {self.title}',
+            **kwargs
+        )

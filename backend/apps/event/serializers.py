@@ -42,7 +42,8 @@ class EventSerializer(serializers.ModelSerializer):
             'max_participant',
             'start_registration',
             'end_registration',
-            'form_url']
+            'form_url',
+            'notification']
 
     def get_is_participating(self, obj: Event) -> bool:
         user = self.context['request'].user

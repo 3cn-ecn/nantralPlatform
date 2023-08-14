@@ -15,7 +15,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        exclude = ['notification']
+        fields = '__all__'
 
     def get_is_admin(self, obj: Post) -> bool:
         user = self.context['request'].user
