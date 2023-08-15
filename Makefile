@@ -30,16 +30,14 @@ install:
 		$(call EXPORT,DJANGO_SUPERUSER_PASSWORD,admin) && \
 		$(PIPENV) run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
 	cd frontend && \
-		npm ci && \
-		npm run build:dev
+		npm ci
 
 
 # Update after pull
 .PHONY: update
 update:
-	$(PYTHON) -m pip install --upgrade --user pipenv
 	cd frontend && \
-		npm install
+		npm ci
 	cd backend && \
 		$(PIPENV) sync --dev && \
 		$(PIPENV) run migrate
@@ -63,3 +61,5 @@ start:
 .PHONY: quality
 quality:
 	flake8 --config setup.cfg ./backend
+	cd frontend && npm run types
+	cd frontend && npm run lint
