@@ -1,10 +1,8 @@
+![Test Back End](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/quality.yml/badge.svg)
 [![Deploy Server](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/deploy-server.yml/badge.svg?branch=master)](https://nantral-platform.fr)
 [![Deploy Staging](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/deploy-staging.yml/badge.svg?branch=staging)](https://dev.nantral-platform.fr)
 [![Deploy Docs](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/deploy-docs.yml/badge.svg?branch=master)](https://docs.nantral-platform.fr)
 
-![Test Back End](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/test-backend.yml/badge.svg)
-![Test Front End](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/test-frontend.yml/badge.svg)
-![Test Docs](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/test-docs.yml/badge.svg)
 
 # Nantral Platform
 
