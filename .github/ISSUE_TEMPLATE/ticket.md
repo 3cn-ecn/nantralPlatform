@@ -7,21 +7,23 @@ assignees: ''
 
 ---
 
-## Description
+# Description
 
-*What your ticket will change on Nantral Platform*
+*Describe in a few lines what your ticket will change on Nantral Platform and why it is important*
 
-## Mock-Up and Designs
+# Definition of done
 
-*Add here a screenshot of your mock-up (for example a Figma or a drawing on paper), to describe the user experience with this new feature*
+*The ticket can be considered as done if all theses criteria are completed:*
+- [ ] ...
+- [ ] ...
 
-## Database implmentations
+# Mock-Up and Designs
 
-*Describe the fields or table you will need to add to the database. Include a diagram if possible*
+*Add here screenshots of your mock-up (for example an [Excalidraw](https://excalidraw.com/) or a drawing on paper), to describe what the interface should be. You can also add it later, but be sure to make it before starting to dev.*
 
-## Technical strategy
+# Technical strategy
 
-*Describe in multiple steps how you will implement your ticket*
+*Describe in multiple steps how you will implement your ticket. The more precise you are, the easier it will be to develop afterwards.*
 
 - [ ] ...
 - [ ] ...
