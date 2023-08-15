@@ -17,6 +17,10 @@ with approximately 5 hours per week.
 
 **✅ What you have to do:** the objectives of the project.
 
+:::tip
+See the **[Resources](/dev/resources.md)** page for some useful links!
+:::
+
 ## Project 1: Discover HTML and CSS
 
 ⏱️ **Time**: ≈ 3 weeks, maximum 2 months (switch to the next project after)

@@ -159,11 +159,18 @@ Now, let's see how to use our new API endpoint in a React component:
 
 ```tsx title="MyComponent.tsx"
 import { useState, useEffect } from "react";
-import useQuery from "react-query";
+import { useQuery } from "react-query";
 import axios, { AxiosError } from "axios";
 
-import convertFromPythonData from "../utils/convertData";
-import { Page } from "../types";
+import { adaptEvent } from "#modules/event/infra";
+import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
+
+interface EventDTO {
+  title: string;
+  start_date: string;
+  end_date: string;
+  is_participating: boolean;
+}
 
 interface Event {
   title: string;
@@ -172,40 +179,47 @@ interface Event {
   isParticipating: boolean;
 }
 
-function MyComponent(props: {}): JSX.Element {
+function MyComponent() {
   // Create a query object. On the first time, data will be stored in the cache.
   // Then on next queries, the data of the cache will be used while the query
   // is loading. The 'queryKey' is the index of the cache (add variables in the
   // list to update the query when some variables change).
   const eventsQuery = useQuery<Page<Event>, AxiosError>({
     queryKey: ["events"],
-    queryFn: () =>
-      axios.get<Page<Event>>("/api/event/event/").then((res) =>
-        convertFromPythonData(res.data, {
-          startDate: "Date",
-          endDate: "Date",
-        })
-      ),
+    queryFn: async () => {
+      const res = await axios.get<PageDTO<EventDTO>>("/api/event/event/");
+      return adaptPage(res.data, adaptEvent)
+    },
   });
+
+  // check if the query is not loading yet
+  if (eventsQuery.isIdle) {
+    return <p>Request not started... ⏳</p>;
+  }
 
   // check if the query is loading
   if (eventsQuery.isLoading) {
-    return <p>Chargement en cours... ⏳</p>;
+    return <p>Loading... ⏳</p>;
   }
 
   // check if there is an error and show it
   if (eventsQuery.isError) {
-    return <p>Erreur : {eventsQuery.error.message}</p>;
+    return <p>Error: {eventsQuery.error.message}</p>;
   }
 
   // if everything is ok, show the data. The types here are:
   // eventsQuery: a query object
   // eventsQuery.data: a Page object of events
   // eventsQuery.data.results: the list of events (Event[])
+  const page = eventsQuery.data;
+  const totalNumberOfEvents = page.count;
+  const eventsOfThisPage = page.results;
+
   return (
+    <p>Showing {eventsOfThisPage.length} / {totalNumberOfEvents} events</p>
     <ul>
-      {eventsQuery.data.results.map((e) => (
-        <li>{e.title}</li>
+      {eventsOfThisPage.map((event) => (
+        <li>{event.title}</li>
       ))}
     </ul>
   );
