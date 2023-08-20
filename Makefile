@@ -11,7 +11,7 @@ ifeq '$(findstring ;,$(PATH))' ';'
 	PYTHON := python
 	COPY := copy
 	PIPENV := $(PYTHON) -m pipenv
-	EXPORT = set $(1) $(2)
+	EXPORT = set $(1)=$(2)
 endif
 
 
