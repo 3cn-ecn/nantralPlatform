@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 import {
   CircularProgress,
   List,
@@ -101,7 +99,7 @@ export function EventParticipantsModal({
         <List>
           {participants.map((student) => (
             <ListItem key={student.id} disablePadding>
-              <ListItemButton component={Link} to={student.url}>
+              <ListItemButton href={student.url}>
                 <ListItemAvatar>
                   <Avatar alt={student.name} src={student.picture} />
                 </ListItemAvatar>
