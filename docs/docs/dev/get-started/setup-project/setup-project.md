@@ -55,7 +55,7 @@ to install everything.
    pipenv run django migrate
    ```
 
-5. Create an administrator acount on this database:
+5. Create an administrator account on this database:
 
    ```bash
    pipenv run django createsuperuser
@@ -63,9 +63,12 @@ to install everything.
 
    When asked, complete as follow:
 
-   - username: `admin` (or `admin2` if already used)
+   - username: `admin`
    - email: `admin@ec-nantes.fr`
    - password: `admin`
+
+   _Note: if `admin` already exists, run `pipenv run django changepassword admin`
+   to change the password of the admin account to `admin`._
 
 6. Now, change your working directory to the `frontend` one:
 
@@ -108,9 +111,9 @@ Since we have created your own database, you do **not** have an account yet
 on this particular database. So let's create one!
 
 1. On the login page, **click the _"No Account?"_** button, and fill in your
-   info as you would do on the real website.
+   info to create your personal account.
 
-   :::tip Notes
+   :::tip Note
 
    - Your password will be only stored on your computer: this is not really secure,
      so do not use a password similar to your real online accounts!
@@ -120,18 +123,26 @@ on this particular database. So let's create one!
      multiple accounts, to test your code later 😉
    - At the end of the process, the website will ask you to validate your account:
      just ignore it for the moment.
-     :::
 
-2. Now, open the admin panel ([http://localhost:8000/admin](http://localhost:8000/admin)),
+   :::
+
+1. Now, open the admin panel ([http://localhost:8000/admin](http://localhost:8000/admin)),
    and **log in** with the fake **admin account** created by default
-   (username: `admin`, password: `admin`)
+   (_username: `admin`, password: `admin`_)
 
-3. Once connected, **search** in the list `Authentification and authorisation > Users`
-   (_or `Authentification et Autorisation > Utilisateurs` in French_)
+   - Note: if the password does not work, you can reset the password:
+     ```bash
+     cd backend
+     pipenv run django changepassword admin
+     ```
 
-4. **Search** for your personnal account (the one you created a few minutes ago) and **open** it
+1. Once connected, open **_"Authentication and authorization > Users"_**
+   (or _"Authentification et Autorisation > Utilisateurs"_ in French)
 
-5. Scroll down to the **_Permissions_** section, and check the 3 checkboxes:
+1. **Search** for your personal account (the one you created a few minutes ago)
+   and **open** it.
+
+1. Scroll down to the **_Permissions_** section, and check the 3 checkboxes:
 
    - `Active` (_Actif_): this will validate your account
    - `Staff status` (_Statut équipe_): this allows you to connect to the admin panel
@@ -139,13 +150,15 @@ on this particular database. So let's create one!
    - `Superuser status` (_Statut super-utilisateur_): this transforms your personnal
      account into an admin account!
 
-6. Finally, **save** your modifications with the button at the bottom.
+1. **Save** your modifications with the button at the bottom.
 
-7. Now, **log out** from the admin interface, go back to _Nantral Platform_
-   ([http://localhost:8000](http://localhost:8000)), and try to **log in** with
+1. **Log out** from the admin interface.
+
+1. Finally, go back to _Nantral Platform_
+   ([http://localhost:8000](http://localhost:8000)), and **log in** with
    your personal account!
 
-8. Congratulations, you now have a personal admin account on your database 🥳
+1. Congratulations, you now have a personal admin account on your database 🥳
 
 ---
 
