@@ -46,8 +46,11 @@ update:
 # Run the tests
 .PHONY: test
 test:
-	cd backend && $(PIPENV) run test
-	cd frontend && npm run test
+	cd backend && \
+		$(PIPENV) run lint && \
+		$(PIPENV) run test
+	cd frontend && \
+		npm run test
 
 
 # Run the backend and frontend
