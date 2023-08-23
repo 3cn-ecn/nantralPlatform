@@ -11,7 +11,7 @@ migrate = "python manage.py migrate"
 django = "python manage.py"
 lint = "flake8 --statistics --show-violation-links"
 "lint:fix" = "sh -c 'black . && isort .'"
-coverage-test = "coverage run --source='.' manage.py test"
+"test:coverage" = "coverage run --source='.' manage.py test"
 
 [packages]
 celery = "~=5.2"
@@ -49,6 +49,7 @@ pyjwt = ">=2.4"
 black = "*"
 coverage = "*"
 wemake-python-styleguide = "*"
+flakeheaven = "*"
 
 [requires]
 python_version = "3.10"

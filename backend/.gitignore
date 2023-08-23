@@ -80,3 +80,6 @@ static/front/**
 
 # sonarqube
 .scannerwork
+
+# linters
+.flakeheaven_cache
