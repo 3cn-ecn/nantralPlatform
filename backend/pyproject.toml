@@ -1,0 +1,11 @@
+[tool.black]
+line-length = 80
+extend-exclude = "tmp/"
+exclude = "(migrations|.venv)"
+
+[tool.isort]
+profile = "black"
+line_length = 80
+known_django="django"
+known_first_party="apps,config"
+sections="FUTURE,STDLIB,DJANGO,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
