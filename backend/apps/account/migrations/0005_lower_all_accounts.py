@@ -1,6 +1,5 @@
 from django.db import migrations
 
-
 """
 Accounts were created without uniforming email to lower case,
 when switching from a temporary account to a true account.

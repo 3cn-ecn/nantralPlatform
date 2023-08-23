@@ -1,11 +1,10 @@
-from django.utils import timezone
-from django.contrib.auth.models import User
-from django.contrib.auth.backends import ModelBackend
 from django.conf import settings
+from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 class EmailBackend(ModelBackend):
-
     @staticmethod
     def authenticate(username=None, password=None, **kwargs) -> User:
         try:
@@ -23,5 +22,5 @@ class EmailBackend(ModelBackend):
         """
         if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
             return True
-        is_active = getattr(user, 'is_active', None)
+        is_active = getattr(user, "is_active", None)
         return is_active or is_active is None

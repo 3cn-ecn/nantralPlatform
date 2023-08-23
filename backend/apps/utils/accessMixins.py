@@ -21,7 +21,7 @@ def user_is_connected(user: User) -> bool:
     return (
         not (user.is_anonymous)
         and user.is_authenticated
-        and hasattr(user, 'student')
+        and hasattr(user, "student")
     )
 
 
@@ -31,7 +31,7 @@ class UserIsMember(UserPassesTestMixin):
     def test_func(self) -> bool:
         if user_is_connected(self.request.user):
             app = resolve(self.request.path).app_name
-            slug = self.kwargs['slug']
+            slug = self.kwargs["slug"]
             group = get_object_from_slug(app, slug)
             return group.is_member(self.request.user)
         return False
@@ -43,7 +43,7 @@ class UserIsAdmin(UserPassesTestMixin):
     def test_func(self) -> bool:
         if user_is_connected(self.request.user):
             app = resolve(self.request.path).app_name
-            slug = self.kwargs['slug']
+            slug = self.kwargs["slug"]
             group = get_object_from_slug(app, slug)
             return group.is_admin(self.request.user)
         return False
@@ -59,7 +59,7 @@ class UserIsSuperAdmin(UserPassesTestMixin):
 
 
 class UserIsInGroup(UserPassesTestMixin):
-    '''Check if a user is in a group, declared in self.group'''
+    """Check if a user is in a group, declared in self.group"""
 
     def test_func(self) -> bool:
         if user_is_connected(self.request.user):
