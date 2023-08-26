@@ -1,8 +1,9 @@
-from rest_framework import status
 from django.test import TransactionTestCase
 from django.urls import reverse
 
-from apps.group.models import GroupType, Group
+from rest_framework import status
+
+from apps.group.models import Group, GroupType
 from apps.utils.utest import TestMixin
 
 from .models import Notification
@@ -17,11 +18,12 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.g = Group.objects.create(name="Club de test", group_type=t)
         self.slug = self.g.slug
         self.url = reverse(
-            'notification_api:subscription', kwargs={'slug': self.slug})
+            "notification_api:subscription", kwargs={"slug": self.slug}
+        )
 
     def tearDown(self):
         self.user_teardown()
-        GroupType.objects.filter(slug='t1').delete()
+        GroupType.objects.filter(slug="t1").delete()
 
     def test_reading_api(self):
         "test to read subscription states in database"
@@ -43,12 +45,14 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertTrue(self.client.get(self.url).data)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(), 1)
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 1
+        )
         # try to subscribe again and check we keep the same
         resp = self.client.post(self.url)
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(), 1)
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 1
+        )
 
     def test_delete_api(self):
         "test to unsubscribe"
@@ -61,12 +65,14 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(self.client.get(self.url).data)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(), 0)
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 0
+        )
         # try to delete again and check we keep the same
         resp = self.client.delete(self.url)
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(), 0)
+            self.g.subscribers.filter(id=self.u2.student.id).count(), 0
+        )
 
 
 class TestNotification(TransactionTestCase, TestMixin):
@@ -75,41 +81,42 @@ class TestNotification(TransactionTestCase, TestMixin):
     def setUp(self):
         self.user_setup()
         t = GroupType.objects.create(name="T1", slug="t1")
-        self.club1 = Group.objects.create(
-            name="Club génial", group_type=t).slug
+        self.club1 = Group.objects.create(name="Club génial", group_type=t).slug
         self.club2 = Group.objects.create(
-            name="Club inconnu", group_type=t).slug
+            name="Club inconnu", group_type=t
+        ).slug
 
     def tearDown(self):
         self.user_teardown()
-        GroupType.objects.filter(slug='t1').delete()
+        GroupType.objects.filter(slug="t1").delete()
 
     def test_notification_api(self):
         # create subscriptions and notifications
         Group.objects.get(slug=self.club1).subscribers.add(self.u2.student)
         Notification.objects.create(
             body="Notif de test 1",
-            url='/',
+            url="/",
             sender=self.club2,
         )
         Notification.objects.create(
             body="Notif de test 2",
-            url='/',
+            url="/",
             sender=self.club1,
         )
         Notification.objects.create(
             body="Notif de test 3",
-            url='/',
+            url="/",
             sender=self.club2,
         )
         # test subscribed notifs withoutlimit
         self.client.login(username=self.u2.username, password=self.PASSWORD)
-        url = '/api/notification/notification/?subscribed=true'
+        url = "/api/notification/notification/?subscribed=true"
         resp = self.client.get(url)
-        self.assertEqual(len(resp.data['results']), 1)
+        self.assertEqual(len(resp.data["results"]), 1)
         self.assertEqual(
-            resp.data['results'][0]['notification']['body'], "Notif de test 2")
+            resp.data["results"][0]["notification"]["body"], "Notif de test 2"
+        )
         # test all notifs with limit of 2
-        url = '/api/notification/notification/?page_size=2'
+        url = "/api/notification/notification/?page_size=2"
         resp = self.client.get(url)
-        self.assertEqual(len(resp.data['results']), 2)
+        self.assertEqual(len(resp.data["results"]), 2)

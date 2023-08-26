@@ -16,33 +16,36 @@ from .webpush import send_webpush_notification
 # Toute notification est envoyée par un groupe
 
 VISIBILITY = [
-    ('Pub', 'Public - Visible par tous'),
-    ('Mem', 'Membres - Visible uniquement par les membres du groupe'),
-    ('Adm', 'Administrateurs de la page')
+    ("Pub", "Public - Visible par tous"),
+    ("Mem", "Membres - Visible uniquement par les membres du groupe"),
+    ("Adm", "Administrateurs de la page"),
 ]
 
 
 class Notification(models.Model):
     """Contenu d'une notification"""
-    title = models.CharField('Titre', max_length=255)
-    body = models.CharField('Corps', max_length=512)
-    url = models.CharField('Cible', max_length=512)
-    sender = models.SlugField('Expéditeur', max_length=50)
+
+    title = models.CharField("Titre", max_length=255)
+    body = models.CharField("Corps", max_length=512)
+    url = models.CharField("Cible", max_length=512)
+    sender = models.SlugField("Expéditeur", max_length=50)
     icon_url = models.CharField(max_length=512, blank=True, null=True)
     image_url = models.CharField(max_length=512, blank=True, null=True)
-    date = models.DateTimeField('Date de création', default=timezone.now)
-    high_priority = models.BooleanField('Prioritaire', default=False)
+    date = models.DateTimeField("Date de création", default=timezone.now)
+    high_priority = models.BooleanField("Prioritaire", default=False)
     publicity = models.CharField(
         choices=VISIBILITY,
-        default='Pub',
+        default="Pub",
         max_length=3,
-        verbose_name='Visibilité de la notification')
+        verbose_name="Visibilité de la notification",
+    )
     receivers = models.ManyToManyField(
-        Student, related_name='notification_set', through='SentNotification')
-    sent = models.BooleanField('Envoyé', default=False)
+        Student, related_name="notification_set", through="SentNotification"
+    )
+    sent = models.BooleanField("Envoyé", default=False)
 
     def __str__(self):
-        return f'{self.title} - {self.body}'[:100]
+        return f"{self.title} - {self.body}"[:100]
 
     def save(self, *args, **kwargs):
         """Save, and then get the list of all profiles who can see the post, and
@@ -52,15 +55,15 @@ class Notification(models.Model):
         page = get_object_or_404(Group, slug=self.sender)
         receivers = Student.objects.none()
         # if receivers are everyone
-        if self.publicity == 'Pub':
+        if self.publicity == "Pub":
             receivers = Student.objects.all()
         # if receivers are only members
-        elif self.publicity == 'Mem':
+        elif self.publicity == "Mem":
             self.high_priority = True
             if hasattr(page, "members"):
                 receivers = page.members.all()
         # if receivers are only administrators
-        elif self.publicity == 'Adm':
+        elif self.publicity == "Adm":
             self.high_priority = True
             if hasattr(page, "members"):
                 receivers = page.members.through.objects.filter(
@@ -75,8 +78,7 @@ class Notification(models.Model):
                 subscriptions__slug=self.sender
             )
         SentNotification.objects.filter(
-            student__in=sub_receivers,
-            notification=self
+            student__in=sub_receivers, notification=self
         ).update(subscribed=True)
         # finally we save again because we updated the high_priority field
         super().save()
@@ -88,27 +90,24 @@ class Notification(models.Model):
         sub_receivers = self.receivers.filter(sentnotification__subscribed=True)
         # then create the message
         message = {
-            'title': self.title,
-            'body': self.body,
-            'data': {
-                'url': self.url,
-                'actions_url': [
-                    action.url
-                    for action in self.actions.all()
-                ]
+            "title": self.title,
+            "body": self.body,
+            "data": {
+                "url": self.url,
+                "actions_url": [action.url for action in self.actions.all()],
             },
-            'icon': self.icon_url,
-            'image': self.image_url,
-            'badge': '/static/img/logo/monochrome/96.png',
-            'tag': self.id,
-            'actions': [
+            "icon": self.icon_url,
+            "image": self.image_url,
+            "badge": "/static/img/logo/monochrome/96.png",
+            "tag": self.id,
+            "actions": [
                 {
-                    'action': f'action_{i}',
-                    'title': action.title,
-                    'icon': action.icon_url
+                    "action": f"action_{i}",
+                    "title": action.title,
+                    "icon": action.icon_url,
                 }
                 for i, action in enumerate(self.actions.all())
-            ]
+            ],
         }
         # finally send the message to the subscribed receivers and get the
         # success value to know if the task has been successfully launched
@@ -124,18 +123,20 @@ class Notification(models.Model):
 
 class SentNotification(models.Model):
     """Table des notifications envoyées à chaque utilisateur"""
+
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)
-    seen = models.BooleanField('Vu', default=False)
+    seen = models.BooleanField("Vu", default=False)
     subscribed = models.BooleanField(
-        'Abonné',
+        "Abonné",
         default=False,
-        help_text="Vrai si on la montre dans les abonnements")
+        help_text="Vrai si on la montre dans les abonnements",
+    )
 
     class Meta:
         verbose_name = "Notification envoyée"
         verbose_name_plural = "Notifications envoyées"
-        unique_together = ['student', 'notification']
+        unique_together = ["student", "notification"]
 
     @property
     def date(self):
@@ -144,11 +145,12 @@ class SentNotification(models.Model):
 
 class NotificationAction(models.Model):
     """An action for a notification."""
+
     notification = models.ForeignKey(
-        Notification,
-        on_delete=models.CASCADE,
-        related_name="actions")
-    title = models.CharField('Titre', max_length=50)
-    url = models.CharField('Cible', max_length=512)
-    icon_url = models.CharField('Url of the icon for the action',
-                                max_length=512, blank=True, null=True)
+        Notification, on_delete=models.CASCADE, related_name="actions"
+    )
+    title = models.CharField("Titre", max_length=50)
+    url = models.CharField("Cible", max_length=512)
+    icon_url = models.CharField(
+        "Url of the icon for the action", max_length=512, blank=True, null=True
+    )

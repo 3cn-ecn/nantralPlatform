@@ -1,0 +1,28 @@
+[flake8]
+format = wemake
+max-line-length = 80
+max-complexity = 6
+docstring-style = numpy
+inline-quotes = double
+ignore = 
+    C8,
+    D1, D401,
+    DAR101, DAR201, DAR301, DAR401,
+    E203,
+    RST,
+    W503,
+    WPS100, WPS110, WPS111,
+    WPS2,
+    WPS3,
+    WPS407, WPS410, WPS412, WPS420, WPS432, WPS454, WPS459,
+    WPS5,
+    WPS601
+per-file-ignores =
+    */settings/*.py:F403,F405
+    */family/*.py:WPS114, N806
+    */family/algorithm/*.py:WPS114, N806
+exclude =
+    .git,
+    __pycache__,
+    */migrations/*,
+    .venv,

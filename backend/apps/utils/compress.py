@@ -1,36 +1,36 @@
 # spell-checker: words LANCZOS getsizeof pyaccess
 
-from io import BytesIO
-from PIL import Image
-from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
+from io import BytesIO
+
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
+from PIL import Image
 
 
 def compress_model_image(object, field, size=(500, 500), contains=False):
     image_field = getattr(object, field)
-    if (not object.pk
-            or image_field != getattr(
-                type(object).objects.get(pk=object.pk),
-                field
-            )):
+    if not object.pk or image_field != getattr(
+        type(object).objects.get(pk=object.pk), field
+    ):
         image_field = compress_image(image_field, size, contains)
     return image_field
 
 
 def compress_image(image, size=(500, 500), contains=False):
-    '''Compresse une image'''
+    """Compresse une image"""
     # exception null
     if not image:
         return image
     # find the format
     format = find_format(image)
     # pas de compression pour les gif, pour conserver l'animation
-    if format == 'GIF':
+    if format == "GIF":
         return image
     # open the image
     im = Image.open(image)
     # resize
-    if (contains):
+    if contains:
         # don't crop the image, the new size is more little than the given size
         im.thumbnail(size, resample=Image.LANCZOS)
     else:
@@ -44,24 +44,25 @@ def compress_image(image, size=(500, 500), contains=False):
     # create a django-friendly Files object
     new_image = InMemoryUploadedFile(
         im_io,
-        'ImageField',
+        "ImageField",
         image.name,
-        'image/' + format,
+        "image/" + format,
         sys.getsizeof(im_io),
-        None)
+        None,
+    )
     im.close()
     return new_image
 
 
 def find_format(image):
-    '''Trouver le format du fichier'''
-    ext = '.' + image.name.split('.')[-1].lower()
+    """Trouver le format du fichier"""
+    ext = "." + image.name.split(".")[-1].lower()
     if ext not in Image.EXTENSION:
         Image.init()
     try:
         format = Image.EXTENSION[ext]
     except KeyError:
-        raise ValueError('unknown file extension: {}'.format(ext))
+        raise ValueError("unknown file extension: {}".format(ext))
     return format
 
 

@@ -1,11 +1,15 @@
 {
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
-  },
+  // auto-formatting
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  },
   "editor.insertSpaces": true,
   "editor.rulers": [80],
   "editor.tabSize": 2,
+  // languages
   "files.associations": {
     "*.html": "html",
     "**/backend/**/*.html": "django-html",
@@ -18,28 +22,35 @@
     "requirements.txt": "pip-requirements",
     "Pipfile": "toml"
   },
-  "workbench.colorCustomizations": {
-    "statusBar.background": "#c02837",
-    "statusBar.foreground": "#fcfcfc"
-  },
+  // python formatting
   "[python]": {
     "editor.tabSize": 4,
-    "editor.defaultFormatter": "ms-python.autopep8"
+    "editor.defaultFormatter": "ms-python.black-formatter"
   },
   "[django-html]": {
     "editor.formatOnSave": false
   },
-  "python.analysis.typeCheckingMode": "off",
-  "python.analysis.extraPaths": ["./backend"],
+  "flake8.args": ["--config", "backend/.flake8"],
+  "black-formatter.args": ["--config", "backend/pyproject.toml"],
+  "isort.args": ["--settings-path", "backend/pyproject.toml"],
+  // python env
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/",
   "python.envFile": "${workspaceFolder}/backend/config/settings/.env",
-  "python.formatting.provider": "none",
   "python.terminal.activateEnvironment": false,
-  "python.linting.enabled": true,
-  "python.linting.flake8Enabled": true,
-  "python.linting.pydocstyleEnabled": true,
-  "python.linting.pydocstyleArgs": ["--ignore=D100,D102,D213,D400,D407"],
+  // python docstring
   "autoDocstring.docstringFormat": "numpy",
+  // i18n-ally (react translations)
+  "i18n-ally.localesPaths": "frontend/src/shared/i18n",
+  "i18n-ally.enabledFrameworks": ["react", "general"],
+  "i18n-ally.pathMatcher": "{locale}.json",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.sourceLanguage": "fr-FR",
+  "i18n-ally.displayLanguage": "fr-FR",
+  "i18n-ally.sortKeys": true,
+  "i18n-ally.indent": 2,
+  "i18n-ally.tabStyle": "space",
+  "i18n-ally.usage.scanningIgnore": ["backend/", "docs/", "ckeditor.js"],
+  // cSpell (grammar checker)
   "cSpell.language": "en,fr",
   "cSpell.enableFiletypes": ["mdx"],
   "cSpell.words": [
@@ -58,14 +69,9 @@
     "testid",
     "viewsets"
   ],
-  "i18n-ally.localesPaths": "frontend/src/shared/i18n",
-  "i18n-ally.enabledFrameworks": ["react", "general"],
-  "i18n-ally.pathMatcher": "{locale}.json",
-  "i18n-ally.keystyle": "nested",
-  "i18n-ally.sourceLanguage": "fr-FR",
-  "i18n-ally.displayLanguage": "fr-FR",
-  "i18n-ally.sortKeys": true,
-  "i18n-ally.indent": 2,
-  "i18n-ally.tabStyle": "space",
-  "i18n-ally.usage.scanningIgnore": ["backend/", "docs/", "ckeditor.js"]
+  // customization (change color of the bottom bar)
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#c02837",
+    "statusBar.foreground": "#fcfcfc"
+  }
 }

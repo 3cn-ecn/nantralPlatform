@@ -1,6 +1,5 @@
 from django.db import migrations
 
-
 """
 Accounts were created without uniforming first name, last name and email to lower case.
 Correcting this issue.

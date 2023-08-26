@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from push_notifications.models import WebPushDevice
-from rest_framework import permissions, status, filters
+from rest_framework import filters, permissions, status
 from rest_framework.decorators import action
 from rest_framework.request import QueryDict
 from rest_framework.response import Response
@@ -14,6 +14,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from apps.group.models import Group
 from apps.utils.parse_bool import parse_bool
+
 from .models import SentNotification
 from .serializers import SentNotificationSerializer
 
@@ -39,6 +40,7 @@ class SubscriptionAPIView(APIView):
     -------
     A boolean : True if the user has subscribed to the page, else False.
     """
+
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, slug, format=None):
@@ -80,11 +82,12 @@ class NotificationsViewSet(ReadOnlyModelViewSet):
     - page_size: int
         the number of notifications per page
     """
+
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [filters.SearchFilter]
-    search_fields = ['notification__title', 'notification__body']
+    search_fields = ["notification__title", "notification__body"]
     serializer_class = SentNotificationSerializer
-    lookup_field = 'notification__id'
+    lookup_field = "notification__id"
 
     @property
     def query_params(self) -> QueryDict:
@@ -92,37 +95,38 @@ class NotificationsViewSet(ReadOnlyModelViewSet):
 
     def get_queryset(self) -> QuerySet[SentNotification]:
         user = self.request.user
-        subscribed = parse_bool(self.query_params.get('subscribed'))
-        seen = parse_bool(self.query_params.get('seen'))
+        subscribed = parse_bool(self.query_params.get("subscribed"))
+        seen = parse_bool(self.query_params.get("seen"))
 
         query = SentNotification.objects.filter(student__user=user)
         if subscribed is not None:
             query = query.filter(subscribed=subscribed)
         if seen is not None:
             query = query.filter(seen=seen)
-        return query.order_by('-notification__date')
+        return query.order_by("-notification__date")
 
-    @action(detail=False, methods=['GET'])
+    @action(detail=False, methods=["GET"])
     def count(self, request, *args, **kwargs):
         total = self.get_queryset().count()
         return Response(data=total)
 
-    @action(detail=False, methods=['POST'])
+    @action(detail=False, methods=["POST"])
     def all_seen(self, request, *args, **kwargs):
-        (SentNotification.objects
-            .filter(student__user=request.user)
-            .update(seen=True)
-         )
+        (
+            SentNotification.objects.filter(student__user=request.user).update(
+                seen=True
+            )
+        )
         return Response(status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['POST', 'DELETE'])
+    @action(detail=True, methods=["POST", "DELETE"])
     def seen(self, request, *args, **kwargs):
         """
         A view to check or uncheck a notification as seen by the user.
         """
         sent_notification = self.get_object()
 
-        if request.method == 'DELETE':
+        if request.method == "DELETE":
             sent_notification.seen = False
             sent_notification.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -134,19 +138,21 @@ class NotificationsViewSet(ReadOnlyModelViewSet):
 
 class RegisterAPIView(APIView):
     """View to register a user for device notifications."""
+
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, format=None):
         already_registered = WebPushDevice.objects.filter(
-            registration_id=request.data.get('registration_id')).exists()
-        data = {'result': False}
+            registration_id=request.data.get("registration_id")
+        ).exists()
+        data = {"result": False}
         if not already_registered:
             WebPushDevice.objects.create(
-                registration_id=request.data.get('registration_id'),
-                p256dh=request.data.get('p256dh'),
-                auth=request.data.get('auth'),
-                browser=request.data.get('browser'),
+                registration_id=request.data.get("registration_id"),
+                p256dh=request.data.get("p256dh"),
+                auth=request.data.get("auth"),
+                browser=request.data.get("browser"),
                 user=request.user,
             )
-            data['result'] = True
+            data["result"] = True
         return JsonResponse(data)

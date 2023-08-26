@@ -1,9 +1,10 @@
 import json
 import re
-
 from typing import List
-from celery import shared_task
+
 from django.utils import timezone
+
+from celery import shared_task
 from push_notifications.models import WebPushDevice
 from push_notifications.webpush import WebPushError
 
@@ -13,9 +14,7 @@ def send_webpush_notification_task(student_ids: List[int], message: dict):
     """The celery task for sending notifications to studends."""
 
     # get devices from students
-    devices = WebPushDevice.objects.filter(
-        user__student__id__in=student_ids
-    )
+    devices = WebPushDevice.objects.filter(user__student__id__in=student_ids)
     # convert the message in json
     data = json.dumps(message)
     # send the message for each device
@@ -24,7 +23,7 @@ def send_webpush_notification_task(student_ids: List[int], message: dict):
             device.send_message(message=data)
         except WebPushError as e:
             # retrive the server response
-            result = re.search(r'Push failed: ([\d]+) ', e.args[0])
+            result = re.search(r"Push failed: ([\d]+) ", e.args[0])
             error = int(result.group(1))
             # if device is no longer subscribed, delete it
             if error in [404, 410]:
@@ -41,5 +40,6 @@ def clean_notifications():
     today = timezone.now()
     # import the Notification model
     from .models import Notification
+
     # and finally delete the old notifications
     Notification.objects.filter(date__lt=today - timeperiod).delete()

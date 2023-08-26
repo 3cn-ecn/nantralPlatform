@@ -1,12 +1,11 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import mail
 from django.template.loader import render_to_string
-from .models import TemporaryAccessRequest
-from django.conf import settings
 
+from .models import IdRegistration, TemporaryAccessRequest
 
-from .models import IdRegistration
 # Register your models here.
 
 
@@ -26,17 +25,17 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
         for temp_access_request in queryset:
             temp_access_request: TemporaryAccessRequest
             email_html = render_to_string(
-                'account/mail/reminder_upgrade.html',
+                "account/mail/reminder_upgrade.html",
                 context={
-                    'tempAccess': temp_access_request.user,
-                    'deadline': settings.TEMPORARY_ACCOUNTS_DATE_LIMIT,
-                    'domain': current_site.domain
-                }
+                    "tempAccess": temp_access_request.user,
+                    "deadline": settings.TEMPORARY_ACCOUNTS_DATE_LIMIT,
+                    "domain": current_site.domain,
+                },
             )
             email = mail.EmailMultiAlternatives(
                 subject="[Nantral Platform] Votre compte expire bientôt !",
                 body=email_html,
-                to=[temp_access_request.user.email]
+                to=[temp_access_request.user.email],
             )
             email.attach_alternative(content=email_html, mimetype="text/html")
             mails.append(email)

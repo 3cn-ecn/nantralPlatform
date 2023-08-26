@@ -1,9 +1,5 @@
-from django.core.validators import (
-    URLValidator,
-    EmailValidator,
-    RegexValidator
-)
 from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator, RegexValidator, URLValidator
 
 
 def validate_uri(value: str):
@@ -19,14 +15,13 @@ def validate_uri(value: str):
     exceptions.ValidationError
         _description_
     """
-    if value.startswith(('http:', 'https:')):
+    if value.startswith(("http:", "https:")):
         URLValidator()(value)
-    elif value.startswith('mailto:'):
+    elif value.startswith("mailto:"):
         EmailValidator()(value[7:])
-    elif value.startswith('tel:'):
+    elif value.startswith("tel:"):
         RegexValidator(
-            regex=r'^\+?[\d\.\s]+$',
-            message="Enter a valid phone number."
+            regex=r"^\+?[\d\.\s]+$", message="Enter a valid phone number."
         )(value[4:])
     else:
         raise ValidationError(

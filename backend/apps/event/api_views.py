@@ -11,22 +11,24 @@ from apps.student.serializers import StudentPreviewSerializer
 from apps.utils.parse_bool import parse_bool
 
 from .models import Event
-from .serializers import (EventPreviewSerializer, EventSerializer,
-                          EventWriteSerializer)
+from .serializers import (
+    EventPreviewSerializer,
+    EventSerializer,
+    EventWriteSerializer,
+)
 
 
 def format_date(date) -> str:
     """
     Format and translate a date according to the locale.
     """
-    return formats.date_format(date, 'DATETIME_FORMAT')
+    return formats.date_format(date, "DATETIME_FORMAT")
 
 
 class EventPermission(permissions.BasePermission):
-
     def has_object_permission(self, request, view, obj: Event):
         if request.method not in permissions.SAFE_METHODS:
-            if view.action in ('participate', 'bookmark'):
+            if view.action in ("participate", "bookmark"):
                 return obj.can_view(request.user)
             return obj.group.is_admin(request.user)
         return obj.can_view(request.user)
@@ -73,20 +75,20 @@ class EventViewSet(viewsets.ModelViewSet):
     - PUT .../event/<id>/ : update an event
     - DELETE .../event/<id>/ : delete an event
     """
+
     permission_classes = [permissions.IsAuthenticated, EventPermission]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'group__name', 'group__short_name']
+    search_fields = ["title", "group__name", "group__short_name"]
     ordering_fields = [
-        'created_at',
-        'end_date',
-        'end_registration'
-        'group__name',
-        'group__short_name',
-        'participants_count',
-        'start_date',
-        'start_registration',
-        'title',
-        'updated_at',
+        "created_at",
+        "end_date",
+        "end_registration" "group__name",
+        "group__short_name",
+        "participants_count",
+        "start_date",
+        "start_registration",
+        "title",
+        "updated_at",
     ]
     ordering = ["start_date"]
 
@@ -95,7 +97,7 @@ class EventViewSet(viewsets.ModelViewSet):
         return self.request.query_params
 
     def get_serializer_class(self):
-        preview = parse_bool(self.query_params.get('preview'))
+        preview = parse_bool(self.query_params.get("preview"))
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return EventWriteSerializer
         if preview is True:
@@ -106,25 +108,27 @@ class EventViewSet(viewsets.ModelViewSet):
             return EventSerializer
         return EventPreviewSerializer
 
-    def get_queryset(self) -> QuerySet[Event]:
+    def get_queryset(self) -> QuerySet[Event]:  # noqa: C901
         now = timezone.now()
         user = self.request.user
 
         # query params
-        group_params = self.query_params.getlist('group', [])
-        groups = ','.join(group_params).split(',') if group_params else []
-        is_member = parse_bool(self.query_params.get('is_member'))
-        is_shotgun = parse_bool(self.query_params.get('is_shotgun'))
-        is_bookmarked = parse_bool(self.query_params.get('is_bookmarked'))
-        is_participating = parse_bool(self.query_params.get('is_participating'))
+        group_params = self.query_params.getlist("group", [])
+        groups = ",".join(group_params).split(",") if group_params else []
+        is_member = parse_bool(self.query_params.get("is_member"))
+        is_shotgun = parse_bool(self.query_params.get("is_shotgun"))
+        is_bookmarked = parse_bool(self.query_params.get("is_bookmarked"))
+        is_participating = parse_bool(self.query_params.get("is_participating"))
         is_registration_open = parse_bool(
-            self.query_params.get('is_registration_open'))
-        from_date = self.query_params.get('from_date')
-        to_date = self.query_params.get('to_date')
+            self.query_params.get("is_registration_open")
+        )
+        from_date = self.query_params.get("from_date")
+        to_date = self.query_params.get("to_date")
 
         # filtering
         qs = Event.objects.filter(
-            Q(publicity='Pub') | Q(group__members__user=user))
+            Q(publicity="Pub") | Q(group__members__user=user)
+        )
         if len(groups) > 0:
             qs = qs.filter(group__slug__in=groups)
         if from_date:
@@ -146,13 +150,15 @@ class EventViewSet(viewsets.ModelViewSet):
         if is_shotgun is not None:
             qs = qs.filter(max_participant__isnull=not is_shotgun)
         if is_registration_open is not None:
-            condition = ((Q(start_registration__lte=now)
-                          | Q(start_registration__isnull=True))
-                         & (Q(end_registration__gte=now)
-                            | Q(end_registration__isnull=True)))
+            condition = (
+                Q(start_registration__lte=now)
+                | Q(start_registration__isnull=True)
+            ) & (
+                Q(end_registration__gte=now) | Q(end_registration__isnull=True)
+            )
             qs = qs.filter(condition if is_registration_open else ~condition)
 
-        return qs.select_related('group').distinct()
+        return qs.select_related("group").distinct()
 
     @action(detail=True, filter_backends=[])
     def participants(self, request, pk=None):
@@ -161,7 +167,7 @@ class EventViewSet(viewsets.ModelViewSet):
         serializer = StudentPreviewSerializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
-    @action(detail=True, methods=['POST', 'DELETE'])
+    @action(detail=True, methods=["POST", "DELETE"])
     def participate(self, request, pk=None):
         """
         A view to add the user to the list of participants or remove him/her \
@@ -169,7 +175,7 @@ class EventViewSet(viewsets.ModelViewSet):
         """
         event: Event = self.get_object()
         # user asks to remove himself from participants
-        if request.method == 'DELETE':
+        if request.method == "DELETE":
             event.participants.remove(request.user.student)
             return Response(status=status.HTTP_204_NO_CONTENT)
         # user asks to add himself to participants
@@ -177,27 +183,34 @@ class EventViewSet(viewsets.ModelViewSet):
         if event.start_registration and event.start_registration > now:
             raise exceptions.PermissionDenied(
                 _("Too soon! Registration will start at %(datetime)s.")
-                % {'datetime': format_date(event.start_registration)})
+                % {"datetime": format_date(event.start_registration)}
+            )
         if event.end_registration and event.end_registration < now:
             raise exceptions.PermissionDenied(
                 _("Too late! Registration has ended at %(datetime)s.")
-                % {'datetime': format_date(event.end_registration)})
-        if (event.max_participant
-                and event.participants.count() >= event.max_participant):
+                % {"datetime": format_date(event.end_registration)}
+            )
+        if (
+            event.max_participant
+            and event.participants.count() >= event.max_participant
+        ):
             raise exceptions.PermissionDenied(
-                _("Too late! The maximum number of participants "
-                  "have been reached."))
+                _(
+                    "Too late! The maximum number of participants "
+                    "have been reached."
+                )
+            )
         # if we pass all criteria, add the user
         event.participants.add(request.user.student)
         return Response(status=status.HTTP_201_CREATED)
 
-    @action(detail=True, methods=['POST', 'DELETE'])
+    @action(detail=True, methods=["POST", "DELETE"])
     def bookmark(self, request, pk=None):
         """
         A view to add or remove this event to the bookmarks of the user.
         """
         event: Event = self.get_object()
-        if request.method == 'DELETE':
+        if request.method == "DELETE":
             event.bookmarks.remove(request.user.student)
             return Response(status=status.HTTP_204_NO_CONTENT)
         event.bookmarks.add(request.user.student)
