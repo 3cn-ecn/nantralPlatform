@@ -1,6 +1,6 @@
 from django import forms
 
-TYPE_CHOICES = ((1, ("Bug")), (2, ("Suggestion")))
+TYPE_CHOICES = (("bug", ("Bug")), ("suggestion", ("Suggestion")))
 
 
 class SuggestionForm(forms.Form):
