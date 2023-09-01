@@ -1,7 +1,6 @@
 version: "2.1"
 
 services:
-
   backend-staging:
     build:
       context: ../../nantralPlatform-staging/backend/

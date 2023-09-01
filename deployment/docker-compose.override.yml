@@ -3,24 +3,24 @@ version: "2.1"
 services:
   database:
     ports:
-      - '5432:5432'
+      - "5432:5432"
     env_file: ../backend/config/settings/.env
-  
+
   backend:
     env_file: ../backend/config/settings/.env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.docker
 
   # External dependencies
-  
+
   nginx:
     build: ./containers/nginx_local
-  
+
   celery:
     env_file: ../backend/config/settings/.env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.docker
-  
+
   celery-beat:
     env_file: ../backend/config/settings/.env
     environment:
