@@ -28,8 +28,8 @@ def check_ecn_mail(mail: str):
     if re.search(r"@([\w\-\.]+\.)?ec-nantes.fr$", mail) is None:
         raise ValidationError(
             _(
-                "Vous devez utiliser une adresse mail de Centrale Nantes finissant "
-                "par ec-nantes.fr"
+                "Vous devez utiliser une adresse mail de Centrale Nantes "
+                "finissant par ec-nantes.fr"
             )
         )
 

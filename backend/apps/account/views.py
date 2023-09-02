@@ -177,7 +177,8 @@ class AuthView(FormView):
                                 "pour l'activer."
                             )
                             messages.error(self.request, message)
-                            return redirect("account:login")
+                            self.request.session["email"] = username
+                            return redirect("account:confirm-email")
                         if (
                             temp_access_req.approved_until
                             <= datetime.now().date()
@@ -200,11 +201,8 @@ class AuthView(FormView):
                         )
                         messages.warning(self.request, message)
                     except TemporaryAccessRequest.DoesNotExist:
-                        messages.error(
-                            self.request,
-                            "Identifiant inconnu ou mot de passe invalide.",
-                        )
-                        return redirect("account:login")
+                        self.request.session["email"] = username
+                        return redirect("account:confirm-email")
                 else:
                     messages.warning(
                         self.request,
@@ -316,3 +314,28 @@ class TemporaryRegistrationChoice(TemplateView):
         context = super().get_context_data(**kwargs)
         context["invite_id"] = invite_id
         return context
+
+
+class ConfirmEmail(TemplateView):
+    template_name = "account/confirm-email.html"
+
+    def get(self, request, *args: Any, **kwargs: Any) -> HttpResponse:
+        try:
+            User.objects.get(email=request.session["email"])
+        except (User.DoesNotExist, KeyError):
+            return redirect("account:login")
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request):
+        user = User.objects.get(email=request.session["email"])
+        mail = user.email
+        try:
+            TemporaryAccessRequest.objects.get(user=user.pk)
+            temp_access = True
+        except TemporaryAccessRequest.DoesNotExist:
+            temp_access = False
+        send_email_confirmation(
+            user, self.request, temporary_access=temp_access, send_to=mail
+        )
+        del self.request.session["email"]
+        return redirect("account:login")

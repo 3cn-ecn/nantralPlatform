@@ -1,0 +1,22 @@
+{% extends 'base_bg.html' %}
+{% load crispy_forms_tags %}
+{% load static%}
+{% load i18n %}
+
+{% block head %}
+    <meta name="robots" content="noindex">
+{% endblock %}
+
+{% block card_content %}
+    <h2>{% translate "Confirmez votre adresse email" %}</h2>
+    </br>
+        <p>
+           {% translate "Votre compte n'est pas encore actif. Veuillez cliquer sur le lien envoyé par mail pour l'activer. Si vous n'avez pas reçu de mail vous pouvez le renvoyer via le bouton ci-dessous" %}
+        </p>
+
+        <form method='POST' class="text-start">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-success">{% translate "Renvoyer un mail de confirmation" %}</button>
+        </form>
+{% endblock %}

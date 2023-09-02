@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     AuthView,
+    ConfirmEmail,
     ConfirmUser,
     ForgottenPassView,
     LogoutView,
@@ -19,6 +20,7 @@ app_name = "account"
 urlpatterns = [
     path("login/", AuthView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("login/confirm_email/", ConfirmEmail.as_view(), name="confirm-email"),
     path(
         "registration/choice/",
         RegistrationChoice.as_view(),
