@@ -90,7 +90,7 @@ def send_email_confirmation(
             request,
             (
                 "Un mail vous a été envoyé pour confirmer votre adresse mail "
-                "Centrale Nantes.\nVous pouvez accéder à votre boîte mail école "
-                '<a href="https://webmail.ec-nantes.fr">ici</a>.'
+                "Centrale Nantes.\nVous pouvez accéder à votre boîte mail "
+                'école <a href="https://webmail.ec-nantes.fr">ici</a>.'
             ),
         )
