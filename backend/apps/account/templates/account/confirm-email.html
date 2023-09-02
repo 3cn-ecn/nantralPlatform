@@ -14,7 +14,7 @@
            {% translate "Votre compte n'est pas encore actif. Veuillez cliquer sur le lien envoyé par mail pour l'activer. Si vous n'avez pas reçu de mail vous pouvez le renvoyer via le bouton ci-dessous" %}
         </p>
 
-        <form method='POST' class="text-start">
+        <form method='POST'>
             {% csrf_token %}
             <button class="btn btn-success">{% translate "Renvoyer un mail de confirmation" %}</button>
         </form>

@@ -171,12 +171,6 @@ class AuthView(FormView):
                             TemporaryAccessRequest.objects.get(user=user)
                         )
                         if not temp_access_req.mail_valid:
-                            message = (
-                                "Votre compte n'est pas encore actif. "
-                                "Veuillez cliquer sur le lien envoyé par mail "
-                                "pour l'activer."
-                            )
-                            messages.error(self.request, message)
                             self.request.session["email"] = username
                             return redirect("account:confirm-email")
                         if (
@@ -329,11 +323,8 @@ class ConfirmEmail(TemplateView):
     def post(self, request):
         user = User.objects.get(email=request.session["email"])
         mail = user.email
-        try:
-            TemporaryAccessRequest.objects.get(user=user.pk)
-            temp_access = True
-        except TemporaryAccessRequest.DoesNotExist:
-            temp_access = False
+        temp_access = TemporaryAccessRequest.objects.filter(
+            user=user.pk).exists()
         send_email_confirmation(
             user, self.request, temporary_access=temp_access, send_to=mail
         )
