@@ -29,7 +29,7 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
   const { formatDate, startOfWeek, endOfWeek, dateFnsLocale } =
     useTranslation();
   const theme = useTheme();
-  const eventsQuery = useEventListQuery(filters);
+  const eventsQuery = useEventListQuery({ ...filters, pageSize: 200 });
 
   if (eventsQuery.isError)
     return (
