@@ -22,7 +22,7 @@ class TestStudent(TestCase, TestMixin):
     #     # Check that you have to be logged in
     #     self.assertEqual(response.status_code, status.HTTP_302_FOUND)
     #     ok = self.client.login(
-    #         username=self.u2.username, password=self.PASSWORD)
+    #         email=self.u2.email, password=self.PASSWORD)
     #     self.assertTrue(ok)
 
     #     response = self.client.get(url)
@@ -36,7 +36,7 @@ class TestStudent(TestCase, TestMixin):
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
         ok = self.client.login(
-            username=self.u3.username, password=self.PASSWORD
+            email=self.u3.email, password=self.PASSWORD
         )
         self.assertTrue(ok)
         with self.assertLogs("django.request", level="WARNING"):
@@ -44,7 +44,7 @@ class TestStudent(TestCase, TestMixin):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.client.logout()
         ok = self.client.login(
-            username=self.u1.username, password=self.PASSWORD
+            email=self.u1.email, password=self.PASSWORD
         )
         self.assertTrue(ok)
 
@@ -65,7 +65,7 @@ class TestStudent(TestCase, TestMixin):
         self.client.logout()
 
         ok = self.client.login(
-            username=self.u2.username, password=self.PASSWORD
+            email=self.u2.email, password=self.PASSWORD
         )
         self.assertTrue(ok)
 
@@ -81,7 +81,7 @@ class TestStudent(TestCase, TestMixin):
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 
         ok = self.client.login(
-            username=self.u2.username, password=self.NEW_PASSWORD
+            email=self.u2.email, password=self.NEW_PASSWORD
         )
         self.assertTrue(ok)
 

@@ -9,10 +9,7 @@ from .base import *
 
 print("Using docker config")
 
-
-#######################
-### DJANGO SETTINGS ###
-#######################
+# DJANGO SETTINGS
 
 
 # Database
@@ -50,8 +47,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ALLOWED_HOSTS = ["django", "localhost"]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
 
 # Cache config
 CACHES = {
@@ -69,10 +64,7 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-
-#######################
-### CELERY SETTINGS ###
-#######################
+# CELERY SETTINGS
 
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
@@ -97,10 +89,7 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-
-######################################
-### THIRD PARTY LIBRARIES SETTINGS ###
-######################################
+# THIRD PARTY LIBRARIES SETTINGS
 
 # Debug toolbar
 DEBUG_TOOLBAR_CONFIG = {

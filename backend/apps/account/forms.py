@@ -2,8 +2,8 @@ import re
 
 from django import forms
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -11,6 +11,8 @@ from django.utils.translation import gettext as _
 from apps.student.models import FACULTIES, PATHS
 
 from .models import IdRegistration
+
+User = get_user_model()
 
 
 def check_id(id):
@@ -88,7 +90,7 @@ class SignUpForm(UserCreationForm):
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
         try:
-            User.objects.get(email=email)
+            get_user_model().objects.get(email=email)
             raise forms.ValidationError(_("Cet email est déjà utilisé."))
         except User.DoesNotExist:
             if email and confirm_email:

@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.loader import render_to_string
@@ -18,6 +18,8 @@ from apps.utils.upload import PathAndRename
 path_and_rename_group = PathAndRename("groups/logo")
 path_and_rename_group_banner = PathAndRename("groups/banniere")
 path_and_rename_group_type = PathAndRename("groups/types")
+
+User = get_user_model()
 
 
 class GroupType(models.Model):

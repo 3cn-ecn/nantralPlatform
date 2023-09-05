@@ -2,10 +2,7 @@ from .docker import *
 
 print("Running prod config")
 
-
-#######################
-### DJANGO SETTINGS ###
-#######################
+# DJANGO SETTINGS
 
 DEBUG = False
 
@@ -17,7 +14,6 @@ if STAGING:
 else:
     ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp"
 EMAIL_PORT = "25"
 # No need to authenticate on localhost
@@ -61,10 +57,7 @@ LOGGING = {
     },
 }
 
-
-##################################
-### OVH MEDIA STORAGE SETTINGS ###
-##################################
+# OVH MEDIA STORAGE SETTINGS
 
 AWS_ACCESS_KEY_ID = env("OVH_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("OVH_SECRET_ACCESS_KEY")
@@ -85,10 +78,7 @@ AWS_S3_OBJECT_PARAMETERS = {
     "ACL": "public-read",
 }
 
-
-######################################
-### THIRD PARTY LIBRARIES SETTINGS ###
-######################################
+# THIRD PARTY LIBRARIES SETTINGS
 
 # Debug toolbar
 DEBUG_TOOLBAR_CONFIG = {

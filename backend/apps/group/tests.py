@@ -134,9 +134,9 @@ class TestGroups(APITestCase):
 class TestMemberships(APITestCase):
     def setUp(self):
         User = get_user_model()  # noqa: N806
-        self.u1 = User.objects.create(username="u1")
-        self.u2 = User.objects.create(username="u2")
-        self.u3 = User.objects.create(username="u3")
+        self.u1 = User.objects.create(username="u1", email="u1@ec-nantes.fr")
+        self.u2 = User.objects.create(username="u2", email="u2@ec-nantes.fr")
+        self.u3 = User.objects.create(username="u3", email="u3@ec-nantes.fr")
         self.t1 = GroupType.objects.create(name="T1", slug="t1")
         self.g1 = Group.objects.create(name="G1", group_type=self.t1)
         # deactivate warnings
