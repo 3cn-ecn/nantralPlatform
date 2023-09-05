@@ -99,6 +99,7 @@ class SignUpForm(UserCreationForm):
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
         try:
+            User = get_user_model()  # noqa
             User.objects.get(email=email)
             raise forms.ValidationError(_("Cet email est déjà utilisé."))
         except User.DoesNotExist:
@@ -110,7 +111,7 @@ class SignUpForm(UserCreationForm):
             return cleaned_data
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = (
             "first_name",
             "last_name",
