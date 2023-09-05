@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -6,8 +7,11 @@ from django.utils import timezone
 
 class EmailBackend(ModelBackend):
     @staticmethod
-    def authenticate(username=None, password=None, **kwargs) -> User:
+    def authenticate(
+        username=None, password=None, **kwargs
+    ) -> get_user_model():
         try:
+            User = get_user_model()  # noqa
             user = User.objects.get(email=username)
             if user.check_password(password):
                 return user
