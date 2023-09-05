@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('account', '0001_create_test_account_dev')
     ]
 
     operations = [
