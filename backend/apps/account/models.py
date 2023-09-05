@@ -1,9 +1,21 @@
 import uuid
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
+
+from .manager import UserManager
+
+
+class User(AbstractUser):
+    USERNAME_FIELD = "email"
+    EMAIL_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
+
+    objects = UserManager()
+
+    email = models.EmailField(unique=True)
 
 
 class IdRegistration(models.Model):
@@ -11,7 +23,7 @@ class IdRegistration(models.Model):
 
 
 class TemporaryAccessRequest(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     approved_until = models.DateField()
     date = models.DateField()
     message_id = models.CharField(max_length=50, blank=True, null=True)
