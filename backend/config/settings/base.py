@@ -123,7 +123,6 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'apps.account.emailAuthBackend.EmailBackend',
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -151,7 +150,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
+AUTH_USER_MODEL = 'account.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 
