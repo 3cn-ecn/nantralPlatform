@@ -89,8 +89,7 @@ class SignUpForm(UserCreationForm):
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
         try:
-            User = get_user_model()  # noqa
-            User.objects.get(email=email)
+            get_user_model().objects.get(email=email)
             raise forms.ValidationError(_("Cet email est déjà utilisé."))
         except User.DoesNotExist:
             if email and confirm_email:

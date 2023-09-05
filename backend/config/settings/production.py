@@ -17,8 +17,8 @@ if STAGING:
 else:
     ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
 
-EMAIL_HOST = 'smtp'
-EMAIL_PORT = '25'
+EMAIL_HOST = "smtp"
+EMAIL_PORT = "25"
 # No need to authenticate on localhost
 EMAIL_HOST_USER = None
 EMAIL_HOST_PASSWORD = None
