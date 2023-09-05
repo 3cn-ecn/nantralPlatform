@@ -6,7 +6,7 @@ from datetime import datetime
 from unittest import mock
 
 from django.contrib.auth import get_user
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core import mail
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -35,6 +35,8 @@ REGEX_ACTIVATE_URL = (
 REGEX_RESET_PASS_URL = (
     r"href='https://testserver/account/reset_pass/([\w-]*)/([\w-]*)/'"
 )
+
+User = get_user_model()
 
 
 class TestAccount(TestCase, TestMixin):
