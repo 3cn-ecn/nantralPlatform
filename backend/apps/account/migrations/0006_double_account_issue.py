@@ -4,8 +4,9 @@
 Correct the duplicate of user accounts.
 """
 
-from django.db import migrations
 from datetime import datetime
+
+from django.db import migrations
 
 
 def sort_user(u):

@@ -2,6 +2,7 @@
 
 from django.db import migrations
 from django.utils.text import slugify
+
 from apps.utils.slug import get_slug_from_full_slug
 
 

@@ -13,6 +13,7 @@ from .serializers import HousingLastRoommatesSerializer, RoommatesSerializer
 
 class SearchGeocodingView(APIView):
     """A view to query the external Geocoding service."""
+
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
@@ -21,6 +22,7 @@ class SearchGeocodingView(APIView):
 
 class HousingView(generics.ListCreateAPIView):
     """API View to get all the housing and their current roommates"""
+
     serializer_class = HousingLastRoommatesSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = None
@@ -34,7 +36,8 @@ class HousingView(generics.ListCreateAPIView):
                     Q(roommates__end_date__gte=now)
                     | Q(roommates__end_date=None)
                 )
-            ) | Q(roommates__members=None)
+            )
+            | Q(roommates__members=None)
         ).distinct()
         return query
 
@@ -47,28 +50,35 @@ class CheckAddressView(APIView):
 
     def post(self, request):
         query = Housing.objects.filter(address=request.data.get("address"))
-        data = [{
-            'pk': housing.pk,
-            'name': (f'{housing.address} - {housing.details} '
-                     f'({housing.current_roommates})')
-        } for housing in query]
+        data = [
+            {
+                "pk": housing.pk,
+                "name": (
+                    f"{housing.address} - {housing.details} "
+                    f"({housing.current_roommates})"
+                ),
+            }
+            for housing in query
+        ]
         return Response(data=data)
 
 
 class RoommatesDetails(APIView):
     """An API view to return the details of a roommates instance"""
+
     serializer_class = RoommatesSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
-        object_slug = self.request.GET.get('slug')
+        object_slug = self.request.GET.get("slug")
         objects = [generics.get_object_or_404(Roommates, slug=object_slug)]
         serializer = self.serializer_class(objects, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         object = generics.get_object_or_404(
-            Roommates, slug=request.data.get("slug"))
+            Roommates, slug=request.data.get("slug")
+        )
         if not object.colocathlon_agree:
             return Response(status=403)
         add_or_delete = int(request.data.get("addOrDelete"))
@@ -76,21 +86,25 @@ class RoommatesDetails(APIView):
         # add_or_delete == 1 --> Delete user
         # add_or_delete == 0 --> Add user
         if add_or_delete == 0:
-            if (object.colocathlon_quota
-                    > object.colocathlon_participants.count()):
+            if (
+                object.colocathlon_quota
+                > object.colocathlon_participants.count()
+            ):
                 roommates = Roommates.objects.filter(
-                    colocathlon_participants=request.user.student)
+                    colocathlon_participants=request.user.student
+                )
                 if not roommates.exists():
                     object.colocathlon_participants.add(request.user.student)
                     return Response(status=200)
                 else:
                     return Response(
                         data=RoommatesSerializer(roommates.first()).data,
-                        status=403)
+                        status=403,
+                    )
             return Response(status=403)
-        if (Roommates.objects
-                .filter(colocathlon_participants=request.user.student)
-                .exists()):
+        if Roommates.objects.filter(
+            colocathlon_participants=request.user.student
+        ).exists():
             object.colocathlon_participants.remove(request.user.student)
             return Response(status=200)
         return Response(status=500)

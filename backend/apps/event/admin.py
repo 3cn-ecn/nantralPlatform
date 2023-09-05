@@ -4,10 +4,16 @@ from .models import Event
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'start_date']
-    readonly_fields = ['updated_by']
+    list_display = ["title", "start_date"]
+    readonly_fields = ["updated_by"]
 
-    def save_model(self, request, obj, form, change,):
+    def save_model(
+        self,
+        request,
+        obj,
+        form,
+        change,
+    ):
         obj.updated_by = request.user.student
         super().save_model(request, obj, form, change)
 

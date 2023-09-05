@@ -6,8 +6,9 @@
 # If changes are made to the required fields of the Accounts model, this
 # file WILL HAVE TO BE EDITED accordingly.
 
-import json
 import copy
+import json
+
 import names
 
 STUDENT_TEMP = {
@@ -25,19 +26,19 @@ def generate():
         if i != 1:
             first_name = names.get_first_name().lower()
             last_name = names.get_last_name().lower()
-            new_student["email"] = f'{first_name}.{last_name}@ec-nantes.fr'
+            new_student["email"] = f"{first_name}.{last_name}@ec-nantes.fr"
         else:
             first_name = "robin"
             last_name = "test"
             new_student["is_superuser"] = True
             new_student["is_staff"] = True
-            new_student["email"] = 'robin@ec-nantes.fr'
-        new_student["username"] = f'{first_name}{last_name}-{i}'
-        new_student["first_name"] = f'{first_name}'
-        new_student["last_name"] = f'{last_name}'
+            new_student["email"] = "robin@ec-nantes.fr"
+        new_student["username"] = f"{first_name}{last_name}-{i}"
+        new_student["first_name"] = f"{first_name}"
+        new_student["last_name"] = f"{last_name}"
 
         L.append(new_student)
-    with open('fixtures.json', 'w') as outfile:
+    with open("fixtures.json", "w") as outfile:
         json.dump(L, outfile)
 
 

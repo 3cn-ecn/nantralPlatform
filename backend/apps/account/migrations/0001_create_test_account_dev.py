@@ -1,12 +1,12 @@
-from django.contrib.auth.hashers import make_password
-from django.db import migrations
-from django.conf import settings
-from random import randint
 import json
 from pathlib import Path
+from random import randint
+
 import django
-from django.db import models
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.hashers import make_password
+from django.db import migrations, models
 
 
 def create_user(apps, schema_editor):

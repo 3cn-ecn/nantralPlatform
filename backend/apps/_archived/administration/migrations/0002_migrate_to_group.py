@@ -2,8 +2,9 @@
 # flake8: noqa
 
 from django.db import migrations
-from django.utils.text import slugify
 from django.utils import timezone
+from django.utils.text import slugify
+
 
 def forwards(apps, schema_editor):
     Administration = apps.get_model('administration', 'Administration')

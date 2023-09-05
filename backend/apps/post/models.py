@@ -12,20 +12,23 @@ from apps.utils.slug import SlugModel
 from apps.utils.upload import PathAndRename
 from django.contrib.auth import get_user_model
 
-path_and_rename = PathAndRename('posts/pictures')
+path_and_rename = PathAndRename("posts/pictures")
 
 VISIBILITY = [
-    ('Pub', 'Public - Visible par tous'),
-    ('Mem', 'Membres uniquement - Visible uniquement par les membres du groupe')
+    ("Pub", "Public - Visible par tous"),
+    (
+        "Mem",
+        "Membres uniquement - Visible uniquement par les membres du groupe",
+    ),
 ]
 
 COLORS = [
-    ('primary', 'Bleu'),
-    ('success', 'Vert'),
-    ('danger', 'Rouge'),
-    ('warning', 'Jaune'),
-    ('secondary', 'Gris'),
-    ('dark', 'Noir')
+    ("primary", "Bleu"),
+    ("success", "Vert"),
+    ("danger", "Rouge"),
+    ("warning", "Jaune"),
+    ("secondary", "Gris"),
+    ("dark", "Noir"),
 ]
 
 User = get_user_model()
@@ -33,64 +36,70 @@ User = get_user_model()
 
 class AbstractPublication(models.Model, SlugModel):
     """Abstract model for posts and events."""
-    title = models.CharField(
-        verbose_name=_("Title"), max_length=200)
-    description = CKEditor5Field(
-        verbose_name=_("Description"), blank=True)
+
+    title = models.CharField(verbose_name=_("Title"), max_length=200)
+    description = CKEditor5Field(verbose_name=_("Description"), blank=True)
     group = models.ForeignKey(
-        to=Group,
-        verbose_name=_("Organiser"),
-        on_delete=models.CASCADE)
+        to=Group, verbose_name=_("Organiser"), on_delete=models.CASCADE
+    )
     publicity = models.CharField(
-        verbose_name=_("Visibility"),
-        max_length=200,
-        choices=VISIBILITY)
+        verbose_name=_("Visibility"), max_length=200, choices=VISIBILITY
+    )
     image = models.ImageField(
         verbose_name=_("Banner"),
         upload_to=path_and_rename,
         null=True,
         blank=True,
-        help_text=_("Your banner will be displayed at 1320x492 pixels."))
+        help_text=_("Your banner will be displayed at 1320x492 pixels."),
+    )
     notification = models.ForeignKey(
-        to=Notification, on_delete=models.SET_NULL, blank=True, null=True)
+        to=Notification, on_delete=models.SET_NULL, blank=True, null=True
+    )
 
     # Log infos
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
-        Student, blank=True, null=True,
-        on_delete=models.SET_NULL, related_name='+')
+        Student,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
     updated_at = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
-        Student, blank=True, null=True,
-        on_delete=models.SET_NULL, related_name='+')
+        Student,
+        blank=True,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
 
     class Meta:
         abstract = True
 
-    def save(
-        self,
-        *args,
-        notification_body: str,
-        **kwargs
-    ) -> None:
+    def save(self, *args, notification_body: str, **kwargs) -> None:
         # compression des images
         self.image = compress_model_image(
-            self, 'image', size=(960, 540), contains=True)
+            self, "image", size=(960, 540), contains=True
+        )
         # create the notification object
         if not self.notification:
             self.notification = Notification.objects.create(
                 title=self.group.name,
                 body=notification_body,
                 url="",
-                sender=self.group.slug)
+                sender=self.group.slug,
+            )
             NotificationAction.objects.create(
                 notification=self.notification,
                 title="Ouvrir",
-                url=self.notification.url)
+                url=self.notification.url,
+            )
             NotificationAction.objects.create(
                 notification=self.notification,
                 title="Gérer",
-                url=reverse("notification:settings"))
+                url=reverse("notification:settings"),
+            )
 
         # save the object
         super(AbstractPublication, self).save(*args, **kwargs)
@@ -101,8 +110,8 @@ class AbstractPublication(models.Model, SlugModel):
         n.body = notification_body
         n.url = self.get_absolute_url()
         n.sender = self.group.slug
-        n.icon_url = (self.group.icon.url if self.group.icon else None)
-        n.image_url = (self.image.url if self.image else None)
+        n.icon_url = self.group.icon.url if self.group.icon else None
+        n.image_url = self.image.url if self.image else None
         n.publicity = self.publicity
         n.save()
         # send the notification
@@ -113,7 +122,7 @@ class AbstractPublication(models.Model, SlugModel):
         return f"{self.title} ({self.group.short_name})"
 
     def can_view(self, user: User) -> bool:
-        if self.publicity == 'Pub':
+        if self.publicity == "Pub":
             return True
         return self.group.is_member(user)
 
@@ -128,14 +137,13 @@ class AbstractPublication(models.Model, SlugModel):
 
 class Post(AbstractPublication):
     pinned = models.BooleanField(
-        verbose_name=_("Pin publication"), default=False)
+        verbose_name=_("Pin publication"), default=False
+    )
 
     def save(self, *args, **kwargs) -> None:
         super(Post, self).save(
-            *args,
-            notification_body=f'Annonce : {self.title}',
-            **kwargs
+            *args, notification_body=f"Annonce : {self.title}", **kwargs
         )
 
     def get_absolute_url(self) -> str:
-        return f'/?post={self.pk}'
+        return f"/?post={self.pk}"

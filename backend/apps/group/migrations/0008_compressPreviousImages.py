@@ -2,6 +2,7 @@
 
 
 from django.db import migrations
+
 from apps.utils.compress import compress_image
 
 

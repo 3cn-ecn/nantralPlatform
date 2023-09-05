@@ -1,9 +1,11 @@
 from datetime import datetime
+
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from extra_settings.models import Setting
-from .models import MembershipFamily, Family
+
+from .models import Family, MembershipFamily
 
 User = get_user_model()
 
@@ -35,10 +37,7 @@ def scholar_year(date: datetime = timezone.now()) -> int:
     return year
 
 
-def get_membership(
-    user: User,
-    year: int = scholar_year()
-) -> MembershipFamily:
+def get_membership(user: User, year: int = scholar_year()) -> MembershipFamily:
     """Get the membership object which links the given user to a family,
     on a given year (one user can only have one family per year).
 
@@ -58,15 +57,14 @@ def get_membership(
     try:
         member = MembershipFamily.objects.get(
             student=user.student,
-            role='2A+',
+            role="2A+",
             group__year=year,
         )
         return member
     except MembershipFamily.DoesNotExist:
         try:
             member = MembershipFamily.objects.get(
-                student=user.student,
-                role='1A'
+                student=user.student, role="1A"
             )
             return member
         except MembershipFamily.DoesNotExist:
@@ -74,9 +72,7 @@ def get_membership(
 
 
 def is_first_year(
-    user: User,
-    membership: MembershipFamily = None,
-    year: int = scholar_year()
+    user: User, membership: MembershipFamily = None, year: int = scholar_year()
 ) -> bool:
     """Determines if a user is in first year or not.
     If not, it means he/she is in second or third year.
@@ -102,16 +98,14 @@ def is_first_year(
     if not membership:
         membership = get_membership(user, year)
     if membership:
-        return membership.role == '1A'
+        return membership.role == "1A"
     else:
         promo = user.student.promo
         return promo == scholar_year()
 
 
 def get_family(
-    user: User,
-    membership: MembershipFamily = None,
-    year: int = scholar_year()
+    user: User, membership: MembershipFamily = None, year: int = scholar_year()
 ) -> Family:
     """Get the family of a user for a certain year.
 
@@ -163,7 +157,7 @@ def show_sensible_data(user: User, membership: MembershipFamily = None) -> bool:
         membership = get_membership(user)
     is_1A = is_first_year(user, membership)  # noqa: N806
     is_2A = not is_1A  # noqa: N806
-    phase = Setting.get('PHASE_PARRAINAGE')
+    phase = Setting.get("PHASE_PARRAINAGE")
     if membership:
         # if membership exists, we are sure of the 1A/2A property
         return is_2A or (phase >= 4)

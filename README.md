@@ -56,13 +56,13 @@
     ```
   - in the backend:
     ```bash
-    pipenv run flake8 ./
+    pipenv run lint  # use lint:fix to fix errors
     pipenv run test
     ```
   - in the frontend:
     ```bash
     npm run types
-    npm run lint
-    npm run jest
+    npm run lint  # use lint:fix to fix errors
+    npm run jest  # use jest:u to update snapshots
     ```
     _Run these 3 commands at once: `npm run test`_

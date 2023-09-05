@@ -1,0 +1,44 @@
+[tool.black]
+line-length = 80
+extend-exclude = "tmp/"
+exclude = "(migrations|.venv)"
+
+[tool.isort]
+profile = "black"
+line_length = 80
+known_django="django"
+known_first_party="apps,config"
+sections="FUTURE,STDLIB,DJANGO,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+
+[tool.flakeheaven]
+format = "grouped"
+statistics = true
+doctests = true
+enable_extensions = "G"
+accept_encodings = "utf-8"
+max-line-length = 80
+max-complexity = 6
+docstring-style = "numpy"
+inline-quotes = "double"
+exclude = [
+    ".git",
+    "__pycache__",
+    "*/migrations/*",
+    ".venv",
+]
+baseline = ".flakeheaven_baseline"
+
+[tool.flakeheaven.plugins]
+"flake8-*" = ["+*", "-C8??", "-D1??", "-D401", "-DAR101", "-DAR201", "-DAR301", "-DAR401", "-RST???"]
+mccabe = ["+*"]
+"pep8-naming" = ["+*"]
+pycodestyle = ["+*", "-E203", "-W503"]
+pyflakes = ["+*"]
+"wemake-python-styleguide" = ["+*", "-WPS100", "-WPS110", "-WPS111", "-WPS2??", "-WPS3??", "-WPS407", "-WPS410", "-WPS412", "-WPS420", "-WPS432", "-WPS454", "-WPS459", "-WPS5", "-WPS601"]
+
+[tool.flakeheaven.exceptions."*/settings/*.py"]
+pyflakes = ["-F403", "-F405"]
+
+[tool.flakeheaven.exceptions."*/family/*.py"]
+"wemake-python-styleguide" = ["-WPS114"]
+pylint = ["-N806"]

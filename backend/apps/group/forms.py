@@ -8,40 +8,42 @@ from .models import Group, Membership
 
 class UpdateGroupForm(ModelForm):
     """Form to update an existing group."""
+
     class Meta:
         model = Group
         fields = [
-            'name',
-            'short_name',
-            'label',
-            'summary',
-            'description',
-            'meeting_place',
-            'meeting_hour',
-            'icon',
-            'banner',
-            'video1',
-            'video2',
-            'creation_year',
-            'tags',
-            'public',
-            'private',
-            'lock_memberships',
-            'children_label',
-            'archived']
+            "name",
+            "short_name",
+            "label",
+            "summary",
+            "description",
+            "meeting_place",
+            "meeting_hour",
+            "icon",
+            "banner",
+            "video1",
+            "video2",
+            "creation_year",
+            "tags",
+            "public",
+            "private",
+            "lock_memberships",
+            "children_label",
+            "archived",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         labels = self.instance.group_type.label_set.all()
         if labels:
-            self.fields['label'].queryset = labels
+            self.fields["label"].queryset = labels
         else:
-            del self.fields['label']
+            del self.fields["label"]
         tags = self.instance.group_type.tag_set.all()
         if tags:
-            self.fields['tags'].queryset = tags
+            self.fields["tags"].queryset = tags
         else:
-            del self.fields['tags']
+            del self.fields["tags"]
 
 
 class MembershipForm(ModelForm):
@@ -49,7 +51,7 @@ class MembershipForm(ModelForm):
 
     class Meta:
         model = Membership
-        fields = ['summary', 'begin_date', 'end_date', 'description']
+        fields = ["summary", "begin_date", "end_date", "description"]
 
     def __init__(
         self,
@@ -60,8 +62,10 @@ class MembershipForm(ModelForm):
         **kwargs
     ):
         if not (instance or (group and student)):
-            raise ValueError("AddMembershipForm.__init__() required both "
-                             "'group' and 'student' arguments or 'instance'")
+            raise ValueError(
+                "AddMembershipForm.__init__() required both "
+                "'group' and 'student' arguments or 'instance'"
+            )
         super().__init__(*args, instance=instance, **kwargs)
         # manually add the group or the student to the instance
         if not instance:
@@ -69,8 +73,8 @@ class MembershipForm(ModelForm):
             self.instance.student = student
         # customize the form
         if self.instance.group.group_type.no_membership_dates:
-            del self.fields['begin_date']
-            del self.fields['end_date']
+            del self.fields["begin_date"]
+            del self.fields["end_date"]
 
 
 class AdminRequestForm(ModelForm):
@@ -78,7 +82,7 @@ class AdminRequestForm(ModelForm):
 
     class Meta:
         model = Membership
-        fields = ['admin_request_messsage']
+        fields = ["admin_request_messsage"]
 
     def save(self, *args, **kwargs) -> any:
         self.instance.admin_request = True
@@ -86,7 +90,5 @@ class AdminRequestForm(ModelForm):
 
 
 SocialLinkGroupFormset = modelformset_factory(
-    SocialLink,
-    fields=['network', 'uri', 'label'],
-    extra=1,
-    can_delete=True)
+    SocialLink, fields=["network", "uri", "label"], extra=1, can_delete=True
+)

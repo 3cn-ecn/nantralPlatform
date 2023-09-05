@@ -10,8 +10,16 @@ class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ['id', 'name', 'promo', 'picture',
-                  'faculty', 'path', 'url', 'staff']
+        fields = [
+            "id",
+            "name",
+            "promo",
+            "picture",
+            "faculty",
+            "path",
+            "url",
+            "staff",
+        ]
 
     def get_name(self, obj: Student) -> str:
         return obj.name
@@ -29,8 +37,8 @@ class StudentPreviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ['id', 'name', 'url', 'picture']
-        read_only = ['picture']
+        fields = ["id", "name", "url", "picture"]
+        read_only = ["picture"]
 
     def get_name(self, obj: Student) -> str:
         return obj.name
