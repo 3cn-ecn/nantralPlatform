@@ -22,8 +22,8 @@ from apps.utils.upload import PathAndRename
 logger = logging.getLogger(__name__)
 
 
-path_and_rename_group = PathAndRename('groups/logo')
-path_and_rename_group_banniere = PathAndRename('groups/banniere')
+path_and_rename_group = PathAndRename("groups/logo")
+path_and_rename_group_banniere = PathAndRename("groups/banniere")
 
 User = get_user_model()
 

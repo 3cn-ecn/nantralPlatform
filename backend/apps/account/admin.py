@@ -49,8 +49,7 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {"fields": ("username", "password")}),
-        (_("Personal info"), {"fields": ("first_name",
-         "last_name", "email")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
         (
             _("Permissions"),
             {
@@ -69,8 +68,8 @@ class CustomUserAdmin(UserAdmin):
         (
             None,
             {
-                'classes': ('wide',),
-                'fields': ('email', 'password1', 'password2')
-            }
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2"),
+            },
         ),
     )

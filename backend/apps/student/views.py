@@ -69,11 +69,9 @@ def change_password(request, pk):
     if form.is_valid():
         user = form.save()
         update_session_auth_hash(request, user)
-        login(
-            request,
-            user)
-        messages.success(request, 'Mot de passe changé !')
-        return redirect('student:update', pk)
+        login(request, user)
+        messages.success(request, "Mot de passe changé !")
+        return redirect("student:update", pk)
     else:
         messages.error(request, form.errors)
         return redirect("student:update", pk)

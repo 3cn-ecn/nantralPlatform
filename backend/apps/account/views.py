@@ -116,8 +116,8 @@ class ConfirmUser(View):
                 )
             user.save()
             login(self.request, user)
-            messages.success(request, 'Votre compte est désormais actif !')
-            return redirect('home:home')
+            messages.success(request, "Votre compte est désormais actif !")
+            return redirect("home:home")
         else:
             return render(self.request, "account/activation_invalid.html")
 
@@ -243,13 +243,13 @@ class ForgottenPassView(FormView):
                         "domain": current_site.domain,
                         "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
                         # method will generate a hash value with user data
-                        'token': account_activation_token.make_token(user),
-                    })
+                        "token": account_activation_token.make_token(user),
+                    },
+                )
                 if settings.DEBUG:
                     print(message)
                 else:
-                    user.email_user(
-                        subject, message, html_message=message)
+                    user.email_user(subject, message, html_message=message)
         except User.DoesNotExist:
             pass
         messages.success(
@@ -322,7 +322,8 @@ class ConfirmEmail(TemplateView):
         user = User.objects.get(email=request.session["email"])
         mail = user.email
         temp_access = TemporaryAccessRequest.objects.filter(
-            user=user.pk).exists()
+            user=user.pk
+        ).exists()
         send_email_confirmation(
             user, self.request, temporary_access=temp_access, send_to=mail
         )

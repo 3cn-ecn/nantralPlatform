@@ -32,9 +32,9 @@ User = get_user_model()
 
 
 class Student(models.Model):
-
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
     promo = models.IntegerField(
         verbose_name="Année de promotion entrante", null=True, blank=True
     )
