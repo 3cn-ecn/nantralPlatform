@@ -28,12 +28,15 @@ jobs:
         run: |
           curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
           pipenv verify
-          pipenv sync
-          pipenv run pip install coverage
+          pipenv sync --dev
+
+      - name: Linter
+        run: |
+          pipenv run flakeheaven lint
 
       - name: Run tests and collect coverage
         run: |
-          pipenv run coverage-test
+          pipenv run test:coverage
           pipenv run coverage xml
 
       - name: SonarCloud Scan

@@ -1,6 +1,6 @@
 from typing import TypeVar
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 def parse_bool(value: str | None, default: T = None) -> bool | T:

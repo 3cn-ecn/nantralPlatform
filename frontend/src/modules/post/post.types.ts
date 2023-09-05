@@ -11,6 +11,7 @@ export type Post = {
   image: string;
   pinned: boolean;
   isAdmin: boolean;
+  notificationId: number | null;
 };
 
 export type PostPreview = Pick<

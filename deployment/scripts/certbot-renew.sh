@@ -21,7 +21,7 @@
 cd /home/ubuntu/nantralPlatform/deployment
 
 # Renew certificates
-certbot certonly --force-renew --webroot --webroot-path ./certbot/www/ -d nantral-platform.fr -d webmail.nantral-platform.fr -d dev.nantral-platform.fr -d www.nantral-platform.fr -d mail.nantral-platform.fr
+certbot certonly --cert-name nantral-platform.fr --expand --webroot --webroot-path ./certbot/www/ -d nantral-platform.fr -d webmail.nantral-platform.fr -d dev.nantral-platform.fr -d www.nantral-platform.fr -d mail.nantral-platform.fr
 
 # Move certificates to handle mails
 cp /etc/letsencrypt/live/nantral-platform.fr/privkey.pem /home/ubuntu/nantralPlatform/deployment/certs/key.pem || exit 1

@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Container } from '@mui/material';
 
@@ -18,23 +18,14 @@ import { UpcomingEventsSection } from './views/section/UpcomingEventsSection';
  */
 export default function HomePage() {
   // Query Params
-  const [queryParams, setQueryParams] = useSearchParams();
+  const [queryParams] = useSearchParams();
+  const navigate = useNavigate();
   // Dates
   const today = new Date();
   const nextWeek = new Date();
   nextWeek.setDate(today.getDate() + 7);
-  // Modals
-  // const { t } = useTranslation(); // translation module
 
   const openedPostId = queryParams.get('post');
-
-  // const { status: myGroupsStatus, data: myGroups } = useQuery<
-  //   SimpleGroupProps[],
-  //   LoadStatus
-  // >({
-  //   queryKey: 'myGroups',
-  //   queryFn: getMyGroups,
-  // });
 
   return (
     <>
@@ -44,11 +35,6 @@ export default function HomePage() {
         <PinnedPostsSection enabled={!openedPostId} />
         <UpcomingEventsSection enabled={!openedPostId} />
         <LastPostsSection enabled={!openedPostId} />
-        {/* <ClubSection
-          clubs={myGroups}
-          status={myGroupsStatus}
-          title={t('home.myClubs')}
-        /> */}
         <Spacer vertical={3} />
         <HelpUsSection />
         <Spacer vertical={6} />
@@ -56,10 +42,7 @@ export default function HomePage() {
       {!!openedPostId && (
         <PostModal
           postId={parseInt(openedPostId)}
-          onClose={() => {
-            queryParams.delete('post');
-            setQueryParams(queryParams);
-          }}
+          onClose={() => navigate({}, { preventScrollReset: true })}
         />
       )}
     </>

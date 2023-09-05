@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { useTranslation as useI18nextTranslation } from 'react-i18next';
 
 import {

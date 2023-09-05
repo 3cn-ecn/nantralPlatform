@@ -6,9 +6,7 @@ from .models import Notification, SentNotification
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = [
-            'id', 'title', 'body', 'url', 'icon_url', 'date'
-        ]
+        fields = ["id", "title", "body", "url", "icon_url", "date"]
 
 
 class SentNotificationSerializer(serializers.ModelSerializer):
@@ -16,4 +14,4 @@ class SentNotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SentNotification
-        fields = ['notification', 'subscribed', 'seen']
+        fields = ["notification", "subscribed", "seen"]

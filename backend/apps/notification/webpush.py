@@ -33,7 +33,7 @@ def send_webpush_notification(students: QuerySet, message: dict):
 
     # we first convert the queryset of student to a list, because we cannot
     # pass a queryset for an async function with celery
-    student_ids = list(students.all().values_list('id', flat=True))
+    student_ids = list(students.all().values_list("id", flat=True))
     # check if celery is launched with a docker instance
     if hasattr(settings, "CELERY_BROKER_URL"):
         # launch the celery task for sending notifications in async

@@ -30,6 +30,7 @@ export function adaptEvent(eventDto: EventDTO): Event {
       ? new Date(eventDto.end_registration)
       : null,
     formUrl: eventDto.form_url,
+    notificationId: eventDto.notification,
   };
 }
 

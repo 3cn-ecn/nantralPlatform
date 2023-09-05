@@ -20,6 +20,7 @@ export type EventDTO = {
   start_registration: string | null;
   end_registration: string | null;
   form_url: string;
+  notification: number | null;
 };
 
 export type EventPreviewDTO = Pick<

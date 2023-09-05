@@ -12,7 +12,11 @@ export function useUpcomingEventsQuery(
   const now = new Date();
 
   const query = useQuery<Page<EventPreview>, ApiError>({
-    queryKey: ['events', 'upcoming-events', { page: 1 }],
+    queryKey: [
+      'events',
+      'upcoming-events',
+      { page: 1, pageSize: numberOfEvents },
+    ],
     queryFn: () =>
       getEventListApi({
         fromDate: now,

@@ -5,15 +5,17 @@
 # feel free to use it if a year you can't use
 # nantral platform anymore
 
-from matching.games import StableMarriage
-from difflib import SequenceMatcher
-from pprint import pprint
-import random
 import copy
 import csv
-import numpy as np
-import sys
 import logging
+import random
+import sys
+from difflib import SequenceMatcher
+from pprint import pprint
+
+import numpy as np
+from matching.games import StableMarriage
+
 logging.basicConfig(level=logging.DEBUG)
 
 sys.setrecursionlimit(99999)
@@ -21,94 +23,81 @@ sys.setrecursionlimit(99999)
 
 # Compare two strings and return a float representing similarities.
 
+
 def similar(a, b):
     res = SequenceMatcher(None, a, b).ratio()
 
 
 COLUMN_ID_NAME = 1
-FILE_FIRST_YEAR = 'answers-fillots.csv'
-FILE_FIRST_YEAR_EN = 'answers-fillots-en.csv'
-FILE_SECOND_YEAR = 'answers-parrains.csv'
-FILE_FAMILIES = 'answers-familles.csv'
+FILE_FIRST_YEAR = "answers-fillots.csv"
+FILE_FIRST_YEAR_EN = "answers-fillots-en.csv"
+FILE_SECOND_YEAR = "answers-parrains.csv"
+FILE_FAMILIES = "answers-familles.csv"
 
 DICT_LOVELIKE = {
     "J'adore": 0,
     "J'apprÃ©cie": 1,
     "IndiffÃ©rent/Je n'aime pas": 2,
-
     "I love": 0,
     "I like": 1,
-    "No interest/I don't like": 2
+    "No interest/I don't like": 2,
 }
 
-DICT_YESNO = {
-    'Oui': 0, 'oui': 0,
-    'Non': 1, 'non': 1,
-
-    'Yes': 0,
-    'No': 1
-}
+DICT_YESNO = {"Oui": 0, "oui": 0, "Non": 1, "non": 1, "Yes": 0, "No": 1}
 
 DICT_DRINK = {
-    'Pas du tout': 0,
-    'Quelques verres': 1,
-    'BourrÃ©': 2,
-    'Un peu trop': 3,
-    'Vers l\'infini et l\'au-delà': 4,
-
-    'I don\'t drink': 0,
-    'a few drinks': 1,
-    'Drunk': 2,
-    'Too many drinks': 3,
-    'The answer above too many drinks': 4
+    "Pas du tout": 0,
+    "Quelques verres": 1,
+    "BourrÃ©": 2,
+    "Un peu trop": 3,
+    "Vers l'infini et l'au-delà": 4,
+    "I don't drink": 0,
+    "a few drinks": 1,
+    "Drunk": 2,
+    "Too many drinks": 3,
+    "The answer above too many drinks": 4,
 }
 
 DICT_DRINK_FAMILY = {
-    'On ne boit pas une goutte': 0,
-    'Quelques verres': 1,
-    'BourrÃ©': 2,
-    'On boit un peu trop': 3,
-    'Vers l\'infini et l\'au-delà': 4
+    "On ne boit pas une goutte": 0,
+    "Quelques verres": 1,
+    "BourrÃ©": 2,
+    "On boit un peu trop": 3,
+    "Vers l'infini et l'au-delà": 4,
 }
 
 DICT_PARTY = {
-    'Jamais': 0,
-    'Une fois par mois': 1,
-    'Une fois par semaine': 2,
-    'Plusieurs fois par semaine': 3,
-    'Une fois par jour (ou plus)': 4,
-
-    'Never': 0,
-    'Once a month': 1,
-    'Once a week': 2,
-    'Several times a week': 3,
-    'Never get tired': 4
+    "Jamais": 0,
+    "Une fois par mois": 1,
+    "Une fois par semaine": 2,
+    "Plusieurs fois par semaine": 3,
+    "Une fois par jour (ou plus)": 4,
+    "Never": 0,
+    "Once a month": 1,
+    "Once a week": 2,
+    "Several times a week": 3,
+    "Never get tired": 4,
 }
 
 DICT_PARTY_FAMILY = {
-    'Jamais': 0,
-    'Une fois par mois': 1,
-    'Une fois par semaine': 2,
-    'Plusieurs fois par semaine': 3,
-    'Une fois par jour (ou plus)': 4
+    "Jamais": 0,
+    "Une fois par mois": 1,
+    "Une fois par semaine": 2,
+    "Plusieurs fois par semaine": 3,
+    "Une fois par jour (ou plus)": 4,
 }
 
 DICT_FUMETTE = {
-    'Non': 0,
-    'Occasionnelement': 1,
-    'RÃ©guliÃ¨rement': 2,
-
-    'No': 0,
-    'Sometimes': 1,
-    'Often': 2
+    "Non": 0,
+    "Occasionnelement": 1,
+    "RÃ©guliÃ¨rement": 2,
+    "No": 0,
+    "Sometimes": 1,
+    "Often": 2,
 }
 
 # Déclaration des questions
-questions = [
-    None,  # Horodateur
-    None,  # Prénom NOM
-    None  # 1 à 10
-]
+questions = [None, None, None]  # Horodateur  # Prénom NOM  # 1 à 10
 questions += [DICT_YESNO] * 3  # BDE/BDA/BDS
 questions += [DICT_LOVELIKE] * 10  # Musique
 questions += [DICT_LOVELIKE] * 8  # Art
@@ -122,7 +111,13 @@ questions += [DICT_FUMETTE]  # Fumette
 
 questions_family = [
     None,  # Horodateur
-    None, None, None, None, None, None, None,  # Members
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,  # Members
     None,  # Family name
     DICT_PARTY_FAMILY,
     DICT_DRINK_FAMILY,
@@ -152,7 +147,7 @@ class Student:
         self.family = None
 
     def __repr__(self):
-        return 'Student(%d, %s)' % (self.id, self.name)
+        return "Student(%d, %s)" % (self.id, self.name)
 
     def setFamily(self, family):
         self.family = family
@@ -173,9 +168,9 @@ def readlineAnswers(line, questions):
 
     # decouper la ligne :
     # print(line)
-    #line_cut = line[0].split('","')
+    # line_cut = line[0].split('","')
     # line_cut.insert(0,"decalage")
-    #line_cut[-1] = line_cut[-1][0:len(line_cut[-1])-1]
+    # line_cut[-1] = line_cut[-1][0:len(line_cut[-1])-1]
     answers = np.zeros(len(questions), dtype=float)
 
     for i, question in enumerate(questions):
@@ -200,8 +195,8 @@ def love_score(answersA, answersB, coeffs=questionsCoeff):
 def readFamilies(filepath, students):
     families = []
 
-    with open(filepath, 'r', newline='') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',', quotechar='"')
+    with open(filepath, "r", newline="") as csvfile:
+        reader = csv.reader(csvfile, delimiter=",", quotechar='"')
 
         next(reader)
         id_neg = 1
@@ -209,7 +204,7 @@ def readFamilies(filepath, students):
             # Create family from name COLONNE 8 CORRESPOND A LA REPONSE NOM DE
             # FAMILLE APRES LES 7 NOMS DES PARRAINS
             f = Family(row[8], i + 1)
-            #print(type(Family(row[7], i+1)))
+            # print(type(Family(row[7], i+1)))
             # print(row[0])
             # print(type(f))
             # print(f.name)
@@ -230,16 +225,18 @@ def readFamilies(filepath, students):
                         f.append(student)
                         student.setFamily(f)
 
-                        student.answers[-1] = (2
-                                               * student.answers[-1] + f.answers[-2]) / 3
-                        student.answers[-2] = (2
-                                               * student.answers[-2] + f.answers[-1]) / 3
+                        student.answers[-1] = (
+                            2 * student.answers[-1] + f.answers[-2]
+                        ) / 3
+                        student.answers[-2] = (
+                            2 * student.answers[-2] + f.answers[-1]
+                        ) / 3
 
                         found = True
                         break
 
                 if not found:
-                    logging.debug('%s not found in students' % personName)
+                    logging.debug("%s not found in students" % personName)
                     numberToDuplicate += 1
 
             print(f.name, numberToDuplicate)
@@ -264,13 +261,13 @@ def readFamilies(filepath, students):
 def readAnswers(filepath):
     students = []
 
-    with open(filepath, 'r', newline='') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',', quotechar='"')
+    with open(filepath, "r", newline="") as csvfile:
+        reader = csv.reader(csvfile, delimiter=",", quotechar='"')
 
         next(reader)  # skip first row
         for studentId, row in enumerate(reader):
             print(row)
-            #row_cut = row[0].split(",")
+            # row_cut = row[0].split(",")
             answers = readlineAnswers(row, questions)
             personName = row[COLUMN_ID_NAME].strip()
             s = Student(studentId, personName, answers)
@@ -282,17 +279,17 @@ def readAnswers(filepath):
 
 
 # -- Read files --
-logging.debug('Lecture fichier fillots')
+logging.debug("Lecture fichier fillots")
 students_firstYear = readAnswers(FILE_FIRST_YEAR)
 print("ei1 ok")
 students_firstYear += readAnswers(FILE_FIRST_YEAR_EN)
 
 random.shuffle(students_firstYear)
 
-logging.debug('Lecture fichier parrains')
+logging.debug("Lecture fichier parrains")
 students_secondYear = readAnswers(FILE_SECOND_YEAR)
 
-logging.debug('Lecture fichier famille')
+logging.debug("Lecture fichier famille")
 families = readFamilies(FILE_FAMILIES, students_secondYear)
 # -- --
 
@@ -325,22 +322,23 @@ random.shuffle(students_secondYear)
 N = len(students_firstYear)
 
 # -- Create preferences lists based on love_score --
-logging.debug('Création du classement pour chaque étudiant')
+logging.debug("Création du classement pour chaque étudiant")
 # Etabli pour chaque première année, la liste ordonnée de ses préférences
 # parmi les deuxièmes années
 first_year_pref = {}
 second_year_pref = {}
 for i in range(N):
-
     first_year_pref[i] = sorted(
         range(N),
         key=lambda n: love_score(
-            students_secondYear[n].answers, students_firstYear[i].answers)
+            students_secondYear[n].answers, students_firstYear[i].answers
+        ),
     )
     second_year_pref[i] = sorted(
         range(N),
         key=lambda n: love_score(
-            students_secondYear[i].answers, students_firstYear[n].answers)
+            students_secondYear[i].answers, students_firstYear[n].answers
+        ),
     )
 
 # -- --
@@ -356,7 +354,7 @@ dict_solved = game.solve()
 families_solved = {}
 orphans = {}
 
-f = open('out.log', 'w')
+f = open("out.log", "w")
 
 for fillot_id, parrain_id in dict_solved.items():
     fillot = students_firstYear[fillot_id.name]
@@ -365,10 +363,15 @@ for fillot_id, parrain_id in dict_solved.items():
     fillot.parrain = parrain
     parrain.fillot = fillot
 
-    out_str = parrain.name + ' + ' + fillot.name + ' : ' + \
-        str(love_score(fillot.answers, parrain.answers))
+    out_str = (
+        parrain.name
+        + " + "
+        + fillot.name
+        + " : "
+        + str(love_score(fillot.answers, parrain.answers))
+    )
     # print(out_str)
-    f.write(out_str + '\n')
+    f.write(out_str + "\n")
 
     if parrain.family is None:  # pas de famille pour le parrain
         orphans[parrain] = fillot
@@ -402,8 +405,8 @@ with open('liens-photos.csv', 'r') as csvfile:
 """
 
 for family in families:
-    out_str_1 += '<h2>%s (numero %d)</h2>' % (family.name.strip(), family.id)
-    out_str_2 += '<h2>Famille numero %d</h2>' % family.id
+    out_str_1 += "<h2>%s (numero %d)</h2>" % (family.name.strip(), family.id)
+    out_str_2 += "<h2>Famille numero %d</h2>" % family.id
     # print(out_str_1)
     # print(out_str_2)
     """
@@ -415,18 +418,17 @@ for family in families:
     out_str_2 += '<ul>'
     """
     for parrain in family:
-        li = '<li>%s</li>' % parrain.fillot.name
+        li = "<li>%s</li>" % parrain.fillot.name
 
         out_str_1 += li
         out_str_2 += li
 
-    out_str_1 += '</ul>'
-    out_str_2 += '</ul>'
+    out_str_1 += "</ul>"
+    out_str_2 += "</ul>"
 
 
 table = []
 for student in students_firstYear:
-
     f = student.parrain.family
     table.append((student.name, f.id))  # , links[f.name]
 
@@ -438,28 +440,30 @@ out_str_3 = '<a href="/html/familles.html">Voir la liste des familles</a><p> </p
 
 for name, fId in table:
     # for name, fId, fLink in table:
-    #out_str_3 += '<tr><td>%s</td><td><a href="%s" target="_blank">%d</a></td></tr>' % (name, fLink, fId)
+    # out_str_3 += '<tr><td>%s</td><td><a href="%s" target="_blank">%d</a></td></tr>' % (name, fLink, fId)
 
-    out_str_3 += '<tr><td>%s</td><td><a href="tests" target="_blank">%d</a></td></tr>' % (
-        name, fId)
+    out_str_3 += (
+        '<tr><td>%s</td><td><a href="tests" target="_blank">%d</a></td></tr>'
+        % (name, fId)
+    )
 
-out_str_3 += '</table>'
+out_str_3 += "</table>"
 
 HTML_TEMPLATE = """<!DOCTYPE html><html>
 <head><meta charset="utf-8"><title></title></head>
 <body>%s</body></html>"""
 
-with open('b83b63ef41a40e68.html', 'w') as f:
+with open("b83b63ef41a40e68.html", "w") as f:
     f.write(HTML_TEMPLATE % out_str_1)
 
-with open('familles.html', 'w') as f:
+with open("familles.html", "w") as f:
     f.write(HTML_TEMPLATE % out_str_2)
 
-with open('ei1.html', 'w') as f:
+with open("ei1.html", "w") as f:
     f.write(HTML_TEMPLATE % out_str_3)
 
 
 for fId, family in enumerate(families):
-    s = str(fId) + ',' + family.name
+    s = str(fId) + "," + family.name
 
     print(s)

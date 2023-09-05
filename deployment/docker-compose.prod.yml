@@ -1,7 +1,6 @@
 version: "2.1"
 
 services:
-
   backend-staging:
     build:
       context: ../../nantralPlatform-staging/backend/
@@ -49,6 +48,11 @@ services:
       - 995:995
       - 143:143
       - 993:993
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "https://webmail.nantral-platform.fr"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
     volumes:
       - "./certs:/certs"
       - "./overrides/nginx:/overrides:ro"

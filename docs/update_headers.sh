@@ -10,15 +10,43 @@ get_author() {
     git log -1 --format="%an" "$1"
 }
 
-sed_command() {
-    # Detect the sed command syntax based on the operating system
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS (BSD sed)
-        sed -i '' -e "$1" "$2"
-    else
-        # Linux (GNU sed)
-        sed -i -e "$1" "$2"
-    fi
+update_metadata() {
+    # File to be updated
+    local file="$1"
+    local last_modified_date="$2"
+    local author="$3"
+
+    awk -v lmd="$last_modified_date" -v author="$author" '
+    BEGIN { in_header = 0; replaced = 0; }
+    /^---/ {
+        if (in_header == 0) {
+            in_header = 1;
+        } else {
+            in_header = 0;
+            if (replaced == 0) {
+                print "last_update:";
+                print "  date:", lmd;
+                print "  author:", author;
+                replaced = 1;
+            }
+        }
+    }
+    /^last_update:/ {
+        if (in_header == 1) {
+            replaced = 1;
+            print "last_update:";
+            print "  date:", lmd;
+            print "  author:", author;
+            for(i=0; i<2 && getline; i++); # skip the next two lines
+            next;
+        }
+    }
+    {
+        print;
+    }' "$file" > "${file}.tmp"
+
+    # Move the temporary file to the original file
+    mv "${file}.tmp" "$file"
 }
 
 # Traverse through all .md and .mdx files in the /docs folder
@@ -27,17 +55,8 @@ for file in $(find ./docs -type f \( -name "*.md" -o -name "*.mdx" \)); do
     last_modified_date=$(get_last_modified_date "$file")
     author=$(get_author "$file")
 
-    # Check if the last_update line exists in the file
-    if ! grep -q '^last_update:' "$file"; then
-        # Add the last_update section at the beginning of the file
-        sed_command "2i\\
-last_update:\\
-  date: $last_modified_date\\
-  author: $author" "$file"
-    else
-        # Update the existing last_update line
-        sed_command "s#^last_update:\n  date:.*\n  author:.*#last_update:\n  date: $last_modified_date\n  author: $author#" "$file"
-    fi
+    # Update the metadata in the file
+    update_metadata "$file" "$last_modified_date" "$author"
 
     echo "Updated header for $file"
 done

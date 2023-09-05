@@ -222,9 +222,8 @@
     "eventSection": {
       "error": "Error: events cannot be loaded 😢",
       "isEmpty": "No upcoming event... 🥺 Create a new one!",
-      "openEventPageButton": {
-        "label": "See all"
-      },
+      "seeAll": "See all",
+      "seeMore": "See more",
       "title": "Upcoming events"
     },
     "helpUsSection": {
@@ -235,7 +234,6 @@
       "level": "Level {{level}}: ",
       "title": "Do you like this site?"
     },
-    "myClubs": "My groups",
     "postSection": {
       "error": "Error: posts cannot be loaded 😢",
       "isEmpty": "No post in the last few days... 🥺 Create a new one!",
@@ -315,6 +313,10 @@
   },
   "notification": {
     "aria-label": "Show {{ nb }} new notifications",
+    "askConsentBanner": {
+      "button": "Enable",
+      "warning": "Notifications are disabled"
+    },
     "endOfList": "End of the list 🥳",
     "loadMore": "Load more",
     "markAllAsSeen": "Mark all as read",

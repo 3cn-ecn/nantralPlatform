@@ -1,14 +1,16 @@
 from django.contrib import admin
+
 from .models import (
     AnswerFamily,
-    MembershipFamily,
-    Family,
     AnswerMember,
-    Option,
-    QuestionMember,
-    QuestionFamily,
+    Family,
     GroupQuestion,
-    QuestionPage)
+    MembershipFamily,
+    Option,
+    QuestionFamily,
+    QuestionMember,
+    QuestionPage,
+)
 
 
 class AnswerFamilyInline(admin.TabularInline):
@@ -35,7 +37,7 @@ class AnswerMemberInline(admin.TabularInline):
 
 
 class MembershipFamilyAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'role']
+    list_display = ["__str__", "role"]
     inlines = [AnswerMemberInline]
 
 

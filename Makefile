@@ -11,7 +11,7 @@ ifeq '$(findstring ;,$(PATH))' ';'
 	PYTHON := python
 	COPY := copy
 	PIPENV := $(PYTHON) -m pipenv
-	EXPORT = set $(1) $(2)
+	EXPORT = set $(1)=$(2)
 endif
 
 
@@ -30,16 +30,14 @@ install:
 		$(call EXPORT,DJANGO_SUPERUSER_PASSWORD,admin) && \
 		$(PIPENV) run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
 	cd frontend && \
-		npm ci && \
-		npm run build:dev
+		npm ci
 
 
 # Update after pull
 .PHONY: update
 update:
-	$(PYTHON) -m pip install --upgrade --user pipenv
 	cd frontend && \
-		npm install
+		npm ci
 	cd backend && \
 		$(PIPENV) sync --dev && \
 		$(PIPENV) run migrate
@@ -48,8 +46,11 @@ update:
 # Run the tests
 .PHONY: test
 test:
-	cd backend && $(PIPENV) run test
-	cd frontend && npm run test
+	cd backend && \
+		$(PIPENV) run lint && \
+		$(PIPENV) run test
+	cd frontend && \
+		npm run test
 
 
 # Run the backend and frontend
@@ -63,3 +64,5 @@ start:
 .PHONY: quality
 quality:
 	flake8 --config setup.cfg ./backend
+	cd frontend && npm run types
+	cd frontend && npm run lint

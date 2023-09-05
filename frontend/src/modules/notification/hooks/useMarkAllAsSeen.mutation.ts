@@ -46,7 +46,7 @@ export function useMarkAllAsSeenMutation() {
         );
         // invalidate queries to force reload the queries we have modified
         queryClient.invalidateQueries(['notifications']);
-        if (onSuccess) return onSuccess(...args);
+        return onSuccess?.(...args);
       },
       onError: (error, variables, context) => {
         showToast({
