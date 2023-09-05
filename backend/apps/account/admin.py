@@ -4,16 +4,18 @@ from django.core import mail
 from django.template.loader import render_to_string
 from .models import TemporaryAccessRequest
 from django.conf import settings
-
-
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import gettext_lazy as _
 from .models import IdRegistration
-# Register your models here.
 
 
+@admin.register(IdRegistration)
 class IdRegistrationAdmin(admin.ModelAdmin):
     list_display = ["id"]
 
 
+@admin.register(TemporaryAccessRequest)
 class TemporaryAccessRequestAdmin(admin.ModelAdmin):
     actions = ["send_reminder"]
     list_display = ["user"]
@@ -43,5 +45,32 @@ class TemporaryAccessRequestAdmin(admin.ModelAdmin):
         connection.send_messages(mails)
 
 
-admin.site.register(IdRegistration, IdRegistrationAdmin)
-admin.site.register(TemporaryAccessRequest, TemporaryAccessRequestAdmin)
+@admin.register(get_user_model())
+class CustomUserAdmin(UserAdmin):
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (_("Personal info"), {"fields": ("first_name",
+         "last_name", "email")}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                'classes': ('wide',),
+                'fields': ('email', 'password1', 'password2')
+            }
+        ),
+    )

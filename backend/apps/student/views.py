@@ -85,8 +85,7 @@ def change_password(request, pk):
         update_session_auth_hash(request, user)
         login(
             request,
-            user,
-            backend='apps.account.emailAuthBackend.EmailBackend')
+            user)
         messages.success(request, 'Mot de passe changé !')
         return redirect('student:update', pk)
     else:

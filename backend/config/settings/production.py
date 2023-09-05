@@ -17,7 +17,6 @@ if STAGING:
 else:
     ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp'
 EMAIL_PORT = '25'
 # No need to authenticate on localhost

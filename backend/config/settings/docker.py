@@ -43,8 +43,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ALLOWED_HOSTS = ["django", "localhost"]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 
 # Cache config
 CACHES = {
