@@ -8,7 +8,7 @@ ignore =
     C8,
     D1, D401,
     DAR101, DAR201, DAR301, DAR401,
-    E203, E266,
+    E203,
     RST,
     W503,
     WPS100, WPS110, WPS111, WPS115,

@@ -246,10 +246,7 @@ class ForgottenPassView(FormView):
                         "token": account_activation_token.make_token(user),
                     },
                 )
-                if settings.DEBUG:
-                    print(message)
-                else:
-                    user.email_user(subject, message, html_message=message)
+                user.email_user(subject, message, html_message=message)
         except User.DoesNotExist:
             pass
         messages.success(

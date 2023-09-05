@@ -95,10 +95,11 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-
+"""
 ######################################
 ### THIRD PARTY LIBRARIES SETTINGS ###
 ######################################
+"""
 
 # Debug toolbar
 DEBUG_TOOLBAR_CONFIG = {

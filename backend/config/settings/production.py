@@ -2,11 +2,11 @@ from .docker import *
 
 print("Running prod config")
 
-
+"""
 #######################
 ### DJANGO SETTINGS ###
 #######################
-
+"""
 DEBUG = False
 
 # SECURITY WARNING: keep the secret key used in production secret!
@@ -61,9 +61,11 @@ LOGGING = {
 }
 
 
+"""
 ##################################
 ### OVH MEDIA STORAGE SETTINGS ###
 ##################################
+"""
 
 AWS_ACCESS_KEY_ID = env("OVH_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("OVH_SECRET_ACCESS_KEY")
@@ -84,10 +86,11 @@ AWS_S3_OBJECT_PARAMETERS = {
     "ACL": "public-read",
 }
 
-
+"""
 ######################################
 ### THIRD PARTY LIBRARIES SETTINGS ###
 ######################################
+"""
 
 # Debug toolbar
 DEBUG_TOOLBAR_CONFIG = {
