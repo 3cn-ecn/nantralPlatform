@@ -8,11 +8,8 @@ User = get_user_model()
 
 class EmailBackend(ModelBackend):
     @staticmethod
-    def authenticate(
-        username=None, password=None, **kwargs
-    ) -> get_user_model():
+    def authenticate(username=None, password=None, **kwargs) -> User:
         try:
-            User = get_user_model()  # noqa
             user = User.objects.get(email=username)
             if user.check_password(password):
                 return user
