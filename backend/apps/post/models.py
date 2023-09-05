@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
@@ -11,6 +10,7 @@ from apps.student.models import Student
 from apps.utils.compress import compress_model_image
 from apps.utils.slug import SlugModel
 from apps.utils.upload import PathAndRename
+from django.contrib.auth import get_user_model
 
 path_and_rename = PathAndRename("posts/pictures")
 
@@ -30,6 +30,8 @@ COLORS = [
     ("secondary", "Gris"),
     ("dark", "Noir"),
 ]
+
+User = get_user_model()
 
 
 class AbstractPublication(models.Model, SlugModel):

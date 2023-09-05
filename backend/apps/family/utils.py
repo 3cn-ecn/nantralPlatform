@@ -1,11 +1,13 @@
 from datetime import datetime
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from extra_settings.models import Setting
 
 from .models import Family, MembershipFamily
+
+User = get_user_model()
 
 
 def scholar_year(date: datetime = timezone.now()) -> int:

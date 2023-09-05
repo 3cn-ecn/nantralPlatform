@@ -1,7 +1,7 @@
 import logging
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.template.loader import render_to_string
 from django.urls.base import reverse
@@ -24,6 +24,8 @@ logger = logging.getLogger(__name__)
 
 path_and_rename_group = PathAndRename("groups/logo")
 path_and_rename_group_banniere = PathAndRename("groups/banniere")
+
+User = get_user_model()
 
 
 class AbstractGroup(models.Model, SlugModel):
