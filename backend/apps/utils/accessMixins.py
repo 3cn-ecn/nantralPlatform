@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import resolve
+from django.contrib.auth import get_user_model
 
 from apps.utils.slug import get_object_from_slug
 
