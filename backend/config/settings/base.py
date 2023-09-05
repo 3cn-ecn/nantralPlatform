@@ -51,11 +51,7 @@ env = environ.Env(
 )
 env.read_env()
 
-"""
-#######################
-### DJANGO SETTINGS ###
-#######################
-"""
+# DJANGO SETTINGS
 
 DEBUG = True
 
@@ -195,11 +191,7 @@ DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 # Less origin restrictive for Youtube embed videos
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
-"""
-#######################
-### CUSTOM SETTINGS ###
-#######################
-"""
+# CUSTOM SETTINGS
 
 TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
     env("TEMPORARY_ACCOUNTS_DATE_LIMIT")
@@ -207,11 +199,7 @@ TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
 
 STAGING = env("STAGING")
 
-"""
-######################################
-### THIRD PARTY LIBRARIES SETTINGS ###
-######################################
-"""
+# THIRD PARTY LIBRARIES SETTINGS
 
 # Rest API settings
 REST_FRAMEWORK = {
@@ -309,11 +297,7 @@ PUSH_NOTIFICATIONS_SETTINGS = {
     "WP_CLAIMS": {"sub": "mailto:" + env("WP_ADMIN_EMAIL")},
 }
 
-"""
-##############################
-### THIRD PARTY CONNEXIONS ###
-##############################
-"""
+# THIRD PARTY CONNEXIONS
 
 # Discord
 DISCORD_TOKEN = env("DISCORD_TOKEN")
