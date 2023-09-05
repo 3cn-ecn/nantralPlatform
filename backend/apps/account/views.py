@@ -152,69 +152,68 @@ class AuthView(FormView):
         username = form.cleaned_data["email"]
         password = form.cleaned_data["password"]
         user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                message = f"Bonjour {user.first_name.title()} !"
-                messages.success(self.request, message)
-            else:
-                if (
-                    settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
-                    >= timezone.now().today()
-                ):
-                    # During certain periods allow temporary accounts.
-                    try:
-                        temp_access_req: TemporaryAccessRequest = (
-                            TemporaryAccessRequest.objects.get(user=user)
-                        )
-                        if not temp_access_req.mail_valid:
-                            self.request.session["email"] = username
-                            return redirect("account:confirm-email")
-                        if (
-                            temp_access_req.approved_until
-                            <= datetime.now().date()
-                        ):
-                            message = (
-                                "Votre compte n'a pas encore été approuvé. "
-                                "On vous prévient par mail dès que c'est le "
-                                "cas."
-                            )
-                            messages.error(self.request, message)
-                            return redirect("account:login")
-                        message = (
-                            "Votre compte n'est pas encore définitif. "
-                            'Veuillez le valider <a href="'
-                            f'{reverse("account:upgrade-permanent")}">ici</a>. '
-                            "Attention après le "
-                            f"{temp_access_req.approved_until} vous ne "
-                            "pourrez plus vous connecter si vous n'avez pas "
-                            "renseigné votre adresse Centrale."
-                        )
-                        messages.warning(self.request, message)
-                    except TemporaryAccessRequest.DoesNotExist:
-                        self.request.session["email"] = username
-                        return redirect("account:confirm-email")
-                else:
-                    messages.warning(
-                        self.request,
-                        "Votre compte n'est pas encore actif. Veuillez "
-                        "cliquer sur le lien dans 'email.",
-                    )
-            login(
-                self.request,
-                user,
-                backend="apps.account.emailAuthBackend.EmailBackend",
-            )
-            # we send back the user to where he wanted to go or to home page
-            url = self.request.GET.get("next", "/")
-            parsed_uri = urlparse(url)
-            if parsed_uri.scheme != "" or parsed_uri.netloc != "":
-                url = "/"
-            return redirect(url)
-        else:
+
+        if user is None:
             messages.error(
                 self.request, "Identifiant inconnu ou mot de passe invalide."
             )
             return redirect("account:login")
+        if user.is_active:
+            message = f"Bonjour {user.first_name.title()} !"
+            messages.success(self.request, message)
+        else:
+            if (
+                settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
+                >= timezone.now().today()
+            ):
+                # During certain periods allow temporary accounts.
+                try:
+                    temp_access_req: TemporaryAccessRequest = (
+                        TemporaryAccessRequest.objects.get(user=user)
+                    )
+                    if not temp_access_req.mail_valid:
+                        self.request.session["email"] = username
+                        return redirect("account:confirm-email")
+                    if (
+                        temp_access_req.approved_until
+                        <= datetime.now().date()
+                    ):
+                        message = (
+                            "Votre compte n'a pas encore été approuvé. "
+                            "On vous prévient par mail dès que c'est le "
+                            "cas."
+                        )
+                        messages.error(self.request, message)
+                        return redirect("account:login")
+                    message = (
+                        "Votre compte n'est pas encore définitif. "
+                        'Veuillez le valider <a href="'
+                        f'{reverse("account:upgrade-permanent")}">ici</a>. '
+                        "Attention après le "
+                        f"{temp_access_req.approved_until} vous ne "
+                        "pourrez plus vous connecter si vous n'avez pas "
+                        "renseigné votre adresse Centrale."
+                    )
+                    messages.warning(self.request, message)
+                except TemporaryAccessRequest.DoesNotExist:
+                    self.request.session["email"] = username
+                    return redirect("account:confirm-email")
+            else:
+                messages.warning(
+                    self.request,
+                    "Votre compte n'est pas encore actif. Veuillez "
+                    "cliquer sur le lien dans 'email.",
+                )
+        login(
+            self.request,
+            user
+        )
+        # we send back the user to where he wanted to go or to home page
+        url = self.request.GET.get("next", "/")
+        parsed_uri = urlparse(url)
+        if parsed_uri.scheme != "" or parsed_uri.netloc != "":
+            url = "/"
+        return redirect(url)
 
 
 class LogoutView(View):
