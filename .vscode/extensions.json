@@ -15,6 +15,8 @@
     "ms-python.autopep8",
     "ms-python.isort",
     "njpwerner.autodocstring",
+    // sqlite
+    "qwtel.sqlite-viewer",
     // django
     "batisteo.vscode-django",
     "mrorz.language-gettext",
