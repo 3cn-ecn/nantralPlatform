@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.loader import render_to_string
@@ -13,7 +14,6 @@ from apps.student.models import Student
 from apps.utils.compress import compress_model_image
 from apps.utils.slug import SlugModel
 from apps.utils.upload import PathAndRename
-from django.contrib.auth import get_user_model
 
 path_and_rename_group = PathAndRename("groups/logo")
 path_and_rename_group_banner = PathAndRename("groups/banniere")
