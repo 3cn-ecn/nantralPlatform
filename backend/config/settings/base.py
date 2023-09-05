@@ -151,7 +151,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
-
+AUTH_USER_MODEL = "account.User"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
