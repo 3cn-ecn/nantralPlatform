@@ -4,7 +4,7 @@ from django.utils import timezone
 from django import forms
 from django.conf import settings
 from django.utils.translation import gettext as _
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
@@ -77,6 +77,7 @@ class SignUpForm(UserCreationForm):
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
         try:
+            User = get_user_model()  # noqa
             User.objects.get(email=email)
             raise forms.ValidationError(_('Cet email est déjà utilisé.'))
         except User.DoesNotExist:
@@ -95,7 +96,7 @@ class SignUpForm(UserCreationForm):
         return data.lower()
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('first_name', 'last_name', 'email', 'confirm_email',
                   'password1', 'password2', 'promo', 'faculty', )
 

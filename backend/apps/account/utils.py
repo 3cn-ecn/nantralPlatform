@@ -1,7 +1,7 @@
 from typing import Union
 from django.core.mail import send_mail
 from django.http import HttpRequest
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 
 from apps.account.models import TemporaryAccessRequest
@@ -11,6 +11,8 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from .tokens import account_activation_token
+
+User = get_user_model()
 
 
 def user_creation(

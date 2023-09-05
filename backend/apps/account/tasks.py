@@ -2,12 +2,14 @@ from datetime import datetime, timedelta
 from celery import shared_task
 from celery.utils.log import get_task_logger
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from apps.account.models import TemporaryAccessRequest
 
 
 logger = get_task_logger(__name__)
+
+User = get_user_model()
 
 
 @shared_task
