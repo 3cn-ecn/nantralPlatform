@@ -4,22 +4,18 @@ from django.db import migrations
 
 
 def change_user_type(apps, schema_editor):
-    ContentType = apps.get_model('contenttypes', 'ContentType')
-    ct = ContentType.objects.filter(
-        app_label='auth',
-        model='user'
-    ).first()
+    ContentType = apps.get_model("contenttypes", "ContentType")
+    ct = ContentType.objects.filter(app_label="auth", model="user").first()
     if ct:
-        ct.app_label = 'account'
+        ct.app_label = "account"
         ct.save()
 
-class Migration(migrations.Migration):
 
+class Migration(migrations.Migration):
     dependencies = [
-        ('account', '0007_idregistration'),
+        ("account", "0007_idregistration"),
     ]
 
     operations = [
-        migrations.RunPython(
-            change_user_type, elidable=True),
+        migrations.RunPython(change_user_type, elidable=True),
     ]
