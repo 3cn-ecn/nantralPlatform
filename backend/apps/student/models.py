@@ -9,10 +9,12 @@ from apps.utils.compress import compress_model_image
 from apps.utils.upload import PathAndRename
 
 FACULTIES = [
-    ("Gen", "Élève Ingénieur Généraliste"),
-    ("Iti", "Élève Ingénieur de Spécialité (ITII)"),
-    ("Mas", "Élève en Master"),
-    ("Doc", "Doctorant"),
+    ("Gen", "Ingénieur Généraliste"),
+    ("Iti", "Ingénieur de Spécialité (ITII)"),
+    ("Mas", "Master"),
+    ("Doc", "Doctorat"),
+    ("Bac", "Bachelor"),
+    ("MSp", "Mastère Spécialisé"),
 ]
 
 PATHS = [
