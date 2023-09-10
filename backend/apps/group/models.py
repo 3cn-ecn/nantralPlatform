@@ -294,6 +294,7 @@ class Group(models.Model, SlugModel):
 
         Example
         -------
+        >>> group = Group.objects.all().firs()
         >>> group.year = 2019
         >>> group.scholar_year
         '2019-2020'
