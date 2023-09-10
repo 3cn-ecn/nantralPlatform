@@ -31,8 +31,11 @@
     "editor.formatOnSave": false
   },
   "flake8.args": ["--config", "backend/.flake8"],
+  "flake8.importStrategy": "fromEnvironment",
   "black-formatter.args": ["--config", "backend/pyproject.toml"],
+  "black-formatter.importStrategy": "fromEnvironment",
   "isort.args": ["--settings-path", "backend/pyproject.toml"],
+  "isort.importStrategy": "fromEnvironment",
   // python env
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/",
   "python.envFile": "${workspaceFolder}/backend/config/settings/.env",
