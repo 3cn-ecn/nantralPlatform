@@ -3,62 +3,159 @@
 import django.db.models.deletion
 from django.db import migrations, models
 
-import apps.utils.upload
-
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('student', '0002_rename_dd_cursus_add_alternant'),
+        ("student", "0002_rename_dd_cursus_add_alternant"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Housing',
+            name="Housing",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('address', models.CharField(max_length=250, verbose_name='Adresse de la colocation.')),
-                ('details', models.CharField(blank=True, max_length=100, null=True, verbose_name='Détails')),
-                ('latitude', models.FloatField(blank=True, null=True)),
-                ('longitude', models.FloatField(blank=True, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "address",
+                    models.CharField(
+                        max_length=250, verbose_name="Adresse de la colocation."
+                    ),
+                ),
+                (
+                    "details",
+                    models.CharField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        verbose_name="Détails",
+                    ),
+                ),
+                ("latitude", models.FloatField(blank=True, null=True)),
+                ("longitude", models.FloatField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='NamedMembershipRoommates',
+            name="NamedMembershipRoommates",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nickname', models.CharField(blank=True, max_length=100, null=True, verbose_name='Surnom')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "nickname",
+                    models.CharField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        verbose_name="Surnom",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Roommates',
+            name="Roommates",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, unique=True, verbose_name='Nom du groupe')),
-                ('description', models.TextField(blank=True, verbose_name='Description du groupe')),
-                ('logo', models.ImageField(blank=True, null=True, upload_to=apps.utils.upload.PathAndRename('groups/logo/group'), verbose_name='Logo du groupe')),
-                ('slug', models.SlugField(blank=True, max_length=40, unique=True)),
-                ('parent', models.SlugField(blank=True, max_length=40, null=True)),
-                ('begin_date', models.DateField()),
-                ('end_date', models.DateField(blank=True, null=True)),
-                ('admins', models.ManyToManyField(blank=True, related_name='roommates_admins', to='student.Student', verbose_name='Administrateur.rice.s du groupe')),
-                ('housing', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='roommates.Housing')),
-                ('members', models.ManyToManyField(blank=True, through='roommates.NamedMembershipRoommates', to='student.Student')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=200,
+                        unique=True,
+                        verbose_name="Nom du groupe",
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True, verbose_name="Description du groupe"
+                    ),
+                ),
+                (
+                    "logo",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to="groups/logo/group",
+                        verbose_name="Logo du groupe",
+                    ),
+                ),
+                (
+                    "slug",
+                    models.SlugField(blank=True, max_length=40, unique=True),
+                ),
+                (
+                    "parent",
+                    models.SlugField(blank=True, max_length=40, null=True),
+                ),
+                ("begin_date", models.DateField()),
+                ("end_date", models.DateField(blank=True, null=True)),
+                (
+                    "admins",
+                    models.ManyToManyField(
+                        blank=True,
+                        related_name="roommates_admins",
+                        to="student.Student",
+                        verbose_name="Administrateur.rice.s du groupe",
+                    ),
+                ),
+                (
+                    "housing",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="roommates.Housing",
+                    ),
+                ),
+                (
+                    "members",
+                    models.ManyToManyField(
+                        blank=True,
+                        through="roommates.NamedMembershipRoommates",
+                        to="student.Student",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Roommates',
+                "verbose_name_plural": "Roommates",
             },
         ),
         migrations.AddField(
-            model_name='namedmembershiproommates',
-            name='roommates',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='roommates.Roommates'),
+            model_name="namedmembershiproommates",
+            name="roommates",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="roommates.Roommates",
+            ),
         ),
         migrations.AddField(
-            model_name='namedmembershiproommates',
-            name='student',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='student.Student'),
+            model_name="namedmembershiproommates",
+            name="student",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="student.Student",
+            ),
         ),
     ]

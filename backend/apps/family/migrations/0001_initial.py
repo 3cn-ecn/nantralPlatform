@@ -5,178 +5,526 @@ from django.db import migrations, models
 
 import django_ckeditor_5.fields
 
-import apps.utils.upload
-
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('student', '0005_auto_20210801_1726'),
+        ("student", "0005_auto_20210801_1726"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Affichage',
+            name="Affichage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('phase', models.IntegerField(choices=[(0, 'Tout masquer'), (1, 'Questionnaires Parrainage'), (2, 'Chasse aux parrains'), (3, 'Résultats Parrainage')], default=0)),
-                ('res_itii', models.BooleanField(default=False, verbose_name='Afficher les résultats ITII')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "phase",
+                    models.IntegerField(
+                        choices=[
+                            (0, "Tout masquer"),
+                            (1, "Questionnaires Parrainage"),
+                            (2, "Chasse aux parrains"),
+                            (3, "Résultats Parrainage"),
+                        ],
+                        default=0,
+                    ),
+                ),
+                (
+                    "res_itii",
+                    models.BooleanField(
+                        default=False,
+                        verbose_name="Afficher les résultats ITII",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='BaseQuestion',
+            name="BaseQuestion",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code_name', models.CharField(max_length=50, verbose_name='Nom de code')),
-                ('label', models.CharField(max_length=100, verbose_name='Question')),
-                ('label_en', models.CharField(max_length=100, verbose_name='Question (en)')),
-                ('details', models.CharField(blank=True, max_length=200, null=True, verbose_name='Informations supplémentaires')),
-                ('details_en', models.CharField(blank=True, max_length=200, null=True, verbose_name='Informations supplémentaires (en)')),
-                ('order', models.IntegerField(default=0, help_text="Ordre d'apparition de la question", verbose_name='Ordre')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "code_name",
+                    models.CharField(max_length=50, verbose_name="Nom de code"),
+                ),
+                (
+                    "label",
+                    models.CharField(max_length=100, verbose_name="Question"),
+                ),
+                (
+                    "label_en",
+                    models.CharField(
+                        max_length=100, verbose_name="Question (en)"
+                    ),
+                ),
+                (
+                    "details",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Informations supplémentaires",
+                    ),
+                ),
+                (
+                    "details_en",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Informations supplémentaires (en)",
+                    ),
+                ),
+                (
+                    "order",
+                    models.IntegerField(
+                        default=0,
+                        help_text="Ordre d'apparition de la question",
+                        verbose_name="Ordre",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Family',
+            name="Family",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True, verbose_name='Nom du groupe')),
-                ('alt_name', models.CharField(blank=True, max_length=100, null=True, verbose_name='Nom alternatif')),
-                ('logo', models.ImageField(blank=True, help_text='Votre logo sera affiché au format 306x306 pixels.', null=True, upload_to=apps.utils.upload.PathAndRename('groups/logo'), verbose_name='Logo du groupe')),
-                ('banniere', models.ImageField(blank=True, help_text='Votre bannière sera affichée au format 1320x492 pixels.', null=True, upload_to=apps.utils.upload.PathAndRename('groups/banniere'), verbose_name='Bannière')),
-                ('summary', models.CharField(blank=True, max_length=500, null=True, verbose_name='Résumé')),
-                ('description', django_ckeditor_5.fields.CKEditor5Field(blank=True, verbose_name='Description du groupe')),
-                ('video1', models.URLField(blank=True, null=True, verbose_name='Lien vidéo 1')),
-                ('video2', models.URLField(blank=True, null=True, verbose_name='Lien vidéo 2')),
-                ('slug', models.SlugField(blank=True, max_length=40, unique=True)),
-                ('modified_date', models.DateTimeField(auto_now=True)),
-                ('year', models.IntegerField(verbose_name='Année de parrainage')),
-                ('non_subscribed_members', models.CharField(blank=True, help_text='Si certains des membres de la famille ne sont pas inscrits sur Nantral Platform,             vous pouvez les ajouter ici. Séparez les noms par des VIRGULES !!!', max_length=300, null=True, verbose_name='Autres parrains')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=100,
+                        unique=True,
+                        verbose_name="Nom du groupe",
+                    ),
+                ),
+                (
+                    "alt_name",
+                    models.CharField(
+                        blank=True,
+                        max_length=100,
+                        null=True,
+                        verbose_name="Nom alternatif",
+                    ),
+                ),
+                (
+                    "logo",
+                    models.ImageField(
+                        blank=True,
+                        help_text="Votre logo sera affiché au format 306x306 pixels.",
+                        null=True,
+                        upload_to="groups/logo",
+                        verbose_name="Logo du groupe",
+                    ),
+                ),
+                (
+                    "banniere",
+                    models.ImageField(
+                        blank=True,
+                        help_text="Votre bannière sera affichée au format 1320x492 pixels.",
+                        null=True,
+                        upload_to="groups/banniere",
+                        verbose_name="Bannière",
+                    ),
+                ),
+                (
+                    "summary",
+                    models.CharField(
+                        blank=True,
+                        max_length=500,
+                        null=True,
+                        verbose_name="Résumé",
+                    ),
+                ),
+                (
+                    "description",
+                    django_ckeditor_5.fields.CKEditor5Field(
+                        blank=True, verbose_name="Description du groupe"
+                    ),
+                ),
+                (
+                    "video1",
+                    models.URLField(
+                        blank=True, null=True, verbose_name="Lien vidéo 1"
+                    ),
+                ),
+                (
+                    "video2",
+                    models.URLField(
+                        blank=True, null=True, verbose_name="Lien vidéo 2"
+                    ),
+                ),
+                (
+                    "slug",
+                    models.SlugField(blank=True, max_length=40, unique=True),
+                ),
+                ("modified_date", models.DateTimeField(auto_now=True)),
+                (
+                    "year",
+                    models.IntegerField(verbose_name="Année de parrainage"),
+                ),
+                (
+                    "non_subscribed_members",
+                    models.CharField(
+                        blank=True,
+                        help_text="Si certains des membres de la famille ne sont pas inscrits sur Nantral Platform,             vous pouvez les ajouter ici. Séparez les noms par des VIRGULES !!!",
+                        max_length=300,
+                        null=True,
+                        verbose_name="Autres parrains",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Famille',
-                'ordering': ['name'],
+                "verbose_name": "Famille",
+                "ordering": ["name"],
             },
         ),
         migrations.CreateModel(
-            name='QuestionPage',
+            name="QuestionPage",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, verbose_name='Nom de la page')),
-                ('name_en', models.CharField(max_length=100, verbose_name='Nom (en)')),
-                ('details1A', models.TextField(blank=True, null=True, verbose_name='Infos 1A')),
-                ('details1A_en', models.TextField(blank=True, null=True, verbose_name='Infos 1A (en)')),
-                ('details2A', models.TextField(blank=True, null=True, verbose_name='Infos 2A+')),
-                ('details2A_en', models.TextField(blank=True, null=True, verbose_name='Infos 2A+ (en)')),
-                ('order', models.IntegerField(help_text="Ordre d'apparition de la page dans le questionnaire", unique=True, verbose_name='Ordre')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=100, verbose_name="Nom de la page"
+                    ),
+                ),
+                (
+                    "name_en",
+                    models.CharField(max_length=100, verbose_name="Nom (en)"),
+                ),
+                (
+                    "details1A",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Infos 1A"
+                    ),
+                ),
+                (
+                    "details1A_en",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Infos 1A (en)"
+                    ),
+                ),
+                (
+                    "details2A",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Infos 2A+"
+                    ),
+                ),
+                (
+                    "details2A_en",
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Infos 2A+ (en)"
+                    ),
+                ),
+                (
+                    "order",
+                    models.IntegerField(
+                        help_text="Ordre d'apparition de la page dans le questionnaire",
+                        unique=True,
+                        verbose_name="Ordre",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Page de Questions',
-                'verbose_name_plural': 'Pages de Questions',
-                'ordering': ['order'],
+                "verbose_name": "Page de Questions",
+                "verbose_name_plural": "Pages de Questions",
+                "ordering": ["order"],
             },
         ),
         migrations.CreateModel(
-            name='GroupQuestion',
+            name="GroupQuestion",
             fields=[
-                ('basequestion_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='family.basequestion')),
-                ('coeff', models.IntegerField(verbose_name='Coeficient')),
-                ('page', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='family.questionpage')),
+                (
+                    "basequestion_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="family.basequestion",
+                    ),
+                ),
+                ("coeff", models.IntegerField(verbose_name="Coeficient")),
+                (
+                    "page",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="family.questionpage",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Groupe de Questions',
-                'verbose_name_plural': 'Groupes de Questions',
+                "verbose_name": "Groupe de Questions",
+                "verbose_name_plural": "Groupes de Questions",
             },
-            bases=('family.basequestion',),
+            bases=("family.basequestion",),
         ),
         migrations.CreateModel(
-            name='MembershipFamily',
+            name="MembershipFamily",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('admin', models.BooleanField(default=False)),
-                ('role', models.CharField(choices=[('1A', '1ère Année'), ('2A+', '2ème Année et plus')], max_length=3, verbose_name='Rôle')),
-                ('group', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='memberships', to='family.family')),
-                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='membershipfamily', to='student.student', verbose_name='Parrain/Marraine')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("admin", models.BooleanField(default=False)),
+                (
+                    "role",
+                    models.CharField(
+                        choices=[
+                            ("1A", "1ère Année"),
+                            ("2A+", "2ème Année et plus"),
+                        ],
+                        max_length=3,
+                        verbose_name="Rôle",
+                    ),
+                ),
+                (
+                    "group",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="memberships",
+                        to="family.family",
+                    ),
+                ),
+                (
+                    "student",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="membershipfamily",
+                        to="student.student",
+                        verbose_name="Parrain/Marraine",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Membre',
-                'ordering': ['student'],
-                'unique_together': {('group', 'student')},
+                "verbose_name": "Membre",
+                "ordering": ["student"],
+                "unique_together": {("group", "student")},
             },
         ),
         migrations.AddField(
-            model_name='family',
-            name='members',
-            field=models.ManyToManyField(through='family.MembershipFamily', to='student.Student'),
+            model_name="family",
+            name="members",
+            field=models.ManyToManyField(
+                through="family.MembershipFamily", to="student.Student"
+            ),
         ),
         migrations.CreateModel(
-            name='QuestionMember',
+            name="QuestionMember",
             fields=[
-                ('basequestion_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='family.basequestion')),
-                ('coeff', models.IntegerField(verbose_name='Coeficient')),
-                ('group', models.ForeignKey(blank=True, help_text="Renseignez si cette question fait partie d'un             groupe de questions similaires. Tous les champs sont alors             remplis automatiquement, sauf le nom de la question.", null=True, on_delete=django.db.models.deletion.SET_NULL, to='family.groupquestion', verbose_name='Groupe')),
-                ('page', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='family.questionpage')),
+                (
+                    "basequestion_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="family.basequestion",
+                    ),
+                ),
+                ("coeff", models.IntegerField(verbose_name="Coeficient")),
+                (
+                    "group",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Renseignez si cette question fait partie d'un             groupe de questions similaires. Tous les champs sont alors             remplis automatiquement, sauf le nom de la question.",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="family.groupquestion",
+                        verbose_name="Groupe",
+                    ),
+                ),
+                (
+                    "page",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="family.questionpage",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Question Membres',
-                'verbose_name_plural': 'Questions Membres',
-                'ordering': ['page', 'order'],
+                "verbose_name": "Question Membres",
+                "verbose_name_plural": "Questions Membres",
+                "ordering": ["page", "order"],
             },
-            bases=('family.basequestion',),
+            bases=("family.basequestion",),
         ),
         migrations.CreateModel(
-            name='QuestionFamily',
+            name="QuestionFamily",
             fields=[
-                ('basequestion_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='family.basequestion')),
-                ('quota', models.IntegerField(help_text='Pourcentage de prise en compte de cette question dans le         calcul des réponses du parrain. 100 supprime la question du questionnaire         parrain (mais pas du questionnaire filleul).', verbose_name='Quota')),
-                ('equivalent', models.OneToOneField(blank=True, help_text="Question équivalente dans le questionnaire des membres. Laissez vide si vous                     souhaitez que cette question ne soit pas prise en compte dans l'algo.", null=True, on_delete=django.db.models.deletion.CASCADE, to='family.questionmember', verbose_name='Question équivalente')),
+                (
+                    "basequestion_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="family.basequestion",
+                    ),
+                ),
+                (
+                    "quota",
+                    models.IntegerField(
+                        help_text="Pourcentage de prise en compte de cette question dans le         calcul des réponses du parrain. 100 supprime la question du questionnaire         parrain (mais pas du questionnaire filleul).",
+                        verbose_name="Quota",
+                    ),
+                ),
+                (
+                    "equivalent",
+                    models.OneToOneField(
+                        blank=True,
+                        help_text="Question équivalente dans le questionnaire des membres. Laissez vide si vous                     souhaitez que cette question ne soit pas prise en compte dans l'algo.",
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="family.questionmember",
+                        verbose_name="Question équivalente",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Question Familles',
-                'verbose_name_plural': 'Questions Familles',
-                'ordering': ['order'],
+                "verbose_name": "Question Familles",
+                "verbose_name_plural": "Questions Familles",
+                "ordering": ["order"],
             },
-            bases=('family.basequestion',),
+            bases=("family.basequestion",),
         ),
         migrations.CreateModel(
-            name='Option',
+            name="Option",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('value', models.IntegerField(verbose_name='Valeur')),
-                ('text', models.CharField(max_length=50, verbose_name='Texte')),
-                ('text_en', models.CharField(max_length=50, verbose_name='Texte (en)')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='family.basequestion')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("value", models.IntegerField(verbose_name="Valeur")),
+                ("text", models.CharField(max_length=50, verbose_name="Texte")),
+                (
+                    "text_en",
+                    models.CharField(max_length=50, verbose_name="Texte (en)"),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="family.basequestion",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['question', 'value'],
-                'unique_together': {('question', 'value')},
+                "ordering": ["question", "value"],
+                "unique_together": {("question", "value")},
             },
         ),
         migrations.CreateModel(
-            name='AnswerMember',
+            name="AnswerMember",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answer', models.IntegerField()),
-                ('member', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='family.membershipfamily')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='family.questionmember')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("answer", models.IntegerField()),
+                (
+                    "member",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="family.membershipfamily",
+                    ),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="family.questionmember",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Réponse',
-                'unique_together': {('question', 'member')},
+                "verbose_name": "Réponse",
+                "unique_together": {("question", "member")},
             },
         ),
         migrations.CreateModel(
-            name='AnswerFamily',
+            name="AnswerFamily",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answer', models.IntegerField()),
-                ('family', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='family.family')),
-                ('question', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='family.questionfamily')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("answer", models.IntegerField()),
+                (
+                    "family",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="family.family",
+                    ),
+                ),
+                (
+                    "question",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="family.questionfamily",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Réponse',
-                'unique_together': {('question', 'family')},
+                "verbose_name": "Réponse",
+                "unique_together": {("question", "family")},
             },
         ),
     ]

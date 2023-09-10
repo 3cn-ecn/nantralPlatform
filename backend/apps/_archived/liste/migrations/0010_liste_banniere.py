@@ -2,19 +2,21 @@
 
 from django.db import migrations, models
 
-import apps.utils.upload
-
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('liste', '0009_auto_20210703_0000'),
+        ("liste", "0009_auto_20210703_0000"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='liste',
-            name='banniere',
-            field=models.ImageField(blank=True, null=True, upload_to=apps.utils.upload.PathAndRename('groups/banniere/club'), verbose_name='Bannière'),
+            model_name="liste",
+            name="banniere",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                upload_to="groups/banniere/club",
+                verbose_name="Bannière",
+            ),
         ),
     ]

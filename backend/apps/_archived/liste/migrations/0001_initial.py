@@ -5,77 +5,153 @@ from django.db import migrations, models
 from django.db.migrations.operations.special import SeparateDatabaseAndState
 from django.db.models import fields
 
-import apps.utils.upload
-
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('student', '0003_alter_student_options'),
-        ('group', '0005_move_liste')
+        ("student", "0003_alter_student_options"),
+        ("group", "0005_move_liste"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.CreateModel(
-                    name='Liste',
+                    name="Liste",
                     fields=[
-                        ('id', models.AutoField(auto_created=True,
-                                                primary_key=True, serialize=False, verbose_name='ID')),
-                        ('name', models.CharField(max_length=200,
-                                                  unique=True, verbose_name='Nom du groupe')),
-                        ('description', models.TextField(
-                            blank=True, verbose_name='Description du groupe')),
-                        ('slug', models.SlugField(
-                            blank=True, max_length=40, unique=True)),
-                        ('parent', models.SlugField(
-                            blank=True, max_length=40, null=True)),
-                        ('modified_date', models.DateTimeField(auto_now=True)),
-                        ('liste_type', models.CharField(choices=[('BDA', 'Bureau des Arts'), ('BDE', 'Bureau des Élèves'), (
-                            'BDS', 'Bureau des Sports')], max_length=60, verbose_name='Type de liste BDX')),
-                        ('year', models.IntegerField(blank=True,
-                                                     null=True, verbose_name='Année de la liste')),
-                        ('logo', models.ImageField(blank=True, null=True, upload_to=apps.utils.upload.PathAndRename(
-                            'groups/logo/liste'), verbose_name='Logo de la liste')),
-                        ('admins', models.ManyToManyField(blank=True, related_name='liste_admins',
-                                                          to='student.Student', verbose_name='Admins du groupe')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "name",
+                            models.CharField(
+                                max_length=200,
+                                unique=True,
+                                verbose_name="Nom du groupe",
+                            ),
+                        ),
+                        (
+                            "description",
+                            models.TextField(
+                                blank=True, verbose_name="Description du groupe"
+                            ),
+                        ),
+                        (
+                            "slug",
+                            models.SlugField(
+                                blank=True, max_length=40, unique=True
+                            ),
+                        ),
+                        (
+                            "parent",
+                            models.SlugField(
+                                blank=True, max_length=40, null=True
+                            ),
+                        ),
+                        ("modified_date", models.DateTimeField(auto_now=True)),
+                        (
+                            "liste_type",
+                            models.CharField(
+                                choices=[
+                                    ("BDA", "Bureau des Arts"),
+                                    ("BDE", "Bureau des Élèves"),
+                                    ("BDS", "Bureau des Sports"),
+                                ],
+                                max_length=60,
+                                verbose_name="Type de liste BDX",
+                            ),
+                        ),
+                        (
+                            "year",
+                            models.IntegerField(
+                                blank=True,
+                                null=True,
+                                verbose_name="Année de la liste",
+                            ),
+                        ),
+                        (
+                            "logo",
+                            models.ImageField(
+                                blank=True,
+                                null=True,
+                                upload_to="groups/logo/liste",
+                                verbose_name="Logo de la liste",
+                            ),
+                        ),
+                        (
+                            "admins",
+                            models.ManyToManyField(
+                                blank=True,
+                                related_name="liste_admins",
+                                to="student.Student",
+                                verbose_name="Admins du groupe",
+                            ),
+                        ),
                     ],
                     options={
-                        'abstract': False,
+                        "abstract": False,
                     },
                 ),
                 migrations.CreateModel(
-                    name='NamedMembershipList',
+                    name="NamedMembershipList",
                     fields=[
-                        ('id', models.AutoField(auto_created=True,
-                                                primary_key=True, serialize=False, verbose_name='ID')),
-                        ('function', models.CharField(blank=True,
-                                                      max_length=200, verbose_name='Poste occupé')),
-                        ('liste', models.ForeignKey(
-                            on_delete=django.db.models.deletion.CASCADE, to='liste.liste')),
-                        ('student', models.ForeignKey(
-                            on_delete=django.db.models.deletion.CASCADE, to='student.student')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "function",
+                            models.CharField(
+                                blank=True,
+                                max_length=200,
+                                verbose_name="Poste occupé",
+                            ),
+                        ),
+                        (
+                            "liste",
+                            models.ForeignKey(
+                                on_delete=django.db.models.deletion.CASCADE,
+                                to="liste.liste",
+                            ),
+                        ),
+                        (
+                            "student",
+                            models.ForeignKey(
+                                on_delete=django.db.models.deletion.CASCADE,
+                                to="student.student",
+                            ),
+                        ),
                     ],
                     options={
-                        'unique_together': {('function', 'student', 'liste')},
+                        "unique_together": {("function", "student", "liste")},
                     },
-                ), ],
-            database_operations=[
+                ),
             ],
+            database_operations=[],
         ),
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.AddField(
-                    model_name='liste',
-                    name='members',
+                    model_name="liste",
+                    name="members",
                     field=models.ManyToManyField(
-                        through='liste.NamedMembershipList', to='student.Student'),
+                        through="liste.NamedMembershipList",
+                        to="student.Student",
+                    ),
                 ),
             ],
-            database_operations=[
-            ],
+            database_operations=[],
         ),
     ]

@@ -5,109 +5,165 @@ from django.db import migrations, models
 
 import django_ckeditor_5.fields
 
-import apps.utils.upload
-
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('student', '0005_auto_20210801_1726'),
-        ('academic', '0003_auto_20210121_1041'),
+        ("student", "0005_auto_20210801_1726"),
+        ("academic", "0003_auto_20210121_1041"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='NamedMembershipCourse',
+            name="NamedMembershipCourse",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('admin', models.BooleanField(default=False)),
-                ('year', models.IntegerField(default=2021, verbose_name='Année où cette formation a été suivie')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("admin", models.BooleanField(default=False)),
+                (
+                    "year",
+                    models.IntegerField(
+                        default=2021,
+                        verbose_name="Année où cette formation a été suivie",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
         ),
         migrations.AlterModelOptions(
-            name='course',
-            options={'verbose_name': 'formation'},
+            name="course",
+            options={"verbose_name": "formation"},
         ),
         migrations.RemoveField(
-            model_name='course',
-            name='course_type',
+            model_name="course",
+            name="course_type",
         ),
         migrations.RemoveField(
-            model_name='course',
-            name='image',
+            model_name="course",
+            name="image",
         ),
         migrations.AddField(
-            model_name='course',
-            name='alt_name',
-            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Nom alternatif'),
+            model_name="course",
+            name="alt_name",
+            field=models.CharField(
+                blank=True,
+                max_length=100,
+                null=True,
+                verbose_name="Nom alternatif",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='banniere',
-            field=models.ImageField(blank=True, help_text='Votre bannière sera affichée au format 1320x492 pixels.', null=True, upload_to=apps.utils.upload.PathAndRename('groups/banniere'), verbose_name='Bannière'),
+            model_name="course",
+            name="banniere",
+            field=models.ImageField(
+                blank=True,
+                help_text="Votre bannière sera affichée au format 1320x492 pixels.",
+                null=True,
+                upload_to="groups/banniere",
+                verbose_name="Bannière",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='description',
-            field=django_ckeditor_5.fields.CKEditor5Field(blank=True, verbose_name='Description du groupe'),
+            model_name="course",
+            name="description",
+            field=django_ckeditor_5.fields.CKEditor5Field(
+                blank=True, verbose_name="Description du groupe"
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='logo',
-            field=models.ImageField(blank=True, help_text='Votre logo sera affiché au format 306x306 pixels.', null=True, upload_to=apps.utils.upload.PathAndRename('groups/logo'), verbose_name='Logo du groupe'),
+            model_name="course",
+            name="logo",
+            field=models.ImageField(
+                blank=True,
+                help_text="Votre logo sera affiché au format 306x306 pixels.",
+                null=True,
+                upload_to="groups/logo",
+                verbose_name="Logo du groupe",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='modified_date',
+            model_name="course",
+            name="modified_date",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AddField(
-            model_name='course',
-            name='slug',
+            model_name="course",
+            name="slug",
             field=models.SlugField(blank=True, max_length=40),
         ),
         migrations.AddField(
-            model_name='course',
-            name='summary',
-            field=models.CharField(blank=True, max_length=500, null=True, verbose_name='Résumé'),
+            model_name="course",
+            name="summary",
+            field=models.CharField(
+                blank=True, max_length=500, null=True, verbose_name="Résumé"
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='type',
-            field=models.CharField(choices=[('OD', 'Option Disciplinaire'), ('OP', 'Option Professionnelle'), ('ITII', 'Filière de Specialité'), ('Master', 'Master')], default='OD', max_length=10, verbose_name='Type de cours'),
+            model_name="course",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("OD", "Option Disciplinaire"),
+                    ("OP", "Option Professionnelle"),
+                    ("ITII", "Filière de Specialité"),
+                    ("Master", "Master"),
+                ],
+                default="OD",
+                max_length=10,
+                verbose_name="Type de cours",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='course',
-            name='video1',
-            field=models.URLField(blank=True, null=True, verbose_name='Lien vidéo 1'),
+            model_name="course",
+            name="video1",
+            field=models.URLField(
+                blank=True, null=True, verbose_name="Lien vidéo 1"
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='video2',
-            field=models.URLField(blank=True, null=True, verbose_name='Lien vidéo 2'),
+            model_name="course",
+            name="video2",
+            field=models.URLField(
+                blank=True, null=True, verbose_name="Lien vidéo 2"
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='name',
-            field=models.CharField(max_length=100, unique=True, verbose_name='Nom du groupe'),
+            model_name="course",
+            name="name",
+            field=models.CharField(
+                max_length=100, unique=True, verbose_name="Nom du groupe"
+            ),
         ),
         migrations.AddField(
-            model_name='namedmembershipcourse',
-            name='group',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='academic.course'),
+            model_name="namedmembershipcourse",
+            name="group",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="academic.course",
+            ),
         ),
         migrations.AddField(
-            model_name='namedmembershipcourse',
-            name='student',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='student.student'),
+            model_name="namedmembershipcourse",
+            name="student",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="student.student",
+            ),
         ),
         migrations.AddField(
-            model_name='course',
-            name='members',
-            field=models.ManyToManyField(through='academic.NamedMembershipCourse', to='student.Student'),
+            model_name="course",
+            name="members",
+            field=models.ManyToManyField(
+                through="academic.NamedMembershipCourse", to="student.Student"
+            ),
         ),
     ]
