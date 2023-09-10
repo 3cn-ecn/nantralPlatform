@@ -81,6 +81,7 @@ class AbstractPublication(models.Model, SlugModel):
                 body=notification_body,
                 url="",
                 sender=self.group.slug,
+                publicity=self.publicity,
             )
             NotificationAction.objects.create(
                 notification=self.notification,
