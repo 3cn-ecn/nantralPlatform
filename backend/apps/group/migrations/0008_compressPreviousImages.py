@@ -9,8 +9,8 @@ from apps.utils.compress import compress_image
 def compress(model):
     for object in model.objects.all():
         try:
-            object.logo = compress_image(object.logo, size=(500,500), contains=True)
-            object.banniere = compress_image(object.banniere, size=(1320,492), contains=False)
+            object.logo = compress_image(object.logo, size=(500,500), crop=True)
+            object.banniere = compress_image(object.banniere, size=(1320,492))
             object.save()
         except Exception:
             print("Fichier non existant")

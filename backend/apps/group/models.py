@@ -22,8 +22,9 @@ path_and_rename_group_type = PathAndRename("groups/types")
 
 class GroupType(models.Model):
     """
-    The type of a group: club, flatshare, etc... with all the group type
-    settings.
+    The type of a group.
+
+    Can be flat-shares, clubs, formations, BDX lists, etc.
     """
 
     # Type infos
@@ -128,7 +129,7 @@ class Tag(models.Model):
 
 
 class Group(models.Model, SlugModel):
-    """Database of all groups, with different types: clubs, flatshares..."""
+    """Database of all groups, with different types: clubs, flat-shares..."""
 
     # General data
     name = models.CharField(verbose_name=_("Name"), unique=True, max_length=100)
@@ -278,8 +279,7 @@ class Group(models.Model, SlugModel):
 
     @property
     def scholar_year(self) -> str:
-        """Returns the year of the group in scholar year format, i.e. with
-        the following year.
+        """Returns the year of the group in scholar year format.
 
         Returns
         -------
@@ -293,7 +293,6 @@ class Group(models.Model, SlugModel):
         >>> group.scholar_year
         '2019-2020'
         """
-
         if self.creation_year:
             return f"{self.creation_year}-{self.creation_year+1}"
         else:
@@ -306,8 +305,7 @@ class Group(models.Model, SlugModel):
         return self.short_name
 
     def clean(self) -> None:
-        """Method to test if the object is valid (no incompatibility between
-        fields."""
+        """Test if the object is valid (no incompatibility between fields)."""
         if self.public and self.private:
             raise ValidationError(
                 _(
@@ -329,13 +327,11 @@ class Group(models.Model, SlugModel):
         self.set_slug(self.short_name, max_length=40)
         # compress images
         self.icon = compress_model_image(
-            self, "icon", size=(500, 500), contains=True
+            self, "icon", size=(500, 500), crop=True
         )
-        self.banner = compress_model_image(
-            self, "banner", size=(1320, 492), contains=False
-        )
+        self.banner = compress_model_image(self, "banner", size=(1320, 492))
         # save the instance
-        super(Group, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def is_admin(self, user: User) -> bool:
         """Check if a user has the admin rights for this group.
@@ -350,7 +346,6 @@ class Group(models.Model, SlugModel):
         bool
             True if the user has admin rights.
         """
-
         return (
             user.is_superuser
             or self.is_member(user)
@@ -372,10 +367,9 @@ class Group(models.Model, SlugModel):
         bool
             True if the user is a member of this group.
         """
-
         return (
             user.is_authenticated
-            and hasattr(user, "student")
+            and hasattr(user, "student")  # noqa: WPS421
             and self.members.contains(user.student)
         )
 
@@ -387,7 +381,9 @@ class Group(models.Model, SlugModel):
         str
             The formatted label of the category of the group.
         """
-        return eval(self.group_type.category_expr, {"group": self})
+        return eval(  # noqa: WPS421, S307
+            self.group_type.category_expr, {"group": self}
+        )
 
     def get_sub_category(self) -> str:
         """Get the sub category label for list display.
@@ -397,7 +393,9 @@ class Group(models.Model, SlugModel):
         str
             The formatted label of the category of the group.
         """
-        return eval(self.group_type.sub_category_expr, {"group": self})
+        return eval(  # noqa: WPS421, S307
+            self.group_type.sub_category_expr, {"group": self}
+        )
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
@@ -432,7 +430,7 @@ class Membership(models.Model):
         verbose_name = "membre"
 
     def __str__(self) -> str:
-        return self.student.__str__()
+        return str(self.student)
 
     def save(self, *args, **kwargs) -> None:
         """Save the membership object."""
@@ -444,7 +442,7 @@ class Membership(models.Model):
         if self.admin and self.admin_request:
             self.admin_request = False
             self.admin_request_messsage = ""
-        super(Membership, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def accept_admin_request(self) -> None:
         """Accept an admin request."""

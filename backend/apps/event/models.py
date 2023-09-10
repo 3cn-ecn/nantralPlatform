@@ -66,6 +66,4 @@ class Event(AbstractPublication):
         # set end date to 1 hour after begin date if not set
         if self.end_date is None:
             self.end_date = self.start_date + timezone.timedelta(hours=1)
-        super(Event, self).save(
-            *args, notification_body=f"Event : {self.title}", **kwargs
-        )
+        super().save(*args, notification_body=f"Event : {self.title}", **kwargs)

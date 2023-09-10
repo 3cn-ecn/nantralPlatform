@@ -98,7 +98,9 @@ class Student(models.Model):
         )
 
     def save(self, *args, **kwargs):
-        self.picture = compress_model_image(self, "picture")
+        self.picture = compress_model_image(
+            self, "picture", size=(500, 500), crop=True
+        )
         super(Student, self).save(*args, **kwargs)
 
     class Meta:

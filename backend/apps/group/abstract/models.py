@@ -111,11 +111,9 @@ class AbstractGroup(models.Model, SlugModel):
         self.set_slug(self.name, 40)
         # compression des images
         self.logo = compress_model_image(
-            self, "logo", size=(500, 500), contains=True
+            self, "logo", size=(500, 500), crop=True
         )
-        self.banniere = compress_model_image(
-            self, "banniere", size=(1320, 492), contains=False
-        )
+        self.banniere = compress_model_image(self, "banniere", size=(1320, 492))
         # enregistrement
         super(AbstractGroup, self).save(*args, **kwargs)
 
