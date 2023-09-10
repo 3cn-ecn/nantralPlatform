@@ -4,9 +4,6 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.post.models import AbstractPublication
 from apps.student.models import Student
-from apps.utils.upload import PathAndRename
-
-path_and_rename = PathAndRename("events/pictures")
 
 
 class Event(AbstractPublication):

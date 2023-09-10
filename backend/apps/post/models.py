@@ -8,11 +8,8 @@ from django_ckeditor_5.fields import CKEditor5Field
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
 from apps.student.models import Student
-from apps.utils.compress import compress_model_image
+from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import SlugModel
-from apps.utils.upload import PathAndRename
-
-path_and_rename = PathAndRename("posts/pictures")
 
 VISIBILITY = [
     ("Pub", "Public - Visible par tous"),
@@ -43,12 +40,13 @@ class AbstractPublication(models.Model, SlugModel):
     publicity = models.CharField(
         verbose_name=_("Visibility"), max_length=200, choices=VISIBILITY
     )
-    image = models.ImageField(
+    image = CustomImageField(
         verbose_name=_("Banner"),
-        upload_to=path_and_rename,
         null=True,
         blank=True,
-        help_text=_("Your banner will be displayed at 1320x492 pixels."),
+        help_text=_("Your banner will be displayed with a 16/9 ratio."),
+        size=(1280, 720),
+        name_from_field="title",
     )
     notification = models.ForeignKey(
         to=Notification, on_delete=models.SET_NULL, blank=True, null=True
@@ -76,10 +74,6 @@ class AbstractPublication(models.Model, SlugModel):
         abstract = True
 
     def save(self, *args, notification_body: str, **kwargs) -> None:
-        # compression des images
-        self.image = compress_model_image(
-            self, "image", size=(960, 540), contains=True
-        )
         # create the notification object
         if not self.notification:
             self.notification = Notification.objects.create(
@@ -100,7 +94,7 @@ class AbstractPublication(models.Model, SlugModel):
             )
 
         # save the object
-        super(AbstractPublication, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         # update the notification (after saving, to use the id in url)
         n = self.notification
@@ -127,6 +121,7 @@ class AbstractPublication(models.Model, SlugModel):
     def delete(self, *args, **kwargs):
         if self.notification:
             self.notification.delete()
+        self.image.delete(save=False)
         return super().delete(*args, **kwargs)
 
     def get_absolute_url(self) -> str:
@@ -139,7 +134,7 @@ class Post(AbstractPublication):
     )
 
     def save(self, *args, **kwargs) -> None:
-        super(Post, self).save(
+        super().save(
             *args, notification_body=f"Annonce : {self.title}", **kwargs
         )
 

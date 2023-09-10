@@ -11,13 +11,8 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.sociallink.models import SocialLink
 from apps.student.models import Student
-from apps.utils.compress import compress_model_image
+from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import SlugModel
-from apps.utils.upload import PathAndRename
-
-path_and_rename_group = PathAndRename("groups/logo")
-path_and_rename_group_banner = PathAndRename("groups/banniere")
-path_and_rename_group_type = PathAndRename("groups/types")
 
 
 class GroupType(models.Model):
@@ -32,11 +27,13 @@ class GroupType(models.Model):
         verbose_name=_("Type name"), unique=True, max_length=30
     )
     slug = models.SlugField(primary_key=True, max_length=10)
-    icon = models.ImageField(
+    icon = CustomImageField(
         verbose_name=_("Icon"),
         blank=True,
         null=True,
-        upload_to=path_and_rename_group_type,
+        size=(306, 306),
+        crop=True,
+        name_from_field="slug",
     )
 
     # Members settings
@@ -105,6 +102,10 @@ class GroupType(models.Model):
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
         return reverse("group:sub_index", kwargs={"type": self.slug})
+
+    def delete(self, *args, **kwargs) -> None:
+        self.icon.delete(save=False)
+        super().delete(*args, **kwargs)
 
 
 class Label(models.Model):
@@ -232,19 +233,23 @@ class Group(models.Model, SlugModel):
     meeting_hour = models.CharField(
         verbose_name=_("Meeting hours"), max_length=50, blank=True
     )
-    icon = models.ImageField(
+    icon = CustomImageField(
         verbose_name=_("Icon"),
         blank=True,
         null=True,
-        upload_to=path_and_rename_group,
         help_text=_("Your icon will be displayed at 306x306 pixels."),
+        size=(500, 500),
+        crop=True,
+        name_from_field="name",
     )
-    banner = models.ImageField(
+    banner = CustomImageField(
         verbose_name=_("Banner"),
         blank=True,
         null=True,
-        upload_to=path_and_rename_group_banner,
         help_text=_("Your banner will be displayed at 1320x492 pixels."),
+        size=(1320, 492),
+        crop=True,
+        name_from_field="name",
     )
     video1 = models.URLField(
         verbose_name=_("Video link 1"), max_length=200, null=True, blank=True
@@ -325,13 +330,13 @@ class Group(models.Model, SlugModel):
             self.private = True
         # create the slug
         self.set_slug(self.short_name, max_length=40)
-        # compress images
-        self.icon = compress_model_image(
-            self, "icon", size=(500, 500), crop=True
-        )
-        self.banner = compress_model_image(self, "banner", size=(1320, 492))
         # save the instance
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs) -> None:
+        self.icon.delete(save=False)
+        self.banner.delete(save=False)
+        super().delete(*args, **kwargs)
 
     def is_admin(self, user: User) -> bool:
         """Check if a user has the admin rights for this group.

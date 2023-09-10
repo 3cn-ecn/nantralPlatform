@@ -1,21 +1,11 @@
-# spell-checker: words LANCZOS getsizeof pyaccess
+# spell-checker: words LANCZOS getsizeof
 
 import sys
 from io import BytesIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.db.models import Model
 
 from PIL import Image
-
-
-def compress_model_image(
-    obj: Model, field: str, size: tuple[int, int] = (500, 500), crop=False
-):
-    image = getattr(obj, field)
-    if not obj.pk or image != getattr(type(obj).objects.get(pk=obj.pk), field):
-        image = compress_image(image, size, crop)
-    return image
 
 
 def compress_image(image, size=(500, 500), crop=False):
