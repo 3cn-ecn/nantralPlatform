@@ -13,18 +13,6 @@ def change_user_type(apps, schema_editor):
         ct.app_label = 'account'
         ct.save()
 
-
-def change_user_type_back(apps, schema_editor):
-    ContentType = apps.get_model('contenttypes', 'ContentType')
-    ct = ContentType.objects.filter(
-        app_label='account',
-        model='user'
-    ).first()
-    if ct:
-        ct.app_label = 'auth'
-        ct.save()
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -33,5 +21,5 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            change_user_type, reverse_code=change_user_type_back, elidable=True),
+            change_user_type, elidable=True),
     ]
