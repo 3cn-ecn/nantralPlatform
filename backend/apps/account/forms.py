@@ -12,6 +12,8 @@ from apps.student.models import FACULTIES, PATHS
 
 from .models import IdRegistration
 
+User = get_user_model()
+
 
 def check_id(id):
     if not IdRegistration.objects.filter(id=id).exists():
@@ -88,7 +90,6 @@ class SignUpForm(UserCreationForm):
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
         try:
-            User = get_user_model()  # noqa
             User.objects.get(email=email)
             raise forms.ValidationError(_("Cet email est déjà utilisé."))
         except User.DoesNotExist:
@@ -108,7 +109,7 @@ class SignUpForm(UserCreationForm):
         return data.lower()
 
     class Meta:
-        model = get_user_model()
+        model = User
         fields = (
             "first_name",
             "last_name",
