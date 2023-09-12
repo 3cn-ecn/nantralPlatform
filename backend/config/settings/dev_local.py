@@ -2,10 +2,7 @@ from .base import *
 
 print("Running dev settings")
 
-
-#######################
-### DJANGO SETTINGS ###
-#######################
+# DJANGO SETTINGS
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
