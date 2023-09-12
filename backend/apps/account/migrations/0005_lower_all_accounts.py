@@ -10,7 +10,7 @@ Correcting this issue.
 def forwards_func(apps, schema_editor):
     # We get the model from the versioned app registry;
     # if we directly import it, it'll be the wrong version
-    User = apps.get_registered_model('auth', 'User')
+    User = apps.get_registered_model('account', 'User')
     for user in User.objects.all():
         if user.email is not None:
             user.email = user.email.lower()
