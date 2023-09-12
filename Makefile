@@ -24,6 +24,7 @@ install:
 	cd backend/config/settings && \
 		$(COPY) .env.example .env
 	cd backend && \
+		mkdir "static/front" && \
 		$(call EXPORT,PIPENV_VENV_IN_PROJECT,1) && \
 		$(PIPENV) sync --dev && \
 		$(PIPENV) run migrate && \
