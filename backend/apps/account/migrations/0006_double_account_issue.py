@@ -17,7 +17,7 @@ def sort_user(u):
 
 
 def forwards_func(apps, schema_editor):
-    User = apps.get_registered_model('auth', 'User')
+    User = apps.get_registered_model('account', 'User')
     for user in User.objects.all():
         related_users = User.objects.filter(email=user.email)
         if len(related_users) > 1:
