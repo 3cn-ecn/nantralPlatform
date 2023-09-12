@@ -9,9 +9,9 @@ from .manager import UserManager
 
 
 class User(AbstractUser):
-    USERNAME_FIELD = "email"
-    EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ["username"]
+    USERNAME_FIELD = "email"  # noqa: WPS 115
+    EMAIL_FIELD = "email"  # noqa: WPS 115
+    REQUIRED_FIELDS = ["username"]  # noqa: WPS 115
 
     objects = UserManager()
 
