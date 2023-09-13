@@ -4,9 +4,6 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.post.models import AbstractPublication
 from apps.student.models import Student
-from apps.utils.upload import PathAndRename
-
-path_and_rename = PathAndRename("events/pictures")
 
 
 class Event(AbstractPublication):
@@ -66,6 +63,4 @@ class Event(AbstractPublication):
         # set end date to 1 hour after begin date if not set
         if self.end_date is None:
             self.end_date = self.start_date + timezone.timedelta(hours=1)
-        super(Event, self).save(
-            *args, notification_body=f"Event : {self.title}", **kwargs
-        )
+        super().save(*args, notification_body=f"Event : {self.title}", **kwargs)

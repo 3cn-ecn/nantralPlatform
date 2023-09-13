@@ -1,15 +1,18 @@
-# Django #
+# Django
 *.log
 *.pot
 *.pyc
+*.mo
 __pycache__
 *.sqlite3
 media/
 staticfiles/
 
-# Compiled translation
-*.mo
-# Backup files #
+# celery
+celerybeat-schedule.*
+*/celerybeat-schedule
+
+# Backup files
 *.bak
 *.gz
 
@@ -40,6 +43,13 @@ wheels/
 pip-log.txt
 pip-delete-this-directory.txt
 
+# SageMath parsed files
+*.sage.py
+
+# Environments
+*.env
+.venv
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -52,34 +62,14 @@ coverage.xml
 *.cover
 .hypothesis/
 
-# celery
-celerybeat-schedule.*
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-*.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# mypy
-.mypy_cache/
-
-# Do not push compiled static js from front because it will be compiled by the server
-static/js/**
-static/upload/**
-static/front/**
-
-# Do not push celerybeat db
-*/celerybeat-schedule
-
 # sonarqube
 .scannerwork
 
 # linters
 .flakeheaven_cache
+
+# types
+.mypy_cache/
+
+# Compiled front-end
+static/front/

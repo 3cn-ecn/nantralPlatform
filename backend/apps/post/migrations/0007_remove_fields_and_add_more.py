@@ -6,74 +6,103 @@ from django.db import migrations, models
 
 import django_ckeditor_5.fields
 
-import apps.utils.upload
-
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('group', '0011_group_can_pin'),
-        ('student', '0006_alter_student_faculty'),
-        ('post', '0006_alter_post_publication_date'),
+        ("group", "0011_group_can_pin"),
+        ("student", "0006_alter_student_faculty"),
+        ("post", "0006_alter_post_publication_date"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='post',
-            old_name='publication_date',
-            new_name='created_at',
+            model_name="post",
+            old_name="publication_date",
+            new_name="created_at",
         ),
         migrations.AlterField(
-            model_name='post',
-            name='created_at',
+            model_name="post",
+            name="created_at",
             field=models.DateTimeField(auto_now_add=True),
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='color',
+            model_name="post",
+            name="color",
         ),
         migrations.RemoveField(
-            model_name='post',
-            name='slug',
+            model_name="post",
+            name="slug",
         ),
         migrations.AddField(
-            model_name='post',
-            name='created_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='student.student'),
+            model_name="post",
+            name="created_by",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="+",
+                to="student.student",
+            ),
         ),
         migrations.AddField(
-            model_name='post',
-            name='pinned',
-            field=models.BooleanField(default=False, verbose_name='Pin publication'),
+            model_name="post",
+            name="pinned",
+            field=models.BooleanField(
+                default=False, verbose_name="Pin publication"
+            ),
         ),
         migrations.AddField(
-            model_name='post',
-            name='updated_at',
+            model_name="post",
+            name="updated_at",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AddField(
-            model_name='post',
-            name='updated_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='student.student'),
+            model_name="post",
+            name="updated_by",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="+",
+                to="student.student",
+            ),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='description',
-            field=django_ckeditor_5.fields.CKEditor5Field(blank=True, verbose_name='Description'),
+            model_name="post",
+            name="description",
+            field=django_ckeditor_5.fields.CKEditor5Field(
+                blank=True, verbose_name="Description"
+            ),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='image',
-            field=models.ImageField(blank=True, help_text='Your banner will be displayed at 1320x492 pixels.', null=True, upload_to=apps.utils.upload.PathAndRename('posts/pictures'), verbose_name='Banner'),
+            model_name="post",
+            name="image",
+            field=models.ImageField(
+                blank=True,
+                help_text="Your banner will be displayed at 1320x492 pixels.",
+                null=True,
+                upload_to="posts/pictures",
+                verbose_name="Banner",
+            ),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='publicity',
-            field=models.CharField(choices=[('Pub', 'Public - Visible par tous'), ('Mem', 'Membres uniquement - Visible uniquement par les membres du groupe')], max_length=200, verbose_name='Visibility'),
+            model_name="post",
+            name="publicity",
+            field=models.CharField(
+                choices=[
+                    ("Pub", "Public - Visible par tous"),
+                    (
+                        "Mem",
+                        "Membres uniquement - Visible uniquement par les membres du groupe",
+                    ),
+                ],
+                max_length=200,
+                verbose_name="Visibility",
+            ),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='title',
-            field=models.CharField(max_length=200, verbose_name='Title'),
+            model_name="post",
+            name="title",
+            field=models.CharField(max_length=200, verbose_name="Title"),
         ),
     ]

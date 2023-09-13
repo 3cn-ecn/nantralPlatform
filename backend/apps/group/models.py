@@ -11,19 +11,15 @@ from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.sociallink.models import SocialLink
 from apps.student.models import Student
-from apps.utils.compress import compress_model_image
+from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import SlugModel
-from apps.utils.upload import PathAndRename
-
-path_and_rename_group = PathAndRename("groups/logo")
-path_and_rename_group_banner = PathAndRename("groups/banniere")
-path_and_rename_group_type = PathAndRename("groups/types")
 
 
 class GroupType(models.Model):
     """
-    The type of a group: club, flatshare, etc... with all the group type
-    settings.
+    The type of a group.
+
+    Can be flat-shares, clubs, formations, BDX lists, etc.
     """
 
     # Type infos
@@ -31,11 +27,13 @@ class GroupType(models.Model):
         verbose_name=_("Type name"), unique=True, max_length=30
     )
     slug = models.SlugField(primary_key=True, max_length=10)
-    icon = models.ImageField(
+    icon = CustomImageField(
         verbose_name=_("Icon"),
         blank=True,
         null=True,
-        upload_to=path_and_rename_group_type,
+        size=(306, 306),
+        crop=True,
+        name_from_field="slug",
     )
 
     # Members settings
@@ -105,6 +103,10 @@ class GroupType(models.Model):
         """Get the url of the object."""
         return reverse("group:sub_index", kwargs={"type": self.slug})
 
+    def delete(self, *args, **kwargs) -> None:
+        self.icon.delete(save=False)
+        super().delete(*args, **kwargs)
+
 
 class Label(models.Model):
     name = models.CharField(_("Label Name"), max_length=30)
@@ -128,7 +130,7 @@ class Tag(models.Model):
 
 
 class Group(models.Model, SlugModel):
-    """Database of all groups, with different types: clubs, flatshares..."""
+    """Database of all groups, with different types: clubs, flat-shares..."""
 
     # General data
     name = models.CharField(verbose_name=_("Name"), unique=True, max_length=100)
@@ -231,19 +233,23 @@ class Group(models.Model, SlugModel):
     meeting_hour = models.CharField(
         verbose_name=_("Meeting hours"), max_length=50, blank=True
     )
-    icon = models.ImageField(
+    icon = CustomImageField(
         verbose_name=_("Icon"),
         blank=True,
         null=True,
-        upload_to=path_and_rename_group,
         help_text=_("Your icon will be displayed at 306x306 pixels."),
+        size=(500, 500),
+        crop=True,
+        name_from_field="name",
     )
-    banner = models.ImageField(
+    banner = CustomImageField(
         verbose_name=_("Banner"),
         blank=True,
         null=True,
-        upload_to=path_and_rename_group_banner,
         help_text=_("Your banner will be displayed at 1320x492 pixels."),
+        size=(1320, 492),
+        crop=True,
+        name_from_field="name",
     )
     video1 = models.URLField(
         verbose_name=_("Video link 1"), max_length=200, null=True, blank=True
@@ -278,8 +284,7 @@ class Group(models.Model, SlugModel):
 
     @property
     def scholar_year(self) -> str:
-        """Returns the year of the group in scholar year format, i.e. with
-        the following year.
+        """Returns the year of the group in scholar year format.
 
         Returns
         -------
@@ -289,11 +294,11 @@ class Group(models.Model, SlugModel):
 
         Example
         -------
+        >>> group = Group.objects.all().firs()
         >>> group.year = 2019
         >>> group.scholar_year
         '2019-2020'
         """
-
         if self.creation_year:
             return f"{self.creation_year}-{self.creation_year+1}"
         else:
@@ -306,8 +311,7 @@ class Group(models.Model, SlugModel):
         return self.short_name
 
     def clean(self) -> None:
-        """Method to test if the object is valid (no incompatibility between
-        fields."""
+        """Test if the object is valid (no incompatibility between fields)."""
         if self.public and self.private:
             raise ValidationError(
                 _(
@@ -327,15 +331,13 @@ class Group(models.Model, SlugModel):
             self.private = True
         # create the slug
         self.set_slug(self.short_name, max_length=40)
-        # compress images
-        self.icon = compress_model_image(
-            self, "icon", size=(500, 500), contains=True
-        )
-        self.banner = compress_model_image(
-            self, "banner", size=(1320, 492), contains=False
-        )
         # save the instance
-        super(Group, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs) -> None:
+        self.icon.delete(save=False)
+        self.banner.delete(save=False)
+        super().delete(*args, **kwargs)
 
     def is_admin(self, user: User) -> bool:
         """Check if a user has the admin rights for this group.
@@ -350,7 +352,6 @@ class Group(models.Model, SlugModel):
         bool
             True if the user has admin rights.
         """
-
         return (
             user.is_superuser
             or self.is_member(user)
@@ -372,10 +373,9 @@ class Group(models.Model, SlugModel):
         bool
             True if the user is a member of this group.
         """
-
         return (
             user.is_authenticated
-            and hasattr(user, "student")
+            and hasattr(user, "student")  # noqa: WPS421
             and self.members.contains(user.student)
         )
 
@@ -387,7 +387,9 @@ class Group(models.Model, SlugModel):
         str
             The formatted label of the category of the group.
         """
-        return eval(self.group_type.category_expr, {"group": self})
+        return eval(  # noqa: WPS421, S307
+            self.group_type.category_expr, {"group": self}
+        )
 
     def get_sub_category(self) -> str:
         """Get the sub category label for list display.
@@ -397,7 +399,9 @@ class Group(models.Model, SlugModel):
         str
             The formatted label of the category of the group.
         """
-        return eval(self.group_type.sub_category_expr, {"group": self})
+        return eval(  # noqa: WPS421, S307
+            self.group_type.sub_category_expr, {"group": self}
+        )
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
@@ -432,7 +436,7 @@ class Membership(models.Model):
         verbose_name = "membre"
 
     def __str__(self) -> str:
-        return self.student.__str__()
+        return str(self.student)
 
     def save(self, *args, **kwargs) -> None:
         """Save the membership object."""
@@ -444,7 +448,7 @@ class Membership(models.Model):
         if self.admin and self.admin_request:
             self.admin_request = False
             self.admin_request_messsage = ""
-        super(Membership, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def accept_admin_request(self) -> None:
         """Accept an admin request."""

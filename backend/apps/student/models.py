@@ -4,8 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from apps.utils.compress import compress_model_image
-from apps.utils.upload import PathAndRename
+from apps.utils.fields.image_field import CustomImageField
 
 FACULTIES = [
     ("Gen", "Ingénieur Généraliste"),
@@ -27,19 +26,19 @@ PATHS = [
     ("O-I", "Officier-Ingénieur"),
 ]
 
-path_and_rename = PathAndRename("students/profile_pictures")
-
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     promo = models.IntegerField(
         verbose_name="Année de promotion entrante", null=True, blank=True
     )
-    picture = models.ImageField(
+    picture = CustomImageField(
         verbose_name="Photo de profil",
-        upload_to=path_and_rename,
         null=True,
         blank=True,
+        size=(500, 500),
+        crop=True,
+        name_from_field="user",
     )
     faculty = models.CharField(
         max_length=200, verbose_name="Filière", choices=FACULTIES
@@ -97,9 +96,9 @@ class Student(models.Model):
             or self.user.is_superuser
         )
 
-    def save(self, *args, **kwargs):
-        self.picture = compress_model_image(self, "picture")
-        super(Student, self).save(*args, **kwargs)
+    def delete(self, *args, **kwargs):
+        self.picture.delete()
+        super().delete(*args, **kwargs)
 
     class Meta:
         ordering = ["user__last_name", "user__first_name"]
