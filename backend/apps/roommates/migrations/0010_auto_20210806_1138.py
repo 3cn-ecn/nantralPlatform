@@ -2,24 +2,33 @@
 
 from django.db import migrations, models
 
-import apps.utils.upload
-
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('roommates', '0009_auto_20210805_1446'),
+        ("roommates", "0009_auto_20210805_1446"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='roommates',
-            name='banniere',
-            field=models.ImageField(blank=True, help_text='Votre bannière sera affichée au format 1320x492 pixels.', null=True, upload_to=apps.utils.upload.PathAndRename('groups/banniere'), verbose_name='Bannière'),
+            model_name="roommates",
+            name="banniere",
+            field=models.ImageField(
+                blank=True,
+                help_text="Votre bannière sera affichée au format 1320x492 pixels.",
+                null=True,
+                upload_to="groups/banniere",
+                verbose_name="Bannière",
+            ),
         ),
         migrations.AlterField(
-            model_name='roommates',
-            name='logo',
-            field=models.ImageField(blank=True, help_text='Votre logo sera affiché au format 306x306 pixels.', null=True, upload_to=apps.utils.upload.PathAndRename('groups/logo'), verbose_name='Logo du groupe'),
+            model_name="roommates",
+            name="logo",
+            field=models.ImageField(
+                blank=True,
+                help_text="Votre logo sera affiché au format 306x306 pixels.",
+                null=True,
+                upload_to="groups/logo",
+                verbose_name="Logo du groupe",
+            ),
         ),
     ]

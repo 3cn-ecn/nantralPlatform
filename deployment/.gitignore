@@ -1,11 +1,7 @@
 # Environments
 *.env
-.venv
+.venv/
 env/
-venv/
-ENV/
-env.bak/
-venv.bak/
 
 # Config folders
 dav/
@@ -42,26 +38,5 @@ wheels/
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-.pytest_cache/
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-
 # pyenv
 .python-version
-
-# celery
-celerybeat-schedule.*
-
-# SageMath parsed files
-*.sage.py
-
-# mypy
-.mypy_cache/

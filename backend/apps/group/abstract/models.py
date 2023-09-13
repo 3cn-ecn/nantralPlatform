@@ -11,19 +11,14 @@ from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.student.models import Student
-from apps.utils.compress import compress_model_image
+from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import (
     SlugModel,
     get_object_from_full_slug,
     get_tuple_from_full_slug,
 )
-from apps.utils.upload import PathAndRename
 
 logger = logging.getLogger(__name__)
-
-
-path_and_rename_group = PathAndRename("groups/logo")
-path_and_rename_group_banniere = PathAndRename("groups/banniere")
 
 
 class AbstractGroup(models.Model, SlugModel):
@@ -38,19 +33,22 @@ class AbstractGroup(models.Model, SlugModel):
     )
 
     # présentation
-    logo = models.ImageField(
+    logo = CustomImageField(
         verbose_name="Logo du groupe",
         blank=True,
         null=True,
-        upload_to=path_and_rename_group,
         help_text="Votre logo sera affiché au format 306x306 pixels.",
+        size=(500, 500),
+        crop=True,
+        name_from_field="name",
     )
-    banniere = models.ImageField(
+    banniere = CustomImageField(
         verbose_name="Bannière",
         blank=True,
         null=True,
-        upload_to=path_and_rename_group_banniere,
         help_text="Votre bannière sera affichée au format 1320x492 pixels.",
+        size=(1320, 492),
+        name_from_field="name",
     )
     summary = models.CharField("Résumé", max_length=500, null=True, blank=True)
     description = CKEditor5Field(
@@ -109,15 +107,13 @@ class AbstractGroup(models.Model, SlugModel):
     def save(self, *args, **kwargs):
         # creation du slug si non-existant ou corrompu
         self.set_slug(self.name, 40)
-        # compression des images
-        self.logo = compress_model_image(
-            self, "logo", size=(500, 500), contains=True
-        )
-        self.banniere = compress_model_image(
-            self, "banniere", size=(1320, 492), contains=False
-        )
         # enregistrement
-        super(AbstractGroup, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self.logo.delete()
+        self.banniere.delete()
+        super().delete(*args, **kwargs)
 
     @property
     def app(self):

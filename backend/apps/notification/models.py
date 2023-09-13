@@ -23,7 +23,7 @@ VISIBILITY = [
 
 
 class Notification(models.Model):
-    """Contenu d'une notification"""
+    """Contenu d'une notification."""
 
     title = models.CharField("Titre", max_length=255)
     body = models.CharField("Corps", max_length=512)
@@ -84,7 +84,7 @@ class Notification(models.Model):
         super().save()
 
     def send(self):
-        """Save the notification and add recipients"""
+        """Save the notification and add recipients."""
         # select the receivers who have subscribed and will receive the
         # notification
         sub_receivers = self.receivers.filter(sentnotification__subscribed=True)
@@ -122,7 +122,7 @@ class Notification(models.Model):
 
 
 class SentNotification(models.Model):
-    """Table des notifications envoyées à chaque utilisateur"""
+    """Table des notifications envoyées à chaque utilisateur."""
 
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     notification = models.ForeignKey(Notification, on_delete=models.CASCADE)

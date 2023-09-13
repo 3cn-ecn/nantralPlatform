@@ -2,24 +2,33 @@
 
 from django.db import migrations, models
 
-import apps.utils.upload
-
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('liste', '0011_alter_namedmembershiplist_function'),
+        ("liste", "0011_alter_namedmembershiplist_function"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='liste',
-            name='banniere',
-            field=models.ImageField(blank=True, help_text='Votre bannière sera affichée au format 1320x492 pixels.', null=True, upload_to=apps.utils.upload.PathAndRename('groups/banniere'), verbose_name='Bannière'),
+            model_name="liste",
+            name="banniere",
+            field=models.ImageField(
+                blank=True,
+                help_text="Votre bannière sera affichée au format 1320x492 pixels.",
+                null=True,
+                upload_to="groups/banniere",
+                verbose_name="Bannière",
+            ),
         ),
         migrations.AlterField(
-            model_name='liste',
-            name='logo',
-            field=models.ImageField(blank=True, help_text='Votre logo sera affiché au format 306x306 pixels.', null=True, upload_to=apps.utils.upload.PathAndRename('groups/logo'), verbose_name='Logo du groupe'),
+            model_name="liste",
+            name="logo",
+            field=models.ImageField(
+                blank=True,
+                help_text="Votre logo sera affiché au format 306x306 pixels.",
+                null=True,
+                upload_to="groups/logo",
+                verbose_name="Logo du groupe",
+            ),
         ),
     ]
