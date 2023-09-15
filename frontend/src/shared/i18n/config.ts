@@ -2,12 +2,15 @@ import { initReactI18next } from 'react-i18next';
 
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { uniq } from 'lodash-es';
 
 import translationEn from './en-GB.json';
 import translationFr from './fr-FR.json';
 
 export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
+export const global_languages = uniq(languages.map((lg) => lg.substring(0, 2)));
 
+export type Language = (typeof global_languages)[number];
 declare module 'i18next' {
   interface CustomTypeOptions {
     returnNull: false;
