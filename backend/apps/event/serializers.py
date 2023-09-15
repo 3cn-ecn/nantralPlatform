@@ -51,9 +51,19 @@ class EventSerializer(serializers.ModelSerializer):
             "end_registration",
             "form_url",
         ]
-        for lang in language:
-            fields.append(f"title_{lang[0]}")
-            fields.append(f"description_{lang[0]}")
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+            for language_code, language_name in settings.LANGUAGES:
+                description_name = f"description_{language_code}"
+                title_name = f"description_{language_code}"
+                self.fields[description_name] = serializers.CharField(
+                    source=f"description_{language_code}"
+                )
+                self.fields[title_name] = serializers.CharField(
+                    source=f"title_{language_code}"
+                )
 
     def get_is_participating(self, obj: Event) -> bool:
         user = self.context["request"].user
@@ -126,9 +136,19 @@ class EventWriteSerializer(serializers.ModelSerializer):
             "end_registration",
             "form_url",
         ]
-        for lang in language:
-            fields.append(f"title_{lang[0]}")
-            fields.append(f"description_{lang[0]}")
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+            for language_code, language_name in settings.LANGUAGES:
+                description_name = f"description_{language_code}"
+                title_name = f"description_{language_code}"
+                self.fields[description_name] = serializers.CharField(
+                    source=f"description_{language_code}"
+                )
+                self.fields[title_name] = serializers.CharField(
+                    source=f"title_{language_code}"
+                )
 
     def validate_max_participant(self, value: int) -> int:
         if value and value < 1:

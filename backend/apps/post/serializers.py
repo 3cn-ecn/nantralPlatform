@@ -41,9 +41,20 @@ class PostPreviewSerializer(PostSerializer):
             "is_admin",
             "publicity",
         ]
-        for lang in language:
-            fields.append(f"title_{lang[0]}")
         exclude = None
+
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+            for language_code, language_name in settings.LANGUAGES:
+                description_name = f"description_{language_code}"
+                title_name = f"description_{language_code}"
+                self.fields[description_name] = serializers.CharField(
+                    source=f"description_{language_code}"
+                )
+                self.fields[title_name] = serializers.CharField(
+                    source=f"title_{language_code}"
+                )
 
 
 class PostWriteSerializer(serializers.ModelSerializer):
