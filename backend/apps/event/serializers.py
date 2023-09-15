@@ -55,7 +55,7 @@ class EventSerializer(serializers.ModelSerializer):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
 
-            for language_code, language_name in settings.LANGUAGES:
+            for language_code in settings.LANGUAGES:
                 description_name = f"description_{language_code}"
                 title_name = f"description_{language_code}"
                 self.fields[description_name] = serializers.CharField(
@@ -140,7 +140,7 @@ class EventWriteSerializer(serializers.ModelSerializer):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
 
-            for language_code, language_name in settings.LANGUAGES:
+            for language_code in settings.LANGUAGES:
                 description_name = f"description_{language_code}"
                 title_name = f"description_{language_code}"
                 self.fields[description_name] = serializers.CharField(
