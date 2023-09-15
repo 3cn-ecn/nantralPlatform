@@ -64,6 +64,7 @@ BASE_DIR = str(BASE_PATH)
 
 # Applications definition
 DJANGO_APPS = [
+    "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -150,7 +151,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 AUTH_USER_MODEL = "account.User"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-
+MODELTRANSLATION_CUSTOM_FIELDS = "CKEditor5Field"
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
