@@ -1,7 +1,14 @@
-import { Dispatch, useCallback } from 'react';
+import { Dispatch, useCallback, useState } from 'react';
 
 import { LocalFireDepartment } from '@mui/icons-material';
-import { Alert, AlertTitle, MenuItem, Paper, Typography } from '@mui/material';
+import {
+  Alert,
+  AlertTitle,
+  MenuItem,
+  Paper,
+  Select,
+  Typography,
+} from '@mui/material';
 
 import { Event, EventForm } from '#modules/event/event.type';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
@@ -34,7 +41,7 @@ export function EventFormFields({
   updateFormValues,
   prevData,
 }: EventFormFieldsProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Use callbacks for every functions passed to a prop of a memoized component,
   // such as all of our Field components. This allows to optimize performance
@@ -54,6 +61,14 @@ export function EventFormFields({
     [],
   );
 
+  const [selectedLang, setSelectedLang] = useState<string>(
+    i18n.resolvedLanguage.substr(0, 2),
+  );
+
+  const handleSelectChange = (event) => {
+    setSelectedLang(event.target.value);
+  };
+
   return (
     <>
       {isError && (
@@ -68,13 +83,19 @@ export function EventFormFields({
           )}
         </Alert>
       )}
+      <Select value={selectedLang} onChange={handleSelectChange}>
+        <MenuItem value="fr"> Français</MenuItem>
+        <MenuItem value="en"> English</MenuItem>
+      </Select>
       <TextField
         name="title"
         label={t('event.form.title.label')}
-        value={formValues.title}
+        value={formValues[`title_${selectedLang}`]}
         handleChange={useCallback(
-          (val) => updateFormValues({ title: val }),
-          [updateFormValues],
+          (val) => {
+            updateFormValues({ [`title_${selectedLang}`]: val });
+          },
+          [selectedLang, updateFormValues],
         )}
         errors={error?.fields?.title}
         required
@@ -99,10 +120,13 @@ export function EventFormFields({
       <RichTextField
         name="description"
         label={t('event.form.description.label')}
-        value={formValues.description}
+        key={selectedLang}
+        value={formValues[`description_${selectedLang}`]}
         handleChange={useCallback(
-          (val) => updateFormValues({ description: val }),
-          [updateFormValues],
+          (val) => {
+            updateFormValues({ [`description_${selectedLang}`]: val });
+          },
+          [selectedLang, updateFormValues],
         )}
         errors={error?.fields?.description}
       />
