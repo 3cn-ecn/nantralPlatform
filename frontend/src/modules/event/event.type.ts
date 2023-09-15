@@ -1,5 +1,13 @@
 import { GroupPreview } from '#modules/group/group.type';
 
+type LocalizedTitles = {
+  [K in Language as `title_${string & K}`]: string;
+};
+
+type LocalizedDescription = {
+  [K in Language as `description_${string & K}`]: string;
+};
+
 export interface Event {
   id: number;
   title: string;
@@ -19,7 +27,8 @@ export interface Event {
   endRegistration: Date | null;
   formUrl: string;
   notificationId: number | null;
-}
+} & LocalizedTitles &
+  LocalizedDescription;
 
 export type EventPreview = Pick<
   Event,
@@ -51,6 +60,10 @@ export type EventForm = Pick<
   | 'endRegistration'
   | 'formUrl'
 > & {
+  [K in Language as `title_${string & K}`]: string;
+} & {
+  [K in Language as `description_${string & K}`]: string;
+} & {
   startDate: Date | null;
   endDate: Date | null;
   group: number | null;

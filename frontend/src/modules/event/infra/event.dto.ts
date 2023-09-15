@@ -1,5 +1,13 @@
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
 
+type LocalizedTitles = {
+  [K in Language as `title_${string & K}`]: string;
+};
+
+type LocalizedDescription = {
+  [K in Language as `description_${string & K}`]: string;
+};
+
 export interface EventDTO {
   id: number;
   title: string;
@@ -21,7 +29,8 @@ export interface EventDTO {
   end_registration: string | null;
   form_url: string;
   notification: number | null;
-}
+} & LocalizedTitles &
+  LocalizedDescription;
 
 export type EventPreviewDTO = Pick<
   EventDTO,
@@ -40,7 +49,9 @@ export type EventPreviewDTO = Pick<
   | 'start_registration'
   | 'end_registration'
   | 'url'
->;
+> & {
+  [K in Language as `title_${string & K}`]: string;
+};
 
 export type EventFormDTO = Pick<
   EventDTO,
@@ -55,6 +66,10 @@ export type EventFormDTO = Pick<
   | 'end_registration'
   | 'form_url'
 > & {
+  [K in Language as `title_${string & K}`]: string;
+} & {
+  [K in Language as `description_${string & K}`]: string;
+} & {
   group: number | null;
   image?: File;
 };
