@@ -40,13 +40,13 @@ export function EditEventModalContent({
   const formTranslatedValues: PostForm = {};
 
   for (const lang of global_languages) {
-    formTranslatedValues[`title_${lang}`] = post[`title_${lang}`];
-    formTranslatedValues[`description_${lang}`] = post[`description_${lang}`];
+    formTranslatedValues[`title_${lang}`] = event[`title_${lang}`];
+    formTranslatedValues[`description_${lang}`] = event[`description_${lang}`];
   }
   const [formValues, updateFormValues] = useObjectState<EventForm>({
     title: event.title,
     description: event.description,
-    ...formTranslatedValue,
+    ...formTranslatedValues,
     group: event.group.id,
     publicity: event.publicity,
     location: event.location,
