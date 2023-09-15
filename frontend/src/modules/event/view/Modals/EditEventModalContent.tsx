@@ -17,6 +17,7 @@ import {
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
 import { useObjectState } from '#shared/hooks/useObjectState';
+import { global_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -36,9 +37,16 @@ export function EditEventModalContent({
   const { palette } = useTheme();
 
   // the values currently in our form
+  const formTranslatedValues: PostForm = {};
+
+  for (const lang of global_languages) {
+    formTranslatedValues[`title_${lang}`] = post[`title_${lang}`];
+    formTranslatedValues[`description_${lang}`] = post[`description_${lang}`];
+  }
   const [formValues, updateFormValues] = useObjectState<EventForm>({
     title: event.title,
     description: event.description,
+    ...formTranslatedValue,
     group: event.group.id,
     publicity: event.publicity,
     location: event.location,
