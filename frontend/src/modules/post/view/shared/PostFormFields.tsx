@@ -1,6 +1,6 @@
-import { Dispatch, useCallback } from 'react';
+import { Dispatch, useCallback, useState } from 'react';
 
-import { Alert, AlertTitle, MenuItem } from '@mui/material';
+import { Alert, AlertTitle, MenuItem, Select } from '@mui/material';
 
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
@@ -13,8 +13,10 @@ import {
   TextField,
 } from '#shared/components/FormFields';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
+import { global_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
+import { getNativeLanguageName } from '#shared/utils/getNativeLanguageName';
 
 interface PostFormFieldsProps {
   isError: boolean;
@@ -31,7 +33,7 @@ export function PostFormFields({
   updateFormValues,
   prevData,
 }: PostFormFieldsProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Use callbacks for every functions passed to a prop of a memoized component,
   // such as all of our Field components. This allows to optimize performance
@@ -50,11 +52,20 @@ export function PostFormFields({
       ),
     [],
   );
+
   const onPinnedChange = useCallback(
     (val: boolean) => updateFormValues({ pinned: val }),
     [updateFormValues],
   );
 
+  const [selectedLang, setSelectedLang] = useState<string>(
+    i18n.resolvedLanguage.substr(0, 2),
+  );
+
+  const handleSelectChange = (event) => {
+    setSelectedLang(event.target.value);
+    console.log(formValues);
+  };
   return (
     <>
       {isError && (
@@ -69,13 +80,23 @@ export function PostFormFields({
           )}
         </Alert>
       )}
+
+      <Select value={selectedLang} onChange={handleSelectChange}>
+        {global_languages.map((language) => (
+          <MenuItem key={language} value={language}>
+            {getNativeLanguageName(language)}
+          </MenuItem>
+        ))}
+      </Select>
       <TextField
         name="title"
         label={t('post.form.title.label')}
-        value={formValues.title}
+        value={formValues[`title_${selectedLang}`]}
         handleChange={useCallback(
-          (val) => updateFormValues({ title: val }),
-          [updateFormValues],
+          (val) => {
+            updateFormValues({ [`title_${selectedLang}`]: val });
+          },
+          [selectedLang, updateFormValues],
         )}
         errors={error?.fields?.title}
         required
@@ -100,10 +121,14 @@ export function PostFormFields({
       <RichTextField
         name="description"
         label={t('post.form.description.label')}
-        value={formValues.description}
+        key={selectedLang}
+        value={formValues[`description_${selectedLang}`]}
         handleChange={useCallback(
-          (val) => updateFormValues({ description: val }),
-          [updateFormValues],
+          (val) => {
+            updateFormValues({ [`description_${selectedLang}`]: val });
+            console.log(formValues);
+          },
+          [formValues, selectedLang, updateFormValues],
         )}
         errors={error?.fields?.description}
       />
