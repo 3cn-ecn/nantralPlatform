@@ -1,6 +1,13 @@
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
 
-export interface PostDTO {
+type LocalizedTitles = {
+  [K in Language as `title_${string & K}`]: string;
+};
+
+type LocalizedDescription = {
+  [K in Language as `description_${string & K}`]: string;
+};
+export type PostDTO = {
   id: number;
   title: string;
   description: string;
@@ -13,7 +20,8 @@ export interface PostDTO {
   can_pin: boolean;
   is_admin: boolean;
   notification: number | null;
-}
+} & LocalizedTitles &
+  LocalizedDescription;
 
 export type PostPreviewDTO = Pick<
   PostDTO,
@@ -27,12 +35,18 @@ export type PostPreviewDTO = Pick<
   | 'is_admin'
   | 'can_pin'
   | 'publicity'
->;
+> & {
+  [K in Language as `title_${string & K}`]: string;
+};
 
 export type PostFormDTO = Pick<
   PostDTO,
   'title' | 'description' | 'publicity' | 'pinned'
 > & {
+  [K in Language as `title_${string & K}`]: string;
+} & {
+  [K in Language as `description_${string & K}`]: string;
+} & {
   group: number | null;
   image?: File;
 };
