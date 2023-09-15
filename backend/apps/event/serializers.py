@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -20,6 +21,7 @@ class EventSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
 
     class Meta:
+        language = settings.LANGUAGES
         model = Event
         read_only_fields = [
             "absolute_url",
@@ -48,8 +50,10 @@ class EventSerializer(serializers.ModelSerializer):
             "start_registration",
             "end_registration",
             "form_url",
-            "notification",
         ]
+        for lang in language:
+            fields.append(f"title_{lang[0]}")
+            fields.append(f"description_{lang[0]}")
 
     def get_is_participating(self, obj: Event) -> bool:
         user = self.context["request"].user
@@ -108,10 +112,9 @@ class EventPreviewSerializer(EventSerializer):
 class EventWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
+        language = settings.LANGUAGES
         fields = [
             "id",
-            "title",
-            "description",
             "location",
             "start_date",
             "end_date",
@@ -123,6 +126,9 @@ class EventWriteSerializer(serializers.ModelSerializer):
             "end_registration",
             "form_url",
         ]
+        for lang in language:
+            fields.append(f"title_{lang[0]}")
+            fields.append(f"description_{lang[0]}")
 
     def validate_max_participant(self, value: int) -> int:
         if value and value < 1:

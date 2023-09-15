@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
@@ -16,6 +17,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = "__all__"
+        exclude = ["notification"]
 
     def get_is_admin(self, obj: Post) -> bool:
         user = self.context["request"].user
@@ -28,6 +30,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 class PostPreviewSerializer(PostSerializer):
     class Meta(PostSerializer.Meta):
+        language = settings.LANGUAGES
         fields = [
             "id",
             "title",
@@ -39,6 +42,8 @@ class PostPreviewSerializer(PostSerializer):
             "is_admin",
             "publicity",
         ]
+        for lang in language:
+            fields.append(f"title_{lang[0]}")
         exclude = None
 
 
@@ -46,6 +51,8 @@ class PostWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         exclude = [
+            "title",
+            "description",
             "notification",
             "created_at",
             "created_by",
