@@ -8,6 +8,11 @@ from django.utils import timezone
 from .manager import UserManager
 
 
+class IdRegistration(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
+    expires_at = models.DateTimeField()
+
+
 class User(AbstractUser):
     USERNAME_FIELD = "email"  # noqa: WPS 115
     EMAIL_FIELD = "email"  # noqa: WPS 115
@@ -16,14 +21,15 @@ class User(AbstractUser):
     objects = UserManager()
 
     email = models.EmailField(unique=True)
+    is_email_valid = models.BooleanField(default=False)
+    email_next = models.EmailField(null=True, blank=True)
+    invitation = models.ForeignKey(
+        IdRegistration, null=True, blank=True, on_delete=models.SET_NULL
+    )
 
     def save(self, *args, **kwargs):
         self.email = self.email.lower()
         super().save(*args, **kwargs)
-
-
-class IdRegistration(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
 
 
 class TemporaryAccessRequest(models.Model):
