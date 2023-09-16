@@ -99,8 +99,10 @@ class CustomUserAdmin(UserAdmin):
             {
                 "fields": (
                     "is_active",
+                    "is_email_valid",
                     "is_staff",
                     "is_superuser",
+                    "invitation",
                     "groups",
                     "user_permissions",
                 ),
