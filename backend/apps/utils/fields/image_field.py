@@ -9,6 +9,7 @@ from ..compress import compress_image
 
 class CustomImageFieldFile(models.ImageField.attr_class):
     def save(self, name, content, save=True):
+        """Compress the image before saving it."""
         try:
             old_instance = self.field.model.objects.get(pk=self.instance.pk)
             old_file = getattr(old_instance, self.field.attname)
@@ -54,6 +55,11 @@ class CustomImageField(models.ImageField):
     def non_db_attrs(self):
         return super().non_db_attrs + ("size", "crop", "name_from_field")
 
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        del kwargs["upload_to"]
+        return name, path, args, kwargs
+
     def create_filename(self, instance, filename):
         app_label = instance._meta.app_label  # noqa: WPS437
         model_name = instance._meta.model_name  # noqa: WPS437
@@ -74,16 +80,17 @@ class CustomImageField(models.ImageField):
         )
 
     def pre_save(self, model_instance, add):
+        """Delete the old image file if a new one is uploaded."""
         try:
             old_instance = self.model.objects.get(pk=model_instance.pk)
-            old_file = getattr(old_instance, self.attname)
+            old_image = getattr(old_instance, self.attname)
         except self.model.DoesNotExist:
-            old_file = None
+            old_image = None
 
         new_file = super().pre_save(model_instance, add)
 
-        if old_file and old_file != new_file:
-            old_file.delete(save=False)
+        if old_image and old_image != new_file:
+            old_image.delete(save=False)
 
         setattr(model_instance, self.attname, new_file)
 
