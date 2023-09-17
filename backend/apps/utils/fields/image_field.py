@@ -54,6 +54,11 @@ class CustomImageField(models.ImageField):
     def non_db_attrs(self):
         return super().non_db_attrs + ("size", "crop", "name_from_field")
 
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        del kwargs["upload_to"]
+        return name, path, args, kwargs
+
     def create_filename(self, instance, filename):
         app_label = instance._meta.app_label  # noqa: WPS437
         model_name = instance._meta.model_name  # noqa: WPS437
