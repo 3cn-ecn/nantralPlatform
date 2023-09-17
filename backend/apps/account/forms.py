@@ -1,11 +1,9 @@
 import re
 
 from django import forms
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
 
@@ -38,11 +36,8 @@ def check_ecn_mail(mail: str):
 
 
 def check_ecn_mail_login(mail: str):
-    """A wrapper around the login check to disable during periods where all
-    emails can be used.
-    """
-    if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
-        return
+    # A wrapper around the login check to disable during periods where all
+    # emails can be used.
     check_ecn_mail(mail)
 
 
@@ -181,6 +176,7 @@ class ResetPassForm(forms.Form):
 
 class TemporaryRequestSignUpForm(SignUpForm):
     """A form to request a temporary access to the platform.
+
     The user will have to confirm the school mail address later.
     """
 

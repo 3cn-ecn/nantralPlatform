@@ -29,12 +29,11 @@ from .forms import (
     TemporaryRequestSignUpForm,
     UpgradePermanentAccountForm,
 )
-from .models import IdRegistration, TemporaryAccessRequest
+from .models import IdRegistration
 from .tokens import account_activation_token
 from .utils import send_email_confirmation, user_creation
 
 User = get_user_model()
-AUTH_BACKEND = "apps.account.emailAuthBackend.EmailBackend"
 
 
 class RegistrationView(FormView):
@@ -60,12 +59,16 @@ class TemporaryRegistrationView(FormView):
     def get(self, request, invite_id: uuid.UUID, *args, **kwargs):
         # Do not allow to use this view outside of allowed.
         # temporary accounts windows.
-        invitation = IdRegistration.objects.filter(id=invite_id).first()
-        if invitation is None or timezone.now() > invitation.expires_at:
+        self.invitation = IdRegistration.objects.filter(id=invite_id).first()
+        if (
+            self.invitation is None
+            or timezone.now() > self.invitation.expires_at
+        ):
             messages.error(
                 request, "Invitation invalide : le lien d'invitation a expiré."
             )
             return redirect("account:registration-choice")
+
         return super().get(request, *args, **kwargs)
 
     def get_initial(self) -> Dict[str, Any]:
@@ -75,13 +78,14 @@ class TemporaryRegistrationView(FormView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context[
-            "DEADLINE_TEMPORARY_REGISTRATION"
-        ] = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
+        context["invitation"] = self.invitation
+        context["DEADLINE_TEMPORARY_REGISTRATION"] = self.invitation.expires_at
         return context
 
     def form_valid(self, form) -> HttpResponse:
-        user_creation(form, self.request)
+        invite_id = self.request.path.split("/")[-2]
+        invitation = IdRegistration.objects.get(id=invite_id)
+        user_creation(form, self.request, invitation=invitation)
         return redirect("account:login")
 
 
@@ -110,7 +114,7 @@ class ConfirmUser(View):
                     "connecter.",
                 )
             user.save()
-            login(self.request, user, backend=AUTH_BACKEND)
+            login(self.request, user)
             messages.success(request, "Votre compte est désormais actif !")
             return redirect("home:home")
         else:
@@ -178,27 +182,19 @@ class AuthView(FormView):
                 'Veuillez le valider <a href="'
                 f'{reverse("account:upgrade-permanent")}">ici</a>. '
                 "Attention après le "
-                f"{user.invitation.expires_at} vous ne "
+                f"{user.invitation.expires_at.strftime('%a')} vous ne "
                 "pourrez plus vous connecter si vous n'avez pas "
                 "renseigné votre adresse Centrale."
             )
             messages.warning(self.request, message)
-            login(
-                self.request,
-                user,
-                backend=AUTH_BACKEND,
-            )
+            login(self.request, user)
             # We send back the user to where he wanted to go or to home page
             return redirect(url)
 
         # Normal case
         message = f"Bonjour {user.first_name.title()} !"
         messages.success(self.request, message)
-        login(
-            self.request,
-            user,
-            backend=AUTH_BACKEND,
-        )
+        login(self.request, user)
         # We send back the user to where he wanted to go or to home page
         return redirect(url)
 
@@ -254,7 +250,6 @@ class ForgottenPassView(FormView):
 class PasswordResetConfirmCustomView(PasswordResetConfirmView):
     template_name = "account/reset_password.html"
     post_reset_login = True
-    post_reset_login_backend = AUTH_BACKEND
     form_class = SetPasswordForm
     token_generator = account_activation_token
     success_url = reverse_lazy("home:home")
@@ -313,9 +308,7 @@ class ConfirmEmail(TemplateView):
     def post(self, request):
         user = User.objects.get(email=request.session["email"])
         mail = user.email
-        temp_access = TemporaryAccessRequest.objects.filter(
-            user=user.pk
-        ).exists()
+        temp_access = user.invitation is not None
         send_email_confirmation(
             user, self.request, temporary_access=temp_access, send_to=mail
         )
