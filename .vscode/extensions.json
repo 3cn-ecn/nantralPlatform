@@ -17,7 +17,7 @@
     // django
     "batisteo.vscode-django",
     "mrorz.language-gettext",
-    // html
+    "qwtel.sqlite-viewer",
     "ecmel.vscode-html-css",
     // js
     "dbaeumer.vscode-eslint",

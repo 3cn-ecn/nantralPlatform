@@ -1,7 +1,7 @@
 from typing import Union
 
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.http import HttpRequest
@@ -14,11 +14,17 @@ from apps.account.models import TemporaryAccessRequest
 from .forms import SignUpForm, TemporaryRequestSignUpForm
 from .tokens import account_activation_token
 
+User = get_user_model()
+
 
 def user_creation(
     form: Union[SignUpForm, TemporaryRequestSignUpForm], request: HttpRequest
 ) -> User:
-    user: User = form.save()
+    # save with username = email by default
+    user: User = form.instance
+    user.username = user.email
+    user.save()
+
     user.student.promo = form.cleaned_data.get("promo")
     user.student.faculty = form.cleaned_data.get("faculty")
     user.student.path = form.cleaned_data.get("path")

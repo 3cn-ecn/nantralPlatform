@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.loader import render_to_string
@@ -13,6 +13,8 @@ from apps.sociallink.models import SocialLink
 from apps.student.models import Student
 from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import SlugModel
+
+User = get_user_model()
 
 
 class GroupType(models.Model):

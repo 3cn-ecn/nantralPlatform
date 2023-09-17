@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-10 15:24+0200\n"
+"POT-Creation-Date: 2023-09-17 14:27+0200\n"
 "PO-Revision-Date: 2023-04-10 15:37+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -18,103 +18,135 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.1.1\n"
 
-#: forms.py:18
+#: admin.py:52
+msgid "Info personnelles"
+msgstr "Personal info"
+
+#: admin.py:54
+msgid "Permissions"
+msgstr "Permissions"
+
+#: admin.py:65
+msgid "Dates Importantes"
+msgstr "Important dates"
+
+#: forms.py:22
 msgid ""
-"Invitation invalide : le lien d'invitation a expiré. Veuillez entrer une "
+"Invitation invalide : le lien d'invitation a expiré. Veuillez entrer une "
 "adresse en ec-nantes.fr, ou contactez un administrateur."
 msgstr ""
 "Invalid invitation: the invitation link has expired. Please enter an email "
 "finishing by ec-nantes.fr, or contact an administrator."
 
-#: forms.py:26
+#: forms.py:33
 msgid ""
 "Vous devez utiliser une adresse mail de Centrale Nantes finissant par ec-"
 "nantes.fr"
 msgstr "You have to use your school email ending in ec-nantes.fr"
 
-#: forms.py:42 forms.py:152
+#: forms.py:50 forms.py:176
 msgid "Les deux mots de passe ne correspondent pas."
 msgstr "The passwords don't match."
 
-#: forms.py:48 forms.py:108
+#: forms.py:58 forms.py:130
 msgid "Votre adresse mail ec-nantes.fr"
 msgstr "Your school email in ec-nantes.fr"
 
-#: forms.py:50
+#: forms.py:61
 msgid "Confirmez votre adresse."
 msgstr "Confirm you email."
 
-#: forms.py:57
+#: forms.py:69
 msgid "Vous pourrez modifier cela plus tard"
 msgstr "You can modify this later"
 
-#: forms.py:62
+#: forms.py:75
 msgid "Adresse mail"
 msgstr "Email"
 
-#: forms.py:64
+#: forms.py:76
 msgid "Confirmation de l'adresse mail"
 msgstr "Confirm your email"
 
-#: forms.py:65
+#: forms.py:77
 msgid "Prénom"
 msgstr "First name"
 
-#: forms.py:66
+#: forms.py:78
 msgid "NOM"
 msgstr "Last name"
 
-#: forms.py:67 forms.py:113
+#: forms.py:79 forms.py:136
 msgid "Mot de passe"
 msgstr "Password"
 
-#: forms.py:68
+#: forms.py:80
 msgid "Confirmation du mot de passe"
 msgstr "Confirm your password"
 
-#: forms.py:70
+#: forms.py:82
 msgid "Entrez le même mot de passe pour vérification"
 msgstr "Enter the same password for verification"
 
-#: forms.py:71
+#: forms.py:84
 msgid "Année d'arrivée à Centrale"
 msgstr "Year of arrival at Centrale Nantes"
 
-#: forms.py:72
+#: forms.py:85
 msgid "Filière"
 msgstr "Formation followed"
 
-#: forms.py:73
+#: forms.py:86
 msgid "Cursus particulier ?"
 msgstr "Are you in a special programm?"
 
-#: forms.py:81
+#: forms.py:94
 msgid "Cet email est déjà utilisé."
 msgstr "This email is already being used."
 
-#: forms.py:86
+#: forms.py:99
 msgid "Les emails ne correspondent pas."
 msgstr "The emails don't match."
 
-#: forms.py:128
+#: forms.py:151
 msgid "Entrez l'adresse mail associée au compte"
 msgstr "Enter the email associated with your account"
 
-#: forms.py:141
+#: forms.py:165
 msgid "Votre nouveau mot de passe"
 msgstr "Your new password"
 
-#: forms.py:142
+#: forms.py:166
 msgid "Confirmer le mot de passe"
 msgstr "Confirm your password"
 
-#: forms.py:163
+#: forms.py:189
 msgid "Votre adresse mail personnelle."
 msgstr "Your personal email."
 
-#: forms.py:174
+#: forms.py:202
 msgid "Votre adresse mail Centrale Nantes."
 msgstr "Your Centrale Nantes email."
+
+#: templates/account/confirm-email.html:11
+#, fuzzy
+#| msgid "Confirmez votre adresse."
+msgid "Confirmez votre adresse email"
+msgstr "Confirm your email address"
+
+#: templates/account/confirm-email.html:14
+msgid ""
+"Votre compte n'est pas encore actif. Veuillez cliquer sur le lien envoyé par "
+"mail pour l'activer. Si vous n'avez pas reçu de mail vous pouvez le renvoyer "
+"via le bouton ci-dessous"
+msgstr ""
+"Your account is not yet active. Please click on the link sent by e-mailto "
+"activate it. If you have not received an e-mail, you can resend it using "
+"thebutton below."
+
+#: templates/account/confirm-email.html:19
+msgid "Renvoyer un mail de confirmation"
+msgstr "Resend confirmation email"
 
 #: templates/account/forgotten_pass.html:10
 msgid "Réinitialisation de mot de passe"
