@@ -78,7 +78,7 @@ class MembershipForm(ModelForm):
 
 
 class AdminRequestForm(ModelForm):
-    """Form to ask for admin rights"""
+    """Form to ask for admin rights."""
 
     class Meta:
         model = Membership
