@@ -16,7 +16,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        exclude = ["notification"]
+        fields = "__all__"
 
     def get_is_admin(self, obj: Post) -> bool:
         user = self.context["request"].user
@@ -42,19 +42,6 @@ class PostPreviewSerializer(PostSerializer):
             "publicity",
         ]
         exclude = None
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-
-            for language_code in settings.LANGUAGES:
-                description_name = f"description_{language_code}"
-                title_name = f"description_{language_code}"
-                self.fields[description_name] = serializers.CharField(
-                    source=f"description_{language_code}"
-                )
-                self.fields[title_name] = serializers.CharField(
-                    source=f"title_{language_code}"
-                )
 
 
 class PostWriteSerializer(serializers.ModelSerializer):

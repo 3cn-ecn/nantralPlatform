@@ -50,6 +50,7 @@ class EventSerializer(serializers.ModelSerializer):
             "start_registration",
             "end_registration",
             "form_url",
+            "notification",
         ]
 
         def __init__(self, *args, **kwargs):
