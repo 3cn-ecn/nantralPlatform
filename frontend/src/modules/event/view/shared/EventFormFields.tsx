@@ -1,14 +1,7 @@
-import { Dispatch, useCallback, useState } from 'react';
+import { Dispatch, useCallback } from 'react';
 
 import { LocalFireDepartment } from '@mui/icons-material';
-import {
-  Alert,
-  AlertTitle,
-  MenuItem,
-  Paper,
-  Select,
-  Typography,
-} from '@mui/material';
+import { Alert, AlertTitle, MenuItem, Paper, Typography } from '@mui/material';
 
 import { Event, EventForm } from '#modules/event/event.type';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
@@ -32,6 +25,7 @@ interface EventFormFieldsProps {
   formValues: EventForm;
   updateFormValues: Dispatch<Partial<EventForm>>;
   prevData?: Event;
+  selectedLang: string;
 }
 
 export function EventFormFields({
@@ -40,8 +34,9 @@ export function EventFormFields({
   formValues,
   updateFormValues,
   prevData,
+  selectedLang,
 }: EventFormFieldsProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Use callbacks for every functions passed to a prop of a memoized component,
   // such as all of our Field components. This allows to optimize performance
@@ -61,14 +56,6 @@ export function EventFormFields({
     [],
   );
 
-  const [selectedLang, setSelectedLang] = useState<string>(
-    i18n.resolvedLanguage.substr(0, 2),
-  );
-
-  const handleSelectChange = (event) => {
-    setSelectedLang(event.target.value);
-  };
-
   return (
     <>
       {isError && (
@@ -83,10 +70,6 @@ export function EventFormFields({
           )}
         </Alert>
       )}
-      <Select value={selectedLang} onChange={handleSelectChange}>
-        <MenuItem value="fr"> Français</MenuItem>
-        <MenuItem value="en"> English</MenuItem>
-      </Select>
       <TextField
         name="title"
         label={t('event.form.title.label')}
