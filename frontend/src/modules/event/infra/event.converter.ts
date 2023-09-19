@@ -1,4 +1,4 @@
-import { global_languages } from '#shared/i18n/config';
+import { languages_without_locales } from '#shared/i18n/config';
 
 import { EventForm } from '../event.type';
 import { EventFormDTO } from './event.dto';
@@ -7,7 +7,7 @@ export function convertEventForm(event: EventForm): EventFormDTO {
   const translatedConverter: EventFormDTO = {};
   let translated_title: string;
   let translated_description: string;
-  for (const lang of global_languages) {
+  for (const lang of languages_without_locales) {
     if (event[`title_${lang}`]) {
       translated_title = event[`title_${lang}`];
     }
@@ -15,7 +15,7 @@ export function convertEventForm(event: EventForm): EventFormDTO {
       translated_description = event[`description_${lang}`];
     }
   }
-  for (const lang of global_languages) {
+  for (const lang of languages_without_locales) {
     if (!event[`title_${lang}`]) {
       event[`title_${lang}`] = translated_title;
     }

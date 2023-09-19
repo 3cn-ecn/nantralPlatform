@@ -1,4 +1,4 @@
-import { global_languages } from '#shared/i18n/config';
+import { languages_without_locales } from '#shared/i18n/config';
 
 import { PostForm } from '../post.types';
 import { PostFormDTO } from './post.dto';
@@ -7,7 +7,7 @@ export function convertPostForm(post: PostForm): PostFormDTO {
   const translatedConverter: PostFormDTO = {};
   let translated_title: string;
   let translated_description: string;
-  for (const lang of global_languages) {
+  for (const lang of languages_without_locales) {
     if (post[`title_${lang}`]) {
       translated_title = post[`title_${lang}`];
     }
@@ -15,7 +15,7 @@ export function convertPostForm(post: PostForm): PostFormDTO {
       translated_description = post[`description_${lang}`];
     }
   }
-  for (const lang of global_languages) {
+  for (const lang of languages_without_locales) {
     if (!post[`title_${lang}`]) {
       post[`title_${lang}`] = translated_title;
     }

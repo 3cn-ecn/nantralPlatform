@@ -36,16 +36,16 @@ export type PostPreviewDTO = Pick<
   | 'can_pin'
   | 'publicity'
 > & {
-  [K in Language as `title_${string & K}`]: string;
+  LocalizedTitles;
 };
 
 export type PostFormDTO = Pick<
   PostDTO,
   'title' | 'description' | 'publicity' | 'pinned'
 > & {
-  [K in Language as `title_${string & K}`]: string;
+  LocalizedTitles;
 } & {
-  [K in Language as `description_${string & K}`]: string;
+  LocalizedDescription;
 } & {
   group: number | null;
   image?: File;

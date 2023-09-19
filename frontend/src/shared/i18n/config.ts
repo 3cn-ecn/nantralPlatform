@@ -8,9 +8,11 @@ import translationEn from './en-GB.json';
 import translationFr from './fr-FR.json';
 
 export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
-export const global_languages = uniq(languages.map((lg) => lg.substring(0, 2)));
+export const languages_without_locales = uniq(
+  languages.map((lg) => lg.substring(0, 2))
+);
 
-export type Language = (typeof global_languages)[number];
+export type Language = (typeof languages_without_locales)[number];
 declare module 'i18next' {
   interface CustomTypeOptions {
     returnNull: false;
