@@ -1,6 +1,6 @@
-import { Dispatch, useCallback, useState } from 'react';
+import { Dispatch, useCallback } from 'react';
 
-import { Alert, AlertTitle, MenuItem, Select } from '@mui/material';
+import { Alert, AlertTitle, MenuItem } from '@mui/material';
 
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
@@ -13,10 +13,8 @@ import {
   TextField,
 } from '#shared/components/FormFields';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
-import { global_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
-import { getNativeLanguageName } from '#shared/utils/getNativeLanguageName';
 
 interface PostFormFieldsProps {
   isError: boolean;
@@ -24,6 +22,7 @@ interface PostFormFieldsProps {
   formValues: PostForm;
   updateFormValues: Dispatch<Partial<PostForm>>;
   prevData?: Post;
+  selectedLang: string;
 }
 
 export function PostFormFields({
@@ -32,8 +31,9 @@ export function PostFormFields({
   formValues,
   updateFormValues,
   prevData,
+  selectedLang,
 }: PostFormFieldsProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   // Use callbacks for every functions passed to a prop of a memoized component,
   // such as all of our Field components. This allows to optimize performance
@@ -58,14 +58,8 @@ export function PostFormFields({
     [updateFormValues],
   );
 
-  const [selectedLang, setSelectedLang] = useState<string>(
-    i18n.resolvedLanguage.substr(0, 2),
-  );
+  // const [selectedLang, setSelectedLang] = useState(i18n.language.substr(0, 2));
 
-  const handleSelectChange = (event) => {
-    setSelectedLang(event.target.value);
-    console.log(formValues);
-  };
   return (
     <>
       {isError && (
@@ -80,14 +74,43 @@ export function PostFormFields({
           )}
         </Alert>
       )}
-
-      <Select value={selectedLang} onChange={handleSelectChange}>
-        {global_languages.map((language) => (
-          <MenuItem key={language} value={language}>
-            {getNativeLanguageName(language)}
-          </MenuItem>
-        ))}
-      </Select>
+      {/* <Box display="flex" justifyContent="flex-end">
+        <Button
+          variant="outlined"
+          disableElevation
+          onClick={handleClick}
+          sx={{
+            borderRadius: '0.5rem',
+            width: '5rem',
+            margin: 0.5,
+          }}
+          endIcon={<KeyboardArrowDownIcon />}
+        >
+          {selectedLang}
+        </Button>
+        <Menu
+          id="demo-customized-menu"
+          MenuListProps={{
+            'aria-labelledby': 'demo-customized-button',
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+        >
+          {languages_without_locales.map((language) => (
+            <MenuItem
+              key={language}
+              value={language}
+              onClick={() => {
+                setSelectedLang(language);
+                handleClose();
+              }}
+            >
+              {getNativeLanguageName(language)}
+            </MenuItem>
+          ))}
+        </Menu>
+      </Box> */}
       <TextField
         name="title"
         label={t('post.form.title.label')}
@@ -126,9 +149,8 @@ export function PostFormFields({
         handleChange={useCallback(
           (val) => {
             updateFormValues({ [`description_${selectedLang}`]: val });
-            console.log(formValues);
           },
-          [formValues, selectedLang, updateFormValues],
+          [selectedLang, updateFormValues],
         )}
         errors={error?.fields?.description}
       />
