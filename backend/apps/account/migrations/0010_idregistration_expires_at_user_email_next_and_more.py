@@ -37,6 +37,22 @@ def migrate_temporary_accounts_back(apps, schema_editor):
             )
 
 
+def change_mail_valid(apps, schema_editor):
+    """Set active property to True for every user"""
+    User: models.Model = apps.get_model("account", "User")
+    for user in User.objects.all():
+        user.is_email_valid = user.is_active
+        user.active = True
+        user.save()
+
+
+def change_mail_valid_back(apps, schema_editor):
+    User: models.Model = apps.get_model("account", "User")
+    for user in User.objects.all():
+        user.active = user.is_email_valid
+        user.save()
+
+
 class Migration(migrations.Migration):
     dependencies = [
         ("account", "0009_alter_user_options_alter_user_managers_and_more"),
@@ -74,6 +90,9 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             migrate_temporary_accounts,
             reverse_code=migrate_temporary_accounts_back,
+        ),
+        migrations.RunPython(
+            change_mail_valid, reverse_code=change_mail_valid_back
         ),
         migrations.DeleteModel(
             name="temporaryaccessrequest",
