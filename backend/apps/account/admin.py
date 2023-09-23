@@ -4,7 +4,10 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import mail
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+
+from apps.student.admin import StudentInline
 
 from .models import IdRegistration
 
@@ -95,7 +98,11 @@ class NoPasswordFilter(admin.SimpleListFilter):
 
 @admin.register(IdRegistration)
 class IdRegistrationAdmin(admin.ModelAdmin):
-    list_display = ["id"]
+    list_display = ["id", "expires_at"]
+    readonly_fields = ["invitation_url"]
+
+    def invitation_url(self, obj: IdRegistration):
+        return reverse("account:temp-registration-choice", args=[obj.id])
 
 
 @admin.register(User)
@@ -140,6 +147,7 @@ class CustomUserAdmin(UserAdmin):
         ),
     )
     readonly_fields = ("date_joined", "last_login")
+    inlines = (StudentInline,)
 
     list_filter = (
         "is_staff",
