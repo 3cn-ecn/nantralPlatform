@@ -9,6 +9,11 @@ from django.urls.resolvers import URLPattern
 from .models import Student
 
 
+class StudentInline(admin.StackedInline):
+    model = Student
+    can_delete = False
+
+
 class StudentAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "promo")
 
