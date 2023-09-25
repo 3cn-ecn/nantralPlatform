@@ -5,12 +5,10 @@ import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Menu, MenuItem } from '@mui/material';
-
 import { createPostApi } from '#modules/post/api/createPost.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
+import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialog,
@@ -23,7 +21,6 @@ import { useObjectState } from '#shared/hooks/useObjectState';
 import { languages_without_locales } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
-import { getNativeLanguageName } from '#shared/utils/getNativeLanguageName';
 
 import { PostFormFields } from '../shared/PostFormFields';
 
@@ -80,15 +77,6 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
 
   const [selectedLang, setSelectedLang] = useState(i18n.language.substr(0, 2));
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <ResponsiveDialog onClose={onClose} disableEnforceFocus>
       <ResponsiveDialogHeader
@@ -101,36 +89,10 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
       >
         {t('post.createModal.title')}
         <Spacer flex={1} />
-        <Button
-          variant="outlined"
-          disableElevation
-          onClick={handleClick}
-          endIcon={<KeyboardArrowDownIcon />}
-        >
-          {selectedLang}
-        </Button>
-        <Menu
-          id="demo-customized-menu"
-          MenuListProps={{
-            'aria-labelledby': 'demo-customized-button',
-          }}
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-        >
-          {languages_without_locales.map((language) => (
-            <MenuItem
-              key={language}
-              value={language}
-              onClick={() => {
-                setSelectedLang(language);
-                handleClose();
-              }}
-            >
-              {getNativeLanguageName(language)}
-            </MenuItem>
-          ))}
-        </Menu>
+        <LanguageSelector
+          selectedLang={selectedLang}
+          setSelectedLang={setSelectedLang}
+        />
       </ResponsiveDialogHeader>
       <form onSubmit={(e) => onSubmit(e, formValues)}>
         <ResponsiveDialogContent>
