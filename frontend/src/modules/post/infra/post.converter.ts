@@ -8,12 +8,8 @@ export function convertPostForm(post: PostForm): PostFormDTO {
   let translated_title: string;
   let translated_description: string;
   for (const lang of languages_without_locales) {
-    if (post[`title_${lang}`]) {
-      translated_title = post[`title_${lang}`];
-    }
-    if (post[`description_${lang}`]) {
-      translated_description = post[`description_${lang}`];
-    }
+    translated_title = post[`title_${lang}`] || null;
+    translated_description = post[`description_${lang}`] || null;
   }
   for (const lang of languages_without_locales) {
     if (!post[`title_${lang}`]) {

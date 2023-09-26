@@ -8,12 +8,8 @@ export function convertEventForm(event: EventForm): EventFormDTO {
   let translated_title: string;
   let translated_description: string;
   for (const lang of languages_without_locales) {
-    if (event[`title_${lang}`]) {
-      translated_title = event[`title_${lang}`];
-    }
-    if (event[`description_${lang}`]) {
-      translated_description = event[`description_${lang}`];
-    }
+    translated_title = event[`title_${lang}`] || null;
+    translated_description = event[`description_${lang}`] || null;
   }
   for (const lang of languages_without_locales) {
     if (!event[`title_${lang}`]) {
