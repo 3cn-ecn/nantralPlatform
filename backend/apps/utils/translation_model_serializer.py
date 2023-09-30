@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils.translation import gettext as _
 
 from rest_framework import serializers
 
@@ -60,3 +61,25 @@ class TranslationModelSerializer(serializers.ModelSerializer):
                     fields.remove(field)
 
         return fields
+
+    def validate(self, data):
+        """
+        Check that at least one translated field is present for required
+        fields.
+        """
+        translations_fields = getattr(self.Meta, "translations_fields", [])
+        model_class = self.Meta.model
+
+        for field in translations_fields:
+            model_field = model_class._meta.get_field(field)  # noqa: WPS437
+            is_field_required = not model_field.blank
+            is_any_translation_present = any(
+                data.get(f"{field}_{language[0]}")
+                for language in settings.LANGUAGES
+            )
+            if is_field_required and not is_any_translation_present:
+                raise serializers.ValidationError(
+                    {field: _("This field is required.")}
+                )
+
+        return super().validate(data)
