@@ -34,7 +34,7 @@ mccabe = ["+*"]
 "pep8-naming" = ["+*"]
 pycodestyle = ["+*", "-E203", "-W503"]
 pyflakes = ["+*"]
-"wemake-python-styleguide" = ["+*", "-WPS100", "-WPS110", "-WPS111", "-WPS2??", "-WPS3??", "-WPS407", "-WPS410", "-WPS412", "-WPS420", "-WPS432", "-WPS454", "-WPS459", "-WPS5", "-WPS601"]
+"wemake-python-styleguide" = ["+*", "-WPS100", "-WPS110", "-WPS111", "-WPS2??", "-WPS3??", "-WPS407", "-WPS410", "-WPS412", "-WPS420", "-WPS432", "-WPS454", "-WPS459", "-WPS5", "-WPS601", "-WPS615"]
 
 [tool.flakeheaven.exceptions."*/settings/*.py"]
 pyflakes = ["-F403", "-F405"]
