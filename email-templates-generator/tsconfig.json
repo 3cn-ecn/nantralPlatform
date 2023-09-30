@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
+    "module": "esnext",
     "esModuleInterop": true,
     "strict": true,
+    "noEmit": true,
     "moduleResolution": "node",
     "baseUrl": ".",
-    "jsx": "react"
+    "jsx": "react-jsx"
   },
   "include": ["emails/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
