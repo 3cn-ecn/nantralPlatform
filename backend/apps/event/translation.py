@@ -1,10 +1,8 @@
-from modeltranslation.translator import TranslationOptions, translator
+from modeltranslation.translator import TranslationOptions, register
 
-from apps.event.models import Event
+from .models import Event
 
 
+@register(Event)
 class EventTranslationOptions(TranslationOptions):
     fields = ("title", "description")
-
-
-translator.register(Event, EventTranslationOptions)
