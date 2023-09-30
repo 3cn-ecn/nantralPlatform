@@ -29,11 +29,11 @@ exclude = [
 baseline = ".flakeheaven_baseline"
 
 [tool.flakeheaven.plugins]
-"flake8-*" = ["+*", "-C8??", "-D1??", "-D401", "-DAR101", "-DAR201", "-DAR301", "-DAR401", "-RST???"]
+"flake8-*" = ["+*", "-C8??", "-D1??", "-D205", "-D4??", "-DAR101", "-DAR201", "-DAR301", "-DAR401", "-RST???"]
 mccabe = ["+*"]
 "pep8-naming" = ["+*"]
 pycodestyle = ["+*", "-E203", "-W503"]
-pyflakes = ["+*"]
+pyflakes = ["+*", "-F721"]
 "wemake-python-styleguide" = ["+*", "-WPS100", "-WPS110", "-WPS111", "-WPS2??", "-WPS3??", "-WPS407", "-WPS410", "-WPS412", "-WPS420", "-WPS432", "-WPS454", "-WPS459", "-WPS5", "-WPS601", "-WPS615"]
 
 [tool.flakeheaven.exceptions."*/settings/*.py"]

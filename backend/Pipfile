@@ -9,7 +9,7 @@ test = "python manage.py test"
 makemigrations = "python manage.py makemigrations"
 migrate = "python manage.py migrate"
 django = "python manage.py"
-lint = "flake8 --statistics --show-violation-links"
+lint = "flakeheaven lint"
 "lint:fix" = "sh -c 'black . && isort .'"
 "test:coverage" = "coverage run --source='.' manage.py test"
 

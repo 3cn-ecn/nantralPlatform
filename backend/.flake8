@@ -6,7 +6,7 @@ docstring-style = numpy
 inline-quotes = double
 ignore = 
     C8,
-    D1, D401,
+    D1, D205, D4,
     DAR101, DAR201, DAR301, DAR401,
     E203,
     RST,
