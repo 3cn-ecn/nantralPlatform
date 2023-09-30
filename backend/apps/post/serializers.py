@@ -1,15 +1,15 @@
-from django.conf import settings
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
 
 from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
+from apps.utils.translation_model_serializer import TranslationModelSerializer
 
 from .models import Post
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(TranslationModelSerializer):
     is_admin = serializers.SerializerMethodField()
     can_pin = serializers.SerializerMethodField()
     group = GroupPreviewSerializer()
@@ -29,7 +29,6 @@ class PostSerializer(serializers.ModelSerializer):
 
 class PostPreviewSerializer(PostSerializer):
     class Meta(PostSerializer.Meta):
-        language = settings.LANGUAGES
         fields = [
             "id",
             "title",
@@ -41,21 +40,20 @@ class PostPreviewSerializer(PostSerializer):
             "is_admin",
             "publicity",
         ]
-        exclude = None
 
 
-class PostWriteSerializer(serializers.ModelSerializer):
+class PostWriteSerializer(TranslationModelSerializer):
     class Meta:
         model = Post
         exclude = [
-            "title",
-            "description",
             "notification",
             "created_at",
             "created_by",
             "updated_at",
             "updated_by",
         ]
+        translations_fields = ["title", "description"]
+        translations_only = True
 
     def validate_group(self, value: Group) -> Group:
         if not value.is_admin(self.context["request"].user):

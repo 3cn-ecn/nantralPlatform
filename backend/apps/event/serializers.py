@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -6,11 +5,12 @@ from rest_framework import serializers
 
 from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
+from apps.utils.translation_model_serializer import TranslationModelSerializer
 
 from .models import Event
 
 
-class EventSerializer(serializers.ModelSerializer):
+class EventSerializer(TranslationModelSerializer):
     number_of_participants = serializers.ReadOnlyField()
     group = GroupPreviewSerializer()
     is_group_member = serializers.SerializerMethodField()
@@ -21,7 +21,6 @@ class EventSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField()
 
     class Meta:
-        language = settings.LANGUAGES
         model = Event
         read_only_fields = [
             "absolute_url",
@@ -52,19 +51,7 @@ class EventSerializer(serializers.ModelSerializer):
             "form_url",
             "notification",
         ]
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-
-            for language_code in settings.LANGUAGES:
-                description_name = f"description_{language_code}"
-                title_name = f"description_{language_code}"
-                self.fields[description_name] = serializers.CharField(
-                    source=f"description_{language_code}"
-                )
-                self.fields[title_name] = serializers.CharField(
-                    source=f"title_{language_code}"
-                )
+        translations_fields = ["title", "description"]
 
     def get_is_participating(self, obj: Event) -> bool:
         user = self.context["request"].user
@@ -118,12 +105,12 @@ class EventPreviewSerializer(EventSerializer):
             "end_registration",
             "url",
         ]
+        translations_fields = []
 
 
-class EventWriteSerializer(serializers.ModelSerializer):
-    class Meta:
+class EventWriteSerializer(TranslationModelSerializer):
+    class Meta(EventSerializer.Meta):
         model = Event
-        language = settings.LANGUAGES
         fields = [
             "id",
             "location",
@@ -137,19 +124,8 @@ class EventWriteSerializer(serializers.ModelSerializer):
             "end_registration",
             "form_url",
         ]
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-
-            for language_code in settings.LANGUAGES:
-                description_name = f"description_{language_code}"
-                title_name = f"description_{language_code}"
-                self.fields[description_name] = serializers.CharField(
-                    source=f"description_{language_code}"
-                )
-                self.fields[title_name] = serializers.CharField(
-                    source=f"title_{language_code}"
-                )
+        translations_fields = ["title", "description"]
+        translations_only = True
 
     def validate_max_participant(self, value: int) -> int:
         if value and value < 1:
