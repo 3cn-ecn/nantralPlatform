@@ -58,8 +58,8 @@ jobs:
       - name: Check previous jobs status
         run: |
           status=$(echo "${{ needs.backend.result }}" | tr '[:upper:]' '[:lower:]')
-          status+=" ${{ needs.frontend.result }}" | tr '[:upper:]' '[:lower:]'
-          status+=" ${{ needs.docs.result }}" | tr '[:upper:]' '[:lower:]'
+          status+=$(echo " ${{ needs.frontend.result }}" | tr '[:upper:]' '[:lower:]')
+          status+=$(echo " ${{ needs.docs.result }}" | tr '[:upper:]' '[:lower:]')
           if [[ "$status" == *"failure"* ]]; then
             echo "One or more previous jobs failed."
             exit 1
