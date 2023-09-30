@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "jsx": "react"
+  },
+  "include": ["emails/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "emails",
+  "version": "0.0.18",
+  "private": true,
+  "workspaces": [
+    ".react-email"
+  ],
+  "scripts": {
+    "start": "email dev",
+    "build:html": "email export --outDir ../backend/templates/emails/",
+    "build:txt": "email export --outDir ../backend/templates/emails/ --plainText",
+    "build": "npm run build:html && npm run build:txt"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.6",
+    "react-email": "^1.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0"
+  }
+}
