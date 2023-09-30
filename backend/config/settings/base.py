@@ -151,7 +151,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 AUTH_USER_MODEL = "account.User"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-MODELTRANSLATION_CUSTOM_FIELDS = ("CKEditor5Field",)
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -166,6 +165,10 @@ TIME_ZONE = "Europe/Paris"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# Model translation
+MODELTRANSLATION_FALLBACK_LANGUAGES = ("en", "fr")
+MODELTRANSLATION_CUSTOM_FIELDS = ("CKEditor5Field",)
 
 # Compile frontend with VITE
 DJANGO_VITE_ASSETS_PATH = os.path.join(BASE_DIR, "static/front")
