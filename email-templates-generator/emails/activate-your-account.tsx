@@ -29,7 +29,7 @@ const ActivateYourAccountEmail = ({
     </Preview>
     <GenericTemplate>
       <Section>
-        <Heading as="h2">🇫🇷 Bienvenue sur Nantral Platform !</Heading>
+        <Heading as="h2">Bienvenue sur Nantral Platform !</Heading>
         <Text>Hello {firstName},</Text>
         <Text>
           Nous sommes ravis de t&apos;accueillir sur Nantral Platform ! Pour
@@ -44,7 +44,7 @@ const ActivateYourAccountEmail = ({
       </Section>
       <Hr />
       <Section>
-        <Heading as="h2">🇬🇧 Welcome to Nantral Platform!</Heading>
+        <Heading as="h2">Welcome to Nantral Platform!</Heading>
         <Text>Hi {firstName},</Text>
         <Text>
           We&apos;re delighted to welcome you to Nantral Platform! To take

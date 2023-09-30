@@ -97,6 +97,6 @@ const footerText: CSSProperties = {
 };
 
 const footerLink: CSSProperties = {
-  color: 'inherit',
+  color: '#888080',
   textDecoration: 'underline',
 };
