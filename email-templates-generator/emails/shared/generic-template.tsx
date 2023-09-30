@@ -1,0 +1,102 @@
+import { CSSProperties, PropsWithChildren } from 'react';
+
+import {
+  Body,
+  Column,
+  Container,
+  Heading,
+  Img,
+  Link,
+  Row,
+  Section,
+  Text,
+} from '@react-email/components';
+
+type Props = PropsWithChildren;
+
+const GenericTemplate = ({ children }: Props) => (
+  <Body style={main}>
+    <Container style={headerContainer}>
+      <Row>
+        <Column align="right">
+          <Img
+            src="https://nantral-platform.fr/static/img/logo/android/android-launchericon-72-72.png"
+            alt="Logo"
+            width="45"
+            style={{ marginRight: '5px' }}
+          />
+        </Column>
+        <Column align="left">
+          <Heading>Nantral Platform</Heading>
+        </Column>
+      </Row>
+    </Container>
+    <Container style={mainContainer}>{children}</Container>
+    <Container style={footerContainer}>
+      <Section>
+        <Text style={footerText}>
+          Cet email a été envoyé automatiquement par{' '}
+          <Link href="https://www.nantral-platform.fr" style={footerLink}>
+            Nantral Platform
+          </Link>
+          . Si vous n&apos;attendiez pas d&apos;email de notre part, vous pouvez
+          ignorer cet email. Pour toute question supplémentaire, merci de nous
+          contacter de préférence via{' '}
+          <Link
+            href="https://www.facebook.com/nantral.platform.ecn"
+            style={footerLink}
+          >
+            notre page Facebook
+          </Link>{' '}
+          ou en répondant à cet email.
+        </Text>
+        <Text style={footerText}>
+          Club 3CN - Association des Étudiants de Centrale Nantes, 1 rue de la
+          Noë, 44321 Nantes, France
+        </Text>
+      </Section>
+    </Container>
+  </Body>
+);
+
+export default GenericTemplate;
+
+const main: CSSProperties = {
+  backgroundColor: '#fcf9f9',
+  fontFamily:
+    'Heebo,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
+  padding: '10px',
+};
+
+const headerContainer: CSSProperties = {
+  textAlign: 'center',
+  width: 'max-content',
+  margin: '0 auto',
+  padding: '20px 0',
+};
+
+const mainContainer: CSSProperties = {
+  backgroundColor: '#ffffff',
+  margin: '0 auto',
+  padding: '32px 48px 32px 48px',
+  border: '1px solid #eee',
+  borderRadius: '10px',
+  boxShadow: '0 5px 10px rgba(20,50,70,.2)',
+};
+
+const footerContainer: CSSProperties = {
+  color: '#656565',
+  padding: '5px 15px 5px 15px',
+  marginBottom: '64px',
+};
+
+const footerText: CSSProperties = {
+  color: '#888080',
+  fontSize: '12px',
+  lineHeight: '16px',
+};
+
+const footerLink: CSSProperties = {
+  color: 'inherit',
+  textDecoration: 'underline',
+};
