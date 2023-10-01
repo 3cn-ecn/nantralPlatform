@@ -2,12 +2,10 @@ import { CSSProperties, PropsWithChildren } from 'react';
 
 import {
   Body,
-  Column,
   Container,
   Heading,
   Img,
   Link,
-  Row,
   Section,
   Text,
 } from '@react-email/components';
@@ -17,19 +15,15 @@ type Props = PropsWithChildren;
 const GenericTemplate = ({ children }: Props) => (
   <Body style={main}>
     <Container style={headerContainer}>
-      <Row>
-        <Column align="right">
-          <Img
-            src="https://nantral-platform.fr/static/img/logo/android/android-launchericon-72-72.png"
-            alt="Logo"
-            width="45"
-            style={{ marginRight: '5px' }}
-          />
-        </Column>
-        <Column align="left">
-          <Heading>Nantral Platform</Heading>
-        </Column>
-      </Row>
+      <Heading>
+        <Img
+          src="https://nantral-platform.fr/static/img/logo/android/android-launchericon-72-72.png"
+          alt=""
+          height="45"
+          style={headerLogo}
+        />
+        Nantral Platform
+      </Heading>
     </Container>
     <Container style={mainContainer}>{children}</Container>
     <Container style={footerContainer}>
@@ -40,7 +34,7 @@ const GenericTemplate = ({ children }: Props) => (
             Nantral Platform
           </Link>
           . Si vous n&apos;attendiez pas d&apos;email de notre part, vous pouvez
-          ignorer cet email. Pour toute question supplémentaire, merci de nous
+          ignorer ce message. Pour toute question supplémentaire, merci de nous
           contacter de préférence via{' '}
           <Link
             href="https://www.facebook.com/nantral.platform.ecn"
@@ -69,10 +63,16 @@ const main: CSSProperties = {
 };
 
 const headerContainer: CSSProperties = {
-  textAlign: 'center',
-  width: 'max-content',
   margin: '0 auto',
   padding: '20px 0',
+  textAlign: 'center',
+};
+
+const headerLogo: CSSProperties = {
+  display: 'inline-block',
+  verticalAlign: 'middle',
+  marginRight: '5px',
+  paddingBottom: '4px',
 };
 
 const mainContainer: CSSProperties = {
