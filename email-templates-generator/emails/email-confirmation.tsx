@@ -18,7 +18,7 @@ type Props = {
   validationLink?: string;
 };
 
-const ActivateYourAccountEmail = ({
+const EmailConfirmationEmail = ({
   firstName = '{{first_name|title}}',
   validationLink = '{{validation_link}}',
 }: Props) => (
@@ -68,4 +68,4 @@ const ActivateYourAccountEmail = ({
   </Html>
 );
 
-export default ActivateYourAccountEmail;
+export default EmailConfirmationEmail;
