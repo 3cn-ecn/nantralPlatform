@@ -3,13 +3,13 @@ from typing import Union
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import send_mail
 from django.http import HttpRequest
-from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 from apps.account.models import TemporaryAccessRequest
+from apps.utils.send_email import send_email
 
 from .forms import SignUpForm, TemporaryRequestSignUpForm
 from .tokens import account_activation_token
@@ -56,33 +56,26 @@ def send_email_confirmation(
     temporary_access: bool = False,
     send_to: str = None,
 ) -> None:
-    subject = "Activation de votre compte Nantral Platform"
-    current_site = get_current_site(request)
-    # load a template like get_template()
-    # and calls its render() method immediately.
-    template = "account/mail/activation_request.html"
-    if temporary_access:
-        template = "account/mail/activation_temporary_request.html"
-    message = render_to_string(
-        template,
-        {
-            "user": user,
-            "domain": current_site.domain,
+    domain = get_current_site(request).domain
+    path = reverse(
+        "account:confirm",
+        kwargs={
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-            # method will generate a hash value with user related data
             "token": account_activation_token.make_token(user),
         },
     )
-    if send_to is not None:
-        send_mail(
-            subject,
-            message,
-            None,
-            html_message=message,
-            recipient_list=[send_to],
-        )
-    else:
-        user.email_user(subject, message, html_message=message)
+    context = {
+        "first_name": user.first_name,
+        "validation_link": f"https://{domain}{path}",
+    }
+
+    send_email(
+        subject="Activation de votre compte Nantral Platform",
+        to_email=send_to or user.email,
+        template_name="email-confirmation",
+        context=context,
+    )
+
     if temporary_access:
         messages.success(
             request,
