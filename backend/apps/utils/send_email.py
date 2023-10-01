@@ -1,9 +1,10 @@
 from typing import Any, Optional
 
-from django.conf import settings
 from django.core.mail import get_connection
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
+
+DEFAULT_REPLY_TO_EMAIL = "contact@nantral-platform.fr"
 
 
 def send_email(
@@ -44,7 +45,7 @@ def send_email(
         to=[to],
         connection=connection,
         alternatives=[(html_body, "text/html")],
-        reply_to=[settings.DEFAULT_REPLY_TO_EMAIL],
+        reply_to=[DEFAULT_REPLY_TO_EMAIL],
     )
 
     return message.send()
@@ -103,7 +104,7 @@ def send_mass_email(
                 to=[recipient],
                 connection=connection,
                 alternatives=[(html_body, "text/html")],
-                reply_to=[settings.DEFAULT_REPLY_TO_EMAIL],
+                reply_to=[DEFAULT_REPLY_TO_EMAIL],
             )
             for recipient, html_body, text_body in zip(
                 recipient_list, html_bodies, text_bodies
@@ -121,7 +122,7 @@ def send_mass_email(
                 to=[recipient],
                 connection=connection,
                 alternatives=[(html_body, "text/html")],
-                reply_to=[settings.DEFAULT_REPLY_TO_EMAIL],
+                reply_to=[DEFAULT_REPLY_TO_EMAIL],
             )
             for recipient in recipient_list
         ]

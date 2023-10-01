@@ -22,7 +22,6 @@ EMAIL_HOST_USER = None
 EMAIL_HOST_PASSWORD = None
 # Specify default sender emails
 DEFAULT_FROM_EMAIL = "Nantral Platform <no-reply@nantral-platform.fr>"
-DEFAULT_REPLY_TO_EMAIL = "Nantral Platform <contact@nantral-platform.fr>"
 SERVER_EMAIL = "Nantral Platform Server <server@nantral-platform.fr>"
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

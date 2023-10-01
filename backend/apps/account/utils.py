@@ -60,7 +60,7 @@ def send_email_confirmation(
     path = reverse(
         "account:confirm",
         kwargs={
-            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+            "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": account_activation_token.make_token(user),
         },
     )
@@ -71,7 +71,7 @@ def send_email_confirmation(
 
     send_email(
         subject="Activation de votre compte Nantral Platform",
-        to_email=send_to or user.email,
+        to=send_to or user.email,
         template_name="email-confirmation",
         context=context,
     )
