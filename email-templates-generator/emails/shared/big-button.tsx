@@ -21,8 +21,4 @@ const button: CSSProperties = {
   borderRadius: '50px',
   color: '#fff',
   fontSize: '16px',
-  fontWeight: 'bold',
-  textDecoration: 'none',
-  textAlign: 'center',
-  display: 'block',
 };
