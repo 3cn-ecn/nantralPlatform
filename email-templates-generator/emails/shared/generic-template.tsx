@@ -4,6 +4,7 @@ import {
   Body,
   Container,
   Heading,
+  Hr,
   Img,
   Link,
   Section,
@@ -25,7 +26,9 @@ const GenericTemplate = ({ children }: Props) => (
         Nantral Platform
       </Heading>
     </Container>
+    <Hr style={{ display: 'none' }} />
     <Container style={mainContainer}>{children}</Container>
+    <Hr style={{ display: 'none' }} />
     <Container style={footerContainer}>
       <Section>
         <Text style={footerText}>
