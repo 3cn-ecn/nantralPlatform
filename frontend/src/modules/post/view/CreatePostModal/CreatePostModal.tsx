@@ -21,7 +21,6 @@ import { useObjectState } from '#shared/hooks/useObjectState';
 import { base_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
-import { getNativeLanguageName } from '#shared/utils/getNativeLanguageName';
 
 import { PostFormFields } from '../shared/PostFormFields';
 
