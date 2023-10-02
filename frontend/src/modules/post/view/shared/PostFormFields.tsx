@@ -58,8 +58,6 @@ export function PostFormFields({
     [updateFormValues],
   );
 
-  // const [selectedLang, setSelectedLang] = useState(i18n.language.substr(0, 2));
-
   return (
     <>
       {isError && (
@@ -74,43 +72,6 @@ export function PostFormFields({
           )}
         </Alert>
       )}
-      {/* <Box display="flex" justifyContent="flex-end">
-        <Button
-          variant="outlined"
-          disableElevation
-          onClick={handleClick}
-          sx={{
-            borderRadius: '0.5rem',
-            width: '5rem',
-            margin: 0.5,
-          }}
-          endIcon={<KeyboardArrowDownIcon />}
-        >
-          {selectedLang}
-        </Button>
-        <Menu
-          id="demo-customized-menu"
-          MenuListProps={{
-            'aria-labelledby': 'demo-customized-button',
-          }}
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-        >
-          {base_languages.map((language) => (
-            <MenuItem
-              key={language}
-              value={language}
-              onClick={() => {
-                setSelectedLang(language);
-                handleClose();
-              }}
-            >
-              {getNativeLanguageName(language)}
-            </MenuItem>
-          ))}
-        </Menu>
-      </Box> */}
       <TextField
         name="title"
         label={t('post.form.title.label')}

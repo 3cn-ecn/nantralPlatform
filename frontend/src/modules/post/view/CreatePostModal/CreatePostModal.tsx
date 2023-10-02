@@ -21,6 +21,7 @@ import { useObjectState } from '#shared/hooks/useObjectState';
 import { base_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
+import { getNativeLanguageName } from '#shared/utils/getNativeLanguageName';
 
 import { PostFormFields } from '../shared/PostFormFields';
 
@@ -75,7 +76,9 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
     });
   };
 
-  const [selectedLang, setSelectedLang] = useState(i18n.language.substr(0, 2));
+  const [selectedLang, setSelectedLang] = useState(
+    i18n.language.substring(0, 2)
+  );
 
   return (
     <ResponsiveDialog onClose={onClose} disableEnforceFocus>

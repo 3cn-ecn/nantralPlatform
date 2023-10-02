@@ -84,7 +84,9 @@ export function EditPostModalContent({
     );
   };
 
-  const [selectedLang, setSelectedLang] = useState(i18n.language.substr(0, 2));
+  const [selectedLang, setSelectedLang] = useState(
+    i18n.language.substring(0, 2)
+  );
 
   return (
     <>
