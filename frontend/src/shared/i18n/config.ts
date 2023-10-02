@@ -8,11 +8,18 @@ import translationEn from './en-GB.json';
 import translationFr from './fr-FR.json';
 
 export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
-export const languages_without_locales = uniq(
-  languages.map((lg) => lg.substring(0, 2))
-);
+export const base_languages = uniq(languages.map((lg) => lg.substring(0, 2)));
 
-export type Language = (typeof languages_without_locales)[number];
+type LanguageCode = (typeof languages)[number];
+export type BaseLanguage = LanguageCode extends `${infer T}-*` ? T : never;
+
+export type LocalizedTitles = {
+  [K in BaseLanguage as `title_${string & K}`]: string;
+};
+
+export type LocalizedDescription = {
+  [K in BaseLanguage as `description_${string & K}`]: string;
+};
 declare module 'i18next' {
   interface CustomTypeOptions {
     returnNull: false;

@@ -3,7 +3,7 @@ import { useState, MouseEvent, Dispatch } from 'react';
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
 import { Button, Menu, MenuItem } from '@mui/material';
 
-import { languages_without_locales } from '#shared/i18n/config';
+import { base_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { getLanguageName } from '#shared/utils/getLanguageName';
 
@@ -44,7 +44,7 @@ export function LanguageSelector({
         open={isOpen}
         onClose={handleClose}
       >
-        {languages_without_locales.map((language) => (
+        {base_languages.map((language) => (
           <MenuItem
             key={language}
             value={language}

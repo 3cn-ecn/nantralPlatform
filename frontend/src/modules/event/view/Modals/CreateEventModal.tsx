@@ -18,7 +18,7 @@ import {
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useObjectState } from '#shared/hooks/useObjectState';
-import { languages_without_locales } from '#shared/i18n/config';
+import { base_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -39,9 +39,9 @@ export function CreateEventModal({
 
   // the values currently in our form
 
-  const formTranslatedValues: EventForm = {};
+  const formTranslatedValues = {};
 
-  for (const lang of languages_without_locales) {
+  for (const lang of base_languages) {
     formTranslatedValues[`title_${lang}`] = '';
     formTranslatedValues[`description_${lang}`] = '';
   }

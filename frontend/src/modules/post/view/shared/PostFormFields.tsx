@@ -97,7 +97,7 @@ export function PostFormFields({
           open={open}
           onClose={handleClose}
         >
-          {languages_without_locales.map((language) => (
+          {base_languages.map((language) => (
             <MenuItem
               key={language}
               value={language}

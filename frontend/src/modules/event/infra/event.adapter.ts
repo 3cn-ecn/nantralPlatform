@@ -1,12 +1,12 @@
 import { adaptGroupPreview } from '#modules/group/infra/group.adapter';
-import { languages_without_locales } from '#shared/i18n/config';
+import { base_languages } from '#shared/i18n/config';
 
 import { Event, EventPreview } from '../event.type';
 import { EventDTO, EventPreviewDTO } from './event.dto';
 
 export function adaptEvent(eventDto: EventDTO): Event {
-  const translatedAdapter: Event = {};
-  for (const lang of languages_without_locales) {
+  const translatedAdapter = {};
+  for (const lang of base_languages) {
     translatedAdapter[`title_${lang}`] = eventDto[`title_${lang}`];
     translatedAdapter[`description_${lang}`] = eventDto[`description_${lang}`];
   }
