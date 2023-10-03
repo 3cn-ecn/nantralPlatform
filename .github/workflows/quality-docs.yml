@@ -20,6 +20,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: docs/.nvmrc
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -27,5 +29,5 @@ jobs:
       - name: Update dates and authors
         run: ./update_headers.sh
 
-      - name: Test to build website
+      - name: Try to build website
         run: npm run build
