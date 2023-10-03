@@ -1,0 +1,39 @@
+name: Test Email Templates Quality
+
+on: workflow_call
+
+jobs:
+  email-templates-quality:
+    name: Email Templates Quality
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # default directory for 'run' actions only in steps
+        working-directory: email-templates-generator
+
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v3
+        with:
+          # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: email-templates-generator/.nvmrc
+          cache: npm
+          cache-dependency-path: email-templates-generator/
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Types test
+        run: npm run types
+
+      - name: Lint test
+        run: npm run lint
+
+      - name: Build emails
+        run: npm run build

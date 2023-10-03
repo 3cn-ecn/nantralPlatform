@@ -16,6 +16,7 @@ jobs:
       backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
       docs: ${{ steps.filter.outputs.docs }}
+      email_templates: ${{ steps.filter.outputs.email_templates }}
     steps:
       - uses: dorny/paths-filter@v2
         id: filter
@@ -27,10 +28,12 @@ jobs:
               - 'frontend/**'
             docs:
               - 'docs/**'
+            email_templates:
+              - 'email-templates-generator/**'
 
   backend:
     name: Back End Quality
-    needs: changes
+    needs: [changes, email_templates]
     if: ${{ needs.changes.outputs.backend == 'true' }}
     uses: ./.github/workflows/quality-backend.yml
     secrets: inherit
@@ -42,6 +45,13 @@ jobs:
     uses: ./.github/workflows/quality-frontend.yml
     secrets: inherit
 
+  email_templates:
+    name: Email Templates Quality
+    needs: changes
+    if: ${{ needs.changes.outputs.email_templates == 'true' }}
+    uses: ./.github/workflows/quality-email-templates.yml
+    secrets: inherit
+
   docs:
     name: Docs Quality
     needs: changes
@@ -51,7 +61,7 @@ jobs:
 
   final-check:
     name: Final Check
-    needs: [backend, frontend, docs]
+    needs: [backend, frontend, docs, email_templates]
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
@@ -60,6 +70,7 @@ jobs:
           status=$(echo "${{ needs.backend.result }}" | tr '[:upper:]' '[:lower:]')
           status+=$(echo " ${{ needs.frontend.result }}" | tr '[:upper:]' '[:lower:]')
           status+=$(echo " ${{ needs.docs.result }}" | tr '[:upper:]' '[:lower:]')
+          status+=$(echo " ${{ needs.email_templates.result }}" | tr '[:upper:]' '[:lower:]')
           if [[ "$status" == *"failure"* ]]; then
             echo "One or more previous jobs failed."
             exit 1
