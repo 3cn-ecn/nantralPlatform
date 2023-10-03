@@ -28,11 +28,9 @@ PAYLOAD_TEMPLATE = {
     "path": "Cla",
 }
 
-REGEX_ACTIVATE_URL = (
-    r"href='https://testserver/account/activate/([\w-]*)/([\w-]*)/'"
-)
+REGEX_ACTIVATE_URL = r"https://testserver/account/activate/([\w-]*)/([\w-]*)/"
 REGEX_RESET_PASS_URL = (
-    r"href='https://testserver/account/reset_pass/([\w-]*)/([\w-]*)/'"
+    r"https://testserver/account/reset_pass/([\w-]*)/([\w-]*)/"  # noqa: S105
 )
 
 User = get_user_model()

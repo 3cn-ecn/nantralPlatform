@@ -71,5 +71,6 @@ coverage.xml
 # types
 .mypy_cache/
 
-# Compiled front-end
+# Compiled files
 static/front/
+templates/emails/

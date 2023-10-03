@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "esnext",
+    "esModuleInterop": true,
+    "strict": true,
+    "noEmit": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "jsx": "react-jsx"
+  },
+  "include": ["emails/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}

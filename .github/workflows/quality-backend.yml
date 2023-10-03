@@ -18,6 +18,19 @@ jobs:
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: email-templates-generator/.nvmrc
+          cache: npm
+          cache-dependency-path: email-templates-generator/
+
+      - name: Build email templates
+        run: |
+          cd ../email-templates-generator
+          npm ci
+          npm run build
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
