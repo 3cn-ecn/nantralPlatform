@@ -94,7 +94,7 @@ jobs:
 
   deploy:
     name: Deploy to staging
-    needs: [frontend-build, clone-database]
+    needs: [frontend-build, clone-database, email-templates-build]
     runs-on: ubuntu-latest
 
     steps:
