@@ -25,9 +25,9 @@ import { ParticipateButton } from '../shared/ParticipateButton';
 
 const DEFAULT_EVENT_IMAGE = '/static/img/default-banner.png';
 
-type EventCardProps = {
+interface EventCardProps {
   event: EventPreview;
-};
+}
 
 export function EventCard({ event }: EventCardProps) {
   const { formatDate, formatTime, formatDateTimeRange } = useTranslation();

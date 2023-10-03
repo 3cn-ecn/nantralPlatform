@@ -15,14 +15,14 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CalendarViewMode } from '../types';
 
-type CalendarViewModeButtonProps = {
+interface CalendarViewModeButtonProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
   updateFilters: (
     newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
   ) => void;
   viewMode: CalendarViewMode;
   size?: 'small' | 'medium' | 'large';
-};
+}
 
 export function CalendarViewModeButton({
   filters,

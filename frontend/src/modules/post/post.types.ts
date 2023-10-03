@@ -1,6 +1,6 @@
 import { GroupPreview } from '#modules/group/group.type';
 
-export type Post = {
+export interface Post {
   id: number;
   title: string;
   description: string;
@@ -12,7 +12,7 @@ export type Post = {
   pinned: boolean;
   isAdmin: boolean;
   notificationId: number | null;
-};
+}
 
 export type PostPreview = Pick<
   Post,

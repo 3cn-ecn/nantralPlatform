@@ -19,13 +19,13 @@ import { RichTextField } from '#shared/components/FormFields/RichTextField';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
-type EventFormFieldsProps = {
+interface EventFormFieldsProps {
   isError: boolean;
   error: ApiFormError<EventFormDTO> | null;
   formValues: EventForm;
   updateFormValues: Dispatch<Partial<EventForm>>;
   prevData?: Event;
-};
+}
 
 export function EventFormFields({
   isError,

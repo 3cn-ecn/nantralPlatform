@@ -13,10 +13,10 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import getTheme from '../../theme';
 
-type ChangeThemeCallback = {
+interface ChangeThemeCallback {
   changeThemeMode: (mode: PaletteMode | 'auto') => void;
   themeMode: PaletteMode | 'auto';
-};
+}
 
 const getCachedThemeMode = (): PaletteMode | 'auto' => {
   const mode = localStorage.getItem('theme');

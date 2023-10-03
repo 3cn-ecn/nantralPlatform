@@ -21,9 +21,9 @@ import { createBlankEvents } from '../shared/createBlankEvents';
 import { CalendarEventBlock } from './CalendarEventBlock';
 import { CalendarEventBlockSkeleton } from './CalendarEventBlockSkeleton';
 
-type CalendarGridViewProps = {
+interface CalendarGridViewProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
-};
+}
 
 export function CalendarGridView({ filters }: CalendarGridViewProps) {
   const { formatDate, startOfWeek, endOfWeek, dateFnsLocale } =

@@ -19,14 +19,14 @@ import {
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { modulo } from '#shared/utils/maths';
 
-type StaticMultipleDaysPickerProps = {
+interface StaticMultipleDaysPickerProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
   updateFilters: (
     newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
   ) => void;
   onClose: () => void;
   keepInRange?: boolean;
-};
+}
 
 export function StaticMultipleDaysPicker({
   filters,

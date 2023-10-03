@@ -7,11 +7,11 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { FlexRow } from '../FlexBox/FlexBox';
 
-type ResponsiveDialogHeaderProps = {
+interface ResponsiveDialogHeaderProps {
   onClose: () => void;
   children?: ReactNode | string;
   leftIcon?: ReactNode;
-};
+}
 
 export function ResponsiveDialogHeader({
   onClose,

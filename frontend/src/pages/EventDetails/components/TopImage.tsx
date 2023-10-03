@@ -5,9 +5,9 @@ import Image from 'mui-image';
 
 import { ImageModal } from '#shared/components/Modal/ImageModal';
 
-type TopImageProps = {
+interface TopImageProps {
   src: string;
-};
+}
 
 export function TopImage({ src }: TopImageProps) {
   const [isOpenImageModal, setIsOpenImageModal] = useState(false);

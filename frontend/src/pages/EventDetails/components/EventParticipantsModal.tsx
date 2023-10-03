@@ -21,10 +21,10 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { useParticipantList } from '../hooks/useParticipantList.query';
 
-type EventParticipantsModalProps = {
+interface EventParticipantsModalProps {
   event: Event;
   onClose: () => void;
-};
+}
 
 export function EventParticipantsModal({
   event,

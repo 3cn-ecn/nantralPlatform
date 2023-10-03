@@ -1,4 +1,4 @@
-export type SentNotification = {
+export interface SentNotification {
   id: number;
   title: string;
   body: string;
@@ -7,4 +7,4 @@ export type SentNotification = {
   date: Date;
   seen: boolean;
   subscribed: boolean;
-};
+}

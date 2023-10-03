@@ -8,11 +8,11 @@ import {
 
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 
-type Toast = {
+interface Toast {
   message: string;
   variant?: AlertColor;
   autoHideDuration?: number;
-};
+}
 
 type ToastContextActions = (toast: Toast) => void;
 

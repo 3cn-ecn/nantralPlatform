@@ -18,7 +18,7 @@ export function useMarkAllAsSeenMutation() {
   const queryClient = useQueryClient();
   const showToast = useToast();
 
-  const markAllAsSeenMutation = useMutation<number, ApiError, void>(
+  const markAllAsSeenMutation = useMutation<number, ApiError>(
     markAllNotificationsAsSeenApi,
   );
 

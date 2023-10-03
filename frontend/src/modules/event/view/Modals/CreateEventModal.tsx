@@ -20,10 +20,10 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { EventFormFields } from '../shared/EventFormFields';
 
-type CreateEventModalProps = {
+interface CreateEventModalProps {
   onClose: () => void;
   onCreated?: (id?: number) => void;
-};
+}
 
 export function CreateEventModal({
   onClose,

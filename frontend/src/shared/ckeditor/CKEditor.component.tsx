@@ -26,14 +26,14 @@ const CKEditorWithRef = forwardRef<HTMLInputElement>((props: any, ref) => {
 });
 CKEditorWithRef.displayName = 'CKEditorWithRef';
 
-type CKEditorComponentProps = {
+interface CKEditorComponentProps {
   value: string;
   handleChange: (val: string) => void;
   name?: string;
   label: string;
   errors?: string[];
   helperText?: string;
-};
+}
 
 export default function CKEditorComponent({
   value,

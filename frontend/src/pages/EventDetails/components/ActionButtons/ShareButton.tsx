@@ -4,9 +4,9 @@ import { Button } from '@mui/material';
 import { useShareLink } from '#shared/hooks/useShareLink';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-type ShareButtonProps = {
+interface ShareButtonProps {
   eventId: number;
-};
+}
 
 export function ShareButton({ eventId }: ShareButtonProps) {
   const { t } = useTranslation();

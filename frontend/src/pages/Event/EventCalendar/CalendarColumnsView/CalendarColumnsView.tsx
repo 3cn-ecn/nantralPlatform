@@ -28,9 +28,9 @@ function getNumberOfCols(events: CalendarEventItem[]) {
   return events.reduce((maxCol, event) => Math.max(maxCol, event.col), -1) + 1;
 }
 
-type CalendarColumnsViewProps = {
+interface CalendarColumnsViewProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
-};
+}
 
 export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
   const { formatDate, formatTime } = useTranslation();

@@ -16,13 +16,13 @@ import { RichTextField } from '#shared/components/FormFields/RichTextField';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
-type PostFormFieldsProps = {
+interface PostFormFieldsProps {
   isError: boolean;
   error: ApiFormError<PostFormDTO> | null;
   formValues: PostForm;
   updateFormValues: Dispatch<Partial<PostForm>>;
   prevData?: Post;
-};
+}
 
 export function PostFormFields({
   isError,

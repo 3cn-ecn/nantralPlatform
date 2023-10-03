@@ -2,10 +2,10 @@ import axios, { GenericAbortSignal } from 'axios';
 
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 
-export type NotificationCountQueryParams = {
+export interface NotificationCountQueryParams {
   subscribed?: boolean | null;
   seen?: boolean | null;
-};
+}
 
 export async function getNotificationCountApi(
   filters: NotificationCountQueryParams = {},

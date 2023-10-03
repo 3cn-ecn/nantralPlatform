@@ -9,10 +9,10 @@ import { CircularProgress, IconButton, Tooltip, Zoom } from '@mui/material';
 import { useBookmarkMutation } from '#modules/event/hooks/useBookmark.mutation';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-type BookmarkedButtonProps = {
+interface BookmarkedButtonProps {
   eventId: number;
   selected: boolean;
-};
+}
 
 export function BookmarkedButton({ eventId, selected }: BookmarkedButtonProps) {
   const [fav, setFav] = useState(selected);

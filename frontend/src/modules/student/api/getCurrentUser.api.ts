@@ -4,9 +4,9 @@ import { adaptStudent } from '../infra/student.adapter';
 import { StudentDTO } from '../infra/student.dto';
 import { Student } from '../student.types';
 
-type GetCurrentUserApiParams = {
+interface GetCurrentUserApiParams {
   signal?: GenericAbortSignal;
-};
+}
 
 export async function getCurrentUserApi({
   signal,

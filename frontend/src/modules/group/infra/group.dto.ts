@@ -1,4 +1,4 @@
-export type GroupDTO = {
+export interface GroupDTO {
   id: number;
   name: string;
   short_name: string;
@@ -23,7 +23,7 @@ export type GroupDTO = {
   is_admin: boolean;
   is_member: boolean;
   lock_memberships: boolean;
-};
+}
 
 export type GroupPreviewDTO = Pick<
   GroupDTO,

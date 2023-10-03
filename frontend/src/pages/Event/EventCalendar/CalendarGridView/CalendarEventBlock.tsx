@@ -5,9 +5,9 @@ import { ButtonBase, Typography, useTheme } from '@mui/material';
 import { EventPreview } from '#modules/event/event.type';
 import { stringToColor } from '#shared/utils/stringToColor';
 
-type CalendarEventBlockProps = {
+interface CalendarEventBlockProps {
   eventItem: EventPreview;
-};
+}
 
 export function CalendarEventBlock({ eventItem }: CalendarEventBlockProps) {
   const theme = useTheme();

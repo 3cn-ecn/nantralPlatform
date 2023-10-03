@@ -13,10 +13,10 @@ import {
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-type NavBarSideProps = {
+interface NavBarSideProps {
   menuOpen: boolean;
   onClose: () => void;
-};
+}
 
 export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
   const { t } = useTranslation();
@@ -86,13 +86,13 @@ export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
   );
 }
 
-type NavBarSideItemProps = {
+interface NavBarSideItemProps {
   label: string;
   path: string;
   iconPath?: string;
   isOnBackend?: boolean;
   closeMenu: () => void;
-};
+}
 
 function NavBarSideItem({
   label,

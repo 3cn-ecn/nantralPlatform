@@ -15,9 +15,9 @@ function toPercent(x: number) {
   return `${x * 100}%`;
 }
 
-type CalendarEventBlockProps = {
+interface CalendarEventBlockProps {
   eventItem: CalendarEventItem;
-};
+}
 
 export function CalendarEventBlock({ eventItem }: CalendarEventBlockProps) {
   const theme = useTheme();

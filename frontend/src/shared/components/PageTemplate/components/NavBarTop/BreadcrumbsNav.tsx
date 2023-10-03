@@ -55,13 +55,13 @@ export function BreadcrumbsNav() {
   );
 }
 
-type BreadcrumbsItemProps = {
+interface BreadcrumbsItemProps {
   path: string;
   label: string;
   icon?: string;
   fontWeight?: 'bold' | 'normal';
   minimized?: boolean;
-};
+}
 function BreadcrumbsItem({
   path,
   label,

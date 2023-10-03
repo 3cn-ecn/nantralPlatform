@@ -11,14 +11,14 @@ const CKEditorComponent = lazy(
   () => import('#shared/ckeditor/CKEditor.component'),
 );
 
-type RichTextFieldProps = {
+interface RichTextFieldProps {
   value: string;
   handleChange: (val: string) => void;
   name?: string;
   label: string;
   errors?: string[];
   helperText?: string;
-};
+}
 
 function RichTextFieldComponent(props: RichTextFieldProps) {
   const { t } = useTranslation();

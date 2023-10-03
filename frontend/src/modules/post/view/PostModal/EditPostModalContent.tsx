@@ -22,11 +22,11 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { PostFormFields } from '../shared/PostFormFields';
 
-type EditPostModalContentProps = {
+interface EditPostModalContentProps {
   post: Post;
   onClose: () => void;
   onFinish: () => void;
-};
+}
 
 export function EditPostModalContent({
   post,
@@ -48,7 +48,7 @@ export function EditPostModalContent({
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
-    void,
+    unknown,
     ApiFormError<PostFormDTO>,
     UpdatePostApiVariables
   >(updatePostApi);

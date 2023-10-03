@@ -7,13 +7,13 @@ import { adaptSentNotification } from '../infra/notification.adapter';
 import { SentNotificationDTO } from '../infra/notification.dto';
 import { SentNotification } from '../notification.types';
 
-export type NotificationListQueryParams = {
+export interface NotificationListQueryParams {
   subscribed?: boolean | null;
   seen?: boolean | null;
   search?: string | null;
   page?: number | null;
   pageSize?: number | null;
-};
+}
 
 export async function getNotificationListApi(
   params: NotificationListQueryParams = {},

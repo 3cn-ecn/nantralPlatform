@@ -1,8 +1,8 @@
 import { SvgIcon, styled } from '@mui/material';
 
-type BadgeIconProps = {
+interface BadgeIconProps {
   Icon: typeof SvgIcon;
-};
+}
 
 export function BadgeIcon({ Icon }: BadgeIconProps) {
   return (

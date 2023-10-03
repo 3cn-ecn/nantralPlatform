@@ -17,21 +17,21 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { EditEventModal } from '../Modals/EditEventModal';
 
-type Action = {
+interface Action {
   key: string;
   label: string;
   Icon: SvgIconComponent;
   onClick: () => void;
   link?: string;
   hidden?: boolean;
-};
+}
 
-type MoreActionsButtonProps = {
+interface MoreActionsButtonProps {
   eventId: number;
   isParticipating: boolean;
   isAdmin: boolean;
   sharedUrl: string;
-};
+}
 
 export function MoreEventActionsButton({
   eventId,

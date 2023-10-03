@@ -23,13 +23,13 @@ import { CalendarViewMode } from '../types';
 import { StaticMonthPicker } from './DatePickers/StaticMonthPicker';
 import { StaticMultipleDaysPicker } from './DatePickers/StaticMultipleDaysPicker';
 
-type CalendarDateSelectorProps = {
+interface CalendarDateSelectorProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
   updateFilters: (
     newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
   ) => void;
   viewMode: CalendarViewMode;
-};
+}
 
 export function CalendarDateSelector({
   filters,

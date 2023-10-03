@@ -14,10 +14,10 @@ import { usePostDetailsQuery } from '../../hooks/usePostDetails.query';
 import { EditPostModalContent } from './EditPostModalContent';
 import { ReadPostModalContent } from './ReadPostModalContent';
 
-type PostModalProps = {
+interface PostModalProps {
   postId: number;
   onClose: () => void;
-};
+}
 
 export function PostModal({ postId, onClose }: PostModalProps) {
   const [editMode, setEditMode] = useState(false);

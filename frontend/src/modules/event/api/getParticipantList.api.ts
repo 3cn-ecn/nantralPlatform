@@ -6,10 +6,10 @@ import { StudentPreview } from '#modules/student/student.types';
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
 
-type GetParticipantListOptions = {
+interface GetParticipantListOptions {
   page?: number;
   pageSize?: number;
-};
+}
 
 export async function getParticipantListApi(
   eventId: number,

@@ -246,10 +246,10 @@ const CustomMenuItem: CustomMenuItemComponent = ({
   );
 };
 
-type MenuHeaderProps = {
+interface MenuHeaderProps {
   setMenuOpen: Dispatch<SetStateAction<string | null>>;
   label: string;
-};
+}
 const MenuHeader = ({ setMenuOpen, label }: MenuHeaderProps) => {
   return (
     <ListItem>

@@ -11,9 +11,9 @@ function toPercent(x: number) {
   return `${x * 100}%`;
 }
 
-type CalendarEventBlockSkeletonProps = {
+interface CalendarEventBlockSkeletonProps {
   eventItem: CalendarEventItem;
-};
+}
 
 export function CalendarEventBlockSkeleton({
   eventItem,

@@ -36,14 +36,14 @@ import {
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { Page } from '#shared/infra/pagination';
 
-type FilterDrawerProps = {
+interface FilterDrawerProps {
   filters: EventListQueryParams;
   updateFilters: (newFilter: Partial<EventListQueryParams>) => void;
   resetFilters: () => void;
   open: boolean;
   onClose: () => void;
   noDates?: boolean;
-};
+}
 
 export function FilterDrawer({
   filters,
@@ -200,12 +200,12 @@ export function FilterDrawer({
   );
 }
 
-type CheckboxFilterProps = {
+interface CheckboxFilterProps {
   label: string;
   icon: ReactNode;
   value: boolean;
   handleChange: (value: boolean) => void;
-};
+}
 
 function CheckboxListItem({
   label,

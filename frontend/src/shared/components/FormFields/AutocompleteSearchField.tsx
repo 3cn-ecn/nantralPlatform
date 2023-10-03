@@ -20,7 +20,7 @@ import { FlexRow } from '../FlexBox/FlexBox';
 function isMultiple<T, Multiple extends boolean>(
   objectValue: T | T[] | null,
   multiple?: Multiple,
-): objectValue is Array<T> {
+): objectValue is T[] {
   return !!multiple;
 }
 

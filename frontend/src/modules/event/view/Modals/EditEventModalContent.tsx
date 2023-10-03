@@ -22,10 +22,10 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { EventFormFields } from '../shared/EventFormFields';
 
-type EditEventModalContentProps = {
+interface EditEventModalContentProps {
   event: Event;
   onClose: () => void;
-};
+}
 
 export function EditEventModalContent({
   event,
@@ -53,7 +53,7 @@ export function EditEventModalContent({
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
-    void,
+    unknown,
     ApiFormError<EventFormDTO>,
     UpdateEventApiVariables
   >(updateEventApi);

@@ -11,10 +11,10 @@ import {
 
 import { EditEventModalContent } from './EditEventModalContent';
 
-type EditEventModalProps = {
+interface EditEventModalProps {
   eventId: number;
   onClose: () => void;
-};
+}
 
 export function EditEventModal({ eventId, onClose }: EditEventModalProps) {
   const eventQuery = useEventDetailsQuery(eventId);

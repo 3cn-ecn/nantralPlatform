@@ -11,7 +11,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { CalendarViewMode } from '../types';
 import { CalendarViewModeButton } from './CalendarViewModeButton';
 
-type CalendarToolBarProps = {
+interface CalendarToolBarProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
   updateFilters: (
     newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
@@ -19,7 +19,7 @@ type CalendarToolBarProps = {
   resetFilters: () => void;
   viewMode: CalendarViewMode;
   isSmallScreen?: boolean;
-};
+}
 
 export function CalendarToolBar({
   filters,

@@ -8,12 +8,12 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { NotificationItem } from './NotificationItem';
 import { NotificationItemSkeleton } from './NotificationItemSkeleton';
 
-type NotificationMenuProps = {
+interface NotificationMenuProps {
   isOpen: boolean;
   onClose: () => void;
   subscribedFilter: boolean;
   unseenFilter: boolean;
-};
+}
 
 export function NotificationMenuContent({
   isOpen,

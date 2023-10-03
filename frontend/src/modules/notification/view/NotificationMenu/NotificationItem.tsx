@@ -14,10 +14,10 @@ import { SentNotification } from '#modules/notification/notification.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 
-type NotificationItemProps = {
+interface NotificationItemProps {
   notification: SentNotification;
   onClose: () => void;
-};
+}
 
 export function NotificationItem({
   notification,

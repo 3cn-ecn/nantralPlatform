@@ -2,9 +2,9 @@ import { Box, useTheme } from '@mui/material';
 
 import { BackgroundImage } from '#shared/components/BackgroundImage/BackgroundImage';
 
-type BackgroundImageOverlayProps = {
+interface BackgroundImageOverlayProps {
   src: string;
-};
+}
 
 export function BackgroundImageOverlay({ src }: BackgroundImageOverlayProps) {
   const theme = useTheme();

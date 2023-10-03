@@ -7,9 +7,9 @@ import { Event } from '#modules/event/event.type';
 import { EventParticipantsModal } from '#pages/EventDetails/components/EventParticipantsModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-type ParticipantsButtonProps = {
+interface ParticipantsButtonProps {
   event: Event;
-};
+}
 
 export function ParticipantsButton({ event }: ParticipantsButtonProps) {
   const { t } = useTranslation();

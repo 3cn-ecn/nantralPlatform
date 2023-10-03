@@ -63,20 +63,17 @@ export function magicPlacement(
   }));
 
   // sort events in groups of overlapping events
-  const groupsOfOverlappingEvents = calendarEvents.reduce(
-    (groups, event) => {
-      // we only need to check the last group because events are sorted
-      const lastGroup = groups.at(-1);
-      if (lastGroup && eventIsOverlappingGroup(event, lastGroup)) {
-        lastGroup.push(event);
-      } else {
-        const newGroup = [event];
-        groups.push(newGroup);
-      }
-      return groups;
-    },
-    [] as Array<CalendarEventItemTemp1[]>,
-  );
+  const groupsOfOverlappingEvents = calendarEvents.reduce((groups, event) => {
+    // we only need to check the last group because events are sorted
+    const lastGroup = groups.at(-1);
+    if (lastGroup && eventIsOverlappingGroup(event, lastGroup)) {
+      lastGroup.push(event);
+    } else {
+      const newGroup = [event];
+      groups.push(newGroup);
+    }
+    return groups;
+  }, [] as CalendarEventItemTemp1[][]);
 
   // for each overlapping group of events, assign a column to each event
   const groupsOfOverlappingEventsWithCols = groupsOfOverlappingEvents.map(
@@ -93,7 +90,7 @@ export function magicPlacement(
 
         const eventWithCol = { ...event, col: firstEmptyCol };
         return groupWithCols.concat([eventWithCol]);
-      }, [] as Array<CalendarEventItemTemp2>);
+      }, [] as CalendarEventItemTemp2[]);
     },
   );
 

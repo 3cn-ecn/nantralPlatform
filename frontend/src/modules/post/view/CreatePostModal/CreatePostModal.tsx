@@ -20,10 +20,10 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { PostFormFields } from '../shared/PostFormFields';
 
-type CreatePostModalProps = {
+interface CreatePostModalProps {
   onClose: () => void;
   onCreated: (postId: number) => void;
-};
+}
 
 export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
   const { t } = useTranslation();

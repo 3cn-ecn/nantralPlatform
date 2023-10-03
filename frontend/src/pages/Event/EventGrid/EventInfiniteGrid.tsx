@@ -13,10 +13,10 @@ import { arrayRange } from '#shared/utils/arrayRange';
 
 import { useInfiniteEventListQuery } from '../hooks/useInfiniteEventList.query';
 
-type EventInfiniteGridProps = {
+interface EventInfiniteGridProps {
   filters: EventListQueryParams;
   disableLoading?: boolean;
-};
+}
 
 export function EventInfiniteGrid({
   filters,
