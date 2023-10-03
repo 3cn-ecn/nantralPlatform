@@ -33,7 +33,11 @@ const GenericTemplate = ({ children }: Props) => (
       <Section>
         <Text style={footerText}>
           Cet email a été envoyé automatiquement par{' '}
-          <Link href="https://www.nantral-platform.fr" style={footerLink}>
+          <Link
+            href="https://www.nantral-platform.fr"
+            rel="noopener noreferrer"
+            style={footerLink}
+          >
             Nantral Platform
           </Link>
           . Si vous n&apos;attendiez pas d&apos;email de notre part, vous pouvez
@@ -41,6 +45,7 @@ const GenericTemplate = ({ children }: Props) => (
           contacter de préférence via{' '}
           <Link
             href="https://www.facebook.com/nantral.platform.ecn"
+            rel="noopener noreferrer"
             style={footerLink}
           >
             notre page Facebook
@@ -60,8 +65,6 @@ export default GenericTemplate;
 
 const main: CSSProperties = {
   backgroundColor: '#fcf9f9',
-  fontFamily:
-    'Heebo,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
   padding: '10px',
 };
 

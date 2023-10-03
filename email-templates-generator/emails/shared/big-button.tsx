@@ -8,7 +8,13 @@ type Props = PropsWithChildren & {
 
 const BigButton = ({ href, children }: Props) => (
   <Container style={{ textAlign: 'center' }}>
-    <Button href={href} style={button} pX={50} pY={10}>
+    <Button
+      href={href}
+      rel="noopener noreferrer"
+      style={button}
+      pX={50}
+      pY={10}
+    >
       {children}
     </Button>
   </Container>

@@ -3,7 +3,11 @@ import { CSSProperties } from 'react';
 import { Link } from '@react-email/components';
 
 const Link3CN = () => (
-  <Link href="https://github.com/3cn-ecn" style={link}>
+  <Link
+    href="https://github.com/3cn-ecn"
+    rel="noopener noreferrer"
+    style={link}
+  >
     3CN
   </Link>
 );
