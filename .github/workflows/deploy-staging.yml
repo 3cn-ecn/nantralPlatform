@@ -67,9 +67,10 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
-            cd nantralPlatform-staging/deployement
+            cd nantralPlatform-staging
             git fetch origin ${{ github.ref_name }}:${{ github.ref_name }}
             git switch ${{ github.ref_name }}
             git reset --hard origin/${{ github.ref_name }}
+            cd ../nantralPlatform/deployment
             sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build backend-staging
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d

@@ -1,6 +1,6 @@
 import { GroupPreview } from '#modules/group/group.type';
 
-export type Event = {
+export interface Event {
   id: number;
   title: string;
   description: string;
@@ -19,7 +19,7 @@ export type Event = {
   endRegistration: Date | null;
   formUrl: string;
   notificationId: number | null;
-};
+}
 
 export type EventPreview = Pick<
   Event,

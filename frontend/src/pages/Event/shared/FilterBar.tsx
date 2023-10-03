@@ -16,14 +16,14 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { FilterDrawer } from './FilterDrawer';
 
-type FilterBarProps = {
+interface FilterBarProps {
   filters: EventListQueryParams;
   updateFilters: (filters: Partial<EventListQueryParams>) => void;
   resetFilters: () => void;
   isDrawerOpen: boolean;
   setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
   noDates?: boolean;
-};
+}
 
 export function FilterBar({
   filters,

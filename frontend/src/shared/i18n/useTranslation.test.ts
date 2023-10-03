@@ -32,10 +32,10 @@ describe('useTranslation hook to format dates and numbers', () => {
     expect(formatDate(date, { dateStyle: 'medium' })).toBe('27 janv. 2023');
     expect(formatDate(date, { dateStyle: 'long' })).toBe('27 janvier 2023');
     expect(formatDate(date, { dateStyle: 'full' })).toBe(
-      'vendredi 27 janvier 2023'
+      'vendredi 27 janvier 2023',
     );
     expect(
-      formatDate(date, { weekday: 'short', day: 'numeric', month: 'short' })
+      formatDate(date, { weekday: 'short', day: 'numeric', month: 'short' }),
     ).toBe('ven. 27 janv.');
   });
 
@@ -53,7 +53,7 @@ describe('useTranslation hook to format dates and numbers', () => {
 
     expect(formatDateTime(date)).toBe('27/01/2023 16:34');
     expect(
-      formatDateTime(date, { dateStyle: 'long', timeStyle: 'short' })
+      formatDateTime(date, { dateStyle: 'long', timeStyle: 'short' }),
     ).toBe('27 janvier 2023 à 16:34');
   });
 
@@ -63,22 +63,22 @@ describe('useTranslation hook to format dates and numbers', () => {
     expect(
       formatDateTimeRange(
         new Date('2023-01-27T15:34:34Z'),
-        new Date('2023-01-27T16:26:56Z')
+        new Date('2023-01-27T16:26:56Z'),
       )
         // replace special spaces for tests because they differ by OS
         .replaceAll(' ', ' ')
-        .replaceAll(' ', ' ')
+        .replaceAll(' ', ' '),
     ).toBe('27/01/2023, 16:34 – 17:26');
 
     expect(
       formatDateTimeRange(
         new Date('2023-01-27T15:34:34Z'),
-        new Date('2023-02-27T08:26:56Z')
+        new Date('2023-02-27T08:26:56Z'),
       )
         // replace special spaces for tests because they differ by OS
         .replaceAll(' ', ' ')
         .replaceAll(' ', ' ')
-        .replaceAll(',', '')
+        .replaceAll(',', ''),
     ).toBe('27/01/2023 16:34 – 27/02/2023 09:26');
   });
 
@@ -91,7 +91,7 @@ describe('useTranslation hook to format dates and numbers', () => {
 
     expect(formatRelativeTime(new Date('2023-01-27T15:34'))).toBe('27/01/2023');
     expect(formatRelativeTime(new Date('2023-05-01T15:34'))).toBe(
-      'aujourd’hui à 15:34'
+      'aujourd’hui à 15:34',
     );
 
     jest.useRealTimers();

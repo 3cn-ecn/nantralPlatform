@@ -11,9 +11,9 @@ function toPercent(x: number) {
   return `${x * 100}%`;
 }
 
-type CalendarEventBlockSkeletonProps = {
+interface CalendarEventBlockSkeletonProps {
   eventItem: CalendarEventItem;
-};
+}
 
 export function CalendarEventBlockSkeleton({
   eventItem,
@@ -26,12 +26,12 @@ export function CalendarEventBlockSkeleton({
         top: toPercent(
           differenceInMilliseconds(
             eventItem.start,
-            startOfDay(eventItem.start)
-          ) / hoursToMilliseconds(24)
+            startOfDay(eventItem.start),
+          ) / hoursToMilliseconds(24),
         ),
         height: toPercent(
           differenceInMilliseconds(eventItem.end, eventItem.start) /
-            hoursToMilliseconds(24)
+            hoursToMilliseconds(24),
         ),
         left: toPercent(eventItem.col / eventItem.nbTotCols),
         width: toPercent(1 / eventItem.nbTotCols),

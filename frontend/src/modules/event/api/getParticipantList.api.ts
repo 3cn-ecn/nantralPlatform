@@ -6,14 +6,14 @@ import { StudentPreview } from '#modules/student/student.types';
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
 
-type GetParticipantListOptions = {
+interface GetParticipantListOptions {
   page?: number;
   pageSize?: number;
-};
+}
 
 export async function getParticipantListApi(
   eventId: number,
-  options: GetParticipantListOptions
+  options: GetParticipantListOptions,
 ): Promise<Page<StudentPreview>> {
   const { data } = await axios
     .get<PageDTO<StudentPreviewDTO>>(
@@ -23,7 +23,7 @@ export async function getParticipantListApi(
           page: options.page,
           page_size: options.pageSize,
         },
-      }
+      },
     )
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);

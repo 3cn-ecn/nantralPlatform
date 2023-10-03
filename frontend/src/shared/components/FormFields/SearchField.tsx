@@ -14,14 +14,14 @@ function SearchFieldComponent({
 }: SearchFieldProps) {
   const debouncedHandleChange = debounce(
     (val: string) => handleChange(val),
-    300
+    300,
   );
 
   const handleHandleChange = useCallback(
     (val: string) => {
       debouncedHandleChange(val);
     },
-    [debouncedHandleChange]
+    [debouncedHandleChange],
   );
 
   return (

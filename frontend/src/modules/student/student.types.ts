@@ -1,4 +1,4 @@
-export type Student = {
+export interface Student {
   id: number;
   name: string;
   promo: number;
@@ -7,6 +7,6 @@ export type Student = {
   path: string;
   url: string;
   staff: boolean;
-};
+}
 
 export type StudentPreview = Pick<Student, 'id' | 'name' | 'url' | 'picture'>;

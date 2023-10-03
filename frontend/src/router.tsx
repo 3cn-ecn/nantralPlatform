@@ -7,13 +7,13 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
-  () => import('#pages/Event/EventCalendar/EventCalendarView.page')
+  () => import('#pages/Event/EventCalendar/EventCalendarView.page'),
 );
 const EventGridViewPage = lazy(
-  () => import('#pages/Event/EventGrid/EventGridView.page')
+  () => import('#pages/Event/EventGrid/EventGridView.page'),
 );
 const EventDetailsPage = lazy(
-  () => import('#pages/EventDetails/EventDetails.page')
+  () => import('#pages/EventDetails/EventDetails.page'),
 );
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const LegalNoticePage = lazy(() => import('#pages/LegalNotice/Legal.page'));

@@ -1,7 +1,7 @@
 import { EventPreview } from '../event.type';
 
 export function getMockEventPreview(
-  event: Partial<EventPreview>
+  event: Partial<EventPreview>,
 ): EventPreview {
   const id = event.id || 0;
   return {

@@ -8,7 +8,7 @@ import { adaptPostPreview } from '../infra/post.adapter';
 import { PostDTO, PostPreviewDTO } from '../infra/post.dto';
 import { PostPreview } from '../post.types';
 
-type GetPostListParams = {
+interface GetPostListParams {
   group?: string[];
   pinned?: boolean;
   isMember?: boolean;
@@ -18,10 +18,10 @@ type GetPostListParams = {
   ordering?: OrderingField<PostDTO>[];
   page?: number;
   pageSize?: number;
-};
+}
 
 export async function getPostListApi(
-  options: GetPostListParams
+  options: GetPostListParams,
 ): Promise<Page<PostPreview>> {
   const { data } = await axios
     .get<PageDTO<PostPreviewDTO>>('/api/post/post/', {

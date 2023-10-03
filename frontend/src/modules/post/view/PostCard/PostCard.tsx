@@ -22,9 +22,9 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { BadgeIcon } from '../shared/BadgeIcon';
 
-type PostCardProps = {
+interface PostCardProps {
   post: PostPreview;
-};
+}
 
 export function PostCard({ post }: PostCardProps) {
   const { formatRelativeTime } = useTranslation();

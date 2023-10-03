@@ -6,13 +6,13 @@ import {
 } from '@mui/icons-material';
 import { IconButton, Menu } from '@mui/material';
 
-type MoreActionsButtonProps = {
+interface MoreActionsButtonProps {
   Icon?: SvgIconComponent;
   menuIsOpen: boolean;
   setMenuIsOpen: Dispatch<SetStateAction<boolean>>;
   menuPosition?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   children: ReactNode;
-};
+}
 
 export function MoreActionsButton({
   Icon = MoreVertIcon,
@@ -30,7 +30,7 @@ export function MoreActionsButton({
 
   const [yPos, xPos] = menuPosition.split('-') as [
     'top' | 'bottom',
-    'left' | 'right'
+    'left' | 'right',
   ];
 
   return (

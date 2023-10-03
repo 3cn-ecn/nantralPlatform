@@ -26,7 +26,7 @@ type CalendarEventItemTemp2 = Pick<
  */
 function eventIsOverlappingGroup(
   event: CalendarEventItemTemp1,
-  group: CalendarEventItemTemp1[]
+  group: CalendarEventItemTemp1[],
 ) {
   return group.some((groupEvent) => areIntervalsOverlapping(event, groupEvent));
 }
@@ -50,7 +50,7 @@ function getMaxCol(group: CalendarEventItemTemp2[]) {
  */
 export function magicPlacement(
   events: EventPreview[],
-  onDate: Date
+  onDate: Date,
 ): CalendarEventItem[] {
   // create new types with start and end keys
   const calendarEvents: CalendarEventItemTemp1[] = events.map((event) => ({
@@ -73,25 +73,25 @@ export function magicPlacement(
       groups.push(newGroup);
     }
     return groups;
-  }, [] as Array<CalendarEventItemTemp1[]>);
+  }, [] as CalendarEventItemTemp1[][]);
 
   // for each overlapping group of events, assign a column to each event
   const groupsOfOverlappingEventsWithCols = groupsOfOverlappingEvents.map(
     (group) => {
       return group.reduce((groupWithCols, event) => {
         const overlappingEvents = groupWithCols.filter((e) =>
-          areIntervalsOverlapping(event, e)
+          areIntervalsOverlapping(event, e),
         );
         const firstEmptyCol = Math.min(
           ...Array.from({ length: getMaxCol(overlappingEvents) + 2 }, (_, i) =>
-            overlappingEvents.some((e) => e.col === i) ? Infinity : i
-          )
+            overlappingEvents.some((e) => e.col === i) ? Infinity : i,
+          ),
         );
 
         const eventWithCol = { ...event, col: firstEmptyCol };
         return groupWithCols.concat([eventWithCol]);
-      }, [] as Array<CalendarEventItemTemp2>);
-    }
+      }, [] as CalendarEventItemTemp2[]);
+    },
   );
 
   // for each group, add the max col to all of its events

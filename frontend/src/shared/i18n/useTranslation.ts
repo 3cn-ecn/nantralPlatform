@@ -24,12 +24,12 @@ export function useTranslation() {
 
   const formatDate = (
     date: Date,
-    options: Intl.DateTimeFormatOptions = { dateStyle: 'short' }
+    options: Intl.DateTimeFormatOptions = { dateStyle: 'short' },
   ) => date.toLocaleDateString(i18n.language, options);
 
   const formatTime = (
     date: Date,
-    options: Intl.DateTimeFormatOptions = { timeStyle: 'short' }
+    options: Intl.DateTimeFormatOptions = { timeStyle: 'short' },
   ) => date.toLocaleTimeString(i18n.language, options);
 
   const formatDateTime = (
@@ -37,7 +37,7 @@ export function useTranslation() {
     options: Intl.DateTimeFormatOptions = {
       dateStyle: 'short',
       timeStyle: 'short',
-    }
+    },
   ) => date.toLocaleString(i18n.language, options);
 
   const formatDateTimeRange = (
@@ -46,7 +46,7 @@ export function useTranslation() {
     options: Intl.DateTimeFormatOptions = {
       dateStyle: 'short',
       timeStyle: 'short',
-    }
+    },
   ) => {
     const intlObject = Intl.DateTimeFormat(i18n.language, options);
     return intlObject.formatRange(startDate, endDate);
@@ -66,7 +66,7 @@ export function useTranslation() {
   const formatNumberRange = (
     startNumber: number,
     endNumber: number,
-    options?: Intl.NumberFormatOptions
+    options?: Intl.NumberFormatOptions,
   ) => {
     const intlObject = Intl.NumberFormat(i18n.language, options);
     return intlObject.formatRange(startNumber, endNumber);

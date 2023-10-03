@@ -3,7 +3,7 @@ import {
   UseMutationOptions,
   useMutation,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 
 import { useToast } from '#shared/context/Toast.context';
 import { ApiError } from '#shared/infra/errors';
@@ -18,8 +18,8 @@ export function useMarkAllAsSeenMutation() {
   const queryClient = useQueryClient();
   const showToast = useToast();
 
-  const markAllAsSeenMutation = useMutation<number, ApiError, void>(
-    markAllNotificationsAsSeenApi
+  const markAllAsSeenMutation = useMutation<number, ApiError>(
+    markAllNotificationsAsSeenApi,
   );
 
   const markAllAsSeen = ({
@@ -38,11 +38,11 @@ export function useMarkAllAsSeenMutation() {
                 ...page,
                 results: page.results.map((e) => ({ ...e, seen: true })),
               })),
-            }
+            },
         );
         queryClient.setQueriesData(
           ['notifications', 'count', { seen: false }],
-          () => 0
+          () => 0,
         );
         // invalidate queries to force reload the queries we have modified
         queryClient.invalidateQueries(['notifications']);

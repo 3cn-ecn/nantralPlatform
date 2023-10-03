@@ -8,9 +8,9 @@ import { EditButton } from './ActionButtons/EditButton';
 import { ParticipantsButton } from './ActionButtons/ParticipantsButton';
 import { ShareButton } from './ActionButtons/ShareButton';
 
-type ActionButtonsBarProps = {
+interface ActionButtonsBarProps {
   event: Event;
-};
+}
 
 export function ActionButtonsBar({ event }: ActionButtonsBarProps) {
   return (

@@ -3,7 +3,7 @@ import { Page } from './page.types';
 
 export function adaptPage<DTO, ObjectType>(
   pageDto: PageDTO<DTO>,
-  resultsAdapterFunction: (dto: DTO) => ObjectType
+  resultsAdapterFunction: (dto: DTO) => ObjectType,
 ): Page<ObjectType> {
   return {
     count: pageDto.count,

@@ -6,7 +6,7 @@ import { GroupPreview } from '../group.type';
 import { adaptGroupPreview } from '../infra/group.adapter';
 import { GroupPreviewDTO } from '../infra/group.dto';
 
-export type GetGroupListApiParams = {
+export interface GetGroupListApiParams {
   type?: string | null;
   isMember?: boolean | null;
   isAdmin?: boolean | null;
@@ -14,10 +14,10 @@ export type GetGroupListApiParams = {
   search?: string | null;
   page?: number | null;
   pageSize?: number | null;
-};
+}
 
 export async function getGroupListApi(
-  options: GetGroupListApiParams
+  options: GetGroupListApiParams,
 ): Promise<Page<GroupPreview>> {
   const { data } = await axios.get<PageDTO<GroupPreviewDTO>>(
     '/api/group/group/',
@@ -31,7 +31,7 @@ export async function getGroupListApi(
         page: options.page,
         page_size: options.pageSize,
       },
-    }
+    },
   );
 
   return adaptPage(data, adaptGroupPreview);

@@ -3,13 +3,13 @@ import { endOfMonth, startOfMonth } from 'date-fns';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 
-type StaticMonthPickerProps = {
+interface StaticMonthPickerProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
   updateFilters: (
-    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>
+    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
   ) => void;
   onClose: () => void;
-};
+}
 
 export function StaticMonthPicker({
   filters,

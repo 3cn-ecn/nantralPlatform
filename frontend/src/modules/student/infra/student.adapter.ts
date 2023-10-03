@@ -15,7 +15,7 @@ export function adaptStudent(studentDTO: StudentDTO): Student {
 }
 
 export function adaptStudentPreview(
-  studentDTO: StudentPreviewDTO
+  studentDTO: StudentPreviewDTO,
 ): StudentPreview {
   return {
     id: studentDTO.id,

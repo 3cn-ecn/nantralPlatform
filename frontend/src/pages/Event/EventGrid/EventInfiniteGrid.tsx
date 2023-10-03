@@ -13,10 +13,10 @@ import { arrayRange } from '#shared/utils/arrayRange';
 
 import { useInfiniteEventListQuery } from '../hooks/useInfiniteEventList.query';
 
-type EventInfiniteGridProps = {
+interface EventInfiniteGridProps {
   filters: EventListQueryParams;
   disableLoading?: boolean;
-};
+}
 
 export function EventInfiniteGrid({
   filters,
@@ -29,7 +29,7 @@ export function EventInfiniteGrid({
 
   const eventsQuery = useInfiniteEventListQuery(
     { ...filters, pageSize: eventsPerPage },
-    { enabled: !disableLoading }
+    { enabled: !disableLoading },
   );
 
   function loadMore() {
@@ -46,7 +46,7 @@ export function EventInfiniteGrid({
     return () => window.removeEventListener('scroll', loadMore);
   });
 
-  if (eventsQuery.isLoading || eventsQuery.isIdle) {
+  if (eventsQuery.isLoading) {
     return (
       <Grid container spacing={1}>
         {arrayRange(eventsPerPage).map((_, index) => (
@@ -84,7 +84,7 @@ export function EventInfiniteGrid({
             <Grid key={event.id} xs={12} sm={6} md={4} lg={3} item>
               <EventCard event={event} />
             </Grid>
-          ))
+          )),
         )}
         {eventsQuery.isFetchingNextPage &&
           arrayRange(eventsPerPage).map((_, index) => (

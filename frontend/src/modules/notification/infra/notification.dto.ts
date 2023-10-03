@@ -1,4 +1,4 @@
-export type SentNotificationDTO = {
+export interface SentNotificationDTO {
   notification: {
     id: number;
     title: string;
@@ -9,4 +9,4 @@ export type SentNotificationDTO = {
   };
   seen: boolean;
   subscribed: boolean;
-};
+}

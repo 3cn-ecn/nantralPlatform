@@ -6,9 +6,9 @@ import { Button } from '@mui/material';
 import { EditEventModal } from '#modules/event/view/Modals/EditEventModal';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-type EditButtonProps = {
+interface EditButtonProps {
   eventId: number;
-};
+}
 
 export function EditButton({ eventId }: EditButtonProps) {
   const { t } = useTranslation();

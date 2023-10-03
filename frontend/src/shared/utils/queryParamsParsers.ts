@@ -42,11 +42,11 @@ export const parseString = (value: string | null): string | null => {
 
 export const convertCamelToSnakeCase = (input: Record<string, unknown>) =>
   Object.fromEntries(
-    Object.entries(input).map(([key, value]) => [snakeCase(key), value])
+    Object.entries(input).map(([key, value]) => [snakeCase(key), value]),
   );
 
 export const convertToURLSearchParams = (
-  params: Record<string, unknown>
+  params: Record<string, unknown>,
 ): URLSearchParams => {
   // Crée une nouvelle instance de URLSearchParams
   const searchParams = new URLSearchParams();

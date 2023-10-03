@@ -8,7 +8,7 @@ import { EventPreview } from '../event.type';
 import { adaptEventPreview } from '../infra/event.adapter';
 import { EventDTO, EventPreviewDTO } from '../infra/event.dto';
 
-export type EventListQueryParams = {
+export interface EventListQueryParams {
   group?: string[] | null;
   fromDate?: Date | null;
   toDate?: Date | null;
@@ -21,11 +21,11 @@ export type EventListQueryParams = {
   ordering?: OrderingField<EventDTO> | null;
   page?: number | null;
   pageSize?: number | null;
-};
+}
 
 export async function getEventListApi(
   params: EventListQueryParams = {},
-  signal?: GenericAbortSignal
+  signal?: GenericAbortSignal,
 ): Promise<Page<EventPreview>> {
   const { data } = await axios
     .get<PageDTO<EventPreviewDTO>>('/api/event/event/', {

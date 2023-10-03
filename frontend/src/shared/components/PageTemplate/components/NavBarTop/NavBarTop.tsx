@@ -14,10 +14,10 @@ declare module '@mui/material/AppBar' {
   }
 }
 
-type NavBarTopProps = {
+interface NavBarTopProps {
   menuOpen: boolean;
   setMenuOpen: Dispatch<SetStateAction<boolean>>;
-};
+}
 
 export function NavBarTop({ menuOpen, setMenuOpen }: NavBarTopProps) {
   return (

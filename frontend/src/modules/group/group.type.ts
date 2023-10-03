@@ -1,4 +1,4 @@
-export type Group = {
+export interface Group {
   id: number;
   name: string;
   shortName: string;
@@ -21,7 +21,7 @@ export type Group = {
   isAdmin: boolean;
   isMember: boolean;
   lockMemberships: boolean;
-};
+}
 
 export type GroupPreview = Pick<
   Group,

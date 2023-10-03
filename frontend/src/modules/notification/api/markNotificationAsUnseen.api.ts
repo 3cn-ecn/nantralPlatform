@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 
 export async function markNotificationAsUnseenApi(
-  notificationId: number
+  notificationId: number,
 ): Promise<number> {
   const { status } = await axios
     .delete(`/api/notification/notification/${notificationId}/seen/`)

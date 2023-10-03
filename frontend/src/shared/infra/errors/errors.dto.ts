@@ -4,13 +4,13 @@ export type DjangoRestApiFieldValidationError<DTO> = {
   [K in keyof DTO]?: string[];
 };
 
-type DjangoRestApiNonFieldValidationError = {
+interface DjangoRestApiNonFieldValidationError {
   non_field_errors?: string[];
-};
+}
 
-type DjangoRestApiGenericError = {
+interface DjangoRestApiGenericError {
   detail?: string;
-};
+}
 
 type DjangoRestApiError<DTO> = DjangoRestApiGenericError &
   DjangoRestApiFieldValidationError<DTO> &

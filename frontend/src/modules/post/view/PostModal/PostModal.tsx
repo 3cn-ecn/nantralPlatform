@@ -14,17 +14,17 @@ import { usePostDetailsQuery } from '../../hooks/usePostDetails.query';
 import { EditPostModalContent } from './EditPostModalContent';
 import { ReadPostModalContent } from './ReadPostModalContent';
 
-type PostModalProps = {
+interface PostModalProps {
   postId: number;
   onClose: () => void;
-};
+}
 
 export function PostModal({ postId, onClose }: PostModalProps) {
   const [editMode, setEditMode] = useState(false);
 
   const postQuery = usePostDetailsQuery(postId);
 
-  if (postQuery.isLoading || postQuery.isIdle) {
+  if (postQuery.isLoading) {
     return (
       <ResponsiveDialog onClose={onClose}>
         <ResponsiveDialogHeader onClose={onClose}></ResponsiveDialogHeader>

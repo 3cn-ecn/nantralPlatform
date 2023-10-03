@@ -6,7 +6,6 @@ import {
   SetStateAction,
   useState,
 } from 'react';
-import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 
 import {
@@ -37,6 +36,7 @@ import {
   Typography,
 } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
@@ -51,7 +51,7 @@ export function UserMenu() {
   const queryClient = useQueryClient();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState<null | 'main' | 'theme' | 'lang'>(
-    null
+    null,
   );
 
   const currentUser = useCurrentUserData();
@@ -246,10 +246,10 @@ const CustomMenuItem: CustomMenuItemComponent = ({
   );
 };
 
-type MenuHeaderProps = {
+interface MenuHeaderProps {
   setMenuOpen: Dispatch<SetStateAction<string | null>>;
   label: string;
-};
+}
 const MenuHeader = ({ setMenuOpen, label }: MenuHeaderProps) => {
   return (
     <ListItem>

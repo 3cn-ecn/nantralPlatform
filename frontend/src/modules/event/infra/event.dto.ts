@@ -1,6 +1,6 @@
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
 
-export type EventDTO = {
+export interface EventDTO {
   id: number;
   title: string;
   description: string;
@@ -21,7 +21,7 @@ export type EventDTO = {
   end_registration: string | null;
   form_url: string;
   notification: number | null;
-};
+}
 
 export type EventPreviewDTO = Pick<
   EventDTO,

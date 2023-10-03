@@ -97,7 +97,7 @@ function getTheme(mode: PaletteMode, language: string) {
         },
       },
     },
-    muiDatePickerLocale
+    muiDatePickerLocale,
   );
 
   return responsiveFontSizes(theme, {

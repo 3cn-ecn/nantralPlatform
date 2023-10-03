@@ -21,9 +21,9 @@ import { createBlankEvents } from '../shared/createBlankEvents';
 import { CalendarEventBlock } from './CalendarEventBlock';
 import { CalendarEventBlockSkeleton } from './CalendarEventBlockSkeleton';
 
-type CalendarGridViewProps = {
+interface CalendarGridViewProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
-};
+}
 
 export function CalendarGridView({ filters }: CalendarGridViewProps) {
   const { formatDate, startOfWeek, endOfWeek, dateFnsLocale } =
@@ -40,10 +40,9 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
       />
     );
 
-  const events =
-    eventsQuery.isLoading || eventsQuery.isIdle
-      ? createBlankEvents(filters.fromDate, filters.toDate)
-      : eventsQuery.data.results;
+  const events = eventsQuery.isLoading
+    ? createBlankEvents(filters.fromDate, filters.toDate)
+    : eventsQuery.data.results;
 
   const weekDays = eachDayOfInterval({
     start: startOfWeek(filters.fromDate),
@@ -108,15 +107,15 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
             .filter((e) =>
               areIntervalsOverlapping(
                 { start: startOfDay(date), end: endOfDay(date) },
-                { start: e.startDate, end: e.endDate }
-              )
+                { start: e.startDate, end: e.endDate },
+              ),
             )
             .map((event) =>
-              eventsQuery.isLoading || eventsQuery.isIdle ? (
+              eventsQuery.isLoading ? (
                 <CalendarEventBlockSkeleton key={event.id} />
               ) : (
                 <CalendarEventBlock key={event.id} eventItem={event} />
-              )
+              ),
             )}
         </Box>
       ))}

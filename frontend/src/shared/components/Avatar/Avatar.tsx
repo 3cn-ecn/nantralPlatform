@@ -10,7 +10,7 @@ import { stringToColor } from '#shared/utils/stringToColor';
 // props of the MuiAvatar
 type AvatarComponentType<
   P = object,
-  D extends React.ElementType = 'div'
+  D extends React.ElementType = 'div',
 > = OverridableComponent<
   AvatarTypeMap<
     P & {

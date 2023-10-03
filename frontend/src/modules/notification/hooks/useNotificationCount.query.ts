@@ -1,4 +1,4 @@
-import { UseQueryOptions, useQuery } from 'react-query';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { ApiError } from '#shared/infra/errors';
 
@@ -9,7 +9,7 @@ import {
 
 export function useNotificationCountQuery(
   filters: Omit<NotificationCountQueryParams, 'page'>,
-  options?: UseQueryOptions<number>
+  options?: UseQueryOptions<number>,
 ) {
   const query = useQuery<number, ApiError>({
     queryKey: ['notifications', 'count', filters],

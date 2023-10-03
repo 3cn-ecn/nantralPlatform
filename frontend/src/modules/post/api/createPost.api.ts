@@ -18,7 +18,7 @@ export async function createPostApi(formData: PostForm) {
         headers: formData.image
           ? { 'Content-Type': 'multipart/form-data' }
           : {},
-      }
+      },
     )
     .catch((err: ApiFormErrorDTO<PostFormDTO>) => {
       throw adaptApiFormErrors(err);

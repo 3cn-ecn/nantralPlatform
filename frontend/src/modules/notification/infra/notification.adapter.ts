@@ -2,7 +2,7 @@ import { SentNotification } from '../notification.types';
 import { SentNotificationDTO } from './notification.dto';
 
 export function adaptSentNotification(
-  notification: SentNotificationDTO
+  notification: SentNotificationDTO,
 ): SentNotification {
   return {
     id: notification.notification.id,

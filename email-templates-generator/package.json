@@ -1,10 +1,7 @@
 {
-  "name": "emails",
-  "version": "0.0.18",
+  "name": "@3cn-ecn/nantral-platform-emails",
+  "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    ".react-email"
-  ],
   "scripts": {
     "start": "email dev",
     "build:html": "email export --outDir ../backend/templates/emails/",
@@ -25,12 +22,12 @@
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "@typescript-eslint/parser": "^5.59.6",
     "eslint": "^8.17.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^2.7.1"
+    "prettier": "^3.0.3"
   }
 }

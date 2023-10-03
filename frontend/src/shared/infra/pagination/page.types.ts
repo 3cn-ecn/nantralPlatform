@@ -1,7 +1,7 @@
-export type Page<ObjectType> = {
+export interface Page<ObjectType> {
   count: number;
   numPages: number;
-  results: Array<ObjectType>;
+  results: ObjectType[];
   next: string | null;
   previous: string | null;
-};
+}

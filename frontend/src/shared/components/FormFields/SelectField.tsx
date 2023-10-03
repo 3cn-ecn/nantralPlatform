@@ -54,5 +54,5 @@ function SelectFieldComponent<ValueType extends string>({
 }
 
 export const SelectField = memo(
-  SelectFieldComponent
+  SelectFieldComponent,
 ) as typeof SelectFieldComponent;

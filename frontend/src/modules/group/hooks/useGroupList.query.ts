@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { UseQueryOptions, useQuery } from 'react-query';
+
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
@@ -12,7 +13,7 @@ import { GroupPreview } from '../group.type';
 
 export function useGroupListQuery(
   filters: Omit<GetGroupListApiParams, 'page'>,
-  options?: UseQueryOptions<Page<GroupPreview>>
+  options?: UseQueryOptions<Page<GroupPreview>>,
 ) {
   const [page, setPage] = useState(1);
 

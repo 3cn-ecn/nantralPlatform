@@ -3,9 +3,9 @@ import { Alert } from '@mui/material';
 import { Event } from '#modules/event/event.type';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-type EventPopupAlertsProps = {
+interface EventPopupAlertsProps {
   event: Event;
-};
+}
 
 export function EventPopupAlerts({ event }: EventPopupAlertsProps) {
   const { t, formatDateTime } = useTranslation();

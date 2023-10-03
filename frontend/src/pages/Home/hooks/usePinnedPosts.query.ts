@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { UseQueryOptions, useQuery } from 'react-query';
+
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { getPostListApi } from '#modules/post/api/getPostList.api';
 import { PostPreview } from '#modules/post/post.types';
@@ -8,7 +9,7 @@ import { Page } from '#shared/infra/pagination';
 
 export function usePinnedPostsQuery(
   numberOfPosts: number,
-  options?: UseQueryOptions<Page<PostPreview>>
+  options?: UseQueryOptions<Page<PostPreview>>,
 ) {
   const [page, setPage] = useState(1);
 

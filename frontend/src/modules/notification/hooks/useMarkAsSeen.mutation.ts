@@ -3,7 +3,7 @@ import {
   UseMutationOptions,
   useMutation,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 
 import { useToast } from '#shared/context/Toast.context';
 import { ApiError } from '#shared/infra/errors';
@@ -22,15 +22,15 @@ export function useMarkAsSeenMutation(defaultNotificationId?: number) {
   const showToast = useToast();
 
   const markAsSeenMutation = useMutation<number, ApiError, number>(
-    markNotificationAsSeenApi
+    markNotificationAsSeenApi,
   );
   const markAsUnseenMutation = useMutation<number, ApiError, number>(
-    markNotificationAsUnseenApi
+    markNotificationAsUnseenApi,
   );
 
   const updateCachedQueries = (
     notificationId: number,
-    newData: Partial<SentNotification>
+    newData: Partial<SentNotification>,
   ) => {
     // update data NOW so that it is displayed to the user
     queryClient.setQueriesData(
@@ -41,10 +41,10 @@ export function useMarkAsSeenMutation(defaultNotificationId?: number) {
           pages: data.pages.map((page) => ({
             ...page,
             results: page.results.map((e) =>
-              e.id === notificationId ? { ...e, ...newData } : e
+              e.id === notificationId ? { ...e, ...newData } : e,
             ),
           })),
-        }
+        },
     );
     // invalidate queries to force reload the queries we have modified
     queryClient.invalidateQueries(['notifications']);

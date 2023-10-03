@@ -19,7 +19,7 @@ export function PinnedPostsSection({
   const { t } = useTranslation();
   const postsQuery = usePinnedPostsQuery(NUMBER_OF_POSTS, { enabled });
 
-  if (postsQuery.isLoading || postsQuery.isIdle) {
+  if (postsQuery.isLoading) {
     return (
       <Section title={t('home.postSection.pinnedTitle')}>
         <Grid container spacing={1}>

@@ -3,7 +3,7 @@ import {
   UseMutationOptions,
   useMutation,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 
 import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -22,10 +22,10 @@ export function useRegistrationMutation(eventId: number) {
   const showToast = useToast();
 
   const registerMutation = useMutation<number, ApiError, number>(
-    registerAsParticipantApi
+    registerAsParticipantApi,
   );
   const unregisterMutation = useMutation<number, ApiError, number>(
-    unregisterAsParticipantApi
+    unregisterAsParticipantApi,
   );
 
   const updateCachedQueries = (newData: Partial<Event>) => {
@@ -38,23 +38,23 @@ export function useRegistrationMutation(eventId: number) {
           pages: data.pages.map((page) => ({
             ...page,
             results: page.results.map((e) =>
-              e.id === eventId ? { ...e, ...newData } : e
+              e.id === eventId ? { ...e, ...newData } : e,
             ),
           })),
-        }
+        },
     );
     queryClient.setQueriesData(
       {
-        queryKey: 'events',
+        queryKey: ['events'],
         predicate: (query) => query.queryKey[1] !== 'infiniteList',
       },
       (data?: Page<Event>) =>
         data && {
           ...data,
           results: data.results.map((e) =>
-            e.id === eventId ? { ...e, ...newData } : e
+            e.id === eventId ? { ...e, ...newData } : e,
           ),
-        }
+        },
     );
     queryClient.setQueriesData(
       ['event', { id: eventId }],
@@ -62,7 +62,7 @@ export function useRegistrationMutation(eventId: number) {
         data && {
           ...data,
           ...newData,
-        }
+        },
     );
     // invalidate queries to force reload the queries we have modified
     queryClient.invalidateQueries(['events']);

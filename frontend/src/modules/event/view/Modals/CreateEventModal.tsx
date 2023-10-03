@@ -1,8 +1,8 @@
 import { FormEvent } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createEventApi } from '#modules/event/api/createEvent.api';
 import { Event, EventForm } from '#modules/event/event.type';
@@ -20,10 +20,10 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { EventFormFields } from '../shared/EventFormFields';
 
-type CreateEventModalProps = {
+interface CreateEventModalProps {
   onClose: () => void;
   onCreated?: (id?: number) => void;
-};
+}
 
 export function CreateEventModal({
   onClose,
@@ -64,8 +64,8 @@ export function CreateEventModal({
     mutate(values, {
       onSuccess: (data) => {
         // if success, reset the event data in all queries
-        queryClient.invalidateQueries('events');
-        queryClient.invalidateQueries('notifications');
+        queryClient.invalidateQueries(['events']);
+        queryClient.invalidateQueries(['notifications']);
         // close the modal
         onCreated(data.id);
       },

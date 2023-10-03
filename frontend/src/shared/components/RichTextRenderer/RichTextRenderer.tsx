@@ -2,7 +2,9 @@ import { Typography } from '@mui/material';
 
 import '#shared/ckeditor/styles/base.styles.scss';
 
-type RichTextRendererProps = { content: string };
+interface RichTextRendererProps {
+  content: string;
+}
 
 export function RichTextRenderer({ content }: RichTextRendererProps) {
   return (

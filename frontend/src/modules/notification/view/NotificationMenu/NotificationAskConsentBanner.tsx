@@ -9,7 +9,7 @@ export function NotificationAskConsentBanner() {
   const { t } = useTranslation();
 
   const [shouldAsk, setShouldAsk] = useState(
-    'Notification' in window && Notification.permission === 'default'
+    'Notification' in window && Notification.permission === 'default',
   );
 
   const askPermission = () => {

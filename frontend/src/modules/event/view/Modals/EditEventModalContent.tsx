@@ -1,8 +1,8 @@
 import { FormEvent } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   UpdateEventApiVariables,
@@ -22,10 +22,10 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { EventFormFields } from '../shared/EventFormFields';
 
-type EditEventModalContentProps = {
+interface EditEventModalContentProps {
   event: Event;
   onClose: () => void;
-};
+}
 
 export function EditEventModalContent({
   event,
@@ -53,7 +53,7 @@ export function EditEventModalContent({
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
-    void,
+    unknown,
     ApiFormError<EventFormDTO>,
     UpdateEventApiVariables
   >(updateEventApi);
@@ -68,13 +68,13 @@ export function EditEventModalContent({
       {
         onSuccess: () => {
           // if success, reset the event data in all queries
-          queryClient.invalidateQueries('events');
+          queryClient.invalidateQueries(['events']);
           queryClient.invalidateQueries(['event', { id: event.id }]);
-          queryClient.invalidateQueries('notifications');
+          queryClient.invalidateQueries(['notifications']);
           // close the modal
           onClose();
         },
-      }
+      },
     );
   };
 

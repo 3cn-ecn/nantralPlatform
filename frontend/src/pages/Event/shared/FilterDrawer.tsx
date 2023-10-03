@@ -1,5 +1,4 @@
 import { ReactNode, useCallback } from 'react';
-import { useQueryClient } from 'react-query';
 
 import {
   CheckCircle as CheckCircleIcon,
@@ -22,6 +21,7 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 import { isSameDay } from 'date-fns';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
@@ -36,14 +36,14 @@ import {
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { Page } from '#shared/infra/pagination';
 
-type FilterDrawerProps = {
+interface FilterDrawerProps {
   filters: EventListQueryParams;
   updateFilters: (newFilter: Partial<EventListQueryParams>) => void;
   resetFilters: () => void;
   open: boolean;
   onClose: () => void;
   noDates?: boolean;
-};
+}
 
 export function FilterDrawer({
   filters,
@@ -72,16 +72,16 @@ export function FilterDrawer({
   const fetchInitialGroupOptions = useCallback(
     () =>
       getGroupListApi({ pageSize: 7, isAdmin: true }).then(
-        (data) => data.results
+        (data) => data.results,
       ),
-    []
+    [],
   );
   const fetchGroupOptions = useCallback(
     (searchText: string) =>
       getGroupListApi({ search: searchText, pageSize: 10 }).then(
-        (data) => data.results
+        (data) => data.results,
       ),
-    []
+    [],
   );
 
   const handleGroupChange = useCallback(
@@ -92,10 +92,10 @@ export function FilterDrawer({
         (prevData: Page<GroupPreview>) => ({
           ...prevData,
           results: objVal,
-        })
+        }),
       );
     },
-    [filters, updateFilters, queryClient]
+    [filters, updateFilters, queryClient],
   );
 
   return (
@@ -200,12 +200,12 @@ export function FilterDrawer({
   );
 }
 
-type CheckboxFilterProps = {
+interface CheckboxFilterProps {
   label: string;
   icon: ReactNode;
   value: boolean;
   handleChange: (value: boolean) => void;
-};
+}
 
 function CheckboxListItem({
   label,

@@ -1,8 +1,8 @@
 import { FormEvent } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   UpdatePostApiVariables,
@@ -22,11 +22,11 @@ import { ApiFormError } from '#shared/infra/errors';
 
 import { PostFormFields } from '../shared/PostFormFields';
 
-type EditPostModalContentProps = {
+interface EditPostModalContentProps {
   post: Post;
   onClose: () => void;
   onFinish: () => void;
-};
+}
 
 export function EditPostModalContent({
   post,
@@ -48,7 +48,7 @@ export function EditPostModalContent({
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
-    void,
+    unknown,
     ApiFormError<PostFormDTO>,
     UpdatePostApiVariables
   >(updatePostApi);
@@ -63,13 +63,13 @@ export function EditPostModalContent({
       {
         onSuccess: () => {
           // if success, reset the post data in all queries
-          queryClient.invalidateQueries('posts');
+          queryClient.invalidateQueries(['posts']);
           queryClient.invalidateQueries(['post', { id: post.id }]);
-          queryClient.invalidateQueries('notifications');
+          queryClient.invalidateQueries(['notifications']);
           // close the modal
           onFinish();
         },
-      }
+      },
     );
   };
 

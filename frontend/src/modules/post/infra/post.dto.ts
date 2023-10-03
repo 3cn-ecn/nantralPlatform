@@ -1,6 +1,6 @@
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
 
-export type PostDTO = {
+export interface PostDTO {
   id: number;
   title: string;
   description: string;
@@ -13,7 +13,7 @@ export type PostDTO = {
   can_pin: boolean;
   is_admin: boolean;
   notification: number | null;
-};
+}
 
 export type PostPreviewDTO = Pick<
   PostDTO,

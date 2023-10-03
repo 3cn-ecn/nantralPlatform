@@ -1,4 +1,4 @@
-export type StudentDTO = {
+export interface StudentDTO {
   id: number;
   name: string;
   promo: number;
@@ -7,7 +7,7 @@ export type StudentDTO = {
   path: string;
   url: string;
   staff: boolean;
-};
+}
 
 export type StudentPreviewDTO = Pick<
   StudentDTO,

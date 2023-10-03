@@ -15,9 +15,9 @@ function toPercent(x: number) {
   return `${x * 100}%`;
 }
 
-type CalendarEventBlockProps = {
+interface CalendarEventBlockProps {
   eventItem: CalendarEventItem;
-};
+}
 
 export function CalendarEventBlock({ eventItem }: CalendarEventBlockProps) {
   const theme = useTheme();
@@ -32,12 +32,12 @@ export function CalendarEventBlock({ eventItem }: CalendarEventBlockProps) {
         top: toPercent(
           differenceInMilliseconds(
             eventItem.start,
-            startOfDay(eventItem.start)
-          ) / hoursToMilliseconds(24)
+            startOfDay(eventItem.start),
+          ) / hoursToMilliseconds(24),
         ),
         height: toPercent(
           differenceInMilliseconds(eventItem.end, eventItem.start) /
-            hoursToMilliseconds(24)
+            hoursToMilliseconds(24),
         ),
         left: toPercent(eventItem.col / eventItem.nbTotCols),
         width: toPercent(1 / eventItem.nbTotCols),

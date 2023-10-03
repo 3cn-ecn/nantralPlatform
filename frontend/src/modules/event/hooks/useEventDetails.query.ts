@@ -1,4 +1,4 @@
-import { UseQueryOptions, useQuery } from 'react-query';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { getEventDetailsApi } from '#modules/event/api/getEventDetails.api';
 import { Event } from '#modules/event/event.type';
@@ -7,7 +7,7 @@ import { ApiError } from '#shared/infra/errors';
 
 export function useEventDetailsQuery(
   eventId: number,
-  { onSuccess, ...options }: UseQueryOptions<Event> = {}
+  { onSuccess, ...options }: UseQueryOptions<Event> = {},
 ) {
   const { markAsSeen } = useMarkAsSeenMutation();
 

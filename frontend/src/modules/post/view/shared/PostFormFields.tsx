@@ -16,13 +16,13 @@ import { RichTextField } from '#shared/components/FormFields/RichTextField';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
-type PostFormFieldsProps = {
+interface PostFormFieldsProps {
   isError: boolean;
   error: ApiFormError<PostFormDTO> | null;
   formValues: PostForm;
   updateFormValues: Dispatch<Partial<PostForm>>;
   prevData?: Post;
-};
+}
 
 export function PostFormFields({
   isError,
@@ -39,20 +39,20 @@ export function PostFormFields({
   const fetchInitialGroupOptions = useCallback(
     () =>
       getGroupListApi({ pageSize: 7, isAdmin: true }).then(
-        (data) => data.results
+        (data) => data.results,
       ),
-    []
+    [],
   );
   const fetchGroupOptions = useCallback(
     (searchText: string) =>
       getGroupListApi({ search: searchText, pageSize: 10 }).then(
-        (data) => data.results
+        (data) => data.results,
       ),
-    []
+    [],
   );
   const onPinnedChange = useCallback(
     (val: boolean) => updateFormValues({ pinned: val }),
-    [updateFormValues]
+    [updateFormValues],
   );
 
   return (
@@ -75,7 +75,7 @@ export function PostFormFields({
         value={formValues.title}
         handleChange={useCallback(
           (val) => updateFormValues({ title: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         errors={error?.fields?.title}
         required
@@ -87,7 +87,7 @@ export function PostFormFields({
         value={formValues.group}
         handleChange={useCallback(
           (val: number) => updateFormValues({ group: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         defaultObjectValue={prevData?.group || null}
         errors={error?.fields?.group}
@@ -103,7 +103,7 @@ export function PostFormFields({
         value={formValues.description}
         handleChange={useCallback(
           (val) => updateFormValues({ description: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         errors={error?.fields?.description}
       />
@@ -114,7 +114,7 @@ export function PostFormFields({
         value={formValues.image}
         handleChange={useCallback(
           (val) => updateFormValues({ image: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         prevFileName={prevData?.image}
         errors={error?.fields?.image}
@@ -126,7 +126,7 @@ export function PostFormFields({
         value={formValues.publicity}
         handleChange={useCallback(
           (val: 'Pub' | 'Mem') => updateFormValues({ publicity: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         errors={error?.fields?.publicity}
         defaultValue="Pub"

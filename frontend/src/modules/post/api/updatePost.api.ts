@@ -6,10 +6,10 @@ import { convertPostForm } from '../infra/post.converter';
 import { PostFormDTO } from '../infra/post.dto';
 import { PostForm } from '../post.types';
 
-export type UpdatePostApiVariables = {
+export interface UpdatePostApiVariables {
   id: number;
   data: PostForm;
-};
+}
 
 export async function updatePostApi({ id, data }: UpdatePostApiVariables) {
   await axios

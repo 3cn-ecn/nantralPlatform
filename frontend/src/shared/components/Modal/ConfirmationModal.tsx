@@ -9,13 +9,13 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { LoadingButton } from '../LoadingButton/LoadingButton';
 
-type ConfirmationModalProps = {
+interface ConfirmationModalProps {
   title: string;
   body: string;
   onCancel: () => void;
   onConfirm: () => void;
   loading?: boolean;
-};
+}
 
 export function ConfirmationModal({
   title,

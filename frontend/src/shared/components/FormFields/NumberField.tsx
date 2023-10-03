@@ -33,7 +33,7 @@ export function NumberField({
         handleChange(parseNumber(val));
       }
     },
-    [handleChange, parseNumber]
+    [handleChange, parseNumber],
   );
 
   const allErrors = useMemo(
@@ -41,7 +41,7 @@ export function NumberField({
       (value?.toString() || '') !== stringValue
         ? [t('form.number.wrongFormat'), ...(errors ?? [])]
         : errors,
-    [errors, stringValue, t, value]
+    [errors, stringValue, t, value],
   );
 
   return (

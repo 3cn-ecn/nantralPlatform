@@ -26,7 +26,7 @@ function parseQueryParams(queryParams: URLSearchParams): EventListQueryParams {
     isRegistrationOpen: parseNullBool(queryParams.get('is_registration_open')),
     search: parseString(queryParams.get('search')),
     ordering: parseString(
-      queryParams.get('ordering')
+      queryParams.get('ordering'),
     ) as OrderingField<EventDTO>,
   };
   if (!filters.fromDate && !filters.toDate) {
@@ -58,14 +58,14 @@ export function useFilters() {
       const params = convertToURLSearchParams(convertedFilter);
       setQueryParams(params, { preventScrollReset: true });
     },
-    [setQueryParams]
+    [setQueryParams],
   );
 
   const updateFilters = useCallback(
     (newFilter: Partial<EventListQueryParams>) => {
       setFilters({ ...filters, ...newFilter });
     },
-    [filters, setFilters]
+    [filters, setFilters],
   );
 
   const resetFilters = useCallback(() => setFilters({}), [setFilters]);

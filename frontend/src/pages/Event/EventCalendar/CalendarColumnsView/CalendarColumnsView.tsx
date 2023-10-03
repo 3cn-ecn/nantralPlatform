@@ -28,9 +28,9 @@ function getNumberOfCols(events: CalendarEventItem[]) {
   return events.reduce((maxCol, event) => Math.max(maxCol, event.col), -1) + 1;
 }
 
-type CalendarColumnsViewProps = {
+interface CalendarColumnsViewProps {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
-};
+}
 
 export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
   const { formatDate, formatTime } = useTranslation();
@@ -46,14 +46,13 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
       />
     );
 
-  const events =
-    eventsQuery.isLoading || eventsQuery.isIdle
-      ? createBlankEvents(filters.fromDate, filters.toDate)
-      : eventsQuery.data.results;
+  const events = eventsQuery.isLoading
+    ? createBlankEvents(filters.fromDate, filters.toDate)
+    : eventsQuery.data.results;
 
   const hours = eachHourOfInterval(
     { start: startOfToday(), end: endOfToday() },
-    { step: 3 }
+    { step: 3 },
   ).concat([endOfToday()]);
 
   const days = eachDayOfInterval({
@@ -66,15 +65,15 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
       areIntervalsOverlapping(
         { start: e.startDate, end: e.endDate },
         { start: startOfDay(date), end: endOfDay(date) },
-        { inclusive: true }
-      )
-    )
+        { inclusive: true },
+      ),
+    ),
   );
 
   const columns = zipWith(days, eventsByDay, (date, events) => ({
     date,
     events: magicPlacement(events, date).filter(
-      (e) => differenceInMinutes(e.end, e.start) > 5
+      (e) => differenceInMinutes(e.end, e.start) > 5,
     ),
   }));
 
@@ -106,7 +105,7 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
         >
           <Typography variant="body2" textAlign="center" noWrap>
             {upperFirst(
-              formatDate(col.date, { weekday: 'short', day: 'numeric' })
+              formatDate(col.date, { weekday: 'short', day: 'numeric' }),
             )}
           </Typography>
           <FlexCol
@@ -125,14 +124,14 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
               <Divider key={formatISO(h, { representation: 'time' })} />
             ))}
             {col.events.map((item) =>
-              eventsQuery.isLoading || eventsQuery.isIdle ? (
+              eventsQuery.isLoading ? (
                 <CalendarEventBlockSkeleton
                   eventItem={item}
                   key={item.data.id}
                 />
               ) : (
                 <CalendarEventBlock eventItem={item} key={item.data.id} />
-              )
+              ),
             )}
           </FlexCol>
         </Box>

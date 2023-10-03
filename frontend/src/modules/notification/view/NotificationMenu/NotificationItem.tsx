@@ -14,17 +14,17 @@ import { SentNotification } from '#modules/notification/notification.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 
-type NotificationItemProps = {
+interface NotificationItemProps {
   notification: SentNotification;
   onClose: () => void;
-};
+}
 
 export function NotificationItem({
   notification,
   onClose,
 }: NotificationItemProps) {
   const { markAsSeen, markAsUnseen, isLoading } = useMarkAsSeenMutation(
-    notification.id
+    notification.id,
   );
 
   const handleItemClick = () => {

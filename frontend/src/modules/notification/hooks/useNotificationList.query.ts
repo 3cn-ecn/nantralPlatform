@@ -2,7 +2,7 @@ import {
   UseInfiniteQueryOptions,
   useInfiniteQuery,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';
@@ -18,7 +18,7 @@ export function useNotificationListQuery(
   {
     onSuccess,
     ...options
-  }: UseInfiniteQueryOptions<Page<SentNotification>> = {}
+  }: UseInfiniteQueryOptions<Page<SentNotification>> = {},
 ) {
   const queryClient = useQueryClient();
 
@@ -30,7 +30,7 @@ export function useNotificationListQuery(
           ...filters,
           page: pageParam,
         },
-        signal
+        signal,
       ),
     getNextPageParam: (lastPage, pages) =>
       lastPage.next ? pages.length + 1 : undefined,
@@ -42,7 +42,7 @@ export function useNotificationListQuery(
           'count',
           { subscribed: filters.subscribed, seen: filters.seen },
         ],
-        (prevCount: number) => data?.pages.at(-1)?.count || prevCount
+        (prevCount: number) => data?.pages.at(-1)?.count || prevCount,
       );
       return onSuccess?.(data);
     },

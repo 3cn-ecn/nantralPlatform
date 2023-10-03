@@ -21,10 +21,10 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { useParticipantList } from '../hooks/useParticipantList.query';
 
-type EventParticipantsModalProps = {
+interface EventParticipantsModalProps {
   event: Event;
   onClose: () => void;
-};
+}
 
 export function EventParticipantsModal({
   event,
@@ -33,7 +33,7 @@ export function EventParticipantsModal({
   const { t } = useTranslation();
   const participantsQuery = useParticipantList(event.id);
 
-  if (participantsQuery.isLoading || participantsQuery.isIdle) {
+  if (participantsQuery.isLoading) {
     return (
       <ResponsiveDialog onClose={onClose} maxWidth="xs">
         <ResponsiveDialogHeader onClose={onClose}>

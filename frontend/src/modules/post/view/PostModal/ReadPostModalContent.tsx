@@ -21,11 +21,11 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { BadgeIcon } from '../shared/BadgeIcon';
 
-type ReadPostModalContentProps = {
+interface ReadPostModalContentProps {
   post: Post;
   onClose: () => void;
   onEdit: () => void;
-};
+}
 
 export function ReadPostModalContent({
   post,
