@@ -13,7 +13,7 @@ jest.mock('#shared/ckeditor/CustomEditor.ts');
 
 function mockPostApiCall(
   params: { pinned?: boolean; page?: number; page_size?: number },
-  results: PostDTO[] = []
+  results: PostDTO[] = [],
 ) {
   mockServer
     .get('/api/post/post/')
@@ -50,12 +50,12 @@ describe('Home page', () => {
     // Now that the page is loaded, we check that the "Featured" section
     // (or "A la une" in French) is hidden, since we do not have any posts.
     expect(
-      screen.queryByRole('heading', { name: 'Featured' })
+      screen.queryByRole('heading', { name: 'Featured' }),
     ).not.toBeInTheDocument();
 
     // On the contrary, the Events section must be displayed
     expect(
-      screen.queryByRole('heading', { name: 'Upcoming events' })
+      screen.queryByRole('heading', { name: 'Upcoming events' }),
     ).toBeInTheDocument();
     expect(screen.queryByText(/No upcoming event.../)).toBeInTheDocument();
 

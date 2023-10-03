@@ -12,13 +12,13 @@ type FlexBoxComponent<Extra = object> = OverridableComponent<
 >;
 
 export const FlexRow: FlexBoxComponent = (
-  props: ComponentProps<FlexBoxComponent>
+  props: ComponentProps<FlexBoxComponent>,
 ) => {
   return <Box display="flex" flexDirection="row" {...props} />;
 };
 
 export const FlexCol: FlexBoxComponent = (
-  props: ComponentProps<FlexBoxComponent>
+  props: ComponentProps<FlexBoxComponent>,
 ) => {
   return <Box display="flex" flexDirection="column" {...props} />;
 };

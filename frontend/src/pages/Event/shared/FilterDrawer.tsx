@@ -72,16 +72,16 @@ export function FilterDrawer({
   const fetchInitialGroupOptions = useCallback(
     () =>
       getGroupListApi({ pageSize: 7, isAdmin: true }).then(
-        (data) => data.results
+        (data) => data.results,
       ),
-    []
+    [],
   );
   const fetchGroupOptions = useCallback(
     (searchText: string) =>
       getGroupListApi({ search: searchText, pageSize: 10 }).then(
-        (data) => data.results
+        (data) => data.results,
       ),
-    []
+    [],
   );
 
   const handleGroupChange = useCallback(
@@ -92,10 +92,10 @@ export function FilterDrawer({
         (prevData: Page<GroupPreview>) => ({
           ...prevData,
           results: objVal,
-        })
+        }),
       );
     },
-    [filters, updateFilters, queryClient]
+    [filters, updateFilters, queryClient],
   );
 
   return (

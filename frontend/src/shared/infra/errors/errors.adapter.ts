@@ -2,7 +2,7 @@ import { ApiErrorDTO, ApiFormErrorDTO } from './errors.dto';
 import { ApiError, ApiFormError } from './errors.types';
 
 export function adaptApiFormErrors<DTO>(
-  error: ApiFormErrorDTO<DTO>
+  error: ApiFormErrorDTO<DTO>,
 ): ApiFormError<DTO> {
   if (error.response) {
     if (error.response.data) {

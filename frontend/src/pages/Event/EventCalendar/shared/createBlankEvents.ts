@@ -19,7 +19,7 @@ function hash(str: string) {
 
 export function createBlankEvents(
   fromDate: Date,
-  toDate: Date
+  toDate: Date,
 ): EventPreview[] {
   const events = new Array<EventPreview>();
   const numberOfHours = differenceInHours(toDate, fromDate);
@@ -36,7 +36,7 @@ export function createBlankEvents(
         id: i,
         startDate: addHours(fromDate, startHour),
         endDate: addHours(fromDate, startHour + duration),
-      })
+      }),
     );
   }
 

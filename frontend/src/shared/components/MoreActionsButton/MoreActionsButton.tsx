@@ -30,7 +30,7 @@ export function MoreActionsButton({
 
   const [yPos, xPos] = menuPosition.split('-') as [
     'top' | 'bottom',
-    'left' | 'right'
+    'left' | 'right',
   ];
 
   return (

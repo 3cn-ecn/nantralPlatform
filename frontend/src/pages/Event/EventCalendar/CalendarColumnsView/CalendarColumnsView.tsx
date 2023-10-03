@@ -52,7 +52,7 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
 
   const hours = eachHourOfInterval(
     { start: startOfToday(), end: endOfToday() },
-    { step: 3 }
+    { step: 3 },
   ).concat([endOfToday()]);
 
   const days = eachDayOfInterval({
@@ -65,15 +65,15 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
       areIntervalsOverlapping(
         { start: e.startDate, end: e.endDate },
         { start: startOfDay(date), end: endOfDay(date) },
-        { inclusive: true }
-      )
-    )
+        { inclusive: true },
+      ),
+    ),
   );
 
   const columns = zipWith(days, eventsByDay, (date, events) => ({
     date,
     events: magicPlacement(events, date).filter(
-      (e) => differenceInMinutes(e.end, e.start) > 5
+      (e) => differenceInMinutes(e.end, e.start) > 5,
     ),
   }));
 
@@ -105,7 +105,7 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
         >
           <Typography variant="body2" textAlign="center" noWrap>
             {upperFirst(
-              formatDate(col.date, { weekday: 'short', day: 'numeric' })
+              formatDate(col.date, { weekday: 'short', day: 'numeric' }),
             )}
           </Typography>
           <FlexCol
@@ -131,7 +131,7 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
                 />
               ) : (
                 <CalendarEventBlock eventItem={item} key={item.data.id} />
-              )
+              ),
             )}
           </FlexCol>
         </Box>

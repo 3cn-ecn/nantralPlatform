@@ -74,7 +74,7 @@ export function EditEventModalContent({
           // close the modal
           onClose();
         },
-      }
+      },
     );
   };
 

@@ -22,7 +22,7 @@ import { modulo } from '#shared/utils/maths';
 type StaticMultipleDaysPickerProps = {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
   updateFilters: (
-    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>
+    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
   ) => void;
   onClose: () => void;
   keepInRange?: boolean;
@@ -38,14 +38,14 @@ export function StaticMultipleDaysPicker({
     differenceInCalendarDays(filters.toDate, filters.fromDate) + 1;
 
   const [value, setValue] = useState<Date | null>(
-    keepInRange ? filters.fromDate : addDays(filters.fromDate, nbOfDays / 2)
+    keepInRange ? filters.fromDate : addDays(filters.fromDate, nbOfDays / 2),
   );
 
   const startDate = value
     ? keepInRange
       ? subDays(
           value,
-          modulo(differenceInCalendarDays(value, filters.fromDate), nbOfDays)
+          modulo(differenceInCalendarDays(value, filters.fromDate), nbOfDays),
         )
       : subDays(value, nbOfDays / 2)
     : undefined;

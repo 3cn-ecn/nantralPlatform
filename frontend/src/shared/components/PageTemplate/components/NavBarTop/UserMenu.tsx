@@ -51,7 +51,7 @@ export function UserMenu() {
   const queryClient = useQueryClient();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [menuOpen, setMenuOpen] = useState<null | 'main' | 'theme' | 'lang'>(
-    null
+    null,
   );
 
   const currentUser = useCurrentUserData();

@@ -68,7 +68,7 @@ export function EventCard({ event }: EventCardProps) {
                   ? formatDateTimeRange(
                       event.startDate,
                       event.endDate,
-                      formatDateOptions
+                      formatDateOptions,
                     )
                   : formatDate(event.startDate, formatDateOptions)}
               </Typography>

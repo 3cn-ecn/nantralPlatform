@@ -31,7 +31,7 @@ const CustomThemeContext = createContext<ChangeThemeCallback | null>(null);
 export function CustomThemeProvider({ children }: PropsWithChildren) {
   const { i18n } = useTranslation();
   const [themeMode, setThemeMode] = useState<PaletteMode | 'auto'>(
-    getCachedThemeMode()
+    getCachedThemeMode(),
   );
 
   const systemThemeMode = useMediaQuery('(prefers-color-scheme: dark)')
@@ -42,9 +42,9 @@ export function CustomThemeProvider({ children }: PropsWithChildren) {
     () =>
       getTheme(
         themeMode === 'auto' ? systemThemeMode : themeMode,
-        i18n.language
+        i18n.language,
       ),
-    [themeMode, systemThemeMode, i18n.language]
+    [themeMode, systemThemeMode, i18n.language],
   );
 
   const changeThemeMode = useCallback(
@@ -52,7 +52,7 @@ export function CustomThemeProvider({ children }: PropsWithChildren) {
       setThemeMode(mode);
       localStorage.setItem('theme', mode);
     },
-    [setThemeMode]
+    [setThemeMode],
   );
 
   const customThemeContextValue = useMemo(
@@ -60,7 +60,7 @@ export function CustomThemeProvider({ children }: PropsWithChildren) {
       changeThemeMode,
       themeMode,
     }),
-    [themeMode, changeThemeMode]
+    [themeMode, changeThemeMode],
   );
 
   return (
@@ -75,7 +75,7 @@ export function useChangeThemeMode(): ChangeThemeCallback {
 
   if (!context) {
     throw new Error(
-      'useChangeTheme must be used within an CustomThemeProvider'
+      'useChangeTheme must be used within an CustomThemeProvider',
     );
   }
 

@@ -24,7 +24,7 @@ export function NotificationItem({
   onClose,
 }: NotificationItemProps) {
   const { markAsSeen, markAsUnseen, isLoading } = useMarkAsSeenMutation(
-    notification.id
+    notification.id,
   );
 
   const handleItemClick = () => {

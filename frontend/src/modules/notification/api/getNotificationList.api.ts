@@ -17,7 +17,7 @@ export type NotificationListQueryParams = {
 
 export async function getNotificationListApi(
   params: NotificationListQueryParams = {},
-  signal?: GenericAbortSignal
+  signal?: GenericAbortSignal,
 ): Promise<Page<SentNotification>> {
   const { data } = await axios
     .get<PageDTO<SentNotificationDTO>>('/api/notification/notification/', {

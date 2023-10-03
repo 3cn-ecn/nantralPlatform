@@ -69,7 +69,7 @@ export function EditPostModalContent({
           // close the modal
           onFinish();
         },
-      }
+      },
     );
   };
 

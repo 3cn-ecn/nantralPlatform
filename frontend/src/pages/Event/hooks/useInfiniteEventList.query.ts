@@ -13,7 +13,7 @@ import { Page } from '#shared/infra/pagination';
 
 export function useInfiniteEventListQuery(
   filters: Omit<EventListQueryParams, 'page' | 'ordering'>,
-  options?: UseInfiniteQueryOptions<Page<EventPreview>>
+  options?: UseInfiniteQueryOptions<Page<EventPreview>>,
 ) {
   const query = useInfiniteQuery<Page<EventPreview>, ApiError>({
     queryKey: ['events', 'infiniteList', filters],
@@ -24,7 +24,7 @@ export function useInfiniteEventListQuery(
           page: pageParam,
           ordering: filters.toDate && !filters.fromDate ? '-start_date' : null,
         },
-        signal
+        signal,
       ),
     getNextPageParam: (lastPage, pages) =>
       lastPage.next ? pages.length + 1 : undefined,

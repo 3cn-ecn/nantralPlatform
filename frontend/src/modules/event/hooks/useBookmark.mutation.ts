@@ -18,7 +18,7 @@ export function useBookmarkMutation(eventId: number) {
   const queryClient = useQueryClient();
 
   const removeMutation = useMutation<number, ApiError, number>(
-    removeBookmarkApi
+    removeBookmarkApi,
   );
   const addMutation = useMutation<number, ApiError, number>(addBookmarkApi);
 
@@ -32,10 +32,10 @@ export function useBookmarkMutation(eventId: number) {
           pages: data.pages.map((page) => ({
             ...page,
             results: page.results.map((e) =>
-              e.id === eventId ? { ...e, ...newData } : e
+              e.id === eventId ? { ...e, ...newData } : e,
             ),
           })),
-        }
+        },
     );
     queryClient.setQueriesData(
       {
@@ -46,9 +46,9 @@ export function useBookmarkMutation(eventId: number) {
         data && {
           ...data,
           results: data.results.map((e) =>
-            e.id === eventId ? { ...e, ...newData } : e
+            e.id === eventId ? { ...e, ...newData } : e,
           ),
-        }
+        },
     );
     queryClient.setQueriesData(
       ['event', { id: eventId }],
@@ -56,7 +56,7 @@ export function useBookmarkMutation(eventId: number) {
         data && {
           ...data,
           ...newData,
-        }
+        },
     );
     // invalidate queries to force reload the queries we have modified
     queryClient.invalidateQueries(['events']);

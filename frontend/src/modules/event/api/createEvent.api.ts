@@ -18,7 +18,7 @@ export async function createEventApi(formData: EventForm) {
         headers: formData.image
           ? { 'Content-Type': 'multipart/form-data' }
           : {},
-      }
+      },
     )
     .catch((err: ApiFormErrorDTO<EventFormDTO>) => {
       throw adaptApiFormErrors(err);

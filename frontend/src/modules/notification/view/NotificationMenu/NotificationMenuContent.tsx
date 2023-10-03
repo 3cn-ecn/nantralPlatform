@@ -30,7 +30,7 @@ export function NotificationMenuContent({
       seen: unseenFilter ? false : undefined,
       pageSize: 10,
     },
-    { enabled: isOpen }
+    { enabled: isOpen },
   );
 
   if (notificationListQuery.isError) {
@@ -62,7 +62,7 @@ export function NotificationMenuContent({
               notification={item}
               onClose={onClose}
             />
-          ))
+          )),
         )}
       </List>
       <Box sx={{ px: 2, pb: 2 }}>

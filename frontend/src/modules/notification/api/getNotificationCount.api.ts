@@ -9,7 +9,7 @@ export type NotificationCountQueryParams = {
 
 export async function getNotificationCountApi(
   filters: NotificationCountQueryParams = {},
-  signal?: GenericAbortSignal
+  signal?: GenericAbortSignal,
 ) {
   const { data } = await axios
     .get<number>('/api/notification/notification/count/', {

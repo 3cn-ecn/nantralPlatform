@@ -41,7 +41,7 @@ const queryClient = new QueryClient({
 export function renderWithProviders(
   element: React.ReactElement,
   otherRoutes: RouteObject[] = [],
-  path = '/'
+  path = '/',
 ) {
   const router = createMemoryRouter([{ path, element }, ...otherRoutes], {
     initialEntries: [path],
@@ -54,6 +54,6 @@ export function renderWithProviders(
           <RouterProvider router={router} />
         </ToastProvider>
       </QueryClientProvider>
-    </CustomThemeProvider>
+    </CustomThemeProvider>,
   );
 }

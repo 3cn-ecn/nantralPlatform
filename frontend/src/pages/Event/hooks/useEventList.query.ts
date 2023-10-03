@@ -12,7 +12,7 @@ import { Page } from '#shared/infra/pagination';
 
 export function useEventListQuery(
   queryParams: Omit<EventListQueryParams, 'page'>,
-  options?: UseQueryOptions<Page<EventPreview>>
+  options?: UseQueryOptions<Page<EventPreview>>,
 ) {
   const [page, setPage] = useState(1);
 
@@ -24,7 +24,7 @@ export function useEventListQuery(
           page: page,
           ...queryParams,
         },
-        signal
+        signal,
       ),
     ...options,
   });

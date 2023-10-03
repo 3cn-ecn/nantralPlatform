@@ -21,7 +21,7 @@ type GetPostListParams = {
 };
 
 export async function getPostListApi(
-  options: GetPostListParams
+  options: GetPostListParams,
 ): Promise<Page<PostPreview>> {
   const { data } = await axios
     .get<PageDTO<PostPreviewDTO>>('/api/post/post/', {

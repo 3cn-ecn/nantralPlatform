@@ -42,16 +42,16 @@ export function EventFormFields({
   const fetchInitialGroupOptions = useCallback(
     () =>
       getGroupListApi({ pageSize: 7, isAdmin: true }).then(
-        (data) => data.results
+        (data) => data.results,
       ),
-    []
+    [],
   );
   const fetchGroupOptions = useCallback(
     (searchText: string) =>
       getGroupListApi({ search: searchText, pageSize: 10 }).then(
-        (data) => data.results
+        (data) => data.results,
       ),
-    []
+    [],
   );
 
   return (
@@ -74,7 +74,7 @@ export function EventFormFields({
         value={formValues.title}
         handleChange={useCallback(
           (val) => updateFormValues({ title: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         errors={error?.fields?.title}
         required
@@ -86,7 +86,7 @@ export function EventFormFields({
         value={formValues.group}
         handleChange={useCallback(
           (val: number) => updateFormValues({ group: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         defaultObjectValue={prevData?.group || null}
         errors={error?.fields?.group}
@@ -102,7 +102,7 @@ export function EventFormFields({
         value={formValues.description}
         handleChange={useCallback(
           (val) => updateFormValues({ description: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         errors={error?.fields?.description}
       />
@@ -113,7 +113,7 @@ export function EventFormFields({
           value={formValues.startDate}
           onChange={useCallback(
             (val) => updateFormValues({ startDate: val }),
-            [updateFormValues]
+            [updateFormValues],
           )}
           errors={error?.fields?.start_date}
           required
@@ -126,7 +126,7 @@ export function EventFormFields({
           minDateTime={formValues.startDate || undefined}
           onChange={useCallback(
             (val) => updateFormValues({ endDate: val }),
-            [updateFormValues]
+            [updateFormValues],
           )}
           errors={error?.fields?.end_date}
           required
@@ -139,7 +139,7 @@ export function EventFormFields({
         value={formValues.location}
         handleChange={useCallback(
           (val) => updateFormValues({ location: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         errors={error?.fields?.location}
       />
@@ -150,7 +150,7 @@ export function EventFormFields({
         value={formValues.image}
         handleChange={useCallback(
           (val) => updateFormValues({ image: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         prevFileName={prevData?.image}
         errors={error?.fields?.image}
@@ -163,7 +163,7 @@ export function EventFormFields({
         value={formValues.formUrl}
         handleChange={useCallback(
           (val) => updateFormValues({ formUrl: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         errors={error?.fields?.form_url}
         type="url"
@@ -184,7 +184,7 @@ export function EventFormFields({
             value={formValues.startRegistration}
             onChange={useCallback(
               (val) => updateFormValues({ startRegistration: val }),
-              [updateFormValues]
+              [updateFormValues],
             )}
             errors={error?.fields?.start_registration}
             fullWidth
@@ -195,7 +195,7 @@ export function EventFormFields({
             value={formValues.endRegistration}
             onChange={useCallback(
               (val) => updateFormValues({ endRegistration: val }),
-              [updateFormValues]
+              [updateFormValues],
             )}
             errors={error?.fields?.end_registration}
             fullWidth
@@ -212,7 +212,7 @@ export function EventFormFields({
           value={formValues.maxParticipant}
           handleChange={useCallback(
             (val) => updateFormValues({ maxParticipant: val }),
-            [updateFormValues]
+            [updateFormValues],
           )}
           errors={error?.fields?.max_participant}
           disabled={!!formValues.formUrl}
@@ -225,7 +225,7 @@ export function EventFormFields({
         value={formValues.publicity}
         handleChange={useCallback(
           (val: 'Pub' | 'Mem') => updateFormValues({ publicity: val }),
-          [updateFormValues]
+          [updateFormValues],
         )}
         errors={error?.fields?.publicity}
         defaultValue="Pub"

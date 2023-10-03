@@ -7,7 +7,7 @@ import { Page } from '#shared/infra/pagination';
 
 export function useUpcomingEventsQuery(
   numberOfEvents: number,
-  options?: UseQueryOptions<Page<EventPreview>>
+  options?: UseQueryOptions<Page<EventPreview>>,
 ) {
   const now = new Date();
 

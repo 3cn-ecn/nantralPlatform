@@ -7,7 +7,7 @@ import { ApiError } from '#shared/infra/errors';
 
 export function usePostDetailsQuery(
   postId: number,
-  { onSuccess, ...options }: UseQueryOptions<Post> = {}
+  { onSuccess, ...options }: UseQueryOptions<Post> = {},
 ) {
   const { markAsSeen } = useMarkAsSeenMutation();
 

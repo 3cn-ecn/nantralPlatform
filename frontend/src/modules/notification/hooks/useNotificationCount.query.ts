@@ -9,7 +9,7 @@ import {
 
 export function useNotificationCountQuery(
   filters: Omit<NotificationCountQueryParams, 'page'>,
-  options?: UseQueryOptions<number>
+  options?: UseQueryOptions<number>,
 ) {
   const query = useQuery<number, ApiError>({
     queryKey: ['notifications', 'count', filters],

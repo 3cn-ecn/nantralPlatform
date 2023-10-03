@@ -19,7 +19,7 @@ export function useMarkAllAsSeenMutation() {
   const showToast = useToast();
 
   const markAllAsSeenMutation = useMutation<number, ApiError, void>(
-    markAllNotificationsAsSeenApi
+    markAllNotificationsAsSeenApi,
   );
 
   const markAllAsSeen = ({
@@ -38,11 +38,11 @@ export function useMarkAllAsSeenMutation() {
                 ...page,
                 results: page.results.map((e) => ({ ...e, seen: true })),
               })),
-            }
+            },
         );
         queryClient.setQueriesData(
           ['notifications', 'count', { seen: false }],
-          () => 0
+          () => 0,
         );
         // invalidate queries to force reload the queries we have modified
         queryClient.invalidateQueries(['notifications']);

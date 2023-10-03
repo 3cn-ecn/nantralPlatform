@@ -19,7 +19,7 @@ import { FlexRow } from '../FlexBox/FlexBox';
 // just a function to make typescript work
 function isMultiple<T, Multiple extends boolean>(
   objectValue: T | T[] | null,
-  multiple?: Multiple
+  multiple?: Multiple,
 ): objectValue is Array<T> {
   return !!multiple;
 }
@@ -43,7 +43,7 @@ type AutocompleteSearchFieldProps<
   DisableClearable extends boolean,
   ChipComponent extends React.ElementType,
   LabelPropName extends string,
-  ImagePropName extends string
+  ImagePropName extends string,
 > = Omit<
   AutocompleteProps<T, Multiple, DisableClearable, false, ChipComponent>,
   | 'error'
@@ -59,7 +59,7 @@ type AutocompleteSearchFieldProps<
   value: AutocompleteValue<number, Multiple, DisableClearable>;
   handleChange: (
     value: AutocompleteValue<number, Multiple, DisableClearable>,
-    objectValue: AutocompleteValue<T, Multiple, DisableClearable>
+    objectValue: AutocompleteValue<T, Multiple, DisableClearable>,
   ) => void;
   defaultObjectValue: DisableClearable extends true
     ? AutocompleteValue<T, Multiple, DisableClearable>
@@ -111,7 +111,7 @@ function AutocompleteSearchFieldComponent<
     }[keyof T],
   Multiple extends boolean = false,
   DisableClearable extends boolean = false,
-  ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent']
+  ChipComponent extends React.ElementType = ChipTypeMap['defaultComponent'],
 >({
   value,
   handleChange,
@@ -161,7 +161,7 @@ function AutocompleteSearchFieldComponent<
       (!isMultiple(objectValue, multiple) && isNil(objectValue))
     ) {
       setObjectValue(
-        defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>
+        defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>,
       );
     }
   }, [defaultObjectValue, objectValue, multiple]);
@@ -182,7 +182,7 @@ function AutocompleteSearchFieldComponent<
     (
       event: React.SyntheticEvent,
       inputValue: string,
-      reason: AutocompleteInputChangeReason
+      reason: AutocompleteInputChangeReason,
     ): void => {
       if (reason !== 'input' || !inputValue) return;
       setIsLoading(true);
@@ -191,18 +191,18 @@ function AutocompleteSearchFieldComponent<
           setOptions(
             isMultiple(objectValue, multiple)
               ? uniqBy(data.concat(...objectValue), (obj) => obj.id)
-              : data
+              : data,
           );
           setIsLoading(false);
         })
         .catch((err) => console.error(err));
     },
-    300
+    300,
   );
 
   const updateValue = (
     event: SyntheticEvent,
-    newObjectValue: AutocompleteValue<T, Multiple, DisableClearable>
+    newObjectValue: AutocompleteValue<T, Multiple, DisableClearable>,
   ) => {
     setObjectValue(newObjectValue);
     handleChange(
@@ -217,7 +217,7 @@ function AutocompleteSearchFieldComponent<
             Multiple,
             DisableClearable
           >),
-      newObjectValue
+      newObjectValue,
     );
   };
 
@@ -290,5 +290,5 @@ function AutocompleteSearchFieldComponent<
  * Remember: never use 'as' in general.
  */
 export const AutocompleteSearchField = memo(
-  AutocompleteSearchFieldComponent
+  AutocompleteSearchFieldComponent,
 ) as typeof AutocompleteSearchFieldComponent;

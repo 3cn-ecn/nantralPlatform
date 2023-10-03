@@ -25,7 +25,7 @@ export type EventListQueryParams = {
 
 export async function getEventListApi(
   params: EventListQueryParams = {},
-  signal?: GenericAbortSignal
+  signal?: GenericAbortSignal,
 ): Promise<Page<EventPreview>> {
   const { data } = await axios
     .get<PageDTO<EventPreviewDTO>>('/api/event/event/', {

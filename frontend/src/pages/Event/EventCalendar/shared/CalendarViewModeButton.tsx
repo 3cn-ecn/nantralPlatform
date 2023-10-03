@@ -18,7 +18,7 @@ import { CalendarViewMode } from '../types';
 type CalendarViewModeButtonProps = {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
   updateFilters: (
-    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>
+    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
   ) => void;
   viewMode: CalendarViewMode;
   size?: 'small' | 'medium' | 'large';

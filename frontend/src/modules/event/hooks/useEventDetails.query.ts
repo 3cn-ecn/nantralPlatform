@@ -7,7 +7,7 @@ import { ApiError } from '#shared/infra/errors';
 
 export function useEventDetailsQuery(
   eventId: number,
-  { onSuccess, ...options }: UseQueryOptions<Event> = {}
+  { onSuccess, ...options }: UseQueryOptions<Event> = {},
 ) {
   const { markAsSeen } = useMarkAsSeenMutation();
 

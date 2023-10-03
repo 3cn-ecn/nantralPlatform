@@ -17,7 +17,7 @@ export type GetGroupListApiParams = {
 };
 
 export async function getGroupListApi(
-  options: GetGroupListApiParams
+  options: GetGroupListApiParams,
 ): Promise<Page<GroupPreview>> {
   const { data } = await axios.get<PageDTO<GroupPreviewDTO>>(
     '/api/group/group/',
@@ -31,7 +31,7 @@ export async function getGroupListApi(
         page: options.page,
         page_size: options.pageSize,
       },
-    }
+    },
   );
 
   return adaptPage(data, adaptGroupPreview);

@@ -107,15 +107,15 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
             .filter((e) =>
               areIntervalsOverlapping(
                 { start: startOfDay(date), end: endOfDay(date) },
-                { start: e.startDate, end: e.endDate }
-              )
+                { start: e.startDate, end: e.endDate },
+              ),
             )
             .map((event) =>
               eventsQuery.isLoading ? (
                 <CalendarEventBlockSkeleton key={event.id} />
               ) : (
                 <CalendarEventBlock key={event.id} eventItem={event} />
-              )
+              ),
             )}
         </Box>
       ))}

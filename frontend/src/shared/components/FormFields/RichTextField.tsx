@@ -8,7 +8,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { TextField } from './TextField';
 
 const CKEditorComponent = lazy(
-  () => import('#shared/ckeditor/CKEditor.component')
+  () => import('#shared/ckeditor/CKEditor.component'),
 );
 
 type RichTextFieldProps = {

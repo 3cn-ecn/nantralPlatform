@@ -9,7 +9,7 @@ import { Page } from '#shared/infra/pagination';
 
 export function useLastPostsQuery(
   numberOfPosts: number,
-  options?: UseQueryOptions<Page<PostPreview>>
+  options?: UseQueryOptions<Page<PostPreview>>,
 ) {
   const [page, setPage] = useState(1);
 

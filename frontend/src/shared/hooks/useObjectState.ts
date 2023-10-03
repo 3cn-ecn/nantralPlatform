@@ -14,13 +14,13 @@ import { Dispatch, useReducer } from 'react';
  * @returns An array with the getter and the setter
  */
 export function useObjectState<ObjectType extends object>(
-  initializer: ObjectType
+  initializer: ObjectType,
 ): [ObjectType, Dispatch<Partial<ObjectType>>] {
   return useReducer(
     (prevObj: ObjectType, newObj: Partial<ObjectType>): ObjectType => ({
       ...prevObj,
       ...newObj,
     }),
-    initializer
+    initializer,
   );
 }

@@ -27,7 +27,7 @@ export function ToastProvider({ children }: PropsWithChildren) {
       setToast(toast);
       setOpen(true);
     },
-    [setToast, setOpen]
+    [setToast, setOpen],
   );
 
   const handleClose = () => {

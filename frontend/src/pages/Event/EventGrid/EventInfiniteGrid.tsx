@@ -29,7 +29,7 @@ export function EventInfiniteGrid({
 
   const eventsQuery = useInfiniteEventListQuery(
     { ...filters, pageSize: eventsPerPage },
-    { enabled: !disableLoading }
+    { enabled: !disableLoading },
   );
 
   function loadMore() {
@@ -84,7 +84,7 @@ export function EventInfiniteGrid({
             <Grid key={event.id} xs={12} sm={6} md={4} lg={3} item>
               <EventCard event={event} />
             </Grid>
-          ))
+          )),
         )}
         {eventsQuery.isFetchingNextPage &&
           arrayRange(eventsPerPage).map((_, index) => (

@@ -26,7 +26,7 @@ import { StaticMultipleDaysPicker } from './DatePickers/StaticMultipleDaysPicker
 type CalendarDateSelectorProps = {
   filters: EventListQueryParams & { fromDate: Date; toDate: Date };
   updateFilters: (
-    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>
+    newFilter: Partial<EventListQueryParams & { fromDate: Date; toDate: Date }>,
   ) => void;
   viewMode: CalendarViewMode;
 };
@@ -48,7 +48,7 @@ export function CalendarDateSelector({
             dateStyle: 'long',
           })
       : upperFirst(
-          formatDate(filters.fromDate, { month: 'long', year: 'numeric' })
+          formatDate(filters.fromDate, { month: 'long', year: 'numeric' }),
         );
 
   const nbOfDays =
