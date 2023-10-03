@@ -24,7 +24,7 @@ jobs:
         with:
           node-version-file: email-templates-generator/.nvmrc
           cache: npm
-          cache-dependency-path: email-templates-generator/
+          cache-dependency-path: email-templates-generator/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -34,6 +34,3 @@ jobs:
 
       - name: Lint test
         run: npm run lint
-
-      - name: Build emails
-        run: npm run build

@@ -8,6 +8,7 @@ on:
       - backend/**
       - deployment/**
       - frontend/**
+      - email-templates-generator/**
       - .github/workflows/deploy-server.yml
 
 jobs:
@@ -17,6 +18,7 @@ jobs:
     outputs:
       backend: ${{ steps.filter.outputs.backend}}
       frontend: ${{ steps.filter.outputs.frontend }}
+      email-templates: ${{ steps.filter.outputs.email-templates }}
     steps:
       - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
@@ -28,12 +30,28 @@ jobs:
               - 'backend/**'
             frontend:
               - 'frontend/**'
+            email-templates:
+              - 'email-templates-generator/**'
 
   frontend-quality:
     name: Test front end quality
     needs: changes
     if: ${{ needs.changes.outputs.frontend == 'true' }}
     uses: ./.github/workflows/quality-frontend.yml
+    secrets: inherit
+
+  backend-quality:
+    name: Test Back End Quality
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    uses: ./.github/workflows/quality-backend.yml
+    secrets: inherit
+
+  email-templates-quality:
+    name: Test Email Templates Quality
+    needs: changes
+    if: ${{ needs.changes.outputs.email-templates == 'true' }}
+    uses: ./.github/workflows/quality-email-templates.yml
     secrets: inherit
 
   frontend-build:
@@ -53,7 +71,7 @@ jobs:
         with:
           node-version-file: frontend/.nvmrc
           cache: npm
-          cache-dependency-path: frontend/
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         run: npm ci --omit=dev
@@ -72,6 +90,7 @@ jobs:
 
   email-templates-build:
     name: Build email templates
+    needs: email-templates-quality
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -86,7 +105,7 @@ jobs:
         with:
           node-version-file: email-templates-generator/.nvmrc
           cache: npm
-          cache-dependency-path: email-templates-generator/
+          cache-dependency-path: email-templates-generator/package-lock.json
 
       - name: Install dependencies
         run: npm ci --omit=dev
@@ -103,33 +122,19 @@ jobs:
           source: "backend/templates/emails/*"
           target: "nantralPlatform"
 
-  backend-quality:
-    name: Test Back End Quality
-    needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
-    uses: ./.github/workflows/quality-backend.yml
-    secrets: inherit
-
-  deploy:
-    name: Deploy on VPS
-    needs: [frontend-build, email-templates-build, backend-quality]
-    if: ${{ always() }}
+  backup-database:
+    name: Create a backup of the database
     runs-on: ubuntu-latest
-
     steps:
-      - name: Pull latest commit
-        uses: actions/checkout@v3
-
       - name: Backup before deploy
-        uses: appleboy/ssh-action@v0.1.4
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.INSTANCE_ADDRESS }}
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
-            cd nantralPlatform
-            cd deployment/scripts
-            git pull
+            cd nantralPlatform/deployment/scripts
+            sudo apt-get install python3-psycopg2 -y
             python3 -m venv env
             source env/bin/activate
             pip install -r requirements.txt
@@ -137,6 +142,13 @@ jobs:
             deactivate
             rm -r env
 
+  deploy:
+    name: Deploy on VPS
+    needs:
+      [frontend-build, email-templates-build, backend-quality, backup-database]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to the VPS
         uses: appleboy/ssh-action@master
         with:
