@@ -1,0 +1,41 @@
+name: Build Frontend
+
+on:
+  workflow_call:
+    inputs:
+      target-directory:
+        required: true
+        type: string
+
+jobs:
+  frontend-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: frontend/.nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --omit=dev
+
+      - name: Build React
+        run: npm run build
+
+      - name: Upload files to the VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.INSTANCE_ADDRESS }}
+          username: "ubuntu"
+          key: ${{ secrets.SSH_KEY_DEPLOY }}
+          source: "backend/static/front/*"
+          target: ${{ inputs.target-directory }}
