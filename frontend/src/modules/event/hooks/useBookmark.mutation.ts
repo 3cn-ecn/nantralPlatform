@@ -39,7 +39,7 @@ export function useBookmarkMutation(eventId: number) {
     );
     queryClient.setQueriesData(
       {
-        queryKey: 'events',
+        queryKey: ['events'],
         predicate: (query) => query.queryKey[1] !== 'infiniteList',
       },
       (data?: Page<Event>) =>

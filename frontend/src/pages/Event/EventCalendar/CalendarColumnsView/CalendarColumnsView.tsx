@@ -46,10 +46,9 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
       />
     );
 
-  const events =
-    eventsQuery.isLoading || eventsQuery.isIdle
-      ? createBlankEvents(filters.fromDate, filters.toDate)
-      : eventsQuery.data.results;
+  const events = eventsQuery.isLoading
+    ? createBlankEvents(filters.fromDate, filters.toDate)
+    : eventsQuery.data.results;
 
   const hours = eachHourOfInterval(
     { start: startOfToday(), end: endOfToday() },
@@ -125,7 +124,7 @@ export function CalendarColumnsView({ filters }: CalendarColumnsViewProps) {
               <Divider key={formatISO(h, { representation: 'time' })} />
             ))}
             {col.events.map((item) =>
-              eventsQuery.isLoading || eventsQuery.isIdle ? (
+              eventsQuery.isLoading ? (
                 <CalendarEventBlockSkeleton
                   eventItem={item}
                   key={item.data.id}

@@ -33,7 +33,7 @@ export function EventParticipantsModal({
   const { t } = useTranslation();
   const participantsQuery = useParticipantList(event.id);
 
-  if (participantsQuery.isLoading || participantsQuery.isIdle) {
+  if (participantsQuery.isLoading) {
     return (
       <ResponsiveDialog onClose={onClose} maxWidth="xs">
         <ResponsiveDialogHeader onClose={onClose}>

@@ -55,8 +55,8 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
     mutate(values, {
       onSuccess: (data) => {
         // if success, reset the post data in all queries
-        queryClient.invalidateQueries('posts');
-        queryClient.invalidateQueries('notifications');
+        queryClient.invalidateQueries(['posts']);
+        queryClient.invalidateQueries(['notifications']);
         // close the modal
         onCreated(data.id);
       },

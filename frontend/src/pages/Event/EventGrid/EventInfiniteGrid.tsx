@@ -46,7 +46,7 @@ export function EventInfiniteGrid({
     return () => window.removeEventListener('scroll', loadMore);
   });
 
-  if (eventsQuery.isLoading || eventsQuery.isIdle) {
+  if (eventsQuery.isLoading) {
     return (
       <Grid container spacing={1}>
         {arrayRange(eventsPerPage).map((_, index) => (

@@ -40,10 +40,9 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
       />
     );
 
-  const events =
-    eventsQuery.isLoading || eventsQuery.isIdle
-      ? createBlankEvents(filters.fromDate, filters.toDate)
-      : eventsQuery.data.results;
+  const events = eventsQuery.isLoading
+    ? createBlankEvents(filters.fromDate, filters.toDate)
+    : eventsQuery.data.results;
 
   const weekDays = eachDayOfInterval({
     start: startOfWeek(filters.fromDate),
@@ -112,7 +111,7 @@ export function CalendarGridView({ filters }: CalendarGridViewProps) {
               )
             )
             .map((event) =>
-              eventsQuery.isLoading || eventsQuery.isIdle ? (
+              eventsQuery.isLoading ? (
                 <CalendarEventBlockSkeleton key={event.id} />
               ) : (
                 <CalendarEventBlock key={event.id} eventItem={event} />

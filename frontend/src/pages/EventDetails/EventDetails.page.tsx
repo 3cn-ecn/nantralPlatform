@@ -15,7 +15,7 @@ import { TopImage } from './components/TopImage';
 
 export default function EventDetailsPage() {
   const { id: eventId } = useParams();
-  // Using suspense: true allows to skip isLoading, isIdle, isError states: they
+  // Using suspense: true allows to skip isLoading, isError states: they
   // are catch by the nearest <Suspense> boundary, in this case the one
   // from <PageTemplate />.
   // We add useErrorBoundary: false to remove the isError state from suspense

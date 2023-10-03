@@ -68,9 +68,9 @@ export function EditEventModalContent({
       {
         onSuccess: () => {
           // if success, reset the event data in all queries
-          queryClient.invalidateQueries('events');
+          queryClient.invalidateQueries(['events']);
           queryClient.invalidateQueries(['event', { id: event.id }]);
-          queryClient.invalidateQueries('notifications');
+          queryClient.invalidateQueries(['notifications']);
           // close the modal
           onClose();
         },
