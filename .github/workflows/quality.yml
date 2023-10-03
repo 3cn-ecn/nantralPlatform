@@ -33,7 +33,7 @@ jobs:
 
   backend:
     name: Back End Quality
-    needs: [changes, email_templates]
+    needs: changes
     if: ${{ needs.changes.outputs.backend == 'true' }}
     uses: ./.github/workflows/quality-backend.yml
     secrets: inherit
