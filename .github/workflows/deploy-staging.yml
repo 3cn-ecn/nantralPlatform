@@ -1,9 +1,7 @@
 name: Deploy Staging
 
 on:
-  push:
-    branches:
-      - staging
+  workflow_dispatch:
 
 jobs:
   frontend-quality:
@@ -123,8 +121,8 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             cd nantralPlatform-staging/deployement
-            git fetch origin staging
-            git switch staging
-            git reset --hard origin/staging
+            git fetch origin ${{ github.ref_name }}:${{ github.ref_name }}
+            git switch ${{ github.ref_name }}
+            git reset --hard origin/${{ github.ref_name }}
             sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml build backend-staging
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
