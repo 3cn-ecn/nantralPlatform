@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { useToast } from '#shared/context/Toast.context';
 import { ApiError } from '#shared/infra/errors';

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { UseQueryOptions, useQuery } from 'react-query';
+
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import {
   EventListQueryParams,

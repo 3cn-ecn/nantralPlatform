@@ -1,4 +1,4 @@
-import { UseQueryOptions, useQuery } from 'react-query';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { useMarkAsSeenMutation } from '#modules/notification/hooks/useMarkAsSeen.mutation';
 import { getPostDetailsApi } from '#modules/post/api/getPostDetails.api';

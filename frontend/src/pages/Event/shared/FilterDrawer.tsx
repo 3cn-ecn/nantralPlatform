@@ -1,5 +1,4 @@
 import { ReactNode, useCallback } from 'react';
-import { useQueryClient } from 'react-query';
 
 import {
   CheckCircle as CheckCircleIcon,
@@ -22,6 +21,7 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 import { isSameDay } from 'date-fns';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';

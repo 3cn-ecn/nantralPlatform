@@ -1,4 +1,4 @@
-import { UseQueryOptions, useQuery } from 'react-query';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { getEventListApi } from '#modules/event/api/getEventList.api';
 import { EventPreview } from '#modules/event/event.type';

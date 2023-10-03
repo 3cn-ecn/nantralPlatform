@@ -6,7 +6,6 @@ import {
   SetStateAction,
   useState,
 } from 'react';
-import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 
 import {
@@ -37,6 +36,7 @@ import {
   Typography,
 } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';

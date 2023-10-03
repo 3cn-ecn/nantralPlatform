@@ -1,4 +1,7 @@
-import { UseInfiniteQueryOptions, useInfiniteQuery } from 'react-query';
+import {
+  UseInfiniteQueryOptions,
+  useInfiniteQuery,
+} from '@tanstack/react-query';
 
 import {
   EventListQueryParams,

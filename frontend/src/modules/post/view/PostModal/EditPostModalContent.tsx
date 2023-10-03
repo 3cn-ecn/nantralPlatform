@@ -1,8 +1,8 @@
 import { FormEvent } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import {
   UpdatePostApiVariables,

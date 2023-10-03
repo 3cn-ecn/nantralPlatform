@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { UseQueryOptions, useQuery } from 'react-query';
+
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { ApiError } from '#shared/infra/errors';
 import { Page } from '#shared/infra/pagination';

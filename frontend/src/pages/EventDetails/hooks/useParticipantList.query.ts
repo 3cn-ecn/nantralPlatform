@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { UseQueryOptions, useQuery } from 'react-query';
+
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 import { getParticipantListApi } from '#modules/event/api/getParticipantList.api';
 import { StudentPreview } from '#modules/student/student.types';

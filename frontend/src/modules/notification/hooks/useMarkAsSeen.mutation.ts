@@ -3,7 +3,7 @@ import {
   UseMutationOptions,
   useMutation,
   useQueryClient,
-} from 'react-query';
+} from '@tanstack/react-query';
 
 import { useToast } from '#shared/context/Toast.context';
 import { ApiError } from '#shared/infra/errors';
