@@ -32,13 +32,19 @@ install:
 		$(PIPENV) run django createsuperuser --noinput --username admin --email admin@ec-nantes.fr
 	cd frontend && \
 		npm ci
+	cd email-templates-generator && \
+		npm ci && \
+		npm run build
 
 
 # Update after pull
 .PHONY: update
 update:
 	cd frontend && \
-		npm ci
+		npm i
+	cd email-templates-generator && \
+		npm i && \
+		npm run build
 	cd backend && \
 		$(PIPENV) sync --dev && \
 		$(PIPENV) run migrate
@@ -51,6 +57,8 @@ test:
 		$(PIPENV) run lint && \
 		$(PIPENV) run test
 	cd frontend && \
+		npm run test
+	cd email-templates-generator && \
 		npm run test
 
 
