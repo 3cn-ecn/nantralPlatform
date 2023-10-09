@@ -34,8 +34,8 @@ const GenericTemplate = ({ children }: Props) => (
         <Text style={footerText}>
           Cet email a été envoyé automatiquement par{' '}
           <Link
-            href="https://www.nantral-platform.fr"
-            rel="noopener noreferrer"
+            href="https://nantral-platform.fr"
+            rel="noopener"
             style={footerLink}
           >
             Nantral Platform
@@ -45,7 +45,7 @@ const GenericTemplate = ({ children }: Props) => (
           contacter de préférence via{' '}
           <Link
             href="https://www.facebook.com/nantral.platform.ecn"
-            rel="noopener noreferrer"
+            rel="noopener"
             style={footerLink}
           >
             notre page Facebook
