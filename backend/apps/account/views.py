@@ -12,7 +12,6 @@ from django.contrib.auth.views import PasswordResetConfirmView
 from django.contrib.sites.shortcuts import get_current_site
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
@@ -22,6 +21,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, TemplateView
 
 from apps.student.models import Student
+from apps.utils.send_email import send_email
 
 from .emailAuthBackend import EmailBackend
 from .forms import (
@@ -239,21 +239,28 @@ class ForgottenPassView(FormView):
         try:
             user = User.objects.get(email=form.cleaned_data["email"])
             if user is not None:
-                subject = (
-                    "[Nantral Platform] Réinitialisation de votre mot de passe"
-                )
-                current_site = get_current_site(self.request)
-                message = render_to_string(
-                    "account/mail/password_request.html",
-                    {
-                        "user": user,
-                        "domain": current_site.domain,
+                base_url = f"https://{get_current_site(self.request).domain}"
+                reset_path = reverse(
+                    "account:reset_pass",
+                    kwargs={
                         "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
-                        # method will generate a hash value with user data
                         "token": account_activation_token.make_token(user),
                     },
                 )
-                user.email_user(subject, message, html_message=message)
+                update_path = reverse(
+                    "student:update", kwargs={"pk": user.student.pk}
+                )
+                send_email(
+                    subject="Réinitialisation de votre mot de passe",
+                    to=user.email,
+                    template_name="reset-password",
+                    context={
+                        "first_name": user.first_name,
+                        "email": user.email,
+                        "reset_password_link": f"{base_url}{reset_path}",
+                        "update_password_link": f"{base_url}{update_path}",
+                    },
+                )
         except User.DoesNotExist:
             pass
         messages.success(
