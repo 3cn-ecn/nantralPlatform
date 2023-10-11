@@ -1,10 +1,10 @@
 ---
-sidebar_position: 99
+sidebar_position: 4
 ---
 
 # Administrator Guides
 
-More advanced guides for *Nantral Platform* administrators, to deal with
+More advanced guides for _Nantral Platform_ administrators, to deal with
 the server.
 
 import DocCardList from '@theme/DocCardList';
