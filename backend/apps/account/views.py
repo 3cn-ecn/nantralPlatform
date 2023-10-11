@@ -9,10 +9,8 @@ from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetConfirmView
-from django.contrib.sites.shortcuts import get_current_site
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
@@ -22,6 +20,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, TemplateView
 
 from apps.student.models import Student
+from apps.utils.send_email import send_email
 
 from .emailAuthBackend import EmailBackend
 from .forms import (
@@ -236,29 +235,38 @@ class ForgottenPassView(FormView):
     template_name = "account/forgotten_pass.html"
 
     def form_valid(self, form):
-        try:
-            user = User.objects.get(email=form.cleaned_data["email"])
-            if user is not None:
-                subject = (
-                    "[Nantral Platform] Réinitialisation de votre mot de passe"
-                )
-                current_site = get_current_site(self.request)
-                message = render_to_string(
-                    "account/mail/password_request.html",
-                    {
-                        "user": user,
-                        "domain": current_site.domain,
-                        "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
-                        # method will generate a hash value with user data
-                        "token": account_activation_token.make_token(user),
-                    },
-                )
-                user.email_user(subject, message, html_message=message)
-        except User.DoesNotExist:
-            pass
+        user = User.objects.filter(email=form.cleaned_data["email"]).first()
+        if user is not None:
+            reset_path = reverse(
+                "account:reset_pass",
+                kwargs={
+                    "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
+                    "token": account_activation_token.make_token(user),
+                },
+            )
+            update_path = reverse(
+                "student:update", kwargs={"pk": user.student.pk}
+            )
+            send_email(
+                subject="Réinitialisation de votre mot de passe",
+                to=user.email,
+                template_name="reset-password",
+                context={
+                    "first_name": user.first_name,
+                    "email": user.email,
+                    "reset_password_link": self.request.build_absolute_uri(
+                        reset_path
+                    ),
+                    "update_password_link": self.request.build_absolute_uri(
+                        update_path
+                    ),
+                },
+            )
         messages.success(
             self.request,
-            "Un email de récuperation a été envoyé si cette adresse existe.",
+            "Un email vous a été envoyé. Si vous ne recevez rien "
+            "dans les 5 prochaines minutes, cela signifie qu'aucun compte "
+            "n'est enregistré avec cette adresse email.",
         )
         return redirect("account:login")
 

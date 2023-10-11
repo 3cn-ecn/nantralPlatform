@@ -47,7 +47,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 ALLOWED_HOSTS = ["django", "localhost"]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "mailpit"
+EMAIL_PORT = 1025
 
 
 # Cache config

@@ -56,7 +56,6 @@ def send_email_confirmation(
     temporary_access: bool = False,
     send_to: str = None,
 ) -> None:
-    domain = get_current_site(request).domain
     path = reverse(
         "account:confirm",
         kwargs={
@@ -66,7 +65,7 @@ def send_email_confirmation(
     )
     context = {
         "first_name": user.first_name,
-        "validation_link": f"https://{domain}{path}",
+        "validation_link": request.build_absolute_uri(path),
     }
 
     send_email(

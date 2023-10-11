@@ -1,19 +1,5 @@
-import { CSSProperties } from 'react';
+import RedLink from './red-link';
 
-import { Link } from '@react-email/components';
-
-const Link3CN = () => (
-  <Link
-    href="https://github.com/3cn-ecn"
-    rel="noopener noreferrer"
-    style={link}
-  >
-    3CN
-  </Link>
-);
+const Link3CN = () => <RedLink href="https://github.com/3cn-ecn">3CN</RedLink>;
 
 export default Link3CN;
-
-const link: CSSProperties = {
-  color: '#DC3545',
-};

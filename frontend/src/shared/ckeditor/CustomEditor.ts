@@ -1,15 +1,12 @@
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat/';
-import { Bold } from '@ckeditor/ckeditor5-basic-styles/';
-import { Italic } from '@ckeditor/ckeditor5-basic-styles/';
-import { Strikethrough } from '@ckeditor/ckeditor5-basic-styles/';
+import { Bold, Italic, Strikethrough } from '@ckeditor/ckeditor5-basic-styles/';
 import { BlockQuote } from '@ckeditor/ckeditor5-block-quote/';
 import { ClassicEditor } from '@ckeditor/ckeditor5-editor-classic/';
 import { Essentials } from '@ckeditor/ckeditor5-essentials/';
 import { Heading } from '@ckeditor/ckeditor5-heading/';
 import { HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line/';
 import { Indent } from '@ckeditor/ckeditor5-indent/';
-import { AutoLink } from '@ckeditor/ckeditor5-link/';
-import { Link } from '@ckeditor/ckeditor5-link/';
+import { AutoLink, Link } from '@ckeditor/ckeditor5-link/';
 import { List } from '@ckeditor/ckeditor5-list/';
 import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed/';
 import { Mention } from '@ckeditor/ckeditor5-mention/';
@@ -73,7 +70,7 @@ CustomEditor.defaultConfig = {
         label: 'Ouvrir dans un nouvel onglet',
         attributes: {
           target: '_blank',
-          rel: 'noopener noreferrer',
+          rel: 'noopener',
         },
       },
     },

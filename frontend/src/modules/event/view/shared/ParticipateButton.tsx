@@ -143,7 +143,7 @@ export function ParticipateButton({ event, sx }: ParticipateButtonProps) {
             ? {
                 href: event.formUrl,
                 target: '_blank',
-                rel: 'noopener noreferrer',
+                rel: 'noopener',
               }
             : {})}
         >

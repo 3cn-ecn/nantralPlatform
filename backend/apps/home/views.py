@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -33,14 +32,15 @@ class SuggestionView(LoginRequiredMixin, FormView):
     form_class = SuggestionForm
 
     def form_valid(self, form):
+        student_url = self.request.build_absolute_uri(
+            self.request.user.student.get_absolute_url()
+        )
         create_issue(
             title=form.cleaned_data["title"],
             label=form.cleaned_data["suggestion_or_bug"],
             body=(
-                f"{form.cleaned_data['description']} <br/> "
-                "[Clique pour découvrir qui propose ça.]"
-                f"(https://{get_current_site(self.request)}"
-                f"{self.request.user.student.get_absolute_url()})"
+                f"{form.cleaned_data['description']} <br/><br />"
+                f"[Voir l'auteur sur Nantral Platform]({student_url})"
             ),
         )
         messages.success(
