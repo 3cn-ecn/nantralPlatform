@@ -9,7 +9,6 @@ from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetConfirmView
-from django.contrib.sites.shortcuts import get_current_site
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -238,15 +237,14 @@ class ForgottenPassView(FormView):
     def form_valid(self, form):
         user = User.objects.filter(email=form.cleaned_data["email"]).first()
         if user is not None:
-            base_url = f"https://{get_current_site(self.request).domain}"
-            reset_link = base_url + reverse(
+            reset_path = reverse(
                 "account:reset_pass",
                 kwargs={
                     "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
                     "token": account_activation_token.make_token(user),
                 },
             )
-            update_link = base_url + reverse(
+            update_path = reverse(
                 "student:update", kwargs={"pk": user.student.pk}
             )
             send_email(
@@ -256,8 +254,12 @@ class ForgottenPassView(FormView):
                 context={
                     "first_name": user.first_name,
                     "email": user.email,
-                    "reset_password_link": reset_link,
-                    "update_password_link": update_link,
+                    "reset_password_link": self.request.build_absolute_uri(
+                        reset_path
+                    ),
+                    "update_password_link": self.request.build_absolute_uri(
+                        update_path
+                    ),
                 },
             )
         messages.success(
