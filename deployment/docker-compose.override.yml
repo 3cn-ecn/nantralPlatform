@@ -2,16 +2,17 @@ version: "2.1"
 
 services:
   database:
+    env_file: ../backend/config/settings/.env
     ports:
       - "5432:5432"
-    env_file: ../backend/config/settings/.env
 
   backend:
     env_file: ../backend/config/settings/.env
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.docker
 
-  # External dependencies
+  redis:
+    restart: no
 
   nginx:
     build: ./containers/nginx_local
@@ -42,3 +43,9 @@ services:
       - CELERY_BROKER=redis://redis:6379/0
       - CELERY_BACKEND=redis://redis:6379/0
       - DJANGO_SETTINGS_MODULE=config.settings.docker
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - 1025:1025
+      - 8025:8025
