@@ -1,54 +1,47 @@
 ---
-last_update:
-  date: 2023-02-17 16:11:25 +0100
-  author: Alexis Delage
 sidebar_position: 3
 ---
 
 # Staging server
 
-Available at [dev.nantral-platform.fr](https://dev.nantral-platform.fr).
+🌐 Address: [https://dev.nantral-platform.fr](https://dev.nantral-platform.fr)
 
-## 1. Purpose
+## 1. Why a staging server?
 
-The purpose of this staging server is to test modifications (and especially database modifications) before adding them to the main server. This is organised that way:
+The purpose of the staging server is to test dangerous modifications before
+deploying them on the production server.
 
-| Github branch | Address                                                    | Purpose                  |
-| :------------ | :----------------------------------------------------------| :----------------------- |
-| master        | [www.nantral-platform.fr](https://www.nantral-platform.fr) | The main site for users  |
-| staging       | [dev.nantral-platform.fr](https://dev.nantral-platform.fr) | The dev site for testing |
+### 🤔 When should I use the staging server?
+
+- When you update the database (for example creating new migrations or updating
+  the `models.py` files)
+- When you add new dependencies to the project (`Pipfile` or `package.json`)
+- More generally, when you are not sure about your code and want to test it!
+
+### 🤔 What can I test on the staging server?
+
+You can test:
+
+- all modifications of the backend (Python code)
+- all modifications of the frontend (Javascript code)
+
+You **_cannot_** test:
+
+- the documentation website
+- the periodic celery tasks (scheduled tasks)
+- the docker configuration (`docker-compose.yml` and `Dockerfile`)
+- the deployment scripts (database backup, deployment, etc.)
+- the github actions
 
 ## 2. How to test my code on the staging server
 
-If you want to test your code on the staging server, you just have to create a pull request on Github, and select the branch `staging` instead of `master` to merge in.
+_Prerequisite: your code should be pushed on GitHub on a specific branch.
+For our example, let's call this branch `my-feature-branch`._
 
-Then github automatically deploys your code on the staging server, the same way it does for the main server.
+1. In GitHub, on the Nantral Platform repository, go to the _Actions_ tab and
+   then select the _Deploy Staging_ action:
+   [https://github.com/3cn-ecn/nantralPlatform/actions/workflows/deploy-staging.yml](https://github.com/3cn-ecn/nantralPlatform/actions/workflows/deploy-staging.yml)
+2. Click the _Run workflow_ button and select your branch (`my-feature-branch`)
+3. Click the button _Run workflow_ to confirm and start the deployment!
 
-Note that each time you deploy a new version on the staging server, the database of the staging server is deleted: it is replaced by a **copy** of the **database** from the main server. That way, you can test your modifications to check if your code is compatible with the main server database and will not erased some part of this database.
-
-## 3. How to remove modifications on the staging server
-
-Sometimes, you might want to remove the modifications you have pushed on the staging server (but not on the main server). You have two ways to do this:
-
-1. Create new commits which revert your previous commits, and merge them on the staging branch
-2. If you have way too much commits, you may prefer to reset the staging branch (see below).
-
-### How to reset the staging branch (advanced)
-
-You have to do it directly on the production server, so please be carefull!
-
-- Connect to the server via `ssh`
-- Go to the staging directory: `cd nantralPlatform-staging/`
-- Update the master branch: `git checkout master` then `git pull`
-- And then reset the staging branch on the server:
-  - `git checkout staging` then
-  - `git reset --hard master`
-
-Then on your own computer:
-
-- Update the master branch: `git checkout master` then `git pull`
-- And then reset the staging branch again on your computer:
-  - `git checkout staging` then
-  - `git reset --hard master`
-- Finally send the reset operation to the github repository: `git push --force`
-- Then you can go to see the _Actions_ page on Github: it should redeploys automatically the staging server
+![](./staging-server.gif)
