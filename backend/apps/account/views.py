@@ -236,36 +236,35 @@ class ForgottenPassView(FormView):
     template_name = "account/forgotten_pass.html"
 
     def form_valid(self, form):
-        try:
-            user = User.objects.get(email=form.cleaned_data["email"])
-            if user is not None:
-                base_url = f"https://{get_current_site(self.request).domain}"
-                reset_path = reverse(
-                    "account:reset_pass",
-                    kwargs={
-                        "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
-                        "token": account_activation_token.make_token(user),
-                    },
-                )
-                update_path = reverse(
-                    "student:update", kwargs={"pk": user.student.pk}
-                )
-                send_email(
-                    subject="Réinitialisation de votre mot de passe",
-                    to=user.email,
-                    template_name="reset-password",
-                    context={
-                        "first_name": user.first_name,
-                        "email": user.email,
-                        "reset_password_link": f"{base_url}{reset_path}",
-                        "update_password_link": f"{base_url}{update_path}",
-                    },
-                )
-        except User.DoesNotExist:
-            pass
+        user = User.objects.filter(email=form.cleaned_data["email"]).first()
+        if user is not None:
+            base_url = f"https://{get_current_site(self.request).domain}"
+            reset_link = base_url + reverse(
+                "account:reset_pass",
+                kwargs={
+                    "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
+                    "token": account_activation_token.make_token(user),
+                },
+            )
+            update_link = base_url + reverse(
+                "student:update", kwargs={"pk": user.student.pk}
+            )
+            send_email(
+                subject="Réinitialisation de votre mot de passe",
+                to=user.email,
+                template_name="reset-password",
+                context={
+                    "first_name": user.first_name,
+                    "email": user.email,
+                    "reset_password_link": reset_link,
+                    "update_password_link": update_link,
+                },
+            )
         messages.success(
             self.request,
-            "Un email de récuperation a été envoyé si cette adresse existe.",
+            "Un email vous a été envoyé. Si vous ne recevez rien "
+            "dans les 5 prochaines minutes, cela signifie qu'aucun compte "
+            "n'est enregistré avec cette adresse email.",
         )
         return redirect("account:login")
 
