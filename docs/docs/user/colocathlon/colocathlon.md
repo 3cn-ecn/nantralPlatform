@@ -1,13 +1,7 @@
 ---
-last_update:
-  date: 2023-02-09 10:22:46 +0100
-  author: Alexis Delage
 title: Colocathlon
 description: "Présentation du fonctionnement de Nantral Platform pour le colocathlon"
-published: true
-date: 2021-10-30T13:55:13.774Z
-editor: markdown
-dateCreated: 2021-10-24T09:16:43.852Z
+sidebar_position: 3
 ---
 
 import './styles.scss';
@@ -38,15 +32,15 @@ ou non au colocathlon. Pour se faire, un post facebook les invite à se connecte
 
 1. Se connecter à la carte des colocs
 2. Aller sur la page de sa propre coloc ou la créer si elle n'existe pas
-  :::success Astuce
-  Pour aller plus vite, on peut partager le lien 
-  [https://nantral-platform.fr/my_coloc](https://nantral-platform.fr/my_coloc) qui
-  redirige directement vers la page de la coloc de l'utilisateur connecté.
-  :::
+   :::success Astuce
+   Pour aller plus vite, on peut partager le lien
+   [https://nantral-platform.fr/my_coloc](https://nantral-platform.fr/my_coloc) qui
+   redirige directement vers la page de la coloc de l'utilisateur connecté.
+   :::
 3. Ce message s'affiche alors :
-  ![](./colocathlon_1_details.png)
+   ![](./colocathlon_1_details.png)
 4. En cliquant sur le bouton, on peut alors remplir le formulaire suivant :
-  ![](./colocathlon_1_form.png)
+   ![](./colocathlon_1_form.png)
 
 :::caution Point de vigilance
 Pour accéder au formulaire, il suffit d'être membre (et non admin comme c'est
@@ -59,17 +53,17 @@ les données d'une autre coloc en s'ajoutant puis s'enlevant des membres.
 _Cette phase ne s'affiche que si le paramètre `PHASE_COLOCATHLON` est défini à `2`._
 
 1. Pour commencer, les EI1 peuvent se connecter à la carte des colocs et activer
-  le **"Mode Colocathlon"** pour ne voir que les colocs participantes au
-  colocathlon. Les infobulles sur les colocs sont aussi modifiées afin
-  d'afficher les heures d'ouvertures et les activités proposées.
-  ![](./colocathlon_2_carte.png)
+   le **"Mode Colocathlon"** pour ne voir que les colocs participantes au
+   colocathlon. Les infobulles sur les colocs sont aussi modifiées afin
+   d'afficher les heures d'ouvertures et les activités proposées.
+   ![](./colocathlon_2_carte.png)
 2. Si une coloc les intéressent, les EI1 peuvent cliquer sur le bouton
-  *Détails* dans l'infobulle pour accéder à la page de la coloc : ils
-  peuvent alors voir le nombre de personnes déjà inscrites sur la coloc, le
-  nombre maximal autorisé, et choisir si ils souhaitent s'y inscrire ou non.
-  ![](./colocathlon_2_details_ei1.png)
+   _Détails_ dans l'infobulle pour accéder à la page de la coloc : ils
+   peuvent alors voir le nombre de personnes déjà inscrites sur la coloc, le
+   nombre maximal autorisé, et choisir si ils souhaitent s'y inscrire ou non.
+   ![](./colocathlon_2_details_ei1.png)
 3. Une fois le bouton cliqué, ils ont aussi toujours la possibilité de se
-  désinscrire pour libérer leur place.
+   désinscrire pour libérer leur place.
 4. Du côté des colocataires de la coloc, ils ont accès à la liste des particpants
-  depuis la page de leur coloc (comme pour l'inscription, seuls les admins
-  peuvent voir la liste).
+   depuis la page de leur coloc (comme pour l'inscription, seuls les admins
+   peuvent voir la liste).

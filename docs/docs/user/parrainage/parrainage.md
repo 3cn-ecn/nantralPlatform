@@ -1,13 +1,7 @@
 ---
-last_update:
-  date: 2023-02-09 10:22:46 +0100
-  author: Alexis Delage
 title: Parrainage
 description: "Documentation sur l'algorithme de parrainage"
-published: true
-date: 2021-10-29T10:07:18.413Z
-editor: markdown
-dateCreated: 2021-10-12T16:15:59.459Z
+sidebar_position: 2
 ---
 
 import './styles.scss';
@@ -82,13 +76,13 @@ Puis, dans la section **EXTRA SETTINGS**, sélectionnez **Paramètres**. Vous
 pouvez alors changez la valeur du paramètre `PHASE_PARRAINAGE` d'après le
 code suivant (cf la section 1.2) :
 
-* `0`: Tout masquer
-* `1`: Questionnaires 2A+
-* `2`: Questionnaires 1A et 2A+
-* `3`: Soirée de parrainage
-* `4`: Résultats du parrainage
-* `5`: Questionnaires ITII
-* `6`: Résultats ITII
+- `0`: Tout masquer
+- `1`: Questionnaires 2A+
+- `2`: Questionnaires 1A et 2A+
+- `3`: Soirée de parrainage
+- `4`: Résultats du parrainage
+- `5`: Questionnaires ITII
+- `6`: Résultats ITII
 
 ### 2.4 Ajouter ou modifier des questions
 
