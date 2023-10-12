@@ -1,9 +1,9 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 description: An easy tutorial for beginners with Git
 ---
 
-# Git Tutorial
+# Tutorial for GitHub Desktop
 
 Let's learn git and github by a simple example: you will try to add your
 name on the README.md page of the github project.
@@ -27,7 +27,7 @@ suppose that you are able to transpose the actions with your git interface.
 
 ### 1. Create a new branch
 
-* In Github Desktop, create a new branch from `master`, and give it a name.
+- In Github Desktop, create a new branch from `master`, and give it a name.
 
 ![Create new branch](./new-branch-button-win.png)
 
@@ -37,49 +37,38 @@ is `master`, which is the branch directly linked to the server. This branch is t
 push changes on it.
 :::
 
-* Then publish your new branch to Github:
+- Then publish your new branch to Github:
 
 ![Publish a branch](./publish-branch-button.png)
 
 :::info
 If you cannot publish the branch, that means that you do not have the right to write on the repository.
-You can ask one of the administators of the repository (for example the president of the club) to grant you 
+You can ask one of the administators of the repository (for example the president of the club) to grant you
 this access by adding you to the nantral-platform organization.
 :::
 
 ### 2. Make your changes
 
-* In VS Code, open the `README.md` file in the main directory.
-* Add your name and a link to your github account under the `Contributors` section, at the end of the file
-* Save the file
+- In VS Code, open the `README.md` file in the main directory.
+- Add your name and a link to your github account under the `Contributors` section, at the end of the file
+- Save the file
 
 ### 3. Publish your changes
 
-* Now go back to Github Desktop, give a name to the commit and create it:
+- Now go back to Github Desktop, give a name to the commit and create it:
 
 ![Create commit](./commit-button.png)
 
-* Then push your commit on the github server:
+- Then push your commit on the github server:
 
 ![Push a commit](./push-origin-button.png)
 
-* Finally create a pull request:
+- Finally create a pull request:
 
 ![Create pull request](./create-pull-request.png)
 
-* Now the github website should open in your browser. Click the *"Create pull request"* button, and then 
-*"Merge pull request"*.
+- Now the github website should open in your browser. Click the _"Create pull request"_ button, and then
+  _"Merge pull request"_.
 
-* Congratulations, you're done! 🥳 You can now see your name on the home page of the repository: 
-    [github.com/3cn-ecn/nantralPlatform](https://github.com/3cn-ecn/nantralPlatform)
-
-
-## Daily use
-
-As a conclusion, just remember this: each time you want to contribute,
-always start by creating a new branch. Then you can make your changes,
-commit them and sync them on your branch.
-
-Once you are satisfied with your changes, you can merge your branch into
-the main one: this will automatically update the website! You can even follow
-the deployment of your modifications in the **Actions** tab on Github.
+- Congratulations, you're done! 🥳 You can now see your name on the home page of the repository:
+  [github.com/3cn-ecn/nantralPlatform](https://github.com/3cn-ecn/nantralPlatform)

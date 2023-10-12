@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Typing
+# Types
 
 How to check that the types of our code is correct?
 
