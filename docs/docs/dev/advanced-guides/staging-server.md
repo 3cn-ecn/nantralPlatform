@@ -45,3 +45,8 @@ For our example, let's call this branch `my-feature-branch`._
 3. Click the button _Run workflow_ to confirm and start the deployment!
 
 ![](./staging-server.gif)
+
+:::info Note
+The deployment can take up from 5 to 10 minutes. If you push new changes to the
+branch, you need to relaunch the Github Action to deploy the new changes.
+:::
