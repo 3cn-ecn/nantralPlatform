@@ -33,12 +33,12 @@ can still find some references to them in old code, so we keep them as reference
 - **Django**: _a web framework_
   / [Tutorial](https://developer.mozilla.org/fr/docs/Learn/Server-side/Django)
   / [Documentation](https://docs.djangoproject.com/en/)
-  / [Doc on this site](/dev/guides/django.md)
+  / [Doc on this site](/dev/guides/frameworks/django.md)
 - **Django REST framework**: _a toolkit to build Web APIs_
   / [Video](https://youtu.be/-MTSQjw5DrM)
   / [Tutorial](https://blog.logrocket.com/using-react-django-create-app-tutorial/)
   / [Documentation](https://www.django-rest-framework.org/)
-  / [Doc on this site](/dev/guides/rest-api.md)
+  / [Doc on this site](/dev/guides/frameworks/rest-api.md)
 - **Django CKEditor5**: _a django library to support CKEditor5_
   / [Documentation](https://pypi.org/project/django-ckeditor-5/)
 - ~~**Bootstrap**: _a CSS library for django templates_
@@ -59,7 +59,7 @@ can still find some references to them in old code, so we keep them as reference
   / [Video](https://youtu.be/Tn6-PIqc4UM)
   / [Tutorial](https://react.dev/learn/tutorial-tic-tac-toe)
   / [Documentation](https://react.dev)
-  / [Doc on this site](/dev/guides/react.md)
+  / [Doc on this site](/dev/guides/frameworks/react.md)
 - **MUI**: _a React library to use Material Design_
   / [Documentation](https://mui.com/material-ui/react-button/)
   / [Icons Library](https://mui.com/material-ui/material-icons/)
