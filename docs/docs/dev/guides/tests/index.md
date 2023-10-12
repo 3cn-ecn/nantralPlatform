@@ -2,7 +2,7 @@
 sidebar_position: 7
 ---
 
-# Tests
+# Testing
 
 Everything you need to know to test your code!
 

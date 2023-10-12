@@ -76,6 +76,7 @@ export function CreateEventModal({
     <ResponsiveDialog onClose={onClose} disableEnforceFocus>
       <ResponsiveDialogHeader
         onClose={onClose}
+        helpUrl="https://docs.nantral-platform.fr/user/posts-events/create-event"
         leftIcon={
           <Avatar sx={{ bgcolor: palette.primary.main }}>
             <EditIcon />

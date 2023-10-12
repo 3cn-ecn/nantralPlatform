@@ -77,9 +77,28 @@ to install everything.
    ```
 
 7. Install the dependencies:
+
    ```bash
    npm install
    ```
+
+8. Then, change your working directory to `email-templates-generator`:
+
+   ```bash
+   cd ../email-templates-generator
+   ```
+
+9. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+10. And build the email templates:
+
+    ```bash
+    npm run build
+    ```
 
 Congratulations, you did it all 🥳
 
@@ -136,8 +155,8 @@ on this particular database. So let's create one!
      pipenv run django changepassword admin
      ```
 
-1. Once connected, open **_"Authentication and authorization > Users"_**
-   (or _"Authentification et Autorisation > Utilisateurs"_ in French)
+1. Once connected, open **_"Account > Users"_**
+   (or _"Account > Utilisateurs"_ in French)
 
 1. **Search** for your personal account (the one you created a few minutes ago)
    and **open** it.
@@ -146,8 +165,8 @@ on this particular database. So let's create one!
 
    - `Active` (_Actif_): this will validate your account
    - `Staff status` (_Statut équipe_): this allows you to connect to the admin panel
-     with your personnal account
-   - `Superuser status` (_Statut super-utilisateur_): this transforms your personnal
+     with your personal account
+   - `Superuser status` (_Statut super-utilisateur_): this transforms your personal
      account into an admin account!
 
 1. **Save** your modifications with the button at the bottom.

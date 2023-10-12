@@ -300,6 +300,9 @@
   "modal": {
     "closeButton": {
       "label": "Close"
+    },
+    "helpButton": {
+      "label": "Help"
     }
   },
   "navbar": {
