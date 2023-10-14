@@ -12,10 +12,10 @@
     {% endif %}
   </h1>
   {% if user.is_superuser %}
-    <a href="{% url 'admin:group_grouptype_change' group_type.pk %}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+    <a href="{% url 'admin:group_grouptype_change' group_type.pk %}" class="btn btn-dark btn-sm" target="_blank" rel="noopener">
       <i class="fas fa-shield-alt"></i>&nbsp; Modifier le type
     </a>
-    <a href="{% url 'admin:group_group_changelist' %}?group_type__exact={{ group_type.pk}}" class="btn btn-dark btn-sm" target="_blank" rel="noopener noreferrer">
+    <a href="{% url 'admin:group_group_changelist' %}?group_type__exact={{ group_type.pk}}" class="btn btn-dark btn-sm" target="_blank" rel="noopener">
       <i class="fas fa-shield-alt"></i>&nbsp; Voir la liste
     </a>
     <br />

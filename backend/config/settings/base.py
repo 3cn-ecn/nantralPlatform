@@ -276,7 +276,7 @@ CKEDITOR_5_CONFIGS = {
                     "label": "Ouvrir dans un nouvel onglet",
                     "attributes": {
                         "target": "_blank",
-                        "rel": "noopener noreferrer",
+                        "rel": "noopener",
                     },
                 }
             },
