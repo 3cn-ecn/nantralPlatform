@@ -63,17 +63,6 @@ CustomEditor.defaultConfig = {
   link: {
     addTargetToExternalLinks: true, // open in new tab by default
     defaultProtocol: 'https://', // add https when missing
-    decorators: {
-      // check-box in options
-      openInNewTab: {
-        mode: 'manual',
-        label: 'Ouvrir dans un nouvel onglet',
-        attributes: {
-          target: '_blank',
-          rel: 'noopener',
-        },
-      },
-    },
   },
   mediaEmbed: {
     previewsInData: true,
