@@ -2,7 +2,7 @@ import { upperFirst } from 'lodash-es';
 
 export const getLanguageName = (
   lang: string,
-  displayedLang: string
+  displayedLang: string,
 ): string => {
   try {
     // try to get names for the asking language

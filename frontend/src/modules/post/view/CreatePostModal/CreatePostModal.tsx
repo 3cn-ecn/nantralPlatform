@@ -1,9 +1,8 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
 
 import { createPostApi } from '#modules/post/api/createPost.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
@@ -76,7 +75,7 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
   };
 
   const [selectedLang, setSelectedLang] = useState(
-    i18n.language.substring(0, 2)
+    i18n.language.substring(0, 2),
   );
 
   return (

@@ -7,10 +7,10 @@ import { base_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { getLanguageName } from '#shared/utils/getLanguageName';
 
-type LanguageSelectorProps = {
+interface LanguageSelectorProps {
   selectedLang: string;
   setSelectedLang: Dispatch<React.SetStateAction<string>>;
-};
+}
 
 export function LanguageSelector({
   selectedLang,

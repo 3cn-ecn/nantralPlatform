@@ -1,9 +1,8 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
 
 import { createEventApi } from '#modules/event/api/createEvent.api';
 import { Event, EventForm } from '#modules/event/event.type';
@@ -86,7 +85,7 @@ export function CreateEventModal({
   };
 
   const [selectedLang, setSelectedLang] = useState(
-    i18n.language.substring(0, 2)
+    i18n.language.substring(0, 2),
   );
 
   return (
