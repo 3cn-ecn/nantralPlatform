@@ -1,14 +1,12 @@
 import { GroupPreview } from '#modules/group/group.type';
-import {
-  BaseLanguage,
-  LocalizedDescription,
-  LocalizedTitles,
-} from '#shared/i18n/config';
+import { TranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
-export type Post = {
+export interface Post {
   id: number;
   title: string;
+  titleTranslated: TranslatedFieldObject;
   description: string;
+  descriptionTranslated: TranslatedFieldObject;
   group: GroupPreview & { canPin: boolean };
   publicity: 'Pub' | 'Mem';
   createdAt: Date;
@@ -17,8 +15,7 @@ export type Post = {
   pinned: boolean;
   isAdmin: boolean;
   notificationId: number | null;
-} & LocalizedTitles &
-  LocalizedDescription;
+}
 
 export type PostPreview = Pick<
   Post,
@@ -35,12 +32,13 @@ export type PostPreview = Pick<
 
 export type PostForm = Pick<
   Post,
-  'title' | 'description' | 'publicity' | 'pinned'
+  | 'title'
+  | 'titleTranslated'
+  | 'description'
+  | 'descriptionTranslated'
+  | 'publicity'
+  | 'pinned'
 > & {
-  [K in BaseLanguage as `title_${string & K}`]: string;
-} & {
-  [K in BaseLanguage as `description_${string & K}`]: string;
-} & {
   group: number | null;
   image?: File;
 };

@@ -1,9 +1,5 @@
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
-import {
-  BaseLanguage,
-  LocalizedDescription,
-  LocalizedTitles,
-} from '#shared/i18n/config';
+import { TranslatedFieldsDTO } from '#shared/infra/translatedFields/translatedField.dto';
 
 export type PostDTO = {
   id: number;
@@ -18,8 +14,7 @@ export type PostDTO = {
   can_pin: boolean;
   is_admin: boolean;
   notification: number | null;
-} & LocalizedTitles &
-  LocalizedDescription;
+} & TranslatedFieldsDTO<'title' | 'description'>;
 
 export type PostPreviewDTO = Pick<
   PostDTO,
@@ -39,10 +34,6 @@ export type PostFormDTO = Pick<
   PostDTO,
   'title' | 'description' | 'publicity' | 'pinned'
 > & {
-  [K in BaseLanguage as `title_${string & K}`];
-} & {
-  [K in BaseLanguage as `description_${string & K}`];
-} & {
   group: number | null;
   image?: File;
-};
+} & TranslatedFieldsDTO<'title' | 'description'>;

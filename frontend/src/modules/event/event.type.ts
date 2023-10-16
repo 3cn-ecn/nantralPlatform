@@ -1,14 +1,12 @@
 import { GroupPreview } from '#modules/group/group.type';
-import {
-  BaseLanguage,
-  LocalizedDescription,
-  LocalizedTitles,
-} from '#shared/i18n/config';
+import { TranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
-export type Event = {
+export interface Event {
   id: number;
   title: string;
+  titleTranslated: TranslatedFieldObject;
   description: string;
+  descriptionTranslated: TranslatedFieldObject;
   location: string;
   startDate: Date;
   endDate: Date;
@@ -24,8 +22,7 @@ export type Event = {
   endRegistration: Date | null;
   formUrl: string;
   notificationId: number | null;
-} & LocalizedTitles &
-  LocalizedDescription;
+}
 
 export type EventPreview = Pick<
   Event,
@@ -49,7 +46,9 @@ export type EventPreview = Pick<
 export type EventForm = Pick<
   Event,
   | 'title'
+  | 'titleTranslated'
   | 'description'
+  | 'descriptionTranslated'
   | 'location'
   | 'publicity'
   | 'maxParticipant'
@@ -57,10 +56,6 @@ export type EventForm = Pick<
   | 'endRegistration'
   | 'formUrl'
 > & {
-  [K in BaseLanguage as `title_${string & K}`];
-} & {
-  [K in BaseLanguage as `description_${string & K}`];
-} & {
   startDate: Date | null;
   endDate: Date | null;
   group: number | null;

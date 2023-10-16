@@ -1,31 +1,15 @@
-import { base_languages } from '#shared/i18n/config';
+import { convertTranslatedField } from '#shared/infra/translatedFields/translatedField.converter';
 
 import { EventForm } from '../event.type';
 import { EventFormDTO } from './event.dto';
 
 export function convertEventForm(event: EventForm): EventFormDTO {
-  const translatedConverter = {};
-  let translated_title: string | null = null;
-  let translated_description: string | null = null;
-  for (const lang of base_languages) {
-    translated_title = event[`title_${lang}`] || null;
-    translated_description = event[`description_${lang}`] || null;
-  }
-  for (const lang of base_languages) {
-    if (!event[`title_${lang}`] && translated_title) {
-      event[`title_${lang}`] = translated_title;
-    }
-    if (!event[`description_${lang}`] && translated_description) {
-      event[`description_${lang}`] = translated_description;
-    }
-    translatedConverter[`title_${lang}`] = event[`title_${lang}`];
-    translatedConverter[`description_${lang}`] = event[`description_${lang}`];
-  }
   return {
     title: event.title,
+    ...convertTranslatedField(event.titleTranslated, 'title'),
     group: event.group,
     description: event.description,
-    ...translatedConverter,
+    ...convertTranslatedField(event.descriptionTranslated, 'description'),
     location: event.location,
     image: event.image,
     start_date: event.startDate?.toISOString() || '',

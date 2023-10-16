@@ -2,29 +2,11 @@ import { initReactI18next } from 'react-i18next';
 
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { uniq } from 'lodash-es';
 
 import translationEn from './en-GB.json';
 import translationFr from './fr-FR.json';
 
 export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
-export const base_languages = uniq(languages.map((lg) => lg.substring(0, 2)));
-
-type LanguageCode = (typeof languages)[number];
-export type BaseLanguage = LanguageCode extends `${infer T}-*` ? T : never;
-
-export type LocalizedTitles = {
-  [K in BaseLanguage as `title_${string & K}`]: string;
-};
-
-export type LocalizedDescription = {
-  [K in BaseLanguage as `description_${string & K}`]: string;
-};
-declare module 'i18next' {
-  interface CustomTypeOptions {
-    returnNull: false;
-  }
-}
 
 i18n
   // detect user language
@@ -54,3 +36,9 @@ i18n
   });
 
 export default i18n;
+
+declare module 'i18next' {
+  interface CustomTypeOptions {
+    returnNull: false;
+  }
+}

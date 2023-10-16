@@ -1,9 +1,5 @@
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
-import {
-  BaseLanguage,
-  LocalizedDescription,
-  LocalizedTitles,
-} from '#shared/i18n/config';
+import { TranslatedFieldsDTO } from '#shared/infra/translatedFields/translatedField.dto';
 
 export type EventDTO = {
   id: number;
@@ -26,8 +22,7 @@ export type EventDTO = {
   end_registration: string | null;
   form_url: string;
   notification: number | null;
-} & LocalizedTitles &
-  LocalizedDescription;
+} & TranslatedFieldsDTO<'title' | 'description'>;
 
 export type EventPreviewDTO = Pick<
   EventDTO,
@@ -46,9 +41,7 @@ export type EventPreviewDTO = Pick<
   | 'start_registration'
   | 'end_registration'
   | 'url'
-> & {
-  [K in BaseLanguage as `title_${string & K}`];
-};
+>;
 
 export type EventFormDTO = Pick<
   EventDTO,
@@ -63,10 +56,6 @@ export type EventFormDTO = Pick<
   | 'end_registration'
   | 'form_url'
 > & {
-  [K in BaseLanguage as `title_${string & K}`];
-} & {
-  [K in BaseLanguage as `description_${string & K}`];
-} & {
   group: number | null;
   image?: File;
-};
+} & TranslatedFieldsDTO<'title' | 'description'>;
