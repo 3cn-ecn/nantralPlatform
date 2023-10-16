@@ -43,7 +43,7 @@ import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useChangeThemeMode } from '#shared/context/CustomTheme.context';
 import { languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { getNativeLanguageName } from '#shared/utils/getNativeLanguageName';
+import { getNativeLanguageName } from '#shared/utils/getLanguageName';
 
 export function UserMenu() {
   const { t, i18n } = useTranslation();
