@@ -1,12 +1,13 @@
 import { Dispatch, useCallback } from 'react';
 
 import { LocalFireDepartment } from '@mui/icons-material';
-import { Alert, AlertTitle, MenuItem, Paper, Typography } from '@mui/material';
+import { MenuItem, Paper, Typography } from '@mui/material';
 
 import { Event, EventForm } from '#modules/event/event.type';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
   DateTimeField,
@@ -60,18 +61,7 @@ export function EventFormFields({
 
   return (
     <>
-      {isError && (
-        <Alert severity="error">
-          <AlertTitle>{t('form.errors.title')}</AlertTitle>
-          {!!error?.globalErrors?.length && (
-            <ul>
-              {error.globalErrors.map((err, index) => (
-                <li key={index}>{err}</li>
-              ))}
-            </ul>
-          )}
-        </Alert>
-      )}
+      <FormErrorAlert isError={isError} error={error} />
       <TextField
         name="title"
         key={`title-${selectedLang}`}

@@ -1,10 +1,11 @@
 import { Dispatch, useCallback } from 'react';
 
-import { Alert, AlertTitle, MenuItem } from '@mui/material';
+import { MenuItem } from '@mui/material';
 
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
+import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
   CheckboxField,
@@ -62,18 +63,7 @@ export function PostFormFields({
 
   return (
     <>
-      {isError && (
-        <Alert severity="error">
-          <AlertTitle>{t('form.errors.title')}</AlertTitle>
-          {!!error?.globalErrors?.length && (
-            <ul>
-              {error.globalErrors.map((err, index) => (
-                <li key={index}>{err}</li>
-              ))}
-            </ul>
-          )}
-        </Alert>
-      )}
+      <FormErrorAlert isError={isError} error={error} />
       <TextField
         name="title"
         key={`title-${selectedLang}`}
