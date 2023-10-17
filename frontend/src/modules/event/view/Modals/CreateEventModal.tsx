@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createEventApi } from '#modules/event/api/createEvent.api';
 import { Event, EventForm } from '#modules/event/event.type';
+import { useEventFormValues } from '#modules/event/hooks/useEventFormValues';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
 import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
@@ -16,10 +17,8 @@ import {
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
-import { useObjectState } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
-import { emptyTranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
 import { EventFormFields } from '../shared/EventFormFields';
 
@@ -38,22 +37,7 @@ export function CreateEventModal({
 
   const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
   // the values currently in our form
-  const [formValues, updateFormValues] = useObjectState<EventForm>({
-    title: '',
-    titleTranslated: emptyTranslatedFieldObject,
-    description: '',
-    descriptionTranslated: emptyTranslatedFieldObject,
-    group: null,
-    publicity: 'Pub',
-    location: '',
-    image: undefined,
-    startDate: null,
-    endDate: null,
-    startRegistration: null,
-    endRegistration: null,
-    maxParticipant: null,
-    formUrl: '',
-  });
+  const [formValues, updateFormValues] = useEventFormValues();
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<

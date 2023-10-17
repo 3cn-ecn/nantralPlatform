@@ -9,6 +9,7 @@ import {
   updateEventApi,
 } from '#modules/event/api/updateEvent.api';
 import { Event, EventForm } from '#modules/event/event.type';
+import { useEventFormValues } from '#modules/event/hooks/useEventFormValues';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
 import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
@@ -18,7 +19,6 @@ import {
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
-import { useObjectState } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -38,22 +38,7 @@ export function EditEventModalContent({
   const { palette } = useTheme();
 
   const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
-  const [formValues, updateFormValues] = useObjectState<EventForm>({
-    title: event.title,
-    titleTranslated: event.titleTranslated,
-    description: event.description,
-    descriptionTranslated: event.descriptionTranslated,
-    group: event.group.id,
-    publicity: event.publicity,
-    location: event.location,
-    image: undefined,
-    startDate: event.startDate,
-    endDate: event.endDate,
-    startRegistration: event.startRegistration,
-    endRegistration: event.endRegistration,
-    maxParticipant: event.maxParticipant,
-    formUrl: event.formUrl,
-  });
+  const [formValues, updateFormValues] = useEventFormValues(event);
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<

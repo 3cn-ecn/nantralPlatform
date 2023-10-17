@@ -8,6 +8,7 @@ import {
   UpdatePostApiVariables,
   updatePostApi,
 } from '#modules/post/api/updatePost.api';
+import { usePostFormValues } from '#modules/post/hooks/usePostFormValues';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
 import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
@@ -18,7 +19,6 @@ import {
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
-import { useObjectState } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -40,15 +40,7 @@ export function EditPostModalContent({
   const { palette } = useTheme();
 
   const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
-  const [formValues, updateFormValues] = useObjectState<PostForm>({
-    title: post.title,
-    titleTranslated: post.titleTranslated,
-    description: post.description,
-    descriptionTranslated: post.descriptionTranslated,
-    group: post.group.id,
-    pinned: post.pinned,
-    publicity: post.publicity,
-  });
+  const [formValues, updateFormValues] = usePostFormValues(post);
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<

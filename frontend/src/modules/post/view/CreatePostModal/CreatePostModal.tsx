@@ -5,6 +5,7 @@ import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createPostApi } from '#modules/post/api/createPost.api';
+import { usePostFormValues } from '#modules/post/hooks/usePostFormValues';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
 import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
@@ -16,10 +17,8 @@ import {
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
-import { useObjectState } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
-import { emptyTranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
 import { PostFormFields } from '../shared/PostFormFields';
 
@@ -34,16 +33,7 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
   const { palette } = useTheme();
 
   const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
-  const [formValues, updateFormValues] = useObjectState<PostForm>({
-    title: '',
-    titleTranslated: emptyTranslatedFieldObject,
-    description: '',
-    descriptionTranslated: emptyTranslatedFieldObject,
-    image: undefined,
-    group: null,
-    pinned: false,
-    publicity: 'Pub',
-  });
+  const [formValues, updateFormValues] = usePostFormValues();
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
