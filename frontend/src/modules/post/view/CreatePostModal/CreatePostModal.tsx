@@ -17,9 +17,9 @@ import {
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useObjectState } from '#shared/hooks/useObjectState';
-import { base_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
+import { emptyTranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
 import { PostFormFields } from '../shared/PostFormFields';
 
@@ -29,22 +29,16 @@ interface CreatePostModalProps {
 }
 
 export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
-  const { i18n, t } = useTranslation();
+  const { currentBaseLanguage, t } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
-  // the values currently in our form
-  const formTranslatedValues = {};
-
-  for (const lang of base_languages) {
-    formTranslatedValues[`title_${lang}`] = '';
-    formTranslatedValues[`description_${lang}`] = '';
-  }
-
+  const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
   const [formValues, updateFormValues] = useObjectState<PostForm>({
     title: '',
-    ...formTranslatedValues,
+    titleTranslated: emptyTranslatedFieldObject,
     description: '',
+    descriptionTranslated: emptyTranslatedFieldObject,
     image: undefined,
     group: null,
     pinned: false,
@@ -73,10 +67,6 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
       },
     });
   };
-
-  const [selectedLang, setSelectedLang] = useState(
-    i18n.language.substring(0, 2),
-  );
 
   return (
     <ResponsiveDialog onClose={onClose} disableEnforceFocus>

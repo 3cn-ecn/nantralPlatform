@@ -13,6 +13,8 @@ import {
   TextField,
 } from '#shared/components/FormFields';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
+import { SetObjectStateAction } from '#shared/hooks/useObjectState';
+import { BaseLanguage } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -20,9 +22,9 @@ interface PostFormFieldsProps {
   isError: boolean;
   error: ApiFormError<PostFormDTO> | null;
   formValues: PostForm;
-  updateFormValues: Dispatch<Partial<PostForm>>;
+  updateFormValues: Dispatch<SetObjectStateAction<PostForm>>;
   prevData?: Post;
-  selectedLang: string;
+  selectedLang: BaseLanguage;
 }
 
 export function PostFormFields({
@@ -74,11 +76,17 @@ export function PostFormFields({
       )}
       <TextField
         name="title"
+        key={`title-${selectedLang}`}
         label={t('post.form.title.label')}
-        value={formValues[`title_${selectedLang}`]}
+        value={formValues.titleTranslated[selectedLang]}
         handleChange={useCallback(
           (val) => {
-            updateFormValues({ [`title_${selectedLang}`]: val });
+            updateFormValues((prevState) => ({
+              titleTranslated: {
+                ...prevState.titleTranslated,
+                [selectedLang]: val,
+              },
+            }));
           },
           [selectedLang, updateFormValues],
         )}
@@ -104,12 +112,17 @@ export function PostFormFields({
       />
       <RichTextField
         name="description"
+        key={`description-${selectedLang}`}
         label={t('post.form.description.label')}
-        key={selectedLang}
-        value={formValues[`description_${selectedLang}`]}
+        value={formValues.descriptionTranslated[selectedLang]}
         handleChange={useCallback(
           (val) => {
-            updateFormValues({ [`description_${selectedLang}`]: val });
+            updateFormValues((prevState) => ({
+              descriptionTranslated: {
+                ...prevState.descriptionTranslated,
+                [selectedLang]: val,
+              },
+            }));
           },
           [selectedLang, updateFormValues],
         )}

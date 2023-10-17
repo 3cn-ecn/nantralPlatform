@@ -19,7 +19,6 @@ import {
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useObjectState } from '#shared/hooks/useObjectState';
-import { base_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -34,21 +33,16 @@ export function EditEventModalContent({
   event,
   onClose,
 }: EditEventModalContentProps) {
-  const { t, i18n } = useTranslation();
+  const { t, currentBaseLanguage } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
-  // the values currently in our form
-  const formTranslatedValues = {};
-
-  for (const lang of base_languages) {
-    formTranslatedValues[`title_${lang}`] = event[`title_${lang}`];
-    formTranslatedValues[`description_${lang}`] = event[`description_${lang}`];
-  }
+  const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
   const [formValues, updateFormValues] = useObjectState<EventForm>({
     title: event.title,
+    titleTranslated: event.titleTranslated,
     description: event.description,
-    ...formTranslatedValues,
+    descriptionTranslated: event.descriptionTranslated,
     group: event.group.id,
     publicity: event.publicity,
     location: event.location,
@@ -88,9 +82,6 @@ export function EditEventModalContent({
     );
   };
 
-  const [selectedLang, setSelectedLang] = useState(
-    i18n.language.substring(0, 2),
-  );
   return (
     <>
       <ResponsiveDialogHeader

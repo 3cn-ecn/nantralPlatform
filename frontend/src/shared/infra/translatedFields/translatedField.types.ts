@@ -1,9 +1,15 @@
-import { languages } from '#shared/i18n/config';
-
-type LanguageCode = (typeof languages)[number];
-
-type BaseLanguage = LanguageCode extends `${infer T}-${string}` ? T : never;
+import { BaseLanguage, languages } from '#shared/i18n/config';
 
 export type TranslatedFieldObject = {
-  [Lang in BaseLanguage as `${string & Lang}`]: string;
+  [Lang in BaseLanguage]: string;
 };
+
+/**
+ * A translated field object with an empty string for all languages.
+ *
+ * @example
+ * { fr: '', en: '', ... }
+ */
+export const emptyTranslatedFieldObject = Object.fromEntries(
+  languages.map((lang) => [lang.split('-')[0], '']),
+) as TranslatedFieldObject;

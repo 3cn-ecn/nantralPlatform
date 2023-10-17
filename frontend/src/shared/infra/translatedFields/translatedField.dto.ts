@@ -1,9 +1,5 @@
-import { languages } from '#shared/i18n/config';
-
-type LanguageCode = (typeof languages)[number];
-
-type BaseLanguage = LanguageCode extends `${infer T}-${string}` ? T : never;
+import { BaseLanguage } from '#shared/i18n/config';
 
 export type TranslatedFieldsDTO<Fields extends string> = {
-  [Lang in BaseLanguage as `${Fields}_${string & Lang}`]: string;
+  [Lang in BaseLanguage as `${Fields}_${Lang}`]: string;
 };

@@ -2,11 +2,19 @@ import { initReactI18next } from 'react-i18next';
 
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { uniq } from 'lodash-es';
 
 import translationEn from './en-GB.json';
 import translationFr from './fr-FR.json';
 
 export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
+
+// types and constants utils deduced from languages list
+export type Language = (typeof languages)[number];
+export type BaseLanguage = Language extends `${infer T}-${string}` ? T : never;
+export const baseLanguages = uniq(
+  languages.map((lg) => lg.split('-')[0] as BaseLanguage),
+);
 
 i18n
   // detect user language

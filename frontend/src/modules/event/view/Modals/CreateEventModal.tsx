@@ -17,9 +17,9 @@ import {
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useObjectState } from '#shared/hooks/useObjectState';
-import { base_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
+import { emptyTranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
 import { EventFormFields } from '../shared/EventFormFields';
 
@@ -32,23 +32,17 @@ export function CreateEventModal({
   onClose,
   onCreated = onClose,
 }: CreateEventModalProps) {
-  const { t, i18n } = useTranslation();
+  const { t, currentBaseLanguage } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
+  const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
   // the values currently in our form
-
-  const formTranslatedValues = {};
-
-  for (const lang of base_languages) {
-    formTranslatedValues[`title_${lang}`] = '';
-    formTranslatedValues[`description_${lang}`] = '';
-  }
-
   const [formValues, updateFormValues] = useObjectState<EventForm>({
     title: '',
+    titleTranslated: emptyTranslatedFieldObject,
     description: '',
-    ...formTranslatedValues,
+    descriptionTranslated: emptyTranslatedFieldObject,
     group: null,
     publicity: 'Pub',
     location: '',
@@ -83,10 +77,6 @@ export function CreateEventModal({
       },
     });
   };
-
-  const [selectedLang, setSelectedLang] = useState(
-    i18n.language.substring(0, 2),
-  );
 
   return (
     <ResponsiveDialog onClose={onClose} disableEnforceFocus>

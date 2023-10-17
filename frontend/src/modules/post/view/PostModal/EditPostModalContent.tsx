@@ -19,7 +19,6 @@ import {
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useObjectState } from '#shared/hooks/useObjectState';
-import { base_languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -36,21 +35,16 @@ export function EditPostModalContent({
   onClose,
   onFinish,
 }: EditPostModalContentProps) {
-  const { t, i18n } = useTranslation();
+  const { t, currentBaseLanguage } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
-  // the values currently in our form
-  const formTranslatedValues = {};
-
-  for (const lang of base_languages) {
-    formTranslatedValues[`title_${lang}`] = post[`title_${lang}`];
-    formTranslatedValues[`description_${lang}`] = post[`description_${lang}`];
-  }
+  const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
   const [formValues, updateFormValues] = useObjectState<PostForm>({
     title: post.title,
+    titleTranslated: post.titleTranslated,
     description: post.description,
-    ...formTranslatedValues,
+    descriptionTranslated: post.descriptionTranslated,
     group: post.group.id,
     pinned: post.pinned,
     publicity: post.publicity,
@@ -82,10 +76,6 @@ export function EditPostModalContent({
       },
     );
   };
-
-  const [selectedLang, setSelectedLang] = useState(
-    i18n.language.substring(0, 2),
-  );
 
   return (
     <>

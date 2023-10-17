@@ -16,6 +16,8 @@ import {
 } from '#shared/components/FormFields';
 import { NumberField } from '#shared/components/FormFields/NumberField';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
+import { SetObjectStateAction } from '#shared/hooks/useObjectState';
+import { BaseLanguage } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -23,9 +25,9 @@ interface EventFormFieldsProps {
   isError: boolean;
   error: ApiFormError<EventFormDTO> | null;
   formValues: EventForm;
-  updateFormValues: Dispatch<Partial<EventForm>>;
+  updateFormValues: Dispatch<SetObjectStateAction<EventForm>>;
   prevData?: Event;
-  selectedLang: string;
+  selectedLang: BaseLanguage;
 }
 
 export function EventFormFields({
@@ -72,11 +74,17 @@ export function EventFormFields({
       )}
       <TextField
         name="title"
+        key={`title-${selectedLang}`}
         label={t('event.form.title.label')}
-        value={formValues[`title_${selectedLang}`]}
+        value={formValues.titleTranslated[selectedLang]}
         handleChange={useCallback(
           (val) => {
-            updateFormValues({ [`title_${selectedLang}`]: val });
+            updateFormValues((prevState) => ({
+              titleTranslated: {
+                ...prevState.titleTranslated,
+                [selectedLang]: val,
+              },
+            }));
           },
           [selectedLang, updateFormValues],
         )}
@@ -102,12 +110,17 @@ export function EventFormFields({
       />
       <RichTextField
         name="description"
+        key={`description-${selectedLang}`}
         label={t('event.form.description.label')}
-        key={selectedLang}
-        value={formValues[`description_${selectedLang}`]}
+        value={formValues.descriptionTranslated[selectedLang]}
         handleChange={useCallback(
           (val) => {
-            updateFormValues({ [`description_${selectedLang}`]: val });
+            updateFormValues((prevState) => ({
+              descriptionTranslated: {
+                ...prevState.descriptionTranslated,
+                [selectedLang]: val,
+              },
+            }));
           },
           [selectedLang, updateFormValues],
         )}

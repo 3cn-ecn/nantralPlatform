@@ -9,7 +9,7 @@ import {
 } from 'date-fns';
 import { enGB, enUS, fr } from 'date-fns/locale';
 
-import { languages } from './config';
+import { BaseLanguage, languages } from './config';
 
 const mapLocales: Record<(typeof languages)[number], Locale> = {
   'fr-FR': fr,
@@ -21,6 +21,9 @@ export function useTranslation() {
   const { t, i18n } = useI18nextTranslation('translation');
 
   const dateFnsLocale: Locale = mapLocales[i18n.language] || enGB;
+
+  /** Base language without region: use only for translated fields */
+  const currentBaseLanguage = i18n.language.split('-')[0] as BaseLanguage;
 
   const formatDate = (
     date: Date,
@@ -81,6 +84,7 @@ export function useTranslation() {
   return {
     t,
     i18n,
+    currentBaseLanguage,
     formatDate,
     formatTime,
     formatDateTime,

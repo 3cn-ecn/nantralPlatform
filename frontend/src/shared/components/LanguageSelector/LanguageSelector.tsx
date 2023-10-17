@@ -1,18 +1,15 @@
-import { MouseEvent, useState } from 'react';
+import { Dispatch, MouseEvent, useState } from 'react';
 
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
 import { Button, Menu, MenuItem } from '@mui/material';
-import { uniq } from 'lodash-es';
 
-import { languages } from '#shared/i18n/config';
+import { BaseLanguage, baseLanguages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { getLanguageName } from '#shared/utils/getLanguageName';
 
-const base_languages = uniq(languages.map((lg) => lg.split('-')[0]));
-
 interface LanguageSelectorProps {
-  selectedLang: string;
-  setSelectedLang: (lang: string) => void;
+  selectedLang: BaseLanguage;
+  setSelectedLang: Dispatch<BaseLanguage>;
 }
 
 export function LanguageSelector({
@@ -41,17 +38,17 @@ export function LanguageSelector({
         {selectedLang}
       </Button>
       <Menu anchorEl={anchorEl} open={isOpen} onClose={handleClose}>
-        {base_languages.map((language) => (
+        {baseLanguages.map((baseLang) => (
           <MenuItem
-            key={language}
-            value={language}
+            key={baseLang}
+            value={baseLang}
             onClick={() => {
-              setSelectedLang(language);
+              setSelectedLang(baseLang);
               handleClose();
             }}
-            selected={language === selectedLang}
+            selected={baseLang === selectedLang}
           >
-            {getLanguageName(language, i18n.language)}
+            {getLanguageName(baseLang, i18n.language)}
           </MenuItem>
         ))}
       </Menu>
