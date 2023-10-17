@@ -6,9 +6,7 @@ from .models import Housing, NamedMembershipRoommates, Roommates
 
 
 class OccupiedFilter(admin.SimpleListFilter):
-    """
-    This filter is being used in django admin panel in profile model.
-    """
+    """This filter is being used in django admin panel in profile model."""
 
     title = "Date"
     parameter_name = "occupation"
@@ -56,11 +54,10 @@ class RoommatesAdmin(admin.ModelAdmin):
     list_filter = [OccupiedFilter, "colocathlon_agree"]
     inlines = [MemberRoommatesInline]
     actions = ["reset_colocs"]
+
     @admin.action(description="Reset les colocs sélectionnées")
     def reset_colocs(self, request, queryset, **kwargs):
-        """ RESET ALL COLOCATHLON INFOS"""
-        colocs = queryset
-        for c in colocs:
+        for c in queryset:
             c.colocathlon_agree = False
             c.colocathlon_quota = 0
             c.colocathlon_hours = ""
