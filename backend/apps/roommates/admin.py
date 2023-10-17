@@ -55,6 +55,19 @@ class RoommatesAdmin(admin.ModelAdmin):
     ]
     list_filter = [OccupiedFilter, "colocathlon_agree"]
     inlines = [MemberRoommatesInline]
+    actions = ["reset_colocs"]
+    @admin.action(description="Reset les colocs sélectionnées")
+    def reset_colocs(self, request, queryset, **kwargs):
+        """ RESET ALL COLOCATHLON INFOS"""
+        print("Delet infos about colocathlon")
+        colocs = queryset
+        for c in colocs:
+            c.colocathlon_agree = False
+            c.colocathlon_quota = 0
+            c.colocathlon_hours = ""
+            c.colocathlon_activities = ""
+            c.colocathlon_participants.clear()
+            c.save()
 
 
 admin.site.register(Roommates, RoommatesAdmin)
