@@ -85,8 +85,8 @@ export function EditEventModalContent({
           setSelectedLang={setSelectedLang}
         />
       </ResponsiveDialogHeader>
-      <form onSubmit={(e) => onSubmit(e, formValues)}>
-        <ResponsiveDialogContent>
+      <ResponsiveDialogContent>
+        <form id="edit-event-form" onSubmit={(e) => onSubmit(e, formValues)}>
           <EventFormFields
             isError={isError}
             error={error}
@@ -95,16 +95,21 @@ export function EditEventModalContent({
             prevData={event}
             selectedLang={selectedLang}
           />
-        </ResponsiveDialogContent>
-        <ResponsiveDialogFooter>
-          <Button variant="text" onClick={() => onClose()}>
-            {t('button.cancel')}
-          </Button>
-          <LoadingButton loading={isLoading} type="submit" variant="contained">
-            {t('button.confirm')}
-          </LoadingButton>
-        </ResponsiveDialogFooter>
-      </form>
+        </form>
+      </ResponsiveDialogContent>
+      <ResponsiveDialogFooter>
+        <Button variant="text" onClick={() => onClose()}>
+          {t('button.cancel')}
+        </Button>
+        <LoadingButton
+          form="edit-event-form"
+          type="submit"
+          loading={isLoading}
+          variant="contained"
+        >
+          {t('button.confirm')}
+        </LoadingButton>
+      </ResponsiveDialogFooter>
     </>
   );
 }

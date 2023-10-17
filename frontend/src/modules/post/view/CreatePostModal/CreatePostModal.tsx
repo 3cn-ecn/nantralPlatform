@@ -75,8 +75,8 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
           setSelectedLang={setSelectedLang}
         />
       </ResponsiveDialogHeader>
-      <form onSubmit={(e) => onSubmit(e, formValues)}>
-        <ResponsiveDialogContent>
+      <ResponsiveDialogContent>
+        <form id="create-post-form" onSubmit={(e) => onSubmit(e, formValues)}>
           <PostFormFields
             isError={isError}
             error={error}
@@ -84,16 +84,21 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
             updateFormValues={updateFormValues}
             selectedLang={selectedLang}
           />
-        </ResponsiveDialogContent>
-        <ResponsiveDialogFooter>
-          <Button variant="text" onClick={() => onClose()}>
-            Annuler
-          </Button>
-          <LoadingButton loading={isLoading} type="submit" variant="contained">
-            Valider
-          </LoadingButton>
-        </ResponsiveDialogFooter>
-      </form>
+        </form>
+      </ResponsiveDialogContent>
+      <ResponsiveDialogFooter>
+        <Button variant="text" onClick={() => onClose()}>
+          Annuler
+        </Button>
+        <LoadingButton
+          form="create-post-form"
+          type="submit"
+          loading={isLoading}
+          variant="contained"
+        >
+          Valider
+        </LoadingButton>
+      </ResponsiveDialogFooter>
     </ResponsiveDialog>
   );
 }

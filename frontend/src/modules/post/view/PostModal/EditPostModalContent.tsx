@@ -86,8 +86,8 @@ export function EditPostModalContent({
           setSelectedLang={setSelectedLang}
         />
       </ResponsiveDialogHeader>
-      <form onSubmit={(e) => onSubmit(e, formValues)}>
-        <ResponsiveDialogContent>
+      <ResponsiveDialogContent>
+        <form id="edit-post-form" onSubmit={(e) => onSubmit(e, formValues)}>
           <PostFormFields
             isError={isError}
             error={error}
@@ -96,16 +96,21 @@ export function EditPostModalContent({
             prevData={post}
             selectedLang={selectedLang}
           />
-        </ResponsiveDialogContent>
-        <ResponsiveDialogFooter>
-          <Button variant="text" onClick={() => onFinish()}>
-            {t('button.cancel')}
-          </Button>
-          <LoadingButton loading={isLoading} type="submit" variant="contained">
-            {t('button.confirm')}
-          </LoadingButton>
-        </ResponsiveDialogFooter>
-      </form>
+        </form>
+      </ResponsiveDialogContent>
+      <ResponsiveDialogFooter>
+        <Button variant="text" onClick={() => onFinish()}>
+          {t('button.cancel')}
+        </Button>
+        <LoadingButton
+          form="edit-post-form"
+          type="submit"
+          loading={isLoading}
+          variant="contained"
+        >
+          {t('button.confirm')}
+        </LoadingButton>
+      </ResponsiveDialogFooter>
     </>
   );
 }
