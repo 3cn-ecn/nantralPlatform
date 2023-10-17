@@ -59,7 +59,6 @@ class RoommatesAdmin(admin.ModelAdmin):
     @admin.action(description="Reset les colocs sélectionnées")
     def reset_colocs(self, request, queryset, **kwargs):
         """ RESET ALL COLOCATHLON INFOS"""
-        print("Delet infos about colocathlon")
         colocs = queryset
         for c in colocs:
             c.colocathlon_agree = False
