@@ -4,11 +4,16 @@ import { Image } from 'mui-image';
 
 export function BackgroundImage({
   wrapperStyle,
+  alt = '',
   ...props
 }: ComponentProps<typeof Image>) {
   return (
     <Image
       wrapperStyle={{ position: 'absolute', zIndex: -1, ...wrapperStyle }}
+      alt={alt}
+      easing="ease-in"
+      duration={900}
+      shiftDuration={900}
       {...props}
     />
   );

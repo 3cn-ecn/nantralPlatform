@@ -16,7 +16,6 @@ export function BackgroundImageOverlay({ src }: BackgroundImageOverlayProps) {
     <Box position="relative">
       <BackgroundImage
         src={src}
-        alt=""
         shift="bottom"
         height="80vh"
         wrapperStyle={{ overflow: 'hidden' }}
