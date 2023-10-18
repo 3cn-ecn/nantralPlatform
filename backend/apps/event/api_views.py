@@ -19,9 +19,7 @@ from .serializers import (
 
 
 def format_date(date) -> str:
-    """
-    Format and translate a date according to the locale.
-    """
+    """Format and translate a date according to the locale."""
     return formats.date_format(date, "DATETIME_FORMAT")
 
 
@@ -35,7 +33,7 @@ class EventPermission(permissions.BasePermission):
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    """An API endpoint for event
+    """An API endpoint for event.
 
     Query Parameters
     ----------------
@@ -147,8 +145,18 @@ class EventViewSet(viewsets.ModelViewSet):
             qs = qs.filter(bookmarks__user=user)
         if is_bookmarked is False:
             qs = qs.exclude(bookmarks__user=user)
-        if is_shotgun is not None:
-            qs = qs.filter(max_participant__isnull=not is_shotgun)
+        if is_shotgun is True:
+            qs = qs.filter(
+                Q(max_participant__isnull=False)
+                | Q(start_registration__isnull=False)
+                | Q(end_registration__isnull=False)
+            )
+        if is_shotgun is False:
+            qs = qs.exclude(
+                Q(max_participant__isnull=False)
+                | Q(start_registration__isnull=False)
+                | Q(end_registration__isnull=False)
+            )
         if is_registration_open is not None:
             condition = (
                 Q(start_registration__lte=now)
@@ -169,10 +177,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["POST", "DELETE"])
     def participate(self, request, pk=None):
-        """
-        A view to add the user to the list of participants or remove him/her \
-        from the list.
-        """
+        """Add or remove a user from the participants."""
         event: Event = self.get_object()
         # user asks to remove himself from participants
         if request.method == "DELETE":
@@ -206,9 +211,7 @@ class EventViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["POST", "DELETE"])
     def bookmark(self, request, pk=None):
-        """
-        A view to add or remove this event to the bookmarks of the user.
-        """
+        """A view to add or remove this event to the bookmarks of the user."""
         event: Event = self.get_object()
         if request.method == "DELETE":
             event.bookmarks.remove(request.user.student)
