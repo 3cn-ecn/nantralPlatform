@@ -147,8 +147,18 @@ class EventViewSet(viewsets.ModelViewSet):
             qs = qs.filter(bookmarks__user=user)
         if is_bookmarked is False:
             qs = qs.exclude(bookmarks__user=user)
-        if is_shotgun is not None:
-            qs = qs.filter(max_participant__isnull=not is_shotgun)
+        if is_shotgun is True:
+            qs = qs.filter(
+                Q(max_participant__isnull=False)
+                | Q(start_registration__isnull=False)
+                | Q(end_registration__isnull=False)
+            )
+        if is_shotgun is False:
+            qs = qs.exclude(
+                Q(max_participant__isnull=False)
+                | Q(start_registration__isnull=False)
+                | Q(end_registration__isnull=False)
+            )
         if is_registration_open is not None:
             condition = (
                 Q(start_registration__lte=now)
