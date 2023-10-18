@@ -3,9 +3,7 @@ import { useObjectState } from '#shared/hooks/useObjectState';
 import { defaultTranslatedFieldValue } from '#shared/infra/translatedFields/defaultTranslatedFieldValue';
 
 const defaultEventFormValues: EventForm = {
-  title: '',
   titleTranslated: defaultTranslatedFieldValue,
-  description: '',
   descriptionTranslated: defaultTranslatedFieldValue,
   group: null,
   publicity: 'Pub',
@@ -21,9 +19,7 @@ const defaultEventFormValues: EventForm = {
 
 function convertToForm(event: Event): EventForm {
   return {
-    title: event.title,
     titleTranslated: event.titleTranslated,
-    description: event.description,
     descriptionTranslated: event.descriptionTranslated,
     group: event.group.id,
     publicity: event.publicity,

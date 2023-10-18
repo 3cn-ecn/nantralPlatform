@@ -5,9 +5,7 @@ import { PostFormDTO } from './post.dto';
 
 export function convertPostForm(post: PostForm): PostFormDTO {
   return {
-    title: post.title,
     ...convertTranslatedField(post.titleTranslated, 'title'),
-    description: post.description,
     ...convertTranslatedField(post.descriptionTranslated, 'description'),
     pinned: post.pinned,
     publicity: post.publicity,

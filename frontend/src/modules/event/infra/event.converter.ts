@@ -5,11 +5,9 @@ import { EventFormDTO } from './event.dto';
 
 export function convertEventForm(event: EventForm): EventFormDTO {
   return {
-    title: event.title,
     ...convertTranslatedField(event.titleTranslated, 'title'),
-    group: event.group,
-    description: event.description,
     ...convertTranslatedField(event.descriptionTranslated, 'description'),
+    group: event.group,
     location: event.location,
     image: event.image,
     start_date: event.startDate?.toISOString() || '',

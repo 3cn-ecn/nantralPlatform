@@ -32,12 +32,7 @@ export type PostPreview = Pick<
 
 export type PostForm = Pick<
   Post,
-  | 'title'
-  | 'titleTranslated'
-  | 'description'
-  | 'descriptionTranslated'
-  | 'publicity'
-  | 'pinned'
+  'titleTranslated' | 'descriptionTranslated' | 'publicity' | 'pinned'
 > & {
   group: number | null;
   image?: File;

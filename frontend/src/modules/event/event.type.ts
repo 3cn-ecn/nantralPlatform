@@ -45,9 +45,7 @@ export type EventPreview = Pick<
 
 export type EventForm = Pick<
   Event,
-  | 'title'
   | 'titleTranslated'
-  | 'description'
   | 'descriptionTranslated'
   | 'location'
   | 'publicity'

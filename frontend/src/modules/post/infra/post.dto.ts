@@ -30,10 +30,11 @@ export type PostPreviewDTO = Pick<
   | 'publicity'
 >;
 
-export type PostFormDTO = Pick<
-  PostDTO,
-  'title' | 'description' | 'publicity' | 'pinned'
-> & {
-  group: number | null;
+export type PostFormDTO = Pick<PostDTO, 'publicity' | 'pinned'> & {
+  // keep unused fields for typing errors
+  title: undefined;
+  description: undefined;
+  // override types for some fields
+  group: number | null; // id of group
   image?: File;
 } & TranslatedFieldsDTO<'title' | 'description'>;

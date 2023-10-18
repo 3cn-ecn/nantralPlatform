@@ -45,8 +45,6 @@ export type EventPreviewDTO = Pick<
 
 export type EventFormDTO = Pick<
   EventDTO,
-  | 'title'
-  | 'description'
   | 'location'
   | 'start_date'
   | 'end_date'
@@ -56,6 +54,10 @@ export type EventFormDTO = Pick<
   | 'end_registration'
   | 'form_url'
 > & {
-  group: number | null;
+  // keep unused fields for typing errors
+  title: undefined;
+  description: undefined;
+  // override types for some fields
+  group: number | null; // id of group
   image?: File;
 } & TranslatedFieldsDTO<'title' | 'description'>;
