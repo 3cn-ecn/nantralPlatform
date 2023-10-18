@@ -22,9 +22,8 @@ export function TopImage({ src }: TopImageProps) {
           setIsOpenImageModal(true);
         }}
         sx={{
-          borderRadius: 1,
-          borderTopLeftRadius: 0,
-          borderTopRightRadius: 0,
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
           overflow: 'hidden',
           width: '100%',
         }}
@@ -33,7 +32,14 @@ export function TopImage({ src }: TopImageProps) {
           src={src}
           alt="Banner of the event"
           shift="bottom"
-          style={{ aspectRatio: 16 / 9 }}
+          easing="ease-in"
+          duration={900}
+          shiftDuration={900}
+          style={{
+            aspectRatio: 16 / 9,
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+          }}
         />
       </ButtonBase>
       <ImageModal
