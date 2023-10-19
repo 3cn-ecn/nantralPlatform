@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# Staging server
+# Staging Server
 
 🌐 Address: [https://dev.nantral-platform.fr](https://dev.nantral-platform.fr)
 
