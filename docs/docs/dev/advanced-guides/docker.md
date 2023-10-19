@@ -74,15 +74,16 @@ background tasks).
 
 These services are launch when you run Docker on your local machine:
 
-| Service           | Description                                        | Access                                                                                                                                                                |
-| ----------------- | -------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| database          | The postgresql database for the website            | You can read it by connecting to the port 5432 on localhost with [PgAdmin4](https://www.pgadmin.org/download/), and using the credentials defined in your `.env` file |
-| backend           | The django server which serve files                | Open [http://localhost](http://localhost) in your browser                                                                                                             |
-| nginx             | Used to serve the backend and the static files     | -                                                                                                                                                                     |
-| redis             | Used for the django cache system                   | -                                                                                                                                                                     |
-| celery            | Used for asynchronous tasks runned in background   | -                                                                                                                                                                     |
-| celery-beat       | Used for linking celery to the backend with django | -                                                                                                                                                                     |
-| workers-dashboard | A dashboard to see all the celery tasks            | Open [http://localhost:5555](http://localhost:5555) in your browser                                                                                                   |
+| Service           | Description                                            | Access                                                                                                                                                                |
+| ----------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| database          | The postgresql database for the website                | You can read it by connecting to the port 5432 on localhost with [PgAdmin4](https://www.pgadmin.org/download/), and using the credentials defined in your `.env` file |
+| backend           | The django server which serve files                    | Open [http://localhost](http://localhost) in your browser                                                                                                             |
+| nginx             | Used to serve the backend and the static files         | -                                                                                                                                                                     |
+| redis             | Used for the django cache system                       | -                                                                                                                                                                     |
+| celery            | Used for asynchronous tasks runned in background       | -                                                                                                                                                                     |
+| celery-beat       | Used for linking celery to the backend with django     | -                                                                                                                                                                     |
+| workers-dashboard | A dashboard to see all the celery tasks                | Open [http://localhost:5555](http://localhost:5555) in your browser                                                                                                   |
+| mailpit           | An email server to show emails sent by django in local | Open [http://localhost:8025](http://localhost:8025) in your browser                                                                                                   |
 
 ## How to run docker for production server
 
