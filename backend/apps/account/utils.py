@@ -20,7 +20,7 @@ User = get_user_model()
 def user_creation(
     form: Union[SignUpForm, TemporaryRequestSignUpForm],
     request: HttpRequest,
-    invitation: Union[IdRegistration, None],
+    invitation: Union[IdRegistration, None] = None,
 ) -> User:
     # save with username = email by default
     user: User = form.instance
