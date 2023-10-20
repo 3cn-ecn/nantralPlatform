@@ -90,7 +90,7 @@ type Props = {
   validationLink?: string;
 };
 const ActivateYourAccountEmail = ({
-  firstName = "{{user.first_name|title}}",
+  firstName = "{{first_name|title}}",
   validationLink = "{{validation_link}}",
 }: Props) => (
   <Html>
@@ -110,7 +110,7 @@ send_email(
   to="toto@example.org",
   template_name="example-email",
   context={
-    "firstName": "Toto",
+    "first_name": "Toto",
     "validation_link": "https://nantral-platform.fr/validation/123456789",
   },
 )
