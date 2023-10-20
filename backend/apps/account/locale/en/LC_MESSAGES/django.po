@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-17 14:27+0200\n"
-"PO-Revision-Date: 2023-04-10 15:37+0200\n"
+"POT-Creation-Date: 2023-10-20 20:07+0200\n"
+"PO-Revision-Date: 2023-10-20 20:08+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
 "Language: en\n"
@@ -16,121 +16,119 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.4\n"
 
-#: admin.py:52
+#: admin.py:53
 msgid "Info personnelles"
 msgstr "Personal info"
 
-#: admin.py:54
+#: admin.py:57
 msgid "Permissions"
 msgstr "Permissions"
 
-#: admin.py:65
+#: admin.py:68
 msgid "Dates Importantes"
 msgstr "Important dates"
 
-#: forms.py:22
+#: forms.py:23
 msgid ""
-"Invitation invalide : le lien d'invitation a expiré. Veuillez entrer une "
+"Invitation invalide : le lien d'invitation a expiré. Veuillez entrer une "
 "adresse en ec-nantes.fr, ou contactez un administrateur."
 msgstr ""
 "Invalid invitation: the invitation link has expired. Please enter an email "
 "finishing by ec-nantes.fr, or contact an administrator."
 
-#: forms.py:33
+#: forms.py:34
 msgid ""
 "Vous devez utiliser une adresse mail de Centrale Nantes finissant par ec-"
 "nantes.fr"
 msgstr "You have to use your school email ending in ec-nantes.fr"
 
-#: forms.py:50 forms.py:176
+#: forms.py:51 forms.py:177
 msgid "Les deux mots de passe ne correspondent pas."
 msgstr "The passwords don't match."
 
-#: forms.py:58 forms.py:130
+#: forms.py:56
+msgid "Adresse mail"
+msgstr "Email"
+
+#: forms.py:60 forms.py:131
 msgid "Votre adresse mail ec-nantes.fr"
 msgstr "Your school email in ec-nantes.fr"
 
-#: forms.py:61
+#: forms.py:63
+msgid "Confirmation de l'adresse mail"
+msgstr "Confirm your email"
+
+#: forms.py:66
 msgid "Confirmez votre adresse."
 msgstr "Confirm you email."
 
 #: forms.py:69
-msgid "Vous pourrez modifier cela plus tard"
-msgstr "You can modify this later"
-
-#: forms.py:75
-msgid "Adresse mail"
-msgstr "Email"
-
-#: forms.py:76
-msgid "Confirmation de l'adresse mail"
-msgstr "Confirm your email"
-
-#: forms.py:77
-msgid "Prénom"
-msgstr "First name"
-
-#: forms.py:78
-msgid "NOM"
-msgstr "Last name"
-
-#: forms.py:79 forms.py:136
-msgid "Mot de passe"
-msgstr "Password"
-
-#: forms.py:80
-msgid "Confirmation du mot de passe"
-msgstr "Confirm your password"
-
-#: forms.py:82
-msgid "Entrez le même mot de passe pour vérification"
-msgstr "Enter the same password for verification"
-
-#: forms.py:84
 msgid "Année d'arrivée à Centrale"
 msgstr "Year of arrival at Centrale Nantes"
 
-#: forms.py:85
+#: forms.py:74
+msgid "Prénom"
+msgstr "First name"
+
+#: forms.py:77
+msgid "Nom"
+msgstr "Last name"
+
+#: forms.py:80
 msgid "Filière"
 msgstr "Formation followed"
 
-#: forms.py:86
+#: forms.py:83
 msgid "Cursus particulier ?"
 msgstr "Are you in a special programm?"
 
+#: forms.py:85
+msgid "Vous pourrez modifier cela plus tard"
+msgstr "You can modify this later"
+
+#: forms.py:91 forms.py:137
+msgid "Mot de passe"
+msgstr "Password"
+
+#: forms.py:92
+msgid "Confirmation du mot de passe"
+msgstr "Confirm your password"
+
 #: forms.py:94
+msgid "Entrez le même mot de passe pour vérification"
+msgstr "Enter the same password for verification"
+
+#: forms.py:103
 msgid "Cet email est déjà utilisé."
 msgstr "This email is already being used."
 
-#: forms.py:99
+#: forms.py:108
 msgid "Les emails ne correspondent pas."
 msgstr "The emails don't match."
 
-#: forms.py:151
+#: forms.py:152
 msgid "Entrez l'adresse mail associée au compte"
 msgstr "Enter the email associated with your account"
 
-#: forms.py:165
+#: forms.py:166
 msgid "Votre nouveau mot de passe"
 msgstr "Your new password"
 
-#: forms.py:166
+#: forms.py:167
 msgid "Confirmer le mot de passe"
 msgstr "Confirm your password"
 
-#: forms.py:189
+#: forms.py:190
 msgid "Votre adresse mail personnelle."
 msgstr "Your personal email."
 
-#: forms.py:202
+#: forms.py:203
 msgid "Votre adresse mail Centrale Nantes."
 msgstr "Your Centrale Nantes email."
 
 #: templates/account/confirm-email.html:11
-#, fuzzy
-#| msgid "Confirmez votre adresse."
 msgid "Confirmez votre adresse email"
 msgstr "Confirm your email address"
 

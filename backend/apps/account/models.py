@@ -48,4 +48,4 @@ class TemporaryAccessRequest(models.Model):
             if domain is not None:
                 self.domain = domain
             self.approved_until = settings.TEMPORARY_ACCOUNTS_DATE_LIMIT
-            super(TemporaryAccessRequest, self).save()
+            super().save()

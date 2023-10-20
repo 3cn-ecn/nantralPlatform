@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy
 
 from apps.student.models import FACULTIES, PATHS
 
@@ -15,8 +16,8 @@ from .models import IdRegistration
 User = get_user_model()
 
 
-def check_id(id):
-    if not IdRegistration.objects.filter(id=id).exists():
+def check_id(id_to_check: str):
+    if not IdRegistration.objects.filter(id=id_to_check).exists():
         raise ValidationError(
             _(
                 "Invitation invalide : le lien d'invitation a expiré. Veuillez "
@@ -52,41 +53,49 @@ def check_passwords(pass1, pass2):
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(
+        label=gettext_lazy("Adresse mail"),
         max_length=200,
         validators=[check_ecn_mail],
         required=True,
-        help_text=_("Votre adresse mail ec-nantes.fr"),
+        help_text=gettext_lazy("Votre adresse mail ec-nantes.fr"),
     )
     confirm_email = forms.EmailField(
-        max_length=200, required=True, help_text=_("Confirmez votre adresse.")
+        label=gettext_lazy("Confirmation de l'adresse mail"),
+        max_length=200,
+        required=True,
+        help_text=gettext_lazy("Confirmez votre adresse."),
     )
-    promo = forms.IntegerField(min_value=1919, required=True)
-    first_name = forms.CharField(max_length=200, required=True)
-    last_name = forms.CharField(max_length=200, required=True)
-    faculty = forms.ChoiceField(required=True, choices=FACULTIES)
+    promo = forms.IntegerField(
+        label=gettext_lazy("Année d'arrivée à Centrale"),
+        min_value=1919,
+        required=True,
+    )
+    first_name = forms.CharField(
+        label=gettext_lazy("Prénom"), max_length=200, required=True
+    )
+    last_name = forms.CharField(
+        label=gettext_lazy("Nom"), max_length=200, required=True
+    )
+    faculty = forms.ChoiceField(
+        label=gettext_lazy("Filière"), required=True, choices=FACULTIES
+    )
     path = forms.ChoiceField(
+        label=gettext_lazy("Cursus particulier ?"),
         choices=PATHS,
-        help_text=_("Vous pourrez modifier cela plus tard"),
+        help_text=gettext_lazy("Vous pourrez modifier cela plus tard"),
         required=False,
     )
 
     def __init__(self, *args, **kwargs):
-        super(SignUpForm, self).__init__(*args, **kwargs)
-        self.fields["email"].label = _("Adresse mail")
-        self.fields["confirm_email"].label = _("Confirmation de l'adresse mail")
-        self.fields["first_name"].label = _("Prénom")
-        self.fields["last_name"].label = _("NOM")
+        super().__init__(*args, **kwargs)
         self.fields["password1"].label = _("Mot de passe")
         self.fields["password2"].label = _("Confirmation du mot de passe")
         self.fields["password2"].help_text = _(
             "Entrez le même mot de passe pour vérification"
         )
-        self.fields["promo"].label = _("Année d'arrivée à Centrale")
-        self.fields["faculty"].label = _("Filière")
-        self.fields["path"].label = _("Cursus particulier ?")
 
     def clean(self):
-        cleaned_data = super(SignUpForm, self).clean()
+        cleaned_data = super().clean()
         email = cleaned_data.get("email")
         confirm_email = cleaned_data.get("confirm_email")
         try:
@@ -119,12 +128,12 @@ class LoginForm(forms.Form):
         max_length=200,
         validators=[check_ecn_mail_login],
         required=True,
-        help_text=_("Votre adresse mail ec-nantes.fr"),
+        help_text=gettext_lazy("Votre adresse mail ec-nantes.fr"),
     )
     password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
-        super(LoginForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["password"].label = _("Mot de passe")
         self.fields["password"].help_text = (
             f"<a class='text-muted' href='/account/forgotten'>"
@@ -153,12 +162,12 @@ class ResetPassForm(forms.Form):
     password_confirm = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
-        super(ResetPassForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["password"].label = _("Votre nouveau mot de passe")
         self.fields["password_confirm"].label = _("Confirmer le mot de passe")
 
     def clean(self):
-        cleaned_data = super(ResetPassForm, self).clean()
+        cleaned_data = super().clean()
         password = cleaned_data.get("password")
         password_confirm = cleaned_data.get("password_confirm ")
 
@@ -178,7 +187,7 @@ class TemporaryRequestSignUpForm(SignUpForm):
     email = forms.EmailField(
         max_length=200,
         required=True,
-        help_text=_("Votre adresse mail personnelle."),
+        help_text=gettext_lazy("Votre adresse mail personnelle."),
     )
     invite_id = forms.UUIDField(
         validators=[check_id], widget=forms.HiddenInput()
@@ -191,6 +200,6 @@ class UpgradePermanentAccountForm(forms.Form):
     email = forms.EmailField(
         max_length=200,
         required=True,
-        help_text=_("Votre adresse mail Centrale Nantes."),
+        help_text=gettext_lazy("Votre adresse mail Centrale Nantes."),
         validators=[check_ecn_mail],
     )
