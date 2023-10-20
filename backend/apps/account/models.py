@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 from .manager import UserManager
 
@@ -9,6 +10,13 @@ from .manager import UserManager
 class IdRegistration(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     expires_at = models.DateTimeField()
+
+    def __str__(self) -> str:
+        return f"Invitation(Expires at: {self.expires_at.strftime('%d/%m/%Y, %H:%M:%S')})"
+
+    def is_valid(self) -> bool:
+        """Return True if invitation is not expired"""
+        return self.expires_at > timezone.now().today()
 
 
 class User(AbstractUser):

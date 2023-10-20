@@ -8,6 +8,8 @@ from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.sites.shortcuts import get_current_site
+from django.http import HttpRequest, HttpResponse
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
@@ -42,8 +44,9 @@ class RegistrationView(FormView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        last_invitation = IdRegistration.objects.order_by("-expires_at").first()
         context["temporary_registration"] = (
-            settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today()
+            last_invitation and last_invitation.is_valid()
         )
         return context
 
@@ -71,6 +74,25 @@ class TemporaryRegistrationView(FormView):
 
         return super().get(request, *args, **kwargs)
 
+    def post(
+        self,
+        request: HttpRequest,
+        invite_id: uuid.UUID,
+        *args: str,
+        **kwargs: Any,
+    ) -> HttpResponse:
+        self.invitation = IdRegistration.objects.filter(id=invite_id).first()
+        if (
+            self.invitation is None
+            or timezone.now() > self.invitation.expires_at
+        ):
+            messages.error(
+                request, "Invitation invalide : le lien d'invitation a expiré."
+            )
+            return redirect("account:registration-choice")
+
+        return super().post(request, *args, **kwargs)
+
     def get_initial(self) -> Dict[str, Any]:
         initial = super().get_initial()
         initial["invite_id"] = self.kwargs["invite_id"]
@@ -78,6 +100,7 @@ class TemporaryRegistrationView(FormView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
+
         context["invitation"] = self.invitation
         context["DEADLINE_TEMPORARY_REGISTRATION"] = self.invitation.expires_at
         return context
@@ -269,7 +292,8 @@ class PermanentAccountUpgradeView(LoginRequiredMixin, FormView):
 
     def get(self, request):
         if request.user.invitation is None:
-            redirect("/")
+            # account already permanent, redirect to home page
+            return redirect("/")
         return super().get(request=request)
 
     def form_valid(self, form: UpgradePermanentAccountForm) -> HttpResponse:
