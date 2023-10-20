@@ -141,8 +141,8 @@ class AuthView(FormView):
             )
             messages.warning(request, message)
             return redirect(url)
-        else:
-            return super(AuthView, AuthView).get(self, request)
+
+        return super().get(self, request)
 
     def form_invalid(self, form):
         message = "Veuillez vous connecter avec votre adresse mail ECN."

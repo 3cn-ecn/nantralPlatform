@@ -23,7 +23,7 @@ def user_creation(
     # save with username = email by default
     user: User = form.instance
     user.username = user.email
-    user.save()
+    form.save()
 
     user.student.promo = form.cleaned_data.get("promo")
     user.student.faculty = form.cleaned_data.get("faculty")
