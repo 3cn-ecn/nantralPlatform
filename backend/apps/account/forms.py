@@ -100,14 +100,6 @@ class SignUpForm(UserCreationForm):
                     )
             return cleaned_data
 
-    def clean_email(self) -> str:
-        data: str = self.cleaned_data["email"]
-        return data.lower()
-
-    def clean_confirm_email(self) -> str:
-        data: str = self.cleaned_data["confirm_email"]
-        return data.lower()
-
     class Meta:
         model = User
         fields = (
@@ -202,7 +194,3 @@ class UpgradePermanentAccountForm(forms.Form):
         help_text=_("Votre adresse mail Centrale Nantes."),
         validators=[check_ecn_mail],
     )
-
-    def clean_email(self) -> str:
-        data: str = self.cleaned_data["email"]
-        return data.lower()

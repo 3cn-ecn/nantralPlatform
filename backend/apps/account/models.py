@@ -17,6 +17,10 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True)
 
+    def save(self, *args, **kwargs):
+        self.email = self.email.lower()
+        super().save(*args, **kwargs)
+
 
 class IdRegistration(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
