@@ -3,7 +3,7 @@ from typing import Any, Dict
 from urllib.parse import urlparse
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordResetConfirmView
@@ -27,11 +27,9 @@ from .forms import (
     TemporaryRequestSignUpForm,
     UpgradePermanentAccountForm,
 )
-from .models import IdRegistration
+from .models import IdRegistration, User
 from .tokens import account_activation_token
 from .utils import send_email_confirmation, user_creation
-
-User = get_user_model()
 
 
 class RegistrationView(FormView):
@@ -56,13 +54,9 @@ class TemporaryRegistrationView(FormView):
     template_name = "account/temporary_registration.html"
 
     def get(self, request, invite_id: uuid.UUID, *args, **kwargs):
-        # Do not allow to use this view outside of allowed.
-        # temporary accounts windows.
         self.invitation = IdRegistration.objects.filter(id=invite_id).first()
-        if (
-            self.invitation is None
-            or timezone.now() > self.invitation.expires_at
-        ):
+        # Do not allow to use this view if invitation is expired
+        if self.invitation is None or not self.invitation.is_valid():
             messages.error(
                 request, "Invitation invalide : le lien d'invitation a expiré."
             )
@@ -78,10 +72,7 @@ class TemporaryRegistrationView(FormView):
         **kwargs: Any,
     ) -> HttpResponse:
         self.invitation = IdRegistration.objects.filter(id=invite_id).first()
-        if (
-            self.invitation is None
-            or timezone.now() > self.invitation.expires_at
-        ):
+        if self.invitation is None or not self.invitation.is_valid():
             messages.error(
                 request, "Invitation invalide : le lien d'invitation a expiré."
             )
@@ -167,9 +158,9 @@ class AuthView(FormView):
         return redirect("account:login")
 
     def form_valid(self, form):
-        username = form.cleaned_data["email"]
+        email = form.cleaned_data["email"]
         password = form.cleaned_data["password"]
-        user = authenticate(self.request, email=username, password=password)
+        user: User = authenticate(self.request, email=email, password=password)
 
         url = self.request.GET.get("next", "/")
         parsed_uri = urlparse(url)
@@ -178,8 +169,7 @@ class AuthView(FormView):
 
         # Wrong credentials or expired invitation
         if user is None or (
-            user.invitation is not None
-            and user.invitation.expires_at < timezone.now()
+            user.invitation is not None and not user.invitation.is_valid()
         ):
             messages.error(
                 self.request, "Identifiant inconnu ou mot de passe invalide."
@@ -188,14 +178,11 @@ class AuthView(FormView):
 
         # Not verified email
         if not user.is_email_valid:
-            self.request.session["email"] = username
+            self.request.session["email"] = email
             return redirect("account:confirm-email")
 
         # Temporary account
-        if (
-            user.invitation is not None
-            and user.invitation.expires_at > timezone.now()
-        ):
+        if user.invitation is not None and user.invitation.is_valid():
             message = (
                 "Votre compte n'est pas encore définitif. "
                 'Veuillez le valider <a href="'

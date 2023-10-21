@@ -17,7 +17,7 @@ class IdRegistration(models.Model):
 
     def is_valid(self) -> bool:
         """Return True if invitation is not expired."""
-        return self.expires_at > timezone.now().today()
+        return self.expires_at > timezone.now()
 
 
 class User(AbstractUser):
