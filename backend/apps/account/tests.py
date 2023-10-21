@@ -165,7 +165,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         response = self.client.post(url, payload)
         self.assertEqual(response.status_code, 302)
         self.assertFalse(get_user(self.client).is_authenticated)
-        # Check that user as an invitation
+        # Check that user has an invitation
         self.assertIsNotNone(user.invitation)
         # Check that is email valid is False
         self.assertFalse(user.is_email_valid)
