@@ -1,5 +1,3 @@
-from typing import Union
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import HttpRequest
@@ -17,9 +15,9 @@ User = get_user_model()
 
 
 def user_creation(
-    form: Union[SignUpForm, TemporaryRequestSignUpForm],
+    form: SignUpForm | TemporaryRequestSignUpForm,
     request: HttpRequest,
-    invitation: Union[IdRegistration, None] = None,
+    invitation: IdRegistration | None = None,
 ) -> User:
     # save with username = email by default
     user: User = form.instance
