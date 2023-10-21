@@ -9,13 +9,13 @@ from django.utils.translation import gettext_lazy
 
 from apps.student.models import FACULTIES, PATHS
 
-from .models import IdRegistration
+from .models import InvitationLink
 
 User = get_user_model()
 
 
 def check_id(id_to_check: str):
-    if not IdRegistration.objects.filter(id=id_to_check).exists():
+    if not InvitationLink.objects.filter(id=id_to_check).exists():
         raise ValidationError(
             _(
                 "Invitation invalide : le lien d'invitation a expiré. Veuillez "

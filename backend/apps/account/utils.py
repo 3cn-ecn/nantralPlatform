@@ -8,7 +8,7 @@ from django.utils.http import urlsafe_base64_encode
 from apps.utils.send_email import send_email
 
 from .forms import SignUpForm, TemporaryRequestSignUpForm
-from .models import IdRegistration
+from .models import InvitationLink
 from .tokens import account_activation_token
 
 User = get_user_model()
@@ -17,7 +17,7 @@ User = get_user_model()
 def user_creation(
     form: SignUpForm | TemporaryRequestSignUpForm,
     request: HttpRequest,
-    invitation: IdRegistration | None = None,
+    invitation: InvitationLink | None = None,
 ) -> User:
     # save with username = email by default
     user: User = form.instance
