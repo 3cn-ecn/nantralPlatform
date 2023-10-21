@@ -181,7 +181,6 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         )
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
-        # temp_req.refresh_from_db()
 
         # Check that you can login
         url = reverse("account:login")
@@ -282,7 +281,7 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
 
 
 class TestForgottenPass(TestCase, TestMixin):
-    new_password = "new"
+    new_password = "new"  # noqa: S105
 
     def setUp(self) -> None:
         self.create_user(username="test", email="test@ec-nantes.fr")

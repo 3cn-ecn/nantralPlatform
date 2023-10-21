@@ -12,10 +12,11 @@ class IdRegistration(models.Model):
     expires_at = models.DateTimeField()
 
     def __str__(self) -> str:
-        return f"Invitation(Expires at: {self.expires_at.strftime('%d/%m/%Y, %H:%M:%S')})"
+        return f"""Invitation(Expires at:
+         {self.expires_at.strftime('%d/%m/%Y, %H:%M:%S')})"""
 
     def is_valid(self) -> bool:
-        """Return True if invitation is not expired"""
+        """Return True if invitation is not expired."""
         return self.expires_at > timezone.now().today()
 
 
