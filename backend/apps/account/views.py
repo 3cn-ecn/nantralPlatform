@@ -27,7 +27,7 @@ from .forms import (
     TemporaryRequestSignUpForm,
     UpgradePermanentAccountForm,
 )
-from .models import IdRegistration, User
+from .models import InvitationLink, User
 from .tokens import account_activation_token
 from .utils import send_email_confirmation, user_creation
 
@@ -38,7 +38,7 @@ class RegistrationView(FormView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        last_invitation = IdRegistration.objects.order_by("-expires_at").first()
+        last_invitation = InvitationLink.objects.order_by("-expires_at").first()
         context["temporary_registration"] = (
             last_invitation and last_invitation.is_valid()
         )
@@ -54,7 +54,7 @@ class TemporaryRegistrationView(FormView):
     template_name = "account/temporary_registration.html"
 
     def get(self, request, invite_id: uuid.UUID, *args, **kwargs):
-        self.invitation = IdRegistration.objects.filter(id=invite_id).first()
+        self.invitation = InvitationLink.objects.filter(id=invite_id).first()
         # Do not allow to use this view if invitation is expired
         if self.invitation is None or not self.invitation.is_valid():
             messages.error(
@@ -71,7 +71,7 @@ class TemporaryRegistrationView(FormView):
         *args: str,
         **kwargs: Any,
     ) -> HttpResponse:
-        self.invitation = IdRegistration.objects.filter(id=invite_id).first()
+        self.invitation = InvitationLink.objects.filter(id=invite_id).first()
         if self.invitation is None or not self.invitation.is_valid():
             messages.error(
                 request, "Invitation invalide : le lien d'invitation a expiré."
@@ -94,7 +94,7 @@ class TemporaryRegistrationView(FormView):
 
     def form_valid(self, form) -> HttpResponse:
         invite_id = self.request.path.split("/")[-2]
-        invitation = IdRegistration.objects.get(id=invite_id)
+        invitation = InvitationLink.objects.get(id=invite_id)
         user_creation(form, self.request, invitation=invitation)
         return redirect("account:login")
 

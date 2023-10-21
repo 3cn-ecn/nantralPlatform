@@ -13,7 +13,7 @@ from django.urls import reverse
 from freezegun import freeze_time
 from rest_framework import status
 
-from apps.account.models import IdRegistration
+from apps.account.models import InvitationLink
 from apps.student.models import Student
 from apps.utils.testing.mocks import discord_mock_message_post
 from apps.utils.utest import TestMixin
@@ -117,7 +117,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
     """Check that temporary accounts work within the correct time frame."""
 
     def setUp(self):
-        self.invite_id = IdRegistration.objects.create(
+        self.invite_id = InvitationLink.objects.create(
             expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc)
         ).id
         self.PAYLOAD = {
@@ -222,7 +222,7 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
             "password1": self.PASSWORD,
             "password2": self.PASSWORD,
         }
-        self.invite_id = IdRegistration.objects.create(
+        self.invite_id = InvitationLink.objects.create(
             expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc)
         ).id
 

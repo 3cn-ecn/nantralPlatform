@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.student.admin import StudentInline
 
-from .models import IdRegistration
+from .models import InvitationLink
 
 User = get_user_model()
 
@@ -55,13 +55,9 @@ class NoPasswordFilter(admin.SimpleListFilter):
             return queryset.filter(password="")  # noqa: S106
 
 
-@admin.register(IdRegistration)
+@admin.register(InvitationLink)
 class IdRegistrationAdmin(admin.ModelAdmin):
-    list_display = ["id", "expires_at"]
-    readonly_fields = ["invitation_url"]
-
-    def invitation_url(self, obj: IdRegistration):
-        return reverse("account:temp-registration-choice", args=[obj.id])
+    list_display = ["id", "description", "expires_at"]
 
 
 @admin.register(User)

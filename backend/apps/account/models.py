@@ -2,14 +2,16 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 from .manager import UserManager
 
 
-class IdRegistration(models.Model):
+class InvitationLink(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     expires_at = models.DateTimeField()
+    description = models.CharField(default="", max_length=200)
 
     def __str__(self) -> str:
         return f"""Invitation(Expires at:
@@ -18,6 +20,9 @@ class IdRegistration(models.Model):
     def is_valid(self) -> bool:
         """Return True if invitation is not expired."""
         return self.expires_at > timezone.now()
+
+    def get_absolute_url(self):
+        return reverse("account:temp-registration-choice", args=[self.id])
 
 
 class User(AbstractUser):
@@ -31,7 +36,7 @@ class User(AbstractUser):
     is_email_valid = models.BooleanField(default=False)
     email_next = models.EmailField(null=True, blank=True)
     invitation = models.ForeignKey(
-        IdRegistration, null=True, blank=True, on_delete=models.SET_NULL
+        InvitationLink, null=True, blank=True, on_delete=models.SET_NULL
     )
 
     def save(self, *args, **kwargs):
