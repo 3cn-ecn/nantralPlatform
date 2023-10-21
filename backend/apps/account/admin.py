@@ -114,6 +114,9 @@ class CustomUserAdmin(UserAdmin):
     @admin.action(description="Send reminder to upgrade account.")
     def send_reminder(self, request, queryset: list[User]):
         current_site = get_current_site(request)
+        upgrade_link = f"https://{current_site.domain}" + reverse(
+            "account:upgrade-permanent"
+        )
         send_mass_email(
             template_name="reminder-upgrade",
             subject="[Nantral Platform] Votre compte expire bientôt !",
@@ -121,7 +124,7 @@ class CustomUserAdmin(UserAdmin):
                 {
                     "first_name": user.first_name,
                     "deadline": user.invitation.expires_at,
-                    "change_email_link": f'https://{current_site.domain}{reverse("account:upgrade-permanent")}',
+                    "change_email_link": upgrade_link,
                 }
                 for user in queryset
                 if user.invitation is not None
