@@ -12,12 +12,14 @@
             <i class="fa fa-cog"></i> Général
         </a>
     </li>
+    {% comment %}
     <li class="nav-item">
         <a class="nav-link {% if open == "members" %}active" aria-current="page{% endif %}" 
             href="{% url object.app|add:':update-members' object.slug %}">
             <i class="fa fa-users"></i> Membres
         </a>
     </li>
+    {% endcomment %}
     <li class="nav-item">
         <a class="nav-link {% if open == "sociallinks" %}active" aria-current="page{% endif %}"
             href="{% url object.app|add:':update-sociallinks' object.slug %}" >
