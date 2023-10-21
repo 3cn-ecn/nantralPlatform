@@ -16,7 +16,7 @@ def migrate_temporary_accounts(apps, schema_editor):
 
     for temp_account in TemporaryAccessRequest.objects.all():
         temp_account.user.invitation = invitation
-        temp_account.save()
+        temp_account.user.save()
 
 
 def migrate_temporary_accounts_back(apps, schema_editor):
