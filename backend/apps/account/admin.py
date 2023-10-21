@@ -55,47 +55,6 @@ class NoPasswordFilter(admin.SimpleListFilter):
             return queryset.filter(password="")  # noqa: S106
 
 
-class UppercaseEmailFilter(admin.SimpleListFilter):
-    title = "mail avec majuscules"
-    parameter_name = "uppercase_email"
-
-    def lookups(self, request, model_admin):
-        return (("has_uppercase", "A des majuscules"),)
-
-    def queryset(self, request, queryset):
-        if self.value() == "has_uppercase":
-            return queryset.filter(email__regex=r"[A-Z]")
-
-
-class ECNantesDomainFilter(admin.SimpleListFilter):
-    title = _("mail Centrale Nantes")
-    parameter_name = "ecnantes_domain"
-
-    def lookups(self, request, model_admin):
-        return (
-            ("with_domain", "ec-nantes.fr"),
-            ("without_domain", "autres hébergeurs"),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == "with_domain":
-            return queryset.filter(email__regex=r"@(\w+\.)?ec-nantes\.fr$")
-        if self.value() == "without_domain":
-            return queryset.exclude(email__regex=r"@(\w+\.)?ec-nantes\.fr$")
-
-
-class NoPasswordFilter(admin.SimpleListFilter):
-    title = "mot de passe vide"
-    parameter_name = "no_password"
-
-    def lookups(self, request, model_admin):
-        return (("no_password", "Mot de passe vide"),)
-
-    def queryset(self, request, queryset):
-        if self.value() == "no_password":
-            return queryset.filter(password="")  # noqa: S106
-
-
 @admin.register(IdRegistration)
 class IdRegistrationAdmin(admin.ModelAdmin):
     list_display = ["id", "expires_at"]
