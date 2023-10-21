@@ -1,9 +1,0 @@
-<small>English version bellow</small>
-<h2>Bonjour {{ tempAccess.user.first_name|title }}</h2>
-<p>Votre accès temporaire à Nantral Platform expire le {{deadline}}.</p>
-<p>Pour continuer à pouvoir accéder à Nantral Platform vous devez renseigner votre email Centrale Nantes. Vous pouvez le faire <a href='https://{{ domain }}{% url "account:upgrade-permanent"%}'>ici</a>.</p>
-<p>Attention sans cela votre compte sera supprimé le {{deadline}}.</p>
-<h2>Hi {{ tempAccess.user.first_name|title }}</h2>
-<p>Your temporary access to Nantral Platform will expire on the {{deadline}}</p>
-<p>To keep using the site you need to register with your school email. You can do it<a href='https://{{ domain }}{% url "account:upgrade-permanent" %}'>here</a>.</p>
-<p>Please be aware that otherwise your account will be deleted on the {{deadline}}.</p>

@@ -192,11 +192,6 @@ DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
 # CUSTOM SETTINGS
-
-TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
-    env("TEMPORARY_ACCOUNTS_DATE_LIMIT")
-)
-
 STAGING = env("STAGING")
 
 # THIRD PARTY LIBRARIES SETTINGS
