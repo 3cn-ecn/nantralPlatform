@@ -10,7 +10,6 @@ from django.contrib.auth.views import PasswordResetConfirmView
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
-from django.utils import timezone
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View

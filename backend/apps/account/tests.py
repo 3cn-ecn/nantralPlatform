@@ -7,7 +7,7 @@ from unittest import mock
 
 from django.contrib.auth import get_user
 from django.core import mail
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from django.urls import reverse
 
 from freezegun import freeze_time
