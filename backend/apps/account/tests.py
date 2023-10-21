@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 from unittest import mock
 
-from django.contrib.auth import get_user, get_user_model
+from django.contrib.auth import get_user
 from django.core import mail
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -17,6 +17,8 @@ from apps.account.models import IdRegistration
 from apps.student.models import Student
 from apps.utils.testing.mocks import discord_mock_message_post
 from apps.utils.utest import TestMixin
+
+from .models import User
 
 PAYLOAD_TEMPLATE = {
     "first_name": "test_name",
@@ -33,8 +35,6 @@ REGEX_RESET_PASS_URL = (
     r"http://testserver/account/reset_pass/([\w-]*)/([\w-]*)/"  # noqa: S105
 )
 
-User = get_user_model()
-
 
 class TestAccount(TestCase, TestMixin):
     """Test class for account related methods."""
@@ -49,7 +49,6 @@ class TestAccount(TestCase, TestMixin):
     def tearDown(self):
         self.user_teardown()
 
-    @freeze_time("2021-09-01")
     def test_create_user_view_inside_temp(self):
         """Test that you can still create an account during temporary
         registration periods."""
@@ -78,12 +77,6 @@ class TestAccount(TestCase, TestMixin):
         user: User = User.objects.get(email="test@ec-nantes.fr")
         self.assertTrue(user.is_active)
 
-    @freeze_time("2021-09-03")
-    @override_settings(
-        TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(
-            year=2021, month=9, day=2, tzinfo=timezone.utc
-        )
-    )
     def test_create_user_view_outside_temp(self):
         """Test that you can still create an account outside temporary
         registration periods."""
@@ -120,11 +113,6 @@ class TestAccount(TestCase, TestMixin):
 
 
 @freeze_time("2021-09-01")
-@override_settings(
-    TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(
-        year=2021, month=9, day=2, tzinfo=timezone.utc
-    )
-)
 class TestTemporaryAccounts(TestCase, TestMixin):
     """Check that temporary accounts work within the correct time frame."""
 
@@ -222,11 +210,6 @@ class TestTemporaryAccounts(TestCase, TestMixin):
 
 
 @freeze_time("2021-09-03")
-@override_settings(
-    TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(
-        year=2021, month=9, day=2, tzinfo=timezone.utc
-    )
-)
 class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
     """Check that temporary accounts don't work outside of the correct time
     frame."""
