@@ -17,6 +17,9 @@
     },
     "notFound": {
       "index": "Erreur 404"
+    },
+    "signature": {
+      "index": "Signature"
     }
   },
   "button": {
@@ -370,6 +373,9 @@
       }
     },
     "post": "Post"
+  },
+  "signature": {
+    "title": "Générateur de signature"
   },
   "site": {
     "name": "Nantral Platform"

@@ -78,7 +78,6 @@ export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
           label={t('navbar.signature')}
           path="/tools/signature/"
           iconPath="/static/img/icons/cropped/sign.svg"
-          isOnBackend
           closeMenu={onClose}
         />
       </List>

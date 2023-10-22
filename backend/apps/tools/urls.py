@@ -6,7 +6,7 @@ app_name = "tools"
 
 urlpatterns = [
     path(
-        "signature/",
+        "signature/old",
         views.SignatureGenerationView.as_view(),
         name="signature-gen",
     ),
