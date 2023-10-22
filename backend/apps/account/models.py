@@ -14,6 +14,9 @@ class InvitationLink(models.Model):
     description = models.CharField(default="", max_length=200)
 
     def __str__(self) -> str:
+        if self.description:
+            return self.description
+
         return f"""Invitation(Expires at:
          {self.expires_at.strftime('%d/%m/%Y, %H:%M:%S')})"""
 
