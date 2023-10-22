@@ -375,6 +375,14 @@
     "post": "Post"
   },
   "signature": {
+    "actions": {
+      "export": {
+        "label": "Export"
+      },
+      "reset": {
+        "label": "Reset"
+      }
+    },
     "title": "Signature generator"
   },
   "site": {
