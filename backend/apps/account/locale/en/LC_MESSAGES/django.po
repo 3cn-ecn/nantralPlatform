@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-20 20:07+0200\n"
+"POT-Creation-Date: 2023-10-22 17:02+0200\n"
 "PO-Revision-Date: 2023-10-20 20:08+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -18,19 +18,29 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4\n"
 
-#: admin.py:53
+#: admin.py:25
+#, fuzzy
+#| msgid "Votre adresse mail Centrale Nantes."
+msgid "mail Centrale Nantes"
+msgstr "Your Centrale Nantes email."
+
+#: admin.py:64
 msgid "Info personnelles"
 msgstr "Personal info"
 
-#: admin.py:57
+#: admin.py:68
 msgid "Permissions"
 msgstr "Permissions"
 
-#: admin.py:68
+#: admin.py:80
+msgid "Validation du compte"
+msgstr "Account Validation"
+
+#: admin.py:89
 msgid "Dates Importantes"
 msgstr "Important dates"
 
-#: forms.py:23
+#: forms.py:21
 msgid ""
 "Invitation invalide : le lien d'invitation a expiré. Veuillez entrer une "
 "adresse en ec-nantes.fr, ou contactez un administrateur."
@@ -38,93 +48,93 @@ msgstr ""
 "Invalid invitation: the invitation link has expired. Please enter an email "
 "finishing by ec-nantes.fr, or contact an administrator."
 
-#: forms.py:34
+#: forms.py:32
 msgid ""
 "Vous devez utiliser une adresse mail de Centrale Nantes finissant par ec-"
 "nantes.fr"
 msgstr "You have to use your school email ending in ec-nantes.fr"
 
-#: forms.py:51 forms.py:177
+#: forms.py:40 forms.py:165
 msgid "Les deux mots de passe ne correspondent pas."
 msgstr "The passwords don't match."
 
-#: forms.py:56
+#: forms.py:45
 msgid "Adresse mail"
 msgstr "Email"
 
-#: forms.py:60 forms.py:131
+#: forms.py:49 forms.py:119
 msgid "Votre adresse mail ec-nantes.fr"
 msgstr "Your school email in ec-nantes.fr"
 
-#: forms.py:63
+#: forms.py:52
 msgid "Confirmation de l'adresse mail"
 msgstr "Confirm your email"
 
-#: forms.py:66
+#: forms.py:55
 msgid "Confirmez votre adresse."
 msgstr "Confirm you email."
 
-#: forms.py:69
+#: forms.py:58
 msgid "Année d'arrivée à Centrale"
 msgstr "Year of arrival at Centrale Nantes"
 
-#: forms.py:74
+#: forms.py:63
 msgid "Prénom"
 msgstr "First name"
 
-#: forms.py:77
+#: forms.py:66
 msgid "Nom"
 msgstr "Last name"
 
-#: forms.py:80
+#: forms.py:69
 msgid "Filière"
 msgstr "Formation followed"
 
-#: forms.py:83
+#: forms.py:72
 msgid "Cursus particulier ?"
 msgstr "Are you in a special programm?"
 
-#: forms.py:85
+#: forms.py:74
 msgid "Vous pourrez modifier cela plus tard"
 msgstr "You can modify this later"
 
-#: forms.py:91 forms.py:137
+#: forms.py:80 forms.py:125
 msgid "Mot de passe"
 msgstr "Password"
 
-#: forms.py:92
+#: forms.py:81
 msgid "Confirmation du mot de passe"
 msgstr "Confirm your password"
 
-#: forms.py:94
+#: forms.py:83
 msgid "Entrez le même mot de passe pour vérification"
 msgstr "Enter the same password for verification"
 
-#: forms.py:103
+#: forms.py:92
 msgid "Cet email est déjà utilisé."
 msgstr "This email is already being used."
 
-#: forms.py:108
+#: forms.py:97
 msgid "Les emails ne correspondent pas."
 msgstr "The emails don't match."
 
-#: forms.py:152
+#: forms.py:140
 msgid "Entrez l'adresse mail associée au compte"
 msgstr "Enter the email associated with your account"
 
-#: forms.py:166
+#: forms.py:154
 msgid "Votre nouveau mot de passe"
 msgstr "Your new password"
 
-#: forms.py:167
+#: forms.py:155
 msgid "Confirmer le mot de passe"
 msgstr "Confirm your password"
 
-#: forms.py:190
+#: forms.py:179
 msgid "Votre adresse mail personnelle."
 msgstr "Your personal email."
 
-#: forms.py:203
+#: forms.py:192
 msgid "Votre adresse mail Centrale Nantes."
 msgstr "Your Centrale Nantes email."
 

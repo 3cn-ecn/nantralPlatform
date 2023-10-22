@@ -35,14 +35,6 @@ class RegistrationView(FormView):
     template_name = "account/registration.html"
     form_class = SignUpForm
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        last_invitation = InvitationLink.objects.order_by("-expires_at").first()
-        context["temporary_registration"] = (
-            last_invitation and last_invitation.is_valid()
-        )
-        return context
-
     def form_valid(self, form):
         user_creation(form, self.request)
         return redirect("home:home")
@@ -107,13 +99,13 @@ class ConfirmUser(View):
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             return render(self.request, "account/activation_invalid.html")
         # get the associated temporary object if it exists
-        invitation = user.invitation is not None
+        is_temporary = user.invitation is not None
         # checking if the token is valid.
         if account_activation_token.check_token(user, token):
             # if valid set active true
             user.is_active = True
             user.is_email_valid = True
-            if invitation and user.email_next:
+            if is_temporary and user.email_next:
                 user.email = user.email_next
                 user.email_next = None
                 user.invitation = None
@@ -197,8 +189,6 @@ class AuthView(FormView):
             return redirect(url)
 
         # Normal case
-        message = f"Bonjour {user.first_name.title()} !"
-        messages.success(self.request, message)
         login(self.request, user)
         # We send back the user to where he wanted to go or to home page
         return redirect(url)
