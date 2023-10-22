@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -70,24 +69,26 @@ class CustomUserAdmin(UserAdmin):
             {
                 "fields": (
                     "is_active",
-                    "is_email_valid",
                     "is_staff",
                     "is_superuser",
-                    "invitation",
                     "groups",
                     "user_permissions",
                 ),
             },
         ),
+        (
+            _("Validation du compte"),
+            {
+                "fields": (
+                    "is_email_valid",
+                    "email_next",
+                    "invitation",
+                )
+            },
+        ),
         (_("Dates Importantes"), {"fields": ("last_login", "date_joined")}),
     )
-    list_filter = (
-        "is_staff",
-        "is_superuser",
-        "is_active",
-        "groups",
-        "invitation",
-    )
+
     add_fieldsets = (
         (
             None,
@@ -113,10 +114,9 @@ class CustomUserAdmin(UserAdmin):
 
     @admin.action(description="Send reminder to upgrade account.")
     def send_reminder(self, request, queryset: list[User]):
-        current_site = get_current_site(request)
-        upgrade_link = request.build_absolute_uri(reverse(
-            "account:upgrade-permanent"
-        ))
+        upgrade_link = request.build_absolute_uri(
+            reverse("account:upgrade-permanent")
+        )
         send_mass_email(
             template_name="reminder-upgrade",
             subject="[Nantral Platform] Votre compte expire bientôt !",

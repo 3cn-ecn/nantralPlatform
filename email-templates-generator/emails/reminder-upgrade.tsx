@@ -15,7 +15,6 @@ import Link3CN from './shared/link-3cn';
 
 type Props = {
   firstName?: string;
-  email?: string;
   deadline?: string;
   changeEmailLink?: string;
 };

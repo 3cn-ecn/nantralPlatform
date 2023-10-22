@@ -35,12 +35,6 @@ def check_ecn_mail(mail: str):
         )
 
 
-def check_ecn_mail_login(mail: str):
-    # A wrapper around the login check to disable during periods where all
-    # emails can be used.
-    check_ecn_mail(mail)
-
-
 def check_passwords(pass1, pass2):
     if not pass1 == pass2:
         raise ValidationError(_("Les deux mots de passe ne correspondent pas."))
@@ -121,7 +115,6 @@ class SignUpForm(UserCreationForm):
 class LoginForm(forms.Form):
     email = forms.EmailField(
         max_length=200,
-        validators=[check_ecn_mail_login],
         required=True,
         help_text=gettext_lazy("Votre adresse mail ec-nantes.fr"),
     )
