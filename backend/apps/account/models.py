@@ -37,7 +37,7 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True)
     is_email_valid = models.BooleanField(default=False)
-    email_next = models.EmailField(null=True, blank=True)
+    email_next = models.EmailField(blank=True, default="")
     invitation = models.ForeignKey(
         InvitationLink, null=True, blank=True, on_delete=models.SET_NULL
     )
