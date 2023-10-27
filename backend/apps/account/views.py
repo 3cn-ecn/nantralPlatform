@@ -107,7 +107,7 @@ class ConfirmUser(View):
             user.is_email_valid = True
             if is_temporary and user.email_next:
                 user.email = user.email_next
-                user.email_next = None
+                user.email_next = ""
                 user.invitation = None
                 messages.warning(
                     request,
