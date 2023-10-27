@@ -105,4 +105,13 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name="temporaryaccessrequest",
         ),
+        migrations.RenameModel(
+            old_name="IdRegistration",
+            new_name="InvitationLink",
+        ),
+        migrations.AddField(
+            model_name="invitationlink",
+            name="description",
+            field=models.CharField(default="", max_length=200),
+        ),
     ]
