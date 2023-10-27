@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="user",
             name="email_next",
-            field=models.EmailField(blank=True, max_length=254, null=True),
+            field=models.EmailField(blank=True, max_length=254, default=""),
         ),
         migrations.AddField(
             model_name="user",
