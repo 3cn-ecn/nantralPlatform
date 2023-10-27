@@ -11,7 +11,7 @@ from .manager import UserManager
 class InvitationLink(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     expires_at = models.DateTimeField()
-    description = models.CharField(default="", max_length=200)
+    description = models.CharField(max_length=200)
 
     def __str__(self) -> str:
         if self.description:
@@ -37,7 +37,7 @@ class User(AbstractUser):
 
     email = models.EmailField(unique=True)
     is_email_valid = models.BooleanField(default=False)
-    email_next = models.EmailField(blank=True, default="")
+    email_next = models.EmailField(blank=True)
     invitation = models.ForeignKey(
         InvitationLink, null=True, blank=True, on_delete=models.SET_NULL
     )

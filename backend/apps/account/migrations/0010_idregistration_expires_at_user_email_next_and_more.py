@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="user",
             name="email_next",
-            field=models.EmailField(blank=True, max_length=254, default=""),
+            field=models.EmailField(blank=True, max_length=254),
         ),
         migrations.AddField(
             model_name="user",
@@ -112,6 +112,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="invitationlink",
             name="description",
-            field=models.CharField(default="", max_length=200),
+            field=models.CharField(max_length=200),
         ),
     ]
