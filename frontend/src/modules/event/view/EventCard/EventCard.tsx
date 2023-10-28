@@ -39,7 +39,7 @@ export function EventCard({ event }: EventCardProps) {
     Math.abs(differenceInHours(event.startDate, event.endDate)) > 24;
 
   return (
-    <Card variant="outlined">
+    <Card>
       <CardActionArea component={Link} to={`/event/${event.id}`}>
         <CardMedia
           component="img"
