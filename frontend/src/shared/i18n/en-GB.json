@@ -376,6 +376,9 @@
   },
   "signature": {
     "actions": {
+      "edit": {
+        "label": "Model to complete"
+      },
       "export": {
         "label": "Export"
       },

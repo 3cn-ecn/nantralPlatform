@@ -376,6 +376,9 @@
   },
   "signature": {
     "actions": {
+      "edit": {
+        "label": "Modèle à compléter"
+      },
       "export": {
         "label": "Exporter"
       },
@@ -383,7 +386,7 @@
         "label": "Réinitialiser"
       }
     },
-    "description": "Générer votre signature mail Centrale Nantes !",
+    "description": "Générez votre signature mail Centrale Nantes !",
     "exportModal": {
       "copyAsHtml": "Copier au format HTML",
       "copyAsrawText": "Copier au format texte brut",

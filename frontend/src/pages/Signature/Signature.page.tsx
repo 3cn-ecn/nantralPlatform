@@ -1,8 +1,14 @@
 import { useState } from 'react';
 
 import { Replay as ReplayIcon, Send as SendIcon } from '@mui/icons-material';
-import { Button, Container, TextField, Typography } from '@mui/material';
-import { render } from '@react-email/render';
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 import { useSignatureInfo } from '#modules/signature/hooks/useSignature.query';
 import { ExportMethodModal } from '#modules/signature/view/ExportModal/ExportModal';
@@ -21,10 +27,6 @@ export default function SignaturePage() {
     },
   });
 
-  const htmlCode = render(
-    <SignatureTemplate markdownContent={markdownContent} />,
-  );
-
   return (
     <Container sx={{ my: 4 }}>
       <Typography variant="h1" mb={1}>
@@ -39,7 +41,7 @@ export default function SignaturePage() {
             multiline
             value={markdownContent}
             onChange={(e) => setMarkdownCode(e.target.value)}
-            label="Source"
+            label={t('signature.actions.edit.label')}
             fullWidth
             inputProps={{ sx: { fontFamily: 'monospace' } }}
             disabled={query.isLoading}
@@ -65,10 +67,19 @@ export default function SignaturePage() {
             </Button>
           </FlexRow>
         </FlexCol>
-        <div
-          dangerouslySetInnerHTML={{ __html: htmlCode }}
-          style={{ width: '100%', overflowX: 'auto' }}
-        />
+        <Box width="100%" overflow="auto">
+          <Card
+            sx={{
+              p: 3,
+              pr: 4,
+              width: 'max-content',
+              bgcolor: '#FCFCFC',
+              borderRadius: 1,
+            }}
+          >
+            <SignatureTemplate markdownContent={markdownContent} />
+          </Card>
+        </Box>
       </FlexAuto>
       <ExportMethodModal
         isOpen={isExportModalOpen}

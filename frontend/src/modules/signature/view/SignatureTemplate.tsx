@@ -87,7 +87,9 @@ export function SignatureTemplate({ markdownContent }: SignatureTemplateProps) {
 
 const fontStyles: CSSProperties = {
   margin: 0,
+  marginBottom: 2,
   color: '#102648',
   fontFamily: "Titillium, 'Titillium Web', Arial, sans-serif",
   fontSize: 'small',
+  lineHeight: 'normal',
 };
