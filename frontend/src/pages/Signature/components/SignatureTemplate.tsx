@@ -1,5 +1,6 @@
 import { Column } from '@react-email/column';
 import { Img } from '@react-email/img';
+import { Link } from '@react-email/link';
 import { Markdown } from '@react-email/markdown';
 import { Row } from '@react-email/row';
 import { CSSProperties } from 'react';
@@ -25,13 +26,28 @@ export function SignatureTemplate({ markdownContent }: SignatureTemplateProps) {
 
   return (
     <Row>
-      <Column valign="top" width={200}>
-        <Img
-          src="https://www.ec-nantes.fr/medias/photo/v_logo-sign_1492585942308-png"
-          alt="Centrale Nantes"
-          width={184}
-          style={fontStyles}
-        />
+      <Column valign="top" width={210}>
+        <Row>
+          <Column width={181}>
+            <Link href="https://www.ec-nantes.fr" rel="noopener noreferer">
+              <Img
+                src={`${location.origin}/static/img/logo_ecn.png`} // do not use relative path in emails
+                alt="Centrale Nantes"
+                width={160}
+                style={{ ...fontStyles, marginTop: 6, marginBottom: 6 }}
+              />
+            </Link>
+          </Column>
+          <Column valign="middle">
+            <div
+              style={{
+                width: 7,
+                height: 40,
+                backgroundColor: '#FAB600',
+              }}
+            />
+          </Column>
+        </Row>
       </Column>
       <Column>
         <Markdown

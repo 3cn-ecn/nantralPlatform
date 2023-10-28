@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { SignatureTemplate } from './components/SignatureTemplate';
 
 const defaultSignature = `# Jean-Baptiste AVRILIER
-*Elève Ingénieur⋅e en Xème Année*
+*Élève-Ingénieur⋅e en Xe année*
 Option Cassage de Bâtiment C
 ----
 Directeur d'École
