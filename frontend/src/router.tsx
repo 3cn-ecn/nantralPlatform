@@ -61,7 +61,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: '/tools/signature',
+        path: '/signature',
         element: <Signature />,
         handle: { crumb: t('breadcrumbs.signature.index') },
       },

@@ -76,7 +76,7 @@ export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
         />
         <NavBarSideItem
           label={t('navbar.signature')}
-          path="/tools/signature/"
+          path="/signature/"
           iconPath="/static/img/icons/cropped/sign.svg"
           closeMenu={onClose}
         />

@@ -10,7 +10,7 @@ export async function getSignatureInfoApi(
   signal?: GenericAbortSignal,
 ): Promise<SignatureInfo> {
   const { data } = await axios
-    .get<SignatureInfoDTO>('/api/tools/signature/', {
+    .get<SignatureInfoDTO>('/api/signature/', {
       signal: signal,
     })
     .catch((err: ApiErrorDTO) => {

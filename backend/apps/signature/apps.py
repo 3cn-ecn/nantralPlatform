@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ToolsConfig(AppConfig):
+class SignatureConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "apps.tools"
+    name = "apps.signature"

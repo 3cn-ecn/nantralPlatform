@@ -2,11 +2,11 @@ from rest_framework.routers import DefaultRouter
 
 from .api_views import SignatureApiViewSet
 
-app_name = "tools"
+app_name = "signature"
 
 # router for the API
 router = DefaultRouter()
-router.register("signature", SignatureApiViewSet, basename="signature")
+router.register("", SignatureApiViewSet, basename="signature")
 
 
 # urls

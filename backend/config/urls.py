@@ -45,7 +45,6 @@ urlpatterns = [
         "parrainage/admin/",
         include("apps.family.admin_urls", namespace="family-admin"),
     ),
-    path("tools/", include("apps.tools.urls", namespace="tools")),
     path(
         "notification/",
         include("apps.notification.urls", namespace="notification"),
@@ -66,7 +65,10 @@ urlpatterns = [
         include("apps.notification.api_urls", namespace="notification_api"),
     ),
     path("api/group/", include("apps.group.api_urls", namespace="group_api")),
-    path("api/tools/", include("apps.tools.api_urls", namespace="tools_api")),
+    path(
+        "api/signature/",
+        include("apps.signature.api_urls", namespace="signature_api"),
+    ),
     path("api/home/", include("apps.home.api_urls", namespace="home_api")),
     # homepage
     path("", include("apps.home.urls", namespace="home")),
