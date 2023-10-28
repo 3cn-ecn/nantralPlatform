@@ -1,9 +1,10 @@
+import { CSSProperties } from 'react';
+
 import { Column } from '@react-email/column';
 import { Img } from '@react-email/img';
 import { Link } from '@react-email/link';
 import { Markdown } from '@react-email/markdown';
 import { Row } from '@react-email/row';
-import { CSSProperties } from 'react';
 
 interface SignatureTemplateProps {
   markdownContent: string;
