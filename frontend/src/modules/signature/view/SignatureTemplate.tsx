@@ -35,7 +35,12 @@ export function SignatureTemplate({ markdownContent }: SignatureTemplateProps) {
                 src={`${location.origin}/static/img/logo_ecn.png`} // do not use relative path in emails
                 alt="Centrale Nantes"
                 width={160}
-                style={{ ...fontStyles, marginTop: 6, marginBottom: 6 }}
+                style={{
+                  ...fontStyles,
+                  marginTop: 6,
+                  marginBottom: 6,
+                  marginRight: 21,
+                }}
               />
             </Link>
           </Column>
@@ -45,6 +50,7 @@ export function SignatureTemplate({ markdownContent }: SignatureTemplateProps) {
                 width: 7,
                 height: 40,
                 backgroundColor: '#FAB600',
+                marginRight: 22,
               }}
             />
           </Column>
