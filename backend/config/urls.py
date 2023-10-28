@@ -1,4 +1,4 @@
-"""Nantral Platform URL Configuration
+"""Nantral Platform URL Configuration.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -66,6 +66,7 @@ urlpatterns = [
         include("apps.notification.api_urls", namespace="notification_api"),
     ),
     path("api/group/", include("apps.group.api_urls", namespace="group_api")),
+    path("api/tools/", include("apps.tools.api_urls", namespace="tools_api")),
     path("api/home/", include("apps.home.api_urls", namespace="home_api")),
     # homepage
     path("", include("apps.home.urls", namespace="home")),
