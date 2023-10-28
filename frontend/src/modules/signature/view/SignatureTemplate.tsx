@@ -27,19 +27,17 @@ export function SignatureTemplate({ markdownContent }: SignatureTemplateProps) {
 
   return (
     <Row>
-      <Column valign="top" width={210}>
+      <Column valign="top" width={186}>
         <Row>
-          <Column width={181}>
+          <Column width={160}>
             <Link href="https://www.ec-nantes.fr" rel="noopener noreferer">
               <Img
                 src={`${location.origin}/static/img/logo_ecn.png`} // do not use relative path in emails
                 alt="Centrale Nantes"
-                width={160}
+                width={140}
                 style={{
                   ...fontStyles,
-                  marginTop: 6,
-                  marginBottom: 6,
-                  marginRight: 21,
+                  marginRight: 20,
                 }}
               />
             </Link>
@@ -48,9 +46,9 @@ export function SignatureTemplate({ markdownContent }: SignatureTemplateProps) {
             <div
               style={{
                 width: 7,
-                height: 40,
+                height: 38,
                 backgroundColor: '#FAB600',
-                marginRight: 22,
+                marginRight: 19,
               }}
             />
           </Column>
@@ -90,6 +88,6 @@ export function SignatureTemplate({ markdownContent }: SignatureTemplateProps) {
 const fontStyles: CSSProperties = {
   margin: 0,
   color: '#102648',
-  fontFamily: 'Titillium, Titillium Web, Arial, sans-serif',
+  fontFamily: "Titillium, 'Titillium Web', Arial, sans-serif",
   fontSize: 'small',
 };
