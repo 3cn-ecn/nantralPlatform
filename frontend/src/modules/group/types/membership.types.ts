@@ -1,6 +1,6 @@
 import { StudentPreview } from '#modules/student/student.types';
 
-import { GroupPreview } from '../group.type';
+import { GroupPreview } from './group.types';
 
 export interface Membership {
   id: number;

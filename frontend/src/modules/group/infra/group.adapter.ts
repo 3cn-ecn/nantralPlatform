@@ -1,4 +1,4 @@
-import { GroupPreview } from '../group.type';
+import { GroupPreview } from '../types/group.types';
 import { GroupPreviewDTO } from './group.dto';
 
 export function adaptGroupPreview(groupDTO: GroupPreviewDTO): GroupPreview {

@@ -26,8 +26,8 @@ import { isSameDay } from 'date-fns';
 
 import { EventListQueryParams } from '#modules/event/api/getEventList.api';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
-import { GroupPreview } from '#modules/group/group.type';
 import { useGroupListQuery } from '#modules/group/hooks/useGroupList.query';
+import { GroupPreview } from '#modules/group/types/group.types';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   AutocompleteSearchField,

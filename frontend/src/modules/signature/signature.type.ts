@@ -1,4 +1,4 @@
-import { GroupPreview } from '#modules/group/group.type';
+import { GroupPreview } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
 
 export interface SignatureInfo {
