@@ -5,6 +5,7 @@ import { Button, Container, TextField, Typography } from '@mui/material';
 import { render } from '@react-email/render';
 
 import { useSignatureInfo } from '#modules/signature/hooks/useSignature.query';
+import { ExportMethodModal } from '#modules/signature/view/ExportModal/ExportModal';
 import { SignatureTemplate } from '#modules/signature/view/SignatureTemplate';
 import { formatSignatureInfoToMarkdown } from '#modules/signature/view/formatSignatureInfoToMarkdown';
 import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -12,6 +13,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function SignaturePage() {
   const [markdownContent, setMarkdownCode] = useState('Chargement...');
+  const [isExportModalOpen, setExportModalOpen] = useState(false);
   const { t } = useTranslation();
   const query = useSignatureInfo({
     onSuccess(data) {
@@ -54,16 +56,25 @@ export default function SignaturePage() {
             >
               {t('signature.actions.reset.label')}
             </Button>
-            <Button variant="contained" endIcon={<SendIcon />}>
+            <Button
+              variant="contained"
+              endIcon={<SendIcon />}
+              onClick={() => setExportModalOpen(true)}
+            >
               {t('signature.actions.export.label')}
             </Button>
           </FlexRow>
         </FlexCol>
         <div
           dangerouslySetInnerHTML={{ __html: htmlCode }}
-          style={{ width: '100%' }}
+          style={{ width: '100%', overflowX: 'auto' }}
         />
       </FlexAuto>
+      <ExportMethodModal
+        isOpen={isExportModalOpen}
+        onClose={() => setExportModalOpen(false)}
+        markdownContent={markdownContent}
+      />
     </Container>
   );
 }

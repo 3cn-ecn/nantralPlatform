@@ -384,6 +384,21 @@
       }
     },
     "description": "Generate your Centrale Nantes email signature!",
+    "exportModal": {
+      "copyAsHtml": "Copy as HTML",
+      "copyAsrawText": "Copy to plain text format",
+      "copyHtmlSourceCode": "Copy HTML source code",
+      "otherMethods": "Other methods:",
+      "recommendedMethod": "Recommended method:",
+      "title": "Choose an export method"
+    },
+    "includeSignature": {
+      "copyCode": "If the copy didn't work, you can also manually copy the code below:",
+      "description": "You can now paste the signature into your favorite email client, or directly on the <2>ECN webmail</2>.",
+      "successMessage": "The signature was copied successfully!",
+      "title": "Include the signature",
+      "tutorialAlt": "Go to “Settings”, then “Signature”. \nSelect \"HTML Format\" then click the \"Source Code\" button in the toolbar. \nThen paste the HTML code!"
+    },
     "title": "Signature generator"
   },
   "site": {
