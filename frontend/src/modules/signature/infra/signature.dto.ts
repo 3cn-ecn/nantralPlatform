@@ -5,6 +5,6 @@ export interface SignatureInfoDTO {
   name: string;
   year: number;
   email: string;
-  academic_group: GroupPreviewDTO | null;
+  academic_groups: GroupPreviewDTO[];
   club_memberships: MembershipDTO[];
 }

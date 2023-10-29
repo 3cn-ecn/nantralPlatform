@@ -5,6 +5,6 @@ export interface SignatureInfo {
   name: string;
   year: number;
   email: string;
-  academic_group?: GroupPreview;
-  club_memberships: Membership[];
+  academicGroups: GroupPreview[];
+  clubMemberships: Membership[];
 }

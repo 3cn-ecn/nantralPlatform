@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from django.db.models import QuerySet
+from django.db.models import Max, QuerySet
 
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, views
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -11,7 +11,7 @@ from apps.group.models import Group, Membership
 from apps.group.serializers import GroupPreviewSerializer, MembershipSerializer
 
 
-class SignatureApiViewSet(viewsets.ViewSet):
+class SignatureApiView(views.APIView):
     """API endpoint for signature."""
 
     permission_classes = [permissions.IsAuthenticated]
@@ -26,18 +26,19 @@ class SignatureApiViewSet(viewsets.ViewSet):
             year = 3  # last year is 3rd year
         return year
 
-    def get_academic_group(self) -> Group | None:
+    def get_academic_groups(self) -> QuerySet[Group]:
         user: User = self.request.user
-        academic_group_membership = (
-            user.student.membership_set.filter(
-                group__group_type__slug="academic"
-            )
-            .order_by("-begin_date")
-            .first()
+        academic_memberships = user.student.membership_set.filter(
+            group__group_type__slug="academic"
         )
-        if academic_group_membership is None:
-            return None
-        return academic_group_membership.group
+        max_year = academic_memberships.aggregate(
+            max_year=Max("begin_date__year")
+        )["max_year"]
+        return Group.objects.filter(
+            membership_set__in=academic_memberships.filter(
+                begin_date__year=max_year
+            )
+        )
 
     def get_club_memberships(self) -> QuerySet[Membership]:
         user: User = self.request.user
@@ -48,13 +49,13 @@ class SignatureApiViewSet(viewsets.ViewSet):
         ).order_by("-begin_date")
         return club_memberships
 
-    def list(self, request: Request, *args, **kwargs):
+    def get(self, request: Request, *args, **kwargs):
         """Get info for a signature."""
         user: User = request.user
         email = user.email
         name = user.student.name
         year = self.get_year()
-        academic_group = self.get_academic_group()
+        academic_groups = self.get_academic_groups()
         club_memberships = self.get_club_memberships()
 
         return Response(
@@ -62,11 +63,9 @@ class SignatureApiViewSet(viewsets.ViewSet):
                 "name": name,
                 "year": year,
                 "email": email,
-                "academic_group": (
-                    GroupPreviewSerializer(academic_group).data
-                    if academic_group
-                    else None
-                ),
+                "academic_groups": GroupPreviewSerializer(
+                    academic_groups, many=True
+                ).data,
                 "club_memberships": MembershipSerializer(
                     club_memberships, many=True
                 ).data,

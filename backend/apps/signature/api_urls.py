@@ -1,13 +1,10 @@
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 
-from .api_views import SignatureApiViewSet
+from .api_views import SignatureApiView
 
 app_name = "signature"
 
-# router for the API
-router = DefaultRouter()
-router.register("", SignatureApiViewSet, basename="signature")
-
-
 # urls
-urlpatterns = router.urls
+urlpatterns = [
+    path("", SignatureApiView.as_view(), name="signature"),
+]

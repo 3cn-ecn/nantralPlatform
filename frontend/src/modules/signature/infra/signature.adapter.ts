@@ -11,10 +11,10 @@ export function adaptSignatureInfo(
     name: signatureInfoDto.name,
     year: signatureInfoDto.year,
     email: signatureInfoDto.email,
-    academic_group: signatureInfoDto.academic_group
-      ? adaptGroupPreview(signatureInfoDto.academic_group)
-      : undefined,
-    club_memberships: signatureInfoDto.club_memberships.map((membership) =>
+    academicGroups: signatureInfoDto.academic_groups.map((group) =>
+      adaptGroupPreview(group),
+    ),
+    clubMemberships: signatureInfoDto.club_memberships.map((membership) =>
       adaptMembership(membership),
     ),
   };
