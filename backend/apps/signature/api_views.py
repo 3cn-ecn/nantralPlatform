@@ -43,7 +43,7 @@ class SignatureApiView(views.APIView):
     def get_club_memberships(self) -> QuerySet[Membership]:
         user: User = self.request.user
         club_memberships = user.student.membership_set.filter(
-            group__group_type__slug="club",
+            group__group_type__slug__in=["club", "admin"],
             begin_date__lte=datetime.now(),
             end_date__gte=datetime.now(),
         ).order_by("-begin_date")
