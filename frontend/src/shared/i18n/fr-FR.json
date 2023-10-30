@@ -402,6 +402,12 @@
       "title": "Intégrer la signature",
       "tutorialAlt": "Aller dans \"Paramètres\", puis \"Signature\". Sélectionnez \"Format HTML\" puis cliquez sur le bouton \"Code source\" dans la barre d'outils. Collez ensuite le code HTML !"
     },
+    "template": {
+      "ecn": "Centrale Nantes",
+      "help": "Seuls les clubs où vous avez un rôle actif sont listés.",
+      "international": "International",
+      "label": "Sélectionnez un template"
+    },
     "title": "Générateur de signature"
   },
   "site": {

@@ -1,14 +1,12 @@
 import { CSSProperties } from 'react';
 
+import { GroupPreview } from '#modules/group/types/group.types';
 import { Column } from '@react-email/column';
 import { Img } from '@react-email/img';
 import { Link } from '@react-email/link';
 import { Markdown } from '@react-email/markdown';
 import { Row } from '@react-email/row';
 
-interface SignatureTemplateProps {
-  markdownContent: string;
-}
 const emailRegex = /\b[\w.!#$%&'*+/=?^_`{|}~-]+@[\w.-]+\b/g;
 const phoneRegex = /(\+\s?)?\b\d[\d\s.-]{8,}\d\b/g;
 
@@ -22,39 +20,56 @@ function prettify(content: string) {
     );
 }
 
-export function SignatureTemplate({ markdownContent }: SignatureTemplateProps) {
+interface SignatureTemplateProps {
+  markdownContent: string;
+  group?: GroupPreview;
+}
+
+export function SignatureTemplate({
+  markdownContent,
+  group,
+}: SignatureTemplateProps) {
   const content = prettify(markdownContent);
+  const imageLink = group?.icon
+    ? group.icon
+    : location.origin + '/static/img/logo_ecn.png';
+  const link = group?.url
+    ? location.origin + group.url
+    : 'https://www.ec-nantes.fr';
 
   return (
     <Row>
-      <Column valign="top" width={186}>
+      <Column valign="top">
         <Row>
-          <Column width={160}>
-            <Link href="https://www.ec-nantes.fr" rel="noopener noreferer">
+          <Column>
+            <Link href={link} rel="noopener noreferer">
               <Img
-                src={`${location.origin}/static/img/logo_ecn.png`} // do not use relative path in emails
+                src={imageLink} // do not use relative path in emails
                 alt="Centrale Nantes"
-                width={140}
+                height={70}
                 style={{
                   ...fontStyles,
                   marginRight: 20,
+                  borderRadius: group?.icon && 10,
                 }}
               />
             </Link>
           </Column>
-          <Column valign="middle">
-            <div
-              style={{
-                width: 7,
-                height: 38,
-                backgroundColor: '#FAB600',
-                marginRight: 19,
-              }}
-            />
-          </Column>
+          {!group?.icon && (
+            <Column valign="middle">
+              <div
+                style={{
+                  width: 7,
+                  height: 38,
+                  backgroundColor: '#FAB600',
+                  marginRight: 19,
+                }}
+              />
+            </Column>
+          )}
         </Row>
       </Column>
-      <Column>
+      <Column valign="top">
         <Markdown
           markdownCustomStyles={{
             p: {

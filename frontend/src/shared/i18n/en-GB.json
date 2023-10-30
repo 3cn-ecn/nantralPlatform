@@ -402,6 +402,12 @@
       "title": "Include the signature",
       "tutorialAlt": "Go to “Settings”, then “Signature”. \nSelect \"HTML Format\" then click the \"Source Code\" button in the toolbar. \nThen paste the HTML code!"
     },
+    "template": {
+      "ecn": "Central Nantes",
+      "help": "Only clubs where you have an active role are listed.",
+      "international": "International",
+      "label": "Select a template"
+    },
     "title": "Signature generator"
   },
   "site": {

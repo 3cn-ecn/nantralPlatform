@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Replay as ReplayIcon, Send as SendIcon } from '@mui/icons-material';
 import {
@@ -13,29 +13,42 @@ import {
 import { useSignatureInfo } from '#modules/signature/hooks/useSignature.query';
 import { ExportMethodModal } from '#modules/signature/view/ExportModal/ExportModal';
 import { SignatureTemplate } from '#modules/signature/view/SignatureTemplate';
-import { formatSignatureInfoToMarkdown } from '#modules/signature/view/formatSignatureInfoToMarkdown';
+import { formatSignatureInfoToMarkdown } from '#modules/signature/view/templates/formatSignatureInfoToMarkdown';
+import {
+  SelectTemplate,
+  TemplateType,
+} from '#modules/signature/view/templates/SelectTemplate';
 import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function SignaturePage() {
   const [markdownContent, setMarkdownCode] = useState('Chargement...');
   const [isExportModalOpen, setExportModalOpen] = useState(false);
+  const [template, setTemplate] = useState<TemplateType>('ecn');
+
   const { t } = useTranslation();
-  const query = useSignatureInfo({
-    onSuccess(data) {
-      setMarkdownCode(formatSignatureInfoToMarkdown(data));
-    },
-  });
+  const query = useSignatureInfo({ suspense: true, staleTime: Infinity });
+
+  useEffect(() => {
+    if (query.data) {
+      setMarkdownCode(formatSignatureInfoToMarkdown(query.data, template));
+    }
+  }, [query.data, template]);
 
   return (
     <Container sx={{ my: 4 }}>
       <Typography variant="h1" mb={1}>
         {t('signature.title')}
       </Typography>
-      <Typography variant="body1" mb={4}>
+      <Typography variant="body1" mb={2}>
         {t('signature.description')}
       </Typography>
-      <FlexAuto gap={6}>
+      <SelectTemplate
+        template={template}
+        setTemplate={setTemplate}
+        clubMemberships={query.data?.clubMemberships}
+      />
+      <FlexAuto gap={6} mt={2}>
         <FlexCol width="100%" gap={2}>
           <TextField
             multiline
@@ -44,16 +57,14 @@ export default function SignaturePage() {
             label={t('signature.actions.edit.label')}
             fullWidth
             inputProps={{ sx: { fontFamily: 'monospace' } }}
-            disabled={query.isLoading}
+            disabled={query.isFetching}
           />
           <FlexRow gap={1} justifyContent="end">
             <Button
               variant="outlined"
               color="secondary"
-              onClick={() =>
-                query.isSuccess &&
-                setMarkdownCode(formatSignatureInfoToMarkdown(query.data))
-              }
+              onClick={() => query.refetch()}
+              disabled={query.isFetching}
               endIcon={<ReplayIcon />}
             >
               {t('signature.actions.reset.label')}
@@ -71,13 +82,21 @@ export default function SignaturePage() {
           <Card
             sx={{
               p: 3,
-              pr: 4,
               width: 'max-content',
               bgcolor: '#FCFCFC',
               borderRadius: 1,
             }}
           >
-            <SignatureTemplate markdownContent={markdownContent} />
+            <SignatureTemplate
+              markdownContent={markdownContent}
+              group={
+                (template.startsWith('@') &&
+                  query.data?.clubMemberships.find(
+                    (m) => m.group.slug === template.slice(1),
+                  )?.group) ||
+                undefined
+              }
+            />
           </Card>
         </Box>
       </FlexAuto>
