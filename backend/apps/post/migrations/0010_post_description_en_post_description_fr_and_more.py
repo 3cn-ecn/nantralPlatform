@@ -4,6 +4,15 @@ from django.db import migrations, models
 import django_ckeditor_5.fields
 
 
+def copy_data(apps, schema_editor):
+    Post = apps.get_model('post', 'post')
+    for obj in Post.objects.all():
+        if not obj.title_fr:
+            obj.title_fr = obj.title
+            obj.save()
+        if not obj.description_fr:
+            obj.description_fr = obj.description
+            obj.save()
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -39,4 +48,5 @@ class Migration(migrations.Migration):
                 max_length=200, null=True, verbose_name="Title"
             ),
         ),
+        migrations.RunPython(copy_data),
     ]
