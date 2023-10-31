@@ -1,11 +1,13 @@
+import { convertTranslatedField } from '#shared/infra/translatedFields/translatedField.converter';
+
 import { EventForm } from '../event.type';
 import { EventFormDTO } from './event.dto';
 
 export function convertEventForm(event: EventForm): EventFormDTO {
   return {
-    title: event.title,
+    ...convertTranslatedField(event.titleTranslated, 'title'),
+    ...convertTranslatedField(event.descriptionTranslated, 'description'),
     group: event.group,
-    description: event.description,
     location: event.location,
     image: event.image,
     start_date: event.startDate?.toISOString() || '',

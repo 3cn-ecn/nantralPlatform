@@ -9,7 +9,7 @@ test = "python manage.py test"
 makemigrations = "python manage.py makemigrations"
 migrate = "python manage.py migrate"
 django = "python manage.py"
-lint = "flake8 --statistics --show-violation-links"
+lint = "flakeheaven lint"
 "lint:fix" = "sh -c 'black . && isort .'"
 "test:coverage" = "coverage run --source='.' manage.py test"
 
@@ -24,6 +24,7 @@ django-crispy-forms = "~=1.14"
 django-debug-toolbar = "~=4.1"
 django-environ = "~=0.9"
 django-extra-settings = "~=0.5"
+django-modeltranslation = "~=0.18.11"
 django-push-notifications = {version = "~=3.0", extras = ["apns", "wp"]}
 django-storages = {version = "~=1.13", extras = ["boto3"]}
 django-vite = "*"

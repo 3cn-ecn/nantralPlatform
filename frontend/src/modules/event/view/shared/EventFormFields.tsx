@@ -1,12 +1,13 @@
 import { Dispatch, useCallback } from 'react';
 
 import { LocalFireDepartment } from '@mui/icons-material';
-import { Alert, AlertTitle, MenuItem, Paper, Typography } from '@mui/material';
+import { MenuItem, Paper, Typography } from '@mui/material';
 
 import { Event, EventForm } from '#modules/event/event.type';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
   DateTimeField,
@@ -16,6 +17,8 @@ import {
 } from '#shared/components/FormFields';
 import { NumberField } from '#shared/components/FormFields/NumberField';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
+import { SetObjectStateAction } from '#shared/hooks/useObjectState';
+import { BaseLanguage } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -23,8 +26,9 @@ interface EventFormFieldsProps {
   isError: boolean;
   error: ApiFormError<EventFormDTO> | null;
   formValues: EventForm;
-  updateFormValues: Dispatch<Partial<EventForm>>;
+  updateFormValues: Dispatch<SetObjectStateAction<EventForm>>;
   prevData?: Event;
+  selectedLang: BaseLanguage;
 }
 
 export function EventFormFields({
@@ -33,6 +37,7 @@ export function EventFormFields({
   formValues,
   updateFormValues,
   prevData,
+  selectedLang,
 }: EventFormFieldsProps) {
   const { t } = useTranslation();
 
@@ -56,25 +61,22 @@ export function EventFormFields({
 
   return (
     <>
-      {isError && (
-        <Alert severity="error">
-          <AlertTitle>{t('form.errors.title')}</AlertTitle>
-          {!!error?.globalErrors?.length && (
-            <ul>
-              {error.globalErrors.map((err, index) => (
-                <li key={index}>{err}</li>
-              ))}
-            </ul>
-          )}
-        </Alert>
-      )}
+      <FormErrorAlert isError={isError} error={error} />
       <TextField
         name="title"
+        key={`title-${selectedLang}`}
         label={t('event.form.title.label')}
-        value={formValues.title}
+        value={formValues.titleTranslated[selectedLang]}
         handleChange={useCallback(
-          (val) => updateFormValues({ title: val }),
-          [updateFormValues],
+          (val) => {
+            updateFormValues((prevState) => ({
+              titleTranslated: {
+                ...prevState.titleTranslated,
+                [selectedLang]: val,
+              },
+            }));
+          },
+          [selectedLang, updateFormValues],
         )}
         errors={error?.fields?.title}
         required
@@ -98,11 +100,19 @@ export function EventFormFields({
       />
       <RichTextField
         name="description"
+        key={`description-${selectedLang}`}
         label={t('event.form.description.label')}
-        value={formValues.description}
+        value={formValues.descriptionTranslated[selectedLang]}
         handleChange={useCallback(
-          (val) => updateFormValues({ description: val }),
-          [updateFormValues],
+          (val) => {
+            updateFormValues((prevState) => ({
+              descriptionTranslated: {
+                ...prevState.descriptionTranslated,
+                [selectedLang]: val,
+              },
+            }));
+          },
+          [selectedLang, updateFormValues],
         )}
         errors={error?.fields?.description}
       />

@@ -1,6 +1,7 @@
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
+import { TranslatedFieldsDTO } from '#shared/infra/translatedFields/translatedField.dto';
 
-export interface EventDTO {
+export type EventDTO = {
   id: number;
   title: string;
   description: string;
@@ -21,7 +22,7 @@ export interface EventDTO {
   end_registration: string | null;
   form_url: string;
   notification: number | null;
-}
+} & TranslatedFieldsDTO<'title' | 'description'>;
 
 export type EventPreviewDTO = Pick<
   EventDTO,
@@ -44,8 +45,6 @@ export type EventPreviewDTO = Pick<
 
 export type EventFormDTO = Pick<
   EventDTO,
-  | 'title'
-  | 'description'
   | 'location'
   | 'start_date'
   | 'end_date'
@@ -55,6 +54,10 @@ export type EventFormDTO = Pick<
   | 'end_registration'
   | 'form_url'
 > & {
-  group: number | null;
+  // keep unused fields for typing errors
+  title: undefined;
+  description: undefined;
+  // override types for some fields
+  group: number | null; // id of group
   image?: File;
-};
+} & TranslatedFieldsDTO<'title' | 'description'>;

@@ -1,4 +1,5 @@
 import { adaptGroupPreview } from '#modules/group/infra/group.adapter';
+import { adaptTranslatedField } from '#shared/infra/translatedFields/translatedField.adapter';
 
 import { Event, EventPreview } from '../event.type';
 import { EventDTO, EventPreviewDTO } from './event.dto';
@@ -7,7 +8,9 @@ export function adaptEvent(eventDto: EventDTO): Event {
   return {
     id: eventDto.id,
     title: eventDto.title,
+    titleTranslated: adaptTranslatedField(eventDto, 'title'),
     description: eventDto.description,
+    descriptionTranslated: adaptTranslatedField(eventDto, 'description'),
     location: eventDto.location,
     startDate: new Date(eventDto.start_date),
     endDate: new Date(eventDto.end_date),

@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
@@ -8,15 +8,17 @@ import {
   UpdatePostApiVariables,
   updatePostApi,
 } from '#modules/post/api/updatePost.api';
+import { usePostFormValues } from '#modules/post/hooks/usePostFormValues';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
+import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialogContent,
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
-import { useObjectState } from '#shared/hooks/useObjectState';
+import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -33,18 +35,12 @@ export function EditPostModalContent({
   onClose,
   onFinish,
 }: EditPostModalContentProps) {
-  const { t } = useTranslation();
+  const { t, currentBaseLanguage } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
-  // the values currently in our form
-  const [formValues, updateFormValues] = useObjectState<PostForm>({
-    title: post.title,
-    description: post.description,
-    group: post.group.id,
-    pinned: post.pinned,
-    publicity: post.publicity,
-  });
+  const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
+  const [formValues, updateFormValues] = usePostFormValues(post);
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
@@ -84,26 +80,37 @@ export function EditPostModalContent({
         }
       >
         {t('post.editModal.title')}
+        <Spacer flex={1} />
+        <LanguageSelector
+          selectedLang={selectedLang}
+          setSelectedLang={setSelectedLang}
+        />
       </ResponsiveDialogHeader>
-      <form onSubmit={(e) => onSubmit(e, formValues)}>
-        <ResponsiveDialogContent>
+      <ResponsiveDialogContent>
+        <form id="edit-post-form" onSubmit={(e) => onSubmit(e, formValues)}>
           <PostFormFields
             isError={isError}
             error={error}
             formValues={formValues}
             updateFormValues={updateFormValues}
             prevData={post}
+            selectedLang={selectedLang}
           />
-        </ResponsiveDialogContent>
-        <ResponsiveDialogFooter>
-          <Button variant="text" onClick={() => onFinish()}>
-            {t('button.cancel')}
-          </Button>
-          <LoadingButton loading={isLoading} type="submit" variant="contained">
-            {t('button.confirm')}
-          </LoadingButton>
-        </ResponsiveDialogFooter>
-      </form>
+        </form>
+      </ResponsiveDialogContent>
+      <ResponsiveDialogFooter>
+        <Button variant="text" onClick={() => onFinish()}>
+          {t('button.cancel')}
+        </Button>
+        <LoadingButton
+          form="edit-post-form"
+          type="submit"
+          loading={isLoading}
+          variant="contained"
+        >
+          {t('button.confirm')}
+        </LoadingButton>
+      </ResponsiveDialogFooter>
     </>
   );
 }

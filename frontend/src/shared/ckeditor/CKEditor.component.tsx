@@ -48,7 +48,7 @@ export default function CKEditorComponent({
   const isError = errors !== undefined;
 
   return (
-    <FormControl margin="normal" variant="outlined">
+    <FormControl margin="normal" variant="outlined" fullWidth>
       <InputLabel
         htmlFor="richtext-input"
         error={isError}

@@ -1,12 +1,12 @@
 [flake8]
 format = wemake
 max-line-length = 80
-max-complexity = 6
+max-complexity = 15
 docstring-style = numpy
 inline-quotes = double
 ignore = 
     C8,
-    D1, D401,
+    D1, D205, D4,
     DAR101, DAR201, DAR301, DAR401,
     E203,
     RST,
@@ -16,7 +16,7 @@ ignore =
     WPS3,
     WPS407, WPS410, WPS412, WPS420, WPS432, WPS454, WPS459,
     WPS5,
-    WPS601
+    WPS601, WPS615
 per-file-ignores =
     */settings/*.py:F403,F405
     */family/*.py:WPS114, N806

@@ -1,4 +1,5 @@
 import { adaptGroupPreview } from '#modules/group/infra/group.adapter';
+import { adaptTranslatedField } from '#shared/infra/translatedFields/translatedField.adapter';
 
 import { Post, PostPreview } from '../post.types';
 import { PostDTO, PostPreviewDTO } from './post.dto';
@@ -23,7 +24,9 @@ export function adaptPostPreview(postDTO: PostPreviewDTO): PostPreview {
 export function adaptPost(postDTO: PostDTO): Post {
   return {
     ...adaptPostPreview(postDTO),
+    titleTranslated: adaptTranslatedField(postDTO, 'title'),
     description: postDTO.description,
+    descriptionTranslated: adaptTranslatedField(postDTO, 'description'),
     notificationId: postDTO.notification,
   };
 }

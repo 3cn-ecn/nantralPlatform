@@ -1,10 +1,11 @@
 import { Dispatch, useCallback } from 'react';
 
-import { Alert, AlertTitle, MenuItem } from '@mui/material';
+import { MenuItem } from '@mui/material';
 
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
+import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
   CheckboxField,
@@ -13,6 +14,8 @@ import {
   TextField,
 } from '#shared/components/FormFields';
 import { RichTextField } from '#shared/components/FormFields/RichTextField';
+import { SetObjectStateAction } from '#shared/hooks/useObjectState';
+import { BaseLanguage } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -20,8 +23,9 @@ interface PostFormFieldsProps {
   isError: boolean;
   error: ApiFormError<PostFormDTO> | null;
   formValues: PostForm;
-  updateFormValues: Dispatch<Partial<PostForm>>;
+  updateFormValues: Dispatch<SetObjectStateAction<PostForm>>;
   prevData?: Post;
+  selectedLang: BaseLanguage;
 }
 
 export function PostFormFields({
@@ -30,6 +34,7 @@ export function PostFormFields({
   formValues,
   updateFormValues,
   prevData,
+  selectedLang,
 }: PostFormFieldsProps) {
   const { t } = useTranslation();
 
@@ -50,6 +55,7 @@ export function PostFormFields({
       ),
     [],
   );
+
   const onPinnedChange = useCallback(
     (val: boolean) => updateFormValues({ pinned: val }),
     [updateFormValues],
@@ -57,25 +63,22 @@ export function PostFormFields({
 
   return (
     <>
-      {isError && (
-        <Alert severity="error">
-          <AlertTitle>{t('form.errors.title')}</AlertTitle>
-          {!!error?.globalErrors?.length && (
-            <ul>
-              {error.globalErrors.map((err, index) => (
-                <li key={index}>{err}</li>
-              ))}
-            </ul>
-          )}
-        </Alert>
-      )}
+      <FormErrorAlert isError={isError} error={error} />
       <TextField
         name="title"
+        key={`title-${selectedLang}`}
         label={t('post.form.title.label')}
-        value={formValues.title}
+        value={formValues.titleTranslated[selectedLang]}
         handleChange={useCallback(
-          (val) => updateFormValues({ title: val }),
-          [updateFormValues],
+          (val) => {
+            updateFormValues((prevState) => ({
+              titleTranslated: {
+                ...prevState.titleTranslated,
+                [selectedLang]: val,
+              },
+            }));
+          },
+          [selectedLang, updateFormValues],
         )}
         errors={error?.fields?.title}
         required
@@ -99,11 +102,19 @@ export function PostFormFields({
       />
       <RichTextField
         name="description"
+        key={`description-${selectedLang}`}
         label={t('post.form.description.label')}
-        value={formValues.description}
+        value={formValues.descriptionTranslated[selectedLang]}
         handleChange={useCallback(
-          (val) => updateFormValues({ description: val }),
-          [updateFormValues],
+          (val) => {
+            updateFormValues((prevState) => ({
+              descriptionTranslated: {
+                ...prevState.descriptionTranslated,
+                [selectedLang]: val,
+              },
+            }));
+          },
+          [selectedLang, updateFormValues],
         )}
         errors={error?.fields?.description}
       />

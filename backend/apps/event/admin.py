@@ -6,6 +6,7 @@ from .models import Event
 class EventAdmin(admin.ModelAdmin):
     list_display = ["title", "start_date"]
     readonly_fields = ["updated_by"]
+    exclude = ["bookmarks"]
 
     def save_model(
         self,
