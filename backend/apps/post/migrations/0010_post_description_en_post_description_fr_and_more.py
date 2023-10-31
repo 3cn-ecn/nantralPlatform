@@ -13,6 +13,12 @@ def copy_data(apps, schema_editor):
         if not obj.description_fr:
             obj.description_fr = obj.description
             obj.save()
+
+
+def reverse_copy_data(apps, schema_editor):
+    return
+    
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -48,5 +54,5 @@ class Migration(migrations.Migration):
                 max_length=200, null=True, verbose_name="Title"
             ),
         ),
-        migrations.RunPython(copy_data),
+        migrations.RunPython(copy_data, reverse_code=reverse_copy_data),
     ]
