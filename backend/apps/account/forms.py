@@ -1,23 +1,21 @@
 import re
 
 from django import forms
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy
 
 from apps.student.models import FACULTIES, PATHS
 
-from .models import IdRegistration
+from .models import InvitationLink
 
 User = get_user_model()
 
 
 def check_id(id_to_check: str):
-    if not IdRegistration.objects.filter(id=id_to_check).exists():
+    if not InvitationLink.objects.filter(id=id_to_check).exists():
         raise ValidationError(
             _(
                 "Invitation invalide : le lien d'invitation a expiré. Veuillez "
@@ -35,15 +33,6 @@ def check_ecn_mail(mail: str):
                 "finissant par ec-nantes.fr"
             )
         )
-
-
-def check_ecn_mail_login(mail: str):
-    """A wrapper around the login check to disable during periods where all
-    emails can be used.
-    """
-    if settings.TEMPORARY_ACCOUNTS_DATE_LIMIT >= timezone.now().today():
-        return
-    check_ecn_mail(mail)
 
 
 def check_passwords(pass1, pass2):
@@ -126,7 +115,6 @@ class SignUpForm(UserCreationForm):
 class LoginForm(forms.Form):
     email = forms.EmailField(
         max_length=200,
-        validators=[check_ecn_mail_login],
         required=True,
         help_text=gettext_lazy("Votre adresse mail ec-nantes.fr"),
     )
@@ -181,6 +169,7 @@ class ResetPassForm(forms.Form):
 
 class TemporaryRequestSignUpForm(SignUpForm):
     """A form to request a temporary access to the platform.
+
     The user will have to confirm the school mail address later.
     """
 

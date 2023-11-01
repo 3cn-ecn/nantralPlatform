@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from datetime import datetime
 
 from django.urls import reverse_lazy
 
@@ -121,7 +120,6 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    "apps.account.emailAuthBackend.EmailBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -196,11 +194,6 @@ DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
 # CUSTOM SETTINGS
-
-TEMPORARY_ACCOUNTS_DATE_LIMIT = datetime.fromisoformat(
-    env("TEMPORARY_ACCOUNTS_DATE_LIMIT")
-)
-
 STAGING = env("STAGING")
 
 # THIRD PARTY LIBRARIES SETTINGS

@@ -2,21 +2,23 @@
 
 import re
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest import mock
 
-from django.contrib.auth import get_user, get_user_model
+from django.contrib.auth import get_user
 from django.core import mail
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from django.urls import reverse
 
 from freezegun import freeze_time
 from rest_framework import status
 
-from apps.account.models import IdRegistration, TemporaryAccessRequest
+from apps.account.models import InvitationLink
 from apps.student.models import Student
 from apps.utils.testing.mocks import discord_mock_message_post
 from apps.utils.utest import TestMixin
+
+from .models import User
 
 PAYLOAD_TEMPLATE = {
     "first_name": "test_name",
@@ -33,8 +35,6 @@ REGEX_RESET_PASS_URL = (
     r"http://testserver/account/reset_pass/([\w-]*)/([\w-]*)/"  # noqa: S105
 )
 
-User = get_user_model()
-
 
 class TestAccount(TestCase, TestMixin):
     """Test class for account related methods."""
@@ -49,14 +49,9 @@ class TestAccount(TestCase, TestMixin):
     def tearDown(self):
         self.user_teardown()
 
-    @freeze_time("2021-09-01")
-    @override_settings(
-        TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2)
-    )
     def test_create_user_view_inside_temp(self):
         """Test that you can still create an account during temporary
         registration periods."""
-
         url = reverse("account:registration")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -68,7 +63,7 @@ class TestAccount(TestCase, TestMixin):
 
         student = Student.objects.get(user__first_name="test_name")
         self.assertEqual(student.user, User.objects.all().last())
-        assert len(mail.outbox) == 1
+        self.assertEqual(len(mail.outbox), 1)
         extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
         uidb64 = extract.group(1) if extract else None
         token = extract.group(2) if extract else None
@@ -82,10 +77,6 @@ class TestAccount(TestCase, TestMixin):
         user: User = User.objects.get(email="test@ec-nantes.fr")
         self.assertTrue(user.is_active)
 
-    @freeze_time("2021-09-03")
-    @override_settings(
-        TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2)
-    )
     def test_create_user_view_outside_temp(self):
         """Test that you can still create an account outside temporary
         registration periods."""
@@ -101,7 +92,7 @@ class TestAccount(TestCase, TestMixin):
 
         student = Student.objects.get(user__first_name="test_name")
         self.assertEqual(student.user, User.objects.all().last())
-        assert len(mail.outbox) == 1
+        self.assertEqual(len(mail.outbox), 1)
         extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
         uidb64 = extract.group(1) if extract else None
         token = extract.group(2) if extract else None
@@ -122,14 +113,13 @@ class TestAccount(TestCase, TestMixin):
 
 
 @freeze_time("2021-09-01")
-@override_settings(
-    TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2)
-)
 class TestTemporaryAccounts(TestCase, TestMixin):
     """Check that temporary accounts work within the correct time frame."""
 
     def setUp(self):
-        self.invite_id = IdRegistration.objects.create().id
+        self.invite_id = InvitationLink.objects.create(
+            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc)
+        ).id
         self.PAYLOAD = {
             **PAYLOAD_TEMPLATE,
             "password1": self.PASSWORD,
@@ -154,7 +144,8 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         response = self.client.post(url, self.PAYLOAD_NOT_EC_NANTES)
         self.assertEqual(response.status_code, 302)
         user: User = User.objects.get(email="test@not-ec-nantes.fr")
-        self.assertEqual(user.is_active, False)
+        self.assertFalse(user.is_email_valid)
+        self.assertTrue(user.is_active)
 
         # Check that you cannot login yet
         url = reverse("account:login")
@@ -162,11 +153,11 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         response = self.client.post(url, payload)
         self.assertEqual(response.status_code, 302)
         self.assertFalse(get_user(self.client).is_authenticated)
-        # Check that a temporary access request has been created
-        temp_req: TemporaryAccessRequest = TemporaryAccessRequest.objects.get(
-            user=user.pk
-        )
-
+        # Check that user has an invitation
+        self.assertIsNotNone(user.invitation)
+        # Check that is email valid is False
+        self.assertFalse(user.is_email_valid)
+        # Check email content
         self.assertEqual(len(mail.outbox), 1)
         extract = re.search(REGEX_ACTIVATE_URL, mail.outbox[0].body)
         uidb64 = extract.group(1) if extract else None
@@ -178,7 +169,6 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         )
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
-        temp_req.refresh_from_db()
 
         # Check that you can login
         url = reverse("account:login")
@@ -210,17 +200,16 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         self.assertEqual(response.status_code, 302)
         user: User = User.objects.get(email="test@ec-nantes.fr")
         self.assertTrue(user.is_active)
-        self.assertEqual(TemporaryAccessRequest.objects.all().count(), 0)
+        self.assertTrue(user.is_email_valid)
+
         url = reverse("account:upgrade-permanent")
-        with self.assertLogs("django.request", level="WARNING"):
-            resp = self.client.get(url)
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+        resp = self.client.get(url)
+        # Check that user is redirected to home view
+        self.assertEqual(resp.status_code, status.HTTP_302_FOUND)
+        self.assertEqual(resp.url, "/")
 
 
 @freeze_time("2021-09-03")
-@override_settings(
-    TEMPORARY_ACCOUNTS_DATE_LIMIT=datetime(year=2021, month=9, day=2)
-)
 class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
     """Check that temporary accounts don't work outside of the correct time
     frame."""
@@ -233,7 +222,9 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
             "password1": self.PASSWORD,
             "password2": self.PASSWORD,
         }
-        self.invite_id = IdRegistration.objects.create().id
+        self.invite_id = InvitationLink.objects.create(
+            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc)
+        ).id
 
     def test_temp_registration_not_available(self):
         url = reverse("account:temporary-registration", args=[uuid.uuid4()])
@@ -241,20 +232,10 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
         self.assertEqual(response.status_code, 302)
 
         response = self.client.post(url, self.PAYLOAD_NOT_EC_NANTES)
-        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.status_code, 302)
         with self.assertRaises(User.DoesNotExist):
             User.objects.get(email="test@not-ec-nantes.fr")
-
-    def test_temp_creation_not_available(self):
-        user: User = User(
-            first_name="test",
-            last_name="test",
-            email="test@ec-nantes.fr",
-            is_active=False,
-        )
-        user.save()
-        TemporaryAccessRequest.objects.create(user=user)
-        self.assertEqual(TemporaryAccessRequest.objects.all().count(), 0)
 
     @freeze_time("2021-09-01")
     @mock.patch("apps.utils.discord.requests.post")
@@ -283,7 +264,7 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
 
 
 class TestForgottenPass(TestCase, TestMixin):
-    NEW_PASSWORD = "new"
+    new_password = "new"  # noqa: S105
 
     def setUp(self) -> None:
         self.create_user(username="test", email="test@ec-nantes.fr")
@@ -299,12 +280,13 @@ class TestForgottenPass(TestCase, TestMixin):
         # Check that you cannot send email to un-existing email.
         response = self.client.post(url, data=payload)
         self.assertEqual(response.status_code, 302)
-        assert len(mail.outbox) == 0
+        self.assertEqual(len(mail.outbox), 0)
 
         payload = {"email": "test@ec-nantes.fr"}
         response = self.client.post(url, data=payload)
         self.assertEqual(response.status_code, 302)
-        assert len(mail.outbox) == 1
+        self.assertEqual(len(mail.outbox), 1)
+
         extract = re.search(REGEX_RESET_PASS_URL, mail.outbox[0].body)
         uidb64 = extract.group(1) if extract else None
         token = extract.group(2) if extract else None
@@ -316,8 +298,8 @@ class TestForgottenPass(TestCase, TestMixin):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Lien invalide")
         payload = {
-            "new_password1": self.NEW_PASSWORD,
-            "new_password2": self.NEW_PASSWORD,
+            "new_password1": self.new_password,
+            "new_password2": self.new_password,
         }
         response = self.client.post(url, payload)
         self.assertEqual(response.status_code, 200)
@@ -326,7 +308,7 @@ class TestForgottenPass(TestCase, TestMixin):
         url = reverse("account:login")
         payload = {
             "email": "test@ec-nantes.fr",
-            "password": self.NEW_PASSWORD,
+            "password": self.new_password,
         }
         response = self.client.post(url, payload)
         self.assertEqual(response.status_code, 302)
@@ -341,8 +323,8 @@ class TestForgottenPass(TestCase, TestMixin):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         payload = {
-            "new_password1": self.NEW_PASSWORD,
-            "new_password2": self.NEW_PASSWORD,
+            "new_password1": self.new_password,
+            "new_password2": self.new_password,
         }
         response = self.client.post(url, payload)
         self.assertEqual(response.status_code, 302)
