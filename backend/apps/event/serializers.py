@@ -5,11 +5,12 @@ from rest_framework import serializers
 
 from apps.group.models import Group
 from apps.group.serializers import GroupPreviewSerializer
+from apps.utils.translation_model_serializer import TranslationModelSerializer
 
 from .models import Event
 
 
-class EventSerializer(serializers.ModelSerializer):
+class EventSerializer(TranslationModelSerializer):
     number_of_participants = serializers.ReadOnlyField()
     group = GroupPreviewSerializer()
     is_group_member = serializers.SerializerMethodField()
@@ -50,6 +51,7 @@ class EventSerializer(serializers.ModelSerializer):
             "form_url",
             "notification",
         ]
+        translations_fields = ["title", "description"]
 
     def get_is_participating(self, obj: Event) -> bool:
         user = self.context["request"].user
@@ -103,15 +105,14 @@ class EventPreviewSerializer(EventSerializer):
             "end_registration",
             "url",
         ]
+        translations_fields = []
 
 
-class EventWriteSerializer(serializers.ModelSerializer):
-    class Meta:
+class EventWriteSerializer(TranslationModelSerializer):
+    class Meta(EventSerializer.Meta):
         model = Event
         fields = [
             "id",
-            "title",
-            "description",
             "location",
             "start_date",
             "end_date",
@@ -123,6 +124,8 @@ class EventWriteSerializer(serializers.ModelSerializer):
             "end_registration",
             "form_url",
         ]
+        translations_fields = ["title", "description"]
+        translations_only = True
 
     def validate_max_participant(self, value: int) -> int:
         if value and value < 1:

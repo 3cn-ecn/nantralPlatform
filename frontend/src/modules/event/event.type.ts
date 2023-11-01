@@ -1,9 +1,12 @@
 import { GroupPreview } from '#modules/group/group.type';
+import { TranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
 export interface Event {
   id: number;
   title: string;
+  titleTranslated: TranslatedFieldObject;
   description: string;
+  descriptionTranslated: TranslatedFieldObject;
   location: string;
   startDate: Date;
   endDate: Date;
@@ -42,8 +45,8 @@ export type EventPreview = Pick<
 
 export type EventForm = Pick<
   Event,
-  | 'title'
-  | 'description'
+  | 'titleTranslated'
+  | 'descriptionTranslated'
   | 'location'
   | 'publicity'
   | 'maxParticipant'

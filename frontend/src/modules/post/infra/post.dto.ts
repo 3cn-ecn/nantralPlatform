@@ -1,6 +1,7 @@
 import { GroupPreviewDTO } from '#modules/group/infra/group.dto';
+import { TranslatedFieldsDTO } from '#shared/infra/translatedFields/translatedField.dto';
 
-export interface PostDTO {
+export type PostDTO = {
   id: number;
   title: string;
   description: string;
@@ -13,7 +14,7 @@ export interface PostDTO {
   can_pin: boolean;
   is_admin: boolean;
   notification: number | null;
-}
+} & TranslatedFieldsDTO<'title' | 'description'>;
 
 export type PostPreviewDTO = Pick<
   PostDTO,
@@ -29,10 +30,11 @@ export type PostPreviewDTO = Pick<
   | 'publicity'
 >;
 
-export type PostFormDTO = Pick<
-  PostDTO,
-  'title' | 'description' | 'publicity' | 'pinned'
-> & {
-  group: number | null;
+export type PostFormDTO = Pick<PostDTO, 'publicity' | 'pinned'> & {
+  // keep unused fields for typing errors
+  title: undefined;
+  description: undefined;
+  // override types for some fields
+  group: number | null; // id of group
   image?: File;
-};
+} & TranslatedFieldsDTO<'title' | 'description'>;

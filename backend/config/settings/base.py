@@ -63,6 +63,7 @@ BASE_DIR = str(BASE_PATH)
 
 # Applications definition
 DJANGO_APPS = [
+    "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -149,7 +150,6 @@ WSGI_APPLICATION = "config.wsgi.application"
 AUTH_USER_MODEL = "account.User"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -164,6 +164,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+# Model translation
+MODELTRANSLATION_FALLBACK_LANGUAGES = ("en", "fr")
+MODELTRANSLATION_CUSTOM_FIELDS = ("CKEditor5Field",)
 
 # Compile frontend with VITE
 DJANGO_VITE_ASSETS_PATH = os.path.join(BASE_DIR, "static/front")

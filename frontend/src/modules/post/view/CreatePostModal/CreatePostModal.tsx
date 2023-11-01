@@ -1,12 +1,14 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { createPostApi } from '#modules/post/api/createPost.api';
+import { usePostFormValues } from '#modules/post/hooks/usePostFormValues';
 import { PostFormDTO } from '#modules/post/infra/post.dto';
 import { Post, PostForm } from '#modules/post/post.types';
+import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialog,
@@ -14,7 +16,7 @@ import {
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
-import { useObjectState } from '#shared/hooks/useObjectState';
+import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -26,19 +28,12 @@ interface CreatePostModalProps {
 }
 
 export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
-  const { t } = useTranslation();
+  const { currentBaseLanguage, t } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
-  // the values currently in our form
-  const [formValues, updateFormValues] = useObjectState<PostForm>({
-    title: '',
-    description: '',
-    image: undefined,
-    group: null,
-    pinned: false,
-    publicity: 'Pub',
-  });
+  const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
+  const [formValues, updateFormValues] = usePostFormValues();
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
@@ -74,25 +69,36 @@ export function CreatePostModal({ onClose, onCreated }: CreatePostModalProps) {
         }
       >
         {t('post.createModal.title')}
+        <Spacer flex={1} />
+        <LanguageSelector
+          selectedLang={selectedLang}
+          setSelectedLang={setSelectedLang}
+        />
       </ResponsiveDialogHeader>
-      <form onSubmit={(e) => onSubmit(e, formValues)}>
-        <ResponsiveDialogContent>
+      <ResponsiveDialogContent>
+        <form id="create-post-form" onSubmit={(e) => onSubmit(e, formValues)}>
           <PostFormFields
             isError={isError}
             error={error}
             formValues={formValues}
             updateFormValues={updateFormValues}
+            selectedLang={selectedLang}
           />
-        </ResponsiveDialogContent>
-        <ResponsiveDialogFooter>
-          <Button variant="text" onClick={() => onClose()}>
-            Annuler
-          </Button>
-          <LoadingButton loading={isLoading} type="submit" variant="contained">
-            Valider
-          </LoadingButton>
-        </ResponsiveDialogFooter>
-      </form>
+        </form>
+      </ResponsiveDialogContent>
+      <ResponsiveDialogFooter>
+        <Button variant="text" onClick={() => onClose()}>
+          Annuler
+        </Button>
+        <LoadingButton
+          form="create-post-form"
+          type="submit"
+          loading={isLoading}
+          variant="contained"
+        >
+          Valider
+        </LoadingButton>
+      </ResponsiveDialogFooter>
     </ResponsiveDialog>
   );
 }

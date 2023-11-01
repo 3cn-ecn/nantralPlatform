@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 
 import { Edit as EditIcon } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
@@ -9,14 +9,16 @@ import {
   updateEventApi,
 } from '#modules/event/api/updateEvent.api';
 import { Event, EventForm } from '#modules/event/event.type';
+import { useEventFormValues } from '#modules/event/hooks/useEventFormValues';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
+import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialogContent,
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
-import { useObjectState } from '#shared/hooks/useObjectState';
+import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -31,25 +33,12 @@ export function EditEventModalContent({
   event,
   onClose,
 }: EditEventModalContentProps) {
-  const { t } = useTranslation();
+  const { t, currentBaseLanguage } = useTranslation();
   const queryClient = useQueryClient();
   const { palette } = useTheme();
 
-  // the values currently in our form
-  const [formValues, updateFormValues] = useObjectState<EventForm>({
-    title: event.title,
-    description: event.description,
-    group: event.group.id,
-    publicity: event.publicity,
-    location: event.location,
-    image: undefined,
-    startDate: event.startDate,
-    endDate: event.endDate,
-    startRegistration: event.startRegistration,
-    endRegistration: event.endRegistration,
-    maxParticipant: event.maxParticipant,
-    formUrl: event.formUrl,
-  });
+  const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
+  const [formValues, updateFormValues] = useEventFormValues(event);
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
@@ -90,26 +79,37 @@ export function EditEventModalContent({
         }
       >
         {t('event.editModal.title')}
+        <Spacer flex={1} />
+        <LanguageSelector
+          selectedLang={selectedLang}
+          setSelectedLang={setSelectedLang}
+        />
       </ResponsiveDialogHeader>
-      <form onSubmit={(e) => onSubmit(e, formValues)}>
-        <ResponsiveDialogContent>
+      <ResponsiveDialogContent>
+        <form id="edit-event-form" onSubmit={(e) => onSubmit(e, formValues)}>
           <EventFormFields
             isError={isError}
             error={error}
             formValues={formValues}
             updateFormValues={updateFormValues}
             prevData={event}
+            selectedLang={selectedLang}
           />
-        </ResponsiveDialogContent>
-        <ResponsiveDialogFooter>
-          <Button variant="text" onClick={() => onClose()}>
-            {t('button.cancel')}
-          </Button>
-          <LoadingButton loading={isLoading} type="submit" variant="contained">
-            {t('button.confirm')}
-          </LoadingButton>
-        </ResponsiveDialogFooter>
-      </form>
+        </form>
+      </ResponsiveDialogContent>
+      <ResponsiveDialogFooter>
+        <Button variant="text" onClick={() => onClose()}>
+          {t('button.cancel')}
+        </Button>
+        <LoadingButton
+          form="edit-event-form"
+          type="submit"
+          loading={isLoading}
+          variant="contained"
+        >
+          {t('button.confirm')}
+        </LoadingButton>
+      </ResponsiveDialogFooter>
     </>
   );
 }

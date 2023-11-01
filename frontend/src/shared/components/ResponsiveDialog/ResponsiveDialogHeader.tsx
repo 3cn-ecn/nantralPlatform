@@ -33,7 +33,7 @@ export function ResponsiveDialogHeader({
         alignItems: 'center',
       }}
     >
-      <FlexRow alignItems="center" gap={2} flex={1} pr={2}>
+      <FlexRow alignItems="center" gap={1} flex={1} pr={1}>
         {leftIcon}
         {children}
       </FlexRow>
