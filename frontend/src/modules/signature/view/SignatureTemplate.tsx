@@ -31,33 +31,40 @@ export function SignatureTemplate({
   group,
 }: SignatureTemplateProps) {
   const content = prettify(markdownContent);
+  const isCustomImage = Boolean(group?.icon);
+
   const imageLink = group?.icon
-    ? group.icon
-    : location.origin + '/static/img/logo_ecn.png';
+    ? new URL(group.icon, location.origin).toString()
+    : new URL('/static/img/logo_ecn.png', location.origin).toString();
   const link = group?.url
-    ? location.origin + group.url
+    ? new URL(group.url, location.origin).toString()
     : 'https://www.ec-nantes.fr';
+
+  const logoWidth = isCustomImage ? 80 : 140;
 
   return (
     <Row>
-      <Column valign="top">
+      <Column
+        valign="top"
+        width={logoWidth + 20 + (isCustomImage ? 0 : 7 + 19)}
+      >
         <Row>
-          <Column>
+          <Column width={logoWidth + 20}>
             <Link href={link} rel="noopener noreferer">
               <Img
                 src={imageLink} // do not use relative path in emails
                 alt="Centrale Nantes"
-                height={70}
+                width={logoWidth}
                 style={{
                   ...fontStyles,
                   marginRight: 20,
-                  borderRadius: group?.icon && 10,
+                  borderRadius: isCustomImage ? 10 : undefined,
                 }}
               />
             </Link>
           </Column>
-          {!group?.icon && (
-            <Column valign="middle">
+          {!isCustomImage && (
+            <Column valign="middle" width={7 + 19}>
               <div
                 style={{
                   width: 7,

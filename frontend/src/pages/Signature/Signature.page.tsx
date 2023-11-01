@@ -35,6 +35,13 @@ export default function SignaturePage() {
     }
   }, [query.data, template]);
 
+  const group =
+    (template.startsWith('@') &&
+      query.data?.clubMemberships.find(
+        (m) => m.group.slug === template.slice(1),
+      )?.group) ||
+    undefined;
+
   return (
     <Container sx={{ my: 4 }}>
       <Typography variant="h1" mb={1}>
@@ -89,13 +96,7 @@ export default function SignaturePage() {
           >
             <SignatureTemplate
               markdownContent={markdownContent}
-              group={
-                (template.startsWith('@') &&
-                  query.data?.clubMemberships.find(
-                    (m) => m.group.slug === template.slice(1),
-                  )?.group) ||
-                undefined
-              }
+              group={group}
             />
           </Card>
         </Box>
@@ -104,6 +105,7 @@ export default function SignaturePage() {
         isOpen={isExportModalOpen}
         onClose={() => setExportModalOpen(false)}
         markdownContent={markdownContent}
+        group={group}
       />
     </Container>
   );

@@ -389,7 +389,7 @@
     "description": "Générez votre signature mail Centrale Nantes !",
     "exportModal": {
       "copyAsHtml": "Copier au format HTML",
-      "copyAsrawText": "Copier au format texte brut",
+      "copyAsRawText": "Copier au format texte simple",
       "copyHtmlSourceCode": "Copier le code source HTML",
       "otherMethods": "Autres méthodes :",
       "recommendedMethod": "Méthode recommandée :",

@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { GroupPreview } from '#modules/group/types/group.types';
 import { ResponsiveDialog } from '#shared/components/ResponsiveDialog';
 
 import { ChooseMethodModalContent } from './ChooseMethodModalContent';
@@ -9,16 +10,22 @@ interface ExportMethodModalProps {
   isOpen: boolean;
   onClose: () => void;
   markdownContent: string;
+  group?: GroupPreview;
 }
 
 export function ExportMethodModal({
   isOpen,
   onClose,
   markdownContent,
+  group,
 }: ExportMethodModalProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [codeToCopy, setCodeToCopy] = useState<string | undefined>();
   const [image, setImage] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (isOpen) setStep(1);
+  }, [isOpen]);
 
   const onPreviousStep = () => {
     setStep(1);
@@ -37,6 +44,7 @@ export function ExportMethodModal({
           onClose={onClose}
           onNextStep={onNextStep}
           markdownContent={markdownContent}
+          group={group}
         />
       ) : (
         <IncludeSignatureModalContent

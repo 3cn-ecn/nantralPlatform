@@ -389,7 +389,7 @@
     "description": "Generate your Centrale Nantes email signature!",
     "exportModal": {
       "copyAsHtml": "Copy as HTML",
-      "copyAsrawText": "Copy to plain text format",
+      "copyAsRawText": "Copy as plain text",
       "copyHtmlSourceCode": "Copy HTML source code",
       "otherMethods": "Other methods:",
       "recommendedMethod": "Recommended method:",

@@ -1,6 +1,7 @@
 import { ArrowForward } from '@mui/icons-material';
 import { Card, CardActionArea, Typography, useTheme } from '@mui/material';
 
+import { GroupPreview } from '#modules/group/types/group.types';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   ResponsiveDialogContent,
@@ -16,12 +17,14 @@ interface ChooseMethodModalContentProps {
   onClose: () => void;
   onNextStep: (image?: string, codeToCopy?: string) => void;
   markdownContent: string;
+  group?: GroupPreview;
 }
 
 export function ChooseMethodModalContent({
   onClose,
   onNextStep,
   markdownContent,
+  group,
 }: ChooseMethodModalContentProps) {
   const { t } = useTranslation();
 
@@ -37,7 +40,7 @@ export function ChooseMethodModalContent({
         <LargeBigButton
           title={t('signature.exportModal.copyHtmlSourceCode')}
           onClick={() => {
-            copyHtmlSourceCode(markdownContent).then((code) => {
+            copyHtmlSourceCode(markdownContent, group).then((code) => {
               onNextStep('/static/img/signature-tutorial.gif', code);
             });
           }}
@@ -49,14 +52,14 @@ export function ChooseMethodModalContent({
         <LargeBigButton
           title={t('signature.exportModal.copyAsHtml')}
           onClick={() => {
-            copyAsHtml(markdownContent).then(() => {
+            copyAsHtml(markdownContent, group).then(() => {
               onNextStep();
             });
           }}
           color="secondary"
         />
         <LargeBigButton
-          title={t('signature.exportModal.copyAsrawText')}
+          title={t('signature.exportModal.copyAsRawText')}
           onClick={() => {
             copyAsPlainText(markdownContent).then((code) => {
               onNextStep(undefined, code);
