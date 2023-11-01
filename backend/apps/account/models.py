@@ -11,7 +11,7 @@ from .manager import UserManager
 class InvitationLink(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=True)
     expires_at = models.DateTimeField()
-    description = models.CharField(max_length=200, blank=True)
+    description = models.CharField(max_length=200)
 
     def __str__(self) -> str:
         if self.description:

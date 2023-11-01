@@ -112,6 +112,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="invitationlink",
             name="description",
-            field=models.CharField(max_length=200, blank=True),
+            field=models.CharField(max_length=200, default="OLD LINK"),
+            preserve_default=False,
         ),
     ]
