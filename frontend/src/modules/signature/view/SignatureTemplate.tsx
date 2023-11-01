@@ -1,11 +1,12 @@
 import { CSSProperties } from 'react';
 
-import { GroupPreview } from '#modules/group/types/group.types';
 import { Column } from '@react-email/column';
 import { Img } from '@react-email/img';
 import { Link } from '@react-email/link';
 import { Markdown } from '@react-email/markdown';
 import { Row } from '@react-email/row';
+
+import { GroupPreview } from '#modules/group/types/group.types';
 
 const emailRegex = /\b[\w.!#$%&'*+/=?^_`{|}~-]+@[\w.-]+\b/g;
 const phoneRegex = /(\+\s?)?\b\d[\d\s.-]{8,}\d\b/g;

@@ -1,10 +1,12 @@
+import { Dispatch, SetStateAction, useCallback } from 'react';
+
+import { HelpOutline } from '@mui/icons-material';
+import { MenuItem, Tooltip } from '@mui/material';
+
 import { SignatureInfo } from '#modules/signature/signature.type';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { SelectField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { HelpOutline } from '@mui/icons-material';
-import { MenuItem, Tooltip } from '@mui/material';
-import { Dispatch, SetStateAction, useCallback } from 'react';
 
 export type TemplateType = 'ecn' | 'international' | `@${string}`;
 

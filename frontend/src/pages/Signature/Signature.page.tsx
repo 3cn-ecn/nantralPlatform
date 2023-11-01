@@ -13,11 +13,11 @@ import {
 import { useSignatureInfo } from '#modules/signature/hooks/useSignature.query';
 import { ExportMethodModal } from '#modules/signature/view/ExportModal/ExportModal';
 import { SignatureTemplate } from '#modules/signature/view/SignatureTemplate';
-import { formatSignatureInfoToMarkdown } from '#modules/signature/view/templates/formatSignatureInfoToMarkdown';
 import {
   SelectTemplate,
   TemplateType,
 } from '#modules/signature/view/templates/SelectTemplate';
+import { formatSignatureInfoToMarkdown } from '#modules/signature/view/templates/formatSignatureInfoToMarkdown';
 import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
