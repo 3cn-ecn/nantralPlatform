@@ -1,24 +1,20 @@
 /* eslint-disable no-irregular-whitespace */
+import { Membership } from '#modules/group/types/membership.types';
+
 import { SignatureInfo } from '../../signature.type';
 import { TemplateType } from './SelectTemplate';
 
-export function formatYear(year: number, lang: 'fr' | 'en') {
+function formatYear(year: number, lang: 'fr' | 'en') {
   if (lang === 'fr') {
-    return `${year}${year === 1 ? 're' : 'e'}`;
+    return year === 1 ? '1re' : `${year}e`;
   }
-  if (year === 1) {
-    return '1st';
-  }
-  if (year === 2) {
-    return '2nd';
-  }
-  if (year === 3) {
-    return '3rd';
-  }
+  if (year === 1) return '1st';
+  if (year === 2) return '2nd';
+  if (year === 3) return '3rd';
   return `${year}th`;
 }
 
-export function formatHeader(data: SignatureInfo, lang: 'fr' | 'en') {
+function formatHeader(data: SignatureInfo, lang: 'fr' | 'en') {
   const formattedYear = formatYear(data.year, lang);
   const status =
     lang === 'fr'
@@ -28,7 +24,7 @@ export function formatHeader(data: SignatureInfo, lang: 'fr' | 'en') {
   return [`# ${data.name}`, status].join('\n');
 }
 
-export function formatAcademicGroup(data: SignatureInfo, lang: 'fr' | 'en') {
+function formatAcademicGroup(data: SignatureInfo, lang: 'fr' | 'en') {
   if (data.year === 1) {
     return lang === 'fr' ? 'Groupe X' : 'Group X';
   }
@@ -38,22 +34,18 @@ export function formatAcademicGroup(data: SignatureInfo, lang: 'fr' | 'en') {
   return data.academicGroups.map((g) => g.name).join('\n');
 }
 
-export function formatClubMemberships(
-  clubMemberships: SignatureInfo['clubMemberships'],
-) {
-  // filter out memberships without summary
-  const memberships = clubMemberships.filter((m) => m.summary);
-
-  if (memberships.length === 0) {
-    return '';
-  }
-
-  return memberships
+function formatClubMemberships(clubMemberships: Membership[]) {
+  return clubMemberships
+    .filter((m) => m.summary)
     .map((m) => `${m.summary} - ${m.group.shortName}`)
     .join('\n');
 }
 
-export function nbLines(text: string) {
+function formatPhoneNumber(lang: 'fr' | 'en' = 'fr') {
+  return lang === 'fr' ? 'Tel : +33 X XX XX XX XX' : 'Phone: +33 X XX XX XX XX';
+}
+
+function nbLines(text: string) {
   if (!text) {
     return 0;
   }
@@ -65,7 +57,7 @@ function formatEcnTemplate(data: SignatureInfo, lang: 'fr' | 'en' = 'fr') {
   const header = formatHeader(data, lang);
   const academicInfos = formatAcademicGroup(data, lang);
   const clubsInfos = formatClubMemberships(data.clubMemberships);
-  const footer = ['Tel : +33 X XX XX XX XX', `**${data.email}**`].join('\n');
+  const footer = [formatPhoneNumber(lang), `**${data.email}**`].join('\n');
 
   if (nbLines(academicInfos) > 1 && nbLines(clubsInfos) == 0) {
     return [header, '---', academicInfos, '---', footer].join('\n');
@@ -90,7 +82,7 @@ function formatClubTemplate(data: SignatureInfo, clubSlug: string) {
     `*${clubMembership.summary}*`,
     clubMembership.group.name,
     '---',
-    'Tel : +33 X XX XX XX XX',
+    formatPhoneNumber(),
     `**${data.email}**`,
   ].join('\n');
 }
