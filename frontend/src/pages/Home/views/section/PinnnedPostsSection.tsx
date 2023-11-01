@@ -5,7 +5,7 @@ import { PostCardSkeleton } from '#modules/post/view/PostCard/PostCardSkeleton';
 import { usePinnedPostsQuery } from '#pages/Home/hooks/usePinnedPosts.query';
 import { Section } from '#shared/components/Section/Section';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { arrayRange } from '#shared/utils/arrayRange';
+import { repeat } from '#shared/utils/repeat';
 
 const NUMBER_OF_POSTS = 3;
 
@@ -23,11 +23,12 @@ export function PinnedPostsSection({
     return (
       <Section title={t('home.postSection.pinnedTitle')}>
         <Grid container spacing={1}>
-          {arrayRange(NUMBER_OF_POSTS).map((_, index) => (
-            <Grid key={index} xs={12} sm={6} md={4} item>
+          {repeat(
+            NUMBER_OF_POSTS,
+            <Grid xs={12} sm={6} md={4} item>
               <PostCardSkeleton />
-            </Grid>
-          ))}
+            </Grid>,
+          )}
         </Grid>
       </Section>
     );

@@ -10,7 +10,7 @@ import { Section } from '#shared/components/Section/Section';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { arrayRange } from '#shared/utils/arrayRange';
+import { repeat } from '#shared/utils/repeat';
 
 function SeeAllEventsButton({ label }: { label: string }) {
   return (
@@ -45,11 +45,12 @@ export function UpcomingEventsSection({ enabled }: UpcomingEventsSectionProps) {
         button={<SeeAllEventsButton label={t('home.eventSection.seeAll')} />}
       >
         <Grid container spacing={1}>
-          {arrayRange(numberOfEvents).map((_, index) => (
-            <Grid key={index} xs={12} sm={6} md={4} item>
+          {repeat(
+            numberOfEvents,
+            <Grid xs={12} sm={6} md={4} item>
               <EventCardSkeleton />
-            </Grid>
-          ))}
+            </Grid>,
+          )}
         </Grid>
       </Section>
     );

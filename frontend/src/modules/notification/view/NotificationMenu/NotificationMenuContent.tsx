@@ -4,6 +4,7 @@ import { useNotificationListQuery } from '#modules/notification/hooks/useNotific
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { useToast } from '#shared/context/Toast.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
+import { repeat } from '#shared/utils/repeat';
 
 import { NotificationItem } from './NotificationItem';
 import { NotificationItemSkeleton } from './NotificationItemSkeleton';
@@ -43,11 +44,7 @@ export function NotificationMenuContent({
   if (!notificationListQuery.isSuccess) {
     return (
       <Box overflow="auto">
-        <List>
-          {Array.from({ length: 6 }).map((_, index) => (
-            <NotificationItemSkeleton key={index} />
-          ))}
-        </List>
+        <List>{repeat(10, <NotificationItemSkeleton />)}</List>
       </Box>
     );
   }
