@@ -7,6 +7,7 @@ import { Markdown } from '@react-email/markdown';
 import { Row } from '@react-email/row';
 
 import { GroupPreview } from '#modules/group/types/group.types';
+import { buildAbsoluteUrl } from '#shared/utils/urls';
 
 const emailRegex = /\b[\w.!#$%&'*+/=?^_`{|}~-]+@[\w.-]+\b/g;
 const phoneRegex = /(\+\s?)?\b\d[\d\s.-]{8,}\d\b/g;
@@ -34,10 +35,10 @@ export function SignatureTemplate({
   const isCustomImage = Boolean(group?.icon);
 
   const imageLink = group?.icon
-    ? new URL(group.icon, location.origin).toString()
-    : new URL('/static/img/logo_ecn.png', location.origin).toString();
+    ? buildAbsoluteUrl(group.icon)
+    : buildAbsoluteUrl('/static/img/logo_ecn.png');
   const link = group?.url
-    ? new URL(group.url, location.origin).toString()
+    ? buildAbsoluteUrl(group.url)
     : 'https://www.ec-nantes.fr';
 
   const logoWidth = isCustomImage ? 80 : 140;
@@ -58,6 +59,7 @@ export function SignatureTemplate({
                 style={{
                   ...fontStyles,
                   marginRight: 20,
+                  marginBottom: 0,
                   borderRadius: isCustomImage ? 10 : undefined,
                 }}
               />
