@@ -1,4 +1,4 @@
-import { GroupPreview } from '#modules/group/group.type';
+import { GroupPreview } from '#modules/group/types/group.types';
 import { TranslatedFieldObject } from '#shared/infra/translatedFields/translatedField.types';
 
 export interface Post {

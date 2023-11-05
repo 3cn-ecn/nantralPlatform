@@ -87,6 +87,11 @@ function getTheme(mode: PaletteMode, language: string) {
             disableElevation: true,
           },
         },
+        MuiCard: {
+          defaultProps: {
+            variant: 'outlined',
+          },
+        },
         MuiTypography: {
           defaultProps: {
             variantMapping: {

@@ -26,7 +26,7 @@ export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
       open={menuOpen}
       onClose={onClose}
       sx={{
-        zIndex: 0,
+        zIndex: 1050,
         ['& .MuiDrawer-paper']: {
           width: 240,
         },
@@ -76,9 +76,8 @@ export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
         />
         <NavBarSideItem
           label={t('navbar.signature')}
-          path="/tools/signature/"
+          path="/signature/"
           iconPath="/static/img/icons/cropped/sign.svg"
-          isOnBackend
           closeMenu={onClose}
         />
       </List>

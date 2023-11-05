@@ -18,6 +18,7 @@ const EventDetailsPage = lazy(
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const LegalNoticePage = lazy(() => import('#pages/LegalNotice/Legal.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
+const Signature = lazy(() => import('#pages/Signature/Signature.page'));
 
 // create a fake t function so that vscode can show translations in editor
 const t = (key: string) => key;
@@ -58,6 +59,11 @@ export const router = createBrowserRouter([
             handle: { crumb: t('breadcrumbs.events.details.index') },
           },
         ],
+      },
+      {
+        path: '/signature',
+        element: <Signature />,
+        handle: { crumb: t('breadcrumbs.signature.index') },
       },
       {
         path: '/legal-notice',

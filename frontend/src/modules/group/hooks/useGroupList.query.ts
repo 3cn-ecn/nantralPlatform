@@ -9,7 +9,7 @@ import {
   GetGroupListApiParams,
   getGroupListApi,
 } from '../api/getGroupList.api';
-import { GroupPreview } from '../group.type';
+import { GroupPreview } from '../types/group.types';
 
 export function useGroupListQuery(
   filters: Omit<GetGroupListApiParams, 'page'>,

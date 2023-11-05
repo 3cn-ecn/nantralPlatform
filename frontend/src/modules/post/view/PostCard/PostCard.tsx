@@ -36,7 +36,7 @@ export function PostCard({ post }: PostCardProps) {
 
   return (
     <>
-      <StyledCard variant="outlined">
+      <StyledCard>
         <StyledCardActionArea onClick={openModal}>
           <BadgeIconsContainer>
             {post.publicity === 'Mem' && <BadgeIcon Icon={GroupIcon} />}

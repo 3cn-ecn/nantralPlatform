@@ -28,8 +28,8 @@ export function FormErrorAlert<T>({ isError, error }: FormErrorAlertProps<T>) {
       <AlertTitle>{t('form.errors.title')}</AlertTitle>
       {!!error?.globalErrors?.length && (
         <ul style={{ margin: 0, paddingInlineStart: 20 }}>
-          {error.globalErrors.map((err, index) => (
-            <li key={index}>{err}</li>
+          {error.globalErrors.map((err) => (
+            <li key={err}>{err}</li>
           ))}
         </ul>
       )}

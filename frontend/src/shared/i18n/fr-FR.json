@@ -17,6 +17,9 @@
     },
     "notFound": {
       "index": "Erreur 404"
+    },
+    "signature": {
+      "index": "Signature"
     }
   },
   "button": {
@@ -370,6 +373,42 @@
       }
     },
     "post": "Post"
+  },
+  "signature": {
+    "actions": {
+      "edit": {
+        "label": "Modèle à compléter"
+      },
+      "export": {
+        "label": "Exporter"
+      },
+      "reset": {
+        "label": "Réinitialiser"
+      }
+    },
+    "description": "Générez votre signature mail Centrale Nantes !",
+    "exportModal": {
+      "copyAsHtml": "Copier au format HTML",
+      "copyAsRawText": "Copier au format texte simple",
+      "copyHtmlSourceCode": "Copier le code source HTML",
+      "otherMethods": "Autres méthodes :",
+      "recommendedMethod": "Méthode recommandée :",
+      "title": "Choisissez une méthode d'export"
+    },
+    "includeSignature": {
+      "copyCode": "Si la copie n'a pas fonctionné, vous pouvez aussi copier manuellement le code ci-dessous :",
+      "description": "Vous pouvez maintenant coller la signature dans votre client mail préféré, ou directement sur la <2>webmail ECN</2>.",
+      "successMessage": "La signature a bien été copiée !",
+      "title": "Intégrer la signature",
+      "tutorialAlt": "Aller dans \"Paramètres\", puis \"Signature\". Sélectionnez \"Format HTML\" puis cliquez sur le bouton \"Code source\" dans la barre d'outils. Collez ensuite le code HTML !"
+    },
+    "template": {
+      "ecn": "Centrale Nantes",
+      "help": "Seuls les clubs où vous avez un rôle actif sont listés.",
+      "international": "International",
+      "label": "Sélectionnez un template"
+    },
+    "title": "Générateur de signature"
   },
   "site": {
     "name": "Nantral Platform"

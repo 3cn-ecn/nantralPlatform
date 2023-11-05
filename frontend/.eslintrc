@@ -12,6 +12,7 @@
     "linebreak-style": ["error", "unix"],
     "prettier/prettier": ["error", { "usePrettierrc": true }],
     "quotes": ["error", "single", { "avoidEscape": true }],
+    "react/no-array-index-key": "error",
     "react-hooks/exhaustive-deps": "error",
     "no-restricted-imports": [
       "error",

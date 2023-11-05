@@ -2,9 +2,9 @@ import axios from 'axios';
 
 import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
 
-import { GroupPreview } from '../group.type';
 import { adaptGroupPreview } from '../infra/group.adapter';
 import { GroupPreviewDTO } from '../infra/group.dto';
+import { GroupPreview } from '../types/group.types';
 
 export interface GetGroupListApiParams {
   type?: string | null;

@@ -9,7 +9,7 @@ import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageC
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 import { useTranslation } from '#shared/i18n/useTranslation';
-import { arrayRange } from '#shared/utils/arrayRange';
+import { repeat } from '#shared/utils/repeat';
 
 import { useInfiniteEventListQuery } from '../hooks/useInfiniteEventList.query';
 
@@ -49,11 +49,12 @@ export function EventInfiniteGrid({
   if (eventsQuery.isLoading) {
     return (
       <Grid container spacing={1}>
-        {arrayRange(eventsPerPage).map((_, index) => (
-          <Grid key={index} xs={12} sm={6} md={4} lg={3} item>
+        {repeat(
+          eventsPerPage,
+          <Grid xs={12} sm={6} md={4} lg={3} item>
             <EventCardSkeleton />
-          </Grid>
-        ))}
+          </Grid>,
+        )}
       </Grid>
     );
   }
@@ -87,11 +88,12 @@ export function EventInfiniteGrid({
           )),
         )}
         {eventsQuery.isFetchingNextPage &&
-          arrayRange(eventsPerPage).map((_, index) => (
-            <Grid key={index} xs={12} sm={6} md={4} lg={3} item>
+          repeat(
+            eventsPerPage,
+            <Grid xs={12} sm={6} md={4} lg={3} item>
               <EventCardSkeleton />
-            </Grid>
-          ))}
+            </Grid>,
+          )}
       </Grid>
       <FlexRow justifyContent="center" mt={3}>
         {eventsQuery.hasNextPage && !eventsQuery.isFetchingNextPage && (
