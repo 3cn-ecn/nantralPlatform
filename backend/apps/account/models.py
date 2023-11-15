@@ -44,6 +44,8 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.email = self.email.lower()
+        self.first_name = self.first_name.lower()
+        self.last_name = self.last_name.lower()
 
         if self.email_next:
             self.email_next = self.email_next.lower()
