@@ -51,6 +51,10 @@ urlpatterns = [
     ),
     # api
     path(
+        "api/account/",
+        include("apps.account.api_urls", namespace="account-api"),
+    ),
+    path(
         "api/student/",
         include("apps.student.api_urls", namespace="student_api"),
     ),
@@ -77,5 +81,7 @@ urlpatterns = [
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler403 = "apps.home.views.handler403"
+handler404 = "apps.home.views.handler404"
+handler500 = "apps.home.views.handler500"
 handler404 = "apps.home.views.handler404"
 handler500 = "apps.home.views.handler500"
