@@ -8,4 +8,12 @@ app_name = "account_api"
 
 router = DefaultRouter()
 router.register(prefix="", basename="account", viewset=AuthViewSet)
-urlpatterns = router.urls
+urlpatterns = router.urls + [
+    path(
+        r"password_reset/",
+        include(
+            "django_rest_passwordreset.urls",
+            namespace="password_reset",
+        ),
+    ),
+]
