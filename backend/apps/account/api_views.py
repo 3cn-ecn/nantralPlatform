@@ -19,7 +19,6 @@ from .serializers import (
     RegisterSerializer,
     UserSerializer,
 )
-from .tokens import account_activation_token
 from .utils import send_email_confirmation
 
 SUCCESS = 0
@@ -71,7 +70,7 @@ class AuthViewSet(GenericViewSet):
                     "message": "Authentication Failed",
                     "code": FAILED,
                 },
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         # Expired invitation
@@ -81,7 +80,7 @@ class AuthViewSet(GenericViewSet):
                     "message": "Authentication Failed",
                     "code": TEMPORARY_ACCOUNT_EXPIRED,
                 },
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         # Not verified email
@@ -91,7 +90,7 @@ class AuthViewSet(GenericViewSet):
                     "message": "Email is not verified",
                     "code": EMAIL_NOT_VALIDATED,
                 },
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         # Temporary account
@@ -137,7 +136,7 @@ class AuthViewSet(GenericViewSet):
             serializer.validated_data, status=status.HTTP_201_CREATED
         )
 
-    @action(detail=False, methods=["PUT"], serializer_class=Serializer)
+    @action(detail=False, methods=["POST"], serializer_class=Serializer)
     def logout(self, request):
         """Logout from current session"""
         logout(request)
@@ -160,7 +159,7 @@ class AuthViewSet(GenericViewSet):
         serializer_class=ChangePasswordSerializer,
     )
     def change_password(self, request: Request):
-        """Change current password
+        """Change password for an authenticated user
         - old_password
         - new_password"""
         data = request.data

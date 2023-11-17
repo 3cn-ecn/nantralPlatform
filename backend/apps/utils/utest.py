@@ -16,7 +16,7 @@ class TestMixin(object):
         Delete the users of the database
     """
 
-    PASSWORD = "pass"
+    PASSWORD = "secured_password"
 
     def user_setup(self) -> None:
         """Create 3 standards users: u1, u2 and u3. Only u2 and u3

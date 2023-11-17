@@ -24,6 +24,13 @@ def validate_ecn_email(mail: str):
         )
 
 
+def validate_email(mail: str):
+    if "+" in mail:
+        raise ValidationError(
+            "L'adresse email ne doit pas contenir de caractères spéciaux"
+        )
+
+
 def validate_invitation(uuid: str):
     if (
         not InvitationLink.objects.filter(id=uuid).exists()
@@ -52,6 +59,7 @@ class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(
         max_length=200,
         validators=[
+            validate_email,
             validate_ecn_email,
             UniqueValidator(
                 User.objects.all(),
@@ -87,6 +95,9 @@ class RegisterSerializer(serializers.Serializer):
         choices=PATHS,
         required=False,
     )
+
+    def validate_email(self, val: str):
+        return val.lower().replace("+", "")
 
     def create(self, validated_data: dict):
         user = User(
@@ -141,6 +152,7 @@ class InvitationRegisterSerializer(RegisterSerializer):
     email = serializers.EmailField(
         max_length=200,
         validators=[
+            validate_email,
             UniqueValidator(
                 User.objects.all(),
                 message=_("Un compte à déjà été créé avec cette adresse email"),
@@ -165,6 +177,7 @@ class ChangeEmailSerializer(serializers.Serializer):
     password = serializers.CharField(style={"input_type": "password"})
     email = serializers.EmailField(
         validators=[
+            validate_email,
             validate_ecn_email,
             UniqueValidator(
                 User.objects.all(),
