@@ -34,7 +34,8 @@ def send_reset_email(
     token = reset_password_token.key
     # paths
     update_path = reverse("student:update", kwargs={"pk": user.student.pk})
-    reset_path = f"{reverse('account-api:password_reset:reset-password-confirm')}?token={token}"
+    # TODO don't forget to update when frontend implemented
+    reset_path = reverse("account:reset_pass", args=[token])
     # sending email
     send_email(
         subject="Réinitialisation de votre mot de passe",

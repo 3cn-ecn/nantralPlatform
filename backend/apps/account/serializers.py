@@ -1,6 +1,5 @@
 import re
 
-from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.translation import gettext as _
@@ -9,7 +8,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
-from apps.student.models import FACULTIES, PATHS, Student
+from apps.student.models import FACULTIES, PATHS
 
 from .models import InvitationLink, User
 
@@ -39,7 +38,7 @@ def validate_invitation(uuid: str):
         raise ValidationError(_("Le lien d'invitation est invalide"))
 
 
-def validate_password_(password):
+def django_validate_password(password):
     try:
         # validate the password against existing validators
         validate_password(password)
@@ -71,7 +70,7 @@ class RegisterSerializer(serializers.Serializer):
     password = serializers.CharField(
         max_length=200,
         required=True,
-        validators=[validate_password_],
+        validators=[django_validate_password],
         style={"input_type": "password"},
     )
     first_name = serializers.CharField(max_length=200, required=True)
@@ -135,7 +134,7 @@ class RegisterSerializer(serializers.Serializer):
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(style={"input_type": "password"})
     new_password = serializers.CharField(
-        style={"input_type": "password"}, validators=[validate_password_]
+        style={"input_type": "password"}, validators=[django_validate_password]
     )
 
     def validate_old_password(self, val):
@@ -197,6 +196,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["username", "first_name", "last_name"]
-
-    def update(self, instance, validated_data):
-        return super().update(instance, validated_data)

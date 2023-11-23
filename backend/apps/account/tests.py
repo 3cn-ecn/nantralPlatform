@@ -39,7 +39,7 @@ PAYLOAD_TEMPLATE = {
 
 REGEX_ACTIVATE_URL = r"http://testserver/account/activate/([\w-]*)/([\w-]*)/"
 REGEX_RESET_PASS_URL = (
-    r"http://testserver/account/reset_pass/([\w-]*)/([\w-]*)/"  # noqa: S105
+    r"http://testserver/account/reset_pass/([\w-]*)/"  # noqa: S105
 )
 
 
@@ -53,8 +53,8 @@ class TestTemporaryAccounts(TestCase, TestMixin):
         ).id
         self.PAYLOAD = {
             **PAYLOAD_TEMPLATE,
-            "password1": self.PASSWORD,
-            "password2": self.PASSWORD,
+            "password1": self.password,
+            "password2": self.password,
         }
         self.PAYLOAD_NOT_EC_NANTES = {
             **self.PAYLOAD,
@@ -80,7 +80,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
 
         # Check that you cannot login yet
         url = reverse("account:login")
-        payload = {"email": "test@not-ec-nantes.fr", "password": self.PASSWORD}
+        payload = {"email": "test@not-ec-nantes.fr", "password": self.password}
         response = self.client.post(url, payload)
         self.assertEqual(response.status_code, 302)
         self.assertFalse(get_user(self.client).is_authenticated)
@@ -103,7 +103,7 @@ class TestTemporaryAccounts(TestCase, TestMixin):
 
         # Check that you can login
         url = reverse("account:login")
-        payload = {"email": "test@not-ec-nantes.fr", "password": self.PASSWORD}
+        payload = {"email": "test@not-ec-nantes.fr", "password": self.password}
         response = self.client.post(url, payload)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(get_user(self.client).is_authenticated)
@@ -143,15 +143,16 @@ class TestTemporaryAccounts(TestCase, TestMixin):
 @freeze_time("2021-09-03")
 class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
     """Check that temporary accounts don't work outside of the correct time
-    frame."""
+    frame.
+    """
 
     def setUp(self):
         self.PAYLOAD_NOT_EC_NANTES = {
             **PAYLOAD_TEMPLATE,
             "email": "test@not-ec-nantes.fr",
             "confirm_email": "test@not-ec-nantes.fr",
-            "password1": self.PASSWORD,
-            "password2": self.PASSWORD,
+            "password1": self.password,
+            "password2": self.password,
         }
         self.invite_id = InvitationLink.objects.create(
             expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc)
@@ -187,7 +188,7 @@ class TestTemporaryAccountsNotAllowed(TestCase, TestMixin):
             url = reverse("account:login")
             payload = {
                 "email": "test@not-ec-nantes.fr",
-                "password": self.PASSWORD,
+                "password": self.password,
             }
             response = self.client.post(url, payload)
             self.assertEqual(response.status_code, 302)
@@ -219,11 +220,8 @@ class TestForgottenPass(TestCase, TestMixin):
         self.assertEqual(len(mail.outbox), 1)
 
         extract = re.search(REGEX_RESET_PASS_URL, mail.outbox[0].body)
-        uidb64 = extract.group(1) if extract else None
-        token = extract.group(2) if extract else None
-        url = reverse(
-            "account:reset_pass", kwargs={"uidb64": uidb64, "token": "token"}
-        )
+        token = extract.group(1) if extract else None
+        url = reverse("account:reset_pass", kwargs={"token": token})
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -233,7 +231,7 @@ class TestForgottenPass(TestCase, TestMixin):
             "new_password2": self.new_password,
         }
         response = self.client.post(url, payload)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
         # Check that you still cannot login
         url = reverse("account:login")
@@ -247,12 +245,10 @@ class TestForgottenPass(TestCase, TestMixin):
 
         # Check with a valid token now
 
-        url = reverse(
-            "account:reset_pass", kwargs={"uidb64": uidb64, "token": token}
-        )
+        url = reverse("account:reset_pass", kwargs={"token": token})
 
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         payload = {
             "new_password1": self.new_password,
             "new_password2": self.new_password,
@@ -401,7 +397,7 @@ class TestRegister(TestCase):
         self.assertIsNone(response.json().get("invitation_uuid"))
         self.assertIsNotNone(user)
         self.assertEqual(user.invitation, invitation)
-        self.assertEqual(user.is_email_valid, False)
+        self.assertFalse(user.is_email_valid)
 
         self.assertEqual(len(mail.outbox), 1)
 

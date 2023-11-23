@@ -161,7 +161,8 @@ class AuthViewSet(GenericViewSet):
     def change_password(self, request: Request):
         """Change password for an authenticated user
         - old_password
-        - new_password"""
+        - new_password
+        """
         data = request.data
         serializer = self.get_serializer(data=data)
         if not serializer.is_valid():
@@ -179,7 +180,6 @@ class AuthViewSet(GenericViewSet):
         detail=False,
         methods=["PUT"],
         permission_classes=[IsAuthenticated],
-        # serializer_class=UserSerializer,
     )
     def edit(self, request: Request):
         """Edit account informations"""
@@ -208,9 +208,8 @@ class AuthViewSet(GenericViewSet):
         user.email_next = serializer.validated_data["email"]
         user.save()
         send_email_confirmation(user, request=request, temporary_access=False)
+        message = "A confirmation email has been sent to verify provided email"
         return Response(
-            {
-                "message": "A confirmation email has been sent to verify provided email"
-            },
+            {"message": message},
             status=status.HTTP_200_OK,
         )

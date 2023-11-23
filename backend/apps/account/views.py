@@ -6,18 +6,24 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import PasswordResetConfirmView
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
+from django.utils.translation import gettext as _
 from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, TemplateView
 
+from django_rest_passwordreset.views import (
+    ResetPasswordConfirmViewSet,
+    ResetPasswordRequestTokenViewSet,
+    ResetPasswordValidateTokenViewSet,
+)
+from rest_framework.exceptions import ValidationError
+
 from apps.student.models import Student
-from apps.utils.send_email import send_email
 
 from .forms import (
     ForgottenPassForm,
@@ -208,30 +214,9 @@ class ForgottenPassView(FormView):
     def form_valid(self, form):
         user = User.objects.filter(email=form.cleaned_data["email"]).first()
         if user is not None:
-            reset_path = reverse(
-                "account:reset_pass",
-                kwargs={
-                    "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
-                    "token": account_activation_token.make_token(user),
-                },
-            )
-            update_path = reverse(
-                "student:update", kwargs={"pk": user.student.pk}
-            )
-            send_email(
-                subject="Réinitialisation de votre mot de passe",
-                to=user.email,
-                template_name="reset-password",
-                context={
-                    "first_name": user.first_name,
-                    "email": user.email,
-                    "reset_password_link": self.request.build_absolute_uri(
-                        reset_path
-                    ),
-                    "update_password_link": self.request.build_absolute_uri(
-                        update_path
-                    ),
-                },
+            self.request.data = {"email": user.email}
+            ResetPasswordRequestTokenViewSet(request=self.request).post(
+                request=self.request
             )
         messages.success(
             self.request,
@@ -242,12 +227,46 @@ class ForgottenPassView(FormView):
         return redirect("account:login")
 
 
-class PasswordResetConfirmCustomView(PasswordResetConfirmView):
+class PasswordResetConfirmCustomView(FormView):
     template_name = "account/reset_password.html"
     post_reset_login = True
     form_class = SetPasswordForm
-    token_generator = account_activation_token
     success_url = reverse_lazy("home:home")
+
+    def get(
+        self, request: HttpRequest, token, *args: str, **kwargs: Any
+    ) -> HttpResponse:
+        self.token = token
+
+        return super().get(request, token)
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        self.request.data = {"token": self.token}
+        response = ResetPasswordValidateTokenViewSet(request=self.request).post(
+            request=self.request
+        )
+        context["valid_token"] = response.status_code == 200
+        return context
+
+    def form_valid(self, form: SetPasswordForm) -> HttpResponse:
+        token = self.request.resolver_match.kwargs["token"]
+        self.request.data = {
+            "token": token,
+            "password": form.cleaned_data["new_password1"],
+        }
+        try:
+            response = ResetPasswordConfirmViewSet(request=self.request).post(
+                request=self.request
+            )
+        except ValidationError as e:
+            messages.error(self.request, "\n".join(e.detail.get("password")))
+            return redirect(self.request.path_info)
+
+        if response.status_code != 200:
+            return redirect(self.request.path_info)
+        messages.success(self.request, _("Mot de passe mis à jour"))
+        return super().form_valid(form)
 
 
 @require_http_methods(["GET"])
