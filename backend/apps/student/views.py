@@ -54,7 +54,7 @@ class StudentProfileEdit(UserPassesTestMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["password_form"] = ChangePassForm(user=self.request.user)
+        context["password_form"] = ChangePassForm(self.object.user)
         context["ariane"] = [
             {"target": reverse("home:me"), "label": "Profil"},
             {"target": "#", "label": "Modifier"},
@@ -65,7 +65,7 @@ class StudentProfileEdit(UserPassesTestMixin, UpdateView):
 @require_http_methods(["POST"])
 @login_required
 def change_password(request, pk):
-    form = ChangePassForm(user=request.user, data=request.POST)
+    form = ChangePassForm(request.user, request.POST)
     if form.is_valid():
         user = form.save()
         update_session_auth_hash(request, user)

@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms.forms import BaseForm
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
@@ -230,23 +231,32 @@ class ForgottenPassView(FormView):
 class PasswordResetConfirmCustomView(FormView):
     template_name = "account/reset_password.html"
     post_reset_login = True
-    form_class = SetPasswordForm
     success_url = reverse_lazy("home:home")
 
     def get(
         self, request: HttpRequest, token, *args: str, **kwargs: Any
     ) -> HttpResponse:
         self.token = token
-
         return super().get(request, token)
+
+    def get_form(self, form_class: type | None = ...) -> BaseForm:
+        return SetPasswordForm(
+            self.request.user,
+            self.request.POST if self.request.method == "POST" else None,
+        )
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        self.request.data = {"token": self.token}
-        response = ResetPasswordValidateTokenViewSet(request=self.request).post(
-            request=self.request
-        )
-        context["valid_token"] = response.status_code == 200
+        if self.request.method == "GET":
+            self.request.data = {"token": self.token}
+            try:
+                response = ResetPasswordValidateTokenViewSet(
+                    request=self.request
+                ).post(request=self.request)
+                context["validlink"] = response.status_code == 200
+            except Exception:
+                context["validlink"] = False
+
         return context
 
     def form_valid(self, form: SetPasswordForm) -> HttpResponse:

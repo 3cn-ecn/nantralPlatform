@@ -3,8 +3,7 @@ from django.contrib.auth.password_validation import validate_password
 
 
 class ChangePassForm(PasswordChangeForm):
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["old_password"].label = "Votre mot de passe actuel"
         self.fields["new_password1"].label = "Votre nouveau mot de passe"
@@ -14,8 +13,3 @@ class ChangePassForm(PasswordChangeForm):
         password2 = super().clean_new_password2()
         validate_password(password2, self.user)
         return password2
-
-    def save(self):
-        new_password = self.clean_new_password2()
-        self.user.set_password(new_password)
-        self.user.save()

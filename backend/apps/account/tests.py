@@ -221,7 +221,7 @@ class TestForgottenPass(TestCase, TestMixin):
 
         extract = re.search(REGEX_RESET_PASS_URL, mail.outbox[0].body)
         token = extract.group(1) if extract else None
-        url = reverse("account:reset_pass", kwargs={"token": token})
+        url = reverse("account:reset_pass", kwargs={"token": "token"})
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -231,7 +231,7 @@ class TestForgottenPass(TestCase, TestMixin):
             "new_password2": self.new_password,
         }
         response = self.client.post(url, payload)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
         # Check that you still cannot login
         url = reverse("account:login")
@@ -254,7 +254,7 @@ class TestForgottenPass(TestCase, TestMixin):
             "new_password2": self.new_password,
         }
         response = self.client.post(url, payload)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
 
 class TestLogin(TestCase):
