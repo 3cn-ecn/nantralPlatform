@@ -192,6 +192,10 @@ class ChangeEmailSerializer(serializers.Serializer):
         return val
 
 
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

@@ -539,7 +539,7 @@ class TestEdit(TestCase):
 
 
 class TestChangeEmail(TestCase):
-    url = reverse("account_api:account-change-email")
+    url = reverse("account_api:email-change")
 
     def setUp(self) -> None:
         self.user: User = User.objects.create_user(
@@ -589,7 +589,9 @@ class TestChangeEmail(TestCase):
 
 
 class TestForgottenPassword(TestCase):
-    """Test forgotten password protocol. No need to test the library"""
+    """Test forgotten password protocol. This part of the api is handled by
+    django-restpasswordreset, so no need to test the library
+    """
 
     def setUp(self):
         self.user = User.objects.create_user(
@@ -604,3 +606,35 @@ class TestForgottenPassword(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         token = ResetPasswordToken.objects.get(user=self.user).key
         self.assertTrue(token in mail.outbox[0].body)
+
+
+class TestEmailResend(TestCase):
+    url = reverse("account_api:email-resend")
+
+    def setUp(self) -> None:
+        self.email = "test@ec-nantes.fr"
+        self.user = User.objects.create(email=self.email)
+
+    def test_email_resend(self):
+        response = self.client.post(self.url, {"email": self.email})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_email_resend_email_next(self):
+        self.user.is_email_valid = True
+        self.user.email_next = "new_email@ec-nantes.fr"
+        self.user.save()
+        response = self.client.post(self.url, {"email": self.email})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_already_validated(self):
+        self.user.is_email_valid = True
+        self.user.save()
+        response = self.client.post(self.url, {"email": self.email})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_non_existant_email(self):
+        response = self.client.post(self.url, {"email": "wrong@ec-nantes.fr"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

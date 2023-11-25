@@ -14,6 +14,7 @@ from .models import User
 from .serializers import (
     ChangeEmailSerializer,
     ChangePasswordSerializer,
+    EmailSerializer,
     InvitationRegisterSerializer,
     LoginSerializer,
     RegisterSerializer,
@@ -191,13 +192,15 @@ class AuthViewSet(GenericViewSet):
         serializer.save()
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
+
+class EmailViewSet(GenericViewSet):
     @action(
         detail=False,
         methods=["PUT"],
         permission_classes=[IsAuthenticated],
         serializer_class=ChangeEmailSerializer,
     )
-    def change_email(self, request: Request):
+    def change(self, request: Request):
         """Change email. This will send a confirmation email to the new email"""
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
@@ -213,3 +216,40 @@ class AuthViewSet(GenericViewSet):
             {"message": message},
             status=status.HTTP_200_OK,
         )
+
+    @action(
+        detail=False,
+        methods=["POST"],
+        serializer_class=EmailSerializer,
+        throttle_classes=[AnonRateThrottle],
+    )
+    def resend(self, request: Request):
+        """Resend email in case it is not received"""
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
+        email = serializer.validated_data.get("email")
+
+        # always send the same response to not give informations
+        message = "A confirmation email has been sent to verify provided email"
+        response = Response(
+            {"message": message},
+            status=status.HTTP_200_OK,
+        )
+        # check account exists
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return response
+
+        # don't send email if already validated
+        if user.is_email_valid and not user.email_next:
+            return response
+
+        temp_access = user.invitation is not None
+        send_email_confirmation(
+            user, self.request, temporary_access=temp_access, send_to=email
+        )
+        return response
