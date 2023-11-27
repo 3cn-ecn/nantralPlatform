@@ -49,7 +49,7 @@ urlpatterns = [
     ),
     path("forgotten/", ForgottenPassView.as_view(), name="forgotten_pass"),
     path(
-        "reset_pass/<slug:uidb64>/<slug:token>/",
+        "reset_pass/<slug:token>/",
         PasswordResetConfirmCustomView.as_view(),
         name="reset_pass",
     ),

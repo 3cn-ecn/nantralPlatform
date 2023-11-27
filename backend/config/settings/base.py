@@ -83,6 +83,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "storages",
     "django_vite",
+    "django_rest_passwordreset",
 ]
 COMMON_APPS = [
     "apps.account",
@@ -202,6 +203,7 @@ STAGING = env("STAGING")
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "apps.utils.api_pagination.CustomPagination",
     "PAGE_SIZE": 20,
+    "DEFAULT_THROTTLE_RATES": {"anon": "50/day", "user": "1000/day"},
 }
 
 SILENCED_SYSTEM_CHECKS = ["rest_framework.W001"]
@@ -298,3 +300,19 @@ GITHUB_REPO = "3cn-ecn/nantralPlatform"
 
 # Mapbox
 MAPBOX_API_KEY = env("MAPBOX_API_KEY")
+
+# Password validation
+# https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"  # noqa: E501
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",  # noqa: E501
+        "OPTIONS": {
+            "min_length": 7,
+        },
+    },
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+]

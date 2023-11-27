@@ -16,7 +16,8 @@ ignore =
     WPS3,
     WPS407, WPS410, WPS412, WPS420, WPS432, WPS454, WPS459,
     WPS5,
-    WPS601, WPS615
+    WPS601, WPS615,
+    S105, S106
 per-file-ignores =
     */settings/*.py:F403,F405
     */family/*.py:WPS114, N806

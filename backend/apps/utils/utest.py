@@ -16,14 +16,14 @@ class TestMixin(object):
         Delete the users of the database
     """
 
-    PASSWORD = "pass"
+    password = "secured_password"
 
     def user_setup(self) -> None:
         """Create 3 standards users: u1, u2 and u3. Only u2 and u3
         are linked to a Student instance.
         """
         self.u1 = User.objects.create_superuser(
-            username="admin", email="admin@ec-nantes.fr", password=self.PASSWORD
+            username="admin", email="admin@ec-nantes.fr", password=self.password
         )
         self.u2 = self.create_user("user2", "user@ec-nantes.fr")
         self.u3 = self.create_user("user3", "user3@ec-nantes.fr")
@@ -32,16 +32,15 @@ class TestMixin(object):
         self, username: str, email: str, is_active: bool = True, name: str = ""
     ) -> User:
         """Create a new user and a Student object with it.
-
         Parameters
         ----------
         username : str
             The username
         email : str
             The email of the user
-        is_active : bool, optional
+        is_active : bool
             Indicate if the user is active or not, by default True
-        name : str, optional
+        name : str
             The name of the user, by default empty
 
         Returns
@@ -50,7 +49,7 @@ class TestMixin(object):
             The user instance created
         """
         u = User.objects.create(username=username, email=email)
-        u.set_password(self.PASSWORD)
+        u.set_password(self.password)
         u.is_active = is_active
         u.name = name
         u.save()
