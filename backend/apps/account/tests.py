@@ -608,6 +608,29 @@ class TestForgottenPassword(TestCase):
         self.assertTrue(token in mail.outbox[0].body)
 
 
+class TestValidateInvitation(TestCase):
+    url = reverse("account_api:account-validate-invitation")
+
+    def setUp(self):
+        self.invite_id = InvitationLink.objects.create(
+            expires_at=datetime(year=2021, month=9, day=3, tzinfo=timezone.utc)
+        ).id
+
+    @freeze_time("2021-09-01")
+    def test_validate_invitation(self):
+        response = self.client.post(self.url, {"uuid": self.invite_id})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    @freeze_time("2021-09-10")
+    def test_expired(self):
+        response = self.client.post(self.url, {"uuid": self.invite_id})
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_not_uuid(self):
+        response = self.client.post(self.url, {"uuid": "not_uuid"})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
 class TestEmailResend(TestCase):
     url = reverse("account_api:email-resend")
 

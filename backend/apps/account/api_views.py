@@ -10,12 +10,13 @@ from rest_framework.serializers import Serializer
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.viewsets import GenericViewSet
 
-from .models import User
+from .models import InvitationLink, User
 from .serializers import (
     ChangeEmailSerializer,
     ChangePasswordSerializer,
     EmailSerializer,
     InvitationRegisterSerializer,
+    InvitationValidSerializer,
     LoginSerializer,
     RegisterSerializer,
     UserSerializer,
@@ -176,6 +177,31 @@ class AuthViewSet(GenericViewSet):
         # make sure user is not logged out by login him again
         login(request=request, user=user)
         return Response({"message": "Successfully updated password"})
+
+    @action(
+        detail=False,
+        methods=["POST"],
+        serializer_class=InvitationValidSerializer,
+        throttle_classes=[AnonRateThrottle],
+    )
+    def validate_invitation(self, request: Request):
+        """Validate an invitation uuid. Returns 404 if not valid"""
+        data = request.data
+        serializer = self.get_serializer(data=data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+        uuid = serializer.validated_data.get("uuid")
+        if (
+            not InvitationLink.objects.filter(id=uuid).exists()
+            or not InvitationLink.objects.get(id=uuid).is_valid()
+        ):
+            # invalid invitation
+            return Response(
+                {"detail": "not found"}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        return Response({"status": "OK"}, status=status.HTTP_200_OK)
 
     @action(
         detail=False,

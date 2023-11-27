@@ -196,6 +196,10 @@ class EmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
 
+class InvitationValidSerializer(serializers.Serializer):
+    uuid = serializers.UUIDField()
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
