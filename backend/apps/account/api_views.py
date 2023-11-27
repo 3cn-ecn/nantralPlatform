@@ -33,12 +33,6 @@ FAILED = 4
 class AuthViewSet(GenericViewSet):
     authentication_classes = [SessionAuthentication]
 
-    def get_serializer(self, *args, **kwargs):
-        if self.action == "edit":
-            serializer = UserSerializer(instance=self.request.user)
-            return serializer
-        return super().get_serializer(*args, **kwargs)
-
     @action(
         detail=False,
         methods=["POST"],

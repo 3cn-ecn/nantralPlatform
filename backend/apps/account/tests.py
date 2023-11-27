@@ -296,6 +296,13 @@ class TestLogin(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.json().get("code"), FAILED)
 
+    def test_not_email(self):
+        response = self.client.post(
+            self.uri,
+            {"email": "not email", "password": self.password},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     @freeze_time("2021-09-01")
     def test_login_temporary_account(self):
         # test for a valid invitation
@@ -658,6 +665,9 @@ class TestEmailResend(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(mail.outbox), 0)
 
-    def test_non_existant_email(self):
+    def test_wrong_email(self):
         response = self.client.post(self.url, {"email": "wrong@ec-nantes.fr"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.post(self.url, {"email": "not email"})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
