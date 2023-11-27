@@ -53,6 +53,9 @@ class LoginSerializer(serializers.Serializer):
         max_length=200, style={"input_type": "password"}
     )
 
+    def validate_email(self, value: str):
+        return value.lower()
+
 
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(
