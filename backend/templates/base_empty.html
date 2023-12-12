@@ -18,13 +18,29 @@
       type="image/svg+xml"
       href="{% static '/img/logo/scalable/logo.svg' %}"
     />
+  
     <title>Nantral Platform</title>
+
+    <!-- Facebook / Twitter preview -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="{% static 'img/default-banner.png' %}"
+    />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:image"
+      content="{% static 'img/default-banner.png' %}"
+    />
     <meta
       name="description"
       content="Bienvenue sur Nantral Platform, le site des étudiant⋅e⋅s de Centrale Nantes !"
     />
+  
     <link rel="stylesheet" href="{% static 'css/base_empty.css' %}?v=5" />
-    <script>const global = globalThis;</script>
+    <script>
+      const global = globalThis;
+    </script>
   </head>
 
   <body>
