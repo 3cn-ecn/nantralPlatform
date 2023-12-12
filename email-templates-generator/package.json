@@ -13,7 +13,7 @@
     "test": "npm run types && npm run lint"
   },
   "dependencies": {
-    "@react-email/components": "^0.0.7",
+    "@react-email/components": "^0.0.12",
     "react-email": "^1.9.5"
   },
   "devDependencies": {
