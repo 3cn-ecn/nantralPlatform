@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import {
-  Edit as EditIcon,
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
+  OpenInNew as OpenInNewIcon,
 } from '@mui/icons-material';
-import { Box, Button, IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
 
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useToast } from '#shared/context/Toast.context';
 
 import axios from '../utils/axios';
@@ -178,9 +180,20 @@ function MembershipsGroup(): JSX.Element {
 
   return (
     <>
-      <Typography variant="h2" mb={1}>
-        Membres
-      </Typography>
+      <FlexRow gap={2} mb={1} alignItems="center">
+        <Typography variant="h2">Membres</Typography>
+        {group.is_admin && displayType === 'grid' && (
+          <Button
+            variant="outlined"
+            color="secondary"
+            href="edit/members"
+            endIcon={<OpenInNewIcon />}
+            size="small"
+          >
+            Modifier
+          </Button>
+        )}
+      </FlexRow>
       {displayType === 'grid' ? (
         <ListMembershipsGrid
           members={members}
@@ -203,16 +216,8 @@ function MembershipsGroup(): JSX.Element {
           }
         />
       )}
-      <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
-        <Button
-          variant="contained"
-          hidden={!group.is_admin || displayType !== 'grid'}
-          href="edit/members"
-          endIcon={<EditIcon />}
-        >
-          Modifier
-        </Button>
-        {(!group.is_member && !group.lock_memberships) || group.is_admin ? (
+      <FlexRow flexWrap="wrap" mt={2} gap={1}>
+        {((!group.is_member && !group.lock_memberships) || group.is_admin) && (
           <>
             <Button variant="contained" onClick={() => setOpenAddModal(true)}>
               Ajouter
@@ -227,12 +232,12 @@ function MembershipsGroup(): JSX.Element {
               student={student}
             />
           </>
-        ) : (
-          <></>
         )}
         {filters.from ? (
           <Button
             variant="text"
+            size="small"
+            color="secondary"
             onClick={() => {
               filters.from = undefined;
               getMemberships();
@@ -243,6 +248,8 @@ function MembershipsGroup(): JSX.Element {
         ) : (
           <Button
             variant="text"
+            size="small"
+            color="secondary"
             onClick={() => {
               filters.from = new Date().toISOString();
               getMemberships();
@@ -251,8 +258,8 @@ function MembershipsGroup(): JSX.Element {
             Masquer les anciens membres
           </Button>
         )}
+        <Spacer flex={1} />
         <IconButton
-          sx={{ ml: 'auto' }}
           disabled={!prevUrl}
           onClick={() => getMemberships(prevUrl, {})}
         >
@@ -264,7 +271,7 @@ function MembershipsGroup(): JSX.Element {
         >
           <NavigateNextIcon />
         </IconButton>
-      </Box>
+      </FlexRow>
     </>
   );
 }
