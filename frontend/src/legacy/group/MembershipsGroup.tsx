@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { render } from 'react-dom';
 
 import {
   Edit as EditIcon,
@@ -9,6 +8,7 @@ import {
 import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
 
 import axios from '../utils/axios';
+import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import ListMembershipsTable from './components/ListMembershipsTable';
 import ModalEditMember from './components/ModalEditMember';
@@ -283,4 +283,4 @@ function MembershipsGroup(): JSX.Element {
   );
 }
 
-render(<MembershipsGroup />, document.getElementById('root-members'));
+wrapAndRenderLegacyCode(<MembershipsGroup />, 'root-members');
