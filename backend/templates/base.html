@@ -95,18 +95,11 @@
           <span></span><span></span>
         {% endfor %}
       </div>
-      <ul class="menuSet navbar-nav ms-auto">
-        <li id="notificationPanel" class="nav-item">
-          <a id="notification-icon" class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown">
+      <ul class="menuSet navbar-nav ms-auto align-items-center">
+        <li id="notificationPanel" class="nav-item dropdown">
+          <a class="nav-link disabled" href="#" role="button">
             <img src='{% static "/img/icons/scalable/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
-            <div id="notification-badge"></div>
           </a>
-          <div class="dropdown-menu dropdown-menu-end overflow-auto"
-            style="width: 18rem; max-width: 90vw; right: -42px; max-height: 70vh;"
-            onclick="event.stopPropagation();"
-          >
-            <ul id="notification-panel"></ul>
-          </div>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown">
