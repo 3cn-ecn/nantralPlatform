@@ -1,12 +1,12 @@
 import { useState } from 'react';
+
 import {
   DragDropContext,
   Draggable,
   DropResult,
   Droppable,
   OnDragEndResponder,
-} from 'react-beautiful-dnd';
-
+} from '@hello-pangea/dnd';
 import {
   Archive as ArchiveIcon,
   CheckCircle as CheckCircleIcon,
@@ -58,7 +58,7 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {
  * @returns A component
  */
 function DraggableComponent(id: string, index: number) {
-  return function (props: any): JSX.Element {
+  return function DraggableComponent(props: any): JSX.Element {
     return (
       <Draggable draggableId={id} index={index}>
         {(provided, snapshot) => (
@@ -89,7 +89,7 @@ function DraggableComponent(id: string, index: number) {
  * @returns A component
  */
 function DroppableComponent(onDragEnd: OnDragEndResponder) {
-  return function (props: any): JSX.Element {
+  return function DroppableComponent(props: any): JSX.Element {
     return (
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="1" direction="vertical">
@@ -240,7 +240,7 @@ function ListMembershipsTable(props: {
   reorderMemberships: (
     reorderedMembers: Membership[],
     member: Membership,
-    lower?: Membership
+    lower?: Membership,
   ) => Promise<void>;
   updateMembership: (member: Membership, reload?: boolean) => Promise<void>;
   deleteMembership: (member: Membership) => Promise<void>;
@@ -268,7 +268,7 @@ function ListMembershipsTable(props: {
     reorderMemberships(
       reorderedMembers,
       members[source],
-      dest + 1 < members.length ? reorderedMembers[dest + 1] : undefined
+      dest + 1 < members.length ? reorderedMembers[dest + 1] : undefined,
     );
   }
 
