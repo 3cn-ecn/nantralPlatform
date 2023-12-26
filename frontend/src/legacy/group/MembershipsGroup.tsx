@@ -5,7 +5,7 @@ import {
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
-import { Box, Button, IconButton } from '@mui/material';
+import { Box, Button, IconButton, Typography } from '@mui/material';
 
 import { useToast } from '#shared/context/Toast.context';
 
@@ -178,7 +178,9 @@ function MembershipsGroup(): JSX.Element {
 
   return (
     <>
-      <h2>Membres</h2>
+      <Typography variant="h2" mb={1}>
+        Membres
+      </Typography>
       {displayType === 'grid' ? (
         <ListMembershipsGrid
           members={members}
