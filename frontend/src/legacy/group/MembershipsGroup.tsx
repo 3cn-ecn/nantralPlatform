@@ -5,7 +5,9 @@ import {
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
-import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
+
+import { useToast } from '#shared/context/Toast.context';
 
 import axios from '../utils/axios';
 import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
@@ -30,6 +32,8 @@ interface QueryParams {
  * Main table component for editing members in the admin page of groups.
  */
 function MembershipsGroup(): JSX.Element {
+  // hooks
+  const showToast = useToast();
   // data
   const [group, setGroup] = useState<Group | null>(null);
   const [student, setStudent] = useState<Student | null>(null);
@@ -37,11 +41,6 @@ function MembershipsGroup(): JSX.Element {
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
     'load',
   );
-  // status of modals
-  const [message, setMessage] = useState<{ type: any; text: string }>({
-    type: null,
-    text: '',
-  });
   const [openAddModal, setOpenAddModal] = useState(false);
   // urls and filters passed as query parameters
   const [prevUrl, setPrevUrl] = useState('');
@@ -115,15 +114,15 @@ function MembershipsGroup(): JSX.Element {
         { params: filters },
       )
       .then(() =>
-        setMessage({
-          type: 'success',
-          text: 'Réagencement sauvegardé !',
+        showToast({
+          variant: 'success',
+          message: 'Réagencement sauvegardé !',
         }),
       )
       .catch(() =>
-        setMessage({
-          type: 'error',
-          text: "Erreur de réseau : le réagencement n'est pas sauvegardé...",
+        showToast({
+          variant: 'error',
+          message: "Erreur de réseau : le réagencement n'est pas sauvegardé...",
         }),
       );
   }
@@ -264,21 +263,6 @@ function MembershipsGroup(): JSX.Element {
           <NavigateNextIcon />
         </IconButton>
       </Box>
-      <Snackbar
-        autoHideDuration={4000}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        onClose={() => setMessage({ type: 'success', text: '' })}
-        open={!!message.text}
-      >
-        <Alert
-          severity={message.type}
-          sx={{ width: '100%' }}
-          elevation={6}
-          variant="filled"
-        >
-          {message.text}
-        </Alert>
-      </Snackbar>
     </>
   );
 }
