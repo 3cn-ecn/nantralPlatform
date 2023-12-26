@@ -35,7 +35,7 @@ function MembershipsGroup(): JSX.Element {
   const [student, setStudent] = useState<Student | null>(null);
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
-    'load'
+    'load',
   );
   // status of modals
   const [message, setMessage] = useState<{ type: any; text: string }>({
@@ -55,7 +55,7 @@ function MembershipsGroup(): JSX.Element {
   const getMemberships = useCallback(
     async function getMemberships(
       url = '/api/group/membership/',
-      queryParams: Partial<QueryParams> = filters
+      queryParams: Partial<QueryParams> = filters,
     ): Promise<void> {
       return axios
         .get<Page<Membership>>(url, { params: queryParams })
@@ -65,13 +65,13 @@ function MembershipsGroup(): JSX.Element {
             data.results.map((item) => {
               item.dragId = `item-${item.id}`; // add a dragId for the drag-and-drop
               return item;
-            })
+            }),
           );
           setPrevUrl(data.previous);
           setNextUrl(data.next);
         });
     },
-    [filters]
+    [filters],
   );
 
   useEffect(() => {
@@ -102,7 +102,7 @@ function MembershipsGroup(): JSX.Element {
   async function reorderMemberships(
     reorderedMembers: Membership[],
     member: Membership,
-    lower?: Membership
+    lower?: Membership,
   ) {
     setMembers(reorderedMembers);
     axios
@@ -112,19 +112,19 @@ function MembershipsGroup(): JSX.Element {
           member: member.id,
           lower: lower?.id,
         },
-        { params: filters }
+        { params: filters },
       )
       .then(() =>
         setMessage({
           type: 'success',
           text: 'Réagencement sauvegardé !',
-        })
+        }),
       )
       .catch(() =>
         setMessage({
           type: 'error',
           text: "Erreur de réseau : le réagencement n'est pas sauvegardé...",
-        })
+        }),
       );
   }
 
@@ -145,7 +145,7 @@ function MembershipsGroup(): JSX.Element {
   async function deleteMembership(
     member: Membership,
     student: Student,
-    group: Group
+    group: Group,
   ) {
     return axios
       .delete(`/api/group/membership/${member.id}/`)
@@ -160,7 +160,7 @@ function MembershipsGroup(): JSX.Element {
   async function createMembership(
     member: Membership,
     student: Student,
-    group: Group
+    group: Group,
   ) {
     return axios
       .post('/api/group/membership/', member)
@@ -168,7 +168,7 @@ function MembershipsGroup(): JSX.Element {
       .then(
         () =>
           (member.student as any) === student.id &&
-          setGroup({ ...group, is_member: true })
+          setGroup({ ...group, is_member: true }),
       );
   }
 
