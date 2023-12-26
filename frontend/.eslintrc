@@ -32,6 +32,12 @@
             "importNames": ["useTranslation"],
             "message": "Use 'useTranslation' from '#shared/i18n/useTranslation' instead."
           }
+        ],
+        "patterns": [
+          {
+            "group": ["**/legacy/*"],
+            "message": "Importing legacy modules into the new codebase is forbidden and can break the frontend."
+          }
         ]
       }
     ]
