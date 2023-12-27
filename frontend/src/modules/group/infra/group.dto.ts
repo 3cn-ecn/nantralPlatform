@@ -1,3 +1,5 @@
+import { GroupTypePreviewDTO } from './groupType.dto';
+
 export interface GroupDTO {
   id: number;
   name: string;
@@ -5,9 +7,7 @@ export interface GroupDTO {
   slug: string;
   url: string;
   icon?: string;
-  group_type: {
-    name: string;
-  };
+  group_type: GroupTypePreviewDTO;
   parent?: GroupPreviewDTO;
   creation_year?: number;
   archived: boolean;

@@ -1,3 +1,5 @@
+import { GroupTypePreview } from './groupType.types';
+
 export interface Group {
   id: number;
   name: string;
@@ -5,7 +7,7 @@ export interface Group {
   slug: string;
   url: string;
   icon?: string;
-  groupType: GroupPreview;
+  groupType: GroupTypePreview;
   parent?: GroupPreview;
   creationYear?: number;
   archived: boolean;

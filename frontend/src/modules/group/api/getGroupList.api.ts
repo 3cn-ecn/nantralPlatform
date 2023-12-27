@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
 
 import { adaptGroupPreview } from '../infra/group.adapter';
@@ -19,9 +20,8 @@ export interface GetGroupListApiParams {
 export async function getGroupListApi(
   options: GetGroupListApiParams,
 ): Promise<Page<GroupPreview>> {
-  const { data } = await axios.get<PageDTO<GroupPreviewDTO>>(
-    '/api/group/group/',
-    {
+  const { data } = await axios
+    .get<PageDTO<GroupPreviewDTO>>('/api/group/group/', {
       params: {
         type: options.type,
         is_member: options.isMember,
@@ -31,8 +31,10 @@ export async function getGroupListApi(
         page: options.page,
         page_size: options.pageSize,
       },
-    },
-  );
+    })
+    .catch((err: ApiErrorDTO) => {
+      throw adaptApiErrors(err);
+    });
 
   return adaptPage(data, adaptGroupPreview);
 }
