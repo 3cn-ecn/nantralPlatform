@@ -216,7 +216,7 @@ function MembershipsGroup(): JSX.Element {
           }
         />
       )}
-      <FlexRow flexWrap="wrap" mt={2} gap={1}>
+      <FlexRow flexWrap="wrap" mt={1} gap={1}>
         {((!group.is_member && !group.lock_memberships) || group.is_admin) && (
           <>
             <Button variant="contained" onClick={() => setOpenAddModal(true)}>

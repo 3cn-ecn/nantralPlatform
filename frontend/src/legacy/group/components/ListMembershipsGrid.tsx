@@ -16,7 +16,7 @@ function ListMembershipsGrid(props: {
   const { members, group, student, updateMembership, deleteMembership } = props;
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={1}>
       {members.map((item, index) => (
         <CardMembership
           item={item}

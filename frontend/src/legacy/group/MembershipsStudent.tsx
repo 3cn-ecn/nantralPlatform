@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { render } from 'react-dom';
 
 import {
   NavigateBefore as NavigateBeforeIcon,
@@ -8,6 +7,7 @@ import {
 import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
 
 import axios from '../utils/axios';
+import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import { Membership, Page, Student } from './interfaces';
 
@@ -30,7 +30,7 @@ function MembershipsStudent(): JSX.Element {
   const [student, setStudent] = useState<Student | null>(null);
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
-    'load'
+    'load',
   );
   // status of modals
   const [message, setMessage] = useState<{ type: any; text: string }>({
@@ -49,7 +49,7 @@ function MembershipsStudent(): JSX.Element {
   const getMemberships = useCallback(
     async function getMemberships(
       url = '/api/group/membership/',
-      query_params: Partial<QueryParams> = filters
+      query_params: Partial<QueryParams> = filters,
     ): Promise<void> {
       return axios
         .get<Page<Membership>>(url, { params: query_params })
@@ -59,13 +59,13 @@ function MembershipsStudent(): JSX.Element {
             data.results.map((item) => {
               item.dragId = `item-${item.id}`; // add a dragId for the drag-and-drop
               return item;
-            })
+            }),
           );
           setPrevUrl(data.previous);
           setNextUrl(data.next);
         });
     },
-    [filters]
+    [filters],
   );
 
   useEffect(() => {
@@ -145,4 +145,4 @@ function MembershipsStudent(): JSX.Element {
   );
 }
 
-render(<MembershipsStudent />, document.getElementById('root-members'));
+wrapAndRenderLegacyCode(<MembershipsStudent />, 'root-members');

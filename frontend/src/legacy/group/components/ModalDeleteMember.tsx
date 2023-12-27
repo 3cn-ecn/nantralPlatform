@@ -51,18 +51,12 @@ function DeleteMemberModal(props: {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={closeModal}
-          variant="text"
-          color="error"
-          disabled={saving}
-        >
+        <Button onClick={closeModal} variant="text" disabled={saving}>
           Annuler
         </Button>
         <Button
           onClick={onDelete}
           variant="contained"
-          color="error"
           disabled={saving}
           endIcon={
             saving ? (

@@ -1,6 +1,10 @@
 import { FormEvent, useState } from 'react';
 
-import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
+import {
+  Close as CloseIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+} from '@mui/icons-material';
 import {
   Alert,
   Box,
@@ -121,7 +125,7 @@ function EditMemberModal(props: {
   const formFields = createFormFields(group, member);
 
   const [formValues, setFormValues] = useState<Membership>(
-    structuredClone(member)
+    structuredClone(member),
   );
   const [formErrors, setFormErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -200,26 +204,21 @@ function EditMemberModal(props: {
             hidden={!openDeleteModal}
             onClick={openDeleteModal}
             variant="outlined"
-            color="error"
+            color="secondary"
             disabled={saving}
             sx={{ mr: 'auto', mt: 2 }}
+            startIcon={<DeleteIcon />}
           >
             Supprimer
           </Button>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={closeModal}
-            variant="text"
-            color="error"
-            disabled={saving}
-          >
+          <Button onClick={closeModal} variant="text" disabled={saving}>
             Annuler
           </Button>
           <Button
             type="submit"
             variant="contained"
-            color="success"
             disabled={saving}
             endIcon={
               saving ? (

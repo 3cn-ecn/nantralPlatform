@@ -55,7 +55,7 @@ export function NotificationMenu() {
         onClick={handleClick}
         id="notification-button"
       >
-        <Badge badgeContent={nbNewNotifications} color="error">
+        <Badge badgeContent={nbNewNotifications} color="primary">
           <Icon
             component="img"
             src="/static/img/icons/cropped/notification.svg"

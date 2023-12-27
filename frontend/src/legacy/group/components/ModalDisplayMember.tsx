@@ -80,6 +80,7 @@ function ShowMemberModal(props: {
         <Button
           href={group ? member.student.url : member.group.url}
           variant="text"
+          color="secondary"
           endIcon={<OpenInNewIcon />}
         >
           {group ? 'Ouvrir le profil' : 'Ouvrir le groupe'}
