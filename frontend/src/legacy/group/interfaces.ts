@@ -1,35 +1,3 @@
-export interface SimpleGroup {
-  name: string;
-  short_name: string;
-  slug: string;
-  url: string;
-  icon?: string;
-}
-
-export interface Group extends SimpleGroup {
-  id: number;
-  group_type: {
-    name: string;
-    slug: string;
-    no_membership_dates: boolean;
-  };
-  parent?: SimpleGroup;
-  creation_year?: number;
-  archived: boolean;
-  private: boolean;
-  public: boolean;
-  summary: string;
-  description: string;
-  meeting_place: string;
-  meeting_hour: string;
-  banner: string;
-  video1: string;
-  video2: string;
-  is_admin: boolean;
-  is_member: boolean;
-  lock_memberships: boolean;
-}
-
 export interface SimpleStudent {
   id: number;
   name: string;

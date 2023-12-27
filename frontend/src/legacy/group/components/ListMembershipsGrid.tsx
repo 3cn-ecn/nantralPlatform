@@ -1,6 +1,8 @@
 import { Grid } from '@mui/material';
 
-import { Group, Membership, Student } from '../interfaces';
+import { Group } from '#modules/group/types/group.types';
+
+import { Membership, Student } from '../interfaces';
 import CardMembership from './CardMembership';
 
 /**

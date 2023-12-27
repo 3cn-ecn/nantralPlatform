@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material';
 import { Button, IconButton, Typography } from '@mui/material';
 
+import { useGroupDetailsQuery } from '#modules/group/hooks/useGroupDetails.query';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useToast } from '#shared/context/Toast.context';
@@ -16,7 +17,7 @@ import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import ListMembershipsTable from './components/ListMembershipsTable';
 import ModalEditMember from './components/ModalEditMember';
-import { Group, Membership, Page, Student } from './interfaces';
+import { Membership, Page, Student } from './interfaces';
 
 // passed through django template
 declare const groupSlug: string;
@@ -36,8 +37,8 @@ interface QueryParams {
 function MembershipsGroup(): JSX.Element {
   // hooks
   const showToast = useToast();
+  const { group } = useGroupDetailsQuery(groupSlug);
   // data
-  const [group, setGroup] = useState<Group | null>(null);
   const [student, setStudent] = useState<Student | null>(null);
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
@@ -80,10 +81,6 @@ function MembershipsGroup(): JSX.Element {
     Promise.all([
       // fetch memberships objects
       getMemberships(),
-      // fetch group object
-      axios
-        .get<Group>(`/api/group/group/${groupSlug}`)
-        .then((res) => setGroup(res.data)),
       // fetch student objet
       axios
         .get<Student>('/api/student/student/me/')
@@ -143,34 +140,17 @@ function MembershipsGroup(): JSX.Element {
   }
 
   /** A function to delete a membership object. */
-  async function deleteMembership(
-    member: Membership,
-    student: Student,
-    group: Group,
-  ) {
+  async function deleteMembership(member: Membership) {
     return axios
       .delete(`/api/group/membership/${member.id}/`)
-      .then(() => getMemberships())
-      .then(() => {
-        member.student.id === student.id &&
-          setGroup({ ...group, is_member: false });
-      });
+      .then(() => getMemberships());
   }
 
   /** A function to create a new membership object. */
-  async function createMembership(
-    member: Membership,
-    student: Student,
-    group: Group,
-  ) {
+  async function createMembership(member: Membership) {
     return axios
       .post('/api/group/membership/', member)
-      .then(() => getMemberships())
-      .then(
-        () =>
-          (member.student as any) === student.id &&
-          setGroup({ ...group, is_member: true }),
-      );
+      .then(() => getMemberships());
   }
 
   if (loadState === 'load' || !group || !student)
@@ -182,7 +162,7 @@ function MembershipsGroup(): JSX.Element {
     <>
       <FlexRow gap={2} mb={1} alignItems="center">
         <Typography variant="h2">Membres</Typography>
-        {group.is_admin && displayType === 'grid' && (
+        {group.isAdmin && displayType === 'grid' && (
           <Button
             variant="outlined"
             color="secondary"
@@ -200,9 +180,7 @@ function MembershipsGroup(): JSX.Element {
           group={group}
           student={student}
           updateMembership={updateMembership}
-          deleteMembership={(member: Membership) =>
-            deleteMembership(member, student, group)
-          }
+          deleteMembership={(member: Membership) => deleteMembership(member)}
         />
       ) : (
         <ListMembershipsTable
@@ -211,22 +189,18 @@ function MembershipsGroup(): JSX.Element {
           student={student}
           reorderMemberships={reorderMemberships}
           updateMembership={updateMembership}
-          deleteMembership={(member: Membership) =>
-            deleteMembership(member, student, group)
-          }
+          deleteMembership={(member: Membership) => deleteMembership(member)}
         />
       )}
       <FlexRow flexWrap="wrap" mt={1} gap={1}>
-        {((!group.is_member && !group.lock_memberships) || group.is_admin) && (
+        {((!group.isMember && !group.lockMemberships) || group.isAdmin) && (
           <>
             <Button variant="contained" onClick={() => setOpenAddModal(true)}>
               Ajouter
             </Button>
             <ModalEditMember
               open={openAddModal}
-              saveMembership={(member: Membership) =>
-                createMembership(member, student, group)
-              }
+              saveMembership={(member: Membership) => createMembership(member)}
               closeModal={() => setOpenAddModal(false)}
               group={group}
               student={student}

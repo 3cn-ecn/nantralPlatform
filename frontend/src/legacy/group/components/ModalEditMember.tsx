@@ -18,8 +18,10 @@ import {
   Typography,
 } from '@mui/material';
 
+import { Group } from '#modules/group/types/group.types';
+
 import FormGroup, { FieldType } from '../../utils/form';
-import { Group, Membership, Student } from '../interfaces';
+import { Membership, Student } from '../interfaces';
 import Avatar from './Avatar';
 
 /**
@@ -45,7 +47,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       multiline: true,
     },
   ];
-  if (group && !group.group_type.no_membership_dates) {
+  if (group && !group.groupType.noMembershipDates) {
     defaultFields.push({
       kind: 'group',
       fields: [
@@ -64,7 +66,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       ],
     });
   }
-  if (group?.is_admin) {
+  if (group?.isAdmin) {
     defaultFields.push({
       kind: 'boolean',
       name: 'admin',
@@ -72,7 +74,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       helpText: 'Un admin peut modifier le groupe et ses membres.',
     });
   }
-  if (member.id === null && group?.is_admin) {
+  if (member.id === null && group?.isAdmin) {
     defaultFields.splice(0, 0, {
       kind: 'autocomplete',
       label: 'Utilisateur',
@@ -97,7 +99,7 @@ function createBlankMember(group: Group, student: Student): Membership {
   const oneYearLater = date.toISOString().split('T')[0];
   const member = {
     id: null,
-    student: group.is_admin ? null : (student.id as any),
+    student: group.isAdmin ? null : (student.id as any),
     group: group.id as any,
     summary: '',
     description: '',

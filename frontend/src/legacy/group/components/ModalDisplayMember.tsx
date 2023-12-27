@@ -15,7 +15,9 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Group, Membership, Student } from '../interfaces';
+import { Group } from '#modules/group/types/group.types';
+
+import { Membership, Student } from '../interfaces';
 import Avatar from './Avatar';
 
 function ShowMemberModal(props: {
@@ -64,7 +66,7 @@ function ShowMemberModal(props: {
       </DialogTitle>
       <DialogContent dividers>
         <Typography
-          hidden={group && group.group_type.no_membership_dates}
+          hidden={group && group.groupType.noMembershipDates}
           color="text.secondary"
           gutterBottom
           sx={{ fontSize: 12, fontStyle: 'italic' }}
@@ -88,7 +90,7 @@ function ShowMemberModal(props: {
         <Button
           hidden={
             !openEditModal ||
-            (!group?.is_admin && student.id !== member.student.id)
+            (!group?.isAdmin && student.id !== member.student.id)
           }
           onClick={openEditModal}
           variant="outlined"

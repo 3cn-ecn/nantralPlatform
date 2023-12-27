@@ -28,7 +28,9 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Group, Membership, Student } from '../interfaces';
+import { Group } from '#modules/group/types/group.types';
+
+import { Membership, Student } from '../interfaces';
 import Avatar from './Avatar';
 import ModalArchiveMember from './ModalArchiveMember';
 import ModalDeleteMember from './ModalDeleteMember';
@@ -183,9 +185,7 @@ function MembershipRow(props: {
             aria-label="archive"
             size="small"
             onClick={() => setOpenArchiveModal(true)}
-            hidden={
-              group.group_type.no_membership_dates || item.end_date < today
-            }
+            hidden={group.groupType.noMembershipDates || item.end_date < today}
           >
             <ArchiveIcon fontSize="small" />
           </IconButton>
