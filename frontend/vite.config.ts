@@ -15,7 +15,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Entry points for legacy React components not yet compiled in the main one
 const legacyEntryPoints = [
   'app/sw.ts',
-  'app/app.ts',
+  'app/app.tsx',
   'group/MembershipsGroup.tsx',
   'group/MembershipsStudent.tsx',
   'event/eventsView.tsx',

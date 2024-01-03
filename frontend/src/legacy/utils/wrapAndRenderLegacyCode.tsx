@@ -5,7 +5,7 @@
  */
 import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Link } from 'react-router-dom';
+import { BrowserRouter, Link, NavLink } from 'react-router-dom';
 
 import { ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -42,6 +42,10 @@ export const wrapAndRenderLegacyCode = (
   // always reload document because we're outside of React Router
   Link.defaultProps = {
     ...Link.defaultProps,
+    reloadDocument: true,
+  };
+  NavLink.defaultProps = {
+    ...NavLink.defaultProps,
     reloadDocument: true,
   };
   // attach the React root into the HTML page

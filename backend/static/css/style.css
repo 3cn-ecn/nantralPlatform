@@ -58,7 +58,9 @@ table.table-sort th {
 
 /* BARRE DE NAVIGATION */
 /* ------------------- */
-
+.navbar {
+  z-index: 1100;
+}
 #fil-dariane {
   overflow: hidden;
   text-overflow: "...";

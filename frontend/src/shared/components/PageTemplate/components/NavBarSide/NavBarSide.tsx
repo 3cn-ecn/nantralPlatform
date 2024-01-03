@@ -97,7 +97,7 @@ function NavBarSideItem({
   label,
   path,
   iconPath = '/static/img/icons/cropped/link.svg',
-  isOnBackend = false,
+  isOnBackend,
   closeMenu,
 }: NavBarSideItemProps) {
   return (
