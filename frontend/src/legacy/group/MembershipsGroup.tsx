@@ -8,6 +8,7 @@ import {
 import { Button, IconButton, Typography } from '@mui/material';
 
 import { useGroupDetailsQuery } from '#modules/group/hooks/useGroupDetails.query';
+import { Student } from '#modules/student/student.types';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useToast } from '#shared/context/Toast.context';
@@ -17,7 +18,7 @@ import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import ListMembershipsTable from './components/ListMembershipsTable';
 import ModalEditMember from './components/ModalEditMember';
-import { Membership, Page, Student } from './interfaces';
+import { Membership, Page } from './interfaces';
 
 // passed through django template
 declare const groupSlug: string;
@@ -53,7 +54,10 @@ function MembershipsGroup(): JSX.Element {
     from: new Date().toISOString(),
   });
 
-  /** Get the list of members */
+  /**
+   * Get the list of members
+   * TODO: replace with a useQuery hook
+   */
   const getMemberships = useCallback(
     async function getMemberships(
       url = '/api/group/membership/',
@@ -92,6 +96,7 @@ function MembershipsGroup(): JSX.Element {
 
   /**
    * Reorder memberships
+   * TODO: replace with a useMutation hook
    *
    * @param reorderedMembers - the new ordered list
    * @param member - the member who has moved
@@ -126,7 +131,10 @@ function MembershipsGroup(): JSX.Element {
       );
   }
 
-  /** A function to update a membership object. */
+  /**
+   * A function to update a membership object.
+   * TODO: replace with a useMutation hook
+   */
   async function updateMembership(member: Membership, reload = false) {
     return axios
       .put(`/api/group/membership/${member.id}/`, member)
@@ -139,14 +147,20 @@ function MembershipsGroup(): JSX.Element {
       });
   }
 
-  /** A function to delete a membership object. */
+  /**
+   * A function to delete a membership object.
+   * TODO: replace with a useMutation hook
+   */
   async function deleteMembership(member: Membership) {
     return axios
       .delete(`/api/group/membership/${member.id}/`)
       .then(() => getMemberships());
   }
 
-  /** A function to create a new membership object. */
+  /**
+   * A function to create a new membership object.
+   * TODO: replace with a useMutation hook
+   */
   async function createMembership(member: Membership) {
     return axios
       .post('/api/group/membership/', member)

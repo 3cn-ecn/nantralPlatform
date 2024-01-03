@@ -10,8 +10,9 @@ import {
 } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
+import { Student } from '#modules/student/student.types';
 
-import { Membership, Student } from '../interfaces';
+import { Membership } from '../interfaces';
 import Avatar from './Avatar';
 import ModalDeleteMember from './ModalDeleteMember';
 import ModalDisplayMember from './ModalDisplayMember';
@@ -37,8 +38,11 @@ function MembershipCard(props: {
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
-      <Card>
-        <CardActionArea onClick={() => setOpenShowModal(true)}>
+      <Card sx={{ height: '100%' }}>
+        <CardActionArea
+          onClick={() => setOpenShowModal(true)}
+          sx={{ height: '100%' }}
+        >
           <CardContent
             sx={{ display: 'flex', alignItems: 'center', gap: 1, p: 1 }}
           >
@@ -73,28 +77,32 @@ function MembershipCard(props: {
         group={group}
         student={student}
       />
-      <ModalEditMember
-        open={openEditModal}
-        closeModal={() => setOpenEditModal(false)}
-        saveMembership={updateMembership}
-        openDeleteModal={
-          deleteMembership
-            ? () => {
-                setOpenEditModal(false);
-                setOpenDeleteModal(true);
-              }
-            : undefined
-        }
-        member={item}
-        group={group}
-        student={student}
-      />
-      <ModalDeleteMember
-        open={openDeleteModal}
-        deleteMembership={deleteMembership}
-        closeModal={() => setOpenDeleteModal(false)}
-        member={item}
-      />
+      {updateMembership && (
+        <ModalEditMember
+          open={openEditModal}
+          closeModal={() => setOpenEditModal(false)}
+          saveMembership={updateMembership}
+          openDeleteModal={
+            deleteMembership
+              ? () => {
+                  setOpenEditModal(false);
+                  setOpenDeleteModal(true);
+                }
+              : undefined
+          }
+          member={item}
+          group={group}
+          student={student}
+        />
+      )}
+      {deleteMembership && (
+        <ModalDeleteMember
+          open={openDeleteModal}
+          deleteMembership={deleteMembership}
+          closeModal={() => setOpenDeleteModal(false)}
+          member={item}
+        />
+      )}
     </Grid>
   );
 }

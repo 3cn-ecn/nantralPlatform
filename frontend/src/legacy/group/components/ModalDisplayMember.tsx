@@ -16,8 +16,9 @@ import {
 } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
+import { Student } from '#modules/student/student.types';
 
-import { Membership, Student } from '../interfaces';
+import { Membership } from '../interfaces';
 import Avatar from './Avatar';
 
 function ShowMemberModal(props: {

@@ -6,10 +6,12 @@ import {
 } from '@mui/icons-material';
 import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
 
+import { Student } from '#modules/student/student.types';
+
 import axios from '../utils/axios';
 import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
-import { Membership, Page, Student } from './interfaces';
+import { Membership, Page } from './interfaces';
 
 // passed through django template
 declare const studentId: string;

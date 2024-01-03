@@ -19,9 +19,10 @@ import {
 } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
+import { Student } from '#modules/student/student.types';
 
 import FormGroup, { FieldType } from '../../utils/form';
-import { Membership, Student } from '../interfaces';
+import { Membership } from '../interfaces';
 import Avatar from './Avatar';
 
 /**

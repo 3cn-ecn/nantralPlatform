@@ -1,19 +1,3 @@
-export interface SimpleStudent {
-  id: number;
-  name: string;
-  url: string;
-  picture: string;
-}
-
-export interface Student {
-  id: number;
-  name: string;
-  promo: number;
-  picture: string;
-  faculty: string;
-  path: string;
-}
-
 export interface Membership {
   id: number;
   student: {
