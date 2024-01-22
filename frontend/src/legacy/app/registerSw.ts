@@ -1,6 +1,6 @@
-import axios from '../utils/axios';
 import { REGISTER_URL } from '../notification/api_urls';
-import { urlBase64ToUint8Array, loadVersionBrowser } from './utils';
+import axios from '../utils/axios';
+import { loadVersionBrowser, urlBase64ToUint8Array } from './utils';
 
 /**
  * Main function: register the service worker,
@@ -32,7 +32,7 @@ export default function registerSw() {
 function subscribePushNotifications(reg) {
   // get constants
   const WP_PUBLIC_KEY = getPublicKey();
-  var browser = loadVersionBrowser();
+  const browser = loadVersionBrowser();
   // subscribe to push manager
   reg.pushManager
     .subscribe({
@@ -41,15 +41,15 @@ function subscribePushNotifications(reg) {
     })
     .then(function (sub) {
       // once we are subscribed, get subscriptions data and send it to our server
-      var endpointParts = sub.endpoint.split('/');
-      var registration_id = endpointParts[endpointParts.length - 1];
-      var data = {
+      const endpointParts = sub.endpoint.split('/');
+      const registration_id = endpointParts[endpointParts.length - 1];
+      const data = {
         browser: browser.name.toUpperCase(),
         p256dh: btoa(
-          String.fromCharCode.apply(null, new Uint8Array(sub.getKey('p256dh')))
+          String.fromCharCode.apply(null, new Uint8Array(sub.getKey('p256dh'))),
         ),
         auth: btoa(
-          String.fromCharCode.apply(null, new Uint8Array(sub.getKey('auth')))
+          String.fromCharCode.apply(null, new Uint8Array(sub.getKey('auth'))),
         ),
         registration_id: registration_id,
       };
@@ -65,7 +65,7 @@ function sendSubscriptionData(data) {
   axios
     .post(REGISTER_URL, data)
     .then((res) =>
-      console.log('Subscription registered with status ' + res.status)
+      console.log('Subscription registered with status ' + res.status),
     )
     .catch((err) => console.log('Fail to register subscription:' + err));
 }
@@ -76,7 +76,7 @@ function sendSubscriptionData(data) {
  */
 function getPublicKey() {
   const vapidMeta = document.querySelector(
-    'meta[name="vapid-key"]'
+    'meta[name="vapid-key"]',
   ) as HTMLMetaElement;
   const key = vapidMeta.content;
   return key;

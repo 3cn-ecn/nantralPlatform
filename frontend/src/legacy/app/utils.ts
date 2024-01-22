@@ -4,11 +4,11 @@
  * @returns A hashed string
  */
 export function urlBase64ToUint8Array(base64String) {
-  var padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  var base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
-  var rawData = window.atob(base64);
-  var outputArray = new Uint8Array(rawData.length);
-  for (var i = 0; i < rawData.length; ++i) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
     outputArray[i] = rawData.charCodeAt(i);
   }
   return outputArray;
@@ -22,7 +22,8 @@ export function loadVersionBrowser() {
   if ('userAgentData' in navigator) {
     // navigator.userAgentData is not available in
     // Firefox and Safari
-    const uaData = (navigator as any).userAgentData;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const uaData = navigator.userAgentData as any;
     // Outputs of navigator.userAgentData.brands[n].brand are e.g.
     // Chrome: 'Google Chrome'
     // Edge: 'Microsoft Edge'
@@ -30,9 +31,9 @@ export function loadVersionBrowser() {
     let browsername;
     let browserversion;
     let chromeVersion = null;
-    for (var i = 0; i < uaData.brands.length; i++) {
-      let brand = uaData.brands[i].brand;
-      browserversion = uaData.brands[i].version;
+    for (const brandObject of uaData.brands) {
+      const brand = brandObject.brand;
+      browserversion = brandObject.version;
       if (
         brand.match(/opera|chrome|edge|safari|firefox|msie|trident/i) !== null
       ) {
@@ -62,11 +63,12 @@ export function loadVersionBrowser() {
   // If no userAgentData is not present, or if no match via userAgentData was found,
   // try to extract the browser name and version from userAgent
   const userAgent = navigator.userAgent;
-  var ua = userAgent,
+  // eslint-disable-next-line prefer-const
+  let ua = userAgent,
     tem,
     M =
       ua.match(
-        /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i
+        /(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i,
       ) || [];
   if (/trident/i.test(M[1])) {
     tem = /\brv[ :]+(\d+)/g.exec(ua) || [];

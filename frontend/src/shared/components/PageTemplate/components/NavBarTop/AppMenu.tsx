@@ -6,6 +6,7 @@ import { NavBarSide } from '../NavBarSide/NavBarSide';
 
 export function AppMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <>
       <IconButton

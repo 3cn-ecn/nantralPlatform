@@ -1,22 +1,21 @@
-import React from 'react';
-import ReactDOM, { render } from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
 async function redirectToLoginPage(): Promise<void> {
-  var current_url = window.location.pathname;
+  const current_url = window.location.pathname;
   fetch('/doihavetologin?path=' + current_url)
     .then((resp) =>
       resp.json().then((data) => {
-        var havetologin = data;
+        const havetologin = data;
         if (havetologin) {
           window.open('/account/login?next=' + current_url, '_self');
         }
-      })
+      }),
     )
-    .catch((err) => {
-      render(
-        <div className="offline">Mode Hors-Connexion</div>,
-        document.getElementById('footer-offline')
+    .catch(() => {
+      const root = ReactDOM.createRoot(
+        document.getElementById('footer-offline') as HTMLElement,
       );
+      root.render(<div className="offline">Mode Hors-Connexion</div>);
     });
 }
 
