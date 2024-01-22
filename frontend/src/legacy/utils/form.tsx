@@ -235,13 +235,13 @@ function FormGroup(props: {
               >
                 <DatePicker
                   label={field.label}
-                  value={values[field.name] && values[field.name]}
+                  value={values[field.name] && new Date(values[field.name])}
                   onChange={(val) => {
                     if (val && val.toString() !== 'Invalid Date') {
                       handleChange(
                         field.name,
                         new Intl.DateTimeFormat('en-GB')
-                          .format(val.toDate())
+                          .format(val)
                           .split('/')
                           .reverse()
                           .join('-'),
