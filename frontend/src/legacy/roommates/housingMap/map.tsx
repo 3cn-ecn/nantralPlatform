@@ -1,13 +1,12 @@
-﻿import * as React from 'react';
-import MapGL, {
-  GeolocateControl,
+﻿import MapGL, {
   FlyToInterpolator,
+  GeolocateControl,
   NavigationControl,
 } from 'react-map-gl';
 
-import { geolocateStyle, navControlStyle } from './styles';
-import { ClusterMarker } from './clusterMarker';
 import Cluster from './cluster';
+import { ClusterMarker } from './clusterMarker';
+import { geolocateStyle, navControlStyle } from './styles';
 
 export function Map(props): JSX.Element {
   const {

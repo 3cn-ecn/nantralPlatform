@@ -1,8 +1,7 @@
-﻿import * as React from 'react';
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 
 import axios from '../../utils/axios';
 import { ParticipateButtonProps } from './interfaces';
@@ -12,7 +11,7 @@ import { spinnerStyle } from './styles';
 export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
   const [isParticipating, setIsParticipating] = useState(props.isParticipating);
   const [numberOfParticipants, setNumberOfParticipants] = useState(
-    props.participants.length
+    props.participants.length,
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -42,10 +41,10 @@ export function ParticipateButton(props: ParticipateButtonProps): JSX.Element {
               addOrDelete: isParticipating ? 1 : 0,
               slug: props.ROOMMATES_SLUG,
             })
-            .then((res: AxiosResponse) => {
+            .then(() => {
               setIsParticipating(!isParticipating);
               setNumberOfParticipants(
-                numberOfParticipants + (isParticipating ? -1 : 1)
+                numberOfParticipants + (isParticipating ? -1 : 1),
               );
             })
             .catch((err: Error | AxiosError) => {

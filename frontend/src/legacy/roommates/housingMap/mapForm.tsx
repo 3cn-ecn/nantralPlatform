@@ -1,11 +1,10 @@
-﻿import * as React from 'react';
-import { Form } from 'react-bootstrap';
+﻿import { Form } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { Popup, FlyToInterpolator } from 'react-map-gl';
+import { FlyToInterpolator, Popup } from 'react-map-gl';
 
-import { Housing } from './interfaces';
 import { ColocInfo } from './colocInfo';
+import { Housing } from './interfaces';
 
 export function MapForm(props): JSX.Element {
   const { colocs, data, setViewPort, setPopUpinfo } = props;
@@ -21,11 +20,11 @@ export function MapForm(props): JSX.Element {
             if (typeof coloc[0] === 'undefined') {
               return;
             }
-            let housings: Housing[] = data.filter(
-              (housing) => housing.id === coloc[0].housing.id
+            const housings: Housing[] = data.filter(
+              (housing) => housing.id === coloc[0].housing.id,
             );
             if (typeof housings[0] === 'undefined') return;
-            let housing: Housing = housings[0];
+            const housing: Housing = housings[0];
             setViewPort({
               zoom: 16,
               longitude: housing.longitude,
@@ -45,11 +44,8 @@ export function MapForm(props): JSX.Element {
                 offsetTop={-10}
                 offsetLeft={10}
               >
-                <ColocInfo
-                  housing={housing}
-                  colocathlonOnly={false}
-                />
-              </Popup>
+                <ColocInfo housing={housing} colocathlonOnly={false} />
+              </Popup>,
             );
           }}
         />

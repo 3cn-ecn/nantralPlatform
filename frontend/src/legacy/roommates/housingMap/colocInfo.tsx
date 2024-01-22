@@ -1,11 +1,10 @@
-﻿import * as React from 'react';
-import { Button } from 'react-bootstrap';
+﻿import { Button } from 'react-bootstrap';
 
 import { ColocInfoProps } from './interfaces';
 
 export function ColocInfo(props: ColocInfoProps): JSX.Element {
   const { housing, colocathlonOnly } = props;
-  let roommatesList: string = '';
+  let roommatesList = '';
   if (
     typeof housing.roommates != 'undefined' &&
     typeof housing.roommates.members != 'undefined' &&

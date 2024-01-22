@@ -1,12 +1,11 @@
-import * as React from 'react';
 import Switch from '@mui/material/Switch';
 
+import { ColocathlonSwitchProps } from './interfaces';
 import {
-  colocathlonSwitchDivStyle,
   colocathlonSwitchChildStyle,
+  colocathlonSwitchDivStyle,
   colocathlonSwitchElementStyle,
 } from './styles';
-import { ColocathlonSwitchProps } from './interfaces';
 
 export function ColocathlonSwitch(props: ColocathlonSwitchProps) {
   const { status, handle } = props;

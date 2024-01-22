@@ -1,8 +1,7 @@
-﻿import * as React from 'react';
-import { PinProps } from './interfaces';
+﻿import { PinProps } from './interfaces';
 
 export function Pin(props: PinProps): JSX.Element {
-  const size: number = 20;
+  const size = 20;
 
   return (
     <svg

@@ -1,7 +1,5 @@
-﻿import * as React from 'react';
-
+﻿import { CurrentColocInfoProps } from './interfaces';
 import { currentColocInfoStyles } from './styles';
-import { CurrentColocInfoProps } from './interfaces';
 
 export function CurrentColocInfo(props: CurrentColocInfoProps) {
   const { colocName, colocUrl } = props;
