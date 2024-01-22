@@ -18,11 +18,9 @@ const legacyEntryPoints = [
   'app/app.tsx',
   'group/MembershipsGroup.tsx',
   'group/MembershipsStudent.tsx',
-  'event/eventsView.tsx',
   'roommates/colocathlonCard.tsx',
   'roommates/housingMap.tsx',
   'roommates/createHousing.tsx',
-  'notification/subscribeButton.tsx',
   'notification/deviceSubscribeButton.tsx',
 ];
 

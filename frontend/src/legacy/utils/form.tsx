@@ -16,11 +16,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs from 'dayjs';
-import 'dayjs/locale/fr';
+import { fr } from 'date-fns/locale';
 import { noop } from 'lodash-es';
 
 import axios from './axios';
@@ -230,13 +229,13 @@ function FormGroup(props: {
           case 'date': // date as string
             return (
               <LocalizationProvider
-                adapterLocale="fr"
-                dateAdapter={AdapterDayjs}
+                adapterLocale={fr}
+                dateAdapter={AdapterDateFns}
                 key={field.name}
               >
                 <DatePicker
                   label={field.label}
-                  value={values[field.name] && dayjs(values[field.name])}
+                  value={values[field.name] && values[field.name]}
                   onChange={(val) => {
                     if (val && val.toString() !== 'Invalid Date') {
                       handleChange(
