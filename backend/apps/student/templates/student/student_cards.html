@@ -23,7 +23,7 @@
                             {% if member.student.picture %}
                                 <img class='icon' src='{{ member.student.picture|file_url }}'>
                             {% else %}
-                                <img class='icon' src="https://avatars.dicebear.com/api/avataaars/{{member.student.name}}.svg" />
+                                <img class='icon' src="https://api.dicebear.com/7.x/thumbs/svg?seed={{member.student.name}}" />
                             {% endif %}
                         </div>
                     </div>

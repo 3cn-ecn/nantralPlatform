@@ -23,7 +23,7 @@
               {% if group_type.icon %}
                 <img src="{{ group_type.icon|file_url }}" alt=""/>
               {% else %}
-                <img src="https://avatars.dicebear.com/api/initials/{{group_type.name}}.svg" alt=""/>
+                <img src="https://api.dicebear.com/7.x/thumbs/svg?seed={{group_type.name}}" alt=""/>
               {% endif %}
             </div>
           </a>
