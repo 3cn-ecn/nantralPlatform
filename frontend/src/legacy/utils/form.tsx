@@ -59,7 +59,7 @@ export type FieldType =
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
-      item?: Array<string>;
+      item?: string[];
     }
   | {
       kind: 'group';
@@ -83,7 +83,10 @@ export type FieldType =
     };
 
 /**
- * A component to create a group of fields for a form
+ * A component to create a group of fields for a form.
+ *
+ * You **SHOULD NOT** use this component to make forms, it was a mistake done by
+ * me when I started to learn React...
  *
  * @param props.fields - the list of the structure of each field
  * @param props.values - an object { key: value } where keys are the 'name' key in the field structure
@@ -129,7 +132,7 @@ function FormGroup(props: {
                 sx={{ display: 'flex', gap: 1.5 }}
                 key={field.fields.reduce(
                   (prev, curr) => `${prev}+${curr.name}`,
-                  ''
+                  '',
                 )}
               >
                 <FormGroup
@@ -242,7 +245,7 @@ function FormGroup(props: {
                           .format(val.toDate())
                           .split('/')
                           .reverse()
-                          .join('-')
+                          .join('-'),
                       );
                     } else {
                       handleChange(field.name, val);
@@ -345,7 +348,7 @@ function AutocompleteField<T>(props: {
   function updateOptions(
     event: React.SyntheticEvent,
     value: string,
-    reason: AutocompleteInputChangeReason
+    reason: AutocompleteInputChangeReason,
   ): void {
     if (reason !== 'input' || value.length < 3) return;
     axios
