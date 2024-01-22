@@ -327,6 +327,13 @@
     "loadMore": "Charger plus",
     "markAllAsSeen": "Tout marquer comme lu",
     "settings": "Paramètres des notifications",
+    "settingsPage": {
+      "blocked": "Vous avez bloqué les notifications... 😢 Activez-les dans vos paramètres !",
+      "disabled": "Les notifications sont désactivées 😢 ",
+      "disabledButtonLabel": "Activer !",
+      "enabled": "Les notifications sont activées ! 🥳 Abonnez-vous à des pages pour recevoir leurs notifications !",
+      "unavailable": "Votre appareil/navigateur n'est pas compatible avec les notifications pour Nantral Platform... 😢"
+    },
     "subscribed": "Abonnements",
     "title": "Notifications",
     "unseen": "Non lues"
