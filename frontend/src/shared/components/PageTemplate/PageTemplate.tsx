@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 import { FlexRow } from '../FlexBox/FlexBox';
-import { NavBarTop } from './components/NavBarTop/NavBarTop';
+import { NavBarTop } from './components/NavBarTop';
 
 export function PageTemplate() {
   const theme = useTheme();

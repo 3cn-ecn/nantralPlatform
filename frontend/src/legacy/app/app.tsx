@@ -1,6 +1,6 @@
 import { NotificationMenu } from '#modules/notification/view/NotificationMenu/NotificationMenu';
-import { AppMenu } from '#shared/components/PageTemplate/components/NavBarTop/AppMenu';
-import { UserMenu } from '#shared/components/PageTemplate/components/NavBarTop/UserMenu';
+import { AppMenu } from '#shared/components/PageTemplate/components/AppMenu';
+import { UserMenu } from '#shared/components/PageTemplate/components/UserMenu';
 
 import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 import { AppInstallBanner } from './appInstallBanner';

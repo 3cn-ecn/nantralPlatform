@@ -13,12 +13,12 @@ import {
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-interface NavBarSideProps {
+interface AppMenuPanelProps {
   menuOpen: boolean;
   onClose: () => void;
 }
 
-export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
+export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
   const { t } = useTranslation();
 
   return (
@@ -34,47 +34,47 @@ export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
     >
       <Toolbar />
       <List>
-        <NavBarSideItem
+        <AppMenuItem
           label={t('navbar.home')}
           path="/"
           iconPath="/static/img/icons/cropped/home.svg"
           closeMenu={onClose}
         />
-        <NavBarSideItem
+        <AppMenuItem
           label={t('navbar.events')}
           path="/event/"
           iconPath="/static/img/icons/cropped/event.svg"
           closeMenu={onClose}
         />
-        <NavBarSideItem
+        <AppMenuItem
           label={t('navbar.group')}
           path="/group/"
           iconPath="/static/img/icons/cropped/club.svg"
           isOnBackend
           closeMenu={onClose}
         />
-        <NavBarSideItem
+        <AppMenuItem
           label={t('navbar.flatshare')}
           path="/colocs/"
           iconPath="/static/img/icons/cropped/roommates.svg"
           isOnBackend
           closeMenu={onClose}
         />
-        <NavBarSideItem
+        <AppMenuItem
           label={t('navbar.family')}
           path="/parrainage/"
           iconPath="/static/img/icons/cropped/family.svg"
           isOnBackend
           closeMenu={onClose}
         />
-        <NavBarSideItem
+        <AppMenuItem
           label={t('navbar.student')}
           path="/student/"
           iconPath="/static/img/icons/cropped/list.svg"
           isOnBackend
           closeMenu={onClose}
         />
-        <NavBarSideItem
+        <AppMenuItem
           label={t('navbar.signature')}
           path="/signature/"
           iconPath="/static/img/icons/cropped/sign.svg"
@@ -85,7 +85,7 @@ export function NavBarSide({ menuOpen, onClose }: NavBarSideProps) {
   );
 }
 
-interface NavBarSideItemProps {
+interface AppMenuItemProps {
   label: string;
   path: string;
   iconPath?: string;
@@ -93,13 +93,13 @@ interface NavBarSideItemProps {
   closeMenu: () => void;
 }
 
-function NavBarSideItem({
+function AppMenuItem({
   label,
   path,
   iconPath = '/static/img/icons/cropped/link.svg',
   isOnBackend,
   closeMenu,
-}: NavBarSideItemProps) {
+}: AppMenuItemProps) {
   return (
     <ListItem disablePadding>
       <ListItemButton

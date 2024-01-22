@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Icon, IconButton } from '@mui/material';
 
-import { NavBarSide } from '../NavBarSide/NavBarSide';
+import { AppMenuPanel } from './AppMenuPanel';
 
 export function AppMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -23,7 +23,7 @@ export function AppMenu() {
           alt="Ouvrir le menu"
         />
       </IconButton>
-      <NavBarSide menuOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <AppMenuPanel menuOpen={menuOpen} onClose={() => setMenuOpen(false)} />
     </>
   );
 }
