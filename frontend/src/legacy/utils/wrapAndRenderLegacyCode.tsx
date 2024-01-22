@@ -11,6 +11,7 @@ import { ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
 
+import { CustomThemeProvider } from '#shared/context/CustomTheme.context';
 import { ToastProvider } from '#shared/context/Toast.context';
 
 import '../../index.scss';
@@ -55,15 +56,17 @@ export const wrapAndRenderLegacyCode = (
   // fill in the React root with our wrapped element
   root.render(
     <React.StrictMode>
-      <ThemeProvider theme={theme}>
-        <QueryClientProvider client={queryClient}>
-          <ToastProvider>
-            <BrowserRouter>
-              <div className="react-legacy-container">{element}</div>
-            </BrowserRouter>
-          </ToastProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
+      <CustomThemeProvider>
+        <ThemeProvider theme={theme}>
+          <QueryClientProvider client={queryClient}>
+            <ToastProvider>
+              <BrowserRouter>
+                <div className="react-legacy-container">{element}</div>
+              </BrowserRouter>
+            </ToastProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
+      </CustomThemeProvider>
     </React.StrictMode>,
   );
 };
