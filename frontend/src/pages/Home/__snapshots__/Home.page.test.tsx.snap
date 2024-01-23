@@ -100,7 +100,7 @@ exports[`Home page should render correctly without data 1`] = `
               viewBox="0 0 24 24"
             >
               <path
-                d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"
+                d="M17 12h-5v5h5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1zm3 18H5V8h14z"
               />
             </svg>
             <span
@@ -135,10 +135,10 @@ exports[`Home page should render correctly without data 1`] = `
               viewBox="0 0 24 24"
             >
               <path
-                d="M17 19.22H5V7h7V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7h-2v7.22z"
+                d="M17 19.22H5V7h7V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7h-2z"
               />
               <path
-                d="M19 2h-2v3h-3c.01.01 0 2 0 2h3v2.99c.01.01 2 0 2 0V7h3V5h-3V2zM7 9h8v2H7zm0 3v2h8v-2h-3zm0 3h8v2H7z"
+                d="M19 2h-2v3h-3c.01.01 0 2 0 2h3v2.99c.01.01 2 0 2 0V7h3V5h-3zM7 9h8v2H7zm0 3v2h8v-2h-3zm0 3h8v2H7z"
               />
             </svg>
             <span
@@ -154,11 +154,11 @@ exports[`Home page should render correctly without data 1`] = `
       <div
         class="MuiBox-root css-47fqa9"
       >
-        <h3
-          class="MuiTypography-root MuiTypography-h3 css-12tds6v-MuiTypography-root"
+        <h2
+          class="MuiTypography-root MuiTypography-h2 css-2raco3-MuiTypography-root"
         >
           Upcoming events
-        </h3>
+        </h2>
         <a
           class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-disableElevation MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-disableElevation css-lvx8jz-MuiButtonBase-root-MuiButton-root"
           href="/event"
@@ -197,11 +197,11 @@ exports[`Home page should render correctly without data 1`] = `
       <div
         class="MuiBox-root css-47fqa9"
       >
-        <h3
-          class="MuiTypography-root MuiTypography-h3 css-12tds6v-MuiTypography-root"
+        <h2
+          class="MuiTypography-root MuiTypography-h2 css-2raco3-MuiTypography-root"
         >
           Posts
-        </h3>
+        </h2>
       </div>
       <p
         class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
@@ -218,11 +218,11 @@ exports[`Home page should render correctly without data 1`] = `
       <div
         class="MuiBox-root css-47fqa9"
       >
-        <h3
-          class="MuiTypography-root MuiTypography-h3 css-12tds6v-MuiTypography-root"
+        <h2
+          class="MuiTypography-root MuiTypography-h2 css-2raco3-MuiTypography-root"
         >
           Do you like this site?
-        </h3>
+        </h2>
       </div>
       <ul>
         <li>

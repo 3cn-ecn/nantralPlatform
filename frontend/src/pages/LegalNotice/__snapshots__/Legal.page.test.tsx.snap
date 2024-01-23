@@ -6,7 +6,7 @@ exports[`Home page should render correctly 1`] = `
     class="MuiContainer-root MuiContainer-maxWidthSm css-1dsi6ev-MuiContainer-root"
   >
     <h1
-      class="MuiTypography-root MuiTypography-h1 css-8um4cb-MuiTypography-root"
+      class="MuiTypography-root MuiTypography-h1 css-11v5353-MuiTypography-root"
     >
       Legal Notice
     </h1>
