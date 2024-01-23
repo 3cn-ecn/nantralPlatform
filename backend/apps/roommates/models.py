@@ -57,7 +57,7 @@ class Roommates(AbstractGroup):
     begin_date = models.DateField(
         "Date d'emménagement", default=timezone.now().today
     )
-    end_date = models.DateField("Date de sortie", null=True, blank=True)
+    end_date = models.DateField("Date de sortie")
     housing = models.ForeignKey(to=Housing, on_delete=models.CASCADE)
     members = models.ManyToManyField(
         to=Student, through="NamedMembershipRoommates", blank=True
