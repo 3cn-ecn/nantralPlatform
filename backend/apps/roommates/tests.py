@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.test import TestCase
 from django.urls import reverse
@@ -26,7 +26,10 @@ class TestHousing(TestCase, TestMixin):
         Housing.objects.create(address="Place royale, Nantes 44000")
         house = Housing.objects.all().first()
         Roommates.objects.create(
-            name="Coloc test", housing=house, begin_date=date.today()
+            name="Coloc test",
+            housing=house,
+            begin_date=date.today(),
+            end_date=date.today() + timedelta(days=365),
         )
         coloc = Roommates.objects.all().first()
         url = reverse("roommates:detail", args=[coloc.slug])
