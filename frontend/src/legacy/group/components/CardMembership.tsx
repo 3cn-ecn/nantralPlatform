@@ -9,7 +9,10 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Group, Membership, Student } from '../interfaces';
+import { Group } from '#modules/group/types/group.types';
+import { Student } from '#modules/student/student.types';
+
+import { Membership } from '../interfaces';
 import Avatar from './Avatar';
 import ModalDeleteMember from './ModalDeleteMember';
 import ModalDisplayMember from './ModalDisplayMember';
@@ -34,26 +37,25 @@ function MembershipCard(props: {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
-      <Card>
-        <CardActionArea onClick={() => setOpenShowModal(true)}>
+    <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
+      <Card sx={{ height: '100%' }}>
+        <CardActionArea
+          onClick={() => setOpenShowModal(true)}
+          sx={{ height: '100%' }}
+        >
           <CardContent
-            sx={{ display: 'flex', alignItems: 'center', gap: 1.5, p: 1.5 }}
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, p: 1 }}
           >
             <Avatar
               url={group ? item.student.picture : item.group.icon}
               title={group ? item.student.name : item.group.name}
-              size="large"
+              size="medium"
             />
             <Box sx={{ minWidth: 0 }}>
-              <Typography variant="h6" sx={{ fontWeight: 500 }} noWrap>
+              <Typography variant="body1" noWrap>
                 {group ? item.student.name : item.group.name}
               </Typography>
-              <Typography
-                sx={{ fontSize: '0.9em' }}
-                color="text.secondary"
-                noWrap
-              >
+              <Typography variant="body2" color="secondary" noWrap>
                 {item.summary}
               </Typography>
             </Box>
@@ -75,28 +77,32 @@ function MembershipCard(props: {
         group={group}
         student={student}
       />
-      <ModalEditMember
-        open={openEditModal}
-        closeModal={() => setOpenEditModal(false)}
-        saveMembership={updateMembership}
-        openDeleteModal={
-          deleteMembership
-            ? () => {
-                setOpenEditModal(false);
-                setOpenDeleteModal(true);
-              }
-            : undefined
-        }
-        member={item}
-        group={group}
-        student={student}
-      />
-      <ModalDeleteMember
-        open={openDeleteModal}
-        deleteMembership={deleteMembership}
-        closeModal={() => setOpenDeleteModal(false)}
-        member={item}
-      />
+      {updateMembership && (
+        <ModalEditMember
+          open={openEditModal}
+          closeModal={() => setOpenEditModal(false)}
+          saveMembership={updateMembership}
+          openDeleteModal={
+            deleteMembership
+              ? () => {
+                  setOpenEditModal(false);
+                  setOpenDeleteModal(true);
+                }
+              : undefined
+          }
+          member={item}
+          group={group}
+          student={student}
+        />
+      )}
+      {deleteMembership && (
+        <ModalDeleteMember
+          open={openDeleteModal}
+          deleteMembership={deleteMembership}
+          closeModal={() => setOpenDeleteModal(false)}
+          member={item}
+        />
+      )}
     </Grid>
   );
 }

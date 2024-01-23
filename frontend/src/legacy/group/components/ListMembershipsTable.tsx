@@ -1,12 +1,12 @@
 import { useState } from 'react';
+
 import {
   DragDropContext,
   Draggable,
   DropResult,
   Droppable,
   OnDragEndResponder,
-} from 'react-beautiful-dnd';
-
+} from '@hello-pangea/dnd';
 import {
   Archive as ArchiveIcon,
   CheckCircle as CheckCircleIcon,
@@ -28,7 +28,10 @@ import {
   Typography,
 } from '@mui/material';
 
-import { Group, Membership, Student } from '../interfaces';
+import { Group } from '#modules/group/types/group.types';
+import { Student } from '#modules/student/student.types';
+
+import { Membership } from '../interfaces';
 import Avatar from './Avatar';
 import ModalArchiveMember from './ModalArchiveMember';
 import ModalDeleteMember from './ModalDeleteMember';
@@ -58,7 +61,7 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {
  * @returns A component
  */
 function DraggableComponent(id: string, index: number) {
-  return function (props: any): JSX.Element {
+  return function DraggableComponent(props: any): JSX.Element {
     return (
       <Draggable draggableId={id} index={index}>
         {(provided, snapshot) => (
@@ -89,7 +92,7 @@ function DraggableComponent(id: string, index: number) {
  * @returns A component
  */
 function DroppableComponent(onDragEnd: OnDragEndResponder) {
-  return function (props: any): JSX.Element {
+  return function DroppableComponent(props: any): JSX.Element {
     return (
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="1" direction="vertical">
@@ -183,9 +186,7 @@ function MembershipRow(props: {
             aria-label="archive"
             size="small"
             onClick={() => setOpenArchiveModal(true)}
-            hidden={
-              group.group_type.no_membership_dates || item.end_date < today
-            }
+            hidden={group.groupType.noMembershipDates || item.end_date < today}
           >
             <ArchiveIcon fontSize="small" />
           </IconButton>
@@ -240,7 +241,7 @@ function ListMembershipsTable(props: {
   reorderMemberships: (
     reorderedMembers: Membership[],
     member: Membership,
-    lower?: Membership
+    lower?: Membership,
   ) => Promise<void>;
   updateMembership: (member: Membership, reload?: boolean) => Promise<void>;
   deleteMembership: (member: Membership) => Promise<void>;
@@ -268,7 +269,7 @@ function ListMembershipsTable(props: {
     reorderMemberships(
       reorderedMembers,
       members[source],
-      dest + 1 < members.length ? reorderedMembers[dest + 1] : undefined
+      dest + 1 < members.length ? reorderedMembers[dest + 1] : undefined,
     );
   }
 

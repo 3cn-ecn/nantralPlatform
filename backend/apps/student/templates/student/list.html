@@ -28,6 +28,16 @@
 </table>
 </div>
 
+<div>
+  {% for page in paginator.page_range %}
+    {% if page is page_obj.number %}
+      {{page}}
+    {% else %}
+      <a href="?page={{page}}">{{page}}</a>
+    {% endif %}
+  {% endfor %}
+</div>
+
 
 {% endblock %}
 

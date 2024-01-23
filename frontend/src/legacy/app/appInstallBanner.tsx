@@ -1,33 +1,18 @@
-import React, { useState } from 'react';
-import { render } from 'react-dom';
+import { useState } from 'react';
 import { Button, CloseButton } from 'react-bootstrap';
 import { useCookies } from 'react-cookie';
-
-/**
- * Declare an event listener which will wait until the browser launch the event
- * "beforeinstallprompt".
- * If this event is triggered, we then know that the browser in compatible with
- * PWA and that the app is not already installed so we prompt the banner to the
- * user.
- */
-export default function addAppInstallListener(): void {
-  render(
-    <AppInstallBanner></AppInstallBanner>,
-    document.getElementById('footer-install-app')
-  );
-}
 
 /**
  * A function to decide if we must load the banner or not
  * for installing the application
  */
-function AppInstallBanner(): JSX.Element {
+export function AppInstallBanner(): JSX.Element {
   // declare constants
   const [defferredPrompt, setDefferredPrompt] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(['app-install-closed']);
+  const [cookies, setCookie] = useCookies(['app-install-closed']);
   // declare conditions
   const visitInApp: boolean = window.matchMedia(
-    '(display-mode: standalone)'
+    '(display-mode: standalone)',
   ).matches;
   const appUnsupportedOrInstalled: boolean = defferredPrompt == null;
   const bannerClosed: boolean = cookies['app-install-closed'] || false;
@@ -68,9 +53,12 @@ function AppInstallBanner(): JSX.Element {
       {isAndroid ? (
         <Button
           variant="danger"
-          onClick={() => window.open(
-            'https://play.google.com/store/apps/details?id=org.ecn_3cn.nantral_platform',
-            '_self')}
+          onClick={() =>
+            window.open(
+              'https://play.google.com/store/apps/details?id=org.ecn_3cn.nantral_platform',
+              '_self',
+            )
+          }
         >
           Télécharger
         </Button>

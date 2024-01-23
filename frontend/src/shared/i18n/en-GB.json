@@ -327,6 +327,13 @@
     "loadMore": "Load more",
     "markAllAsSeen": "Mark all as read",
     "settings": "Notification settings",
+    "settingsPage": {
+      "blocked": "You've blocked notifications... 😢 Turn them on in your settings!",
+      "disabled": "Notifications are disabled 😢",
+      "disabledButtonLabel": "Enable !",
+      "enabled": "Notifications are enabled! \n🥳 Subscribe to pages to receive their notifications!",
+      "unavailable": "Your device/browser is not compatible with notifications for Nantral Platform...😢"
+    },
     "subscribed": "Subscriptions",
     "title": "Notifications",
     "unseen": "Unread"

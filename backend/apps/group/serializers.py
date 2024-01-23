@@ -21,15 +21,12 @@ class AdminFieldsMixin:
             admin_fields = self.fields
         if self.instance:
             an_admin_field_is_updated = any(
-                [
-                    data.get(field)
-                    and getattr(self.instance, field) != data[field]
-                    for field in admin_fields
-                ]
+                data.get(field) and getattr(self.instance, field) != data[field]
+                for field in admin_fields
             )
         else:
             an_admin_field_is_updated = any(
-                [data.get(field) for field in admin_fields]
+                data.get(field) for field in admin_fields
             )
         user = self.context["request"].user
         if an_admin_field_is_updated and not group.is_admin(user):
@@ -190,8 +187,8 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
         ):
             raise exceptions.PermissionDenied(
                 _(
-                    "You cannot create create a new membership inside a private "
-                    "group if you are not admin of this group."
+                    "You cannot create create a new membership inside a private"
+                    " group if you are not admin of this group."
                 )
             )
         if data.get("end_date", None) and data.get("begin_date", None):

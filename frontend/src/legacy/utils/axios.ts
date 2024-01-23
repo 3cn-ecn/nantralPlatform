@@ -4,7 +4,6 @@
  *
  * DO NOT USE ANYMORE !!! REPLACE BY fetchAPi
  */
-
 import axios from 'axios';
 
 axios.defaults.xsrfCookieName = 'csrftoken';

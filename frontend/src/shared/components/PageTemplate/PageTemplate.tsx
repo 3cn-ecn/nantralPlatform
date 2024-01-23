@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import { Outlet, ScrollRestoration } from 'react-router-dom';
 
 import {
@@ -10,12 +10,10 @@ import {
 } from '@mui/material';
 
 import { FlexRow } from '../FlexBox/FlexBox';
-import { NavBarSide } from './components/NavBarSide/NavBarSide';
-import { NavBarTop } from './components/NavBarTop/NavBarTop';
+import { NavBarTop } from './components/NavBarTop';
 
 export function PageTemplate() {
   const theme = useTheme();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   // NOTES:
   // - <Suspense> is a React component which shows a fallback if something
@@ -27,8 +25,7 @@ export function PageTemplate() {
     <Box className={`global-${theme.palette.mode}-theme`}>
       <CssBaseline />
       <ScrollRestoration />
-      <NavBarTop menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-      <NavBarSide menuOpen={menuOpen} onClose={() => setMenuOpen(false)} />
+      <NavBarTop />
       <Box component="main">
         <Toolbar />
         <Suspense

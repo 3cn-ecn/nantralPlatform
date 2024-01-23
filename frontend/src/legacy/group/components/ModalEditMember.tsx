@@ -1,6 +1,10 @@
 import { FormEvent, useState } from 'react';
 
-import { Close as CloseIcon, Edit as EditIcon } from '@mui/icons-material';
+import {
+  Close as CloseIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+} from '@mui/icons-material';
 import {
   Alert,
   Box,
@@ -14,8 +18,11 @@ import {
   Typography,
 } from '@mui/material';
 
+import { Group } from '#modules/group/types/group.types';
+import { Student } from '#modules/student/student.types';
+
 import FormGroup, { FieldType } from '../../utils/form';
-import { Group, Membership, Student } from '../interfaces';
+import { Membership } from '../interfaces';
 import Avatar from './Avatar';
 
 /**
@@ -41,7 +48,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       multiline: true,
     },
   ];
-  if (group && !group.group_type.no_membership_dates) {
+  if (group && !group.groupType.noMembershipDates) {
     defaultFields.push({
       kind: 'group',
       fields: [
@@ -60,7 +67,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       ],
     });
   }
-  if (group?.is_admin) {
+  if (group?.isAdmin) {
     defaultFields.push({
       kind: 'boolean',
       name: 'admin',
@@ -68,7 +75,7 @@ function createFormFields(group: Group, member: Membership): FieldType[] {
       helpText: 'Un admin peut modifier le groupe et ses membres.',
     });
   }
-  if (member.id === null && group?.is_admin) {
+  if (member.id === null && group?.isAdmin) {
     defaultFields.splice(0, 0, {
       kind: 'autocomplete',
       label: 'Utilisateur',
@@ -93,7 +100,7 @@ function createBlankMember(group: Group, student: Student): Membership {
   const oneYearLater = date.toISOString().split('T')[0];
   const member = {
     id: null,
-    student: group.is_admin ? null : (student.id as any),
+    student: group.isAdmin ? null : (student.id as any),
     group: group.id as any,
     summary: '',
     description: '',
@@ -121,7 +128,7 @@ function EditMemberModal(props: {
   const formFields = createFormFields(group, member);
 
   const [formValues, setFormValues] = useState<Membership>(
-    structuredClone(member)
+    structuredClone(member),
   );
   const [formErrors, setFormErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -200,26 +207,21 @@ function EditMemberModal(props: {
             hidden={!openDeleteModal}
             onClick={openDeleteModal}
             variant="outlined"
-            color="error"
+            color="secondary"
             disabled={saving}
             sx={{ mr: 'auto', mt: 2 }}
+            startIcon={<DeleteIcon />}
           >
             Supprimer
           </Button>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={closeModal}
-            variant="text"
-            color="error"
-            disabled={saving}
-          >
+          <Button onClick={closeModal} variant="text" disabled={saving}>
             Annuler
           </Button>
           <Button
             type="submit"
             variant="contained"
-            color="success"
             disabled={saving}
             endIcon={
               saving ? (

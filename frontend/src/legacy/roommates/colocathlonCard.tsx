@@ -1,10 +1,10 @@
-﻿import React, { useState, useEffect } from 'react';
-import { render } from 'react-dom';
+﻿import { useEffect, useState } from 'react';
 
-import { cardStyle, cardH2Style } from './colocathlonCard/styles';
-import { Roommates } from './housingMap/interfaces';
-import { getRoommatesDetails } from './colocathlonCard/utils';
+import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 import { ParticipateButton } from './colocathlonCard/participateButton';
+import { cardH2Style, cardStyle } from './colocathlonCard/styles';
+import { getRoommatesDetails } from './colocathlonCard/utils';
+import { Roommates } from './housingMap/interfaces';
 
 declare const API_URL: string;
 declare const ROOMMATES_SLUG: string;
@@ -13,8 +13,8 @@ declare const IS_ADMIN: string;
 declare const PHASE: number;
 declare const USER_ID: number;
 
-function Root(props: {}): JSX.Element {
-  const isAdmin = IS_ADMIN === "True";
+function Root(): JSX.Element {
+  const isAdmin = IS_ADMIN === 'True';
   const [roommates, setRoommates] = useState<Roommates | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -58,7 +58,7 @@ function Root(props: {}): JSX.Element {
             ROOMMATES_SLUG={ROOMMATES_SLUG}
             isParticipating={
               roommates.colocathlon_participants.filter(
-                (e) => e.user === USER_ID
+                (e) => e.user === USER_ID,
               ).length > 0
             }
             participants={roommates.colocathlon_participants}
@@ -103,4 +103,4 @@ function Root(props: {}): JSX.Element {
   }
 }
 
-render(<Root />, document.getElementById('root'));
+wrapAndRenderLegacyCode(<Root />, 'root');

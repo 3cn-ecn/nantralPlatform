@@ -64,7 +64,6 @@
                         <i class="fa fa-pencil"></i>&nbsp; Modifier la page
                     </a>
                 {% endif %}
-                    <span id="subscription_button"></span>
             {% endif %}
             </p>
             {% block infos %}
@@ -154,5 +153,4 @@
     const membersURL = "{% url object.app|add:'_api:list-members' %}?slug={{ object.slug }}";
 </script>
 {% vite_asset 'src/legacy/group/groupMembers.tsx' %}
-{% vite_asset 'src/legacy/notification/subscribeButton.tsx' %}
 {% endblock %}

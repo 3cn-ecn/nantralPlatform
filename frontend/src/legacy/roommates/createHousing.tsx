@@ -1,14 +1,15 @@
-import React, { useState, ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
+import { Button, Form, ListGroup } from 'react-bootstrap';
+
 import axios from '../utils/axios';
-import { render } from 'react-dom';
-import { Form, Button, ListGroup } from 'react-bootstrap';
+import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 
 declare const API_URL: string;
 declare const CHECK_URL: string;
 declare const GEO_URL: string;
 declare const CREATE_URL: string;
 
-function Root(props: {}) {
+function Root() {
   const [currentHousing, updateCurrentHousing] = useState({});
   const [alreadyExists, updateAlreadyExists] = useState([]);
   const [suggestions, updateSuggestions] = useState([]);
@@ -18,7 +19,7 @@ function Root(props: {}) {
       fetch(GEO_URL + `?search_string=${encodeURI(search)}`).then((resp) =>
         resp.json().then((suggs) => {
           updateSuggestions(suggs);
-        })
+        }),
       );
     }
   }
@@ -124,4 +125,4 @@ function Root(props: {}) {
   );
 }
 
-render(<Root />, document.getElementById('root'));
+wrapAndRenderLegacyCode(<Root />, 'root');

@@ -1,15 +1,15 @@
-﻿import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { render } from 'react-dom';
-import { Popup, Marker, FlyToInterpolator } from 'react-map-gl';
-import { useCookies, CookiesProvider } from 'react-cookie';
+﻿import { useEffect, useMemo, useRef, useState } from 'react';
+import { CookiesProvider, useCookies } from 'react-cookie';
+import { FlyToInterpolator, Marker, Popup } from 'react-map-gl';
 
-import { Housing } from './housingMap/interfaces';
+import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
+import { ColocInfo } from './housingMap/colocInfo';
 import { ColocathlonSwitch } from './housingMap/colocathlonSwitch';
+import { CurrentColocInfo } from './housingMap/currentColocInfo';
+import { Housing } from './housingMap/interfaces';
+import { Map } from './housingMap/map';
 import { MapForm } from './housingMap/mapForm';
 import { Pin } from './housingMap/pin';
-import { ColocInfo } from './housingMap/colocInfo';
-import { Map } from './housingMap/map';
-import { CurrentColocInfo } from './housingMap/currentColocInfo';
 import { getRoommates } from './housingMap/utils';
 
 declare const MAPBOX_TOKEN: string;
@@ -18,7 +18,7 @@ declare const PHASE_COLOCATHLON: number;
 declare const CURRENT_COLOC: string;
 declare const CURRENT_COLOC_URL: string;
 
-function Root(props: {}): JSX.Element {
+function Root(): JSX.Element {
   const [data, setData] = useState<Housing[]>([]);
   const [colocs, setColocs] = useState([]);
   const [viewport, setViewPort] = useState({
@@ -30,10 +30,10 @@ function Root(props: {}): JSX.Element {
     bearing: 0,
     pitch: 0,
   });
-  const [popupInfo, setPopUpinfo] = useState(null);
+  const [popupInfo, setPopUpinfo] = useState<JSX.Element | null>(null);
 
-  const [cookies, setCookie, removeCookie] = useCookies(['colocathlon-cookie']);
-  let colocathlonCookieValue: boolean =
+  const [cookies, setCookie] = useCookies(['colocathlon-cookie']);
+  const colocathlonCookieValue: boolean =
     cookies['colocathlon-cookie'] !== undefined
       ? cookies['colocathlon-cookie'] === 'true'
       : PHASE_COLOCATHLON == 2;
@@ -48,8 +48,8 @@ function Root(props: {}): JSX.Element {
   const mapRef = useRef(null);
 
   const markers = useMemo(() => {
-    let housings = data.filter(
-      (e) => !colocathlonParticipantsOnly || e.roommates.colocathlon_agree
+    const housings = data.filter(
+      (e) => !colocathlonParticipantsOnly || e.roommates.colocathlon_agree,
     );
     return housings.map((housing: Housing) => (
       <Marker
@@ -85,7 +85,7 @@ function Root(props: {}): JSX.Element {
                   housing={housing}
                   colocathlonOnly={colocathlonParticipantsOnly}
                 />
-              </Popup>
+              </Popup>,
             );
           }}
         />
@@ -106,7 +106,8 @@ function Root(props: {}): JSX.Element {
         <MapForm
           colocs={colocs}
           data={data.filter(
-            (e) => !colocathlonParticipantsOnly || e.roommates.colocathlon_agree
+            (e) =>
+              !colocathlonParticipantsOnly || e.roommates.colocathlon_agree,
           )}
           setViewPort={setViewPort}
           setPopUpinfo={setPopUpinfo}
@@ -144,9 +145,10 @@ function Root(props: {}): JSX.Element {
 }
 
 document.body.style.margin = '0';
-render(
+
+wrapAndRenderLegacyCode(
   <CookiesProvider>
     <Root />
   </CookiesProvider>,
-  document.getElementById('root')
+  'root',
 );

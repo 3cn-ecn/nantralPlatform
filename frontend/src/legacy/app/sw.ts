@@ -3,6 +3,11 @@
 export type {};
 declare const self: ServiceWorkerGlobalScope;
 
+interface Message extends NotificationOptions {
+  title: string;
+  hidden?: boolean;
+}
+
 /**
  * =============================
  * MANAGE NOTIFICATION RECEPTION
@@ -13,17 +18,16 @@ let unreadCount = 0;
 
 // listen to new notifications
 self.addEventListener('push', (event: PushEvent) => {
-  console.log('Received a new message! ');
-  console.log(event.data);
-  let message: any;
+  console.log('Received a new message!');
+  let message: Message;
   try {
     // Push is a JSON
-    message = event.data.json();
+    message = event.data?.json();
   } catch (err) {
     // Push is a simple text
     message = {
-      title: event.data.text(),
-    } as any;
+      title: event.data?.text() || '',
+    };
   }
 
   // send a notification, except if we explicitly say it must not be sent
@@ -33,7 +37,7 @@ self.addEventListener('push', (event: PushEvent) => {
   }
 
   // set a badge
-  const nav = navigator as any;
+  const nav = navigator;
   unreadCount += 1;
   if (nav.setAppBadge) {
     nav.setAppBadge(unreadCount).catch(() => {
@@ -60,5 +64,5 @@ self.addEventListener(
     // close the notification
     event.notification.close();
   },
-  false
+  false,
 );

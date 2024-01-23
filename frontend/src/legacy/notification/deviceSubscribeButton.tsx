@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
-import ReactDOM, { render } from 'react-dom';
+import { useState } from 'react';
 import { Button } from 'react-bootstrap';
+
+import { useTranslation } from '#shared/i18n/useTranslation';
+
+import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 
 /**
  * Load the Subscribe Button and update it when clicked
  * @param props Properties of the XML element
  * @returns HTML Button element
  */
-function DeviceSubscribeButton(props): JSX.Element {
+function DeviceSubscribeButton() {
   const [notificationState, setNotificationState] = useState('unsupported');
+  const { t } = useTranslation();
 
-  async function askForNotifications(event) {
+  async function askForNotifications() {
     Notification.requestPermission().then(() => {
       setNotificationState(Notification.permission);
     });
@@ -21,39 +25,24 @@ function DeviceSubscribeButton(props): JSX.Element {
   }
 
   if (notificationState === 'granted') {
-    return (
-      <p>
-        Les notifications sont activées&nbsp;!&nbsp;🥳 Abonnez-vous à des pages
-        pour recevoir leurs notifications&nbsp;!
-      </p>
-    );
+    return <p>{t('notification.settingsPage.enabled')}</p>;
   } else if (notificationState === 'default') {
     return (
       <p>
-        <span>Les notifications sont désactivées&nbsp;😢&nbsp; </span>
+        <span>{t('notification.settingsPage.disabled')}</span>
         <Button size="sm" onClick={askForNotifications}>
-          Activer&nbsp;!
+          {t('notification.settingsPage.disabledButtonLabel')}
         </Button>
       </p>
     );
   } else if (notificationState === 'denied') {
-    return (
-      <p>
-        Vous avez bloqué les notifications...&nbsp;😢 Activez-les dans vos
-        paramètres&nbsp;
-      </p>
-    );
+    return <p>{t('notification.settingsPage.blocked')}</p>;
   } else {
-    return (
-      <p>
-        Votre appareil/navigateur n'est pas compatible avec les notifications
-        pour Nantral Platform...&nbsp;😢
-      </p>
-    );
+    return <p>{t('notification.settingsPage.unavailable')}</p>;
   }
 }
 
-render(
+wrapAndRenderLegacyCode(
   <DeviceSubscribeButton />,
-  document.getElementById('subscribe_to_notifications')
+  'subscribe_to_notifications',
 );

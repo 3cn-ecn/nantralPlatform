@@ -1,6 +1,9 @@
 import { Grid } from '@mui/material';
 
-import { Group, Membership, Student } from '../interfaces';
+import { Group } from '#modules/group/types/group.types';
+import { Student } from '#modules/student/student.types';
+
+import { Membership } from '../interfaces';
 import CardMembership from './CardMembership';
 
 /**
@@ -16,8 +19,8 @@ function ListMembershipsGrid(props: {
   const { members, group, student, updateMembership, deleteMembership } = props;
 
   return (
-    <Grid container spacing={2}>
-      {members.map((item, index) => (
+    <Grid container spacing={1}>
+      {members.map((item) => (
         <CardMembership
           item={item}
           group={group}

@@ -1,0 +1,9 @@
+// revert changes from bootstrap-django styles
+
+.react-legacy-container,
+.MuiPopover-root {
+  a:hover {
+    color: unset;
+    text-decoration: unset;
+  }
+}

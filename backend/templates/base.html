@@ -11,7 +11,7 @@
   <meta name="vapid-key" content="{{ vapid_key }}">
   <!-- css -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=7">
   <!-- js --> 
   {% vite_hmr_client %}
   {% vite_react_refresh %}
@@ -48,38 +48,12 @@
 <body>
   
   <nav class="navbar navbar-expand sticky-top navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
-    <div class="container">
+    <div class="container-fluid px-4">
       <ul class="menuSet navbar-nav pe-2">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown" >
+        <li id="appMenu" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown" >
             <img src='{% static "/img/icons/scalable/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">
           </a>
-          <ul class="dropdown-menu" onclick="event.stopPropagation()">
-            <li><a class="dropdown-item" href="/event/">
-              <img src='{% static "/img/icons/scalable/event.svg" %}' class="align-middle" loading="lazy" alt="">
-              Posts et Évènements
-            </a></li>
-            <li><a class="dropdown-item" href="{% url 'group:index' %}">
-              <img src='{% static "/img/icons/scalable/club.svg" %}' class="align-middle" loading="lazy" alt="">
-              Groupes
-            </a></li>
-            <li><a class="dropdown-item" href="{% url 'roommates:index' %}">
-              <img src='{% static "/img/icons/scalable/roommates.svg" %}' class="align-middle" loading="lazy" alt="">
-              Carte des Colocs
-            </a></li>
-            <li><a class="dropdown-item" href="{% url 'family:home' %}">
-              <img src='{% static "/img/icons/scalable/family.svg" %}' class="align-middle" loading="lazy" alt="">
-              Parrainage
-            </a></li>
-            <li><a class="dropdown-item" href="{% url 'student:list' %}">
-              <img src='{% static "/img/icons/scalable/list.svg" %}' class="align-middle" loading="lazy" alt="">
-              Annuaire Étudiant
-            </a></li>
-            <li><a class="dropdown-item" href="/signature/">
-              <img src='{% static "/img/icons/scalable/sign.svg" %}' class="align-middle" loading="lazy" alt="">
-              Signature ECN
-            </a></li>
-          </ul>
         </li>
       </ul>
       <div id="fil-dariane" class="navbar-brand">
@@ -95,74 +69,16 @@
           <span></span><span></span>
         {% endfor %}
       </div>
-      <ul class="menuSet navbar-nav ms-auto">
-        <li id="notificationPanel" class="nav-item">
-          <a id="notification-icon" class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown">
+      <ul class="menuSet navbar-nav ms-auto align-items-center">
+        <li id="notificationPanel" class="nav-item dropdown">
+          <a class="nav-link disabled" href="#" role="button">
             <img src='{% static "/img/icons/scalable/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
-            <div id="notification-badge"></div>
           </a>
-          <div class="dropdown-menu dropdown-menu-end overflow-auto"
-            style="width: 18rem; max-width: 90vw; right: -42px; max-height: 70vh;"
-            onclick="event.stopPropagation();"
-          >
-            <ul id="notification-panel"></ul>
-          </div>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggler" href="#" role="button" data-bs-toggle="dropdown">
+        <li id="userMenu" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
             <img src='{% static "/img/icons/scalable/people.svg" %}' class="d-inline-block align-top" alt="compte personnel" loading="lazy">
           </a>
-          <ul class="dropdown-menu dropdown-menu-end" style="right: 0;" onclick="event.stopPropagation()" aria-labelledby="triggerId">
-            {% if request.user.is_authenticated %}
-              {% if request.user.student.pk %}
-                <li>
-                  <a class="dropdown-item" href="/student/{{ request.user.student.pk }}">
-                    <i class="fas fa-user" aria-hidden="true"></i>&nbsp; Mon Profil
-                  </a>
-                </li>
-                {% if request.user.is_staff %}
-                  <li>
-                    <a class="dropdown-item" href="{% url 'admin:index' %}" target="_blank" rel="noopener">
-                      <i class="fas fa-shield-alt" aria-hidden="true"></i>&nbsp; Interface Admin
-                    </a>
-                  </li>
-                {% endif %}
-                <li>
-                  <a class="dropdown-item" href="{% url 'account:logout' %}" {# onclick="caches.delete('main-pages');" #}>
-                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>&nbsp; Me déconnecter
-                  </a>
-                </li>
-              {% else %}
-                <li>
-                  <a class="dropdown-item disabled" href="">
-                    Oooups ! Votre compte est corrompu. Contactez un admin !
-                  </a>
-                </li>
-              {% endif  %}
-              <li><hr class="dropdown-divider"></li>
-              <li>
-                <a class="dropdown-item" href="{% url 'home:suggestions' %}">
-                  <i class="fa fa-exclamation-circle" aria-hidden="true"></i>&nbsp; Suggestion / Bug
-                </a>
-              </li>
-            {% else %}
-              <li>
-                <a class="dropdown-item" href="{% url 'account:login' %}">
-                  <i class="fas fa-sign-in-alt" aria-hidden="true"></i>&nbsp; Connexion
-                </a>
-              </li>
-            {% endif %}
-            <li>
-              <a class="dropdown-item" href="https://docs.nantral-platform.fr" target="_blank" rel="noopener">
-                <i class="fas fa-question-circle" aria-hidden="true"></i>&nbsp; Documentation
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/legal-notice/">
-                <i class="fas fa-gavel" aria-hidden="true"></i>&nbsp; Mentions Légales
-              </a>
-            </li>
-          </ul>
         </li>
       </ul>
     </div>
@@ -191,7 +107,7 @@
   <footer id="footer-install-app"></footer>
   <footer id="footer-offline"></footer>
 
-  {% vite_asset 'src/legacy/app/app.ts' %}
+  {% vite_asset 'src/legacy/app/app.tsx' %}
 
   {% block script %}
   {% endblock %}

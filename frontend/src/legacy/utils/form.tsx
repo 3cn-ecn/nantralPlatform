@@ -16,11 +16,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import dayjs from 'dayjs';
-import 'dayjs/locale/fr';
+import { fr } from 'date-fns/locale';
 import { noop } from 'lodash-es';
 
 import axios from './axios';
@@ -59,7 +58,7 @@ export type FieldType =
       maxLength?: number;
       helpText?: string;
       multiline?: boolean;
-      item?: Array<string>;
+      item?: string[];
     }
   | {
       kind: 'group';
@@ -83,7 +82,10 @@ export type FieldType =
     };
 
 /**
- * A component to create a group of fields for a form
+ * A component to create a group of fields for a form.
+ *
+ * You **SHOULD NOT** use this component to make forms, it was a mistake done by
+ * me when I started to learn React...
  *
  * @param props.fields - the list of the structure of each field
  * @param props.values - an object { key: value } where keys are the 'name' key in the field structure
@@ -129,7 +131,7 @@ function FormGroup(props: {
                 sx={{ display: 'flex', gap: 1.5 }}
                 key={field.fields.reduce(
                   (prev, curr) => `${prev}+${curr.name}`,
-                  ''
+                  '',
                 )}
               >
                 <FormGroup
@@ -227,22 +229,22 @@ function FormGroup(props: {
           case 'date': // date as string
             return (
               <LocalizationProvider
-                adapterLocale="fr"
-                dateAdapter={AdapterDayjs}
+                adapterLocale={fr}
+                dateAdapter={AdapterDateFns}
                 key={field.name}
               >
                 <DatePicker
                   label={field.label}
-                  value={values[field.name] && dayjs(values[field.name])}
+                  value={values[field.name] && new Date(values[field.name])}
                   onChange={(val) => {
                     if (val && val.toString() !== 'Invalid Date') {
                       handleChange(
                         field.name,
                         new Intl.DateTimeFormat('en-GB')
-                          .format(val.toDate())
+                          .format(val)
                           .split('/')
                           .reverse()
-                          .join('-')
+                          .join('-'),
                       );
                     } else {
                       handleChange(field.name, val);
@@ -345,7 +347,7 @@ function AutocompleteField<T>(props: {
   function updateOptions(
     event: React.SyntheticEvent,
     value: string,
-    reason: AutocompleteInputChangeReason
+    reason: AutocompleteInputChangeReason,
   ): void {
     if (reason !== 'input' || value.length < 3) return;
     axios

@@ -50,15 +50,15 @@ function getTheme(mode: PaletteMode, language: string) {
         },
         h1: {
           fontWeight: 800,
-          fontSize: '3.5rem',
+          fontSize: '3rem',
         },
         h2: {
-          fontWeight: 600,
-          fontSize: '3rem',
+          fontWeight: 700,
+          fontSize: '2.125rem',
         },
         h3: {
           fontWeight: 600,
-          fontSize: '2.125rem',
+          fontSize: '1.75rem',
         },
         h4: {
           fontWeight: 500,

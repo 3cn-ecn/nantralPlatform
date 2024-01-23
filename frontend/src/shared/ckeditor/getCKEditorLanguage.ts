@@ -13,7 +13,7 @@
  */
 import { i18n } from 'i18next';
 
-export const getCKEditorLanguage = (i18n: i18n) => {
+export const getCKEditorLanguage = (i18n: i18n): string => {
   const language = i18n.language;
   const languageMap = {
     'en-US': 'en',

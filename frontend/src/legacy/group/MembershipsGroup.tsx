@@ -1,18 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
-import { render } from 'react-dom';
 
 import {
-  Edit as EditIcon,
   NavigateBefore as NavigateBeforeIcon,
   NavigateNext as NavigateNextIcon,
+  OpenInNew as OpenInNewIcon,
 } from '@mui/icons-material';
-import { Alert, Box, Button, IconButton, Snackbar } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
+
+import { useGroupDetailsQuery } from '#modules/group/hooks/useGroupDetails.query';
+import { Student } from '#modules/student/student.types';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useToast } from '#shared/context/Toast.context';
 
 import axios from '../utils/axios';
+import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 import ListMembershipsGrid from './components/ListMembershipsGrid';
 import ListMembershipsTable from './components/ListMembershipsTable';
 import ModalEditMember from './components/ModalEditMember';
-import { Group, Membership, Page, Student } from './interfaces';
+import { Membership, Page } from './interfaces';
 
 // passed through django template
 declare const groupSlug: string;
@@ -30,18 +36,15 @@ interface QueryParams {
  * Main table component for editing members in the admin page of groups.
  */
 function MembershipsGroup(): JSX.Element {
+  // hooks
+  const showToast = useToast();
+  const { group } = useGroupDetailsQuery(groupSlug);
   // data
-  const [group, setGroup] = useState<Group | null>(null);
   const [student, setStudent] = useState<Student | null>(null);
   const [members, setMembers] = useState<Membership[]>([]);
   const [loadState, setLoadState] = useState<'load' | 'success' | 'fail'>(
-    'load'
+    'load',
   );
-  // status of modals
-  const [message, setMessage] = useState<{ type: any; text: string }>({
-    type: null,
-    text: '',
-  });
   const [openAddModal, setOpenAddModal] = useState(false);
   // urls and filters passed as query parameters
   const [prevUrl, setPrevUrl] = useState('');
@@ -51,11 +54,14 @@ function MembershipsGroup(): JSX.Element {
     from: new Date().toISOString(),
   });
 
-  /** Get the list of members */
+  /**
+   * Get the list of members
+   * TODO: replace with a useQuery hook
+   */
   const getMemberships = useCallback(
     async function getMemberships(
       url = '/api/group/membership/',
-      queryParams: Partial<QueryParams> = filters
+      queryParams: Partial<QueryParams> = filters,
     ): Promise<void> {
       return axios
         .get<Page<Membership>>(url, { params: queryParams })
@@ -65,13 +71,13 @@ function MembershipsGroup(): JSX.Element {
             data.results.map((item) => {
               item.dragId = `item-${item.id}`; // add a dragId for the drag-and-drop
               return item;
-            })
+            }),
           );
           setPrevUrl(data.previous);
           setNextUrl(data.next);
         });
     },
-    [filters]
+    [filters],
   );
 
   useEffect(() => {
@@ -79,10 +85,6 @@ function MembershipsGroup(): JSX.Element {
     Promise.all([
       // fetch memberships objects
       getMemberships(),
-      // fetch group object
-      axios
-        .get<Group>(`/api/group/group/${groupSlug}`)
-        .then((res) => setGroup(res.data)),
       // fetch student objet
       axios
         .get<Student>('/api/student/student/me/')
@@ -94,6 +96,7 @@ function MembershipsGroup(): JSX.Element {
 
   /**
    * Reorder memberships
+   * TODO: replace with a useMutation hook
    *
    * @param reorderedMembers - the new ordered list
    * @param member - the member who has moved
@@ -102,7 +105,7 @@ function MembershipsGroup(): JSX.Element {
   async function reorderMemberships(
     reorderedMembers: Membership[],
     member: Membership,
-    lower?: Membership
+    lower?: Membership,
   ) {
     setMembers(reorderedMembers);
     axios
@@ -112,23 +115,26 @@ function MembershipsGroup(): JSX.Element {
           member: member.id,
           lower: lower?.id,
         },
-        { params: filters }
+        { params: filters },
       )
       .then(() =>
-        setMessage({
-          type: 'success',
-          text: 'Réagencement sauvegardé !',
-        })
+        showToast({
+          variant: 'success',
+          message: 'Réagencement sauvegardé !',
+        }),
       )
       .catch(() =>
-        setMessage({
-          type: 'error',
-          text: "Erreur de réseau : le réagencement n'est pas sauvegardé...",
-        })
+        showToast({
+          variant: 'error',
+          message: "Erreur de réseau : le réagencement n'est pas sauvegardé...",
+        }),
       );
   }
 
-  /** A function to update a membership object. */
+  /**
+   * A function to update a membership object.
+   * TODO: replace with a useMutation hook
+   */
   async function updateMembership(member: Membership, reload = false) {
     return axios
       .put(`/api/group/membership/${member.id}/`, member)
@@ -141,35 +147,24 @@ function MembershipsGroup(): JSX.Element {
       });
   }
 
-  /** A function to delete a membership object. */
-  async function deleteMembership(
-    member: Membership,
-    student: Student,
-    group: Group
-  ) {
+  /**
+   * A function to delete a membership object.
+   * TODO: replace with a useMutation hook
+   */
+  async function deleteMembership(member: Membership) {
     return axios
       .delete(`/api/group/membership/${member.id}/`)
-      .then(() => getMemberships())
-      .then(() => {
-        member.student.id === student.id &&
-          setGroup({ ...group, is_member: false });
-      });
+      .then(() => getMemberships());
   }
 
-  /** A function to create a new membership object. */
-  async function createMembership(
-    member: Membership,
-    student: Student,
-    group: Group
-  ) {
+  /**
+   * A function to create a new membership object.
+   * TODO: replace with a useMutation hook
+   */
+  async function createMembership(member: Membership) {
     return axios
       .post('/api/group/membership/', member)
-      .then(() => getMemberships())
-      .then(
-        () =>
-          (member.student as any) === student.id &&
-          setGroup({ ...group, is_member: true })
-      );
+      .then(() => getMemberships());
   }
 
   if (loadState === 'load' || !group || !student)
@@ -179,16 +174,27 @@ function MembershipsGroup(): JSX.Element {
 
   return (
     <>
-      <h2>Membres</h2>
+      <FlexRow gap={2} mb={1} alignItems="center">
+        <Typography variant="h2">Membres</Typography>
+        {group.isAdmin && displayType === 'grid' && (
+          <Button
+            variant="outlined"
+            color="secondary"
+            href="edit/members"
+            endIcon={<OpenInNewIcon />}
+            size="small"
+          >
+            Modifier
+          </Button>
+        )}
+      </FlexRow>
       {displayType === 'grid' ? (
         <ListMembershipsGrid
           members={members}
           group={group}
           student={student}
           updateMembership={updateMembership}
-          deleteMembership={(member: Membership) =>
-            deleteMembership(member, student, group)
-          }
+          deleteMembership={(member: Membership) => deleteMembership(member)}
         />
       ) : (
         <ListMembershipsTable
@@ -197,41 +203,29 @@ function MembershipsGroup(): JSX.Element {
           student={student}
           reorderMemberships={reorderMemberships}
           updateMembership={updateMembership}
-          deleteMembership={(member: Membership) =>
-            deleteMembership(member, student, group)
-          }
+          deleteMembership={(member: Membership) => deleteMembership(member)}
         />
       )}
-      <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
-        <Button
-          variant="contained"
-          hidden={!group.is_admin || displayType !== 'grid'}
-          href="edit/members"
-          endIcon={<EditIcon />}
-        >
-          Modifier
-        </Button>
-        {(!group.is_member && !group.lock_memberships) || group.is_admin ? (
+      <FlexRow flexWrap="wrap" mt={1} gap={1}>
+        {((!group.isMember && !group.lockMemberships) || group.isAdmin) && (
           <>
             <Button variant="contained" onClick={() => setOpenAddModal(true)}>
               Ajouter
             </Button>
             <ModalEditMember
               open={openAddModal}
-              saveMembership={(member: Membership) =>
-                createMembership(member, student, group)
-              }
+              saveMembership={(member: Membership) => createMembership(member)}
               closeModal={() => setOpenAddModal(false)}
               group={group}
               student={student}
             />
           </>
-        ) : (
-          <></>
         )}
         {filters.from ? (
           <Button
             variant="text"
+            size="small"
+            color="secondary"
             onClick={() => {
               filters.from = undefined;
               getMemberships();
@@ -242,6 +236,8 @@ function MembershipsGroup(): JSX.Element {
         ) : (
           <Button
             variant="text"
+            size="small"
+            color="secondary"
             onClick={() => {
               filters.from = new Date().toISOString();
               getMemberships();
@@ -250,8 +246,8 @@ function MembershipsGroup(): JSX.Element {
             Masquer les anciens membres
           </Button>
         )}
+        <Spacer flex={1} />
         <IconButton
-          sx={{ ml: 'auto' }}
           disabled={!prevUrl}
           onClick={() => getMemberships(prevUrl, {})}
         >
@@ -263,24 +259,9 @@ function MembershipsGroup(): JSX.Element {
         >
           <NavigateNextIcon />
         </IconButton>
-      </Box>
-      <Snackbar
-        autoHideDuration={4000}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        onClose={() => setMessage({ type: 'success', text: '' })}
-        open={!!message.text}
-      >
-        <Alert
-          severity={message.type}
-          sx={{ width: '100%' }}
-          elevation={6}
-          variant="filled"
-        >
-          {message.text}
-        </Alert>
-      </Snackbar>
+      </FlexRow>
     </>
   );
 }
 
-render(<MembershipsGroup />, document.getElementById('root-members'));
+wrapAndRenderLegacyCode(<MembershipsGroup />, 'root-members');

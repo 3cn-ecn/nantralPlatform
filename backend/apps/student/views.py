@@ -17,6 +17,7 @@ class StudentList(LoginRequiredMixin, ListView):
     model = Student
     template_name = "student/list.html"
     ordering = ["user__last_name", "user__first_name"]
+    paginate_by = 50
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
