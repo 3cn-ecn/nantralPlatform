@@ -6,9 +6,9 @@ import { Essentials } from '@ckeditor/ckeditor5-essentials/';
 import { Heading } from '@ckeditor/ckeditor5-heading/';
 import { HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line/';
 import { Indent } from '@ckeditor/ckeditor5-indent/';
-import { AutoLink, Link } from '@ckeditor/ckeditor5-link/';
+import { AutoLink, Link, LinkConfig } from '@ckeditor/ckeditor5-link/';
 import { List } from '@ckeditor/ckeditor5-list/';
-import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed/';
+import { MediaEmbed, MediaEmbedConfig } from '@ckeditor/ckeditor5-media-embed/';
 import { Mention } from '@ckeditor/ckeditor5-mention/';
 import { Paragraph } from '@ckeditor/ckeditor5-paragraph/';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing/';
@@ -68,3 +68,11 @@ CustomEditor.defaultConfig = {
     previewsInData: true,
   },
 };
+
+// add plugins to type declaration for the editor
+declare module '@ckeditor/ckeditor5-core/src/editor/editorconfig' {
+  interface EditorConfig {
+    link: LinkConfig;
+    mediaEmbed: MediaEmbedConfig;
+  }
+}
