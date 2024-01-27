@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Icon, IconButton } from '@mui/material';
 
-import { AppMenuPanel } from './AppMenuPanel';
+import { AppMenuPanel } from './components/AppMenuPanel';
 
 export function AppMenu() {
   const [menuOpen, setMenuOpen] = useState(false);
