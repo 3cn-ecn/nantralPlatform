@@ -21,9 +21,9 @@
       "#modules/*": ["modules/*"],
       "#pages/*": ["pages/*"],
       "#shared/*": ["shared/*"],
-      "#types/*": ["types/*"]
-    }
+      "#types/*": ["types/*"],
+    },
   },
   "include": ["src", "custom.d.ts"],
-  "exclude": ["src/legacy"]
+  "exclude": ["src/legacy"],
 }
