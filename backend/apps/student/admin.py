@@ -16,6 +16,11 @@ class StudentInline(admin.StackedInline):
 
 class StudentAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "promo")
+    search_fields = (
+        "user__first_name",
+        "user__last_name",
+        "user__email",
+    )
 
     def get_urls(self) -> List[URLPattern]:
         urls = super().get_urls()

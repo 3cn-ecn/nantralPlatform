@@ -54,6 +54,7 @@ class RoommatesAdmin(admin.ModelAdmin):
     list_filter = [OccupiedFilter, "colocathlon_agree"]
     inlines = [MemberRoommatesInline]
     actions = ["reset_colocs"]
+    autocomplete_fields = ["colocathlon_participants"]
 
     @admin.action(description="Reset les colocs sélectionnées")
     def reset_colocs(self, request, queryset, **kwargs):
