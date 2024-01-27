@@ -38,6 +38,10 @@ export const wrapAndRenderLegacyCode = (
   element: ReactNode,
   elementId: string,
 ): void => {
+  const rootElement = document.getElementById(elementId);
+  if (rootElement === null) return;
+  const root = ReactDOM.createRoot(rootElement);
+
   // legacy pages only support light theme and french language
   const theme = getTheme('light', 'fr-FR');
   // always reload document because we're outside of React Router
@@ -49,10 +53,7 @@ export const wrapAndRenderLegacyCode = (
     ...NavLink.defaultProps,
     reloadDocument: true,
   };
-  // attach the React root into the HTML page
-  const root = ReactDOM.createRoot(
-    document.getElementById(elementId) as HTMLElement,
-  );
+
   // fill in the React root with our wrapped element
   root.render(
     <React.StrictMode>

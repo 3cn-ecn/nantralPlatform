@@ -12,14 +12,11 @@ import {
   ArrowBack as ArrowBackIcon,
   DarkMode as DarkModeIcon,
   SettingsBrightness as DeviceModeIcon,
-  FeedbackOutlined as FeedbackIcon,
   Gavel as LegalIcon,
   LightMode as LightModeIcon,
-  LogoutRounded as LogoutIcon,
+  Login as LoginIcon,
   MenuBook as MenuBookIcon,
   NavigateNext as NavigateNextIcon,
-  Person as PersonIcon,
-  Security as SecurityIcon,
   Translate as TranslateIcon,
 } from '@mui/icons-material';
 import {
@@ -38,14 +35,12 @@ import {
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
-import { Avatar } from '#shared/components/Avatar/Avatar';
 import { useChangeThemeMode } from '#shared/context/CustomTheme.context';
 import { languages } from '#shared/i18n/config';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { getNativeLanguageName } from '#shared/utils/getLanguageName';
 
-export function UserMenu() {
+export function UserMenuUnauthenticated() {
   const { t, i18n } = useTranslation();
   const { themeMode, changeThemeMode } = useChangeThemeMode();
   const queryClient = useQueryClient();
@@ -53,8 +48,6 @@ export function UserMenu() {
   const [menuOpen, setMenuOpen] = useState<null | 'main' | 'theme' | 'lang'>(
     null,
   );
-
-  const currentUser = useCurrentUserData();
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -69,17 +62,12 @@ export function UserMenu() {
         aria-label={t('userMenu.button.label')}
         aria-haspopup="true"
         onClick={handleClick}
-        sx={currentUser.picture ? { p: 0.5 } : {}}
       >
-        {currentUser.picture ? (
-          <Avatar alt={currentUser.name} src={currentUser.picture} />
-        ) : (
-          <Icon
-            component="img"
-            src="/static/img/icons/cropped/people.svg"
-            alt="Ouvrir le Menu Profil"
-          />
-        )}
+        <Icon
+          component="img"
+          src="/static/img/icons/cropped/people.svg"
+          alt="Ouvrir le Menu Profil"
+        />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -91,18 +79,10 @@ export function UserMenu() {
         slotProps={{ paper: { sx: { minWidth: 200 } } }}
       >
         <CustomMenuItem
-          label={t('userMenu.menu.profile')}
-          icon={<PersonIcon />}
+          label={t('userMenu.menu.signIn')}
+          icon={<LoginIcon />}
           component={Link}
-          to={`/student/${currentUser.id}`}
-          reloadDocument
-          onClick={() => setMenuOpen(null)}
-        />
-        <CustomMenuItem
-          label={t('userMenu.menu.signOut')}
-          icon={<LogoutIcon />}
-          component={Link}
-          to="/account/logout/"
+          to="/account/login/"
           reloadDocument
           onClick={() => setMenuOpen(null)}
         />
@@ -120,29 +100,11 @@ export function UserMenu() {
           onClick={() => setMenuOpen('theme')}
         />
         <Divider />
-        {currentUser.staff && (
-          <CustomMenuItem
-            label={t('userMenu.menu.adminInterface')}
-            icon={<SecurityIcon />}
-            component={Link}
-            to="/admin"
-            reloadDocument
-            onClick={() => setMenuOpen(null)}
-          />
-        )}
         <CustomMenuItem
           label={t('userMenu.menu.documentation')}
           icon={<MenuBookIcon />}
           component={Link}
           to="https://docs.nantral-platform.fr/"
-          reloadDocument
-          onClick={() => setMenuOpen(null)}
-        />
-        <CustomMenuItem
-          label={t('userMenu.menu.report')}
-          icon={<FeedbackIcon />}
-          component={Link}
-          to="/suggestions"
           reloadDocument
           onClick={() => setMenuOpen(null)}
         />
