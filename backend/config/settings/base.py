@@ -200,7 +200,10 @@ STAGING = env("STAGING")
 
 # Rest API settings
 REST_FRAMEWORK = {
-    "DEFAULT_PAGINATION_CLASS": "apps.utils.api_pagination.CustomPagination",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "apps.utils.rest_api.authentication.SessionAuthentication"
+    ],
+    "DEFAULT_PAGINATION_CLASS": "apps.utils.rest_api.pagination.CustomPagination",  # noqa: E501
     "PAGE_SIZE": 20,
     "DEFAULT_THROTTLE_RATES": {"anon": "50/day", "user": "1000/day"},
 }
@@ -215,7 +218,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # CKeditor config
-CKEDITOR_5_CONFIGS = {
+CKEDITOR_5_CONFIGS = {  # noqa: WPS114
     "default": {
         "toolbar": [
             "heading",
