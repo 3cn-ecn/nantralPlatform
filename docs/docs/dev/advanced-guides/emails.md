@@ -90,8 +90,8 @@ type Props = {
   validationLink?: string;
 };
 const ActivateYourAccountEmail = ({
-  firstName = "{{first_name|title}}",
-  validationLink = "{{validation_link}}",
+  firstName = '{{first_name|title}}',
+  validationLink = '{{validation_link}}',
 }: Props) => (
   <Html>
     <Text>Bonjour {firstName} !</Text>

@@ -18,6 +18,7 @@ import TabItem from '@theme/TabItem';
 </iframe>
 
 ---
+
 We recommend you to use the **LaTest Stable** version of **Node** (also called the "LTS" version). Currently, it is the
 16.15.0 version.
 
@@ -31,6 +32,7 @@ We recommend you to use the **LaTest Stable** version of **Node** (also called t
 <TabItem value="lin" label="Linux">
 
 Open a terminal and run
+
 ```bash
 sudo apt update && sudo apt install nodejs npm -y
 ```
@@ -43,11 +45,13 @@ you can check the `nvm` package which allowed you to have multiple versions of n
 </TabItem>
 </Tabs>
 
-Check that the installtion was successful: 
-- Open a terminal and run `node -v`, and then `npm -v`. 
-- You should get a version number for each command. If you get an error such as `command not found`, the 
-    installation did not work. You can also have to restart your computer to make it work.
+Check that the installtion was successful:
+
+- Open a terminal and run `node -v`, and then `npm -v`.
+- You should get a version number for each command. If you get an error such as `command not found`, the
+  installation did not work. You can also have to restart your computer to make it work.
 
 As you saw, node.js comes with two different commands:
-* `node` is the programming language itself, which allow us to run scripts in javascript
-* `npm` is the **n**ode **p**ackage **m**anager, which we will use to install dependencies
+
+- `node` is the programming language itself, which allow us to run scripts in javascript
+- `npm` is the **n**ode **p**ackage **m**anager, which we will use to install dependencies

@@ -1,6 +1,6 @@
 ---
 title: Debugging in production
-description: "How to debug your code in production"
+description: 'How to debug your code in production'
 ---
 
 # Debugging in production
@@ -19,7 +19,7 @@ The deployment pipeline is split into two parts:
 We will see how to debug both processes.
 
 :::info
-In the following section, all `docker-compose` commands **in production** are replaced with the 
+In the following section, all `docker-compose` commands **in production** are replaced with the
 alias `dcf` which stands for `docker-compose -f docker-compose.yml -f docker-compose.prod.yml`
 :::
 

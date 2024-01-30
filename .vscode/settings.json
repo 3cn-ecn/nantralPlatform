@@ -45,6 +45,9 @@
   // js extension
   "eslint.workingDirectories": ["./frontend", "./email-templates-generator"],
   // docs formatting
+  "[mdx][markdown]": {
+    "editor.tabSize": 3
+  },
   "mdx.server.enable": false,
   // i18n-ally (react translations)
   "i18n-ally.localesPaths": "frontend/src/shared/i18n",
