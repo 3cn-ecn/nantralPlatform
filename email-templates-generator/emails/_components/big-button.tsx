@@ -8,7 +8,7 @@ type Props = PropsWithChildren & {
 
 const BigButton = ({ href, children }: Props) => (
   <Container style={{ textAlign: 'center' }}>
-    <Button href={href} rel="noopener" style={button} pX={50} pY={10}>
+    <Button href={href} rel="noopener" style={button}>
       {children}
     </Button>
   </Container>
@@ -21,4 +21,5 @@ const button: CSSProperties = {
   borderRadius: '50px',
   color: '#fff',
   fontSize: '16px',
+  padding: '10px 50px',
 };

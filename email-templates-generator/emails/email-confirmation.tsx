@@ -7,11 +7,11 @@ import {
   Text,
 } from '@react-email/components';
 
-import BigButton from './shared/big-button';
-import GenericTemplate from './shared/generic-template';
-import HeadWithFont from './shared/head-with-font';
-import LanguageFlag from './shared/language-flag';
-import Link3CN from './shared/link-3cn';
+import BigButton from './_components/big-button';
+import GenericTemplate from './_components/generic-template';
+import HeadWithFont from './_components/head-with-font';
+import LanguageFlag from './_components/language-flag';
+import Link3CN from './_components/link-3cn';
 
 type Props = {
   firstName?: string;
