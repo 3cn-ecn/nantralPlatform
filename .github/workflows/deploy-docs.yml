@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Clone the repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # History of commits needed for lastUpdate author/time
 
       - name: Setup Node
         uses: actions/setup-node@v3
