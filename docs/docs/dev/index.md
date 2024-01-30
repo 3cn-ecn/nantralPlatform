@@ -10,4 +10,4 @@ Try these few tutorials to begin with 😉
 
 import DocCardList from '@theme/DocCardList';
 
-<DocCardList /> 
+<DocCardList />

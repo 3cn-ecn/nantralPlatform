@@ -11,13 +11,20 @@ This page is about backups of the database on the server. It requires you to hav
 
 - Backups of the database are made every day at 05:00 AM and stored on our S3 bucket.
 - They are stored for 30 days. (There is currently nothing to delete them automatically).
-- To make a backup manually: `cd /home/ubuntu/nantralPlatform/deployment/scripts && source env/bin/activate && python3 db_backup.py && deactivate`.
+- To make a backup manually:
+
+  ```bash
+  cd /home/ubuntu/nantralPlatform/deployment/scripts
+  source env/bin/activate
+  python3 db_backup.py
+  deactivate
+  ```
 
 - A simple restore script is provided. You need to specify some environment variables first:
-  ```
-    TARGET_DB: the db name to restore
-    TARGET_ARCHIVE: the full path of the archive to restore
-  ```
+
+  - `TARGET_DB`: the db name to restore
+  - `TARGET_ARCHIVE`: the full path of the archive to restore
+
   The restore script will delete the TARGET_DB, so make sure you know what you are doing. Then it will create a new one and restore the content from TARGET_ARCHIVE
   If you specify these environment variable using docker-compose.yml file, then you can execute a restore process like this:
   `docker-compose exec dbbackup ./restore.sh`

@@ -1,5 +1,5 @@
 ---
-description: "A comprehensive description of how mails are handled on the server"
+description: 'A comprehensive description of how mails are handled on the server'
 ---
 
 # Email server

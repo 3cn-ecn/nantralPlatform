@@ -1,6 +1,6 @@
 ---
 title: Colocathlon
-description: "Présentation du fonctionnement de Nantral Platform pour le colocathlon"
+description: 'Présentation du fonctionnement de Nantral Platform pour le colocathlon'
 sidebar_position: 3
 ---
 

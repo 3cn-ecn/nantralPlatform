@@ -1,11 +1,10 @@
-import clsx from "clsx";
-import React from "react";
-import styles from "./styles.module.css";
+import clsx from 'clsx';
+import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: "News & Events",
-    Svg: require("@site/static/img/home/post.svg").default,
+    title: 'News & Events',
+    Svg: require('@site/static/img/home/post.svg').default,
     description: (
       <>
         Create and share your news and events with the student community of
@@ -14,8 +13,8 @@ const FeatureList = [
     ),
   },
   {
-    title: "Groups",
-    Svg: require("@site/static/img/home/club.svg").default,
+    title: 'Groups',
+    Svg: require('@site/static/img/home/club.svg').default,
     description: (
       <>
         Create a group for your club, association, roommate or more, and
@@ -24,8 +23,8 @@ const FeatureList = [
     ),
   },
   {
-    title: "Roommates Map",
-    Svg: require("@site/static/img/home/roommates.svg").default,
+    title: 'Roommates Map',
+    Svg: require('@site/static/img/home/roommates.svg').default,
     description: (
       <>
         Find all the roommates of the school on this map, and discover your
@@ -37,7 +36,7 @@ const FeatureList = [
 
 function Feature({ Svg, title, description }) {
   return (
-    <div className={clsx("col col--4")}>
+    <div className={clsx('col col--4')}>
       <div className="text--center">
         <Svg className={styles.featureSvg} role="img" />
       </div>

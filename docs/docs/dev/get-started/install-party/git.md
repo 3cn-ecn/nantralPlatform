@@ -24,13 +24,14 @@ import TabItem from '@theme/TabItem';
 
 - Download `git` from [the official website](https://git-scm.com/download).
 - Install `git` by clicking on the executable you've just downloaded.
-- During the installation, just click `OK` for all the steps as we don't need to use the advanced options, 
-    unless you know what you are doing.
+- During the installation, just click `OK` for all the steps as we don't need to use the advanced options,
+  unless you know what you are doing.
 
 </TabItem>
 <TabItem value="lin" label="Linux">
 
 Open a terminal and run:
+
 ```bash
 sudo apt update && sudo apt install git -y
 ```
@@ -38,8 +39,8 @@ sudo apt update && sudo apt install git -y
 </TabItem>
 </Tabs>
 
-To make sure that the installation was successful, open a terminal window and run `git -v`. 
-You should get a version number as an output. If you get an error such as `command not found`, 
+To make sure that the installation was successful, open a terminal window and run `git -v`.
+You should get a version number as an output. If you get an error such as `command not found`,
 the installation did not work. You can also have to restart your computer to make it work.
 
 :::note Create a github Account
@@ -62,8 +63,8 @@ download Github Desktop to easily use git commands with a graphical interface.
 </TabItem>
 <TabItem value="lin" label="Linux">
 
-Sorry, there is no official package of Github Desktop for Linux. 😢 
-You can use the other options below instead, or use the unofficial package for linux 
+Sorry, there is no official package of Github Desktop for Linux. 😢
+You can use the other options below instead, or use the unofficial package for linux
 ([follow the instructions here](https://gist.github.com/berkorbay/6feda478a00b0432d13f1fc0a50467f1)).
 
 </TabItem>

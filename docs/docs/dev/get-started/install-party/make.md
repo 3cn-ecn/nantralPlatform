@@ -15,18 +15,18 @@ helpful in the following, trust me ;)
 <TabItem value="win" label="Windows">
 
 1. Open **Powershell** and run:
-    ```powershell
-    winget install GnuWin32.make
-    ```
-    If the `winget` command does not work, install it from the [Windows Store](https://www.microsoft.com/p/app-installer/9nblggh4nns1#activetab=pivot:overviewtab).
+   ```powershell
+   winget install GnuWin32.make
+   ```
+   If the `winget` command does not work, install it from the [Windows Store](https://www.microsoft.com/p/app-installer/9nblggh4nns1#activetab=pivot:overviewtab).
 2. Add `make` to your PATH:
-    ```powershell
-    [Environment]::SetEnvironmentVariable("PATH", $Env:PATH + ";C:\Program Files (x86)\GnuWin32\bin\", [EnvironmentVariableTarget]::User)
-    ```
+   ```powershell
+   [Environment]::SetEnvironmentVariable("PATH", $Env:PATH + ";C:\Program Files (x86)\GnuWin32\bin\", [EnvironmentVariableTarget]::User)
+   ```
 3. Close and restart your terminal, then test the command:
-    ```powershell
-    make --version
-    ```
+   ```powershell
+   make --version
+   ```
 
 <details>
 <summary>In case it doesn't work... 😓</summary>
@@ -41,6 +41,7 @@ Try to install `make` by folloing this tutorial:
 Make is already installed on your system! You have nothing to do 😁
 
 Try it with:
+
 ```bash
 make --version
 ```

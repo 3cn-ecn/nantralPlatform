@@ -10,14 +10,14 @@ Before Nantral Platform came to life, various projects have been created before.
 
 ## The Students Server, or "Serveur des Élèves"
 
-The *Students Server* was a server, maintained by students, which had the 
+The _Students Server_ was a server, maintained by students, which had the
 purpose to host different websites of the clubs and associations of the school.
 Unfortunately, it was too difficult to maintain and the project ended up
 in 2018.
 
 ## Hippocéan
 
-Hippocean was a website created to be a directory with all the websites 
+Hippocean was a website created to be a directory with all the websites
 related to Centrale Nantes. Its purpose was to give a simple way to find
 easily and quickly the website you were looking for.
 

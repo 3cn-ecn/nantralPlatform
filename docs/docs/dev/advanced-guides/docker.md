@@ -102,7 +102,7 @@ Note that in practice, we will not stop and restart all services each
 time we want to make an update. To do so, we can indicate which service
 we want to restart. For example, to restart only the backend:
 
-```
+```bash
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache nginx backend
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
 ```
