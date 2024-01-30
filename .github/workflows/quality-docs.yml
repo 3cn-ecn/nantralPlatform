@@ -26,8 +26,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Update dates and authors
-        run: ./update_headers.sh
-
       - name: Try to build website
         run: npm run build
