@@ -13,12 +13,18 @@
         <link href="https://docs.nantral-platform.fr/blog/history"/>
         <updated>2022-05-29T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Before Nantral Platform came to life, various projects have been created before.]]></summary>
-        <content type="html"><![CDATA[<p>Before Nantral Platform came to life, various projects have been created before.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-students-server-or-serveur-des-élèves">The Students Server, or "Serveur des Élèves"<a href="#the-students-server-or-serveur-des-élèves" class="hash-link" aria-label="Direct link to The Students Server, or &quot;Serveur des Élèves&quot;" title="Direct link to The Students Server, or &quot;Serveur des Élèves&quot;">​</a></h2><p>The <em>Students Server</em> was a server, maintained by students, which had the
+        <content type="html"><![CDATA[<p>Before Nantral Platform came to life, various projects have been created before.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-students-server-or-serveur-des-élèves">The Students Server, or "Serveur des Élèves"<a href="https://docs.nantral-platform.fr/blog/history#the-students-server-or-serveur-des-%C3%A9l%C3%A8ves" class="hash-link" aria-label="Direct link to The Students Server, or &quot;Serveur des Élèves&quot;" title="Direct link to The Students Server, or &quot;Serveur des Élèves&quot;">​</a></h2>
+<p>The <em>Students Server</em> was a server, maintained by students, which had the
 purpose to host different websites of the clubs and associations of the school.
 Unfortunately, it was too difficult to maintain and the project ended up
-in 2018.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="hippocéan">Hippocéan<a href="#hippocéan" class="hash-link" aria-label="Direct link to Hippocéan" title="Direct link to Hippocéan">​</a></h2><p>Hippocean was a website created to be a directory with all the websites
+in 2018.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="hippocéan">Hippocéan<a href="https://docs.nantral-platform.fr/blog/history#hippoc%C3%A9an" class="hash-link" aria-label="Direct link to Hippocéan" title="Direct link to Hippocéan">​</a></h2>
+<p>Hippocean was a website created to be a directory with all the websites
 related to Centrale Nantes. Its purpose was to give a simple way to find
-easily and quickly the website you were looking for.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-students-directory-or-annuaire-des-élèves">The Students Directory, or "Annuaire des Élèves"<a href="#the-students-directory-or-annuaire-des-élèves" class="hash-link" aria-label="Direct link to The Students Directory, or &quot;Annuaire des Élèves&quot;" title="Direct link to The Students Directory, or &quot;Annuaire des Élèves&quot;">​</a></h2><p>The purpose of this project was simply to offer a website to regroup the names
+easily and quickly the website you were looking for.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-students-directory-or-annuaire-des-élèves">The Students Directory, or "Annuaire des Élèves"<a href="https://docs.nantral-platform.fr/blog/history#the-students-directory-or-annuaire-des-%C3%A9l%C3%A8ves" class="hash-link" aria-label="Direct link to The Students Directory, or &quot;Annuaire des Élèves&quot;" title="Direct link to The Students Directory, or &quot;Annuaire des Élèves&quot;">​</a></h2>
+<p>The purpose of this project was simply to offer a website to regroup the names
 of all the students of the school. It is the main source of Nantral Platform:
 our project has been built in continuity with this one.</p>]]></content>
         <author>
@@ -32,15 +38,26 @@ our project has been built in continuity with this one.</p>]]></content>
         <link href="https://docs.nantral-platform.fr/blog/introduce"/>
         <updated>2022-05-28T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Welcome to Nantral Platform! I'm glad to introduce you to this new website 🥰]]></summary>
-        <content type="html"><![CDATA[<p>Welcome to Nantral Platform! I'm glad to introduce you to this new website 🥰</p><p>Nantral Platform is a website developped by and for the Centrale Nantes'
+        <content type="html"><![CDATA[<p>Welcome to Nantral Platform! I'm glad to introduce you to this new website 🥰</p>
+<p>Nantral Platform is a website developped by and for the Centrale Nantes'
 students. Its aim is to help students to communicate between each other,
-to organize events or simply make some annoucements.</p><p>This platform is composed of several parts, called <strong>apps</strong>:</p><ul><li><strong>Groups</strong>: there are the core of Nantral Platform. A group can represent
+to organize events or simply make some annoucements.</p>
+<p>This platform is composed of several parts, called <strong>apps</strong>:</p>
+<ul>
+<li><strong>Groups</strong>: there are the core of Nantral Platform. A group can represent
 a club, an association, a flatshare, a class, or anything else. Groups can
-create events or posts so as to share it with all the students.</li><li><strong>Event and posts</strong>: this app allows students to access and read events
-and annoucments about Centrale Nantes' life.</li><li><strong>Flatshares map</strong>: a map with all the flatshares of the Centrale Nantes'
-students.</li><li><strong>The mentoring algorithm</strong>: an algorithm to attribute mentors to new
-students</li><li><strong>The students directory</strong>: to find all the students of the school.</li><li><strong>The email signature generator</strong>: a tool to build a personnalized
-Centrale Nantes email signature.</li></ul><p>We hope you will enjoy the website, and help to improve it!</p>]]></content>
+create events or posts so as to share it with all the students.</li>
+<li><strong>Event and posts</strong>: this app allows students to access and read events
+and annoucments about Centrale Nantes' life.</li>
+<li><strong>Flatshares map</strong>: a map with all the flatshares of the Centrale Nantes'
+students.</li>
+<li><strong>The mentoring algorithm</strong>: an algorithm to attribute mentors to new
+students</li>
+<li><strong>The students directory</strong>: to find all the students of the school.</li>
+<li><strong>The email signature generator</strong>: a tool to build a personnalized
+Centrale Nantes email signature.</li>
+</ul>
+<p>We hope you will enjoy the website, and help to improve it!</p>]]></content>
         <author>
             <name>Alexis Delage</name>
             <uri>https://github.com/hydrielax</uri>
