@@ -115,7 +115,7 @@ First, pip is maybe not installed on your system. To install it, run
 python3 -m ensurepip --upgrade
 ```
 or on Linux:
-```
+```bash
 sudo apt-get install python3-pip
 ```
 
