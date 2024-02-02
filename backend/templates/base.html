@@ -70,6 +70,7 @@
         {% endfor %}
       </div>
       <ul class="menuSet navbar-nav ms-auto align-items-center">
+        {% if user.is_authenticated %}
         <li id="notificationPanel" class="nav-item dropdown">
           <a class="nav-link disabled" href="#" role="button">
             <img src='{% static "/img/icons/scalable/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
@@ -80,6 +81,13 @@
             <img src='{% static "/img/icons/scalable/people.svg" %}' class="d-inline-block align-top" alt="compte personnel" loading="lazy">
           </a>
         </li>
+        {% else %}
+        <li id="userMenuUnauthenticated" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
+            <img src='{% static "/img/icons/scalable/people.svg" %}' class="d-inline-block align-top" alt="compte personnel" loading="lazy">
+          </a>
+        </li>
+        {% endif %}
       </ul>
     </div>
   </nav>

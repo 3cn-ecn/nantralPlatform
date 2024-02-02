@@ -29,7 +29,6 @@ env = environ.Env(
     WP_ADMIN_EMAIL=(str, ""),
     WP_PUBLIC_KEY=(str, ""),
     WP_PRIVATE_KEY=(str, ""),
-    TEMPORARY_ACCOUNTS_DATE_LIMIT=(str, "2000-12-31"),
     STAGING=(bool, False),
     # docker needed
     DB_HOSTNAME=(str, ""),

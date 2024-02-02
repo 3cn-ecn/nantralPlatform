@@ -1,6 +1,7 @@
 import { NotificationMenu } from '#modules/notification/view/NotificationMenu/NotificationMenu';
-import { AppMenu } from '#shared/components/PageTemplate/components/AppMenu';
-import { UserMenu } from '#shared/components/PageTemplate/components/UserMenu';
+import { AppMenu } from '#shared/components/PageTemplate/AppMenu/AppMenu';
+import { UserMenuAuthenticated } from '#shared/components/PageTemplate/UserMenu/UserMenuAuthenticated';
+import { UserMenuUnauthenticated } from '#shared/components/PageTemplate/UserMenu/UserMenuUnauthenticated';
 
 import { wrapAndRenderLegacyCode } from '../utils/wrapAndRenderLegacyCode';
 import { AppInstallBanner } from './appInstallBanner';
@@ -13,4 +14,5 @@ redirectToLoginPage();
 wrapAndRenderLegacyCode(<AppInstallBanner />, 'footer-install-app');
 wrapAndRenderLegacyCode(<NotificationMenu />, 'notificationPanel');
 wrapAndRenderLegacyCode(<AppMenu />, 'appMenu');
-wrapAndRenderLegacyCode(<UserMenu />, 'userMenu');
+wrapAndRenderLegacyCode(<UserMenuAuthenticated />, 'userMenu');
+wrapAndRenderLegacyCode(<UserMenuUnauthenticated />, 'userMenuUnauthenticated');

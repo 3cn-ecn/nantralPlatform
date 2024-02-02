@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 
 import { FlexRow } from '../FlexBox/FlexBox';
-import { NavBarTop } from './components/NavBarTop';
+import { NavBar } from './NavBar/NavBar';
 
 export function PageTemplate() {
   const theme = useTheme();
@@ -25,7 +25,7 @@ export function PageTemplate() {
     <Box className={`global-${theme.palette.mode}-theme`}>
       <CssBaseline />
       <ScrollRestoration />
-      <NavBarTop />
+      <NavBar />
       <Box component="main">
         <Toolbar />
         <Suspense

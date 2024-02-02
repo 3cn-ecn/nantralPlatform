@@ -3,9 +3,9 @@ import { AppBar, Toolbar } from '@mui/material';
 import { NotificationMenu } from '#modules/notification/view/NotificationMenu/NotificationMenu';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
-import { AppMenu } from './AppMenu';
-import { BreadcrumbsNav } from './BreadcrumbsNav';
-import { UserMenu } from './UserMenu';
+import { AppMenu } from '../AppMenu/AppMenu';
+import { UserMenuAuthenticated } from '../UserMenu/UserMenuAuthenticated';
+import { BreadcrumbsNav } from './components/BreadcrumbsNav';
 
 declare module '@mui/material/AppBar' {
   interface AppBarPropsColorOverrides {
@@ -13,7 +13,7 @@ declare module '@mui/material/AppBar' {
   }
 }
 
-export function NavBarTop() {
+export function NavBar() {
   return (
     <AppBar position="fixed" color="neutral">
       <Toolbar>
@@ -21,7 +21,7 @@ export function NavBarTop() {
         <BreadcrumbsNav />
         <Spacer flex={1} />
         <NotificationMenu />
-        <UserMenu />
+        <UserMenuAuthenticated />
       </Toolbar>
     </AppBar>
   );
