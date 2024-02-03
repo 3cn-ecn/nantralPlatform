@@ -5,31 +5,54 @@ last_update:
 sidebar_position: 1
 ---
 
+import ArchitectureSvg from './architecture.excalidraw.svg'
+
 # Architecture
 
-Discover the main architecture of the Nantral Platform project.
+Discover the architecture of the back-end!
 
-[![Schéma de l'architecture générale](./architecture.png)](./architecture.png)
+<ArchitectureSvg />
 
-## Definitions
+## What's the back-end?
 
-First, you need to understand the difference between frontend and backend:
+The back-end is the part of the application that runs on the **server**.
+Its role is to:
 
-- **the front end**: it is the code which is compiled and run on the **client**, that is to say in the own browser
-  of the user. Its purpose is to simulate the behavior of a regular application.
-- **the back end**: it is the code which will run on the **server**. Its purpose is to make the link between the frontend
-  and the database: when a user register himself in a group for example, the frontend will send a request to the
-  backend, and then the backend will verify the rights of the user and update the database in consequence.
+- send data from the database to the front-end
+- receive data from the front-end and store it in the database
+- check if the user is authenticated
+- check the permissions of the user to access content
 
-## Languages and frameworks
+## How is it organized?
 
-For the nantral platform project, we use two main languages and frameworks for the backend and the frontend:
+Each **feature** is stored in an **app**.
+For example, we currently have these apps on Nantral Platform:
+_account_, _groups_, _events_, _roommates_, _mentorship_...
 
-- **on the back end**: we use [Python](https://www.python.org/), with the framework [django](https://www.djangoproject.com/)
-- **on the front end**: we use [TypeScript](https://www.typescriptlang.org/), with the framework [React](https://reactjs.org/)
+Then, each app is organized as explained in the schema above.
+We have:
 
-:::info What is a framework?
-A framework is a module, or a library, with a set of predefined useful functions to achieve a certain goal.
-For instance, django gives functions to connect to the database or to manage the http protocol, so as we don't have
-to implement these functions ourselves.
-:::
+- the _models_ in the `models.py` files
+- the _views_ in the `views.py` or `api_views.py` files
+- the _serializers_ in the `serializers.py` files
+- the _urls_ in the `urls.py` or `api_urls.py` files
+
+## The old (legacy) back-end
+
+In some apps, you can also find two other types of files: **forms** and
+**templates**. Their job is to replace the _serializers_, to return a full HTML
+page instead of just some data.
+
+These files replace the front-end.
+They were used on _Nantral Platform_ **before** the React front-end was created,
+but today, we try to _remove_ these files and only use React for the front-end.
+
+## The helper files
+
+There are 2 other types of files that are important, which are used to help
+developers:
+
+- **admin.py**: they are used to configure the admin interface of django,
+  which you can access with an admin account
+- **tests.py**: they are used to write tests for the app, which are very
+  important to be sure we don't break anything when we modify the code
