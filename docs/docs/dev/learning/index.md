@@ -2,9 +2,9 @@
 sidebar_position: 2
 ---
 
-# Guides
+# Learning
 
-Some guides about basic stuff on the Nantral Platform project.
+Here are some tutorials and resources on the tool you will be using.
 
 import DocCardList from '@theme/DocCardList';
 

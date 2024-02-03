@@ -2,9 +2,9 @@
 sidebar_position: 3
 ---
 
-# Frameworks
+# Back End
 
-Discover the frameworks we use at Nantral Platform!
+Everything about the backend of Nantral Platform.
 
 import DocCardList from '@theme/DocCardList';
 

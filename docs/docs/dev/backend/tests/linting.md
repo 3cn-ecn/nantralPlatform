@@ -27,17 +27,6 @@ we have to duplicate the config for the moment):
 
 [See the list of all rules here](https://wemake-python-styleguide.readthedocs.io/en/latest/pages/usage/violations/index.html)
 
-## On the Front End
-
-- Linter: we use [eslint](https://eslint.org/)
-  ```bash
-  npm run lint
-  ```
-- Formatter: also [eslint](https://eslint.org/)
-  ```bash
-  npm run lint:fix
-  ```
-
 ## On the CI
 
 Did you noticed, that, on the back end, `pipenv run flake8` always returns a lot

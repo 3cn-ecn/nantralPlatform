@@ -3,7 +3,7 @@ sidebar_position: 1
 description: Some projects to learn web development
 ---
 
-# Learning
+# Tutorials
 
 This page proposes some mini-project to help you engage with the world of
 web development!
