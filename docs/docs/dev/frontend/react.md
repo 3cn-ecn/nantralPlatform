@@ -1,7 +1,4 @@
 ---
-last_update:
-  date: 2023-02-17 16:11:25 +0100
-  author: Alexis Delage
 sidebar_position: 4
 description: A JavaScript library for building user interfaces.
 ---
