@@ -14,6 +14,7 @@ To do this, we will need to use the terminal: make sure that you know how to ope
 
 <details>
 <summary>Help! I don't know what a terminal is 😢</summary>
+
 Don't worry, we will explain you the basics 😉
 <Tabs groupId="os">
 <TabItem value="win" label="Windows">
