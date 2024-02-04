@@ -23,6 +23,8 @@ Its role is to:
 - check if the user is authenticated
 - check the permissions of the user to access content
 
+In our case, the back-end is built with the [**Django**](https://docs.djangoproject.com) framework.
+
 ## How is it organized?
 
 Each **feature** is stored in an **app**.
