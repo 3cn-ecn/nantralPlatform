@@ -16,7 +16,8 @@ const EventDetailsPage = lazy(
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
 const Signature = lazy(() => import('#pages/Signature/Signature.page'));
-
+const FeedbackPage = lazy(() => import('#pages/Feedback/Feedback.page'));
+const SuggestionPage = lazy(() => import('#pages/Feedback/Suggestion.page'));
 const t = (key: string) => key;
 
 export const authenticatedRoutes: RouteObject = {
@@ -58,6 +59,21 @@ export const authenticatedRoutes: RouteObject = {
       path: '/signature',
       element: <Signature />,
       handle: { crumb: t('breadcrumbs.signature.index') },
+    },
+    {
+      path: '/feedback',
+      handle: { crumb: t('breadcrumbs.feedback.index') },
+      children: [
+        {
+          index: true,
+          element: <FeedbackPage />,
+        },
+        {
+          path: 'suggestion',
+          element: <SuggestionPage />,
+          handle: { crumb: t('breadcrumbs.feedback.suggestion') },
+        },
+      ],
     },
     {
       path: '*',
