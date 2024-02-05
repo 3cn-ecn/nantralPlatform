@@ -6,7 +6,7 @@ import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export default function FeedbackPage() {
+export default function BugPage() {
   const { t } = useTranslation();
 
   return (
@@ -33,21 +33,20 @@ export default function FeedbackPage() {
       <TextField
         name="Title"
         key="Title"
-        label={t('feedback.suggestion.form.title.label')}
+        label={t('feedback.bug.form.title.label')}
         required
       />
       <RichTextField
-        helperText={t('feedback.suggestion.form.description.helperText')}
-        label={t('feedback.suggestion.form.description.label')}
+        helperText={t('feedback.bug.form.description.helperText')}
+        label={t('feedback.bug.form.description.label')}
       />
       <LoadingButton
-        form="create-event-form"
         type="submit"
         loading={false}
         variant="contained"
         startIcon={<SendIcon />}
       >
-        {t('feedback.suggestion.form.button.label')}
+        {t('feedback.bug.form.button.label')}
       </LoadingButton>
     </Container>
   );
