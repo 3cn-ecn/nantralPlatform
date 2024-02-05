@@ -19,6 +19,8 @@ const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const LegalNoticePage = lazy(() => import('#pages/LegalNotice/Legal.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
 const Signature = lazy(() => import('#pages/Signature/Signature.page'));
+const FeedbackPage = lazy(() => import('#pages/Feedback/Feedback.page'));
+const SuggestionPage = lazy(() => import('#pages/Feedback/Suggestion.page'));
 
 // create a fake t function so that vscode can show translations in editor
 const t = (key: string) => key;
@@ -69,6 +71,21 @@ export const router = createBrowserRouter([
         path: '/legal-notice',
         element: <LegalNoticePage />,
         handle: { crumb: t('breadcrumbs.legal.index') },
+      },
+      {
+        path: '/feedback',
+        handle: { crumb: t('breadcrumbs.feedback.index') },
+        children: [
+          {
+            index: true,
+            element: <FeedbackPage />,
+          },
+          {
+            path: 'suggestion',
+            element: <SuggestionPage />,
+            handle: { crumb: t('breadcrumbs.feedback.suggestion') },
+          },
+        ],
       },
       {
         path: '*',

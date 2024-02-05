@@ -20,6 +20,10 @@
     },
     "signature": {
       "index": "Signature"
+    },
+    "feedback": {
+      "index": "Feedback",
+      "suggestion": "Suggestion"
     }
   },
   "button": {
@@ -447,6 +451,22 @@
     "shareLink": {
       "failure": "The link could not be copied",
       "success": "Link copied!"
+    }
+  },
+  "feedback": {
+    "suggestion": {
+      "form": {
+        "title": {
+          "label": "Issue title"
+        },
+        "description": {
+          "label": "Description",
+          "helperText": "Please provide comprehensive details and context regarding the issue you're experiencing. Include as much information as possible, such as the specific steps or actions leading up to the problem. Additionally, if feasible, provide a clear set of instructions on how to replicate the issue. This will greatly assist in understanding and addressing the issue effectively"
+        },
+        "button": {
+          "label": "Submit"
+        }
+      }
     }
   }
 }
