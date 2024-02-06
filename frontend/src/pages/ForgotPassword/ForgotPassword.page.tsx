@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import { Box, Card, Container, Icon, useTheme } from '@mui/material';
 
-import '#pages/Login/LoginPage.scss';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { ForgotPasswordForm } from './components/ForgotPasswordForm';

@@ -1,11 +1,8 @@
 import { Button, ButtonProps } from '@mui/material';
 
-import './BigButton.scss';
-
 export function BigButton({ sx, ...props }: ButtonProps) {
   return (
     <Button
-      // className="big-button"
       sx={{
         width: '100%',
         borderRadius: '10px',

@@ -16,7 +16,6 @@ import {
 
 import { loginApi } from '#modules/account/api/login.api';
 import { LoginFormFields } from '#modules/account/view/shared/LoginFormFields';
-import '#pages/Login/LoginPage.scss';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useAuth } from '#shared/context/Auth.context';
 
