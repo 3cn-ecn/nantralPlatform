@@ -1,13 +1,27 @@
 import { Send as SendIcon } from '@mui/icons-material';
 import { Container, Alert, Link } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 
-import { TextField, RichTextField } from '#shared/components/FormFields';
+import { submitFeedback } from '#modules/feedback/api/submitFeedback.api';
+import { useFeedbackFormValues } from '#modules/feedback/hooks/useFeedbackFormValues';
+import { FeedbackFormFields } from '#modules/feedback/view/shared/FeedbackFormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function BugPage() {
   const { t } = useTranslation();
+  const [formValues, updateFormValues] = useFeedbackFormValues();
+
+  const { error, isLoading, isError, mutate } = useMutation({
+    mutationFn: (vals) => submitFeedback('bug', vals),
+  });
+
+  const onSubmit = async (e: Event, formValues: FeedbackForm) => {
+    e.preventDefault();
+
+    mutate(formValues);
+  };
 
   return (
     <Container>
@@ -29,25 +43,23 @@ export default function BugPage() {
         <b>Stay safe!</b>
       </Alert>
       <Spacer vertical={2} />
-      {/* Form */}
-      <TextField
-        name="Title"
-        key="Title"
-        label={t('feedback.bug.form.title.label')}
-        required
-      />
-      <RichTextField
-        helperText={t('feedback.bug.form.description.helperText')}
-        label={t('feedback.bug.form.description.label')}
-      />
-      <LoadingButton
-        type="submit"
-        loading={false}
-        variant="contained"
-        startIcon={<SendIcon />}
-      >
-        {t('feedback.bug.form.button.label')}
-      </LoadingButton>
+      <form id="create-feedback-form" onSubmit={(e) => onSubmit(e, formValues)}>
+        <FeedbackFormFields
+          isError={isError}
+          error={error}
+          formValues={formValues}
+          updateFormValues={updateFormValues}
+        />
+        <LoadingButton
+          type="submit"
+          loading={isLoading}
+          variant="contained"
+          startIcon={<SendIcon />}
+          disabled={isLoading}
+        >
+          {t('feedback.bug.form.button.label')}
+        </LoadingButton>
+      </form>
     </Container>
   );
 }
