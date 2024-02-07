@@ -1,14 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 
 import { MarkEmailReadRounded } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+
+import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 
 import { BigButton } from '../../../shared/components/Button/BigButton';
 
@@ -60,33 +55,30 @@ export function EmailSent({
             Click on the link in the email and login to access your account
           </Typography>
         </CardContent>
-        <CardActions></CardActions>
       </Card>
-      <Box
+      <FlexRow
         sx={{
           marginTop: 2,
           justifyContent: 'space-between',
-          width: '100%',
-          display: 'flex',
         }}
       >
-        <div>
+        <FlexCol>
           <Typography sx={{ color: 'gray' }}>Email not received?</Typography>
           <Typography>
-            <p>Wait a few minutes, this can sometimes take a long time.</p>
-            <p style={{ lineHeight: 1 }}>
-              Still Nothing?{' '}
-              <Button sx={{ textTransform: 'none' }}>Send again</Button>
-            </p>
+            Wait a few minutes, this can sometimes take a long time.
           </Typography>
-        </div>
+          <FlexRow>
+            <Typography style={{ lineHeight: 1 }}>Still Nothing?</Typography>
+            <Button sx={{ textTransform: 'none' }}>Send again</Button>
+          </FlexRow>
+        </FlexCol>
         <BigButton
           sx={{ width: 200, maxHeight: 50 }}
           onClick={() => navigate('/login')}
         >
           Login
         </BigButton>
-      </Box>
+      </FlexRow>
     </Box>
   );
 }

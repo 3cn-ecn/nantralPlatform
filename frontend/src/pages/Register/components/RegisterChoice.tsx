@@ -14,6 +14,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { validateInvitationApi } from '#modules/account/api/invitation.api';
 import { BigButton } from '#shared/components/Button/BigButton';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 
 export function RegisterChoice({
   onClick,
@@ -53,13 +54,15 @@ export function RegisterChoice({
       <Card sx={{ width: '100%', marginTop: 3 }} variant="elevation">
         <CardActionArea disableRipple>
           <CardContent>
-            <Typography
-              variant="h3"
-              sx={{ alignItems: 'center', display: 'flex', gap: 1 }}
-            >
+            <FlexRow alignItems="center" gap={1}>
               <CheckCircle color="success" fontSize="medium" />
-              Yes I have an email at Centrale Nantes
-            </Typography>
+              <Typography
+                variant="h3"
+                sx={{ alignItems: 'center', display: 'flex', gap: 1 }}
+              >
+                Yes I have an email at Centrale Nantes
+              </Typography>
+            </FlexRow>
             <Typography
               variant="body1"
               sx={{ textAlign: 'justify', marginLeft: 1, marginTop: 2 }}
@@ -87,13 +90,12 @@ export function RegisterChoice({
           disabled={isLoading || !invitationValid}
         >
           <CardContent>
-            <Typography
-              variant="h3"
-              sx={{ alignItems: 'center', display: 'flex', gap: 1 }}
-            >
+            <FlexRow alignItems="center" gap={1}>
               <CloseRounded color="primary" fontSize="large" />
-              No, I don&apos;t have access to my Centrale Nantes address yet.
-            </Typography>
+              <Typography variant="h3">
+                No, I don&apos;t have access to my Centrale Nantes address yet.
+              </Typography>
+            </FlexRow>
             <Typography
               variant="body1"
               sx={{ textAlign: 'justify', marginLeft: 1, marginTop: 2 }}

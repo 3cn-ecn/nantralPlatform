@@ -19,11 +19,8 @@ export function UnauthenticatedPageTemplate() {
   //   is loading in its children
   // - <Outlet> is a React-Router component which displays the children pages
   //   defined in the router.tsx
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
-  if (isLoading) {
-    return null;
-  }
 
   return isAuthenticated ? (
     <Navigate to="/" state={{ from: location }} replace />

@@ -1,32 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Card, Container, Icon, useTheme } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
-import { passwordResetValidateToken } from '#modules/account/api/passwordReset.api';
+import { passwordResetValidateTokenApi } from '#modules/account/api/passwordReset.api';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { ResetPasswordError } from './components/ResetPasswordError';
 import { ResetPasswordForm } from './components/ResetPasswordForm';
 import { ResetPasswordSuccess } from './components/ResetPasswordSuccess';
 
-/**
- * Home Page, with Welcome message, next events, etc...
- * @returns Home page component
- */
 export default function ForgotPasswordPage() {
   const { token } = useParams();
 
   const theme = useTheme();
   const [success, setSuccess] = useState(false);
-  const { isError, isSuccess: tokenValid } = useQuery({
-    queryFn: () => {
-      if (token) return passwordResetValidateToken(token);
-    },
-    queryKey: ['validateToken', token],
-    retry: false,
-  });
+  const {
+    isError,
+    isSuccess: tokenValid,
+    mutate,
+    isIdle,
+  } = useMutation(passwordResetValidateTokenApi);
+
+  useEffect(() => {
+    if (isIdle && token) {
+      mutate(token);
+    }
+  }, [isIdle, token, mutate]);
 
   return (
     <Container

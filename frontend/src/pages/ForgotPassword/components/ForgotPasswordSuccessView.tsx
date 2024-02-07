@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import { Check } from '@mui/icons-material';
-import { Box, Button, Divider, Typography } from '@mui/material';
+import { Button, Divider, Typography } from '@mui/material';
 
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
@@ -18,23 +18,13 @@ export function ForgotPasswordSuccessView() {
       <Spacer vertical={3} />
       <Divider flexItem />
       <Spacer vertical={3} />
-      <Box
-        sx={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-        }}
+      <Button
+        sx={{ maxWidth: 220 }}
+        onClick={() => navigate('/login')}
+        variant="text"
       >
-        <Button
-          sx={{ maxWidth: 220 }}
-          onClick={() => navigate('/login')}
-          variant="text"
-        >
-          Back to login
-        </Button>
-      </Box>
+        Back to login
+      </Button>
     </>
   );
 }

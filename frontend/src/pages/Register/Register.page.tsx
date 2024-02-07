@@ -6,12 +6,15 @@ import {
   Card,
   Container,
   Icon,
+  Paper,
   Step,
   StepLabel,
   Stepper,
+  Typography,
   useTheme,
 } from '@mui/material';
 
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
 
 import { EmailSent } from './components/EmailSent';
@@ -58,26 +61,37 @@ export default function RegisterPage() {
           src="/static/img/logo/scalable/logo.svg"
           alt="Nantral platform"
         />
-        <h1
-          style={{
-            lineHeight: '1.2',
+        <Typography
+          sx={{
             textAlign: 'center',
             width: '100%',
             color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
           }}
+          m={2}
+          variant="h2"
         >
           Create your Nantral Platform account
-        </h1>
+        </Typography>
 
-        <div style={{ color: 'gray', width: '100%', textAlign: 'center' }}>
-          Already have an account?
-          <Button
-            sx={{ textTransform: 'none' }}
-            onClick={() => navigate('/login/')}
-          >
-            Go to the login page
-          </Button>
-        </div>
+        <Paper
+          sx={{
+            color: 'gray',
+            pl: 2,
+            pr: 2,
+            gap: 4,
+            mb: 1,
+          }}
+        >
+          <FlexRow alignItems="center" gap={1}>
+            <Typography>Already have an account?</Typography>
+            <Button
+              sx={{ textTransform: 'none' }}
+              onClick={() => navigate('/login/')}
+            >
+              Go to the login page
+            </Button>
+          </FlexRow>
+        </Paper>
         <Stepper
           activeStep={step}
           variant="outlined"

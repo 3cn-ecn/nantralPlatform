@@ -1,24 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Divider,
-  Typography,
-} from '@mui/material';
+import { Button, CircularProgress, Divider, Typography } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 
 import { passwordResetRequestApi } from '#modules/account/api/passwordReset.api';
 import { BigButton } from '#shared/components/Button/BigButton';
+import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 export function ForgotPasswordForm({ onSuccess }: { onSuccess: () => void }) {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<{ fields: { email?: string[] } }>({
-    fields: {},
-  });
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState<{
@@ -26,16 +18,15 @@ export function ForgotPasswordForm({ onSuccess }: { onSuccess: () => void }) {
   }>({ email: '' });
 
   function requestPasswordReset() {
-    setLoading(true);
-    passwordResetRequestApi(formValues?.email)
-      .then(() => onSuccess())
-      .catch((err) => setError(err))
-      .finally(() => setLoading(false));
+    mutate(formValues?.email);
   }
-
-  useEffect(() => {
-    setError({ fields: {} });
-  }, [formValues]);
+  const { isLoading, mutate, error } = useMutation<
+    number,
+    { fields: { email: string[] } },
+    string
+  >(passwordResetRequestApi, {
+    onSuccess: onSuccess,
+  });
 
   return (
     <>
@@ -63,24 +54,22 @@ export function ForgotPasswordForm({ onSuccess }: { onSuccess: () => void }) {
         <Spacer vertical={3} />
         <Divider flexItem />
         <Spacer vertical={3} />
-        <Box
+        <FlexCol
           sx={{
             justifyContent: 'center',
             alignItems: 'center',
-            display: 'flex',
-            flexDirection: 'column',
             gap: 2,
           }}
         >
           <BigButton
             sx={{
               width: '100%',
-              filter: loading ? 'brightness(0.4)' : undefined,
+              filter: isLoading ? 'brightness(0.4)' : undefined,
             }}
-            disabled={loading}
+            disabled={isLoading}
             type="submit"
           >
-            {loading ? (
+            {isLoading ? (
               <CircularProgress size={25} />
             ) : (
               'Request password reset'
@@ -93,7 +82,7 @@ export function ForgotPasswordForm({ onSuccess }: { onSuccess: () => void }) {
           >
             Back to login
           </Button>
-        </Box>
+        </FlexCol>
       </form>
     </>
   );

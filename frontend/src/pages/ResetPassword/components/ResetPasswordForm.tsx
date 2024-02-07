@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Divider } from '@mui/material';
 
-import { passwordReset } from '#modules/account/api/passwordReset.api';
+import { passwordResetApi } from '#modules/account/api/passwordReset.api';
 import { BigButton } from '#shared/components/Button/BigButton';
 import { PasswordField } from '#shared/components/FormFields/PasswordField';
 
@@ -37,7 +37,7 @@ export function ResetPasswordForm({
 
     const form = { password: formValues?.password, token: token };
     try {
-      const status = await passwordReset(form);
+      const status = await passwordResetApi(form);
       if (status === 200) onSuccess();
     } catch (err) {
       setError(err);

@@ -11,7 +11,7 @@ export async function passwordResetRequestApi(email: string) {
   return status;
 }
 
-export async function passwordResetValidateToken(token: string) {
+export async function passwordResetValidateTokenApi(token: string) {
   const { status } = await axios
     .post('/api/account/password_reset/validate_token/', { token: token })
     .catch((err: ApiErrorDTO) => {
@@ -20,13 +20,15 @@ export async function passwordResetValidateToken(token: string) {
   return status;
 }
 
-export async function passwordReset({
-  password,
-  token,
-}: {
+export interface PasswordResetApiBody {
   password: string;
   token: string;
-}) {
+}
+
+export async function passwordResetApi({
+  password,
+  token,
+}: PasswordResetApiBody) {
   const { status } = await axios
     .post('/api/account/password_reset/confirm/', {
       password: password,

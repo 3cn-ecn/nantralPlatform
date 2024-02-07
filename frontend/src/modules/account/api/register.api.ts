@@ -6,16 +6,9 @@ import { RegisterForm } from '../account.type';
 import { adaptRegisterForm } from '../infra/account.adapter';
 import { RegisterDTO } from '../infra/account.dto';
 
-interface RegisterOptions {
-  form: RegisterForm;
-}
-
-export async function registerApi(params: RegisterOptions) {
+export async function registerApi(form: RegisterForm) {
   const { status } = await axios
-    .post<RegisterDTO>(
-      '/api/account/register/',
-      adaptRegisterForm(params?.form),
-    )
+    .post<RegisterDTO>('/api/account/register/', adaptRegisterForm(form))
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });

@@ -1,37 +1,59 @@
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 import { isAuthenticatedApi } from '../api/isAuthenticated.api';
+import { LoginApiBody, loginApi } from '../api/login.api';
 import { logoutApi } from '../api/logout.api';
 
-export function useProvideAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+export interface ProvideAuthValues {
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  error: AxiosError<{ message?: string; code?: string }> | null;
+  login: (body: LoginApiBody) => void;
+  signOut: () => void;
+}
 
-  useEffect(() => {
-    query();
-  }, []);
+export function useProvideAuth(): ProvideAuthValues {
+  const queryClient = useQueryClient();
 
-  async function query() {
-    setIsLoading(true);
-    try {
-      const res = await isAuthenticatedApi();
-      setIsAuthenticated(res.status === 200);
-    } catch {
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
+  const { data: isAuthenticated, isLoading } = useQuery({
+    queryFn: isAuthenticatedApi,
+    queryKey: ['isAuthenticated'],
+    refetchOnWindowFocus: false,
+    retry: false,
+    refetchOnMount: false,
+    suspense: true,
+  });
+
+  function setIsAuthenticated(value: boolean) {
+    queryClient.setQueryData(['isAuthenticated'], value);
   }
+
+  const logoutMutation = useMutation(logoutApi, {
+    onSuccess: () => setIsAuthenticated(false),
+  });
 
   async function signOut() {
-    setIsLoading(true);
-    await logoutApi();
-    setIsAuthenticated(false);
-    setIsLoading(false);
+    await logoutMutation.mutateAsync();
   }
 
-  function login() {
-    setIsAuthenticated(true);
+  const loginMutation = useMutation<
+    number,
+    AxiosError<{ message?: string; code?: string }>,
+    LoginApiBody
+  >(loginApi, {
+    onSuccess: () => setIsAuthenticated(true),
+  });
+
+  async function login(body: LoginApiBody) {
+    await loginMutation.mutateAsync(body);
   }
-  return { isLoading, isAuthenticated: !!isAuthenticated, signOut, login };
+
+  return {
+    isLoading: isLoading || logoutMutation.isLoading || loginMutation.isLoading,
+    isAuthenticated: !!isAuthenticated,
+    signOut,
+    login,
+    error: loginMutation.error,
+  };
 }

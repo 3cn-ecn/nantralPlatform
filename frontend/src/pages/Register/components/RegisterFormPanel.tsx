@@ -68,7 +68,7 @@ export function RegisterFormPanel({
       formValues.invitationUUID = uuid;
     }
     try {
-      const res = await registerApi({ form: formValues });
+      const res = await registerApi(formValues);
       if (res) {
         onSuccess({
           firstName: formValues?.firstName,

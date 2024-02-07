@@ -2,16 +2,16 @@ import axios from 'axios';
 
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 
-interface LoginOptions {
+export interface LoginApiBody {
   email?: string;
   password?: string;
 }
 
-export async function loginApi(params?: LoginOptions) {
+export async function loginApi(body: LoginApiBody) {
   const { status } = await axios
     .post('/api/account/login/', {
-      email: params?.email,
-      password: params?.password,
+      email: body?.email,
+      password: body?.password,
     })
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);

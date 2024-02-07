@@ -1,17 +1,16 @@
 import { ReactNode, createContext, useContext } from 'react';
 
-import { useProvideAuth } from '#modules/account/hooks/useProvideAuth';
+import {
+  ProvideAuthValues,
+  useProvideAuth,
+} from '#modules/account/hooks/useProvideAuth';
 
-const authContext = createContext<{
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  signOut: () => Promise<void>;
-  login: () => void;
-}>({
+const AuthContext = createContext<ProvideAuthValues>({
   isLoading: true,
   isAuthenticated: false,
   signOut: () => new Promise<void>(() => null),
   login: () => null,
+  error: null,
 });
 /**
  * Auth Provider provides handy functions to access authentication state and modify it
@@ -20,9 +19,9 @@ const authContext = createContext<{
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const auth = useProvideAuth();
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  return useContext(authContext);
+  return useContext(AuthContext);
 }
