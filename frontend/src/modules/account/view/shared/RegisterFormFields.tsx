@@ -89,8 +89,8 @@ export function RegisterFormFields({
         )}
         label={'Confirm your password'}
         errors={error?.fields?.passwordConfirm}
-        visibilityIcon={false}
-        validatePassword={
+        visibilityIconHidden
+        showValidateIcon={
           !!formValues?.password &&
           formValues.password === formValues?.passwordConfirm
         }
