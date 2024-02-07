@@ -10,7 +10,7 @@ export interface ProvideAuthValues {
   isAuthenticated: boolean;
   error: AxiosError<{ message?: string; code?: string }> | null;
   login: (body: LoginApiBody) => void;
-  signOut: () => void;
+  logout: () => void;
 }
 
 export function useProvideAuth(): ProvideAuthValues {
@@ -25,35 +25,30 @@ export function useProvideAuth(): ProvideAuthValues {
     suspense: true,
   });
 
-  function setIsAuthenticated(value: boolean) {
-    queryClient.setQueryData(['isAuthenticated'], value);
-  }
+  const { mutateAsync: logout, isLoading: isLogoutLoading } = useMutation(
+    logoutApi,
+    {
+      onSuccess: () => queryClient.invalidateQueries(['isAuthenticated']),
+    },
+  );
 
-  const logoutMutation = useMutation(logoutApi, {
-    onSuccess: () => setIsAuthenticated(false),
-  });
-
-  async function signOut() {
-    await logoutMutation.mutateAsync();
-  }
-
-  const loginMutation = useMutation<
+  const {
+    isLoading: isLoginLoading,
+    mutateAsync: login,
+    error,
+  } = useMutation<
     number,
     AxiosError<{ message?: string; code?: string }>,
     LoginApiBody
   >(loginApi, {
-    onSuccess: () => setIsAuthenticated(true),
+    onSuccess: () => queryClient.invalidateQueries(['isAuthenticated']),
   });
 
-  async function login(body: LoginApiBody) {
-    await loginMutation.mutateAsync(body);
-  }
-
   return {
-    isLoading: isLoading || logoutMutation.isLoading || loginMutation.isLoading,
+    isLoading: isLoading || isLogoutLoading || isLoginLoading,
     isAuthenticated: !!isAuthenticated,
-    signOut,
+    logout: logout,
     login,
-    error: loginMutation.error,
+    error,
   };
 }
