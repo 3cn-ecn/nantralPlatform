@@ -36,7 +36,7 @@ export function UserMenuAuthenticated() {
     setAnchorEl(event.currentTarget);
     setMenuOpen('main');
   };
-  const { signOut } = useAuth();
+  const { logout } = useAuth();
 
   return (
     <>
@@ -79,7 +79,7 @@ export function UserMenuAuthenticated() {
           label={t('userMenu.menu.signOut')}
           icon={<LogoutIcon />}
           onClick={() => {
-            signOut();
+            logout();
           }}
         />
         <Divider />
