@@ -5,7 +5,6 @@ import {
   Alert,
   Button,
   Card,
-  CircularProgress,
   Divider,
   Typography,
   useTheme,
@@ -14,10 +13,10 @@ import {
 import { LoginFormFields } from '#modules/account/view/shared/LoginFormFields';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
+import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useAuth } from '#shared/context/Auth.context';
 
-import { BigButton } from '../../shared/components/Button/BigButton';
 import { SeeGroupsButton } from './components/SeeGroups';
 
 export default function LoginPage() {
@@ -44,6 +43,7 @@ export default function LoginPage() {
         <FlexRow
           sx={{
             alignItems: 'center',
+            justifyContent: 'center',
             columnGap: 2,
             rowGap: 1,
           }}
@@ -65,11 +65,12 @@ export default function LoginPage() {
             sx={{
               color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
             }}
+            textAlign="center"
           >
             Nantral Platform.
           </Typography>
         </FlexRow>
-        <Typography marginTop={1} variant="subtitle1">
+        <Typography mt={1} textAlign="center" variant="subtitle1">
           The student website for Centrale Nantes!
         </Typography>
         <Spacer vertical={2} />
@@ -94,8 +95,8 @@ export default function LoginPage() {
           <FlexRow
             sx={{
               justifyContent: 'space-between',
-              margin: 1,
-              marginTop: 2,
+              mt: 2,
+              mb: 1,
             }}
           >
             <Button onClick={() => navigate('/register')}>No account?</Button>
@@ -105,16 +106,15 @@ export default function LoginPage() {
           </FlexRow>
           <Divider flexItem />
           <Spacer vertical={3} />
-          <BigButton
-            sx={{
-              width: '100%',
-              filter: isLoading ? 'brightness(0.4)' : undefined,
-            }}
-            disabled={isLoading}
+          <LoadingButton
             type="submit"
+            variant="contained"
+            size="large"
+            fullWidth
+            loading={isLoading}
           >
-            {isLoading ? <CircularProgress size={25} /> : 'Login'}
-          </BigButton>
+            Login
+          </LoadingButton>
         </form>
       </Card>
       <Spacer vertical={3} />

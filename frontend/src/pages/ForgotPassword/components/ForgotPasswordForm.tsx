@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, CircularProgress, Divider, Typography } from '@mui/material';
+import { Button, Divider, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { passwordResetRequestApi } from '#modules/account/api/passwordReset.api';
-import { BigButton } from '#shared/components/Button/BigButton';
 import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
+import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
-export function ForgotPasswordForm({ onSuccess }: { onSuccess: () => void }) {
+export default function ForgotPasswordForm() {
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState<{
@@ -25,12 +25,13 @@ export function ForgotPasswordForm({ onSuccess }: { onSuccess: () => void }) {
     { fields: { email: string[] } },
     string
   >(passwordResetRequestApi, {
-    onSuccess: onSuccess,
+    onSuccess: () =>
+      navigate('email_sent', { state: { email: formValues.email } }),
   });
 
   return (
     <>
-      <Typography variant="h6" margin={2}>
+      <Typography variant="body1" margin={2}>
         Please provide your email, we&apos;ll send you a link to reset your
         password
       </Typography>
@@ -61,20 +62,15 @@ export function ForgotPasswordForm({ onSuccess }: { onSuccess: () => void }) {
             gap: 2,
           }}
         >
-          <BigButton
-            sx={{
-              width: '100%',
-              filter: isLoading ? 'brightness(0.4)' : undefined,
-            }}
-            disabled={isLoading}
+          <LoadingButton
+            loading={isLoading}
+            variant="contained"
             type="submit"
+            size="large"
+            fullWidth
           >
-            {isLoading ? (
-              <CircularProgress size={25} />
-            ) : (
-              'Request password reset'
-            )}
-          </BigButton>
+            Request password reset
+          </LoadingButton>
           <Button
             sx={{ maxWidth: 220 }}
             onClick={() => navigate('/login')}

@@ -9,7 +9,7 @@ import { DateField, TextField } from '#shared/components/FormFields';
 import { PasswordField } from '#shared/components/FormFields/PasswordField';
 
 interface RegisterFormFieldsProps {
-  error: { fields: Partial<Record<keyof RegisterForm, string[]>> };
+  error: { fields: Partial<Record<keyof RegisterForm, string[]>> } | null;
   formValues: RegisterForm & { passwordConfirm: string };
   updateFormValues: (newValue: Partial<RegisterForm>) => void;
   registrationType?: 'invitation' | 'normal';
@@ -108,7 +108,6 @@ export function RegisterFormFields({
 
       <Divider sx={{ marginTop: 1 }} />
       <DateField
-        format="yyyy"
         label={'Year of arrival at Centrale Nantes'}
         defaultValue={new Date()}
         sx={{ marginTop: 3 }}
@@ -158,7 +157,7 @@ export function RegisterFormFields({
             {...params}
             label="Special Program"
             helperText={
-              error.fields?.path ||
+              error?.fields?.path ||
               'Special program your in central. You can change it later'
             }
           />

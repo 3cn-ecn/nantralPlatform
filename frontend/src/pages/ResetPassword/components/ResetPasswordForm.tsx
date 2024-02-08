@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Divider } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 
 import { passwordResetApi } from '#modules/account/api/passwordReset.api';
-import { BigButton } from '#shared/components/Button/BigButton';
 import { PasswordField } from '#shared/components/FormFields/PasswordField';
+import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 
-export function ResetPasswordForm({
+export default function ResetPasswordForm({
   token,
   onSuccess,
 }: {
@@ -17,41 +18,32 @@ export function ResetPasswordForm({
     password: '',
     confirmPassword: '',
   });
-  const [error, setError] = useState<{
-    fields?: { password?: string[]; confirmPassword?: string[] };
-    globalErrors?: string[];
-  }>({ fields: {}, globalErrors: [] });
 
-  async function updatePassword() {
-    if (
-      !!formValues?.password &&
-      formValues?.password !== formValues?.confirmPassword
-    ) {
-      setError({ fields: { confirmPassword: ["Passwords don't match."] } });
-      return;
+  const { error, isLoading, mutate } = useMutation<
+    number,
+    {
+      fields?: { password?: string[]; confirmPassword?: string[] };
+      globalErrors?: string[];
+    },
+    { password: string; confirmPassword: string }
+  >(resetPassword, { onSuccess: () => onSuccess() });
+
+  function resetPassword(form: { password: string; confirmPassword: string }) {
+    if (!!form?.password && form?.password !== form?.confirmPassword) {
+      throw { fields: { confirmPassword: ["Passwords don't match."] } };
     }
     if (!token) {
-      setError({ globalErrors: ['Something went wrong'] });
-      return;
+      throw { globalErrors: ['Something went wrong'] };
     }
 
-    const form = { password: formValues?.password, token: token };
-    try {
-      const status = await passwordResetApi(form);
-      if (status === 200) onSuccess();
-    } catch (err) {
-      setError(err);
-    }
+    return passwordResetApi({ password: form?.password, token: token });
   }
-  useEffect(() => {
-    setError({});
-  }, [formValues]);
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        updatePassword();
+        mutate(formValues);
       }}
     >
       <PasswordField
@@ -66,8 +58,8 @@ export function ResetPasswordForm({
         handleChange={(val) =>
           setFormValues({ ...formValues, confirmPassword: val })
         }
-        visibilityIcon={false}
-        validatePassword={
+        visibilityIconHidden
+        showValidateIcon={
           !!formValues?.confirmPassword &&
           formValues?.confirmPassword === formValues?.password
         }
@@ -76,7 +68,15 @@ export function ResetPasswordForm({
         required
       />
       <Divider sx={{ marginTop: 2, marginBottom: 2 }} />
-      <BigButton type="submit">Update password</BigButton>
+      <LoadingButton
+        loading={isLoading}
+        size="large"
+        fullWidth
+        variant="contained"
+        type="submit"
+      >
+        Update password
+      </LoadingButton>
     </form>
   );
 }

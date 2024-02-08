@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Box, Card, Container, Icon, useTheme } from '@mui/material';
+import { Card, Typography, useTheme } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
 import { passwordResetValidateTokenApi } from '#modules/account/api/passwordReset.api';
+import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
 import { ResetPasswordError } from './components/ResetPasswordError';
-import { ResetPasswordForm } from './components/ResetPasswordForm';
-import { ResetPasswordSuccess } from './components/ResetPasswordSuccess';
+import ResetPasswordForm from './components/ResetPasswordForm';
+import ResetPasswordSuccess from './components/ResetPasswordSuccess';
 
 export default function ForgotPasswordPage() {
   const { token } = useParams();
@@ -30,16 +31,7 @@ export default function ForgotPasswordPage() {
   }, [isIdle, token, mutate]);
 
   return (
-    <Container
-      sx={{
-        margin: 0,
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-      }}
-      maxWidth={'sm'}
-    >
+    <FloatingContainer maxWidth={'sm'}>
       <Card
         sx={{
           padding: 5,
@@ -49,9 +41,8 @@ export default function ForgotPasswordPage() {
         }}
         variant="outlined"
       >
-        <Icon
-          component="img"
-          sx={{
+        <img
+          style={{
             width: 50,
             height: 50,
             border: 'solid',
@@ -63,26 +54,14 @@ export default function ForgotPasswordPage() {
           src="/static/img/logo/scalable/logo.svg"
           alt="Nantral platform"
         />
-        <Box
+        <Typography
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            width: '100%',
-            justifyContent: 'center',
-            columnGap: 2,
-            rowGap: 1,
+            color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
           }}
+          variant="h2"
         >
-          <Box
-            className="login-title"
-            sx={{
-              color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
-            }}
-          >
-            Password Reset
-          </Box>
-        </Box>
+          Password Reset
+        </Typography>
         <Spacer vertical={4} />
         {isError && <ResetPasswordError />}
         {!success && tokenValid && (
@@ -90,6 +69,6 @@ export default function ForgotPasswordPage() {
         )}
         {tokenValid && success && <ResetPasswordSuccess />}
       </Card>
-    </Container>
+    </FloatingContainer>
   );
 }

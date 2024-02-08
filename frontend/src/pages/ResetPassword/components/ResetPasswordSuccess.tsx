@@ -1,20 +1,28 @@
 import { useNavigate } from 'react-router-dom';
 
 import { CheckCircle } from '@mui/icons-material';
-import { Typography } from '@mui/material';
+import { Button, Divider, Typography } from '@mui/material';
 
-import { BigButton } from '#shared/components/Button/BigButton';
+import { Spacer } from '#shared/components/Spacer/Spacer';
 
-export function ResetPasswordSuccess() {
+export default function ResetPasswordSuccess() {
   const navigate = useNavigate();
   return (
     <>
       <CheckCircle sx={{ fontSize: 200 }} color="success" />
       <Typography variant="h4">Password changed successfully</Typography>
       <Typography>You can now login with your new password</Typography>
-      <BigButton onClick={() => navigate('/login/')} sx={{ marginTop: 3 }}>
+      <Spacer vertical={3} />
+      <Divider flexItem />
+      <Spacer vertical={3} />
+      <Button
+        variant="contained"
+        size="large"
+        fullWidth
+        onClick={() => navigate('/login/')}
+      >
         Go to login page
-      </BigButton>
+      </Button>
     </>
   );
 }

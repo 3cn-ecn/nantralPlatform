@@ -1,31 +1,15 @@
-import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
-import { Box, Card, Container, Icon, useTheme } from '@mui/material';
+import { Card, Icon, Typography, useTheme } from '@mui/material';
 
+import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
-import { ForgotPasswordForm } from './components/ForgotPasswordForm';
-import { ForgotPasswordSuccessView } from './components/ForgotPasswordSuccessView';
-
-/**
- * Home Page, with Welcome message, next events, etc...
- * @returns Home page component
- */
 export default function ForgotPasswordPage() {
-  const [success, setSuccess] = useState(false);
   const theme = useTheme();
 
   return (
-    <Container
-      sx={{
-        margin: 0,
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-      }}
-      maxWidth={'sm'}
-    >
+    <FloatingContainer maxWidth={'sm'}>
       <Card
         sx={{
           padding: 5,
@@ -49,30 +33,17 @@ export default function ForgotPasswordPage() {
           src="/static/img/logo/scalable/logo.svg"
           alt="Nantral platform"
         />
-        <Box
+        <Typography
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            width: '100%',
-            justifyContent: 'center',
-            columnGap: 2,
-            rowGap: 1,
+            color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
           }}
+          variant="h2"
         >
-          <Box
-            className="login-title"
-            sx={{
-              color: theme.palette.mode == 'dark' ? '#b6b7b7' : '#282828',
-            }}
-          >
-            Forgot your Password?
-          </Box>
-        </Box>
+          Forgot your Password?
+        </Typography>
         <Spacer vertical={2} />
-        {!success && <ForgotPasswordForm onSuccess={() => setSuccess(true)} />}
-        {success && <ForgotPasswordSuccessView />}
+        <Outlet />
       </Card>
-    </Container>
+    </FloatingContainer>
   );
 }

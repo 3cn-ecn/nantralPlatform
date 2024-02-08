@@ -1,3 +1,5 @@
+import { FacultyOptions, PathOptions } from './infra/account.dto';
+
 export interface RegisterForm {
   email: string;
   firstName: string;
@@ -6,12 +8,21 @@ export interface RegisterForm {
   promo: number;
   faculty: {
     label: string;
-    value: 'Gen' | 'Iti' | 'Mas' | 'Doc' | 'Bac' | 'MSp';
+    value: FacultyOptions;
   };
   path: {
     label: string;
-    value: 'Cla' | 'Alt' | 'I-A' | 'A-I' | 'I-M' | 'M-I' | 'I-O' | 'O-I';
+    value: PathOptions;
   };
   invitationUUID?: string;
   passwordConfirm?: string;
+}
+
+export interface RegisterCreated {
+  firstName: string;
+  lastName: string;
+  email: string;
+  promo: number;
+  faculty: FacultyOptions;
+  path: PathOptions;
 }

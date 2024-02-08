@@ -1,5 +1,5 @@
-import { RegisterForm } from '../account.type';
-import { RegisterDTO } from './account.dto';
+import { RegisterCreated, RegisterForm } from '../account.type';
+import { RegisterCreatedDTO, RegisterDTO } from './account.dto';
 
 export function adaptRegisterForm(form: RegisterForm): RegisterDTO {
   return {
@@ -11,5 +11,18 @@ export function adaptRegisterForm(form: RegisterForm): RegisterDTO {
     path: form?.path?.value,
     promo: form.promo,
     invitation_uuid: form?.invitationUUID,
+  };
+}
+
+export function adaptRegisterCreatedDTO(
+  data: RegisterCreatedDTO,
+): RegisterCreated {
+  return {
+    firstName: data.first_name,
+    lastName: data.last_name,
+    email: data.email,
+    faculty: data.faculty,
+    path: data.path,
+    promo: data.promo,
   };
 }

@@ -1,42 +1,20 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { ChevronLeft, Info } from '@mui/icons-material';
-import {
-  Card,
-  CardContent,
-  CircularProgress,
-  Divider,
-  Typography,
-} from '@mui/material';
+import { Button, Divider, Paper, Typography } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 
-import { RegisterForm } from '#modules/account/account.type';
+import { RegisterCreated, RegisterForm } from '#modules/account/account.type';
 import { registerApi } from '#modules/account/api/register.api';
 import { RegisterFormFields } from '#modules/account/view/shared/RegisterFormFields';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
-import { BigButton } from '../../../shared/components/Button/BigButton';
-
-export function RegisterFormPanel({
-  registrationType,
-  onSuccess,
-  onGoBack,
-}: {
-  registrationType: 'invitation' | 'normal';
-  onGoBack: () => void;
-  onSuccess: ({
-    email,
-    firstName,
-  }: {
-    email: string;
-    firstName: string;
-  }) => void;
-}) {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<{
-    fields: Partial<Record<keyof RegisterForm, string[]>>;
-  }>({ fields: {} });
+export default function RegisterFormPanel() {
   const [params] = useSearchParams();
+  const uuid = params.get('uuid') || undefined;
   const [formValues, setFormValues] = useState<
     RegisterForm & { passwordConfirm: string }
   >({
@@ -48,64 +26,51 @@ export function RegisterFormPanel({
     faculty: { label: 'Ingénieur généraliste', value: 'Gen' },
     promo: new Date().getFullYear(),
     path: { label: 'None', value: 'Cla' },
+    invitationUUID: uuid,
+  });
+  const navigate = useNavigate();
+  const {
+    isLoading: loading,
+    error,
+    mutate,
+  } = useMutation<
+    RegisterCreated,
+    {
+      fields: Partial<Record<keyof RegisterForm, string[]>>;
+    },
+    RegisterForm
+  >(register, {
+    onSuccess: (data) =>
+      navigate('/register/validation', {
+        state: { email: data?.email, firstName: data?.firstName },
+      }),
   });
 
-  useEffect(() => {
-    setError({ fields: {} });
-  }, [formValues]);
-
-  async function register() {
-    if (
-      formValues?.password &&
-      formValues?.password !== formValues?.passwordConfirm
-    ) {
-      setError({ fields: { passwordConfirm: ["Passwords don't match"] } });
-      return;
+  async function register(form: RegisterForm) {
+    if (form?.password && form?.password !== form?.passwordConfirm) {
+      throw {
+        fields: { passwordConfirm: ["Passwords don't match"] },
+      };
     }
-    setLoading(true);
-    if (registrationType === 'invitation') {
-      const uuid = params.get('uuid')?.replace('/', '');
-      formValues.invitationUUID = uuid;
-    }
-    try {
-      const res = await registerApi(formValues);
-      if (res) {
-        onSuccess({
-          firstName: formValues?.firstName,
-          email: formValues?.email,
-        });
-      }
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
+    return registerApi(form);
   }
+
   return (
     <>
-      <Card>
-        <CardContent>
-          <Typography
-            sx={{
-              textAlign: 'justify',
-            }}
-          >
-            <Info
-              fontSize="medium"
-              sx={{ marginRight: 1, color: 'secondary', paddingTop: 0.8 }}
-            />
-            To sign up for Nantral Platform, you have to be currently at
-            Centrale Nantes. To verify it, we use your email address that should
-            end with <b>@eleves.ec-nantes.fr</b> or <b>@ec-nantes.fr</b>.
-          </Typography>
-        </CardContent>
-      </Card>
+      <Paper sx={{ p: 2, justifyContent: 'center', display: 'flex' }}>
+        <Info sx={{ m: 0 }} />
+        <Typography component={'span'} textAlign={'center'}>
+          To sign up for Nantral Platform, you have to be currently at Centrale
+          Nantes. To verify it, we use your email address that should end with{' '}
+          <b>@eleves.ec-nantes.fr</b> or <b>@ec-nantes.fr</b>.
+        </Typography>
+      </Paper>
 
       <Spacer vertical={2} />
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          register();
+          mutate(formValues);
         }}
       >
         <RegisterFormFields
@@ -114,32 +79,30 @@ export function RegisterFormPanel({
             setFormValues({ ...formValues, ...newValues })
           }
           error={error}
-          registrationType={registrationType}
+          registrationType={uuid ? 'invitation' : 'normal'}
         />
         <Divider flexItem />
         <Spacer vertical={3} />
-        <div style={{ justifyContent: 'space-between', display: 'flex' }}>
-          <BigButton
-            sx={{ width: '25%', background: 'none' }}
+        <FlexRow justifyContent={'space-between'}>
+          <Button
+            sx={{ background: 'none' }}
             color="secondary"
             variant="text"
             startIcon={<ChevronLeft />}
-            onClick={() => onGoBack()}
+            onClick={() => history.back()}
+            size="large"
           >
             Back
-          </BigButton>
-          <BigButton
-            sx={{
-              width: '25%',
-              filter: loading ? 'brightness(0.4)' : undefined,
-            }}
-            disabled={loading}
+          </Button>
+          <LoadingButton
+            loading={loading}
             variant="contained"
             type="submit"
+            size="large"
           >
-            {loading ? <CircularProgress size={30} /> : 'Register'}
-          </BigButton>
-        </div>
+            Register
+          </LoadingButton>
+        </FlexRow>
       </form>
     </>
   );
