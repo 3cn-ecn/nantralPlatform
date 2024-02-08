@@ -23,9 +23,9 @@ export default function RegisterFormPanel() {
     passwordConfirm: '',
     firstName: '',
     lastName: '',
-    faculty: { label: 'Ingénieur généraliste', value: 'Gen' },
+    faculty: 'Gen',
     promo: new Date().getFullYear(),
-    path: { label: 'None', value: 'Cla' },
+    path: 'Cla',
     invitationUUID: uuid,
   });
   const navigate = useNavigate();

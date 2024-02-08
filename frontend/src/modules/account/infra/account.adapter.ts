@@ -4,11 +4,11 @@ import { RegisterCreatedDTO, RegisterDTO } from './account.dto';
 export function adaptRegisterForm(form: RegisterForm): RegisterDTO {
   return {
     email: form.email,
-    faculty: form.faculty.value,
+    faculty: form.faculty,
     first_name: form.firstName,
     last_name: form.lastName,
     password: form.password,
-    path: form?.path?.value,
+    path: form?.path,
     promo: form.promo,
     invitation_uuid: form?.invitationUUID,
   };

@@ -1,11 +1,14 @@
 import { useCallback } from 'react';
 
 import { AccountCircle, School } from '@mui/icons-material';
-import { Autocomplete, Divider, Typography } from '@mui/material';
-import MuiTextField from '@mui/material/TextField';
+import { Divider, MenuItem, Typography } from '@mui/material';
 
 import { RegisterForm } from '#modules/account/account.type';
-import { DateField, TextField } from '#shared/components/FormFields';
+import {
+  DateField,
+  SelectField,
+  TextField,
+} from '#shared/components/FormFields';
 import { PasswordField } from '#shared/components/FormFields/PasswordField';
 
 interface RegisterFormFieldsProps {
@@ -117,52 +120,40 @@ export function RegisterFormFields({
         required
         fullWidth
       />
-      <Autocomplete
-        sx={{ marginTop: 2, marginBottom: 3 }}
+      <SelectField
+        handleChange={(value: RegisterForm['faculty']) =>
+          updateFormValues({
+            faculty: value,
+          })
+        }
+        required
         value={formValues?.faculty}
-        getOptionLabel={(option) => option.label}
-        onChange={(_, value: RegisterForm['faculty']) =>
-          updateFormValues({ faculty: value })
+        label="Formation followed"
+      >
+        <MenuItem value={'Gen'}>Ingénieur généraliste</MenuItem>
+        <MenuItem value={'Iti'}>Ingénieur de spécialité (ITII)</MenuItem>
+        <MenuItem value={'Mst'}>Master</MenuItem>
+        <MenuItem value={'Doc'}>Doctorat</MenuItem>
+        <MenuItem value={'Bac'}>Bachelor</MenuItem>
+        <MenuItem value={'MSp'}>Mastère Spécialisé</MenuItem>
+      </SelectField>
+      <SelectField
+        handleChange={(value: RegisterForm['path']) =>
+          updateFormValues({
+            path: value,
+          })
         }
-        options={[
-          { label: 'Ingénieur généraliste', value: 'Gen' },
-          { label: 'Ingénieur de spécialité (ITII)', value: 'Iti' },
-          { label: 'Master', value: 'Mst' },
-          { label: 'Doctorat', value: 'Doc' },
-          { label: 'Bachelor', value: 'Bac' },
-          { label: 'Mastère Spécialisé', value: 'MSp' },
-        ]}
-        renderInput={(params) => (
-          <MuiTextField {...params} label="Formation followed" required />
-        )}
-      />
-      <Autocomplete
-        sx={{ marginTop: 2, marginBottom: 4 }}
         value={formValues?.path}
-        defaultValue={{ label: 'None', value: 'Cla' }}
-        getOptionLabel={(option) => option.label}
-        onChange={(_, value: RegisterForm['path']) =>
-          updateFormValues({ path: value || undefined })
-        }
-        options={[
-          { label: 'None', value: 'Cla' },
-          { label: 'Apprenticeship', value: 'Alt' },
-          { label: 'Engineer-Architect', value: 'I-A' },
-          { label: 'Architect-Engineer', value: 'A-I' },
-          { label: 'Engineer-Manager', value: 'I-M' },
-          { label: 'Manager-Engineer', value: 'M-I' },
-        ]}
-        renderInput={(params) => (
-          <MuiTextField
-            {...params}
-            label="Special Program"
-            helperText={
-              error?.fields?.path ||
-              'Special program your in central. You can change it later'
-            }
-          />
-        )}
-      />
+        label="Special Program"
+        helperText={'Special program your in central. You can change it later'}
+      >
+        <MenuItem value={'Cla'}>None</MenuItem>
+        <MenuItem value={'Alt'}>Apprenticeship</MenuItem>
+        <MenuItem value={'I-A'}>Engineer-Architect</MenuItem>
+        <MenuItem value={'A-I'}>Architect-Engineer</MenuItem>
+        <MenuItem value={'I-M'}>Engineer-Manager</MenuItem>
+        <MenuItem value={'M-I'}>Manager-Engineer</MenuItem>
+      </SelectField>
     </>
   );
 }

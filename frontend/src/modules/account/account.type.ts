@@ -6,14 +6,8 @@ export interface RegisterForm {
   lastName: string;
   password: string;
   promo: number;
-  faculty: {
-    label: string;
-    value: FacultyOptions;
-  };
-  path: {
-    label: string;
-    value: PathOptions;
-  };
+  faculty: FacultyOptions;
+  path: PathOptions;
   invitationUUID?: string;
   passwordConfirm?: string;
 }
