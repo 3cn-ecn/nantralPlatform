@@ -33,6 +33,7 @@ interface CKEditorComponentProps {
   label: string;
   errors?: string[];
   helperText?: string;
+  placeholder?: string;
 }
 
 export default function CKEditorComponent({
@@ -42,6 +43,7 @@ export default function CKEditorComponent({
   label,
   errors,
   helperText,
+  placeholder,
 }: CKEditorComponentProps) {
   const { i18n } = useTranslation();
 
@@ -65,7 +67,7 @@ export default function CKEditorComponent({
             name: name,
             editor: CustomEditor,
             data: value,
-            config: { language: getCKEditorLanguage(i18n) },
+            config: { language: getCKEditorLanguage(i18n), placeholder },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } as any,
         }}
