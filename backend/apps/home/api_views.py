@@ -6,8 +6,8 @@ from rest_framework.views import APIView
 from apps.utils.github import create_issue
 
 
-class CreateIssueView(APIView):
-    """A view to send the data of bug report form to GitHub."""
+class CreateFeedbackView(APIView):
+    """A view to send the data of bug/suggestion report form to GitHub."""
 
     permission_classes = [permissions.IsAuthenticated]
 
