@@ -455,6 +455,20 @@
     }
   },
   "feedback": {
+    "suggestion": {
+      "form": {
+        "title": {
+          "label": "Suggestion title"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Feel free to express and detail your suggestion as much as want. If feasible, please provide an example usage if it is not directly deducable from your explenation"
+        },
+        "button": {
+          "label": "Make the magic happen"
+        }
+      }
+    },
     "bug": {
       "form": {
         "title": {
@@ -462,7 +476,7 @@
         },
         "description": {
           "label": "Description",
-          "helperText": "Please provide comprehensive details and context regarding the issue you're experiencing. Include as much information as possible, such as the specific steps or actions leading up to the problem. Additionally, if feasible, provide a clear set of instructions on how to replicate the issue. This will greatly assist in understanding and addressing the issue effectively"
+          "placeholder": "Please provide comprehensive details and context regarding the issue you're experiencing. Include as much information as possible, such as the specific steps or actions leading up to the problem. Additionally, if feasible, provide a clear set of instructions on how to replicate the issue. This will greatly assist in understanding and addressing the issue effectively"
         },
         "button": {
           "label": "Submit"

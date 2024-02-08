@@ -7,11 +7,14 @@ import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
+import { FeedbackType, Feedback, FeedbackForm } from '../../feedback.types';
+
 interface FeedbackFormFieldsProps {
   isError: boolean;
   error: ApiFormError<Feedback> | null;
   formValues: FeedbackForm;
   updateFormValues: Dispatch<SetObjectStateAction<FeedbackForm>>;
+  type: FeedbackType;
 }
 
 export function FeedbackFormFields({
@@ -19,6 +22,7 @@ export function FeedbackFormFields({
   error,
   formValues,
   updateFormValues,
+  type,
 }: FeedbackFormFieldsProps) {
   const { t } = useTranslation();
 
@@ -28,7 +32,7 @@ export function FeedbackFormFields({
       <TextField
         name="title"
         key="title"
-        label={t('feedback.bug.form.title.label')}
+        label={t(`feedback.${type}.form.title.label`)}
         value={formValues.title}
         handleChange={useCallback(
           (val) => {
@@ -43,8 +47,8 @@ export function FeedbackFormFields({
         required
       />
       <RichTextField
-        label={t('feedback.bug.form.description.label')}
-        helperText={t('feedback.bug.form.description.helperText')}
+        label={t(`feedback.${type}.form.description.label`)}
+        placeholder={t(`feedback.${type}.form.description.placeholder`)}
         name="description"
         key="description"
         value={formValues.description}
