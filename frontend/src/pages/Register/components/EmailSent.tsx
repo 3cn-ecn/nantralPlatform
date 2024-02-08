@@ -1,6 +1,6 @@
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
-import { MarkEmailReadRounded } from '@mui/icons-material';
+import { Check, MarkEmailReadRounded } from '@mui/icons-material';
 import { Box, Button, CardContent, Paper, Typography } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 
@@ -61,7 +61,10 @@ export default function EmailSent() {
         <FlexRow sx={{ alignItems: 'center', gap: 1 }}>
           <Typography>Still Nothing?</Typography>
           {isSuccess ? (
-            <Typography color="primary">Email sent</Typography>
+            <>
+              <Typography sx={{ color: 'gray' }}>Email sent</Typography>
+              <Check color="success" />
+            </>
           ) : (
             <Button
               disabled={isLoading}
