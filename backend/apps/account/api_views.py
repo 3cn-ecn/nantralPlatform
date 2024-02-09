@@ -194,13 +194,17 @@ class AuthViewSet(GenericViewSet):
             return Response(
                 {"detail": "not found"}, status=status.HTTP_404_NOT_FOUND
             )
-
-        return Response({"status": "OK"}, status=status.HTTP_200_OK)
+        expires_at = InvitationLink.objects.get(id=uuid).expires_at
+        return Response(
+            {"status": "OK", "expires_at": expires_at},
+            status=status.HTTP_200_OK,
+        )
 
     @action(
         detail=False,
         methods=["PUT"],
         permission_classes=[IsAuthenticated],
+        serializer_class=UserSerializer,
     )
     def edit(self, request: Request):
         """Edit account informations"""
