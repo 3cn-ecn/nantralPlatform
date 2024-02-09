@@ -9,8 +9,8 @@ export interface ProvideAuthValues {
   isLoading: boolean;
   isAuthenticated: boolean;
   error: AxiosError<{ message?: string; code?: string }> | null;
-  login: (body: LoginApiBody) => void;
-  logout: () => void;
+  login: (body: LoginApiBody) => Promise<number>;
+  logout: () => Promise<number>;
 }
 
 export function useProvideAuth(): ProvideAuthValues {
@@ -47,7 +47,7 @@ export function useProvideAuth(): ProvideAuthValues {
   return {
     isLoading: isLoading || isLogoutLoading || isLoginLoading,
     isAuthenticated: !!isAuthenticated,
-    logout: logout,
+    logout,
     login,
     error,
   };

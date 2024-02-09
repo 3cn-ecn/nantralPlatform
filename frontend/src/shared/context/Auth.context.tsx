@@ -8,8 +8,8 @@ import {
 const AuthContext = createContext<ProvideAuthValues>({
   isLoading: true,
   isAuthenticated: false,
-  logout: () => new Promise<void>(() => null),
-  login: () => null,
+  logout: () => new Promise(() => null),
+  login: () => new Promise(() => null),
   error: null,
 });
 /**
