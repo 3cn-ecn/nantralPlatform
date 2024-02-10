@@ -1,34 +1,12 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 import { Card, Typography, useTheme } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
 
-import { passwordResetValidateTokenApi } from '#modules/account/api/passwordReset.api';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
-import { ResetPasswordError } from './components/ResetPasswordError';
-import ResetPasswordForm from './components/ResetPasswordForm';
-import ResetPasswordSuccess from './components/ResetPasswordSuccess';
-
 export default function ForgotPasswordPage() {
-  const { token } = useParams();
-
   const theme = useTheme();
-  const [success, setSuccess] = useState(false);
-  const {
-    isError,
-    isSuccess: tokenValid,
-    mutate,
-    isIdle,
-  } = useMutation(passwordResetValidateTokenApi);
-
-  useEffect(() => {
-    if (isIdle && token) {
-      mutate(token);
-    }
-  }, [isIdle, token, mutate]);
 
   return (
     <FloatingContainer maxWidth={'sm'}>
@@ -63,11 +41,7 @@ export default function ForgotPasswordPage() {
           Password Reset
         </Typography>
         <Spacer vertical={4} />
-        {isError && <ResetPasswordError />}
-        {!success && tokenValid && (
-          <ResetPasswordForm token={token} onSuccess={() => setSuccess(true)} />
-        )}
-        {tokenValid && success && <ResetPasswordSuccess />}
+        <Outlet />
       </Card>
     </FloatingContainer>
   );

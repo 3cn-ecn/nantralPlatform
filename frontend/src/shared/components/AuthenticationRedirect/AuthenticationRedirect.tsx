@@ -18,7 +18,7 @@ export function AuthenticationRedirect({
 }: AuthenticationRedirectProps) {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
-
+  console.log(location.pathname);
   return isAuthenticated !== authenticated ? (
     <Outlet />
   ) : (

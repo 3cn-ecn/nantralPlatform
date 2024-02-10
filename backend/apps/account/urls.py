@@ -3,7 +3,7 @@ from django.urls import path
 from .views import (
     ConfirmEmail,
     ConfirmUser,
-    PasswordResetConfirmCustomView,
+    PasswordResetConfirmRedirect,
     PermanentAccountUpgradeView,
     redirect_to_student,
 )
@@ -23,9 +23,9 @@ urlpatterns = [
         name="upgrade-permanent",
     ),
     path(
-        "reset_pass/<slug:token>/",
-        PasswordResetConfirmCustomView.as_view(),
-        name="reset_pass",
+        "reset_password/<slug:token>/",
+        PasswordResetConfirmRedirect.as_view(),
+        name="reset-pass",
     ),
     path(
         "<slug:user_id>/student/", redirect_to_student, name="redirect-student"

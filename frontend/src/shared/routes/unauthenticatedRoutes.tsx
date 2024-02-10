@@ -1,6 +1,9 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
+import { ResetPasswordError } from '#pages/ResetPassword/components/ResetPasswordError';
+import ResetPasswordForm from '#pages/ResetPassword/components/ResetPasswordForm';
+import ResetPasswordSuccess from '#pages/ResetPassword/components/ResetPasswordSuccess';
 import { UnauthenticatedPageTemplate } from '#shared/components/PageTemplate/UnauthenticatedPageTemplate';
 
 const EmailSent = lazy(() => import('#pages/Register/components/EmailSent'));
@@ -46,6 +49,14 @@ export const unauthenticatedRoutes: RouteObject = {
         { path: 'email_sent', element: <ForgotPasswordSuccessView /> },
       ],
     },
-    { path: '/reset_password/:token', element: <ResetPasswordPage /> },
+    {
+      path: 'account/reset_password/:token', // same url as backend
+      element: <ResetPasswordPage />,
+      children: [
+        { path: '', element: <ResetPasswordForm /> },
+        { path: 'invalid', element: <ResetPasswordError /> },
+        { path: 'success', element: <ResetPasswordSuccess /> },
+      ],
+    },
   ],
 };

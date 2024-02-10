@@ -1,25 +1,19 @@
 from typing import Any
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
-from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms.forms import BaseForm
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
-from django.utils.translation import gettext as _
 from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, TemplateView
 
-from django_rest_passwordreset.views import (
-    ResetPasswordConfirmViewSet,
-    ResetPasswordValidateTokenViewSet,
-)
-from rest_framework.exceptions import ValidationError
+from django_rest_passwordreset.views import ResetPasswordValidateTokenViewSet
 
 from apps.student.models import Student
 
@@ -70,55 +64,33 @@ class ConfirmUser(View):
             return render(self.request, "account/activation_invalid.html")
 
 
-class PasswordResetConfirmCustomView(FormView):
-    template_name = "account/reset_password.html"
-    post_reset_login = True
-    success_url = reverse_lazy("home:home")
+class PasswordResetConfirmRedirect(View):
+    """Redirects to the same url in the frontend if the token is valid,
+    else redirects to
 
-    def get(
-        self, request: HttpRequest, token, *args: str, **kwargs: Any
-    ) -> HttpResponse:
-        self.token = token
-        return super().get(request, token)
+    Parameters
+    ----------
+    View : _type_
+        _description_
+    """
 
-    def get_form(self, form_class: type | None = ...) -> BaseForm:
-        return SetPasswordForm(
-            self.request.user,
-            self.request.POST if self.request.method == "POST" else None,
-        )
-
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        if self.request.method == "GET":
-            self.request.data = {"token": self.token}
-            try:
-                response = ResetPasswordValidateTokenViewSet(
-                    request=self.request
-                ).post(request=self.request)
-                context["validlink"] = response.status_code == 200
-            except Exception:
-                context["validlink"] = False
-
-        return context
-
-    def form_valid(self, form: SetPasswordForm) -> HttpResponse:
-        token = self.request.resolver_match.kwargs["token"]
-        self.request.data = {
-            "token": token,
-            "password": form.cleaned_data["new_password1"],
-        }
+    def get(self, request: HttpRequest, token):
+        request.data = {"token": token}
+        # validate token
         try:
-            response = ResetPasswordConfirmViewSet(request=self.request).post(
+            response = ResetPasswordValidateTokenViewSet(
                 request=self.request
-            )
-        except ValidationError as e:
-            messages.error(self.request, "\n".join(e.detail.get("password")))
-            return redirect(self.request.path_info)
+            ).post(request=self.request)
+            valid = response.status_code == 200
+        except Exception:
+            valid = False
 
-        if response.status_code != 200:
-            return redirect(self.request.path_info)
-        messages.success(self.request, _("Mot de passe mis à jour"))
-        return super().form_valid(form)
+        if not valid:
+            return redirect(f"/account/reset_password/{token}/invalid")
+        # render react page
+        context = {"DJANGO_VITE_DEV_MODE": settings.DJANGO_VITE_DEV_MODE}
+        response = render(request, "base_empty.html", context)
+        return response
 
 
 @require_http_methods(["GET"])

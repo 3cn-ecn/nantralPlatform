@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Divider } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
@@ -7,13 +8,9 @@ import { passwordResetApi } from '#modules/account/api/passwordReset.api';
 import { PasswordField } from '#shared/components/FormFields/PasswordField';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 
-export default function ResetPasswordForm({
-  token,
-  onSuccess,
-}: {
-  token?: string;
-  onSuccess: () => void;
-}) {
+export default function ResetPasswordForm() {
+  const { token = undefined } = useParams();
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     password: '',
     confirmPassword: '',
@@ -26,7 +23,7 @@ export default function ResetPasswordForm({
       globalErrors?: string[];
     },
     { password: string; confirmPassword: string }
-  >(resetPassword, { onSuccess: () => onSuccess() });
+  >(resetPassword, { onSuccess: () => navigate('success') });
 
   function resetPassword(form: { password: string; confirmPassword: string }) {
     if (!!form?.password && form?.password !== form?.confirmPassword) {
