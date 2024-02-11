@@ -1,6 +1,6 @@
 ---
 title: Send Emails
-sidebar_position: 2
+sidebar_position: 6
 ---
 
 # How to send emails?

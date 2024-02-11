@@ -165,6 +165,7 @@ const config: Config = {
         'json',
         'javascript',
         'typescript',
+        'diff',
       ],
     },
   } satisfies Preset.ThemeConfig,
