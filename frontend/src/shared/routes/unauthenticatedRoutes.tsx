@@ -1,14 +1,20 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
-import { ResetPasswordError } from '#pages/ResetPassword/components/ResetPasswordError';
-import ResetPasswordForm from '#pages/ResetPassword/components/ResetPasswordForm';
-import ResetPasswordSuccess from '#pages/ResetPassword/components/ResetPasswordSuccess';
 import { UnauthenticatedPageTemplate } from '#shared/components/PageTemplate/UnauthenticatedPageTemplate';
 
 const EmailSent = lazy(() => import('#pages/Register/components/EmailSent'));
 const ForgotPasswordSuccessView = lazy(
   () => import('#pages/ForgotPassword/components/ForgotPasswordSuccessView'),
+);
+const ResetPasswordForm = lazy(
+  () => import('#pages/ResetPassword/components/ResetPasswordForm'),
+);
+const ResetPasswordSuccess = lazy(
+  () => import('#pages/ResetPassword/components/ResetPasswordSuccess'),
+);
+const ResetPasswordError = lazy(
+  () => import('#pages/ResetPassword/components/ResetPasswordError'),
 );
 const RegisterChoice = lazy(
   () => import('#pages/Register/components/RegisterChoice'),

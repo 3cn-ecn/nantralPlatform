@@ -1,6 +1,6 @@
 import { Alert } from '@mui/material';
 
-export function ResetPasswordError() {
+export default function ResetPasswordError() {
   return (
     <Alert severity="error">
       Something went wrong. The link may be invalid.
