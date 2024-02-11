@@ -1,14 +1,11 @@
 ---
-title: Resources 🔗
-sidebar_position: 99
+title: Resources
+sidebar_position: 3
 ---
 
 # 🔗 Resources
 
-This page regroups all the resources for framework, plugin or dependency of the project.
-
-The items with ~~strikethrough~~ are not used anymore in Nantral Platform, but you
-can still find some references to them in old code, so we keep them as reference.
+Docs and tutorials about the technologies used in Nantral Platform.
 
 ## General
 
@@ -38,10 +35,10 @@ can still find some references to them in old code, so we keep them as reference
   / [Doc on this site](/dev/guides/frameworks/rest-api.md)
 - **Django CKEditor5**: _a django library to support CKEditor5_
   / [Documentation](https://pypi.org/project/django-ckeditor-5/)
-- ~~**Bootstrap**: _a CSS library for django templates_
-  / [Documentation](https://getbootstrap.com/docs/5.0/getting-started/introduction/)~~
-- ~~**FontAwesome**: _an icon library for django templates_
-  / [Icons Library](https://fontawesome.com/v5/search)~~
+- [Deprecated] **Bootstrap**: _a CSS library for django templates_
+  / [Documentation](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+- [Deprecated] **FontAwesome**: _an icon library for django templates_
+  / [Icons Library](https://fontawesome.com/v5/search)
 
 ## Front End
 

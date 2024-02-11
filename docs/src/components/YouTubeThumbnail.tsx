@@ -13,17 +13,27 @@ export default function YouTubeThumbnail({
   const thumbnailUrl = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
   return (
-    <a href={url} target="_blank" rel="noopener noreferrer">
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        display: 'inline-flex',
+        flexDirection: 'column',
+        width: '49%',
+        maxWidth: '100%',
+        ...style,
+      }}
+    >
+      <span>{alt}</span>
       <img
         src={thumbnailUrl}
         alt={alt}
         title={alt}
         style={{
-          width: '49%',
-          maxWidth: '100%',
+          width: '100%',
           aspectRatio: '16 / 9',
           objectFit: 'cover',
-          ...style,
         }}
       />
     </a>

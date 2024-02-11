@@ -3,9 +3,9 @@ sidebar_position: 1
 description: Some projects to learn web development
 ---
 
-# Tutorials
+# Mini-projects
 
-This page proposes some mini-project to help you engage with the world of
+This page proposes some mini-projects to help you engage with the world of
 web development!
 
 For each project, don't hesitate to use tutorials on the internet

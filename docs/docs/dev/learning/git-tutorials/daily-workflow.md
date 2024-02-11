@@ -1,8 +1,8 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 ---
 
-# Daily workflow
+# How to make a PR
 
 Here is a typical workflow for contributing on the project with Git.
 
