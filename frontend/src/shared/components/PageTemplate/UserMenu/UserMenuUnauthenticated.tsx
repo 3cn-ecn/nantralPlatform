@@ -57,8 +57,7 @@ export function UserMenuUnauthenticated() {
           label={t('userMenu.menu.signIn')}
           icon={<LoginIcon />}
           component={Link}
-          to="/account/login/"
-          reloadDocument
+          to="/login/"
           onClick={() => setMenuOpen(null)}
         />
         <Divider />

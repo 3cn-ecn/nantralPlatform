@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-22 17:02+0200\n"
+"POT-Creation-Date: 2024-02-12 13:47+0100\n"
 "PO-Revision-Date: 2023-10-20 20:08+0200\n"
 "Last-Translator: Alexis Delage <alexidelage@gmail.com>\n"
 "Language-Team: \n"
@@ -18,27 +18,49 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4\n"
 
-#: admin.py:25
+#: admin.py:29
 #, fuzzy
 #| msgid "Votre adresse mail Centrale Nantes."
 msgid "mail Centrale Nantes"
 msgstr "Your Centrale Nantes email."
 
-#: admin.py:64
+#: admin.py:77
 msgid "Info personnelles"
 msgstr "Personal info"
 
-#: admin.py:68
+#: admin.py:81
 msgid "Permissions"
 msgstr "Permissions"
 
-#: admin.py:80
+#: admin.py:93
 msgid "Validation du compte"
 msgstr "Account Validation"
 
-#: admin.py:89
+#: admin.py:102
 msgid "Dates Importantes"
 msgstr "Important dates"
+
+#: api_views.py:62
+msgid "L'authentification à échoué"
+msgstr "Authentication failed"
+
+#: api_views.py:86
+msgid ""
+"Votre e-mail n'est pas vérifié. Merci de cliquer sur le lien de vérification"
+msgstr ""
+"Your e-mail is not verified. Please click on the link verification link"
+
+#: api_views.py:100
+msgid ""
+"Connection réussi, votre compte est temporaire, veuillez mettre à jour votre "
+"adresse email au plus vite."
+msgstr ""
+"Connection successful, your account is temporary, please update your email "
+"address as soon as possible."
+
+#: api_views.py:111
+msgid "Connection réussi"
+msgstr "Succesfully connected"
 
 #: forms.py:21
 msgid ""
@@ -48,7 +70,7 @@ msgstr ""
 "Invalid invitation: the invitation link has expired. Please enter an email "
 "finishing by ec-nantes.fr, or contact an administrator."
 
-#: forms.py:32
+#: forms.py:32 serializers.py:20
 msgid ""
 "Vous devez utiliser une adresse mail de Centrale Nantes finissant par ec-"
 "nantes.fr"
@@ -137,6 +159,22 @@ msgstr "Your personal email."
 #: forms.py:192
 msgid "Votre adresse mail Centrale Nantes."
 msgstr "Your Centrale Nantes email."
+
+#: serializers.py:38
+msgid "Le lien d'invitation est invalide"
+msgstr "Invitation link is invalid"
+
+#: serializers.py:68 serializers.py:160 serializers.py:186
+msgid "Un compte à déjà été créé avec cette adresse email"
+msgstr "An account has already been created with this email address"
+
+#: serializers.py:86
+msgid "Ce nom d'utilisateur est déjà pris"
+msgstr "This email is already being used."
+
+#: serializers.py:147 serializers.py:194
+msgid "Mot de passe invalide"
+msgstr "Invalid passsword"
 
 #: templates/account/confirm-email.html:11
 msgid "Confirmez votre adresse email"

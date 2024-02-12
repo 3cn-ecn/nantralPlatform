@@ -16,6 +16,7 @@ import { Collapse, Divider, Icon, IconButton, Menu } from '@mui/material';
 
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
+import { useAuth } from '#shared/context/Auth.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { LangSubMenu } from './components/LangSubMenu';
@@ -35,6 +36,7 @@ export function UserMenuAuthenticated() {
     setAnchorEl(event.currentTarget);
     setMenuOpen('main');
   };
+  const { logout } = useAuth();
 
   return (
     <>
@@ -76,10 +78,9 @@ export function UserMenuAuthenticated() {
         <UserMenuItem
           label={t('userMenu.menu.signOut')}
           icon={<LogoutIcon />}
-          component={Link}
-          to="/account/logout/"
-          reloadDocument
-          onClick={() => setMenuOpen(null)}
+          onClick={() => {
+            logout();
+          }}
         />
         <Divider />
         <UserMenuItem

@@ -144,7 +144,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         """Validate that provided password is correct"""
         user: User = self.context.get("request").user
         if not user.check_password(val):
-            raise ValidationError(_("Invalid password"))
+            raise ValidationError(_("Mot de passe invalide"))
 
         return val
 
@@ -183,7 +183,7 @@ class ChangeEmailSerializer(serializers.Serializer):
             validate_ecn_email,
             UniqueValidator(
                 User.objects.all(),
-                message=_("Ce mail a déjà été utilisé avec un autre compte"),
+                message=_("Un compte à déjà été créé avec cette adresse email"),
             ),
         ]
     )
@@ -191,7 +191,7 @@ class ChangeEmailSerializer(serializers.Serializer):
     def validate_password(self, val):
         user: User = self.context.get("request").user
         if not user.check_password(val):
-            raise ValidationError(_("Invalid password"))
+            raise ValidationError(_("Mot de passe invalide"))
         return val
 
 

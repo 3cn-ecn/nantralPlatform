@@ -2,7 +2,6 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.urls import reverse
 from django.utils import timezone
 
 from .manager import UserManager
@@ -25,7 +24,7 @@ class InvitationLink(models.Model):
         return self.expires_at > timezone.now()
 
     def get_absolute_url(self):
-        return reverse("account:temp-registration-choice", args=[self.id])
+        return f"/register?uuid={self.id}/"
 
 
 class User(AbstractUser):

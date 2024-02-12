@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-from django.urls import reverse_lazy
-
 import environ
 
 # import all the environment variables, defining their type and their default
@@ -127,7 +125,7 @@ MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 ROOT_URLCONF = "config.urls"
 LOGIN_REDIRECT_URL = "None"
-LOGIN_URL = reverse_lazy("account:login")
+LOGIN_URL = "/login"
 
 TEMPLATES = [
     {

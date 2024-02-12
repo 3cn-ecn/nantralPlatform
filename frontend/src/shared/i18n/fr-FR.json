@@ -23,6 +23,7 @@
     }
   },
   "button": {
+    "back": "Retour",
     "cancel": "Annuler",
     "confirm": "Valider",
     "next": "Suivant",
@@ -300,6 +301,38 @@
     "title": "Mentions Légales"
   },
   "loading": "Chargement...",
+  "login": {
+    "arrivalYear": "Année d'arrivé à Centrale Nantes",
+    "ecnEmail": "Votre adresse email ec-nantes.fr",
+    "email": "Email",
+    "formationFollowed": {
+      "PhD": "Doctorat",
+      "bachelor": "Bachelor",
+      "generalEngineer": "Ingénieur généraliste",
+      "label": "Formation suivie",
+      "master": "Master",
+      "specializedMaster": "Mastère Spécialisé",
+      "specialtyEngineer": "Ingénieur de spécialité (ITII)"
+    },
+    "login": "Se connecter",
+    "noAccount": "Pas de compte ?",
+    "password": "Mot de passe",
+    "passwordConfirm": "Confirmez votre mot de passe",
+    "specialProgram": {
+      "apprenticeship": "Apprenti",
+      "architectEngineer": "Architecte-Ingénieur",
+      "engineerArchitect": "Ingénieur-Architecte",
+      "engineerManager": "Ingénieur-Manager",
+      "helperText": "Programme spécial suivie à Centrale. Vous pourrez le changer plus tard.",
+      "label": "Programme spécial",
+      "managerEngineer": "Manager-Ingénieur",
+      "none": "Aucun"
+    },
+    "viewPublicGroups": "Voir les groupes publics",
+    "website": {
+      "ecn": "Le site web étudiant de Centrale Nantes !"
+    }
+  },
   "modal": {
     "closeButton": {
       "label": "Fermer"
@@ -337,6 +370,11 @@
     "subscribed": "Abonnements",
     "title": "Notifications",
     "unseen": "Non lues"
+  },
+  "passwordReset": {
+    "error": "Une erreur s'est produite. Le lien semble invalide.",
+    "newPassword": "Nouveau mot de passe",
+    "title": "Réinitilaisation du mot de passe"
   },
   "post": {
     "createModal": {
@@ -380,6 +418,55 @@
       }
     },
     "post": "Post"
+  },
+  "register": {
+    "ECNEmail": "Votre adresse email ec-nantes.fr",
+    "EmailECN": "J'ai un email Centrale nantes",
+    "accountCreation": "Création du compte",
+    "accountInformations": "Informations de compte",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "canCreateTemporaryAccount": "Dans ce cas, vous pouvez créer un compte temporaire avec votre email personnel. NB : Ce compte vous donne accès à Nantral Platform pour une durée limitée, assurez-vous de le changer dès que vous avez accès à votre email @ec-nantes.fr.",
+    "canNotCreateAccount": "Dans ce cas, vous ne pouvez pas créer de compte sur Nantral Platform. Vous pouvez cependant créer un compte temporaire si vous disposez d'un lien d'invitation (disponible sur la page d'accueil d'Onboard pendant l'été, par exemple)",
+    "clickOnLink": "Cliquez sur le lien contenu dans l'e-mail et connectez-vous pour accéder à votre compte.",
+    "confirmationEmailSent": "Un e-mail de confirmation vous a été envoyé pour confirmer votre adresse e-mail à <strong>{{email}}</strong>.",
+    "createAccount": "Créez votre compte Nantral Platform",
+    "createAccountNow": "Créer un compte maintenant",
+    "createTemporaryAccount": "Créer un compte temporaire",
+    "createdAccountIsTemporary": "Vous pouvez créer un compte Nantral Platform avec votre adresse email personnelle, cependant vous devrez renseigner votre addresse <strong>@ec-nantes.fr</strong> dès que vous y aurez accès. ",
+    "emailNotReceived": "Email non reçu ?",
+    "emailSent": "Email envoyé",
+    "firstName": "Prénom",
+    "goLoginPage": "Aller à la page de connexion",
+    "haveECNEmail": {
+      "canContinue": "Si vous avez accès à votre adresse Centrale Nantes (se terminant par ec-nantes.fr), vous pouvez continuer votre inscription",
+      "no": "Non, je n'ai pas encore accès à mon adresse Centrale Nantes",
+      "question": "Ai-je un email Centrale Nantes ?",
+      "yes": "Oui, j'ai un email Centrale Nantes"
+    },
+    "invalidInvitation": "Le lien d'invitation fourni n'est pas valide. Assurez-vous qu'il est correct.",
+    "lastName": "Nom",
+    "nearlyDone": "Nous y sommes presque {{firstName}} !",
+    "passwordDontMatch": "Les mots de passe ne correspondent pas",
+    "passwordHelperText": "Votre mot de passe doit contenir au moins 7 caractères",
+    "personalEmail": "Votre adresse personnelle",
+    "register": "S'inscrire",
+    "schooling": "Étude",
+    "sendAgain": "Renvoyer",
+    "signUpEmailRequirement": "Pour s'inscrire à Nantral Platform, vous devez être actuellement à Centrale Nantes. Pour le vérifier, nous utilisons votre adresse email qui doit se terminer par <strong>@eleves.ec-nantes.fr</strong> ou <strong>@ec-nantes.fr</strong>.",
+    "stillNothing": "Toujours rien ?",
+    "validation": "Validation",
+    "waitAFewMinutes": "Attendez quelques minutes, cela peut parfois prendre beaucoup de temps."
+  },
+  "resetPassword": {
+    "backToLogin": "Retour",
+    "emailHelperText": "Email associé à votre compte Nantral Platform",
+    "emailSent": "Un courriel a été envoyé pour réinitialiser votre mot de passe. Si vous ne recevez rien, attendez quelques minutes, cela peut parfois prendre du temps.",
+    "forgotten": "Mot de passe oublié ?",
+    "passwordChanged": "Mot de passe modifié",
+    "provideEmail": "Veuillez indiquer votre adresse e-mail, nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+    "request": "Envoyer le lien de réinitialisation",
+    "updatePassword": "Mettre à jour le mot de passe",
+    "youCanNowLogin": "Vous pouvez désormais vous connecter avec votre nouveau mot de passe"
   },
   "signature": {
     "actions": {

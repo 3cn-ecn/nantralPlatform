@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.encoding import force_bytes
@@ -8,10 +7,8 @@ from django.utils.http import urlsafe_base64_encode
 from apps.utils.send_email import send_email
 
 from .forms import SignUpForm, TemporaryRequestSignUpForm
-from .models import InvitationLink
+from .models import InvitationLink, User
 from .tokens import account_activation_token
-
-User = get_user_model()
 
 
 def user_creation(

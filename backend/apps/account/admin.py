@@ -1,5 +1,9 @@
+from typing import Any
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.db.models.query import QuerySet
+from django.http.request import HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -53,6 +57,15 @@ class NoPasswordFilter(admin.SimpleListFilter):
 @admin.register(InvitationLink)
 class IdRegistrationAdmin(admin.ModelAdmin):
     list_display = ["id", "description", "expires_at"]
+    readonly_fields = ("url",)
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
+        self.request = request  # get access to the request object
+        return super().get_queryset(request)
+
+    def url(self, obj: InvitationLink):
+        absolute_uri = obj.get_absolute_url()
+        return self.request.build_absolute_uri(absolute_uri)
 
 
 @admin.register(User)
