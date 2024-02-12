@@ -100,14 +100,6 @@ export default function RegisterFormPanel() {
             variant="contained"
             type="submit"
             size="large"
-            onClick={() =>
-              navigate('/register/validation', {
-                state: {
-                  email: formValues?.email,
-                  firstName: formValues?.firstName,
-                },
-              })
-            }
           >
             {t('register.register')}
           </LoadingButton>
