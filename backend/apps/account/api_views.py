@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -58,12 +59,12 @@ class AuthViewSet(GenericViewSet):
         password = serializer.validated_data.get("password")
 
         user: User = authenticate(username=email, password=password)
-
+        fail_message = _("L'authentification à échoué")
         # Wrong credentials
         if user is None:
             return Response(
                 {
-                    "message": "Authentication Failed",
+                    "message": fail_message,
                     "code": FAILED,
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -73,7 +74,7 @@ class AuthViewSet(GenericViewSet):
         if user.invitation is not None and not user.invitation.is_valid():
             return Response(
                 {
-                    "message": "Authentication Failed",
+                    "message": fail_message,
                     "code": TEMPORARY_ACCOUNT_EXPIRED,
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -81,9 +82,13 @@ class AuthViewSet(GenericViewSet):
 
         # Not verified email
         if not user.is_email_valid:
+            message = _(
+                "Votre e-mail n'est pas vérifié. Merci de cliquer sur le lien "
+                "de vérification"
+            )
             return Response(
                 {
-                    "message": "Email is not verified",
+                    "message": message,
                     "code": EMAIL_NOT_VALIDATED,
                 },
                 status=status.HTTP_401_UNAUTHORIZED,
@@ -91,7 +96,10 @@ class AuthViewSet(GenericViewSet):
 
         # Temporary account
         if user.invitation is not None and user.invitation.is_valid():
-            message = "You are connected on a temporary account"
+            message = _(
+                "Connection réussi, votre compte est temporaire, veuillez "
+                "mettre à jour votre adresse email au plus vite."
+            )
             login(request=request, user=user)
             return Response(
                 data={"message": message, "code": ACCOUNT_TEMPORARY},
@@ -100,7 +108,7 @@ class AuthViewSet(GenericViewSet):
 
         login(request=request, user=user)
         return Response(
-            data={"message": "Connection success", "code": SUCCESS},
+            data={"message": _("Connection réussi"), "code": SUCCESS},
             status=status.HTTP_200_OK,
         )
 
