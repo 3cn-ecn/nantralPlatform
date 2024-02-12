@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { CheckCircle } from '@mui/icons-material';
@@ -7,11 +8,14 @@ import { Spacer } from '#shared/components/Spacer/Spacer';
 
 export default function ResetPasswordSuccess() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <>
       <CheckCircle sx={{ fontSize: 200 }} color="success" />
-      <Typography variant="h4">Password changed successfully</Typography>
-      <Typography>You can now login with your new password</Typography>
+      <Typography variant="h4">{t('resetPassword.passwordChanged')}</Typography>
+      <Typography textAlign="center">
+        {t('resetPassword.youCanNowLogin')}
+      </Typography>
       <Spacer vertical={3} />
       <Divider flexItem />
       <Spacer vertical={3} />
@@ -21,7 +25,7 @@ export default function ResetPasswordSuccess() {
         fullWidth
         onClick={() => navigate('/login/')}
       >
-        Go to login page
+        {t('resetPassword.backToLogin')}
       </Button>
     </>
   );

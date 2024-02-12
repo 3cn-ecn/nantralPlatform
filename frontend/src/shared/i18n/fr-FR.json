@@ -371,6 +371,11 @@
     "title": "Notifications",
     "unseen": "Non lues"
   },
+  "passwordReset": {
+    "error": "Une erreur s'est produite. Le lien semble invalide.",
+    "newPassword": "Nouveau mot de passe",
+    "title": "Réinitilaisation du mot de passe"
+  },
   "post": {
     "createModal": {
       "title": "Créer un post"
@@ -456,8 +461,11 @@
     "emailHelperText": "Email associé à votre compte Nantral Platform",
     "emailSent": "Un courriel a été envoyé pour réinitialiser votre mot de passe. Si vous ne recevez rien, attendez quelques minutes, cela peut parfois prendre du temps.",
     "forgotten": "Mot de passe oublié ?",
+    "passwordChanged": "Mot de passe modifié",
     "provideEmail": "Veuillez indiquer votre adresse e-mail, nous vous enverrons un lien pour réinitialiser votre mot de passe.",
-    "request": "Envoyer le lien de réinitialisation"
+    "request": "Envoyer le lien de réinitialisation",
+    "updatePassword": "Mettre à jour le mot de passe",
+    "youCanNowLogin": "Vous pouvez désormais vous connecter avec votre nouveau mot de passe"
   },
   "signature": {
     "actions": {

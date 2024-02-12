@@ -7,10 +7,12 @@ import { useMutation } from '@tanstack/react-query';
 import { passwordResetApi } from '#modules/account/api/passwordReset.api';
 import { PasswordField } from '#shared/components/FormFields/PasswordField';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function ResetPasswordForm() {
   const { token = undefined } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [formValues, setFormValues] = useState({
     password: '',
     confirmPassword: '',
@@ -27,7 +29,7 @@ export default function ResetPasswordForm() {
 
   function resetPassword(form: { password: string; confirmPassword: string }) {
     if (!!form?.password && form?.password !== form?.confirmPassword) {
-      throw { fields: { confirmPassword: ["Passwords don't match."] } };
+      throw { fields: { confirmPassword: [t('register.passwordDontMatch')] } };
     }
     if (!token) {
       throw { globalErrors: ['Something went wrong'] };
@@ -45,8 +47,8 @@ export default function ResetPasswordForm() {
     >
       <PasswordField
         handleChange={(val) => setFormValues({ ...formValues, password: val })}
-        label="New password"
-        helperText={'Your new password must contain at least 7 characters.'}
+        label={t('passwordReset.newPassword')}
+        helperText={t('register.passwordHelperText')}
         errors={error?.fields?.password}
         required
       />
@@ -60,7 +62,7 @@ export default function ResetPasswordForm() {
           !!formValues?.confirmPassword &&
           formValues?.confirmPassword === formValues?.password
         }
-        label="Confirm new password"
+        label={t('login.passwordConfirm')}
         errors={error?.fields?.confirmPassword}
         required
       />
@@ -72,7 +74,7 @@ export default function ResetPasswordForm() {
         variant="contained"
         type="submit"
       >
-        Update password
+        {t('resetPassword.updatePassword')}
       </LoadingButton>
     </form>
   );

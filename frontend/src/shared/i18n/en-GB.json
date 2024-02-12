@@ -368,6 +368,11 @@
     "title": "Notifications",
     "unseen": "Unread"
   },
+  "passwordReset": {
+    "error": "Something went wrong. The link may be invalid.",
+    "newPassword": "New Password",
+    "title": "Password reset"
+  },
   "post": {
     "createModal": {
       "title": "Create new post"
@@ -454,8 +459,11 @@
     "emailHelperText": "Email associated with your Nantral Platform account",
     "emailSent": "An email has been sent to reset your password. If you don't receive anything, wait a few minutes it can sometimes take some time.",
     "forgotten": "Forgot your Password?",
+    "passwordChanged": "Password changed successfully",
     "provideEmail": "Please provide your email, we'll send you a link to reset your password.",
-    "request": "Request password reset"
+    "request": "Request password reset",
+    "updatePassword": "Update password",
+    "youCanNowLogin": "You can now login with your new password"
   },
   "signature": {
     "actions": {

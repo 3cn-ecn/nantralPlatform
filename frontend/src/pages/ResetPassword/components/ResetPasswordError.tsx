@@ -1,9 +1,8 @@
 import { Alert } from '@mui/material';
 
+import { useTranslation } from '#shared/i18n/useTranslation';
+
 export default function ResetPasswordError() {
-  return (
-    <Alert severity="error">
-      Something went wrong. The link may be invalid.
-    </Alert>
-  );
+  const { t } = useTranslation();
+  return <Alert severity="error">{t('passwordReset.error')}</Alert>;
 }
