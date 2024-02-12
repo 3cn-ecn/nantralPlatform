@@ -10,6 +10,7 @@ import {
   TextField,
 } from '#shared/components/FormFields';
 import { PasswordField } from '#shared/components/FormFields/PasswordField';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 interface RegisterFormFieldsProps {
   error: { fields: Partial<Record<keyof RegisterForm, string[]>> } | null;
@@ -24,7 +25,7 @@ export function RegisterFormFields({
   updateFormValues,
   registrationType = 'normal',
 }: RegisterFormFieldsProps) {
-  // const { t } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -33,7 +34,7 @@ export function RegisterFormFields({
         color={'primary'}
         sx={{ alignItems: 'center', display: 'flex', columnGap: 1 }}
       >
-        <AccountCircle /> Account Informations
+        <AccountCircle /> {t('register.accountInformations')}
       </Typography>
       <Divider sx={{ marginTop: 1 }} />
       <TextField
@@ -49,12 +50,12 @@ export function RegisterFormFields({
         required
         helperText={
           registrationType === 'invitation'
-            ? 'Your personal email'
-            : 'Your email address ec-nantes.fr'
+            ? t('register.personalEmail')
+            : t('register.ECNEmail')
         }
       />
       <TextField
-        label={'First Name'}
+        label={t('register.firstName')}
         value={formValues.firstName}
         handleChange={useCallback(
           (val) => updateFormValues({ firstName: val }),
@@ -64,7 +65,7 @@ export function RegisterFormFields({
         required
       />
       <TextField
-        label={'Last Name'}
+        label={t('register.lastName')}
         value={formValues.lastName}
         handleChange={useCallback(
           (val) => updateFormValues({ lastName: val }),
@@ -79,9 +80,9 @@ export function RegisterFormFields({
           (val) => updateFormValues({ password: val }),
           [updateFormValues],
         )}
-        label={'Password'}
+        label={t('login.password')}
         errors={error?.fields?.password}
-        helperText={'Your password must contain at least 7 characters.'}
+        helperText={t('register.passwordHelperText')}
         sx={{ marginTop: 3 }}
         required
       />
@@ -90,7 +91,7 @@ export function RegisterFormFields({
           (val) => updateFormValues({ passwordConfirm: val }),
           [updateFormValues],
         )}
-        label={'Confirm your password'}
+        label={t('login.passwordConfirm')}
         errors={error?.fields?.passwordConfirm}
         visibilityIconHidden
         showValidateIcon={
@@ -106,12 +107,12 @@ export function RegisterFormFields({
         sx={{ alignItems: 'center', display: 'flex', columnGap: 1 }}
       >
         <School />
-        Schooling
+        {t('register.schooling')}
       </Typography>
 
       <Divider sx={{ marginTop: 1 }} />
       <DateField
-        label={'Year of arrival at Centrale Nantes'}
+        label={t('login.arrivalYear')}
         defaultValue={new Date()}
         sx={{ marginTop: 3 }}
         views={['year']}
@@ -128,14 +129,22 @@ export function RegisterFormFields({
         }
         required
         value={formValues?.faculty}
-        label="Formation followed"
+        label={t('login.formationFollowed.label')}
       >
-        <MenuItem value={'Gen'}>Ingénieur généraliste</MenuItem>
-        <MenuItem value={'Iti'}>Ingénieur de spécialité (ITII)</MenuItem>
-        <MenuItem value={'Mst'}>Master</MenuItem>
-        <MenuItem value={'Doc'}>Doctorat</MenuItem>
-        <MenuItem value={'Bac'}>Bachelor</MenuItem>
-        <MenuItem value={'MSp'}>Mastère Spécialisé</MenuItem>
+        <MenuItem value={'Gen'}>
+          {t('login.formationFollowed.generalEngineer')}
+        </MenuItem>
+        <MenuItem value={'Iti'}>
+          {t('login.formationFollowed.specialtyEngineer')}
+        </MenuItem>
+        <MenuItem value={'Mst'}>{t('login.formationFollowed.master')}</MenuItem>
+        <MenuItem value={'Doc'}>{t('login.formationFollowed.PhD')}</MenuItem>
+        <MenuItem value={'Bac'}>
+          {t('login.formationFollowed.bachelor')}
+        </MenuItem>
+        <MenuItem value={'MSp'}>
+          {t('login.formationFollowed.specializedMaster')}
+        </MenuItem>
       </SelectField>
       <SelectField
         handleChange={(value: RegisterForm['path']) =>
@@ -144,15 +153,25 @@ export function RegisterFormFields({
           })
         }
         value={formValues?.path}
-        label="Special Program"
-        helperText={'Special program your in central. You can change it later'}
+        label={t('login.specialProgram.label')}
+        helperText={t('login.specialProgram.helperText')}
       >
-        <MenuItem value={'Cla'}>None</MenuItem>
-        <MenuItem value={'Alt'}>Apprenticeship</MenuItem>
-        <MenuItem value={'I-A'}>Engineer-Architect</MenuItem>
-        <MenuItem value={'A-I'}>Architect-Engineer</MenuItem>
-        <MenuItem value={'I-M'}>Engineer-Manager</MenuItem>
-        <MenuItem value={'M-I'}>Manager-Engineer</MenuItem>
+        <MenuItem value={'Cla'}>{t('login.specialProgram.none')}</MenuItem>
+        <MenuItem value={'Alt'}>
+          {t('login.specialProgram.apprenticeship')}
+        </MenuItem>
+        <MenuItem value={'I-A'}>
+          {t('login.specialProgram.engineerArchitect')}
+        </MenuItem>
+        <MenuItem value={'A-I'}>
+          {t('login.specialProgram.architectEngineer')}
+        </MenuItem>
+        <MenuItem value={'I-M'}>
+          {t('login.specialProgram.engineerManager')}
+        </MenuItem>
+        <MenuItem value={'M-I'}>
+          {t('login.specialProgram.managerEngineer')}
+        </MenuItem>
       </SelectField>
     </>
   );

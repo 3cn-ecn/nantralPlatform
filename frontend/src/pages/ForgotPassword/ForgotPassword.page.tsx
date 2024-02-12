@@ -4,8 +4,10 @@ import { Card, Icon, Typography, useTheme } from '@mui/material';
 
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslation();
   const theme = useTheme();
 
   return (
@@ -39,7 +41,7 @@ export default function ForgotPasswordPage() {
           }}
           variant="h2"
         >
-          Forgot your Password?
+          {t('resetPassword.forgotten')}
         </Typography>
         <Spacer vertical={2} />
         <Outlet />

@@ -9,9 +9,12 @@ import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { TextField } from '#shared/components/FormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function ForgotPasswordForm() {
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const [formValues, setFormValues] = useState<{
     email: string;
@@ -32,8 +35,7 @@ export default function ForgotPasswordForm() {
   return (
     <>
       <Typography variant="body1" margin={2}>
-        Please provide your email, we&apos;ll send you a link to reset your
-        password
+        {t('resetPassword.provideEmail')}
       </Typography>
       <form
         onSubmit={(event) => {
@@ -49,7 +51,7 @@ export default function ForgotPasswordForm() {
           required
           fullWidth
           errors={error?.fields?.email}
-          helperText={'Email associated with your Nantral Platform account'}
+          helperText={t('resetPassword.emailHelperText')}
           handleChange={(val) => setFormValues({ ...formValues, email: val })}
         />
         <Spacer vertical={3} />
@@ -69,14 +71,14 @@ export default function ForgotPasswordForm() {
             size="large"
             fullWidth
           >
-            Request password reset
+            {t('resetPassword.request')}
           </LoadingButton>
           <Button
             sx={{ maxWidth: 220 }}
             onClick={() => navigate('/login')}
             variant="text"
           >
-            Back to login
+            {t('resetPassword.backToLogin')}
           </Button>
         </FlexCol>
       </form>

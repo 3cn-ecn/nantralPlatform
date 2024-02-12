@@ -16,10 +16,12 @@ import { FloatingContainer } from '#shared/components/FloatingContainer/Floating
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useAuth } from '#shared/context/Auth.context';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { SeeGroupsButton } from './components/SeeGroups';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -71,7 +73,7 @@ export default function LoginPage() {
           </Typography>
         </FlexRow>
         <Typography mt={1} textAlign="center" variant="subtitle1">
-          The student website for Centrale Nantes!
+          {t('login.website.ecn')}
         </Typography>
         <Spacer vertical={2} />
         <form
@@ -99,9 +101,11 @@ export default function LoginPage() {
               mb: 1,
             }}
           >
-            <Button onClick={() => navigate('/register')}>No account?</Button>
+            <Button onClick={() => navigate('/register')}>
+              {t('login.noAccount')}
+            </Button>
             <Button onClick={() => navigate('/forgot_password')}>
-              Forgot password?
+              {t('resetPassword.forgotten')}
             </Button>
           </FlexRow>
           <Divider flexItem />
@@ -113,7 +117,7 @@ export default function LoginPage() {
             fullWidth
             loading={isLoading}
           >
-            Login
+            {t('login.login')}
           </LoadingButton>
         </form>
       </Card>

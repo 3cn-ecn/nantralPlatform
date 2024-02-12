@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Trans } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { ChevronLeft, Info } from '@mui/icons-material';
@@ -11,9 +12,11 @@ import { RegisterFormFields } from '#modules/account/view/shared/RegisterFormFie
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function RegisterFormPanel() {
   const [params] = useSearchParams();
+  const { t } = useTranslation();
   const uuid = params.get('uuid') || undefined;
   const [formValues, setFormValues] = useState<
     RegisterForm & { passwordConfirm: string }
@@ -49,7 +52,7 @@ export default function RegisterFormPanel() {
   async function register(form: RegisterForm) {
     if (form?.password && form?.password !== form?.passwordConfirm) {
       throw {
-        fields: { passwordConfirm: ["Passwords don't match"] },
+        fields: { passwordConfirm: [t('register.passwordDontMatch')] },
       };
     }
     return registerApi(form);
@@ -60,9 +63,7 @@ export default function RegisterFormPanel() {
       <Paper sx={{ p: 2, justifyContent: 'center', display: 'flex' }}>
         <Info sx={{ m: 0 }} />
         <Typography component={'span'} textAlign={'center'}>
-          To sign up for Nantral Platform, you have to be currently at Centrale
-          Nantes. To verify it, we use your email address that should end with{' '}
-          <b>@eleves.ec-nantes.fr</b> or <b>@ec-nantes.fr</b>.
+          <Trans i18nKey="register.signUpEmailRequirement" />
         </Typography>
       </Paper>
 
@@ -92,15 +93,23 @@ export default function RegisterFormPanel() {
             onClick={() => history.back()}
             size="large"
           >
-            Back
+            {t('button.back')}
           </Button>
           <LoadingButton
             loading={loading}
             variant="contained"
             type="submit"
             size="large"
+            onClick={() =>
+              navigate('/register/validation', {
+                state: {
+                  email: formValues?.email,
+                  firstName: formValues?.firstName,
+                },
+              })
+            }
           >
-            Register
+            {t('register.register')}
           </LoadingButton>
         </FlexRow>
       </form>

@@ -14,9 +14,11 @@ import {
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FloatingContainer } from '#shared/components/FloatingContainer/FloatingContainer';
 import { useBreakpoint } from '#shared/hooks/useBreakpoint';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const theme = useTheme();
   const small = useBreakpoint('sm').isSmaller;
@@ -55,7 +57,7 @@ export default function RegisterPage() {
             m={2}
             variant="h2"
           >
-            Create your Nantral Platform account
+            {t('register.createAccount')}
           </Typography>
 
           <Paper
@@ -68,12 +70,12 @@ export default function RegisterPage() {
             }}
           >
             <FlexRow alignItems="center" gap={1}>
-              <Typography>Already have an account?</Typography>
+              <Typography>{t('register.alreadyHaveAccount')}</Typography>
               <Button
                 sx={{ textTransform: 'none' }}
                 onClick={() => navigate('/login')}
               >
-                Go to the login page
+                {t('register.goLoginPage')}
               </Button>
             </FlexRow>
           </Paper>
@@ -85,13 +87,13 @@ export default function RegisterPage() {
             orientation={small ? 'vertical' : 'horizontal'}
           >
             <Step>
-              <StepLabel>{'Centrale nantes email'}</StepLabel>
+              <StepLabel>{t('register.EmailECN')}</StepLabel>
             </Step>
             <Step>
-              <StepLabel>{'Account creation'}</StepLabel>
+              <StepLabel>{t('register.accountCreation')}</StepLabel>
             </Step>
             <Step>
-              <StepLabel>{'Validation'}</StepLabel>
+              <StepLabel>{t('register.validation')}</StepLabel>
             </Step>
           </Stepper>
           <Outlet />

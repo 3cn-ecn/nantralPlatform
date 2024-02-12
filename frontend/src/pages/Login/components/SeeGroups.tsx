@@ -1,8 +1,10 @@
 import { Card, CardActionArea, Typography } from '@mui/material';
 
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function SeeGroupsButton() {
+  const { t } = useTranslation();
   return (
     <Card variant="elevation">
       <CardActionArea href={'/group/'} sx={{ display: 'flex' }}>
@@ -19,7 +21,7 @@ export function SeeGroupsButton() {
             src="/static/img/icons/cropped/club.svg"
             alt="Groups"
           />
-          <Typography>View Public Groups</Typography>
+          <Typography>{t('login.viewPublicGroups')}</Typography>
         </FlexRow>
       </CardActionArea>
     </Card>

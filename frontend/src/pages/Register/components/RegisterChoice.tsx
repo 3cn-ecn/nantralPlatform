@@ -18,8 +18,10 @@ import { useQuery } from '@tanstack/react-query';
 
 import { validateInvitationApi } from '#modules/account/api/invitation.api';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function RegisterChoice() {
+  const { t } = useTranslation();
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const uuid = params.get('uuid')?.replace('/', ''); // remove trailing slashes
@@ -46,7 +48,9 @@ export default function RegisterChoice() {
           }
         </Alert>
       )}
-      <Typography variant="h2">Do I have a Centrale Nantes email?</Typography>
+      <Typography variant="h2">
+        {t('register.haveECNEmail.question')}
+      </Typography>
       <Card
         sx={{
           width: '100%',
@@ -64,15 +68,14 @@ export default function RegisterChoice() {
               variant="h3"
               sx={{ alignItems: 'center', display: 'flex', gap: 1 }}
             >
-              Yes I have an email at Centrale Nantes
+              {t('register.haveECNEmail.yes')}
             </Typography>
           </FlexRow>
           <Typography
             variant="body1"
             sx={{ textAlign: 'justify', marginLeft: 1, marginTop: 2 }}
           >
-            Si vous avez accès à votre adresse Centrale Nantes (se terminant par
-            ec-nantes.fr), vous pouvez continuer votre inscription
+            {t('register.haveECNEmail.canContinue')}
           </Typography>
         </CardContent>
         <CardActions sx={{ alignContent: 'flex-end' }}>
@@ -84,7 +87,7 @@ export default function RegisterChoice() {
             fullWidth
             variant="contained"
           >
-            Create an account now
+            {t('register.createAccountNow')}
           </Button>
         </CardActions>
       </Card>
@@ -93,7 +96,7 @@ export default function RegisterChoice() {
           <FlexRow alignItems="center" gap={1}>
             <CloseRounded color="primary" fontSize="large" />
             <Typography variant="h3">
-              No, I don&apos;t have access to my Centrale Nantes address yet.
+              {t('register.haveECNEmail.no')}
             </Typography>
           </FlexRow>
           <Typography
@@ -101,11 +104,8 @@ export default function RegisterChoice() {
             sx={{ textAlign: 'justify', marginLeft: 1, marginTop: 2 }}
           >
             {invitationValid
-              ? 'In this case you can create a temporary account with your personal email. NB: This account give you access to Nantral Platform for a limited period of time, make sure to change it as soon as you have access to your @ec-nantes email'
-              : `In this case, you cannot create an account on Nantral Platform.
-              You can, however, create a temporary account if you have an
-              invitation link (available on the Onboard home page during the
-              summer, for example).`}
+              ? t('register.canCreateTemporaryAccount')
+              : t('register.canNotCreateAccount')}
           </Typography>
         </CardContent>
         {uuid && invitationValid && (
@@ -121,7 +121,7 @@ export default function RegisterChoice() {
               fullWidth
               variant="contained"
             >
-              Create a temporary account
+              {t('register.createTemporaryAccount')}
             </Button>
           </CardActions>
         )}
