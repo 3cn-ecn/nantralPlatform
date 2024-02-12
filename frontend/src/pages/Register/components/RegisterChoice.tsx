@@ -43,9 +43,7 @@ export default function RegisterChoice() {
     <Box>
       {isError && (
         <Alert sx={{ marginBottom: 2 }} severity="error">
-          {
-            'The invitation link provided is invalid. Make sure you have copied it correctly.'
-          }
+          {t('register.invalidInvitation')}
         </Alert>
       )}
       <Typography variant="h2">

@@ -443,6 +443,7 @@
       "question": "Ai-je un email Centrale Nantes ?",
       "yes": "Oui, j'ai un email Centrale Nantes"
     },
+    "invalidInvitation": "Le lien d'invitation fourni n'est pas valide. Assurez-vous qu'il est correct.",
     "lastName": "Nom",
     "nearlyDone": "Nous y sommes presque {{firstName}} !",
     "passwordDontMatch": "Les mots de passe ne correspondent pas",

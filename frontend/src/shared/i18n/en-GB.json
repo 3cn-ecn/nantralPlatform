@@ -440,6 +440,7 @@
       "question": "Do I have a Centrale Nantes email?",
       "yes": "Yes I have an email at Centrale Nantes"
     },
+    "invalidInvitation": "The invitation link provided is invalid. Make sure it is correct.",
     "lastName": "Last Name",
     "nearlyDone": "We're almost there {{firstName}}!",
     "passwordDontMatch": "Passwords don't match",
