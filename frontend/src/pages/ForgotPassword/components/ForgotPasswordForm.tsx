@@ -34,7 +34,7 @@ export default function ForgotPasswordForm() {
 
   return (
     <>
-      <Typography variant="body1" margin={2}>
+      <Typography variant="body1" margin={2} textAlign="center">
         {t('resetPassword.provideEmail')}
       </Typography>
       <form
@@ -46,7 +46,7 @@ export default function ForgotPasswordForm() {
       >
         <TextField
           type="email"
-          label="email"
+          label="Email"
           value={formValues.email}
           required
           fullWidth

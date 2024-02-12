@@ -1,3 +1,4 @@
+import { Trans } from 'react-i18next';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { Check, MarkEmailReadRounded } from '@mui/icons-material';
@@ -6,10 +7,12 @@ import { useMutation } from '@tanstack/react-query';
 
 import { resendVerificationEmailApi } from '#modules/account/api/email.api';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function EmailSent() {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const { t } = useTranslation();
   const { email = undefined, firstName = undefined } = state || {};
   const { isSuccess, mutate, isLoading } = useMutation(
     resendVerificationEmailApi,
@@ -19,24 +22,26 @@ export default function EmailSent() {
   }
   return (
     <Box>
-      <Typography variant="h4">{`We are nearly done ${
-        firstName || ''
-      }!`}</Typography>
+      <Typography variant="h4">
+        {t('register.nearlyDone', { firstName: firstName })}
+      </Typography>
       <Paper sx={{ width: '100%', marginTop: 3 }} variant="elevation">
         <CardContent>
           <FlexRow justifyContent={'center'}>
             <MarkEmailReadRounded sx={{ fontSize: 200 }} color="secondary" />
           </FlexRow>
-          <Typography variant="body1" color="secondary">
-            A confirmation e-mail has been sent to you to confirm your e-mail
-            address at <b color="primary">{email}</b>
+          <Typography variant="body1" color="secondary" textAlign="center">
+            <Trans
+              i18nKey="register.confirmationEmailSent"
+              values={{ email: email.replace('-', '-\u2060') }}
+            />
           </Typography>
           <Typography
             variant="body1"
             sx={{ textAlign: 'center', marginLeft: 1, marginTop: 2 }}
             color="primary"
           >
-            Click on the link in the email and login to access your account
+            {t('register.clickOnLink')}
           </Typography>
           <FlexRow mt={3} justifyContent="center">
             <Button
@@ -46,23 +51,23 @@ export default function EmailSent() {
               size="large"
               fullWidth
             >
-              Login
+              {t('login.login')}
             </Button>
           </FlexRow>
         </CardContent>
       </Paper>
       <FlexCol sx={{ mt: 2 }}>
         <Typography sx={{ color: 'gray', mb: 1 }}>
-          Email not received?
+          {t('register.emailNotReceived')}
         </Typography>
-        <Typography>
-          Wait a few minutes, this can sometimes take a long time.
-        </Typography>
-        <FlexRow sx={{ alignItems: 'center', gap: 1 }}>
-          <Typography>Still Nothing?</Typography>
+        <Typography>{t('register.waitAFewMinutes')}</Typography>
+        <FlexRow sx={{ alignItems: 'center', gap: 1, mt: 1 }}>
+          <Typography>{t('register.stillNothing')}</Typography>
           {isSuccess ? (
             <>
-              <Typography sx={{ color: 'gray' }}>Email sent</Typography>
+              <Typography sx={{ color: 'gray' }}>
+                {t('register.emailSent')}
+              </Typography>
               <Check color="success" />
             </>
           ) : (
@@ -73,7 +78,7 @@ export default function EmailSent() {
                 mutate(email);
               }}
             >
-              Send again
+              {t('register.sendAgain')}
             </Button>
           )}
         </FlexRow>
