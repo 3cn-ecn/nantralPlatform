@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { CheckCircle } from '@mui/icons-material';
 import { Button, Divider, Typography } from '@mui/material';
 
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function ResetPasswordSuccess() {
   const navigate = useNavigate();
