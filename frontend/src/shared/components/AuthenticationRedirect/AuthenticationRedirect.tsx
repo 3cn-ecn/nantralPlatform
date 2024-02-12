@@ -22,6 +22,10 @@ export function AuthenticationRedirect({
   return isAuthenticated !== authenticated ? (
     <Outlet />
   ) : (
-    <Navigate to={redirectTo} state={{ from: location }} replace />
+    <Navigate
+      to={location.state?.from || redirectTo}
+      state={{ from: location }}
+      replace
+    />
   );
 }
