@@ -4,13 +4,14 @@ sidebar_position: 5
 
 # Testing
 
-Everything you need to know to test your code!
+How to test your code in the back-end.
 
-:::info
-You can run all the tests at once with the command:
+:::tip TL;DR
+To test the back-end code, run these commands:
 
 ```bash
-make test
+pipenv run lint
+pipenv run test
 ```
 
 :::
