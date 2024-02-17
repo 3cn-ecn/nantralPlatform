@@ -27,6 +27,7 @@
     // react
     "lokalise.i18n-ally",
     // docs
-    "unifiedjs.vscode-mdx"
+    "unifiedjs.vscode-mdx",
+    "pomdtr.excalidraw-editor"
   ]
 }

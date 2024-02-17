@@ -1,0 +1,73 @@
+---
+sidebar_position: 1
+description: Some projects to learn web development
+---
+
+# Mini-projects
+
+This page proposes some mini-projects to help you engage with the world of
+web development!
+
+For each project, don't hesitate to use tutorials on the internet
+(they are many of them!), but also try to make things by yourself,
+you will learn better.
+
+⏱️ **Time**: This indicates an estimation of the time for doing the project,
+with approximately 5 hours per week.
+
+**✅ What you have to do:** the objectives of the project.
+
+:::tip
+See the **[Resources](/dev/resources.md)** page for some useful links!
+:::
+
+## Project 1: Discover HTML and CSS
+
+⏱️ **Time**: ≈ 3 weeks, maximum 2 months (switch to the next project after)
+
+**✅ What you have to do:**
+
+- Create a website with your CV (_Curriculum Vitae_)
+- Use only HTML and CSS, no JavaScript
+- Your site should have some images, multiple pages, and be beautiful!
+
+## Project 2: Become a front end developer
+
+⏱️ **Time**: ≈ 5 weeks, maximum 3 months (switch to the next project after)
+
+**✅ What you have to do:**
+
+- Create a single-page app that runs without internet. It can be a calculator, a video
+  player, a to-do app...
+- Make your app with **React**, in **TypeScript**.
+- Again, use tutorials to help you at the beginning, but as a hint we recommend
+  you to start with `create-react-app`.
+
+## Project 3: Become a back end developer
+
+⏱️ **Time**: ≈ 3 weeks, maximum 2 months (switch to the next project after)
+
+**✅ What you have to do:**
+
+- Create a website with **Django**. It can be anything you want (you can follow
+  a tutorial if you do not have any idea).
+- Your website should focus on having a database, and what you do with it: do
+  not focus on the design.
+
+## Project 4: Become a full-stack developer!
+
+⏱️ **Time**: ≈ 2 weeks, maximum 2 months (switch to the next project after)
+
+**✅ What you have to do:**
+
+- Create a full web-application with a React front end and a Django back end.
+- Your front end should display information that are stored in your database,
+  in the back end.
+- Make queries between the two, with `django-rest-framework`, `axios`, and
+  `react-query`.
+- You can re-use your previous projects.
+
+## Congratulations 🥳
+
+You are now ready to contribute to any web project, and especially
+(_of course!_) Nantral Platform!

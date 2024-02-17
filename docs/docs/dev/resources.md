@@ -1,17 +1,11 @@
 ---
-last_update:
-  date: 2023-03-04 00:37:55 +0100
-  author: Alexis Delage
-title: Resources 🔗
-sidebar_position: 99
+title: Resources
+sidebar_position: 6
 ---
 
 # 🔗 Resources
 
-This page regroups all the resources for framework, plugin or dependency of the project.
-
-The items with ~~strikethrough~~ are not used anymore in Nantral Platform, but you
-can still find some references to them in old code, so we keep them as reference.
+Docs and tutorials about the technologies used in Nantral Platform.
 
 ## General
 
@@ -33,18 +27,16 @@ can still find some references to them in old code, so we keep them as reference
 - **Django**: _a web framework_
   / [Tutorial](https://developer.mozilla.org/fr/docs/Learn/Server-side/Django)
   / [Documentation](https://docs.djangoproject.com/en/)
-  / [Doc on this site](/dev/guides/frameworks/django.md)
 - **Django REST framework**: _a toolkit to build Web APIs_
   / [Video](https://youtu.be/-MTSQjw5DrM)
   / [Tutorial](https://blog.logrocket.com/using-react-django-create-app-tutorial/)
   / [Documentation](https://www.django-rest-framework.org/)
-  / [Doc on this site](/dev/guides/frameworks/rest-api.md)
 - **Django CKEditor5**: _a django library to support CKEditor5_
   / [Documentation](https://pypi.org/project/django-ckeditor-5/)
-- ~~**Bootstrap**: _a CSS library for django templates_
-  / [Documentation](https://getbootstrap.com/docs/5.0/getting-started/introduction/)~~
-- ~~**FontAwesome**: _an icon library for django templates_
-  / [Icons Library](https://fontawesome.com/v5/search)~~
+- [Deprecated] **Bootstrap**: _a CSS library for django templates_
+  / [Documentation](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+- [Deprecated] **FontAwesome**: _an icon library for django templates_
+  / [Icons Library](https://fontawesome.com/v5/search)
 
 ## Front End
 
@@ -59,7 +51,6 @@ can still find some references to them in old code, so we keep them as reference
   / [Video](https://youtu.be/Tn6-PIqc4UM)
   / [Tutorial](https://react.dev/learn/tutorial-tic-tac-toe)
   / [Documentation](https://react.dev)
-  / [Doc on this site](/dev/guides/frameworks/react.md)
 - **MUI**: _a React library to use Material Design_
   / [Documentation](https://mui.com/material-ui/react-button/)
   / [Icons Library](https://mui.com/material-ui/material-icons/)

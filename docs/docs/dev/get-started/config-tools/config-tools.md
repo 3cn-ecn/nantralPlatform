@@ -67,28 +67,35 @@ In VSCode, in the left panel, you can see the folder structure of the repository
 Here are a few explanations about the purpose of the main folders.
 
 ```js title=".../nantralplatform/"
-📁 .github    // definitions of github actions
-📁 .vscode    // configuration of vs code
-// highlight-next-line
-📁 backend    // source files of the backend (django)
-    📁 apps
+📁 .github    // Github Actions (CI and CD)
+📁 .vscode    // Config of VS code
+// highlight-start
+📁 backend    // Django project
+    📁 apps       // each 'app' is a part of the website
     📁 config
     📁 static
     📁 templates
     📄 manage.py
-    📄 Pipfile
-📁 deployment // configuration for the deployment on the real server
-// highlight-next-line
-📁 docs       // source files of the documentation (docusaurus)
+    📄 Pipfile    // Dependencies file
+// highlight-end
+📁 deployment // Docker files and back-up scripts
+📁 docs       // Documentation website (Docusaurus)
     📁 docs
-    📁 static
     📄 package.json
-// highlight-next-line
-📁 frontend   // source files of the frontend (react)
+📁 email-templates-generator  // Generate HTML templates for emails in Django
+    📁 emails
+    📄 package.json
+// highlight-start
+📁 frontend   // React project
     📁 src
-    📄 package.json
-📄 Makefile   // global scripts for installation and other things
-📄 README.md  // the description file of the project
+        📁 modules    // equivalent to apps in Django
+        📁 pages      // the pages the user see
+        📁 shared
+        📄 App.tsx
+    📄 package.json    // Dependencies file
+// highlight-end
+📄 Makefile   // make update command
+📄 README.md
 ```
 
 ### The Backend

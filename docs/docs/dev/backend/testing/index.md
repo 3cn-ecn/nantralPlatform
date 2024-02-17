@@ -1,0 +1,23 @@
+---
+sidebar_position: 5
+---
+
+# Testing
+
+How to test your code in the back-end.
+
+:::tip TL;DR
+To test the back-end code, run these commands:
+
+```bash
+pipenv run lint
+pipenv run test
+```
+
+:::
+
+<br />
+
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />

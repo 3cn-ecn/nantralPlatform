@@ -1,18 +1,15 @@
 ---
-last_update:
-  date: 2023-02-09 10:22:46 +0100
-  author: Alexis Delage
 sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Run the project
+# First Launch
 
 It's time to run _Nantral Platform_ on your computer!
 
-## First launch
+## Set up the project
 
 Open a terminal in the `nantralPlatform` directory (for convenience, you can
 open this terminal inside of VS Code but it also works if you use your regular
@@ -124,7 +121,7 @@ And that's it! You should now see the login page of Nantral Platform:
 
 ![The login page](./login-page.png)
 
-## Create your account
+## Create your admin account
 
 Since we have created your own database, you do **not** have an account yet
 on this particular database. So let's create one!
