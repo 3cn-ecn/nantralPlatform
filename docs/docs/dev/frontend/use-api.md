@@ -1,0 +1,103 @@
+---
+title: Use the API
+sidebar_position: 2
+description: How to share data between the front and the back end
+---
+
+# Use the API (i.e. the back end)
+
+## What's the API?
+
+The Nantral Platform API is built with Django. See [Create an API app](/dev/backend/create-an-app/index.md)
+for more details on its structure and how it is organized.
+
+## How to use an API endpoint
+
+Now, let's see how to use our new API endpoint in a React component.
+This is a summary of all the steps needed: in practice, we would split
+the code in different files (see [Architecture](/dev/frontend/architecture/architecture.md)).
+
+```tsx title="MyComponent.tsx"
+import { useState, useEffect } from "react";
+import { useQuery } from "react-query";
+import axios, { AxiosError } from "axios";
+
+import { adaptEvent } from "#modules/event/infra";
+import { Page, PageDTO, adaptPage } from '#shared/infra/pagination';
+
+interface EventDTO {
+  title: string;
+  start_date: string;
+  end_date: string;
+  is_participating: boolean;
+}
+
+interface Event {
+  title: string;
+  startDate: Date;
+  endDate: Date;
+  isParticipating: boolean;
+}
+
+function MyComponent() {
+  // Create a query object. On the first time, data will be stored in the cache.
+  // Then on next queries, the data of the cache will be used while the query
+  // is loading. The 'queryKey' is the index of the cache (add variables in the
+  // list to update the query when some variables change).
+  const eventsQuery = useQuery<Page<Event>, AxiosError>({
+    queryKey: ["events"],
+    queryFn: async () => {
+      const res = await axios.get<PageDTO<EventDTO>>("/api/event/event/");
+      return adaptPage(res.data, adaptEvent)
+    },
+  });
+
+  // check if the query is not loading yet
+  if (eventsQuery.isIdle) {
+    return <p>Request not started... ⏳</p>;
+  }
+
+  // check if the query is loading
+  if (eventsQuery.isLoading) {
+    return <p>Loading... ⏳</p>;
+  }
+
+  // check if there is an error and show it
+  if (eventsQuery.isError) {
+    return <p>Error: {eventsQuery.error.message}</p>;
+  }
+
+  // if everything is ok, show the data. The types here are:
+  // eventsQuery: a query object
+  // eventsQuery.data: a Page object of events
+  // eventsQuery.data.results: the list of events (Event[])
+  const page = eventsQuery.data;
+  const totalNumberOfEvents = page.count;
+  const eventsOfThisPage = page.results;
+
+  return (
+    <p>Showing {eventsOfThisPage.length} / {totalNumberOfEvents} events</p>
+    <ul>
+      {eventsOfThisPage.map((event) => (
+        <li>{event.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+Some explanations on this code:
+
+- First, we declare the imports and interfaces.
+- Then we call our API with `axios`. We obtain a list like this:
+  ```js
+  [ { title: 'Title 1', begin_date: '2022-01-01T16:54:000Z', ...}, ...]
+  ```
+- To respect javascript conventions, we change the format of the keys
+  and convert dates from string to Date objects with the `convertFromPythonData`
+  function:
+  ```js
+  [ { title: 'Title 1', startDate: Date('2022-01-01T16:54:000Z'), ...}, ...]
+  ```
+- We check for errors.
+- And finally we render the data.

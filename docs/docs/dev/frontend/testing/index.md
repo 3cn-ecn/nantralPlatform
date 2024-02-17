@@ -1,0 +1,30 @@
+---
+sidebar_position: 5
+---
+
+# Testing
+
+How to test your code in the front-end.
+
+:::tip TL;DR
+To test the front-end code, run these commands:
+
+```bash
+npm run types
+npm run lint
+npm run jest
+```
+
+or all at once:
+
+```bash
+npm run test
+```
+
+:::
+
+<br />
+
+import DocCardList from '@theme/DocCardList';
+
+<DocCardList />

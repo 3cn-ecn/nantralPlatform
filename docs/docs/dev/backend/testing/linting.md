@@ -68,3 +68,4 @@ The formatter is automatically run when you save a file in VScode, if you have
 the [Black extension](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter)
 and [isort extension](https://marketplace.visualstudio.com/items?itemName=ms-python.isort)
 installed.
+:::

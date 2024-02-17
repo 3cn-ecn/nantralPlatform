@@ -2,7 +2,7 @@
 sidebar_position: 7
 ---
 
-# Dependencies (Pipfile)
+# Dependencies (Pipenv)
 
 _A little discussion about the nightmare of all developers..._
 

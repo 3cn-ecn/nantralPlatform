@@ -1,5 +1,5 @@
 ---
-sidebar_position: 8
+sidebar_position: 7
 ---
 
 # Debugging
@@ -13,28 +13,6 @@ save you a lot of time!
 
 👉 **[The Debugging Guide: 20 simple steps to debug anything](https://debug.guide/)** 👈
 :::
-
-## Common issues on the backend
-
-Here is a list of common problems you should check if you encounter a problem.
-
-### Check-list
-
-- Did you launch the backend with `pipenv run start` ?
-- Did you install the latest dependencies with `pipenv install`?
-- Did you apply the latest migrations with `pipenv run migrate`?
-- Is the server running?
-
-### If you're still stuck
-
-- Reset the dependencies:
-  - remove the `.venv` folder and all of its content
-  - run `pipenv install`
-- Reset the database:
-  - Rename your database file (for example `db.sqlite3` to `db.old.sqlite3`)
-  - Run `pipenv run migrate` to create a new database
-  - Run `pipenv run django createsuperuser` to create a new admin user
-  - Follow [this guide](/dev/get-started/setup-project/#start-the-server) to recreate your account
 
 ## Common issues on the frontend
 
