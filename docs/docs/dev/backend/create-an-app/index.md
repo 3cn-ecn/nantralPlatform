@@ -4,8 +4,21 @@ sidebar_position: 3
 
 # Create an API app
 
-A quick tutorial to demonstrate how to add an app in the back end, based
-on the **event** app example.
+What is an API?
+
+<iframe 
+    class="youtube"
+    src="https://www.youtube-nocookie.com/embed/-MTSQjw5DrM" 
+    title="YouTube video player" 
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+</iframe>
+
+---
+
+Now let's see this quick tutorial to demonstrate how to add an app in the back
+end, based on the **event** app example.
 
 import DocCardList from '@theme/DocCardList';
 
