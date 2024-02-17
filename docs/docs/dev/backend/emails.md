@@ -139,7 +139,7 @@ have noticed that this preview does not include the context data.
 
 To test your email during runtime, you have 2 options:
 
-1. Use [Docker](./docker) to locally run the server:
+1. Use **Docker** to locally run the server:
 
    - Launch the website locally with docker:
      ```bash
@@ -155,11 +155,11 @@ To test your email during runtime, you have 2 options:
      docker should be redirected here. You should also have received the email
      to validate the account created at the previous step.
 
-   ➡️ Find more info on the [Docker](./docker) page.
+   ➡️ Find more info on the [Docker](/dev/server/docker.md) page.
 
-2. Use the [Staging Server](./staging-server): this method is easier, but be
-   aware that you will use the real email server, so be sure to not send test
-   emails to other users!
+2. Use the [Staging Server](/dev/server/staging-server/staging-server.md):
+   this method is easier, but be aware that you will use the real email server,
+   so be sure to not send test emails to other users!
 
 ## 🛟 F.A.Q.
 

@@ -64,8 +64,7 @@ See the **[Resources](/dev/resources.md)** page for some useful links!
 - Your front end should display information that are stored in your database,
   in the back end.
 - Make queries between the two, with `django-rest-framework`, `axios`, and
-  `react-query` (see the page of [Rest API](/dev/guides/frameworks/rest-api.md) for more
-  details).
+  `react-query`.
 - You can re-use your previous projects.
 
 ## Congratulations 🥳
