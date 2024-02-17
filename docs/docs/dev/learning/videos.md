@@ -9,22 +9,16 @@ import YouTubeThumbnail from '@site/src/components/YouTubeThumbnail'
 A selection of short YouTube videos made by [Fireship](https://youtube.com/playlist?list=PL0vfts4VzfNiI1BsIK5u7LpPaIDKMJIDN),
 about all topics you might encounter in Nantral Platform.
 
-## HTML and CSS
+## HTML, CSS and Sass
 
 <YouTubeThumbnail alt="HTML" url="https://youtu.be/ok-plXXHlWw" />
 <YouTubeThumbnail alt="CSS" url="https://youtu.be/OEV8gMkCHXQ" />
+<YouTubeThumbnail alt="Sass" url="https://youtu.be/akDIJa0AP5c" />
 
 ### CSS features
 
 <YouTubeThumbnail alt="CSS flexbox" url="https://youtu.be/K74l26pE4YA" />
 <YouTubeThumbnail alt="CSS grid" url="https://youtu.be/uuOXPWCh-6o" />
-<YouTubeThumbnail alt="CSS animation" url="https://youtu.be/HZHHBwzmJLk" />
-<YouTubeThumbnail alt="CSS pseudo classes" url="https://youtu.be/kpXKwDGtjGE" />
-<YouTubeThumbnail alt="CSS pseudo elements" url="https://youtu.be/e1KpKBHJOrA" />
-
-### CSS libraries
-
-<YouTubeThumbnail alt="Sass" url="https://youtu.be/akDIJa0AP5c" />
 
 ## JavaScript and TypeScript
 
