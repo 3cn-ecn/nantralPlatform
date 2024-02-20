@@ -16,7 +16,7 @@ type AvatarComponentType<
     P & {
       alt: string;
       Icon?: SvgIconComponent;
-      size?: 's' | 'm' | 'l' | 'xxl';
+      size?: 's' | 'm' | 'l' | 'xl' | 'xxl';
     },
     D
   >
@@ -47,6 +47,8 @@ export const Avatar: AvatarComponentType = ({
     s: 28,
     m: 40,
     l: 48,
+    xl: 115,
+    xxl: 170,
   };
 
   const bgColor = stringToColor(alt);
