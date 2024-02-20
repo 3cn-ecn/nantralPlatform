@@ -73,6 +73,10 @@ urlpatterns = [
         "api/signature/",
         include("apps.signature.api_urls", namespace="signature_api"),
     ),
+    path(
+        "api/sociallink/",
+        include("apps.sociallink.api_urls", namespace="sociallink_api"),
+    ),
     path("api/home/", include("apps.home.api_urls", namespace="home_api")),
     # homepage
     path("", include("apps.home.urls", namespace="home")),
