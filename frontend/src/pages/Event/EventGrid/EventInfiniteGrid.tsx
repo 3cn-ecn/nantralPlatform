@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 import { Button, Grid, Typography } from '@mui/material';
 
@@ -24,27 +25,18 @@ export function EventInfiniteGrid({
 }: EventInfiniteGridProps) {
   const { t } = useTranslation();
   const bk = useBreakpoint('lg');
-
+  const { ref, inView } = useInView();
   const eventsPerPage = bk.isLarger ? 8 : 6;
-
   const eventsQuery = useInfiniteEventListQuery(
     { ...filters, pageSize: eventsPerPage },
     { enabled: !disableLoading },
   );
 
-  function loadMore() {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.scrollingElement?.scrollHeight
-    ) {
+  useEffect(() => {
+    if (inView && eventsQuery.hasNextPage && !eventsQuery.isLoading) {
       eventsQuery.fetchNextPage();
     }
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', loadMore);
-    return () => window.removeEventListener('scroll', loadMore);
-  });
+  }, [eventsQuery, inView]);
 
   if (eventsQuery.isLoading) {
     return (
@@ -95,6 +87,7 @@ export function EventInfiniteGrid({
             </Grid>,
           )}
       </Grid>
+      <div ref={ref} />
       <FlexRow justifyContent="center" mt={3}>
         {eventsQuery.hasNextPage && !eventsQuery.isFetchingNextPage && (
           <Button
