@@ -16,12 +16,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+import debug_toolbar
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-
-import debug_toolbar
 
 urlpatterns = [
     # default and third-party apps
@@ -71,6 +70,10 @@ urlpatterns = [
     path(
         "api/signature/",
         include("apps.signature.api_urls", namespace="signature_api"),
+    ),
+    path(
+        "api/sociallink/",
+        include("apps.sociallink.api_urls", namespace="sociallink_api"),
     ),
     path("api/core/", include("apps.core.api_urls", namespace="core_api")),
     # static files
