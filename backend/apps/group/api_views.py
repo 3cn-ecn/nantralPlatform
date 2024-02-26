@@ -1,60 +1,19 @@
+from apps.utils.parse_bool import parse_bool
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
+from rest_framework import (decorators, exceptions, filters, permissions,
+                            response, serializers, status, viewsets)
 
-from rest_framework import (
-    decorators,
-    exceptions,
-    filters,
-    permissions,
-    response,
-    serializers,
-    status,
-    viewsets,
-)
-
-from apps.utils.parse_bool import parse_bool
-
-from .models import Group, GroupType, Membership
-from .serializers import (
-    GroupPreviewSerializer,
-    GroupSerializer,
-    GroupTypeSerializer,
-    GroupWriteSerializer,
-    MembershipSerializer,
-    NewMembershipSerializer,
-)
-
-
-class GroupPermission(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        if view.action == "create":
-            group_type = GroupType.objects.filter(
-                slug=request.query_params.get("type", None),
-            ).first()
-            if not group_type:
-                raise exceptions.ValidationError(
-                    _(
-                        "You must specify a valid group type in query parameters.",
-                    ),
-                )
-            return group_type.can_create
-        return True
-
-    def has_object_permission(self, request, view, obj: Group):
-        user = request.user
-        if request.method in permissions.SAFE_METHODS:
-            if obj.public:
-                return True
-            if obj.private:
-                return obj.is_member(user) or user.is_superuser
-            return user.is_authenticated
-        return obj.is_admin(request.user)
+from .models import Group, GroupType, Label, Membership
+from .permissions import GroupPermission, MembershipPermission
+from .serializers import (GroupPreviewSerializer, GroupSerializer,
+                          GroupTypeSerializer, GroupWriteSerializer,
+                          LabelSerializer, MembershipSerializer,
+                          NewMembershipSerializer)
 
 
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -69,18 +28,20 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     Query Parameters
     ----------------
-    type: slug
+    - type: slug
         Filter by group type
-    is_member: bool
+    - is_member: bool
         Filter by groups where user is member
-    is_admin: bool
+    - is_admin: bool
         Filter by groups where user is an admin member
-    slug: string (multiple)
+    - slug: string (multiple)
         Filter by one or multiple slug
-    page: int
+    - page: int
         The page to get
-    pageSize: int
+    - pageSize: int
         The max number of items to return per page
+    - parent: string (multiple)
+        Filter by one or multiple parent group slug
 
     Actions
     -------
@@ -119,9 +80,12 @@ class GroupViewSet(viewsets.ModelViewSet):
         group_type = GroupType.objects.filter(
             slug=self.query_params.get("type"),
         ).first()
-        is_member = parse_bool(self.query_params.get("is_member"), False)
-        is_admin = parse_bool(self.query_params.get("is_admin"), False)
+        is_member = parse_bool(
+            self.query_params.get("is_member"), default=False
+        )
+        is_admin = parse_bool(self.query_params.get("is_admin"), default=False)
         slugs = self.query_params.getlist("slug")
+        parents = self.query_params.getlist("parent")
 
         queryset = (
             Group.objects
@@ -166,6 +130,9 @@ class GroupViewSet(viewsets.ModelViewSet):
         # filter by slug
         if slugs:
             queryset = queryset.filter(slug__in=slugs)
+        # filter by parent
+        if parents:
+            queryset = queryset.filter(parent__slug__in=parents)
 
         return (
             queryset
@@ -183,15 +150,6 @@ class GroupViewSet(viewsets.ModelViewSet):
         obj = get_object_or_404(Group, slug=self.kwargs["slug"])
         self.check_object_permissions(self.request, obj)
         return obj
-
-
-class MembershipPermission(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj: Membership):
-        if request.method in permissions.SAFE_METHODS:
-            return not obj.group.private or obj.group.is_member(request.user)
-        return obj.student.user == request.user or obj.group.is_admin(
-            request.user,
-        )
 
 
 class MembershipViewSet(viewsets.ModelViewSet):
@@ -290,12 +248,11 @@ class MembershipViewSet(viewsets.ModelViewSet):
     @decorators.action(detail=False, methods=["POST"])
     def reorder(self, request, *args, **kwargs):
         """
-        Action to reorder a membership. It changes the 'priority' fields for all
+        Action to reorder a membership. It changes the `priority` fields for all
         members of a group to place the member between two other members, in the
         list of memberships defined by the query parameters.
 
-        Body Parameters
-        ---------------
+        ## Body Parameters
         member: id of the membership we want to move elsewhere
         lower: id of the membership that should be just before the member,
                for the given query parameters, or None if member should be the
@@ -345,3 +302,23 @@ class MembershipViewSet(viewsets.ModelViewSet):
                 curr_index -= 1
             Membership.objects.bulk_update(members, ["priority"])
         return response.Response(status=status.HTTP_200_OK)
+
+
+class LabelViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get"]
+    serializer_class = LabelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @property
+    def query_params(self) -> QueryDict:
+        return self.request.query_params
+
+    def get_queryset(self):
+        qs = Label.objects.all()
+        group_type = self.query_params.get("group_type")
+        if group_type:
+            qs = qs.filter(group_type=group_type)
+
+        qs = qs.order_by("-priority")
+
+        return qs
