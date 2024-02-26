@@ -1,20 +1,17 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.loader import render_to_string
-from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
 
 from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
 
+from apps.account.models import User
 from apps.sociallink.models import SocialLink
 from apps.student.models import Student
 from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import SlugModel
-
-User = get_user_model()
 
 
 class GroupType(models.Model):
@@ -103,7 +100,7 @@ class GroupType(models.Model):
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
-        return reverse("group:sub_index", kwargs={"type": self.slug})
+        return f"/group/{self.slug}/"
 
     def delete(self, *args, **kwargs) -> None:
         self.icon.delete(save=False)
@@ -262,7 +259,7 @@ class Group(models.Model, SlugModel):
     social_links = models.ManyToManyField(
         to=SocialLink,
         verbose_name=_("Social networks"),
-        related_name="+",
+        related_name="group_set",
         blank=True,
     )
 
@@ -389,9 +386,12 @@ class Group(models.Model, SlugModel):
         str
             The formatted label of the category of the group.
         """
-        return eval(  # noqa: WPS421, S307
+        cat = eval(  # noqa: WPS421, S307
             self.group_type.category_expr, {"group": self}
         )
+        if cat is None:
+            return None
+        return str(cat)  # safe_guard to be sure what is sent is a string
 
     def get_sub_category(self) -> str:
         """Get the sub category label for list display.
@@ -401,9 +401,12 @@ class Group(models.Model, SlugModel):
         str
             The formatted label of the category of the group.
         """
-        return eval(  # noqa: WPS421, S307
+        sub_cat = eval(  # noqa: WPS421, S307
             self.group_type.sub_category_expr, {"group": self}
         )
+        if sub_cat is None:
+            return None
+        return str(sub_cat)  # safe_guard to be sure what is sent is a string
 
     def get_absolute_url(self) -> str:
         """Get the url of the object."""
