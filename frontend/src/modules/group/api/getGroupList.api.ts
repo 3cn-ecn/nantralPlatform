@@ -15,6 +15,7 @@ export interface GetGroupListApiParams {
   search?: string | null;
   page?: number | null;
   pageSize?: number | null;
+  parent?: string | string[] | null;
 }
 
 export async function getGroupListApi(
@@ -30,6 +31,7 @@ export async function getGroupListApi(
         search: options.search,
         page: options.page,
         page_size: options.pageSize,
+        parent: options.parent,
       },
     })
     .catch((err: ApiErrorDTO) => {
