@@ -48,7 +48,7 @@ pyjwt = ">=2.4"
 django-rest-passwordreset = "*"
 
 [dev-packages]
-black = "~=23.9"
+black = "~=24.3"
 coverage = "~=7.3"
 wemake-python-styleguide = "~=0.17"
 flakeheaven = "~=3.3"
