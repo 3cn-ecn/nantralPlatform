@@ -15,7 +15,6 @@ from .models import FACULTIES, PATHS, Student
 class StudentFactory(DjangoModelFactory):
     class Meta:
         model = Student
-        skip_postgeneration_save = True
 
     user = factory.SubFactory(UserFactory, student=None)
     promo = factory.Faker("year")
@@ -25,20 +24,16 @@ class StudentFactory(DjangoModelFactory):
             (key, 10 if key == "Gen" else 1) for key, _ in FACULTIES
         ),
     )
-    path = factory.Faker(
-        "random_element",
-        elements=OrderedDict(
-            (key, 10 if key == "Cla" else 1) for key, _ in PATHS
+    path = factory.Maybe(
+        decider=factory.LazyAttribute(lambda obj: obj.faculty == "Gen"),
+        yes_declaration=factory.Faker(
+            "random_element",
+            elements=OrderedDict(
+                (key, 10 if key == "Cla" else 1) for key, _ in PATHS
+            ),
         ),
+        no_declaration="Cla",
     )
-
-    @factory.post_generation
-    def set_path(self, create, extracted, **kwargs):
-        if self.faculty != "Gen":
-            # Force path to "Classic" if student is not a Generalist Engineer
-            self.path = "Cla"
-            if create:
-                self.save()
 
 
 class StudentFakeData(FakeDataGenerator):
