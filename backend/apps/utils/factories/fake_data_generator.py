@@ -1,3 +1,9 @@
+import sys
+
+from django.core.management.base import OutputWrapper
+from django.core.management.color import color_style
+from django.db.utils import IntegrityError
+
 import factory
 
 
@@ -22,11 +28,20 @@ class FakeDataGenerator:
 
     dependencies = []
 
+    stdout = OutputWrapper(sys.stdout)
+    style = color_style()
+
     @faker_locale("fr_FR")
     def run(self):
         for name in dir(self):  # noqa: WPS421
             if name.startswith("make_"):
-                getattr(self, name)()
+                try:
+                    getattr(self, name)()
+                except IntegrityError as e:
+                    self.stdout.write(
+                        f"{name} failed after creating a duplicate ({e})",
+                        self.style.WARNING,
+                    )
 
     @classmethod
     def locale(cls, locale):
