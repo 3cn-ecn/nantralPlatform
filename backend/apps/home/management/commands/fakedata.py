@@ -83,8 +83,12 @@ class Command(BaseCommand):
         def resolve(generator):  # noqa: WPS430
             if generator in resolved:
                 return
-            for dependency in generator.dependencies:
-                if dependency not in resolved:
+            for dependency_name in generator.dependencies:
+                dependency = next(
+                    (g for g in generators if g.__name__ == dependency_name),
+                    None,
+                )
+                if dependency and dependency not in resolved:
                     resolve(dependency)
             resolved.add(generator)
             sorted_generators.append(generator)
