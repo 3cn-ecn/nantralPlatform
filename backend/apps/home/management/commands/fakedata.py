@@ -1,3 +1,4 @@
+import traceback
 from importlib import import_module
 
 from django.apps import apps
@@ -22,6 +23,7 @@ class Command(BaseCommand):
             f"apps.{app}" if not app.startswith("apps.") else app
             for app in options["apps"]
         ]
+        verbosity = options["verbosity"]
 
         generator_classes = self.get_classes(apps_selected)
         sorted_generators = self.resolve_dependencies(generator_classes)
@@ -34,7 +36,20 @@ class Command(BaseCommand):
             try:
                 fake_data_class().run()
             except Exception as e:
-                self.stdout.write(str(e), self.style.ERROR)
+                error_class = e.__class__.__name__
+                error_module = e.__class__.__module__
+                self.stdout.write(
+                    f"Error {error_class} ({error_module}): {e}",
+                    self.style.ERROR,
+                )
+                if verbosity >= 2:
+                    traceback.print_exc()
+                if isinstance(e, KeyError) and str(e) == "'locale'":
+                    self.stdout.write(
+                        "This seems to be a bug from the faker library. "
+                        "Do not use factory.Faker in the decider of a Maybe.",
+                        self.style.NOTICE,
+                    )
 
         self.stdout.write("Done", self.style.SUCCESS)
 
