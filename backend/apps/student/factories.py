@@ -6,7 +6,7 @@ import factory
 from factory.django import DjangoModelFactory
 
 from apps.account.factories import UserFactory
-from apps.utils.fake_data_generator import FakeDataGenerator
+from apps.utils.factories.fake_data_generator import FakeDataGenerator
 
 from .models import FACULTIES, PATHS, Student
 

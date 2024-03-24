@@ -4,7 +4,7 @@ from django.apps import apps
 from django.core.management.base import BaseCommand
 from django.utils.module_loading import module_has_submodule
 
-from apps.utils.fake_data_generator import FakeDataGenerator
+from apps.utils.factories.fake_data_generator import FakeDataGenerator
 
 
 class Command(BaseCommand):
