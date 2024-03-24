@@ -6,6 +6,7 @@ import factory
 from factory.django import DjangoModelFactory
 
 from apps.account.factories import UserFactory
+from apps.utils.fake_data_generator import FakeDataGenerator
 
 from .models import FACULTIES, PATHS, Student
 
@@ -38,3 +39,18 @@ class StudentFactory(DjangoModelFactory):
             self.path = "Cla"
             if create:
                 self.save()
+
+
+class StudentFakeData(FakeDataGenerator):
+    """
+    Generate 150 random students.
+    Warning: User generation is slow because of the password hashing.
+    """
+
+    def make_students(self):
+        print("Warning: this can take a few minutes")  # noqa: WPS421
+        StudentFactory.create_batch(100)
+
+    @FakeDataGenerator.locale("en_US")
+    def make_students_en(self):
+        StudentFactory.create_batch(50)
