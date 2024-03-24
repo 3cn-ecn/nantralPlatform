@@ -23,9 +23,12 @@ class Command(BaseCommand):
             for app in options["apps"]
         ]
 
-        for fake_data_class, app_name in self.get_classes(apps_selected):
+        generator_classes = self.get_classes(apps_selected)
+        sorted_generators = self.resolve_dependencies(generator_classes)
+
+        for fake_data_class in sorted_generators:
             self.stdout.write(
-                f"Run {fake_data_class.__name__} from app {app_name}...",
+                f"Running {fake_data_class.__name__}...",
                 self.style.MIGRATE_HEADING,
             )
             try:
@@ -36,6 +39,7 @@ class Command(BaseCommand):
         self.stdout.write("Done", self.style.SUCCESS)
 
     def get_classes(self, apps_selected: list[str]):
+        classes = []
         # Iterate over all installed apps
         for app_config in apps.get_app_configs():
             # If apps are selected, only consider those
@@ -54,4 +58,23 @@ class Command(BaseCommand):
                         and issubclass(obj, FakeDataGenerator)
                         and obj is not FakeDataGenerator
                     ):
-                        yield obj, app_config.verbose_name
+                        classes.append(obj)
+        return classes
+
+    def resolve_dependencies(self, generators):
+        sorted_generators = []
+        resolved = set()
+
+        def resolve(generator):  # noqa: WPS430
+            if generator in resolved:
+                return
+            for dependency in generator.dependencies:
+                if dependency not in resolved:
+                    resolve(dependency)
+            resolved.add(generator)
+            sorted_generators.append(generator)
+
+        for generator in generators:
+            resolve(generator)
+
+        return sorted_generators

@@ -20,6 +20,8 @@ class FakeDataGenerator:
     Used to generate fake data with the 'manage.py fakedata' command.
     """
 
+    dependencies = []
+
     @faker_locale("fr_FR")
     def run(self):
         for name in dir(self):  # noqa: WPS421
