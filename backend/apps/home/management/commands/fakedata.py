@@ -20,7 +20,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         apps_selected = [
-            f"apps.{app}" if not app.startswith("apps.") else app
+            app if app.startswith("apps.") else f"apps.{app}"
             for app in options["apps"]
         ]
         verbosity = options["verbosity"]
