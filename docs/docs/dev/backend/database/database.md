@@ -6,6 +6,8 @@ import DatabaseSchema from './database.excalidraw.svg'
 
 # Database
 
+## Schema
+
 The following schema is an entity-relationship diagram of the database,
 simplified for your convenience 😉
 
@@ -35,3 +37,21 @@ If you have problems in running the method described above, you have to run befo
 
 </details>
 </details>
+
+## Use fake data
+
+You can generate fake random data for the database using this command:
+
+```bash
+pipenv run fakedata
+```
+
+You can also generate data for a specific app, for example `event`:
+
+```bash
+pipenv run fakedata event
+```
+
+The fake data generators are defined in the `factories.py` files of each app,
+using [`factory-boy`](https://factoryboy.readthedocs.io/en/stable/) and
+[`Faker`](https://faker.readthedocs.io/en/master/#contents).
