@@ -29,7 +29,8 @@ install:
 		$(PIPENV) sync --dev && \
 		$(PIPENV) run migrate && \
 		$(call EXPORT,DJANGO_SUPERUSER_PASSWORD,admin) && \
-		$(PIPENV) run django createsuperuser --noinput --username admin --username admin --email admin@ec-nantes.fr
+		$(PIPENV) run django createsuperuser --noinput --username admin --username admin --email admin@ec-nantes.fr && \
+		$(PIPENV) run fakedata
 	cd frontend && \
 		npm ci
 	cd email-templates-generator && \

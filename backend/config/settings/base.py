@@ -97,7 +97,6 @@ COMMON_APPS = [
 ]
 ARCHIVED_APPS = [
     "apps._archived.exchange",
-    "apps._archived.services",
     "apps._archived.club",
     "apps._archived.liste",
     "apps._archived.administration",
