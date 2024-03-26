@@ -12,6 +12,7 @@ django = "python manage.py"
 lint = "flakeheaven lint"
 "lint:fix" = "sh -c 'black . && isort .'"
 "test:coverage" = "coverage run --source='.' manage.py test"
+"fakedata" = "python manage.py fakedata"
 
 [packages]
 celery = "~=5.2"
