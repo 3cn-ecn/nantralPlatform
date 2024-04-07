@@ -12,6 +12,7 @@ django = "python manage.py"
 lint = "flakeheaven lint"
 "lint:fix" = "sh -c 'black . && isort .'"
 "test:coverage" = "coverage run --source='.' manage.py test"
+"fakedata" = "python manage.py fakedata"
 
 [packages]
 celery = "~=5.2"
@@ -46,6 +47,7 @@ six = "~=1.16"
 # force update of a sub-package
 pyjwt = ">=2.4"
 django-rest-passwordreset = "*"
+factory-boy = "~=3.3.0"
 
 [dev-packages]
 black = "~=24.3"
