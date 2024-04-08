@@ -35,8 +35,8 @@ export default defineConfig({
   base: '/static/',
   resolve: {
     alias: {
-      '#api': path.resolve(__dirname, './src/api/'),
-      '#modules': path.resolve(__dirname, './src/modules/'),
+      '#api': path.resolve(__dirname, './src/api'),
+      '#modules': path.resolve(__dirname, './src/modules'),
       '#pages': path.resolve(__dirname, './src/pages'),
       '#shared': path.resolve(__dirname, './src/shared'),
       '#types': path.resolve(__dirname, './src/types'),
