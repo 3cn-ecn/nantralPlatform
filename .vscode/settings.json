@@ -30,6 +30,8 @@
   "[django-html]": {
     "editor.formatOnSave": false
   },
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "off",
   "flake8.args": ["--config", "backend/.flake8"],
   "flake8.importStrategy": "fromEnvironment",
   "black-formatter.args": ["--config", "backend/pyproject.toml"],
