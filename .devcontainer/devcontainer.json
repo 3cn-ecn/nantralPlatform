@@ -1,0 +1,46 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers-contrib/features/pipenv:2": {}
+  },
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "5173": { "onAutoForward": "silent" }
+  },
+  "postCreateCommand": "make install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // global
+        "eamodio.gitlens",
+        "visualstudioexptteam.vscodeintellicode",
+        "streetsidesoftware.code-spell-checker",
+        "streetsidesoftware.code-spell-checker-french",
+        "mikestead.dotenv",
+        "simonsiefke.svg-preview",
+        // python
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.flake8",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "njpwerner.autodocstring",
+        // django
+        "batisteo.vscode-django",
+        "mrorz.language-gettext",
+        "qwtel.sqlite-viewer",
+        "ecmel.vscode-html-css",
+        // js
+        "dbaeumer.vscode-eslint",
+        "christian-kohler.npm-intellisense",
+        "cschlosser.doxdocgen",
+        "esbenp.prettier-vscode",
+        // react
+        "lokalise.i18n-ally",
+        // docs
+        "unifiedjs.vscode-mdx",
+        "pomdtr.excalidraw-editor"
+      ]
+    }
+  }
+}
