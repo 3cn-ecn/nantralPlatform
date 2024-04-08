@@ -3,9 +3,10 @@
   "features": {
     "ghcr.io/devcontainers-contrib/features/pipenv:2": {}
   },
-  "forwardPorts": [8000],
+  "forwardPorts": [8000, 5173],
   "portsAttributes": {
-    "5173": { "onAutoForward": "silent" }
+    "5173": { "onAutoForward": "silent" },
+    "8000": { "onAutoForward": "openBrowserOnce" }
   },
   "postCreateCommand": "make install",
   "customizations": {
