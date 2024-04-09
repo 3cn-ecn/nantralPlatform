@@ -20,10 +20,10 @@ To use it, just call the `useTranslation` hook in your component and then use it
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 function HomePage(): JSX.Element {
-  const { t } = useTranslation();
-  const myName = 'John';
+   const { t } = useTranslation();
+   const myName = 'John';
 
-  return <p>{t('home.welcome', { firstName: myName })}</p>;
+   return <p>{t('home.welcome', { firstName: myName })}</p>;
 }
 ```
 
@@ -32,9 +32,9 @@ Then, add your translations in the `frontend/src/translations/<lang>.json` files
 ```json
 // fr-FR.json
 {
-  "home": {
-    "welcome": "Bienvenue {{firstName}} !"
-  }
+   "home": {
+      "welcome": "Bienvenue {{firstName}} !"
+   }
 }
 ```
 
@@ -50,10 +50,10 @@ of the `useTranslation` hook:
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 function MyComponent(): JSX.Element {
-  const { formatDate } = useTranslation();
-  const today = new Date(); // get the date of today
+   const { formatDate } = useTranslation();
+   const today = new Date(); // get the date of today
 
-  return <p>{formatDate(today, { dateStyle: 'long' })}</p>;
+   return <p>{formatDate(today, { dateStyle: 'long' })}</p>;
 }
 
 // returns "17 février 2023"
@@ -73,9 +73,9 @@ MDN reference for the options here: [NumberFormatOptions](https://developer.mozi
 :::info Find the locale code
 The code of a locale is defined in 2 parts:
 
-- the language (e.g `fr`, `en`...): it defines which translations to use;
-- the region code (e.g. `FR`, `US`, `GB`): it defines the date and number
-  formatting which will be used.
+-  the language (e.g `fr`, `en`...): it defines which translations to use;
+-  the region code (e.g. `FR`, `US`, `GB`): it defines the date and number
+   formatting which will be used.
 
 :::
 
@@ -83,20 +83,20 @@ The code of a locale is defined in 2 parts:
    international code of the language (e.g. `fr-FR.json` for French).
    Make a copy of one of the existing file and translate all texts.
 2. In `src/shared/i18n/config.ts`:
-   - Add the language code in the `languages` array:
-     ```ts
-     export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
-     ```
-   - Import the JSON file:
-     ```ts
-     import translationFr from './fr-FR.json';
-     ```
-   - Add it to the `resources` key:
-     ```ts
-     resources: {
-      "fr-FR": { translation: translationFr },
-     },
-     ```
+   -  Add the language code in the `languages` array:
+      ```ts
+      export const languages = ['fr-FR', 'en-GB', 'en-US'] as const;
+      ```
+   -  Import the JSON file:
+      ```ts
+      import translationFr from './fr-FR.json';
+      ```
+   -  Add it to the `resources` key:
+      ```ts
+      resources: {
+       "fr-FR": { translation: translationFr },
+      },
+      ```
 3. In `src/shared/i18n/useTranslation.ts`, import the locale from `date-fns` and
    map it to the language previously defined in the `languages` array.
 4. In `src/theme.ts`, import the locale from `@mui/x-date-pickers` and map it

@@ -13,14 +13,14 @@ Now, let's see how to start the project each time you want to work on it.
 When someone else make changes on the project, you have to update your database
 on your computer to avoid problems.
 
-- First, download the last commits on your local branch:
-  ```bash
-  git pull
-  ```
-- Then, update the dependencies and your database:
-  ```bash
-  make update
-  ```
+-  First, download the last commits on your local branch:
+   ```bash
+   git pull
+   ```
+-  Then, update the dependencies and your database:
+   ```bash
+   make update
+   ```
 
 <details>
 <summary>Someone updated the `master` branch, how to rebase my branch?</summary>
@@ -28,28 +28,28 @@ on your computer to avoid problems.
 If you are working on a branch and someone else updated the `master` branch,
 you should rebase your branch on the `master` branch to avoid conflicts.
 
-- First, download the last commits on your local `master` branch:
-  ```bash
-  git checkout master
-  git pull
-  ```
-- Then, go back to your branch and rebase it on the `master` branch:
-  ```bash
-  git checkout your-branch
-  git rebase master
-  ```
-  If you have conflicts, you have to resolve them and then continue the rebase:
-  ```bash
-  git rebase --continue
-  ```
-  If you want to cancel the rebase:
-  ```bash
-  git rebase --abort
-  ```
-- Finally, if you already pushed your branch to GitHub, you have to force push it:
-  ```bash
-  git push --force
-  ```
+-  First, download the last commits on your local `master` branch:
+   ```bash
+   git checkout master
+   git pull
+   ```
+-  Then, go back to your branch and rebase it on the `master` branch:
+   ```bash
+   git checkout your-branch
+   git rebase master
+   ```
+   If you have conflicts, you have to resolve them and then continue the rebase:
+   ```bash
+   git rebase --continue
+   ```
+   If you want to cancel the rebase:
+   ```bash
+   git rebase --abort
+   ```
+-  Finally, if you already pushed your branch to GitHub, you have to force push it:
+   ```bash
+   git push --force
+   ```
 
 :::warning
 Do **NOT** merge your branch with the `master` branch, always rebase it.
