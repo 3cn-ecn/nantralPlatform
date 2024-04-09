@@ -9,41 +9,26 @@ their pros and cons.
 
 ## Summary
 
-| My situation                                           | The choice we recommend                                |
-| ------------------------------------------------------ | ------------------------------------------------------ |
-| I have a Mac                                           | Use MacOS                                              |
-| I already know Linux or I am interested in learning it | Use Linux                                              |
-| I have a Windows with good performances                | Use WSL                                                |
-| I have a Windows with very bad performances            | Use Windows (or Linux if you want better performances) |
+| My situation                                           | The choice we recommend |
+| ------------------------------------------------------ | ----------------------- |
+| I have a Mac                                           | Use MacOS               |
+| I already know Linux or I am interested in learning it | Use Linux               |
+| I have a Windows with good performances                | Use WSL                 |
+| I have a Windows with very bad performances            | Use Github Codespaces   |
 
 ## Pros and cons of each OS
-
-### Windows
-
-✅ Pros: you already know how to use it and are familiar with the interface.
-
-❌ Cons: you will have more bugs and problems during development, because
-Windows is not meant for web development (it is not a Unix-based system).
-
-### MacOS
-
-✅ Pros: easy to use and perfect for web development, since it is a Unix-based
-system.
-
-❌ Cons: it is expensive and you need to buy a Mac. You will also have less
-compatibility with other devices.
 
 ### Linux
 
 ✅ Pros: it is perfect for web development, as a Unix-based system.
 It is also free, installable on any computer, you can dual-boot it with Windows,
-and has a lot more tools for devs than Windows or MacOS.
+and it has a lot more tools for devs than Windows or MacOS.
 
 ❌ Cons: you will need to learn how to use it, and it is not as user-friendly
 as Windows or MacOS.
 
 <details>
-<summary>Instructions for Linux...</summary>
+<summary>How to install Linux</summary>
 
 You'll need to pick a distribution to start with. If you are a beginner,
 we recommend you to use an _Ubuntu_-based distribution: they have great
@@ -58,28 +43,71 @@ Some of the best _Ubuntu_-based distributions:
 
 </details>
 
+### MacOS
+
+✅ Pros: very easy to use, and perfect for web development (it is also based on Unix,
+as for Linux).
+
+❌ Cons: it is expensive and you need to buy a Mac. Apple is also known
+for spying its users.
+
+### Windows
+
+✅ Pros: you probably already know how to use it and are familiar with the
+interface.
+
+❌ Cons: you will have more bugs and problems during development, because
+Windows is not meant for web development (it is not a Unix-based system).
+
 ### WSL (Windows Subsystem for Linux)
 
-If you are hesitating between Windows and Linux, you can use the best of both
-with WSL: basically, it is a Linux system which runs inside your Windows.
+If you are hesitating about installing Linux, you can use the best of Windows
+and Linux with WSL: basically, it is a full Linux system which runs inside your
+Windows.
 
 ✅ Pros: you keep the Windows interface that you're familiar with, but you can
 also use all the Linux tools for web development.
 
-❌ Cons: your computer will consume more power and RAM to run both Windows
+❌ Cons: your computer will need more power and RAM to run both Windows
 and Linux at the same time.
 
 <details>
-<summary>Instructions for WSL...</summary>
+<summary>How to install WSL</summary>
 
-First, you need to install **WSL2** on your Windows. Follow the official instructions
-of the Microsoft documentation to do this, because it can be a bit tricky.
+First, you need to install **WSL2** on your Windows. Be sure to follow
+[the official Microsoft documentation](https://learn.microsoft.com/en-us/windows/wsl/install),
+because it can be a bit tricky.
 
 Then, you need to pick a distribution to start with: we recommend you to use
 _Ubuntu_.
 
 Finally, you need to install all programs and tools for your Linux system:
 to do so, follow this documentation using the _Linux_ tab each time instead of
-the _Windows_ tab.
+the _Windows_ tab, and run commands in the WSL terminal.
+
+</details>
+
+### Github Codespaces
+
+Codespaces allows you to use a remote Linux machine, which runs on the Github
+servers.
+
+✅ Pros: you don't need to install anything (the remote machine is already
+configured with all tools), and you can access it from anywhere through a
+browser. It is also perfect if your computer does not have good performances.
+
+❌ Cons: codespaces can be automatically deleted by Github after a certain
+period of time if they are not used, so you need to be sure to commit and push
+your changes frequently.
+
+<details>
+<summary>How to use Github Codespaces</summary>
+
+1. Open the [Github repository](https://github.com/3cn-ecn/nantralPlatform)
+   page.
+2. Click the **Code** button, select **Codespaces**, and create a new
+   codespace.
+3. Wait for the codespace to be created. After it is done, you can directly
+   go to the [First launch](../setup-project/setup-project.md) page.
 
 </details>

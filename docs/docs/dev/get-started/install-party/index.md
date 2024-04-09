@@ -3,8 +3,8 @@ title: Install Party
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import TabItem from '@theme/TabItem'
+import Tabs from '@theme/Tabs'
 
 # Install Party
 
@@ -91,8 +91,13 @@ Remember it, they are very useful! 🤩
 
 </details>
 
+:::tip Don't have time?
+You can skip the installation by working directly in your browser.
+See the **_Pick an OS_** section.  
+:::
+
 ---
 
-import DocCardList from '@theme/DocCardList';
+import DocCardList from '@theme/DocCardList'
 
 <DocCardList />
