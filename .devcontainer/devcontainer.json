@@ -8,7 +8,6 @@
     "5173": { "onAutoForward": "silent" },
     "8000": { "onAutoForward": "openBrowserOnce" }
   },
-  "postCreateCommand": "make install",
   "customizations": {
     "vscode": {
       "extensions": [
