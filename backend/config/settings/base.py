@@ -44,6 +44,10 @@ env = environ.Env(
     OVH_ACCESS_KEY_ID=(str, ""),
     OVH_SECRET_ACCESS_KEY=(str, ""),
     S3_BUCKET=(str, ""),
+    # for codespaces only (automatically retrieved from the codespace)
+    CODESPACES=(bool, False),
+    CODESPACE_NAME=(str, ""),
+    GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN=(str, ""),
 )
 env.read_env()
 
@@ -168,8 +172,13 @@ MODELTRANSLATION_CUSTOM_FIELDS = ("CKEditor5Field",)
 # Compile frontend with VITE
 DJANGO_VITE_ASSETS_PATH = os.path.join(BASE_DIR, "static/front")
 DJANGO_VITE_DEV_MODE = True
-DJANGO_VITE_DEV_SERVER_PORT = 5173
 
+if env("CODESPACES"):
+    CODESPACE_NAME = env("CODESPACE_NAME")
+    CODESPACE_DOMAIN = env("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN")
+    DJANGO_VITE_DEV_SERVER_PROTOCOL = "https"
+    DJANGO_VITE_DEV_SERVER_HOST = f"{CODESPACE_NAME}-5173.{CODESPACE_DOMAIN}"
+    DJANGO_VITE_DEV_SERVER_PORT = 443
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

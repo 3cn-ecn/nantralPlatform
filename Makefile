@@ -36,6 +36,8 @@ install:
 	cd email-templates-generator && \
 		npm ci && \
 		npm run build
+	cd docs && \
+		npm ci
 
 
 # Update after pull

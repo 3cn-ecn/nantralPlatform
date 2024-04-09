@@ -2,8 +2,8 @@
 sidebar_position: 3
 ---
 
-import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
 
 # First Launch
 
@@ -101,6 +101,10 @@ Congratulations, you did it all 🥳
 
 </details>
 
+When the installation is finished, refresh your IDE: for VScode, tap
+<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>, search for **"Reload Windows"**,
+and tap <kbd>Enter</kbd>.
+
 ## Start the server
 
 Now it's time to launch the website! To do this:
@@ -115,7 +119,33 @@ Now it's time to launch the website! To do this:
    cd backend/
    pipenv run start
    ```
-1. Open this address in your browser: [http://localhost:8000](http://localhost:8000)
+
+<Tabs>
+<TabItem value="local" label="Local">
+
+3. Open this address in your browser: [http://localhost:8000](http://localhost:8000)
+
+</TabItem>
+<TabItem value="codespaces" label="Github Codespaces">
+
+3. The ports 8000 and 5173 are automatically **forwarded** by VScode. The port
+   8000 is automatically opened in **a new tab**.
+4. Go back into the vscode tab of your browser. You need to change
+   the **visibility** of the ports to **public**:
+
+   - open the **_Ports_** tab on the bottom bar of VS code
+   - right click on each port, and select _Port visibility_ > _Public_
+
+   You can also run this command to change the visibility of both ports:
+
+   ```
+   gh codespace ports visibility 5173:public 8000:public --codespace $CODESPACE_NAME
+   ```
+
+5. Go back to the tab **previously** opened automatically.
+
+</TabItem>
+</Tabs>
 
 And that's it! You should now see the login page of Nantral Platform:
 
