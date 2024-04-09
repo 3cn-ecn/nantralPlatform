@@ -18,7 +18,7 @@
     "**/*.jsx": "javascriptreact",
     "**/*.ts": "typescript",
     "**/*.tsx": "typescriptreact",
-    "**/docs/**/*.md": "mdx",
+    "**/docs/**/*.mdx": "mdx",
     "requirements.txt": "pip-requirements",
     "Pipfile": "toml"
   },
@@ -48,7 +48,10 @@
   "eslint.workingDirectories": ["./frontend", "./email-templates-generator"],
   // docs formatting
   "[mdx][markdown]": {
-    "editor.tabSize": 3
+    "editor.tabSize": 3,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "never"
+    }
   },
   "mdx.server.enable": false,
   // i18n-ally (react translations)

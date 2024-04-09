@@ -1,0 +1,45 @@
+---
+sidebar_position: 1
+---
+
+import ArchitectureSvg from './architecture.excalidraw.svg';
+
+# Architecture
+
+Discover the architecture of the front-end!
+
+<ArchitectureSvg />
+
+## What's the front-end?
+
+The front-end is the part of the application that runs on the **client**.
+Its role is to:
+
+-  display the data to the user
+-  send data to the back-end
+-  manage the user's interactions
+
+In our case, the front-end is built with the [**React**](https://reactjs.org) library.
+
+## React is NOT a framework
+
+React is a **library**, which is only useful for building user interfaces.
+Since it isn't a framework, we need other libraries to build a complete front-end:
+
+-  [**React Router**](https://reactrouter.com/en/main/start/overview) for routing
+   (i.e. managing the URLs and the pages)
+-  [**React Query**](https://tanstack.com/query/v4/docs/framework/react/quick-start)
+   for data fetching and caching (i.e. using the API)
+-  [**React Hook Form**](https://react-hook-form.com/get-started#IntegratingwithUIlibraries)
+   for forms
+-  [**MUI**](https://mui.com) for the design system
+
+## The old (legacy) front-end
+
+The old front-end was built with the [**Django**](https://www.djangoproject.com)
+template system, which is a server-side rendering system.
+But, in some cases, we injected some React components in the Django templates
+to make the front-end more dynamic.
+
+These injected React component are stored in the `frontend/legacy` folder:
+they are standalone components which are not part of a page.

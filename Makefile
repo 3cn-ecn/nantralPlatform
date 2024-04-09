@@ -2,7 +2,7 @@
 CREATE := touch
 PYTHON := python3
 COPY := cp
-PIPENV := $(PYTHON) -m pipenv
+PIPENV := pipenv
 EXPORT = export $(1)=$(2)
 
 # MODIFY COMMANDS FOR WINDOWS

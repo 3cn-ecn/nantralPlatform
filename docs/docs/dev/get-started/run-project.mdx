@@ -1,0 +1,98 @@
+---
+sidebar_position: 4
+---
+
+# Run the project
+
+Wow, you've successfully installed the project! 🎉
+
+Now, let's see how to start the project each time you want to work on it.
+
+## Updates
+
+When someone else make changes on the project, you have to update your database
+on your computer to avoid problems.
+
+-  First, download the last commits on your local branch:
+   ```bash
+   git pull
+   ```
+-  Then, update the dependencies and your database:
+   ```bash
+   make update
+   ```
+
+<details>
+<summary>Someone updated the `master` branch, how to rebase my branch?</summary>
+
+If you are working on a branch and someone else updated the `master` branch,
+you should rebase your branch on the `master` branch to avoid conflicts.
+
+-  First, download the last commits on your local `master` branch:
+   ```bash
+   git checkout master
+   git pull
+   ```
+-  Then, go back to your branch and rebase it on the `master` branch:
+   ```bash
+   git checkout your-branch
+   git rebase master
+   ```
+   If you have conflicts, you have to resolve them and then continue the rebase:
+   ```bash
+   git rebase --continue
+   ```
+   If you want to cancel the rebase:
+   ```bash
+   git rebase --abort
+   ```
+-  Finally, if you already pushed your branch to GitHub, you have to force push it:
+   ```bash
+   git push --force
+   ```
+
+:::warning
+Do **NOT** merge your branch with the `master` branch, always rebase it.
+Merging will destroy the commits history of the project and make it harder to
+understand for reviewers.
+:::
+
+</details>
+
+## Run the back end server (Django)
+
+To run the backend, simply go into the `backend` folder and start the server:
+
+```bash
+cd backend/
+pipenv run start
+```
+
+The server will be launched in the background. You can stop the
+server at any time by simply pressing <kbd>CTRL</kbd>+<kbd>C</kbd> in the terminal.
+
+When you edit a file of the backend, the changes will be automatically
+taken into account: no need to relaunch the server.
+
+## Run the front end server (React)
+
+To run the front end, open a second terminal
+(you need to keep the django server running), and run these commands:
+
+```bash
+cd frontend/
+npm run start
+```
+
+You can now visit your browser at [http://localhost:8000](http://localhost:8000)
+to see the result! 🥳
+
+---
+
+:::note Others npm packages
+You will notice 2 others packages in the Nantral Platform repo: `docs` and
+`email-templates-generator`.
+
+You can read their README.md files to know how to run them. Most of the time,
+they share the same commands as the frontend.
+:::
