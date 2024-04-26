@@ -30,7 +30,6 @@ class GroupAdmin(admin.ModelAdmin):
         "archived",
     ]
     exclude = ["members", "subscribers"]
-    raw_id_fields = ["social_links"]
     readonly_fields = [
         "id",
         "created_by",

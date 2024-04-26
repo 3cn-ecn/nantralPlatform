@@ -28,6 +28,10 @@ class GroupPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj: Group):
         user = request.user
+        if view.action == "admin_request":
+            return obj.membership_set.filter(
+                student__user=request.user
+            ).exists()
         if request.method in permissions.SAFE_METHODS:
             if obj.public:
                 return True
