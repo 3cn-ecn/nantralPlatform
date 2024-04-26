@@ -255,3 +255,7 @@ class LabelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Label
         fields = ["id", "name"]
+
+
+class AdminRequestSerializer(serializers.Serializer):
+    message = serializers.CharField(max_length=256)

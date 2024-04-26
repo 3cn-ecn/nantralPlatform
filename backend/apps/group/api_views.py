@@ -1,7 +1,10 @@
 from apps.utils.parse_bool import parse_bool
+from discord_webhook import DiscordEmbed, DiscordWebhook
+from django.conf import settings
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
@@ -10,10 +13,10 @@ from rest_framework import (decorators, exceptions, filters, permissions,
 
 from .models import Group, GroupType, Label, Membership
 from .permissions import GroupPermission, MembershipPermission
-from .serializers import (GroupPreviewSerializer, GroupSerializer,
-                          GroupTypeSerializer, GroupWriteSerializer,
-                          LabelSerializer, MembershipSerializer,
-                          NewMembershipSerializer)
+from .serializers import (AdminRequestSerializer, GroupPreviewSerializer,
+                          GroupSerializer, GroupTypeSerializer,
+                          GroupWriteSerializer, LabelSerializer,
+                          MembershipSerializer, NewMembershipSerializer)
 
 
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -65,6 +68,8 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
+        if self.action == "admin_request":
+            return AdminRequestSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
         if preview is True:
@@ -142,14 +147,76 @@ class GroupViewSet(viewsets.ModelViewSet):
             .order_by(
                 "group_type",
                 *group_type.sort_fields.split(",") if group_type else "",
-            )
-            .distinct()
+            ).distinct()
         )
 
     def get_object(self):
         obj = get_object_or_404(Group, slug=self.kwargs["slug"])
         self.check_object_permissions(self.request, obj)
         return obj
+
+    @decorators.action(detail=True, methods=["POST"])
+    def admin_request(self, request, *args, **kwargs):
+        obj: Group = self.get_object()
+        user = request.user
+        serializer = self.get_serializer(data=request.data)
+
+        if obj.is_admin(user):
+            return response.Response(
+                status=400,
+                data={"detail": "You are already admin of that group"},
+            )
+        membership: Membership = obj.membership_set.get(student__user=user)
+        if membership.admin_request is True:
+            return response.Response(
+                status=400,
+                data={"detail": "Admin request already sent"},
+            )
+        if not serializer.is_valid():
+            return response.Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
+        message = serializer.validated_data.get("message")
+        membership.admin_request = True
+        membership.admin_request_messsage = message
+        membership.save()
+        res = response.Response(
+            status=200,
+            data={
+                "detail": _(
+                    "Your admin request has been sent! You will receive the "
+                    "answer soon by email."
+                ),
+            },
+        )
+        if settings.DEBUG:
+            return res
+        # send a message to the discord channel for administrators
+        accept_url = self.request.build_absolute_uri(
+            reverse("group:accept-admin-req", kwargs={"id": membership.id})
+        )
+        deny_url = self.request.build_absolute_uri(
+            reverse("group:deny-admin-req", kwargs={"id": membership.id})
+        )
+        webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
+        embed = DiscordEmbed(
+            title=(
+                f"{membership.student} demande à "
+                f"devenir admin de {membership.group.short_name}"
+            ),
+            description=membership.admin_request_messsage,
+            color=242424,
+        )
+        embed.add_embed_field(
+            name="Accepter", value=f"[Accepter]({accept_url})", inline=True
+        )
+        embed.add_embed_field(
+            name="Refuser", value=f"[Refuser]({deny_url})", inline=True
+        )
+        webhook.add_embed(embed)
+        webhook.execute()
+
+        return res
 
 
 class MembershipViewSet(viewsets.ModelViewSet):
@@ -237,9 +304,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
                 Q(end_date__gte=from_date) | Q(end_date__isnull=True),
             )
         if to_date:
-            qs = qs.filter(
-                Q(begin_date__lt=to_date) | Q(begin_date__isnull=True),
-            )
+            qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True))
 
         qs = qs.prefetch_related("student__user").distinct()
         self.queryset = qs
