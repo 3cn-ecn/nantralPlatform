@@ -7,11 +7,11 @@ import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageC
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
+import { TopImage } from '../../shared/components/TopImage/TopImage';
 import { ActionButtonsBar } from './components/ActionButtonsBar';
 import { BackgroundImageOverlay } from './components/BackgroundImageOverlay';
 import { EventInfo } from './components/EventInfo';
 import { EventPopupAlerts } from './components/EventPopupAlerts';
-import { TopImage } from './components/TopImage';
 
 export default function EventDetailsPage() {
   const { id: eventId } = useParams();

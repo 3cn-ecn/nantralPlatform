@@ -7,9 +7,10 @@ import { ImageModal } from '#shared/components/Modal/ImageModal';
 
 interface TopImageProps {
   src: string;
+  aspectRatio?: number;
 }
 
-export function TopImage({ src }: TopImageProps) {
+export function TopImage({ src, aspectRatio = 16 / 9 }: TopImageProps) {
   const [isOpenImageModal, setIsOpenImageModal] = useState(false);
 
   if (!src) return null;
@@ -33,10 +34,10 @@ export function TopImage({ src }: TopImageProps) {
           alt="Banner of the event"
           shift="bottom"
           easing="ease-in"
-          duration={900}
-          shiftDuration={900}
+          duration={500}
+          shiftDuration={500}
           style={{
-            aspectRatio: 16 / 9,
+            aspectRatio: aspectRatio,
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
           }}
