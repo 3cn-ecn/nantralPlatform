@@ -6,7 +6,7 @@ import { PageDTO, adaptPage } from '#shared/infra/pagination';
 import { adaptMembership } from '../infra/membership.adapter';
 import { MembershipDTO } from '../infra/membership.dto';
 
-interface GetMembershipListApiParams {
+export interface GetMembershipListApiParams {
   student?: number;
   group?: string;
   from?: Date;
