@@ -1,6 +1,5 @@
 """Utils function to query geocoding."""
 
-from typing import List
 from urllib.parse import quote
 
 from django.conf import settings
@@ -8,7 +7,7 @@ from django.conf import settings
 import requests
 
 
-def geocode(search: str, limit: int = 3) -> List[str]:
+def geocode(search: str, limit: int = 3) -> list[str]:
     results = requests.get(
         f"https://api.mapbox.com/geocoding/v5/mapbox.places/"
         f"{quote(search)}.json"

@@ -191,7 +191,7 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
                     " group if you are not admin of this group.",
                 ),
             )
-        if data.get("end_date", None) and data.get("begin_date", None):
+        if data.get("end_date") and data.get("begin_date"):
             if data["begin_date"] > data["end_date"]:
                 raise exceptions.ValidationError(
                     _("The end date must be after the begin date."),

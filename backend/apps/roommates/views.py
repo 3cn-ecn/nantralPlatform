@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,7 +18,7 @@ from .models import Housing, Roommates
 class HousingMap(LoginRequiredMixin, TemplateView):
     template_name = "roommates/map.html"
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["MAPBOX_API_KEY"] = settings.MAPBOX_API_KEY
         phase_colocathlon = Setting.get("PHASE_COLOCATHLON")

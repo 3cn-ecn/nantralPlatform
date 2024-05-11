@@ -96,7 +96,10 @@ class TestLogin(TestCase):
         # test for an invalid invitation
         self.user.invitation = InvitationLink.objects.create(
             expires_at=datetime(
-                year=2021, month=8, day=30, tzinfo=timezone.utc
+                year=2021,
+                month=8,
+                day=30,
+                tzinfo=timezone.utc,
             ),
         )
         self.user.save()

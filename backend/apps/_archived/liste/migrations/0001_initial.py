@@ -2,8 +2,6 @@
 
 import django.db.models.deletion
 from django.db import migrations, models
-from django.db.migrations.operations.special import SeparateDatabaseAndState
-from django.db.models import fields
 
 
 class Migration(migrations.Migration):

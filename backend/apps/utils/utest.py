@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class TestMixin(object):
+class TestMixin:
     """Abstract class to provide user account for tests
 
     Methods

@@ -1,5 +1,4 @@
 import django
-from django.conf import settings
 from django.db import migrations, models
 
 # migration for custom user table

@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any
 
 from django.core.mail import get_connection
 from django.core.mail.message import EmailMultiAlternatives
@@ -11,7 +11,7 @@ def send_email(
     subject: str,
     to: str,
     template_name: str,
-    context: Optional[dict[str, Any]] = None,
+    context: dict[str, Any] | None = None,
 ) -> int:
     """Send an email to a user.
 
@@ -55,8 +55,8 @@ def send_mass_email(
     subject: str,
     recipient_list: list[str],
     template_name: str,
-    context: Optional[dict[str, Any]] = None,
-    context_list: Optional[list[dict[str, Any]]] = None,
+    context: dict[str, Any] | None = None,
+    context_list: list[dict[str, Any]] | None = None,
 ) -> int:
     """Send an email to multiple users.
 
