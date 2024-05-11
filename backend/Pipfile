@@ -50,10 +50,7 @@ django-rest-passwordreset = "~=1.4"
 factory-boy = "~=3.3.0"
 
 [dev-packages]
-black = "~=24.3"
 coverage = "~=7.3"
-wemake-python-styleguide = "~=0.17"
-flakeheaven = "~=3.3"
 
 [requires]
 python_version = "3.10"
