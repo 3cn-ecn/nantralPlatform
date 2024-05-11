@@ -13,7 +13,7 @@ class StudentListView(generics.ListAPIView):
     def get_queryset(self):
         if self.request.GET.get("search") is not None:
             return Student.objects.filter(
-                user__username__icontains=self.request.GET.get("search")
+                user__username__icontains=self.request.GET.get("search"),
             )[:10]
         return Student.objects.all()
 

@@ -58,7 +58,9 @@ class TestStudent(TestCase, TestMixin):
         }
         url = reverse("student:change_pass", args=[student.pk])
         response = self.client.post(
-            url, data=password_change, follow_redirects=True
+            url,
+            data=password_change,
+            follow_redirects=True,
         )
         self.assertEqual(response.status_code, status.HTTP_302_FOUND)
 

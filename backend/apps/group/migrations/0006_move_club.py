@@ -39,7 +39,8 @@ class Migration(migrations.Migration):
             database_operations=[
                 migrations.AlterModelTable(name="Club", table="club_club"),
                 migrations.AlterModelTable(
-                    name="NamedMembershipClub", table="club_namedmembershipclub"
+                    name="NamedMembershipClub",
+                    table="club_namedmembershipclub",
                 ),
             ],
         ),

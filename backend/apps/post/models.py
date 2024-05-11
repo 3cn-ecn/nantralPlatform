@@ -37,10 +37,14 @@ class AbstractPublication(models.Model, SlugModel):
     title = models.CharField(verbose_name=_("Title"), max_length=200)
     description = CKEditor5Field(verbose_name=_("Description"), blank=True)
     group = models.ForeignKey(
-        to=Group, verbose_name=_("Organiser"), on_delete=models.CASCADE
+        to=Group,
+        verbose_name=_("Organiser"),
+        on_delete=models.CASCADE,
     )
     publicity = models.CharField(
-        verbose_name=_("Visibility"), max_length=200, choices=VISIBILITY
+        verbose_name=_("Visibility"),
+        max_length=200,
+        choices=VISIBILITY,
     )
     image = CustomImageField(
         verbose_name=_("Banner"),
@@ -51,7 +55,10 @@ class AbstractPublication(models.Model, SlugModel):
         name_from_field="title",
     )
     notification = models.ForeignKey(
-        to=Notification, on_delete=models.SET_NULL, blank=True, null=True
+        to=Notification,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
     )
 
     # Log infos
@@ -133,12 +140,15 @@ class AbstractPublication(models.Model, SlugModel):
 
 class Post(AbstractPublication):
     pinned = models.BooleanField(
-        verbose_name=_("Pin publication"), default=False
+        verbose_name=_("Pin publication"),
+        default=False,
     )
 
     def save(self, *args, **kwargs) -> None:
         super().save(
-            *args, notification_body=f"Annonce : {self.title}", **kwargs
+            *args,
+            notification_body=f"Annonce : {self.title}",
+            **kwargs,
         )
 
     def get_absolute_url(self) -> str:

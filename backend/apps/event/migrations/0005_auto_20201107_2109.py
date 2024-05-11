@@ -13,7 +13,9 @@ class Migration(migrations.Migration):
             model_name="baseevent",
             name="slug",
             field=models.SlugField(
-                null=True, unique=True, verbose_name="Slug de l'événement"
+                null=True,
+                unique=True,
+                verbose_name="Slug de l'événement",
             ),
         ),
     ]

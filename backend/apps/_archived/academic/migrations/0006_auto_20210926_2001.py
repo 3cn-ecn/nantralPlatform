@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
             model_name="course",
             name="archived",
             field=models.BooleanField(
-                default=False, verbose_name="Formation archivée"
+                default=False,
+                verbose_name="Formation archivée",
             ),
         ),
         migrations.AlterField(

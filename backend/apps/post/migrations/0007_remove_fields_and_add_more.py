@@ -48,7 +48,8 @@ class Migration(migrations.Migration):
             model_name="post",
             name="pinned",
             field=models.BooleanField(
-                default=False, verbose_name="Pin publication"
+                default=False,
+                verbose_name="Pin publication",
             ),
         ),
         migrations.AddField(
@@ -71,7 +72,8 @@ class Migration(migrations.Migration):
             model_name="post",
             name="description",
             field=django_ckeditor_5.fields.CKEditor5Field(
-                blank=True, verbose_name="Description"
+                blank=True,
+                verbose_name="Description",
             ),
         ),
         migrations.AlterField(

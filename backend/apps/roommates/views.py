@@ -25,7 +25,7 @@ class HousingMap(LoginRequiredMixin, TemplateView):
         context["colocathlon"] = phase_colocathlon
         if phase_colocathlon == 2:
             roommate = Roommates.objects.filter(
-                colocathlon_participants=self.request.user.student
+                colocathlon_participants=self.request.user.student,
             ).first()
             if roommate:
                 context["CURRENT_COLOC"] = roommate.name
@@ -69,12 +69,13 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.housing = Housing.objects.get(
-            pk=self.kwargs["housing_pk"]
+            pk=self.kwargs["housing_pk"],
         )
         roommates = form.save()
         roommates.members.add(self.request.user.student)
         member = roommates.members.through.objects.get(
-            student=self.request.user.student, group=roommates
+            student=self.request.user.student,
+            group=roommates,
         )
         member.admin = True
         member.save()
@@ -106,7 +107,8 @@ class ColocathlonFormView(UserIsMember, UpdateView):
             {"target": reverse(group.app + ":index"), "label": group.app_name},
             {
                 "target": reverse(
-                    group.app + ":detail", kwargs={"slug": group.slug}
+                    group.app + ":detail",
+                    kwargs={"slug": group.slug},
                 ),
                 "label": group.name,
             },
@@ -143,14 +145,16 @@ class UpdateRoommatesView(UpdateGroupView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form_housing"] = UpdateHousingForm(
-            instance=context["object"].housing
+            instance=context["object"].housing,
         )
         return context
 
     def post(self, request, **kwargs):
         group = self.get_object()
         form_housing = UpdateHousingForm(
-            request.POST, request.FILES, instance=group.housing
+            request.POST,
+            request.FILES,
+            instance=group.housing,
         )
         form_housing.save()
         return super().post(request, **kwargs)

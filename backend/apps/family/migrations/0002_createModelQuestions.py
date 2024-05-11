@@ -219,7 +219,9 @@ def create_questions(apps, schema_editor):
     add_question(q3, label="Du sport", label_en="Practise sport")
     add_question(q3, label="Aller au ciné", label_en="Go to the cinema")
     add_question(
-        q3, label="Des sorties culturelles", label_en="Cultural activities"
+        q3,
+        label="Des sorties culturelles",
+        label_en="Cultural activities",
     )
     add_question(
         q3,
@@ -238,10 +240,14 @@ def create_questions(apps, schema_editor):
     )
     q2.option_set.create(value=0, text="Pas du tout", text_en="I don't drink")
     q2.option_set.create(
-        value=1, text="Quelques verres", text_en="A few drinks"
+        value=1,
+        text="Quelques verres",
+        text_en="A few drinks",
     )
     q2.option_set.create(
-        value=2, text="Pas mal de verres", text_en="More drinks"
+        value=2,
+        text="Pas mal de verres",
+        text_en="More drinks",
     )
     q2.option_set.create(value=3, text="Bourré", text_en="Drunk")
     q2.option_set.create(value=4, text="Trop bien", text_en="Too many drinks")
@@ -261,10 +267,14 @@ def create_questions(apps, schema_editor):
     )
     q3.option_set.create(value=0, text="Jamais", text_en="Never")
     q3.option_set.create(
-        value=1, text="Une fois par mois", text_en="Once a month"
+        value=1,
+        text="Une fois par mois",
+        text_en="Once a month",
     )
     q3.option_set.create(
-        value=2, text="Une fois par semaine", text_en="Once a week"
+        value=2,
+        text="Une fois par semaine",
+        text_en="Once a week",
     )
     q3.option_set.create(
         value=3,
@@ -294,7 +304,9 @@ def create_questions(apps, schema_editor):
     )
     add_question(q4, label="Dans un bar", label_en="In a bar")
     add_question(
-        q4, label="Tranquille dans un appart", label_en="Relax in an apartment"
+        q4,
+        label="Tranquille dans un appart",
+        label_en="Relax in an apartment",
     )
     add_question(
         q4,
@@ -326,10 +338,14 @@ def create_questions(apps, schema_editor):
     )
     f1.option_set.create(value=0, text="Jamais", text_en="Never")
     f1.option_set.create(
-        value=1, text="Une fois par mois", text_en="Once a month"
+        value=1,
+        text="Une fois par mois",
+        text_en="Once a month",
     )
     f1.option_set.create(
-        value=2, text="Une fois par semaine", text_en="Once a week"
+        value=2,
+        text="Une fois par semaine",
+        text_en="Once a week",
     )
     f1.option_set.create(
         value=3,
@@ -352,10 +368,14 @@ def create_questions(apps, schema_editor):
     )
     f2.option_set.create(value=0, text="Pas du tout", text_en="I don't drink")
     f2.option_set.create(
-        value=1, text="Quelques verres", text_en="A few drinks"
+        value=1,
+        text="Quelques verres",
+        text_en="A few drinks",
     )
     f2.option_set.create(
-        value=2, text="Pas mal de verres", text_en="More drinks"
+        value=2,
+        text="Pas mal de verres",
+        text_en="More drinks",
     )
     f2.option_set.create(value=3, text="Bourré", text_en="Drunk")
     f2.option_set.create(value=4, text="Trop bien", text_en="Too many drinks")

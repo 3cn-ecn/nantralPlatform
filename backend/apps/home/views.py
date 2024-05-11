@@ -33,7 +33,7 @@ class SuggestionView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         student_url = self.request.build_absolute_uri(
-            self.request.user.student.get_absolute_url()
+            self.request.user.student.get_absolute_url(),
         )
         create_issue(
             title=form.cleaned_data["title"],
@@ -44,7 +44,8 @@ class SuggestionView(LoginRequiredMixin, FormView):
             ),
         )
         messages.success(
-            self.request, "Votre suggestion a été enregistrée merci"
+            self.request,
+            "Votre suggestion a été enregistrée merci",
         )
         return redirect("home:home")
 
@@ -83,8 +84,8 @@ def current_user_roommates_view(request):
         .filter(
             Q(
                 Q(begin_date__lte=now)
-                & (Q(end_date__gte=now) | Q(end_date=None))
-            )
+                & (Q(end_date__gte=now) | Q(end_date=None)),
+            ),
         )
         .first()
     )
@@ -102,12 +103,13 @@ def service_worker(request):
     """A view to serve the service worker"""
     vite_loader = DjangoViteAssetLoader.instance()
     service_worker_url = vite_loader.generate_vite_asset_url(
-        "src/legacy/app/sw.ts"
+        "src/legacy/app/sw.ts",
     )
     if settings.DJANGO_VITE_DEV_MODE:
         response = requests.get(service_worker_url)
         return HttpResponse(
-            response.content, content_type="application/javascript"
+            response.content,
+            content_type="application/javascript",
         )
     else:
         parsed_url = urlparse(service_worker_url)

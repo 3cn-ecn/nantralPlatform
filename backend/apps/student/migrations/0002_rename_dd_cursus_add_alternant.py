@@ -10,7 +10,9 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RenameField(
-            model_name="student", old_name="double_degree", new_name="path"
+            model_name="student",
+            old_name="double_degree",
+            new_name="path",
         ),
         migrations.AlterField(
             model_name="student",

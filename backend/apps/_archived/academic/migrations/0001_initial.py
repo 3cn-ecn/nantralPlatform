@@ -27,7 +27,8 @@ class Migration(migrations.Migration):
                 (
                     "name",
                     models.CharField(
-                        max_length=200, verbose_name="Nom de la formation"
+                        max_length=200,
+                        verbose_name="Nom de la formation",
                     ),
                 ),
                 (

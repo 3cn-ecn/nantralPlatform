@@ -14,7 +14,9 @@ class Migration(migrations.Migration):
             model_name="roommates",
             name="colocathlon_participants",
             field=models.ManyToManyField(
-                blank=True, related_name="colocathlons_in", to="student.student"
+                blank=True,
+                related_name="colocathlons_in",
+                to="student.student",
             ),
         ),
     ]

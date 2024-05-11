@@ -18,15 +18,15 @@ def validate_ecn_email(mail: str):
         raise ValidationError(
             _(
                 "Vous devez utiliser une adresse mail de Centrale Nantes "
-                "finissant par ec-nantes.fr"
-            )
+                "finissant par ec-nantes.fr",
+            ),
         )
 
 
 def validate_email(mail: str):
     if "+" in mail:
         raise ValidationError(
-            "L'adresse email ne doit pas contenir de caractères spéciaux"
+            "L'adresse email ne doit pas contenir de caractères spéciaux",
         )
 
 
@@ -50,7 +50,8 @@ def django_validate_password(password):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=200)
     password = serializers.CharField(
-        max_length=200, style={"input_type": "password"}
+        max_length=200,
+        style={"input_type": "password"},
     )
 
     def validate_email(self, value: str):
@@ -137,7 +138,8 @@ class RegisterSerializer(serializers.Serializer):
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(style={"input_type": "password"})
     new_password = serializers.CharField(
-        style={"input_type": "password"}, validators=[django_validate_password]
+        style={"input_type": "password"},
+        validators=[django_validate_password],
     )
 
     def validate_old_password(self, val):
@@ -163,7 +165,8 @@ class InvitationRegisterSerializer(RegisterSerializer):
         required=True,
     )
     invitation_uuid = serializers.UUIDField(
-        required=True, validators=[validate_invitation]
+        required=True,
+        validators=[validate_invitation],
     )
 
     def create(self, validated_data: dict):
@@ -185,7 +188,7 @@ class ChangeEmailSerializer(serializers.Serializer):
                 User.objects.all(),
                 message=_("Un compte à déjà été créé avec cette adresse email"),
             ),
-        ]
+        ],
     )
 
     def validate_password(self, val):

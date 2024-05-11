@@ -32,10 +32,13 @@ User = get_user_model()
 
 class Student(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
     )
     promo = models.IntegerField(
-        verbose_name="Année de promotion entrante", null=True, blank=True
+        verbose_name="Année de promotion entrante",
+        null=True,
+        blank=True,
     )
     picture = CustomImageField(
         verbose_name="Photo de profil",
@@ -46,7 +49,9 @@ class Student(models.Model):
         name_from_field="user",
     )
     faculty = models.CharField(
-        max_length=200, verbose_name="Filière", choices=FACULTIES
+        max_length=200,
+        verbose_name="Filière",
+        choices=FACULTIES,
     )
     path = models.CharField(
         max_length=200,

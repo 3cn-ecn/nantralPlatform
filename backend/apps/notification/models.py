@@ -40,7 +40,9 @@ class Notification(models.Model):
         verbose_name="Visibilité de la notification",
     )
     receivers = models.ManyToManyField(
-        Student, related_name="notification_set", through="SentNotification"
+        Student,
+        related_name="notification_set",
+        through="SentNotification",
     )
     sent = models.BooleanField("Envoyé", default=False)
 
@@ -67,7 +69,8 @@ class Notification(models.Model):
             self.high_priority = True
             if hasattr(page, "members"):
                 receivers = page.members.through.objects.filter(
-                    group=page, admin=True
+                    group=page,
+                    admin=True,
                 )
         self.receivers.add(*receivers)
         # then we update the subscribed field for receivers who have subscribed
@@ -75,10 +78,11 @@ class Notification(models.Model):
             sub_receivers = self.receivers.all()
         else:
             sub_receivers = self.receivers.filter(
-                subscriptions__slug=self.sender
+                subscriptions__slug=self.sender,
             )
         SentNotification.objects.filter(
-            student__in=sub_receivers, notification=self
+            student__in=sub_receivers,
+            notification=self,
         ).update(subscribed=True)
         # finally we save again because we updated the high_priority field
         super().save()
@@ -147,10 +151,15 @@ class NotificationAction(models.Model):
     """An action for a notification."""
 
     notification = models.ForeignKey(
-        Notification, on_delete=models.CASCADE, related_name="actions"
+        Notification,
+        on_delete=models.CASCADE,
+        related_name="actions",
     )
     title = models.CharField("Titre", max_length=50)
     url = models.CharField("Cible", max_length=512)
     icon_url = models.CharField(
-        "Url of the icon for the action", max_length=512, blank=True, null=True
+        "Url of the icon for the action",
+        max_length=512,
+        blank=True,
+        null=True,
     )

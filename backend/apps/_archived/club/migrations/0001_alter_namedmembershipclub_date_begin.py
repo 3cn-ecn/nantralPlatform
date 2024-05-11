@@ -15,7 +15,8 @@ class Migration(migrations.Migration):
             model_name="namedmembershipclub",
             name="date_begin",
             field=models.DateField(
-                default=datetime.datetime.today, verbose_name="Date de début"
+                default=datetime.datetime.today,
+                verbose_name="Date de début",
             ),
         ),
     ]

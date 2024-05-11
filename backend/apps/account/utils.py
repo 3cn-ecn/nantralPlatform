@@ -37,7 +37,9 @@ def user_creation(
         user.invitation = invitation
     user.save()
     send_email_confirmation(
-        user, request, isinstance(form, TemporaryRequestSignUpForm)
+        user,
+        request,
+        isinstance(form, TemporaryRequestSignUpForm),
     )
     return user
 

@@ -17,7 +17,11 @@ def set_inactive(sender, instance: InvitationLink, **kwargs):
 
 @receiver(reset_password_token_created)
 def send_reset_email(
-    sender, instance, reset_password_token: ResetPasswordToken, *args, **kwargs
+    sender,
+    instance,
+    reset_password_token: ResetPasswordToken,
+    *args,
+    **kwargs,
 ):
     """Signal received when a new password token is created
 
@@ -45,10 +49,10 @@ def send_reset_email(
             "first_name": user.first_name,
             "email": user.email,
             "reset_password_link": instance.request.build_absolute_uri(
-                reset_path
+                reset_path,
             ),
             "update_password_link": instance.request.build_absolute_uri(
-                update_path
+                update_path,
             ),
         },
     )

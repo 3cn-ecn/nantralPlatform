@@ -31,7 +31,8 @@ class Migration(migrations.Migration):
                 (
                     "title",
                     models.CharField(
-                        max_length=200, verbose_name="Titre de l'événement"
+                        max_length=200,
+                        verbose_name="Titre de l'événement",
                     ),
                 ),
                 (
@@ -60,7 +61,8 @@ class Migration(migrations.Migration):
                 (
                     "slug",
                     models.SlugField(
-                        unique=True, verbose_name="Slug de l'événement"
+                        unique=True,
+                        verbose_name="Slug de l'événement",
                     ),
                 ),
                 (

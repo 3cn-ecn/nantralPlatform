@@ -29,7 +29,7 @@ class StudentAdmin(admin.ModelAdmin):
                 "metrics/",
                 self.admin_site.admin_view(self.metrics_view),
                 name="student-metrics",
-            )
+            ),
         ]
         return custom_urls + urls
 

@@ -39,7 +39,8 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
         context["phase"] = Setting.get("PHASE_PARRAINAGE")
         context["is_2Aplus"] = not is_first_year(self.request.user, membership)
         context["show_sensible_data"] = show_sensible_data(
-            self.request.user, membership
+            self.request.user,
+            membership,
         )
         context["is_itii"] = self.request.user.student.faculty == "Iti"
         context["membership"] = membership
@@ -70,7 +71,8 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
             for f in Family.objects.all()
         ]
         memberships = MembershipFamily.objects.all().select_related(
-            "student__user", "group"
+            "student__user",
+            "group",
         )
         if show_data:
             context["list_2A"] = [
@@ -117,7 +119,7 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
 
     def can_create(self):
         return get_membership(self.request.user) is None and not is_first_year(
-            self.request.user
+            self.request.user,
         )
 
     def form_valid(self, form):
@@ -172,7 +174,7 @@ class JoinFamilyView(LoginRequiredMixin, DetailView):
 
     def can_join(self):
         return get_membership(self.request.user) is None and not is_first_year(
-            self.request.user
+            self.request.user,
         )
 
     def get_context_data(self, *args, **kwargs):
@@ -225,7 +227,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
             queryset=MembershipFamily.objects.filter(role="2A+"),
         )
         context["question_form"] = FamilyQuestionsForm(
-            initial=self.get_family().get_answers_dict()
+            initial=self.get_family().get_answers_dict(),
         )
         return context
 
@@ -252,10 +254,10 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                 for form in forms[1]:
                     if hasattr(form.instance, "student"):
                         if form.instance.student.family_set.filter(
-                            year=scholar_year()
+                            year=scholar_year(),
                         ).exclude(pk=self.get_family().pk):
                             membres_doublon.append(
-                                form.instance.student.alphabetical_name
+                                form.instance.student.alphabetical_name,
                             )
                 if not membres_doublon:
                     # c'est bon on sauvegarde !
@@ -330,7 +332,8 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         if membership is None:
             if is_first_year(self.request.user):
                 membership = MembershipFamily.objects.create(
-                    student=self.request.user.student, role="1A"
+                    student=self.request.user.student,
+                    role="1A",
                 )
             else:
                 membership = None
@@ -349,7 +352,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
             {
                 "page": self.get_page(),
                 "is_2Aplus": self.get_member().role == "2A+",
-            }
+            },
         )
         return kwargs
 
@@ -357,7 +360,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         form.save(self.get_member())
         try:
             next_page = QuestionPage.objects.get(
-                order=self.get_page().order + 1
+                order=self.get_page().order + 1,
             )
             return redirect("family:questionnary", next_page.order)
         except QuestionPage.DoesNotExist:
@@ -375,7 +378,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         context = super().get_context_data(*args, **kwargs)
         context["page"] = self.get_page()
         context["percent"] = int(
-            100 * self.get_page().order / QuestionPage.objects.all().count()
+            100 * self.get_page().order / QuestionPage.objects.all().count(),
         )
         member = self.get_member()
         if member:

@@ -82,7 +82,7 @@ class TestLogin(TestCase):
     def test_login_temporary_account(self):
         # test for a valid invitation
         self.user.invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc)
+            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc),
         )
         self.user.save()
 
@@ -95,7 +95,9 @@ class TestLogin(TestCase):
 
         # test for an invalid invitation
         self.user.invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=8, day=30, tzinfo=timezone.utc)
+            expires_at=datetime(
+                year=2021, month=8, day=30, tzinfo=timezone.utc
+            ),
         )
         self.user.save()
         response = self.client.post(
@@ -126,7 +128,8 @@ class TestRegister(TestCase):
         self.assertIsNone(response.json().get("password"))
 
         user: User = authenticate(
-            username=self.payload["email"], password=self.payload["password"]
+            username=self.payload["email"],
+            password=self.payload["password"],
         )
         self.assertIsNotNone(user)
         # check user informations
@@ -164,7 +167,7 @@ class TestRegister(TestCase):
     @freeze_time("2021-09-01")
     def test_register_invitation(self):
         invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc)
+            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc),
         )
         self.payload["email"] = "test@notecn.fr"
         self.payload["invitation_uuid"] = invitation.id
@@ -173,7 +176,8 @@ class TestRegister(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # can authenticate
         user: User = authenticate(
-            username=self.payload["email"], password=self.payload["password"]
+            username=self.payload["email"],
+            password=self.payload["password"],
         )
         # Do not send back uuid
         self.assertIsNone(response.json().get("invitation_uuid"))
@@ -186,7 +190,7 @@ class TestRegister(TestCase):
     @freeze_time("2021-09-10")
     def test_register_invitation_expired(self):
         invitation = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc)
+            expires_at=datetime(year=2021, month=9, day=2, tzinfo=timezone.utc),
         )
         self.payload["email"] = "test@notecn.fr"
         self.payload["invitation_uuid"] = invitation.id
@@ -200,7 +204,8 @@ class TestLogout(TestCase):
 
     def test_logout(self):
         self.user = User.objects.create_user(
-            email="test@ec-nantes.fr", password="adminadmin"
+            email="test@ec-nantes.fr",
+            password="adminadmin",
         )
         self.client.force_login(self.user)
         response = self.client.post(self.uri)
@@ -213,7 +218,8 @@ class TestIsAuthenticated(TestCase):
 
     def test_is_authenticated(self):
         self.user = User.objects.create_user(
-            email="test@ec-nantes.fr", password="adminadmin"
+            email="test@ec-nantes.fr",
+            password="adminadmin",
         )
         self.client.force_login(self.user)
         response = self.client.get(self.uri)
@@ -229,7 +235,8 @@ class TestChangePassword(TestCase):
 
     def setUp(self) -> None:
         self.user = User.objects.create_user(
-            email="test@ec-nantes.fr", password="adminadmin"
+            email="test@ec-nantes.fr",
+            password="adminadmin",
         )
 
     def test_change_password(self):
@@ -241,7 +248,8 @@ class TestChangePassword(TestCase):
         # make sure user is still connected
         self.assertTrue(response.wsgi_request.user.is_authenticated)
         user = authenticate(
-            username=self.user.email, password=payload["new_password"]
+            username=self.user.email,
+            password=payload["new_password"],
         )
         self.assertEqual(user, self.user)
 
@@ -276,7 +284,9 @@ class TestEdit(TestCase):
 
     def setUp(self) -> None:
         self.user: User = User.objects.create_user(
-            email="test@ec-nantes.fr", password="test", username="test"
+            email="test@ec-nantes.fr",
+            password="test",
+            username="test",
         )
 
     def test_edit(self):
@@ -287,7 +297,9 @@ class TestEdit(TestCase):
             "username": "Tesssst",
         }
         response = self.client.put(
-            self.url, data=payload, content_type="application/json"
+            self.url,
+            data=payload,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.user.refresh_from_db()
@@ -298,7 +310,9 @@ class TestEdit(TestCase):
     def test_taken_username(self):
         self.client.force_login(self.user)
         User.objects.create_user(
-            email="test2@ec-nantes.fr", password="password", username="Tesssst"
+            email="test2@ec-nantes.fr",
+            password="password",
+            username="Tesssst",
         )
         payload = {
             "first_name": "Test",
@@ -306,7 +320,9 @@ class TestEdit(TestCase):
             "username": "Tesssst",
         }
         response = self.client.put(
-            self.url, data=payload, content_type="application/json"
+            self.url,
+            data=payload,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -325,14 +341,18 @@ class TestChangeEmail(TestCase):
 
     def setUp(self) -> None:
         self.user: User = User.objects.create_user(
-            email="test@ec-nantes.fr", password="test", username="test"
+            email="test@ec-nantes.fr",
+            password="test",
+            username="test",
         )
 
     def test_change_email(self):
         self.client.force_login(self.user)
         payload = {"password": "test", "email": "new@ec-nantes.fr"}
         response = self.client.put(
-            self.url, data=payload, content_type="application/json"
+            self.url,
+            data=payload,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -344,7 +364,9 @@ class TestChangeEmail(TestCase):
         self.client.force_login(self.user)
         payload = {"password": "wrongpassword", "email": "new@ec-nantes.fr"}
         response = self.client.put(
-            self.url, data=payload, content_type="application/json"
+            self.url,
+            data=payload,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -352,20 +374,26 @@ class TestChangeEmail(TestCase):
         self.client.force_login(self.user)
         payload = {"password": "test", "email": "new@wrongdomain.fr"}
         response = self.client.put(
-            self.url, data=payload, content_type="application/json"
+            self.url,
+            data=payload,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         # with + in the email
         payload = {"password": "test", "email": "ne+w@ec-nantes.fr"}
         response = self.client.put(
-            self.url, data=payload, content_type="application/json"
+            self.url,
+            data=payload,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_is_authenticated(self):
         payload = {"password": "test", "email": "new@ec-nantes.fr"}
         response = self.client.put(
-            self.url, data=payload, content_type="application/json"
+            self.url,
+            data=payload,
+            content_type="application/json",
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -377,7 +405,8 @@ class TestForgottenPassword(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            email="test@ec-nantes.fr", password="test"
+            email="test@ec-nantes.fr",
+            password="test",
         )
 
     def test_forgot_password(self):
@@ -395,7 +424,7 @@ class TestValidateInvitation(TestCase):
 
     def setUp(self):
         self.invite_id = InvitationLink.objects.create(
-            expires_at=datetime(year=2021, month=9, day=3, tzinfo=timezone.utc)
+            expires_at=datetime(year=2021, month=9, day=3, tzinfo=timezone.utc),
         ).id
 
     @freeze_time("2021-09-01")

@@ -18,7 +18,8 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.g = Group.objects.create(name="Club de test", group_type=t)
         self.slug = self.g.slug
         self.url = reverse(
-            "notification_api:subscription", kwargs={"slug": self.slug}
+            "notification_api:subscription",
+            kwargs={"slug": self.slug},
         )
 
     def tearDown(self):
@@ -45,13 +46,15 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertTrue(self.client.get(self.url).data)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(), 1
+            self.g.subscribers.filter(id=self.u2.student.id).count(),
+            1,
         )
         # try to subscribe again and check we keep the same
         resp = self.client.post(self.url)
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(), 1
+            self.g.subscribers.filter(id=self.u2.student.id).count(),
+            1,
         )
 
     def test_delete_api(self):
@@ -65,13 +68,15 @@ class TestSubscription(TransactionTestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(self.client.get(self.url).data)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(), 0
+            self.g.subscribers.filter(id=self.u2.student.id).count(),
+            0,
         )
         # try to delete again and check we keep the same
         resp = self.client.delete(self.url)
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(
-            self.g.subscribers.filter(id=self.u2.student.id).count(), 0
+            self.g.subscribers.filter(id=self.u2.student.id).count(),
+            0,
         )
 
 
@@ -83,7 +88,8 @@ class TestNotification(TransactionTestCase, TestMixin):
         t = GroupType.objects.create(name="T1", slug="t1")
         self.club1 = Group.objects.create(name="Club génial", group_type=t).slug
         self.club2 = Group.objects.create(
-            name="Club inconnu", group_type=t
+            name="Club inconnu",
+            group_type=t,
         ).slug
 
     def tearDown(self):
@@ -114,7 +120,8 @@ class TestNotification(TransactionTestCase, TestMixin):
         resp = self.client.get(url)
         self.assertEqual(len(resp.data["results"]), 1)
         self.assertEqual(
-            resp.data["results"][0]["notification"]["body"], "Notif de test 2"
+            resp.data["results"][0]["notification"]["body"],
+            "Notif de test 2",
         )
         # test all notifs with limit of 2
         url = "/api/notification/notification/?page_size=2"

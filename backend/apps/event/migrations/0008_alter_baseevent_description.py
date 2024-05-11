@@ -15,7 +15,8 @@ class Migration(migrations.Migration):
             model_name="baseevent",
             name="description",
             field=django_ckeditor_5.fields.CKEditor5Field(
-                blank=True, verbose_name="Description de l'événement"
+                blank=True,
+                verbose_name="Description de l'événement",
             ),
         ),
     ]

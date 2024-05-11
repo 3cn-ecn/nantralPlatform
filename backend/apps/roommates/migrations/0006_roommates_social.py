@@ -14,7 +14,9 @@ class Migration(migrations.Migration):
             model_name="roommates",
             name="social",
             field=models.ManyToManyField(
-                blank=True, null=True, to="sociallink.SocialLink"
+                blank=True,
+                null=True,
+                to="sociallink.SocialLink",
             ),
         ),
     ]

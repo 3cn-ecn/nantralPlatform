@@ -13,7 +13,9 @@ class Migration(migrations.Migration):
             model_name="namedmembershiplist",
             name="function",
             field=models.CharField(
-                blank=True, max_length=200, verbose_name="Rôle (facultatif)"
+                blank=True,
+                max_length=200,
+                verbose_name="Rôle (facultatif)",
             ),
         ),
     ]

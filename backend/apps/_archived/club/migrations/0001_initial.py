@@ -38,19 +38,24 @@ class Migration(migrations.Migration):
                         (
                             "description",
                             models.TextField(
-                                blank=True, verbose_name="Description du groupe"
+                                blank=True,
+                                verbose_name="Description du groupe",
                             ),
                         ),
                         (
                             "slug",
                             models.SlugField(
-                                blank=True, max_length=40, unique=True
+                                blank=True,
+                                max_length=40,
+                                unique=True,
                             ),
                         ),
                         (
                             "parent",
                             models.SlugField(
-                                blank=True, max_length=40, null=True
+                                blank=True,
+                                max_length=40,
+                                null=True,
                             ),
                         ),
                         ("modified_date", models.DateTimeField(auto_now=True)),
@@ -153,7 +158,7 @@ class Migration(migrations.Migration):
                     ],
                     options={
                         "unique_together": {
-                            ("function", "year", "student", "club")
+                            ("function", "year", "student", "club"),
                         },
                     },
                 ),
@@ -166,7 +171,8 @@ class Migration(migrations.Migration):
                     model_name="club",
                     name="members",
                     field=models.ManyToManyField(
-                        through="club.NamedMembershipClub", to="student.Student"
+                        through="club.NamedMembershipClub",
+                        to="student.Student",
                     ),
                 ),
             ],

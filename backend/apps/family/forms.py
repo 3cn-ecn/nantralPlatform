@@ -33,7 +33,8 @@ class MemberForDeleteForm(forms.BaseInlineFormSet):
     def _should_delete_form(self, form):
         """Return whether or not the form was marked for deletion."""
         return form.cleaned_data.get(
-            "DELETE", False
+            "DELETE",
+            False,
         ) or not form.cleaned_data.get("student", False)
 
 
@@ -52,7 +53,9 @@ Member2AFormset = forms.inlineformset_factory(
 class FamilyQuestionsForm(forms.Form):
     def __init__(self, initial=None, *args, **kwargs):
         super(FamilyQuestionsForm, self).__init__(
-            initial=initial, *args, **kwargs
+            initial=initial,
+            *args,
+            **kwargs,
         )
         questions = QuestionFamily.objects.all()
         for question in questions:
@@ -88,7 +91,9 @@ class FamilyQuestionsForm(forms.Form):
 class FamilyQuestionItiiForm(FamilyQuestionsForm):
     def __init__(self, initial=None, *args, **kwargs):
         super(FamilyQuestionsForm, self).__init__(
-            initial=initial, *args, **kwargs
+            initial=initial,
+            *args,
+            **kwargs,
         )
         question = QuestionFamily.objects.get(code_name="itii")
         name = f"question-{question.pk}"
@@ -103,7 +108,9 @@ class FamilyQuestionItiiForm(FamilyQuestionsForm):
 class MemberQuestionsForm(forms.Form):
     def __init__(self, page, is_2Aplus, initial, *args, **kwargs):  # noqa:N803
         super(MemberQuestionsForm, self).__init__(
-            initial=initial, *args, **kwargs
+            initial=initial,
+            *args,
+            **kwargs,
         )
         self.use_required_attribute = False
         questions = QuestionMember.objects.filter(page=page)
@@ -122,7 +129,7 @@ class MemberQuestionsForm(forms.Form):
                     ],
                     help_text=question.details,
                     widget=forms.RadioSelect(
-                        attrs={"class": "form-check-input"}
+                        attrs={"class": "form-check-input"},
                     ),
                 )
                 self[name].group = question.group

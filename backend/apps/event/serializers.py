@@ -135,14 +135,14 @@ class EventWriteSerializer(TranslationModelSerializer):
     def validate_group(self, value: Group) -> Group:
         if not value.is_admin(self.context["request"].user):
             raise serializers.ValidationError(
-                _("You have to be admin to add or update an event")
+                _("You have to be admin to add or update an event"),
             )
         return value
 
     def validate(self, data: dict) -> dict:
         if data["start_date"] > data["end_date"]:
             raise serializers.ValidationError(
-                _("The end date must be after the begin date.")
+                _("The end date must be after the begin date."),
             )
         if (
             data.get("start_registration")
@@ -152,7 +152,7 @@ class EventWriteSerializer(TranslationModelSerializer):
             raise serializers.ValidationError(
                 _(
                     "The end-registration date must be after the start-"
-                    "registration date."
-                )
+                    "registration date.",
+                ),
             )
         return super().validate(data)

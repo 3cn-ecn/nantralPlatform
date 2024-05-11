@@ -29,15 +29,15 @@ class SignatureApiView(views.APIView):
     def get_academic_groups(self) -> QuerySet[Group]:
         user: User = self.request.user
         academic_memberships = user.student.membership_set.filter(
-            group__group_type__slug="academic"
+            group__group_type__slug="academic",
         )
         max_year = academic_memberships.aggregate(
-            max_year=Max("begin_date__year")
+            max_year=Max("begin_date__year"),
         )["max_year"]
         return Group.objects.filter(
             membership_set__in=academic_memberships.filter(
-                begin_date__year=max_year
-            )
+                begin_date__year=max_year,
+            ),
         )
 
     def get_club_memberships(self) -> QuerySet[Membership]:
@@ -64,10 +64,12 @@ class SignatureApiView(views.APIView):
                 "year": year,
                 "email": email,
                 "academic_groups": GroupPreviewSerializer(
-                    academic_groups, many=True
+                    academic_groups,
+                    many=True,
                 ).data,
                 "club_memberships": MembershipSerializer(
-                    club_memberships, many=True
+                    club_memberships,
+                    many=True,
                 ).data,
-            }
+            },
         )

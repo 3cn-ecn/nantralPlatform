@@ -27,10 +27,15 @@ class AbstractGroup(models.Model, SlugModel):
 
     # Nom du groupe
     name = models.CharField(
-        verbose_name="Nom du groupe", unique=True, max_length=100
+        verbose_name="Nom du groupe",
+        unique=True,
+        max_length=100,
     )
     alt_name = models.CharField(
-        verbose_name="Nom alternatif", max_length=100, null=True, blank=True
+        verbose_name="Nom alternatif",
+        max_length=100,
+        null=True,
+        blank=True,
     )
 
     # présentation
@@ -53,13 +58,20 @@ class AbstractGroup(models.Model, SlugModel):
     )
     summary = models.CharField("Résumé", max_length=500, null=True, blank=True)
     description = CKEditor5Field(
-        verbose_name="Description du groupe", blank=True
+        verbose_name="Description du groupe",
+        blank=True,
     )
     video1 = models.URLField(
-        "Lien vidéo 1", max_length=200, null=True, blank=True
+        "Lien vidéo 1",
+        max_length=200,
+        null=True,
+        blank=True,
     )
     video2 = models.URLField(
-        "Lien vidéo 2", max_length=200, null=True, blank=True
+        "Lien vidéo 2",
+        max_length=200,
+        null=True,
+        blank=True,
     )
 
     # paramètres techniques
@@ -157,10 +169,13 @@ class AdminRightsRequest(models.Model):
     group = models.SlugField(verbose_name="Groupe demandé.")
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
     date = models.DateField(
-        verbose_name="Date de la requête", default=timezone.now
+        verbose_name="Date de la requête",
+        default=timezone.now,
     )
     reason = models.CharField(
-        max_length=100, verbose_name="Raison de la demande", blank=True
+        max_length=100,
+        verbose_name="Raison de la demande",
+        blank=True,
     )
     domain = models.CharField(max_length=64)
 
@@ -171,7 +186,7 @@ class AdminRightsRequest(models.Model):
         group = get_object_from_full_slug(self.group)
         try:
             webhook = DiscordWebhook(
-                url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK
+                url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK,
             )
             embed = DiscordEmbed(
                 title=f"{self.student} demande à devenir admin de {group}",
@@ -184,7 +199,9 @@ class AdminRightsRequest(models.Model):
                 inline=True,
             )
             embed.add_embed_field(
-                name="Refuser", value=f"[Refuser]({self.deny_url})", inline=True
+                name="Refuser",
+                value=f"[Refuser]({self.deny_url})",
+                inline=True,
             )
             if self.student.picture:
                 embed.thumbnail = {"url": self.student.picture.url}
@@ -198,7 +215,8 @@ class AdminRightsRequest(models.Model):
     def accept_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
         url_path = reverse(
-            app + ":accept-admin-req", kwargs={"slug": slug, "id": self.id}
+            app + ":accept-admin-req",
+            kwargs={"slug": slug, "id": self.id},
         )
         return f"https://{self.domain}{url_path}"
 
@@ -206,7 +224,8 @@ class AdminRightsRequest(models.Model):
     def deny_url(self):
         app, slug = get_tuple_from_full_slug(self.group)
         url_path = reverse(
-            app + ":deny-admin-req", kwargs={"slug": slug, "id": self.id}
+            app + ":deny-admin-req",
+            kwargs={"slug": slug, "id": self.id},
         )
         return f"https://{self.domain}{url_path}"
 
@@ -214,13 +233,16 @@ class AdminRightsRequest(models.Model):
         group = get_object_from_full_slug(self.group)
         if group.is_member(self.student.user):
             membership = group.members.through.objects.get(
-                student=self.student.id, group=group
+                student=self.student.id,
+                group=group,
             )
             membership.admin = True
             membership.save()
         else:
             group.members.through.objects.create(
-                student=self.student, group=group, admin=True
+                student=self.student,
+                group=group,
+                admin=True,
             )
         mail = render_to_string(
             "abstract_group/mail/new_admin.html",

@@ -53,7 +53,8 @@ class Migration(migrations.Migration):
                 (
                     "high_priority",
                     models.BooleanField(
-                        default=False, verbose_name="Prioritaire"
+                        default=False,
+                        verbose_name="Prioritaire",
                     ),
                 ),
                 (

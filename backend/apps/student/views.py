@@ -32,7 +32,7 @@ class StudentProfile(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["colocs"] = NamedMembershipRoommates.objects.filter(
-            student=self.object
+            student=self.object,
         )
         context["ariane"] = [
             {"target": reverse("student:list"), "label": "Annuaire"},

@@ -52,7 +52,8 @@ class AuthViewSet(GenericViewSet):
 
         if not serializer.is_valid():
             return Response(
-                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         email = serializer.validated_data.get("email")
@@ -84,7 +85,7 @@ class AuthViewSet(GenericViewSet):
         if not user.is_email_valid:
             message = _(
                 "Votre e-mail n'est pas vérifié. Merci de cliquer sur le lien "
-                "de vérification"
+                "de vérification",
             )
             return Response(
                 {
@@ -98,7 +99,7 @@ class AuthViewSet(GenericViewSet):
         if user.invitation is not None and user.invitation.is_valid():
             message = _(
                 "Connection réussi, votre compte est temporaire, veuillez "
-                "mettre à jour votre adresse email au plus vite."
+                "mettre à jour votre adresse email au plus vite.",
             )
             login(request=request, user=user)
             return Response(
@@ -130,14 +131,18 @@ class AuthViewSet(GenericViewSet):
 
         if not serializer.is_valid():
             return Response(
-                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
             )
         user = serializer.save()
         send_email_confirmation(
-            user, request=request, temporary_access=temporary
+            user,
+            request=request,
+            temporary_access=temporary,
         )
         return Response(
-            serializer.validated_data, status=status.HTTP_201_CREATED
+            serializer.validated_data,
+            status=status.HTTP_201_CREATED,
         )
 
     @action(detail=False, methods=["POST"], serializer_class=Serializer)
@@ -171,7 +176,8 @@ class AuthViewSet(GenericViewSet):
         serializer = self.get_serializer(data=data)
         if not serializer.is_valid():
             return Response(
-                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
             )
         user: User = request.user
         user.set_password(serializer.validated_data["new_password"])
@@ -200,7 +206,8 @@ class AuthViewSet(GenericViewSet):
         ):
             # invalid invitation
             return Response(
-                {"detail": "not found"}, status=status.HTTP_404_NOT_FOUND
+                {"detail": "not found"},
+                status=status.HTTP_404_NOT_FOUND,
             )
         expires_at = InvitationLink.objects.get(id=uuid).expires_at
         return Response(
@@ -219,7 +226,8 @@ class AuthViewSet(GenericViewSet):
         serializer = UserSerializer(instance=request.user, data=request.data)
         if not serializer.is_valid():
             return Response(
-                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
             )
         serializer.save()
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
@@ -237,7 +245,8 @@ class EmailViewSet(GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(
-                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
             )
         user: User = request.user
         user.email_next = serializer.validated_data["email"]
@@ -260,7 +269,8 @@ class EmailViewSet(GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
             return Response(
-                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST,
             )
         email = serializer.validated_data.get("email")
 
@@ -282,6 +292,9 @@ class EmailViewSet(GenericViewSet):
 
         temp_access = user.invitation is not None
         send_email_confirmation(
-            user, self.request, temporary_access=temp_access, send_to=email
+            user,
+            self.request,
+            temporary_access=temp_access,
+            send_to=email,
         )
         return response

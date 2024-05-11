@@ -15,7 +15,10 @@ class Migration(migrations.Migration):
             model_name="sociallink",
             name="label",
             field=models.CharField(
-                blank=True, default="", max_length=20, verbose_name="Étiquette"
+                blank=True,
+                default="",
+                max_length=20,
+                verbose_name="Étiquette",
             ),
             preserve_default=False,
         ),

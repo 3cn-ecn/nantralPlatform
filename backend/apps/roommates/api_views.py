@@ -35,9 +35,9 @@ class HousingView(generics.ListCreateAPIView):
                 & (
                     Q(roommates__end_date__gte=now)
                     | Q(roommates__end_date=None)
-                )
+                ),
             )
-            | Q(roommates__members=None)
+            | Q(roommates__members=None),
         ).distinct()
         return query
 
@@ -77,7 +77,8 @@ class RoommatesDetails(APIView):
 
     def post(self, request):
         object = generics.get_object_or_404(
-            Roommates, slug=request.data.get("slug")
+            Roommates,
+            slug=request.data.get("slug"),
         )
         if not object.colocathlon_agree:
             return Response(status=403)
@@ -91,7 +92,7 @@ class RoommatesDetails(APIView):
                 > object.colocathlon_participants.count()
             ):
                 roommates = Roommates.objects.filter(
-                    colocathlon_participants=request.user.student
+                    colocathlon_participants=request.user.student,
                 )
                 if not roommates.exists():
                     object.colocathlon_participants.add(request.user.student)
@@ -103,7 +104,7 @@ class RoommatesDetails(APIView):
                     )
             return Response(status=403)
         if Roommates.objects.filter(
-            colocathlon_participants=request.user.student
+            colocathlon_participants=request.user.student,
         ).exists():
             object.colocathlon_participants.remove(request.user.student)
             return Response(status=200)

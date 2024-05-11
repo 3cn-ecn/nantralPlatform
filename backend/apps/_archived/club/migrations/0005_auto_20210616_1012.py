@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                         nulls_first=True,
                     ),
                     "name",
-                ]
+                ],
             },
         ),
         migrations.AddField(
@@ -37,14 +37,17 @@ class Migration(migrations.Migration):
             model_name="namedmembershipclub",
             name="date_begin",
             field=models.DateField(
-                default=datetime.date.today, verbose_name="Date de début"
+                default=datetime.date.today,
+                verbose_name="Date de début",
             ),
         ),
         migrations.AddField(
             model_name="namedmembershipclub",
             name="date_end",
             field=models.DateField(
-                blank=True, null=True, verbose_name="Date de fin"
+                blank=True,
+                null=True,
+                verbose_name="Date de fin",
             ),
         ),
         migrations.AddField(

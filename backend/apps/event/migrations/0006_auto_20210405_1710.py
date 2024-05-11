@@ -14,7 +14,8 @@ class Migration(migrations.Migration):
             model_name="baseevent",
             name="publication_date",
             field=models.DateTimeField(
-                default=timezone.now(), verbose_name="Date de publication"
+                default=timezone.now(),
+                verbose_name="Date de publication",
             ),
         ),
         migrations.AlterField(

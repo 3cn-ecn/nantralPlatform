@@ -22,7 +22,10 @@ class Migration(migrations.Migration):
             model_name="event",
             name="location",
             field=models.CharField(
-                blank=True, default="", max_length=200, verbose_name="Location"
+                blank=True,
+                default="",
+                max_length=200,
+                verbose_name="Location",
             ),
             preserve_default=False,
         ),

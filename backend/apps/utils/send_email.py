@@ -89,7 +89,7 @@ def send_mass_email(
         # we compile the html and text messages for each recipient
         if len(recipient_list) != len(context_list):
             raise ValueError(
-                "The number of recipients must match the number of contexts."
+                "The number of recipients must match the number of contexts.",
             )
         html_bodies = [
             render_to_string(html_template, context) for context in context_list
@@ -107,7 +107,9 @@ def send_mass_email(
                 reply_to=[DEFAULT_REPLY_TO_EMAIL],
             )
             for recipient, html_body, text_body in zip(
-                recipient_list, html_bodies, text_bodies
+                recipient_list,
+                html_bodies,
+                text_bodies,
             )
         ]
 

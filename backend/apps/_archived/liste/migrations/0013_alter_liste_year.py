@@ -13,7 +13,8 @@ class Migration(migrations.Migration):
             model_name="liste",
             name="year",
             field=models.IntegerField(
-                default=2021, verbose_name="Année de la liste"
+                default=2021,
+                verbose_name="Année de la liste",
             ),
             preserve_default=False,
         ),

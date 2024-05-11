@@ -24,7 +24,8 @@ class Migration(migrations.Migration):
             model_name="roommates",
             name="colocathlon_agree",
             field=models.BooleanField(
-                default=False, verbose_name="Participation au colocathlon"
+                default=False,
+                verbose_name="Participation au colocathlon",
             ),
         ),
         migrations.AddField(
@@ -41,14 +42,16 @@ class Migration(migrations.Migration):
             model_name="roommates",
             name="colocathlon_participants",
             field=models.ManyToManyField(
-                related_name="colocathlons_in", to="student.Student"
+                related_name="colocathlons_in",
+                to="student.Student",
             ),
         ),
         migrations.AddField(
             model_name="roommates",
             name="colocathlon_quota",
             field=models.IntegerField(
-                default=0, verbose_name="Quantité max d'invités"
+                default=0,
+                verbose_name="Quantité max d'invités",
             ),
         ),
     ]

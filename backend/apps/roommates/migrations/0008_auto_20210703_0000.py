@@ -17,21 +17,28 @@ class Migration(migrations.Migration):
             model_name="roommates",
             name="summary",
             field=models.CharField(
-                blank=True, max_length=500, null=True, verbose_name="Résumé"
+                blank=True,
+                max_length=500,
+                null=True,
+                verbose_name="Résumé",
             ),
         ),
         migrations.AddField(
             model_name="roommates",
             name="video1",
             field=models.URLField(
-                blank=True, null=True, verbose_name="Lien vidéo 1"
+                blank=True,
+                null=True,
+                verbose_name="Lien vidéo 1",
             ),
         ),
         migrations.AddField(
             model_name="roommates",
             name="video2",
             field=models.URLField(
-                blank=True, null=True, verbose_name="Lien vidéo 2"
+                blank=True,
+                null=True,
+                verbose_name="Lien vidéo 2",
             ),
         ),
         migrations.AlterField(
@@ -48,7 +55,9 @@ class Migration(migrations.Migration):
             model_name="roommates",
             name="name",
             field=models.CharField(
-                max_length=100, unique=True, verbose_name="Nom du groupe"
+                max_length=100,
+                unique=True,
+                verbose_name="Nom du groupe",
             ),
         ),
     ]

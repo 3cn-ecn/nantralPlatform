@@ -13,7 +13,9 @@ class Migration(migrations.Migration):
             model_name="sociallink",
             name="slug",
             field=models.SlugField(
-                null=True, unique=True, verbose_name="Slug du lien"
+                null=True,
+                unique=True,
+                verbose_name="Slug du lien",
             ),
         ),
     ]

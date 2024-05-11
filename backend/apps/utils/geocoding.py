@@ -17,7 +17,7 @@ def geocode(search: str, limit: int = 3) -> List[str]:
         "&language=fr"
         "&types=address"
         f"&limit={limit}"
-        f"&access_token={settings.MAPBOX_API_KEY}"
+        f"&access_token={settings.MAPBOX_API_KEY}",
     )
     if results.status_code == 200:
         return [
@@ -34,5 +34,5 @@ def geocode(search: str, limit: int = 3) -> List[str]:
                 "place_name": "Ecole Centrale",
                 "long": "-1.5541362",
                 "lat": "47.2186371",
-            }
+            },
         ]

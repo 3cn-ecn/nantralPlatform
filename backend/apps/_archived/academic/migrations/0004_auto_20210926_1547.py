@@ -75,7 +75,8 @@ class Migration(migrations.Migration):
             model_name="course",
             name="description",
             field=django_ckeditor_5.fields.CKEditor5Field(
-                blank=True, verbose_name="Description du groupe"
+                blank=True,
+                verbose_name="Description du groupe",
             ),
         ),
         migrations.AddField(
@@ -103,7 +104,10 @@ class Migration(migrations.Migration):
             model_name="course",
             name="summary",
             field=models.CharField(
-                blank=True, max_length=500, null=True, verbose_name="Résumé"
+                blank=True,
+                max_length=500,
+                null=True,
+                verbose_name="Résumé",
             ),
         ),
         migrations.AddField(
@@ -126,21 +130,27 @@ class Migration(migrations.Migration):
             model_name="course",
             name="video1",
             field=models.URLField(
-                blank=True, null=True, verbose_name="Lien vidéo 1"
+                blank=True,
+                null=True,
+                verbose_name="Lien vidéo 1",
             ),
         ),
         migrations.AddField(
             model_name="course",
             name="video2",
             field=models.URLField(
-                blank=True, null=True, verbose_name="Lien vidéo 2"
+                blank=True,
+                null=True,
+                verbose_name="Lien vidéo 2",
             ),
         ),
         migrations.AlterField(
             model_name="course",
             name="name",
             field=models.CharField(
-                max_length=100, unique=True, verbose_name="Nom du groupe"
+                max_length=100,
+                unique=True,
+                verbose_name="Nom du groupe",
             ),
         ),
         migrations.AddField(
@@ -163,7 +173,8 @@ class Migration(migrations.Migration):
             model_name="course",
             name="members",
             field=models.ManyToManyField(
-                through="academic.NamedMembershipCourse", to="student.Student"
+                through="academic.NamedMembershipCourse",
+                to="student.Student",
             ),
         ),
     ]

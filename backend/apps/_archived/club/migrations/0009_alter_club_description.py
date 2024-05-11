@@ -15,7 +15,8 @@ class Migration(migrations.Migration):
             model_name="club",
             name="description",
             field=django_ckeditor_5.fields.CKEditor5Field(
-                blank=True, verbose_name="Description du groupe"
+                blank=True,
+                verbose_name="Description du groupe",
             ),
         ),
     ]

@@ -13,7 +13,9 @@ class Migration(migrations.Migration):
             model_name="course",
             name="image",
             field=models.CharField(
-                max_length=200, null=True, verbose_name="Image de l'option"
+                max_length=200,
+                null=True,
+                verbose_name="Image de l'option",
             ),
         ),
     ]

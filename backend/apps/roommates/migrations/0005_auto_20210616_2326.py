@@ -29,14 +29,17 @@ class Migration(migrations.Migration):
             model_name="roommates",
             name="begin_date",
             field=models.DateField(
-                default=datetime.date.today, verbose_name="Date d'emménagement"
+                default=datetime.date.today,
+                verbose_name="Date d'emménagement",
             ),
         ),
         migrations.AlterField(
             model_name="roommates",
             name="end_date",
             field=models.DateField(
-                blank=True, null=True, verbose_name="Date de sortie"
+                blank=True,
+                null=True,
+                verbose_name="Date de sortie",
             ),
         ),
     ]

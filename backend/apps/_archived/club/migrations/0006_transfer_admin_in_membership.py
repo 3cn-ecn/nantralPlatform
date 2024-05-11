@@ -15,17 +15,21 @@ def forwards_func(apps, schema_editor):
         for admin in club.admins.all():
             try:
                 membership = NamedMembershipClub.objects.using(db_alias).get(
-                    club=club, student=admin
+                    club=club,
+                    student=admin,
                 )
                 membership = NamedMembershipClub.objects.get(
-                    club=club, student=admin
+                    club=club,
+                    student=admin,
                 )
                 membership.admin = True
                 membership.save()
             except ObjectDoesNotExist:
                 print(f"Membership does not exist {club} {admin}")
                 NamedMembershipClub.objects.using(db_alias).create(
-                    club=club, student=admin, admin=True
+                    club=club,
+                    student=admin,
+                    admin=True,
                 )
 
 

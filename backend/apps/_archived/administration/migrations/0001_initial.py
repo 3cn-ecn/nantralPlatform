@@ -77,19 +77,24 @@ class Migration(migrations.Migration):
                 (
                     "description",
                     django_ckeditor_5.fields.CKEditor5Field(
-                        blank=True, verbose_name="Description du groupe"
+                        blank=True,
+                        verbose_name="Description du groupe",
                     ),
                 ),
                 (
                     "video1",
                     models.URLField(
-                        blank=True, null=True, verbose_name="Lien vidéo 1"
+                        blank=True,
+                        null=True,
+                        verbose_name="Lien vidéo 1",
                     ),
                 ),
                 (
                     "video2",
                     models.URLField(
-                        blank=True, null=True, verbose_name="Lien vidéo 2"
+                        blank=True,
+                        null=True,
+                        verbose_name="Lien vidéo 2",
                     ),
                 ),
                 (

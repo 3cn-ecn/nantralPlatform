@@ -25,16 +25,16 @@ class OccupiedFilter(admin.SimpleListFilter):
             return Roommates.objects.filter(
                 Q(
                     Q(begin_date__lte=now)
-                    & (Q(end_date__gte=now) | Q(end_date=None))
-                )
+                    & (Q(end_date__gte=now) | Q(end_date=None)),
+                ),
             )
         elif self.value().lower() == "non_occupied":
             now = timezone.now()
             return Roommates.objects.exclude(
                 Q(
                     Q(begin_date__lte=now)
-                    & (Q(end_date__gte=now) | Q(end_date=None))
-                )
+                    & (Q(end_date__gte=now) | Q(end_date=None)),
+                ),
             )
 
 

@@ -20,8 +20,8 @@ def check_id(id_to_check: str):
             _(
                 "Invitation invalide : le lien d'invitation a expiré. Veuillez "
                 "entrer une adresse en ec-nantes.fr, ou contactez un "
-                "administrateur."
-            )
+                "administrateur.",
+            ),
         )
 
 
@@ -30,8 +30,8 @@ def check_ecn_mail(mail: str):
         raise ValidationError(
             _(
                 "Vous devez utiliser une adresse mail de Centrale Nantes "
-                "finissant par ec-nantes.fr"
-            )
+                "finissant par ec-nantes.fr",
+            ),
         )
 
 
@@ -60,13 +60,19 @@ class SignUpForm(UserCreationForm):
         required=True,
     )
     first_name = forms.CharField(
-        label=gettext_lazy("Prénom"), max_length=200, required=True
+        label=gettext_lazy("Prénom"),
+        max_length=200,
+        required=True,
     )
     last_name = forms.CharField(
-        label=gettext_lazy("Nom"), max_length=200, required=True
+        label=gettext_lazy("Nom"),
+        max_length=200,
+        required=True,
     )
     faculty = forms.ChoiceField(
-        label=gettext_lazy("Filière"), required=True, choices=FACULTIES
+        label=gettext_lazy("Filière"),
+        required=True,
+        choices=FACULTIES,
     )
     path = forms.ChoiceField(
         label=gettext_lazy("Cursus particulier ?"),
@@ -80,7 +86,7 @@ class SignUpForm(UserCreationForm):
         self.fields["password1"].label = _("Mot de passe")
         self.fields["password2"].label = _("Confirmation du mot de passe")
         self.fields["password2"].help_text = _(
-            "Entrez le même mot de passe pour vérification"
+            "Entrez le même mot de passe pour vérification",
         )
 
     def clean(self):
@@ -94,7 +100,7 @@ class SignUpForm(UserCreationForm):
             if email and confirm_email:
                 if email != confirm_email:
                     raise forms.ValidationError(
-                        _("Les emails ne correspondent pas.")
+                        _("Les emails ne correspondent pas."),
                     )
             return cleaned_data
 
@@ -162,7 +168,7 @@ class ResetPassForm(forms.Form):
         if password and password_confirm:
             if password != password_confirm:
                 raise forms.ValidationError(
-                    _("Les deux mots de passe ne correspondent pas.")
+                    _("Les deux mots de passe ne correspondent pas."),
                 )
         return cleaned_data
 
@@ -179,7 +185,8 @@ class TemporaryRequestSignUpForm(SignUpForm):
         help_text=gettext_lazy("Votre adresse mail personnelle."),
     )
     invite_id = forms.UUIDField(
-        validators=[check_id], widget=forms.HiddenInput()
+        validators=[check_id],
+        widget=forms.HiddenInput(),
     )
 
 

@@ -30,28 +30,36 @@ class Migration(migrations.Migration):
             model_name="post",
             name="description_en",
             field=django_ckeditor_5.fields.CKEditor5Field(
-                blank=True, null=True, verbose_name="Description"
+                blank=True,
+                null=True,
+                verbose_name="Description",
             ),
         ),
         migrations.AddField(
             model_name="post",
             name="description_fr",
             field=django_ckeditor_5.fields.CKEditor5Field(
-                blank=True, null=True, verbose_name="Description"
+                blank=True,
+                null=True,
+                verbose_name="Description",
             ),
         ),
         migrations.AddField(
             model_name="post",
             name="title_en",
             field=models.CharField(
-                max_length=200, null=True, verbose_name="Title"
+                max_length=200,
+                null=True,
+                verbose_name="Title",
             ),
         ),
         migrations.AddField(
             model_name="post",
             name="title_fr",
             field=models.CharField(
-                max_length=200, null=True, verbose_name="Title"
+                max_length=200,
+                null=True,
+                verbose_name="Title",
             ),
         ),
         migrations.RunPython(copy_data, reverse_code=reverse_copy_data),

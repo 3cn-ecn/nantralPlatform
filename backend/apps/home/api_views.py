@@ -13,7 +13,7 @@ class CreateIssueView(APIView):
 
     def post(self, request: HttpRequest):
         student_url = request.build_absolute_uri(
-            request.user.student.get_absolute_url()
+            request.user.student.get_absolute_url(),
         )
         create_issue(
             title=request.data.get("title"),

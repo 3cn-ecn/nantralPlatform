@@ -15,7 +15,7 @@ def migrate_slugs_to_fk(apps, schema_editor):
             event.group = Group.objects.all().first()
             print(
                 f"Group with slug '{event.group_slug}' not found. "
-                f"Replaced with '{event.group.name}'"
+                f"Replaced with '{event.group.name}'",
             )
         event.save()
 
@@ -49,11 +49,14 @@ class Migration(migrations.Migration):
             model_name="event",
             name="group_slug",
             field=models.SlugField(
-                blank=True, null=True, verbose_name="Slug du groupe"
+                blank=True,
+                null=True,
+                verbose_name="Slug du groupe",
             ),
         ),
         migrations.RunPython(
-            code=migrate_slugs_to_fk, reverse_code=migrate_fk_to_slugs
+            code=migrate_slugs_to_fk,
+            reverse_code=migrate_fk_to_slugs,
         ),
         migrations.RemoveField(
             model_name="event",

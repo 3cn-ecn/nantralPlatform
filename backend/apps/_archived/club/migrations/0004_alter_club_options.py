@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                         nulls_first=True,
                     ),
                     "name",
-                ]
+                ],
             },
         ),
     ]

@@ -15,7 +15,8 @@ class Migration(migrations.Migration):
             model_name="post",
             name="description",
             field=django_ckeditor_5.fields.CKEditor5Field(
-                blank=True, verbose_name="Texte de l'annonce"
+                blank=True,
+                verbose_name="Texte de l'annonce",
             ),
         ),
     ]

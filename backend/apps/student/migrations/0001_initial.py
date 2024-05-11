@@ -43,13 +43,17 @@ class Migration(migrations.Migration):
                 (
                     "first_name",
                     models.CharField(
-                        max_length=200, null=True, verbose_name="Prénom"
+                        max_length=200,
+                        null=True,
+                        verbose_name="Prénom",
                     ),
                 ),
                 (
                     "last_name",
                     models.CharField(
-                        max_length=200, null=True, verbose_name="Nom de famille"
+                        max_length=200,
+                        null=True,
+                        verbose_name="Nom de famille",
                     ),
                 ),
                 (

@@ -27,7 +27,13 @@ class Migration(migrations.Migration):
                     "publication_date",
                     models.DateTimeField(
                         default=datetime.datetime(
-                            2021, 4, 5, 17, 10, 39, 35367
+                            2021,
+                            4,
+                            5,
+                            17,
+                            10,
+                            39,
+                            35367,
                         ),
                         verbose_name="Date de publication",
                     ),
@@ -35,7 +41,8 @@ class Migration(migrations.Migration):
                 (
                     "title",
                     models.CharField(
-                        max_length=200, verbose_name="Titre de l'annonce"
+                        max_length=200,
+                        verbose_name="Titre de l'annonce",
                     ),
                 ),
                 (
@@ -49,7 +56,9 @@ class Migration(migrations.Migration):
                 (
                     "slug",
                     models.SlugField(
-                        null=True, unique=True, verbose_name="Slug de l'annonce"
+                        null=True,
+                        unique=True,
+                        verbose_name="Slug de l'annonce",
                     ),
                 ),
                 (

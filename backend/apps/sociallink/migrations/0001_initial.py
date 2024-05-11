@@ -26,13 +26,15 @@ class Migration(migrations.Migration):
                 (
                     "color",
                     models.CharField(
-                        max_length=7, verbose_name="Couleur en hexadécimal"
+                        max_length=7,
+                        verbose_name="Couleur en hexadécimal",
                     ),
                 ),
                 (
                     "icon_name",
                     models.CharField(
-                        max_length=20, verbose_name="Nom Bootstrap de l'icône"
+                        max_length=20,
+                        verbose_name="Nom Bootstrap de l'icône",
                     ),
                 ),
             ],

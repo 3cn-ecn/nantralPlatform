@@ -28,6 +28,8 @@ urlpatterns = [
         name="reset-pass",
     ),
     path(
-        "<slug:user_id>/student/", redirect_to_student, name="redirect-student"
+        "<slug:user_id>/student/",
+        redirect_to_student,
+        name="redirect-student",
     ),
 ]

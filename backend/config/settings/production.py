@@ -35,7 +35,7 @@ LOGGING = {
     "formatters": {
         "default": {
             "format": "[DJANGO] %(levelname)s %(asctime)s %(module)s "
-            "%(name)s.%(funcName)s:%(lineno)s: %(message)s"
+            "%(name)s.%(funcName)s:%(lineno)s: %(message)s",
         },
     },
     "handlers": {
@@ -43,7 +43,7 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "default",
-        }
+        },
     },
     "root": {
         "handlers": ["console"],

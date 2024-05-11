@@ -21,10 +21,11 @@ def validate_uri(value: str):
         EmailValidator()(value[7:])
     elif value.startswith("tel:"):
         RegexValidator(
-            regex=r"^\+?[\d\.\s]+$", message="Enter a valid phone number."
+            regex=r"^\+?[\d\.\s]+$",
+            message="Enter a valid phone number.",
         )(value[4:])
     else:
         raise ValidationError(
             "The URI is not valid: it must start with 'https:', 'mailto:', or "
-            "'tel:'."
+            "'tel:'.",
         )

@@ -25,7 +25,10 @@ class Migration(migrations.Migration):
             model_name="sociallink",
             name="label",
             field=models.CharField(
-                blank=True, max_length=20, null=True, verbose_name="Étiquette"
+                blank=True,
+                max_length=20,
+                null=True,
+                verbose_name="Étiquette",
             ),
         ),
         migrations.AlterField(
@@ -42,21 +45,25 @@ class Migration(migrations.Migration):
             model_name="socialnetwork",
             name="color",
             field=models.CharField(
-                max_length=7, verbose_name="Couleur en hexadécimal avec #"
+                max_length=7,
+                verbose_name="Couleur en hexadécimal avec #",
             ),
         ),
         migrations.AlterField(
             model_name="socialnetwork",
             name="icon_name",
             field=models.CharField(
-                max_length=40, verbose_name="Nom Bootstrap de l'icône"
+                max_length=40,
+                verbose_name="Nom Bootstrap de l'icône",
             ),
         ),
         migrations.AlterField(
             model_name="socialnetwork",
             name="name",
             field=models.CharField(
-                max_length=20, unique=True, verbose_name="Nom"
+                max_length=20,
+                unique=True,
+                verbose_name="Nom",
             ),
         ),
     ]

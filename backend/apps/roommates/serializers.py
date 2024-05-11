@@ -17,7 +17,9 @@ class HousingLastRoommatesSerializer(serializers.ModelSerializer):
 
     def get_roommates(self, obj):
         return RoommatesSerializer(
-            obj.current_roommates, many=False, context=self._context
+            obj.current_roommates,
+            many=False,
+            context=self._context,
         ).data
 
 
@@ -60,7 +62,9 @@ class RoommatesSerializer(serializers.ModelSerializer):
     def get_members(self, obj):
         members = NamedMembershipRoommates.objects.filter(group=obj)
         return RoommatesMemberSerializer(
-            members, many=True, context=self._context
+            members,
+            many=True,
+            context=self._context,
         ).data
 
     def get_url(self, obj):

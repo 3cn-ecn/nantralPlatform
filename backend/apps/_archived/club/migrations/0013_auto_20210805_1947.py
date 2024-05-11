@@ -13,14 +13,18 @@ class Migration(migrations.Migration):
             model_name="namedmembershipclub",
             name="date_end",
             field=models.DateField(
-                blank=True, null=True, verbose_name="Date de fin (facultatif)"
+                blank=True,
+                null=True,
+                verbose_name="Date de fin (facultatif)",
             ),
         ),
         migrations.AlterField(
             model_name="namedmembershipclub",
             name="function",
             field=models.CharField(
-                blank=True, max_length=200, verbose_name="Rôle (facultatif)"
+                blank=True,
+                max_length=200,
+                verbose_name="Rôle (facultatif)",
             ),
         ),
     ]

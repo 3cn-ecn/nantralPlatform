@@ -114,7 +114,7 @@ class NotificationsViewSet(ReadOnlyModelViewSet):
     def all_seen(self, request, *args, **kwargs):
         (
             SentNotification.objects.filter(student__user=request.user).update(
-                seen=True
+                seen=True,
             )
         )
         return Response(status=status.HTTP_200_OK)
@@ -143,7 +143,7 @@ class RegisterAPIView(APIView):
 
     def post(self, request, format=None):
         already_registered = WebPushDevice.objects.filter(
-            registration_id=request.data.get("registration_id")
+            registration_id=request.data.get("registration_id"),
         ).exists()
         data = {"result": False}
         if not already_registered:
