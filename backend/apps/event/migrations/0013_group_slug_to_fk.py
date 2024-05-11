@@ -5,21 +5,23 @@ from django.db import migrations, models
 
 
 def migrate_slugs_to_fk(apps, schema_editor):
-    Event = apps.get_model('event', 'Event')
-    Group = apps.get_model('group', 'Group')
+    Event = apps.get_model("event", "Event")
+    Group = apps.get_model("group", "Group")
     for event in Event.objects.all():
         g = Group.objects.filter(slug=event.group_slug).first()
         if g is not None:
             event.group = g
         else:
             event.group = Group.objects.all().first()
-            print(f"Group with slug '{event.group_slug}' not found. "
-                  f"Replaced with '{event.group.name}'")
+            print(
+                f"Group with slug '{event.group_slug}' not found. "
+                f"Replaced with '{event.group.name}'"
+            )
         event.save()
 
 
 def migrate_fk_to_slugs(apps, schema_editor):
-    Event = apps.get_model('event', 'Event')
+    Event = apps.get_model("event", "Event")
     for event in Event.objects.all():
         slug = event.group.slug
         event.group_slug = slug
@@ -27,42 +29,43 @@ def migrate_fk_to_slugs(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('event', '0012_remove_event_color_remove_event_date_and_more'),
-        ('group', '0010_group_grouptype_tag_membership_label_and_more')
+        ("event", "0012_remove_event_color_remove_event_date_and_more"),
+        ("group", "0010_group_grouptype_tag_membership_label_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='event',
-            name='group',
+            model_name="event",
+            name="group",
             field=models.ForeignKey(
                 null=True,
                 on_delete=django.db.models.deletion.CASCADE,
-                to='group.group',
-                verbose_name='Organiser'),
+                to="group.group",
+                verbose_name="Organiser",
+            ),
         ),
         migrations.AlterField(
-            model_name='event',
-            name='group_slug',
+            model_name="event",
+            name="group_slug",
             field=models.SlugField(
-                blank=True, null=True, verbose_name='Slug du groupe'),
+                blank=True, null=True, verbose_name="Slug du groupe"
+            ),
         ),
         migrations.RunPython(
-            code=migrate_slugs_to_fk,
-            reverse_code=migrate_fk_to_slugs
+            code=migrate_slugs_to_fk, reverse_code=migrate_fk_to_slugs
         ),
         migrations.RemoveField(
-            model_name='event',
-            name='group_slug',
+            model_name="event",
+            name="group_slug",
         ),
         migrations.AlterField(
-            model_name='event',
-            name='group',
+            model_name="event",
+            name="group",
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
-                to='group.group',
-                verbose_name='Organiser'),
+                to="group.group",
+                verbose_name="Organiser",
+            ),
         ),
     ]

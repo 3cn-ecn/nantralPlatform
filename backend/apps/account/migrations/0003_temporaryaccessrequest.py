@@ -6,26 +6,42 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('account', '0002_lower_all_accounts'),
+        ("account", "0002_lower_all_accounts"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='TemporaryAccessRequest',
+            name="TemporaryAccessRequest",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('approved_until', models.DateField()),
-                ('date', models.DateField()),
-                ('message_id', models.IntegerField(blank=True, null=True)),
-                ('domain', models.CharField(max_length=64)),
-                ('approved', models.BooleanField()),
-                ('mail_valid', models.BooleanField()),
-                ('final_email', models.EmailField(blank=True, max_length=254, null=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("approved_until", models.DateField()),
+                ("date", models.DateField()),
+                ("message_id", models.IntegerField(blank=True, null=True)),
+                ("domain", models.CharField(max_length=64)),
+                ("approved", models.BooleanField()),
+                ("mail_valid", models.BooleanField()),
+                (
+                    "final_email",
+                    models.EmailField(blank=True, max_length=254, null=True),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

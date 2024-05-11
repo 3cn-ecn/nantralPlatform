@@ -15,20 +15,16 @@ def forwards_func(apps, schema_editor):
         for admin in liste.admins.all():
             try:
                 membership = NamedMembershipList.objects.using(db_alias).get(
-                    liste=liste,
-                    student=admin
+                    liste=liste, student=admin
                 )
                 membership = NamedMembershipList.objects.get(
-                    liste=liste,
-                    student=admin
+                    liste=liste, student=admin
                 )
                 membership.admin = True
                 membership.save()
             except ObjectDoesNotExist:
                 NamedMembershipList.objects.using(db_alias).create(
-                    liste=liste,
-                    student=admin,
-                    admin=True
+                    liste=liste, student=admin, admin=True
                 )
 
 
@@ -46,20 +42,19 @@ def reverse_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('liste', '0004_alter_liste_options'),
+        ("liste", "0004_alter_liste_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='namedmembershiplist',
-            name='admin',
+            model_name="namedmembershiplist",
+            name="admin",
             field=models.BooleanField(default=False),
         ),
         migrations.RunPython(forwards_func, reverse_func),
         migrations.RemoveField(
-            model_name='liste',
-            name='admins',
+            model_name="liste",
+            name="admins",
         ),
     ]

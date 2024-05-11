@@ -129,9 +129,9 @@ class DetailRoommatesView(DetailGroupView):
             .order_by("-begin_date")
         )
         context["colocathlon"] = Setting.get("PHASE_COLOCATHLON")
-        context[
-            "nb_participants"
-        ] = self.object.colocathlon_participants.count()
+        context["nb_participants"] = (
+            self.object.colocathlon_participants.count()
+        )
         return context
 
 

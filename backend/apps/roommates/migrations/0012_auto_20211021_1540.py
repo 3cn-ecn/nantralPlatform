@@ -4,36 +4,51 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('student', '0005_auto_20210801_1726'),
-        ('roommates', '0011_alter_roommates_begin_date'),
+        ("student", "0005_auto_20210801_1726"),
+        ("roommates", "0011_alter_roommates_begin_date"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='roommates',
-            name='colocathlon_activities',
-            field=models.CharField(blank=True, max_length=250, null=True, verbose_name='Activités proposées'),
+            model_name="roommates",
+            name="colocathlon_activities",
+            field=models.CharField(
+                blank=True,
+                max_length=250,
+                null=True,
+                verbose_name="Activités proposées",
+            ),
         ),
         migrations.AddField(
-            model_name='roommates',
-            name='colocathlon_agree',
-            field=models.BooleanField(default=False, verbose_name='Participation au colocathlon'),
+            model_name="roommates",
+            name="colocathlon_agree",
+            field=models.BooleanField(
+                default=False, verbose_name="Participation au colocathlon"
+            ),
         ),
         migrations.AddField(
-            model_name='roommates',
-            name='colocathlon_hours',
-            field=models.CharField(blank=True, max_length=50, null=True, verbose_name="Horaires d'ouvertures"),
+            model_name="roommates",
+            name="colocathlon_hours",
+            field=models.CharField(
+                blank=True,
+                max_length=50,
+                null=True,
+                verbose_name="Horaires d'ouvertures",
+            ),
         ),
         migrations.AddField(
-            model_name='roommates',
-            name='colocathlon_participants',
-            field=models.ManyToManyField(related_name='colocathlons_in', to='student.Student'),
+            model_name="roommates",
+            name="colocathlon_participants",
+            field=models.ManyToManyField(
+                related_name="colocathlons_in", to="student.Student"
+            ),
         ),
         migrations.AddField(
-            model_name='roommates',
-            name='colocathlon_quota',
-            field=models.IntegerField(default=0, verbose_name="Quantité max d'invités"),
+            model_name="roommates",
+            name="colocathlon_quota",
+            field=models.IntegerField(
+                default=0, verbose_name="Quantité max d'invités"
+            ),
         ),
     ]

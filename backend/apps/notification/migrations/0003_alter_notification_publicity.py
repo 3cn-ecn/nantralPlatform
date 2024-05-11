@@ -4,15 +4,26 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('notification', '0002_subscribeToBDX'),
+        ("notification", "0002_subscribeToBDX"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='notification',
-            name='publicity',
-            field=models.CharField(choices=[('Pub', 'Public - Visible par tous'), ('Mem', 'Membres - Visible uniquement par les membres du groupe'), ('Adm', 'Administrateurs de la page')], default='Pub', max_length=3, verbose_name='Visibilité de la notification'),
+            model_name="notification",
+            name="publicity",
+            field=models.CharField(
+                choices=[
+                    ("Pub", "Public - Visible par tous"),
+                    (
+                        "Mem",
+                        "Membres - Visible uniquement par les membres du groupe",
+                    ),
+                    ("Adm", "Administrateurs de la page"),
+                ],
+                default="Pub",
+                max_length=3,
+                verbose_name="Visibilité de la notification",
+            ),
         ),
     ]

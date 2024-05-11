@@ -8,7 +8,7 @@ import django_ckeditor_5.fields
 
 
 def copy_data(apps, schema_editor):
-    Event = apps.get_model('event', 'event')
+    Event = apps.get_model("event", "event")
     for obj in Event.objects.all():
         if not obj.title_fr:
             obj.title_fr = obj.title
@@ -21,10 +21,8 @@ def copy_data(apps, schema_editor):
 def reverse_copy_data(apps, schema_editor):
     return
 
-    
+
 class Migration(migrations.Migration):
-
-
     dependencies = [
         ("event", "0016_alter_event_image"),
     ]
@@ -59,4 +57,3 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(copy_data, reverse_code=reverse_copy_data),
     ]
-

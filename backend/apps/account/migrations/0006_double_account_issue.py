@@ -17,7 +17,7 @@ def sort_user(u):
 
 
 def forwards_func(apps, schema_editor):
-    User = apps.get_registered_model('account', 'User')
+    User = apps.get_registered_model("account", "User")
     for user in User.objects.all():
         related_users = User.objects.filter(email=user.email)
         if len(related_users) > 1:
@@ -29,9 +29,8 @@ def forwards_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('account', '0005_lower_all_accounts'),
+        ("account", "0005_lower_all_accounts"),
     ]
 
     operations = [

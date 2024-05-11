@@ -6,15 +6,16 @@ import django_ckeditor_5.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0008_club_social'),
+        ("club", "0008_club_social"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='club',
-            name='description',
-            field=django_ckeditor_5.fields.CKEditor5Field(blank=True, verbose_name='Description du groupe'),
+            model_name="club",
+            name="description",
+            field=django_ckeditor_5.fields.CKEditor5Field(
+                blank=True, verbose_name="Description du groupe"
+            ),
         ),
     ]

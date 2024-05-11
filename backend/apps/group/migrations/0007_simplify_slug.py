@@ -13,29 +13,28 @@ def simplify_slug(model):
             slug = slugify(object.name)[:35]
             if type(object).objects.filter(slug=slug):
                 id = 1
-                while type(object).objects.filter(slug=f'{slug}-{id}'):
+                while type(object).objects.filter(slug=f"{slug}-{id}"):
                     id += 1
-                slug = f'{slug}-{id}'
+                slug = f"{slug}-{id}"
             object.slug = slug
         object.save()
 
 
 def main_simplify_slug(apps, schema_editor):
-    Club = apps.get_model('club', 'Club')
-    Liste = apps.get_model('liste', 'Liste')
-    Roommates = apps.get_model('roommates', 'Roommates')
+    Club = apps.get_model("club", "Club")
+    Liste = apps.get_model("liste", "Liste")
+    Roommates = apps.get_model("roommates", "Roommates")
     simplify_slug(Club)
     simplify_slug(Liste)
     simplify_slug(Roommates)
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('group', '0006_move_club'),
-        ('club', '0012_alter_club_options'),
-        ('liste', '0010_liste_banniere'),
-        ('roommates', '0009_auto_20210805_1446'),
+        ("group", "0006_move_club"),
+        ("club", "0012_alter_club_options"),
+        ("liste", "0010_liste_banniere"),
+        ("roommates", "0009_auto_20210805_1446"),
     ]
 
     operations = [

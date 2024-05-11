@@ -4,15 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('post', '0004_post_notification'),
+        ("post", "0004_post_notification"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='post',
-            old_name='group',
-            new_name='group_slug',
+            model_name="post",
+            old_name="group",
+            new_name="group_slug",
         ),
     ]

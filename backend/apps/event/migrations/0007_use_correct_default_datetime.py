@@ -5,15 +5,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('event', '0006_auto_20210405_1710'),
+        ("event", "0006_auto_20210405_1710"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='baseevent',
-            name='publication_date',
-            field=models.DateTimeField(default=django.utils.timezone.now, verbose_name='Date de publication'),
+            model_name="baseevent",
+            name="publication_date",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now,
+                verbose_name="Date de publication",
+            ),
         ),
     ]

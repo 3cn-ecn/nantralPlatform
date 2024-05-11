@@ -5,15 +5,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('post', '0005_rename_group_post_group_slug'),
+        ("post", "0005_rename_group_post_group_slug"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='publication_date',
-            field=models.DateTimeField(default=django.utils.timezone.now, help_text='Entrez la date au format JJ/MM/AAAA HH:MM', verbose_name='Date de publication'),
+            model_name="post",
+            name="publication_date",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now,
+                help_text="Entrez la date au format JJ/MM/AAAA HH:MM",
+                verbose_name="Date de publication",
+            ),
         ),
     ]

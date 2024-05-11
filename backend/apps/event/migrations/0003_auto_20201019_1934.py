@@ -4,15 +4,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('event', '0002_baseevent_color'),
+        ("event", "0002_baseevent_color"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='baseevent',
-            name='color',
-            field=models.CharField(choices=[('primary', 'Bleu'), ('success', 'Vert'), ('danger', 'Rouge'), ('warning', 'Jaune'), ('secondary', 'Gris'), ('dark', 'Noir')], default='primary', max_length=200, null=True, verbose_name='Couleur de fond'),
+            model_name="baseevent",
+            name="color",
+            field=models.CharField(
+                choices=[
+                    ("primary", "Bleu"),
+                    ("success", "Vert"),
+                    ("danger", "Rouge"),
+                    ("warning", "Jaune"),
+                    ("secondary", "Gris"),
+                    ("dark", "Noir"),
+                ],
+                default="primary",
+                max_length=200,
+                null=True,
+                verbose_name="Couleur de fond",
+            ),
         ),
     ]

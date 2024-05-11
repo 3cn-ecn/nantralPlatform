@@ -5,21 +5,23 @@ from django.db import migrations, models
 
 
 def migrate_slugs_to_fk(apps, schema_editor):
-    Post = apps.get_model('post', 'Post')
-    Group = apps.get_model('group', 'Group')
+    Post = apps.get_model("post", "Post")
+    Group = apps.get_model("group", "Group")
     for p in Post.objects.all():
         g = Group.objects.filter(slug=p.group_slug).first()
         if g is not None:
             p.group = g
         else:
             p.group = Group.objects.all().first()
-            print(f"Group with slug '{p.group_slug}' not found. "
-                  f"Replaced with '{p.group.name}'")
+            print(
+                f"Group with slug '{p.group_slug}' not found. "
+                f"Replaced with '{p.group.name}'"
+            )
         p.save()
 
 
 def migrate_fk_to_slugs(apps, schema_editor):
-    Post = apps.get_model('post', 'Post')
+    Post = apps.get_model("post", "Post")
     for p in Post.objects.all():
         slug = p.group.slug
         p.group_slug = slug
@@ -27,41 +29,43 @@ def migrate_fk_to_slugs(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('post', '0007_remove_fields_and_add_more'),
-        ('group', '0010_group_grouptype_tag_membership_label_and_more')
+        ("post", "0007_remove_fields_and_add_more"),
+        ("group", "0010_group_grouptype_tag_membership_label_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='post',
-            name='group',
+            model_name="post",
+            name="group",
             field=models.ForeignKey(
                 null=True,
                 on_delete=django.db.models.deletion.CASCADE,
-                to='group.group',
-                verbose_name='Organiser'),
+                to="group.group",
+                verbose_name="Organiser",
+            ),
         ),
         migrations.AlterField(
-            model_name='post',
-            name='group_slug',
+            model_name="post",
+            name="group_slug",
             field=models.SlugField(
-                blank=True, null=True, verbose_name='Slug du groupe'),
+                blank=True, null=True, verbose_name="Slug du groupe"
+            ),
         ),
         migrations.RunPython(
-            code=migrate_slugs_to_fk,
-            reverse_code=migrate_fk_to_slugs),
+            code=migrate_slugs_to_fk, reverse_code=migrate_fk_to_slugs
+        ),
         migrations.RemoveField(
-            model_name='post',
-            name='group_slug',
+            model_name="post",
+            name="group_slug",
         ),
         migrations.AlterField(
-            model_name='post',
-            name='group',
+            model_name="post",
+            name="group",
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
-                to='group.group',
-                verbose_name='Organiser'),
+                to="group.group",
+                verbose_name="Organiser",
+            ),
         ),
     ]

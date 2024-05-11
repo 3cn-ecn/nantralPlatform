@@ -4,14 +4,17 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('liste', '0013_alter_liste_year'),
+        ("liste", "0013_alter_liste_year"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='liste',
-            options={'ordering': ['-year', 'liste_type', 'name'], 'verbose_name': 'Liste BDX', 'verbose_name_plural': 'Listes BDX'},
+            name="liste",
+            options={
+                "ordering": ["-year", "liste_type", "name"],
+                "verbose_name": "Liste BDX",
+                "verbose_name_plural": "Listes BDX",
+            },
         ),
     ]

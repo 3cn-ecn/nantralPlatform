@@ -1,4 +1,5 @@
-""" Utils function to query geocoding."""
+"""Utils function to query geocoding."""
+
 from typing import List
 from urllib.parse import quote
 

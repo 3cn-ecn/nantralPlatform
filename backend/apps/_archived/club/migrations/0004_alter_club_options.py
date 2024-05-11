@@ -5,14 +5,21 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0003_auto_20210615_1531'),
+        ("club", "0003_auto_20210615_1531"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='club',
-            options={'ordering': [django.db.models.expressions.OrderBy(django.db.models.expressions.F('bdx_type'), nulls_first=True), 'name']},
+            name="club",
+            options={
+                "ordering": [
+                    django.db.models.expressions.OrderBy(
+                        django.db.models.expressions.F("bdx_type"),
+                        nulls_first=True,
+                    ),
+                    "name",
+                ]
+            },
         ),
     ]

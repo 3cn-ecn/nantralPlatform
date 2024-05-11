@@ -6,15 +6,16 @@ import django_ckeditor_5.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('event', '0007_use_correct_default_datetime'),
+        ("event", "0007_use_correct_default_datetime"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='baseevent',
-            name='description',
-            field=django_ckeditor_5.fields.CKEditor5Field(blank=True, verbose_name="Description de l'événement"),
+            model_name="baseevent",
+            name="description",
+            field=django_ckeditor_5.fields.CKEditor5Field(
+                blank=True, verbose_name="Description de l'événement"
+            ),
         ),
     ]

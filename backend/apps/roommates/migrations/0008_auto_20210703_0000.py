@@ -4,39 +4,51 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('roommates', '0007_alter_roommates_description'),
+        ("roommates", "0007_alter_roommates_description"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='roommates',
-            name='social',
+            model_name="roommates",
+            name="social",
         ),
         migrations.AddField(
-            model_name='roommates',
-            name='summary',
-            field=models.CharField(blank=True, max_length=500, null=True, verbose_name='Résumé'),
+            model_name="roommates",
+            name="summary",
+            field=models.CharField(
+                blank=True, max_length=500, null=True, verbose_name="Résumé"
+            ),
         ),
         migrations.AddField(
-            model_name='roommates',
-            name='video1',
-            field=models.URLField(blank=True, null=True, verbose_name='Lien vidéo 1'),
+            model_name="roommates",
+            name="video1",
+            field=models.URLField(
+                blank=True, null=True, verbose_name="Lien vidéo 1"
+            ),
         ),
         migrations.AddField(
-            model_name='roommates',
-            name='video2',
-            field=models.URLField(blank=True, null=True, verbose_name='Lien vidéo 2'),
+            model_name="roommates",
+            name="video2",
+            field=models.URLField(
+                blank=True, null=True, verbose_name="Lien vidéo 2"
+            ),
         ),
         migrations.AlterField(
-            model_name='roommates',
-            name='alt_name',
-            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Nom alternatif'),
+            model_name="roommates",
+            name="alt_name",
+            field=models.CharField(
+                blank=True,
+                max_length=100,
+                null=True,
+                verbose_name="Nom alternatif",
+            ),
         ),
         migrations.AlterField(
-            model_name='roommates',
-            name='name',
-            field=models.CharField(max_length=100, unique=True, verbose_name='Nom du groupe'),
+            model_name="roommates",
+            name="name",
+            field=models.CharField(
+                max_length=100, unique=True, verbose_name="Nom du groupe"
+            ),
         ),
     ]

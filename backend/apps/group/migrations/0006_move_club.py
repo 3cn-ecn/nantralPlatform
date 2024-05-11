@@ -4,46 +4,43 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-    atomic=False
+    atomic = False
     dependencies = [
-        ('group', '0005_move_liste'),
+        ("group", "0005_move_liste"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.AlterUniqueTogether(
-                    name='namedmembershipclub',
+                    name="namedmembershipclub",
                     unique_together=None,
                 ),
                 migrations.RemoveField(
-                    model_name='namedmembershipclub',
-                    name='club',
+                    model_name="namedmembershipclub",
+                    name="club",
                 ),
                 migrations.RemoveField(
-                    model_name='namedmembershipclub',
-                    name='student',
+                    model_name="namedmembershipclub",
+                    name="student",
                 ),
             ],
-            database_operations=[]
+            database_operations=[],
         ),
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.DeleteModel(
-                    name='Club',
+                    name="Club",
                 ),
                 migrations.DeleteModel(
-                    name='NamedMembershipClub',
+                    name="NamedMembershipClub",
                 ),
             ],
             database_operations=[
+                migrations.AlterModelTable(name="Club", table="club_club"),
                 migrations.AlterModelTable(
-                    name='Club',
-                    table='club_club'),
-                migrations.AlterModelTable(
-                    name='NamedMembershipClub',
-                    table='club_namedmembershipclub'
-                )
-            ]
+                    name="NamedMembershipClub", table="club_namedmembershipclub"
+                ),
+            ],
         ),
     ]

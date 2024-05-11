@@ -1,4 +1,4 @@
-﻿from django.urls import path
+from django.urls import path
 
 from apps.group.abstract.urls import make_group_url_patterns
 

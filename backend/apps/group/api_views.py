@@ -137,7 +137,8 @@ class GroupViewSet(viewsets.ModelViewSet):
                     "membership_set",
                     filter=Q(membership_set__end_date__gte=timezone.now()),
                 )
-            ).filter(
+            )
+            .filter(
                 Q(num_active_members__gt=0)
                 | Q(group_type__hide_no_active_members=False)
             )
@@ -172,8 +173,9 @@ class GroupViewSet(viewsets.ModelViewSet):
             # order by category, order and then name
             .order_by(
                 "group_type",
-                *group_type.sort_fields.split(",") if group_type else ""
-            ).distinct()
+                *group_type.sort_fields.split(",") if group_type else "",
+            )
+            .distinct()
         )
 
     def get_object(self):

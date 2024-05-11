@@ -5,25 +5,28 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0002_create_bdx'),
-        ('liste', '0001_initial'),
+        ("club", "0002_create_bdx"),
+        ("liste", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='liste',
-            name='parent',
+            model_name="liste",
+            name="parent",
         ),
         migrations.RemoveField(
-            model_name='liste',
-            name='liste_type',
+            model_name="liste",
+            name="liste_type",
         ),
         migrations.AddField(
-            model_name='liste',
-            name='liste_type',
+            model_name="liste",
+            name="liste_type",
             field=models.ForeignKey(
-                blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='club.bdx'),
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="club.bdx",
+            ),
         ),
     ]

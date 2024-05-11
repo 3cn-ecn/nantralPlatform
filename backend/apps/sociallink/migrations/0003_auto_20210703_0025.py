@@ -4,49 +4,59 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('sociallink', '0002_sociallink_slug'),
+        ("sociallink", "0002_sociallink_slug"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='sociallink',
-            options={'verbose_name': 'Lien de Réseau Social', 'verbose_name_plural': 'Liens des Réseaux Sociaux'},
+            name="sociallink",
+            options={
+                "verbose_name": "Lien de Réseau Social",
+                "verbose_name_plural": "Liens des Réseaux Sociaux",
+            },
         ),
         migrations.RenameField(
-            model_name='sociallink',
-            old_name='reseau',
-            new_name='network',
+            model_name="sociallink",
+            old_name="reseau",
+            new_name="network",
         ),
         migrations.AddField(
-            model_name='sociallink',
-            name='label',
-            field=models.CharField(blank=True, max_length=20, null=True, verbose_name='Étiquette'),
+            model_name="sociallink",
+            name="label",
+            field=models.CharField(
+                blank=True, max_length=20, null=True, verbose_name="Étiquette"
+            ),
         ),
         migrations.AlterField(
-            model_name='sociallink',
-            name='slug',
-            field=models.SlugField(null=True, verbose_name='Slug du lien'),
+            model_name="sociallink",
+            name="slug",
+            field=models.SlugField(null=True, verbose_name="Slug du lien"),
         ),
         migrations.AlterField(
-            model_name='sociallink',
-            name='url',
-            field=models.URLField(verbose_name='URL'),
+            model_name="sociallink",
+            name="url",
+            field=models.URLField(verbose_name="URL"),
         ),
         migrations.AlterField(
-            model_name='socialnetwork',
-            name='color',
-            field=models.CharField(max_length=7, verbose_name='Couleur en hexadécimal avec #'),
+            model_name="socialnetwork",
+            name="color",
+            field=models.CharField(
+                max_length=7, verbose_name="Couleur en hexadécimal avec #"
+            ),
         ),
         migrations.AlterField(
-            model_name='socialnetwork',
-            name='icon_name',
-            field=models.CharField(max_length=40, verbose_name="Nom Bootstrap de l'icône"),
+            model_name="socialnetwork",
+            name="icon_name",
+            field=models.CharField(
+                max_length=40, verbose_name="Nom Bootstrap de l'icône"
+            ),
         ),
         migrations.AlterField(
-            model_name='socialnetwork',
-            name='name',
-            field=models.CharField(max_length=20, unique=True, verbose_name='Nom'),
+            model_name="socialnetwork",
+            name="name",
+            field=models.CharField(
+                max_length=20, unique=True, verbose_name="Nom"
+            ),
         ),
     ]

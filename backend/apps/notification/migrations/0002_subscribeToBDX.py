@@ -10,12 +10,12 @@ def forwards_func(apps, schema_editor):
     Student = apps.get_model("student", "Student")
     with transaction.atomic():
         Subscription.objects.bulk_create(
-            objs = [
+            objs=[
                 Subscription(student=student, page="club--" + bdx.slug)
                 for student in Student.objects.all()
                 for bdx in BDX.objects.all()
-            ], 
-            ignore_conflicts = True
+            ],
+            ignore_conflicts=True,
         )
 
 
@@ -29,11 +29,10 @@ def reverse_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('notification', '0001_initial'),
-        ('club', '0015_auto_20210819_2352'),
-        ('student', '0001_initial')
+        ("notification", "0001_initial"),
+        ("club", "0015_auto_20210819_2352"),
+        ("student", "0001_initial"),
     ]
 
     operations = [

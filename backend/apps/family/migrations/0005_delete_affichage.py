@@ -4,20 +4,19 @@ from django.db import IntegrityError, migrations, transaction
 
 
 def create_setting(apps, schema_editor):
-    Setting = apps.get_model('extra_settings', 'Setting')
+    Setting = apps.get_model("extra_settings", "Setting")
     try:
         with transaction.atomic():
             obj = Setting(
-                name='PHASE_PARRAINAGE', 
-                value_type='int',
-                description=
-"""* 0: Tout masquer
+                name="PHASE_PARRAINAGE",
+                value_type="int",
+                description="""* 0: Tout masquer
 * 1: Questionnaires 2A+
 * 2: Questionnaires 1A et 2A+
 * 3: Soirée de parrainage
 * 4: Résultats du parrainage
 * 5: Questionnaires ITII
-* 6: Résultats ITII"""
+* 6: Résultats ITII""",
             )
             obj.value = 0
             obj.save()
@@ -26,24 +25,23 @@ def create_setting(apps, schema_editor):
 
 
 def reverse_func(apps, schema_editor):
-    Setting = apps.get_model('extra_settings', 'Setting')
+    Setting = apps.get_model("extra_settings", "Setting")
     try:
         with transaction.atomic():
-            Setting.objects.get(name='PHASE_PARRAINAGE').delete()
+            Setting.objects.get(name="PHASE_PARRAINAGE").delete()
     except IntegrityError:
         pass
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('family', '0004_auto_20211003_1523'),
-        ('extra_settings', '0005_setting_value_json_alter_setting_value_type')
+        ("family", "0004_auto_20211003_1523"),
+        ("extra_settings", "0005_setting_value_json_alter_setting_value_type"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='Affichage',
+            name="Affichage",
         ),
         migrations.RunPython(create_setting),
     ]

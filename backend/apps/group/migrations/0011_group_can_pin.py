@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('group', '0010_group_grouptype_tag_membership_label_and_more'),
+        ("group", "0010_group_grouptype_tag_membership_label_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='group',
-            name='can_pin',
-            field=models.BooleanField(default=False, help_text='Admin members of this group can pin their posts', verbose_name='Can pin'),
+            model_name="group",
+            name="can_pin",
+            field=models.BooleanField(
+                default=False,
+                help_text="Admin members of this group can pin their posts",
+                verbose_name="Can pin",
+            ),
         ),
     ]

@@ -59,7 +59,7 @@ class MembershipForm(ModelForm):
         student: Student = None,
         instance: Membership = None,
         *args,
-        **kwargs
+        **kwargs,
     ):
         if not (instance or (group and student)):
             raise ValueError(

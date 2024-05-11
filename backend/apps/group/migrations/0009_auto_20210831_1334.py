@@ -6,14 +6,13 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('group', '0008_compressPreviousImages'),
+        ("group", "0008_compressPreviousImages"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='adminrightsrequest',
-            name='issue',
+            model_name="adminrightsrequest",
+            name="issue",
         ),
     ]

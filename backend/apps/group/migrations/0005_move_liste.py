@@ -4,43 +4,44 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-    atomic=False
+    atomic = False
     dependencies = [
-        ('group', '0004_move_social_network'),
+        ("group", "0004_move_social_network"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
-            state_operations=[migrations.AlterUniqueTogether(
-                name='namedmembershiplist',
-                unique_together=None,
-            ),
+            state_operations=[
+                migrations.AlterUniqueTogether(
+                    name="namedmembershiplist",
+                    unique_together=None,
+                ),
                 migrations.RemoveField(
-                model_name='namedmembershiplist',
-                name='liste',
-            ),
+                    model_name="namedmembershiplist",
+                    name="liste",
+                ),
                 migrations.RemoveField(
-                model_name='namedmembershiplist',
-                name='student',
-            ), ],
+                    model_name="namedmembershiplist",
+                    name="student",
+                ),
+            ],
             database_operations=[],
         ),
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.DeleteModel(
-                    name='Liste',
+                    name="Liste",
                 ),
                 migrations.DeleteModel(
-                    name='NamedMembershipList',
-                ), ],
+                    name="NamedMembershipList",
+                ),
+            ],
             database_operations=[
+                migrations.AlterModelTable(name="Liste", table="liste_liste"),
                 migrations.AlterModelTable(
-                    name='Liste',
-                    table='liste_liste'),
-                migrations.AlterModelTable(
-                    name='NamedMembershipList',
-                    table='liste_namedmembershiplist'
-                )
+                    name="NamedMembershipList",
+                    table="liste_namedmembershiplist",
+                ),
             ],
         ),
     ]

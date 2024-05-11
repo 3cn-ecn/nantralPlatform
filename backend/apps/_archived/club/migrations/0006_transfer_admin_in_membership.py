@@ -15,21 +15,17 @@ def forwards_func(apps, schema_editor):
         for admin in club.admins.all():
             try:
                 membership = NamedMembershipClub.objects.using(db_alias).get(
-                    club=club,
-                    student=admin
+                    club=club, student=admin
                 )
                 membership = NamedMembershipClub.objects.get(
-                    club=club,
-                    student=admin
+                    club=club, student=admin
                 )
                 membership.admin = True
                 membership.save()
             except ObjectDoesNotExist:
                 print(f"Membership does not exist {club} {admin}")
                 NamedMembershipClub.objects.using(db_alias).create(
-                    club=club,
-                    student=admin,
-                    admin=True
+                    club=club, student=admin, admin=True
                 )
 
 
@@ -47,20 +43,19 @@ def reverse_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0005_auto_20210616_1012'),
+        ("club", "0005_auto_20210616_1012"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='namedmembershipclub',
-            name='admin',
+            model_name="namedmembershipclub",
+            name="admin",
             field=models.BooleanField(default=False),
         ),
         migrations.RunPython(forwards_func, reverse_func),
         migrations.RemoveField(
-            model_name='club',
-            name='admins',
-        )
+            model_name="club",
+            name="admins",
+        ),
     ]
