@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 module = import_module(f"{app_config.name}.factories")
 
                 # Iterate over all classes in the 'factories' module
-                for name in dir(module):  # noqa: WPS421
+                for name in dir(module):
                     obj = getattr(module, name)
                     if (
                         isinstance(obj, type)
@@ -80,7 +80,7 @@ class Command(BaseCommand):
         sorted_generators = []
         resolved = set()
 
-        def resolve(generator):  # noqa: WPS430
+        def resolve(generator):
             if generator in resolved:
                 return
             for dependency_name in generator.dependencies:

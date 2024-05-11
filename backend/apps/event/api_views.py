@@ -80,7 +80,8 @@ class EventViewSet(viewsets.ModelViewSet):
     ordering_fields = [
         "created_at",
         "end_date",
-        "end_registration" "group__name",
+        "end_registration",
+        "group__name",
         "group__short_name",
         "participants_count",
         "start_date",
@@ -106,7 +107,7 @@ class EventViewSet(viewsets.ModelViewSet):
             return EventSerializer
         return EventPreviewSerializer
 
-    def get_queryset(self) -> QuerySet[Event]:  # noqa: C901
+    def get_queryset(self) -> QuerySet[Event]:
         now = timezone.now()
         user = self.request.user
 
@@ -118,14 +119,14 @@ class EventViewSet(viewsets.ModelViewSet):
         is_bookmarked = parse_bool(self.query_params.get("is_bookmarked"))
         is_participating = parse_bool(self.query_params.get("is_participating"))
         is_registration_open = parse_bool(
-            self.query_params.get("is_registration_open")
+            self.query_params.get("is_registration_open"),
         )
         from_date = self.query_params.get("from_date")
         to_date = self.query_params.get("to_date")
 
         # filtering
         qs = Event.objects.filter(
-            Q(publicity="Pub") | Q(group__members__user=user)
+            Q(publicity="Pub") | Q(group__members__user=user),
         )
         if len(groups) > 0:
             qs = qs.filter(group__slug__in=groups)
@@ -149,13 +150,13 @@ class EventViewSet(viewsets.ModelViewSet):
             qs = qs.filter(
                 Q(max_participant__isnull=False)
                 | Q(start_registration__isnull=False)
-                | Q(end_registration__isnull=False)
+                | Q(end_registration__isnull=False),
             )
         if is_shotgun is False:
             qs = qs.exclude(
                 Q(max_participant__isnull=False)
                 | Q(start_registration__isnull=False)
-                | Q(end_registration__isnull=False)
+                | Q(end_registration__isnull=False),
             )
         if is_registration_open is not None:
             condition = (
@@ -188,12 +189,12 @@ class EventViewSet(viewsets.ModelViewSet):
         if event.start_registration and event.start_registration > now:
             raise exceptions.PermissionDenied(
                 _("Too soon! Registration will start at %(datetime)s.")
-                % {"datetime": format_date(event.start_registration)}
+                % {"datetime": format_date(event.start_registration)},
             )
         if event.end_registration and event.end_registration < now:
             raise exceptions.PermissionDenied(
                 _("Too late! Registration has ended at %(datetime)s.")
-                % {"datetime": format_date(event.end_registration)}
+                % {"datetime": format_date(event.end_registration)},
             )
         if (
             event.max_participant
@@ -202,8 +203,8 @@ class EventViewSet(viewsets.ModelViewSet):
             raise exceptions.PermissionDenied(
                 _(
                     "Too late! The maximum number of participants "
-                    "have been reached."
-                )
+                    "have been reached.",
+                ),
             )
         # if we pass all criteria, add the user
         event.participants.add(request.user.student)

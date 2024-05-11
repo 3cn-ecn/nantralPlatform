@@ -51,7 +51,7 @@ class NoPasswordFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "no_password":
-            return queryset.filter(password="")  # noqa: S106
+            return queryset.filter(password="")
 
 
 @admin.register(InvitationLink)
@@ -96,7 +96,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_email_valid",
                     "email_next",
                     "invitation",
-                )
+                ),
             },
         ),
         (_("Dates Importantes"), {"fields": ("last_login", "date_joined")}),
@@ -128,7 +128,7 @@ class CustomUserAdmin(UserAdmin):
     @admin.action(description="Send reminder to upgrade account.")
     def send_reminder(self, request, queryset: list[User]):
         upgrade_link = request.build_absolute_uri(
-            reverse("account:upgrade-permanent")
+            reverse("account:upgrade-permanent"),
         )
         send_mass_email(
             template_name="reminder-upgrade",

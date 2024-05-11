@@ -1,5 +1,4 @@
-"""
-LES SLUGS ET LES GROUPES
+"""LES SLUGS ET LES GROUPES
 ------------------------
 
 ->  Certaines applis sont des applis "groupes". ex : Club, Liste, Roommates
@@ -33,7 +32,6 @@ gérées automatiquement mais peuvent être réécrites si besoin.
 """
 
 from importlib import import_module
-from typing import Type
 
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
@@ -70,10 +68,10 @@ class SlugModel:
             self.slug = slug
 
 
-def get_model(app_name: str) -> Type[SlugModel]:
+def get_model(app_name: str) -> type[SlugModel]:
     try:
         package = import_module(SLUG_MODELS[app_name][0])
-        Model = getattr(package, SLUG_MODELS[app_name][1])  # noqa: N806
+        Model = getattr(package, SLUG_MODELS[app_name][1])
         return Model
     except KeyError:
         raise Exception(f"Unknown application : {app_name}")
@@ -81,7 +79,6 @@ def get_model(app_name: str) -> Type[SlugModel]:
 
 def get_object_from_slug(app_name: str, slug: str) -> SlugModel:
     """Get a model object from a slug and an app."""
-
     if app_name == "club":
         from apps.club.models import BDX, Club
 
@@ -93,7 +90,7 @@ def get_object_from_slug(app_name: str, slug: str) -> SlugModel:
         return object
     else:
         try:
-            Model = get_model(app_name)  # noqa: N806
+            Model = get_model(app_name)
             return get_object_or_404(Model, slug=slug)
         except KeyError:
             raise Exception(f"Unknown application : {app_name}")

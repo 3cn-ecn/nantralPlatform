@@ -10,11 +10,13 @@ from .models import Group, GroupType, Membership
 
 class TestGroups(APITestCase):
     def setUp(self):
-        User = get_user_model()  # noqa: N806
+        User = get_user_model()
         self.u1 = User.objects.create(username="u1")
         self.t1 = GroupType.objects.create(name="T1", slug="t1")
         self.t2 = GroupType.objects.create(
-            name="T2", slug="t2", can_create=True
+            name="T2",
+            slug="t2",
+            can_create=True,
         )
         # deactivate warnings
         logger = logging.getLogger("django.request")
@@ -22,7 +24,7 @@ class TestGroups(APITestCase):
         logger.setLevel(logging.ERROR)
 
     def tearDown(self):
-        User = get_user_model()  # noqa: N806
+        User = get_user_model()
         User.objects.all().delete()
         GroupType.objects.filter(slug="t1").delete()
         GroupType.objects.filter(slug="t2").delete()
@@ -133,7 +135,7 @@ class TestGroups(APITestCase):
 
 class TestMemberships(APITestCase):
     def setUp(self):
-        User = get_user_model()  # noqa: N806
+        User = get_user_model()
         self.u1 = User.objects.create(username="u1", email="u1@ec-nantes.fr")
         self.u2 = User.objects.create(username="u2", email="u2@ec-nantes.fr")
         self.u3 = User.objects.create(username="u3", email="u3@ec-nantes.fr")
@@ -145,7 +147,7 @@ class TestMemberships(APITestCase):
         logger.setLevel(logging.ERROR)
 
     def tearDown(self):
-        User = get_user_model()  # noqa: N806
+        User = get_user_model()
         User.objects.all().delete()
         GroupType.objects.filter(slug="t1").delete()
         # re-activate warnings
@@ -232,7 +234,7 @@ class TestMemberships(APITestCase):
         self.assertEqual(self.g1.members.count(), init_nb + 1)
         # test for adding a new member if admin
         self.g1.membership_set.filter(student=self.u1.student).update(
-            admin=True
+            admin=True,
         )
         res = self.client.post(
             "/api/group/membership/",
@@ -277,32 +279,38 @@ class TestMemberships(APITestCase):
         m2 = Membership.objects.create(student=self.u2.student, group=self.g1)
         # test for non-authenticated users
         res = self.client.put(
-            f"/api/group/membership/{m1.id}/", {"summary": "Test"}
+            f"/api/group/membership/{m1.id}/",
+            {"summary": "Test"},
         )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with authenticated user
         self.client.force_login(self.u1)
         res = self.client.put(
-            f"/api/group/membership/{m1.id}/", {"summary": "Test"}
+            f"/api/group/membership/{m1.id}/",
+            {"summary": "Test"},
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         # test with other member
         res = self.client.put(
-            f"/api/group/membership/{m2.id}/", {"summary": "Test2"}
+            f"/api/group/membership/{m2.id}/",
+            {"summary": "Test2"},
         )
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
         # test with admin
         Membership.objects.filter(id=m1.id).update(admin=True)
         res = self.client.put(
-            f"/api/group/membership/{m2.id}/", {"summary": "Test2"}
+            f"/api/group/membership/{m2.id}/",
+            {"summary": "Test2"},
         )
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         # check the modifications are done
         self.assertEqual(
-            self.g1.membership_set.get(student=self.u1.student).summary, "Test"
+            self.g1.membership_set.get(student=self.u1.student).summary,
+            "Test",
         )
         self.assertEqual(
-            self.g1.membership_set.get(student=self.u2.student).summary, "Test2"
+            self.g1.membership_set.get(student=self.u2.student).summary,
+            "Test2",
         )
 
     def test_delete(self):
@@ -330,7 +338,9 @@ class TestMemberships(APITestCase):
     def test_reorder(self):
         self.client.force_login(self.u1)
         m1 = Membership.objects.create(
-            group=self.g1, student=self.u1.student, admin=True
+            group=self.g1,
+            student=self.u1.student,
+            admin=True,
         )
         m2 = Membership.objects.create(group=self.g1, student=self.u2.student)
         # test to order u1 before u2

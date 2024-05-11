@@ -21,8 +21,7 @@ def faker_locale(locale: str):
 
 
 class FakeDataGenerator:
-    """
-    An abstract class that runs all methods beginning with 'make_'.
+    """An abstract class that runs all methods beginning with 'make_'.
     Used to generate fake data with the 'manage.py fakedata' command.
     """
 
@@ -33,7 +32,7 @@ class FakeDataGenerator:
 
     @faker_locale("fr_FR")
     def run(self):
-        for name in dir(self):  # noqa: WPS421
+        for name in dir(self):
             if name.startswith("make_"):
                 try:
                     getattr(self, name)()
@@ -45,8 +44,7 @@ class FakeDataGenerator:
 
     @classmethod
     def locale(cls, locale):
-        """
-        Use this decorator to change the locale of the Faker provider.
+        """Use this decorator to change the locale of the Faker provider.
         The default locale is 'fr_FR'.
         """
         return faker_locale(locale)

@@ -5,6 +5,6 @@ class AccountConfig(AppConfig):
     name = "apps.account"
 
     def ready(self) -> None:
-        import apps.account.signals  # noqa: WPS433,F401
+        from . import signals  # noqa: F401
 
         return super().ready()

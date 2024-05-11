@@ -15,7 +15,6 @@ from .utils import (
 
 def delta_algorithm():
     """Attribute 1A members to families after the first algorithm"""
-
     # get the questionnary
     print("Get questions...")
     question_list = get_question_list()
@@ -23,20 +22,21 @@ def delta_algorithm():
 
     # get the members list with their answers for each question
     print("Get new 1A answers...")
-    member1A_list = get_member_1A_list(question_list)  # noqa: N806
+    member1A_list = get_member_1A_list(question_list)
     print("Get 2A answers...")
-    member2A_list, family_list = get_member_2A_list(question_list)  # noqa: N806
+    member2A_list, family_list = get_member_2A_list(question_list)
 
     # count number of members per family
     print("Calculate the deltas...")
-    placed_1A = MembershipFamily.objects.filter(  # noqa: N806
-        role="1A", group__year=scholar_year()
+    placed_1A = MembershipFamily.objects.filter(
+        role="1A",
+        group__year=scholar_year(),
     ).prefetch_related("group")
     for f in family_list:
         nb_1A = len(
-            [m for m in placed_1A if m.group == f["family"]]  # noqa: N806
+            [m for m in placed_1A if m.group == f["family"]],
         )
-        nb_2A = f["nb"]  # noqa: N806
+        nb_2A = f["nb"]
         f["delta"] = nb_1A - nb_2A
 
     # pour chaque membre 1A non attribué, on lui cherche une famille

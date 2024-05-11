@@ -37,13 +37,12 @@ class StudentFactory(DjangoModelFactory):
 
 
 class StudentFakeData(FakeDataGenerator):
-    """
-    Generate 150 random students.
+    """Generate 150 random students.
     Warning: User generation is slow because of the password hashing.
     """
 
     def make_students(self):
-        print("Warning: this can take a few minutes")  # noqa: WPS421
+        print("Warning: this can take a few minutes")
         StudentFactory.create_batch(100)
 
     @FakeDataGenerator.locale("en_US")

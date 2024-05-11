@@ -37,7 +37,7 @@ class Family(AbstractGroup):
             initial[f"question-{ans.question.pk}"] = ans.answer
         return initial
 
-    def count_members_2A(self) -> int:  # noqa: N802
+    def count_members_2A(self) -> int:
         nb_subscribed = self.memberships.filter(role="2A+").count()
         # test if field is not None or is different to ""
         if self.non_subscribed_members:
@@ -104,17 +104,25 @@ class MembershipFamily(NamedMembership):
 class QuestionPage(models.Model):
     name = models.CharField("Nom de la page", max_length=100)
     name_en = models.CharField("Nom (en)", max_length=100)
-    details1A = models.TextField(  # noqa: N815
-        "Infos 1A", null=True, blank=True
+    details1A = models.TextField(
+        "Infos 1A",
+        null=True,
+        blank=True,
     )
-    details1A_en = models.TextField(  # noqa: N815
-        "Infos 1A (en)", null=True, blank=True
+    details1A_en = models.TextField(
+        "Infos 1A (en)",
+        null=True,
+        blank=True,
     )
-    details2A = models.TextField(  # noqa: N815
-        "Infos 2A+", null=True, blank=True
+    details2A = models.TextField(
+        "Infos 2A+",
+        null=True,
+        blank=True,
     )
-    details2A_en = models.TextField(  # noqa: N815
-        "Infos 2A+ (en)", null=True, blank=True
+    details2A_en = models.TextField(
+        "Infos 2A+ (en)",
+        null=True,
+        blank=True,
     )
     order = models.IntegerField(
         "Ordre",
@@ -136,7 +144,10 @@ class BaseQuestion(models.Model):
     label = models.CharField("Question", max_length=100)
     label_en = models.CharField("Question (en)", max_length=100)
     details = models.CharField(
-        "Informations supplémentaires", max_length=200, null=True, blank=True
+        "Informations supplémentaires",
+        max_length=200,
+        null=True,
+        blank=True,
     )
     details_en = models.CharField(
         "Informations supplémentaires (en)",
@@ -145,7 +156,9 @@ class BaseQuestion(models.Model):
         blank=True,
     )
     order = models.IntegerField(
-        "Ordre", help_text="Ordre d'apparition de la question", default=0
+        "Ordre",
+        help_text="Ordre d'apparition de la question",
+        default=0,
     )
 
     def __str__(self):

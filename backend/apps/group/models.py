@@ -18,15 +18,16 @@ User = get_user_model()
 
 
 class GroupType(models.Model):
-    """
-    The type of a group.
+    """The type of a group.
 
     Can be flat-shares, clubs, formations, BDX lists, etc.
     """
 
     # Type infos
     name = models.CharField(
-        verbose_name=_("Type name"), unique=True, max_length=30
+        verbose_name=_("Type name"),
+        unique=True,
+        max_length=30,
     )
     slug = models.SlugField(primary_key=True, max_length=10)
     icon = CustomImageField(
@@ -58,7 +59,7 @@ class GroupType(models.Model):
         blank=True,
         help_text=_(
             "Children groups of these groups will be displayed in the "
-            "list of all groups."
+            "list of all groups.",
         ),
     )
     sort_fields = models.CharField(
@@ -68,7 +69,7 @@ class GroupType(models.Model):
         help_text=_(
             "Fields used to sort groups in the list, separated by ',' "
             "and without spaces. If categories are defined, you must "
-            "also reflect them here."
+            "also reflect them here.",
         ),
     )
     category_expr = models.CharField(
@@ -91,7 +92,8 @@ class GroupType(models.Model):
 
     # Permissions
     can_create = models.BooleanField(
-        verbose_name=_("Everyone can create new group"), default=False
+        verbose_name=_("Everyone can create new group"),
+        default=False,
     )
 
     class Meta:
@@ -114,7 +116,9 @@ class Label(models.Model):
     name = models.CharField(_("Label Name"), max_length=30)
     priority = models.IntegerField(_("Priority"), default=0)
     group_type = models.ForeignKey(
-        to=GroupType, verbose_name=_("Type of group"), on_delete=models.CASCADE
+        to=GroupType,
+        verbose_name=_("Type of group"),
+        on_delete=models.CASCADE,
     )
 
     def __str__(self) -> str:
@@ -124,7 +128,9 @@ class Label(models.Model):
 class Tag(models.Model):
     name = models.CharField(_("Tag Name"), max_length=50)
     group_type = models.ForeignKey(
-        to=GroupType, verbose_name=_("Type of group"), on_delete=models.CASCADE
+        to=GroupType,
+        verbose_name=_("Type of group"),
+        on_delete=models.CASCADE,
     )
 
     def __str__(self) -> str:
@@ -158,7 +164,9 @@ class Group(models.Model, SlugModel):
 
     # Technical data
     group_type = models.ForeignKey(
-        to=GroupType, verbose_name=_("Type of group"), on_delete=models.CASCADE
+        to=GroupType,
+        verbose_name=_("Type of group"),
+        on_delete=models.CASCADE,
     )
     label = models.ForeignKey(
         to=Label,
@@ -199,7 +207,7 @@ class Group(models.Model, SlugModel):
         default=False,
         help_text=_(
             "An archived group cannot have new members and is hidden "
-            "from the displayed list."
+            "from the displayed list.",
         ),
     )
 
@@ -215,7 +223,7 @@ class Group(models.Model, SlugModel):
         help_text=_(
             "If ticked, the group page can be seen by everyone, "
             "including non-authenticated users. Members, events and "
-            "posts still however hidden."
+            "posts still however hidden.",
         ),
     )
     can_pin = models.BooleanField(
@@ -226,14 +234,20 @@ class Group(models.Model, SlugModel):
 
     # Profile
     summary = models.CharField(
-        verbose_name=_("Summary"), max_length=500, blank=True
+        verbose_name=_("Summary"),
+        max_length=500,
+        blank=True,
     )
     description = CKEditor5Field(verbose_name=_("Description"), blank=True)
     meeting_place = models.CharField(
-        verbose_name=_("Meeting place"), max_length=50, blank=True
+        verbose_name=_("Meeting place"),
+        max_length=50,
+        blank=True,
     )
     meeting_hour = models.CharField(
-        verbose_name=_("Meeting hours"), max_length=50, blank=True
+        verbose_name=_("Meeting hours"),
+        max_length=50,
+        blank=True,
     )
     icon = CustomImageField(
         verbose_name=_("Icon"),
@@ -254,10 +268,16 @@ class Group(models.Model, SlugModel):
         name_from_field="name",
     )
     video1 = models.URLField(
-        verbose_name=_("Video link 1"), max_length=200, null=True, blank=True
+        verbose_name=_("Video link 1"),
+        max_length=200,
+        null=True,
+        blank=True,
     )
     video2 = models.URLField(
-        verbose_name=_("Video link 2"), max_length=200, null=True, blank=True
+        verbose_name=_("Video link 2"),
+        max_length=200,
+        null=True,
+        blank=True,
     )
     social_links = models.ManyToManyField(
         to=SocialLink,
@@ -288,18 +308,19 @@ class Group(models.Model, SlugModel):
     def scholar_year(self) -> str:
         """Returns the year of the group in scholar year format.
 
-        Returns
+        Returns:
         -------
         str
             The scholar year of the group, or an empty string if there is no
             year.
 
-        Example
+        Example:
         -------
         >>> group = Group.objects.all().firs()
         >>> group.year = 2019
         >>> group.scholar_year
         '2019-2020'
+
         """
         if self.creation_year:
             return f"{self.creation_year}-{self.creation_year+1}"
@@ -318,8 +339,8 @@ class Group(models.Model, SlugModel):
             raise ValidationError(
                 _(
                     "You cannot set both 'public' and "
-                    "'private' properties to True."
-                )
+                    "'private' properties to True.",
+                ),
             )
 
     def save(self, *args, **kwargs) -> None:
@@ -353,6 +374,7 @@ class Group(models.Model, SlugModel):
         -------
         bool
             True if the user has admin rights.
+
         """
         return (
             user.is_superuser
@@ -374,10 +396,11 @@ class Group(models.Model, SlugModel):
         -------
         bool
             True if the user is a member of this group.
+
         """
         return (
             user.is_authenticated
-            and hasattr(user, "student")  # noqa: WPS421
+            and hasattr(user, "student")
             and self.members.contains(user.student)
         )
 
@@ -388,9 +411,11 @@ class Group(models.Model, SlugModel):
         -------
         str
             The formatted label of the category of the group.
+
         """
-        return eval(  # noqa: WPS421, S307
-            self.group_type.category_expr, {"group": self}
+        return eval(
+            self.group_type.category_expr,
+            {"group": self},
         )
 
     def get_sub_category(self) -> str:
@@ -400,9 +425,11 @@ class Group(models.Model, SlugModel):
         -------
         str
             The formatted label of the category of the group.
+
         """
-        return eval(  # noqa: WPS421, S307
-            self.group_type.sub_category_expr, {"group": self}
+        return eval(
+            self.group_type.sub_category_expr,
+            {"group": self},
         )
 
     def get_absolute_url(self) -> str:
@@ -414,13 +441,19 @@ class Membership(models.Model):
     """A class for memberships of each group."""
 
     student = models.ForeignKey(
-        to=Student, on_delete=models.CASCADE, related_name="membership_set"
+        to=Student,
+        on_delete=models.CASCADE,
+        related_name="membership_set",
     )
     group = models.ForeignKey(
-        to=Group, on_delete=models.CASCADE, related_name="membership_set"
+        to=Group,
+        on_delete=models.CASCADE,
+        related_name="membership_set",
     )
     summary = models.CharField(
-        verbose_name=_("Summary"), max_length=50, blank=True
+        verbose_name=_("Summary"),
+        max_length=50,
+        blank=True,
     )
     description = models.TextField(verbose_name=_("Description"), blank=True)
     begin_date = models.DateField(verbose_name=_("Begin date"), null=True)
@@ -428,7 +461,8 @@ class Membership(models.Model):
     priority = models.IntegerField(_("Priority"), default=0)
     admin = models.BooleanField(_("Admin"), default=False)
     admin_request = models.BooleanField(
-        _("Asked to become admin"), default=False
+        _("Asked to become admin"),
+        default=False,
     )
     admin_request_messsage = models.TextField(_("Request message"), blank=True)
 

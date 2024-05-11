@@ -32,11 +32,12 @@ class EventFactory(DjangoModelFactory):
             start_date=obj.start_date,
             end_date=obj.start_date + timedelta(days=1),
             tzinfo=get_current_timezone(),
-        )
+        ),
     )
     location = factory.Faker("address")
     max_participant = random_maybe(
-        factory.Faker("random_int", min=1, max=50), p=0.1
+        factory.Faker("random_int", min=1, max=50),
+        p=0.1,
     )
     form_url = random_maybe(factory.Faker("url"), "", p=0.1)
     start_registration = random_maybe(
@@ -45,7 +46,7 @@ class EventFactory(DjangoModelFactory):
                 start_date=obj.start_date - timedelta(days=30),
                 end_date=obj.start_date - timedelta(days=15),
                 tzinfo=get_current_timezone(),
-            )
+            ),
         ),
         p=0.1,
     )
@@ -55,7 +56,7 @@ class EventFactory(DjangoModelFactory):
                 start_date=obj.start_date - timedelta(days=15),
                 end_date=obj.start_date - timedelta(days=1),
                 tzinfo=get_current_timezone(),
-            )
+            ),
         ),
         p=0.1,
     )
@@ -66,7 +67,7 @@ class EventFactory(DjangoModelFactory):
     def participants(self, create, extracted, **kwargs):
         if not create:
             return
-        nb_participants = random.randint(0, 15)  # noqa: S311
+        nb_participants = random.randint(0, 15)
         queryset = Student.objects.order_by("?")[:nb_participants]
         self.participants.add(*queryset)
 
@@ -74,7 +75,7 @@ class EventFactory(DjangoModelFactory):
     def bookmarks(self, create, extracted, **kwargs):
         if not create:
             return
-        nb_bookmarks = random.randint(0, 15)  # noqa: S311
+        nb_bookmarks = random.randint(0, 15)
         queryset = Student.objects.order_by("?")[:nb_bookmarks]
         self.bookmarks.add(*queryset)
 

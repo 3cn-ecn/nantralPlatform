@@ -18,7 +18,7 @@ def check_itii_answers(family_list):
         question_id = QuestionFamily.objects.get(code_name="itii").id
     except QuestionFamily.DoesNotExist:
         raise Exception(
-            "Pas de question labellisée 'itii' dans le questionnaire famille"
+            "Pas de question labellisée 'itii' dans le questionnaire famille",
         )
     question_value = 0
     new_family_list = []
@@ -39,7 +39,6 @@ def check_itii_answers(family_list):
 
 def itii_algorithm():
     """Relaunch the main algorithm but for itii only"""
-
     # get the questionnary
     print("Get questions...")
     question_list = get_question_list()
@@ -51,19 +50,20 @@ def itii_algorithm():
 
     # get the family who have said yes to itii question
     print("Get family answers...")
-    member2A_list, family_list = get_member_2A_list(question_list)  # noqa: N806
+    member2A_list, family_list = get_member_2A_list(question_list)
     family_list = check_itii_answers(family_list)
 
     # count difference of number of members per family
     print("Calculate the deltas...")
-    placed_1A = MembershipFamily.objects.filter(  # noqa: N806
-        role="1A", group__year=scholar_year()
+    placed_1A = MembershipFamily.objects.filter(
+        role="1A",
+        group__year=scholar_year(),
     ).prefetch_related("group")
     for f in family_list:
         nb_1A = len(
-            [m for m in placed_1A if m.group == f["family"]]  # noqa: N806
+            [m for m in placed_1A if m.group == f["family"]],
         )
-        nb_2A = f["nb"]  # noqa: N806
+        nb_2A = f["nb"]
         f["delta"] = nb_1A - nb_2A
 
     # match the correct number : we add families and priorise the little ones
@@ -91,7 +91,9 @@ def reset_itii():
     """Reset the decision of the algorithm"""
     print("Deleting...")
     m_list = MembershipFamily.objects.filter(
-        role="1A", group__year=scholar_year(), student__faculty="Iti"
+        role="1A",
+        group__year=scholar_year(),
+        student__faculty="Iti",
     )
     for m in m_list:
         m.group = None

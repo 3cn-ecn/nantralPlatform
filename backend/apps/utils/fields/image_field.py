@@ -18,15 +18,16 @@ class CustomImageFieldFile(models.ImageField.attr_class):
 
         if content != old_file:
             new_content = compress_image(
-                content, self.field.size, self.field.crop
+                content,
+                self.field.size,
+                self.field.crop,
             )
 
         super().save(name, new_content, save)
 
 
 class CustomImageField(models.ImageField):
-    """
-    A custom ImageField.
+    """A custom ImageField.
 
     ImageField that deletes the previous image file when a new file is uploaded,
     and compresses the uploaded image.
@@ -61,8 +62,8 @@ class CustomImageField(models.ImageField):
         return name, path, args, kwargs
 
     def create_filename(self, instance, filename):
-        app_label = instance._meta.app_label  # noqa: WPS437
-        model_name = instance._meta.model_name  # noqa: WPS437
+        app_label = instance._meta.app_label
+        model_name = instance._meta.model_name
         field_name = self.name
 
         extension = filename.split(".")[-1]

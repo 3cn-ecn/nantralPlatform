@@ -25,9 +25,13 @@ def vecthasnan(vect: np.ndarray) -> bool:
 def get_question_list():
     """Get the questions as a list of dicts, with keys id, coeff
     and if there is an equivalent question for families, and then
-    defines the NAN_VECT constant."""
+    defines the NAN_VECT constant.
+    """
     question_list = QuestionMember.objects.all().values(
-        "id", "coeff", "equivalent", "code_name"
+        "id",
+        "coeff",
+        "equivalent",
+        "code_name",
     )
     return question_list
 
@@ -56,7 +60,7 @@ def get_answer(member: MembershipFamily, question):
                 ans = (1 - quota) * ans + quota * f_ans_value
             except IndexError:
                 raise Exception(
-                    f"La famille {member.group} n'a pas répondu aux questions."
+                    f"La famille {member.group} n'a pas répondu aux questions.",
                 )
         return ans
 
@@ -73,7 +77,7 @@ def get_answer(member: MembershipFamily, question):
                 ][0]
             except IndexError:
                 raise Exception(
-                    f"La famille {member.group} n'a pas répondu aux questions."
+                    f"La famille {member.group} n'a pas répondu aux questions.",
                 )
             return f_ans.answer
         else:
@@ -83,7 +87,7 @@ def get_answer(member: MembershipFamily, question):
         # bug case : a member must not have two answers for the same question
         raise Exception(
             f"User {member.student} has multiple answers for the {question.id} \
-            question"
+            question",
         )
 
 
@@ -96,18 +100,20 @@ def get_answers(member: MembershipFamily, question_list):
     return np.array(answers)
 
 
-def get_member_1A_list(question_list, itii=False):  # noqa: N802
+def get_member_1A_list(question_list, itii=False):
     """Get the list of 1A students with their answers"""
     data = MembershipFamily.objects.filter(
-        role="1A", group__isnull=True
+        role="1A",
+        group__isnull=True,
     ).prefetch_related(
-        "answermember_set__question", "group__answerfamily_set__question"
+        "answermember_set__question",
+        "group__answerfamily_set__question",
     )
     if itii:
         data = data.filter(student__faculty="Iti")
     else:
         data = data.exclude(student__faculty="Iti")
-    member_1A_list = []  # noqa: N806
+    member_1A_list = []
     for membership in data:
         if len(membership.answermember_set.all()) >= len(question_list):
             answers = get_answers(membership, question_list)
@@ -115,23 +121,24 @@ def get_member_1A_list(question_list, itii=False):  # noqa: N802
     return member_1A_list
 
 
-def get_member_2A_list(question_list):  # noqa: N802
+def get_member_2A_list(question_list):
     """Get the list of 2A+ students with their answers"""
-
     # add all membershipFamily students
     data = MembershipFamily.objects.filter(
-        role="2A+", group__year=scholar_year()
+        role="2A+",
+        group__year=scholar_year(),
     ).prefetch_related(
-        "answermember_set__question", "group__answerfamily_set__question"
+        "answermember_set__question",
+        "group__answerfamily_set__question",
     )
-    member2A_list = []  # noqa: N806
+    member2A_list = []
     for membership in data:
         member2A_list.append(
             {
                 "member": membership,
                 "answers": get_answers(membership, question_list),
                 "family": membership.group,
-            }
+            },
         )
 
     # calculate the average answer for each family
@@ -160,19 +167,20 @@ def get_member_2A_list(question_list):  # noqa: N802
                         "member": m,
                         "answers": family["answers"],
                         "family": family["family"],
-                    }
+                    },
                 )
 
     return member2A_list, family_list
 
 
-def get_family_list(member2A_list):  # noqa: N803
-    """return a list of families with the average answer
-    based of all his members who completed the form"""
+def get_family_list(member2A_list):
+    """Return a list of families with the average answer
+    based of all his members who completed the form
+    """
     family_list = []
     for fam in Family.objects.filter(year=scholar_year()):
         answers_list = np.array(
-            [m["answers"] for m in member2A_list if m["family"] == fam]
+            [m["answers"] for m in member2A_list if m["family"] == fam],
         )
         answers_mean = np.nanmean(answers_list, axis=0)
         if answers_mean is np.nan:
@@ -184,15 +192,15 @@ def get_family_list(member2A_list):  # noqa: N803
                 "family": fam,
                 "answers": answers_mean,
                 "nb": fam.count_members_2A(),
-            }
+            },
         )
     return family_list
 
 
 def love_score(answers_a, answers_b, coeff_list):
     """Calculate the lovescore between two students.
-    The lower the score is, the best it is."""
-
+    The lower the score is, the best it is.
+    """
     somme = np.nansum(np.abs(answers_a - answers_b) * coeff_list)
     somme_coeff = np.sum((1 - np.isnan(answers_a + answers_b)) * coeff_list)
 
@@ -204,10 +212,10 @@ def love_score(answers_a, answers_b, coeff_list):
         return np.inf
 
 
-def make_same_length(member1A_list, member2A_list, family_list):  # noqa: N803
+def make_same_length(member1A_list, member2A_list, family_list):
     """Add or delete 2A students so as to have the same number
-    than 1A students"""
-
+    than 1A students
+    """
     delta_len = len(member1A_list) - len(member2A_list)
 
     if delta_len > 0:  # more first year than second year
@@ -222,7 +230,7 @@ def make_same_length(member1A_list, member2A_list, family_list):  # noqa: N803
                     "member": f"Fake member {i}",
                     "answers": family_list[i % n]["answers"],
                     "family": family_list[i % n]["family"],
-                }
+                },
             )
             i += 1
 
@@ -241,16 +249,16 @@ def make_same_length(member1A_list, member2A_list, family_list):  # noqa: N803
                 index = random.choice(index_members)
             except IndexError:
                 raise Exception(
-                    "Erreur : pas encore assez de 1A pour faire tourner l'algo."
+                    "Erreur : pas encore assez de 1A pour faire tourner l'algo.",
                 )
-            member2A_list = np.delete(member2A_list, index)  # noqa: N806
+            member2A_list = np.delete(member2A_list, index)
             i += 1
 
     return member2A_list
 
 
 def prevent_lonelyness(
-    member1A_list,  # noqa: N803
+    member1A_list,
     member2A_list,
     family_list,
     q_id,
@@ -259,8 +267,8 @@ def prevent_lonelyness(
     coeff_list,
 ):
     """Empêcher de créer des familles avec des personnes seules du point de vue
-    d'un critère : femmes, étudiants étrangers..."""
-
+    d'un critère : femmes, étudiants étrangers...
+    """
     # on regarde pour chaque membre le critère
     for m in member1A_list:
         m[q_name] = m["answers"][q_id] == q_val
@@ -273,14 +281,14 @@ def prevent_lonelyness(
                 m
                 for m in member1A_list
                 if m[q_name] and m["family"] == f["family"]
-            ]
+            ],
         )
         f["nb_criteria_2A"] = len(
             [
                 m
                 for m in member2A_list
                 if m[q_name] and m["family"] == f["family"]
-            ]
+            ],
         )
     # on cherche les familles avec une personne seule pour le critère
     for f in family_list:
@@ -314,7 +322,9 @@ def prevent_lonelyness(
                 candidate_member = min(
                     candidate_member_list,
                     key=lambda m: love_score(
-                        m["answers"], lonely_member["answers"], coeff_list
+                        m["answers"],
+                        lonely_member["answers"],
+                        coeff_list,
                     ),
                 )
                 # on récupère l'index du candidat dans la liste member1A_list
@@ -342,7 +352,6 @@ def prevent_lonelyness(
 
 def solve_problem(member_list1, member_list2, coeff_list):
     """Solve the matching problem"""
-
     # randomize lists in order to avoid unwanted effects
     print("Randomize lists...")
     random.shuffle(member_list1)
@@ -374,23 +383,24 @@ def solve_problem(member_list1, member_list2, coeff_list):
     # leurs préférences
     print("Solving...")
     game = StableMarriage.create_from_dictionaries(
-        first_year_pref, second_year_pref
+        first_year_pref,
+        second_year_pref,
     )
     dict_solved = game.solve()
 
     # get the family for each 1A
     print("Add families to 1A members")
-    for player_1A, player_2A in dict_solved.items():  # noqa: N806
-        id_1A = player_1A.name  # noqa: N806
-        id_2A = player_2A.name  # noqa: N806
+    for player_1A, player_2A in dict_solved.items():
+        id_1A = player_1A.name
+        id_2A = player_2A.name
         member_list1[id_1A]["family"] = member_list2[id_2A]["family"]
 
     return member_list1
 
 
-def save(member1A_list):  # noqa: N803
+def save(member1A_list):
     """Save the families for 1A students in the database"""
-    for member1A in member1A_list:  # noqa: N806
+    for member1A in member1A_list:
         member1A["member"].group = member1A["family"]
         member1A["member"].save()
 
@@ -399,7 +409,8 @@ def reset():
     """Reset the decision of the algorithm"""
     print("Deleting...")
     members = MembershipFamily.objects.filter(
-        role="1A", group__year=scholar_year()
+        role="1A",
+        group__year=scholar_year(),
     )
     for m in members:
         m.group = None
