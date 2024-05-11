@@ -9,8 +9,8 @@ test = "python manage.py test"
 makemigrations = "python manage.py makemigrations"
 migrate = "python manage.py migrate"
 django = "python manage.py"
-lint = "flakeheaven lint"
-"lint:fix" = "sh -c 'black . && isort .'"
+lint = "ruff check"
+"lint:fix" = "sh -c 'ruff check --fix . && ruff format'"
 "test:coverage" = "coverage run --source='.' manage.py test"
 "fakedata" = "python manage.py fakedata"
 
@@ -51,6 +51,7 @@ factory-boy = "~=3.3.0"
 
 [dev-packages]
 coverage = "~=7.3"
+ruff = "~=0.4"
 
 [requires]
 python_version = "3.10"
