@@ -29,7 +29,7 @@ class Family(AbstractGroup):
         # set the year
         if not self.year:
             self.year = timezone.now().year
-        super(Family, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def get_answers_dict(self):
         initial = {}
@@ -216,7 +216,7 @@ class QuestionMember(BaseQuestion):
             self.page = self.group.page
             self.coeff = self.group.coeff
             self.order = self.group.order
-            super(QuestionMember, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             for o in Option.objects.filter(question=self):
                 o.delete()
             for o in self.group.option_set.all():
@@ -226,7 +226,7 @@ class QuestionMember(BaseQuestion):
                     text_en=o.text_en,
                 )
         else:
-            super(QuestionMember, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
 
 
 class QuestionFamily(BaseQuestion):

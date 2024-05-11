@@ -24,11 +24,11 @@ def check_itii_answers(family_list):
     new_family_list = []
     for f in family_list:
         try:
-            f_ans = [
+            f_ans = next(
                 ans
                 for ans in f["family"].answerfamily_set.all()
                 if ans.question.id == question_id
-            ][0]
+            )
             if f_ans.answer == question_value:
                 new_family_list.append(f)
         except IndexError:

@@ -42,11 +42,11 @@ def main_algorithm():
 
     # prevent lonely foreign students
     print("Checking that no international student is alone")
-    question_id = [
+    question_id = next(
         i
         for i in range(len(question_list))
         if question_list[i]["code_name"] == "International"
-    ][0]
+    )
     question_value = 0
     member1A_list = prevent_lonelyness(
         member1A_list,
@@ -60,11 +60,11 @@ def main_algorithm():
 
     # prevent lonely girls
     print("checking that no girl is alone")
-    question_id = [
+    question_id = next(
         i
         for i in range(len(question_list))
         if question_list[i]["code_name"] == "Genre"
-    ][0]
+    )
     question_value = 1
     member1A_list = prevent_lonelyness(
         member1A_list,

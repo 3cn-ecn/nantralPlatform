@@ -50,11 +50,11 @@ def get_answer(member: MembershipFamily, question):
         if member.role == "2A+" and question["equivalent"] is not None:
             # we check if we have to penderate with a family question
             try:
-                f_ans = [
+                f_ans = next(
                     ans
                     for ans in member.group.answerfamily_set.all()
                     if ans.question.id == question["equivalent"]
-                ][0]
+                )
                 f_ans_value = f_ans.answer
                 quota = f_ans.question.quota / 100
                 ans = (1 - quota) * ans + quota * f_ans_value
@@ -70,11 +70,11 @@ def get_answer(member: MembershipFamily, question):
             # ordinary case : it is an only-family question (quota=100)
             # or if he didn't answer we take the family answer
             try:
-                f_ans = [
+                f_ans = next(
                     ans
                     for ans in member.group.answerfamily_set.all()
                     if ans.question.id == question["equivalent"]
-                ][0]
+                )
             except IndexError:
                 raise Exception(
                     f"La famille {member.group} n'a pas répondu aux questions.",
@@ -148,9 +148,9 @@ def get_member_2A_list(question_list):
     for m in member2A_list:
         if vecthasnan(m["answers"]):
             # we search the family answers of this member
-            fam_answers = [
+            fam_answers = next(
                 f for f in family_list if f["family"] == m["family"]
-            ][0]["answers"]
+            )["answers"]
             if vectisnan(m["answers"]):
                 m["answers"] = fam_answers
             else:
@@ -294,14 +294,14 @@ def prevent_lonelyness(
     for f in family_list:
         if f["nb_criteria_1A"] == 1 and f["nb_criteria_2A"] == 0:
             # on récupère le membre seul dans la famille et son id
-            lonely_member_id = [
+            lonely_member_id = next(
                 i
                 for i in range(len(member1A_list))
                 if (
                     member1A_list[i][q_name]
                     and member1A_list[i]["family"] == f["family"]
                 )
-            ][0]
+            )
             lonely_member = member1A_list[lonely_member_id]
             # on sélectionne les membres dans une famille qui ont déjà un membre
             # avec ce critère où on peut rajouter le membre seul
@@ -328,16 +328,16 @@ def prevent_lonelyness(
                     ),
                 )
                 # on récupère l'index du candidat dans la liste member1A_list
-                candidate_member_id = [
+                candidate_member_id = next(
                     i
                     for i in range(len(member1A_list))
                     if member1A_list[i] == candidate_member
-                ][0]
-                candidate_family_id = [
+                )
+                candidate_family_id = next(
                     i
                     for i in range(len(family_list))
                     if family_list[i]["family"] == candidate_member["family"]
-                ][0]
+                )
                 # on échange les familles
                 member1A_list[lonely_member_id]["family"] = family_list[
                     candidate_family_id

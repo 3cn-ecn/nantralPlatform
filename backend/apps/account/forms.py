@@ -97,11 +97,10 @@ class SignUpForm(UserCreationForm):
             User.objects.get(email=email)
             raise forms.ValidationError(_("Cet email est déjà utilisé."))
         except User.DoesNotExist:
-            if email and confirm_email:
-                if email != confirm_email:
-                    raise forms.ValidationError(
-                        _("Les emails ne correspondent pas."),
-                    )
+            if email and confirm_email and email != confirm_email:
+                raise forms.ValidationError(
+                    _("Les emails ne correspondent pas."),
+                )
             return cleaned_data
 
     class Meta:

@@ -9,7 +9,7 @@ AUTH_HEADER = {"Authorization": f"Bot {settings.DISCORD_TOKEN}"}
 def send_message(
     channel_id: int,
     message: str,
-    embeds: list[dict] = None,
+    embeds: list[dict] | None = None,
 ) -> str:
     payload = {"content": message}
     if embeds is not None:

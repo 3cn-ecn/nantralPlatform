@@ -28,7 +28,7 @@ class Housing(models.Model):
         ):
             self.latitude = coordinates["lat"]
             self.longitude = coordinates["long"]
-        super(Housing, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.address if self.address else self.id

@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,7 +23,9 @@ from .forms import (
     SocialLinkGroupFormset,
     UpdateGroupForm,
 )
-from .models import AbstractGroup
+
+if TYPE_CHECKING:
+    from .models import AbstractGroup
 
 
 class BaseDetailGroupView(DetailView):

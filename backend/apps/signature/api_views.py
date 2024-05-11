@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from django.db.models import Max, QuerySet
 
@@ -6,9 +7,11 @@ from rest_framework import permissions, views
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from apps.account.models import User
 from apps.group.models import Group, Membership
 from apps.group.serializers import GroupPreviewSerializer, MembershipSerializer
+
+if TYPE_CHECKING:
+    from apps.account.models import User
 
 
 class SignatureApiView(views.APIView):

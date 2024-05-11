@@ -29,8 +29,9 @@ urlpatterns = [
         ColocathlonFormView.as_view(),
         name="colocathlon-edit",
     ),
-] + make_group_url_patterns(
-    url_base="coloc",
-    detail_view=DetailRoommatesView.as_view(),
-    update_view=UpdateRoommatesView.as_view(),
-)
+    *make_group_url_patterns(
+        url_base="coloc",
+        detail_view=DetailRoommatesView.as_view(),
+        update_view=UpdateRoommatesView.as_view(),
+    ),
+]

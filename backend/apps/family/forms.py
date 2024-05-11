@@ -52,7 +52,7 @@ Member2AFormset = forms.inlineformset_factory(
 
 class FamilyQuestionsForm(forms.Form):
     def __init__(self, initial=None, *args, **kwargs):
-        super(FamilyQuestionsForm, self).__init__(
+        super().__init__(
             initial=initial,
             *args,
             **kwargs,
@@ -107,7 +107,7 @@ class FamilyQuestionItiiForm(FamilyQuestionsForm):
 
 class MemberQuestionsForm(forms.Form):
     def __init__(self, page, is_2Aplus, initial, *args, **kwargs):  # noqa:N803
-        super(MemberQuestionsForm, self).__init__(
+        super().__init__(
             initial=initial,
             *args,
             **kwargs,

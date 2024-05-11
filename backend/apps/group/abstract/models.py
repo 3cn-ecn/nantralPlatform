@@ -182,7 +182,7 @@ class AdminRightsRequest(models.Model):
     def save(self, domain: str, *args, **kwargs):
         self.date = timezone.now()
         self.domain = domain
-        super(AdminRightsRequest, self).save()
+        super().save()
         group = get_object_from_full_slug(self.group)
         try:
             webhook = DiscordWebhook(
@@ -209,7 +209,7 @@ class AdminRightsRequest(models.Model):
             webhook.execute()
         except Exception as e:
             logger.error(e)
-        super(AdminRightsRequest, self).save()
+        super().save()
 
     @property
     def accept_url(self):
