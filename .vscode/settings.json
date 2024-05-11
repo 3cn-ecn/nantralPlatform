@@ -25,19 +25,18 @@
   // python formatting
   "[python]": {
     "editor.tabSize": 4,
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
   "[django-html]": {
     "editor.formatOnSave": false
   },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "off",
-  "flake8.args": ["--config", "backend/.flake8"],
-  "flake8.importStrategy": "fromEnvironment",
-  "black-formatter.args": ["--config", "backend/pyproject.toml"],
-  "black-formatter.importStrategy": "fromEnvironment",
-  "isort.args": ["--settings-path", "backend/pyproject.toml"],
-  "isort.importStrategy": "fromEnvironment",
+  "python.analysis.extraPaths": ["./backend"],
+  "python.autoComplete.extraPaths": ["./backend"],
   // python env
   "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/",
   "python.envFile": "${workspaceFolder}/backend/config/settings/.env",
