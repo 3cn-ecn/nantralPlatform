@@ -28,7 +28,7 @@
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
   "[django-html]": {
-    "editor.formatOnSave": false
+    "editor.defaultFormatter": "batisteo.vscode-django"
   },
   "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml"
