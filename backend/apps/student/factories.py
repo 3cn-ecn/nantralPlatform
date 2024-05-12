@@ -1,3 +1,4 @@
+import logging
 from collections import OrderedDict
 
 from django.db.models.signals import post_save
@@ -9,6 +10,8 @@ from apps.account.factories import UserFactory
 from apps.utils.factories.fake_data_generator import FakeDataGenerator
 
 from .models import FACULTIES, PATHS, Student
+
+logger = logging.getLogger(__name__)
 
 
 @factory.django.mute_signals(post_save)  # Use this because OneToOneField
@@ -42,7 +45,7 @@ class StudentFakeData(FakeDataGenerator):
     """
 
     def make_students(self):
-        print("Warning: this can take a few minutes")
+        logger.info("Warning: this can take a few minutes")
         StudentFactory.create_batch(100)
 
     @FakeDataGenerator.locale("en_US")

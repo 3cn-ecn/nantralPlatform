@@ -1,9 +1,8 @@
-# flake8: noqa
-# this is the first version of the algorithm !
-# it was made to use datas from a csv file,
-# extracted from a google form
-# feel free to use it if a year you can't use
-# nantral platform anymore
+# This is the first version of the algorithm! It was made to use datas from a
+# csv file, extracted from a google form. Feel free to use it if a year you
+# can't use nantral platform anymore
+
+# ruff: noqa
 
 import copy
 import csv

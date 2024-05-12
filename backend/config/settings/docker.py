@@ -3,11 +3,13 @@
 DO NOT USE IN PRODUCTION.
 """
 
+# ruff: noqa: F403, F405
+
 from celery.schedules import crontab
 
 from .base import *
 
-print("Using docker config")
+print("Using docker config")  # noqa: T201
 
 # DJANGO SETTINGS
 
@@ -32,16 +34,13 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation."
-        + "UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-        + "CommonPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        "NAME": "django.contrib.auth.password_validation."
-        + "NumericPasswordValidator",
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 

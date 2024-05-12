@@ -1,6 +1,8 @@
+# ruff: noqa: F403, F405
+
 from .base import *
 
-print("Running dev settings")
+print("Running dev settings")  # noqa: T201
 
 # DJANGO SETTINGS
 

@@ -1,4 +1,7 @@
-# spell-checker: words dtype
+# spell-checker: words dtype,
+# ruff: noqa: N806
+
+import logging
 
 import numpy as np
 
@@ -12,21 +15,23 @@ from .utils import (
     solve_problem,
 )
 
+logger = logging.getLogger(__name__)
+
 
 def main_algorithm():
     # get the questionnary
-    print("Get questions...")
+    logger.info("Get questions...")
     question_list = get_question_list()
     coeff_list = np.array([q["coeff"] for q in question_list], dtype=int)
 
     # get the members list with their answers for each question
-    print("Get 1A answers...")
+    logger.info("Get 1A answers...")
     member1A_list = get_member_1A_list(question_list)
-    print("Get 2A answers...")
+    logger.info("Get 2A answers...")
     member2A_list, family_list = get_member_2A_list(question_list)
 
     # Add or delete 2A members so as to have the same length as 1A members
-    print("Checking the length...")
+    logger.info("Checking the length...")
     member2A_list_plus = make_same_length(
         member1A_list,
         member2A_list,
@@ -41,7 +46,7 @@ def main_algorithm():
     )
 
     # prevent lonely foreign students
-    print("Checking that no international student is alone")
+    logger.info("Checking that no international student is alone")
     question_id = next(
         i
         for i in range(len(question_list))
@@ -59,7 +64,7 @@ def main_algorithm():
     )
 
     # prevent lonely girls
-    print("checking that no girl is alone")
+    logger.info("checking that no girl is alone")
     question_id = next(
         i
         for i in range(len(question_list))
@@ -77,8 +82,8 @@ def main_algorithm():
     )
 
     # saving in database
-    print("Saving...")
+    logger.info("Saving...")
     save(member1A_list)
 
-    print("Done!")
+    logger.info("Done!")
     return member1A_list, member2A_list, family_list

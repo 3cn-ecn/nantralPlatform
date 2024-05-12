@@ -1,4 +1,7 @@
 # spell-checker: words dtype
+# ruff: noqa: N806
+
+import logging
 
 import numpy as np
 
@@ -11,6 +14,8 @@ from .utils import (
     save,
     solve_problem,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def check_itii_answers(family_list):
@@ -40,21 +45,21 @@ def check_itii_answers(family_list):
 def itii_algorithm():
     """Relaunch the main algorithm but for itii only"""
     # get the questionnary
-    print("Get questions...")
+    logger.info("Get questions...")
     question_list = get_question_list()
     coeff_list = np.array([q["coeff"] for q in question_list], dtype=int)
 
     # get the members list with their answers for each question
-    print("Get 1A itii answers...")
+    logger.info("Get 1A itii answers...")
     itii_list = get_member_1A_list(question_list, itii=True)
 
     # get the family who have said yes to itii question
-    print("Get family answers...")
+    logger.info("Get family answers...")
     member2A_list, family_list = get_member_2A_list(question_list)
     family_list = check_itii_answers(family_list)
 
     # count difference of number of members per family
-    print("Calculate the deltas...")
+    logger.info("Calculate the deltas...")
     placed_1A = MembershipFamily.objects.filter(
         role="1A",
         group__year=scholar_year(),
@@ -80,16 +85,16 @@ def itii_algorithm():
     itii_result_list = solve_problem(itii_list, family_list, coeff_list)
 
     # saving in database
-    print("Saving...")
+    logger.info("Saving...")
     save(itii_result_list)
 
-    print("Done!")
+    logger.info("Done!")
     return itii_list, member2A_list, family_list
 
 
 def reset_itii():
     """Reset the decision of the algorithm"""
-    print("Deleting...")
+    logger.info("Deleting...")
     m_list = MembershipFamily.objects.filter(
         role="1A",
         group__year=scholar_year(),
@@ -98,4 +103,4 @@ def reset_itii():
     for m in m_list:
         m.group = None
         m.save()
-    print("Deleted!")
+    logger.info("Deleted!")

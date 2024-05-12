@@ -1,5 +1,7 @@
 # spell-checker: words vect vecthasnan vectisnan ndarray
+# ruff: noqa: N802, N803, N806, PLR0913
 
+import logging
 import random
 import sys
 
@@ -10,6 +12,7 @@ from ..models import Family, MembershipFamily, QuestionMember
 from ..utils import scholar_year
 
 sys.setrecursionlimit(150000)
+logger = logging.getLogger(__name__)
 
 
 def vectisnan(vect: np.ndarray) -> bool:
@@ -131,15 +134,14 @@ def get_member_2A_list(question_list):
         "answermember_set__question",
         "group__answerfamily_set__question",
     )
-    member2A_list = []
-    for membership in data:
-        member2A_list.append(
-            {
-                "member": membership,
-                "answers": get_answers(membership, question_list),
-                "family": membership.group,
-            },
-        )
+    member2A_list = [
+        {
+            "member": membership,
+            "answers": get_answers(membership, question_list),
+            "family": membership.group,
+        }
+        for membership in data
+    ]
 
     # calculate the average answer for each family
     family_list = get_family_list(member2A_list)
@@ -158,17 +160,16 @@ def get_member_2A_list(question_list):
                     m["answers"][i] = fam_answers[i]
 
     # add the non_subscribed_members
-    for family in family_list:
-        if family["family"].non_subscribed_members:
-            m_list = family["family"].non_subscribed_members.split(",")
-            for m in m_list:
-                member2A_list.append(
-                    {
-                        "member": m,
-                        "answers": family["answers"],
-                        "family": family["family"],
-                    },
-                )
+    member2A_list += [
+        {
+            "member": m,
+            "answers": f["answers"],
+            "family": f["family"],
+        }
+        for f in family_list
+        if f["family"].non_subscribed_members
+        for m in f["family"].non_subscribed_members.split(",")
+    ]
 
     return member2A_list, family_list
 
@@ -353,12 +354,12 @@ def prevent_lonelyness(
 def solve_problem(member_list1, member_list2, coeff_list):
     """Solve the matching problem"""
     # randomize lists in order to avoid unwanted effects
-    print("Randomize lists...")
+    logger.info("Randomize lists...")
     random.shuffle(member_list1)
     random.shuffle(member_list2)
 
     # creating the dicts
-    print("Creating the dicts for solving...")
+    logger.info("Creating the dicts for solving...")
     first_year_pref = {}
     second_year_pref = {}
     for i in range(len(member_list1)):
@@ -381,7 +382,7 @@ def solve_problem(member_list1, member_list2, coeff_list):
 
     # make the marriage and solve the problem! Les 1A sont privilégiés dans
     # leurs préférences
-    print("Solving...")
+    logger.info("Solving...")
     game = StableMarriage.create_from_dictionaries(
         first_year_pref,
         second_year_pref,
@@ -389,7 +390,7 @@ def solve_problem(member_list1, member_list2, coeff_list):
     dict_solved = game.solve()
 
     # get the family for each 1A
-    print("Add families to 1A members")
+    logger.info("Add families to 1A members")
     for player_1A, player_2A in dict_solved.items():
         id_1A = player_1A.name
         id_2A = player_2A.name
@@ -407,7 +408,7 @@ def save(member1A_list):
 
 def reset():
     """Reset the decision of the algorithm"""
-    print("Deleting...")
+    logger.info("Deleting...")
     members = MembershipFamily.objects.filter(
         role="1A",
         group__year=scholar_year(),
@@ -415,4 +416,4 @@ def reset():
     for m in members:
         m.group = None
         m.save()
-    print("Deleted!")
+    logger.info("Deleted!")
