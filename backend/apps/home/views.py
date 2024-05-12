@@ -106,7 +106,7 @@ def service_worker(request):
         "src/legacy/app/sw.ts",
     )
     if settings.DJANGO_VITE_DEV_MODE:
-        response = requests.get(service_worker_url)
+        response = requests.get(service_worker_url)  # noqa: S113 (dev only)
         return HttpResponse(
             response.content,
             content_type="application/javascript",
@@ -117,7 +117,7 @@ def service_worker(request):
             settings.STATIC_ROOT,
             parsed_url.path.replace(settings.STATIC_URL, "", 1),
         )
-        return FileResponse(open(path_to_file, "rb"))
+        return FileResponse(open(path_to_file, "rb"))  # noqa: SIM115 (file closed by FileResponse)
 
 
 @require_http_methods(["GET"])
@@ -167,7 +167,7 @@ def handler500(request, *args, **argv):
 class DoIHaveToLoginView(APIView):
     """API endpoint to check if user has to login to see a page"""
 
-    def get(self, request, format=None):
+    def get(self, request, format=None):  # noqa: A002
         path = request.GET.get("path")
         try:
             view, args, kwargs = resolve(path)

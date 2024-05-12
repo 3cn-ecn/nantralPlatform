@@ -1,16 +1,19 @@
+# ruff: noqa: N806
+
 from datetime import datetime
 
-from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from extra_settings.models import Setting
 
+from apps.account.models import User
+
 from .models import Family, MembershipFamily
 
-User = get_user_model()
+FIRST_MONTH_OF_NEW_CYCLE = 6  # June
 
 
-def scholar_year(date: datetime = timezone.now()) -> int:
+def scholar_year(date: datetime | None = None) -> int:
     """Calculate the current scholar year. The date of changement from one
     scholar year to another is fixed on the 1st June.
 
@@ -30,9 +33,11 @@ def scholar_year(date: datetime = timezone.now()) -> int:
         The scholar year corresponding to the given date
 
     """
+    if date is None:
+        date = timezone.now()
     year = date.year
     month = date.month
-    if month < 6:
+    if month < FIRST_MONTH_OF_NEW_CYCLE:
         year -= 1
     return year
 
@@ -165,8 +170,8 @@ def show_sensible_data(user: User, membership: MembershipFamily = None) -> bool:
     phase = Setting.get("PHASE_PARRAINAGE")
     if membership:
         # if membership exists, we are sure of the 1A/2A property
-        return is_2A or (phase >= 4)
+        return is_2A or (phase >= 4)  # noqa: PLR2004
     else:
         # here we are not sure of the 1A/2A property so we always hide,
         # except before the 1A have access to the form
-        return phase >= 4 or (phase == 1 and is_2A)
+        return phase >= 4 or (phase == 1 and is_2A)  # noqa: PLR2004

@@ -38,7 +38,7 @@ class SocialLink(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Type du lien",
     )
-    slug = models.SlugField(verbose_name="Slug du groupe", null=True)
+    slug = models.SlugField(verbose_name="Slug du groupe", null=True)  # noqa: DJ001
 
     class Meta:
         verbose_name = "Lien de Réseau Social"

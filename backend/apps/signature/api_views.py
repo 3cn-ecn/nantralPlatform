@@ -1,7 +1,7 @@
-from datetime import datetime
 from typing import TYPE_CHECKING
 
 from django.db.models import Max, QuerySet
+from django.utils import timezone
 
 from rest_framework import permissions, views
 from rest_framework.request import Request
@@ -13,6 +13,9 @@ from apps.group.serializers import GroupPreviewSerializer, MembershipSerializer
 if TYPE_CHECKING:
     from apps.account.models import User
 
+FIRST_MONTH_OF_NEW_CYCLE = 8  # August
+MAX_YEAR = 3
+
 
 class SignatureApiView(views.APIView):
     """API endpoint for signature."""
@@ -22,11 +25,11 @@ class SignatureApiView(views.APIView):
     def get_year(self) -> int:
         """Returns 1st year, 2nd year, or 3d year."""
         promo = self.request.user.student.promo
-        year = datetime.now().year - promo
-        if datetime.now().month >= 8:
+        year = timezone.now().year - promo
+        if timezone.now().month >= FIRST_MONTH_OF_NEW_CYCLE:
             year += 1
-        if year > 3:
-            year = 3  # last year is 3rd year
+        if year > MAX_YEAR:
+            year = MAX_YEAR
         return year
 
     def get_academic_groups(self) -> QuerySet[Group]:
@@ -47,8 +50,8 @@ class SignatureApiView(views.APIView):
         user: User = self.request.user
         club_memberships = user.student.membership_set.filter(
             group__group_type__slug__in=["club", "admin"],
-            begin_date__lte=datetime.now(),
-            end_date__gte=datetime.now(),
+            begin_date__lte=timezone.now(),
+            end_date__gte=timezone.now(),
         ).order_by("-begin_date")
         return club_memberships
 

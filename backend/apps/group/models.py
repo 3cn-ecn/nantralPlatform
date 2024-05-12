@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.loader import render_to_string
@@ -9,12 +8,11 @@ from django.utils.translation import gettext_lazy as _
 from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
 
+from apps.account.models import User
 from apps.sociallink.models import SocialLink
 from apps.student.models import Student
 from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import SlugModel
-
-User = get_user_model()
 
 
 class GroupType(models.Model):
@@ -270,13 +268,11 @@ class Group(models.Model, SlugModel):
     video1 = models.URLField(
         verbose_name=_("Video link 1"),
         max_length=200,
-        null=True,
         blank=True,
     )
     video2 = models.URLField(
         verbose_name=_("Video link 2"),
         max_length=200,
-        null=True,
         blank=True,
     )
     social_links = models.ManyToManyField(
@@ -304,6 +300,45 @@ class Group(models.Model, SlugModel):
         related_name="+",
     )
 
+    class Meta:
+        verbose_name = "groupe"
+
+    def __str__(self) -> str:
+        return self.short_name
+
+    def save(self, *args, **kwargs) -> None:
+        """Save an instance of the model in the database."""
+        # fill default values
+        if not self.short_name:
+            self.short_name = self.name
+        if self.pk is None:
+            self.created_by = self.updated_by
+        if self.pk is None and self.group_type.private_by_default:
+            self.private = True
+        # create the slug
+        self.set_slug(self.short_name, max_length=40)
+        # save the instance
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self) -> str:
+        """Get the url of the object."""
+        return f"/group/@{self.slug}"
+
+    def clean(self) -> None:
+        """Test if the object is valid (no incompatibility between fields)."""
+        if self.public and self.private:
+            raise ValidationError(
+                _(
+                    "You cannot set both 'public' and "
+                    "'private' properties to True.",
+                ),
+            )
+
+    def delete(self, *args, **kwargs) -> None:
+        self.icon.delete(save=False)
+        self.banner.delete(save=False)
+        super().delete(*args, **kwargs)
+
     @property
     def scholar_year(self) -> str:
         """Returns the year of the group in scholar year format.
@@ -326,41 +361,6 @@ class Group(models.Model, SlugModel):
             return f"{self.creation_year}-{self.creation_year+1}"
         else:
             return ""
-
-    class Meta:
-        verbose_name = "groupe"
-
-    def __str__(self) -> str:
-        return self.short_name
-
-    def clean(self) -> None:
-        """Test if the object is valid (no incompatibility between fields)."""
-        if self.public and self.private:
-            raise ValidationError(
-                _(
-                    "You cannot set both 'public' and "
-                    "'private' properties to True.",
-                ),
-            )
-
-    def save(self, *args, **kwargs) -> None:
-        """Save an instance of the model in the database."""
-        # fill default values
-        if not self.short_name:
-            self.short_name = self.name
-        if self.pk is None:
-            self.created_by = self.updated_by
-        if self.pk is None and self.group_type.private_by_default:
-            self.private = True
-        # create the slug
-        self.set_slug(self.short_name, max_length=40)
-        # save the instance
-        super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs) -> None:
-        self.icon.delete(save=False)
-        self.banner.delete(save=False)
-        super().delete(*args, **kwargs)
 
     def is_admin(self, user: User) -> bool:
         """Check if a user has the admin rights for this group.
@@ -413,7 +413,7 @@ class Group(models.Model, SlugModel):
             The formatted label of the category of the group.
 
         """
-        return eval(
+        return eval(  # noqa: S307
             self.group_type.category_expr,
             {"group": self},
         )
@@ -427,14 +427,10 @@ class Group(models.Model, SlugModel):
             The formatted label of the category of the group.
 
         """
-        return eval(
+        return eval(  # noqa: S307
             self.group_type.sub_category_expr,
             {"group": self},
         )
-
-    def get_absolute_url(self) -> str:
-        """Get the url of the object."""
-        return f"/group/@{self.slug}"
 
 
 class Membership(models.Model):

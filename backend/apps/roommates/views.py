@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Any
 
 from django.conf import settings
@@ -9,10 +10,16 @@ from django.views.generic import CreateView, ListView, TemplateView, UpdateView
 from extra_settings.models import Setting
 
 from apps.group.abstract.views import DetailGroupView, UpdateGroupView
-from apps.utils.accessMixins import UserIsMember
+from apps.utils.access_mixins import UserIsMember
 
 from .forms import UpdateHousingForm
 from .models import Housing, Roommates
+
+
+class ColocathlonPhase(Enum):
+    UNAVAILABLE = 0
+    ROOMMATES_REGISTRATION = 1
+    PARTICIPANTS_REGISTRATION = 2
 
 
 class HousingMap(LoginRequiredMixin, TemplateView):
@@ -21,9 +28,12 @@ class HousingMap(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["MAPBOX_API_KEY"] = settings.MAPBOX_API_KEY
-        phase_colocathlon = Setting.get("PHASE_COLOCATHLON")
-        context["colocathlon"] = phase_colocathlon
-        if phase_colocathlon == 2:
+        colocathlon_phase_id = Setting.get("PHASE_COLOCATHLON")
+        context["colocathlon"] = colocathlon_phase_id
+        if (
+            ColocathlonPhase(colocathlon_phase_id)
+            == ColocathlonPhase.PARTICIPANTS_REGISTRATION
+        ):
             roommate = Roommates.objects.filter(
                 colocathlon_participants=self.request.user.student,
             ).first()

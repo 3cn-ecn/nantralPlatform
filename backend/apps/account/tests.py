@@ -1,4 +1,5 @@
 # spell-checker: words utest uidb
+# ruff: noqa: S105, S106
 
 from datetime import datetime, timezone
 

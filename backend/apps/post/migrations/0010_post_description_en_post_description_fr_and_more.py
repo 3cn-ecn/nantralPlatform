@@ -6,7 +6,7 @@ import django_ckeditor_5.fields
 
 
 def copy_data(apps, schema_editor):
-    Post = apps.get_model("post", "post")
+    Post = apps.get_model("post", "post")  # noqa: N806
     for obj in Post.objects.all():
         if not obj.title_fr:
             obj.title_fr = obj.title

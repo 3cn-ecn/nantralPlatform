@@ -1,9 +1,14 @@
+# ruff: noqa: N815, N802
+
 from django.db import models
 from django.urls.base import reverse
 from django.utils import timezone
 
 from apps.group.abstract.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
+
+MAX_2APLUS_PER_FAMILY = 7
+MIN_2APLUS_PER_FAMILY = 3
 
 
 class Family(AbstractGroup):
@@ -14,7 +19,6 @@ class Family(AbstractGroup):
     non_subscribed_members = models.CharField(
         "Autres parrains",
         max_length=300,
-        null=True,
         blank=True,
         help_text="Si certains des membres de la famille ne sont pas inscrits \
             sur Nantral Platform, vous pouvez les ajouter ici. Séparez les \
@@ -55,7 +59,11 @@ class Family(AbstractGroup):
         nb_done = self.answerfamily_set.all().count()
         nb_tot = QuestionFamily.objects.all().count()
         nb_members = self.count_members_2A()
-        return nb_done >= nb_tot and nb_members >= 3 and nb_members <= 7
+        return (
+            nb_done >= nb_tot
+            and nb_members >= MIN_2APLUS_PER_FAMILY
+            and nb_members <= MAX_2APLUS_PER_FAMILY
+        )
 
 
 class MembershipFamily(NamedMembership):
@@ -106,22 +114,18 @@ class QuestionPage(models.Model):
     name_en = models.CharField("Nom (en)", max_length=100)
     details1A = models.TextField(
         "Infos 1A",
-        null=True,
         blank=True,
     )
     details1A_en = models.TextField(
         "Infos 1A (en)",
-        null=True,
         blank=True,
     )
     details2A = models.TextField(
         "Infos 2A+",
-        null=True,
         blank=True,
     )
     details2A_en = models.TextField(
         "Infos 2A+ (en)",
-        null=True,
         blank=True,
     )
     order = models.IntegerField(
@@ -146,13 +150,11 @@ class BaseQuestion(models.Model):
     details = models.CharField(
         "Informations supplémentaires",
         max_length=200,
-        null=True,
         blank=True,
     )
     details_en = models.CharField(
         "Informations supplémentaires (en)",
         max_length=200,
-        null=True,
         blank=True,
     )
     order = models.IntegerField(

@@ -107,7 +107,7 @@ class EventViewSet(viewsets.ModelViewSet):
             return EventSerializer
         return EventPreviewSerializer
 
-    def get_queryset(self) -> QuerySet[Event]:
+    def get_queryset(self) -> QuerySet[Event]:  # noqa: C901
         now = timezone.now()
         user = self.request.user
 

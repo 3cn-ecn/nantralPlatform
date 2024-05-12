@@ -1,3 +1,5 @@
+# ruff: noqa: B026
+
 from django import forms
 
 from .models import (
@@ -72,11 +74,11 @@ class FamilyQuestionsForm(forms.Form):
         if self.is_valid():
             answers = self.cleaned_data.items()
             for question, val in answers:
-                id = int(question[9:])
+                pk = int(question[9:])
                 try:
                     ans = AnswerFamily.objects.get(
                         family=family,
-                        question=QuestionFamily.objects.get(pk=id),
+                        question=QuestionFamily.objects.get(pk=pk),
                     )
                     ans.answer = val
                     ans.save()
@@ -84,7 +86,7 @@ class FamilyQuestionsForm(forms.Form):
                     AnswerFamily.objects.create(
                         answer=val,
                         family=family,
-                        question=QuestionFamily.objects.get(pk=id),
+                        question=QuestionFamily.objects.get(pk=pk),
                     )
 
 
@@ -117,7 +119,7 @@ class MemberQuestionsForm(forms.Form):
         last_name = None
         for question in questions:
             try:
-                show_question = not is_2Aplus or question.equivalent.quota < 100
+                show_question = not is_2Aplus or question.equivalent.quota < 100  # noqa: PLR2004
             except Exception:
                 show_question = True
             if show_question:
@@ -146,11 +148,11 @@ class MemberQuestionsForm(forms.Form):
         if self.is_valid():
             answers = self.cleaned_data.items()
             for question, val in answers:
-                id = int(question[9:])
+                pk = int(question[9:])
                 try:
                     ans = AnswerMember.objects.get(
                         member=member,
-                        question=QuestionMember.objects.get(pk=id),
+                        question=QuestionMember.objects.get(pk=pk),
                     )
                     ans.answer = val
                     ans.save()
@@ -158,5 +160,5 @@ class MemberQuestionsForm(forms.Form):
                     AnswerMember.objects.create(
                         answer=val,
                         member=member,
-                        question=QuestionMember.objects.get(pk=id),
+                        question=QuestionMember.objects.get(pk=pk),
                     )

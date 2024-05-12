@@ -11,7 +11,7 @@ from .models import Student
 class TestStudent(TestCase, TestMixin):
     """Test class for student app."""
 
-    new_password = "new_secured_password"
+    new_password = "new_secured_password"  # noqa: S105
 
     def setUp(self):
         self.user_setup()

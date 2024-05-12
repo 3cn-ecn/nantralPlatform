@@ -1,10 +1,10 @@
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from django_ckeditor_5.fields import CKEditor5Field
 
+from apps.account.models import User
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
 from apps.student.models import Student
@@ -27,8 +27,6 @@ COLORS = [
     ("secondary", "Gris"),
     ("dark", "Noir"),
 ]
-
-User = get_user_model()
 
 
 class AbstractPublication(models.Model, SlugModel):
@@ -82,6 +80,9 @@ class AbstractPublication(models.Model, SlugModel):
     class Meta:
         abstract = True
 
+    def __str__(self) -> str:
+        return f"{self.title} ({self.group.short_name})"
+
     def save(self, *args, notification_body: str, **kwargs) -> None:
         # create the notification object
         if not self.notification:
@@ -120,8 +121,8 @@ class AbstractPublication(models.Model, SlugModel):
         if not self.notification.sent:
             self.notification.send()
 
-    def __str__(self) -> str:
-        return f"{self.title} ({self.group.short_name})"
+    def get_absolute_url(self) -> str:
+        raise NotImplementedError(self.get_absolute_url)
 
     def can_view(self, user: User) -> bool:
         if self.publicity == "Pub":
@@ -133,9 +134,6 @@ class AbstractPublication(models.Model, SlugModel):
             self.notification.delete()
         self.image.delete(save=False)
         return super().delete(*args, **kwargs)
-
-    def get_absolute_url(self) -> str:
-        raise NotImplementedError(self.get_absolute_url)
 
 
 class Post(AbstractPublication):

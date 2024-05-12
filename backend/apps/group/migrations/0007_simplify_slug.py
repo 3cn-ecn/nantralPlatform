@@ -7,17 +7,17 @@ from apps.utils.slug import get_slug_from_full_slug
 
 
 def simplify_slug(model):
-    for object in model.objects.all():
-        object.slug = get_slug_from_full_slug(object.slug)
-        if not object.slug:
-            slug = slugify(object.name)[:35]
-            if type(object).objects.filter(slug=slug):
-                id = 1
-                while type(object).objects.filter(slug=f"{slug}-{id}"):
-                    id += 1
-                slug = f"{slug}-{id}"
-            object.slug = slug
-        object.save()
+    for obj in model.objects.all():
+        obj.slug = get_slug_from_full_slug(obj.slug)
+        if not obj.slug:
+            slug = slugify(obj.name)[:35]
+            if type(obj).objects.filter(slug=slug):
+                num = 1
+                while type(obj).objects.filter(slug=f"{slug}-{num}"):
+                    num += 1
+                slug = f"{slug}-{num}"
+            obj.slug = slug
+        obj.save()
 
 
 def main_simplify_slug(apps, schema_editor):

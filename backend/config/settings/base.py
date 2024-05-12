@@ -55,7 +55,7 @@ env.read_env()
 DEBUG = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "dev-key"
+SECRET_KEY = "dev-key"  # noqa: S105
 
 # Build paths inside the project like this: join(BASE_DIR, "directory")
 BASE_PATH = environ.Path(__file__) - 3

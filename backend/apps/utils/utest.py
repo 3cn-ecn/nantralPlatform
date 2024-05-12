@@ -1,6 +1,4 @@
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from apps.account.models import User
 
 
 class TestMixin:
@@ -16,7 +14,7 @@ class TestMixin:
         Delete the users of the database
     """
 
-    password = "secured_password"
+    password = "secured_password"  # noqa: S105
 
     def user_setup(self) -> None:
         """Create 3 standards users: u1, u2 and u3. Only u2 and u3

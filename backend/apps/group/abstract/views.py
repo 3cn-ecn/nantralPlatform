@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, FormView, TemplateView, View
 
 from apps.sociallink.models import SocialLink
-from apps.utils.accessMixins import UserIsAdmin, user_is_connected
+from apps.utils.access_mixins import UserIsAdmin, user_is_connected
 from apps.utils.slug import get_object_from_slug
 
 from .forms import (
@@ -138,7 +138,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
         context = super().get_context_data(**kwargs)
         context["object"] = self.get_object()
         group = self.get_object()
-        UpdateForm = UpdateGroupForm(context["object"])
+        UpdateForm = UpdateGroupForm(context["object"])  # noqa: N806
         if UpdateForm:
             context["form"] = UpdateForm(instance=context["object"])
         context["ariane"] = [
@@ -156,7 +156,7 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
 
     def post(self, request, **kwargs):
         group = self.get_object()
-        UpdateForm = UpdateGroupForm(group)
+        UpdateForm = UpdateGroupForm(group)  # noqa: N806
         if UpdateForm:
             form = UpdateForm(request.POST, request.FILES, instance=group)
             if form.is_valid():
@@ -192,12 +192,6 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
             },
             {"target": "#", "label": "Modifier"},
         ]
-        # memberships = context['object'].members.through.objects.filter(
-        #     group=context['object'])
-        # MembersFormset = NamedMembershipGroupFormset(
-        #     context['object'])
-        # if MembersFormset:
-        #     context['members'] = MembersFormset(queryset=memberships)
         return context
 
     def post(self, request, **kwargs):
@@ -208,7 +202,7 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
 @require_http_methods(["POST"])
 @login_required
 def edit_named_memberships(request, group):
-    MembersFormset = NamedMembershipGroupFormset(group)
+    MembersFormset = NamedMembershipGroupFormset(group)  # noqa: N806
     if MembersFormset:
         form = MembersFormset(request.POST)
         if form.is_valid():
@@ -300,10 +294,10 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
                 "par mail."
             ),
         )
-        object = form.save(commit=False)
-        object.student = self.request.user.student
-        object.group = self.get_group().full_slug
-        object.save(domain=get_current_site(self.request).domain)
+        obj = form.save(commit=False)
+        obj.student = self.request.user.student
+        obj.group = self.get_group().full_slug
+        obj.save(domain=get_current_site(self.request).domain)
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
@@ -312,7 +306,7 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 
 
 class AcceptAdminRequestView(UserIsAdmin, View):
-    def get(self, request: HttpRequest, slug, id):
+    def get(self, request: HttpRequest, slug, id):  # noqa: A002
         app = resolve(request.path_info).app_name
         group: AbstractGroup = get_object_from_slug(app, slug)
         try:
@@ -336,7 +330,7 @@ class AcceptAdminRequestView(UserIsAdmin, View):
 
 
 class DenyAdminRequestView(UserIsAdmin, View):
-    def get(self, request: HttpRequest, slug, id):
+    def get(self, request: HttpRequest, slug, id):  # noqa: A002
         app = resolve(request.path_info).app_name
         group: AbstractGroup = get_object_from_slug(app, slug)
         try:

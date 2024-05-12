@@ -18,6 +18,7 @@ def send_message(
         f"{BASE_URL}/channels/{channel_id}/messages",
         json=payload,
         headers=AUTH_HEADER,
+        timeout=10,
     )
     return resp.json()["id"]
 
@@ -29,4 +30,5 @@ def react_message(channel_id: int, message_id: str, emoji: str):
             f"messages/{message_id}/reactions/{emoji}/@me"
         ),
         headers=AUTH_HEADER,
+        timeout=10,
     )

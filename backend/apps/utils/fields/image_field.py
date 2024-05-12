@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 
 from ..compress import compress_image
@@ -71,9 +72,9 @@ class CustomImageField(models.ImageField):
 
         filename_slug = slugify(str(getattr(instance, field_for_name)))[:20]
 
-        date = datetime.now().strftime("%Y-%m-%d")
-        year = datetime.now().strftime("%Y")
-        timestamp = str(int(datetime.timestamp(datetime.now())))
+        date = timezone.now().strftime("%Y-%m-%d")
+        year = timezone.now().strftime("%Y")
+        timestamp = str(int(datetime.timestamp(timezone.now())))
 
         return os.path.join(
             f"{app_label}/{model_name}/{field_name}/{year}/",

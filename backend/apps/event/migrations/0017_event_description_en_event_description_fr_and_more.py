@@ -7,7 +7,7 @@ import django_ckeditor_5.fields
 
 
 def copy_data(apps, schema_editor):
-    Event = apps.get_model("event", "event")
+    Event = apps.get_model("event", "event")  # noqa: N806
     for obj in Event.objects.all():
         if not obj.title_fr:
             obj.title_fr = obj.title

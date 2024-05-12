@@ -1,5 +1,5 @@
 # spell-checker: words listeforms
-
+# ruff: noqa: N802
 
 from django.forms import BaseModelFormSet, ModelForm, modelformset_factory
 

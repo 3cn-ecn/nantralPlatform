@@ -38,7 +38,7 @@ def send_reset_email(
     token = reset_password_token.key
     # paths
     update_path = reverse("student:update", kwargs={"pk": user.student.pk})
-    # TODO don't forget to update when frontend implemented
+    # TODO @rravelli: don't forget to update when frontend implemented  # noqa: TD003
     reset_path = reverse("account:reset-pass", args=[token])
     # sending email
     send_email(

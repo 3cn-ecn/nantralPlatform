@@ -7,13 +7,13 @@ from apps.student.models import Student
 
 from .webpush import send_webpush_notification
 
-# Fonctionnement des notifications :
-# ----------------------------------
-# Dans le menu notifs, on voit toutes les notifs
-# Seules les notifs dans l'onglet "Abonnement" sont envoyées sur l'appareil
-# Par défaut, aucun abonnement donc aucune notification, sauf les prioritaires
-# On s'abonne uniquement à des groupes
-# Toute notification est envoyée par un groupe
+# How notifications work:
+# -----------------------
+# In the notifications menu, we see all notifications.
+# Only notifications in the "Subscription" tab are sent to the device.
+# By default, no subscription, so no notification, except the high-priority ones.
+# We only subscribe to groups.
+# All notifications are sent by a group.
 
 VISIBILITY = [
     ("Pub", "Public - Visible par tous"),
@@ -29,8 +29,8 @@ class Notification(models.Model):
     body = models.CharField("Corps", max_length=512)
     url = models.CharField("Cible", max_length=512)
     sender = models.SlugField("Expéditeur", max_length=50)
-    icon_url = models.CharField(max_length=512, blank=True, null=True)
-    image_url = models.CharField(max_length=512, blank=True, null=True)
+    icon_url = models.CharField(max_length=512, blank=True)
+    image_url = models.CharField(max_length=512, blank=True)
     date = models.DateTimeField("Date de création", default=timezone.now)
     high_priority = models.BooleanField("Prioritaire", default=False)
     publicity = models.CharField(
@@ -161,5 +161,4 @@ class NotificationAction(models.Model):
         "Url of the icon for the action",
         max_length=512,
         blank=True,
-        null=True,
     )

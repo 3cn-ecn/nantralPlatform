@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 
 from extra_settings.models import Setting
 
-from apps.utils.accessMixins import UserIsInGroup
+from apps.utils.access_mixins import UserIsInGroup
 
 from .models import Roommates
 

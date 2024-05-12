@@ -6,9 +6,6 @@ from apps.utils.utest import TestMixin
 
 from .models import Event
 
-# from django.urls import reverse
-# from rest_framework import status
-
 
 class EventTestCase(TestCase, TestMixin):
     def setUp(self) -> None:
@@ -23,7 +20,6 @@ class EventTestCase(TestCase, TestMixin):
             description="Test Desc",
             location="Amphi A",
         )
-        # self.assertEqual(len(Event.objects.all()), 1)
 
     def tearDown(self):
         self.user_teardown()

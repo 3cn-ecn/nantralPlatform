@@ -6,32 +6,33 @@ from apps.group.abstract.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
 from apps.utils.geocoding import geocode
 
+COORDINATES_PRECISION = 5e-3
+
 
 class Housing(models.Model):
     address = models.CharField(max_length=250, verbose_name="Adresse")
     details = models.CharField(
         max_length=100,
         verbose_name="Complément d'adresse",
-        null=True,
         blank=True,
     )
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return self.address if self.address else self.id
 
     def save(self, *args, **kwargs):
         coordinates = geocode(self.address)[0]
         if (
             not self.latitude
             or not self.longitude
-            or abs(self.latitude - coordinates["lat"]) > 5e-3
-            or abs(self.longitude - coordinates["long"]) > 5e-3
+            or abs(self.latitude - coordinates["lat"]) > COORDINATES_PRECISION
+            or abs(self.longitude - coordinates["long"]) > COORDINATES_PRECISION
         ):
             self.latitude = coordinates["lat"]
             self.longitude = coordinates["long"]
         super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.address if self.address else self.id
 
     @property
     def current_roommates(self):
@@ -78,13 +79,11 @@ class Roommates(AbstractGroup):
     colocathlon_hours = models.CharField(
         verbose_name="Horaires d'ouvertures",
         max_length=50,
-        null=True,
         blank=True,
     )
     colocathlon_activities = models.CharField(
         verbose_name="Activités proposées",
         max_length=250,
-        null=True,
         blank=True,
     )
     colocathlon_participants = models.ManyToManyField(
@@ -111,7 +110,6 @@ class NamedMembershipRoommates(NamedMembership):
         max_length=100,
         verbose_name="Surnom",
         blank=True,
-        null=True,
     )
 
     def __str__(self):

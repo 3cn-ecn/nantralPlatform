@@ -1,16 +1,15 @@
 import logging
 
-from django.contrib.auth import get_user_model
-
 from rest_framework import status
 from rest_framework.test import APITestCase
+
+from apps.account.models import User
 
 from .models import Group, GroupType, Membership
 
 
 class TestGroups(APITestCase):
     def setUp(self):
-        User = get_user_model()
         self.u1 = User.objects.create(username="u1")
         self.t1 = GroupType.objects.create(name="T1", slug="t1")
         self.t2 = GroupType.objects.create(
@@ -24,7 +23,6 @@ class TestGroups(APITestCase):
         logger.setLevel(logging.ERROR)
 
     def tearDown(self):
-        User = get_user_model()
         User.objects.all().delete()
         GroupType.objects.filter(slug="t1").delete()
         GroupType.objects.filter(slug="t2").delete()
@@ -135,7 +133,6 @@ class TestGroups(APITestCase):
 
 class TestMemberships(APITestCase):
     def setUp(self):
-        User = get_user_model()
         self.u1 = User.objects.create(username="u1", email="u1@ec-nantes.fr")
         self.u2 = User.objects.create(username="u2", email="u2@ec-nantes.fr")
         self.u3 = User.objects.create(username="u3", email="u3@ec-nantes.fr")
@@ -147,7 +144,6 @@ class TestMemberships(APITestCase):
         logger.setLevel(logging.ERROR)
 
     def tearDown(self):
-        User = get_user_model()
         User.objects.all().delete()
         GroupType.objects.filter(slug="t1").delete()
         # re-activate warnings

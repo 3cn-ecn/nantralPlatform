@@ -14,6 +14,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, TemplateView
 
 from django_rest_passwordreset.views import ResetPasswordValidateTokenViewSet
+from rest_framework import status
 
 from apps.student.models import Student
 
@@ -81,7 +82,7 @@ class PasswordResetConfirmRedirect(View):
             response = ResetPasswordValidateTokenViewSet(
                 request=self.request,
             ).post(request=self.request)
-            valid = response.status_code == 200
+            valid = response.status_code == status.HTTP_200_OK
         except Exception:
             valid = False
 

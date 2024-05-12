@@ -42,7 +42,7 @@ class Command(BaseCommand):
                     f"Error {error_class} ({error_module}): {e}",
                     self.style.ERROR,
                 )
-                if verbosity >= 2:
+                if verbosity >= 2:  # noqa: PLR2004
                     traceback.print_exc()
                 if isinstance(e, KeyError) and str(e) == "'locale'":
                     self.stdout.write(

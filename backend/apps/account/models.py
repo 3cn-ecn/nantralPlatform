@@ -19,12 +19,12 @@ class InvitationLink(models.Model):
         return f"""Invitation(Expires at:
          {self.expires_at.strftime('%d/%m/%Y, %H:%M:%S')})"""
 
+    def get_absolute_url(self):
+        return f"/register?uuid={self.id}/"
+
     def is_valid(self) -> bool:
         """Return True if invitation is not expired."""
         return self.expires_at > timezone.now()
-
-    def get_absolute_url(self):
-        return f"/register?uuid={self.id}/"
 
 
 class User(AbstractUser):

@@ -6,7 +6,7 @@ from django.views.generic import CreateView, DetailView, FormView, TemplateView
 
 from extra_settings.models import Setting
 
-from apps.utils.accessMixins import UserIsAdmin
+from apps.utils.access_mixins import UserIsAdmin
 
 from .forms import (
     CreateFamilyForm,
@@ -16,15 +16,19 @@ from .forms import (
     MemberQuestionsForm,
     UpdateFamilyForm,
 )
-from .models import Family, MembershipFamily, QuestionPage
+from .models import (
+    MAX_2APLUS_PER_FAMILY,
+    MIN_2APLUS_PER_FAMILY,
+    Family,
+    MembershipFamily,
+    QuestionPage,
+)
 from .utils import (
     get_membership,
     is_first_year,
     scholar_year,
     show_sensible_data,
 )
-
-# Create your views here.
 
 
 class HomeFamilyView(LoginRequiredMixin, TemplateView):
@@ -83,13 +87,13 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
                 }
                 for m in memberships.filter(role="2A+")
             ]
-        if phase >= 3:
+        if phase >= 3:  # noqa: PLR2004
             context["list_1A"] = [
                 {
                     "name": m.student.alphabetical_name,
                     "family": (
                         m.group.name
-                        if show_data and phase > 3
+                        if show_data and phase > 3  # noqa: PLR2004
                         else f"Famille n°{m.group.id}"
                     ),
                     "url": m.group.get_absolute_url(),
@@ -248,17 +252,19 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                 if hasattr(form.instance, "student"):
                     nb_subscribed += 1
             nb_tot = nb_subscribed + nb_non_subscribed
-            if nb_tot <= 7 and nb_tot >= 3:
+            if (
+                nb_tot <= MAX_2APLUS_PER_FAMILY
+                and nb_tot >= MIN_2APLUS_PER_FAMILY
+            ):
                 # on vérifie que les membres ne sont pas déjà dans une famille
-                membres_doublon = []
-                for form in forms[1]:
-                    if hasattr(form.instance, "student"):
-                        if form.instance.student.family_set.filter(
-                            year=scholar_year(),
-                        ).exclude(pk=self.get_family().pk):
-                            membres_doublon.append(
-                                form.instance.student.alphabetical_name,
-                            )
+                membres_doublon = [
+                    form.instance.student.alphabetical_name
+                    for form in forms[1]
+                    if hasattr(form.instance, "student")
+                    and form.instance.student.family_set.filter(
+                        year=scholar_year()
+                    ).exclude(pk=self.get_family().pk)
+                ]
                 if not membres_doublon:
                     # c'est bon on sauvegarde !
                     for form in forms[1]:
@@ -278,8 +284,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                     messages.error(
                         request,
                         "Erreur : les membres suivants sont déjà dans une "
-                        + "famille : "
-                        + ", ".join(membres_doublon),
+                        "famille : " + ", ".join(membres_doublon),
                     )
             else:
                 messages.error(

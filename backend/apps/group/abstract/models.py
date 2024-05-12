@@ -1,7 +1,6 @@
 import logging
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.template.loader import render_to_string
 from django.urls.base import reverse
@@ -10,6 +9,7 @@ from django.utils import timezone
 from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
 
+from apps.account.models import User
 from apps.student.models import Student
 from apps.utils.fields.image_field import CustomImageField
 from apps.utils.slug import (
@@ -19,7 +19,6 @@ from apps.utils.slug import (
 )
 
 logger = logging.getLogger(__name__)
-User = get_user_model()
 
 
 class AbstractGroup(models.Model, SlugModel):
@@ -34,7 +33,6 @@ class AbstractGroup(models.Model, SlugModel):
     alt_name = models.CharField(
         verbose_name="Nom alternatif",
         max_length=100,
-        null=True,
         blank=True,
     )
 
@@ -56,7 +54,7 @@ class AbstractGroup(models.Model, SlugModel):
         size=(1320, 492),
         name_from_field="name",
     )
-    summary = models.CharField("Résumé", max_length=500, null=True, blank=True)
+    summary = models.CharField("Résumé", max_length=500, blank=True)
     description = CKEditor5Field(
         verbose_name="Description du groupe",
         blank=True,
@@ -64,13 +62,11 @@ class AbstractGroup(models.Model, SlugModel):
     video1 = models.URLField(
         "Lien vidéo 1",
         max_length=200,
-        null=True,
         blank=True,
     )
     video2 = models.URLField(
         "Lien vidéo 2",
         max_length=200,
-        null=True,
         blank=True,
     )
 
@@ -89,6 +85,32 @@ class AbstractGroup(models.Model, SlugModel):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        # creation du slug si non-existant ou corrompu
+        self.set_slug(self.name, 40)
+        # enregistrement
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse(self.app + ":detail", kwargs={"slug": self.slug})
+
+    @property
+    def app(self):
+        return self._meta.app_label
+
+    @property
+    def full_slug(self):
+        return f"{self.app}--{self.slug}"
+
+    @property
+    def app_name(self):
+        return self.model_name.title()
+
+    @property
+    def model_name(self):
+        """Plural Model name, used in templates"""
+        return self.__class__._meta.verbose_name_plural
 
     def is_admin(self, user: User) -> bool:
         """Indicates if a user is admin."""
@@ -117,38 +139,10 @@ class AbstractGroup(models.Model, SlugModel):
             return False
         return user.student in self.members.all()
 
-    def save(self, *args, **kwargs):
-        # creation du slug si non-existant ou corrompu
-        self.set_slug(self.name, 40)
-        # enregistrement
-        super().save(*args, **kwargs)
-
     def delete(self, *args, **kwargs):
         self.logo.delete()
         self.banniere.delete()
         super().delete(*args, **kwargs)
-
-    @property
-    def app(self):
-        return self._meta.app_label
-
-    @property
-    def full_slug(self):
-        return f"{self.app}--{self.slug}"
-
-    @property
-    def app_name(self):
-        return self.model_name.title()
-
-    # Don't make this a property, Django expects it to be a method.
-    # Making it a property can cause a 500 error (see issue #553).
-    def get_absolute_url(self):
-        return reverse(self.app + ":detail", kwargs={"slug": self.slug})
-
-    @property
-    def model_name(self):
-        """Plural Model name, used in templates"""
-        return self.__class__._meta.verbose_name_plural
 
 
 class NamedMembership(models.Model):
@@ -281,38 +275,3 @@ class AdminRightsRequest(models.Model):
         webhook.add_embed(embed)
         webhook.execute()
         self.delete()
-
-
-# # FIXME Broken since the move of admins inside of members, nice to fix
-# @receiver(m2m_changed, sender=AbstractGroup.members.through)
-# def admins_changed(
-#     sender, instance, action, pk_set, reverse, model, **kwargs):
-#     if isinstance(instance, AbstractGroup):
-#         # FIXME temporary fix because this signal shotguns m2m_changed which
-#         # other can't use. To avoid this we check the instance before to make
-#         # sure it's a group.
-#         if action == "post_add":
-#             for pk in pk_set:
-#                 user = User.objects.get(pk=pk)
-#                 mail = render_to_string(
-#                     'abstract_group/mail/new_admin.html',
-#                     {
-#                         'group': instance,
-#                         'user': user
-#                     })
-#                 user.email_user(f'Vous êtes admin de {instance}', mail,
-#                                 from_email=None, html_message=mail)
-#         elif action == "post_remove":
-#             for pk in pk_set:
-#                 user = User.objects.get(pk=pk)
-#                 mail = render_to_string(
-#                     'abstract_group/mail/remove_admin.html',
-#                     {
-#                         'group': instance,
-#                         'user': user
-#                     })
-#                 user.email_user(
-#                     f'Vous n\'êtes plus membre de {instance}',
-#                     mail,
-#                     from_email=None,
-#                     html_message=mail)

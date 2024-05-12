@@ -649,8 +649,6 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
             value=f"[Refuser]({deny_url})",
             inline=True,
         )
-        # if membership.student.picture:
-        #     embed.thumbnail = {"url": membership.student.picture.url}
         webhook.add_embed(embed)
         webhook.execute()
         return redirect(self.get_group().get_absolute_url())
@@ -661,7 +659,7 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
 
 
 class AcceptAdminRequestView(UserIsGroupAdminMixin, View):
-    def get(self, request: HttpRequest, id):
+    def get(self, request: HttpRequest, id):  # noqa: A002
         member = get_object_or_404(Membership, id=id)
         if member.admin_request:
             member.accept_admin_request()
@@ -678,7 +676,7 @@ class AcceptAdminRequestView(UserIsGroupAdminMixin, View):
 
 
 class DenyAdminRequestView(UserIsGroupAdminMixin, View):
-    def get(self, request: HttpRequest, id):
+    def get(self, request: HttpRequest, id):  # noqa: A002
         member = get_object_or_404(Membership, id=id)
         if member.admin_request:
             member.deny_admin_request()

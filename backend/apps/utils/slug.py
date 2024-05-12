@@ -61,39 +61,29 @@ class SlugModel:
             slug = slugify(text)[: max_length - 5]
             model = type(self)
             if model.objects.filter(slug=slug).exists():
-                id = 1
-                while model.objects.filter(slug=f"{slug}-{id}").exists():
-                    id += 1
-                slug = f"{slug}-{id}"
+                num = 1
+                while model.objects.filter(slug=f"{slug}-{num}").exists():
+                    num += 1
+                slug = f"{slug}-{num}"
             self.slug = slug
 
 
 def get_model(app_name: str) -> type[SlugModel]:
     try:
         package = import_module(SLUG_MODELS[app_name][0])
-        Model = getattr(package, SLUG_MODELS[app_name][1])
-        return Model
+        model_class = getattr(package, SLUG_MODELS[app_name][1])
+        return model_class
     except KeyError:
         raise Exception(f"Unknown application : {app_name}")
 
 
 def get_object_from_slug(app_name: str, slug: str) -> SlugModel:
     """Get a model object from a slug and an app."""
-    if app_name == "club":
-        from apps.club.models import BDX, Club
-
-        object = get_object_or_404(Club, slug=slug)
-        try:
-            object = object.bdx
-        except BDX.DoesNotExist:
-            pass
-        return object
-    else:
-        try:
-            Model = get_model(app_name)
-            return get_object_or_404(Model, slug=slug)
-        except KeyError:
-            raise Exception(f"Unknown application : {app_name}")
+    try:
+        Model = get_model(app_name)
+        return get_object_or_404(Model, slug=slug)
+    except KeyError:
+        raise Exception(f"Unknown application : {app_name}")
 
 
 def get_full_slug_from_slug(app: str, slug: str) -> str:

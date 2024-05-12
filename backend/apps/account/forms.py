@@ -164,11 +164,10 @@ class ResetPassForm(forms.Form):
         password = cleaned_data.get("password")
         password_confirm = cleaned_data.get("password_confirm ")
 
-        if password and password_confirm:
-            if password != password_confirm:
-                raise forms.ValidationError(
-                    _("Les deux mots de passe ne correspondent pas."),
-                )
+        if password and password_confirm and password != password_confirm:
+            raise forms.ValidationError(
+                _("Les deux mots de passe ne correspondent pas."),
+            )
         return cleaned_data
 
 
