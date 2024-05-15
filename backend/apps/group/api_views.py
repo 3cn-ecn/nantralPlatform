@@ -35,13 +35,13 @@ class GroupPermission(permissions.BasePermission):
             return True
         if view.action == "create":
             group_type = GroupType.objects.filter(
-                slug=request.query_params.get("type", None)
+                slug=request.query_params.get("type", None),
             ).first()
             if not group_type:
                 raise exceptions.ValidationError(
                     _(
-                        "You must specify a valid group type in query parameters."
-                    )
+                        "You must specify a valid group type in query parameters.",
+                    ),
                 )
             return group_type.can_create
         return True
@@ -117,7 +117,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     def get_queryset(self) -> QuerySet[Group]:
         user = self.request.user
         group_type = GroupType.objects.filter(
-            slug=self.query_params.get("type")
+            slug=self.query_params.get("type"),
         ).first()
         is_member = parse_bool(self.query_params.get("is_member"), False)
         is_admin = parse_bool(self.query_params.get("is_admin"), False)
@@ -127,7 +127,7 @@ class GroupViewSet(viewsets.ModelViewSet):
             Group.objects
             # remove the sub-groups to keep only parent groups
             .filter(
-                Q(parent=None) | Q(parent__in=F("group_type__extra_parents"))
+                Q(parent=None) | Q(parent__in=F("group_type__extra_parents")),
             )
             # hide archived groups
             .filter(archived=False)
@@ -136,16 +136,17 @@ class GroupViewSet(viewsets.ModelViewSet):
                 num_active_members=Count(
                     "membership_set",
                     filter=Q(membership_set__end_date__gte=timezone.now()),
-                )
-            ).filter(
+                ),
+            )
+            .filter(
                 Q(num_active_members__gt=0)
-                | Q(group_type__hide_no_active_members=False)
+                | Q(group_type__hide_no_active_members=False),
             )
         )
         # hide private groups unless user is member
         if user.is_authenticated:
             queryset = queryset.filter(
-                Q(private=False) | Q(members=user.student)
+                Q(private=False) | Q(members=user.student),
             )
         # and hide non-public group if user is not authenticated
         else:
@@ -159,7 +160,8 @@ class GroupViewSet(viewsets.ModelViewSet):
         # filter by groups where current user is admin
         if is_admin:
             queryset = queryset.filter(
-                membership_set__student=user.student, membership_set__admin=True
+                membership_set__student=user.student,
+                membership_set__admin=True,
             )
         # filter by slug
         if slugs:
@@ -172,8 +174,9 @@ class GroupViewSet(viewsets.ModelViewSet):
             # order by category, order and then name
             .order_by(
                 "group_type",
-                *group_type.sort_fields.split(",") if group_type else ""
-            ).distinct()
+                *group_type.sort_fields.split(",") if group_type else "",
+            )
+            .distinct()
         )
 
     def get_object(self):
@@ -187,7 +190,7 @@ class MembershipPermission(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return not obj.group.private or obj.group.is_member(request.user)
         return obj.student.user == request.user or obj.group.is_admin(
-            request.user
+            request.user,
         )
 
 
@@ -264,7 +267,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         # filter by memberships you are allowed to see
         if not user.is_superuser:
             qs = qs.filter(
-                Q(group__private=False) | Q(group__members=user.student)
+                Q(group__private=False) | Q(group__members=user.student),
             )
         # filter by params
         if group_slug:
@@ -273,11 +276,11 @@ class MembershipViewSet(viewsets.ModelViewSet):
             qs = qs.filter(student__id=student_id)
         if from_date:
             qs = qs.filter(
-                Q(end_date__gte=from_date) | Q(end_date__isnull=True)
+                Q(end_date__gte=from_date) | Q(end_date__isnull=True),
             )
         if to_date:
             qs = qs.filter(
-                Q(begin_date__lt=to_date) | Q(begin_date__isnull=True)
+                Q(begin_date__lt=to_date) | Q(begin_date__isnull=True),
             )
 
         qs = qs.prefetch_related("student__user").distinct()
@@ -299,7 +302,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
                last.
         """
         member: Membership = get_object_or_404(
-            self.get_queryset(), id=request.data.get("member", None)
+            self.get_queryset(),
+            id=request.data.get("member", None),
         )
         lower = (
             self.get_queryset()
@@ -313,7 +317,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
             or self.query_params.get("group") != member.group.slug
         ):
             raise exceptions.ValidationError(
-                _("All memberships objects must be from the same group.")
+                _("All memberships objects must be from the same group."),
             )
         # check user is admin
         if not member.group.is_admin(request.user):
@@ -333,7 +337,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
             retenue = prev_priority + 1 - members[curr_index].priority
             while curr_index >= 0 and retenue > 0:
                 retenue -= max(
-                    members[curr_index].priority - prev_priority - 1, 0
+                    members[curr_index].priority - prev_priority - 1,
+                    0,
                 )
                 members[curr_index].priority += retenue
                 prev_priority = members[curr_index].priority

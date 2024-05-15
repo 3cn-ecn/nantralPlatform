@@ -59,12 +59,12 @@ class MembershipForm(ModelForm):
         student: Student = None,
         instance: Membership = None,
         *args,
-        **kwargs
+        **kwargs,
     ):
         if not (instance or (group and student)):
             raise ValueError(
                 "AddMembershipForm.__init__() required both "
-                "'group' and 'student' arguments or 'instance'"
+                "'group' and 'student' arguments or 'instance'",
             )
         super().__init__(*args, instance=instance, **kwargs)
         # manually add the group or the student to the instance
@@ -90,5 +90,8 @@ class AdminRequestForm(ModelForm):
 
 
 SocialLinkGroupFormset = modelformset_factory(
-    SocialLink, fields=["network", "uri", "label"], extra=1, can_delete=True
+    SocialLink,
+    fields=["network", "uri", "label"],
+    extra=1,
+    can_delete=True,
 )

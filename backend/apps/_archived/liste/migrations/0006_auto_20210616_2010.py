@@ -4,20 +4,19 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('student', '0003_alter_student_options'),
-        ('liste', '0005_transfer_admin_in_membership'),
+        ("student", "0003_alter_student_options"),
+        ("liste", "0005_transfer_admin_in_membership"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='namedmembershiplist',
-            old_name='liste',
-            new_name='group',
+            model_name="namedmembershiplist",
+            old_name="liste",
+            new_name="group",
         ),
         migrations.AlterUniqueTogether(
-            name='namedmembershiplist',
-            unique_together={('function', 'student', 'group')},
+            name="namedmembershiplist",
+            unique_together={("function", "student", "group")},
         ),
     ]

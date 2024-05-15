@@ -7,46 +7,60 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0004_alter_club_options'),
+        ("club", "0004_alter_club_options"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='bdx',
-            options={'ordering': ['order'], 'verbose_name_plural': 'BDX'},
+            name="bdx",
+            options={"ordering": ["order"], "verbose_name_plural": "BDX"},
         ),
         migrations.AlterModelOptions(
-            name='club',
-            options={'ordering': [django.db.models.expressions.OrderBy(django.db.models.expressions.F('bdx_type'), nulls_first=True), 'name']},
+            name="club",
+            options={
+                "ordering": [
+                    django.db.models.expressions.OrderBy(
+                        django.db.models.expressions.F("bdx_type"),
+                        nulls_first=True,
+                    ),
+                    "name",
+                ],
+            },
         ),
         migrations.AddField(
-            model_name='bdx',
-            name='order',
+            model_name="bdx",
+            name="order",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='namedmembershipclub',
-            name='date_begin',
-            field=models.DateField(default=datetime.date.today, verbose_name='Date de début'),
+            model_name="namedmembershipclub",
+            name="date_begin",
+            field=models.DateField(
+                default=datetime.date.today,
+                verbose_name="Date de début",
+            ),
         ),
         migrations.AddField(
-            model_name='namedmembershipclub',
-            name='date_end',
-            field=models.DateField(blank=True, null=True, verbose_name='Date de fin'),
+            model_name="namedmembershipclub",
+            name="date_end",
+            field=models.DateField(
+                blank=True,
+                null=True,
+                verbose_name="Date de fin",
+            ),
         ),
         migrations.AddField(
-            model_name='namedmembershipclub',
-            name='order',
-            field=models.IntegerField(default=0, verbose_name='Hiérarchie'),
+            model_name="namedmembershipclub",
+            name="order",
+            field=models.IntegerField(default=0, verbose_name="Hiérarchie"),
         ),
         migrations.AlterUniqueTogether(
-            name='namedmembershipclub',
+            name="namedmembershipclub",
             unique_together=set(),
         ),
         migrations.RemoveField(
-            model_name='namedmembershipclub',
-            name='year',
+            model_name="namedmembershipclub",
+            name="year",
         ),
     ]

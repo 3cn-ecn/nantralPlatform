@@ -4,39 +4,60 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0009_alter_club_description'),
+        ("club", "0009_alter_club_description"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='club',
-            name='social',
+            model_name="club",
+            name="social",
         ),
         migrations.AddField(
-            model_name='club',
-            name='summary',
-            field=models.CharField(blank=True, max_length=500, null=True, verbose_name='Résumé'),
+            model_name="club",
+            name="summary",
+            field=models.CharField(
+                blank=True,
+                max_length=500,
+                null=True,
+                verbose_name="Résumé",
+            ),
         ),
         migrations.AddField(
-            model_name='club',
-            name='video1',
-            field=models.URLField(blank=True, null=True, verbose_name='Lien vidéo 1'),
+            model_name="club",
+            name="video1",
+            field=models.URLField(
+                blank=True,
+                null=True,
+                verbose_name="Lien vidéo 1",
+            ),
         ),
         migrations.AddField(
-            model_name='club',
-            name='video2',
-            field=models.URLField(blank=True, null=True, verbose_name='Lien vidéo 2'),
+            model_name="club",
+            name="video2",
+            field=models.URLField(
+                blank=True,
+                null=True,
+                verbose_name="Lien vidéo 2",
+            ),
         ),
         migrations.AlterField(
-            model_name='club',
-            name='alt_name',
-            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Nom alternatif'),
+            model_name="club",
+            name="alt_name",
+            field=models.CharField(
+                blank=True,
+                max_length=100,
+                null=True,
+                verbose_name="Nom alternatif",
+            ),
         ),
         migrations.AlterField(
-            model_name='club',
-            name='name',
-            field=models.CharField(max_length=100, unique=True, verbose_name='Nom du groupe'),
+            model_name="club",
+            name="name",
+            field=models.CharField(
+                max_length=100,
+                unique=True,
+                verbose_name="Nom du groupe",
+            ),
         ),
     ]

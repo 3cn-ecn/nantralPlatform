@@ -7,7 +7,7 @@ def add_end_date(apps, schema_editor):
     Roommates = apps.get_model("roommates", "Roommates")
     for roommate in Roommates.objects.filter(end_date__isnull=True):
         roommate.end_date = roommate.begin_date.replace(
-            year=roommate.begin_date.year + 1
+            year=roommate.begin_date.year + 1,
         )
         roommate.save()
 
@@ -19,7 +19,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            add_end_date, reverse_code=migrations.RunPython.noop
+            add_end_date,
+            reverse_code=migrations.RunPython.noop,
         ),
         migrations.AlterField(
             model_name="roommates",

@@ -4,16 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('sociallink', '0002_sociallink_slug'),
-        ('roommates', '0005_auto_20210616_2326'),
+        ("sociallink", "0002_sociallink_slug"),
+        ("roommates", "0005_auto_20210616_2326"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='roommates',
-            name='social',
-            field=models.ManyToManyField(blank=True, null=True, to='sociallink.SocialLink'),
+            model_name="roommates",
+            name="social",
+            field=models.ManyToManyField(
+                blank=True,
+                null=True,
+                to="sociallink.SocialLink",
+            ),
         ),
     ]

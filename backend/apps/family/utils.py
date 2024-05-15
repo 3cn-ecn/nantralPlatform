@@ -1,16 +1,19 @@
+# ruff: noqa: N806
+
 from datetime import datetime
 
-from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from extra_settings.models import Setting
 
+from apps.account.models import User
+
 from .models import Family, MembershipFamily
 
-User = get_user_model()
+FIRST_MONTH_OF_NEW_CYCLE = 6  # June
 
 
-def scholar_year(date: datetime = timezone.now()) -> int:
+def scholar_year(date: datetime | None = None) -> int:
     """Calculate the current scholar year. The date of changement from one
     scholar year to another is fixed on the 1st June.
 
@@ -28,11 +31,13 @@ def scholar_year(date: datetime = timezone.now()) -> int:
     -------
     int
         The scholar year corresponding to the given date
-    """
 
+    """
+    if date is None:
+        date = timezone.now()
     year = date.year
     month = date.month
-    if month < 6:
+    if month < FIRST_MONTH_OF_NEW_CYCLE:
         year -= 1
     return year
 
@@ -52,8 +57,8 @@ def get_membership(user: User, year: int = scholar_year()) -> MembershipFamily:
     -------
     MembershipFamily
         The membership object
-    """
 
+    """
     try:
         member = MembershipFamily.objects.get(
             student=user.student,
@@ -64,7 +69,8 @@ def get_membership(user: User, year: int = scholar_year()) -> MembershipFamily:
     except MembershipFamily.DoesNotExist:
         try:
             member = MembershipFamily.objects.get(
-                student=user.student, role="1A"
+                student=user.student,
+                role="1A",
             )
             return member
         except MembershipFamily.DoesNotExist:
@@ -72,7 +78,9 @@ def get_membership(user: User, year: int = scholar_year()) -> MembershipFamily:
 
 
 def is_first_year(
-    user: User, membership: MembershipFamily = None, year: int = scholar_year()
+    user: User,
+    membership: MembershipFamily = None,
+    year: int = scholar_year(),
 ) -> bool:
     """Determines if a user is in first year or not.
     If not, it means he/she is in second or third year.
@@ -93,8 +101,8 @@ def is_first_year(
     -------
     bool
         True if user is in first year, false if in second or third year.
-    """
 
+    """
     if not membership:
         membership = get_membership(user, year)
     if membership:
@@ -105,7 +113,9 @@ def is_first_year(
 
 
 def get_family(
-    user: User, membership: MembershipFamily = None, year: int = scholar_year()
+    user: User,
+    membership: MembershipFamily = None,
+    year: int = scholar_year(),
 ) -> Family:
     """Get the family of a user for a certain year.
 
@@ -124,8 +134,8 @@ def get_family(
     -------
     Family
         The family object
-    """
 
+    """
     if not membership:
         membership = get_membership(user, year)
     if membership:
@@ -151,17 +161,17 @@ def show_sensible_data(user: User, membership: MembershipFamily = None) -> bool:
     -------
     bool
         True if we can display the sensible data, else False
-    """
 
+    """
     if not membership:
         membership = get_membership(user)
-    is_1A = is_first_year(user, membership)  # noqa: N806
-    is_2A = not is_1A  # noqa: N806
+    is_1A = is_first_year(user, membership)
+    is_2A = not is_1A
     phase = Setting.get("PHASE_PARRAINAGE")
     if membership:
         # if membership exists, we are sure of the 1A/2A property
-        return is_2A or (phase >= 4)
+        return is_2A or (phase >= 4)  # noqa: PLR2004
     else:
         # here we are not sure of the 1A/2A property so we always hide,
         # except before the 1A have access to the form
-        return phase >= 4 or (phase == 1 and is_2A)
+        return phase >= 4 or (phase == 1 and is_2A)  # noqa: PLR2004

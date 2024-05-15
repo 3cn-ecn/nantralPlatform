@@ -70,7 +70,8 @@ class Migration(migrations.Migration):
                 (
                     "label_en",
                     models.CharField(
-                        max_length=100, verbose_name="Question (en)"
+                        max_length=100,
+                        verbose_name="Question (en)",
                     ),
                 ),
                 (
@@ -162,19 +163,24 @@ class Migration(migrations.Migration):
                 (
                     "description",
                     django_ckeditor_5.fields.CKEditor5Field(
-                        blank=True, verbose_name="Description du groupe"
+                        blank=True,
+                        verbose_name="Description du groupe",
                     ),
                 ),
                 (
                     "video1",
                     models.URLField(
-                        blank=True, null=True, verbose_name="Lien vidéo 1"
+                        blank=True,
+                        null=True,
+                        verbose_name="Lien vidéo 1",
                     ),
                 ),
                 (
                     "video2",
                     models.URLField(
-                        blank=True, null=True, verbose_name="Lien vidéo 2"
+                        blank=True,
+                        null=True,
+                        verbose_name="Lien vidéo 2",
                     ),
                 ),
                 (
@@ -217,7 +223,8 @@ class Migration(migrations.Migration):
                 (
                     "name",
                     models.CharField(
-                        max_length=100, verbose_name="Nom de la page"
+                        max_length=100,
+                        verbose_name="Nom de la page",
                     ),
                 ),
                 (
@@ -227,25 +234,33 @@ class Migration(migrations.Migration):
                 (
                     "details1A",
                     models.TextField(
-                        blank=True, null=True, verbose_name="Infos 1A"
+                        blank=True,
+                        null=True,
+                        verbose_name="Infos 1A",
                     ),
                 ),
                 (
                     "details1A_en",
                     models.TextField(
-                        blank=True, null=True, verbose_name="Infos 1A (en)"
+                        blank=True,
+                        null=True,
+                        verbose_name="Infos 1A (en)",
                     ),
                 ),
                 (
                     "details2A",
                     models.TextField(
-                        blank=True, null=True, verbose_name="Infos 2A+"
+                        blank=True,
+                        null=True,
+                        verbose_name="Infos 2A+",
                     ),
                 ),
                 (
                     "details2A_en",
                     models.TextField(
-                        blank=True, null=True, verbose_name="Infos 2A+ (en)"
+                        blank=True,
+                        null=True,
+                        verbose_name="Infos 2A+ (en)",
                     ),
                 ),
                 (
@@ -346,7 +361,8 @@ class Migration(migrations.Migration):
             model_name="family",
             name="members",
             field=models.ManyToManyField(
-                through="family.MembershipFamily", to="student.Student"
+                through="family.MembershipFamily",
+                to="student.Student",
             ),
         ),
         migrations.CreateModel(

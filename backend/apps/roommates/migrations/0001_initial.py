@@ -27,7 +27,8 @@ class Migration(migrations.Migration):
                 (
                     "address",
                     models.CharField(
-                        max_length=250, verbose_name="Adresse de la colocation."
+                        max_length=250,
+                        verbose_name="Adresse de la colocation.",
                     ),
                 ),
                 (
@@ -89,7 +90,8 @@ class Migration(migrations.Migration):
                 (
                     "description",
                     models.TextField(
-                        blank=True, verbose_name="Description du groupe"
+                        blank=True,
+                        verbose_name="Description du groupe",
                     ),
                 ),
                 (

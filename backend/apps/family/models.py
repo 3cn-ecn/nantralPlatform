@@ -1,9 +1,14 @@
+# ruff: noqa: N815, N802
+
 from django.db import models
 from django.urls.base import reverse
 from django.utils import timezone
 
 from apps.group.abstract.models import AbstractGroup, NamedMembership
 from apps.student.models import Student
+
+MAX_2APLUS_PER_FAMILY = 7
+MIN_2APLUS_PER_FAMILY = 3
 
 
 class Family(AbstractGroup):
@@ -14,7 +19,6 @@ class Family(AbstractGroup):
     non_subscribed_members = models.CharField(
         "Autres parrains",
         max_length=300,
-        null=True,
         blank=True,
         help_text="Si certains des membres de la famille ne sont pas inscrits \
             sur Nantral Platform, vous pouvez les ajouter ici. Séparez les \
@@ -29,7 +33,7 @@ class Family(AbstractGroup):
         # set the year
         if not self.year:
             self.year = timezone.now().year
-        super(Family, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def get_answers_dict(self):
         initial = {}
@@ -37,7 +41,7 @@ class Family(AbstractGroup):
             initial[f"question-{ans.question.pk}"] = ans.answer
         return initial
 
-    def count_members_2A(self) -> int:  # noqa: N802
+    def count_members_2A(self) -> int:
         nb_subscribed = self.memberships.filter(role="2A+").count()
         # test if field is not None or is different to ""
         if self.non_subscribed_members:
@@ -55,7 +59,11 @@ class Family(AbstractGroup):
         nb_done = self.answerfamily_set.all().count()
         nb_tot = QuestionFamily.objects.all().count()
         nb_members = self.count_members_2A()
-        return nb_done >= nb_tot and nb_members >= 3 and nb_members <= 7
+        return (
+            nb_done >= nb_tot
+            and nb_members >= MIN_2APLUS_PER_FAMILY
+            and nb_members <= MAX_2APLUS_PER_FAMILY
+        )
 
 
 class MembershipFamily(NamedMembership):
@@ -104,17 +112,21 @@ class MembershipFamily(NamedMembership):
 class QuestionPage(models.Model):
     name = models.CharField("Nom de la page", max_length=100)
     name_en = models.CharField("Nom (en)", max_length=100)
-    details1A = models.TextField(  # noqa: N815
-        "Infos 1A", null=True, blank=True
+    details1A = models.TextField(
+        "Infos 1A",
+        blank=True,
     )
-    details1A_en = models.TextField(  # noqa: N815
-        "Infos 1A (en)", null=True, blank=True
+    details1A_en = models.TextField(
+        "Infos 1A (en)",
+        blank=True,
     )
-    details2A = models.TextField(  # noqa: N815
-        "Infos 2A+", null=True, blank=True
+    details2A = models.TextField(
+        "Infos 2A+",
+        blank=True,
     )
-    details2A_en = models.TextField(  # noqa: N815
-        "Infos 2A+ (en)", null=True, blank=True
+    details2A_en = models.TextField(
+        "Infos 2A+ (en)",
+        blank=True,
     )
     order = models.IntegerField(
         "Ordre",
@@ -136,16 +148,19 @@ class BaseQuestion(models.Model):
     label = models.CharField("Question", max_length=100)
     label_en = models.CharField("Question (en)", max_length=100)
     details = models.CharField(
-        "Informations supplémentaires", max_length=200, null=True, blank=True
+        "Informations supplémentaires",
+        max_length=200,
+        blank=True,
     )
     details_en = models.CharField(
         "Informations supplémentaires (en)",
         max_length=200,
-        null=True,
         blank=True,
     )
     order = models.IntegerField(
-        "Ordre", help_text="Ordre d'apparition de la question", default=0
+        "Ordre",
+        help_text="Ordre d'apparition de la question",
+        default=0,
     )
 
     def __str__(self):
@@ -203,7 +218,7 @@ class QuestionMember(BaseQuestion):
             self.page = self.group.page
             self.coeff = self.group.coeff
             self.order = self.group.order
-            super(QuestionMember, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
             for o in Option.objects.filter(question=self):
                 o.delete()
             for o in self.group.option_set.all():
@@ -213,7 +228,7 @@ class QuestionMember(BaseQuestion):
                     text_en=o.text_en,
                 )
         else:
-            super(QuestionMember, self).save(*args, **kwargs)
+            super().save(*args, **kwargs)
 
 
 class QuestionFamily(BaseQuestion):

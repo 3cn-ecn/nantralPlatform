@@ -5,16 +5,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('notification', '0001_initial'),
-        ('post', '0003_alter_post_description'),
+        ("notification", "0001_initial"),
+        ("post", "0003_alter_post_description"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='post',
-            name='notification',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='notification.notification'),
+            model_name="post",
+            name="notification",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="notification.notification",
+            ),
         ),
     ]

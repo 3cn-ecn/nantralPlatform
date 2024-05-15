@@ -1,10 +1,10 @@
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from django_ckeditor_5.fields import CKEditor5Field
 
+from apps.account.models import User
 from apps.group.models import Group
 from apps.notification.models import Notification, NotificationAction
 from apps.student.models import Student
@@ -28,8 +28,6 @@ COLORS = [
     ("dark", "Noir"),
 ]
 
-User = get_user_model()
-
 
 class AbstractPublication(models.Model, SlugModel):
     """Abstract model for posts and events."""
@@ -37,10 +35,14 @@ class AbstractPublication(models.Model, SlugModel):
     title = models.CharField(verbose_name=_("Title"), max_length=200)
     description = CKEditor5Field(verbose_name=_("Description"), blank=True)
     group = models.ForeignKey(
-        to=Group, verbose_name=_("Organiser"), on_delete=models.CASCADE
+        to=Group,
+        verbose_name=_("Organiser"),
+        on_delete=models.CASCADE,
     )
     publicity = models.CharField(
-        verbose_name=_("Visibility"), max_length=200, choices=VISIBILITY
+        verbose_name=_("Visibility"),
+        max_length=200,
+        choices=VISIBILITY,
     )
     image = CustomImageField(
         verbose_name=_("Banner"),
@@ -51,7 +53,10 @@ class AbstractPublication(models.Model, SlugModel):
         name_from_field="title",
     )
     notification = models.ForeignKey(
-        to=Notification, on_delete=models.SET_NULL, blank=True, null=True
+        to=Notification,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
     )
 
     # Log infos
@@ -74,6 +79,9 @@ class AbstractPublication(models.Model, SlugModel):
 
     class Meta:
         abstract = True
+
+    def __str__(self) -> str:
+        return f"{self.title} ({self.group.short_name})"
 
     def save(self, *args, notification_body: str, **kwargs) -> None:
         # create the notification object
@@ -113,8 +121,8 @@ class AbstractPublication(models.Model, SlugModel):
         if not self.notification.sent:
             self.notification.send()
 
-    def __str__(self) -> str:
-        return f"{self.title} ({self.group.short_name})"
+    def get_absolute_url(self) -> str:
+        raise NotImplementedError(self.get_absolute_url)
 
     def can_view(self, user: User) -> bool:
         if self.publicity == "Pub":
@@ -127,18 +135,18 @@ class AbstractPublication(models.Model, SlugModel):
         self.image.delete(save=False)
         return super().delete(*args, **kwargs)
 
-    def get_absolute_url(self) -> str:
-        raise NotImplementedError(self.get_absolute_url)
-
 
 class Post(AbstractPublication):
     pinned = models.BooleanField(
-        verbose_name=_("Pin publication"), default=False
+        verbose_name=_("Pin publication"),
+        default=False,
     )
 
     def save(self, *args, **kwargs) -> None:
         super().save(
-            *args, notification_body=f"Annonce : {self.title}", **kwargs
+            *args,
+            notification_body=f"Annonce : {self.title}",
+            **kwargs,
         )
 
     def get_absolute_url(self) -> str:

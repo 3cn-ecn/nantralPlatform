@@ -31,7 +31,7 @@ class AdminFieldsMixin:
         user = self.context["request"].user
         if an_admin_field_is_updated and not group.is_admin(user):
             raise exceptions.PermissionDenied(
-                _("Some fields cannot be updated by non-admins.")
+                _("Some fields cannot be updated by non-admins."),
             )
 
 
@@ -150,7 +150,7 @@ class MembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
             and data["begin_date"] > data["end_date"]
         ):
             raise exceptions.ValidationError(
-                _("The end date must be after the begin date.")
+                _("The end date must be after the begin date."),
             )
         self.validate_admin_fields(data, self.instance.group)
         return data
@@ -179,26 +179,26 @@ class NewMembershipSerializer(AdminFieldsMixin, serializers.ModelSerializer):
             raise exceptions.PermissionDenied(
                 _(
                     "You can only create new membership for yourself or for "
-                    "someone else inside a group where you are admin."
-                )
+                    "someone else inside a group where you are admin.",
+                ),
             )
         if (group.private or group.lock_memberships) and not group.is_admin(
-            user
+            user,
         ):
             raise exceptions.PermissionDenied(
                 _(
                     "You cannot create create a new membership inside a private"
-                    " group if you are not admin of this group."
-                )
+                    " group if you are not admin of this group.",
+                ),
             )
-        if data.get("end_date", None) and data.get("begin_date", None):
+        if data.get("end_date") and data.get("begin_date"):
             if data["begin_date"] > data["end_date"]:
                 raise exceptions.ValidationError(
-                    _("The end date must be after the begin date.")
+                    _("The end date must be after the begin date."),
                 )
         elif not group.group_type.no_membership_dates:
             raise exceptions.ValidationError(
-                _("You must provides 'begin_date' and 'end_date'.")
+                _("You must provides 'begin_date' and 'end_date'."),
             )
         self.validate_admin_fields(data, group)
         return data

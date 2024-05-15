@@ -1,5 +1,3 @@
-from typing import List
-
 from django.conf import settings
 
 import requests
@@ -9,7 +7,9 @@ AUTH_HEADER = {"Authorization": f"Bot {settings.DISCORD_TOKEN}"}
 
 
 def send_message(
-    channel_id: int, message: str, embeds: List[dict] = None
+    channel_id: int,
+    message: str,
+    embeds: list[dict] | None = None,
 ) -> str:
     payload = {"content": message}
     if embeds is not None:
@@ -18,6 +18,7 @@ def send_message(
         f"{BASE_URL}/channels/{channel_id}/messages",
         json=payload,
         headers=AUTH_HEADER,
+        timeout=10,
     )
     return resp.json()["id"]
 
@@ -29,4 +30,5 @@ def react_message(channel_id: int, message_id: str, emoji: str):
             f"messages/{message_id}/reactions/{emoji}/@me"
         ),
         headers=AUTH_HEADER,
+        timeout=10,
     )

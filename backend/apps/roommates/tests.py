@@ -1,7 +1,8 @@
-from datetime import date, timedelta
+from datetime import timedelta
 
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from rest_framework import status
 
@@ -28,8 +29,8 @@ class TestHousing(TestCase, TestMixin):
         Roommates.objects.create(
             name="Coloc test",
             housing=house,
-            begin_date=date.today(),
-            end_date=date.today() + timedelta(days=365),
+            begin_date=timezone.now(),
+            end_date=timezone.now() + timedelta(days=365),
         )
         coloc = Roommates.objects.all().first()
         url = reverse("roommates:detail", args=[coloc.slug])

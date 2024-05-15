@@ -18,11 +18,12 @@ class UserFactory(DjangoModelFactory):
     is_email_valid = True
     password = factory.django.Password("pass")
     username = factory.LazyAttribute(
-        lambda obj: f"{obj.first_name.lower()}.{obj.last_name.lower()}"
+        lambda obj: f"{obj.first_name.lower()}.{obj.last_name.lower()}",
     )
 
     # Declare the related student factory because of the OneToOneField
-    # see: https://factoryboy.readthedocs.io/en/stable/recipes.html#example-django-s-profile  # noqa: E501
+    # see: https://factoryboy.readthedocs.io/en/stable/recipes.html#example-django-s-profile
     student = factory.RelatedFactory(
-        "apps.student.factories.StudentFactory", factory_related_name="user"
+        "apps.student.factories.StudentFactory",
+        factory_related_name="user",
     )

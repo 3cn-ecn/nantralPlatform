@@ -4,16 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('student', '0006_alter_student_faculty'),
-        ('roommates', '0013_create_extra_setting_colocathlon'),
+        ("student", "0006_alter_student_faculty"),
+        ("roommates", "0013_create_extra_setting_colocathlon"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='roommates',
-            name='colocathlon_participants',
-            field=models.ManyToManyField(blank=True, related_name='colocathlons_in', to='student.student'),
+            model_name="roommates",
+            name="colocathlon_participants",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="colocathlons_in",
+                to="student.student",
+            ),
         ),
     ]

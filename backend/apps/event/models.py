@@ -18,7 +18,9 @@ class Event(AbstractPublication):
         help_text=_("Enter date in format DD/MM/YYYY HH:MM"),
     )
     location = models.CharField(
-        verbose_name=_("Location"), max_length=200, blank=True
+        verbose_name=_("Location"),
+        max_length=200,
+        blank=True,
     )
     participants = models.ManyToManyField(
         to=Student,
@@ -34,10 +36,14 @@ class Event(AbstractPublication):
         related_name="bookmarked_events",
     )
     form_url = models.URLField(
-        verbose_name=_("Link to external form"), max_length=200, blank=True
+        verbose_name=_("Link to external form"),
+        max_length=200,
+        blank=True,
     )
     max_participant = models.PositiveIntegerField(
-        verbose_name=_("Maximum number of participants"), blank=True, null=True
+        verbose_name=_("Maximum number of participants"),
+        blank=True,
+        null=True,
     )
     start_registration = models.DateTimeField(
         verbose_name=_("Start date for registration"),

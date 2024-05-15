@@ -7,76 +7,83 @@ from django.utils.timezone import timedelta
 
 
 def forwards(apps, schema_editor):
-    Club = apps.get_model('club', 'Club')
-    GroupType = apps.get_model('group', 'GroupType')
-    Group = apps.get_model('group', 'Group')
-    Subscription = apps.get_model('notification', 'Subscription')
-    Event = apps.get_model('event', 'Event')
-    Post = apps.get_model('post', 'Post')
-    SocialLink = apps.get_model('sociallink', 'SocialLink')
-    SocialNetwork = apps.get_model('sociallink', 'SocialNetwork')
+    Club = apps.get_model("club", "Club")
+    GroupType = apps.get_model("group", "GroupType")
+    Group = apps.get_model("group", "Group")
+    Subscription = apps.get_model("notification", "Subscription")
+    Event = apps.get_model("event", "Event")
+    Post = apps.get_model("post", "Post")
+    SocialLink = apps.get_model("sociallink", "SocialLink")
+    SocialNetwork = apps.get_model("sociallink", "SocialNetwork")
 
     gt = GroupType.objects.create(
         name="Clubs & Assos",
-        slug='club',
-        sort_fields='-parent__priority,parent__short_name,-priority,short_name',
+        slug="club",
+        sort_fields="-parent__priority,parent__short_name,-priority,short_name",
         category_expr='f"Clubs {group.parent.short_name}" if group.parent else "Associations"',
     )
-    if not SocialNetwork.objects.filter(name='Email').exists():
+    if not SocialNetwork.objects.filter(name="Email").exists():
         email_type = SocialNetwork.objects.create(
-            name='E-mail',
-            color='#bc6c25',
-            icon_name='fas fa-envelope')
+            name="E-mail", color="#bc6c25", icon_name="fas fa-envelope"
+        )
     else:
-        email_type = SocialNetwork.objects.get(name='Email')
+        email_type = SocialNetwork.objects.get(name="Email")
     bdx = {}
 
-    for club in Club.objects.all().order_by(F('bdx').asc(nulls_last=True)):
-        alt_name = club.alt_name.split(',')[0] if club.alt_name else ''
+    for club in Club.objects.all().order_by(F("bdx").asc(nulls_last=True)):
+        alt_name = club.alt_name.split(",")[0] if club.alt_name else ""
         g = Group.objects.create(
             name=club.name if len(club.name) > len(alt_name) else alt_name,
-            short_name=alt_name if len(club.name) > len(alt_name) and len(alt_name) else club.name,
+            short_name=alt_name
+            if len(club.name) > len(alt_name) and len(alt_name)
+            else club.name,
             group_type=gt,
             parent=bdx[club.bdx_type.id] if club.bdx_type else None,
             public=True,
-            summary=club.summary if club.summary else '',
+            summary=club.summary if club.summary else "",
             description=club.description,
-            meeting_place=club.meeting_place if club.meeting_place else '',
-            meeting_hour=club.meeting_hour if club.meeting_hour else '',
+            meeting_place=club.meeting_place if club.meeting_place else "",
+            meeting_hour=club.meeting_hour if club.meeting_hour else "",
             icon=club.logo,
             banner=club.banniere,
             video1=club.video1,
             video2=club.video2,
             slug=club.slug,
-            priority=club.bdx.order if hasattr(club, 'bdx') else 0
+            priority=club.bdx.order if hasattr(club, "bdx") else 0,
         )
-        if hasattr(club, 'bdx'):
+        if hasattr(club, "bdx"):
             bdx[club.id] = g
         for m in club.namedmembershipclub_set.all():
-            g.members.add(m.student, through_defaults={
-                'admin': m.admin,
-                'summary': m.function[:50],
-                'description': m.function if len(m.function) > 50 else '',
-                'begin_date': m.date_begin,
-                'end_date': m.date_end if m.date_end else (m.date_begin + timedelta(days=365)),
-                'priority': 100 - m.order if m.order else 0,
-            })
+            g.members.add(
+                m.student,
+                through_defaults={
+                    "admin": m.admin,
+                    "summary": m.function[:50],
+                    "description": m.function if len(m.function) > 50 else "",
+                    "begin_date": m.date_begin,
+                    "end_date": m.date_end
+                    if m.date_end
+                    else (m.date_begin + timedelta(days=365)),
+                    "priority": 100 - m.order if m.order else 0,
+                },
+            )
         for s in Subscription.objects.filter(page=f"club--{club.slug}"):
             g.subscribers.add(s.student)
             s.delete()
         for e in Event.objects.filter(group_slug=f"club--{club.slug}"):
-            e.group_slug=g.slug
+            e.group_slug = g.slug
             e.save()
         for p in Post.objects.filter(group_slug=f"club--{club.slug}"):
-            p.group_slug=g.slug
+            p.group_slug = g.slug
             p.save()
         for s in SocialLink.objects.filter(slug=f"club--{club.slug}"):
             g.social_links.add(s)
         if club.email:
             g.social_links.create(
                 uri=f"mailto:{club.email}",
-                label=club.email if len(club.email) < 20 else '',
-                network=email_type)
+                label=club.email if len(club.email) < 20 else "",
+                network=email_type,
+            )
     # add bdx as extra_parents
     gt.extra_parents.add(*[g for _, g in bdx.items()])
     # delete all clubs
@@ -84,16 +91,18 @@ def forwards(apps, schema_editor):
 
 
 def reverse(apps, schema_editor):
-    Club = apps.get_model('club', 'Club')
-    BDX = apps.get_model('club', 'BDX')
-    GroupType = apps.get_model('group', 'GroupType')
-    Group = apps.get_model('group', 'Group')
-    Subscription = apps.get_model('notification', 'Subscription')
-    Event = apps.get_model('event', 'Event')
-    Post = apps.get_model('post', 'Post')
+    Club = apps.get_model("club", "Club")
+    BDX = apps.get_model("club", "BDX")
+    GroupType = apps.get_model("group", "GroupType")
+    Group = apps.get_model("group", "Group")
+    Subscription = apps.get_model("notification", "Subscription")
+    Event = apps.get_model("event", "Event")
+    Post = apps.get_model("post", "Post")
 
     parent = {}
-    for group in Group.objects.filter(group_type__slug='club').order_by(F('parent').asc(nulls_first=True)):
+    for group in Group.objects.filter(group_type__slug="club").order_by(
+        F("parent").asc(nulls_first=True)
+    ):
         Model = BDX if not group.parent else Club
         c = Model.objects.create(
             name=group.name,
@@ -107,43 +116,45 @@ def reverse(apps, schema_editor):
             banniere=group.banner,
             video1=group.video1,
             video2=group.video2,
-            slug=group.slug
+            slug=group.slug,
         )
         if group.parent is None:
             parent[group.id] = c
         for m in group.membership_set.all():
-            c.members.add(m.student, through_defaults={
-                'admin': m.admin,
-                'function': m.summary,
-                'date_begin': m.begin_date,
-                'date_end': m.end_date,
-                'order': m.priority,
-            })
+            c.members.add(
+                m.student,
+                through_defaults={
+                    "admin": m.admin,
+                    "function": m.summary,
+                    "date_begin": m.begin_date,
+                    "date_end": m.end_date,
+                    "order": m.priority,
+                },
+            )
         for student in group.subscribers.all():
             Subscription.objects.create(student=student, page=f"club--{c.slug}")
         for e in Event.objects.filter(group_slug=group.slug):
-            e.group_slug=f"club--{c.slug}"
+            e.group_slug = f"club--{c.slug}"
             e.save()
         for p in Post.objects.filter(group_slug=group.slug):
-            p.group_slug=f"club--{c.slug}"
+            p.group_slug = f"club--{c.slug}"
             p.save()
         for s in group.social_links.all():
             s.slug = f"club--{c.slug}"
             s.save()
     # delete all group objects
-    GroupType.objects.filter(slug='club').delete()
+    GroupType.objects.filter(slug="club").delete()
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0001_alter_namedmembershipclub_date_begin'),
-        ('liste', '0015_migrate_to_group'),
-        ('group', '0010_group_grouptype_tag_membership_label_and_more'),
-        ('notification', '0003_alter_notification_publicity'),
-        ('event', '0011_rename_baseevent_event'),
-        ('post', '0005_rename_group_post_group_slug'),
-        ('sociallink', '0005_alter_sociallink_label_alter_sociallink_url')
+        ("club", "0001_alter_namedmembershipclub_date_begin"),
+        ("liste", "0015_migrate_to_group"),
+        ("group", "0010_group_grouptype_tag_membership_label_and_more"),
+        ("notification", "0003_alter_notification_publicity"),
+        ("event", "0011_rename_baseevent_event"),
+        ("post", "0005_rename_group_post_group_slug"),
+        ("sociallink", "0005_alter_sociallink_label_alter_sociallink_url"),
     ]
 
     operations = [

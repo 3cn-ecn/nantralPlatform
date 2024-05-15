@@ -4,28 +4,39 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0014_auto_20210806_1138'),
+        ("club", "0014_auto_20210806_1138"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='club',
-            name='email',
+            model_name="club",
+            name="email",
             field=models.EmailField(
-                blank=True, max_length=50, null=True, verbose_name="Email de l'asso"),
+                blank=True,
+                max_length=50,
+                null=True,
+                verbose_name="Email de l'asso",
+            ),
         ),
         migrations.AddField(
-            model_name='club',
-            name='meeting_hour',
-            field=models.CharField(blank=True, max_length=50, null=True,
-                                   verbose_name='Heure et jour de réunion périodique'),
-        ),
-        migrations.AddField(
-            model_name='club',
-            name='meeting_place',
+            model_name="club",
+            name="meeting_hour",
             field=models.CharField(
-                blank=True, max_length=50, null=True, verbose_name='Local / Lieu de réunion'),
+                blank=True,
+                max_length=50,
+                null=True,
+                verbose_name="Heure et jour de réunion périodique",
+            ),
+        ),
+        migrations.AddField(
+            model_name="club",
+            name="meeting_place",
+            field=models.CharField(
+                blank=True,
+                max_length=50,
+                null=True,
+                verbose_name="Local / Lieu de réunion",
+            ),
         ),
     ]

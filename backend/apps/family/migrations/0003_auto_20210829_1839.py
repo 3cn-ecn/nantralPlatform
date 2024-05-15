@@ -5,20 +5,36 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('family', '0002_createModelQuestions'),
+        ("family", "0002_createModelQuestions"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='affichage',
-            name='phase',
-            field=models.IntegerField(choices=[(0, 'Tout masquer'), (1, 'Questionnaires Familles & Parrains'), (2, 'Questionnaires pour tous'), (3, 'Chasse aux parrains'), (4, 'Résultats Parrainage')], default=0),
+            model_name="affichage",
+            name="phase",
+            field=models.IntegerField(
+                choices=[
+                    (0, "Tout masquer"),
+                    (1, "Questionnaires Familles & Parrains"),
+                    (2, "Questionnaires pour tous"),
+                    (3, "Chasse aux parrains"),
+                    (4, "Résultats Parrainage"),
+                ],
+                default=0,
+            ),
         ),
         migrations.AlterField(
-            model_name='questionfamily',
-            name='equivalent',
-            field=models.OneToOneField(blank=True, help_text="Question équivalente dans le questionnaire des membres. Laissez vide si vous                     souhaitez que cette question ne soit pas prise en compte dans l'algo.", null=True, on_delete=django.db.models.deletion.CASCADE, related_name='equivalent', to='family.questionmember', verbose_name='Question équivalente'),
+            model_name="questionfamily",
+            name="equivalent",
+            field=models.OneToOneField(
+                blank=True,
+                help_text="Question équivalente dans le questionnaire des membres. Laissez vide si vous                     souhaitez que cette question ne soit pas prise en compte dans l'algo.",
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="equivalent",
+                to="family.questionmember",
+                verbose_name="Question équivalente",
+            ),
         ),
     ]

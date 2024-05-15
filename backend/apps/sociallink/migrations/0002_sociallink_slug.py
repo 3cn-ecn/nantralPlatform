@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('sociallink', '0001_initial'),
+        ("sociallink", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='sociallink',
-            name='slug',
-            field=models.SlugField(null=True, unique=True, verbose_name='Slug du lien'),
+            model_name="sociallink",
+            name="slug",
+            field=models.SlugField(
+                null=True,
+                unique=True,
+                verbose_name="Slug du lien",
+            ),
         ),
     ]

@@ -6,23 +6,49 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('student', '0003_alter_student_options'),
-        ('group', 'group_admin_no_null'),
+        ("student", "0003_alter_student_options"),
+        ("group", "group_admin_no_null"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='AdminRightsRequest',
+            name="AdminRightsRequest",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('group', models.SlugField(verbose_name='Groupe demandé.')),
-                ('date', models.DateField(default=django.utils.timezone.now, verbose_name='Date de la requête')),
-                ('reason', models.CharField(blank=True, max_length=100, verbose_name='Raison de la demande')),
-                ('domain', models.CharField(max_length=64)),
-                ('issue', models.IntegerField(blank=True)),
-                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='student.student')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("group", models.SlugField(verbose_name="Groupe demandé.")),
+                (
+                    "date",
+                    models.DateField(
+                        default=django.utils.timezone.now,
+                        verbose_name="Date de la requête",
+                    ),
+                ),
+                (
+                    "reason",
+                    models.CharField(
+                        blank=True,
+                        max_length=100,
+                        verbose_name="Raison de la demande",
+                    ),
+                ),
+                ("domain", models.CharField(max_length=64)),
+                ("issue", models.IntegerField(blank=True)),
+                (
+                    "student",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="student.student",
+                    ),
+                ),
             ],
         ),
     ]

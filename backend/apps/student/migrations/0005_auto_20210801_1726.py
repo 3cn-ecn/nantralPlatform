@@ -4,22 +4,21 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('student', '0004_alter_student_options'),
+        ("student", "0004_alter_student_options"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='student',
-            options={'ordering': ['user__last_name', 'user__first_name']},
+            name="student",
+            options={"ordering": ["user__last_name", "user__first_name"]},
         ),
         migrations.RemoveField(
-            model_name='student',
-            name='first_name',
+            model_name="student",
+            name="first_name",
         ),
         migrations.RemoveField(
-            model_name='student',
-            name='last_name',
+            model_name="student",
+            name="last_name",
         ),
     ]

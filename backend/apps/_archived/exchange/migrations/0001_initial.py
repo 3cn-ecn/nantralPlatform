@@ -5,22 +5,51 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('student', '0002_rename_dd_cursus_add_alternant'),
-        ('academic', '0003_auto_20210121_1041'),
+        ("student", "0002_rename_dd_cursus_add_alternant"),
+        ("academic", "0003_auto_20210121_1041"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Exchange',
+            name="Exchange",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('got', models.ForeignKey(limit_choices_to={'type': 'OD'}, on_delete=django.db.models.deletion.CASCADE, related_name='got_by', to='academic.Course')),
-                ('student', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='exchange', to='student.Student')),
-                ('wanted', models.ManyToManyField(limit_choices_to={'type': 'OD'}, related_name='wanted_by', to='academic.Course')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "got",
+                    models.ForeignKey(
+                        limit_choices_to={"type": "OD"},
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="got_by",
+                        to="academic.Course",
+                    ),
+                ),
+                (
+                    "student",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="exchange",
+                        to="student.Student",
+                    ),
+                ),
+                (
+                    "wanted",
+                    models.ManyToManyField(
+                        limit_choices_to={"type": "OD"},
+                        related_name="wanted_by",
+                        to="academic.Course",
+                    ),
+                ),
             ],
         ),
     ]

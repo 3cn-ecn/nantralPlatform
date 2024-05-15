@@ -7,17 +7,23 @@ Correct the duplicate of user accounts.
 from datetime import datetime
 
 from django.db import migrations
+from django.utils import timezone
 
 
 def sort_user(u):
     if u.last_login:
         return u.last_login.timestamp()
     else:
-        return datetime(1919, 1, 1).timestamp()
+        return datetime(
+            1919,
+            1,
+            1,
+            tzinfo=timezone.get_current_timezone(),
+        ).timestamp()
 
 
 def forwards_func(apps, schema_editor):
-    User = apps.get_registered_model('account', 'User')
+    User = apps.get_registered_model("account", "User")  # noqa: N806
     for user in User.objects.all():
         related_users = User.objects.filter(email=user.email)
         if len(related_users) > 1:
@@ -29,9 +35,8 @@ def forwards_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('account', '0005_lower_all_accounts'),
+        ("account", "0005_lower_all_accounts"),
     ]
 
     operations = [

@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import DetailView, FormView, TemplateView, View
 
 from apps.sociallink.models import SocialLink
-from apps.utils.accessMixins import UserIsAdmin, user_is_connected
+from apps.utils.access_mixins import UserIsAdmin, user_is_connected
 from apps.utils.slug import get_object_from_slug
 
 from .forms import (
@@ -21,7 +23,9 @@ from .forms import (
     SocialLinkGroupFormset,
     UpdateGroupForm,
 )
-from .models import AbstractGroup
+
+if TYPE_CHECKING:
+    from .models import AbstractGroup
 
 
 class BaseDetailGroupView(DetailView):
@@ -44,7 +48,7 @@ class BaseDetailGroupView(DetailView):
         if user_is_connected(self.request.user):
             # members
             context["members"] = group.members.through.objects.filter(
-                group=group
+                group=group,
             ).order_by("student__user__first_name")
             context["is_member"] = group.is_member(self.request.user)
             if context["is_member"]:
@@ -53,7 +57,7 @@ class BaseDetailGroupView(DetailView):
                     group=group,
                 )
                 context["form"] = NamedMembershipAddGroup(group)(
-                    instance=membership
+                    instance=membership,
                 )
             else:
                 context["form"] = NamedMembershipAddGroup(group)()
@@ -69,8 +73,6 @@ class BaseDetailGroupView(DetailView):
 
 class DetailGroupView(LoginRequiredMixin, BaseDetailGroupView):
     """Vue de détail d'un groupe protégée."""
-
-    pass
 
 
 class AddToGroupView(LoginRequiredMixin, FormView):
@@ -94,7 +96,8 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         student = self.request.user.student
         group = self.get_group()
         membership = group.members.through.objects.filter(
-            group=group, student=student
+            group=group,
+            student=student,
         ).first()
         return form_class(instance=membership, **self.get_form_kwargs())
 
@@ -111,7 +114,8 @@ class AddToGroupView(LoginRequiredMixin, FormView):
         else:
             self.object.save()
             messages.success(
-                self.request, "Les modifications ont bien été enregistrées !"
+                self.request,
+                "Les modifications ont bien été enregistrées !",
             )
         return redirect(self.object.group.get_absolute_url())
 
@@ -141,7 +145,8 @@ class UpdateGroupView(UserIsAdmin, TemplateView):
             {"target": reverse(group.app + ":index"), "label": group.app_name},
             {
                 "target": reverse(
-                    group.app + ":detail", kwargs={"slug": group.slug}
+                    group.app + ":detail",
+                    kwargs={"slug": group.slug},
                 ),
                 "label": group.name,
             },
@@ -180,18 +185,13 @@ class UpdateGroupMembersView(UserIsAdmin, TemplateView):
             {"target": reverse(group.app + ":index"), "label": group.app_name},
             {
                 "target": reverse(
-                    group.app + ":detail", kwargs={"slug": group.slug}
+                    group.app + ":detail",
+                    kwargs={"slug": group.slug},
                 ),
                 "label": group.name,
             },
             {"target": "#", "label": "Modifier"},
         ]
-        # memberships = context['object'].members.through.objects.filter(
-        #     group=context['object'])
-        # MembersFormset = NamedMembershipGroupFormset(
-        #     context['object'])
-        # if MembersFormset:
-        #     context['members'] = MembersFormset(queryset=memberships)
         return context
 
     def post(self, request, **kwargs):
@@ -233,7 +233,7 @@ class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
         group = self.get_object()
         context["object"] = group
         sociallinks = SocialLink.objects.filter(
-            slug=context["object"].full_slug
+            slug=context["object"].full_slug,
         )
         form = SocialLinkGroupFormset(queryset=sociallinks)
         context["sociallinks"] = form
@@ -241,7 +241,8 @@ class UpdateGroupSocialLinksView(UserIsAdmin, TemplateView):
             {"target": reverse(group.app + ":index"), "label": group.app_name},
             {
                 "target": reverse(
-                    group.app + ":detail", kwargs={"slug": group.slug}
+                    group.app + ":detail",
+                    kwargs={"slug": group.slug},
                 ),
                 "label": group.name,
             },
@@ -293,10 +294,10 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
                 "par mail."
             ),
         )
-        object = form.save(commit=False)
-        object.student = self.request.user.student
-        object.group = self.get_group().full_slug
-        object.save(domain=get_current_site(self.request).domain)
+        obj = form.save(commit=False)
+        obj.student = self.request.user.student
+        obj.group = self.get_group().full_slug
+        obj.save(domain=get_current_site(self.request).domain)
         return super().form_valid(form)
 
     def get_success_url(self) -> str:
@@ -305,12 +306,12 @@ class RequestAdminRightsView(LoginRequiredMixin, FormView):
 
 
 class AcceptAdminRequestView(UserIsAdmin, View):
-    def get(self, request: HttpRequest, slug, id):
+    def get(self, request: HttpRequest, slug, id):  # noqa: A002
         app = resolve(request.path_info).app_name
         group: AbstractGroup = get_object_from_slug(app, slug)
         try:
             admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
-                id=id
+                id=id,
             )
             if group.full_slug == admin_req.group:
                 # Checking whether the url is legit
@@ -329,12 +330,12 @@ class AcceptAdminRequestView(UserIsAdmin, View):
 
 
 class DenyAdminRequestView(UserIsAdmin, View):
-    def get(self, request: HttpRequest, slug, id):
+    def get(self, request: HttpRequest, slug, id):  # noqa: A002
         app = resolve(request.path_info).app_name
         group: AbstractGroup = get_object_from_slug(app, slug)
         try:
             admin_req: AdminRightsRequest = AdminRightsRequest.objects.get(
-                id=id
+                id=id,
             )
             if group.full_slug == admin_req.group:
                 # Checking whether the url is legit

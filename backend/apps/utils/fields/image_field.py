@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 
 from ..compress import compress_image
@@ -18,15 +19,16 @@ class CustomImageFieldFile(models.ImageField.attr_class):
 
         if content != old_file:
             new_content = compress_image(
-                content, self.field.size, self.field.crop
+                content,
+                self.field.size,
+                self.field.crop,
             )
 
         super().save(name, new_content, save)
 
 
 class CustomImageField(models.ImageField):
-    """
-    A custom ImageField.
+    """A custom ImageField.
 
     ImageField that deletes the previous image file when a new file is uploaded,
     and compresses the uploaded image.
@@ -53,7 +55,7 @@ class CustomImageField(models.ImageField):
 
     @property
     def non_db_attrs(self):
-        return super().non_db_attrs + ("size", "crop", "name_from_field")
+        return (*super().non_db_attrs, "size", "crop", "name_from_field")
 
     def deconstruct(self):
         name, path, args, kwargs = super().deconstruct()
@@ -61,8 +63,8 @@ class CustomImageField(models.ImageField):
         return name, path, args, kwargs
 
     def create_filename(self, instance, filename):
-        app_label = instance._meta.app_label  # noqa: WPS437
-        model_name = instance._meta.model_name  # noqa: WPS437
+        app_label = instance._meta.app_label
+        model_name = instance._meta.model_name
         field_name = self.name
 
         extension = filename.split(".")[-1]
@@ -70,9 +72,9 @@ class CustomImageField(models.ImageField):
 
         filename_slug = slugify(str(getattr(instance, field_for_name)))[:20]
 
-        date = datetime.now().strftime("%Y-%m-%d")
-        year = datetime.now().strftime("%Y")
-        timestamp = str(int(datetime.timestamp(datetime.now())))
+        date = timezone.now().strftime("%Y-%m-%d")
+        year = timezone.now().strftime("%Y")
+        timestamp = str(int(datetime.timestamp(timezone.now())))
 
         return os.path.join(
             f"{app_label}/{model_name}/{field_name}/{year}/",

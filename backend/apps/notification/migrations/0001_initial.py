@@ -6,70 +6,191 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('student', '0005_auto_20210801_1726'),
+        ("student", "0005_auto_20210801_1726"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Notification',
+            name="Notification",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255, verbose_name='Titre')),
-                ('body', models.CharField(max_length=512, verbose_name='Corps')),
-                ('url', models.CharField(max_length=512, verbose_name='Cible')),
-                ('sender', models.SlugField(verbose_name='Expéditeur')),
-                ('icon_url', models.CharField(blank=True, max_length=512, null=True)),
-                ('image_url', models.CharField(blank=True, max_length=512, null=True)),
-                ('date', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Date de création')),
-                ('high_priority', models.BooleanField(default=False, verbose_name='Prioritaire')),
-                ('publicity', models.CharField(choices=[('Pub', 'Public - Visible par tous'), ('Mem', 'Membres uniquement - Visible uniquement par les membres du groupe'), ('Adm', 'Administeurs de la page')], default='Pub', max_length=3, verbose_name='Visibilité de la notification')),
-                ('sent', models.BooleanField(default=False, verbose_name='Envoyé')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(max_length=255, verbose_name="Titre"),
+                ),
+                (
+                    "body",
+                    models.CharField(max_length=512, verbose_name="Corps"),
+                ),
+                ("url", models.CharField(max_length=512, verbose_name="Cible")),
+                ("sender", models.SlugField(verbose_name="Expéditeur")),
+                (
+                    "icon_url",
+                    models.CharField(blank=True, max_length=512, null=True),
+                ),
+                (
+                    "image_url",
+                    models.CharField(blank=True, max_length=512, null=True),
+                ),
+                (
+                    "date",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        verbose_name="Date de création",
+                    ),
+                ),
+                (
+                    "high_priority",
+                    models.BooleanField(
+                        default=False,
+                        verbose_name="Prioritaire",
+                    ),
+                ),
+                (
+                    "publicity",
+                    models.CharField(
+                        choices=[
+                            ("Pub", "Public - Visible par tous"),
+                            (
+                                "Mem",
+                                "Membres uniquement - Visible uniquement par les membres du groupe",
+                            ),
+                            ("Adm", "Administeurs de la page"),
+                        ],
+                        default="Pub",
+                        max_length=3,
+                        verbose_name="Visibilité de la notification",
+                    ),
+                ),
+                (
+                    "sent",
+                    models.BooleanField(default=False, verbose_name="Envoyé"),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='SentNotification',
+            name="SentNotification",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('seen', models.BooleanField(default=False, verbose_name='Vu')),
-                ('subscribed', models.BooleanField(default=False, help_text='Vrai si on la montre dans les abonnements', verbose_name='Abonné')),
-                ('notification', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='notification.notification')),
-                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='student.student')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("seen", models.BooleanField(default=False, verbose_name="Vu")),
+                (
+                    "subscribed",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Vrai si on la montre dans les abonnements",
+                        verbose_name="Abonné",
+                    ),
+                ),
+                (
+                    "notification",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="notification.notification",
+                    ),
+                ),
+                (
+                    "student",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="student.student",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Notification envoyée',
-                'verbose_name_plural': 'Notifications envoyées',
-                'unique_together': {('student', 'notification')},
+                "verbose_name": "Notification envoyée",
+                "verbose_name_plural": "Notifications envoyées",
+                "unique_together": {("student", "notification")},
             },
         ),
         migrations.CreateModel(
-            name='NotificationAction',
+            name="NotificationAction",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=50, verbose_name='Titre')),
-                ('url', models.CharField(max_length=512, verbose_name='Cible')),
-                ('icon_url', models.CharField(blank=True, max_length=512, null=True, verbose_name='Url of the icon for the action')),
-                ('notification', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='actions', to='notification.notification')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(max_length=50, verbose_name="Titre"),
+                ),
+                ("url", models.CharField(max_length=512, verbose_name="Cible")),
+                (
+                    "icon_url",
+                    models.CharField(
+                        blank=True,
+                        max_length=512,
+                        null=True,
+                        verbose_name="Url of the icon for the action",
+                    ),
+                ),
+                (
+                    "notification",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="actions",
+                        to="notification.notification",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='notification',
-            name='receivers',
-            field=models.ManyToManyField(related_name='notification_set', through='notification.SentNotification', to='student.Student'),
+            model_name="notification",
+            name="receivers",
+            field=models.ManyToManyField(
+                related_name="notification_set",
+                through="notification.SentNotification",
+                to="student.Student",
+            ),
         ),
         migrations.CreateModel(
-            name='Subscription',
+            name="Subscription",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('page', models.SlugField(verbose_name='Page')),
-                ('student', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subscription_set', to='student.student')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("page", models.SlugField(verbose_name="Page")),
+                (
+                    "student",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="subscription_set",
+                        to="student.student",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Abonnement',
-                'unique_together': {('student', 'page')},
+                "verbose_name": "Abonnement",
+                "unique_together": {("student", "page")},
             },
         ),
     ]

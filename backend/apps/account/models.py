@@ -19,18 +19,18 @@ class InvitationLink(models.Model):
         return f"""Invitation(Expires at:
          {self.expires_at.strftime('%d/%m/%Y, %H:%M:%S')})"""
 
+    def get_absolute_url(self):
+        return f"/register?uuid={self.id}/"
+
     def is_valid(self) -> bool:
         """Return True if invitation is not expired."""
         return self.expires_at > timezone.now()
 
-    def get_absolute_url(self):
-        return f"/register?uuid={self.id}/"
-
 
 class User(AbstractUser):
-    USERNAME_FIELD = "email"  # noqa: WPS 115
-    EMAIL_FIELD = "email"  # noqa: WPS 115
-    REQUIRED_FIELDS = ["username"]  # noqa: WPS 115
+    USERNAME_FIELD = "email"
+    EMAIL_FIELD = "email"
+    REQUIRED_FIELDS = ["username"]
 
     objects = UserManager()
 
@@ -38,7 +38,10 @@ class User(AbstractUser):
     is_email_valid = models.BooleanField(default=False)
     email_next = models.EmailField(blank=True)
     invitation = models.ForeignKey(
-        InvitationLink, null=True, blank=True, on_delete=models.SET_NULL
+        InvitationLink,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
 
     def save(self, *args, **kwargs):

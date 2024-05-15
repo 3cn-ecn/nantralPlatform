@@ -91,7 +91,7 @@ class PostViewSet(viewsets.ModelViewSet):
         user = self.request.user
 
         query = Post.objects.filter(
-            Q(publicity="Pub") | Q(group__members__user=user)
+            Q(publicity="Pub") | Q(group__members__user=user),
         )
         if is_member is True:
             query = query.filter(group__members__user=user)

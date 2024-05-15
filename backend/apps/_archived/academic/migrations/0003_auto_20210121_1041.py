@@ -4,15 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('academic', '0002_course_image'),
+        ("academic", "0002_course_image"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='course',
-            name='image',
-            field=models.CharField(blank=True, max_length=200, null=True, verbose_name="Image de l'option"),
+            model_name="course",
+            name="image",
+            field=models.CharField(
+                blank=True,
+                max_length=200,
+                null=True,
+                verbose_name="Image de l'option",
+            ),
         ),
     ]

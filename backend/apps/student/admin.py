@@ -1,5 +1,3 @@
-from typing import List
-
 from django.contrib import admin
 from django.db.models import Count
 from django.template.response import TemplateResponse
@@ -22,14 +20,14 @@ class StudentAdmin(admin.ModelAdmin):
         "user__email",
     )
 
-    def get_urls(self) -> List[URLPattern]:
+    def get_urls(self) -> list[URLPattern]:
         urls = super().get_urls()
         custom_urls = [
             path(
                 "metrics/",
                 self.admin_site.admin_view(self.metrics_view),
                 name="student-metrics",
-            )
+            ),
         ]
         return custom_urls + urls
 

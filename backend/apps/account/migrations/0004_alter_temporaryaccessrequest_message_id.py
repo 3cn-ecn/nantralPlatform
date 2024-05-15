@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('account', '0003_temporaryaccessrequest'),
+        ("account", "0003_temporaryaccessrequest"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='temporaryaccessrequest',
-            name='message_id',
+            model_name="temporaryaccessrequest",
+            name="message_id",
             field=models.CharField(blank=True, max_length=50, null=True),
         ),
     ]

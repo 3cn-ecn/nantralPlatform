@@ -27,7 +27,7 @@ class GroupFactory(DjangoModelFactory):
     description = factory.Faker("paragraph", nb_sentences=10)
     group_type = factory.Iterator(GroupType.objects.all())
     parent = factory.LazyAttribute(
-        lambda obj: RealFaker().random_element(obj.possible_parents)
+        lambda obj: RealFaker().random_element(obj.possible_parents),
     )
 
     class Params:
@@ -64,7 +64,7 @@ class MembershipFactory(DjangoModelFactory):
         lambda obj: RealFaker().date_between(
             start_date=obj.begin_date,
             end_date=obj.begin_date + timedelta(days=365 * 2),
-        )
+        ),
     )
 
 
@@ -75,8 +75,8 @@ class GroupFakeData(FakeDataGenerator):
         clubs = GroupTypeFactory.create(
             slug="club",
             name="Club & Assos",
-            sort_fields="-parent__priority,parent__short_name,-priority,short_name",  # noqa: E501
-            category_expr="""f"Clubs {group.parent.short_name}" if group.parent else "Associations" """,  # noqa: E501
+            sort_fields="-parent__priority,parent__short_name,-priority,short_name",
+            category_expr="""f"Clubs {group.parent.short_name}" if group.parent else "Associations" """,
         )
         bde = GroupFactory.create(slug="bde", name="Bureau des Élèves")
         bda = GroupFactory.create(slug="bda", name="Bureau des Arts")
@@ -94,8 +94,8 @@ class GroupFakeData(FakeDataGenerator):
             slug="liste",
             name="Listes BDX",
             no_membership_dates=True,
-            sort_fields="-creation_year,-label__priority,label__name,short_name",  # noqa: E501
-            category_expr="""f"Campagnes {group.creation_year}-{group.creation_year + 1}" if group.creation_year else "Autres" """,  # noqa: E501
+            sort_fields="-creation_year,-label__priority,label__name,short_name",
+            category_expr="""f"Campagnes {group.creation_year}-{group.creation_year + 1}" if group.creation_year else "Autres" """,
             sub_category_expr="""group.label""",
             can_create=True,
         )
@@ -104,6 +104,7 @@ class GroupFakeData(FakeDataGenerator):
         GroupFactory.create_batch(
             size=50,
             group_type=factory.Faker(
-                "random_element", elements=[listes, academics]
+                "random_element",
+                elements=[listes, academics],
             ),
         )

@@ -5,35 +5,48 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0001_initial'),
+        ("club", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='BDX',
+            name="BDX",
             fields=[
-                ('club_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
-                 parent_link=True, primary_key=True, serialize=False, to='club.club')),
+                (
+                    "club_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="club.club",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('club.club',),
+            bases=("club.club",),
         ),
         migrations.RemoveField(
-            model_name='club',
-            name='parent',
+            model_name="club",
+            name="parent",
         ),
         migrations.RemoveField(
-            model_name='club',
-            name='bdx_type',
+            model_name="club",
+            name="bdx_type",
         ),
         migrations.AddField(
-            model_name='club',
-            name='bdx_type',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
-                                    to='club.bdx', verbose_name='Type de club BDX'),
+            model_name="club",
+            name="bdx_type",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="club.bdx",
+                verbose_name="Type de club BDX",
+            ),
         ),
     ]

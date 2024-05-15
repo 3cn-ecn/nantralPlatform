@@ -1,45 +1,76 @@
-[tool.black]
+[project]
+name = "nantral-platform"
+version = "1.0.0"
+requires-python = ">=3.10"
+
+[tool.ruff]
 line-length = 80
-extend-exclude = "tmp/"
-exclude = "(migrations|.venv)"
 
-[tool.isort]
-profile = "black"
-line_length = 80
-known_django="django"
-known_first_party="apps,config"
-sections="FUTURE,STDLIB,DJANGO,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
-
-[tool.flakeheaven]
-format = "grouped"
-statistics = true
-doctests = true
-enable_extensions = "G"
-accept_encodings = "utf-8"
-max-line-length = 80
-max-complexity = 15
-docstring-style = "numpy"
-inline-quotes = "double"
-exclude = [
-    ".git",
-    "__pycache__",
-    "*/migrations/*",
-    ".venv",
+[tool.ruff.lint]
+select = [
+  "F",     # Pyflakes
+  "E",     # pycodestyle
+  "C90",   # mccabe
+  "I",     # isort
+  "N",     # pep8-naming
+  "UP",    # pyupgrade
+  "ASYNC", # flake8-async
+  "TRIO",  # flake8-trio
+  "S",     # flake8-bandit
+  "B0",    # flake8-bugbear
+  "A",     # flake8-builtins
+  "C4",    # flake8-comprehensions
+  "DTZ",   # flake8-datetimez
+  "T10",   # flake8-debugger
+  "DJ",    # flake8-django
+  "FA",    # flake8-future-annotations
+  "ISC",   # flake8-implicit-str-concat
+  "ICN",   # flake8-import-conventions
+  "LOG",   # flake8-logging
+  "G",     # flake8-logging-format
+  "INP",   # flake8-no-pep420
+  "PIE",   # flake8-pie
+  "T20",   # flake8-print
+  "PYI",   # flake8-pyi
+  "Q",     # flake8-quotes
+  "SLOT",  # flake8-slots
+  "SIM",   # flake8-simplify
+  "TCH",   # flake8-type-checking
+  "INT",   # flake8-gettext
+  "TD",    # flake8-todos
+  "ERA",   # eradicate
+  "PD",    # pandas-vet
+  "PGH",   # pygrep-hooks
+  "PL",    # Pylint
+  "FLY",   # flynt
+  "NPY",   # NumPy-specific rules
+  "AIR",   # Airflow
+  "PERF",  # Perflint
+  "RUF",   # Ruff-specific rules
 ]
-baseline = ".flakeheaven_baseline"
+ignore = [
+  "E501",    # line too long
+  "S311",    # using random
+  "SIM105",  # using try-except-pass
+  "S110",    # using try-except-pass
+  "PERF203", # using try-except in loops
+  "RUF012",  # for typing only
+  "ISC001",  # implicit str concat (interfere with formatter),
+  "G00",     # logging format
+  "DJ008",   # force __str__ on all django models
+]
+allowed-confusables = [" "]
 
-[tool.flakeheaven.plugins]
-"flake8-*" = ["+*", "-C8??", "-D1??", "-D205", "-D4??", "-DAR101", "-DAR201", "-DAR301", "-DAR401", "-RST???",]
-mccabe = ["+*"]
-"pep8-naming" = ["+*"]
-pycodestyle = ["+*", "-E203", "-W503"]
-pyflakes = ["+*", "-F721"]
-"wemake-python-styleguide" = ["+*", "-WPS100", "-WPS110", "-WPS111", "-WPS2??", "-WPS3??", "-WPS407", "-WPS410", "-WPS412", "-WPS420", "-WPS432", "-WPS454", "-WPS459", "-WPS5", "-WPS601", "-WPS615"]
-"flake8-bandit"= ["-S106", "-S105"]
+[tool.ruff.lint.isort]
+known-first-party = ["apps", "config"]
+section-order = [
+  "future",
+  "standard-library",
+  "django",
+  "third-party",
+  "first-party",
+  "local-folder",
+]
 
-[tool.flakeheaven.exceptions."*/settings/*.py"]
-pyflakes = ["-F403", "-F405"]
-
-[tool.flakeheaven.exceptions."*/family/*.py"]
-"wemake-python-styleguide" = ["-WPS114"]
-pylint = ["-N806"]
+[tool.ruff.lint.isort.sections]
+django = ["django"]

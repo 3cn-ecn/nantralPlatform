@@ -1,6 +1,5 @@
 import json
 import re
-from typing import List
 
 from django.utils import timezone
 
@@ -10,7 +9,7 @@ from push_notifications.webpush import WebPushError
 
 
 @shared_task
-def send_webpush_notification_task(student_ids: List[int], message: dict):
+def send_webpush_notification_task(student_ids: list[int], message: dict):
     """The celery task for sending notifications to studends."""
 
     # get devices from students

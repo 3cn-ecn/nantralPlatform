@@ -15,7 +15,9 @@ class Migration(migrations.Migration):
             model_name="student",
             name="picture",
             field=apps.utils.fields.image_field.CustomImageField(
-                blank=True, null=True, verbose_name="Photo de profil"
+                blank=True,
+                null=True,
+                verbose_name="Photo de profil",
             ),
         ),
     ]

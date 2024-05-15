@@ -1,3 +1,5 @@
+# ruff: noqa: B008
+
 from django.urls import path
 
 from .views import (
@@ -13,13 +15,8 @@ from .views import (
 
 app_name = "group"
 
-# note : les vues de l'app groupe servent uniquement de modèle
-# pour celles des autres modèles de groupe
-# pour créer un nouveau groupe, utilisez
-# urlpatterns = make_group_url_patterns("nom_du_groupe_dans_slug")
 
-
-def make_group_url_patterns(
+def make_group_url_patterns(  # noqa: PLR0913
     url_base="",
     detail_view=DetailGroupView.as_view(),
     add_member_view=AddToGroupView.as_view(),

@@ -5,35 +5,101 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('student', '0001_initial'),
+        ("student", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='BaseEvent',
+            name="BaseEvent",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateTimeField(verbose_name="Date de l'événement")),
-                ('title', models.CharField(max_length=200, verbose_name="Titre de l'événement")),
-                ('description', models.TextField(verbose_name="Description de l'événement")),
-                ('location', models.CharField(max_length=200, verbose_name='Lieu')),
-                ('publicity', models.CharField(choices=[('Pub', 'Public - Visible par tous'), ('Mem', 'Membres - Visible uniquement par les membres du groupe')], max_length=200, verbose_name="Visibilité de l'événement")),
-                ('group', models.SlugField(verbose_name='Groupe organisateur')),
-                ('slug', models.SlugField(unique=True, verbose_name="Slug de l'événement")),
-                ('ticketing', models.CharField(blank=True, max_length=200, null=True, verbose_name='Lien vers la billeterie')),
-                ('participants', models.ManyToManyField(blank=True, to='student.Student', verbose_name='Participants')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date",
+                    models.DateTimeField(verbose_name="Date de l'événement"),
+                ),
+                (
+                    "title",
+                    models.CharField(
+                        max_length=200,
+                        verbose_name="Titre de l'événement",
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(verbose_name="Description de l'événement"),
+                ),
+                (
+                    "location",
+                    models.CharField(max_length=200, verbose_name="Lieu"),
+                ),
+                (
+                    "publicity",
+                    models.CharField(
+                        choices=[
+                            ("Pub", "Public - Visible par tous"),
+                            (
+                                "Mem",
+                                "Membres - Visible uniquement par les membres du groupe",
+                            ),
+                        ],
+                        max_length=200,
+                        verbose_name="Visibilité de l'événement",
+                    ),
+                ),
+                ("group", models.SlugField(verbose_name="Groupe organisateur")),
+                (
+                    "slug",
+                    models.SlugField(
+                        unique=True,
+                        verbose_name="Slug de l'événement",
+                    ),
+                ),
+                (
+                    "ticketing",
+                    models.CharField(
+                        blank=True,
+                        max_length=200,
+                        null=True,
+                        verbose_name="Lien vers la billeterie",
+                    ),
+                ),
+                (
+                    "participants",
+                    models.ManyToManyField(
+                        blank=True,
+                        to="student.Student",
+                        verbose_name="Participants",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='EatingEvent',
+            name="EatingEvent",
             fields=[
-                ('baseevent_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='event.BaseEvent')),
-                ('menu', models.TextField(verbose_name="Menu de l'événement")),
+                (
+                    "baseevent_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="event.BaseEvent",
+                    ),
+                ),
+                ("menu", models.TextField(verbose_name="Menu de l'événement")),
             ],
-            bases=('event.baseevent',),
+            bases=("event.baseevent",),
         ),
     ]

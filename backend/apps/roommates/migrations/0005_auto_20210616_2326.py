@@ -6,34 +6,40 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('roommates', '0004_roommates_alt_name'),
+        ("roommates", "0004_roommates_alt_name"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='namedmembershiproommates',
-            old_name='roommates',
-            new_name='group',
+            model_name="namedmembershiproommates",
+            old_name="roommates",
+            new_name="group",
         ),
         migrations.RemoveField(
-            model_name='roommates',
-            name='admins',
+            model_name="roommates",
+            name="admins",
         ),
         migrations.AddField(
-            model_name='namedmembershiproommates',
-            name='admin',
+            model_name="namedmembershiproommates",
+            name="admin",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='roommates',
-            name='begin_date',
-            field=models.DateField(default=datetime.date.today, verbose_name="Date d'emménagement"),
+            model_name="roommates",
+            name="begin_date",
+            field=models.DateField(
+                default=datetime.date.today,
+                verbose_name="Date d'emménagement",
+            ),
         ),
         migrations.AlterField(
-            model_name='roommates',
-            name='end_date',
-            field=models.DateField(blank=True, null=True, verbose_name='Date de sortie'),
+            model_name="roommates",
+            name="end_date",
+            field=models.DateField(
+                blank=True,
+                null=True,
+                verbose_name="Date de sortie",
+            ),
         ),
     ]

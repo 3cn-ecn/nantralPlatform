@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('liste', '0010_liste_banniere'),
+        ("liste", "0010_liste_banniere"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='namedmembershiplist',
-            name='function',
-            field=models.CharField(blank=True, max_length=200, verbose_name='Rôle (facultatif)'),
+            model_name="namedmembershiplist",
+            name="function",
+            field=models.CharField(
+                blank=True,
+                max_length=200,
+                verbose_name="Rôle (facultatif)",
+            ),
         ),
     ]

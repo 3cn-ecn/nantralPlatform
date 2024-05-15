@@ -1,10 +1,8 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import resolve
 
+from apps.account.models import User
 from apps.utils.slug import get_object_from_slug
-
-User = get_user_model()
 
 
 def user_is_connected(user: User) -> bool:

@@ -4,23 +4,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('club', '0002_create_bdx'),
+        ("club", "0002_create_bdx"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='bdx',
-            options={'ordering': ['name']},
+            name="bdx",
+            options={"ordering": ["name"]},
         ),
         migrations.AlterModelOptions(
-            name='club',
-            options={'ordering': ['bdx_type', 'name']},
+            name="club",
+            options={"ordering": ["bdx_type", "name"]},
         ),
         migrations.AlterField(
-            model_name='club',
-            name='alt_name',
-            field=models.CharField(blank=True, max_length=200, null=True, verbose_name='Nom alternatif'),
+            model_name="club",
+            name="alt_name",
+            field=models.CharField(
+                blank=True,
+                max_length=200,
+                null=True,
+                verbose_name="Nom alternatif",
+            ),
         ),
     ]

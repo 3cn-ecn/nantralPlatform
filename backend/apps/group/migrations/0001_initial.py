@@ -35,7 +35,8 @@ class Migration(migrations.Migration):
                 (
                     "description",
                     models.TextField(
-                        blank=True, verbose_name="Description du groupe"
+                        blank=True,
+                        verbose_name="Description du groupe",
                     ),
                 ),
                 (
@@ -104,7 +105,8 @@ class Migration(migrations.Migration):
                 (
                     "description",
                     models.TextField(
-                        blank=True, verbose_name="Description du groupe"
+                        blank=True,
+                        verbose_name="Description du groupe",
                     ),
                 ),
                 (
@@ -130,7 +132,9 @@ class Migration(migrations.Migration):
                 (
                     "year",
                     models.IntegerField(
-                        blank=True, null=True, verbose_name="Année de la liste"
+                        blank=True,
+                        null=True,
+                        verbose_name="Année de la liste",
                     ),
                 ),
                 (
@@ -170,7 +174,9 @@ class Migration(migrations.Migration):
                 (
                     "function",
                     models.CharField(
-                        blank=True, max_length=200, verbose_name="Poste occupé"
+                        blank=True,
+                        max_length=200,
+                        verbose_name="Poste occupé",
                     ),
                 ),
                 (
@@ -207,13 +213,17 @@ class Migration(migrations.Migration):
                 (
                     "function",
                     models.CharField(
-                        blank=True, max_length=200, verbose_name="Poste occupé"
+                        blank=True,
+                        max_length=200,
+                        verbose_name="Poste occupé",
                     ),
                 ),
                 (
                     "year",
                     models.IntegerField(
-                        blank=True, null=True, verbose_name="Année du poste"
+                        blank=True,
+                        null=True,
+                        verbose_name="Année du poste",
                     ),
                 ),
                 (
@@ -239,14 +249,16 @@ class Migration(migrations.Migration):
             model_name="liste",
             name="members",
             field=models.ManyToManyField(
-                through="group.NamedMembershipList", to="student.Student"
+                through="group.NamedMembershipList",
+                to="student.Student",
             ),
         ),
         migrations.AddField(
             model_name="club",
             name="members",
             field=models.ManyToManyField(
-                through="group.NamedMembershipClub", to="student.Student"
+                through="group.NamedMembershipClub",
+                to="student.Student",
             ),
         ),
     ]

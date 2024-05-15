@@ -27,13 +27,15 @@ class Migration(migrations.Migration):
                 (
                     "color",
                     models.CharField(
-                        max_length=7, verbose_name="Couleur en hexadécimal"
+                        max_length=7,
+                        verbose_name="Couleur en hexadécimal",
                     ),
                 ),
                 (
                     "icon_name",
                     models.CharField(
-                        max_length=20, verbose_name="Nom Bootstrap de l'icône"
+                        max_length=20,
+                        verbose_name="Nom Bootstrap de l'icône",
                     ),
                 ),
             ],
@@ -46,7 +48,10 @@ class Migration(migrations.Migration):
             model_name="club",
             name="alt_name",
             field=models.CharField(
-                blank=True, max_length=200, null=True, verbose_name="Nom abrégé"
+                blank=True,
+                max_length=200,
+                null=True,
+                verbose_name="Nom abrégé",
             ),
         ),
         migrations.AddField(
@@ -122,7 +127,8 @@ class Migration(migrations.Migration):
             model_name="club",
             name="social",
             field=models.ManyToManyField(
-                through="group.LienSocialClub", to="group.ReseauSocial"
+                through="group.LienSocialClub",
+                to="group.ReseauSocial",
             ),
         ),
     ]

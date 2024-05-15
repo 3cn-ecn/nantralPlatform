@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('family', '0006_auto_20220822_2105'),
+        ("family", "0006_auto_20220822_2105"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='groupquestion',
-            name='coeff',
-            field=models.IntegerField(verbose_name='Coefficient'),
+            model_name="groupquestion",
+            name="coeff",
+            field=models.IntegerField(verbose_name="Coefficient"),
         ),
         migrations.AlterField(
-            model_name='questionmember',
-            name='coeff',
-            field=models.IntegerField(verbose_name='Coefficient'),
+            model_name="questionmember",
+            name="coeff",
+            field=models.IntegerField(verbose_name="Coefficient"),
         ),
     ]

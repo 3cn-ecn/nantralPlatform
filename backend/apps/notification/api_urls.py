@@ -21,4 +21,5 @@ urlpatterns = [
         name="subscription",
     ),
     path("register", RegisterAPIView.as_view(), name="register"),
-] + router.urls
+    *router.urls,
+]

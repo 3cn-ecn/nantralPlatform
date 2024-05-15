@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('student', '0002_rename_dd_cursus_add_alternant'),
+        ("student", "0002_rename_dd_cursus_add_alternant"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='student',
-            options={'ordering': ['first_name', 'last_name']},
+            name="student",
+            options={"ordering": ["first_name", "last_name"]},
         ),
     ]

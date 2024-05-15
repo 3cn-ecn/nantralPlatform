@@ -4,15 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('event', '0004_baseevent_image'),
+        ("event", "0004_baseevent_image"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='baseevent',
-            name='slug',
-            field=models.SlugField(null=True, unique=True, verbose_name="Slug de l'événement"),
+            model_name="baseevent",
+            name="slug",
+            field=models.SlugField(
+                null=True,
+                unique=True,
+                verbose_name="Slug de l'événement",
+            ),
         ),
     ]

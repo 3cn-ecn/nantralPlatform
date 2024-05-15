@@ -4,15 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('academic', '0007_alter_namedmembershipcourse_year'),
+        ("academic", "0007_alter_namedmembershipcourse_year"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='namedmembershipcourse',
-            name='year',
-            field=models.IntegerField(default=2023, verbose_name='Année où cette formation a été suivie'),
+            model_name="namedmembershipcourse",
+            name="year",
+            field=models.IntegerField(
+                default=2023,
+                verbose_name="Année où cette formation a été suivie",
+            ),
         ),
     ]

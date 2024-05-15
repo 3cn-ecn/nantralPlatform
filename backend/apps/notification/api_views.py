@@ -43,7 +43,7 @@ class SubscriptionAPIView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, slug, format=None):
+    def get(self, request, slug, *args, **kwargs):
         """Get the state of the subscription of current user to a page."""
 
         res = request.user.student.subscriptions.filter(slug=slug).exists()
@@ -114,7 +114,7 @@ class NotificationsViewSet(ReadOnlyModelViewSet):
     def all_seen(self, request, *args, **kwargs):
         (
             SentNotification.objects.filter(student__user=request.user).update(
-                seen=True
+                seen=True,
             )
         )
         return Response(status=status.HTTP_200_OK)
@@ -141,9 +141,9 @@ class RegisterAPIView(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         already_registered = WebPushDevice.objects.filter(
-            registration_id=request.data.get("registration_id")
+            registration_id=request.data.get("registration_id"),
         ).exists()
         data = {"result": False}
         if not already_registered:

@@ -4,15 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('roommates', '0003_remove_roommates_parent'),
+        ("roommates", "0003_remove_roommates_parent"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='roommates',
-            name='alt_name',
-            field=models.CharField(blank=True, max_length=200, null=True, verbose_name='Nom alternatif'),
+            model_name="roommates",
+            name="alt_name",
+            field=models.CharField(
+                blank=True,
+                max_length=200,
+                null=True,
+                verbose_name="Nom alternatif",
+            ),
         ),
     ]

@@ -1,9 +1,3 @@
-import json
-from pathlib import Path
-from random import randint
-
-from django.conf import settings
-from django.contrib.auth.hashers import make_password
 from django.db import migrations
 
 """
@@ -15,7 +9,7 @@ Correcting this issue.
 def forwards_func(apps, schema_editor):
     # We get the model from the versioned app registry;
     # if we directly import it, it'll be the wrong version
-    User = apps.get_registered_model("account", "User")
+    User = apps.get_registered_model("account", "User")  # noqa: N806
     for user in User.objects.all():
         if user.first_name is not None:
             user.first_name = user.first_name.lower()

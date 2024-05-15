@@ -4,21 +4,30 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('student', '0001_initial'),
-        ('group', '0002_auto_20200626_2132'),
+        ("student", "0001_initial"),
+        ("group", "0002_auto_20200626_2132"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='club',
-            name='admins',
-            field=models.ManyToManyField(blank=True, related_name='club_admins', to='student.Student', verbose_name='Administrateur.rice.s du groupe'),
+            model_name="club",
+            name="admins",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="club_admins",
+                to="student.Student",
+                verbose_name="Administrateur.rice.s du groupe",
+            ),
         ),
         migrations.AlterField(
-            model_name='liste',
-            name='admins',
-            field=models.ManyToManyField(blank=True, related_name='liste_admins', to='student.Student', verbose_name='Administrateur.rice.s du groupe'),
+            model_name="liste",
+            name="admins",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="liste_admins",
+                to="student.Student",
+                verbose_name="Administrateur.rice.s du groupe",
+            ),
         ),
     ]

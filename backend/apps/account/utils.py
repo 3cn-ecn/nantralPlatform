@@ -37,7 +37,9 @@ def user_creation(
         user.invitation = invitation
     user.save()
     send_email_confirmation(
-        user, request, isinstance(form, TemporaryRequestSignUpForm)
+        user,
+        request,
+        isinstance(form, TemporaryRequestSignUpForm),
     )
     return user
 
@@ -46,7 +48,7 @@ def send_email_confirmation(
     user: User,
     request: HttpRequest,
     temporary_access: bool = False,
-    send_to: str = None,
+    send_to: str | None = None,
 ) -> None:
     path = reverse(
         "account:confirm",

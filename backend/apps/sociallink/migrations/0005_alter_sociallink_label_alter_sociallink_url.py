@@ -6,26 +6,34 @@ import apps.sociallink.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('sociallink', '0004_auto_20210714_1915'),
+        ("sociallink", "0004_auto_20210714_1915"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='sociallink',
-            name='label',
-            field=models.CharField(blank=True, default='', max_length=20, verbose_name='Étiquette'),
+            model_name="sociallink",
+            name="label",
+            field=models.CharField(
+                blank=True,
+                default="",
+                max_length=20,
+                verbose_name="Étiquette",
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='sociallink',
-            name='url',
-            field=models.CharField(max_length=200, validators=[apps.sociallink.models.validate_uri], verbose_name='URI'),
+            model_name="sociallink",
+            name="url",
+            field=models.CharField(
+                max_length=200,
+                validators=[apps.sociallink.models.validate_uri],
+                verbose_name="URI",
+            ),
         ),
         migrations.RenameField(
-            model_name='sociallink',
-            old_name='url',
-            new_name='uri',
+            model_name="sociallink",
+            old_name="url",
+            new_name="uri",
         ),
     ]

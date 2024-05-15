@@ -4,12 +4,12 @@ from django.db import IntegrityError, migrations, transaction
 
 
 def create_setting(apps, schema_editor):
-    Setting = apps.get_model('extra_settings', 'Setting')
+    Setting = apps.get_model("extra_settings", "Setting")
     try:
         with transaction.atomic():
             obj = Setting(
-                name='PHASE_COLOCATHLON', 
-                value_type='int',
+                name="PHASE_COLOCATHLON",
+                value_type="int",
             )
             obj.value = 0
             obj.save()
@@ -18,19 +18,18 @@ def create_setting(apps, schema_editor):
 
 
 def reverse_func(apps, schema_editor):
-    Setting = apps.get_model('extra_settings', 'Setting')
+    Setting = apps.get_model("extra_settings", "Setting")
     try:
         with transaction.atomic():
-            Setting.objects.get(name='PHASE_COLOCATHLON').delete()
+            Setting.objects.get(name="PHASE_COLOCATHLON").delete()
     except IntegrityError:
         pass
-    
+
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('roommates', '0012_auto_20211021_1540'),
-        ('extra_settings', '0005_setting_value_json_alter_setting_value_type'),
+        ("roommates", "0012_auto_20211021_1540"),
+        ("extra_settings", "0005_setting_value_json_alter_setting_value_type"),
     ]
 
     operations = [

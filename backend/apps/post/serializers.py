@@ -58,6 +58,6 @@ class PostWriteSerializer(TranslationModelSerializer):
     def validate_group(self, value: Group) -> Group:
         if not value.is_admin(self.context["request"].user):
             raise serializers.ValidationError(
-                _("You have to be admin to add or update a post")
+                _("You have to be admin to add or update a post"),
             )
         return value

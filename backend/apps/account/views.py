@@ -14,6 +14,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, TemplateView
 
 from django_rest_passwordreset.views import ResetPasswordValidateTokenViewSet
+from rest_framework import status
 
 from apps.student.models import Student
 
@@ -79,9 +80,9 @@ class PasswordResetConfirmRedirect(View):
         # validate token
         try:
             response = ResetPasswordValidateTokenViewSet(
-                request=self.request
+                request=self.request,
             ).post(request=self.request)
-            valid = response.status_code == 200
+            valid = response.status_code == status.HTTP_200_OK
         except Exception:
             valid = False
 
@@ -116,7 +117,9 @@ class PermanentAccountUpgradeView(LoginRequiredMixin, FormView):
         self.request.user.email_next = new_email
         self.request.user.save()
         send_email_confirmation(
-            self.request.user, self.request, send_to=new_email
+            self.request.user,
+            self.request,
+            send_to=new_email,
         )
         return super().form_valid(form)
 
@@ -136,7 +139,10 @@ class ConfirmEmail(TemplateView):
         mail = user.email
         temp_access = user.invitation is not None
         send_email_confirmation(
-            user, self.request, temporary_access=temp_access, send_to=mail
+            user,
+            self.request,
+            temporary_access=temp_access,
+            send_to=mail,
         )
         del self.request.session["email"]
         return redirect("account:login")

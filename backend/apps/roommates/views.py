@@ -1,4 +1,5 @@
-from typing import Any, Dict
+from enum import Enum
+from typing import Any
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,23 +10,32 @@ from django.views.generic import CreateView, ListView, TemplateView, UpdateView
 from extra_settings.models import Setting
 
 from apps.group.abstract.views import DetailGroupView, UpdateGroupView
-from apps.utils.accessMixins import UserIsMember
+from apps.utils.access_mixins import UserIsMember
 
 from .forms import UpdateHousingForm
 from .models import Housing, Roommates
 
 
+class ColocathlonPhase(Enum):
+    UNAVAILABLE = 0
+    ROOMMATES_REGISTRATION = 1
+    PARTICIPANTS_REGISTRATION = 2
+
+
 class HousingMap(LoginRequiredMixin, TemplateView):
     template_name = "roommates/map.html"
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["MAPBOX_API_KEY"] = settings.MAPBOX_API_KEY
-        phase_colocathlon = Setting.get("PHASE_COLOCATHLON")
-        context["colocathlon"] = phase_colocathlon
-        if phase_colocathlon == 2:
+        colocathlon_phase_id = Setting.get("PHASE_COLOCATHLON")
+        context["colocathlon"] = colocathlon_phase_id
+        if (
+            ColocathlonPhase(colocathlon_phase_id)
+            == ColocathlonPhase.PARTICIPANTS_REGISTRATION
+        ):
             roommate = Roommates.objects.filter(
-                colocathlon_participants=self.request.user.student
+                colocathlon_participants=self.request.user.student,
             ).first()
             if roommate:
                 context["CURRENT_COLOC"] = roommate.name
@@ -69,12 +79,13 @@ class CreateRoommatesView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.housing = Housing.objects.get(
-            pk=self.kwargs["housing_pk"]
+            pk=self.kwargs["housing_pk"],
         )
         roommates = form.save()
         roommates.members.add(self.request.user.student)
         member = roommates.members.through.objects.get(
-            student=self.request.user.student, group=roommates
+            student=self.request.user.student,
+            group=roommates,
         )
         member.admin = True
         member.save()
@@ -106,7 +117,8 @@ class ColocathlonFormView(UserIsMember, UpdateView):
             {"target": reverse(group.app + ":index"), "label": group.app_name},
             {
                 "target": reverse(
-                    group.app + ":detail", kwargs={"slug": group.slug}
+                    group.app + ":detail",
+                    kwargs={"slug": group.slug},
                 ),
                 "label": group.name,
             },
@@ -129,9 +141,9 @@ class DetailRoommatesView(DetailGroupView):
             .order_by("-begin_date")
         )
         context["colocathlon"] = Setting.get("PHASE_COLOCATHLON")
-        context[
-            "nb_participants"
-        ] = self.object.colocathlon_participants.count()
+        context["nb_participants"] = (
+            self.object.colocathlon_participants.count()
+        )
         return context
 
 
@@ -143,14 +155,16 @@ class UpdateRoommatesView(UpdateGroupView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["form_housing"] = UpdateHousingForm(
-            instance=context["object"].housing
+            instance=context["object"].housing,
         )
         return context
 
     def post(self, request, **kwargs):
         group = self.get_object()
         form_housing = UpdateHousingForm(
-            request.POST, request.FILES, instance=group.housing
+            request.POST,
+            request.FILES,
+            instance=group.housing,
         )
         form_housing.save()
         return super().post(request, **kwargs)

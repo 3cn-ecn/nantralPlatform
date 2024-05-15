@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 
 from extra_settings.models import Setting
 
-from apps.utils.accessMixins import UserIsInGroup
+from apps.utils.access_mixins import UserIsInGroup
 
 from .models import Roommates
 
@@ -44,7 +44,6 @@ class ResetView(UserIsInGroup, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         """ RESET ALL COLOCATHLON INFOS"""
-        print("Delet infos about colocathlon")
         colocs = Roommates.objects.filter()
         for c in colocs:
             c.colocathlon_agree = False

@@ -4,28 +4,27 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('administration', '0002_migrate_to_group'),
+        ("administration", "0002_migrate_to_group"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='namedmembershipadministration',
+            name="namedmembershipadministration",
             unique_together=None,
         ),
         migrations.RemoveField(
-            model_name='namedmembershipadministration',
-            name='group',
+            model_name="namedmembershipadministration",
+            name="group",
         ),
         migrations.RemoveField(
-            model_name='namedmembershipadministration',
-            name='student',
+            model_name="namedmembershipadministration",
+            name="student",
         ),
         migrations.DeleteModel(
-            name='Administration',
+            name="Administration",
         ),
         migrations.DeleteModel(
-            name='NamedMembershipAdministration',
+            name="NamedMembershipAdministration",
         ),
     ]

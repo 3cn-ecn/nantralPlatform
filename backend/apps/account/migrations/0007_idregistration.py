@@ -6,16 +6,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('account', '0006_double_account_issue'),
+        ("account", "0006_double_account_issue"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='IdRegistration',
+            name="IdRegistration",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
             ],
         ),
     ]

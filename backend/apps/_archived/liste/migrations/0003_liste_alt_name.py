@@ -4,15 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('liste', '0002_new_bdx_struc'),
+        ("liste", "0002_new_bdx_struc"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='liste',
-            name='alt_name',
-            field=models.CharField(blank=True, max_length=200, null=True, verbose_name='Nom alternatif'),
+            model_name="liste",
+            name="alt_name",
+            field=models.CharField(
+                blank=True,
+                max_length=200,
+                null=True,
+                verbose_name="Nom alternatif",
+            ),
         ),
     ]

@@ -32,10 +32,13 @@ User = get_user_model()
 
 class Student(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
     )
     promo = models.IntegerField(
-        verbose_name="Année de promotion entrante", null=True, blank=True
+        verbose_name="Année de promotion entrante",
+        null=True,
+        blank=True,
     )
     picture = CustomImageField(
         verbose_name="Photo de profil",
@@ -46,15 +49,26 @@ class Student(models.Model):
         name_from_field="user",
     )
     faculty = models.CharField(
-        max_length=200, verbose_name="Filière", choices=FACULTIES
+        max_length=200,
+        verbose_name="Filière",
+        choices=FACULTIES,
     )
-    path = models.CharField(
+    path = models.CharField(  # noqa: DJ001
         max_length=200,
         verbose_name="Cursus",
         choices=PATHS,
         null=True,
         blank=True,
     )
+
+    class Meta:
+        ordering = ["user__last_name", "user__first_name"]
+
+    def __str__(self):
+        return self.alphabetical_name
+
+    def get_absolute_url(self) -> str:
+        return f"/student/{self.pk}"
 
     @property
     def name(self):
@@ -80,14 +94,6 @@ class Student(models.Model):
         else:
             return self.name
 
-    def __str__(self):
-        return self.alphabetical_name
-
-    # Don't make this a property, Django expects it to be a method.
-    # Making it a property can cause a 500 error (see issue #553).
-    def get_absolute_url(self) -> str:
-        return f"/student/{self.pk}"
-
     def can_pin(self) -> bool:
         # to avoid circular import
         membership = apps.get_model("group.Membership")
@@ -104,9 +110,6 @@ class Student(models.Model):
     def delete(self, *args, **kwargs):
         self.picture.delete()
         super().delete(*args, **kwargs)
-
-    class Meta:
-        ordering = ["user__last_name", "user__first_name"]
 
 
 @receiver(post_save, sender=User)

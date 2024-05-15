@@ -4,28 +4,40 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('academic', '0005_migrate_data'),
+        ("academic", "0005_migrate_data"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='course',
-            name='archived',
-            field=models.BooleanField(default=False, verbose_name='Formation archivée'),
+            model_name="course",
+            name="archived",
+            field=models.BooleanField(
+                default=False,
+                verbose_name="Formation archivée",
+            ),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='slug',
+            model_name="course",
+            name="slug",
             field=models.SlugField(blank=True, max_length=40, unique=True),
         ),
         migrations.AlterField(
-            model_name='course',
-            name='type',
-            field=models.CharField(choices=[('OD', 'Option Disciplinaire'), ('OP', 'Option Professionnelle'), ('ITII', 'Filière de Specialité (ITII)'), ('Master', 'Master'), ('BBA', 'Bachelor')], max_length=10, verbose_name='Type de cours'),
+            model_name="course",
+            name="type",
+            field=models.CharField(
+                choices=[
+                    ("OD", "Option Disciplinaire"),
+                    ("OP", "Option Professionnelle"),
+                    ("ITII", "Filière de Specialité (ITII)"),
+                    ("Master", "Master"),
+                    ("BBA", "Bachelor"),
+                ],
+                max_length=10,
+                verbose_name="Type de cours",
+            ),
         ),
         migrations.DeleteModel(
-            name='FollowCourse',
+            name="FollowCourse",
         ),
     ]

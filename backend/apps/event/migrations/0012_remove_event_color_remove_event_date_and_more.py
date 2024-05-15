@@ -89,7 +89,8 @@ class Migration(migrations.Migration):
             model_name="event",
             name="form_url",
             field=models.URLField(
-                blank=True, verbose_name="Link to external form"
+                blank=True,
+                verbose_name="Link to external form",
             ),
         ),
         migrations.AddField(
@@ -131,7 +132,8 @@ class Migration(migrations.Migration):
             model_name="event",
             name="description",
             field=django_ckeditor_5.fields.CKEditor5Field(
-                blank=True, verbose_name="Description"
+                blank=True,
+                verbose_name="Description",
             ),
         ),
         migrations.AlterField(
@@ -149,7 +151,10 @@ class Migration(migrations.Migration):
             model_name="event",
             name="location",
             field=models.CharField(
-                blank=True, max_length=200, null=True, verbose_name="Location"
+                blank=True,
+                max_length=200,
+                null=True,
+                verbose_name="Location",
             ),
         ),
         migrations.AlterField(

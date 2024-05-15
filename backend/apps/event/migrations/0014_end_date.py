@@ -5,7 +5,7 @@ from django.utils import timezone
 
 
 def add_end_dates(apps, schema_editor):
-    Event = apps.get_model('event', 'Event')
+    Event = apps.get_model("event", "Event")
     for event in Event.objects.all():
         event.end_date = event.start_date + timezone.timedelta(hours=1)
         event.save()
@@ -17,24 +17,29 @@ def remove_end_dates(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('event', '0013_group_slug_to_fk'),
+        ("event", "0013_group_slug_to_fk"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='event',
-            name='end_date',
-            field=models.DateTimeField(blank=True, null=True, help_text='If empty, default to one hour after the start date.', verbose_name='End date'),
+            model_name="event",
+            name="end_date",
+            field=models.DateTimeField(
+                blank=True,
+                null=True,
+                help_text="If empty, default to one hour after the start date.",
+                verbose_name="End date",
+            ),
         ),
-        migrations.RunPython(
-            code=add_end_dates,
-            reverse_code=remove_end_dates
-        ),
+        migrations.RunPython(code=add_end_dates, reverse_code=remove_end_dates),
         migrations.AlterField(
-            model_name='event',
-            name='end_date',
-            field=models.DateTimeField(blank=True, help_text='If empty, default to one hour after the start date.', verbose_name='End date'),
+            model_name="event",
+            name="end_date",
+            field=models.DateTimeField(
+                blank=True,
+                help_text="If empty, default to one hour after the start date.",
+                verbose_name="End date",
+            ),
         ),
     ]

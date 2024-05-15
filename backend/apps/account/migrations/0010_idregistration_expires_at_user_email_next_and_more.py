@@ -9,7 +9,8 @@ from django.utils import timezone
 
 def migrate_temporary_accounts(apps, schema_editor):
     TemporaryAccessRequest: models.Model = apps.get_model(
-        "account", "TemporaryAccessRequest"
+        "account",
+        "TemporaryAccessRequest",
     )
     IdRegistration: models.Model = apps.get_model("account", "IdRegistration")
     invitation = IdRegistration.objects.first()
@@ -22,7 +23,8 @@ def migrate_temporary_accounts(apps, schema_editor):
 def migrate_temporary_accounts_back(apps, schema_editor):
     User: models.Model = apps.get_model("account", "User")
     TemporaryAccessRequest: models.Model = apps.get_model(
-        "account", "TemporaryAccessRequest"
+        "account",
+        "TemporaryAccessRequest",
     )
 
     for user in User.objects.all():
@@ -71,7 +73,7 @@ class Migration(migrations.Migration):
                     23,
                     59,
                     tzinfo=timezone.get_current_timezone(),
-                )
+                ),
             ),
             preserve_default=False,
         ),
@@ -100,7 +102,8 @@ class Migration(migrations.Migration):
             reverse_code=migrate_temporary_accounts_back,
         ),
         migrations.RunPython(
-            change_mail_valid, reverse_code=change_mail_valid_back
+            change_mail_valid,
+            reverse_code=change_mail_valid_back,
         ),
         migrations.DeleteModel(
             name="temporaryaccessrequest",

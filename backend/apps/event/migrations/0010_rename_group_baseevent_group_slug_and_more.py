@@ -5,33 +5,44 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('event', '0009_baseevent_notification'),
+        ("event", "0009_baseevent_notification"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='baseevent',
-            old_name='group',
-            new_name='group_slug',
+            model_name="baseevent",
+            old_name="group",
+            new_name="group_slug",
         ),
         migrations.AlterField(
-            model_name='baseevent',
-            name='date',
-            field=models.DateTimeField(help_text='Entrez la date au format JJ/MM/AAAA HH:MM', verbose_name="Date de l'événement"),
+            model_name="baseevent",
+            name="date",
+            field=models.DateTimeField(
+                help_text="Entrez la date au format JJ/MM/AAAA HH:MM",
+                verbose_name="Date de l'événement",
+            ),
         ),
         migrations.AlterField(
-            model_name='baseevent',
-            name='publication_date',
-            field=models.DateTimeField(default=django.utils.timezone.now, help_text='Entrez la date au format JJ/MM/AAAA HH:MM', verbose_name='Date de publication'),
+            model_name="baseevent",
+            name="publication_date",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now,
+                help_text="Entrez la date au format JJ/MM/AAAA HH:MM",
+                verbose_name="Date de publication",
+            ),
         ),
         migrations.AlterField(
-            model_name='baseevent',
-            name='ticketing',
-            field=models.CharField(blank=True, max_length=200, null=True, verbose_name='Lien vers la billetterie'),
+            model_name="baseevent",
+            name="ticketing",
+            field=models.CharField(
+                blank=True,
+                max_length=200,
+                null=True,
+                verbose_name="Lien vers la billetterie",
+            ),
         ),
         migrations.DeleteModel(
-            name='EatingEvent',
+            name="EatingEvent",
         ),
     ]

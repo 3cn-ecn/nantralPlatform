@@ -88,7 +88,7 @@ class ListGroupView(ListView):
             .filter(group_type=group_type)
             # remove the sub-groups to keep only parent groups
             .filter(
-                Q(parent=None) | Q(parent__in=group_type.extra_parents.all())
+                Q(parent=None) | Q(parent__in=group_type.extra_parents.all()),
             )
             # hide archived groups
             .filter(archived=False)
@@ -97,19 +97,19 @@ class ListGroupView(ListView):
             .filter(
                 Q(private=False) | Q(members=user.student)
                 if user.is_authenticated
-                else Q(public=True)
+                else Q(public=True),
             )
             # hide groups without active members (ie end_date > today)
             .annotate(
                 num_active_members=Count(
                     "membership_set",
                     filter=Q(membership_set__end_date__gte=timezone.now()),
-                )
+                ),
             )
             .filter(
                 Q(num_active_members__gt=0)
                 if group_type.hide_no_active_members
-                else Q()
+                else Q(),
             )
             # prefetch type and parent group for better performances
             .prefetch_related("group_type", "parent")
@@ -152,7 +152,8 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
                 created_at__lte=timezone.now(),
             ).order_by("-created_at")
             all_events = Event.objects.filter(
-                group=group, end_date__gte=timezone.now()
+                group=group,
+                end_date__gte=timezone.now(),
             ).order_by("start_date")
             context["posts"] = [p for p in all_posts if p.can_view(user)][:3]
             context["events"] = [e for e in all_events if e.can_view(user)][:3]
@@ -163,10 +164,11 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
             # member form
             if context["is_member"]:
                 context["has_requested_admin"] = group.membership_set.get(
-                    student__user=user
+                    student__user=user,
                 ).admin_request
                 membership = group.membership_set.get(
-                    student=user.student, group=group
+                    student=user.student,
+                    group=group,
                 )
                 context["member_form"] = MembershipForm(instance=membership)
                 context["admin_form"] = AdminRequestForm(instance=membership)
@@ -202,12 +204,13 @@ class ListGroupChildrenView(ListView):
             .filter(
                 Q(private=False) | Q(members=user.student)
                 if user.is_authenticated
-                else Q(public=True)
+                else Q(public=True),
             )
             # prefetch type and parent group for better performances
             .prefetch_related("group_type", "parent")
             # order by category, order and then name
-            .order_by("-priority", "short_name").distinct()
+            .order_by("-priority", "short_name")
+            .distinct()
         )
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
@@ -309,7 +312,7 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
     def test_func(self) -> bool:
         self.group_type = get_object_or_404(GroupType, slug=self.kwargs["type"])
         self.parent = Group.objects.filter(
-            slug=self.request.GET.get("parent", None)
+            slug=self.request.GET.get("parent", None),
         ).first()
         return (
             self.request.user.is_superuser
@@ -355,7 +358,8 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
         res = super().form_valid(form)
         if not self.parent:
             form.instance.members.add(
-                self.request.user.student, through_defaults={"admin": True}
+                self.request.user.student,
+                through_defaults={"admin": True},
             )
         return res
 
@@ -471,7 +475,7 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context["group"] = self.object
         context["events"] = Event.objects.filter(group=self.object).order_by(
-            "-start_date"
+            "-start_date",
         )
         context["ariane"] = [
             {"target": reverse("group:index"), "label": _("Groups")},
@@ -501,7 +505,7 @@ class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context["group"] = self.object
         context["posts"] = Post.objects.filter(group=self.object).order_by(
-            "-created_at"
+            "-created_at",
         )
         context["ariane"] = [
             {"target": reverse("group:index"), "label": _("Groups")},
@@ -554,7 +558,7 @@ class MembershipFormView(UserCanSeeGroupMixin, FormView):
             student=self.request.user.student,
             instance=(
                 self.group.membership_set.filter(
-                    student=self.request.user.student
+                    student=self.request.user.student,
                 ).first()
             ),
             **self.get_form_kwargs(),
@@ -567,7 +571,8 @@ class MembershipFormView(UserCanSeeGroupMixin, FormView):
             self.group.subscribers.remove(student)
             form.instance.delete()
             messages.success(
-                self.request, _("You are no longer a member of this group.")
+                self.request,
+                _("You are no longer a member of this group."),
             )
         else:
             # create or update the membership
@@ -578,7 +583,8 @@ class MembershipFormView(UserCanSeeGroupMixin, FormView):
                 messages.success(self.request, _("Welcome in the group!"))
             else:
                 messages.success(
-                    self.request, _("Your modifications have been saved!")
+                    self.request,
+                    _("Your modifications have been saved!"),
                 )
         # return to the page
         return redirect(self.group.get_absolute_url())
@@ -602,7 +608,7 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
         return AdminRequestForm(
             instance=(
                 self.get_group().membership_set.get(
-                    student=self.request.user.student
+                    student=self.request.user.student,
                 )
             ),
             **self.get_form_kwargs(),
@@ -614,15 +620,15 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
             self.request,
             _(
                 "Your admin request has been sent! You will receive the answer "
-                "soon by email."
+                "soon by email.",
             ),
         )
         # send a message to the discord channel for administrators
         accept_url = self.request.build_absolute_uri(
-            reverse("group:accept-admin-req", kwargs={"id": membership.id})
+            reverse("group:accept-admin-req", kwargs={"id": membership.id}),
         )
         deny_url = self.request.build_absolute_uri(
-            reverse("group:deny-admin-req", kwargs={"id": membership.id})
+            reverse("group:deny-admin-req", kwargs={"id": membership.id}),
         )
         webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(
@@ -634,13 +640,15 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
             color=242424,
         )
         embed.add_embed_field(
-            name="Accepter", value=f"[Accepter]({accept_url})", inline=True
+            name="Accepter",
+            value=f"[Accepter]({accept_url})",
+            inline=True,
         )
         embed.add_embed_field(
-            name="Refuser", value=f"[Refuser]({deny_url})", inline=True
+            name="Refuser",
+            value=f"[Refuser]({deny_url})",
+            inline=True,
         )
-        # if membership.student.picture:
-        #     embed.thumbnail = {"url": membership.student.picture.url}
         webhook.add_embed(embed)
         webhook.execute()
         return redirect(self.get_group().get_absolute_url())
@@ -651,7 +659,7 @@ class AdminRequestFormView(UserCanSeeGroupMixin, FormView):
 
 
 class AcceptAdminRequestView(UserIsGroupAdminMixin, View):
-    def get(self, request: HttpRequest, id):
+    def get(self, request: HttpRequest, id):  # noqa: A002
         member = get_object_or_404(Membership, id=id)
         if member.admin_request:
             member.accept_admin_request()
@@ -668,7 +676,7 @@ class AcceptAdminRequestView(UserIsGroupAdminMixin, View):
 
 
 class DenyAdminRequestView(UserIsGroupAdminMixin, View):
-    def get(self, request: HttpRequest, id):
+    def get(self, request: HttpRequest, id):  # noqa: A002
         member = get_object_or_404(Membership, id=id)
         if member.admin_request:
             member.deny_admin_request()

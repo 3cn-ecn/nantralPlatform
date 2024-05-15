@@ -6,7 +6,7 @@ from django.views.generic import CreateView, DetailView, FormView, TemplateView
 
 from extra_settings.models import Setting
 
-from apps.utils.accessMixins import UserIsAdmin
+from apps.utils.access_mixins import UserIsAdmin
 
 from .forms import (
     CreateFamilyForm,
@@ -16,15 +16,19 @@ from .forms import (
     MemberQuestionsForm,
     UpdateFamilyForm,
 )
-from .models import Family, MembershipFamily, QuestionPage
+from .models import (
+    MAX_2APLUS_PER_FAMILY,
+    MIN_2APLUS_PER_FAMILY,
+    Family,
+    MembershipFamily,
+    QuestionPage,
+)
 from .utils import (
     get_membership,
     is_first_year,
     scholar_year,
     show_sensible_data,
 )
-
-# Create your views here.
 
 
 class HomeFamilyView(LoginRequiredMixin, TemplateView):
@@ -39,7 +43,8 @@ class HomeFamilyView(LoginRequiredMixin, TemplateView):
         context["phase"] = Setting.get("PHASE_PARRAINAGE")
         context["is_2Aplus"] = not is_first_year(self.request.user, membership)
         context["show_sensible_data"] = show_sensible_data(
-            self.request.user, membership
+            self.request.user,
+            membership,
         )
         context["is_itii"] = self.request.user.student.faculty == "Iti"
         context["membership"] = membership
@@ -70,7 +75,8 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
             for f in Family.objects.all()
         ]
         memberships = MembershipFamily.objects.all().select_related(
-            "student__user", "group"
+            "student__user",
+            "group",
         )
         if show_data:
             context["list_2A"] = [
@@ -81,13 +87,13 @@ class ListFamilyView(LoginRequiredMixin, TemplateView):
                 }
                 for m in memberships.filter(role="2A+")
             ]
-        if phase >= 3:
+        if phase >= 3:  # noqa: PLR2004
             context["list_1A"] = [
                 {
                     "name": m.student.alphabetical_name,
                     "family": (
                         m.group.name
-                        if show_data and phase > 3
+                        if show_data and phase > 3  # noqa: PLR2004
                         else f"Famille n°{m.group.id}"
                     ),
                     "url": m.group.get_absolute_url(),
@@ -117,7 +123,7 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
 
     def can_create(self):
         return get_membership(self.request.user) is None and not is_first_year(
-            self.request.user
+            self.request.user,
         )
 
     def form_valid(self, form):
@@ -172,7 +178,7 @@ class JoinFamilyView(LoginRequiredMixin, DetailView):
 
     def can_join(self):
         return get_membership(self.request.user) is None and not is_first_year(
-            self.request.user
+            self.request.user,
         )
 
     def get_context_data(self, *args, **kwargs):
@@ -225,7 +231,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
             queryset=MembershipFamily.objects.filter(role="2A+"),
         )
         context["question_form"] = FamilyQuestionsForm(
-            initial=self.get_family().get_answers_dict()
+            initial=self.get_family().get_answers_dict(),
         )
         return context
 
@@ -246,17 +252,19 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                 if hasattr(form.instance, "student"):
                     nb_subscribed += 1
             nb_tot = nb_subscribed + nb_non_subscribed
-            if nb_tot <= 7 and nb_tot >= 3:
+            if (
+                nb_tot <= MAX_2APLUS_PER_FAMILY
+                and nb_tot >= MIN_2APLUS_PER_FAMILY
+            ):
                 # on vérifie que les membres ne sont pas déjà dans une famille
-                membres_doublon = []
-                for form in forms[1]:
-                    if hasattr(form.instance, "student"):
-                        if form.instance.student.family_set.filter(
-                            year=scholar_year()
-                        ).exclude(pk=self.get_family().pk):
-                            membres_doublon.append(
-                                form.instance.student.alphabetical_name
-                            )
+                membres_doublon = [
+                    form.instance.student.alphabetical_name
+                    for form in forms[1]
+                    if hasattr(form.instance, "student")
+                    and form.instance.student.family_set.filter(
+                        year=scholar_year()
+                    ).exclude(pk=self.get_family().pk)
+                ]
                 if not membres_doublon:
                     # c'est bon on sauvegarde !
                     for form in forms[1]:
@@ -276,8 +284,7 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
                     messages.error(
                         request,
                         "Erreur : les membres suivants sont déjà dans une "
-                        + "famille : "
-                        + ", ".join(membres_doublon),
+                        "famille : " + ", ".join(membres_doublon),
                     )
             else:
                 messages.error(
@@ -330,7 +337,8 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         if membership is None:
             if is_first_year(self.request.user):
                 membership = MembershipFamily.objects.create(
-                    student=self.request.user.student, role="1A"
+                    student=self.request.user.student,
+                    role="1A",
                 )
             else:
                 membership = None
@@ -349,7 +357,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
             {
                 "page": self.get_page(),
                 "is_2Aplus": self.get_member().role == "2A+",
-            }
+            },
         )
         return kwargs
 
@@ -357,7 +365,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         form.save(self.get_member())
         try:
             next_page = QuestionPage.objects.get(
-                order=self.get_page().order + 1
+                order=self.get_page().order + 1,
             )
             return redirect("family:questionnary", next_page.order)
         except QuestionPage.DoesNotExist:
@@ -375,7 +383,7 @@ class QuestionnaryPageView(LoginRequiredMixin, FormView):
         context = super().get_context_data(*args, **kwargs)
         context["page"] = self.get_page()
         context["percent"] = int(
-            100 * self.get_page().order / QuestionPage.objects.all().count()
+            100 * self.get_page().order / QuestionPage.objects.all().count(),
         )
         member = self.get_member()
         if member:

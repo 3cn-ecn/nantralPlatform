@@ -54,7 +54,8 @@ class Migration(migrations.Migration):
             model_name="roommates",
             name="name",
             field=models.CharField(
-                max_length=100, verbose_name="Nom du groupe"
+                max_length=100,
+                verbose_name="Nom du groupe",
             ),
         ),
     ]

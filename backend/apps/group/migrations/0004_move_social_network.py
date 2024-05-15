@@ -4,20 +4,19 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('group', '0003_auto_social_network_init'),
+        ("group", "0003_auto_social_network_init"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='club',
-            name='social',
+            model_name="club",
+            name="social",
         ),
         migrations.DeleteModel(
-            name='LienSocialClub',
+            name="LienSocialClub",
         ),
         migrations.DeleteModel(
-            name='ReseauSocial',
+            name="ReseauSocial",
         ),
     ]

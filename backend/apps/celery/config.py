@@ -1,12 +1,13 @@
+# ruff: noqa: ERA001
+
+import logging
 import os
 
 from django.conf import settings
 
 from celery import Celery
 
-# from celery.app import shared_task
-# from celery.schedules import crontab
-
+logger = logging.getLogger(__name__)
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.base")
@@ -20,7 +21,7 @@ app = Celery("core")
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
 # Load task modules from all registered Django apps.
-print("autodiscover")
+logger.info("autodiscover")
 app.autodiscover_tasks(settings.COMMON_APPS)
 
 
@@ -36,5 +37,5 @@ def setup_periodic_tasks(sender: Celery, **kwargs):
 
 @app.task(bind=True)
 def debug_task(self):
-    print(f"Request: {self.request!r}")
-    print("Debug task is working.")
+    logger.info(f"Request: {self.request!r}")
+    logger.info("Debug task is working.")

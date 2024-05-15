@@ -31,7 +31,9 @@ class Migration(migrations.Migration):
                 (
                     "name",
                     models.CharField(
-                        max_length=100, unique=True, verbose_name="Name"
+                        max_length=100,
+                        unique=True,
+                        verbose_name="Name",
                     ),
                 ),
                 (
@@ -103,25 +105,32 @@ class Migration(migrations.Migration):
                 (
                     "summary",
                     models.CharField(
-                        blank=True, max_length=500, verbose_name="Summary"
+                        blank=True,
+                        max_length=500,
+                        verbose_name="Summary",
                     ),
                 ),
                 (
                     "description",
                     django_ckeditor_5.fields.CKEditor5Field(
-                        blank=True, verbose_name="Description"
+                        blank=True,
+                        verbose_name="Description",
                     ),
                 ),
                 (
                     "meeting_place",
                     models.CharField(
-                        blank=True, max_length=50, verbose_name="Meeting place"
+                        blank=True,
+                        max_length=50,
+                        verbose_name="Meeting place",
                     ),
                 ),
                 (
                     "meeting_hour",
                     models.CharField(
-                        blank=True, max_length=50, verbose_name="Meeting hours"
+                        blank=True,
+                        max_length=50,
+                        verbose_name="Meeting hours",
                     ),
                 ),
                 (
@@ -147,13 +156,17 @@ class Migration(migrations.Migration):
                 (
                     "video1",
                     models.URLField(
-                        blank=True, null=True, verbose_name="Video link 1"
+                        blank=True,
+                        null=True,
+                        verbose_name="Video link 1",
                     ),
                 ),
                 (
                     "video2",
                     models.URLField(
-                        blank=True, null=True, verbose_name="Video link 2"
+                        blank=True,
+                        null=True,
+                        verbose_name="Video link 2",
                     ),
                 ),
                 ("created_at", models.DateTimeField(auto_now_add=True)),
@@ -180,13 +193,17 @@ class Migration(migrations.Migration):
                 (
                     "name",
                     models.CharField(
-                        max_length=30, unique=True, verbose_name="Type name"
+                        max_length=30,
+                        unique=True,
+                        verbose_name="Type name",
                     ),
                 ),
                 (
                     "slug",
                     models.SlugField(
-                        max_length=10, primary_key=True, serialize=False
+                        max_length=10,
+                        primary_key=True,
+                        serialize=False,
                     ),
                 ),
                 (
@@ -313,7 +330,9 @@ class Migration(migrations.Migration):
                 (
                     "summary",
                     models.CharField(
-                        blank=True, max_length=50, verbose_name="Summary"
+                        blank=True,
+                        max_length=50,
+                        verbose_name="Summary",
                     ),
                 ),
                 (
@@ -339,13 +358,15 @@ class Migration(migrations.Migration):
                 (
                     "admin_request",
                     models.BooleanField(
-                        default=False, verbose_name="Asked to become admin"
+                        default=False,
+                        verbose_name="Asked to become admin",
                     ),
                 ),
                 (
                     "admin_request_messsage",
                     models.TextField(
-                        blank=True, verbose_name="Request message"
+                        blank=True,
+                        verbose_name="Request message",
                     ),
                 ),
                 (
@@ -468,7 +489,9 @@ class Migration(migrations.Migration):
             model_name="group",
             name="tags",
             field=models.ManyToManyField(
-                blank=True, to="group.tag", verbose_name="Tags"
+                blank=True,
+                to="group.tag",
+                verbose_name="Tags",
             ),
         ),
         migrations.AddField(

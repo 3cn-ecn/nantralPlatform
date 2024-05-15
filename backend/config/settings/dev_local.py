@@ -1,6 +1,8 @@
+# ruff: noqa: F403, F405
+
 from .base import *
 
-print("Running dev settings")
+print("Running dev settings")  # noqa: T201
 
 # DJANGO SETTINGS
 
@@ -23,5 +25,5 @@ INTERNAL_IPS = [
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
-    }
+    },
 }
