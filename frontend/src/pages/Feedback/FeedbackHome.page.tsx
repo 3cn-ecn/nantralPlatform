@@ -1,74 +1,99 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import {
-  Card,
-  CardContent,
-  Typography,
-  Container,
-  List,
-  Link,
-} from '@mui/material';
+import { Card, CardContent, Typography, Container, Link } from '@mui/material';
 
+import { LargeBigButton } from '#shared/components/LargeBigButton/LargeBigButton';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export default function FeedbackHomePage() {
+  const { t } = useTranslation();
+
   return (
     <Container maxWidth="sm" sx={{ my: 4 }}>
       <Typography variant="h1" gutterBottom>
-        Feedback
+        {t('feedback.home.title')}
       </Typography>
-      <Card>
-        <CardContent>
-          <Typography gutterBottom variant="h4">
-            🙋 Need help ?
-          </Typography>
-          <List sx={{ listStyleType: 'disc', pl: 4, py: 0 }}>
-            <Typography
-              sx={{ display: 'list-item' }}
-              variant="body2"
-              color="text.secondary"
-            >
-              Write us on{' '}
-              <Link href="https://m.me/nantralplatform.ecn">Messenger</Link>
-            </Typography>
-            <Typography
-              sx={{ display: 'list-item' }}
-              variant="body2"
-              color="text.secondary"
-            >
-              Email us on{' '}
-              <Link href="mailto:contact@nantral-platform.fr">
-                contact@nantral-platform.fr
-              </Link>
-            </Typography>
-          </List>
-        </CardContent>
-      </Card>
       <Spacer vertical={2} />
-      <Card>
-        <CardContent>
-          <Typography gutterBottom variant="h4">
-            ✨ Have a suggestion ?
-          </Typography>
-          <Typography sx={{ pl: 1 }} variant="body2" color="text.secondary">
-            Tell us about it by filling{' '}
-            <RouterLink to="/feedback/suggestion">this form</RouterLink>.
-          </Typography>
-        </CardContent>
-      </Card>
+      <ContactForHelpCard />
       <Spacer vertical={2} />
-      <Card>
-        <CardContent>
-          <Typography gutterBottom variant="h4">
-            🐛 Noticed a bug ?
-          </Typography>
-          <Typography sx={{ pl: 1 }} variant="body2" color="text.secondary">
-            Report it <RouterLink to="/feedback/bug">here</RouterLink> and we
-            will take care of the rest 🔪 🤫.
-          </Typography>
-        </CardContent>
-      </Card>
-      <Spacer vertical={4} />
+      <SuggestionCard />
+      <Spacer vertical={2} />
+      <BugCard />
     </Container>
+  );
+}
+
+function ContactForHelpCard() {
+  const { t } = useTranslation();
+
+  return (
+    <Card sx={{ pt: 1 }}>
+      <CardContent>
+        <Typography variant="h4" gutterBottom>
+          {t('feedback.home.help.title')}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          {t('feedback.home.help.description')}
+        </Typography>
+        <ul style={{ margin: 0 }}>
+          <li>
+            <Link
+              href="https://m.me/nantralplatform.ecn"
+              variant="body2"
+              target="_blank"
+              rel="noopener"
+            >
+              {t('feedback.home.help.messenger')}
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="mailto:contact@nantral-platform.fr"
+              variant="body2"
+              target="_blank"
+              rel="noopener"
+            >
+              contact@nantral-platform.fr
+            </Link>
+          </li>
+        </ul>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SuggestionCard() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  return (
+    <LargeBigButton
+      onClick={() => navigate('/feedback/suggestion')}
+      sx={{ py: 1 }}
+    >
+      <Typography gutterBottom variant="h4">
+        {t('feedback.home.suggestion.title')}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {t('feedback.home.suggestion.description')}
+      </Typography>
+    </LargeBigButton>
+  );
+}
+
+function BugCard() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  return (
+    <LargeBigButton onClick={() => navigate('/feedback/bug')} sx={{ py: 1 }}>
+      <Typography gutterBottom variant="h4">
+        {t('feedback.home.bug.title')}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {t('feedback.home.bug.description')}
+      </Typography>
+    </LargeBigButton>
   );
 }

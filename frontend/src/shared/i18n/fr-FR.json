@@ -201,16 +201,14 @@
         "description": {
           "helperText": "N'incluez pas d'informations personnelles (votre commentaire sera accessible publiquement sur GitHub)",
           "label": "Description",
-          "template": "<h1>Description du bug</h1> <p><i>Une description claire et concise du bug</i></p> <h1>Comment le reproduire</h1> <p><i>Décrivez les étapes pour reproduire le bug</i></p> <h1>Comportement attendu</h1> <p><i>Une description claire et concise de ce que vous vous attendiez à voir.</i></p> <h1>Informations sur l'appareil</h1> <ul> <li>Système (Android, Windows...) :</li> <li>Navigateur (Chrome, Safari, App Nantral Platform) :</li> </ul>"
+          "template": "<h1>Description du bug</h1> <p><i>Une description claire et concise du bug</i></p> <h1>Comment le reproduire</h1> <p><i>Décrivez les étapes pour reproduire le bug</i></p> <h1>Comportement attendu</h1> <p><i>Une description claire et concise de ce que vous vous attendiez à voir.</i></p> <h1>Informations sur l'appareil</h1> <ul> <li>Système (Android, Windows...) :</li> <li>Navigateur (Chrome, Safari, App Nantral Platform) :</li> </ul><p></p>"
         },
         "title": {
           "label": "Titre"
         }
       },
-      "pleaseCheckIssue": {
-        "button": "Voir la liste"
-      },
       "pleaseCheckIssues": {
+        "button": "Voir la liste",
         "text": "Merci de vérifier que votre suggestion ou bug n'existe pas déjà avant de le soumettre."
       },
       "submitButton": {
@@ -221,6 +219,22 @@
         "bug": "Signaler un bug",
         "suggestion": "Proposer une suggestion"
       }
+    },
+    "home": {
+      "bug": {
+        "description": "Signalez-le ici et nous nous occuperons du reste 🔪 🤫",
+        "title": "🐛 Vous avez trouvé un bug ?"
+      },
+      "help": {
+        "description": "Contactez-nous directement sur Messenger ou par email !",
+        "messenger": "Nantral Platform sur Messenger",
+        "title": "🙋 Besoin d'aide ?"
+      },
+      "suggestion": {
+        "description": "Faites-nous en part en remplissant ce formulaire",
+        "title": "✨ Une suggestion ?"
+      },
+      "title": "Aide & Commentaires"
     }
   },
   "form": {

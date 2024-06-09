@@ -68,7 +68,7 @@ export default function FeedbackFormPage({ kind }: FeedbackHomePageProps) {
             target="_blank"
             rel="noopener"
           >
-            {t('feedback.form.pleaseCheckIssue.button')}
+            {t('feedback.form.pleaseCheckIssues.button')}
           </Button>
         }
       >

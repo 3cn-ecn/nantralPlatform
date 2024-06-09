@@ -201,16 +201,14 @@
         "description": {
           "helperText": "Do not include personal information (your comment will be publicly available on GitHub)",
           "label": "Description",
-          "template": "<h1>Describe the bug</h1> <p><i>A clear and concise description of what the bug is.</i></p> <h1>How to Reproduce</h1> <p><i>Steps to reproduce the behavior</i></p> <h1>Expected behavior</h1> <p><i>A clear and concise description of what you expected to happen.</i></p> <h1>Device info</h1> <ul> <li>Device (Android, Windows...):</li> <li>Browser (Chrome, Safari, Nantral Platform App):</li> </ul>"
+          "template": "<h1>Describe the bug</h1> <p><i>A clear and concise description of what the bug is.</i></p> <h1>How to Reproduce</h1> <p><i>Steps to reproduce the behavior</i></p> <h1>Expected behavior</h1> <p><i>A clear and concise description of what you expected to happen.</i></p> <h1>Device info</h1> <ul> <li>Device (Android, Windows...):</li> <li>Browser (Chrome, Safari, Nantral Platform App):</li> </ul><p></p>"
         },
         "title": {
           "label": "Title"
         }
       },
-      "pleaseCheckIssue": {
-        "button": "See the list"
-      },
       "pleaseCheckIssues": {
+        "button": "See the list",
         "text": "Please check your issue does not already exist before submitting."
       },
       "submitButton": {
@@ -221,6 +219,22 @@
         "bug": "Report a bug",
         "suggestion": "Submit a suggestion"
       }
+    },
+    "home": {
+      "bug": {
+        "description": "Report it here and we will take care of the rest 🔪 🤫",
+        "title": "🐛 Noticed a bug?"
+      },
+      "help": {
+        "description": "Contact us directly on Messenger or by email!",
+        "messenger": "Nantral Platform on Messenger",
+        "title": "🙋 Need help?"
+      },
+      "suggestion": {
+        "description": "Tell us about it by filling the suggestion form",
+        "title": "✨ Have a suggestion?"
+      },
+      "title": "Help & Feedback"
     }
   },
   "form": {

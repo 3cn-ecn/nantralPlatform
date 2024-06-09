@@ -62,6 +62,7 @@ export default function CKEditorComponent({
         id="richtext-input"
         value={value}
         slots={{ input: CKEditorWithRef }}
+        error={isError}
         slotProps={{
           input: {
             name: name,
