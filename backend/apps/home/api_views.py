@@ -21,7 +21,7 @@ class CreateFeedbackView(generics.CreateAPIView):
 
         resp_code = create_issue(
             title=data["title"],
-            label=data["type"],
+            label=data["kind"],
             body=(
                 f"{data['description']} <br/><br/>"
                 f"[Voir l'auteur sur Nantral Platform]({student_url})"

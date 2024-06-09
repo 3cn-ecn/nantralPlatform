@@ -79,7 +79,7 @@ export default function CKEditorComponent({
           }) as any
         }
       />
-      <FormHelperText>
+      <FormHelperText error={isError}>
         {isError ? errors.join(', ') : helperText}
       </FormHelperText>
     </FormControl>

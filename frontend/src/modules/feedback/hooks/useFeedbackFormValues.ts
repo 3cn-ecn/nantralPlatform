@@ -1,23 +1,20 @@
 import { useObjectState } from '#shared/hooks/useObjectState';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
-import { Feedback, FeedbackForm } from '../feedback.types';
+import { FeedbackForm, FeedbackKind } from '../feedback.types';
 
-const defaultFeedbackFormValues: FeedbackForm = {
-  title: '',
-  description: '',
-};
+export function useFeedbackFormValues(kind: FeedbackKind) {
+  const { t } = useTranslation();
 
-function convertToForm(feedback: Feedback): FeedbackForm {
-  return {
-    title: feedback.title,
-    description: feedback.description,
+  const defaultDescriptions = {
+    bug: t('feedback.form.fields.description.template'),
+    suggestion: '',
   };
-}
-
-export function useFeedbackFormValues(feedback?: Feedback) {
-  const defaultValues = feedback
-    ? convertToForm(feedback)
-    : defaultFeedbackFormValues;
+  const defaultValues: FeedbackForm = {
+    title: '',
+    description: defaultDescriptions[kind],
+    kind,
+  };
 
   return useObjectState(defaultValues);
 }

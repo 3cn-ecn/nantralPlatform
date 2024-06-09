@@ -9,6 +9,11 @@
       },
       "index": "Events"
     },
+    "feedback": {
+      "bug": "Bug",
+      "home": "Feedback",
+      "suggestion": "Suggestion"
+    },
     "home": {
       "index": "Home"
     },
@@ -20,11 +25,6 @@
     },
     "signature": {
       "index": "Signature"
-    },
-    "feedback": {
-      "index": "Feedback",
-      "suggestion": "Suggestion",
-      "bug": "Bug"
     }
   },
   "button": {
@@ -195,6 +195,34 @@
       "placeholder": "Search for an event"
     }
   },
+  "feedback": {
+    "form": {
+      "fields": {
+        "description": {
+          "helperText": "Do not include personal information (your comment will be publicly available on GitHub)",
+          "label": "Description",
+          "template": "<h1>Describe the bug</h1> <p><i>A clear and concise description of what the bug is.</i></p> <h1>How to Reproduce</h1> <p><i>Steps to reproduce the behavior</i></p> <h1>Expected behavior</h1> <p><i>A clear and concise description of what you expected to happen.</i></p> <h1>Device info</h1> <ul> <li>Device (Android, Windows...):</li> <li>Browser (Chrome, Safari, Nantral Platform App):</li> </ul>"
+        },
+        "title": {
+          "label": "Title"
+        }
+      },
+      "pleaseCheckIssue": {
+        "button": "See the list"
+      },
+      "pleaseCheckIssues": {
+        "text": "Please check your issue does not already exist before submitting."
+      },
+      "submitButton": {
+        "label": "Submit"
+      },
+      "success": "Your feedback has been sent!",
+      "title": {
+        "bug": "Report a bug",
+        "suggestion": "Submit a suggestion"
+      }
+    }
+  },
   "form": {
     "autocomplete": {
       "clear": "Clear",
@@ -324,6 +352,9 @@
     "password": "Password",
     "passwordConfirm": "Confirm your password",
     "specialProgram": {
+      "apprenticeship": "Apprentice",
+      "architectEngineer": "Architect-Engineer",
+      "engineerArchitect": "Engineer-Architect",
       "engineerManager": "Engineer-Manager",
       "helperText": "Special program you're following in Centrale. You can change it later.",
       "label": "Special Program",
@@ -455,7 +486,6 @@
     "schooling": "Schooling",
     "sendAgain": "Resend",
     "signUpEmailRequirement": "To sign up for Nantral Platform, you have to be currently at Centrale Nantes. To verify it, we use your email address that should end with <strong>@eleves.ec-nantes.fr</strong> or <strong>@ec-nantes.fr</strong>.",
-    "signUpEmailRequirementNameTitle": "hj,",
     "stillNothing": "Still nothing?",
     "validation": "Validation",
     "waitAFewMinutes": "Wait a few minutes, this can sometimes take a long time."
@@ -537,36 +567,6 @@
     "shareLink": {
       "failure": "The link could not be copied",
       "success": "Link copied!"
-    }
-  },
-  "feedback": {
-    "suggestion": {
-      "form": {
-        "title": {
-          "label": "Suggestion title"
-        },
-        "description": {
-          "label": "Description",
-          "placeholder": "Feel free to express and detail your suggestion as much as want. If feasible, please provide an example usage if it is not directly deducable from your explenation"
-        },
-        "button": {
-          "label": "Make the magic happen"
-        }
-      }
-    },
-    "bug": {
-      "form": {
-        "title": {
-          "label": "Issue title"
-        },
-        "description": {
-          "label": "Description",
-          "placeholder": "Please provide comprehensive details and context regarding the issue you're experiencing. Include as much information as possible, such as the specific steps or actions leading up to the problem. Additionally, if feasible, provide a clear set of instructions on how to replicate the issue. This will greatly assist in understanding and addressing the issue effectively"
-        },
-        "button": {
-          "label": "Submit"
-        }
-      }
     }
   }
 }

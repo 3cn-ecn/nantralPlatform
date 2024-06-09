@@ -9,6 +9,11 @@
       },
       "index": "Évènements"
     },
+    "feedback": {
+      "bug": "Bug",
+      "home": "Commentaires",
+      "suggestion": "Suggestion"
+    },
     "home": {
       "index": "Accueil"
     },
@@ -188,6 +193,34 @@
     },
     "search": {
       "placeholder": "Rechercher un évènement"
+    }
+  },
+  "feedback": {
+    "form": {
+      "fields": {
+        "description": {
+          "helperText": "N'incluez pas d'informations personnelles (votre commentaire sera accessible publiquement sur GitHub)",
+          "label": "Description",
+          "template": "<h1>Description du bug</h1> <p><i>Une description claire et concise du bug</i></p> <h1>Comment le reproduire</h1> <p><i>Décrivez les étapes pour reproduire le bug</i></p> <h1>Comportement attendu</h1> <p><i>Une description claire et concise de ce que vous vous attendiez à voir.</i></p> <h1>Informations sur l'appareil</h1> <ul> <li>Système (Android, Windows...) :</li> <li>Navigateur (Chrome, Safari, App Nantral Platform) :</li> </ul>"
+        },
+        "title": {
+          "label": "Titre"
+        }
+      },
+      "pleaseCheckIssue": {
+        "button": "Voir la liste"
+      },
+      "pleaseCheckIssues": {
+        "text": "Merci de vérifier que votre suggestion ou bug n'existe pas déjà avant de le soumettre."
+      },
+      "submitButton": {
+        "label": "Envoyer"
+      },
+      "success": "Votre commentaire a bien été envoyé !",
+      "title": {
+        "bug": "Signaler un bug",
+        "suggestion": "Proposer une suggestion"
+      }
     }
   },
   "form": {

@@ -2,18 +2,11 @@ import axios from 'axios';
 
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 
-import { FeedbackType, FeedbackForm } from '../feedback.types';
+import { FeedbackForm } from '../feedback.types';
 
-export async function submitFeedback(
-  type: FeedbackType,
-  formData: FeedbackForm,
-) {
+export async function submitFeedback(formData: FeedbackForm) {
   const { status } = await axios
-    .post('/api/home/feedback/', {
-      type,
-      description: formData.description,
-      title: formData.title,
-    })
+    .post('/api/home/feedback/', formData)
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });

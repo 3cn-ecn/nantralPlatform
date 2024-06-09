@@ -7,14 +7,13 @@ import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
-import { FeedbackType, Feedback, FeedbackForm } from '../../feedback.types';
+import { FeedbackForm } from '../../feedback.types';
 
 interface FeedbackFormFieldsProps {
   isError: boolean;
-  error: ApiFormError<Feedback> | null;
+  error: ApiFormError<FeedbackForm> | null;
   formValues: FeedbackForm;
   updateFormValues: Dispatch<SetObjectStateAction<FeedbackForm>>;
-  type: FeedbackType;
 }
 
 export function FeedbackFormFields({
@@ -22,7 +21,6 @@ export function FeedbackFormFields({
   error,
   formValues,
   updateFormValues,
-  type,
 }: FeedbackFormFieldsProps) {
   const { t } = useTranslation();
 
@@ -31,38 +29,24 @@ export function FeedbackFormFields({
       <FormErrorAlert isError={isError} error={error} />
       <TextField
         name="title"
-        key="title"
-        label={t(`feedback.${type}.form.title.label`)}
+        label={t('feedback.form.fields.title.label')}
         value={formValues.title}
         handleChange={useCallback(
-          (val) => {
-            updateFormValues((prevState) => ({
-              ...prevState,
-              title: val,
-            }));
-          },
+          (val) => updateFormValues({ title: val }),
           [updateFormValues],
         )}
         errors={error?.fields?.title}
-        required
       />
       <RichTextField
-        label={t(`feedback.${type}.form.description.label`)}
-        placeholder={t(`feedback.${type}.form.description.placeholder`)}
+        label={t('feedback.form.fields.description.label')}
+        helperText={t('feedback.form.fields.description.helperText')}
         name="description"
-        key="description"
         value={formValues.description}
         handleChange={useCallback(
-          (val) => {
-            updateFormValues((prevState) => ({
-              ...prevState,
-              description: val,
-            }));
-          },
+          (val) => updateFormValues({ description: val }),
           [updateFormValues],
         )}
         errors={error?.fields?.description}
-        required
       />
     </>
   );

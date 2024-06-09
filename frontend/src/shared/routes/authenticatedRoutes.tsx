@@ -16,9 +16,12 @@ const EventDetailsPage = lazy(
 const HomePage = lazy(() => import('#pages/Home/Home.page'));
 const NotFoundPage = lazy(() => import('#pages/NotFound/NotFound.page'));
 const Signature = lazy(() => import('#pages/Signature/Signature.page'));
-const FeedbackPage = lazy(() => import('#pages/Feedback/Feedback.page'));
-const BugPage = lazy(() => import('#pages/Feedback/Bug.page'));
-const SuggestionPage = lazy(() => import('#pages/Feedback/Suggestion.page'));
+const FeedbackHomePage = lazy(
+  () => import('#pages/Feedback/FeedbackHome.page'),
+);
+const FeedbackFormPage = lazy(
+  () => import('#pages/Feedback/FeedbackForm.page'),
+);
 
 const t = (key: string) => key;
 
@@ -64,20 +67,20 @@ export const authenticatedRoutes: RouteObject = {
     },
     {
       path: '/feedback',
-      handle: { crumb: t('breadcrumbs.feedback.index') },
+      handle: { crumb: t('breadcrumbs.feedback.home') },
       children: [
         {
           index: true,
-          element: <FeedbackPage />,
+          element: <FeedbackHomePage />,
         },
         {
           path: 'bug',
-          element: <BugPage />,
+          element: <FeedbackFormPage kind="bug" />,
           handle: { crumb: t('breadcrumbs.feedback.bug') },
         },
         {
           path: 'suggestion',
-          element: <SuggestionPage />,
+          element: <FeedbackFormPage kind="suggestion" />,
           handle: { crumb: t('breadcrumbs.feedback.suggestion') },
         },
       ],
