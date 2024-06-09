@@ -247,7 +247,7 @@ exports[`Home page should render correctly without data 1`] = `
           Level 3 😍: 
           <a
             class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineAlways css-18z7zy0-MuiTypography-root-MuiLink-root"
-            href="/suggestions"
+            href="/feedback"
           >
             Suggest improvements
           </a>
