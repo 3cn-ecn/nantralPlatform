@@ -547,12 +547,12 @@
     "menu": {
       "adminInterface": "Admin interface",
       "documentation": "Documentation",
+      "feedback": "Help & Feedback",
       "language": {
         "title": "Language"
       },
       "legalNotice": "Legal Notice",
       "profile": "My profile",
-      "report": "Suggestion / Bug",
       "signIn": "Sign in",
       "signOut": "Sign out",
       "theme": {
