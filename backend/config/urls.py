@@ -73,15 +73,15 @@ urlpatterns = [
         "api/signature/",
         include("apps.signature.api_urls", namespace="signature_api"),
     ),
-    path("api/home/", include("apps.home.api_urls", namespace="home_api")),
+    path("api/home/", include("apps.core.api_urls", namespace="home_api")),
     # homepage
-    path("", include("apps.home.urls", namespace="home")),
+    path("", include("apps.core.urls", namespace="home")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler403 = "apps.home.views.handler403"
-handler404 = "apps.home.views.handler404"
-handler500 = "apps.home.views.handler500"
-handler404 = "apps.home.views.handler404"
-handler500 = "apps.home.views.handler500"
+handler403 = "apps.core.views.handler403"
+handler404 = "apps.core.views.handler404"
+handler500 = "apps.core.views.handler500"
+handler404 = "apps.core.views.handler404"
+handler500 = "apps.core.views.handler500"

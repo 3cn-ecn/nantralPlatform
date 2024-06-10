@@ -87,10 +87,10 @@ THIRD_PARTY_APPS = [
 ]
 COMMON_APPS = [
     "apps.account",
+    "apps.core",
     "apps.event",
     "apps.family",
     "apps.group",
-    "apps.home",
     "apps.notification",
     "apps.post",
     "apps.roommates",
@@ -140,7 +140,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "apps.home.context_processors.navbar_context",
+                "apps.core.context_processors.navbar_context",
             ],
         },
     },
