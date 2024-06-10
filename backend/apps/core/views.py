@@ -97,15 +97,6 @@ def assetlinks(request):
 # ERROR PAGES VIEWS
 
 
-@require_http_methods(["GET"])
-def offline_view(request):
-    response = render(request, "home/offline.html")
-    return response
-
-
-# ERROR PAGES VIEWS
-
-
 @require_http_methods(["GET", "POST", "PUT", "DELETE"])
 def handler403(request, *args, **argv):
     response = render(request, "errors/403.html", context={}, status=403)

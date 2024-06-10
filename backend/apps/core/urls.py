@@ -13,7 +13,6 @@ urlpatterns = [
     path("404/", views.handler404),
     path("403/", views.handler403),
     path("500/", views.handler500),
-    path("offline.html/", views.offline_view),
     # special files that have to be served from root
     path("sw.js", views.service_worker),
     path(".well-known/assetlinks.json", views.assetlinks),
