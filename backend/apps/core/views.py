@@ -6,14 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import resolve
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
 import requests
 from django_vite.apps import DjangoViteAssetLoader
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from apps.roommates.models import Roommates
 from apps.student.models import Student
@@ -125,22 +122,3 @@ def handler404(request, *args, **argv):
 def handler500(request, *args, **argv):
     response = render(request, "errors/500.html", context={}, status=500)
     return response
-
-
-# API VIEWS
-
-
-class DoIHaveToLoginView(APIView):
-    """API endpoint to check if user has to login to see a page"""
-
-    def get(self, request, format=None):  # noqa: A002
-        path = request.GET.get("path")
-        try:
-            view, args, kwargs = resolve(path)
-            kwargs["request"] = request
-            kwargs["request"].path = path
-            v = view(*args, **kwargs)
-            have_to_login = v.url.split("?")[0] == settings.LOGIN_URL
-            return Response(data=have_to_login)
-        except Exception:
-            return Response(data=False)

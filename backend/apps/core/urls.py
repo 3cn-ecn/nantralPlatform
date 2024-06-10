@@ -17,8 +17,6 @@ urlpatterns = [
     # special files that have to be served from root
     path("sw.js", views.service_worker),
     path(".well-known/assetlinks.json", views.assetlinks),
-    # api
-    path("doihavetologin/", views.DoIHaveToLoginView.as_view()),
     # use the react router if nothing match
     re_path(r"^(?:(?!api).*/)?$", views.react_app_view, name="home"),
 ]
