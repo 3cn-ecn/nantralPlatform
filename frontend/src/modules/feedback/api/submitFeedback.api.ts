@@ -6,7 +6,7 @@ import { FeedbackForm } from '../feedback.types';
 
 export async function submitFeedback(formData: FeedbackForm) {
   const { status } = await axios
-    .post('/api/home/feedback/', formData)
+    .post('/api/core/feedback/', formData)
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });
