@@ -33,6 +33,7 @@ interface CKEditorComponentProps {
   label: string;
   errors?: string[];
   helperText?: string;
+  placeholder?: string;
 }
 
 export default function CKEditorComponent({
@@ -42,6 +43,7 @@ export default function CKEditorComponent({
   label,
   errors,
   helperText,
+  placeholder,
 }: CKEditorComponentProps) {
   const { i18n } = useTranslation();
 
@@ -60,12 +62,13 @@ export default function CKEditorComponent({
         id="richtext-input"
         value={value}
         slots={{ input: CKEditorWithRef }}
+        error={isError}
         slotProps={{
           input: {
             name: name,
             editor: CustomEditor,
             data: value,
-            config: { language: getCKEditorLanguage(i18n) },
+            config: { language: getCKEditorLanguage(i18n), placeholder },
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } as any,
         }}
@@ -77,7 +80,7 @@ export default function CKEditorComponent({
           }) as any
         }
       />
-      <FormHelperText>
+      <FormHelperText error={isError}>
         {isError ? errors.join(', ') : helperText}
       </FormHelperText>
     </FormControl>

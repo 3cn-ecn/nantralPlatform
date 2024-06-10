@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert } from '@mui/material';
 
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
@@ -25,7 +25,7 @@ export function FormErrorAlert<T>({ isError, error }: FormErrorAlertProps<T>) {
 
   return (
     <Alert severity="error" sx={{ mb: 1 }} ref={alertRef}>
-      <AlertTitle>{t('form.errors.title')}</AlertTitle>
+      <span>{t('form.errors.title')}</span>
       {!!error?.globalErrors?.length && (
         <ul style={{ margin: 0, paddingInlineStart: 20 }}>
           {error.globalErrors.map((err) => (

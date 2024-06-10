@@ -61,10 +61,10 @@ export function ErrorPageContent({
           </Button>
           <Button
             component={Link}
-            to="/suggestions"
+            to="/feedback"
             startIcon={<BugReportIcon />}
             color="secondary"
-            reloadDocument
+            reloadDocument={reloadDocument}
           >
             {t('error.feedback')}
           </Button>

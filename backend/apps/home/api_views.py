@@ -1,26 +1,32 @@
-from django.http import HttpRequest
+from django.utils.translation import gettext as _
 
-from rest_framework import permissions, response, status
-from rest_framework.views import APIView
+from rest_framework import exceptions, generics, permissions, status
 
 from apps.utils.github import create_issue
 
+from .serializers import FeedbackSerializer
 
-class CreateIssueView(APIView):
-    """A view to send the data of bug report form to GitHub."""
+
+class CreateFeedbackView(generics.CreateAPIView):
+    """A view to send the data of bug/suggestion report form to GitHub."""
 
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = FeedbackSerializer
 
-    def post(self, request: HttpRequest):
-        student_url = request.build_absolute_uri(
-            request.user.student.get_absolute_url(),
+    def perform_create(self, serializer: FeedbackSerializer):
+        data = serializer.validated_data
+        student_url = self.request.build_absolute_uri(
+            self.request.user.student.get_absolute_url(),
         )
-        create_issue(
-            title=request.data.get("title"),
-            label=request.data.get("type"),
+
+        resp_code = create_issue(
+            title=data["title"],
+            label=data["kind"],
             body=(
-                f"{request.data.get('description')} <br/><br/>"
+                f"{data['description']} <br/><br/>"
                 f"[Voir l'auteur sur Nantral Platform]({student_url})"
             ),
         )
-        return response.Response(status=status.HTTP_200_OK)
+
+        if resp_code != status.HTTP_201_CREATED:
+            raise exceptions.APIException(_("Issue creation on GitHub failed"))

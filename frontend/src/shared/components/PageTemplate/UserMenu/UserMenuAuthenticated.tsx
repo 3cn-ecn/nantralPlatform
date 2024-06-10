@@ -115,11 +115,10 @@ export function UserMenuAuthenticated() {
           onClick={() => setMenuOpen(null)}
         />
         <UserMenuItem
-          label={t('userMenu.menu.report')}
+          label={t('userMenu.menu.feedback')}
           icon={<FeedbackIcon />}
           component={Link}
-          to="/suggestions"
-          reloadDocument
+          to="/feedback"
           onClick={() => setMenuOpen(null)}
         />
         <UserMenuItem

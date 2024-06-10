@@ -2,16 +2,13 @@ from os.path import join
 from urllib.parse import urlparse
 
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import resolve
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
-from django.views.generic import FormView
 
 import requests
 from django_vite.apps import DjangoViteAssetLoader
@@ -20,39 +17,8 @@ from rest_framework.views import APIView
 
 from apps.roommates.models import Roommates
 from apps.student.models import Student
-from apps.utils.github import create_issue
-
-from .forms import SuggestionForm
 
 # PAGES VIEWS
-
-
-class SuggestionView(LoginRequiredMixin, FormView):
-    template_name = "home/suggestions.html"
-    form_class = SuggestionForm
-
-    def form_valid(self, form):
-        student_url = self.request.build_absolute_uri(
-            self.request.user.student.get_absolute_url(),
-        )
-        create_issue(
-            title=form.cleaned_data["title"],
-            label=form.cleaned_data["suggestion_or_bug"],
-            body=(
-                f"{form.cleaned_data['description']} <br/><br />"
-                f"[Voir l'auteur sur Nantral Platform]({student_url})"
-            ),
-        )
-        messages.success(
-            self.request,
-            "Votre suggestion a été enregistrée merci",
-        )
-        return redirect("home:home")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["ariane"] = [{"target": "#", "label": "Suggestions & Bugs"}]
-        return context
 
 
 @require_http_methods(["GET"])

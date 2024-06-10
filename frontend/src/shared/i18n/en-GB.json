@@ -9,6 +9,11 @@
       },
       "index": "Events"
     },
+    "feedback": {
+      "bug": "Bug",
+      "home": "Feedback",
+      "suggestion": "Suggestion"
+    },
     "home": {
       "index": "Home"
     },
@@ -190,6 +195,48 @@
       "placeholder": "Search for an event"
     }
   },
+  "feedback": {
+    "form": {
+      "fields": {
+        "description": {
+          "helperText": "Do not include personal information (your comment will be publicly available on GitHub)",
+          "label": "Description",
+          "template": "<h1>Describe the bug</h1> <p><i>A clear and concise description of what the bug is.</i></p> <h1>How to Reproduce</h1> <p><i>Steps to reproduce the behavior</i></p> <h1>Expected behavior</h1> <p><i>A clear and concise description of what you expected to happen.</i></p> <h1>Device info</h1> <ul> <li>Device (Android, Windows...):</li> <li>Browser (Chrome, Safari, Nantral Platform App):</li> </ul><p></p>"
+        },
+        "title": {
+          "label": "Title"
+        }
+      },
+      "pleaseCheckIssues": {
+        "button": "See the list",
+        "text": "Please check your issue does not already exist before submitting."
+      },
+      "submitButton": {
+        "label": "Submit"
+      },
+      "success": "Your feedback has been sent!",
+      "title": {
+        "bug": "Report a bug",
+        "suggestion": "Submit a suggestion"
+      }
+    },
+    "home": {
+      "bug": {
+        "description": "Report it here and we will take care of the rest 🔪 🤫",
+        "title": "🐛 Noticed a bug?"
+      },
+      "help": {
+        "description": "Contact us directly on Messenger or by email!",
+        "messenger": "Nantral Platform on Messenger",
+        "title": "🙋 Need help?"
+      },
+      "suggestion": {
+        "description": "Tell us about it by filling the suggestion form",
+        "title": "✨ Have a suggestion?"
+      },
+      "title": "Help & Feedback"
+    }
+  },
   "form": {
     "autocomplete": {
       "clear": "Clear",
@@ -319,6 +366,9 @@
     "password": "Password",
     "passwordConfirm": "Confirm your password",
     "specialProgram": {
+      "apprenticeship": "Apprentice",
+      "architectEngineer": "Architect-Engineer",
+      "engineerArchitect": "Engineer-Architect",
       "engineerManager": "Engineer-Manager",
       "helperText": "Special program you're following in Centrale. You can change it later.",
       "label": "Special Program",
@@ -450,7 +500,6 @@
     "schooling": "Schooling",
     "sendAgain": "Resend",
     "signUpEmailRequirement": "To sign up for Nantral Platform, you have to be currently at Centrale Nantes. To verify it, we use your email address that should end with <strong>@eleves.ec-nantes.fr</strong> or <strong>@ec-nantes.fr</strong>.",
-    "signUpEmailRequirementNameTitle": "hj,",
     "stillNothing": "Still nothing?",
     "validation": "Validation",
     "waitAFewMinutes": "Wait a few minutes, this can sometimes take a long time."
@@ -512,12 +561,12 @@
     "menu": {
       "adminInterface": "Admin interface",
       "documentation": "Documentation",
+      "feedback": "Help & Feedback",
       "language": {
         "title": "Language"
       },
       "legalNotice": "Legal Notice",
       "profile": "My profile",
-      "report": "Suggestion / Bug",
       "signIn": "Sign in",
       "signOut": "Sign out",
       "theme": {
