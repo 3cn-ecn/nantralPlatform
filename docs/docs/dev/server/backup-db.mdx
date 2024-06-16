@@ -7,41 +7,100 @@ description: "Instructions on how to backup the production's database"
 
 This page is about backups of the database on the server. It requires you to have access to the server and already been connected to the ssh terminal.
 
-## Automatic Backups
+:::info Note
+To create backups manually and restore a backup, you'll need to have access to
+the server. To do so, [create a SSH key](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+if you don't have one yet, and send the public key to an admin to add it on the server.
 
--  Backups of the database are made every day at 05:00 AM and stored on our S3 bucket.
--  They are stored for 30 days. (There is currently nothing to delete them automatically).
--  To make a backup manually:
+Then, you can connect to the server with:
 
+```bash
+ssh <username>@nantral-platform.fr
+```
+
+_Ask an admin for the `<username>` of the server's user session._
+:::
+
+## 🔄 Automatic Backups
+
+-  Backups are made every day at 05:00 AM and each time you push an update to the server.
+-  Backups are stored on our S3 bucket on OVH.
+-  When a new backup is created, a cleanup is run to keep only the last 20 backups.
+
+You can find and download the backups on the OVH platform, in
+_Public Cloud > Object Storage > Backups_.
+
+<details>
+<summary>Create backups manually</summary>
+
+1. Log into the server:
    ```bash
-   cd /home/ubuntu/nantralPlatform/deployment/scripts
-   source env/bin/activate
-   python3 db_backup.py
-   deactivate
+   ssh <username>@nantral-platform.fr
+   ```
+1. CD into the development directory:
+   ```bash
+   cd nantralPlatform/deployment
+   ```
+1. Create a backup of the database:
+   ```bash
+   docker exec deployment_database_1 pg_dump -U <db_username> <db_name> > backup.sql
+   ```
+   > _You can find `<db_username>` and `<db_name>` in the `backend.env` file. A file named `backup.sql` will then be created in the `deployment` directory._
+1. Exit from the server:
+   ```bash
+   exit
+   ```
+1. Copy the backup file from the server to your local computer:
+   ```bash
+   scp <username>@nantral-platform.fr:~/nantralPlatform/deployment/dump.sql ./dump.sql
    ```
 
--  A simple restore script is provided. You need to specify some environment variables first:
+</details>
 
-   -  `TARGET_DB`: the db name to restore
-   -  `TARGET_ARCHIVE`: the full path of the archive to restore
+## 💾 Restore a backup
 
-   The restore script will delete the TARGET_DB, so make sure you know what you are doing. Then it will create a new one and restore the content from TARGET_ARCHIVE
-   If you specify these environment variable using docker-compose.yml file, then you can execute a restore process like this:
-   `docker-compose exec dbbackup ./restore.sh`
-
-## Create and download a backup
-
-1. CD into the development directory with `cd nantralPlatform/deployment`.
-2. Dump the database with `docker exec deployment_database_1 pg_dump -U userNameDatabase nantral > dump.sql`.
-   This creates a dump.sql file containing all the database's data.
-3. In order to download the file, run this command in your terminal `scp -i nantral_platform.pem ubuntu@nantral-platform.fr:~/nantralPlatform/deployment/dump.sql ./dump.sql`
-
-## Upload and use a backup
-
-1. Transfer the file to the server by running `scp -i nantral_platform.pem dump.sql ubuntu@nantral-platform.fr:~/nantralPlatform/deployment/dump.sql`.
-2. Transfer the file to the container with `sudo docker cp dump.sql deployment_database_1:dump.sql`.
-3. Open the container's command line with `sudo docker exec -it deployment_database_1 bin/sh`.
-4. Restore from the backup with `psql -U <username> <dbname> < dump.sql`.
-   Note that username and dbname are available in the .env file in the deployment directory.
-5. Delete the dump.sql file using `rm dump.sql`.
-6. Exit the container by running `exit` and delete the dump again with `rm dump.sql`.
+1. Copy the backup file from your local computer to the server:
+   ```bash
+   scp backup.sql.gz <username>@nantral-platform.fr:~/nantralPlatform/deployment/backup.sql.gz
+   ```
+1. Log into the server:
+   ```bash
+   ssh <username>@nantral-platform.fr
+   ```
+1. CD into the deployment directory:
+   ```bash
+   cd nantralPlatform/deployment
+   ```
+1. Unzip the backup file:
+   ```bash
+   gunzip backup.sql.gz
+   ```
+1. Copy the backup from the server to the Postgres docker container:
+   ```bash
+   sudo docker cp backup.sql deployment_database_1:dump.sql
+   ```
+1. Open the container's shell:
+   ```bash
+   sudo docker exec -it deployment_database_1 bin/sh
+   ```
+1. Replace the current database with the backup:
+   ```bash
+   psql -U <db_username> <db_name> < dump.sql
+   ```
+   > _You can find `<db_username>` and `<db_name>` in the `backend.env` file._
+1. Delete the backup.sql file in the container:
+   ```bash
+   rm backup.sql
+   ```
+1. Exit the container:
+   ```bash
+   exit
+   ```
+1. Delete the backup.sql file in the server:
+   ```bash
+   rm backup.sql
+   ```
+1. Exit the server:
+   ```bash
+   exit
+   ```

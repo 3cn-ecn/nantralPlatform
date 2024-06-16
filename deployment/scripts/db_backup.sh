@@ -103,7 +103,7 @@ backup() {
     local file_count
     file_count=$(echo "$files" | wc -l)
     local files_to_delete
-    files_to_delete=$((file_count - 10))  # Keep only yhe 10 most recent files
+    files_to_delete=$((file_count - 20))  # Keep only the 20 most recent files
     local counter=0
     if [ "$files_to_delete" -gt 0 ]; then
         for file in $(echo "$files" | head -n "$files_to_delete"); do
