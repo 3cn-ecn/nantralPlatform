@@ -113,10 +113,20 @@ backup() {
     fi
     log "INFO" "$counter files have been deleted."
 
-    send_success_notification "$object_name" "$size" "$counter"
+    if [ "$SKIP_SUCCESS_NOTIFICATION" = false ]; then
+        send_success_notification "$object_name" "$size" "$counter"
+    fi
 }
 
 main() {
+    SKIP_SUCCESS_NOTIFICATION = false
+    for arg in "$@"; do
+        if [ "$arg" = "--skip-success-notif" ]; then
+            SKIP_SUCCESS_NOTIFICATION = true
+            break
+        fi
+    done
+
     log "INFO" "Starting database backup."
     backup
     log "INFO" "Success."

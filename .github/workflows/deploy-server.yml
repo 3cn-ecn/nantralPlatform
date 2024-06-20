@@ -82,7 +82,7 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             cd nantralPlatform/deployment/scripts
-            ./db_backup.sh
+            ./db_backup.sh --skip-success-notif
 
   deploy:
     name: Deploy on VPS
