@@ -2,7 +2,7 @@ from django.urls import path
 
 from .api_views import CreateFeedbackView
 
-app_name = "api_home"
+app_name = "api_core"
 
 
 urlpatterns = [

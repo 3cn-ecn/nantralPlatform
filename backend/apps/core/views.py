@@ -6,35 +6,33 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import resolve
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 
 import requests
 from django_vite.apps import DjangoViteAssetLoader
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from apps.roommates.models import Roommates
 from apps.student.models import Student
 
-# PAGES VIEWS
+# FRONTEND section
 
 
 @require_http_methods(["GET"])
 def react_app_view(request):
+    """Serve the React frontend app."""
     context = {"DJANGO_VITE_DEV_MODE": settings.DJANGO_VITE_DEV_MODE}
     response = render(request, "base_empty.html", context)
     return response
 
 
-# SHORTCUT AND REDIRECT VIEWS
+# SHORTCUTS section
 
 
 @require_http_methods(["GET"])
 @login_required
 def current_user_page_view(request):
-    """A view to redirect the user to his own page"""
+    """Shortcut to the current user profile (/me)"""
     student = get_object_or_404(Student, pk=request.user.student.pk)
     response = redirect(f"/student/{student.pk}")
     return response
@@ -43,7 +41,7 @@ def current_user_page_view(request):
 @require_http_methods(["GET"])
 @login_required
 def current_user_roommates_view(request):
-    """A view to redirect the user to his roommates page"""
+    """Shortcut to the current user roommates instance (/my_coloc)"""
     now = timezone.now()
     roommates = (
         Roommates.objects.filter(members=request.user.student)
@@ -61,12 +59,12 @@ def current_user_roommates_view(request):
         return redirect("roommates:housing-map")
 
 
-# SPECIAL FILE VIEWS THAT HAVE TO BE SERVED FROM ROOT
-
-
 @require_http_methods(["GET"])
 def service_worker(request):
-    """A view to serve the service worker"""
+    """
+    Shortcut to the service worker file (the service worker must be served
+    from the root path to be able to intercept all the requests of the app)
+    """
     vite_loader = DjangoViteAssetLoader.instance()
     service_worker_url = vite_loader.generate_vite_asset_url(
         "src/legacy/app/sw.ts",
@@ -89,7 +87,7 @@ def service_worker(request):
 @require_http_methods(["GET"])
 def assetlinks(request):
     """
-    A view to serve the assetlinks file, for the PWA application on Play Store,
+    Shortcut to the assetlinks file, for the PWA application on Play Store,
     to ensure to Google we own the website.
     """
     file_path = join(settings.BASE_DIR, "static/assetlinks.json")
@@ -97,16 +95,7 @@ def assetlinks(request):
         return HttpResponse(file.read())
 
 
-# ERROR PAGES VIEWS
-
-
-@require_http_methods(["GET"])
-def offline_view(request):
-    response = render(request, "home/offline.html")
-    return response
-
-
-# ERROR PAGES VIEWS
+# ERROR PAGES section
 
 
 @require_http_methods(["GET", "POST", "PUT", "DELETE"])
@@ -125,22 +114,3 @@ def handler404(request, *args, **argv):
 def handler500(request, *args, **argv):
     response = render(request, "errors/500.html", context={}, status=500)
     return response
-
-
-# API VIEWS
-
-
-class DoIHaveToLoginView(APIView):
-    """API endpoint to check if user has to login to see a page"""
-
-    def get(self, request, format=None):  # noqa: A002
-        path = request.GET.get("path")
-        try:
-            view, args, kwargs = resolve(path)
-            kwargs["request"] = request
-            kwargs["request"].path = path
-            v = view(*args, **kwargs)
-            have_to_login = v.url.split("?")[0] == settings.LOGIN_URL
-            return Response(data=have_to_login)
-        except Exception:
-            return Response(data=False)

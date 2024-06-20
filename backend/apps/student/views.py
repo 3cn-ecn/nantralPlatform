@@ -57,7 +57,7 @@ class StudentProfileEdit(UserPassesTestMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["password_form"] = ChangePassForm(self.object.user)
         context["ariane"] = [
-            {"target": reverse("home:me"), "label": "Profil"},
+            {"target": reverse("core:me"), "label": "Profil"},
             {"target": "#", "label": "Modifier"},
         ]
         return context

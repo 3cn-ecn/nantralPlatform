@@ -30,7 +30,7 @@ class RegistrationView(FormView):
 
     def form_valid(self, form):
         user_creation(form, self.request)
-        return redirect("home:home")
+        return redirect("core:home")
 
 
 class ConfirmUser(View):
@@ -60,7 +60,7 @@ class ConfirmUser(View):
             user.save()
             login(self.request, user)
             messages.success(request, "Votre compte est désormais actif !")
-            return redirect("home:home")
+            return redirect("core:home")
         else:
             return render(self.request, "account/activation_invalid.html")
 
@@ -104,7 +104,7 @@ def redirect_to_student(request, user_id):
 class PermanentAccountUpgradeView(LoginRequiredMixin, FormView):
     form_class = UpgradePermanentAccountForm
     template_name = "account/permanent_account_upgrade.html"
-    success_url = reverse_lazy("home:home")
+    success_url = reverse_lazy("core:home")
 
     def get(self, request):
         if request.user.invitation is None:

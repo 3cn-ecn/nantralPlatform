@@ -23,8 +23,8 @@ class CreateFeedbackView(generics.CreateAPIView):
             title=data["title"],
             label=data["kind"],
             body=(
-                f"{data['description']} <br/><br/>"
-                f"[Voir l'auteur sur Nantral Platform]({student_url})"
+                f"{data['description']} \n\n"
+                f"<a href=\"{student_url}\">Voir l'auteur sur Nantral Platform</a>"
             ),
         )
 

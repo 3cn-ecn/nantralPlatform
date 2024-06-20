@@ -16,7 +16,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-# pour importer les fichiers en dev local
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -25,12 +24,12 @@ from django.urls import include, path
 import debug_toolbar
 
 urlpatterns = [
+    # default and third-party apps
     path("admin/doc/", include("django.contrib.admindocs.urls")),
     path("admin/", admin.site.urls),
-    # default and third-party apps
     path("__debug__/", include(debug_toolbar.urls)),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
-    # apps
+    # legacy views
     path("account/", include("apps.account.urls", namespace="account")),
     path("student/", include("apps.student.urls", namespace="student")),
     path("group/", include("apps.group.urls", namespace="group")),
@@ -49,7 +48,7 @@ urlpatterns = [
         "notification/",
         include("apps.notification.urls", namespace="notification"),
     ),
-    # api
+    # api routes
     path(
         "api/account/",
         include("apps.account.api_urls", namespace="account-api"),
@@ -73,15 +72,13 @@ urlpatterns = [
         "api/signature/",
         include("apps.signature.api_urls", namespace="signature_api"),
     ),
-    path("api/home/", include("apps.home.api_urls", namespace="home_api")),
+    path("api/core/", include("apps.core.api_urls", namespace="core_api")),
+    # static files
+    *(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)),
     # homepage
-    path("", include("apps.home.urls", namespace="home")),
+    path("", include("apps.core.urls", namespace="core")),
 ]
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-handler403 = "apps.home.views.handler403"
-handler404 = "apps.home.views.handler404"
-handler500 = "apps.home.views.handler500"
-handler404 = "apps.home.views.handler404"
-handler500 = "apps.home.views.handler500"
+handler403 = "apps.core.views.handler403"
+handler404 = "apps.core.views.handler404"
+handler500 = "apps.core.views.handler500"
