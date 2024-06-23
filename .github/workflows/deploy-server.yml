@@ -82,13 +82,14 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             cd nantralPlatform/deployment/scripts
+            chmod +x db_backup.sh
             ./db_backup.sh --skip-success-notif
 
   deploy:
     name: Deploy on VPS
     needs:
       [frontend-build, email-templates-build, backend-quality, backup-database]
-    if: ${{ always() }}
+    if: ${{ always() && (needs.frontend-build.result == 'success' || needs.frontend-build.result == 'skipped') && (needs.email-templates-build.result == 'success' || needs.email-templates-build.result == 'skipped') && (needs.backend-quality.result == 'success' || needs.backend-quality.result == 'skipped') && (needs.backup-database.result == 'success') }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to the VPS
