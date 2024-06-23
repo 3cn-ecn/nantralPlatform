@@ -119,10 +119,10 @@ backup() {
 }
 
 main() {
-    SKIP_SUCCESS_NOTIFICATION = false
+    SKIP_SUCCESS_NOTIFICATION=false
     for arg in "$@"; do
         if [ "$arg" = "--skip-success-notif" ]; then
-            SKIP_SUCCESS_NOTIFICATION = true
+            SKIP_SUCCESS_NOTIFICATION=true
             break
         fi
     done
