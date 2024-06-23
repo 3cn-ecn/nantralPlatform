@@ -46,6 +46,7 @@ jobs:
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
             cd nantralPlatform/deployment/scripts
+            chmod +x db_staging.sh
             ./db_staging.sh
 
   deploy:
