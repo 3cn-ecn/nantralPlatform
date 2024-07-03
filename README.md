@@ -66,3 +66,11 @@
     npm run jest  # use jest:u to update snapshots
     ```
     _Run these 3 commands at once: `npm run test`_
+
+## Contributors
+
+Thank you for your contribution!
+
+<a href="https://github.com/3cn-ecn/nantralplatform/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=3cn-ecn/nantralplatform" />
+</a>
