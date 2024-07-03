@@ -3,13 +3,9 @@ from django.urls import path
 from .views import (
     AcceptAdminRequestView,
     AdminRequestFormView,
-    CreateGroupView,
     DeleteGroupView,
     DenyAdminRequestView,
-    DetailGroupView,
     ListGroupChildrenView,
-    ListGroupTypeView,
-    ListGroupView,
     MembershipFormView,
     UpdateGroupChildrenView,
     UpdateGroupEventsView,
@@ -24,11 +20,6 @@ app_name = "group"
 
 urlpatterns = [
     # list views
-    path("", ListGroupTypeView.as_view(), name="index"),
-    path("<slug:type>/", ListGroupView.as_view(), name="sub_index"),
-    path("<slug:type>/create/", CreateGroupView.as_view(), name="create"),
-    # objet views (for group admins only)
-    path("@<slug:slug>/", DetailGroupView.as_view(), name="detail"),
     path(
         "@<slug:slug>/children",
         ListGroupChildrenView.as_view(),

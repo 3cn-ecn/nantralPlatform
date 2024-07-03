@@ -41,7 +41,6 @@ export function AppMenuPanel({ menuOpen, onClose }: AppMenuPanelProps) {
           label={t('navbar.group')}
           path="/group/"
           iconPath="/static/img/icons/cropped/club.svg"
-          isOnBackend
           closeMenu={onClose}
         />
         <AppMenuItem

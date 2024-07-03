@@ -123,7 +123,7 @@ class ListGroupView(ListView):
         group_type = GroupType.objects.get(slug=self.kwargs.get("type"))
         context["group_type"] = group_type
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {"target": "#", "label": group_type.name},
         ]
         return context
@@ -175,7 +175,7 @@ class DetailGroupView(UserCanSeeGroupMixin, DetailView):
             else:
                 context["member_form"] = MembershipForm(group, user.student)
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": group.group_type.get_absolute_url(),
                 "label": group.group_type.name,
@@ -219,7 +219,7 @@ class ListGroupChildrenView(ListView):
         context["parent"] = parent
         context["is_admin"] = parent.is_admin(self.request.user)
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": parent.group_type.get_absolute_url(),
                 "label": parent.group_type.name,
@@ -240,7 +240,7 @@ class UpdateGroupView(UserIsGroupAdminMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": self.object.group_type.get_absolute_url(),
                 "label": self.object.group_type.name,
@@ -271,7 +271,7 @@ class DeleteGroupView(UserIsGroupAdminMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": self.object.group_type.get_absolute_url(),
                 "label": self.object.group_type.name,
@@ -324,7 +324,7 @@ class CreateGroupView(UserPassesTestMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": self.group_type.get_absolute_url(),
                 "label": self.group_type.name,
@@ -377,7 +377,7 @@ class UpdateGroupMembershipsView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context["group"] = self.object
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": self.object.group_type.get_absolute_url(),
                 "label": self.object.group_type.name,
@@ -406,7 +406,7 @@ class UpdateGroupSocialLinksView(UserIsGroupAdminMixin, TemplateView):
         form = SocialLinkGroupFormset(queryset=self.object.social_links.all())
         context["sociallinks"] = form
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": self.object.group_type.get_absolute_url(),
                 "label": self.object.group_type.name,
@@ -448,7 +448,7 @@ class UpdateGroupChildrenView(UserIsGroupAdminMixin, TemplateView):
         self.object = self.get_object()
         context["group"] = self.object
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": self.object.group_type.get_absolute_url(),
                 "label": self.object.group_type.name,
@@ -478,7 +478,7 @@ class UpdateGroupEventsView(UserIsGroupAdminMixin, TemplateView):
             "-start_date",
         )
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": self.object.group_type.get_absolute_url(),
                 "label": self.object.group_type.name,
@@ -508,7 +508,7 @@ class UpdateGroupPostsView(UserIsGroupAdminMixin, TemplateView):
             "-created_at",
         )
         context["ariane"] = [
-            {"target": reverse("group:index"), "label": _("Groups")},
+            {"target": "/group", "label": _("Groups")},
             {
                 "target": self.object.group_type.get_absolute_url(),
                 "label": self.object.group_type.name,
