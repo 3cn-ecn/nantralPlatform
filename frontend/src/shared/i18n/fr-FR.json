@@ -32,7 +32,8 @@
     "cancel": "Annuler",
     "confirm": "Valider",
     "next": "Suivant",
-    "previous": "Précédent"
+    "previous": "Précédent",
+    "send": "Envoyer"
   },
   "error": {
     "errorMessage": "Erreur : {{errorMessage}}",
