@@ -1,15 +1,17 @@
-from apps.account.models import User
-from apps.sociallink.models import SocialLink
-from apps.student.models import Student
-from apps.utils.fields.image_field import CustomImageField
-from apps.utils.slug import SlugModel
-from discord_webhook import DiscordEmbed, DiscordWebhook
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
+
+from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
+
+from apps.account.models import User
+from apps.sociallink.models import SocialLink
+from apps.student.models import Student
+from apps.utils.fields.image_field import CustomImageField
+from apps.utils.slug import SlugModel
 
 
 class GroupType(models.Model):
@@ -410,7 +412,7 @@ class Group(models.Model, SlugModel):
             The formatted label of the category of the group.
 
         """
-        cat = eval(  # noqa: WPS421, S307
+        cat = eval(  # noqa: S307
             self.group_type.category_expr, {"group": self}
         )
         if cat is None:
@@ -426,16 +428,12 @@ class Group(models.Model, SlugModel):
             The formatted label of the category of the group.
 
         """
-        sub_cat = eval(  # noqa: WPS421, S307
+        sub_cat = eval(  # noqa: S307
             self.group_type.sub_category_expr, {"group": self}
         )
         if sub_cat is None:
             return None
         return str(sub_cat)  # safe_guard to be sure what is sent is a string
-
-    def get_absolute_url(self) -> str:
-        """Get the url of the object."""
-        return f"/group/@{self.slug}"
 
 
 class Membership(models.Model):

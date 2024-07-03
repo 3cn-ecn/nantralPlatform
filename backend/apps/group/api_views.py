@@ -1,5 +1,3 @@
-from apps.utils.parse_bool import parse_bool
-from discord_webhook import DiscordEmbed, DiscordWebhook
 from django.conf import settings
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
@@ -8,15 +6,33 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
-from rest_framework import (decorators, exceptions, filters, permissions,
-                            response, serializers, status, viewsets)
+
+from discord_webhook import DiscordEmbed, DiscordWebhook
+from rest_framework import (
+    decorators,
+    exceptions,
+    filters,
+    permissions,
+    response,
+    serializers,
+    status,
+    viewsets,
+)
+
+from apps.utils.parse_bool import parse_bool
 
 from .models import Group, GroupType, Label, Membership
 from .permissions import GroupPermission, MembershipPermission
-from .serializers import (AdminRequestSerializer, GroupPreviewSerializer,
-                          GroupSerializer, GroupTypeSerializer,
-                          GroupWriteSerializer, LabelSerializer,
-                          MembershipSerializer, NewMembershipSerializer)
+from .serializers import (
+    AdminRequestSerializer,
+    GroupPreviewSerializer,
+    GroupSerializer,
+    GroupTypeSerializer,
+    GroupWriteSerializer,
+    LabelSerializer,
+    MembershipSerializer,
+    NewMembershipSerializer,
+)
 
 
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -147,7 +163,8 @@ class GroupViewSet(viewsets.ModelViewSet):
             .order_by(
                 "group_type",
                 *group_type.sort_fields.split(",") if group_type else "",
-            ).distinct()
+            )
+            .distinct()
         )
 
     def get_object(self):

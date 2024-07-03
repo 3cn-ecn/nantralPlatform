@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("family", "0008_alter_family_banniere_alter_family_logo"),
     ]
@@ -36,7 +35,10 @@ class Migration(migrations.Migration):
             model_name="family",
             name="alt_name",
             field=models.CharField(
-                blank=True, default="", max_length=100, verbose_name="Nom alternatif"
+                blank=True,
+                default="",
+                max_length=100,
+                verbose_name="Nom alternatif",
             ),
             preserve_default=False,
         ),
@@ -63,19 +65,25 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="family",
             name="video1",
-            field=models.URLField(blank=True, default="", verbose_name="Lien vidéo 1"),
+            field=models.URLField(
+                blank=True, default="", verbose_name="Lien vidéo 1"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
             model_name="family",
             name="video2",
-            field=models.URLField(blank=True, default="", verbose_name="Lien vidéo 2"),
+            field=models.URLField(
+                blank=True, default="", verbose_name="Lien vidéo 2"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
             model_name="questionpage",
             name="details1A",
-            field=models.TextField(blank=True, default="", verbose_name="Infos 1A"),
+            field=models.TextField(
+                blank=True, default="", verbose_name="Infos 1A"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
@@ -89,7 +97,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="questionpage",
             name="details2A",
-            field=models.TextField(blank=True, default="", verbose_name="Infos 2A+"),
+            field=models.TextField(
+                blank=True, default="", verbose_name="Infos 2A+"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
