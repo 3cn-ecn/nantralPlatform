@@ -45,6 +45,7 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
+            set -e
             cd nantralPlatform/deployment/scripts
             chmod +x db_staging.sh
             ./db_staging.sh
@@ -62,6 +63,7 @@ jobs:
           username: "ubuntu"
           key: ${{ secrets.SSH_KEY_DEPLOY }}
           script: |
+            set -e
             cd nantralPlatform-staging
             git fetch origin ${{ github.ref_name }}:${{ github.ref_name }}
             git switch ${{ github.ref_name }}
