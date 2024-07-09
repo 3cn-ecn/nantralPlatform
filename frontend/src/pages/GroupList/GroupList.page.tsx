@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 
 import { AdminPanelSettings } from '@mui/icons-material';
-import { Button, Container, Paper, Typography } from '@mui/material';
+import { Button, Container, Divider, Typography } from '@mui/material';
 
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
@@ -26,10 +26,12 @@ export default function GroupListPage() {
         justifyContent={'space-between'}
         alignItems="center"
         flexWrap={'wrap'}
+        py={1}
       >
-        <Typography variant="h1" mb={1}>
-          {groupType?.name}
+        <Typography variant="h1">
+          {groupType?.name} ({count})
         </Typography>
+
         {staff && (
           <FlexRow gap={2}>
             <Button
@@ -51,27 +53,25 @@ export default function GroupListPage() {
           </FlexRow>
         )}
       </FlexRow>
-      <Typography color="gray">{count} groupes</Typography>
-      <Spacer vertical={3} />
+      <Divider />
+      <Spacer vertical={2} />
       <FlexCol gap={4}>
         {isSuccess &&
           groupsByCategory &&
           Object.keys(groupsByCategory).map((cat) => (
-            <Paper key={cat} sx={{ padding: 2 }}>
-              <FlexCol>
-                <Typography variant="h2" mb={2}>
-                  {cat}
-                </Typography>
-                <GroupGrid estimatedSize={100} groups={groupsByCategory[cat]} />
-                {isLoading && (
-                  <GroupGrid
-                    estimatedSize={100}
-                    groups={groupsByCategory[cat]}
-                    isLoading
-                  />
-                )}
-              </FlexCol>
-            </Paper>
+            <FlexCol key={cat} sx={{ py: 2 }}>
+              <Typography variant="h2" mb={4}>
+                {cat}
+              </Typography>
+              <GroupGrid estimatedSize={100} groups={groupsByCategory[cat]} />
+              {isLoading && (
+                <GroupGrid
+                  estimatedSize={100}
+                  groups={groupsByCategory[cat]}
+                  isLoading
+                />
+              )}
+            </FlexCol>
           ))}
       </FlexCol>
       <div ref={ref} />

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { Typography } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 
 import { GroupPreview } from '#modules/group/types/group.types';
 import { Avatar, AvatarSize } from '#shared/components/Avatar/Avatar';
@@ -13,10 +13,21 @@ interface GroupItemProps {
 
 function GroupItem({ group, size }: GroupItemProps) {
   const fallbackUrl = `https://api.dicebear.com/7.x/thumbs/svg?seed=${group.shortName}`;
+  const theme = useTheme();
+
   return (
     <FlexCol alignItems={'center'} gap={1}>
       <Link to={group.url}>
-        <Avatar size={size} src={group.icon || fallbackUrl} alt={group.name} />
+        <Avatar
+          sx={{
+            '&:hover': {
+              boxShadow: `0 0 10px ${theme.palette.text.disabled}`,
+            },
+          }}
+          size={size}
+          src={group.icon || fallbackUrl}
+          alt={group.name}
+        />
       </Link>
       <Typography variant="h6" textAlign={'center'}>
         {group.shortName}

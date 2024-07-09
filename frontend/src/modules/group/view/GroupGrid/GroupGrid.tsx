@@ -9,11 +9,13 @@ export function GroupGrid({
   groups,
   isLoading = false,
   estimatedSize = 10,
+  extraComponent,
 }: {
   groups?: GroupPreview[];
   isLoading?: boolean;
   estimatedSize?: number;
   reloadDocument?: boolean;
+  extraComponent?: JSX.Element;
 }) {
   return (
     <Grid spacing={1} container>
@@ -31,6 +33,11 @@ export function GroupGrid({
               <GroupItem size="xl" group={group} />
             </Grid>
           ))}
+      {extraComponent && (
+        <Grid key={'extra'} xs={6} sm={4} md={3} lg={2} item>
+          {extraComponent}
+        </Grid>
+      )}
     </Grid>
   );
 }
