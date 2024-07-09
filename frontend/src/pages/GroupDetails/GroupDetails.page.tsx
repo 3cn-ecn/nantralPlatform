@@ -69,7 +69,10 @@ export default function GroupDetailsPage() {
             value={tabValue}
             onChangeValue={(val) => {
               setTabValue(val);
-              setParams({ ...params, tab: val });
+              console.log(history.state);
+              const url = new URL(window.location.toString());
+              url.searchParams.set('tab', val);
+              history.replaceState(history.state, '', url);
             }}
           />
         )}
@@ -84,7 +87,7 @@ export default function GroupDetailsPage() {
         {tabValue == 'posts' && groupDetails?.slug && (
           <GroupPosts groupSlug={groupDetails?.slug} />
         )}
-        <Spacer vertical={20} />
+        <Spacer vertical={80} />
       </Container>
       {postId && (
         <PostModal

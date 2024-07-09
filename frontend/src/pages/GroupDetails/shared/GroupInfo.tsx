@@ -1,5 +1,4 @@
-import { Notifications } from '@mui/icons-material';
-import { Button, Skeleton, Typography } from '@mui/material';
+import { Skeleton, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { SocialLinkItem } from '#modules/social_link/view/shared/SocialLinkItem';
@@ -75,13 +74,6 @@ export function GroupInfo({
           <Skeleton width={120} height={55} animation="wave" />
         ) : (
           <JoinButton group={group} />
-        )}
-        {isLoading ? (
-          <Skeleton width={120} height={55} animation="wave" />
-        ) : (
-          <Button startIcon={<Notifications />} variant="outlined">
-            {"S'abonner"}
-          </Button>
         )}
       </FlexRow>
     </FlexRow>
