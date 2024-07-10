@@ -67,10 +67,9 @@ export function ModalEditMembership({
   >(() => editMembershipApi(membership.id, formValues), {
     onSuccess: () => {
       queryClient.invalidateQueries(['group', { slug: membership.group.slug }]);
-      queryClient.invalidateQueries([
-        'members',
-        { slug: membership.group.slug },
-      ]);
+      queryClient
+        .invalidateQueries(['members', { slug: membership.group.slug }])
+        .then(() => console.log('hello'));
       queryClient.invalidateQueries([
         'membership',
         { group: membership.group.slug, student: membership.student.id },

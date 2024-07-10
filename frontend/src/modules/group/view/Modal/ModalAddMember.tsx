@@ -1,13 +1,16 @@
 import { FormEvent, useState } from 'react';
 
-import { Add } from '@mui/icons-material';
+import { PersonAdd } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { createGroupApi } from '#modules/group/api/createGroup.api';
-import { useGroupFormValues } from '#modules/group/hooks/useGroupFormValues';
+import { createMembershipApi } from '#modules/group/api/createMembership.api';
+import { MembershipFormDTO } from '#modules/group/infra/membership.dto';
 import { CreateGroupForm, Group } from '#modules/group/types/group.types';
-import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
+import {
+  Membership,
+  MembershipForm,
+} from '#modules/group/types/membership.types';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialog,
@@ -19,23 +22,41 @@ import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
-export function CreateGroupModal({
+import { MembershipFormFields } from '../shared/MembershipFormFields';
+
+export function ModalAddMember({
   onClose,
-  groupType,
+  group,
 }: {
   onClose: () => void;
-  groupType: string;
+  group: Group;
 }) {
   const { t } = useTranslation();
-  const value = useGroupFormValues();
+  const today = new Date();
+  const oneYear = new Date();
+  oneYear.setFullYear(today.getFullYear() + 1);
+  const [formValues, setFormValues] = useState<MembershipForm>({
+    beginDate: today,
+    endDate: oneYear,
+    description: '',
+    group: group.id,
+    student: -1,
+    summary: '',
+    admin: false,
+  });
+  const queryClient = useQueryClient();
   const { palette } = useTheme();
-  const [formValues, setFormValues] = useState<CreateGroupForm>(value);
-  const { error, isError, mutate } = useMutation<
-    Group,
-    ApiFormError<CreateGroupForm>,
-    CreateGroupForm
-  >(() => createGroupApi(groupType, formValues));
-  const isLoading = false;
+  const { error, isError, mutate, isLoading } = useMutation<
+    Membership,
+    ApiFormError<MembershipFormDTO>,
+    MembershipForm
+  >(() => createMembershipApi(formValues), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['group', { slug: group.slug }]);
+      queryClient.invalidateQueries(['members', { slug: group.slug }]);
+      onClose();
+    },
+  });
 
   function updateFormValues(val: Partial<CreateGroupForm>) {
     setFormValues({ ...formValues, ...val });
@@ -44,27 +65,29 @@ export function CreateGroupModal({
     e.preventDefault();
     mutate(formValues);
   }
+
   return (
-    <ResponsiveDialog onClose={onClose} disableEnforceFocus>
+    <ResponsiveDialog onClose={onClose} disableEnforceFocus maxWidth="sm">
       <ResponsiveDialogHeader
         onClose={onClose}
         leftIcon={
           <Avatar sx={{ bgcolor: palette.primary.main }}>
-            <Add />
+            <PersonAdd />
           </Avatar>
         }
       >
-        Créer un groupe
+        Ajouter un membre
         <Spacer flex={1} />
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent>
-        <form id="create-group-form" onSubmit={(e) => onSubmit(e)}>
-          <GroupFormFields
+        <form id="edit-group-form" onSubmit={(e) => onSubmit(e)}>
+          <MembershipFormFields
             isError={isError}
+            isAdmin={group.isAdmin}
             error={error}
             formValues={formValues}
             updateFormValues={updateFormValues}
-            groupType={groupType}
+            selectStudent
           />
         </form>
       </ResponsiveDialogContent>
@@ -73,7 +96,7 @@ export function CreateGroupModal({
           {t('button.cancel')}
         </Button>
         <LoadingButton
-          form="create-group-form"
+          form="edit-group-form"
           type="submit"
           loading={isLoading}
           variant="contained"

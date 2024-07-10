@@ -4,8 +4,10 @@ import { History } from '@mui/icons-material';
 import { Chip } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { AddMemberButton } from '#pages/GroupDetails/shared/Buttons/AddMemberButton';
+import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 
+import { JoinButton } from '../shared/Buttons/JoinButton';
 import { MembersInfiniteGrid } from './MembersInfiniteGrid';
 
 interface GroupMembersProps {
@@ -26,6 +28,10 @@ export function GroupMembers({ group }: GroupMembersProps) {
             setFilters({ ...filters, previous: !filters.previous })
           }
         />
+        <FlexAuto gap={2}>
+          {group.isAdmin && <AddMemberButton group={group} />}
+          <JoinButton group={group} />
+        </FlexAuto>
       </FlexRow>
       <MembersInfiniteGrid group={group} filters={filters} />
     </>

@@ -5,7 +5,6 @@ import { SocialLinkItem } from '#modules/social_link/view/shared/SocialLinkItem'
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 
-import { JoinButton } from './Buttons/JoinButton';
 import { GroupInfoLine } from './GroupInfoLine';
 import { TimeAndPlace } from './TimeAndPlace';
 
@@ -68,13 +67,6 @@ export function GroupInfo({
             ))}
           </FlexRow>
         </FlexCol>
-      </FlexRow>
-      <FlexRow flexWrap={'wrap-reverse'} gap={1} alignItems={'center'}>
-        {isLoading ? (
-          <Skeleton width={120} height={55} animation="wave" />
-        ) : (
-          <JoinButton group={group} />
-        )}
       </FlexRow>
     </FlexRow>
   );

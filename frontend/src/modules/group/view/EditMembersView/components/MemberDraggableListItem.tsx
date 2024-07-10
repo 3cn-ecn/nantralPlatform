@@ -1,11 +1,12 @@
 import { Draggable } from 'react-beautiful-dnd';
 
-import { DragIndicator, Edit } from '@mui/icons-material';
+import { DragIndicator, Edit, Verified } from '@mui/icons-material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import {
   IconButton,
   ListItem,
   ListItemAvatar,
+  ListItemIcon,
   ListItemText,
   useTheme,
 } from '@mui/material';
@@ -16,9 +17,10 @@ import { Avatar } from '#shared/components/Avatar/Avatar';
 export interface Props {
   item: Membership;
   index: number;
+  onClickEdit: () => void;
 }
 
-export function MemberDraggableListItem({ item, index }: Props) {
+export function MemberDraggableListItem({ item, index, onClickEdit }: Props) {
   const theme = useTheme();
   return (
     <Draggable
@@ -46,12 +48,15 @@ export function MemberDraggableListItem({ item, index }: Props) {
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={item.student.name} secondary={item.summary} />
+          <ListItemIcon>
+            {item.admin && <Verified color="secondary" />}
+          </ListItemIcon>
 
           <IconButton
             title="Modifier"
             aria-label="edit"
             size="small"
-            onClick={() => null}
+            onClick={onClickEdit}
           >
             <Edit fontSize="small" />
           </IconButton>

@@ -43,7 +43,6 @@ export default function GroupDetailsPage() {
       />
     );
   }
-
   const postId = params.get('post');
 
   return (
@@ -69,7 +68,6 @@ export default function GroupDetailsPage() {
             value={tabValue}
             onChangeValue={(val) => {
               setTabValue(val);
-              console.log(history.state);
               const url = new URL(window.location.toString());
               url.searchParams.set('tab', val);
               history.replaceState(history.state, '', url);

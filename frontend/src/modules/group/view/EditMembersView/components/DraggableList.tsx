@@ -29,11 +29,13 @@ export interface DraggableListProps {
     member: Membership,
     lower?: Membership,
   ) => void;
+  onClick: (member: Membership) => void;
 }
 
 export function DraggableList({
   items,
   reorderMemberships,
+  onClick,
 }: DraggableListProps) {
   /**
    * Callback after dropping for the drag-and-drop.
@@ -63,6 +65,7 @@ export function DraggableList({
                 item={item}
                 index={index}
                 key={item.id}
+                onClickEdit={() => onClick(item)}
               />
             ))}
             {provided.placeholder}

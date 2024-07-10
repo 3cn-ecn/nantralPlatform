@@ -33,6 +33,8 @@
     "confirm": "Valider",
     "next": "Suivant",
     "previous": "Précédent",
+    "save": "Enregistrer",
+    "saved": "Enregistré",
     "send": "Envoyer"
   },
   "error": {

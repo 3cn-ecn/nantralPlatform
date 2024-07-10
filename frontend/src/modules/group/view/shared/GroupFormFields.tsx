@@ -2,9 +2,13 @@ import { Dispatch, useCallback } from 'react';
 
 import {
   AccessTimeFilled,
+  EditNote,
   ExpandMoreRounded,
+  Image,
   LinkRounded,
+  Notes,
   Place,
+  Slideshow,
 } from '@mui/icons-material';
 import {
   Accordion,
@@ -20,7 +24,7 @@ import {
   Group,
   CreateGroupForm as GroupForm,
 } from '#modules/group/types/group.types';
-import { FlexAuto, FlexCol } from '#shared/components/FlexBox/FlexBox';
+import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   CheckboxField,
@@ -41,6 +45,7 @@ interface EventFormFieldsProps {
   updateFormValues: Dispatch<SetObjectStateAction<GroupForm>>;
   prevData?: Group;
   groupType: string;
+  edit?: boolean;
   // selectedLang: BaseLanguage;
 }
 
@@ -51,7 +56,7 @@ export function GroupFormFields({
   updateFormValues,
   prevData,
   groupType,
-  // selectedLang,
+  edit = false,
 }: EventFormFieldsProps) {
   const { t } = useTranslation();
   const { data, isSuccess } = useQuery({
@@ -62,9 +67,10 @@ export function GroupFormFields({
   return (
     <>
       <FormErrorAlert isError={isError} error={error} />
-      <Typography variant="h2" mt={2}>
-        Général
-      </Typography>
+      <FlexRow alignItems={'center'} gap={1} mt={2}>
+        <EditNote />
+        <Typography variant="h2">Général</Typography>
+      </FlexRow>
       <FlexAuto gap={2}>
         <TextField
           name="name"
@@ -93,39 +99,42 @@ export function GroupFormFields({
         />
       </FlexAuto>
 
-      <FlexAuto gap={2} alignItems={'center'}>
-        <DateField
-          label={'Date de création'}
-          defaultValue={new Date()}
-          views={['year']}
-          onChange={(date) =>
-            updateFormValues({ creationYear: date?.getFullYear() })
-          }
-          disableFuture
-          required
-        />
-        <SelectField
-          handleChange={useCallback(
-            (val) => updateFormValues({ label: Number.parseInt(val) }),
-            [updateFormValues],
-          )}
-          label={'label'}
-          disabled={!isSuccess || data.count === 0}
-          defaultValue={'-1'}
-          value={formValues.label?.toString()}
-          errors={error?.fields?.label}
-        >
-          <MenuItem value={'-1'}>{'Aucun'}</MenuItem>
-          {data?.results.map((label) => (
-            <MenuItem key={label.id} value={label.id}>
-              {label.name}
-            </MenuItem>
-          ))}
-        </SelectField>
-      </FlexAuto>
-      <Typography variant="h2" mt={2}>
-        Images
-      </Typography>
+      {!edit && (
+        <FlexAuto gap={2} alignItems={'center'}>
+          <DateField
+            label={'Date de création'}
+            defaultValue={new Date()}
+            views={['year']}
+            onChange={(date) =>
+              updateFormValues({ creationYear: date?.getFullYear() })
+            }
+            disableFuture
+            required
+            fullWidth
+          />
+          <SelectField
+            handleChange={(val) =>
+              updateFormValues({ label: Number.parseInt(val) })
+            }
+            label={'label'}
+            disabled={!isSuccess || data.count === 0}
+            defaultValue={'-1'}
+            value={formValues.label?.toString()}
+            errors={error?.fields?.label}
+          >
+            <MenuItem value={'-1'}>{'Aucun'}</MenuItem>
+            {data?.results.map((label) => (
+              <MenuItem key={label.id} value={label.id}>
+                {label.name}
+              </MenuItem>
+            ))}
+          </SelectField>
+        </FlexAuto>
+      )}
+      <FlexRow alignItems={'center'} mt={2} gap={1}>
+        <Image />
+        <Typography variant="h2">Images</Typography>
+      </FlexRow>
       <FlexAuto gap={2}>
         <FileField
           name="icon"
@@ -154,9 +163,10 @@ export function GroupFormFields({
           accept="image/*"
         />
       </FlexAuto>
-      <Typography variant="h2" mt={2}>
-        Videos
-      </Typography>
+      <FlexRow alignItems={'center'} mt={2} gap={1}>
+        <Slideshow />
+        <Typography variant="h2">Vidéos</Typography>
+      </FlexRow>
       <FlexAuto gap={2}>
         <TextField
           label={'Vidéo 1'}
@@ -185,9 +195,10 @@ export function GroupFormFields({
           errors={error?.fields?.video2}
         />
       </FlexAuto>
-      <Typography variant="h2" mt={2}>
-        Informations
-      </Typography>
+      <FlexRow alignItems={'center'} mt={2} gap={1}>
+        <Notes />
+        <Typography variant="h2">Informations</Typography>
+      </FlexRow>
       <TextField
         label={'Résumé'}
         value={formValues.summary}

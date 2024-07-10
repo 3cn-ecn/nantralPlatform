@@ -20,13 +20,16 @@ export function GroupTabBar({ value, onChangeValue }: GroupTabBarProps) {
         allowScrollButtonsMobile
       >
         <Tab label={'Home'} value={'home'} />
-        <Tab label={'Membres'} disabled={!isAuthenticated} value={'members'} />
-        <Tab
-          label={'Événements'}
-          disabled={!isAuthenticated}
-          value={'events'}
-        />
-        <Tab label={'Annonces'} disabled={!isAuthenticated} value={'posts'} />
+        {isAuthenticated && (
+          <Tab label={'Membres'} disabled={false} value={'members'} />
+        )}
+
+        {isAuthenticated && (
+          <Tab label={'Événements'} disabled={false} value={'events'} />
+        )}
+        {isAuthenticated && (
+          <Tab label={'Annonces'} disabled={false} value={'posts'} />
+        )}
       </Tabs>
       <Divider />
     </>

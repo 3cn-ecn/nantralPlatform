@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Paper } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Paper, Typography } from '@mui/material';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { getMembershipListApi } from '#modules/group/api/getMembershipList.api';
 import { ReorderMemberApi } from '#modules/group/api/reorderMember.api';
 import { Membership } from '#modules/group/types/membership.types';
 import { useToast } from '#shared/context/Toast.context';
 
+import { ModalEditMembership } from '../Modal/ModalEditMembership';
 import { DraggableList } from './components/DraggableList';
 
 interface EditMembersViewProps {
@@ -14,7 +16,8 @@ interface EditMembersViewProps {
 }
 
 export function EditMembersView({ members }: EditMembersViewProps) {
-  const [memberships, setMemberships] = useState(members);
+  const [memberships, setMemberships] = useState<Membership[]>(members);
+  const [selected, setSelected] = useState<Membership>();
   const showToast = useToast();
   const queryClient = useQueryClient();
   const { mutate } = useMutation(ReorderMemberApi, {
@@ -34,6 +37,22 @@ export function EditMembersView({ members }: EditMembersViewProps) {
         message: "Erreur de réseau : le réagencement n'est pas sauvegardé...",
       }),
   });
+  const { data, isSuccess } = useQuery({
+    queryKey: ['members', { slug: members[0].group.slug }],
+    queryFn: () =>
+      getMembershipListApi({
+        group: members[0].group.slug,
+        pageSize: 200,
+        // from: new Date(),
+        to: new Date(),
+      }),
+  });
+
+  useEffect(() => {
+    if (data) {
+      setMemberships(data.results);
+    }
+  }, [data]);
 
   function reorderMemberships(
     updatedMemberships: Membership[],
@@ -46,12 +65,26 @@ export function EditMembersView({ members }: EditMembersViewProps) {
 
   return (
     <>
-      <Paper>
-        <DraggableList
-          items={memberships}
-          reorderMemberships={reorderMemberships}
+      <Typography variant="h3" mb={1}>
+        Membres ({memberships.length})
+      </Typography>
+      {isSuccess && data && (
+        <Paper>
+          <DraggableList
+            items={memberships}
+            reorderMemberships={reorderMemberships}
+            onClick={setSelected}
+          />
+        </Paper>
+      )}
+      {selected && (
+        <ModalEditMembership
+          membership={selected}
+          onClose={() => {
+            setSelected(undefined);
+          }}
         />
-      </Paper>
+      )}
     </>
   );
 }

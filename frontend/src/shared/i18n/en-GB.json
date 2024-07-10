@@ -33,6 +33,8 @@
     "confirm": "OK",
     "next": "Next",
     "previous": "Previous",
+    "save": "Save",
+    "saved": "Saved",
     "send": "Send"
   },
   "error": {

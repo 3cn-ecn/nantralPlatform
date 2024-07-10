@@ -1,7 +1,14 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
-import { Edit } from '@mui/icons-material';
-import { Button, Tab, Tabs } from '@mui/material';
+import {
+  Check,
+  Edit,
+  Groups,
+  Save,
+  Settings,
+  Share,
+} from '@mui/icons-material';
+import { Avatar, Tab, Tabs, useTheme } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { updateGroupApi } from '#modules/group/api/updateGroup.api';
@@ -10,14 +17,13 @@ import { CreateGroupForm, Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
 import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
 import { EditSocialLinkForm } from '#modules/social_link/view/shared/EditSocialLinkForm';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
-  ResponsiveDialogFooter,
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
-import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -38,8 +44,9 @@ export function ModalEditGroup({
   const [formValues, setFormValues] = useState<CreateGroupForm>(groupValues);
 
   const [tab, setTab] = useState(0);
+  const [changes, setChanges] = useState(false);
   const queryClient = useQueryClient();
-
+  const { palette } = useTheme();
   const { error, isError, mutate, isLoading } = useMutation<
     Group,
     ApiFormError<CreateGroupForm>,
@@ -47,7 +54,7 @@ export function ModalEditGroup({
   >(() => updateGroupApi(group.slug, formValues), {
     onSuccess: () => {
       queryClient.invalidateQueries(['group', { slug: group.slug }]);
-      onClose();
+      setChanges(false);
     },
   });
 
@@ -60,55 +67,66 @@ export function ModalEditGroup({
     mutate(formValues);
   }
 
+  useEffect(() => {
+    setChanges(true);
+  }, [formValues]);
+
   return (
     <ResponsiveDialog onClose={onClose} disableEnforceFocus>
       <ResponsiveDialogHeader
         onClose={onClose}
-        leftIcon={<Edit />}
-        // helpUrl="https://docs.nantral-platform.fr/user/posts-events/create-event"
+        leftIcon={
+          <Avatar sx={{ bgcolor: palette.primary.main }}>
+            <Edit />
+          </Avatar>
+        }
       >
         Modifier le groupe
-        <Spacer flex={1} />
       </ResponsiveDialogHeader>
+
       <ResponsiveDialogContent>
         <Tabs value={tab} onChange={(e, val) => setTab(val)} sx={{ mb: 2 }}>
-          <Tab label="Général" />
-          <Tab label="Réseau sociaux" />
-          <Tab label="Membres" />
+          <Tab label="Général" iconPosition="start" icon={<Settings />} />
+          <Tab label="Membres" iconPosition="start" icon={<Groups />} />
+          <Tab label="Liens" iconPosition="start" icon={<Share />} />
         </Tabs>
+
         {tab == 0 && (
-          <form id="edit-group-form" onSubmit={(e) => onSubmit(e)}>
-            <GroupFormFields
-              isError={isError}
-              error={error}
-              formValues={formValues}
-              updateFormValues={updateFormValues}
-              groupType={group.groupType.slug}
-              prevData={group}
-            />
-          </form>
+          <>
+            <form id="edit-group-form" onSubmit={(e) => onSubmit(e)}>
+              <GroupFormFields
+                isError={isError}
+                error={error}
+                formValues={formValues}
+                updateFormValues={updateFormValues}
+                groupType={group.groupType.slug}
+                prevData={group}
+                edit
+              />
+            </form>
+            <FlexRow my={2} justifyContent={'end'}>
+              <LoadingButton
+                form="edit-group-form"
+                type="submit"
+                loading={isLoading}
+                variant="contained"
+                disabled={!changes}
+                startIcon={changes && <Save />}
+                endIcon={!changes && <Check />}
+              >
+                {!changes ? t('button.saved') : t('button.save')}
+              </LoadingButton>
+            </FlexRow>
+          </>
         )}
-        {tab == 1 && (
+        {tab == 1 && <EditMembersView members={members} />}
+        {tab == 2 && (
           <EditSocialLinkForm
             socialLinks={group.socialLinks}
             groupSlug={group.slug}
           />
         )}
-        {tab == 2 && <EditMembersView members={members} />}
       </ResponsiveDialogContent>
-      <ResponsiveDialogFooter>
-        <Button variant="text" onClick={() => onClose()}>
-          {t('button.cancel')}
-        </Button>
-        <LoadingButton
-          form="edit-group-form"
-          type="submit"
-          loading={isLoading}
-          variant="contained"
-        >
-          {t('button.confirm')}
-        </LoadingButton>
-      </ResponsiveDialogFooter>
     </ResponsiveDialog>
   );
 }
