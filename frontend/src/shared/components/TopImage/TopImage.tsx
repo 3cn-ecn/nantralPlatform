@@ -34,8 +34,8 @@ export function TopImage({ src, aspectRatio = 16 / 9 }: TopImageProps) {
           alt="Banner of the event"
           shift="bottom"
           easing="ease-in"
-          duration={500}
-          shiftDuration={500}
+          duration={400}
+          shiftDuration={400}
           style={{
             aspectRatio: aspectRatio,
             borderBottomLeftRadius: 20,
