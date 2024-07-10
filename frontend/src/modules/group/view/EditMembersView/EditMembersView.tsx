@@ -5,18 +5,21 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getMembershipListApi } from '#modules/group/api/getMembershipList.api';
 import { ReorderMemberApi } from '#modules/group/api/reorderMember.api';
+import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
+import { AddMemberButton } from '#pages/GroupDetails/shared/Buttons/AddMemberButton';
+import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
 import { useToast } from '#shared/context/Toast.context';
 
 import { ModalEditMembership } from '../Modal/ModalEditMembership';
 import { DraggableList } from './components/DraggableList';
 
 interface EditMembersViewProps {
-  members: Membership[];
+  group: Group;
 }
 
-export function EditMembersView({ members }: EditMembersViewProps) {
-  const [memberships, setMemberships] = useState<Membership[]>(members);
+export function EditMembersView({ group }: EditMembersViewProps) {
+  const [memberships, setMemberships] = useState<Membership[]>([]);
   const [selected, setSelected] = useState<Membership>();
   const showToast = useToast();
   const queryClient = useQueryClient();
@@ -26,10 +29,7 @@ export function EditMembersView({ members }: EditMembersViewProps) {
         variant: 'success',
         message: 'Réagencement sauvegardé !',
       });
-      queryClient.invalidateQueries([
-        'members',
-        { slug: members[0].group.slug },
-      ]);
+      queryClient.invalidateQueries(['members', { slug: group.slug }]);
     },
     onError: () =>
       showToast({
@@ -38,13 +38,11 @@ export function EditMembersView({ members }: EditMembersViewProps) {
       }),
   });
   const { data, isSuccess } = useQuery({
-    queryKey: ['members', { slug: members[0].group.slug }],
+    queryKey: ['members', { slug: group.slug }],
     queryFn: () =>
       getMembershipListApi({
-        group: members[0].group.slug,
+        group: group.slug,
         pageSize: 200,
-        // from: new Date(),
-        to: new Date(),
       }),
   });
 
@@ -65,10 +63,13 @@ export function EditMembersView({ members }: EditMembersViewProps) {
 
   return (
     <>
-      <Typography variant="h3" mb={1}>
-        Membres ({memberships.length})
-      </Typography>
-      {isSuccess && data && (
+      <FlexAuto justifyContent={'space-between'} alignItems={'center'} mb={1}>
+        <Typography variant="h3" mb={1}>
+          Membres ({memberships.length})
+        </Typography>
+        <AddMemberButton group={group} />
+      </FlexAuto>
+      {isSuccess && data?.count > 0 && (
         <Paper>
           <DraggableList
             items={memberships}
@@ -76,6 +77,9 @@ export function EditMembersView({ members }: EditMembersViewProps) {
             onClick={setSelected}
           />
         </Paper>
+      )}
+      {isSuccess && data?.count === 0 && (
+        <Typography>Aucun membre pour le moment</Typography>
       )}
       {selected && (
         <ModalEditMembership

@@ -87,7 +87,7 @@ function MembershipCard(props: {
         <ModalDeleteMember
           open={openDeleteModal}
           deleteMembership={deleteMembership}
-          closeModal={() => setOpenDeleteModal(false)}
+          onClose={() => setOpenDeleteModal(false)}
           member={item}
         />
       )}

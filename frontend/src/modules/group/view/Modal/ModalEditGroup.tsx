@@ -14,7 +14,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateGroupApi } from '#modules/group/api/updateGroup.api';
 import { useGroupFormValues } from '#modules/group/hooks/useGroupFormValues';
 import { CreateGroupForm, Group } from '#modules/group/types/group.types';
-import { Membership } from '#modules/group/types/membership.types';
 import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
 import { EditSocialLinkForm } from '#modules/social_link/view/shared/EditSocialLinkForm';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -32,11 +31,9 @@ import { EditMembersView } from '../EditMembersView/EditMembersView';
 export function ModalEditGroup({
   onClose,
   group,
-  members,
 }: {
   onClose: () => void;
   group: Group;
-  members: Membership[];
 }) {
   const { t } = useTranslation();
   const groupValues = useGroupFormValues(group);
@@ -119,7 +116,7 @@ export function ModalEditGroup({
             </FlexRow>
           </>
         )}
-        {tab == 1 && <EditMembersView members={members} />}
+        {tab == 1 && <EditMembersView group={group} />}
         {tab == 2 && (
           <EditSocialLinkForm
             socialLinks={group.socialLinks}

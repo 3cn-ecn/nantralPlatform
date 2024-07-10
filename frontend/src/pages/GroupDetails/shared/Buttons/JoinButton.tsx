@@ -61,7 +61,7 @@ export function JoinButton({ group }: { group?: Group }) {
           {group?.isMember ? 'Membre' : 'Rejoindre'}
         </Button>
         <Menu
-          open={open}
+          open={open && group.isMember}
           variant="selectedMenu"
           onClose={handleClose}
           anchorEl={anchorEl}

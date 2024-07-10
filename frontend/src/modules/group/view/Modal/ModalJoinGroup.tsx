@@ -57,6 +57,10 @@ export function ModalJoinGroup({
     onSuccess: () => {
       queryClient.invalidateQueries(['group', { slug: group.slug }]);
       queryClient.invalidateQueries(['members', { slug: group.slug }]);
+      queryClient.invalidateQueries([
+        'membership',
+        { group: group.slug, student: student.id },
+      ]);
       onClose();
     },
   });

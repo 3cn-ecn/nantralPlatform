@@ -52,7 +52,7 @@ export default function GroupDetailsPage() {
       )}
       <Container sx={{ mb: 2 }}>
         {groupDetails?.isAdmin && members && (
-          <EditButton group={groupDetails} members={members?.results} />
+          <EditButton group={groupDetails} />
         )}
         {groupDetails?.banner && (
           <TopImage src={groupDetails.banner} aspectRatio={110 / 40} />

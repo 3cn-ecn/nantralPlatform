@@ -34,6 +34,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
 import { MembershipFormFields } from '../shared/MembershipFormFields';
+import { ModalDeleteMember } from './ModalDeleteMember';
 
 export function ModalEditMembership({
   onClose,
@@ -46,6 +47,8 @@ export function ModalEditMembership({
   const today = new Date();
   const oneYear = new Date();
   oneYear.setFullYear(today.getFullYear() + 1);
+
+  const [modalOpen, setModalOpen] = useState(false);
   const [formValues, setFormValues] = useState<MembershipForm>(
     convertMembershipToForm(membership),
   );
@@ -87,60 +90,72 @@ export function ModalEditMembership({
   }
 
   return (
-    <ResponsiveDialog onClose={onClose} disableEnforceFocus maxWidth="sm">
-      <ResponsiveDialogHeader
-        onClose={onClose}
-        leftIcon={
-          <Avatar sx={{ backgroundColor: palette.primary.main }}>
-            <Edit />
-          </Avatar>
-        }
-      >
-        {membership.student.name}
-        <Spacer flex={1} />
-      </ResponsiveDialogHeader>
-      <ResponsiveDialogContent>
-        <form id="edit-group-form" onSubmit={(e) => onSubmit(e)}>
-          <MembershipFormFields
-            isError={isError}
-            error={error}
-            formValues={formValues}
-            updateFormValues={updateFormValues}
-            isAdmin={membership.admin || staff}
-          />
-        </form>
-        <FlexRow justifyContent={'left'}>
-          <IconButton onClick={handleClick}>
-            <MoreHoriz />
-          </IconButton>
-          <Menu
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left', // Anchor menu to the left of the button
-            }}
-          >
-            <MenuItem>
-              <Typography color="primary">Supprimer</Typography>
-            </MenuItem>
-          </Menu>
-        </FlexRow>
-      </ResponsiveDialogContent>
-      <ResponsiveDialogFooter>
-        <Button variant="text" onClick={() => onClose()}>
-          {t('button.cancel')}
-        </Button>
-        <LoadingButton
-          form="edit-group-form"
-          type="submit"
-          loading={isLoading}
-          variant="contained"
+    <>
+      <ResponsiveDialog onClose={onClose} disableEnforceFocus maxWidth="sm">
+        <ResponsiveDialogHeader
+          onClose={onClose}
+          leftIcon={
+            <Avatar sx={{ backgroundColor: palette.primary.main }}>
+              <Edit />
+            </Avatar>
+          }
         >
-          {t('button.confirm')}
-        </LoadingButton>
-      </ResponsiveDialogFooter>
-    </ResponsiveDialog>
+          {membership.student.name}
+          <Spacer flex={1} />
+        </ResponsiveDialogHeader>
+        <ResponsiveDialogContent>
+          <form id="edit-group-form" onSubmit={(e) => onSubmit(e)}>
+            <MembershipFormFields
+              isError={isError}
+              error={error}
+              formValues={formValues}
+              updateFormValues={updateFormValues}
+              isAdmin={membership.admin || staff}
+            />
+          </form>
+          <FlexRow justifyContent={'left'}>
+            <IconButton onClick={handleClick}>
+              <MoreHoriz />
+            </IconButton>
+            <Menu
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left', // Anchor menu to the left of the button
+              }}
+            >
+              <MenuItem onClick={() => setModalOpen(true)}>
+                <Typography color="primary">Supprimer</Typography>
+              </MenuItem>
+            </Menu>
+          </FlexRow>
+        </ResponsiveDialogContent>
+        <ResponsiveDialogFooter>
+          <Button variant="text" onClick={() => onClose()}>
+            {t('button.cancel')}
+          </Button>
+          <LoadingButton
+            form="edit-group-form"
+            type="submit"
+            loading={isLoading}
+            variant="contained"
+          >
+            {t('button.confirm')}
+          </LoadingButton>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialog>
+      <ModalDeleteMember
+        open={modalOpen}
+        onClose={(deleted) => {
+          setModalOpen(false);
+          if (deleted) {
+            onClose();
+          }
+        }}
+        member={membership}
+      />
+    </>
   );
 }

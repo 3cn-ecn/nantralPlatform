@@ -4,7 +4,6 @@ import { History } from '@mui/icons-material';
 import { Chip } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
-import { AddMemberButton } from '#pages/GroupDetails/shared/Buttons/AddMemberButton';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 
 import { JoinButton } from '../shared/Buttons/JoinButton';
@@ -29,7 +28,6 @@ export function GroupMembers({ group }: GroupMembersProps) {
           }
         />
         <FlexAuto gap={2}>
-          {group.isAdmin && <AddMemberButton group={group} />}
           <JoinButton group={group} />
         </FlexAuto>
       </FlexRow>
