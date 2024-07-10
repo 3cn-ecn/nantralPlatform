@@ -29,7 +29,7 @@ function GroupItem({ group, size }: GroupItemProps) {
           alt={group.name}
         />
       </Link>
-      <Typography variant="h6" textAlign={'center'}>
+      <Typography textAlign={'center'}>
         {group.shortName}
         {group.subCategory && (
           <Typography color="gray" variant="subtitle1">
