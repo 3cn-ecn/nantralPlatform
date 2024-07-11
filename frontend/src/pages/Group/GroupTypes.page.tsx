@@ -68,13 +68,14 @@ export default function GroupTypesPage() {
                 </Button>
               </FlexRow>
 
-              {results && results[index]?.data && (
+              {results && (
                 <GroupGrid
                   estimatedSize={6}
-                  isLoading={results[index].isLoading}
+                  isLoading={!results[index] || results[index].isLoading}
                   groups={results[index].data?.results}
                   extraComponent={
-                    results[index].data.count > PAGE_SIZE ? (
+                    results[index]?.data &&
+                    results[index]?.data?.count > PAGE_SIZE ? (
                       <FlexCol
                         alignItems={'center'}
                         justifyContent={'center'}

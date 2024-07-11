@@ -33,7 +33,7 @@ export function GroupGrid({
               <GroupItem size="xl" group={group} />
             </Grid>
           ))}
-      {extraComponent && (
+      {!isLoading && extraComponent && (
         <Grid key={'extra'} xs={6} sm={4} md={3} lg={2} item>
           {extraComponent}
         </Grid>
