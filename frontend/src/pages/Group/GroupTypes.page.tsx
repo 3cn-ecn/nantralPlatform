@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 
-import { Add, AdminPanelSettings, ChevronRight } from '@mui/icons-material';
-import { Button, Container, Divider, Fab, Typography } from '@mui/material';
+import { AdminPanelSettings, ChevronRight } from '@mui/icons-material';
+import { Button, Container, Divider, Typography } from '@mui/material';
 import { useQueries, useQuery } from '@tanstack/react-query';
 
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
@@ -12,6 +12,7 @@ import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useAuth } from '#shared/context/Auth.context';
 
 import { GroupGrid } from '../../modules/group/view/GroupGrid/GroupGrid';
+import { MoreGroupButton } from './components/MoreGroupButton';
 
 const PAGE_SIZE = 5;
 
@@ -74,22 +75,11 @@ export default function GroupTypesPage() {
                   isLoading={!results[index] || results[index].isLoading}
                   groups={results[index].data?.results}
                   extraComponent={
-                    results[index]?.data &&
-                    results[index]?.data?.count > PAGE_SIZE ? (
-                      <FlexCol
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        height={'100%'}
-                      >
-                        <Fab
-                          onClick={() => setParams({ type: type.slug })}
-                          variant="extended"
-                          sx={{ fontSize: 20 }}
-                        >
-                          <Add />
-                          {results[index].data.count - PAGE_SIZE}
-                        </Fab>
-                      </FlexCol>
+                    results[index].data?.count || 0 > PAGE_SIZE ? (
+                      <MoreGroupButton
+                        count={results[index].data?.count || 0 - PAGE_SIZE}
+                        onClick={() => setParams({ type: type.slug })}
+                      />
                     ) : undefined
                   }
                 />
