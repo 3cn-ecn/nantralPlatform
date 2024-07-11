@@ -1,7 +1,13 @@
 import { useSearchParams } from 'react-router-dom';
 
 import { AdminPanelSettings } from '@mui/icons-material';
-import { Button, Container, Divider, Typography } from '@mui/material';
+import {
+  Button,
+  Container,
+  Divider,
+  Skeleton,
+  Typography,
+} from '@mui/material';
 
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
@@ -28,9 +34,13 @@ export default function GroupListPage() {
         flexWrap={'wrap'}
         py={1}
       >
-        <Typography variant="h1">
-          {groupType?.name} ({count})
-        </Typography>
+        {isLoading ? (
+          <Skeleton variant="text" sx={{ width: 200, height: 30 }}></Skeleton>
+        ) : (
+          <Typography variant="h1">
+            {groupType?.name} ({count})
+          </Typography>
+        )}
 
         {staff && (
           <FlexRow gap={2}>
