@@ -20,6 +20,7 @@ export function GroupMembers({ group }: GroupMembersProps) {
       <FlexRow alignItems={'center'} justifyContent={'space-between'}>
         <Chip
           icon={<History />}
+          disabled={group.groupType.noMembershipDates}
           label={'anciens membres'}
           variant={filters.previous ? 'filled' : 'outlined'}
           color={filters.previous ? 'secondary' : 'default'}

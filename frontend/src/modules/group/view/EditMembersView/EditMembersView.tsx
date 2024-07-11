@@ -84,6 +84,7 @@ export function EditMembersView({ group }: EditMembersViewProps) {
       {selected && (
         <ModalEditMembership
           membership={selected}
+          group={group}
           onClose={() => {
             setSelected(undefined);
           }}

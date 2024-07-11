@@ -20,6 +20,7 @@ interface JoinGroupFormFieldsProps {
   updateFormValues: Dispatch<SetObjectStateAction<MembershipForm>>;
   isAdmin?: boolean;
   selectStudent?: boolean;
+  showDates?: boolean;
 }
 
 export function MembershipFormFields({
@@ -28,6 +29,7 @@ export function MembershipFormFields({
   updateFormValues,
   isAdmin = false,
   selectStudent = false,
+  showDates,
 }: JoinGroupFormFieldsProps) {
   async function fetchOptions(search: string) {
     const data = await getStudentListApi({ search: search });
@@ -75,35 +77,31 @@ export function MembershipFormFields({
         errors={error?.fields?.description}
         multiline
       />
-      <FlexAuto gap={2}>
-        <DateField
-          label={'Date de début'}
-          value={formValues.beginDate}
-          onChange={useCallback(
-            (val) => {
-              updateFormValues({ beginDate: val });
-            },
-            [updateFormValues],
-          )}
-          errors={error?.fields?.begin_date}
-          fullWidth
-          required
-        />
-        <DateField
-          label={'Date de fin'}
-          disablePast
-          value={formValues.endDate}
-          onChange={useCallback(
-            (val) => {
-              updateFormValues({ endDate: val });
-            },
-            [updateFormValues],
-          )}
-          errors={error?.fields?.end_date}
-          fullWidth
-          required
-        />
-      </FlexAuto>
+      {showDates && (
+        <FlexAuto gap={2}>
+          <DateField
+            label={'Date de début'}
+            value={formValues.beginDate}
+            onChange={(val) => {
+              updateFormValues({ beginDate: val ?? undefined });
+            }}
+            errors={error?.fields?.begin_date}
+            fullWidth
+            required
+          />
+          <DateField
+            label={'Date de fin'}
+            disablePast
+            value={formValues.endDate}
+            onChange={(val) => {
+              updateFormValues({ endDate: val ?? undefined });
+            }}
+            errors={error?.fields?.end_date}
+            fullWidth
+            required
+          />
+        </FlexAuto>
+      )}
 
       {isAdmin && (
         <CheckboxField

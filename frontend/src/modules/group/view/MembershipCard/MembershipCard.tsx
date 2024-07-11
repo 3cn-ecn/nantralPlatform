@@ -76,8 +76,9 @@ function MembershipCard(props: {
         student={item.student}
       />
 
-      {openEditModal && (
+      {openEditModal && group && (
         <ModalEditMembership
+          group={group}
           onClose={() => setOpenEditModal(false)}
           membership={item}
         />
@@ -86,7 +87,6 @@ function MembershipCard(props: {
       {deleteMembership && (
         <ModalDeleteMember
           open={openDeleteModal}
-          deleteMembership={deleteMembership}
           onClose={() => setOpenDeleteModal(false)}
           member={item}
         />

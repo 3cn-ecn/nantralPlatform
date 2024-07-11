@@ -15,7 +15,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { editMembershipApi } from '#modules/group/api/editMembership.api';
 import { convertMembershipToForm } from '#modules/group/hooks/useMembershipFormValues';
 import { MembershipFormDTO } from '#modules/group/infra/membership.dto';
-import { CreateGroupForm } from '#modules/group/types/group.types';
+import { CreateGroupForm, Group } from '#modules/group/types/group.types';
 import {
   Membership,
   MembershipForm,
@@ -39,9 +39,11 @@ import { ModalDeleteMember } from './ModalDeleteMember';
 export function ModalEditMembership({
   onClose,
   membership,
+  group,
 }: {
   onClose: () => void;
   membership: Membership;
+  group: Group;
 }) {
   const { t } = useTranslation();
   const today = new Date();
@@ -70,9 +72,10 @@ export function ModalEditMembership({
   >(() => editMembershipApi(membership.id, formValues), {
     onSuccess: () => {
       queryClient.invalidateQueries(['group', { slug: membership.group.slug }]);
-      queryClient
-        .invalidateQueries(['members', { slug: membership.group.slug }])
-        .then(() => console.log('hello'));
+      queryClient.invalidateQueries([
+        'members',
+        { slug: membership.group.slug },
+      ]);
       queryClient.invalidateQueries([
         'membership',
         { group: membership.group.slug, student: membership.student.id },
@@ -111,6 +114,7 @@ export function ModalEditMembership({
               formValues={formValues}
               updateFormValues={updateFormValues}
               isAdmin={membership.admin || staff}
+              showDates={!group.groupType.noMembershipDates}
             />
           </form>
           <FlexRow justifyContent={'left'}>

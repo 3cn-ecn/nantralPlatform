@@ -100,6 +100,7 @@ export function JoinButton({ group }: { group?: Group }) {
         )}
         {modalOpen && group?.isMember && member && (
           <ModalEditMembership
+            group={group}
             membership={member}
             onClose={() => setJoinModalOpen(false)}
           />
