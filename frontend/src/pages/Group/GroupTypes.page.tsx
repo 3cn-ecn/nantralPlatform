@@ -75,7 +75,7 @@ export default function GroupTypesPage() {
                   isLoading={!results[index] || results[index].isLoading}
                   groups={results[index].data?.results}
                   extraComponent={
-                    results[index].data?.count || 0 > PAGE_SIZE ? (
+                    (results[index].data?.count || 0) > PAGE_SIZE ? (
                       <MoreGroupButton
                         count={(results[index].data?.count || 0) - PAGE_SIZE}
                         onClick={() => setParams({ type: type.slug })}
