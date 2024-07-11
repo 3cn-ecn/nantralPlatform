@@ -34,13 +34,15 @@ export default function GroupListPage() {
         flexWrap={'wrap'}
         py={1}
       >
-        {isLoading ? (
-          <Skeleton variant="text" sx={{ width: 200, height: 30 }}></Skeleton>
-        ) : (
-          <Typography variant="h1">
-            {groupType?.name} ({count})
-          </Typography>
-        )}
+        <FlexRow alignItems={'center'} gap={1} mb={1}>
+          {isLoading ? (
+            <Skeleton variant="text" sx={{ width: 200, height: 50 }}></Skeleton>
+          ) : (
+            <Typography variant="h1">
+              {groupType?.name} ({count})
+            </Typography>
+          )}
+        </FlexRow>
 
         {staff && (
           <FlexRow gap={2}>
@@ -69,7 +71,7 @@ export default function GroupListPage() {
         {isSuccess &&
           groupsByCategory &&
           Object.keys(groupsByCategory).map((cat) => (
-            <FlexCol key={cat} sx={{ py: 2 }}>
+            <FlexCol key={cat}>
               <Typography variant="h2" mb={4}>
                 {cat}
               </Typography>

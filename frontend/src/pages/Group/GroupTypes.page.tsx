@@ -37,7 +37,7 @@ export default function GroupTypesPage() {
   const { staff } = useCurrentUserData();
   return (
     <Container sx={{ my: 4 }}>
-      <FlexRow justifyContent={'space-between'} alignItems="center">
+      <FlexRow justifyContent={'space-between'} alignItems="center" py={1}>
         <Typography variant="h1" mb={1}>
           Groups
         </Typography>
@@ -77,7 +77,7 @@ export default function GroupTypesPage() {
                   extraComponent={
                     results[index].data?.count || 0 > PAGE_SIZE ? (
                       <MoreGroupButton
-                        count={results[index].data?.count || 0 - PAGE_SIZE}
+                        count={(results[index].data?.count || 0) - PAGE_SIZE}
                         onClick={() => setParams({ type: type.slug })}
                       />
                     ) : undefined
