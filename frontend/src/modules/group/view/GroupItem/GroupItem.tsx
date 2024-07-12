@@ -23,6 +23,7 @@ function GroupItem({ group, size }: GroupItemProps) {
             '&:hover': {
               boxShadow: `0 0 10px ${theme.palette.text.disabled}`,
             },
+            objectFit: 'contain',
           }}
           size={size}
           src={group.icon || fallbackUrl}
