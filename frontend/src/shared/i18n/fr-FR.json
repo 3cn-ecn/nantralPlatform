@@ -288,6 +288,10 @@
       "level": "Niveau {{level}} : ",
       "title": "Tu aimes ce site ? Dis-le nous !"
     },
+    "myGroupSection": {
+      "seeAll": "Voir tous",
+      "title": "Mes groupes"
+    },
     "postSection": {
       "error": "Erreur : les annonces n'ont pas pu être chargées 😢",
       "isEmpty": "Aucun post ces derniers jours... 🥺 Créez-en un !",

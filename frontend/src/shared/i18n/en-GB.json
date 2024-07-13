@@ -288,6 +288,10 @@
       "level": "Level {{level}}: ",
       "title": "Do you like this site?"
     },
+    "myGroupSection": {
+      "seeAll": "See all",
+      "title": "My groups"
+    },
     "postSection": {
       "error": "Error: posts cannot be loaded 😢",
       "isEmpty": "No post in the last few days... 🥺 Create a new one!",
