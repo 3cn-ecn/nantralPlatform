@@ -2,6 +2,7 @@ import { Divider, Grid, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import MembershipCard from '#modules/group/view/MembershipCard/MembershipCard';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { useInfiniteMembership } from '../hooks/useInfiniteMemberships';
 
@@ -15,6 +16,7 @@ export function MembersInfiniteGrid({
   group,
 }: InfiniteMembershipGridProps) {
   const today = new Date(new Date().toDateString());
+  const { t } = useTranslation();
   const { data: members, ref } = useInfiniteMembership({
     options: { group: group.slug, from: today },
   });
@@ -24,7 +26,7 @@ export function MembersInfiniteGrid({
   });
   return (
     <>
-      <Grid spacing={1} container mt={2}>
+      <Grid spacing={1} container my={2}>
         {members?.pages
           .flatMap((page) => page.results)
           .map((member) => (
@@ -35,7 +37,7 @@ export function MembersInfiniteGrid({
       {filters.previous && (
         <>
           <Typography variant="caption" sx={{ mt: 2, ml: 1 }} color={'primary'}>
-            Previous members
+            {t('group.details.formerMembers')}
           </Typography>
           <Divider sx={{ mb: 1, backgroundColor: 'red' }} />
 

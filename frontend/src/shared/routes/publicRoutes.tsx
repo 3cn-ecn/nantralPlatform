@@ -20,7 +20,7 @@ export const publicRoutes: RouteObject = {
     },
     {
       path: '/group',
-      handle: { crumb: 'Groups' },
+      handle: { crumb: t('breadcrumbs.group.index') },
       children: [
         {
           path: '',
@@ -29,7 +29,7 @@ export const publicRoutes: RouteObject = {
         {
           path: ':type',
           element: <GroupDetailsPage />,
-          handle: { crumb: 'Details' },
+          handle: { crumb: t('breadcrumbs.group.details') },
         },
       ],
     },

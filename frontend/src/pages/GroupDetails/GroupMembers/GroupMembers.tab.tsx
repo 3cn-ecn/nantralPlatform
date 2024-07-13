@@ -5,6 +5,7 @@ import { Chip } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { JoinButton } from '../shared/Buttons/JoinButton';
 import { MembersInfiniteGrid } from './MembersInfiniteGrid';
@@ -14,14 +15,14 @@ interface GroupMembersProps {
 }
 export function GroupMembers({ group }: GroupMembersProps) {
   const [filters, setFilters] = useState({ previous: false });
-
+  const { t } = useTranslation();
   return (
     <>
       <FlexRow alignItems={'center'} justifyContent={'space-between'}>
         <Chip
           icon={<History />}
           disabled={group.groupType.noMembershipDates}
-          label={'anciens membres'}
+          label={t('group.details.formerMembers')}
           variant={filters.previous ? 'filled' : 'outlined'}
           color={filters.previous ? 'secondary' : 'default'}
           onClick={() =>

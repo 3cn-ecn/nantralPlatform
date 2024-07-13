@@ -1,6 +1,7 @@
 import { Divider, Tab, Tabs } from '@mui/material';
 
 import { useAuth } from '#shared/context/Auth.context';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export type GroupDetailsTabs = 'home' | 'members' | 'events' | 'posts';
 
@@ -11,6 +12,7 @@ interface GroupTabBarProps {
 
 export function GroupTabBar({ value, onChangeValue }: GroupTabBarProps) {
   const { isAuthenticated } = useAuth();
+  const { t } = useTranslation();
   return (
     <>
       <Tabs
@@ -19,16 +21,28 @@ export function GroupTabBar({ value, onChangeValue }: GroupTabBarProps) {
         value={value}
         allowScrollButtonsMobile
       >
-        <Tab label={'Home'} value={'home'} />
+        <Tab label={t('group.details.tabs.home')} value={'home'} />
         {isAuthenticated && (
-          <Tab label={'Membres'} disabled={false} value={'members'} />
+          <Tab
+            label={t('group.details.tabs.members')}
+            disabled={false}
+            value={'members'}
+          />
         )}
 
         {isAuthenticated && (
-          <Tab label={'Événements'} disabled={false} value={'events'} />
+          <Tab
+            label={t('group.details.tabs.events')}
+            disabled={false}
+            value={'events'}
+          />
         )}
         {isAuthenticated && (
-          <Tab label={'Annonces'} disabled={false} value={'posts'} />
+          <Tab
+            label={t('group.details.tabs.posts')}
+            disabled={false}
+            value={'posts'}
+          />
         )}
       </Tabs>
       <Divider />

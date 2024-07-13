@@ -18,10 +18,12 @@ import { ModalEditMembership } from '#modules/group/view/Modal/ModalEditMembersh
 import { ModalJoinGroup } from '#modules/group/view/Modal/ModalJoinGroup';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { useAuth } from '#shared/context/Auth.context';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function JoinButton({ group }: { group?: Group }) {
   const { isAuthenticated } = useAuth();
   const student = useCurrentUserData();
+  const { t } = useTranslation();
   const [modalOpen, setJoinModalOpen] = useState(false);
   const [adminRequestModalOpen, setAdminRequestModalOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -58,7 +60,9 @@ export function JoinButton({ group }: { group?: Group }) {
           variant={group?.isMember ? 'outlined' : 'contained'}
           onClick={handleClick}
         >
-          {group?.isMember ? 'Membre' : 'Rejoindre'}
+          {group?.isMember
+            ? t('group.details.member')
+            : t('group.details.join')}
         </Button>
         <Menu
           open={open && group.isMember}
@@ -69,7 +73,7 @@ export function JoinButton({ group }: { group?: Group }) {
         >
           <MenuItem onClick={() => setJoinModalOpen(true)} sx={{ gap: 1 }}>
             <Edit />
-            <Typography>Modifier</Typography>
+            <Typography>{t('group.details.edit')}</Typography>
           </MenuItem>
           {!group.isAdmin && (
             <MenuItem
@@ -80,12 +84,12 @@ export function JoinButton({ group }: { group?: Group }) {
               {member?.adminRequest ? (
                 <>
                   <CheckCircle />
-                  <Typography>Demande envoyée</Typography>
+                  <Typography>{t('group.details.requestSent')}</Typography>
                 </>
               ) : (
                 <>
                   <AdminPanelSettingsRounded />
-                  <Typography>Demander a être admin</Typography>
+                  <Typography>{t('group.details.requestAdmin')}</Typography>
                 </>
               )}
             </MenuItem>

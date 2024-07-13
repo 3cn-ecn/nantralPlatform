@@ -14,6 +14,10 @@
       "home": "Commentaires",
       "suggestion": "Suggestion"
     },
+    "group": {
+      "details": "Détails",
+      "index": "Groupes"
+    },
     "home": {
       "index": "Accueil"
     },
@@ -270,6 +274,22 @@
     },
     "number": {
       "wrongFormat": "Format invalide"
+    }
+  },
+  "group": {
+    "details": {
+      "edit": "Modifier",
+      "formerMembers": "Anciens membres",
+      "join": "Rejoindre",
+      "member": "Membre",
+      "requestAdmin": "Demander a être admin",
+      "requestSent": "Demande envoyée",
+      "tabs": {
+        "events": "Évènements",
+        "home": "Accueil",
+        "members": "Membres",
+        "posts": "Postes"
+      }
     }
   },
   "home": {
