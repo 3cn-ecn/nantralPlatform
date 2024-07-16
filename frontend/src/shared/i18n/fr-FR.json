@@ -278,6 +278,7 @@
   },
   "group": {
     "details": {
+      "create": "Créer",
       "edit": "Modifier",
       "formerMembers": "Anciens membres",
       "join": "Rejoindre",

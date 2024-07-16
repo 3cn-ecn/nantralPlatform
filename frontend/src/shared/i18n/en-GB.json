@@ -278,6 +278,7 @@
   },
   "group": {
     "details": {
+      "create": "Create",
       "edit": "Edit",
       "formerMembers": "Former members",
       "join": "Join",

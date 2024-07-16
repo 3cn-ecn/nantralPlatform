@@ -1,14 +1,23 @@
+import { useState } from 'react';
+
 import { Grid } from '@mui/material';
 
+import { Group } from '#modules/group/types/group.types';
+import { CreatePostModal } from '#modules/post/view/CreatePostModal/CreatePostModal';
 import { PostCard } from '#modules/post/view/PostCard/PostCard';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 
 import { useInfiniteGroupPosts } from '../hooks/useInfiniteGroupPosts';
+import { CreateButton } from '../shared/Buttons/CreateButton';
 
-export function GroupPosts({ groupSlug }: { groupSlug: string }) {
-  const { data, ref } = useInfiniteGroupPosts({ groupSlug: groupSlug });
-
+export function GroupPosts({ group }: { group: Group }) {
+  const { data, ref } = useInfiniteGroupPosts({ groupSlug: group.slug });
+  const [open, setOpen] = useState(false);
   return (
     <>
+      <FlexRow justifyContent={'end'}>
+        {group.isAdmin && <CreateButton onClick={() => setOpen(true)} />}
+      </FlexRow>
       <Grid spacing={1} container mt={2}>
         {data?.pages
           ?.flatMap((page) => page.results)
@@ -19,6 +28,12 @@ export function GroupPosts({ groupSlug }: { groupSlug: string }) {
           ))}
         <div ref={ref} />
       </Grid>
+      {group.isAdmin && open && (
+        <CreatePostModal
+          onCreated={() => setOpen(false)}
+          onClose={() => setOpen(false)}
+        />
+      )}
     </>
   );
 }

@@ -80,10 +80,10 @@ export default function GroupDetailsPage() {
           <GroupMembers group={groupDetails} />
         )}
         {tabValue == 'events' && groupDetails && (
-          <GroupEvents groupSlug={groupDetails?.slug} />
+          <GroupEvents group={groupDetails} />
         )}
-        {tabValue == 'posts' && groupDetails?.slug && (
-          <GroupPosts groupSlug={groupDetails?.slug} />
+        {tabValue == 'posts' && groupDetails && (
+          <GroupPosts group={groupDetails} />
         )}
         <Spacer vertical={80} />
       </Container>
