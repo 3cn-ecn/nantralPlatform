@@ -7,7 +7,7 @@ import { Group } from '#modules/group/types/group.types';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-import { JoinButton } from '../shared/Buttons/JoinButton';
+import { JoinButton } from '../components/Buttons/JoinButton';
 import { MembersInfiniteGrid } from './MembersInfiniteGrid';
 
 interface GroupMembersProps {

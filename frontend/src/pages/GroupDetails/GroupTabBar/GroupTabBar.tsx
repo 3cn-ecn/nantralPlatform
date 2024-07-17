@@ -1,5 +1,6 @@
 import { Divider, Tab, Tabs } from '@mui/material';
 
+import { Group } from '#modules/group/types/group.types';
 import { useAuth } from '#shared/context/Auth.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -8,9 +9,10 @@ export type GroupDetailsTabs = 'home' | 'members' | 'events' | 'posts';
 interface GroupTabBarProps {
   value: string;
   onChangeValue: (val: string) => void;
+  group: Group;
 }
 
-export function GroupTabBar({ value, onChangeValue }: GroupTabBarProps) {
+export function GroupTabBar({ value, onChangeValue, group }: GroupTabBarProps) {
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
   return (
@@ -42,6 +44,13 @@ export function GroupTabBar({ value, onChangeValue }: GroupTabBarProps) {
             label={t('group.details.tabs.posts')}
             disabled={false}
             value={'posts'}
+          />
+        )}
+        {isAuthenticated && group.isAdmin && (
+          <Tab
+            label={t('group.details.tabs.adminRequests')}
+            disabled={false}
+            value={'adminRequests'}
           />
         )}
       </Tabs>

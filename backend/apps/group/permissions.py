@@ -48,3 +48,14 @@ class MembershipPermission(permissions.BasePermission):
         return obj.student.user == request.user or obj.group.is_admin(
             request.user
         )
+
+
+class AdminRequestPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        user = request.user
+        slug = view.kwargs.get("slug")
+        try:
+            group = Group.objects.get(slug=slug)
+        except Group.DoesNotExist:
+            return True
+        return group.is_admin(user)

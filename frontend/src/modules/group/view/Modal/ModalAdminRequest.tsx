@@ -55,6 +55,7 @@ export function ModalAdminRequest({
         <form id="send-admin-request-form" onSubmit={onSubmit}>
           <TextField
             label={'Message'}
+            required
             helperText={
               "Demander à avoir les droits d'administration sur ce groupe"
             }

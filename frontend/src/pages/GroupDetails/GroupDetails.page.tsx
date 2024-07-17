@@ -9,14 +9,15 @@ import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageC
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { TopImage } from '#shared/components/TopImage/TopImage';
 
+import { GroupAdminRequests } from './GroupAdminRequests/GroupAdminRequests.tab';
 import { GroupEvents } from './GroupEvents/GroupEvents.tab';
 import { GroupHome } from './GroupHome/GroupHome.tab';
 import { GroupMembers } from './GroupMembers/GroupMembers.tab';
 import { GroupPosts } from './GroupPosts/GroupPosts.tab';
 import { GroupTabBar } from './GroupTabBar/GroupTabBar';
+import { EditButton } from './components/Buttons/EditButton';
+import { GroupInfo } from './components/GroupInfo';
 import { useGroupDetails } from './hooks/useGroupDetails';
-import { EditButton } from './shared/Buttons/EditButton';
-import { GroupInfo } from './shared/GroupInfo';
 
 export default function GroupDetailsPage() {
   const { type: slug } = useParams();
@@ -63,9 +64,10 @@ export default function GroupDetailsPage() {
           group={groupDetails}
           isLoading={isLoading}
         />
-        {isSuccess && (
+        {isSuccess && groupDetails && (
           <GroupTabBar
             value={tabValue}
+            group={groupDetails}
             onChangeValue={(val) => {
               setTabValue(val);
               const url = new URL(window.location.toString());
@@ -84,6 +86,9 @@ export default function GroupDetailsPage() {
         )}
         {tabValue == 'posts' && groupDetails && (
           <GroupPosts group={groupDetails} />
+        )}
+        {tabValue == 'adminRequests' && groupDetails && (
+          <GroupAdminRequests group={groupDetails} />
         )}
         <Spacer vertical={80} />
       </Container>

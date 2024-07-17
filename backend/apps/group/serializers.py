@@ -257,5 +257,17 @@ class LabelSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
-class AdminRequestSerializer(serializers.Serializer):
+class AdminRequestFormSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=256)
+
+
+class AdminRequestValidateSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+
+
+class AdminRequestSerializer(serializers.ModelSerializer):
+    student = StudentPreviewSerializer(read_only=True)
+
+    class Meta:
+        model = Membership
+        fields = ["student", "admin", "admin_request_message", "id"]

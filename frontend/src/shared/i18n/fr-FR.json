@@ -278,18 +278,24 @@
   },
   "group": {
     "details": {
+      "accept": "Accepter",
+      "accepted": "Acceptée",
       "create": "Créer",
+      "denied": "Refusée",
+      "deny": "Refuser",
       "edit": "Modifier",
       "formerMembers": "Anciens membres",
       "join": "Rejoindre",
       "member": "Membre",
       "requestAdmin": "Demander a être admin",
       "requestSent": "Demande envoyée",
+      "requestToBeAdmin": "{{student}} demande à être admin",
       "tabs": {
+        "adminRequests": "Demandes d'admin",
         "events": "Évènements",
         "home": "Accueil",
         "members": "Membres",
-        "posts": "Postes"
+        "posts": "Posts"
       }
     }
   },

@@ -7,8 +7,8 @@ import { CreatePostModal } from '#modules/post/view/CreatePostModal/CreatePostMo
 import { PostCard } from '#modules/post/view/PostCard/PostCard';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 
+import { CreateButton } from '../components/Buttons/CreateButton';
 import { useInfiniteGroupPosts } from '../hooks/useInfiniteGroupPosts';
-import { CreateButton } from '../shared/Buttons/CreateButton';
 
 export function GroupPosts({ group }: { group: Group }) {
   const { data, ref } = useInfiniteGroupPosts({ groupSlug: group.slug });

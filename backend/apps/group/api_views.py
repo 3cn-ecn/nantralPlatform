@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db.models import Count, F, Q, QuerySet
+from django.forms import ValidationError
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -8,10 +9,12 @@ from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
 from discord_webhook import DiscordEmbed, DiscordWebhook
+from requests import Request
 from rest_framework import (
     decorators,
     exceptions,
     filters,
+    mixins,
     permissions,
     response,
     serializers,
@@ -22,9 +25,15 @@ from rest_framework import (
 from apps.utils.parse_bool import parse_bool
 
 from .models import Group, GroupType, Label, Membership
-from .permissions import GroupPermission, MembershipPermission
+from .permissions import (
+    AdminRequestPermission,
+    GroupPermission,
+    MembershipPermission,
+)
 from .serializers import (
+    AdminRequestFormSerializer,
     AdminRequestSerializer,
+    AdminRequestValidateSerializer,
     GroupPreviewSerializer,
     GroupSerializer,
     GroupTypeSerializer,
@@ -85,7 +94,10 @@ class GroupViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
         if self.action == "admin_request":
-            return AdminRequestSerializer
+            if self.request.method == "POST":
+                return AdminRequestFormSerializer
+            else:
+                return MembershipSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
         if preview is True:
@@ -173,9 +185,10 @@ class GroupViewSet(viewsets.ModelViewSet):
         return obj
 
     @decorators.action(detail=True, methods=["POST"])
-    def admin_request(self, request, *args, **kwargs):
+    def admin_request(self, request: Request, *args, **kwargs):
         obj: Group = self.get_object()
         user = request.user
+
         serializer = self.get_serializer(data=request.data)
 
         if obj.is_admin(user):
@@ -404,3 +417,77 @@ class LabelViewSet(viewsets.ModelViewSet):
         qs = qs.order_by("-priority")
 
         return qs
+
+
+class AdminRequestViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    serializer_class = MembershipSerializer
+    lookup_field = "group__slug"
+    lookup_url_kwarg = "slug"
+    permission_classes = [permissions.IsAuthenticated, AdminRequestPermission]
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return AdminRequestSerializer
+        return AdminRequestValidateSerializer
+
+    # annotate return type
+    def get_serializer(self, *args, **kwargs) -> serializers.Serializer:
+        return super().get_serializer(*args, **kwargs)
+
+    def get_queryset(self):
+        slug = self.kwargs.get(self.lookup_url_kwarg)
+        group = get_object_or_404(Group, slug=slug)
+        return Membership.objects.filter(admin_request=True, group=group)
+
+    def list(self, request, *args, **kwargs):
+        slug = self.kwargs.get(self.lookup_url_kwarg)
+        # prevent from using the api without slug kwargs
+        if slug is None:
+            raise exceptions.ValidationError()
+        return super().list(self, request, args, kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        # using the list mixin to retrieve the admin requests
+        return self.list(request, args, kwargs)
+
+    @decorators.action(detail=True, methods=["POST"])
+    def accept(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        slug = self.kwargs.get(self.lookup_url_kwarg)
+        membership = get_object_or_404(
+            Membership, id=serializer.data.get("id"), group__slug=slug
+        )
+        if not membership.admin_request:
+            raise ValidationError(_("Request already answered!"))
+
+        membership.accept_admin_request()
+        return response.Response(
+            {
+                "message": _("The user %(user)s is now admin!")
+                % {"user": membership.student}
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+
+    @decorators.action(detail=True, methods=["POST"])
+    def deny(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        slug = self.kwargs.get(self.lookup_url_kwarg)
+        membership = get_object_or_404(
+            Membership, id=serializer.data.get("id"), group__slug=slug
+        )
+        if not membership.admin_request:
+            raise ValidationError(_("Request already answered!"))
+
+        membership.deny_admin_request()
+        return response.Response(
+            {
+                "message": _("The admin request from %(user)s has been denied.")
+                % {"user": membership.student}
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )

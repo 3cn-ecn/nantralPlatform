@@ -7,7 +7,7 @@ import { getMembershipListApi } from '#modules/group/api/getMembershipList.api';
 import { ReorderMemberApi } from '#modules/group/api/reorderMember.api';
 import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
-import { AddMemberButton } from '#pages/GroupDetails/shared/Buttons/AddMemberButton';
+import { AddMemberButton } from '#pages/GroupDetails/components/Buttons/AddMemberButton';
 import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
 import { useToast } from '#shared/context/Toast.context';
 

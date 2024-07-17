@@ -5,13 +5,13 @@ import { Group } from '#modules/group/types/group.types';
 import { EventInfiniteGrid } from '#pages/Event/EventGrid/EventInfiniteGrid';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 
-import { CreateButton } from '../shared/Buttons/CreateButton';
+import { CreateButton } from '../components/Buttons/CreateButton';
 
 export function GroupEvents({ group }: { group: Group }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <FlexRow py={2} justifyContent={'end'}>
+      <FlexRow pb={2} justifyContent={'end'}>
         {group.isAdmin && <CreateButton onClick={() => setOpen(true)} />}
       </FlexRow>
       <EventInfiniteGrid

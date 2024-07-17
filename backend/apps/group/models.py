@@ -463,7 +463,7 @@ class Membership(models.Model):
         _("Asked to become admin"),
         default=False,
     )
-    admin_request_messsage = models.TextField(_("Request message"), blank=True)
+    admin_request_message = models.TextField(_("Request message"), blank=True)
 
     class Meta:
         unique_together = ("student", "group")
@@ -501,6 +501,10 @@ class Membership(models.Model):
             message=mail,
             html_message=mail,
         )
+
+        if settings.DEBUG:
+            return
+
         webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(
             title=(
@@ -530,6 +534,10 @@ class Membership(models.Model):
             message=mail,
             html_message=mail,
         )
+
+        if settings.DEBUG:
+            return
+
         webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
         embed = DiscordEmbed(
             title=(

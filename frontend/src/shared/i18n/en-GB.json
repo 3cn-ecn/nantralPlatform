@@ -278,14 +278,20 @@
   },
   "group": {
     "details": {
+      "accept": "Accept",
+      "accepted": "Accepted",
       "create": "Create",
+      "denied": "Denied",
+      "deny": "Deny",
       "edit": "Edit",
       "formerMembers": "Former members",
       "join": "Join",
       "member": "Member",
       "requestAdmin": "Ask to be an admin",
       "requestSent": "Request sent",
+      "requestToBeAdmin": "{{student}} asks to be admin",
       "tabs": {
+        "adminRequests": "Admin Requests",
         "events": "Events",
         "home": "Home",
         "members": "Members",

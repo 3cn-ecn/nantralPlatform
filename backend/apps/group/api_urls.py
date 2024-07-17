@@ -1,6 +1,7 @@
 from rest_framework.routers import DefaultRouter
 
 from .api_views import (
+    AdminRequestViewSet,
     GroupTypeViewSet,
     GroupViewSet,
     LabelViewSet,
@@ -17,6 +18,6 @@ router.register("membership", MembershipViewSet, basename="membership")
 router.register("group", GroupViewSet, basename="group")
 router.register("grouptype", GroupTypeViewSet, basename="grouptype")
 router.register("label", LabelViewSet, basename="label")
-
+router.register("admin_request", AdminRequestViewSet, basename="admin_request")
 
 urlpatterns = router.urls
