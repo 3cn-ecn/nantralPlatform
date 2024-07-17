@@ -94,10 +94,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
         if self.action == "admin_request":
-            if self.request.method == "POST":
-                return AdminRequestFormSerializer
-            else:
-                return MembershipSerializer
+            return AdminRequestFormSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
         if preview is True:
