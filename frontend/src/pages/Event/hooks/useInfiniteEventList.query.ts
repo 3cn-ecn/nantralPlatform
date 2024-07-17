@@ -25,7 +25,7 @@ export function useInfiniteEventListQuery(
           ordering:
             filters.toDate && !filters.fromDate
               ? '-start_date'
-              : filters.ordering,
+              : (filters.ordering as never),
         },
         signal,
       ),
