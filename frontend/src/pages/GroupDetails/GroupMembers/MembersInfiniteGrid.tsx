@@ -21,7 +21,7 @@ export function MembersInfiniteGrid({
     options: { group: group.slug, from: today },
   });
   const { data: oldMembers, ref: oldRef } = useInfiniteMembership({
-    options: { group: group.slug, to: today },
+    options: { group: group.slug, to: today, orderBy: '-begin_date' },
     enabled: filters.previous,
   });
   return (

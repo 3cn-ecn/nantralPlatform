@@ -284,7 +284,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         "group__short_name",
         "summary",
     ]
-    ordering_fields = []
+    ordering_fields = ["begin_date", "end_date", "priority", "admin"]
     ordering = [
         "-priority",
         "student__user__first_name",

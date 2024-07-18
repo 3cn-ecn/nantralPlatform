@@ -37,12 +37,14 @@ export function EditMembersView({ group }: EditMembersViewProps) {
         message: "Erreur de réseau : le réagencement n'est pas sauvegardé...",
       }),
   });
+  const today = new Date();
   const { data, isSuccess } = useQuery({
     queryKey: ['members', { slug: group.slug }],
     queryFn: () =>
       getMembershipListApi({
         group: group.slug,
         pageSize: 200,
+        from: today,
       }),
   });
 
