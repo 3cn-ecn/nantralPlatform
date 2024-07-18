@@ -76,7 +76,7 @@ export function ModalAddMember({
           </Avatar>
         }
       >
-        Ajouter un membre
+        {t('group.details.addMember')}
         <Spacer flex={1} />
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent>

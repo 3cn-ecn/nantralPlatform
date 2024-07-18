@@ -19,6 +19,7 @@ import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
 import { StudentPreview } from '#modules/student/student.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function ModalShowMember(props: {
   closeModal: () => void;
@@ -29,7 +30,7 @@ export function ModalShowMember(props: {
   student: StudentPreview;
 }) {
   const { closeModal, openEditModal, open, member, group, student } = props;
-
+  const { t } = useTranslation();
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
@@ -71,11 +72,16 @@ export function ModalShowMember(props: {
           gutterBottom
           sx={{ fontSize: 12, fontStyle: 'italic' }}
         >
-          Membre du {new Date(member.beginDate).toLocaleDateString()} au{' '}
-          {new Date(member.endDate).toLocaleDateString()}
+          {t('group.details.modal.displayMember.dates', {
+            from: member.beginDate.toLocaleDateString(),
+            to: member.endDate.toLocaleDateString(),
+          })}
         </Typography>
         <Typography gutterBottom>
-          {member.description || `Membre de ${member.group.name}`}
+          {member.description ||
+            t('group.details.modal.displayMember.descripition', {
+              group: member.group.name,
+            })}
         </Typography>
       </DialogContent>
       <DialogActions>
@@ -85,7 +91,9 @@ export function ModalShowMember(props: {
           color="secondary"
           endIcon={<OpenInNewIcon />}
         >
-          {group ? 'Ouvrir le profil' : 'Ouvrir le groupe'}
+          {group
+            ? t('group.details.modal.displayMember.openProfile')
+            : t('group.details.modal.displayMember.openGroup')}
         </Button>
         {group?.isAdmin && (
           <Button
@@ -98,7 +106,7 @@ export function ModalShowMember(props: {
             endIcon={<EditIcon />}
             sx={{ marginLeft: 1 }}
           >
-            Modifier
+            {t('button.edit')}
           </Button>
         )}
       </DialogActions>

@@ -78,7 +78,7 @@ export function ModalEditGroup({
           </Avatar>
         }
       >
-        Modifier le groupe
+        {t('group.details.modal.editGroup.title')}
       </ResponsiveDialogHeader>
 
       <ResponsiveDialogContent>

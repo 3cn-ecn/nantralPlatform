@@ -48,17 +48,15 @@ export function ModalAdminRequest({
         onClose={onClose}
         leftIcon={<AdminPanelSettings />}
       >
-        Faire une demande d&apos;admin
+        {t('group.details.makeAdminRequest')}
         <Spacer flex={1} />
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent>
         <form id="send-admin-request-form" onSubmit={onSubmit}>
           <TextField
-            label={'Message'}
+            label={t('group.details.form.message.label')}
             required
-            helperText={
-              "Demander à avoir les droits d'administration sur ce groupe"
-            }
+            helperText={t('group.details.form.message.helperText')}
             multiline
             value={formValues.message}
             handleChange={(val) => setFormValues({ message: val })}

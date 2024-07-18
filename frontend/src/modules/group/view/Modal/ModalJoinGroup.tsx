@@ -83,7 +83,7 @@ export function ModalJoinGroup({
           </Avatar>
         }
       >
-        Rejoindre {group.name}
+        {t('group.details.modal.joinGroup.title', { group: group.name })}
         <Spacer flex={1} />
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent>

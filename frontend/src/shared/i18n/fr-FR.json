@@ -35,6 +35,8 @@
     "back": "Retour",
     "cancel": "Annuler",
     "confirm": "Valider",
+    "delete": "Supprimer",
+    "edit": "Modifier",
     "next": "Suivant",
     "previous": "Précédent",
     "save": "Enregistrer",
@@ -280,13 +282,40 @@
     "details": {
       "accept": "Accepter",
       "accepted": "Acceptée",
+      "addMember": "Ajouter un membre",
       "create": "Créer",
+      "deleteMember": "Supprimer le membre ?",
       "denied": "Refusée",
       "deny": "Refuser",
       "edit": "Modifier",
+      "form": {
+        "message": {
+          "helperText": " Demander à avoir les droits d'administration sur ce groupe",
+          "label": "Message"
+        }
+      },
       "formerMembers": "Anciens membres",
       "join": "Rejoindre",
+      "makeAdminRequest": "Faire une demande d'admin",
       "member": "Membre",
+      "modal": {
+        "deleteMember": {
+          "text": "Voulez-vous vraiment supprimer {{ student } des membres de {{ group }} ?",
+          "title": "Supprimer le membre ?"
+        },
+        "displayMember": {
+          "dates": "Membre du {{ from }} au {{ to }}",
+          "descripition": "Membre de {{ group }}",
+          "openGroup": "Ouvrir le groupe",
+          "openProfile": "Ouvrir le profil"
+        },
+        "editGroup": {
+          "title": "Modifier le groupe"
+        },
+        "joinGroup": {
+          "title": "Rejoindre {{ group }}"
+        }
+      },
       "requestAdmin": "Demander a être admin",
       "requestSent": "Demande envoyée",
       "requestToBeAdmin": "{{student}} demande à être admin",

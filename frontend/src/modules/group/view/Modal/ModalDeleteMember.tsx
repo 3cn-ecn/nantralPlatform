@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteMembershipApi } from '#modules/group/api/deleteMembership.api';
 import { Membership } from '#modules/group/types/membership.types';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 /** A modal to confirm the deletion of a member. */
 export function ModalDeleteMember({
@@ -23,6 +24,7 @@ export function ModalDeleteMember({
   open: boolean;
   member: Membership;
 }) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { mutate, isLoading, error } = useMutation({
     mutationFn: deleteMembershipApi,
@@ -44,7 +46,7 @@ export function ModalDeleteMember({
       open={open}
       onClose={onClose}
     >
-      <DialogTitle>Supprimer le membre ?</DialogTitle>
+      <DialogTitle>{t('group.details.modal.deleteMember.title')}</DialogTitle>
       <DialogContent>
         {!!error && (
           <Alert severity="error" sx={{ mb: 1 }}>
@@ -52,8 +54,10 @@ export function ModalDeleteMember({
           </Alert>
         )}
         <DialogContentText>
-          Voulez-vous vraiment supprimer {member.student.name} des membres de{' '}
-          {member.group.name} ?
+          {t('group.details.modal.deleteMember.text', {
+            student: member.student.name,
+            group: member.group.name,
+          })}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -62,14 +66,14 @@ export function ModalDeleteMember({
           variant="text"
           disabled={isLoading}
         >
-          Annuler
+          {t('button.cancel')}
         </Button>
         <LoadingButton
           onClick={() => mutate(member.id)}
           variant="contained"
           loading={isLoading}
         >
-          Supprimer
+          {t('button.delete')}
         </LoadingButton>
       </DialogActions>
     </Dialog>

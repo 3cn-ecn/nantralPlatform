@@ -35,6 +35,8 @@
     "back": "Back",
     "cancel": "Cancel",
     "confirm": "OK",
+    "delete": "Delete",
+    "edit": "Edit",
     "next": "Next",
     "previous": "Previous",
     "save": "Save",
@@ -280,13 +282,40 @@
     "details": {
       "accept": "Accept",
       "accepted": "Accepted",
+      "addMember": "Add a member",
       "create": "Create",
+      "deleteMember": "Delete the member?",
       "denied": "Denied",
       "deny": "Deny",
       "edit": "Edit",
+      "form": {
+        "message": {
+          "helperText": "Request administrative rights to this group",
+          "label": "Message"
+        }
+      },
       "formerMembers": "Former members",
       "join": "Join",
+      "makeAdminRequest": "Make an admin request",
       "member": "Member",
+      "modal": {
+        "deleteMember": {
+          "text": "Are you sure you want to remove {{ student } from {{ group }} members?",
+          "title": "Delete member?"
+        },
+        "displayMember": {
+          "dates": "Member from {{ from }} to {{ to }}",
+          "descripition": "Member of {{group}}",
+          "openGroup": "Open group",
+          "openProfile": "Open profile"
+        },
+        "editGroup": {
+          "title": "Edit group"
+        },
+        "joinGroup": {
+          "title": "Join {{group}}"
+        }
+      },
       "requestAdmin": "Ask to be an admin",
       "requestSent": "Request sent",
       "requestToBeAdmin": "{{student}} asks to be admin",
