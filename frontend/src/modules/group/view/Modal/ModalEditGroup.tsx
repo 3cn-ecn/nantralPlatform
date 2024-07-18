@@ -80,14 +80,14 @@ export function ModalEditGroup({
       >
         {t('group.details.modal.editGroup.title')}
       </ResponsiveDialogHeader>
-
-      <ResponsiveDialogContent>
-        <Tabs value={tab} onChange={(e, val) => setTab(val)} sx={{ mb: 2 }}>
+      <div style={{ position: 'relative', maxHeight: 100 }}>
+        <Tabs value={tab} onChange={(e, val) => setTab(val)}>
           <Tab label="Général" iconPosition="start" icon={<Settings />} />
           <Tab label="Membres" iconPosition="start" icon={<Groups />} />
           <Tab label="Liens" iconPosition="start" icon={<Share />} />
         </Tabs>
-
+      </div>
+      <ResponsiveDialogContent sx={{ height: 800 }}>
         {tab == 0 && (
           <>
             <form id="edit-group-form" onSubmit={(e) => onSubmit(e)}>
