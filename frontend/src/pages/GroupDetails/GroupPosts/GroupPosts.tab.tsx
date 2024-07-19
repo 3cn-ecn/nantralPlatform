@@ -39,6 +39,7 @@ export function GroupPosts({ group }: { group: Group }) {
         <CreatePostModal
           onCreated={() => setOpenModal(false)}
           onClose={() => setOpenModal(false)}
+          group={{ ...group, canPin: false }}
         />
       )}
     </>

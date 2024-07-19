@@ -21,6 +21,7 @@ export function GroupEvents({ group }: { group: Group }) {
         <CreateEventModal
           onClose={() => setOpen(false)}
           onCreated={() => setOpen(false)}
+          group={group}
         />
       )}
     </>

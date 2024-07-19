@@ -27,7 +27,7 @@ interface EventFormFieldsProps {
   error: ApiFormError<EventFormDTO> | null;
   formValues: EventForm;
   updateFormValues: Dispatch<SetObjectStateAction<EventForm>>;
-  prevData?: Event;
+  prevData?: Partial<Event>;
   selectedLang: BaseLanguage;
 }
 

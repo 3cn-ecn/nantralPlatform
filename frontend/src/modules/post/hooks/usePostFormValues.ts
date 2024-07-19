@@ -1,3 +1,4 @@
+import { Group, GroupPreview } from '#modules/group/types/group.types';
 import { Post, PostForm } from '#modules/post/post.types';
 import { useObjectState } from '#shared/hooks/useObjectState';
 import { defaultTranslatedFieldValue } from '#shared/infra/translatedFields/defaultTranslatedFieldValue';
@@ -22,8 +23,13 @@ function convertToForm(post: Post): PostForm {
   };
 }
 
-export function usePostFormValues(post?: Post) {
+export function usePostFormValues({
+  post,
+  group,
+}: { post?: Post; group?: number } = {}) {
   const defaultValues = post ? convertToForm(post) : defaultPostFormValues;
-
+  if (group) {
+    defaultValues.group = group;
+  }
   return useObjectState(defaultValues);
 }

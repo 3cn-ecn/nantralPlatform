@@ -1,4 +1,5 @@
 import { Event, EventForm } from '#modules/event/event.type';
+import { Group } from '#modules/group/types/group.types';
 import { useObjectState } from '#shared/hooks/useObjectState';
 import { defaultTranslatedFieldValue } from '#shared/infra/translatedFields/defaultTranslatedFieldValue';
 
@@ -34,8 +35,16 @@ function convertToForm(event: Event): EventForm {
   };
 }
 
-export function useEventFormValues(event?: Event) {
+export function useEventFormValues({
+  event,
+  group,
+}: {
+  event?: Event;
+  group?: Group;
+} = {}) {
   const defaultValues = event ? convertToForm(event) : defaultEventFormValues;
-
+  if (group) {
+    defaultValues.group = group.id;
+  }
   return useObjectState(defaultValues);
 }
