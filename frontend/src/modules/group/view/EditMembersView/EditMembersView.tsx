@@ -10,6 +10,7 @@ import { Membership } from '#modules/group/types/membership.types';
 import { AddMemberButton } from '#pages/GroupDetails/components/Buttons/AddMemberButton';
 import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
 import { useToast } from '#shared/context/Toast.context';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { ModalEditMembership } from '../Modal/ModalEditMembership';
 import { DraggableList } from './components/DraggableList';
@@ -23,6 +24,7 @@ export function EditMembersView({ group }: EditMembersViewProps) {
   const [selected, setSelected] = useState<Membership>();
   const showToast = useToast();
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const { mutate } = useMutation(ReorderMemberApi, {
     onSuccess: () => {
       showToast({
@@ -67,7 +69,7 @@ export function EditMembersView({ group }: EditMembersViewProps) {
     <>
       <FlexAuto justifyContent={'space-between'} alignItems={'center'} mb={1}>
         <Typography variant="h3" mb={1}>
-          Membres ({memberships.length})
+          {t('group.details.modal.editGroup.members')} ({memberships.length})
         </Typography>
         <AddMemberButton group={group} />
       </FlexAuto>

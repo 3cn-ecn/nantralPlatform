@@ -69,11 +69,11 @@ export function GroupFormFields({
       <FormErrorAlert isError={isError} error={error} />
       <FlexRow alignItems={'center'} gap={1} mt={2}>
         <EditNote />
-        <Typography variant="h2">Général</Typography>
+        <Typography variant="h2">{t('group.form.title.general')}</Typography>
       </FlexRow>
       <FlexAuto gap={2}>
         <TextField
-          name="name"
+          name={t('group.form.name.label')}
           key={'title'}
           label={'Nom'}
           value={formValues.name}
@@ -87,7 +87,7 @@ export function GroupFormFields({
           required
         />
         <TextField
-          label={'Nom raccourci'}
+          label={t('group.form.shortName.label')}
           value={formValues.shortName}
           handleChange={useCallback(
             (val) => {
@@ -95,6 +95,7 @@ export function GroupFormFields({
             },
             [updateFormValues],
           )}
+          helperText={t('group.form.shortName.helperText')}
           errors={error?.fields?.shortName}
         />
       </FlexAuto>
@@ -102,7 +103,7 @@ export function GroupFormFields({
       {!edit && (
         <FlexAuto gap={2} alignItems={'center'}>
           <DateField
-            label={'Date de création'}
+            label={t('group.form.creationDate.label')}
             defaultValue={new Date()}
             views={['year']}
             onChange={(date) =>
@@ -116,7 +117,7 @@ export function GroupFormFields({
             handleChange={(val) =>
               updateFormValues({ label: Number.parseInt(val) })
             }
-            label={'label'}
+            label={t('group.form.label.label')}
             disabled={!isSuccess || data.count === 0}
             defaultValue={'-1'}
             value={formValues.label?.toString()}
@@ -133,26 +134,26 @@ export function GroupFormFields({
       )}
       <FlexRow alignItems={'center'} mt={2} gap={1}>
         <Image />
-        <Typography variant="h2">Images</Typography>
+        <Typography variant="h2">{t('group.form.title.images')}</Typography>
       </FlexRow>
       <FlexAuto gap={2}>
         <FileField
           name="icon"
-          label={'Icône'}
-          helperText={''}
+          label={t('group.form.icon.label')}
           value={formValues.icon}
           handleChange={useCallback(
             (val) => updateFormValues({ icon: val }),
             [updateFormValues],
           )}
+          helperText={t('group.form.icon.helperText')}
           prevFileName={prevData?.icon}
           errors={error?.fields?.icon}
           accept="image/*"
         />
         <FileField
           name="banner"
-          label={'Bannière'}
-          helperText={''}
+          label={t('group.form.banner.label')}
+          helperText={t('group.form.banner.helperText')}
           value={formValues.banner}
           handleChange={useCallback(
             (val) => updateFormValues({ banner: val }),
@@ -165,11 +166,11 @@ export function GroupFormFields({
       </FlexAuto>
       <FlexRow alignItems={'center'} mt={2} gap={1}>
         <Slideshow />
-        <Typography variant="h2">Vidéos</Typography>
+        <Typography variant="h2">{t('group.form.title.videos')}</Typography>
       </FlexRow>
       <FlexAuto gap={2}>
         <TextField
-          label={'Vidéo 1'}
+          label={t('group.form.video1.label')}
           type="url"
           InputProps={{ endAdornment: <LinkRounded /> }}
           value={formValues.video1}
@@ -182,7 +183,7 @@ export function GroupFormFields({
           errors={error?.fields?.video1}
         />
         <TextField
-          label={'Vidéo 2'}
+          label={t('group.form.video2.label')}
           InputProps={{ endAdornment: <LinkRounded /> }}
           type="url"
           value={formValues.video2}
@@ -197,10 +198,12 @@ export function GroupFormFields({
       </FlexAuto>
       <FlexRow alignItems={'center'} mt={2} gap={1}>
         <Notes />
-        <Typography variant="h2">Informations</Typography>
+        <Typography variant="h2">
+          {t('group.form.title.additionalInformation')}
+        </Typography>
       </FlexRow>
       <TextField
-        label={'Résumé'}
+        label={t('group.form.summary.label')}
         value={formValues.summary}
         handleChange={useCallback(
           (val) => {
@@ -213,7 +216,7 @@ export function GroupFormFields({
       <FlexAuto columnGap={2} breakPoint="sm">
         <TextField
           InputProps={{ endAdornment: <Place sx={{ mr: 1 }} /> }}
-          label={'Lieu de réunion'}
+          label={t('group.form.meetingPlace.label')}
           value={formValues.meetingPlace}
           handleChange={useCallback(
             (val) => updateFormValues({ meetingPlace: val }),
@@ -223,7 +226,7 @@ export function GroupFormFields({
         />
         <TextField
           InputProps={{ endAdornment: <AccessTimeFilled sx={{ mr: 1 }} /> }}
-          label={'Heure de réunion'}
+          label={t('group.form.meetingHour.label')}
           value={formValues.meetingHour}
           handleChange={useCallback(
             (val) => updateFormValues({ meetingHour: val }),
@@ -246,14 +249,14 @@ export function GroupFormFields({
 
       <Accordion sx={{ mt: 3 }}>
         <AccordionSummary expandIcon={<ExpandMoreRounded />}>
-          Options avancées
+          {t('group.form.title.advancedOptions')}
         </AccordionSummary>
         <AccordionDetails>
           <FlexCol gap={2}>
             <CheckboxField
-              label="Public"
+              label={t('group.form.public.label')}
               value={formValues?.public}
-              helperText="Visible pour les utilisateurs non connectés. Les membres et les évènements resterons toutefois cachés."
+              helperText={t('group.form.public.helperText')}
               errors={error?.fields?.public}
               handleChange={useCallback(
                 (val: boolean) => updateFormValues({ public: val }),
@@ -261,9 +264,9 @@ export function GroupFormFields({
               )}
             />
             <CheckboxField
-              label="Private"
+              label={t('group.form.private.label')}
               value={formValues?.private}
-              helperText="Rendre le club non visible pour tout le monde sauf les membres"
+              helperText={t('group.form.private.helperText')}
               errors={error?.fields?.private}
               handleChange={useCallback(
                 (val: boolean) => updateFormValues({ private: val }),
@@ -271,9 +274,9 @@ export function GroupFormFields({
               )}
             />
             <CheckboxField
-              label="Archiver"
+              label={t('group.form.archive.label')}
               value={formValues?.archived}
-              helperText="Archiver le club. Il ne sera plus visible sur nantral platform."
+              helperText={t('group.form.archive.helperText')}
               errors={error?.fields?.archived}
               handleChange={useCallback(
                 (val: boolean) => updateFormValues({ archived: val }),

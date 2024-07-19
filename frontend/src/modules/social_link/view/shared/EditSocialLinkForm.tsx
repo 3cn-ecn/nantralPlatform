@@ -20,6 +20,7 @@ import {
 } from '#modules/social_link/types/socialLink.type';
 import { SocialLinkFormFields } from '#modules/social_link/view/shared/SocialLinkFormFields';
 import { FlexCol } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
 import { SocialLinkItem } from './SocialLinkItem';
@@ -34,6 +35,7 @@ export function EditSocialLinkForm({
   groupSlug,
 }: EditSocialLinkFormProps) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState<number | undefined>(undefined);
   const [socialLinkForm, setSocialLinkForm] = useState<SocialLinkForm>({
     label: '',
@@ -42,6 +44,7 @@ export function EditSocialLinkForm({
   });
 
   function onSuccess() {
+    setExpanded(undefined);
     groupSlug &&
       queryClient.invalidateQueries(['group', { slug: groupSlug || '' }]);
   }
@@ -74,7 +77,6 @@ export function EditSocialLinkForm({
     {
       onSuccess: () => {
         onSuccess();
-        setSocialLinkForm({ label: '', network: -1, uri: '' });
       },
     },
   );
@@ -120,15 +122,15 @@ export function EditSocialLinkForm({
               />
             </AccordionDetails>
             <AccordionActions>
-              <Button type="submit" variant="contained" color="secondary">
-                Modifier
+              <Button type="submit" variant="contained">
+                {t('socialLink.apply')}
               </Button>
               <Button
                 startIcon={<Delete />}
-                variant="contained"
+                variant="outlined"
                 onClick={() => deleteSocialLink(socialLinkForm)}
               >
-                Supprimer
+                {t('socialLink.delete')}
               </Button>
             </AccordionActions>
           </Accordion>
@@ -156,7 +158,7 @@ export function EditSocialLinkForm({
           <AccordionSummary
             expandIcon={expanded == -1 ? <ExpandMore /> : <AddBox />}
           >
-            Ajouter
+            {t('socialLink.add')}
           </AccordionSummary>
           <AccordionDetails>
             <SocialLinkFormFields
@@ -170,7 +172,7 @@ export function EditSocialLinkForm({
           </AccordionDetails>
           <AccordionActions>
             <Button type="submit" variant="contained">
-              Ajouter
+              {t('socialLink.add')}
             </Button>
           </AccordionActions>
         </Accordion>

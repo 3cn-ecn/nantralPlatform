@@ -5,9 +5,11 @@ import { Button } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { ModalAddMember } from '#modules/group/view/Modal/ModalAddMember';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function AddMemberButton({ group }: { group: Group }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const { t } = useTranslation();
   return (
     <>
       <Button
@@ -15,7 +17,7 @@ export function AddMemberButton({ group }: { group: Group }) {
         startIcon={<Add />}
         onClick={() => setModalOpen(true)}
       >
-        Ajouter
+        {t('group.details.editGroup.add')}
       </Button>
       {modalOpen && (
         <ModalAddMember onClose={() => setModalOpen(false)} group={group} />

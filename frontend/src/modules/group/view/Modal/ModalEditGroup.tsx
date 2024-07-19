@@ -82,9 +82,21 @@ export function ModalEditGroup({
       </ResponsiveDialogHeader>
       <div style={{ position: 'relative', maxHeight: 100 }}>
         <Tabs value={tab} onChange={(e, val) => setTab(val)}>
-          <Tab label="Général" iconPosition="start" icon={<Settings />} />
-          <Tab label="Membres" iconPosition="start" icon={<Groups />} />
-          <Tab label="Liens" iconPosition="start" icon={<Share />} />
+          <Tab
+            label={t('group.details.modal.editGroup.tabs.general')}
+            iconPosition="start"
+            icon={<Settings />}
+          />
+          <Tab
+            label={t('group.details.modal.editGroup.tabs.members')}
+            iconPosition="start"
+            icon={<Groups />}
+          />
+          <Tab
+            label={t('group.details.modal.editGroup.tabs.links')}
+            iconPosition="start"
+            icon={<Share />}
+          />
         </Tabs>
       </div>
       <ResponsiveDialogContent sx={{ height: 800 }}>

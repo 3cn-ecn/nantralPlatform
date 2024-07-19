@@ -1,22 +1,24 @@
 import { useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { CreatePostModal } from '#modules/post/view/CreatePostModal/CreatePostModal';
 import { PostCard } from '#modules/post/view/PostCard/PostCard';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CreateButton } from '../components/Buttons/CreateButton';
 import { useInfiniteGroupPosts } from '../hooks/useInfiniteGroupPosts';
 
 export function GroupPosts({ group }: { group: Group }) {
   const { data, ref } = useInfiniteGroupPosts({ groupSlug: group.slug });
-  const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const { t } = useTranslation();
   return (
     <>
       <FlexRow justifyContent={'end'}>
-        {group.isAdmin && <CreateButton onClick={() => setOpen(true)} />}
+        {group.isAdmin && <CreateButton onClick={() => setOpenModal(true)} />}
       </FlexRow>
       <Grid spacing={1} container mt={2}>
         {data?.pages
@@ -28,10 +30,15 @@ export function GroupPosts({ group }: { group: Group }) {
           ))}
         <div ref={ref} />
       </Grid>
-      {group.isAdmin && open && (
+      {data && data?.pages[0].count === 0 && (
+        <Typography color="secondary" mt={3} textAlign="center">
+          {t('post.noPosts')}
+        </Typography>
+      )}
+      {group.isAdmin && openModal && (
         <CreatePostModal
-          onCreated={() => setOpen(false)}
-          onClose={() => setOpen(false)}
+          onCreated={() => setOpenModal(false)}
+          onClose={() => setOpenModal(false)}
         />
       )}
     </>

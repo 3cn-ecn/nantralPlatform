@@ -1,13 +1,15 @@
-import { Container } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { getAdminRequestListApi } from '#modules/group/api/getAdminRequestList.api';
 import { Group } from '#modules/group/types/group.types';
 import { FlexCol } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { AdminRequestRow } from '../components/AdminRequestRow';
 
 export function GroupAdminRequests({ group }: { group: Group }) {
+  const { t } = useTranslation();
   const { data } = useInfiniteQuery({
     queryFn: ({ pageParam = 1 }) =>
       getAdminRequestListApi(group.slug, { page: pageParam }),
@@ -27,6 +29,11 @@ export function GroupAdminRequests({ group }: { group: Group }) {
             />
           ))}
       </FlexCol>
+      {data?.pages[0].count == 0 && (
+        <Typography color="secondary" mt={3} textAlign="center">
+          {t('group.details.noAdminReqests')}
+        </Typography>
+      )}
     </Container>
   );
 }

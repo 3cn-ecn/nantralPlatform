@@ -88,6 +88,7 @@ export function ModalAddMember({
             formValues={formValues}
             updateFormValues={updateFormValues}
             selectStudent
+            showDates={!group.groupType.noMembershipDates}
           />
         </form>
       </ResponsiveDialogContent>

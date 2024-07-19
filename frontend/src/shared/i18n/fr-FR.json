@@ -288,13 +288,31 @@
       "denied": "Refusée",
       "deny": "Refuser",
       "edit": "Modifier",
+      "editGroup": {
+        "add": "Ajouter"
+      },
       "form": {
+        "description": {
+          "label": "Description"
+        },
         "message": {
           "helperText": " Demander à avoir les droits d'administration sur ce groupe",
           "label": "Message"
+        },
+        "summary": {
+          "label": "Résumé"
+        },
+        "user": {
+          "label": "Utilisateur"
         }
       },
       "formerMembers": "Anciens membres",
+      "from": {
+      },
+      "infoLine": {
+        "events": "événement(s)",
+        "members": "membre(s)"
+      },
       "join": "Rejoindre",
       "makeAdminRequest": "Faire une demande d'admin",
       "member": "Membre",
@@ -310,12 +328,19 @@
           "openProfile": "Ouvrir le profil"
         },
         "editGroup": {
+          "members": "Membres",
+          "tabs": {
+            "general": "Général",
+            "links": "Liens",
+            "members": "Membres"
+          },
           "title": "Modifier le groupe"
         },
         "joinGroup": {
           "title": "Rejoindre {{ group }}"
         }
       },
+      "noAdminReqests": "Aucune demande d'admin",
       "requestAdmin": "Demander a être admin",
       "requestSent": "Demande envoyée",
       "requestToBeAdmin": "{{student}} demande à être admin",
@@ -325,6 +350,72 @@
         "home": "Accueil",
         "members": "Membres",
         "posts": "Posts"
+      }
+    },
+    "form": {
+      "admin": {
+        "label": "Admin"
+      },
+      "archive": {
+        "helperText": "Archiver le club. Il ne sera plus visible sur nantral platform.",
+        "label": "Archiver"
+      },
+      "banner": {
+        "helperText": "Taille recommandée 1152x420 pixels",
+        "label": "Bannière"
+      },
+      "beginDate": {
+        "label": "Date de début"
+      },
+      "creationDate": {
+        "label": "Date de création"
+      },
+      "endDate": {
+        "label": "Date de fin"
+      },
+      "icon": {
+        "helperText": "Taille recommandée 400x400 pixels.",
+        "label": "Icône"
+      },
+      "label": {
+        "label": "Label"
+      },
+      "meetingHour": {
+        "label": "Heure de réunion"
+      },
+      "meetingPlace": {
+        "label": "Lieu de réunion"
+      },
+      "name": {
+        "label": "Nom"
+      },
+      "private": {
+        "helperText": "Rendre le club non visible pour tout le monde sauf les membres",
+        "label": "Privé"
+      },
+      "public": {
+        "helperText": "Visible pour les utilisateurs non connectés. Les membres et les évènements resterons toutefois cachés.",
+        "label": "Public"
+      },
+      "shortName": {
+        "helperText": "Ce nom est utilisé sur la page des groupes",
+        "label": "Nom raccourci"
+      },
+      "summary": {
+        "label": "Résumé"
+      },
+      "title": {
+        "additionalInformation": "Informations Additionnelles",
+        "advancedOptions": "Options avancées",
+        "general": "Général",
+        "images": "Images",
+        "videos": "Vidéos"
+      },
+      "video1": {
+        "label": "Vidéo 1"
+      },
+      "video2": {
+        "label": "Vidéo 2"
       }
     }
   },
@@ -527,6 +618,7 @@
         "dates": "Publié {{createdDuration}} • Mis à jour {{updatedDuration}}"
       }
     },
+    "noPosts": "Aucun post 😿",
     "post": "Post"
   },
   "register": {
@@ -616,6 +708,22 @@
   },
   "site": {
     "name": "Nantral Platform"
+  },
+  "socialLink": {
+    "add": "Ajouter",
+    "apply": "Appliquer",
+    "delete": "Supprimer",
+    "form": {
+      "label": {
+        "label": "Label"
+      },
+      "network": {
+        "label": "Réseau"
+      },
+      "url": {
+        "label": "url"
+      }
+    }
   },
   "userMenu": {
     "button": {

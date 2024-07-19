@@ -288,13 +288,31 @@
       "denied": "Denied",
       "deny": "Deny",
       "edit": "Edit",
+      "editGroup": {
+        "add": "Add"
+      },
       "form": {
+        "description": {
+          "label": "Description"
+        },
         "message": {
           "helperText": "Request administrative rights to this group",
           "label": "Message"
+        },
+        "summary": {
+          "label": "Summary"
+        },
+        "user": {
+          "label": "User"
         }
       },
       "formerMembers": "Former members",
+      "from": {
+      },
+      "infoLine": {
+        "events": "event(s)",
+        "members": "member(s)"
+      },
       "join": "Join",
       "makeAdminRequest": "Make an admin request",
       "member": "Member",
@@ -310,12 +328,19 @@
           "openProfile": "Open profile"
         },
         "editGroup": {
+          "members": "Members",
+          "tabs": {
+            "general": "General",
+            "links": "Links",
+            "members": "Members"
+          },
           "title": "Edit group"
         },
         "joinGroup": {
           "title": "Join {{group}}"
         }
       },
+      "noAdminReqests": "No admin requests",
       "requestAdmin": "Ask to be an admin",
       "requestSent": "Request sent",
       "requestToBeAdmin": "{{student}} asks to be admin",
@@ -325,6 +350,72 @@
         "home": "Home",
         "members": "Members",
         "posts": "Posts"
+      }
+    },
+    "form": {
+      "admin": {
+        "label": "Admin"
+      },
+      "archive": {
+        "helperText": "Archive the club. \nIt will no longer be visible on nantral platform.",
+        "label": "Archive"
+      },
+      "banner": {
+        "helperText": "Recommended size 1152x420 pixels",
+        "label": "Banner"
+      },
+      "beginDate": {
+        "label": "Begin date"
+      },
+      "creationDate": {
+        "label": "Creation date"
+      },
+      "endDate": {
+        "label": "End date"
+      },
+      "icon": {
+        "helperText": "Recommended size 400x400 pixels.",
+        "label": "Icon"
+      },
+      "label": {
+        "label": "Label"
+      },
+      "meetingHour": {
+        "label": "Meeting time"
+      },
+      "meetingPlace": {
+        "label": "Meeting place"
+      },
+      "name": {
+        "label": "Name"
+      },
+      "private": {
+        "helperText": "Make the club invisible to everyone except members",
+        "label": "Private"
+      },
+      "public": {
+        "helperText": "Visible to users who are not logged in. \nHowever, members and events will remain hidden.",
+        "label": "Public"
+      },
+      "shortName": {
+        "helperText": "This name is used on the groups page",
+        "label": "Shortened name"
+      },
+      "summary": {
+        "label": "Summary"
+      },
+      "title": {
+        "additionalInformation": "Additional information",
+        "advancedOptions": "Advanced options",
+        "general": "General",
+        "images": "Images",
+        "videos": "Videos"
+      },
+      "video1": {
+        "label": "Video 1"
+      },
+      "video2": {
+        "label": "Video 2"
       }
     }
   },
@@ -527,6 +618,7 @@
         "dates": "Published {{createdDuration}} • Updated {{updatedDuration}}"
       }
     },
+    "noPosts": "No posts 😿",
     "post": "Post"
   },
   "register": {
@@ -616,6 +708,22 @@
   },
   "site": {
     "name": "Nantral Platform"
+  },
+  "socialLink": {
+    "add": "Add",
+    "apply": "Apply",
+    "delete": "Delete",
+    "form": {
+      "label": {
+        "label": "Label"
+      },
+      "network": {
+        "label": "Network"
+      },
+      "url": {
+        "label": "url"
+      }
+    }
   },
   "userMenu": {
     "button": {

@@ -1,9 +1,11 @@
 import { Dispatch, useCallback } from 'react';
 
+import { Verified } from '@mui/icons-material';
+
 import { MembershipFormDTO } from '#modules/group/infra/membership.dto';
 import { MembershipForm } from '#modules/group/types/membership.types';
 import { getStudentListApi } from '#modules/student/api/getStudentList.api';
-import { FlexAuto } from '#shared/components/FlexBox/FlexBox';
+import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
   AutocompleteSearchField,
   CheckboxField,
@@ -11,6 +13,7 @@ import {
   TextField,
 } from '#shared/components/FormFields';
 import { SetObjectStateAction } from '#shared/hooks/useObjectState';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
 interface JoinGroupFormFieldsProps {
@@ -29,18 +32,19 @@ export function MembershipFormFields({
   updateFormValues,
   isAdmin = false,
   selectStudent = false,
-  showDates,
+  showDates = true,
 }: JoinGroupFormFieldsProps) {
   async function fetchOptions(search: string) {
     const data = await getStudentListApi({ search: search });
     return data.results;
   }
+  const { t } = useTranslation();
   return (
     <>
       {selectStudent && (
         <AutocompleteSearchField
           name="user"
-          label={'User'}
+          label={t('group.details.form.user.label')}
           value={formValues.student}
           handleChange={(val) =>
             updateFormValues({ student: val || undefined })
@@ -48,14 +52,13 @@ export function MembershipFormFields({
           defaultObjectValue={null}
           errors={error?.fields?.student}
           required
-          // fetchInitialOptions={fetchInitialGroupOptions}
           fetchOptions={fetchOptions}
           labelPropName="name"
           imagePropName="picture"
         />
       )}
       <TextField
-        label={'Résumé'}
+        label={t('group.details.form.summary.label')}
         value={formValues.summary}
         handleChange={useCallback(
           (val) => {
@@ -66,7 +69,7 @@ export function MembershipFormFields({
         errors={error?.fields?.summary}
       />
       <TextField
-        label={'Description'}
+        label={t('group.details.form.description.label')}
         value={formValues.description}
         handleChange={useCallback(
           (val) => {
@@ -80,7 +83,7 @@ export function MembershipFormFields({
       {showDates && (
         <FlexAuto gap={2}>
           <DateField
-            label={'Date de début'}
+            label={t('group.form.beginDate.label')}
             value={formValues.beginDate}
             onChange={(val) => {
               updateFormValues({ beginDate: val ?? undefined });
@@ -90,7 +93,7 @@ export function MembershipFormFields({
             required
           />
           <DateField
-            label={'Date de fin'}
+            label={t('group.form.endDate.label')}
             disablePast
             value={formValues.endDate}
             onChange={(val) => {
@@ -104,13 +107,17 @@ export function MembershipFormFields({
       )}
 
       {isAdmin && (
-        <CheckboxField
-          label="Admin"
-          value={formValues.admin}
-          handleChange={(val) => {
-            updateFormValues({ admin: val });
-          }}
-        />
+        <FlexRow alignItems="center">
+          <CheckboxField
+            label={t('group.form.admin.label')}
+            value={formValues.admin}
+            handleChange={(val) => {
+              updateFormValues({ admin: val });
+            }}
+            sx={{ mr: 1 }}
+          />
+          <Verified color="secondary" />
+        </FlexRow>
       )}
     </>
   );
