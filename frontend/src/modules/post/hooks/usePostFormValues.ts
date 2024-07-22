@@ -1,4 +1,3 @@
-import { Group, GroupPreview } from '#modules/group/types/group.types';
 import { Post, PostForm } from '#modules/post/post.types';
 import { useObjectState } from '#shared/hooks/useObjectState';
 import { defaultTranslatedFieldValue } from '#shared/infra/translatedFields/defaultTranslatedFieldValue';
