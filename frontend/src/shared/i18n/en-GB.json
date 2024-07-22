@@ -378,7 +378,8 @@
         "label": "Icon"
       },
       "label": {
-        "label": "Label"
+        "label": "Label",
+        "none": "None"
       },
       "meetingHour": {
         "label": "Meeting time"

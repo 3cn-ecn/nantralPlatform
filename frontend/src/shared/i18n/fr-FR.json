@@ -378,7 +378,8 @@
         "label": "Icône"
       },
       "label": {
-        "label": "Label"
+        "label": "Label",
+        "none": "Aucun"
       },
       "meetingHour": {
         "label": "Heure de réunion"

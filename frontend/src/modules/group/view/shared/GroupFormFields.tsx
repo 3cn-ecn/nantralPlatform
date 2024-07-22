@@ -123,7 +123,7 @@ export function GroupFormFields({
             value={formValues.label?.toString()}
             errors={error?.fields?.label}
           >
-            <MenuItem value={'-1'}>{'Aucun'}</MenuItem>
+            <MenuItem value={'-1'}>{t('group.form.label.none')}</MenuItem>
             {data?.results.map((label) => (
               <MenuItem key={label.id} value={label.id}>
                 {label.name}
