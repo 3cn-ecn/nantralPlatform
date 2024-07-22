@@ -417,6 +417,11 @@
       "video2": {
         "label": "Video 2"
       }
+    },
+    "type": {
+      "seeAll": "See all",
+      "seeList": "See the list",
+      "title": "Groups"
     }
   },
   "home": {

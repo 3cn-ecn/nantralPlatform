@@ -10,6 +10,7 @@ import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useAuth } from '#shared/context/Auth.context';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { GroupGrid } from '../../modules/group/view/GroupGrid/GroupGrid';
 import { MoreGroupButton } from './components/MoreGroupButton';
@@ -23,7 +24,7 @@ export default function GroupTypesPage() {
     queryKey: ['getGroupTypes'],
   });
   const { isAuthenticated } = useAuth();
-
+  const { t } = useTranslation();
   const results = useQueries({
     queries:
       groupTypes?.results.map((groupType) => ({
@@ -39,7 +40,7 @@ export default function GroupTypesPage() {
     <Container sx={{ my: 4 }}>
       <FlexRow justifyContent={'space-between'} alignItems="center" py={1}>
         <Typography variant="h1" mb={1}>
-          Groups
+          {t('group.type.title')}
         </Typography>
         {staff && (
           <Button
@@ -48,7 +49,7 @@ export default function GroupTypesPage() {
             href="/admin/group/grouptype"
             startIcon={<AdminPanelSettings />}
           >
-            Voir la liste
+            {t('group.type.seeList')}
           </Button>
         )}
       </FlexRow>
@@ -65,7 +66,7 @@ export default function GroupTypesPage() {
                   variant="outlined"
                   endIcon={<ChevronRight />}
                 >
-                  See All
+                  {t('group.type.seeAll')}
                 </Button>
               </FlexRow>
 
