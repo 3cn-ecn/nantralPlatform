@@ -1,6 +1,5 @@
 import { Dispatch } from 'react';
 
-import * as Icons from '@mui/icons-material';
 import { MenuItem, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 
@@ -10,6 +9,7 @@ import { SocialLinkForm } from '#modules/social_link/types/socialLink.type';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { SelectField, TextField } from '#shared/components/FormFields';
 import { SetObjectStateAction } from '#shared/hooks/useObjectState';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
 interface SocialLinkFormFieldsProps {
@@ -28,6 +28,7 @@ export function SocialLinkFormFields({
     queryFn: getSocialNetworksApi,
     queryKey: ['networks'],
   });
+  const { t } = useTranslation();
 
   return (
     <>
@@ -36,7 +37,7 @@ export function SocialLinkFormFields({
           updateFormValues({ uri: val });
         }}
         type={'url'}
-        label={'url'}
+        label={t('socialLink.form.url.label')}
         value={formValues.uri}
         errors={error?.fields?.uri}
         required
@@ -47,17 +48,16 @@ export function SocialLinkFormFields({
           handleChange={(val) => {
             updateFormValues({ network: parseInt(val) });
           }}
-          label={'Network'}
+          label={t('socialLink.form.network.label')}
           value={formValues.network == -1 ? '' : formValues.network.toString()}
           disabled={isLoading}
           required
         >
           {networks?.results.map((network) => {
-            const Icon = Icons[network.iconName];
             return (
               <MenuItem key={network.id} value={network.id.toString()}>
                 <FlexRow alignItems={'center'} gap={1}>
-                  {(Icon && <Icon />) || <Icons.LinkRounded />}
+                  {<i className={network.iconName} />}
                   <Typography>{network.name}</Typography>
                 </FlexRow>
               </MenuItem>
@@ -65,7 +65,7 @@ export function SocialLinkFormFields({
           })}
         </SelectField>
         <TextField
-          label={'label'}
+          label={t('socialLink.form.label.label')}
           handleChange={(val) => {
             updateFormValues({ label: val });
           }}
