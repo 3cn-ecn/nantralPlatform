@@ -418,6 +418,14 @@
         "label": "Video 2"
       }
     },
+    "list": {
+      "editType": "Edit Type"
+    },
+    "modal": {
+      "createGroup": {
+        "title": "Create a group"
+      }
+    },
     "type": {
       "seeAll": "See all",
       "seeList": "See the list",

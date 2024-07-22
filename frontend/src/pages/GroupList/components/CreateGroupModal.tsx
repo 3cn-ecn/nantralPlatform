@@ -1,4 +1,5 @@
 import { FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Add } from '@mui/icons-material';
 import { Avatar, Button, useTheme } from '@mui/material';
@@ -28,13 +29,19 @@ export function CreateGroupModal({
 }) {
   const { t } = useTranslation();
   const value = useGroupFormValues();
+  const navigate = useNavigate();
   const { palette } = useTheme();
   const [formValues, setFormValues] = useState<CreateGroupForm>(value);
   const { error, isError, mutate } = useMutation<
     Group,
     ApiFormError<CreateGroupForm>,
     CreateGroupForm
-  >(() => createGroupApi(groupType, formValues));
+  >(() => createGroupApi(groupType, formValues), {
+    onSuccess: (group) => {
+      onClose();
+      navigate(`/group/@${group.slug}`);
+    },
+  });
   const isLoading = false;
 
   function updateFormValues(val: Partial<CreateGroupForm>) {
@@ -54,7 +61,7 @@ export function CreateGroupModal({
           </Avatar>
         }
       >
-        Créer un groupe
+        {t('group.modal.createGroup.title')}
         <Spacer flex={1} />
       </ResponsiveDialogHeader>
       <ResponsiveDialogContent>

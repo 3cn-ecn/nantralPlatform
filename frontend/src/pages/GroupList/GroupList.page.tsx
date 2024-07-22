@@ -13,6 +13,7 @@ import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CreateGroupButton } from './components/CreateGroupButton';
 import { useGroupList } from './hooks/useGroupList';
@@ -23,6 +24,7 @@ export default function GroupListPage() {
   const type = params.get('type') || undefined;
   const { groupsByCategory, isSuccess, isLoading, count, ref } =
     useGroupList(type);
+  const { t } = useTranslation();
   const groupType = useGroupTypeDetails(type);
   const { staff } = useCurrentUserData();
 
@@ -52,7 +54,7 @@ export default function GroupListPage() {
               href={`/admin/group/grouptype/${type}/change/`}
               startIcon={<AdminPanelSettings />}
             >
-              Modifier Le Type
+              {t('group.list.editType')}
             </Button>
             <Button
               variant="contained"
@@ -60,7 +62,7 @@ export default function GroupListPage() {
               href={`/admin/group/group/?group_type__slug__exact=${type}`}
               startIcon={<AdminPanelSettings />}
             >
-              Voir la liste
+              {t('group.type.seeList')}
             </Button>
           </FlexRow>
         )}

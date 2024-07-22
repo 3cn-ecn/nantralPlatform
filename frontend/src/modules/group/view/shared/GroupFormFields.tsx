@@ -73,9 +73,9 @@ export function GroupFormFields({
       </FlexRow>
       <FlexAuto gap={2}>
         <TextField
-          name={t('group.form.name.label')}
+          name={'name'}
           key={'title'}
-          label={'Nom'}
+          label={t('group.form.name.label')}
           value={formValues.name}
           handleChange={useCallback(
             (val) => {

@@ -15,7 +15,7 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 import { GroupGrid } from '../../modules/group/view/GroupGrid/GroupGrid';
 import { MoreGroupButton } from './components/MoreGroupButton';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 6;
 
 export default function GroupTypesPage() {
   const [, setParams] = useSearchParams();
@@ -74,7 +74,12 @@ export default function GroupTypesPage() {
                 <GroupGrid
                   estimatedSize={6}
                   isLoading={!results[index] || results[index].isLoading}
-                  groups={results[index].data?.results}
+                  groups={results[index].data?.results?.slice(
+                    0,
+                    results[index].data?.count > PAGE_SIZE
+                      ? PAGE_SIZE - 1
+                      : PAGE_SIZE,
+                  )}
                   extraComponent={
                     (results[index].data?.count || 0) > PAGE_SIZE ? (
                       <MoreGroupButton
