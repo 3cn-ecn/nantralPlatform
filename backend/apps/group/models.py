@@ -1,10 +1,7 @@
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
-from discord_webhook import DiscordEmbed, DiscordWebhook
 from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.account.models import User
@@ -484,68 +481,3 @@ class Membership(models.Model):
             self.admin_request = False
             self.admin_request_messsage = ""
         super().save(*args, **kwargs)
-
-    def accept_admin_request(self) -> None:
-        """Accept an admin request."""
-        self.admin = True
-        self.save()
-        mail = render_to_string(
-            "group/mail/accept_admin_request.html",
-            {"group": self.group, "user": self.student.user},
-        )
-        self.student.user.email_user(
-            subject=(
-                _("Your admin request for %(group)s has been accepted.")
-                % {"group": self.group.name}
-            ),
-            message=mail,
-            html_message=mail,
-        )
-
-        if settings.DEBUG:
-            return
-
-        webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(
-            title=(
-                f"La demande de {self.student} pour rejoindre {self.group} "
-                "a été acceptée."
-            ),
-            description="",
-            color=00000,
-        )
-        webhook.add_embed(embed)
-        webhook.execute()
-
-    def deny_admin_request(self) -> None:
-        """Deny an admin request."""
-        self.admin_request = False
-        self.admin_request_messsage = ""
-        self.save()
-        mail = render_to_string(
-            "group/mail/deny_admin_request.html",
-            {"group": self.group, "user": self.student.user},
-        )
-        self.student.user.email_user(
-            subject=(
-                _("Your admin request for %(group)s has been denied.")
-                % {"group": self.group.name}
-            ),
-            message=mail,
-            html_message=mail,
-        )
-
-        if settings.DEBUG:
-            return
-
-        webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(
-            title=(
-                f"La demande de {self.student} pour rejoindre {self.group} "
-                "a été refusée."
-            ),
-            description="",
-            color=00000,
-        )
-        webhook.add_embed(embed)
-        webhook.execute()

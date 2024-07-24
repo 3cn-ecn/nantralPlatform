@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
+from requests import Request
 from rest_framework import exceptions, permissions
 
 from .models import Group, GroupType, Membership
@@ -51,11 +52,22 @@ class MembershipPermission(permissions.BasePermission):
 
 
 class AdminRequestPermission(permissions.BasePermission):
-    def has_permission(self, request, view):
+    def has_object_permission(self, request, view, obj: Membership):
         user = request.user
-        slug = view.kwargs.get("slug")
+        return obj.group.is_admin(user)
+
+
+class AdminRequestListPermission(permissions.BasePermission):
+    def has_permission(self, request: Request, view):
+        user = request.user
+        # a super user can access all admin requests
+        if user.is_superuser:
+            return True
+
+        slug = request.query_params.get("group")
+        # a user can access only admin requests where he is admin
         try:
             group = Group.objects.get(slug=slug)
+            return group.is_admin(user)
         except Group.DoesNotExist:
-            return True
-        return group.is_admin(user)
+            return False

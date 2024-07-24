@@ -1,20 +1,18 @@
-from django.conf import settings
 from django.db.models import Count, F, Q, QuerySet
 from django.forms import ValidationError
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
-from discord_webhook import DiscordEmbed, DiscordWebhook
 from requests import Request
 from rest_framework import (
     decorators,
     exceptions,
     filters,
-    mixins,
     permissions,
     response,
     serializers,
@@ -22,10 +20,12 @@ from rest_framework import (
     viewsets,
 )
 
+from apps.utils.discord import respond_admin_request, send_admin_request
 from apps.utils.parse_bool import parse_bool
 
 from .models import Group, GroupType, Label, Membership
 from .permissions import (
+    AdminRequestListPermission,
     AdminRequestPermission,
     GroupPermission,
     MembershipPermission,
@@ -33,7 +33,6 @@ from .permissions import (
 from .serializers import (
     AdminRequestFormSerializer,
     AdminRequestSerializer,
-    AdminRequestValidateSerializer,
     GroupPreviewSerializer,
     GroupSerializer,
     GroupTypeSerializer,
@@ -93,8 +92,6 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         preview = parse_bool(self.query_params.get("preview"))
-        if self.action == "admin_request":
-            return AdminRequestFormSerializer
         if self.request.method in ["POST", "PUT", "PATCH"]:
             return GroupWriteSerializer
         if preview is True:
@@ -181,70 +178,6 @@ class GroupViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(self.request, obj)
         return obj
 
-    @decorators.action(detail=True, methods=["POST"])
-    def admin_request(self, request: Request, *args, **kwargs):
-        obj: Group = self.get_object()
-        user = request.user
-
-        serializer = self.get_serializer(data=request.data)
-
-        if obj.is_admin(user):
-            return response.Response(
-                status=400,
-                data={"detail": "You are already admin of that group"},
-            )
-        membership: Membership = obj.membership_set.get(student__user=user)
-        if membership.admin_request is True:
-            return response.Response(
-                status=400,
-                data={"detail": "Admin request already sent"},
-            )
-        if not serializer.is_valid():
-            return response.Response(
-                serializer.errors, status=status.HTTP_400_BAD_REQUEST
-            )
-        message = serializer.validated_data.get("message")
-        membership.admin_request = True
-        membership.admin_request_messsage = message
-        membership.save()
-        res = response.Response(
-            status=200,
-            data={
-                "detail": _(
-                    "Your admin request has been sent! You will receive the "
-                    "answer soon by email."
-                ),
-            },
-        )
-        if settings.DEBUG:
-            return res
-        # send a message to the discord channel for administrators
-        accept_url = self.request.build_absolute_uri(
-            reverse("group:accept-admin-req", kwargs={"id": membership.id})
-        )
-        deny_url = self.request.build_absolute_uri(
-            reverse("group:deny-admin-req", kwargs={"id": membership.id})
-        )
-        webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
-        embed = DiscordEmbed(
-            title=(
-                f"{membership.student} demande à "
-                f"devenir admin de {membership.group.short_name}"
-            ),
-            description=membership.admin_request_messsage,
-            color=242424,
-        )
-        embed.add_embed_field(
-            name="Accepter", value=f"[Accepter]({accept_url})", inline=True
-        )
-        embed.add_embed_field(
-            name="Refuser", value=f"[Refuser]({deny_url})", inline=True
-        )
-        webhook.add_embed(embed)
-        webhook.execute()
-
-        return res
-
 
 class MembershipViewSet(viewsets.ModelViewSet):
     """An API viewset to get memberships of a group. This viewset ignore all
@@ -298,8 +231,14 @@ class MembershipViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self) -> serializers.ModelSerializer:
         if self.action == "create":
             return NewMembershipSerializer
+        elif self.action in ["admin_request", "accept_request", "deny_request"]:
+            return super().get_serializer_class()
         else:
             return MembershipSerializer
+
+    # simply to override the return type
+    def get_serializer(self, *args, **kwargs) -> serializers.Serializer:
+        return super().get_serializer(*args, **kwargs)
 
     def get_queryset(self) -> QuerySet[Membership]:
         """
@@ -332,6 +271,8 @@ class MembershipViewSet(viewsets.ModelViewSet):
             )
         if to_date:
             qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True))
+        if self.action == "admin_requests":
+            qs = qs.filter(admin_request=True)
 
         qs = qs.prefetch_related("student__user").distinct()
         self.queryset = qs
@@ -395,6 +336,161 @@ class MembershipViewSet(viewsets.ModelViewSet):
             Membership.objects.bulk_update(members, ["priority"])
         return response.Response(status=status.HTTP_200_OK)
 
+    @decorators.action(
+        detail=False,
+        serializer_class=AdminRequestSerializer,
+        permission_classes=[
+            permissions.IsAuthenticated,
+            AdminRequestListPermission,
+        ],
+    )
+    def admin_requests(self, *args, **kwargs):
+        return self.list(*args, **kwargs)
+
+    @decorators.action(
+        detail=True,
+        methods=["POST"],
+        serializer_class=AdminRequestFormSerializer,
+    )
+    def admin_request(self, request: Request, *args, **kwargs):
+        membership: Membership = self.get_object()
+
+        serializer: AdminRequestFormSerializer = self.get_serializer(
+            data=request.data
+        )
+        if membership.admin:
+            raise exceptions.MethodNotAllowed(
+                "POST", detail="You are already admin of that group"
+            )
+        if membership.admin_request is True:
+            raise exceptions.MethodNotAllowed(
+                "POST", "Admin request already sent"
+            )
+
+        serializer.is_valid(raise_exception=True)
+
+        message = serializer.validated_data.get("admin_request_message")
+        membership.admin_request_message = message
+        membership.admin_request = True
+        membership.save()
+
+        try:
+            # send a message to the discord channel for administrators
+            accept_url = self.request.build_absolute_uri(
+                reverse("group:accept-admin-req", kwargs={"id": membership.id})
+            )
+            deny_url = self.request.build_absolute_uri(
+                reverse("group:deny-admin-req", kwargs={"id": membership.id})
+            )
+            send_admin_request(
+                f"{membership.student} demande à "
+                f"devenir admin de {membership.group.short_name}",
+                membership.admin_request_message,
+                accept_url,
+                deny_url,
+            )
+        except Exception:
+            ...
+
+        return response.Response(
+            status=status.HTTP_200_OK,
+            data={
+                "detail": _(
+                    "Your admin request has been sent! You will receive the "
+                    "answer soon by email."
+                ),
+            },
+        )
+
+    @decorators.action(
+        detail=True,
+        methods=["POST"],
+        serializer_class=serializers.Serializer,
+        permission_classes=[
+            permissions.IsAuthenticated,
+            AdminRequestPermission,
+        ],
+    )
+    def accept_request(self, request, *args, **kwargs):
+        membership: Membership = self.get_object()
+        if not membership.admin_request:
+            raise ValidationError(_("Request already answered!"))
+
+        membership.admin_request = False
+        membership.admin = True
+        membership.admin_request_message = ""
+        membership.save()
+
+        try:
+            # send response by email
+            mail = render_to_string(
+                "group/mail/accept_admin_request.html",
+                {"group": self.group, "user": self.student.user},
+            )
+            membership.student.user.email_user(
+                subject=(
+                    _("Your admin request for %(group)s has been accepted.")
+                    % {"group": self.group.name}
+                ),
+                message=mail,
+                html_message=mail,
+            )
+            # send response on discord
+            respond_admin_request(
+                f"La demande de {self.student} pour rejoindre {self.group} "
+                "a été acceptée."
+            )
+        except Exception:
+            ...
+
+        return response.Response(
+            {
+                "message": _("The user %(user)s is now admin!")
+                % {"user": membership.student}
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+
+    @decorators.action(detail=True, methods=["POST"])
+    def deny_request(self, request, *args, **kwargs):
+        membership: Membership = self.get_object()
+        if not membership.admin_request:
+            raise ValidationError(_("Request already answered!"))
+
+        membership.admin_request = False
+        membership.admin_request_message = ""
+        membership.save()
+
+        try:
+            # send response by email
+            mail = render_to_string(
+                "group/mail/deny_admin_request.html",
+                {"group": self.group, "user": self.student.user},
+            )
+            membership.student.user.email_user(
+                subject=(
+                    _("Your admin request for %(group)s has been denied.")
+                    % {"group": self.group.name}
+                ),
+                message=mail,
+                html_message=mail,
+            )
+            # send response on discord
+            respond_admin_request(
+                f"La demande de {self.student} pour rejoindre {self.group} "
+                "a été refusée."
+            )
+        except Exception:
+            ...
+
+        return response.Response(
+            {
+                "message": _("The admin request from %(user)s has been denied.")
+                % {"user": membership.student}
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+
 
 class LabelViewSet(viewsets.ModelViewSet):
     http_method_names = ["get"]
@@ -414,77 +510,3 @@ class LabelViewSet(viewsets.ModelViewSet):
         qs = qs.order_by("-priority")
 
         return qs
-
-
-class AdminRequestViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
-    serializer_class = MembershipSerializer
-    lookup_field = "group__slug"
-    lookup_url_kwarg = "slug"
-    permission_classes = [permissions.IsAuthenticated, AdminRequestPermission]
-
-    def get_serializer_class(self):
-        if self.request.method == "GET":
-            return AdminRequestSerializer
-        return AdminRequestValidateSerializer
-
-    # annotate return type
-    def get_serializer(self, *args, **kwargs) -> serializers.Serializer:
-        return super().get_serializer(*args, **kwargs)
-
-    def get_queryset(self):
-        slug = self.kwargs.get(self.lookup_url_kwarg)
-        group = get_object_or_404(Group, slug=slug)
-        return Membership.objects.filter(admin_request=True, group=group)
-
-    def list(self, request, *args, **kwargs):
-        slug = self.kwargs.get(self.lookup_url_kwarg)
-        # prevent from using the api without slug kwargs
-        if slug is None:
-            raise exceptions.ValidationError()
-        return super().list(self, request, args, kwargs)
-
-    def retrieve(self, request, *args, **kwargs):
-        # using the list mixin to retrieve the admin requests
-        return self.list(request, args, kwargs)
-
-    @decorators.action(detail=True, methods=["POST"])
-    def accept(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        slug = self.kwargs.get(self.lookup_url_kwarg)
-        membership = get_object_or_404(
-            Membership, id=serializer.data.get("id"), group__slug=slug
-        )
-        if not membership.admin_request:
-            raise ValidationError(_("Request already answered!"))
-
-        membership.accept_admin_request()
-        return response.Response(
-            {
-                "message": _("The user %(user)s is now admin!")
-                % {"user": membership.student}
-            },
-            status=status.HTTP_202_ACCEPTED,
-        )
-
-    @decorators.action(detail=True, methods=["POST"])
-    def deny(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        slug = self.kwargs.get(self.lookup_url_kwarg)
-        membership = get_object_or_404(
-            Membership, id=serializer.data.get("id"), group__slug=slug
-        )
-        if not membership.admin_request:
-            raise ValidationError(_("Request already answered!"))
-
-        membership.deny_admin_request()
-        return response.Response(
-            {
-                "message": _("The admin request from %(user)s has been denied.")
-                % {"user": membership.student}
-            },
-            status=status.HTTP_202_ACCEPTED,
-        )

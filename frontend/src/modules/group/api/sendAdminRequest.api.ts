@@ -3,14 +3,14 @@ import axios from 'axios';
 import { ApiErrorDTO, adaptApiErrors } from '#shared/infra/errors';
 
 interface SendAdminRequestApiParams {
-  group: string;
+  membership: number;
   message?: string;
 }
 
-export async function SendAdminRequestApi(options: SendAdminRequestApiParams) {
+export async function sendAdminRequestApi(options: SendAdminRequestApiParams) {
   const { data } = await axios
     .post<{ detail: string }>(
-      `/api/group/group/${options.group}/admin_request/`,
+      `/api/group/membership/${options.membership}/admin_request/`,
       {
         message: options.message,
       },

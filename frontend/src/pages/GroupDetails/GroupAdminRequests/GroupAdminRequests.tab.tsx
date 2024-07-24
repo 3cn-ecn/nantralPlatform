@@ -25,7 +25,6 @@ export function GroupAdminRequests({ group }: { group: Group }) {
             <AdminRequestRow
               key={adminRequest.id}
               adminRequest={adminRequest}
-              group={group}
             />
           ))}
       </FlexCol>

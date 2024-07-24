@@ -258,7 +258,9 @@ class LabelSerializer(serializers.ModelSerializer):
 
 
 class AdminRequestFormSerializer(serializers.Serializer):
-    message = serializers.CharField(max_length=256)
+    admin_request_message = serializers.CharField(
+        max_length=256, source="message"
+    )
 
 
 class AdminRequestValidateSerializer(serializers.Serializer):

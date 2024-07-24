@@ -12,17 +12,14 @@ import {
 import { acceptAdminRequestApi } from '#modules/group/api/acceptAdminRequest.api';
 import { denyAdminRequestApi } from '#modules/group/api/denyAdminRequest.api';
 import { AdminRequest } from '#modules/group/types/adminRequest.type';
-import { Group } from '#modules/group/types/group.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function AdminRequestRow({
   adminRequest,
-  group,
 }: {
   adminRequest: AdminRequest;
-  group: Group;
 }) {
   const [variant, setVariant] = useState<undefined | 'accept' | 'deny'>();
   const { t } = useTranslation();
@@ -30,7 +27,7 @@ export function AdminRequestRow({
   async function handleClickAccept() {
     setVariant('accept');
     try {
-      await acceptAdminRequestApi(group.slug, adminRequest.id);
+      await acceptAdminRequestApi(adminRequest.id);
     } catch {
       setVariant(undefined);
     }
@@ -39,7 +36,7 @@ export function AdminRequestRow({
   async function handleClickDeny() {
     setVariant('deny');
     try {
-      await denyAdminRequestApi(group.slug, adminRequest.id);
+      await denyAdminRequestApi(adminRequest.id);
     } catch {
       setVariant(undefined);
     }

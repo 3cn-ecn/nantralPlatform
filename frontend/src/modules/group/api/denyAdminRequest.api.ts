@@ -2,12 +2,9 @@ import axios from 'axios';
 
 import { adaptApiErrors, ApiErrorDTO } from '#shared/infra/errors';
 
-export async function denyAdminRequestApi(
-  slug: string,
-  adminRequestId: number,
-) {
+export async function denyAdminRequestApi(adminRequestId: number) {
   const { status } = await axios
-    .post(`/api/group/admin_request/${slug}/deny/`, { id: adminRequestId })
+    .post(`/api/group/membership/${adminRequestId}/deny_request/`)
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });

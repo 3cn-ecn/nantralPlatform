@@ -4,8 +4,9 @@ import { AdminPanelSettings } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { SendAdminRequestApi as sendAdminRequestApi } from '#modules/group/api/sendAdminRequest.api';
+import { sendAdminRequestApi } from '#modules/group/api/sendAdminRequest.api';
 import { Group } from '#modules/group/types/group.types';
+import { Membership } from '#modules/group/types/membership.types';
 import { TextField } from '#shared/components/FormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
@@ -20,8 +21,10 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function ModalAdminRequest({
   group,
+  membership,
   onClose,
 }: {
+  membership: Membership;
   group: Group;
   onClose: () => void;
 }) {
@@ -39,7 +42,7 @@ export function ModalAdminRequest({
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    mutate({ group: group.slug, message: formValues.message });
+    mutate({ membership: membership.id, message: formValues.message });
   }
 
   return (

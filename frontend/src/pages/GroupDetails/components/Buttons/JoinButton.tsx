@@ -109,9 +109,10 @@ export function JoinButton({ group }: { group?: Group }) {
             onClose={() => setJoinModalOpen(false)}
           />
         )}
-        {adminRequestModalOpen && (
+        {adminRequestModalOpen && member && (
           <ModalAdminRequest
             group={group}
+            membership={member}
             onClose={() => setAdminRequestModalOpen(false)}
           />
         )}
