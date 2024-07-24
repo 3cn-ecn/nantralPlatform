@@ -400,6 +400,25 @@ class Group(models.Model, SlugModel):
             and self.members.contains(user.student)
         )
 
+    def _eval_as_str(self, expr: str) -> str | None:
+        """Evaluate an expression containing with this group as a context variable
+        and returns the result as a string
+
+        Parameters
+        ----------
+        expr : The expression to evaluate
+
+        Returns
+        -------
+        None if the result is None else a string representing the result
+        """
+        res = eval(expr, {"group": self})  # noqa: S307
+
+        if res is None:
+            return None
+
+        return str(res)
+
     def get_category(self) -> str:
         """Get the category label for list display.
 
@@ -409,12 +428,7 @@ class Group(models.Model, SlugModel):
             The formatted label of the category of the group.
 
         """
-        cat = eval(  # noqa: S307
-            self.group_type.category_expr, {"group": self}
-        )
-        if cat is None:
-            return None
-        return str(cat)  # safe_guard to be sure what is sent is a string
+        return self._eval_as_str(self.group_type.category_expr)
 
     def get_sub_category(self) -> str:
         """Get the sub category label for list display.
@@ -425,12 +439,7 @@ class Group(models.Model, SlugModel):
             The formatted label of the category of the group.
 
         """
-        sub_cat = eval(  # noqa: S307
-            self.group_type.sub_category_expr, {"group": self}
-        )
-        if sub_cat is None:
-            return None
-        return str(sub_cat)  # safe_guard to be sure what is sent is a string
+        return self._eval_as_str(self.group_type.sub_category_expr)
 
 
 class Membership(models.Model):

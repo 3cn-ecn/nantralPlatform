@@ -495,7 +495,10 @@ class MembershipViewSet(viewsets.ModelViewSet):
 class LabelViewSet(viewsets.ModelViewSet):
     http_method_names = ["get"]
     serializer_class = LabelSerializer
+    filter_backends = [filters.OrderingFilter]
     permission_classes = [permissions.IsAuthenticated]
+    ordering_fields = ["priority", "name"]
+    ordering = ["-priority"]
 
     @property
     def query_params(self) -> QueryDict:
@@ -506,7 +509,5 @@ class LabelViewSet(viewsets.ModelViewSet):
         group_type = self.query_params.get("group_type")
         if group_type:
             qs = qs.filter(group_type=group_type)
-
-        qs = qs.order_by("-priority")
 
         return qs
