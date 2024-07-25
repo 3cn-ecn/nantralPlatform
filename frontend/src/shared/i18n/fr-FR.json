@@ -450,6 +450,7 @@
       "title": "Tu aimes ce site ? Dis-le nous !"
     },
     "myGroupSection": {
+      "noGroup": "Vous n'êtes dans aucun groupe actuellement 😔",
       "seeAll": "Voir tous",
       "title": "Mes groupes"
     },

@@ -22,8 +22,7 @@ export function MyGroupsSection() {
       button={
         <Button
           component={Link}
-          to="/me/"
-          reloadDocument
+          to="/group"
           variant="outlined"
           color="secondary"
           endIcon={<ChevronRight />}
@@ -33,9 +32,7 @@ export function MyGroupsSection() {
       }
     >
       {!isLoading && data?.count === 0 ? (
-        <Typography>
-          Vous n&apos;êtes dans aucun groupe actuellement 😔
-        </Typography>
+        <Typography>{t('home.myGroupSection.noGroup')}</Typography>
       ) : (
         <GroupGrid
           estimatedSize={6}
