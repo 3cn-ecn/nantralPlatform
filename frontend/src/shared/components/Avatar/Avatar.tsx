@@ -61,14 +61,15 @@ export const Avatar: AvatarComponentType = ({
         width: AVATAR_SIZES[size],
         height: AVATAR_SIZES[size],
         fontSize: AVATAR_SIZES[size] * 0.4,
-        backgroundColor: bgColor,
+        backgroundColor: props.src ? 'transparent' : bgColor,
         color: theme.palette.getContrastText(bgColor),
         textDecoration: 'none',
+        img: { objectFit: 'contain' },
         ...sx,
       }}
       {...props}
     >
-      {Icon ? <Icon /> : initials}
+      {Icon ? <Icon sx={{ bgcolor: bgColor }} /> : initials}
     </MuiAvatar>
   );
 };

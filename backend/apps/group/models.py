@@ -249,7 +249,7 @@ class Group(models.Model, SlugModel):
         null=True,
         help_text=_("Your icon will be displayed at 306x306 pixels."),
         size=(500, 500),
-        crop=True,
+        crop=False,
         name_from_field="name",
     )
     banner = CustomImageField(
@@ -258,7 +258,6 @@ class Group(models.Model, SlugModel):
         null=True,
         help_text=_("Your banner will be displayed at 1320x492 pixels."),
         size=(1320, 492),
-        crop=True,
         name_from_field="name",
     )
     video1 = models.URLField(

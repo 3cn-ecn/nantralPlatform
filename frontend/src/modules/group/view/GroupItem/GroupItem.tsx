@@ -21,7 +21,8 @@ function GroupItem({ group, size }: GroupItemProps) {
         <Avatar
           sx={{
             '&:hover': {
-              boxShadow: `0 0 10px ${theme.palette.text.disabled}`,
+              boxShadow: `0 0 10px ${theme.palette.text.primary}`,
+              transition: 'box-shadow 0.1s ease',
             },
             objectFit: 'contain',
           }}
@@ -33,7 +34,7 @@ function GroupItem({ group, size }: GroupItemProps) {
       <Typography textAlign={'center'}>
         {group.shortName}
         {group.subCategory && (
-          <Typography color="gray" variant="subtitle1">
+          <Typography color="gray" variant="body1">
             {group.subCategory}
           </Typography>
         )}
