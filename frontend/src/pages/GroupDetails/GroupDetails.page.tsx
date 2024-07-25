@@ -33,7 +33,7 @@ export default function GroupDetailsPage() {
     error,
     refetch,
     isSuccess,
-  } = useGroupDetails(slug?.replace('@', ''));
+  } = useGroupDetails(slug?.slice(1));
 
   if (isError && error) {
     return (
