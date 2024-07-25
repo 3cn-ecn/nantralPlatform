@@ -29,14 +29,14 @@ export function EditMembersView({ group }: EditMembersViewProps) {
     onSuccess: () => {
       showToast({
         variant: 'success',
-        message: 'Réagencement sauvegardé !',
+        message: t('group.details.modal.editMembership.success'),
       });
       queryClient.invalidateQueries(['members', { slug: group.slug }]);
     },
     onError: () =>
       showToast({
         variant: 'error',
-        message: "Erreur de réseau : le réagencement n'est pas sauvegardé...",
+        message: t('group.details.modal.editMembership.error'),
       }),
   });
   const today = new Date();

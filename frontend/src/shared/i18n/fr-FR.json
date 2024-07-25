@@ -336,6 +336,10 @@
           },
           "title": "Modifier le groupe"
         },
+        "editMembership": {
+          "error": "Erreur de réseau : le réagencement n'est pas sauvegardé",
+          "success": "Réagencement sauvegardé !"
+        },
         "joinGroup": {
           "title": "Rejoindre {{ group }}"
         }
@@ -344,6 +348,7 @@
       "requestAdmin": "Demander a être admin",
       "requestSent": "Demande envoyée",
       "requestToBeAdmin": "{{student}} demande à être admin",
+      "subgroups": "Sous-Groupes",
       "tabs": {
         "adminRequests": "Demandes d'admin",
         "events": "Évènements",

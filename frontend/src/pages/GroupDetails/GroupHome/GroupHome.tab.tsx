@@ -5,6 +5,7 @@ import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { useGroupChildren } from '../hooks/useGroupChildren';
 import { GroupVideos } from './GroupVideos';
@@ -17,6 +18,7 @@ export function GroupHome({ group }: GroupHomeProps) {
   const childrenQuery = useGroupChildren({
     slug: group?.slug || '',
   });
+  const { t } = useTranslation();
 
   return (
     <>
@@ -26,7 +28,7 @@ export function GroupHome({ group }: GroupHomeProps) {
       {childrenQuery.data?.pages && childrenQuery.data?.pages[0].count > 0 && (
         <Paper sx={{ p: 2 }}>
           <Typography variant="h2" mb={2}>
-            Sous-Groupes
+            {t('group.details.subgroups')}
           </Typography>
           <InfiniteList query={childrenQuery}>
             <GroupGrid

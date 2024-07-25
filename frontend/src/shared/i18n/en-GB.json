@@ -336,6 +336,10 @@
           },
           "title": "Edit group"
         },
+        "editMembership": {
+          "error": "Network error: rearrangement not saved",
+          "success": "Rearrangement saved!"
+        },
         "joinGroup": {
           "title": "Join {{group}}"
         }
@@ -344,6 +348,7 @@
       "requestAdmin": "Ask to be an admin",
       "requestSent": "Request sent",
       "requestToBeAdmin": "{{student}} asks to be admin",
+      "subgroups": "Subgroups",
       "tabs": {
         "adminRequests": "Admin Requests",
         "events": "Events",
