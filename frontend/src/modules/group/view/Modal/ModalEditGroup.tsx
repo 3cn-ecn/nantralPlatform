@@ -41,7 +41,7 @@ export function ModalEditGroup({
   const [formValues, setFormValues] = useState<CreateGroupForm>(groupValues);
 
   const [tab, setTab] = useState(0);
-  const [changes, setChanges] = useState(false);
+  const [hasModifications, setHasModifications] = useState(false);
   const queryClient = useQueryClient();
   const { palette } = useTheme();
   const { error, isError, mutate, isLoading } = useMutation<
@@ -51,7 +51,7 @@ export function ModalEditGroup({
   >(() => updateGroupApi(group.slug, formValues), {
     onSuccess: () => {
       queryClient.invalidateQueries(['group', { slug: group.slug }]);
-      setChanges(false);
+      setHasModifications(false);
     },
   });
 
@@ -65,7 +65,7 @@ export function ModalEditGroup({
   }
 
   useEffect(() => {
-    setChanges(true);
+    setHasModifications(true);
   }, [formValues]);
 
   return (
@@ -119,11 +119,11 @@ export function ModalEditGroup({
                 type="submit"
                 loading={isLoading}
                 variant="contained"
-                disabled={!changes}
-                startIcon={changes && <Save />}
-                endIcon={!changes && <Check />}
+                disabled={!hasModifications}
+                startIcon={hasModifications && <Save />}
+                endIcon={!hasModifications && <Check />}
               >
-                {!changes ? t('button.saved') : t('button.save')}
+                {!hasModifications ? t('button.saved') : t('button.save')}
               </LoadingButton>
             </FlexRow>
           </>
