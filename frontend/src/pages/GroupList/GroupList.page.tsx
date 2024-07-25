@@ -12,6 +12,7 @@ import {
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
@@ -22,8 +23,7 @@ import { useGroupTypeDetails } from './hooks/useGroupTypeDetails';
 export default function GroupListPage() {
   const [params] = useSearchParams();
   const type = params.get('type') || undefined;
-  const { groupsByCategory, isSuccess, isLoading, count, ref } =
-    useGroupList(type);
+  const { groupsByCategory, query, count } = useGroupList(type);
   const { t } = useTranslation();
   const groupType = useGroupTypeDetails(type);
   const { staff } = useCurrentUserData();
@@ -37,13 +37,13 @@ export default function GroupListPage() {
         py={1}
       >
         <FlexRow alignItems={'center'} gap={1} mb={1}>
-          {isLoading ? (
-            <Skeleton variant="text" sx={{ width: 200, height: 50 }}></Skeleton>
-          ) : (
-            <Typography variant="h1">
-              {groupType?.name} ({count})
-            </Typography>
-          )}
+          <Typography variant="h1">
+            {query.isLoading ? (
+              <Skeleton width={250} variant="text" />
+            ) : (
+              `${groupType?.name} (${count})`
+            )}
+          </Typography>
         </FlexRow>
 
         {staff && (
@@ -69,26 +69,27 @@ export default function GroupListPage() {
       </FlexRow>
       <Divider />
       <Spacer vertical={2} />
-      <FlexCol gap={4}>
-        {isSuccess &&
-          groupsByCategory &&
-          Object.keys(groupsByCategory).map((cat) => (
-            <FlexCol key={cat}>
-              <Typography variant="h2" mb={4}>
-                {cat}
-              </Typography>
-              <GroupGrid estimatedSize={100} groups={groupsByCategory[cat]} />
-              {isLoading && (
-                <GroupGrid
-                  estimatedSize={100}
-                  groups={groupsByCategory[cat]}
-                  isLoading
-                />
-              )}
-            </FlexCol>
-          ))}
-      </FlexCol>
-      <div ref={ref} />
+      <InfiniteList query={query}>
+        <FlexCol gap={4}>
+          {query.isSuccess &&
+            groupsByCategory &&
+            Object.keys(groupsByCategory).map((cat) => (
+              <FlexCol key={cat}>
+                <Typography variant="h2" mb={4}>
+                  {cat}
+                </Typography>
+                <GroupGrid estimatedSize={100} groups={groupsByCategory[cat]} />
+                {(query.isLoading || query.isFetchingNextPage) && (
+                  <GroupGrid
+                    estimatedSize={100}
+                    groups={groupsByCategory[cat]}
+                    isLoading
+                  />
+                )}
+              </FlexCol>
+            ))}
+        </FlexCol>
+      </InfiniteList>
       {groupType?.canCreate && <CreateGroupButton groupType={groupType.slug} />}
     </Container>
   );

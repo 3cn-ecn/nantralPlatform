@@ -1,6 +1,3 @@
-import { useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
-
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import {
@@ -15,7 +12,7 @@ export function useInfiniteMembership({
   options: GetMembershipListApiParams;
   enabled?: boolean;
 }) {
-  const { data, hasNextPage, fetchNextPage } = useInfiniteQuery({
+  const query = useInfiniteQuery({
     queryFn: ({ pageParam = 1 }) =>
       getMembershipListApi({ ...options, page: pageParam }),
     getNextPageParam: (lastPage, allPages) =>
@@ -23,11 +20,6 @@ export function useInfiniteMembership({
     queryKey: ['members', { slug: options.group, ...options }],
     enabled: enabled,
   });
-  const { ref, inView } = useInView();
 
-  useEffect(() => {
-    if (inView && hasNextPage) fetchNextPage();
-  }, [inView, hasNextPage, fetchNextPage]);
-
-  return { data, ref };
+  return query;
 }

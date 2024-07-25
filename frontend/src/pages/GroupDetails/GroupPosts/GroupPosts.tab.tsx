@@ -6,13 +6,14 @@ import { Group } from '#modules/group/types/group.types';
 import { CreatePostModal } from '#modules/post/view/CreatePostModal/CreatePostModal';
 import { PostCard } from '#modules/post/view/PostCard/PostCard';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CreateButton } from '../components/Buttons/CreateButton';
 import { useInfiniteGroupPosts } from '../hooks/useInfiniteGroupPosts';
 
 export function GroupPosts({ group }: { group: Group }) {
-  const { data, ref } = useInfiniteGroupPosts({ groupSlug: group.slug });
+  const postsQuery = useInfiniteGroupPosts({ groupSlug: group.slug });
   const [openModal, setOpenModal] = useState(false);
   const { t } = useTranslation();
   return (
@@ -20,17 +21,18 @@ export function GroupPosts({ group }: { group: Group }) {
       <FlexRow justifyContent={'end'}>
         {group.isAdmin && <CreateButton onClick={() => setOpenModal(true)} />}
       </FlexRow>
-      <Grid spacing={1} container mt={2}>
-        {data?.pages
-          ?.flatMap((page) => page.results)
-          .map((post) => (
-            <Grid key={post.id} xs={12} md={6} lg={4} item>
-              <PostCard post={post} />
-            </Grid>
-          ))}
-        <div ref={ref} />
-      </Grid>
-      {data && data?.pages[0].count === 0 && (
+      <InfiniteList query={postsQuery}>
+        <Grid spacing={1} container mt={2}>
+          {postsQuery.data?.pages
+            ?.flatMap((page) => page.results)
+            .map((post) => (
+              <Grid key={post.id} xs={12} md={6} lg={4} item>
+                <PostCard post={post} />
+              </Grid>
+            ))}
+        </Grid>
+      </InfiniteList>
+      {postsQuery.data && postsQuery.data?.pages[0].count === 0 && (
         <Typography color="secondary" mt={3} textAlign="center">
           {t('post.noPosts')}
         </Typography>
