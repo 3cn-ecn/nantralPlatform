@@ -222,7 +222,7 @@ exports[`Home page should render correctly without data 1`] = `
         </h2>
         <a
           class="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation MuiButton-root MuiButton-outlined MuiButton-outlinedSecondary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSecondary MuiButton-disableElevation css-lvx8jz-MuiButtonBase-root-MuiButton-root"
-          href="/me/"
+          href="/group"
           tabindex="0"
         >
           See all
@@ -249,7 +249,7 @@ exports[`Home page should render correctly without data 1`] = `
       <p
         class="MuiTypography-root MuiTypography-body1 css-17s6y1p-MuiTypography-root"
       >
-        Vous n'êtes dans aucun groupe actuellement 😔
+        You are not in any group currently 😔
       </p>
     </div>
     <div
