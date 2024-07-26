@@ -43,7 +43,7 @@ export function MemberDraggableListItem({ item, index, onClickEdit }: Props) {
             color={snapshot.isDragging ? 'action' : 'disabled'}
           />
           <ListItemAvatar>
-            <Avatar alt={item.student.name}>
+            <Avatar src={item.student.picture} alt={item.student.name}>
               <InboxIcon />
             </Avatar>
           </ListItemAvatar>

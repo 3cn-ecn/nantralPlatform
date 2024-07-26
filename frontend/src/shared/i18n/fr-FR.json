@@ -328,7 +328,9 @@
           "openProfile": "Ouvrir le profil"
         },
         "editGroup": {
+          "error": "Une erreur s'est produite",
           "members": "Membres",
+          "noMembers": "Aucun membre pour le moment",
           "tabs": {
             "general": "Général",
             "links": "Liens",

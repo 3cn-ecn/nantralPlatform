@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { Paper, Typography } from '@mui/material';
+import { Alert, CircularProgress, Paper, Typography } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { roundToNearestMinutes } from 'date-fns';
 
 import { getMembershipListApi } from '#modules/group/api/getMembershipList.api';
-import { ReorderMemberApi } from '#modules/group/api/reorderMember.api';
+import { reorderMembershipApi } from '#modules/group/api/reorderMember.api';
 import { Group } from '#modules/group/types/group.types';
 import { Membership } from '#modules/group/types/membership.types';
 import { AddMemberButton } from '#pages/GroupDetails/components/Buttons/AddMemberButton';
@@ -20,27 +21,66 @@ interface EditMembersViewProps {
 }
 
 export function EditMembersView({ group }: EditMembersViewProps) {
-  const [memberships, setMemberships] = useState<Membership[]>([]);
   const [selected, setSelected] = useState<Membership>();
   const showToast = useToast();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
-  const { mutate } = useMutation(ReorderMemberApi, {
+
+  async function reorderMembership({
+    member,
+    lower,
+  }: {
+    updatedMemberships: Membership[];
+    member: Membership;
+    lower?: Membership;
+  }) {
+    return await reorderMembershipApi({
+      member: member.id,
+      lower: lower?.id,
+      group: member.group.slug,
+    });
+  }
+  const today = roundToNearestMinutes(new Date());
+  const queryKey = ['members', { slug: group.slug }];
+  const { mutate } = useMutation(reorderMembership, {
+    onMutate: async ({ updatedMemberships }) => {
+      // snapshot previous value
+      const previousMemberships = queryClient.getQueryData(queryKey);
+      // optimistically update to the new value
+      queryClient.setQueryData(queryKey, {
+        count: updatedMemberships.length,
+        results: updatedMemberships,
+      });
+      // cancel any outgoing query
+      await queryClient.cancelQueries(queryKey);
+
+      return { previousMemberships };
+    },
     onSuccess: () => {
       showToast({
         variant: 'success',
         message: t('group.details.modal.editMembership.success'),
       });
-      queryClient.invalidateQueries(['members', { slug: group.slug }]);
     },
-    onError: () =>
+    onError: (err, variables, context) => {
+      // revert to previous data
+      queryClient.setQueryData(queryKey, context?.previousMemberships);
       showToast({
         variant: 'error',
         message: t('group.details.modal.editMembership.error'),
-      }),
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(queryKey);
+    },
   });
-  const today = new Date();
-  const { data, isSuccess } = useQuery({
+
+  const {
+    data: memberships,
+    isSuccess,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['members', { slug: group.slug }],
     queryFn: () =>
       getMembershipListApi({
@@ -48,42 +88,40 @@ export function EditMembersView({ group }: EditMembersViewProps) {
         pageSize: 200,
         from: today,
       }),
+    keepPreviousData: true,
   });
 
-  useEffect(() => {
-    if (data) {
-      setMemberships(data.results);
-    }
-  }, [data]);
-
-  function reorderMemberships(
-    updatedMemberships: Membership[],
-    member: Membership,
-    lower?: Membership,
-  ) {
-    setMemberships(updatedMemberships);
-    mutate({ member: member.id, lower: lower?.id, group: member.group.slug });
+  if (!memberships) {
+    return;
   }
 
   return (
     <>
       <FlexAuto justifyContent={'space-between'} alignItems={'center'} mb={1}>
         <Typography variant="h3" mb={1}>
-          {t('group.details.modal.editGroup.members')} ({memberships.length})
+          {t('group.details.modal.editGroup.members')} ({memberships.count})
         </Typography>
         <AddMemberButton group={group} />
       </FlexAuto>
-      {isSuccess && data?.count > 0 && (
+      {isLoading && <CircularProgress />}
+      {isError && (
+        <Alert severity="error">
+          {t('group.details.modal.editGroup.error')}
+        </Alert>
+      )}
+      {isSuccess && memberships?.count > 0 && (
         <Paper>
           <DraggableList
-            items={memberships}
-            reorderMemberships={reorderMemberships}
+            items={memberships.results}
+            reorderMemberships={(updatedMemberships, member, lower) => {
+              mutate({ updatedMemberships, member, lower });
+            }}
             onClick={setSelected}
           />
         </Paper>
       )}
-      {isSuccess && data?.count === 0 && (
-        <Typography>Aucun membre pour le moment</Typography>
+      {isSuccess && memberships?.count === 0 && (
+        <Typography>{t('group.details.modal.editGroup.noMembers')}</Typography>
       )}
       {selected && (
         <ModalEditMembership

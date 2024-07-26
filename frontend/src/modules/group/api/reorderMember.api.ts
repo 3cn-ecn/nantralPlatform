@@ -10,7 +10,7 @@ interface ReorderMemberApiParams {
   group?: string;
 }
 
-export async function ReorderMemberApi(options: ReorderMemberApiParams) {
+export async function reorderMembershipApi(options: ReorderMemberApiParams) {
   const { status } = await axios
     .post<MembershipDTO>(
       '/api/group/membership/reorder/',
