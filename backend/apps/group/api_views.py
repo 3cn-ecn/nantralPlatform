@@ -1,5 +1,4 @@
 from django.db.models import Count, F, Q, QuerySet
-from django.forms import ValidationError
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
@@ -414,7 +413,9 @@ class MembershipViewSet(viewsets.ModelViewSet):
     def accept_request(self, request, *args, **kwargs):
         membership: Membership = self.get_object()
         if not membership.admin_request:
-            raise ValidationError(_("Request already answered!"))
+            raise exceptions.MethodNotAllowed(
+                "POST", _("Request already answered!")
+            )
 
         membership.admin_request = False
         membership.admin = True
@@ -451,11 +452,17 @@ class MembershipViewSet(viewsets.ModelViewSet):
             status=status.HTTP_202_ACCEPTED,
         )
 
-    @decorators.action(detail=True, methods=["POST"])
+    @decorators.action(
+        detail=True,
+        methods=["POST"],
+        serializer_class=serializers.Serializer,
+    )
     def deny_request(self, request, *args, **kwargs):
         membership: Membership = self.get_object()
         if not membership.admin_request:
-            raise ValidationError(_("Request already answered!"))
+            raise exceptions.MethodNotAllowed(
+                "POST", _("Request already answered!")
+            )
 
         membership.admin_request = False
         membership.admin_request_message = ""
