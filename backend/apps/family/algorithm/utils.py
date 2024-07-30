@@ -202,12 +202,15 @@ def love_score(answers_a, answers_b, coeff_list):
     """Calculate the lovescore between two students.
     The lower the score is, the best it is.
     """
-    somme = np.nansum(np.abs(answers_a - answers_b) * coeff_list)
-    somme_coeff = np.sum((1 - np.isnan(answers_a + answers_b)) * coeff_list)
 
-    if somme_coeff:
+    weighted_answers_a = answers_a * coeff_list
+    weighted_answers_b = answers_b * coeff_list
+    
+    score = np.linalg.norm(weighted_answers_a - weighted_answers_b)
+
+    if np.sum((1 - np.isnan(answers_a + answers_b)) * coeff_list):
         # if we can calculate the score
-        return somme / somme_coeff
+        return score
     else:
         # if one of the students has not answered to any question
         return np.inf
