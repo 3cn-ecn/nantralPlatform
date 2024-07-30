@@ -8,7 +8,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 
-from apps.student.models import FACULTIES, PATHS
+from apps.student.models import FACULTIES, PATHS, Student
 
 from .models import InvitationLink, User
 
@@ -113,8 +113,6 @@ class RegisterSerializer(serializers.Serializer):
         # little trick to remove password from validated_data
         self.validated_data.pop("password")
 
-        user.first_name = user.first_name.lower()
-        user.last_name = user.last_name.lower()
         user.username = validated_data.get("username")
 
         if user.username is None:
@@ -127,11 +125,14 @@ class RegisterSerializer(serializers.Serializer):
 
         user.save()
         # add student informations
-        user.student.promo = validated_data.get("promo")
-        user.student.faculty = validated_data.get("faculty")
-        user.student.path = validated_data.get("path")
+        student = Student(
+            user=user,
+            promo=validated_data.get("promo"),
+            faculty=validated_data.get("faculty"),
+            path=validated_data.get("path"),
+        )
+        student.save()
 
-        user.save()
         return user
 
 
