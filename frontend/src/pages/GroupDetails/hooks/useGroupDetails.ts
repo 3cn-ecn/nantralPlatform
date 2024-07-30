@@ -18,16 +18,18 @@ export function useGroupDetails(slug?: string) {
     isSuccess,
   } = useQuery<Group, ApiError>({
     queryFn: () => getGroupDetailsApi(slug || ''),
-    queryKey: ['group', { slug: slug }, isAuthenticated],
+    queryKey: ['group', { slug: slug }],
   });
   const { data: events } = useQuery({
     queryFn: () => getEventListApi({ group: [slug || ''] }),
-    queryKey: ['groupEvents', { slug: slug }, isAuthenticated],
+    queryKey: ['groupEvents', { slug: slug }],
+    enabled: isAuthenticated,
   });
 
   const { data: members } = useQuery({
     queryFn: () => getMembershipListApi({ group: slug }),
-    queryKey: ['members', { slug: slug }, isAuthenticated],
+    queryKey: ['members', { slug: slug }],
+    enabled: isAuthenticated,
   });
 
   return {
