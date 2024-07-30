@@ -76,7 +76,7 @@ export default function GroupTypesPage() {
                   isLoading={!results[index] || results[index].isLoading}
                   groups={results[index].data?.results?.slice(
                     0,
-                    results[index].data?.count ?? 0 > PAGE_SIZE
+                    (results[index].data?.count || 0) > PAGE_SIZE
                       ? PAGE_SIZE - 1
                       : PAGE_SIZE,
                   )}
