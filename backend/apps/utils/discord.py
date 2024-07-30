@@ -36,9 +36,7 @@ def react_message(channel_id: int, message_id: str, emoji: str):
     )
 
 
-def send_admin_request(
-    title: str, description: str, accept_url: str, deny_url: str
-):
+def send_admin_request(title: str, description: str, url: str):
     webhook = DiscordWebhook(url=settings.DISCORD_ADMIN_MODERATION_WEBHOOK)
     embed = DiscordEmbed(
         title=title,
@@ -46,10 +44,9 @@ def send_admin_request(
         color=242424,
     )
     embed.add_embed_field(
-        name="Accepter", value=f"[Accepter]({accept_url})", inline=True
-    )
-    embed.add_embed_field(
-        name="Refuser", value=f"[Refuser]({deny_url})", inline=True
+        name="Voir la demande",
+        value=f"[Voir la demande]({url})",
+        inline=True,
     )
     webhook.add_embed(embed)
     webhook.execute()

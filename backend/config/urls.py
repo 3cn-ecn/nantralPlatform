@@ -32,7 +32,6 @@ urlpatterns = [
     # legacy views
     path("account/", include("apps.account.urls", namespace="account")),
     path("student/", include("apps.student.urls", namespace="student")),
-    path("group/", include("apps.group.urls", namespace="group")),
     path("club/", include("apps._archived.club.urls", namespace="club")),
     path("colocs/", include("apps.roommates.urls", namespace="roommates")),
     path(

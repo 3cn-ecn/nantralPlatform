@@ -2,7 +2,6 @@ from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
-from django.urls import reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
@@ -375,18 +374,15 @@ class MembershipViewSet(viewsets.ModelViewSet):
 
         try:
             # send a message to the discord channel for administrators
-            accept_url = self.request.build_absolute_uri(
-                reverse("group:accept-admin-req", kwargs={"id": membership.id})
+            relative_url = (
+                f"{membership.group.get_absolute_url()}?tab=adminRequests"
             )
-            deny_url = self.request.build_absolute_uri(
-                reverse("group:deny-admin-req", kwargs={"id": membership.id})
-            )
+            url = self.request.build_absolute_uri(relative_url)
             send_admin_request(
                 f"{membership.student} demande à "
                 f"devenir admin de {membership.group.short_name}",
                 membership.admin_request_message,
-                accept_url,
-                deny_url,
+                url,
             )
         except Exception:
             ...
