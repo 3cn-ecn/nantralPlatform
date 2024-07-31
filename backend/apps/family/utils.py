@@ -10,12 +10,12 @@ from apps.account.models import User
 
 from .models import Family, MembershipFamily
 
-FIRST_MONTH_OF_NEW_CYCLE = 6  # June
+FIRST_MONTH_OF_NEW_CYCLE = 9  # September
 
 
 def scholar_year(date: datetime | None = None) -> int:
     """Calculate the current scholar year. The date of changement from one
-    scholar year to another is fixed on the 1st June.
+    scholar year to another is fixed on the 1st September.
 
     Examples
     --------
