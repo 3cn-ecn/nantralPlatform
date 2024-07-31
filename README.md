@@ -48,7 +48,7 @@
 ## Contribute
 
 - [Create a [TICKET] issue](https://github.com/3cn-ecn/nantralPlatform/issues) to describe what you want to do. Assign yourself to the issue if you want to work on it.
-- Create a new branch linked to the issue and then create a Pull Request.
+- Create a new branch linked to the issue and then create a Pull Request. Don't clone the repository on your personnal account !
 - Test your code:
   - All-in-one command:
     ```bash
