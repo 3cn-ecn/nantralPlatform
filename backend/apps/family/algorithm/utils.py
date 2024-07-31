@@ -51,7 +51,7 @@ def get_answer(member: MembershipFamily, question):
         # ordinary question case
         ans = answers[0].answer
         if member.role == "2A+" and question["equivalent"] is not None:
-            # we check if we have to penderate with a family question
+            # we check if we have to ponderate with a family question
             try:
                 f_ans = next(
                     ans
@@ -205,7 +205,7 @@ def love_score(answers_a, answers_b, coeff_list):
 
     weighted_answers_a = answers_a * coeff_list
     weighted_answers_b = answers_b * coeff_list
-    
+
     score = np.linalg.norm(weighted_answers_a - weighted_answers_b)
 
     if np.sum((1 - np.isnan(answers_a + answers_b)) * coeff_list):
@@ -365,9 +365,11 @@ def solve_problem(member_list1, member_list2, coeff_list):
     logger.info("Creating the dicts for solving...")
     first_year_pref = {}
     second_year_pref = {}
-    for i in range(len(member_list1)):
+    total_number = len(member_list1)  # total number of 1A or 2A (its the same)
+
+    for i in range(total_number):
         first_year_pref[i] = sorted(
-            range(len(member_list1)),
+            range(total_number),
             key=lambda n: love_score(
                 member_list2[n]["answers"],
                 member_list1[i]["answers"],
@@ -375,7 +377,7 @@ def solve_problem(member_list1, member_list2, coeff_list):
             ),
         )
         second_year_pref[i] = sorted(
-            range(len(member_list1)),
+            range(total_number),
             key=lambda n: love_score(
                 member_list2[i]["answers"],
                 member_list1[n]["answers"],

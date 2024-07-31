@@ -42,7 +42,10 @@ def scholar_year(date: datetime | None = None) -> int:
     return year
 
 
-def get_membership(user: User, year: int = scholar_year()) -> MembershipFamily:
+def get_membership(
+    user: User,
+    year: int = scholar_year(),
+) -> MembershipFamily | None:
     """Get the membership object which links the given user to a family,
     on a given year (one user can only have one family per year).
 
@@ -79,7 +82,7 @@ def get_membership(user: User, year: int = scholar_year()) -> MembershipFamily:
 
 def is_first_year(
     user: User,
-    membership: MembershipFamily = None,
+    membership: MembershipFamily | None = None,
     year: int = scholar_year(),
 ) -> bool:
     """Determines if a user is in first year or not.
@@ -104,17 +107,17 @@ def is_first_year(
 
     """
     if not membership:
-        membership = get_membership(user, year)
+        membership = get_membership(user, year)  # try to get the membership
     if membership:
         return membership.role == "1A"
-    else:
-        promo = user.student.promo
-        return promo == scholar_year()
+
+    promo = user.student.promo
+    return promo == scholar_year()
 
 
 def get_family(
     user: User,
-    membership: MembershipFamily = None,
+    membership: MembershipFamily | None = None,
     year: int = scholar_year(),
 ) -> Family:
     """Get the family of a user for a certain year.
@@ -140,11 +143,13 @@ def get_family(
         membership = get_membership(user, year)
     if membership:
         return membership.group
-    else:
-        return None
+    return None
 
 
-def show_sensible_data(user: User, membership: MembershipFamily = None) -> bool:
+def show_sensible_data(
+    user: User,
+    membership: MembershipFamily | None = None,
+) -> bool:
     """Decide if we must show or hide the sensible data of the families, that is
     to say their name, description, and members who are in 2nd or 3rd year.
     These infos must be hidden before and during the party when the first_year
