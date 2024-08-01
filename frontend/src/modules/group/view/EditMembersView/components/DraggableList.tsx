@@ -1,5 +1,4 @@
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-
+import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import { DropResult } from '@hello-pangea/dnd';
 import { List } from '@mui/material';
 

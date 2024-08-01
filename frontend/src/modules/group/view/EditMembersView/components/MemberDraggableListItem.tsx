@@ -1,5 +1,4 @@
-import { Draggable } from 'react-beautiful-dnd';
-
+import { Draggable } from '@hello-pangea/dnd';
 import { DragIndicator, Edit, Verified } from '@mui/icons-material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import {
