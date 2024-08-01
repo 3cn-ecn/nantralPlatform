@@ -225,9 +225,7 @@ def make_same_length(member1A_list, member2A_list, family_list):
     if delta_len > 0:  # more first year than second year
         # we remove 1A member to make each list same length
         random.shuffle(member1A_list)
-        removed1A_list = []
-        for i in range(delta_len):
-            removed1A_list.append(member1A_list[i])
+        removed1A_list = [member1A_list[i] for i in range(delta_len)]
 
         member1A_list = np.delete(member1A_list, slice(delta_len))
 
