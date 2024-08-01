@@ -217,26 +217,19 @@ def love_score(answers_a, answers_b, coeff_list):
 
 
 def make_same_length(member1A_list, member2A_list, family_list):
-    """Add or delete 2A students so as to have the same number
-    than 1A students
+    """Delete 1A (resp. 2A) students so as to have the same number
+    than 2A (resp. 1A) students
     """
     delta_len = len(member1A_list) - len(member2A_list)
 
     if delta_len > 0:  # more first year than second year
-        # we add fake members in each family, one by one,
-        # the more little first with the mean answer of the family
-        family_list.sort(key=lambda f: f["nb"])
-        i = 0
-        n = len(family_list)
-        while delta_len - i > 0:
-            member2A_list.append(
-                {
-                    "member": f"Fake member {i}",
-                    "answers": family_list[i % n]["answers"],
-                    "family": family_list[i % n]["family"],
-                },
-            )
-            i += 1
+        # we remove 1A member to make each list same length
+        random.shuffle(member1A_list)
+        removed1A_list = []
+        for i in range(delta_len):
+            removed1A_list.append(member1A_list[i])
+
+        member1A_list = np.delete(member1A_list, slice(delta_len))
 
     elif delta_len < 0:  # more second year than first year
         # Remove random second year students, in big families first
@@ -258,7 +251,7 @@ def make_same_length(member1A_list, member2A_list, family_list):
             member2A_list = np.delete(member2A_list, index)
             i += 1
 
-    return member2A_list
+    return member1A_list, member2A_list, removed1A_list
 
 
 def prevent_lonelyness(
@@ -354,7 +347,7 @@ def prevent_lonelyness(
     return member1A_list
 
 
-def solve_problem(member_list1, member_list2, coeff_list):
+def solve_problem(member_list1, member_list2, surplus_member_list1, coeff_list):
     """Solve the matching problem"""
     # randomize lists in order to avoid unwanted effects
     logger.info("Randomize lists...")
@@ -365,7 +358,7 @@ def solve_problem(member_list1, member_list2, coeff_list):
     logger.info("Creating the dicts for solving...")
     first_year_pref = {}
     second_year_pref = {}
-    total_number = len(member_list1)  # total number of 1A or 2A (its the same)
+    total_number = len(member_list1)  # total number of 1A or 2A (it's the same)
 
     for i in range(total_number):
         first_year_pref[i] = sorted(
@@ -385,8 +378,7 @@ def solve_problem(member_list1, member_list2, coeff_list):
             ),
         )
 
-    # make the marriage and solve the problem! Les 1A sont privilégiés dans
-    # leurs préférences
+    # make the marriage and solve the problem! Les 1A sont privilégiés dans leurs préférences
     logger.info("Solving...")
     game = StableMarriage.create_from_dictionaries(
         first_year_pref,
@@ -400,6 +392,26 @@ def solve_problem(member_list1, member_list2, coeff_list):
         id_1A = player_1A.name
         id_2A = player_2A.name
         member_list1[id_1A]["family"] = member_list2[id_2A]["family"]
+
+    if len(surplus_member_list1) > 0:
+        # If there are more 1A than 2A we associate them to their favorite choice
+
+        for i in range(len(surplus_member_list1)):
+            first_year_surplus_pref = sorted(
+                range(total_number),
+                key=lambda n: love_score(
+                    member_list2[n]["answers"],
+                    surplus_member_list1[i]["answers"],
+                    coeff_list,
+                ),
+            )
+
+            # get the family for each surplus_1A
+            wanted_family_member = first_year_surplus_pref[0]
+            surplus_member_list1[i]["family"] = member_list2[wanted_family_member]["family"]
+
+        # we add the surplus_1A to the main list
+        member_list1 = np.concatenate((member_list1, surplus_member_list1), axis=0)
 
     return member_list1
 
