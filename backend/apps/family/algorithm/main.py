@@ -32,7 +32,7 @@ def main_algorithm():
 
     # Add or delete 2A members so as to have the same length as 1A members
     logger.info("Checking the length...")
-    member2A_list_plus = make_same_length(
+    new_member1A_list, new_member2A_list, surplus_member1A_list = make_same_length(
         member1A_list,
         member2A_list,
         family_list,
@@ -40,8 +40,9 @@ def main_algorithm():
 
     # Solve the matching problem
     member1A_list = solve_problem(
-        member1A_list,
-        member2A_list_plus,
+        new_member1A_list,
+        new_member2A_list,
+        surplus_member1A_list,
         coeff_list,
     )
 
