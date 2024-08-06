@@ -307,8 +307,7 @@
         }
       },
       "formerMembers": "Anciens membres",
-      "from": {
-      },
+      "from": {},
       "infoLine": {
         "events": "événement(s)",
         "members": "membre(s)"
@@ -318,7 +317,7 @@
       "member": "Membre",
       "modal": {
         "deleteMember": {
-          "text": "Voulez-vous vraiment supprimer {{ student } des membres de {{ group }} ?",
+          "text": "Voulez-vous vraiment supprimer {{ student }} des membres de {{ group }} ?",
           "title": "Supprimer le membre ?"
         },
         "displayMember": {
