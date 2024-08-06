@@ -40,7 +40,7 @@ def get_question_list():
 
 
 def get_answer(member: MembershipFamily, question):
-    """Get the answer to a question for a member"""
+    """Get the answer and the coeff to a question for a member"""
     answers = [
         ans
         for ans in member.answermember_set.all()
@@ -49,7 +49,10 @@ def get_answer(member: MembershipFamily, question):
 
     if len(answers) == 1:
         # ordinary question case
-        ans = answers[0].answer
+        ans = {
+            "answer": answers[0].answer,
+            "coeff": answers[0].custom_coeff,
+        }
         if member.role == "2A+" and question["equivalent"] is not None:
             # we check if we have to ponderate with a family question
             try:
@@ -58,9 +61,17 @@ def get_answer(member: MembershipFamily, question):
                     for ans in member.group.answerfamily_set.all()
                     if ans.question.id == question["equivalent"]
                 )
+
                 f_ans_value = f_ans.answer
+                f_ans_coeff = f_ans.custom_coeff
+
                 quota = f_ans.question.quota / 100
-                ans = (1 - quota) * ans + quota * f_ans_value
+
+                ans["answer"] = (1 - quota) * ans[
+                    "answer"
+                ] + quota * f_ans_value
+                ans["coeff"] = (1 - quota) * ans["coeff"] + quota * f_ans_coeff
+
             except IndexError:
                 raise Exception(
                     f"La famille {member.group} n'a pas répondu aux questions.",
@@ -78,13 +89,19 @@ def get_answer(member: MembershipFamily, question):
                     for ans in member.group.answerfamily_set.all()
                     if ans.question.id == question["equivalent"]
                 )
-            except IndexError:
+            except (IndexError, StopIteration):
                 raise Exception(
                     f"La famille {member.group} n'a pas répondu aux questions.",
                 )
-            return f_ans.answer
+            return {
+                "answer": f_ans.answer,
+                "coeff": f_ans.custom_coeff,
+            }
         else:
-            return np.nan
+            return {
+                "answer": np.nan,
+                "coeff": np.nan,
+            }
 
     else:
         # bug case : a member must not have two answers for the same question
@@ -95,12 +112,14 @@ def get_answer(member: MembershipFamily, question):
 
 
 def get_answers(member: MembershipFamily, question_list):
-    """Get all the answers to the question_list for a member"""
+    """Get all the answers and coeff to the question_list for a member"""
     answers = []
+    coeff = []
     for question in question_list:
         answer = get_answer(member, question)
-        answers.append(answer)
-    return np.array(answers)
+        answers.append(answer["answer"])
+        coeff.append(answer["coeff"])
+    return np.array(answers), np.array(coeff)
 
 
 def get_member_1A_list(question_list, itii=False):
@@ -119,8 +138,10 @@ def get_member_1A_list(question_list, itii=False):
     member_1A_list = []
     for membership in data:
         if len(membership.answermember_set.all()) >= len(question_list):
-            answers = get_answers(membership, question_list)
-            member_1A_list.append({"member": membership, "answers": answers})
+            answers, coeff = get_answers(membership, question_list)
+            member_1A_list.append(
+                {"member": membership, "answers": answers, "coeff": coeff}
+            )
     return member_1A_list
 
 
@@ -134,14 +155,18 @@ def get_member_2A_list(question_list):
         "answermember_set__question",
         "group__answerfamily_set__question",
     )
-    member2A_list = [
-        {
-            "member": membership,
-            "answers": get_answers(membership, question_list),
-            "family": membership.group,
-        }
-        for membership in data
-    ]
+
+    member2A_list = []
+    for membership in data:
+        answers, coeff = get_answers(membership, question_list)
+        member2A_list.append(
+            {
+                "member": membership,
+                "answers": answers,
+                "coeff": coeff,
+                "family": membership.group,
+            }
+        )
 
     # calculate the average answer for each family
     family_list = get_family_list(member2A_list)
@@ -159,11 +184,23 @@ def get_member_2A_list(question_list):
                 for i in range(m["answers"].size):
                     m["answers"][i] = fam_answers[i]
 
+        if vecthasnan(m["coeff"]):
+            # we search the family coeff of this member
+            fam_answers = next(
+                f for f in family_list if f["family"] == m["family"]
+            )["coeff"]
+            if vectisnan(m["coeff"]):
+                m["coeff"] = fam_answers
+            else:
+                for i in range(m["coeff"].size):
+                    m["coeff"][i] = fam_answers[i]
+
     # add the non_subscribed_members
     member2A_list += [
         {
             "member": m,
             "answers": f["answers"],
+            "coeff": coeff,
             "family": f["family"],
         }
         for f in family_list
@@ -198,18 +235,21 @@ def get_family_list(member2A_list):
     return family_list
 
 
-def love_score(answers_a, answers_b, coeff_list):
+def love_score(answers_a, coeff_list_a, answers_b, question_coeff_list):
     """Calculate the lovescore between two students.
+    The score is not symetrical between member "a" and "b" : here it's from the point of view of "a"
     The lower the score is, the best it is.
     """
 
-    weighted_answers_a = answers_a * coeff_list
-    weighted_answers_b = answers_b * coeff_list
+    global_coeff = coeff_list_a * question_coeff_list
+
+    weighted_answers_a = answers_a * global_coeff
+    weighted_answers_b = answers_b * global_coeff
 
     score = np.linalg.norm(weighted_answers_a - weighted_answers_b)
 
-    if np.sum((1 - np.isnan(answers_a + answers_b)) * coeff_list):
-        # if we can calculate the score
+    if np.sum(1 - np.isnan(answers_a + answers_b)):
+        # if each student has at least answered to one question
         return score
     else:
         # if one of the students has not answered to any question
@@ -221,6 +261,7 @@ def make_same_length(member1A_list, member2A_list, family_list):
     than 2A (resp. 1A) students
     """
     delta_len = len(member1A_list) - len(member2A_list)
+    removed1A_list = []
 
     if delta_len > 0:  # more first year than second year
         # we remove 1A member to make each list same length
@@ -259,7 +300,7 @@ def prevent_lonelyness(
     q_id,
     q_val,
     q_name,
-    coeff_list,
+    question_coeff_list,
 ):
     """Empêcher de créer des familles avec des personnes seules du point de vue
     d'un critère : femmes, étudiants étrangers...
@@ -318,8 +359,9 @@ def prevent_lonelyness(
                     candidate_member_list,
                     key=lambda m: love_score(
                         m["answers"],
+                        m["coeff"],
                         lonely_member["answers"],
-                        coeff_list,
+                        question_coeff_list,
                     ),
                 )
                 # on récupère l'index du candidat dans la liste member1A_list
@@ -345,7 +387,9 @@ def prevent_lonelyness(
     return member1A_list
 
 
-def solve_problem(member_list1, member_list2, surplus_member_list1, coeff_list):
+def solve_problem(
+    member_list1, member_list2, surplus_member_list1, question_coeff_list
+):
     """Solve the matching problem"""
     # randomize lists in order to avoid unwanted effects
     logger.info("Randomize lists...")
@@ -362,17 +406,19 @@ def solve_problem(member_list1, member_list2, surplus_member_list1, coeff_list):
         first_year_pref[i] = sorted(
             range(total_number),
             key=lambda n: love_score(
-                member_list2[n]["answers"],
                 member_list1[i]["answers"],
-                coeff_list,
+                member_list1[i]["coeff"],
+                member_list2[n]["answers"],
+                question_coeff_list,
             ),
         )
         second_year_pref[i] = sorted(
             range(total_number),
             key=lambda n: love_score(
                 member_list2[i]["answers"],
+                member_list2[i]["coeff"],
                 member_list1[n]["answers"],
-                coeff_list,
+                question_coeff_list,
             ),
         )
 
@@ -398,18 +444,23 @@ def solve_problem(member_list1, member_list2, surplus_member_list1, coeff_list):
             first_year_surplus_pref = sorted(
                 range(total_number),
                 key=lambda n: love_score(
-                    member_list2[n]["answers"],
                     surplus_member_list1[i]["answers"],
-                    coeff_list,
+                    surplus_member_list1[i]["coeff"],
+                    member_list2[n]["answers"],
+                    question_coeff_list,
                 ),
             )
 
             # get the family for each surplus_1A
             wanted_family_member = first_year_surplus_pref[0]
-            surplus_member_list1[i]["family"] = member_list2[wanted_family_member]["family"]
+            surplus_member_list1[i]["family"] = member_list2[
+                wanted_family_member
+            ]["family"]
 
         # we add the surplus_1A to the main list
-        member_list1 = np.concatenate((member_list1, surplus_member_list1), axis=0)
+        member_list1 = np.concatenate(
+            (member_list1, surplus_member_list1), axis=0
+        )
 
     return member_list1
 

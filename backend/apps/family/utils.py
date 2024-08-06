@@ -4,18 +4,19 @@ from datetime import datetime
 
 from django.utils import timezone
 
+import numpy as np
 from extra_settings.models import Setting
 
 from apps.account.models import User
 
-from .models import Family, MembershipFamily
+from .models import Family, MembershipFamily, QuestionMember
 
-FIRST_MONTH_OF_NEW_CYCLE = 9  # September
+FIRST_MONTH_OF_NEW_CYCLE = 6  # June
 
 
 def scholar_year(date: datetime | None = None) -> int:
     """Calculate the current scholar year. The date of changement from one
-    scholar year to another is fixed on the 1st September.
+    scholar year to another is fixed on the 1st June.
 
     Examples
     --------
@@ -180,3 +181,18 @@ def show_sensible_data(
         # here we are not sure of the 1A/2A property so we always hide,
         # except before the 1A have access to the form
         return phase >= 4 or (phase == 1 and is_2A)  # noqa: PLR2004
+
+
+def display_custom_coeff_in_group(question: QuestionMember):
+    if not question.group:
+        return False
+
+    else:
+        questions_in_this_group = QuestionMember.objects.all().filter(
+            group=question.group
+        )
+        allow_custom_coeff_list = np.array(
+            [q.allow_custom_coef for q in questions_in_this_group]
+        )
+
+        return np.sum(allow_custom_coeff_list) > 0
