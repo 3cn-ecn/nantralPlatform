@@ -225,10 +225,21 @@ def get_family_list(member2A_list):
             raise Exception(f"Family {fam.name} has no members")
         if vectisnan(answers_mean):
             raise Exception(f"Members of {fam.name} have no answers")
+
+        coeff_list = np.array(
+            [m["coeff"] for m in member2A_list if m["family"] == fam],
+        )
+        coeff_mean = np.nanmean(coeff_list, axis=0)
+        if coeff_mean is np.nan:
+            raise Exception(f"Family {fam.name} has no members")
+        if vectisnan(coeff_mean):
+            raise Exception(f"Members of {fam.name} have no answers")
+
         family_list.append(
             {
                 "family": fam,
                 "answers": answers_mean,
+                "coeff": coeff_mean,
                 "nb": fam.count_members_2A(),
             },
         )
@@ -257,18 +268,27 @@ def love_score(answers_a, coeff_list_a, answers_b, question_coeff_list):
 
 
 def make_same_length(member1A_list, member2A_list, family_list):
-    """Delete 1A (resp. 2A) students so as to have the same number
-    than 2A (resp. 1A) students
+    """Add or delete 2A students so as to have the same number
+    than 1A students
     """
     delta_len = len(member1A_list) - len(member2A_list)
-    removed1A_list = []
 
     if delta_len > 0:  # more first year than second year
-        # we remove 1A member to make each list same length
-        random.shuffle(member1A_list)
-        removed1A_list = [member1A_list[i] for i in range(delta_len)]
-
-        member1A_list = np.delete(member1A_list, slice(delta_len))
+        # we add fake members in each family, one by one,
+        # the more little first with the mean answer of the family
+        family_list.sort(key=lambda f: f["nb"])
+        i = 0
+        n = len(family_list)
+        while delta_len - i > 0:
+            member2A_list.append(
+                {
+                    "member": f"Fake member {i}",
+                    "answers": family_list[i % n]["answers"],
+                    "coeff": family_list[i % n]["coeff"],
+                    "family": family_list[i % n]["family"],
+                },
+            )
+            i += 1
 
     elif delta_len < 0:  # more second year than first year
         # Remove random second year students, in big families first
@@ -290,7 +310,7 @@ def make_same_length(member1A_list, member2A_list, family_list):
             member2A_list = np.delete(member2A_list, index)
             i += 1
 
-    return member1A_list, member2A_list, removed1A_list
+    return member2A_list
 
 
 def prevent_lonelyness(
@@ -387,9 +407,7 @@ def prevent_lonelyness(
     return member1A_list
 
 
-def solve_problem(
-    member_list1, member_list2, surplus_member_list1, question_coeff_list
-):
+def solve_problem(member_list1, member_list2, question_coeff_list):
     """Solve the matching problem"""
     # randomize lists in order to avoid unwanted effects
     logger.info("Randomize lists...")
@@ -422,7 +440,8 @@ def solve_problem(
             ),
         )
 
-    # make the marriage and solve the problem! Les 1A sont privilégiés dans leurs préférences
+    # make the marriage and solve the problem! Les 1A sont privilégiés dans
+    # leurs préférences
     logger.info("Solving...")
     game = StableMarriage.create_from_dictionaries(
         first_year_pref,
@@ -436,31 +455,6 @@ def solve_problem(
         id_1A = player_1A.name
         id_2A = player_2A.name
         member_list1[id_1A]["family"] = member_list2[id_2A]["family"]
-
-    if len(surplus_member_list1) > 0:
-        # If there are more 1A than 2A we associate them to their favorite choice
-
-        for i in range(len(surplus_member_list1)):
-            first_year_surplus_pref = sorted(
-                range(total_number),
-                key=lambda n: love_score(
-                    surplus_member_list1[i]["answers"],
-                    surplus_member_list1[i]["coeff"],
-                    member_list2[n]["answers"],
-                    question_coeff_list,
-                ),
-            )
-
-            # get the family for each surplus_1A
-            wanted_family_member = first_year_surplus_pref[0]
-            surplus_member_list1[i]["family"] = member_list2[
-                wanted_family_member
-            ]["family"]
-
-        # we add the surplus_1A to the main list
-        member_list1 = np.concatenate(
-            (member_list1, surplus_member_list1), axis=0
-        )
 
     return member_list1
 

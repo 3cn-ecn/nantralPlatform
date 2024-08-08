@@ -47,7 +47,9 @@ def itii_algorithm():
     # get the questionnary
     logger.info("Get questions...")
     question_list = get_question_list()
-    coeff_list = np.array([q["coeff"] for q in question_list], dtype=int)
+    question_coeff_list = np.array(
+        [q["coeff"] for q in question_list], dtype=int
+    )
 
     # get the members list with their answers for each question
     logger.info("Get 1A itii answers...")
@@ -82,7 +84,9 @@ def itii_algorithm():
         family_list = family_list[: len(itii_list)]
 
     # Solve the matching problem
-    itii_result_list = solve_problem(itii_list, family_list, coeff_list)
+    itii_result_list = solve_problem(
+        itii_list, family_list, question_coeff_list
+    )
 
     # saving in database
     logger.info("Saving...")

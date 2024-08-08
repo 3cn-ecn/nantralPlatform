@@ -4,8 +4,11 @@ from datetime import datetime
 import factory
 from factory.django import DjangoModelFactory
 from faker import Faker as RealFaker
+from pytz import UTC
 
 from apps.family.models import (
+    MAX_2APLUS_PER_FAMILY,
+    MIN_2APLUS_PER_FAMILY,
     AnswerFamily,
     AnswerMember,
     Family,
@@ -15,12 +18,15 @@ from apps.family.models import (
 )
 from apps.utils.factories.fake_data_generator import FakeDataGenerator
 
+from .utils import FIRST_MONTH_OF_NEW_CYCLE
+
 fake = RealFaker()
-FAMILY_NUMBER = 50
+FAMILY_NUMBER = 5
+
 
 def get_current_academic_year():
-    now = datetime.now()
-    if now.month >= 6:  # June or later
+    now = datetime.now(UTC)
+    if now.month >= FIRST_MONTH_OF_NEW_CYCLE:  # June or later
         return now.year
     else:
         return now.year - 1
@@ -53,7 +59,10 @@ class MembershipFamilyFactory(DjangoModelFactory):
     def _get_family_with_available_spots(self):
         families = Family.objects.all()
         for family in families:
-            if family.members.filter(membershipfamily__role="2A+").count() < 7:
+            if (
+                family.members.filter(membershipfamily__role="2A+").count()
+                < MAX_2APLUS_PER_FAMILY 
+            ):
                 return family
         return FamilyFactory.create()
 
@@ -83,12 +92,13 @@ class FamilyFakeData(FakeDataGenerator):
 
     def make_families(self):
         for i in range(FAMILY_NUMBER):
-            
             print(f"Création de la famille {i+1}/{FAMILY_NUMBER}")
-            
+
             family = FamilyFactory.create()
-            num_2a_plus = random.randint(3, 7)
-            num_1a = 15 - num_2a_plus
+            num_2a_plus = random.randint(
+                MIN_2APLUS_PER_FAMILY, MAX_2APLUS_PER_FAMILY - 1
+            )
+            num_1a = 10 - num_2a_plus
 
             members_2a_plus = MembershipFamilyFactory.create_batch(
                 num_2a_plus, group=family, role="2A+"

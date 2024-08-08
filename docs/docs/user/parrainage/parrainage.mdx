@@ -86,10 +86,26 @@ code suivant (cf la section 1.2) :
 
 ### 2.4 Ajouter ou modifier des questions
 
+Il existe deux types de questions :
+
+Les questions membres
+Les questions familles
+Comme leurs noms l'indiquent, les questions membres doivent être répondues par toutes les personnes participant au parrainage (1A et 2A+), alors que les questions familles ne doivent être répondues que par les parrains.
+
+Pour ajouter une question membre (resp. famille), il suffit, depuis l'interface administrateur, de créer un objet dans la table Questions Membres (resp. Questions Familles) présente dans la catégorie FAMILY.
+
+Il est possible de regrouper les questions dans des Groupes de Questions pour les afficher sous forme de matrice, mais aussi par Pages de Questions.
+
 ## 3. Fonctionnement des algorithmes et choix de conceptions
 
 ### Algorithme initial
 
+L'algorithme initial est basé sur l'algorithme de Gale-Shapley, également connu sous le nom d'algorithme de mariage stable. Il permet de trouver une correspondance stable entre deux ensembles, en l'occurrence les 1A et les familles de 2A+.
+
 ### Algorithme delta
 
+L'algorithme delta est une extension de l'algorithme initial, utilisé pour attribuer les 1A qui remplissent leur questionnaire après l'exécution de l'algorithme initial.
+
 ### Algorithme ITII
+
+L'algorithme ITII est utilisé pour intégrer les étudiants ITII dans les familles existantes après leur rentrée en octobre. 

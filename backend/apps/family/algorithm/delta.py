@@ -57,7 +57,9 @@ def delta_algorithm():
         # on cherche la meilleure famille
         m["family"] = min(
             little_family_list,
-            key=lambda f: love_score(m["answers"], f["answers"], coeff_list),
+            key=lambda f: love_score(
+                m["answers"], m["coeff"], f["answers"], coeff_list
+            ),
         )["family"]
 
     logger.info("Saving...")
