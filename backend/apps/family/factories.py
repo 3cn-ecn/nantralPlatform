@@ -61,7 +61,7 @@ class MembershipFamilyFactory(DjangoModelFactory):
         for family in families:
             if (
                 family.members.filter(membershipfamily__role="2A+").count()
-                < MAX_2APLUS_PER_FAMILY 
+                < MAX_2APLUS_PER_FAMILY
             ):
                 return family
         return FamilyFactory.create()
@@ -92,7 +92,7 @@ class FamilyFakeData(FakeDataGenerator):
 
     def make_families(self):
         for i in range(FAMILY_NUMBER):
-            print(f"Création de la famille {i+1}/{FAMILY_NUMBER}")
+            print(f"Création de la famille {i+1}/{FAMILY_NUMBER}")  # noqa: T201
 
             family = FamilyFactory.create()
             num_2a_plus = random.randint(

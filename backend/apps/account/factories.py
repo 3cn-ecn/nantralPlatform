@@ -1,10 +1,9 @@
-from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 
 import factory
 from factory.django import DjangoModelFactory
 
-User = get_user_model()
+from .models import User
 
 
 def generate_unique_username(first_name, last_name):
