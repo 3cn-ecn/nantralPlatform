@@ -5,17 +5,13 @@ from factory.django import DjangoModelFactory
 
 from .models import User
 
+suffix = 0
+
 
 def generate_unique_username(first_name, last_name):
-    base_username = f"{first_name.lower()}.{last_name.lower()}"
-    username = base_username
-    suffix = 1
-
-    while User.objects.filter(username=username).exists():
-        username = f"{base_username}{suffix}"
-        suffix += 1
-
-    return username
+    global suffix  # noqa: PLW0603
+    suffix += 1
+    return f"{first_name.lower()}.{last_name.lower()}{suffix}"
 
 
 @factory.django.mute_signals(post_save)  # Use this because OneToOneField
