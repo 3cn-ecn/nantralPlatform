@@ -147,6 +147,9 @@ class BaseQuestion(models.Model):
     code_name = models.CharField("Nom de code", max_length=50)
     label = models.CharField("Question", max_length=100)
     label_en = models.CharField("Question (en)", max_length=100)
+    allow_custom_coef = models.BooleanField(
+        "Coefficient personnalisable par la personne répondant", default=False
+    )
     details = models.CharField(
         "Informations supplémentaires",
         max_length=200,
@@ -258,6 +261,7 @@ class QuestionFamily(BaseQuestion):
 
 class BaseAnswer(models.Model):
     answer = models.IntegerField()
+    custom_coeff = models.IntegerField(default=1)
 
     class Meta:
         abstract = True

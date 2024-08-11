@@ -3,10 +3,10 @@
 {% block content %}
     
     <h1 class="mb-4">Questionnaire de Parrainage</h1>
-    <h2>{{page.order}}. {{page.name}}</h2>
+    <h2>{{ page.order }}. {{ page.name }}</h2>
 
     <div class="progress mt-3 mb-4" style="height:5px;">
-        <div class="progress-bar bg-success" role="progressbar" style="width: {{percent}}%" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="progress-bar bg-success" role="progressbar" style="width: {{ percent }}%" aria-valuenow="{{ percent }}" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 
     {% if error %}

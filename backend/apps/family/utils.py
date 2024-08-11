@@ -4,11 +4,12 @@ from datetime import datetime
 
 from django.utils import timezone
 
+import numpy as np
 from extra_settings.models import Setting
 
 from apps.account.models import User
 
-from .models import Family, MembershipFamily
+from .models import Family, MembershipFamily, QuestionMember
 
 FIRST_MONTH_OF_NEW_CYCLE = 6  # June
 
@@ -42,7 +43,10 @@ def scholar_year(date: datetime | None = None) -> int:
     return year
 
 
-def get_membership(user: User, year: int = scholar_year()) -> MembershipFamily:
+def get_membership(
+    user: User,
+    year: int = scholar_year(),
+) -> MembershipFamily | None:
     """Get the membership object which links the given user to a family,
     on a given year (one user can only have one family per year).
 
@@ -79,7 +83,7 @@ def get_membership(user: User, year: int = scholar_year()) -> MembershipFamily:
 
 def is_first_year(
     user: User,
-    membership: MembershipFamily = None,
+    membership: MembershipFamily | None = None,
     year: int = scholar_year(),
 ) -> bool:
     """Determines if a user is in first year or not.
@@ -104,17 +108,17 @@ def is_first_year(
 
     """
     if not membership:
-        membership = get_membership(user, year)
+        membership = get_membership(user, year)  # try to get the membership
     if membership:
         return membership.role == "1A"
-    else:
-        promo = user.student.promo
-        return promo == scholar_year()
+
+    promo = user.student.promo
+    return promo == scholar_year()
 
 
 def get_family(
     user: User,
-    membership: MembershipFamily = None,
+    membership: MembershipFamily | None = None,
     year: int = scholar_year(),
 ) -> Family:
     """Get the family of a user for a certain year.
@@ -140,11 +144,13 @@ def get_family(
         membership = get_membership(user, year)
     if membership:
         return membership.group
-    else:
-        return None
+    return None
 
 
-def show_sensible_data(user: User, membership: MembershipFamily = None) -> bool:
+def show_sensible_data(
+    user: User,
+    membership: MembershipFamily | None = None,
+) -> bool:
     """Decide if we must show or hide the sensible data of the families, that is
     to say their name, description, and members who are in 2nd or 3rd year.
     These infos must be hidden before and during the party when the first_year
@@ -175,3 +181,18 @@ def show_sensible_data(user: User, membership: MembershipFamily = None) -> bool:
         # here we are not sure of the 1A/2A property so we always hide,
         # except before the 1A have access to the form
         return phase >= 4 or (phase == 1 and is_2A)  # noqa: PLR2004
+
+
+def display_custom_coeff_in_group(question: QuestionMember):
+    if not question.group:
+        return False
+
+    else:
+        questions_in_this_group = QuestionMember.objects.all().filter(
+            group=question.group
+        )
+        allow_custom_coeff_list = np.array(
+            [q.allow_custom_coef for q in questions_in_this_group]
+        )
+
+        return np.sum(allow_custom_coeff_list) > 0
