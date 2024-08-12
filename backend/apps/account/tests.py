@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
+
 from django_rest_passwordreset.models import ResetPasswordToken
 from freezegun import freeze_time
 from rest_framework import status
