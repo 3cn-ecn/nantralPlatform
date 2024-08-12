@@ -24,7 +24,8 @@ export default function GroupTypesPage() {
 
   const groupTypeResults = groupTypesQuery.data?.results?.filter(
     (_, i) =>
-      listQueries[i].data && (listQueries[i].data.count > 0 || isAuthenticated),
+      listQueries[i].data &&
+      ((listQueries[i].data?.count ?? 0) > 0 || isAuthenticated),
   );
 
   const { staff } = useCurrentUserData();
