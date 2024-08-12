@@ -2,10 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 
 import { AdminPanelSettings, ChevronRight } from '@mui/icons-material';
 import { Button, Container, Divider, Typography } from '@mui/material';
-import { useQueries, useQuery } from '@tanstack/react-query';
 
-import { getGroupListApi } from '#modules/group/api/getGroupList.api';
-import { getGroupTypesApi } from '#modules/group/api/getGroupTypes.api';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
@@ -14,26 +11,21 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { GroupGrid } from '../../modules/group/view/GroupGrid/GroupGrid';
 import { MoreGroupButton } from './components/MoreGroupButton';
+import { useGroupTypes } from './hooks/useGroupTypes';
 
 const PAGE_SIZE = 6;
 
 export default function GroupTypesPage() {
   const [, setParams] = useSearchParams();
-  const { data: groupTypes, isSuccess } = useQuery({
-    queryFn: getGroupTypesApi,
-    queryKey: ['getGroupTypes'],
-  });
+
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
-  const results = useQueries({
-    queries:
-      groupTypes?.results.map((groupType) => ({
-        queryFn: () =>
-          getGroupListApi({ type: groupType.slug, pageSize: PAGE_SIZE }),
-        queryKey: ['getGroupList', groupType.slug, isAuthenticated],
-        enabled: isSuccess,
-      })) || [],
-  });
+  const { listQueries, groupTypesQuery } = useGroupTypes(PAGE_SIZE);
+
+  const groupTypeResults = groupTypesQuery.data?.results?.filter(
+    (_, i) =>
+      listQueries[i].data && (listQueries[i].data.count > 0 || isAuthenticated),
+  );
 
   const { staff } = useCurrentUserData();
   return (
@@ -56,8 +48,8 @@ export default function GroupTypesPage() {
       <Divider />
       <Spacer vertical={2} />
       <FlexCol gap={4}>
-        {isSuccess &&
-          groupTypes?.results?.map((type, index) => (
+        {groupTypesQuery.isSuccess &&
+          groupTypeResults?.map((type, index) => (
             <FlexCol key={type.slug} justifyContent={'flex-start'}>
               <FlexRow alignItems="center" gap={2} mb={4}>
                 <Typography variant="h2">{type.name}</Typography>
@@ -70,20 +62,24 @@ export default function GroupTypesPage() {
                 </Button>
               </FlexRow>
 
-              {results && (
+              {listQueries && (
                 <GroupGrid
                   estimatedSize={6}
-                  isLoading={!results[index] || results[index].isLoading}
-                  groups={results[index].data?.results?.slice(
+                  isLoading={
+                    !listQueries[index] || listQueries[index].isLoading
+                  }
+                  groups={listQueries[index].data?.results?.slice(
                     0,
-                    (results[index].data?.count || 0) > PAGE_SIZE
+                    (listQueries[index].data?.count || 0) > PAGE_SIZE
                       ? PAGE_SIZE - 1
                       : PAGE_SIZE,
                   )}
                   extraComponent={
-                    (results[index].data?.count || 0) > PAGE_SIZE ? (
+                    (listQueries[index].data?.count || 0) > PAGE_SIZE ? (
                       <MoreGroupButton
-                        count={(results[index].data?.count || 0) - PAGE_SIZE}
+                        count={
+                          (listQueries[index].data?.count || 0) - PAGE_SIZE
+                        }
                         onClick={() => setParams({ type: type.slug })}
                       />
                     ) : undefined

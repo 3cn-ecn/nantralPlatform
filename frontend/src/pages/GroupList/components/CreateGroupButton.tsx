@@ -3,9 +3,15 @@ import { useState } from 'react';
 import { Add } from '@mui/icons-material';
 import { Fab, Tooltip } from '@mui/material';
 
+import { GroupTypePreview } from '#modules/group/types/groupType.types';
+
 import { CreateGroupModal } from './CreateGroupModal';
 
-export function CreateGroupButton({ groupType }: { groupType: string }) {
+export function CreateGroupButton({
+  groupType,
+}: {
+  groupType: GroupTypePreview;
+}) {
   const [groupFormOpen, setGroupFormOpen] = useState(false);
 
   return (

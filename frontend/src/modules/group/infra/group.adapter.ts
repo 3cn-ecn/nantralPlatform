@@ -69,5 +69,6 @@ export function adaptGroupForm(groupForm: CreateGroupForm): CreateGroupFormDTO {
     children_label: groupForm.childrenLabel,
     creation_year: groupForm.creationYear,
     label: (groupForm.label >= 0 && groupForm.label) || null,
+    parent: groupForm.parent,
   };
 }

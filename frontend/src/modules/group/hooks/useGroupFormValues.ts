@@ -42,6 +42,16 @@ function convertToForm(group: Group): CreateGroupForm {
   };
 }
 
-export function useGroupFormValues(group?: Group) {
-  return group ? convertToForm(group) : defaultGroupFormValues;
+export function useGroupFormValues({
+  group,
+  parent,
+}: {
+  group?: Group;
+  parent?: Group;
+}) {
+  const form = group ? convertToForm(group) : defaultGroupFormValues;
+  if (parent) {
+    form.parent = parent.id;
+  }
+  return form;
 }

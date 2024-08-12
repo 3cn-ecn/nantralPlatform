@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import {
   Check,
   Edit,
+  GridView,
   Groups,
   Save,
   Settings,
@@ -26,6 +27,7 @@ import {
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
+import { EditChildrenView } from '../EditChildrenView/EditChildrenView';
 import { EditMembersView } from '../EditMembersView/EditMembersView';
 
 export function ModalEditGroup({
@@ -36,7 +38,7 @@ export function ModalEditGroup({
   group: Group;
 }) {
   const { t } = useTranslation();
-  const groupValues = useGroupFormValues(group);
+  const groupValues = useGroupFormValues({ group: group });
 
   const [formValues, setFormValues] = useState<CreateGroupForm>(groupValues);
 
@@ -81,7 +83,12 @@ export function ModalEditGroup({
         {t('group.details.modal.editGroup.title')}
       </ResponsiveDialogHeader>
       <div style={{ position: 'relative', maxHeight: 100 }}>
-        <Tabs value={tab} onChange={(e, val) => setTab(val)}>
+        <Tabs
+          variant="scrollable"
+          value={tab}
+          onChange={(e, val) => setTab(val)}
+          allowScrollButtonsMobile
+        >
           <Tab
             label={t('group.details.modal.editGroup.tabs.general')}
             iconPosition="start"
@@ -97,6 +104,13 @@ export function ModalEditGroup({
             iconPosition="start"
             icon={<Share />}
           />
+          {!group.parent && group.groupType.canHaveParent && (
+            <Tab
+              label={t('group.details.modal.editGroup.tabs.subgroups')}
+              iconPosition="start"
+              icon={<GridView />}
+            />
+          )}
         </Tabs>
       </div>
       <ResponsiveDialogContent sx={{ height: 800 }}>
@@ -108,7 +122,7 @@ export function ModalEditGroup({
                 error={error}
                 formValues={formValues}
                 updateFormValues={updateFormValues}
-                groupType={group.groupType.slug}
+                groupType={group.groupType}
                 prevData={group}
                 edit
               />
@@ -135,6 +149,7 @@ export function ModalEditGroup({
             groupSlug={group.slug}
           />
         )}
+        {tab == 3 && <EditChildrenView group={group} />}
       </ResponsiveDialogContent>
     </ResponsiveDialog>
   );

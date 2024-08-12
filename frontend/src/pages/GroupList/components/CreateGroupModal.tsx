@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createGroupApi } from '#modules/group/api/createGroup.api';
 import { useGroupFormValues } from '#modules/group/hooks/useGroupFormValues';
 import { CreateGroupForm, Group } from '#modules/group/types/group.types';
+import { GroupTypePreview } from '#modules/group/types/groupType.types';
 import { GroupFormFields } from '#modules/group/view/shared/GroupFormFields';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
@@ -23,12 +24,14 @@ import { ApiFormError } from '#shared/infra/errors';
 export function CreateGroupModal({
   onClose,
   groupType,
+  parent,
 }: {
   onClose: () => void;
-  groupType: string;
+  groupType: GroupTypePreview;
+  parent?: Group;
 }) {
   const { t } = useTranslation();
-  const value = useGroupFormValues();
+  const value = useGroupFormValues({ parent: parent });
   const navigate = useNavigate();
   const { palette } = useTheme();
   const [formValues, setFormValues] = useState<CreateGroupForm>(value);
@@ -36,10 +39,10 @@ export function CreateGroupModal({
     Group,
     ApiFormError<CreateGroupForm>,
     CreateGroupForm
-  >(() => createGroupApi(groupType, formValues), {
+  >(() => createGroupApi(groupType.slug, formValues), {
     onSuccess: (group) => {
       onClose();
-      navigate(`/group/@${group.slug}`);
+      navigate(group.url);
     },
   });
   const isLoading = false;
@@ -72,6 +75,7 @@ export function CreateGroupModal({
             formValues={formValues}
             updateFormValues={updateFormValues}
             groupType={groupType}
+            prevData={{ parent }}
           />
         </form>
       </ResponsiveDialogContent>

@@ -109,6 +109,9 @@ class GroupViewSet(viewsets.ModelViewSet):
             self.query_params.get("is_member"), default=False
         )
         is_admin = parse_bool(self.query_params.get("is_admin"), default=False)
+        has_no_parent = parse_bool(
+            self.query_params.get("has_no_parent"), default=False
+        )
         slugs = self.query_params.getlist("slug")
         parents = self.query_params.getlist("parent")
 
@@ -132,6 +135,8 @@ class GroupViewSet(viewsets.ModelViewSet):
                 | Q(group_type__hide_no_active_members=False),
             )
         )
+        if has_no_parent:
+            queryset = queryset.filter(parent=None)
         # hide private groups unless user is member
         if user.is_authenticated:
             queryset = queryset.filter(

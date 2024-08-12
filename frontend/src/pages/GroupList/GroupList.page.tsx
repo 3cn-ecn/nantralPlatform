@@ -90,7 +90,7 @@ export default function GroupListPage() {
             ))}
         </FlexCol>
       </InfiniteList>
-      {groupType?.canCreate && <CreateGroupButton groupType={groupType.slug} />}
+      {groupType?.canCreate && <CreateGroupButton groupType={groupType} />}
     </Container>
   );
 }

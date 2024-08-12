@@ -44,7 +44,13 @@ class GroupTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupType
-        fields = ["name", "slug", "no_membership_dates", "can_create"]
+        fields = [
+            "name",
+            "slug",
+            "no_membership_dates",
+            "can_create",
+            "can_have_parent",
+        ]
 
     def get_can_create(self, obj: GroupType):
         user = self.context.get("request").user
@@ -114,6 +120,7 @@ class GroupSerializer(serializers.ModelSerializer):
             "url",
             "category",
             "sub_category",
+            "parent",
         ]
 
     def get_url(self, obj: Group) -> str:
@@ -146,12 +153,60 @@ class GroupWriteSerializer(serializers.ModelSerializer):
             "updated_at",
             "updated_by",
         ]
-        read_only_fields = ["group_type", "parent", "url", "tags"]
+        read_only_fields = ["group_type", "url", "tags"]
+
+    def get_group_type(self) -> GroupType:
+        group: Group | None = self.instance
+        if group is None:
+            group_type = self.context["request"].query_params.get("type")
+            return GroupType.objects.get(slug=group_type)
+        else:
+            return group.group_type
+
+    def validate_parent(self, parent: Group | None):
+        if parent is None:
+            # Nothing to validate in that case
+            return parent
+
+        group: Group | None = self.instance
+        group_type = self.get_group_type()
+
+        if group == parent:
+            raise exceptions.ValidationError("Can't assign itself as a parent")
+
+        if not group_type.can_have_parent:
+            raise exceptions.ValidationError(
+                "Can't assign a parent to that group"
+            )
+
+        if parent.parent is not None:
+            raise exceptions.ValidationError(
+                "Can't choose a subgroup as parent"
+            )
+
+        if group and len(group.children.all()) > 0:
+            raise exceptions.ValidationError(
+                "A group having children can't have a parent"
+            )
+
+        return parent
 
     def validate(self, data):
-        if not self.instance:
-            group_type = self.context["request"].query_params.get("type")
-            data["group_type"] = GroupType.objects.get(slug=group_type)
+        group_type = self.get_group_type()
+        # assign group_type to data so that the group is updated
+        data["group_type"] = group_type
+
+        parent: Group = data.get("parent")
+        if parent and not group_type.can_have_parent:
+            raise exceptions.ValidationError(
+                "Can't assign parent to that group"
+            )
+
+        if parent and parent.group_type != group_type:
+            raise exceptions.ValidationError(
+                "Parent group type and this group type do not match"
+            )
+
         return super().validate(data)
 
 

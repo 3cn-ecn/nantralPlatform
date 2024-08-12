@@ -63,4 +63,5 @@ export type CreateGroupForm = Pick<
   banner?: File;
   label: number;
   tags: number[];
+  parent?: number;
 };

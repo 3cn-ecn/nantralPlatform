@@ -3,4 +3,5 @@ export interface GroupTypePreview {
   slug: string;
   noMembershipDates: boolean;
   canCreate: boolean;
+  canHaveParent: boolean;
 }

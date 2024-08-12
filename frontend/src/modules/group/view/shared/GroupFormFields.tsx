@@ -20,13 +20,16 @@ import {
 import { useQuery } from '@tanstack/react-query';
 
 import { getGroupLabelApi } from '#modules/group/api/getGroupLabel.api';
+import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import {
   Group,
   CreateGroupForm as GroupForm,
 } from '#modules/group/types/group.types';
+import { GroupTypePreview } from '#modules/group/types/groupType.types';
 import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
+  AutocompleteSearchField,
   CheckboxField,
   DateField,
   FileField,
@@ -38,13 +41,13 @@ import { SetObjectStateAction } from '#shared/hooks/useObjectState';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
-interface EventFormFieldsProps {
+interface GroupFormFieldsProps {
   isError: boolean;
   error: ApiFormError<GroupForm> | null;
   formValues: GroupForm;
   updateFormValues: Dispatch<SetObjectStateAction<GroupForm>>;
-  prevData?: Group;
-  groupType: string;
+  prevData?: Partial<Group>;
+  groupType: GroupTypePreview;
   edit?: boolean;
   // selectedLang: BaseLanguage;
 }
@@ -57,10 +60,10 @@ export function GroupFormFields({
   prevData,
   groupType,
   edit = false,
-}: EventFormFieldsProps) {
+}: GroupFormFieldsProps) {
   const { t } = useTranslation();
   const { data, isSuccess } = useQuery({
-    queryFn: () => getGroupLabelApi({ groupType: groupType }),
+    queryFn: () => getGroupLabelApi({ groupType: groupType.slug }),
     queryKey: ['getGroupLabels', groupType],
   });
 
@@ -131,6 +134,30 @@ export function GroupFormFields({
             ))}
           </SelectField>
         </FlexAuto>
+      )}
+      {groupType.canHaveParent && (
+        <AutocompleteSearchField
+          name="parent"
+          label={'Parent'}
+          value={formValues.parent || null}
+          handleChange={(val: number) => updateFormValues({ parent: val })}
+          defaultObjectValue={prevData?.parent || null}
+          errors={error?.fields?.parent}
+          fetchInitialOptions={() =>
+            getGroupListApi({ hasNoParent: true, type: groupType.slug }).then(
+              (res) => res.results,
+            )
+          }
+          fetchOptions={(inputValue) =>
+            getGroupListApi({
+              parent: null,
+              type: groupType.slug,
+              search: inputValue,
+            }).then((res) => res.results)
+          }
+          labelPropName="name"
+          imagePropName="icon"
+        />
       )}
       <FlexRow alignItems={'center'} mt={2} gap={1}>
         <Image />

@@ -32,6 +32,7 @@
     }
   },
   "button": {
+    "add": "Add",
     "back": "Back",
     "cancel": "Cancel",
     "confirm": "OK",
@@ -307,7 +308,8 @@
         }
       },
       "formerMembers": "Former members",
-      "from": {},
+      "from": {
+      },
       "infoLine": {
         "events": "event(s)",
         "members": "member(s)"
@@ -333,7 +335,8 @@
           "tabs": {
             "general": "General",
             "links": "Links",
-            "members": "Members"
+            "members": "Members",
+            "subgroups": "Subgroups"
           },
           "title": "Edit group"
         },
@@ -349,6 +352,7 @@
       "requestAdmin": "Ask to be an admin",
       "requestSent": "Request sent",
       "requestToBeAdmin": "{{student}} asks to be admin",
+      "subGroupOf": "Subgroup of",
       "subgroups": "Subgroups",
       "tabs": {
         "adminRequests": "Admin Requests",

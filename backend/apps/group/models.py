@@ -89,6 +89,7 @@ class GroupType(models.Model):
         verbose_name=_("Everyone can create new group"),
         default=False,
     )
+    can_have_parent = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = _("group type")

@@ -63,4 +63,5 @@ export type CreateGroupFormDTO = Pick<
   banner?: File;
   label: number | null;
   tags: number[];
+  parent?: number;
 };
