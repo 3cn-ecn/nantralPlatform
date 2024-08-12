@@ -41,7 +41,7 @@ export function EditMembersView({ group }: EditMembersViewProps) {
     });
   }
   const today = roundToNearestMinutes(new Date());
-  const queryKey = ['members', { slug: group.slug }];
+  const queryKey = ['members', { slug: group.slug, from: today }];
   const { mutate } = useMutation(reorderMembership, {
     onMutate: async ({ updatedMemberships }) => {
       // snapshot previous value
