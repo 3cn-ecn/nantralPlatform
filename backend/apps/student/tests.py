@@ -1,6 +1,5 @@
 from django.test import TestCase
 from django.urls import reverse
-
 from rest_framework import status
 
 from apps.utils.utest import TestMixin

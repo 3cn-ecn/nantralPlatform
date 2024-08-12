@@ -7,12 +7,12 @@ from django.contrib.auth import authenticate
 from django.core import mail
 from django.test import TestCase
 from django.urls import reverse
-
 from django_rest_passwordreset.models import ResetPasswordToken
 from freezegun import freeze_time
 from rest_framework import status
 
 from apps.account.models import InvitationLink
+from apps.utils.testing.mocks import create_student_user
 
 from .api_views import (
     ACCOUNT_TEMPORARY,
@@ -408,7 +408,7 @@ class TestForgottenPassword(TestCase):
     """
 
     def setUp(self):
-        self.user = User.objects.create_user(
+        self.user = create_student_user(
             email="test@ec-nantes.fr",
             password="test",
         )

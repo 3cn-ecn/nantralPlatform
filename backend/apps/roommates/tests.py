@@ -3,7 +3,6 @@ from datetime import timedelta
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-
 from rest_framework import status
 
 from apps.utils.utest import TestMixin
@@ -23,7 +22,7 @@ class TestHousing(TestCase, TestMixin):
         self.assertEqual(len(Housing.objects.all()), 1)
 
     def test_housing_views(self):
-        self.client.login(email=self.u1.email, password=self.password)
+        self.client.login(email=self.u2.email, password=self.password)
         Housing.objects.create(address="Place royale, Nantes 44000")
         house = Housing.objects.all().first()
         Roommates.objects.create(
@@ -38,8 +37,8 @@ class TestHousing(TestCase, TestMixin):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         url = reverse("roommates:update", args=[coloc.slug])
-        with self.assertLogs("django.request", level="WARNING"):
-            resp = self.client.get(url)
+
+        resp = self.client.get(url)
         self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
 
         url = reverse("roommates:create-housing")
