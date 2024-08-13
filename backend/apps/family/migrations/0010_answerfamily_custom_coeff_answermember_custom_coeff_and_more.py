@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("family", "0009_alter_basequestion_details_and_more"),
     ]
