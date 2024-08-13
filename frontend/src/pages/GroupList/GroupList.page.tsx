@@ -38,7 +38,7 @@ export default function GroupListPage() {
       >
         <FlexRow alignItems={'center'} gap={1} mb={1}>
           <Typography variant="h1">
-            {query.isLoading ? (
+            {query.isLoading || !groupType?.name ? (
               <Skeleton width={250} variant="text" />
             ) : (
               `${groupType?.name} (${count})`
