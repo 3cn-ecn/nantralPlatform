@@ -23,7 +23,7 @@ import { useGroupTypeDetails } from './hooks/useGroupTypeDetails';
 export default function GroupListPage() {
   const [params] = useSearchParams();
   const type = params.get('type') || undefined;
-  const { groupsByCategory, query, count } = useGroupList(type);
+  const { groupsByCategory, query: groupListQuery, count } = useGroupList(type);
   const { t } = useTranslation();
   const groupTypeQuery = useGroupTypeDetails(type);
   const { staff } = useCurrentUserData();
@@ -38,7 +38,7 @@ export default function GroupListPage() {
       >
         <FlexRow alignItems={'center'} gap={1} mb={1}>
           <Typography variant="h1">
-            {groupTypeQuery.isLoading ? (
+            {groupTypeQuery.isLoading || groupListQuery.isLoading ? (
               <Skeleton width={250} variant="text" />
             ) : (
               `${groupTypeQuery.data?.name} (${count})`
@@ -69,9 +69,9 @@ export default function GroupListPage() {
       </FlexRow>
       <Divider />
       <Spacer vertical={2} />
-      <InfiniteList query={query}>
+      <InfiniteList query={groupListQuery}>
         <FlexCol gap={4}>
-          {query.isSuccess &&
+          {groupListQuery.isSuccess &&
             groupsByCategory &&
             Object.keys(groupsByCategory).map((cat) => (
               <FlexCol key={cat}>
@@ -79,7 +79,8 @@ export default function GroupListPage() {
                   {cat}
                 </Typography>
                 <GroupGrid estimatedSize={100} groups={groupsByCategory[cat]} />
-                {(query.isLoading || query.isFetchingNextPage) && (
+                {(groupListQuery.isLoading ||
+                  groupListQuery.isFetchingNextPage) && (
                   <GroupGrid
                     estimatedSize={100}
                     groups={groupsByCategory[cat]}
