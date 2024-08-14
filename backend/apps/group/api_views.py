@@ -117,10 +117,6 @@ class GroupViewSet(viewsets.ModelViewSet):
 
         queryset = (
             Group.objects
-            # remove the sub-groups to keep only parent groups
-            .filter(
-                Q(parent=None) | Q(parent__in=F("group_type__extra_parents")),
-            )
             # hide archived groups
             .filter(archived=False)
             # hide groups without active members (ie end_date > today)
@@ -135,8 +131,16 @@ class GroupViewSet(viewsets.ModelViewSet):
                 | Q(group_type__hide_no_active_members=False),
             )
         )
+
+        # remove the sub-groups to keep only parent groups if no parent specified
+        if len(parents) == 0:
+            queryset = queryset.filter(
+                Q(parent=None) | Q(parent__in=F("group_type__extra_parents")),
+            )
+        # keep only parent groups
         if has_no_parent:
             queryset = queryset.filter(parent=None)
+
         # hide private groups unless user is member
         if user.is_authenticated:
             queryset = queryset.filter(
