@@ -31,14 +31,12 @@ function GroupItem({ group, size }: GroupItemProps) {
           alt={group.name}
         />
       </Link>
-      <Typography textAlign={'center'}>
-        {group.shortName}
-        {group.subCategory && (
-          <Typography color="gray" variant="body1">
-            {group.subCategory}
-          </Typography>
-        )}
-      </Typography>
+      <Typography textAlign={'center'}>{group.shortName}</Typography>
+      {group.subCategory && (
+        <Typography color="gray" variant="body1">
+          {group.subCategory}
+        </Typography>
+      )}
     </FlexCol>
   );
 }
