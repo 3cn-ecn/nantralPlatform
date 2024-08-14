@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
+import { LoaderFunctionArgs, redirect, RouteObject } from 'react-router-dom';
 
 import { getGroupDetailsApi } from '#modules/group/api/getGroupDetails.api';
 import { getGroupTypeDetailsApi } from '#modules/group/api/getGroupTypeDetails.api';
@@ -29,7 +29,7 @@ async function groupTypeLoader(obj: LoaderFunctionArgs<unknown>) {
       ],
     };
   } catch {
-    return {};
+    return redirect('/group');
   }
 }
 
