@@ -21,7 +21,7 @@ const emptyUser = {
 export function useCurrentUserData() {
   const { isAuthenticated } = useAuth();
   const query = useQuery<Student, ApiError>({
-    queryKey: ['student', 'current', isAuthenticated],
+    queryKey: ['student', 'current'],
     queryFn: ({ signal }) => getCurrentUserApi({ signal }),
     enabled: isAuthenticated,
   });
