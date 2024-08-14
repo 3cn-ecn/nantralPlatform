@@ -44,6 +44,9 @@ from .serializers import (
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupTypeSerializer
     lookup_field = "slug"
+    filter_backends = [filters.OrderingFilter]
+    ordering = ["-priority"]
+    ordering_fields = ["slug", "name", "priority"]
     lookup_url_kwarg = "slug"
     queryset = GroupType.objects.all()
 

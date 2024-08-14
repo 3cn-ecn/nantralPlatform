@@ -44,6 +44,7 @@ class GroupType(models.Model):
         default=False,
         help_text=_("New groups are private by default."),
     )
+    priority = models.IntegerField(verbose_name=_("Priority"), default=0)
 
     # Group list display settings
     extra_parents = models.ManyToManyField(
