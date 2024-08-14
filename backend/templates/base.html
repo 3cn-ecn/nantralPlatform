@@ -1,124 +1,143 @@
-{% load static %}
-{% load file_url %}
-{% load django_vite %}
+{% load static %} {% load file_url %} {% load django_vite %}
 
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
-  <meta name="vapid-key" content="{{ vapid_key }}">
-  <!-- css -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=7">
-  <!-- js --> 
-  {% vite_hmr_client %}
-  {% vite_react_refresh %}
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-  <!-- fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet"> 
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
-  <!-- favicon -->
-  <link rel="shortcut icon" href="{% static '/img/logo/scalable/logo.svg' %}">
-  <!-- Facebook / Twitter preview -->
-  <meta property="og:type" content="website" />
-  <meta
-    property="og:image"
-    content="{% static 'img/default-banner.png' %}"
-  />
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta
-    property="twitter:image"
-    content="{% static 'img/default-banner.png' %}"
-  />
-  {% block head %}
-    <meta name="description" CONTENT="Bienvenue sur Nantral Platform, le site des clubs et assos de Centrale Nantes !">
-  {% endblock %}
-  <title>
-    {% if ariane %}
-      {% with ariane|last as page %}{{page.label}} - {% endwith %}
-    {% endif %}
-    Nantral Platform
-  </title>
-</head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="{% static 'manifest.webmanifest' %}" />
+    <meta name="vapid-key" content="{{ vapid_key }}" />
+    <!-- css -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=7" />
+    <!-- js -->
+    {% vite_hmr_client %} {% vite_react_refresh %}
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+      crossorigin="anonymous"
+    ></script>
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&display=swap" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{% static '/img/logo/scalable/logo.svg' %}" />
+    <!-- Facebook / Twitter preview -->
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="{% static 'img/default-banner.png' %}" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:image" content="{% static 'img/default-banner.png' %}" />
+    {% block head %}
+    <meta name="description" content="Bienvenue sur Nantral Platform, le site des clubs et assos de Centrale Nantes !" />
+    {% endblock %}
+    <title>{% if ariane %} {% with ariane|last as page %}{{page.label}} - {% endwith %} {% endif %} Nantral Platform</title>
+  </head>
 
-<body>
-  
-  <nav class="navbar navbar-expand sticky-top navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
-    <div class="container-fluid px-4">
-      <ul class="menuSet navbar-nav pe-2">
-        <li id="appMenu" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown" >
-            <img src='{% static "/img/icons/scalable/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy">
-          </a>
-        </li>
-      </ul>
-      <div id="fil-dariane" class="navbar-brand">
-        {# On rajoute des <!-- --> pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
-        <a class="ariane-link" href="/" style="font-weight: 900;"><!--
-          --><img src="{% static '/img/logo/scalable/logo.svg' %}" width="30" height="30" class="d-inline-block align-top me-2" alt="" loading="lazy"><!--
-          --><span class="ms-0">Nantral Platform.</span><!--
-        --></a><!--
+  <body>
+    <nav class="navbar navbar-expand sticky-top navbar-light bg-light" style="box-shadow: 1px 1px 7px #999">
+      <div class="container-fluid px-4">
+        <ul class="menuSet navbar-nav pe-2">
+          <li id="appMenu" class="nav-item dropdown">
+            <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
+              <img src='{% static "/img/icons/scalable/menu.svg" %}' class="d-inline-block align-top" alt="menu" loading="lazy" />
+            </a>
+          </li>
+        </ul>
+        <div id="fil-dariane" class="navbar-brand">
+          {# On rajoute des
+          <!-- -->
+          pour corriger un bug html (ça rajoute des espaces en trop sinon) #}
+          <a class="ariane-link" href="/" style="font-weight: 900"
+            ><!--
+          --><img
+              src="{% static '/img/logo/scalable/logo.svg' %}"
+              width="30"
+              height="30"
+              class="d-inline-block align-top me-2"
+              alt=""
+              loading="lazy"
+            /><!--
+          --><span class="ms-0">Nantral Platform.</span
+            ><!--
+        --></a
+          ><!--
         -->{% for link in ariane %}<!--
-          --><i class="fas fa-angle-right"></i><!--
-          --><a class="ariane-link" href="{{ link.target }}" style="font: 'Heebo'; font-weight: 900;"><span>{{ link.label }}</span></a><!--
-        -->{% empty %}
-          <span></span><span></span>
-        {% endfor %}
+          --><i class="fas fa-angle-right"></i
+          ><!--
+          --><a class="ariane-link" href="{{ link.target }}" style="font: 'Heebo'; font-weight: 900"
+            ><span>{{ link.label }}</span></a
+          ><!--
+        -->{% empty %} <span></span><span></span>
+          {% endfor %}
+        </div>
+        <ul class="menuSet navbar-nav ms-auto align-items-center">
+          {% if user.is_authenticated %}
+          <li id="notificationPanel" class="nav-item dropdown">
+            <a class="nav-link disabled" href="#" role="button">
+              <img
+                src='{% static "/img/icons/scalable/notification.svg" %}'
+                class="d-inline-block align-top"
+                alt="notifications"
+                loading="lazy"
+              />
+            </a>
+          </li>
+          <li id="userMenu" class="nav-item dropdown">
+            <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
+              <img
+                src='{% static "/img/icons/scalable/people.svg" %}'
+                class="d-inline-block align-top"
+                alt="compte personnel"
+                loading="lazy"
+              />
+            </a>
+          </li>
+          {% else %}
+          <li id="userMenuUnauthenticated" class="nav-item dropdown">
+            <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
+              <img
+                src='{% static "/img/icons/scalable/people.svg" %}'
+                class="d-inline-block align-top"
+                alt="compte personnel"
+                loading="lazy"
+              />
+            </a>
+          </li>
+          {% endif %}
+        </ul>
       </div>
-      <ul class="menuSet navbar-nav ms-auto align-items-center">
-        {% if user.is_authenticated %}
-        <li id="notificationPanel" class="nav-item dropdown">
-          <a class="nav-link disabled" href="#" role="button">
-            <img src='{% static "/img/icons/scalable/notification.svg" %}' class="d-inline-block align-top" alt="notifications" loading="lazy">
-          </a>
-        </li>
-        <li id="userMenu" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
-            <img src='{% static "/img/icons/scalable/people.svg" %}' class="d-inline-block align-top" alt="compte personnel" loading="lazy">
-          </a>
-        </li>
-        {% else %}
-        <li id="userMenuUnauthenticated" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggler disabled" href="#" role="button" data-bs-toggle="dropdown">
-            <img src='{% static "/img/icons/scalable/people.svg" %}' class="d-inline-block align-top" alt="compte personnel" loading="lazy">
-          </a>
-        </li>
-        {% endif %}
-      </ul>
+    </nav>
+
+    {% block banniere %} {% endblock %}
+
+    <div class="container">
+      {% if messages %} {% for message in messages %}
+      <div
+        id="alertScore"
+        class="alert alert-{% if message.tags == 'error'%}danger{%else%}{{message.tags}}{%endif%} alert-dismissible fade show mt-4"
+        role="alert"
+      >
+        {{ message|safe }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {%endfor%} {% endif %}
+
+      <br />
+      {% block content %} {% endblock %}
+
+      <br /><br /><br />
     </div>
-  </nav>
-  
-  {% block banniere %}
-  {% endblock %}
-  
-  <div class="container">
-  {% if messages %}
-    {% for message in messages %}
-    <div id="alertScore" class="alert alert-{% if message.tags == 'error'%}danger{%else%}{{message.tags}}{%endif%} alert-dismissible fade show mt-4" role="alert">
-      {{ message|safe }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {%endfor%}
-  {% endif %}
 
-  <br>
-  {% block content %}
-  {% endblock %}
+    <footer id="footer-install-app"></footer>
+    <footer id="footer-offline"></footer>
 
-  <br><br><br>
-  </div>
-
-  <footer id="footer-install-app"></footer>
-  <footer id="footer-offline"></footer>
-
-  {% vite_asset 'src/legacy/app/app.tsx' %}
-
-  {% block script %}
-  {% endblock %}
-</body>
-
+    {% vite_asset 'src/legacy/app/app.tsx' %} {% block script %} {% endblock %}
+  </body>
 </html>
