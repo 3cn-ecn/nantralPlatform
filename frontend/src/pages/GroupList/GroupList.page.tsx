@@ -25,7 +25,7 @@ export default function GroupListPage() {
   const type = params.get('type') || undefined;
   const { groupsByCategory, query, count } = useGroupList(type);
   const { t } = useTranslation();
-  const groupType = useGroupTypeDetails(type);
+  const groupTypeQuery = useGroupTypeDetails(type);
   const { staff } = useCurrentUserData();
 
   return (
@@ -38,10 +38,10 @@ export default function GroupListPage() {
       >
         <FlexRow alignItems={'center'} gap={1} mb={1}>
           <Typography variant="h1">
-            {query.isLoading || !groupType?.name ? (
+            {groupTypeQuery.isLoading ? (
               <Skeleton width={250} variant="text" />
             ) : (
-              `${groupType?.name} (${count})`
+              `${groupTypeQuery.data?.name} (${count})`
             )}
           </Typography>
         </FlexRow>
@@ -90,7 +90,9 @@ export default function GroupListPage() {
             ))}
         </FlexCol>
       </InfiniteList>
-      {groupType?.canCreate && <CreateGroupButton groupType={groupType} />}
+      {groupTypeQuery.data?.canCreate && (
+        <CreateGroupButton groupType={groupTypeQuery.data} />
+      )}
     </Container>
   );
 }
