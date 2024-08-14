@@ -1,8 +1,12 @@
 import { lazy } from 'react';
 import { LoaderFunctionArgs, redirect, RouteObject } from 'react-router-dom';
 
+import { QueryClient } from '@tanstack/react-query';
+
 import { getGroupDetailsApi } from '#modules/group/api/getGroupDetails.api';
 import { getGroupTypeDetailsApi } from '#modules/group/api/getGroupTypeDetails.api';
+import { Group } from '#modules/group/types/group.types';
+import { GroupTypePreview } from '#modules/group/types/groupType.types';
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
 const LegalNoticePage = lazy(() => import('#pages/LegalNotice/Legal.page'));
@@ -12,19 +16,31 @@ const GroupDetailsPage = lazy(
 );
 const t = (key: string) => key;
 
-async function groupTypeLoader(obj: LoaderFunctionArgs<unknown>) {
-  const type = new URL(obj.request.url).searchParams.get('type');
+// load crumbs data
+async function groupListLoader(
+  args: LoaderFunctionArgs<unknown>,
+  queryClient: QueryClient,
+) {
+  const type = new URL(args.request.url).searchParams.get('type');
   if (!type) {
     return {};
   }
+
   try {
-    const groupType = await getGroupTypeDetailsApi(type);
+    const queryKey = ['getGroupTypeDetails', type];
+    const groupType: GroupTypePreview =
+      queryClient.getQueryData(queryKey) ??
+      (await queryClient.fetchQuery({
+        queryFn: () => getGroupTypeDetailsApi(type),
+        queryKey,
+      }));
+
     return {
       extraCrumb: [
         {
           id: groupType.slug,
           label: groupType.name,
-          path: obj.request.url,
+          path: args.request.url,
         },
       ],
     };
@@ -33,13 +49,23 @@ async function groupTypeLoader(obj: LoaderFunctionArgs<unknown>) {
   }
 }
 
-async function groupDetailsLoader(obj: LoaderFunctionArgs<unknown>) {
-  const type = obj.params.type;
+// load crumbs data
+async function groupDetailsLoader(
+  args: LoaderFunctionArgs<unknown>,
+  queryClient: QueryClient,
+) {
+  const type = args.params.type;
   if (!type) {
     return {};
   }
   try {
-    const group = await getGroupDetailsApi(type.slice(1));
+    const queryKey = ['group', { slug: type.slice(1) }];
+    const group: Group =
+      queryClient.getQueryData(queryKey) ??
+      (await queryClient.fetchQuery({
+        queryFn: async () => getGroupDetailsApi(type.slice(1)),
+        queryKey,
+      }));
     return {
       extraCrumb: [
         {
@@ -59,7 +85,9 @@ async function groupDetailsLoader(obj: LoaderFunctionArgs<unknown>) {
   }
 }
 
-export const publicRoutes: RouteObject = {
+export const publicRoutes: (queryClient: QueryClient) => RouteObject = (
+  queryClient,
+) => ({
   element: <PageTemplate />,
   children: [
     {
@@ -72,16 +100,16 @@ export const publicRoutes: RouteObject = {
       handle: { crumb: t('breadcrumbs.group.index') },
       children: [
         {
-          loader: groupTypeLoader,
+          loader: (args) => groupListLoader(args, queryClient),
           path: '',
           element: <GroupPage />,
         },
         {
-          loader: groupDetailsLoader,
+          loader: (args) => groupDetailsLoader(args, queryClient),
           path: ':type',
           element: <GroupDetailsPage />,
         },
       ],
     },
   ],
-};
+});
