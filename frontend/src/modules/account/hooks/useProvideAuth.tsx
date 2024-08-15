@@ -44,7 +44,10 @@ export function useProvideAuth(): ProvideAuthValues {
     AxiosError<{ message?: string; code?: string }>,
     LoginApiBody
   >(loginApi, {
-    onSuccess: () => queryClient.setQueryData(['isAuthenticated'], true),
+    onSuccess: () => {
+      queryClient.clear();
+      queryClient.setQueryData(['isAuthenticated'], true);
+    },
   });
 
   return {

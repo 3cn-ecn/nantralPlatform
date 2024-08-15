@@ -2,11 +2,8 @@ import { useQueries, useQuery } from '@tanstack/react-query';
 
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { getGroupTypesApi } from '#modules/group/api/getGroupTypes.api';
-import { useAuth } from '#shared/context/Auth.context';
 
 export function useGroupTypes(pageSize: number) {
-  const { isAuthenticated } = useAuth();
-
   const groupTypesQuery = useQuery({
     queryFn: getGroupTypesApi,
     queryKey: ['getGroupTypes'],
@@ -17,7 +14,7 @@ export function useGroupTypes(pageSize: number) {
       groupTypesQuery.data?.results.map((groupType) => ({
         queryFn: () =>
           getGroupListApi({ type: groupType.slug, pageSize: pageSize }),
-        queryKey: ['getGroupList', groupType.slug, isAuthenticated],
+        queryKey: ['getGroupList', groupType.slug],
         enabled: groupTypesQuery.isSuccess,
       })) || [],
   });
