@@ -430,7 +430,8 @@
       }
     },
     "list": {
-      "editType": "Modifier le type"
+      "editType": "Modifier le type",
+      "noGroup": "Aucun groupe à afficher 🤔"
     },
     "modal": {
       "createGroup": {

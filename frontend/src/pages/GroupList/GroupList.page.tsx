@@ -91,6 +91,9 @@ export default function GroupListPage() {
             ))}
         </FlexCol>
       </InfiniteList>
+      {groupListQuery.data?.pages[0].count === 0 && (
+        <Typography>{t('group.list.noGroup')}</Typography>
+      )}
       {groupTypeQuery.data?.canCreate && (
         <CreateGroupButton groupType={groupTypeQuery.data} />
       )}

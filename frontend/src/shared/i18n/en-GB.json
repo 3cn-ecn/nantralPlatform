@@ -430,7 +430,8 @@
       }
     },
     "list": {
-      "editType": "Edit Type"
+      "editType": "Edit Type",
+      "noGroup": "No groups to display 🤔"
     },
     "modal": {
       "createGroup": {
