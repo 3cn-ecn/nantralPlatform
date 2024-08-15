@@ -11,14 +11,14 @@ type InfiniteListProps = PropsWithChildren<{ query: UseInfiniteQueryResult }>;
  */
 export function InfiniteList({ query, children }: InfiniteListProps) {
   const { inView, ref } = useInView();
-  const { fetchNextPage, hasNextPage } = query;
+  const { fetchNextPage, hasNextPage, isFetchingNextPage } = query;
 
   useEffect(() => {
     // fetch data in cascade if the div is inView
-    if (inView && hasNextPage) {
+    if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
-  }, [inView, hasNextPage, fetchNextPage]);
+  }, [inView, hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   return (
     <>
