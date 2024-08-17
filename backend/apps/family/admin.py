@@ -51,14 +51,31 @@ class OptionInline(admin.TabularInline):
 
 
 class QuestionMemberAdmin(admin.ModelAdmin):
+    list_display = [
+        "code_name",
+        "coeff",
+        "allow_custom_coef",
+        "order",
+        "group",
+        "page",
+    ]
+    list_filter = ["group", "page"]
     inlines = [OptionInline]
 
 
 class QuestionFamilyAdmin(admin.ModelAdmin):
+    list_display = ["code_name", "quota", "allow_custom_coef", "order"]
     inlines = [OptionInline]
 
 
 class GroupQuestionAdmin(admin.ModelAdmin):
+    list_display = [
+        "code_name",
+        "coeff",
+        "order",
+        "page",
+    ]
+    list_filter = ["page"]
     inlines = [OptionInline]
 
 
@@ -80,6 +97,7 @@ class QuestionGroupInline(admin.TabularInline):
 
 
 class QuestionPageAdmin(admin.ModelAdmin):
+    list_display = ["name", "order"]
     inlines = [QuestionGroupInline, QuestionMemberInline]
 
 
