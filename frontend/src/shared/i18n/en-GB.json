@@ -438,6 +438,9 @@
         "title": "Create a group"
       }
     },
+    "search": {
+      "placeholder": "Search for a group"
+    },
     "type": {
       "seeAll": "See all",
       "seeList": "See the list",

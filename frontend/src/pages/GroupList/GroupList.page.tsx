@@ -29,7 +29,7 @@ export default function GroupListPage() {
   const { staff } = useCurrentUserData();
 
   return (
-    <Container sx={{ my: 4 }}>
+    <Container sx={{ my: 3 }}>
       <FlexRow
         justifyContent={'space-between'}
         alignItems="center"
