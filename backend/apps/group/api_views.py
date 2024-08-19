@@ -241,7 +241,12 @@ class MembershipViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self) -> serializers.ModelSerializer:
         if self.action == "create":
             return NewMembershipSerializer
-        elif self.action in ["admin_request", "accept_request", "deny_request"]:
+        elif self.action in [
+            "admin_requests",
+            "admin_request",
+            "accept_request",
+            "deny_request",
+        ]:
             return super().get_serializer_class()
         else:
             return MembershipSerializer
@@ -431,22 +436,27 @@ class MembershipViewSet(viewsets.ModelViewSet):
         membership.save()
 
         try:
+            group = Group.objects.get(id=membership.group.pk)
             # send response by email
             mail = render_to_string(
                 "group/mail/accept_admin_request.html",
-                {"group": self.group, "user": self.student.user},
+                {"group": group, "user": request.user},
             )
             membership.student.user.email_user(
                 subject=(
                     _("Your admin request for %(group)s has been accepted.")
-                    % {"group": self.group.name}
+                    % {"group": membership.group.name}
                 ),
                 message=mail,
                 html_message=mail,
             )
+        except Exception:
+            ...
+
+        try:
             # send response on discord
             respond_admin_request(
-                f"La demande de {self.student} pour rejoindre {self.group} "
+                f"La demande de {membership.student} pour rejoindre {membership.group} "
                 "a été acceptée."
             )
         except Exception:
@@ -477,22 +487,27 @@ class MembershipViewSet(viewsets.ModelViewSet):
         membership.save()
 
         try:
+            group = Group.objects.get(id=membership.group.pk)
             # send response by email
             mail = render_to_string(
                 "group/mail/deny_admin_request.html",
-                {"group": self.group, "user": self.student.user},
+                {"group": group, "user": request.user},
             )
             membership.student.user.email_user(
                 subject=(
                     _("Your admin request for %(group)s has been denied.")
-                    % {"group": self.group.name}
+                    % {"group": membership.group.name}
                 ),
                 message=mail,
                 html_message=mail,
             )
+        except Exception:
+            ...
+
+        try:
             # send response on discord
             respond_admin_request(
-                f"La demande de {self.student} pour rejoindre {self.group} "
+                f"La demande de {membership.student} pour rejoindre {membership.group} "
                 "a été refusée."
             )
         except Exception:
