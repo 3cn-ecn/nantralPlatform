@@ -27,7 +27,7 @@ async function groupListLoader(
   }
 
   try {
-    const queryKey = ['getGroupTypeDetails', type];
+    const queryKey = ['groupType', type];
     const groupType: GroupTypePreview =
       queryClient.getQueryData(queryKey) ??
       (await queryClient.fetchQuery({

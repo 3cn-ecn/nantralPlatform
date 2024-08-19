@@ -1,11 +1,21 @@
-import { useQueries, useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
 import { getGroupTypesApi } from '#modules/group/api/getGroupTypes.api';
 
 export function useGroupTypes(pageSize: number) {
+  const queryClient = useQueryClient();
+
+  async function getGroupTypesAndCache() {
+    const groupTypes = await getGroupTypesApi();
+    groupTypes.results.forEach((type) =>
+      queryClient.setQueryData(['groupType', type.slug], type),
+    );
+    return groupTypes;
+  }
+
   const groupTypesQuery = useQuery({
-    queryFn: getGroupTypesApi,
+    queryFn: getGroupTypesAndCache,
     queryKey: ['getGroupTypes'],
   });
 

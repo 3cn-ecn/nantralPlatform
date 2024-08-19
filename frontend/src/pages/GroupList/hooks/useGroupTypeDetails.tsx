@@ -5,7 +5,7 @@ import { getGroupTypeDetailsApi } from '#modules/group/api/getGroupTypeDetails.a
 export function useGroupTypeDetails(type?: string) {
   const groupTypeQuery = useQuery({
     queryFn: () => getGroupTypeDetailsApi(type || ''),
-    queryKey: ['getGroupTypeDetails', type],
+    queryKey: ['groupType', type],
   });
   return groupTypeQuery;
 }
