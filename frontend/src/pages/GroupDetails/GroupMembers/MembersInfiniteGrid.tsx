@@ -34,6 +34,11 @@ export function MembersInfiniteGrid({
             .map((member) => (
               <MembershipCard group={group} key={member.id} item={member} />
             ))}
+          {membershipsQuery.data?.pages[0].count === 0 && (
+            <Typography px={2}>
+              {t('group.details.modal.editGroup.noMembers')}
+            </Typography>
+          )}
         </Grid>
       </InfiniteList>
       {filters.previous && (

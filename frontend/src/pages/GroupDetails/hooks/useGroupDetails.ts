@@ -27,8 +27,8 @@ export function useGroupDetails(slug?: string) {
   });
 
   const { data: members } = useQuery({
-    queryFn: () => getMembershipListApi({ group: slug }),
-    queryKey: ['members', { slug: slug }],
+    queryFn: () => getMembershipListApi({ group: slug, pageSize: 1 }),
+    queryKey: ['members', { slug: slug, pageSize: 1 }],
     enabled: isAuthenticated,
   });
 
