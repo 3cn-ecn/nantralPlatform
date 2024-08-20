@@ -9,6 +9,7 @@ import { CreateNewButton } from './views/CreateNewButton';
 import { HomeHeader } from './views/HomeHeader';
 import { HelpUsSection } from './views/section/HelpUsSection';
 import { LastPostsSection } from './views/section/LastPostsSection';
+import { MyGroupsSection } from './views/section/MyGroupsSection';
 import { PinnedPostsSection } from './views/section/PinnnedPostsSection';
 import { UpcomingEventsSection } from './views/section/UpcomingEventsSection';
 
@@ -35,6 +36,7 @@ export default function HomePage() {
         <PinnedPostsSection enabled={!openedPostId} />
         <UpcomingEventsSection enabled={!openedPostId} />
         <LastPostsSection enabled={!openedPostId} />
+        <MyGroupsSection />
         <Spacer vertical={3} />
         <HelpUsSection />
         <Spacer vertical={6} />

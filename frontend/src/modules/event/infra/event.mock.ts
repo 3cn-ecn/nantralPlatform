@@ -25,6 +25,7 @@ export function getMockEventPreview(
       url: '',
       shortName: `Group ${id}`,
       slug: `group-${id}`,
+      category: 'test',
     },
   };
 }

@@ -40,7 +40,7 @@ export function EditPostModalContent({
   const { palette } = useTheme();
 
   const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
-  const [formValues, updateFormValues] = usePostFormValues(post);
+  const [formValues, updateFormValues] = usePostFormValues({ post: post });
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<

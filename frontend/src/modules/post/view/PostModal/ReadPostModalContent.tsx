@@ -39,12 +39,7 @@ export function ReadPostModalContent({
       <ResponsiveDialogHeader
         onClose={onClose}
         leftIcon={
-          <IconButton
-            component={Link}
-            to={post.group.url}
-            reloadDocument
-            sx={{ p: 0.5 }}
-          >
+          <IconButton component={Link} to={post.group.url} sx={{ p: 0.5 }}>
             <Avatar src={post.group.icon} alt={post.group.shortName} />
           </IconButton>
         }

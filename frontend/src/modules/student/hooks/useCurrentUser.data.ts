@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { useAuth } from '#shared/context/Auth.context';
 import { useToast } from '#shared/context/Toast.context';
 import { ApiError } from '#shared/infra/errors';
 
@@ -18,9 +19,11 @@ const emptyUser = {
 };
 
 export function useCurrentUserData() {
+  const { isAuthenticated } = useAuth();
   const query = useQuery<Student, ApiError>({
     queryKey: ['student', 'current'],
     queryFn: ({ signal }) => getCurrentUserApi({ signal }),
+    enabled: isAuthenticated,
   });
 
   const showToast = useToast();

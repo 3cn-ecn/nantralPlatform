@@ -8,6 +8,7 @@ import { createEventApi } from '#modules/event/api/createEvent.api';
 import { Event, EventForm } from '#modules/event/event.type';
 import { useEventFormValues } from '#modules/event/hooks/useEventFormValues';
 import { EventFormDTO } from '#modules/event/infra/event.dto';
+import { Group } from '#modules/group/types/group.types';
 import { LanguageSelector } from '#shared/components/LanguageSelector/LanguageSelector';
 import { LoadingButton } from '#shared/components/LoadingButton/LoadingButton';
 import {
@@ -25,11 +26,13 @@ import { EventFormFields } from '../shared/EventFormFields';
 interface CreateEventModalProps {
   onClose: () => void;
   onCreated?: (id?: number) => void;
+  group?: Group;
 }
 
 export function CreateEventModal({
   onClose,
   onCreated = onClose,
+  group,
 }: CreateEventModalProps) {
   const { t, currentBaseLanguage } = useTranslation();
   const queryClient = useQueryClient();
@@ -37,7 +40,9 @@ export function CreateEventModal({
 
   const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
   // the values currently in our form
-  const [formValues, updateFormValues] = useEventFormValues();
+  const [formValues, updateFormValues] = useEventFormValues({
+    group: group,
+  });
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<
@@ -88,6 +93,7 @@ export function CreateEventModal({
             formValues={formValues}
             updateFormValues={updateFormValues}
             selectedLang={selectedLang}
+            prevData={{ group: group }}
           />
         </form>
       </ResponsiveDialogContent>

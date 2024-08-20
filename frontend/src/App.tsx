@@ -25,7 +25,7 @@ export function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <ToastProvider>
-            <RouterProvider router={router} />
+            <RouterProvider router={router(queryClient)} />
           </ToastProvider>
         </AuthProvider>
       </QueryClientProvider>

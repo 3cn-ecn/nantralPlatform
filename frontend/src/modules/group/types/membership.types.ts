@@ -14,3 +14,8 @@ export interface Membership {
   admin: boolean;
   adminRequest: string;
 }
+
+export type MembershipForm = Pick<
+  Membership,
+  'beginDate' | 'endDate' | 'summary' | 'description' | 'admin'
+> & { student: number; group: number };

@@ -1,10 +1,12 @@
 from django.db.models import Count, F, Q, QuerySet
 from django.http.request import QueryDict
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext as _
 
+from requests import Request
 from rest_framework import (
     decorators,
     exceptions,
@@ -16,50 +18,35 @@ from rest_framework import (
     viewsets,
 )
 
+from apps.utils.discord import respond_admin_request, send_admin_request
 from apps.utils.parse_bool import parse_bool
 
-from .models import Group, GroupType, Membership
+from .models import Group, GroupType, Label, Membership
+from .permissions import (
+    AdminRequestListPermission,
+    AdminRequestPermission,
+    GroupPermission,
+    MembershipPermission,
+)
 from .serializers import (
+    AdminRequestFormSerializer,
+    AdminRequestSerializer,
     GroupPreviewSerializer,
     GroupSerializer,
     GroupTypeSerializer,
     GroupWriteSerializer,
+    LabelSerializer,
     MembershipSerializer,
     NewMembershipSerializer,
 )
 
 
-class GroupPermission(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        if view.action == "create":
-            group_type = GroupType.objects.filter(
-                slug=request.query_params.get("type", None),
-            ).first()
-            if not group_type:
-                raise exceptions.ValidationError(
-                    _(
-                        "You must specify a valid group type in query parameters.",
-                    ),
-                )
-            return group_type.can_create
-        return True
-
-    def has_object_permission(self, request, view, obj: Group):
-        user = request.user
-        if request.method in permissions.SAFE_METHODS:
-            if obj.public:
-                return True
-            if obj.private:
-                return obj.is_member(user) or user.is_superuser
-            return user.is_authenticated
-        return obj.is_admin(request.user)
-
-
 class GroupTypeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupTypeSerializer
     lookup_field = "slug"
+    filter_backends = [filters.OrderingFilter]
+    ordering = ["-priority"]
+    ordering_fields = ["slug", "name", "priority"]
     lookup_url_kwarg = "slug"
     queryset = GroupType.objects.all()
 
@@ -69,18 +56,20 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     Query Parameters
     ----------------
-    type: slug
+    - type: slug
         Filter by group type
-    is_member: bool
+    - is_member: bool
         Filter by groups where user is member
-    is_admin: bool
+    - is_admin: bool
         Filter by groups where user is an admin member
-    slug: string (multiple)
+    - slug: string (multiple)
         Filter by one or multiple slug
-    page: int
+    - page: int
         The page to get
-    pageSize: int
+    - pageSize: int
         The max number of items to return per page
+    - parent: string (multiple)
+        Filter by one or multiple parent group slug
 
     Actions
     -------
@@ -119,16 +108,18 @@ class GroupViewSet(viewsets.ModelViewSet):
         group_type = GroupType.objects.filter(
             slug=self.query_params.get("type"),
         ).first()
-        is_member = parse_bool(self.query_params.get("is_member"), False)
-        is_admin = parse_bool(self.query_params.get("is_admin"), False)
+        is_member = parse_bool(
+            self.query_params.get("is_member"), default=False
+        )
+        is_admin = parse_bool(self.query_params.get("is_admin"), default=False)
+        has_no_parent = parse_bool(
+            self.query_params.get("has_no_parent"), default=False
+        )
         slugs = self.query_params.getlist("slug")
+        parents = self.query_params.getlist("parent")
 
         queryset = (
             Group.objects
-            # remove the sub-groups to keep only parent groups
-            .filter(
-                Q(parent=None) | Q(parent__in=F("group_type__extra_parents")),
-            )
             # hide archived groups
             .filter(archived=False)
             # hide groups without active members (ie end_date > today)
@@ -143,6 +134,16 @@ class GroupViewSet(viewsets.ModelViewSet):
                 | Q(group_type__hide_no_active_members=False),
             )
         )
+
+        # remove the sub-groups to keep only parent groups if no parent specified
+        if len(parents) == 0:
+            queryset = queryset.filter(
+                Q(parent=None) | Q(parent__in=F("group_type__extra_parents")),
+            )
+        # keep only parent groups
+        if has_no_parent:
+            queryset = queryset.filter(parent=None)
+
         # hide private groups unless user is member
         if user.is_authenticated:
             queryset = queryset.filter(
@@ -166,6 +167,9 @@ class GroupViewSet(viewsets.ModelViewSet):
         # filter by slug
         if slugs:
             queryset = queryset.filter(slug__in=slugs)
+        # filter by parent
+        if parents:
+            queryset = queryset.filter(parent__slug__in=parents)
 
         return (
             queryset
@@ -183,15 +187,6 @@ class GroupViewSet(viewsets.ModelViewSet):
         obj = get_object_or_404(Group, slug=self.kwargs["slug"])
         self.check_object_permissions(self.request, obj)
         return obj
-
-
-class MembershipPermission(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj: Membership):
-        if request.method in permissions.SAFE_METHODS:
-            return not obj.group.private or obj.group.is_member(request.user)
-        return obj.student.user == request.user or obj.group.is_admin(
-            request.user,
-        )
 
 
 class MembershipViewSet(viewsets.ModelViewSet):
@@ -232,7 +227,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         "group__short_name",
         "summary",
     ]
-    ordering_fields = []
+    ordering_fields = ["begin_date", "end_date", "priority", "admin"]
     ordering = [
         "-priority",
         "student__user__first_name",
@@ -246,8 +241,19 @@ class MembershipViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self) -> serializers.ModelSerializer:
         if self.action == "create":
             return NewMembershipSerializer
+        elif self.action in [
+            "admin_requests",
+            "admin_request",
+            "accept_request",
+            "deny_request",
+        ]:
+            return super().get_serializer_class()
         else:
             return MembershipSerializer
+
+    # simply to override the return type
+    def get_serializer(self, *args, **kwargs) -> serializers.Serializer:
+        return super().get_serializer(*args, **kwargs)
 
     def get_queryset(self) -> QuerySet[Membership]:
         """
@@ -279,9 +285,9 @@ class MembershipViewSet(viewsets.ModelViewSet):
                 Q(end_date__gte=from_date) | Q(end_date__isnull=True),
             )
         if to_date:
-            qs = qs.filter(
-                Q(begin_date__lt=to_date) | Q(begin_date__isnull=True),
-            )
+            qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True))
+        if self.action == "admin_requests":
+            qs = qs.filter(admin_request=True)
 
         qs = qs.prefetch_related("student__user").distinct()
         self.queryset = qs
@@ -290,12 +296,11 @@ class MembershipViewSet(viewsets.ModelViewSet):
     @decorators.action(detail=False, methods=["POST"])
     def reorder(self, request, *args, **kwargs):
         """
-        Action to reorder a membership. It changes the 'priority' fields for all
+        Action to reorder a membership. It changes the `priority` fields for all
         members of a group to place the member between two other members, in the
         list of memberships defined by the query parameters.
 
-        Body Parameters
-        ---------------
+        ## Body Parameters
         member: id of the membership we want to move elsewhere
         lower: id of the membership that should be just before the member,
                for the given query parameters, or None if member should be the
@@ -345,3 +350,194 @@ class MembershipViewSet(viewsets.ModelViewSet):
                 curr_index -= 1
             Membership.objects.bulk_update(members, ["priority"])
         return response.Response(status=status.HTTP_200_OK)
+
+    @decorators.action(
+        detail=False,
+        serializer_class=AdminRequestSerializer,
+        permission_classes=[
+            permissions.IsAuthenticated,
+            AdminRequestListPermission,
+        ],
+    )
+    def admin_requests(self, *args, **kwargs):
+        return self.list(*args, **kwargs)
+
+    @decorators.action(
+        detail=True,
+        methods=["POST"],
+        serializer_class=AdminRequestFormSerializer,
+    )
+    def admin_request(self, request: Request, *args, **kwargs):
+        membership: Membership = self.get_object()
+
+        serializer: AdminRequestFormSerializer = self.get_serializer(
+            data=request.data
+        )
+        if membership.admin:
+            raise exceptions.MethodNotAllowed(
+                "POST", detail="You are already admin of that group"
+            )
+        if membership.admin_request is True:
+            raise exceptions.MethodNotAllowed(
+                "POST", "Admin request already sent"
+            )
+
+        serializer.is_valid(raise_exception=True)
+
+        message = serializer.validated_data.get("admin_request_message")
+        membership.admin_request_message = message
+        membership.admin_request = True
+        membership.save()
+
+        try:
+            # send a message to the discord channel for administrators
+            relative_url = (
+                f"{membership.group.get_absolute_url()}?tab=adminRequests"
+            )
+            url = self.request.build_absolute_uri(relative_url)
+            send_admin_request(
+                f"{membership.student} demande à "
+                f"devenir admin de {membership.group.short_name}",
+                membership.admin_request_message,
+                url,
+            )
+        except Exception:
+            ...
+
+        return response.Response(
+            status=status.HTTP_200_OK,
+            data={
+                "detail": _(
+                    "Your admin request has been sent! You will receive the "
+                    "answer soon by email."
+                ),
+            },
+        )
+
+    @decorators.action(
+        detail=True,
+        methods=["POST"],
+        serializer_class=serializers.Serializer,
+        permission_classes=[
+            permissions.IsAuthenticated,
+            AdminRequestPermission,
+        ],
+    )
+    def accept_request(self, request, *args, **kwargs):
+        membership: Membership = self.get_object()
+        if not membership.admin_request:
+            raise exceptions.MethodNotAllowed(
+                "POST", _("Request already answered!")
+            )
+
+        membership.admin_request = False
+        membership.admin = True
+        membership.admin_request_message = ""
+        membership.save()
+
+        try:
+            group = Group.objects.get(id=membership.group.pk)
+            # send response by email
+            mail = render_to_string(
+                "group/mail/accept_admin_request.html",
+                {"group": group, "user": request.user},
+            )
+            membership.student.user.email_user(
+                subject=(
+                    _("Your admin request for %(group)s has been accepted.")
+                    % {"group": membership.group.name}
+                ),
+                message=mail,
+                html_message=mail,
+            )
+        except Exception:
+            ...
+
+        try:
+            # send response on discord
+            respond_admin_request(
+                f"La demande de {membership.student} pour rejoindre {membership.group} "
+                "a été acceptée."
+            )
+        except Exception:
+            ...
+
+        return response.Response(
+            {
+                "message": _("The user %(user)s is now admin!")
+                % {"user": membership.student}
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+
+    @decorators.action(
+        detail=True,
+        methods=["POST"],
+        serializer_class=serializers.Serializer,
+    )
+    def deny_request(self, request, *args, **kwargs):
+        membership: Membership = self.get_object()
+        if not membership.admin_request:
+            raise exceptions.MethodNotAllowed(
+                "POST", _("Request already answered!")
+            )
+
+        membership.admin_request = False
+        membership.admin_request_message = ""
+        membership.save()
+
+        try:
+            group = Group.objects.get(id=membership.group.pk)
+            # send response by email
+            mail = render_to_string(
+                "group/mail/deny_admin_request.html",
+                {"group": group, "user": request.user},
+            )
+            membership.student.user.email_user(
+                subject=(
+                    _("Your admin request for %(group)s has been denied.")
+                    % {"group": membership.group.name}
+                ),
+                message=mail,
+                html_message=mail,
+            )
+        except Exception:
+            ...
+
+        try:
+            # send response on discord
+            respond_admin_request(
+                f"La demande de {membership.student} pour rejoindre {membership.group} "
+                "a été refusée."
+            )
+        except Exception:
+            ...
+
+        return response.Response(
+            {
+                "message": _("The admin request from %(user)s has been denied.")
+                % {"user": membership.student}
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+
+
+class LabelViewSet(viewsets.ModelViewSet):
+    http_method_names = ["get"]
+    serializer_class = LabelSerializer
+    filter_backends = [filters.OrderingFilter]
+    permission_classes = [permissions.IsAuthenticated]
+    ordering_fields = ["priority", "name"]
+    ordering = ["-priority"]
+
+    @property
+    def query_params(self) -> QueryDict:
+        return self.request.query_params
+
+    def get_queryset(self):
+        qs = Label.objects.all()
+        group_type = self.query_params.get("group_type")
+        if group_type:
+            qs = qs.filter(group_type=group_type)
+
+        return qs

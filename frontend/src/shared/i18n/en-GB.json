@@ -14,6 +14,10 @@
       "home": "Feedback",
       "suggestion": "Suggestion"
     },
+    "group": {
+      "details": "Details",
+      "index": "Groups"
+    },
     "home": {
       "index": "Home"
     },
@@ -28,11 +32,17 @@
     }
   },
   "button": {
+    "add": "Add",
     "back": "Back",
     "cancel": "Cancel",
     "confirm": "OK",
+    "delete": "Delete",
+    "edit": "Edit",
     "next": "Next",
-    "previous": "Previous"
+    "previous": "Previous",
+    "save": "Save",
+    "saved": "Saved",
+    "send": "Send"
   },
   "error": {
     "errorMessage": "Error: {{errorMessage}}",
@@ -269,6 +279,174 @@
       "wrongFormat": "Invalid format"
     }
   },
+  "group": {
+    "details": {
+      "accept": "Accept",
+      "accepted": "Accepted",
+      "addMember": "Add a member",
+      "create": "Create",
+      "deleteMember": "Delete the member?",
+      "denied": "Denied",
+      "deny": "Deny",
+      "edit": "Edit",
+      "editGroup": {
+        "add": "Add"
+      },
+      "form": {
+        "description": {
+          "label": "Description"
+        },
+        "message": {
+          "helperText": "Request administrative rights to this group",
+          "label": "Message"
+        },
+        "summary": {
+          "label": "Summary"
+        },
+        "user": {
+          "label": "User"
+        }
+      },
+      "formerMembers": "Former members",
+      "from": {
+      },
+      "infoLine": {
+        "events": "event(s)",
+        "members": "member(s)"
+      },
+      "join": "Join",
+      "makeAdminRequest": "Make an admin request",
+      "member": "Member",
+      "modal": {
+        "deleteMember": {
+          "text": "Are you sure you want to remove {{ student }} from {{ group }} members?",
+          "title": "Delete member?"
+        },
+        "displayMember": {
+          "dates": "Member from {{ from }} to {{ to }}",
+          "descripition": "Member of {{group}}",
+          "openGroup": "Open group",
+          "openProfile": "Open profile"
+        },
+        "editGroup": {
+          "error": "An error occurred",
+          "members": "Members",
+          "noMembers": "No members at the moment",
+          "tabs": {
+            "general": "General",
+            "links": "Links",
+            "members": "Members",
+            "subgroups": "Subgroups"
+          },
+          "title": "Edit group"
+        },
+        "editMembership": {
+          "error": "Network error: rearrangement not saved",
+          "success": "Rearrangement saved!"
+        },
+        "joinGroup": {
+          "title": "Join {{group}}"
+        }
+      },
+      "noAdminReqests": "No admin requests",
+      "requestAdmin": "Ask to be an admin",
+      "requestSent": "Request sent",
+      "requestToBeAdmin": "{{student}} asks to be admin",
+      "subGroupOf": "Subgroup of",
+      "subgroups": "Subgroups",
+      "tabs": {
+        "adminRequests": "Admin Requests",
+        "events": "Events",
+        "home": "Home",
+        "members": "Members",
+        "posts": "Posts"
+      }
+    },
+    "form": {
+      "admin": {
+        "label": "Admin"
+      },
+      "archive": {
+        "helperText": "Archive the club. \nIt will no longer be visible on nantral platform.",
+        "label": "Archive"
+      },
+      "banner": {
+        "helperText": "Recommended size 1152x420 pixels",
+        "label": "Banner"
+      },
+      "beginDate": {
+        "label": "Begin date"
+      },
+      "creationDate": {
+        "label": "Creation date"
+      },
+      "endDate": {
+        "label": "End date"
+      },
+      "icon": {
+        "helperText": "Recommended size 400x400 pixels.",
+        "label": "Icon"
+      },
+      "label": {
+        "label": "Label",
+        "none": "None"
+      },
+      "meetingHour": {
+        "label": "Meeting time"
+      },
+      "meetingPlace": {
+        "label": "Meeting place"
+      },
+      "name": {
+        "label": "Name"
+      },
+      "private": {
+        "helperText": "Make the club invisible to everyone except members",
+        "label": "Private"
+      },
+      "public": {
+        "helperText": "Visible to users who are not logged in. \nHowever, members and events will remain hidden.",
+        "label": "Public"
+      },
+      "shortName": {
+        "helperText": "This name is used on the groups page",
+        "label": "Shortened name"
+      },
+      "summary": {
+        "label": "Summary"
+      },
+      "title": {
+        "additionalInformation": "Additional information",
+        "advancedOptions": "Advanced options",
+        "general": "General",
+        "images": "Images",
+        "videos": "Videos"
+      },
+      "video1": {
+        "label": "Video 1"
+      },
+      "video2": {
+        "label": "Video 2"
+      }
+    },
+    "list": {
+      "editType": "Edit Type",
+      "noGroup": "No groups to display 🤔"
+    },
+    "modal": {
+      "createGroup": {
+        "title": "Create a group"
+      }
+    },
+    "search": {
+      "placeholder": "Search for a group"
+    },
+    "type": {
+      "seeAll": "See all",
+      "seeList": "See the list",
+      "title": "Groups"
+    }
+  },
   "home": {
     "eventSection": {
       "error": "Error: events cannot be loaded 😢",
@@ -284,6 +462,11 @@
       "giveFeedback": "Suggest improvements",
       "level": "Level {{level}}: ",
       "title": "Do you like this site?"
+    },
+    "myGroupSection": {
+      "noGroup": "You are not in any group currently 😔",
+      "seeAll": "See all",
+      "title": "My groups"
     },
     "postSection": {
       "error": "Error: posts cannot be loaded 😢",
@@ -464,6 +647,7 @@
         "dates": "Published {{createdDuration}} • Updated {{updatedDuration}}"
       }
     },
+    "noPosts": "No posts 😿",
     "post": "Post"
   },
   "register": {
@@ -553,6 +737,22 @@
   },
   "site": {
     "name": "Nantral Platform"
+  },
+  "socialLink": {
+    "add": "Add",
+    "apply": "Apply",
+    "delete": "Delete",
+    "form": {
+      "label": {
+        "label": "Label"
+      },
+      "network": {
+        "label": "Network"
+      },
+      "url": {
+        "label": "url"
+      }
+    }
   },
   "userMenu": {
     "button": {

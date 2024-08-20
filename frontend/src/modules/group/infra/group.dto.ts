@@ -1,3 +1,5 @@
+import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
+
 import { GroupTypePreviewDTO } from './groupType.dto';
 
 export interface GroupDTO {
@@ -23,9 +25,43 @@ export interface GroupDTO {
   is_admin: boolean;
   is_member: boolean;
   lock_memberships: boolean;
+  category: string;
+  sub_category?: string;
+  social_links: SocialLinkDTO[];
 }
 
 export type GroupPreviewDTO = Pick<
   GroupDTO,
-  'id' | 'name' | 'short_name' | 'slug' | 'url' | 'icon'
+  | 'id'
+  | 'name'
+  | 'short_name'
+  | 'slug'
+  | 'url'
+  | 'icon'
+  | 'category'
+  | 'sub_category'
 >;
+
+export type CreateGroupFormDTO = Pick<
+  GroupDTO,
+  | 'name'
+  | 'short_name'
+  | 'meeting_hour'
+  | 'video1'
+  | 'video2'
+  | 'private'
+  | 'public'
+  | 'creation_year'
+  | 'slug'
+  | 'archived'
+  | 'summary'
+  | 'description'
+  | 'meeting_place'
+> & {
+  children_label?: string;
+  icon?: File;
+  banner?: File;
+  label: number | null;
+  tags: number[];
+  parent?: number;
+};

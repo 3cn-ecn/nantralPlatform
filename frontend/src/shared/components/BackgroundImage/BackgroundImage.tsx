@@ -12,8 +12,7 @@ export function BackgroundImage({
       wrapperStyle={{ position: 'absolute', zIndex: -1, ...wrapperStyle }}
       alt={alt}
       easing="ease-in"
-      duration={900}
-      shiftDuration={900}
+      duration={400}
       {...props}
     />
   );

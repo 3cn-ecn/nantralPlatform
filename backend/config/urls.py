@@ -32,7 +32,6 @@ urlpatterns = [
     # legacy views
     path("account/", include("apps.account.urls", namespace="account")),
     path("student/", include("apps.student.urls", namespace="student")),
-    path("group/", include("apps.group.urls", namespace="group")),
     path("club/", include("apps._archived.club.urls", namespace="club")),
     path("colocs/", include("apps.roommates.urls", namespace="roommates")),
     path(
@@ -71,6 +70,10 @@ urlpatterns = [
     path(
         "api/signature/",
         include("apps.signature.api_urls", namespace="signature_api"),
+    ),
+    path(
+        "api/sociallink/",
+        include("apps.sociallink.api_urls", namespace="sociallink_api"),
     ),
     path("api/core/", include("apps.core.api_urls", namespace="core_api")),
     # static files

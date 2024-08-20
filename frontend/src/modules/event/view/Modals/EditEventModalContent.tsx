@@ -38,7 +38,7 @@ export function EditEventModalContent({
   const { palette } = useTheme();
 
   const [selectedLang, setSelectedLang] = useState(currentBaseLanguage);
-  const [formValues, updateFormValues] = useEventFormValues(event);
+  const [formValues, updateFormValues] = useEventFormValues({ event: event });
 
   // create all states for error, loading, etc. while fetching the API
   const { mutate, isLoading, isError, error } = useMutation<

@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 import { Button, Icon, Typography } from '@mui/material';
 
@@ -20,8 +20,11 @@ export function BreadcrumbsItem({
   const { pathname } = useLocation();
   const isCurrentPage = path.replace(/\/$/, '') === pathname.replace(/\/$/, '');
 
+  const [, setParams] = useSearchParams();
+
   const scrollToTop = (e) => {
     e.preventDefault();
+    setParams({});
     window.scroll({ behavior: 'smooth', top: 0 });
   };
 
