@@ -66,6 +66,17 @@ export function GroupFormFields({
     queryFn: () => getGroupLabelApi({ groupType: groupType.slug }),
     queryKey: ['getGroupLabels', groupType],
   });
+  const parentCallback = useCallback(
+    (val: number) => updateFormValues({ parent: val }),
+    [updateFormValues],
+  );
+  const fetchInitialOptions = useCallback(
+    () =>
+      getGroupListApi({ hasNoParent: true, type: groupType.slug }).then(
+        (res) => res.results,
+      ),
+    [groupType.slug],
+  );
 
   return (
     <>
@@ -140,14 +151,10 @@ export function GroupFormFields({
           name="parent"
           label={'Parent'}
           value={formValues.parent || null}
-          handleChange={(val: number) => updateFormValues({ parent: val })}
+          handleChange={parentCallback}
           defaultObjectValue={prevData?.parent || null}
           errors={error?.fields?.parent}
-          fetchInitialOptions={() =>
-            getGroupListApi({ hasNoParent: true, type: groupType.slug }).then(
-              (res) => res.results,
-            )
-          }
+          fetchInitialOptions={fetchInitialOptions}
           fetchOptions={(inputValue) =>
             getGroupListApi({
               parent: null,
