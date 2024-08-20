@@ -4,9 +4,9 @@ from django.views.decorators.http import require_GET
 
 @require_GET
 def redirect_to_list(request):
-    return redirect("group:sub_index", "club")
+    return redirect("/group/?type=club")
 
 
 @require_GET
 def redirect_to_club(request, slug):
-    return redirect("group:detail", slug)
+    return redirect(f"/group/@{slug}")
