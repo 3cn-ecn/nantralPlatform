@@ -538,6 +538,7 @@
     "email": "Email",
     "formationFollowed": {
       "PhD": "Doctorat",
+      "all": "Toutes",
       "bachelor": "Bachelor",
       "generalEngineer": "Ingénieur généraliste",
       "label": "Formation suivie",
@@ -753,6 +754,21 @@
       }
     },
     "new": "Nouveau lien"
+  },
+  "student": {
+    "arrivalYear": "Promo",
+    "filters": {
+      "title": "Filtres"
+    },
+    "name": {
+      "label": "Nom"
+    },
+    "picture": {
+      "label": "Image"
+    },
+    "searchBar": {
+      "placeholder": "Rechercher un élève"
+    }
   },
   "userMenu": {
     "button": {

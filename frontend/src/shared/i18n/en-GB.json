@@ -538,6 +538,7 @@
     "email": "Email",
     "formationFollowed": {
       "PhD": "PhD",
+      "all": "All",
       "bachelor": "Bachelor",
       "generalEngineer": "General Engineer",
       "label": "Formation followed",
@@ -753,6 +754,21 @@
       }
     },
     "new": "New link"
+  },
+  "student": {
+    "arrivalYear": "Arrival year",
+    "filters": {
+      "title": "Filters"
+    },
+    "name": {
+      "label": "Name"
+    },
+    "picture": {
+      "label": "Picture"
+    },
+    "searchBar": {
+      "placeholder": "Search for a student"
+    }
   },
   "userMenu": {
     "button": {
