@@ -19,7 +19,7 @@ from rest_framework import (
 )
 
 from apps.utils.discord import respond_admin_request, send_admin_request
-from apps.utils.parse_bool import parse_bool
+from apps.utils.parse import parse_bool
 
 from .models import Group, GroupType, Label, Membership
 from .permissions import (
