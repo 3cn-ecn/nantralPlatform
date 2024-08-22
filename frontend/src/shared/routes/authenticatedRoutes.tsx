@@ -22,6 +22,9 @@ const FeedbackHomePage = lazy(
 const FeedbackFormPage = lazy(
   () => import('#pages/Feedback/FeedbackForm.page'),
 );
+const StudentListPage = lazy(
+  () => import('#pages/StudentList/StudentList.page'),
+);
 
 const t = (key: string) => key;
 
@@ -64,6 +67,11 @@ export const authenticatedRoutes: RouteObject = {
       path: '/signature',
       element: <Signature />,
       handle: { crumb: t('breadcrumbs.signature.index') },
+    },
+    {
+      path: '/student',
+      element: <StudentListPage />,
+      handle: { crumb: t('navbar.student') },
     },
     {
       path: '/feedback',
