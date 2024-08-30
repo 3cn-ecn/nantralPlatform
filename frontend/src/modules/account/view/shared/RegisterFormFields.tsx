@@ -120,6 +120,7 @@ export function RegisterFormFields({
         disableFuture
         required
         fullWidth
+        errors={error?.fields?.promo}
       />
       <SelectField
         handleChange={(value: RegisterForm['faculty']) =>
@@ -130,6 +131,7 @@ export function RegisterFormFields({
         required
         value={formValues?.faculty}
         label={t('login.formationFollowed.label')}
+        errors={error?.fields.faculty}
       >
         <MenuItem value={'Gen'}>
           {t('login.formationFollowed.generalEngineer')}
@@ -137,7 +139,7 @@ export function RegisterFormFields({
         <MenuItem value={'Iti'}>
           {t('login.formationFollowed.specialtyEngineer')}
         </MenuItem>
-        <MenuItem value={'Mst'}>{t('login.formationFollowed.master')}</MenuItem>
+        <MenuItem value={'Mas'}>{t('login.formationFollowed.master')}</MenuItem>
         <MenuItem value={'Doc'}>{t('login.formationFollowed.PhD')}</MenuItem>
         <MenuItem value={'Bac'}>
           {t('login.formationFollowed.bachelor')}
@@ -154,6 +156,7 @@ export function RegisterFormFields({
         }
         value={formValues?.path}
         label={t('login.specialProgram.label')}
+        errors={error?.fields?.path}
         helperText={t('login.specialProgram.helperText')}
       >
         <MenuItem value={'Cla'}>{t('login.specialProgram.none')}</MenuItem>
