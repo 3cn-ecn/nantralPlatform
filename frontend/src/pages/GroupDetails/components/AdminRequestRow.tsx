@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Check, Close } from '@mui/icons-material';
 import {
@@ -8,6 +9,7 @@ import {
   CardContent,
   Typography,
 } from '@mui/material';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { acceptAdminRequestApi } from '#modules/group/api/acceptAdminRequest.api';
 import { denyAdminRequestApi } from '#modules/group/api/denyAdminRequest.api';
@@ -18,16 +20,22 @@ import { useTranslation } from '#shared/i18n/useTranslation';
 
 export function AdminRequestRow({
   adminRequest,
+  groupSlug,
 }: {
   adminRequest: AdminRequest;
+  groupSlug: string;
 }) {
   const [variant, setVariant] = useState<undefined | 'accept' | 'deny'>();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   async function handleClickAccept() {
     setVariant('accept');
     try {
       await acceptAdminRequestApi(adminRequest.id);
+      setTimeout(() => {
+        queryClient.invalidateQueries(['adminRequest', { slug: groupSlug }]);
+      }, 2000);
     } catch {
       setVariant(undefined);
     }
@@ -37,6 +45,9 @@ export function AdminRequestRow({
     setVariant('deny');
     try {
       await denyAdminRequestApi(adminRequest.id);
+      setTimeout(() => {
+        queryClient.invalidateQueries(['adminRequest']);
+      }, 2000);
     } catch {
       setVariant(undefined);
     }
@@ -49,6 +60,9 @@ export function AdminRequestRow({
           <Avatar
             alt={adminRequest.student.name}
             src={adminRequest.student.picture}
+            component={Link}
+            to={adminRequest.student.url}
+            reloadDocument
           />
           <Typography variant="caption">
             {t('group.details.requestToBeAdmin', {
