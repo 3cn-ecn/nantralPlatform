@@ -1,9 +1,12 @@
-import { Skeleton, Typography } from '@mui/material';
+import { AdminPanelSettings } from '@mui/icons-material';
+import { Button, Skeleton, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { SocialLinkItem } from '#modules/social_link/view/shared/SocialLinkItem';
+import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { GroupInfoLine } from './GroupInfoLine';
 import { TimeAndPlace } from './TimeAndPlace';
@@ -19,6 +22,8 @@ export function GroupInfo({
   memberCount?: number;
   eventCount?: number;
 }) {
+  const { staff } = useCurrentUserData();
+  const { t } = useTranslation();
   return (
     <FlexRow
       width="100%"
@@ -28,7 +33,7 @@ export function GroupInfo({
       justifyContent={'space-between'}
       flexWrap={'wrap'}
     >
-      <FlexRow gap={2} flexWrap={'wrap'}>
+      <FlexRow gap={2} flexWrap={'wrap'} width={'100%'}>
         {isLoading ? (
           <Skeleton
             variant="circular"
@@ -67,6 +72,23 @@ export function GroupInfo({
             ))}
           </FlexRow>
         </FlexCol>
+        {group && staff && (
+          <FlexCol
+            alignItems={'flex-end'}
+            justifyContent={'center'}
+            px={3}
+            flex={1}
+          >
+            <Button
+              variant="contained"
+              startIcon={<AdminPanelSettings />}
+              color="secondary"
+              href={`/admin/group/group/${group.id}/change/`}
+            >
+              {t('group.details.modal.editGroup.title')}
+            </Button>
+          </FlexCol>
+        )}
       </FlexRow>
     </FlexRow>
   );
