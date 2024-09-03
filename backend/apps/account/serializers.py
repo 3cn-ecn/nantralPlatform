@@ -112,6 +112,10 @@ class RegisterSerializer(serializers.Serializer):
         user.set_password(validated_data["password"])
         # little trick to remove password from validated_data
         self.validated_data.pop("password")
+        # assign to something unique in the first place
+        user.username = user.email
+        # save to generate the primary key
+        user.save()
 
         user.username = validated_data.get("username")
 
@@ -120,9 +124,8 @@ class RegisterSerializer(serializers.Serializer):
             first_name = "".join(e for e in user.first_name if e.isalnum())
             last_name = "".join(e for e in user.last_name if e.isalnum())
             promo = validated_data.get("promo")
-
-            user.username = f"{first_name}.{last_name}{promo}-{user.id}"
-
+            user.username = f"{first_name}.{last_name}.{promo}.{user.pk}"
+        # save again
         user.save()
         # add student informations
         student = Student(
