@@ -120,6 +120,7 @@ class CustomUserAdmin(UserAdmin):
         "is_active",
         "groups",
         "invitation",
+        "is_email_valid",
         UppercaseEmailFilter,
         ECNantesDomainFilter,
         NoPasswordFilter,
