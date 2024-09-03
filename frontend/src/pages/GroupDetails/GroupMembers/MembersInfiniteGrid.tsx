@@ -1,11 +1,10 @@
-import { Divider, Grid, Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
-import MembershipCard from '#modules/group/view/MembershipCard/MembershipCard';
-import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { useInfiniteMembership } from '../hooks/useInfiniteMemberships';
+import { MembersGrid } from './MembersGrid';
 
 interface InfiniteMembershipGridProps {
   filters: { previous: boolean };
@@ -19,43 +18,27 @@ export function MembersInfiniteGrid({
   const today = new Date(new Date().toDateString());
   const { t } = useTranslation();
   const membershipsQuery = useInfiniteMembership({
-    options: { group: group.slug, from: today },
+    options: { group: group.slug, from: today, pageSize: 6 },
   });
   const oldMembershipsQuery = useInfiniteMembership({
-    options: { group: group.slug, to: today, orderBy: '-begin_date' },
+    options: {
+      group: group.slug,
+      to: today,
+      orderBy: '-begin_date',
+      pageSize: 6 * 5,
+    },
     enabled: filters.previous,
   });
   return (
     <>
-      <InfiniteList query={membershipsQuery}>
-        <Grid spacing={1} container my={2}>
-          {membershipsQuery.data?.pages
-            .flatMap((page) => page.results)
-            .map((member) => (
-              <MembershipCard group={group} key={member.id} item={member} />
-            ))}
-          {membershipsQuery.data?.pages[0].count === 0 && (
-            <Typography px={2}>
-              {t('group.details.modal.editGroup.noMembers')}
-            </Typography>
-          )}
-        </Grid>
-      </InfiniteList>
+      <MembersGrid query={membershipsQuery} group={group} />
       {filters.previous && (
         <>
           <Typography variant="caption" sx={{ mt: 2, ml: 1 }} color={'primary'}>
             {t('group.details.formerMembers')}
           </Typography>
           <Divider sx={{ mb: 1, backgroundColor: 'red' }} />
-          <InfiniteList query={oldMembershipsQuery}>
-            <Grid container spacing={1}>
-              {oldMembershipsQuery.data?.pages
-                .flatMap((page) => page.results)
-                .map((member) => (
-                  <MembershipCard group={group} key={member.id} item={member} />
-                ))}
-            </Grid>
-          </InfiniteList>
+          <MembersGrid query={oldMembershipsQuery} group={group} />
         </>
       )}
     </>
