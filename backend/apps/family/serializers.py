@@ -34,11 +34,6 @@ class FamilyMembersSerializer(serializers.Serializer):
 
                 previous_members[i].save()
             elif new_members[i]:
-                print(
-                    "creating",
-                    Student.objects.get(id=new_members[i]),
-                    self.context.get("family"),
-                )
                 MembershipFamily.objects.create(
                     student=Student.objects.get(id=new_members[i]),
                     role="2A+",
