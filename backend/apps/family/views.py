@@ -227,12 +227,17 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
     def get_members(self):
         students = (
             MembershipFamily.objects.filter(role="2A+", group=self.get_family())
+            .order_by("pk")
             .values_list("student")
             .all()
         )
 
         return StudentSerializer(
-            instance=Student.objects.filter(pk__in=students).all(),
+            instance=[
+                Student.objects.filter(pk=value[0]).first()
+                for value in students
+                if Student.objects.filter(pk=value[0]).exists()
+            ],
             many=True,
         ).data
 
@@ -281,7 +286,16 @@ class UpdateFamilyView(UserIsAdmin, TemplateView):
 
         context = {
             "update_form": forms[0],
-            "current_members": json.dumps(self.get_members()),
+            "current_members": json.dumps(
+                StudentSerializer(
+                    instance=[
+                        Student.objects.filter(pk=value).first()
+                        for value in serializer.data.values()
+                        if Student.objects.filter(pk=value).exists()
+                    ],
+                    many=True,
+                ).data
+            ),
             "question_form": forms[1],
             "errors": json.dumps(error_dict),
         }
