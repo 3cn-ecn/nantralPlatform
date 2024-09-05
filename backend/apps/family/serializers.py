@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models import Q
 
 from rest_framework import exceptions, serializers
@@ -23,23 +24,18 @@ class FamilyMembersSerializer(serializers.Serializer):
         ).all()
         new_members = list(self.validated_data.values())
 
-        for i in range(7):
-            if len(previous_members) > i:
-                if new_members[i]:
-                    previous_members[i].student = Student.objects.get(
-                        id=new_members[i]
-                    )
-                else:
-                    previous_members[i].student = None
+        with transaction.atomic():
+            for member in previous_members:
+                member.delete()
 
-                previous_members[i].save()
-            elif new_members[i]:
-                MembershipFamily.objects.create(
-                    student=Student.objects.get(id=new_members[i]),
-                    role="2A+",
-                    admin=True,
-                    group=self.context.get("family"),
-                )
+            for member in new_members:
+                if member:
+                    MembershipFamily.objects.create(
+                        student=Student.objects.get(id=member),
+                        role="2A+",
+                        admin=True,
+                        group=self.context.get("family"),
+                    )
 
     def validate(self, attrs: dict):
         validated_data: dict = super().validate(attrs)
