@@ -61,9 +61,10 @@ type AutocompleteSearchFieldProps<
     value: AutocompleteValue<number, Multiple, DisableClearable>,
     objectValue: AutocompleteValue<T, Multiple, DisableClearable>,
   ) => void;
-  defaultObjectValue: DisableClearable extends true
+  defaultObjectValue?: DisableClearable extends true
     ? AutocompleteValue<T, Multiple, DisableClearable>
     : AutocompleteValue<T, Multiple, DisableClearable> | undefined;
+  initialObjectValue?: AutocompleteValue<T, Multiple, DisableClearable>;
   fetchInitialOptions?: () => Promise<T[]>;
   fetchOptions: (inputValue: string) => Promise<T[]>;
   name?: string;
@@ -123,6 +124,7 @@ function AutocompleteSearchFieldComponent<
   >,
   fetchInitialOptions,
   fetchOptions,
+  initialObjectValue,
   name,
   label,
   helperText,
@@ -147,7 +149,10 @@ function AutocompleteSearchFieldComponent<
   const [isLoading, setIsLoading] = useState(loading);
   const [objectValue, setObjectValue] = useState<
     AutocompleteValue<T, Multiple, DisableClearable>
-  >(defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>);
+  >(
+    initialObjectValue ??
+      (defaultObjectValue as AutocompleteValue<T, Multiple, DisableClearable>),
+  );
 
   const isError = errors !== undefined;
 

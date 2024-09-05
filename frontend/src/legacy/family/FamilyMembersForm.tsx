@@ -40,7 +40,7 @@ function FamilyMembersForm() {
     const data = await getStudentListApi({ search: search });
     return data.results;
   }
-
+  console.log(formValues);
   return (
     <>
       <FormErrorAlert
@@ -57,7 +57,7 @@ function FamilyMembersForm() {
               label={'Membre'}
               value={formValues[i]}
               handleChange={(val) => updateFormValues(i, val)}
-              defaultObjectValue={CURRENT_MEMBERS[i]}
+              initialObjectValue={CURRENT_MEMBERS[i]}
               fetchOptions={fetchOptions}
               labelPropName="name"
               imagePropName="picture"
@@ -66,7 +66,7 @@ function FamilyMembersForm() {
             <input
               hidden
               name={`student${i}`}
-              value={formValues[i] ?? undefined}
+              value={formValues[i] ?? ''}
               readOnly
             />
           </div>
