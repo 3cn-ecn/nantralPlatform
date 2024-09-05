@@ -50,18 +50,6 @@ class MemberForDeleteForm(forms.BaseInlineFormSet):
         ) or not form.cleaned_data.get("student", False)
 
 
-Member2AFormset = forms.inlineformset_factory(
-    parent_model=Family,
-    model=MembershipFamily,
-    extra=7,
-    max_num=7,
-    validate_max=True,
-    fields=["student"],
-    can_delete=True,
-    formset=MemberForDeleteForm,
-)
-
-
 class FamilyQuestionsForm(forms.Form):
     def __init__(self, initial=None, *args, **kwargs):
         super().__init__(
