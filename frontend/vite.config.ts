@@ -21,6 +21,7 @@ const legacyEntryPoints = [
   'roommates/colocathlonCard.tsx',
   'roommates/housingMap.tsx',
   'roommates/createHousing.tsx',
+  'family/FamilyMembersForm.tsx',
   'notification/deviceSubscribeButton.tsx',
 ];
 
