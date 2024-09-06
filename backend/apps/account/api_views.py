@@ -218,20 +218,28 @@ class AuthViewSet(GenericViewSet):
 
     @action(
         detail=False,
-        methods=["PUT"],
+        methods=["PUT", "GET"],
         permission_classes=[IsAuthenticated],
         serializer_class=UserSerializer,
     )
     def edit(self, request: Request):
         """Edit account informations"""
-        serializer = UserSerializer(instance=request.user, data=request.data)
-        if not serializer.is_valid():
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST,
+
+        if request.method == "PUT":
+            serializer = UserSerializer(
+                instance=request.user, data=request.data
             )
-        serializer.save()
-        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response(
+                serializer.validated_data, status=status.HTTP_200_OK
+            )
+
+        if request.method == "GET":
+            serializer = UserSerializer(instance=request.user)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class EmailViewSet(GenericViewSet):
