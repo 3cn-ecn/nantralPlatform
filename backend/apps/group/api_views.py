@@ -440,7 +440,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
             # send response by email
             mail = render_to_string(
                 "group/mail/accept_admin_request.html",
-                {"group": group, "user": request.user},
+                {"group": group, "user": membership.student.user},
             )
             membership.student.user.email_user(
                 subject=(
@@ -491,7 +491,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
             # send response by email
             mail = render_to_string(
                 "group/mail/deny_admin_request.html",
-                {"group": group, "user": request.user},
+                {"group": group, "user": membership.student.user},
             )
             membership.student.user.email_user(
                 subject=(
