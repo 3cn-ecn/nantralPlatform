@@ -32,6 +32,7 @@
   },
   "button": {
     "add": "Add",
+    "apply": "Apply",
     "back": "Back",
     "cancel": "Cancel",
     "confirm": "OK",
@@ -777,8 +778,14 @@
   },
   "student": {
     "arrivalYear": "Arrival year",
+    "details": {
+      "changePassword": "Change password"
+    },
     "filters": {
       "title": "Filters"
+    },
+    "list": {
+      "labelDisplayedRows": "Page {{ page }} of {{ pageSize }} ({{ count }} results)"
     },
     "name": {
       "label": "Name"

@@ -16,7 +16,6 @@ export function StudentRow({ student }: StudentRowProps) {
     <TableRow
       component={Link}
       to={student.url}
-      reloadDocument
       key={student.id}
       sx={{ textDecoration: 'none' }}
     >

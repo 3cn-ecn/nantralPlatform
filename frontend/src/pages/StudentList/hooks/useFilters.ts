@@ -23,7 +23,7 @@ function parseQueryParams(
   const filters = {
     promo: parseNumber(queryParams.get('promo')) ?? undefined,
     page: parseNumber(queryParams.get('page')) ?? 1,
-    pageSize: parseNumber(queryParams.get('page_size')) ?? 30,
+    pageSize: parseNumber(queryParams.get('page_size')) ?? 25,
     search: parseString(queryParams.get('search')) ?? undefined,
     ordering: parseString(queryParams.get('ordering')) ?? undefined,
     path: parseString(queryParams.get('path')) ?? undefined,

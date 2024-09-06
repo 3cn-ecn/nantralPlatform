@@ -61,9 +61,15 @@ export function StudentTable({ filters, updateFilters }: StudentTableProps) {
       </Table>
       <FlexRow>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 30]}
+          rowsPerPageOptions={[10, 25, 50, 75, 100]}
           labelRowsPerPage={'Résultats par page'}
-          colSpan={3}
+          labelDisplayedRows={() =>
+            t('student.list.labelDisplayedRows', {
+              page: filters.page,
+              pageSize: data?.numPages,
+              count: data?.count,
+            })
+          }
           count={data?.count || 0}
           rowsPerPage={filters.pageSize}
           page={filters.page - 1}

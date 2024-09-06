@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { Close } from '@mui/icons-material';
 import {
   Button,
@@ -31,6 +33,21 @@ export function FilterDrawer({
   updateFilters,
 }: FilterDrawerProps) {
   const { t } = useTranslation();
+  const [tempFilters, setTempFilters] =
+    useState<StudentListQueryParams>(filters);
+
+  function updateTempFilters(val: Partial<StudentListQueryParams>) {
+    setTempFilters({ ...tempFilters, ...val });
+  }
+
+  function handleReset() {
+    resetFilters();
+  }
+
+  useEffect(() => {
+    setTempFilters(filters);
+  }, [filters]);
+
   return (
     <Drawer open={open} onClose={onClose} anchor="right">
       <Container sx={{ my: 2 }}>
@@ -44,8 +61,8 @@ export function FilterDrawer({
           <ListItem>
             <SelectField
               label={t('login.formationFollowed.label')}
-              value={filters.faculty}
-              handleChange={(val) => updateFilters({ faculty: val })}
+              value={tempFilters.faculty}
+              handleChange={(val) => updateTempFilters({ faculty: val })}
             >
               <MenuItem value={undefined}>-</MenuItem>
               <MenuItem value={'Gen'}>
@@ -54,7 +71,7 @@ export function FilterDrawer({
               <MenuItem value={'Iti'}>
                 {t('login.formationFollowed.specialtyEngineer')}
               </MenuItem>
-              <MenuItem value={'Mst'}>
+              <MenuItem value={'Mas'}>
                 {t('login.formationFollowed.master')}
               </MenuItem>
               <MenuItem value={'Doc'}>
@@ -71,11 +88,11 @@ export function FilterDrawer({
           <ListItem>
             <SelectField
               handleChange={(val) =>
-                updateFilters({
+                updateTempFilters({
                   path: val,
                 })
               }
-              value={filters.path}
+              value={tempFilters.path}
               label={t('login.specialProgram.label')}
             >
               <MenuItem value={undefined}>-</MenuItem>
@@ -102,24 +119,31 @@ export function FilterDrawer({
           <ListItem>
             <DateField
               label={t('student.arrivalYear')}
-              value={filters.promo ? new Date(`${filters.promo}-01-01`) : null}
+              value={
+                tempFilters.promo
+                  ? new Date(`${tempFilters.promo}-01-01`)
+                  : null
+              }
               views={['year']}
               onChange={(date) => {
-                updateFilters({ promo: date?.getFullYear() });
+                updateTempFilters({ promo: date?.getFullYear() });
               }}
               disableFuture
             />
           </ListItem>
         </List>
-
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={resetFilters}
-          sx={{ mt: 1 }}
-        >
-          {t('event.filters.reset')}
-        </Button>
+        <FlexRow mt={1} gap={1}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => updateFilters({ ...tempFilters, page: 1 })}
+          >
+            {t('button.apply')}
+          </Button>
+          <Button variant="outlined" color="secondary" onClick={handleReset}>
+            {t('event.filters.reset')}
+          </Button>
+        </FlexRow>
       </Container>
     </Drawer>
   );
