@@ -211,6 +211,39 @@ class InvitationValidSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
 
 
+class EditStudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ["path", "promo", "description", "picture"]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    student = EditStudentSerializer()
+
+    class Meta:
+        model = User
+        fields = ["username", "first_name", "last_name", "student"]
+
+    def update(self, obj: User, data: dict):
+        student_data = data.pop("student")
+        self.validated_data["student"]
+
+        for attr, value in data.items():
+            setattr(obj, attr, value)
+
+        student_serializer = EditStudentSerializer(
+            instance=obj.student, data=student_data
+        )
+
+        if student_serializer.is_valid():
+            student_serializer.save()
+            self.validated_data["student"]["picture"] = (
+                student_serializer.data.get("picture")
+            )
+
+        return obj
+
+
 class UsernameSerializer(serializers.ModelSerializer):
     picture = serializers.SerializerMethodField()
     name = serializers.SerializerMethodField()
