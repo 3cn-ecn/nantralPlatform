@@ -18,7 +18,7 @@ export function MembersInfiniteGrid({
   const today = new Date(new Date().toDateString());
   const { t } = useTranslation();
   const membershipsQuery = useInfiniteMembership({
-    options: { group: group.slug, from: today, pageSize: 6 },
+    options: { group: group.slug, from: today, pageSize: 6 * 5 },
   });
   const oldMembershipsQuery = useInfiniteMembership({
     options: {
