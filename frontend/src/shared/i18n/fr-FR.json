@@ -32,6 +32,7 @@
   },
   "button": {
     "add": "Ajouter",
+    "apply": "Appliquer",
     "back": "Retour",
     "cancel": "Annuler",
     "confirm": "Valider",
@@ -757,8 +758,14 @@
   },
   "student": {
     "arrivalYear": "Promo",
+    "details": {
+      "changePassword": "Changer de mot de passe"
+    },
     "filters": {
       "title": "Filtres"
+    },
+    "list": {
+      "labelDisplayedRows": "Page {{ page }} sur {{ pageSize }} ({{ count }} résultats)"
     },
     "name": {
       "label": "Nom"
