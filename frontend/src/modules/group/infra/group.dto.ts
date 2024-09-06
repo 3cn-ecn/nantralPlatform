@@ -57,6 +57,7 @@ export type CreateGroupFormDTO = Pick<
   | 'summary'
   | 'description'
   | 'meeting_place'
+  | 'lock_memberships'
 > & {
   children_label?: string;
   icon?: File;

@@ -57,6 +57,7 @@ export type CreateGroupForm = Pick<
   | 'summary'
   | 'description'
   | 'meetingPlace'
+  | 'lockMemberships'
 > & {
   childrenLabel?: string;
   icon?: File;

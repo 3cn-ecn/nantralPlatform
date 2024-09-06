@@ -17,6 +17,7 @@ const defaultGroupFormValues: CreateGroupForm = {
   childrenLabel: 'Sous groupes',
   creationYear: new Date().getFullYear(),
   label: -1,
+  lockMemberships: false,
 };
 
 function convertToForm(group: Group): CreateGroupForm {
@@ -39,6 +40,7 @@ function convertToForm(group: Group): CreateGroupForm {
     icon: undefined,
     childrenLabel: 'Sous-Groupes',
     creationYear: group.creationYear,
+    lockMemberships: group.lockMemberships,
   };
 }
 

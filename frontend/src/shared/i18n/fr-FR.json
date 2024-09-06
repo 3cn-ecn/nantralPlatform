@@ -391,6 +391,10 @@
         "label": "Label",
         "none": "Aucun"
       },
+      "lockMemberships": {
+        "helperText": "Empécher les utilisateurs de s'ajouter eux-même au groupe",
+        "label": "Verouiller le groupe"
+      },
       "meetingHour": {
         "label": "Heure de réunion"
       },

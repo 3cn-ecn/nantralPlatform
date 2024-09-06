@@ -391,6 +391,10 @@
         "label": "Label",
         "none": "None"
       },
+      "lockMemberships": {
+        "helperText": "Prevent users from adding themselves to the group",
+        "label": "Lock group"
+      },
       "meetingHour": {
         "label": "Meeting time"
       },

@@ -6,6 +6,8 @@ import {
   ExpandMoreRounded,
   Image,
   LinkRounded,
+  Lock,
+  LockOpen,
   Notes,
   Place,
   Slideshow,
@@ -166,6 +168,19 @@ export function GroupFormFields({
           imagePropName="icon"
         />
       )}
+
+      <CheckboxField
+        handleChange={useCallback(
+          (val) => updateFormValues({ lockMemberships: val }),
+          [updateFormValues],
+        )}
+        value={formValues.lockMemberships}
+        sx={{ mt: 2 }}
+        label={t('group.form.lockMemberships.label')}
+        helperText={t('group.form.lockMemberships.helperText')}
+        checkboxProps={{ icon: <LockOpen />, checkedIcon: <Lock /> }}
+      />
+
       <FlexRow alignItems={'center'} mt={2} gap={1}>
         <Image />
         <Typography variant="h2">{t('group.form.title.images')}</Typography>
