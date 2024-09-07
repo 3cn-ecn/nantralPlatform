@@ -65,7 +65,7 @@ export function JoinButton({ group }: { group?: Group }) {
             )
           }
           endIcon={group?.isMember && <ExpandMore />}
-          disabled={group.lockMemberships}
+          disabled={group.lockMemberships && !group?.isMember}
           variant={group?.isMember ? 'outlined' : 'contained'}
           onClick={handleClick}
         >
