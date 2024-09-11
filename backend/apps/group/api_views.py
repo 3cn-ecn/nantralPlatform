@@ -440,7 +440,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
             # send response by email
             mail = render_to_string(
                 "group/mail/accept_admin_request.html",
-                {"group": group, "user": request.user},
+                {"group": group, "user": membership.student.user},
             )
             membership.student.user.email_user(
                 subject=(
@@ -457,7 +457,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
             # send response on discord
             respond_admin_request(
                 f"La demande de {membership.student} pour rejoindre {membership.group} "
-                "a été acceptée."
+                f"a été acceptée par {request.user.student}."
             )
         except Exception:
             ...
@@ -491,7 +491,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
             # send response by email
             mail = render_to_string(
                 "group/mail/deny_admin_request.html",
-                {"group": group, "user": request.user},
+                {"group": group, "user": membership.student.user},
             )
             membership.student.user.email_user(
                 subject=(
@@ -508,7 +508,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
             # send response on discord
             respond_admin_request(
                 f"La demande de {membership.student} pour rejoindre {membership.group} "
-                "a été refusée."
+                f"a été refusée par {request.user.student}."
             )
         except Exception:
             ...

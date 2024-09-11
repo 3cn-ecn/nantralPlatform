@@ -2,6 +2,7 @@ import { ChangeEvent, memo } from 'react';
 
 import {
   Checkbox,
+  CheckboxProps,
   FormControlLabel,
   FormControlLabelProps,
   FormHelperText,
@@ -17,6 +18,7 @@ type CheckboxFieldProps = Omit<
   errors?: string[];
   helperText?: string;
   handleChange: (value: boolean) => void;
+  checkboxProps?: CheckboxProps;
 };
 
 function CheckboxFieldComponent({
@@ -25,6 +27,7 @@ function CheckboxFieldComponent({
   handleChange,
   errors,
   helperText,
+  checkboxProps = {},
   ...props
 }: CheckboxFieldProps) {
   const isError = errors !== undefined;
@@ -44,7 +47,7 @@ function CheckboxFieldComponent({
         handleChange(e.target.checked)
       }
       value={value}
-      control={<Checkbox />}
+      control={<Checkbox {...checkboxProps} />}
       sx={{ ml: 0, ...props.sx }}
       {...props}
     />

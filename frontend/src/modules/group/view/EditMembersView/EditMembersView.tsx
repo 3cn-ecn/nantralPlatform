@@ -81,7 +81,7 @@ export function EditMembersView({ group }: EditMembersViewProps) {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['members', { slug: group.slug }],
+    queryKey: queryKey,
     queryFn: () =>
       getMembershipListApi({
         group: group.slug,

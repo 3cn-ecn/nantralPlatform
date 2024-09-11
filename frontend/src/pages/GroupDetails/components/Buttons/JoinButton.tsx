@@ -6,6 +6,7 @@ import {
   CheckCircle,
   Edit,
   ExpandMore,
+  Lock,
   PersonAddRounded,
 } from '@mui/icons-material';
 import { Button, Menu, MenuItem, Typography } from '@mui/material';
@@ -54,9 +55,17 @@ export function JoinButton({ group }: { group?: Group }) {
     group && (
       <>
         <Button
-          startIcon={group?.isMember ? <Check /> : <PersonAddRounded />}
+          startIcon={
+            group?.isMember ? (
+              <Check />
+            ) : group.lockMemberships ? (
+              <Lock />
+            ) : (
+              <PersonAddRounded />
+            )
+          }
           endIcon={group?.isMember && <ExpandMore />}
-          disabled={group.lockMemberships}
+          disabled={group.lockMemberships && !group?.isMember}
           variant={group?.isMember ? 'outlined' : 'contained'}
           onClick={handleClick}
         >

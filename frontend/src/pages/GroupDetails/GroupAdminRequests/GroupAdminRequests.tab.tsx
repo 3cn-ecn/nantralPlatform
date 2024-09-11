@@ -13,7 +13,7 @@ export function GroupAdminRequests({ group }: { group: Group }) {
   const { data } = useInfiniteQuery({
     queryFn: ({ pageParam = 1 }) =>
       getAdminRequestListApi(group.slug, { page: pageParam }),
-    queryKey: ['membership', 'adminRequest', { slug: group.slug }],
+    queryKey: ['adminRequest', { slug: group.slug }],
   });
   return (
     <Container maxWidth="sm">
@@ -25,6 +25,7 @@ export function GroupAdminRequests({ group }: { group: Group }) {
             <AdminRequestRow
               key={adminRequest.id}
               adminRequest={adminRequest}
+              groupSlug={group.slug}
             />
           ))}
       </FlexCol>
