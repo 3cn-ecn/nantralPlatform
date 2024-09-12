@@ -35,7 +35,12 @@ export function FilterBar({
         value={filters.search}
       />
       <FlexRow overflow={'scroll'} gap={2}>
-        <Button startIcon={<FilterAlt />} onClick={() => setOpen(true)}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          startIcon={<FilterAlt />}
+          onClick={() => setOpen(true)}
+        >
           {t('student.filters.title')}
         </Button>
         {filters.faculty && (

@@ -136,7 +136,10 @@ export function FilterDrawer({
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => updateFilters({ ...tempFilters, page: 1 })}
+            onClick={() => {
+              updateFilters({ ...tempFilters, page: 1 });
+              onClose();
+            }}
           >
             {t('button.apply')}
           </Button>
