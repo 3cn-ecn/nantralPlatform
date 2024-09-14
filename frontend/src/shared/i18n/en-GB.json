@@ -55,6 +55,7 @@
   },
   "event": {
     "action_menu": {
+      "addToCalendar": "Add to Calendar",
       "edit": "Edit",
       "share": "Share",
       "unsubscribe": "Unregister"
@@ -308,8 +309,7 @@
         }
       },
       "formerMembers": "Former members",
-      "from": {
-      },
+      "from": {},
       "infoLine": {
         "events": "event(s)",
         "members": "member(s)"

@@ -55,6 +55,7 @@
   },
   "event": {
     "action_menu": {
+      "addToCalendar": "Ajouter au calendrier",
       "edit": "Modifier",
       "share": "Partager",
       "unsubscribe": "Se désinscrire"
@@ -308,8 +309,7 @@
         }
       },
       "formerMembers": "Anciens membres",
-      "from": {
-      },
+      "from": {},
       "infoLine": {
         "events": "événement(s)",
         "members": "membre(s)"
