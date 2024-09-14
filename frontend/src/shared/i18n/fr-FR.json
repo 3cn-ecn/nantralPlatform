@@ -55,6 +55,7 @@
   },
   "event": {
     "action_menu": {
+      "addToCalendar": "Ajouter au calendrier",
       "edit": "Modifier",
       "share": "Partager",
       "unsubscribe": "Se désinscrire"

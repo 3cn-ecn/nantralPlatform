@@ -4,6 +4,7 @@ import { ParticipateButton } from '#modules/event/view/shared/ParticipateButton'
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
+import { AddToCalendarButton } from './ActionButtons/AddToCalendarButton';
 import { EditButton } from './ActionButtons/EditButton';
 import { ParticipantsButton } from './ActionButtons/ParticipantsButton';
 import { ShareButton } from './ActionButtons/ShareButton';
@@ -15,6 +16,7 @@ interface ActionButtonsBarProps {
 export function ActionButtonsBar({ event }: ActionButtonsBarProps) {
   return (
     <FlexRow gap={1} flexWrap="wrap">
+      <AddToCalendarButton event={event} />
       <ParticipateButton event={event} />
       <BookmarkedButton eventId={event.id} selected={event.isBookmarked} />
       <Spacer flex={1} />
