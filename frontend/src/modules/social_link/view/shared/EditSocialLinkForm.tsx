@@ -1,11 +1,16 @@
 import { useState } from 'react';
 
-import { AddBox, Delete, Edit, ExpandMore } from '@mui/icons-material';
+import {
+  AddBox,
+  DeleteForever as DeleteForeverIcon,
+  ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
 import {
   Accordion,
   AccordionActions,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Button,
 } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -20,7 +25,6 @@ import {
 } from '#modules/social_link/types/socialLink.type';
 import { sortLinks } from '#modules/social_link/utils/sortLinks';
 import { SocialLinkFormFields } from '#modules/social_link/view/shared/SocialLinkFormFields';
-import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
@@ -85,35 +89,34 @@ export function EditSocialLinkForm({
   );
 
   return (
-    <FlexCol gap={2}>
+    <Box>
       {sortedSocialLinks.map((socialLink, index) => (
-        <form
+        <Accordion
           key={socialLink.id}
-          onSubmit={(e) => {
-            e.preventDefault();
-            updateSocialLink(socialLinkForm);
+          expanded={expanded === socialLink.id}
+          onChange={(_, isExpanded) => {
+            const val = socialLinks[index];
+            if (isExpanded) {
+              setSocialLinkForm({
+                label: val.label,
+                uri: val.uri,
+                id: val.id,
+              });
+            }
+            setExpanded(isExpanded ? socialLink.id : undefined);
           }}
         >
-          <Accordion
-            expanded={expanded === socialLink.id}
-            onChange={(_, isExpanded) => {
-              const val = socialLinks[index];
-              if (isExpanded) {
-                setSocialLinkForm({
-                  label: val.label,
-                  uri: val.uri,
-                  id: val.id,
-                });
-              }
-              setExpanded(isExpanded ? socialLink.id : undefined);
-            }}
-          >
-            <AccordionSummary
-              expandIcon={expanded == socialLink.id ? <ExpandMore /> : <Edit />}
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <SocialLinkItem socialLink={socialLink} clickable={false} />
+          </AccordionSummary>
+          <AccordionDetails>
+            <form
+              id={`social-link-${socialLink.id}`}
+              onSubmit={(e) => {
+                e.preventDefault();
+                updateSocialLink(socialLinkForm);
+              }}
             >
-              <SocialLinkItem socialLink={socialLink} />
-            </AccordionSummary>
-            <AccordionDetails>
               <SocialLinkFormFields
                 isError={socialLinkIsError}
                 error={socialLinkError}
@@ -122,21 +125,26 @@ export function EditSocialLinkForm({
                   setSocialLinkForm({ ...socialLinkForm, ...val });
                 }}
               />
-            </AccordionDetails>
-            <AccordionActions>
-              <Button type="submit" variant="contained">
-                {t('socialLink.apply')}
-              </Button>
-              <Button
-                startIcon={<Delete />}
-                variant="outlined"
-                onClick={() => deleteSocialLink(socialLinkForm)}
-              >
-                {t('socialLink.delete')}
-              </Button>
-            </AccordionActions>
-          </Accordion>
-        </form>
+            </form>
+          </AccordionDetails>
+          <AccordionActions>
+            <Button
+              startIcon={<DeleteForeverIcon />}
+              variant="outlined"
+              color="secondary"
+              onClick={() => deleteSocialLink(socialLinkForm)}
+            >
+              {t('button.delete')}
+            </Button>
+            <Button
+              form={`social-link-${socialLink.id}`}
+              type="submit"
+              variant="contained"
+            >
+              {t('button.update')}
+            </Button>
+          </AccordionActions>
+        </Accordion>
       ))}
       <form
         onSubmit={(e) => {
@@ -157,7 +165,7 @@ export function EditSocialLinkForm({
           }}
         >
           <AccordionSummary
-            expandIcon={expanded == -1 ? <ExpandMore /> : <AddBox />}
+            expandIcon={expanded == -1 ? <ExpandMoreIcon /> : <AddBox />}
           >
             {t('socialLink.add')}
           </AccordionSummary>
@@ -178,6 +186,6 @@ export function EditSocialLinkForm({
           </AccordionActions>
         </Accordion>
       </form>
-    </FlexCol>
+    </Box>
   );
 }

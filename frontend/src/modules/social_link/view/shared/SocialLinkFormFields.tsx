@@ -29,6 +29,7 @@ export function SocialLinkFormFields({
         }}
         type={'url'}
         label={t('socialLink.form.url.label')}
+        helperText={t('socialLink.form.url.description')}
         value={formValues.uri}
         errors={error?.fields?.uri}
         required

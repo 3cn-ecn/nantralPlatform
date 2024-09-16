@@ -8,11 +8,26 @@ import { getLabel } from '#modules/social_link/utils/getLabel';
 
 interface SocialLinkItemProps {
   socialLink: SocialLink;
+  clickable?: boolean;
 }
 
-export function SocialLinkItem({ socialLink }: SocialLinkItemProps) {
+export function SocialLinkItem({
+  socialLink,
+  clickable = true,
+}: SocialLinkItemProps) {
   const label = getLabel(socialLink);
   const { icon, color } = getIconAndColor(socialLink);
+
+  const clickableProps = clickable
+    ? {
+        component: Link,
+        to: socialLink.uri,
+        target: '_blank',
+        // empty function to make the chip clickable
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onClick: () => {},
+      }
+    : {};
 
   return (
     <Chip
@@ -25,12 +40,7 @@ export function SocialLinkItem({ socialLink }: SocialLinkItemProps) {
       }}
       icon={icon}
       label={label}
-      component={Link}
-      to={socialLink.uri}
-      target="_blank"
-      // empty function to make the chip clickable
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      onClick={() => {}}
+      {...clickableProps}
     />
   );
 }

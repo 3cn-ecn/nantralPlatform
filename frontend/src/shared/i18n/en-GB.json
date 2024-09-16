@@ -15,7 +15,6 @@
       "suggestion": "Suggestion"
     },
     "group": {
-      "details": "Details",
       "index": "Groups"
     },
     "home": {
@@ -42,7 +41,8 @@
     "previous": "Previous",
     "save": "Save",
     "saved": "Saved",
-    "send": "Send"
+    "send": "Send",
+    "update": "Update"
   },
   "error": {
     "errorMessage": "Error: {{errorMessage}}",
@@ -285,7 +285,6 @@
       "accepted": "Accepted",
       "addMember": "Add a member",
       "create": "Create",
-      "deleteMember": "Delete the member?",
       "denied": "Denied",
       "deny": "Deny",
       "edit": "Edit",
@@ -308,8 +307,7 @@
         }
       },
       "formerMembers": "Former members",
-      "from": {
-      },
+      "from": {},
       "infoLine": {
         "events": "event(s)",
         "members": "member(s)"
@@ -744,17 +742,13 @@
   },
   "socialLink": {
     "add": "Add",
-    "apply": "Apply",
-    "delete": "Delete",
     "form": {
       "label": {
         "label": "Label"
       },
-      "network": {
-        "label": "Network"
-      },
       "url": {
-        "label": "url"
+        "description": "The URL should start with https:, mailto, or tel:",
+        "label": "URL"
       }
     }
   },

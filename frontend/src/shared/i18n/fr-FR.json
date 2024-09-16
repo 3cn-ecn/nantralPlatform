@@ -15,7 +15,6 @@
       "suggestion": "Suggestion"
     },
     "group": {
-      "details": "Détails",
       "index": "Groupes"
     },
     "home": {
@@ -42,7 +41,8 @@
     "previous": "Précédent",
     "save": "Enregistrer",
     "saved": "Enregistré",
-    "send": "Envoyer"
+    "send": "Envoyer",
+    "update": "Valider"
   },
   "error": {
     "errorMessage": "Erreur : {{errorMessage}}",
@@ -285,7 +285,6 @@
       "accepted": "Acceptée",
       "addMember": "Ajouter un membre",
       "create": "Créer",
-      "deleteMember": "Supprimer le membre ?",
       "denied": "Refusée",
       "deny": "Refuser",
       "edit": "Modifier",
@@ -308,8 +307,7 @@
         }
       },
       "formerMembers": "Anciens membres",
-      "from": {
-      },
+      "from": {},
       "infoLine": {
         "events": "événement(s)",
         "members": "membre(s)"
@@ -744,17 +742,13 @@
   },
   "socialLink": {
     "add": "Ajouter",
-    "apply": "Appliquer",
-    "delete": "Supprimer",
     "form": {
       "label": {
         "label": "Label"
       },
-      "network": {
-        "label": "Réseau"
-      },
       "url": {
-        "label": "url"
+        "description": "L'URL doit commencer par https:, mailto:, ou tel:",
+        "label": "URL"
       }
     }
   },
