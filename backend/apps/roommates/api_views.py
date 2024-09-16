@@ -4,11 +4,17 @@ from django.utils import timezone
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
 from apps.utils.geocoding import geocode
+from apps.utils.parse import parse_int
 
-from .models import Housing, Roommates
-from .serializers import HousingLastRoommatesSerializer, RoommatesSerializer
+from .models import Housing, NamedMembershipRoommates, Roommates
+from .serializers import (
+    HousingLastRoommatesSerializer,
+    HousingMembershipSerializer,
+    RoommatesSerializer,
+)
 
 
 class SearchGeocodingView(APIView):
@@ -18,6 +24,22 @@ class SearchGeocodingView(APIView):
 
     def get(self, request):
         return Response(data=geocode(request.GET.get("search_string")))
+
+
+class FlatShareMembershipViewSet(ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    http_method_names = ["get"]
+    serializer_class = HousingMembershipSerializer
+    lookup_field = "id"
+    lookup_url_kwarg = "id"
+
+    def get_queryset(self):
+        student = parse_int(self.request.GET.get("student"))
+        qs = NamedMembershipRoommates.objects
+        if student:
+            qs = qs.filter(student=student)
+
+        return qs.prefetch_related("group")
 
 
 class HousingView(generics.ListCreateAPIView):
