@@ -268,6 +268,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
         to_date = parse_datetime(self.query_params.get("to", ""))
         group_slug = self.query_params.get("group")
         student_id = self.query_params.get("student")
+        group_type = self.query_params.get("group_type")
         # make queryset
         qs = Membership.objects.all()
         # filter by memberships you are allowed to see
@@ -286,6 +287,9 @@ class MembershipViewSet(viewsets.ModelViewSet):
             )
         if to_date:
             qs = qs.filter(Q(end_date__lt=to_date) | Q(begin_date__isnull=True))
+        if group_type:
+            qs = qs.filter(group__group_type__slug=group_type)
+
         if self.action == "admin_requests":
             qs = qs.filter(admin_request=True)
 
