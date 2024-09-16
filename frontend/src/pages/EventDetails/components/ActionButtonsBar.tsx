@@ -16,11 +16,11 @@ interface ActionButtonsBarProps {
 export function ActionButtonsBar({ event }: ActionButtonsBarProps) {
   return (
     <FlexRow gap={1} flexWrap="wrap">
-      <AddToCalendarButton event={event} />
       <ParticipateButton event={event} />
       <BookmarkedButton eventId={event.id} selected={event.isBookmarked} />
       <Spacer flex={1} />
       <FlexRow gap={1} flexWrap="wrap">
+        <AddToCalendarButton event={event} />
         <ShareButton eventId={event.id} />
         {event.group.isAdmin && <EditButton eventId={event.id} />}
         {!event.formUrl && <ParticipantsButton event={event} />}
