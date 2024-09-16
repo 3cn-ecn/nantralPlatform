@@ -231,6 +231,8 @@ class UserSerializer(serializers.ModelSerializer):
         for attr, value in data.items():
             setattr(obj, attr, value)
 
+        obj.save()
+
         student_serializer = EditStudentSerializer(
             instance=obj.student, data=student_data
         )
