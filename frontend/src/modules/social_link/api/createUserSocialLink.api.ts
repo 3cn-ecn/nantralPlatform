@@ -6,15 +6,9 @@ import { adaptSocialLinkForm } from '../infra/socialLink.adapter';
 import { convertSocialLinkForm } from '../infra/socialLink.converter';
 import { SocialLinkForm } from '../types/socialLink.type';
 
-export async function updateSocialLinkApi(
-  form: SocialLinkForm,
-  type: 'user' | 'group',
-) {
+export async function createUserSocialLinkApi(form: SocialLinkForm) {
   const { data } = await axios
-    .put<SocialLinkForm>(
-      `/api/sociallink/${type}/${form.id}/`,
-      convertSocialLinkForm(form),
-    )
+    .post<SocialLinkForm>('/api/sociallink/user/', convertSocialLinkForm(form))
     .catch((err: ApiErrorDTO) => {
       throw adaptApiErrors(err);
     });
