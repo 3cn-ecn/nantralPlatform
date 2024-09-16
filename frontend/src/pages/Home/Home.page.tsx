@@ -5,6 +5,7 @@ import { PostModal } from '#modules/post/view/PostModal/PostModal';
 import UpdateUsernameAlert from '#pages/UpdateUsername/UpdateUsername.alert';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
+import './Home.scss';
 import { CreateNewButton } from './views/CreateNewButton';
 import { HomeHeader } from './views/HomeHeader';
 import Shortcuts from './views/Shortcuts';
@@ -28,7 +29,7 @@ export default function HomePage() {
   return (
     <>
       <HomeHeader />
-      <Container sx={{ my: 4 }}>
+      <Container id="homeContainer" sx={{ my: 4 }}>
         <UpdateUsernameAlert />
         <Shortcuts />
         <CreateNewButton />

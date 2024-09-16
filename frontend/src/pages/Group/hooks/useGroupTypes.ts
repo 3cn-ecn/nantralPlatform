@@ -24,7 +24,10 @@ export function useGroupTypes(pageSize: number) {
       groupTypesQuery.data?.results.map((groupType) => ({
         queryFn: () =>
           getGroupListApi({ type: groupType.slug, pageSize: pageSize }),
-        queryKey: ['getGroupList', groupType.slug],
+        queryKey: [
+          'getGroupList',
+          { slug: groupType.slug, pageSize: pageSize },
+        ],
         enabled: groupTypesQuery.isSuccess,
       })) || [],
   });
