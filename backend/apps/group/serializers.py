@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 from rest_framework import exceptions, serializers
 
 from apps.sociallink.serializers import (
-    SocialLinkCreateSerializer,
+    GroupSocialLinkSerializer,
     SocialLinkSerializer,
 )
 from apps.student.serializers import StudentPreviewSerializer
@@ -140,7 +140,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class GroupWriteSerializer(serializers.ModelSerializer):
-    social_links = SocialLinkCreateSerializer(many=True, read_only=True)
+    social_links = GroupSocialLinkSerializer(many=True, read_only=True)
 
     class Meta:
         model = Group

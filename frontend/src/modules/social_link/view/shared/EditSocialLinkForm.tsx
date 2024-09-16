@@ -18,6 +18,7 @@ import {
   SocialLink,
   SocialLinkForm,
 } from '#modules/social_link/types/socialLink.type';
+import { sortLinks } from '#modules/social_link/utils/sortLinks';
 import { SocialLinkFormFields } from '#modules/social_link/view/shared/SocialLinkFormFields';
 import { FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
@@ -34,12 +35,14 @@ export function EditSocialLinkForm({
   socialLinks,
   groupSlug,
 }: EditSocialLinkFormProps) {
+  const sortedSocialLinks = sortLinks(socialLinks);
+
   const queryClient = useQueryClient();
   const { t } = useTranslation();
+
   const [expanded, setExpanded] = useState<number | undefined>(undefined);
   const [socialLinkForm, setSocialLinkForm] = useState<SocialLinkForm>({
     label: '',
-    network: -1,
     uri: '',
   });
 
@@ -83,7 +86,7 @@ export function EditSocialLinkForm({
 
   return (
     <FlexCol gap={2}>
-      {socialLinks.map((socialLink, index) => (
+      {sortedSocialLinks.map((socialLink, index) => (
         <form
           key={socialLink.id}
           onSubmit={(e) => {
@@ -98,7 +101,6 @@ export function EditSocialLinkForm({
               if (isExpanded) {
                 setSocialLinkForm({
                   label: val.label,
-                  network: val.network.id,
                   uri: val.uri,
                   id: val.id,
                 });
@@ -148,7 +150,6 @@ export function EditSocialLinkForm({
             if (isExpanded) {
               setSocialLinkForm({
                 label: '',
-                network: -1,
                 uri: '',
               });
             }

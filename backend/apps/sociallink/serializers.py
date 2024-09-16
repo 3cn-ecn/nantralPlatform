@@ -3,34 +3,21 @@ from rest_framework.exceptions import ValidationError
 
 from apps.group.models import Group
 
-from .models import SocialLink, SocialNetwork
-
-
-class NetworkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SocialNetwork
-        fields = ["id", "name", "color", "icon_name"]
+from .models import SocialLink
 
 
 class SocialLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialLink
-        fields = ["id", "uri", "network", "label"]
-        depth = 1
+        fields = ["id", "uri", "label"]
 
 
-class SocialLinkUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SocialLink
-        fields = ["id", "uri", "network", "label"]
-
-
-class SocialLinkCreateSerializer(serializers.ModelSerializer):
-    group = serializers.SlugField(write_only=True)
+class GroupSocialLinkSerializer(serializers.ModelSerializer):
+    group = serializers.SlugField(write_only=True, required=False)
 
     class Meta:
         model = SocialLink
-        fields = ["uri", "network", "label", "network", "group"]
+        fields = ["id", "uri", "label", "group"]
 
     def validate_group(self, val: str):
         if not Group.objects.filter(slug=val).exists():
@@ -39,10 +26,8 @@ class SocialLinkCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict):
         group = validated_data.pop("group", None)
-        social_link = SocialLink.objects.create(**validated_data)
-        if group:
-            group = Group.objects.get(slug=group)
-            group.social_links.add(social_link)
-            group.save()
-
+        if group is None:
+            raise ValidationError("Group slug is required")
+        group = Group.objects.get(slug=group)
+        social_link = group.social_links.create(**validated_data)
         return social_link
