@@ -147,6 +147,7 @@ export function ModalEditGroup({
           <EditSocialLinkForm
             socialLinks={group.socialLinks}
             groupSlug={group.slug}
+            type="group"
           />
         )}
         {tab == 3 && <EditChildrenView group={group} />}

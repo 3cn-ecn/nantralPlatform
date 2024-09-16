@@ -1,7 +1,9 @@
 import { AxiosError } from 'axios';
 
 export type DjangoRestApiFieldValidationError<DTO> = {
-  [K in keyof DTO]?: string[];
+  [K in keyof DTO]: DTO[K] extends object
+    ? DjangoRestApiFieldValidationError<DTO[K]>
+    : string[];
 };
 
 interface DjangoRestApiNonFieldValidationError {

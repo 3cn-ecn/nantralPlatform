@@ -7,7 +7,7 @@ import { ApiError } from '#shared/infra/errors';
 import { getCurrentUserApi } from '../api/getCurrentUser.api';
 import { Student } from '../student.types';
 
-const emptyUser = {
+const emptyUser: Student = {
   id: -1,
   name: 'Chargement...',
   promo: 1919,
@@ -16,6 +16,9 @@ const emptyUser = {
   path: '',
   url: '',
   staff: false,
+  username: '',
+  socialLinks: [],
+  description: '',
 };
 
 export function useCurrentUserData() {

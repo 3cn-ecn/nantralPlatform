@@ -14,7 +14,7 @@ export function MembersGrid({
   group,
 }: {
   query: UseInfiniteQueryResult<Page<Membership>>;
-  group: Group;
+  group?: Group;
 }) {
   const { t } = useTranslation();
   return (

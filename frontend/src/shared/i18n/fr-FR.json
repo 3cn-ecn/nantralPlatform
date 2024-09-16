@@ -771,6 +771,7 @@
       "label": "Nom"
     },
     "picture": {
+      "helperText": "Taille recommandée: 400 x 400",
       "label": "Image"
     },
     "searchBar": {
