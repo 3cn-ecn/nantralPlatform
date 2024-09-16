@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Event as EventIcon } from '@mui/icons-material';
-import { Button, Link } from '@mui/material';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import { Button, ListItemText, Menu, MenuItem } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import * as CalendarLink from 'calendar-link';
 
@@ -34,23 +33,9 @@ export function AddToCalendarButton({ event }: AddToCalendarButtonProps) {
     start: event.startDate.toUTCString(),
     end: event.endDate.toUTCString(),
     location: event.location,
-    url: `${window.location.origin}/event/${event.id}`,
-    description: [
-      event.description,
-      event.descriptionTranslated.en,
-      event.descriptionTranslated.fr,
-    ]
-      .filter((x) => !!x) // Remove empty descriptions
-      .join('\n\n'), // Add two empty lines in between
+    url: location.origin + event.url,
+    description: event.description,
   };
-
-  const linkButtonsProps = [
-    { title: 'Google Calendar', href: CalendarLink.google(eventInfo) },
-    { title: 'Outlook', href: CalendarLink.outlook(eventInfo) },
-    { title: 'Office 365', href: CalendarLink.office365(eventInfo) },
-    { title: 'Yahoo Calendar', href: CalendarLink.yahoo(eventInfo) },
-    { title: 'Microsoft Teams', href: CalendarLink.msTeams(eventInfo) },
-  ];
 
   return (
     <>
@@ -90,18 +75,51 @@ export function AddToCalendarButton({ event }: AddToCalendarButtonProps) {
         open={isMenuOpen}
         onClose={handleClose}
       >
-        {linkButtonsProps.map((props) => (
-          <Link
-            underline="none"
-            color="inherit"
-            href={props.href}
-            onClick={handleClose}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MenuItem>{props.title}</MenuItem>
-          </Link>
-        ))}
+        <MenuItem
+          component={Link}
+          to={CalendarLink.google(eventInfo)}
+          onClick={handleClose}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <ListItemText>Google Calendar</ListItemText>
+        </MenuItem>
+        <MenuItem
+          component={Link}
+          to={CalendarLink.outlook(eventInfo)}
+          onClick={handleClose}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <ListItemText>Outlook</ListItemText>
+        </MenuItem>
+        <MenuItem
+          component={Link}
+          to={CalendarLink.office365(eventInfo)}
+          onClick={handleClose}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <ListItemText>Office 365</ListItemText>
+        </MenuItem>
+        <MenuItem
+          component={Link}
+          to={CalendarLink.yahoo(eventInfo)}
+          onClick={handleClose}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <ListItemText>Yahoo Calendar</ListItemText>
+        </MenuItem>
+        <MenuItem
+          component={Link}
+          to={CalendarLink.msTeams(eventInfo)}
+          onClick={handleClose}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <ListItemText>Microsoft Teams</ListItemText>
+        </MenuItem>
       </Menu>
     </>
   );
