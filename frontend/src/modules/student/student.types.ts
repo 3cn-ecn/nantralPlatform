@@ -1,3 +1,5 @@
+import { SocialLink } from '#modules/social_link/types/socialLink.type';
+
 export interface Student {
   id: number;
   name: string;
@@ -7,14 +9,28 @@ export interface Student {
   path: string;
   url: string;
   staff: boolean;
+  description: string;
+  username: string;
+  socialLinks: SocialLink[];
 }
 
 export type StudentPreview = Pick<Student, 'id' | 'name' | 'url' | 'picture'>;
 
+export type FacultyOptions = 'Gen' | 'Iti' | 'Mas' | 'Doc' | 'Bac' | 'Msp';
+export type PathOptions =
+  | 'Cla'
+  | 'Alt'
+  | 'I-A'
+  | 'A-I'
+  | 'I-M'
+  | 'M-I'
+  | 'I-O'
+  | 'O-I';
+
 export enum Faculties {
   Gen = 'login.formationFollowed.generalEngineer',
   Iti = 'login.formationFollowed.specialtyEngineer',
-  Mst = 'login.formationFollowed.master',
+  Mas = 'login.formationFollowed.master',
   Doc = 'login.formationFollowed.PhD',
   Bac = 'login.formationFollowed.bachelor',
   MSp = 'login.formationFollowed.specializedMaster',
