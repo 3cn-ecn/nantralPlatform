@@ -307,7 +307,6 @@
         }
       },
       "formerMembers": "Former members",
-      "from": {},
       "infoLine": {
         "events": "event(s)",
         "members": "member(s)"
@@ -741,7 +740,9 @@
     "name": "Nantral Platform"
   },
   "socialLink": {
-    "add": "Add",
+    "addEmail": "E-mail",
+    "addLink": "Link",
+    "addPhoneNumber": "Phone",
     "form": {
       "label": {
         "label": "Label"
@@ -750,7 +751,8 @@
         "description": "The URL should start with https:, mailto, or tel:",
         "label": "URL"
       }
-    }
+    },
+    "new": "New link"
   },
   "userMenu": {
     "button": {
