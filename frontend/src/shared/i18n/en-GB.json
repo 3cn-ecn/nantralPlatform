@@ -312,6 +312,7 @@
         }
       },
       "formerMembers": "Former members",
+      "hideFormerMembers": "Hide old members",
       "history": "See old versions",
       "infoLine": {
         "events_one": "{{count}} event",
@@ -357,6 +358,7 @@
       "requestAdmin": "Ask to be an admin",
       "requestSent": "Request sent",
       "requestToBeAdmin": "{{student}} asks to be admin",
+      "showFormerMembers": "Show old members",
       "subGroupOf": "Subgroup of",
       "subgroups": "Subgroups",
       "subscribe": "Subscribe",
@@ -778,11 +780,36 @@
   },
   "student": {
     "arrivalYear": "Arrival year",
+    "confirmNewPassword": "Confirm new password",
+    "currentPassword": {
+      "label": "Current password"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Describe yourself in one or two sentences"
+    },
     "details": {
-      "changePassword": "Change password"
+      "changePassword": "Change password",
+      "editPassword": "Change password",
+      "editProfile": "Edit your profile",
+      "form": {
+        "firstName": {
+          "label": "First name"
+        }
+      },
+      "housing": "Shared accommodation",
+      "links": "Links",
+      "password": "Password",
+      "profile": "Profile"
     },
     "filters": {
       "title": "Filters"
+    },
+    "firstName": {
+      "label": "First name"
+    },
+    "lastName": {
+      "label": "Last Name"
     },
     "list": {
       "labelDisplayedRows": "Page {{ page }} of {{ pageSize }} ({{ count }} results)"
@@ -790,12 +817,18 @@
     "name": {
       "label": "Name"
     },
+    "newPassword": {
+      "label": "New Password"
+    },
     "picture": {
       "helperText": "Recommended size: 400 x 400",
       "label": "Picture"
     },
     "searchBar": {
       "placeholder": "Search for a student"
+    },
+    "username": {
+      "label": "User name"
     }
   },
   "userMenu": {

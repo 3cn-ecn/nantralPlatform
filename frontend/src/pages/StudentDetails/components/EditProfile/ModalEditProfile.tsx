@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Edit, Person, Link as LinkIcon } from '@mui/icons-material';
+import { Edit, Person, Link as LinkIcon, Password } from '@mui/icons-material';
 import { Avatar, Tab, Tabs, useTheme } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -12,12 +12,14 @@ import {
   ResponsiveDialogHeader,
 } from '#shared/components/ResponsiveDialog';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
+import { ChangePasswordTab } from './ChangePassword.tab';
 import { EditProfileTab } from './EditProfile.tab';
 
 export function ModalEditProfile({ onClose }: { onClose: () => void }) {
   const { palette } = useTheme();
-
+  const { t } = useTranslation();
   const [tab, setTab] = useState('profile');
   const { socialLinks } = useCurrentUserData();
   const queryClient = useQueryClient();
@@ -31,7 +33,7 @@ export function ModalEditProfile({ onClose }: { onClose: () => void }) {
           </Avatar>
         }
       >
-        Modifier le profile
+        {t('student.details.editProfile')}
         <Spacer flex={1} />
       </ResponsiveDialogHeader>
       <Tabs
@@ -41,14 +43,20 @@ export function ModalEditProfile({ onClose }: { onClose: () => void }) {
       >
         <Tab
           icon={<Person />}
-          label="Profile"
+          label={t('student.details.profile')}
           value={'profile'}
           iconPosition="start"
         />
         <Tab
           icon={<LinkIcon />}
-          label="Socials"
+          label={t('student.details.links')}
           value={'links'}
+          iconPosition="start"
+        />
+        <Tab
+          icon={<Password />}
+          label={t('student.details.password')}
+          value={'password'}
           iconPosition="start"
         />
       </Tabs>
@@ -63,6 +71,7 @@ export function ModalEditProfile({ onClose }: { onClose: () => void }) {
             }
           />
         )}
+        {tab === 'password' && <ChangePasswordTab />}
       </ResponsiveDialogContent>
     </ResponsiveDialog>
   );

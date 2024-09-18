@@ -6,7 +6,6 @@ import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
-import { ProfileActions } from './components/ProfileActions';
 import { StudentGroupsSection } from './components/Section/StudentGroupSection';
 import { StudentHousingSection } from './components/Section/StudentHousingSection';
 import { StudentDetailsInfo } from './components/StudentDetailsInfo';
@@ -32,9 +31,7 @@ export default function StudentDetailsPage() {
       <Typography sx={{ lineBreak: 'anywhere' }} my={2}>
         {student.description}
       </Typography>
-
       <Divider sx={{ my: 2 }} />
-      {isMe && <ProfileActions />}
       <StudentHousingSection student={student} />
       <StudentGroupsSection student={student} />
       <Spacer vertical={10} />
