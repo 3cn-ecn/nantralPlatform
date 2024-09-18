@@ -122,7 +122,7 @@
     "rollup-plugin-visualizer": "latest",
     "sass": "^1.55.0",
     "supercluster": "^7.1.3",
-    "vite": "^4.1.0",
+    "vite": "^4.5.5",
     "vite-plugin-svgr": "^4.1.0"
   },
   "browserslist": {
