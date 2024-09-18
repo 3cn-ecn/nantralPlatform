@@ -1,6 +1,7 @@
 import { Divider, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { useInfiniteMembership } from '../hooks/useInfiniteMemberships';
@@ -34,10 +35,13 @@ export function MembersInfiniteGrid({
       <MembersGrid query={membershipsQuery} group={group} />
       {filters.previous && (
         <>
-          <Typography variant="caption" sx={{ mt: 2, ml: 1 }} color={'primary'}>
-            {t('group.details.formerMembers')}
-          </Typography>
-          <Divider sx={{ mb: 1, backgroundColor: 'red' }} />
+          <FlexRow sx={{ my: 2 }} alignItems={'center'}>
+            <Divider sx={{ backgroundColor: 'red', flex: 1 }} />
+            <Typography variant="caption" sx={{ mx: 2 }} color={'primary'}>
+              {t('group.details.formerMembers')}
+            </Typography>
+            <Divider sx={{ backgroundColor: 'red', flex: 1 }} />
+          </FlexRow>
           <MembersGrid query={oldMembershipsQuery} group={group} />
         </>
       )}
