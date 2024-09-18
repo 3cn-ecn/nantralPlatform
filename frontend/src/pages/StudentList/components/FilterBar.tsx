@@ -34,12 +34,13 @@ export function FilterBar({
         }}
         value={filters.search}
       />
-      <FlexRow overflow={'scroll'} gap={2}>
+      <FlexRow overflow={'scroll'} gap={2} py={1} alignItems={'center'}>
         <Button
           variant="outlined"
           color="secondary"
           startIcon={<FilterAlt />}
           onClick={() => setOpen(true)}
+          sx={{ minWidth: 100 }}
         >
           {t('student.filters.title')}
         </Button>
