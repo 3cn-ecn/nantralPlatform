@@ -28,7 +28,7 @@ export function StudentDetailsInfo({ student }: { student: Partial<Student> }) {
           <Chip label={t(Curriculum[student.path])}></Chip>
         )}
       </FlexRow>
-      <FlexRow my={1}>
+      <FlexRow my={1} flexWrap={'wrap'}>
         {student.socialLinks?.map((link) => (
           <SocialLinkItem key={link.id} socialLink={link} />
         ))}
