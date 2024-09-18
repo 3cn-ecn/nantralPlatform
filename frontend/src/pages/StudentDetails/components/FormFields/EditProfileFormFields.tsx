@@ -1,4 +1,4 @@
-import { Divider, MenuItem, Typography } from '@mui/material';
+import { MenuItem, Typography } from '@mui/material';
 
 import { RegisterForm } from '#modules/account/account.type';
 import {
@@ -6,17 +6,14 @@ import {
   EditAccountOptionsDTO,
 } from '#modules/account/api/editAccount';
 import { Student } from '#modules/student/student.types';
-import { Avatar } from '#shared/components/Avatar/Avatar';
-import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import {
+  DateField,
   FileField,
   SelectField,
   TextField,
 } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
-
-import { StudentDetailsInfo } from '../StudentDetailsInfo';
 
 export function EditProfileFormFields({
   formValues,
@@ -29,51 +26,9 @@ export function EditProfileFormFields({
   updateFormValues: (val: Partial<EditAccountOptions>) => void;
   error: ApiFormError<EditAccountOptionsDTO> | null;
 }) {
-  function convertPictureToURL() {
-    if (formValues.picture) {
-      if (formValues.picture.name === '') {
-        return '';
-      } else {
-        return URL.createObjectURL(formValues.picture);
-      }
-    }
-    return previousValues.picture;
-  }
-  function convertToPreview(form: EditAccountOptions): Student {
-    return {
-      description: form.description,
-      faculty: form.faculty,
-      name: form.firstName + ' ' + form.lastName.toUpperCase(),
-      id: -1,
-      path: form.path,
-      picture: convertPictureToURL(),
-      promo: form.promo,
-      socialLinks: [],
-      staff: false,
-      url: '',
-      username: form.username,
-    };
-  }
   const { t } = useTranslation();
   return (
     <>
-      <Typography
-        sx={{ textDecorationLine: 'underline' }}
-        align="right"
-        variant="caption"
-      >
-        Preview
-      </Typography>
-      <FlexRow>
-        <Avatar
-          alt={formValues.firstName + ' ' + formValues.lastName.toUpperCase()}
-          src={convertPictureToURL()}
-          size="xl"
-          sx={{ m: 1 }}
-        />
-        <StudentDetailsInfo student={convertToPreview(formValues)} />
-      </FlexRow>
-      <Divider sx={{ my: 2 }} />
       <FileField
         value={formValues.picture}
         prevFileName={previousValues.picture}
@@ -82,36 +37,50 @@ export function EditProfileFormFields({
         label={t('student.picture.label')}
         helperText={t('student.picture.helperText')}
         errors={error?.fields?.student?.picture}
+        accept="image/*"
       />
       <TextField
         value={formValues.firstName}
         handleChange={(val) => updateFormValues({ firstName: val })}
-        label="Prénom"
+        label={t('student.firstName.label')}
         required
         errors={error?.fields?.first_name}
       />
       <TextField
         value={formValues.lastName}
         handleChange={(val) => updateFormValues({ lastName: val })}
-        label="Nom"
+        label={t('student.lastName.label')}
         required
         errors={error?.fields?.last_name}
       />
       <TextField
         value={formValues.username}
         handleChange={(val) => updateFormValues({ username: val })}
-        label="Nom d'utilisateur"
+        label={t('student.username.label')}
         errors={error?.fields?.username}
         required
       />
       <TextField
         handleChange={(val) => updateFormValues({ description: val })}
-        label="description"
-        placeholder="Describe yourself in one or two sentence"
+        label={t('student.description.label')}
+        placeholder={t('student.description.placeholder')}
         rows={2}
         value={formValues.description}
         errors={error?.fields?.student?.description}
         multiline
+      />
+      <Typography variant="h3" m={1}>
+        Schooling
+      </Typography>
+      <DateField
+        label={t('login.arrivalYear')}
+        defaultValue={new Date()}
+        value={new Date(`${formValues.promo}-01-01`)}
+        sx={{ marginTop: 3 }}
+        views={['year']}
+        onChange={(date) => updateFormValues({ promo: date?.getFullYear() })}
+        disableFuture
+        fullWidth
       />
       <SelectField
         handleChange={(value: RegisterForm['faculty']) =>
