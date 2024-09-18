@@ -19,7 +19,7 @@ class GroupSocialLinkViewSet(ModelViewSet):
 class UserSocialLinkViewSet(ModelViewSet):
     queryset = SocialLink.objects.all()
     permission_classes = [UserSocialLinkPermission, IsAuthenticated]
-    serializer_class = [UserSocialLinkSerializer]
+    serializer_class = UserSocialLinkSerializer
 
     def list(self, request):
         raise MethodNotAllowed("GET", detail='Method "GET" not allowed')

@@ -12,7 +12,7 @@ class StudentSerializer(serializers.ModelSerializer):
     staff = serializers.SerializerMethodField()
     username = serializers.SerializerMethodField()
     expires_at = serializers.SerializerMethodField()
-    social_links = SocialLinkSerializer(many=True)
+    social_links = SocialLinkSerializer(many=True, read_only=True)
 
     class Meta:
         model = Student
