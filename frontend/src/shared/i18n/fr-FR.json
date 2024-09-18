@@ -308,6 +308,7 @@
         }
       },
       "formerMembers": "Anciens membres",
+      "hideFormerMembers": "Cacher les anciens membres",
       "infoLine": {
         "events": "événement(s)",
         "members": "membre(s)"
@@ -350,6 +351,7 @@
       "requestAdmin": "Demander a être admin",
       "requestSent": "Demande envoyée",
       "requestToBeAdmin": "{{student}} demande à être admin",
+      "showFormerMembers": "Afficher les anciens membres",
       "subGroupOf": "Sous-groupe de",
       "subgroups": "Sous-Groupes",
       "tabs": {
@@ -758,11 +760,36 @@
   },
   "student": {
     "arrivalYear": "Promo",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "currentPassword": {
+      "label": "Mot de passe actuel"
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Décrivez-vous en une ou deux phrases"
+    },
     "details": {
-      "changePassword": "Changer de mot de passe"
+      "changePassword": "Changer de mot de passe",
+      "editPassword": "Changer de mot de passe",
+      "editProfile": "Modifier son profil",
+      "form": {
+        "firstName": {
+          "label": "Prénom"
+        }
+      },
+      "housing": "Colocation",
+      "links": "Liens",
+      "password": "Mot de passe",
+      "profile": "Profil"
     },
     "filters": {
       "title": "Filtres"
+    },
+    "firstName": {
+      "label": "Prénom"
+    },
+    "lastName": {
+      "label": "Nom"
     },
     "list": {
       "labelDisplayedRows": "Page {{ page }} sur {{ pageSize }} ({{ count }} résultats)"
@@ -770,12 +797,18 @@
     "name": {
       "label": "Nom"
     },
+    "newPassword": {
+      "label": "Nouveau mot de passe"
+    },
     "picture": {
       "helperText": "Taille recommandée: 400 x 400",
       "label": "Image"
     },
     "searchBar": {
       "placeholder": "Rechercher un élève"
+    },
+    "username": {
+      "label": "Nom d'utilisateur"
     }
   },
   "userMenu": {

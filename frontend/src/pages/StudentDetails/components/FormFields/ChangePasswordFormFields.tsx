@@ -1,7 +1,8 @@
 import { PasswordField } from '#shared/components/FormFields/PasswordField';
+import { useTranslation } from '#shared/i18n/useTranslation';
 import { ApiFormError } from '#shared/infra/errors';
 
-import { ChangePasswordForm } from '../ChangePasswordModal';
+import { ChangePasswordForm } from '../EditProfile/ChangePassword.tab';
 
 export function ChangePasswordFormFields({
   formValues,
@@ -14,22 +15,23 @@ export function ChangePasswordFormFields({
     old_password: string;
     new_password: string;
     confirm_new_password: string;
-  }>;
+  }> | null;
   updateFormValues: (val: Partial<ChangePasswordForm>) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <>
       <PasswordField
         value={formValues.oldPassword}
         handleChange={(val) => updateFormValues({ oldPassword: val })}
-        label="Mot de passe"
+        label={t('student.currentPassword.label')}
         errors={error?.fields?.old_password}
         required
       />
       <PasswordField
         value={formValues.newPassword}
         handleChange={(val) => updateFormValues({ newPassword: val })}
-        label="Nouveau mot de passe"
+        label={t('student.newPassword.label')}
         errors={error?.fields?.new_password}
         required
       />
@@ -43,7 +45,7 @@ export function ChangePasswordFormFields({
         required
         visibilityIconHidden
         errors={error?.fields?.confirm_new_password}
-        label="Confirmer le nouveau mot de passe"
+        label={t('student.confirmNewPassword')}
       />
     </>
   );
