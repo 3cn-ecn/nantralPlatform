@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   Add as AddIcon,
@@ -42,6 +42,7 @@ export function EditSocialLinkForm({
   groupSlug,
 }: EditSocialLinkFormProps) {
   const sortedSocialLinks = sortLinks(socialLinks);
+  const addButtonRef = useRef<HTMLButtonElement>(null);
 
   const queryClient = useQueryClient();
   const { t } = useTranslation();
@@ -51,6 +52,13 @@ export function EditSocialLinkForm({
     label: '',
     uri: '',
   });
+
+  // hack to scroll to bottom when creating a new item
+  useEffect(() => {
+    if (expanded === -1) {
+      addButtonRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [expanded]);
 
   function onSuccess() {
     setExpanded(undefined);
@@ -96,9 +104,9 @@ export function EditSocialLinkForm({
         {sortedSocialLinks.map((socialLink, index) => (
           <Accordion
             key={socialLink.id}
+            disabled={expanded === -1}
             expanded={expanded === socialLink.id}
             onChange={(_, isExpanded) => {
-              if (expanded === -1) return;
               if (isExpanded) {
                 const val = socialLinks[index];
                 setSocialLinkForm({ ...val });
@@ -197,6 +205,7 @@ export function EditSocialLinkForm({
       <FlexRow gap={1}>
         <Button
           startIcon={<AddIcon />}
+          ref={addButtonRef}
           variant="contained"
           onClick={() => {
             setExpanded(-1);
