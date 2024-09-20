@@ -2,9 +2,11 @@
 import {
   faDiscord,
   faFacebook,
+  faFacebookMessenger,
   faInstagram,
   faLinkedin,
   faSpotify,
+  faWhatsapp,
   faXTwitter,
   faYoutube,
 } from '@fortawesome/free-brands-svg-icons';
@@ -51,6 +53,13 @@ export function getIconAndColor(socialLink: SocialLink): {
       return { icon: <FAIcon icon={faSpotify} />, color: colors.green[600] };
     case 'discord.gg':
       return { icon: <FAIcon icon={faDiscord} />, color: colors.indigo[400] };
+    case 'm.me':
+      return {
+        icon: <FAIcon icon={faFacebookMessenger} />,
+        color: colors.common.black,
+      };
+    case 'whatsapp.com':
+      return { icon: <FAIcon icon={faWhatsapp} />, color: colors.green[600] };
     default:
       return { icon: <GlobeIcon />, color: colors.grey[600] };
   }
