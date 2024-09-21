@@ -1,13 +1,9 @@
-import ckeditor5 from '@ckeditor/vite-plugin-ckeditor5';
 import react from '@vitejs/plugin-react';
-import { createRequire } from 'node:module';
 import path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 import svgr from 'vite-plugin-svgr';
-
-const require = createRequire(import.meta.url);
 
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -27,12 +23,7 @@ const legacyEntryPoints = [
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    svgr(),
-    react(),
-    visualizer({ template: 'sunburst' }),
-    ckeditor5({ theme: require.resolve('@ckeditor/ckeditor5-theme-lark') }),
-  ],
+  plugins: [svgr(), react(), visualizer({ template: 'sunburst' })],
   base: '/static/',
   resolve: {
     alias: {
