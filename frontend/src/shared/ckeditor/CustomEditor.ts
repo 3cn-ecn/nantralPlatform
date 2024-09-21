@@ -18,6 +18,8 @@ import {
   TextTransformation,
 } from 'ckeditor5';
 
+import { CKEditorTranslations } from './getCKEditorLanguage';
+
 export class CustomEditor extends ClassicEditor {}
 
 // Plugins to include in the build.
@@ -64,7 +66,7 @@ CustomEditor.defaultConfig = {
       'redo',
     ],
   },
-  language: 'fr',
+  translations: CKEditorTranslations,
   link: {
     addTargetToExternalLinks: true, // open in new tab by default
     defaultProtocol: 'https://', // add https when missing

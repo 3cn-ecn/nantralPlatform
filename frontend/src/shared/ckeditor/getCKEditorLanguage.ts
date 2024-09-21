@@ -1,24 +1,28 @@
-/**
- * NOTE: this function does nothing for the moment, because the translations
- * are not yet including during the build phase.
- *
- * To make this function working, we need to include the languages in the
- * vite config (vite.config.ts) with ckeditor-vite plugin. However, this
- * plugin does not support yet translations, but the team plans to implement it
- * soon.
- *
- * See this page to check the status of the plugin, and implement translations
- * when it will be available:
- * https://github.com/ckeditor/vite-plugin-ckeditor5
- */
+// @ts-expect-error Handled by the vite bundler
+import enTranslations from 'ckeditor5/translations/en';
+// @ts-expect-error Handled by the vite bundler
+import enGbTranslations from 'ckeditor5/translations/en-gb';
+// @ts-expect-error Handled by the vite bundler
+import frTranslations from 'ckeditor5/translations/fr';
 import { i18n } from 'i18next';
 
+export const CKEditorTranslations = [
+  enTranslations,
+  enGbTranslations,
+  frTranslations,
+];
+
+/**
+ * Map the i18n language to the CKEditor language
+ * @param i18n - The i18n object (with standard tag in all Nantral Platform)
+ * @returns - The CKEditor language (same tag as import)
+ */
 export const getCKEditorLanguage = (i18n: i18n): string => {
-  const language = i18n.language;
-  const languageMap = {
+  const stdLang = i18n.language;
+  const stdLangToCKEditorLang = {
     'en-US': 'en',
     'en-GB': 'en-gb',
     'fr-FR': 'fr',
   };
-  return languageMap[language] || 'en';
+  return stdLangToCKEditorLang[stdLang] || 'en';
 };
