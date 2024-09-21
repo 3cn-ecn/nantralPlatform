@@ -19,7 +19,7 @@ export async function copyAsHtml(
     const blob = new Blob([element.innerHTML], { type });
     const data = [new ClipboardItem({ [type]: blob })];
     await navigator.clipboard.write(data);
-  } catch (error) {
+  } catch {
     // continue regardless of error
   }
 

@@ -35,7 +35,11 @@ export function NotificationItem({
   const handleSeenMarkClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    notification.seen ? markAsUnseen() : markAsSeen();
+    if (notification.seen) {
+      markAsUnseen();
+    } else {
+      markAsSeen();
+    }
   };
 
   return (
