@@ -40,13 +40,20 @@ export default defineConfig({
   },
   build: {
     outDir: path.join(__dirname, '../backend/static/front/'),
-    manifest: true,
+    manifest: 'manifest.json',
     emptyOutDir: true,
     rollupOptions: {
       input: [
         path.join(__dirname, '/src/index.tsx'),
         ...legacyEntryPoints.map((p) => path.join(__dirname, '/src/legacy', p)),
       ],
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern',
+      },
     },
   },
 });
