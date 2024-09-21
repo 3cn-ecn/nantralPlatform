@@ -8,7 +8,7 @@ export async function copyAsHtml(
   markdownContent: string,
   group?: GroupPreview,
 ) {
-  const htmlCode = render(
+  const htmlCode = await render(
     <SignatureTemplate markdownContent={markdownContent} group={group} />,
   );
   const element = document.createElement('div');
