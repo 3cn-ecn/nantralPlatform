@@ -1,4 +1,5 @@
-{% load static %} {% load django_vite %}
+{% load static %}
+{% load django_vite %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -7,9 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="manifest" href="{% static 'manifest.webmanifest' %}" />
     <meta name="vapid-key" content="{{ vapid_key }}" />
-    <script src="https://kit.fontawesome.com/fb916ac9cd.js" crossorigin="anonymous"></script>
 
-    {% vite_react_refresh %} {% vite_hmr_client %}
+    {% vite_react_refresh %}
+    {% vite_hmr_client %}
 
     <!-- favicon -->
     <link rel="shortcut icon" type="image/svg+xml" href="{% static '/img/logo/scalable/logo.svg' %}" />

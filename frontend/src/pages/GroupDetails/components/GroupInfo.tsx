@@ -2,6 +2,7 @@ import { AdminPanelSettings } from '@mui/icons-material';
 import { Button, Skeleton, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
+import { sortLinks } from '#modules/social_link/utils/sortLinks';
 import { SocialLinkItem } from '#modules/social_link/view/shared/SocialLinkItem';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { Avatar } from '#shared/components/Avatar/Avatar';
@@ -24,6 +25,9 @@ export function GroupInfo({
 }) {
   const { staff } = useCurrentUserData();
   const { t } = useTranslation();
+
+  const sortedSocialLinks = group ? sortLinks(group.socialLinks) : [];
+
   return (
     <FlexRow
       width="100%"
@@ -66,8 +70,8 @@ export function GroupInfo({
           />
           <TimeAndPlace time={group?.meetingHour} place={group?.meetingPlace} />
           <Typography mt={1}>{group?.summary}</Typography>
-          <FlexRow flexWrap={'wrap'} mt={1}>
-            {group?.socialLinks.map((socialLink) => (
+          <FlexRow flexWrap="wrap" mt={2}>
+            {sortedSocialLinks?.map((socialLink) => (
               <SocialLinkItem key={socialLink.id} socialLink={socialLink} />
             ))}
           </FlexRow>

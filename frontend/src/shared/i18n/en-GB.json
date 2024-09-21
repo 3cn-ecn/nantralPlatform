@@ -15,7 +15,6 @@
       "suggestion": "Suggestion"
     },
     "group": {
-      "details": "Details",
       "index": "Groups"
     },
     "home": {
@@ -42,7 +41,8 @@
     "previous": "Previous",
     "save": "Save",
     "saved": "Saved",
-    "send": "Send"
+    "send": "Send",
+    "update": "Update"
   },
   "error": {
     "errorMessage": "Error: {{errorMessage}}",
@@ -285,7 +285,6 @@
       "accepted": "Accepted",
       "addMember": "Add a member",
       "create": "Create",
-      "deleteMember": "Delete the member?",
       "denied": "Denied",
       "deny": "Deny",
       "edit": "Edit",
@@ -308,8 +307,6 @@
         }
       },
       "formerMembers": "Former members",
-      "from": {
-      },
       "infoLine": {
         "events": "event(s)",
         "members": "member(s)"
@@ -743,20 +740,19 @@
     "name": "Nantral Platform"
   },
   "socialLink": {
-    "add": "Add",
-    "apply": "Apply",
-    "delete": "Delete",
+    "addEmail": "E-mail",
+    "addLink": "Link",
+    "addPhoneNumber": "Phone",
     "form": {
       "label": {
         "label": "Label"
       },
-      "network": {
-        "label": "Network"
-      },
       "url": {
-        "label": "url"
+        "description": "The URL should start with https:, mailto, or tel:",
+        "label": "URL"
       }
-    }
+    },
+    "new": "New link"
   },
   "userMenu": {
     "button": {
