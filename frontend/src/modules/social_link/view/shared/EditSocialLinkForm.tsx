@@ -62,7 +62,7 @@ export function EditSocialLinkForm({
 
   function onSuccess() {
     setExpanded(undefined);
-    groupSlug &&
+    if (groupSlug)
       queryClient.invalidateQueries(['group', { slug: groupSlug || '' }]);
   }
 

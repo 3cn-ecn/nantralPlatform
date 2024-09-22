@@ -1,0 +1,56 @@
+:root {
+  --np-red: #dc3545;
+  --ck-color-link-default: var(--np-red);
+  --ck-color-base-active: var(--np-red);
+  --ck-color-button-on-color: var(--np-red);
+  --ck-color-focus-border: var(--np-red);
+  --ck-color-base-focus: #d14654;
+  --ck-color-base-active-focus: #d72234;
+  --ck-color-button-on-background: #fff0f0;
+  --ck-color-button-on-hover-background: #ffe0e0;
+  --ck-color-button-on-active-background: #ffe0e0;
+  --ck-color-focus-outer-shadow: #f7d0d4;
+  --ck-color-focus-disabled-shadow: #f7d0d482;
+  --ck-color-base-border: rgb(196, 196, 196);
+  --ck-z-default: 1400;
+  --ck-border-radius: 20px;
+
+  .ck-content {
+    a {
+      color: var(--ck-color-link-default);
+    }
+  }
+
+  .ck.ck-editor {
+    width: 100%;
+
+    .ck.ck-toolbar {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .ck.ck-content {
+      background-color: transparent;
+      min-height: 7em;
+    }
+  }
+
+  .ck-balloon-panel {
+    button.ck-button:first-of-type {
+      border-bottom-left-radius: 20px;
+    }
+    button.ck-button:last-of-type {
+      border-bottom-right-radius: 20px;
+    }
+  }
+
+  .ck-dropdown__panel {
+    ul.ck-list {
+      padding: 0;
+
+      li:not(:first-child):not(:last-child) button {
+        border-radius: 0;
+      }
+    }
+  }
+}

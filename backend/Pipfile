@@ -29,7 +29,7 @@ django-modeltranslation = "~=0.18.11"
 django-push-notifications = {version = "~=3.0", extras = ["apns", "wp"]}
 django-rest-passwordreset = "~=1.4"
 django-storages = {version = "~=1.13", extras = ["boto3"]}
-django-vite = "~=2.1"
+django-vite = "~=3.0"
 djangorestframework = "~=3.15"
 docutils = "*"
 factory-boy = "~=3.3"

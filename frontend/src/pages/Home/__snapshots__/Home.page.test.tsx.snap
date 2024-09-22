@@ -11,7 +11,7 @@ exports[`Home page should render correctly without data 1`] = `
     >
       <img
         alt=""
-        class="mui-image-img  css-jlmoib"
+        class="mui-image-img css-jlmoib"
         src="/static/img/header.png"
         style="position: relative; width: 100%; height: 100%; object-fit: cover; transition-property: top, opacity; transition-duration: 120ms, 200ms; transition-timing-function: ease-in; opacity: 0; top: 100px;"
       />
