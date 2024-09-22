@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunknantralplatform_docs=self.webpackChunknantralplatform_docs||[]).push([[7472],{5513:t=>{t.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"History","permalink":"/blog/history","unlisted":false},{"title":"Introducing Nantral Platform","permalink":"/blog/introduce","unlisted":false}]}')}}]);

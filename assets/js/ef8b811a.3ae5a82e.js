@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunknantralplatform_docs=self.webpackChunknantralplatform_docs||[]).push([[8947],{6600:e=>{e.exports=JSON.parse('{"authors":[{"name":"Alexis Delage","title":"Webmaster 2021 at the Centrale Nantes\' BDE","url":"https://github.com/hydrielax","imageURL":"https://github.com/hydrielax.png","key":"hydrielax","page":null,"count":2}]}')}}]);

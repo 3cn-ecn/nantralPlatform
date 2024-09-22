@@ -14,6 +14,7 @@
         <updated>2022-05-29T00:00:00.000Z</updated>
         <summary type="html"><![CDATA[Before Nantral Platform came to life, various projects have been created before.]]></summary>
         <content type="html"><![CDATA[<p>Before Nantral Platform came to life, various projects have been created before.</p>
+<!-- -->
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="the-students-server-or-serveur-des-élèves">The Students Server, or "Serveur des Élèves"<a href="https://docs.nantral-platform.fr/blog/history#the-students-server-or-serveur-des-%C3%A9l%C3%A8ves" class="hash-link" aria-label="Direct link to The Students Server, or &quot;Serveur des Élèves&quot;" title="Direct link to The Students Server, or &quot;Serveur des Élèves&quot;">​</a></h2>
 <p>The <em>Students Server</em> was a server, maintained by students, which had the
 purpose to host different websites of the clubs and associations of the school.
@@ -42,6 +43,7 @@ our project has been built in continuity with this one.</p>]]></content>
 <p>Nantral Platform is a website developped by and for the Centrale Nantes'
 students. Its aim is to help students to communicate between each other,
 to organize events or simply make some annoucements.</p>
+<!-- -->
 <p>This platform is composed of several parts, called <strong>apps</strong>:</p>
 <ul>
 <li><strong>Groups</strong>: there are the core of Nantral Platform. A group can represent
