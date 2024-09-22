@@ -6,6 +6,7 @@ T = TypeVar("T")
 def parse_bool(value: str | None, default: T = None) -> bool | T:
     if value is None:
         return default
-    if value.lower().replace("/", "") in ("false", "0"):
-        return False
-    return True
+
+    formatted_value = value.lower().replace("/", "")
+
+    return formatted_value not in ("false", "0")

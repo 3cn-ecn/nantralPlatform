@@ -28,8 +28,7 @@ class SignatureApiView(views.APIView):
         year = timezone.now().year - promo
         if timezone.now().month >= FIRST_MONTH_OF_NEW_CYCLE:
             year += 1
-        if year > MAX_YEAR:
-            year = MAX_YEAR
+        year = min(year, MAX_YEAR)
         return year
 
     def get_academic_groups(self) -> QuerySet[Group]:
