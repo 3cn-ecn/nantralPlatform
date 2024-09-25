@@ -86,7 +86,7 @@
     "@vitejs/plugin-react": "^4.0.0",
     "array-move": "^4.0.0",
     "axios": "^1.7.4",
-    "ckeditor5": "^43.1.0",
+    "ckeditor5": "^43.1.1",
     "date-fns": "^2.30.0",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^8.0.0",
