@@ -6,6 +6,7 @@ from .models import Post
 class PostAdmin(admin.ModelAdmin):
     list_display = ["title", "created_at", "group"]
     readonly_fields = ["updated_by"]
+    autocomplete_fields = ["created_by", "group"]
 
     def save_model(
         self,
