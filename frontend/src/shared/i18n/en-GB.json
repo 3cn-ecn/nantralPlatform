@@ -737,6 +737,7 @@
     "title": "Signature generator"
   },
   "site": {
+    "adminSettings": "Admin Settings",
     "name": "Nantral Platform"
   },
   "socialLink": {
