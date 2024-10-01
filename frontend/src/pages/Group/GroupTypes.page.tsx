@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { AdminPanelSettings } from '@mui/icons-material';
-import { Button, Container, Divider, Typography } from '@mui/material';
+import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
+import { Container, IconButton, Tooltip, Typography } from '@mui/material';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { getGroupListApi } from '#modules/group/api/getGroupList.api';
@@ -37,22 +37,20 @@ export default function GroupTypesPage() {
 
   return (
     <Container sx={{ my: 3 }}>
-      <FlexRow justifyContent={'space-between'} alignItems="center" py={1}>
-        <Typography variant="h1" mb={1}>
-          {t('group.type.title')}
-        </Typography>
+      <FlexRow alignItems="center" gap={1}>
+        <Typography variant="h1">{t('group.type.title')}</Typography>
         {staff && (
-          <Button
-            variant="contained"
-            color="secondary"
-            href="/admin/group/grouptype"
-            startIcon={<AdminPanelSettings />}
-          >
-            {t('group.type.seeList')}
-          </Button>
+          <Tooltip title={t('group.type.seeList')}>
+            <IconButton
+              href="/admin/group/grouptype"
+              target="_blank"
+              size="large"
+            >
+              <AdminPanelSettingsIcon fontSize="inherit" />
+            </IconButton>
+          </Tooltip>
         )}
       </FlexRow>
-      <Divider />
       <SearchField
         value={search}
         handleChange={(val) => {
