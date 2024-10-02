@@ -2,6 +2,7 @@ import { MouseEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
+  AdminPanelSettings as AdminPanelSettingsIcon,
   DarkMode as DarkModeIcon,
   FeedbackOutlined as FeedbackIcon,
   Gavel as LegalIcon,
@@ -9,7 +10,6 @@ import {
   MenuBook as MenuBookIcon,
   NavigateNext as NavigateNextIcon,
   Person as PersonIcon,
-  Security as SecurityIcon,
   Translate as TranslateIcon,
 } from '@mui/icons-material';
 import { Collapse, Divider, Icon, IconButton, Menu } from '@mui/material';
@@ -99,10 +99,10 @@ export function UserMenuAuthenticated() {
         {currentUser.staff && (
           <UserMenuItem
             label={t('userMenu.menu.adminInterface')}
-            icon={<SecurityIcon />}
-            component={Link}
-            to="/admin"
-            reloadDocument
+            icon={<AdminPanelSettingsIcon />}
+            component="a"
+            href="/admin"
+            target="_blank"
             onClick={() => setMenuOpen(null)}
           />
         )}

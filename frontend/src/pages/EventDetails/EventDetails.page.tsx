@@ -1,11 +1,21 @@
 import { useParams } from 'react-router-dom';
 
-import { Container, Divider, Typography } from '@mui/material';
+import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
+import {
+  Container,
+  Divider,
+  IconButton,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 
 import { useEventDetailsQuery } from '#modules/event/hooks/useEventDetails.query';
+import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
+import { FlexRow } from '#shared/components/FlexBox/FlexBox';
 import { RichTextRenderer } from '#shared/components/RichTextRenderer/RichTextRenderer';
 import { Spacer } from '#shared/components/Spacer/Spacer';
+import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { TopImage } from '../../shared/components/TopImage/TopImage';
 import { ActionButtonsBar } from './components/ActionButtonsBar';
@@ -14,6 +24,9 @@ import { EventInfo } from './components/EventInfo';
 import { EventPopupAlerts } from './components/EventPopupAlerts';
 
 export default function EventDetailsPage() {
+  const { t } = useTranslation();
+  const { staff } = useCurrentUserData();
+
   const { id: eventId } = useParams();
   // Using suspense: true allows to skip isLoading, isError states: they
   // are catch by the nearest <Suspense> boundary, in this case the one
@@ -51,7 +64,20 @@ export default function EventDetailsPage() {
         maxWidth="md"
         sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 3 }}
       >
-        <Typography variant="h1">{event.title}</Typography>
+        <FlexRow alignItems="center" gap={1}>
+          <Typography variant="h1">{event.title}</Typography>
+          {staff && (
+            <Tooltip title={t('site.adminSettings')}>
+              <IconButton
+                size="large"
+                href={`/admin/event/event/${event.id}/change/`}
+                target="_blank"
+              >
+                <AdminPanelSettingsIcon fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
+          )}
+        </FlexRow>
         <ActionButtonsBar event={event} />
         <EventInfo
           startDate={event.startDate}

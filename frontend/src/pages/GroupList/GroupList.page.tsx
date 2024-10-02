@@ -1,10 +1,10 @@
 import { useSearchParams } from 'react-router-dom';
 
-import { AdminPanelSettings } from '@mui/icons-material';
+import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
 import {
-  Button,
   Container,
   Divider,
+  MenuItem,
   Skeleton,
   Typography,
 } from '@mui/material';
@@ -12,8 +12,8 @@ import {
 import { GroupGrid } from '#modules/group/view/GroupGrid/GroupGrid';
 import { useCurrentUserData } from '#modules/student/hooks/useCurrentUser.data';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { IconMenu } from '#shared/components/IconMenu/IconMenu';
 import { InfiniteList } from '#shared/components/InfiniteList/InfiniteList';
-import { Spacer } from '#shared/components/Spacer/Spacer';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { CreateGroupButton } from './components/CreateGroupButton';
@@ -30,45 +30,38 @@ export default function GroupListPage() {
 
   return (
     <Container sx={{ my: 3 }}>
-      <FlexRow
-        justifyContent={'space-between'}
-        alignItems="center"
-        flexWrap={'wrap'}
-        py={1}
-      >
-        <FlexRow alignItems={'center'} gap={1} mb={1}>
-          <Typography variant="h1">
-            {groupTypeQuery.isLoading || groupListQuery.isLoading ? (
-              <Skeleton width={250} variant="text" />
-            ) : (
-              `${groupTypeQuery.data?.name} (${count})`
-            )}
-          </Typography>
-        </FlexRow>
-
+      <FlexRow alignItems="center" gap={1}>
+        <Typography variant="h1">
+          {groupTypeQuery.isLoading || groupListQuery.isLoading ? (
+            <Skeleton width={250} variant="text" />
+          ) : (
+            `${groupTypeQuery.data?.name} (${count})`
+          )}
+        </Typography>
         {staff && (
-          <FlexRow gap={2}>
-            <Button
-              variant="contained"
-              color="secondary"
+          <IconMenu
+            Icon={AdminPanelSettingsIcon}
+            size="large"
+            tooltip={t('site.adminSettings')}
+          >
+            <MenuItem
+              component="a"
               href={`/admin/group/grouptype/${type}/change/`}
-              startIcon={<AdminPanelSettings />}
+              target="_blank"
             >
               {t('group.list.editType')}
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
+            </MenuItem>
+            <MenuItem
+              component="a"
               href={`/admin/group/group/?group_type__slug__exact=${type}`}
-              startIcon={<AdminPanelSettings />}
+              target="_blank"
             >
               {t('group.type.seeList')}
-            </Button>
-          </FlexRow>
+            </MenuItem>
+          </IconMenu>
         )}
       </FlexRow>
-      <Divider />
-      <Spacer vertical={2} />
+      <Divider sx={{ my: 3 }} />
       <InfiniteList query={groupListQuery}>
         <FlexCol gap={4}>
           {groupListQuery.isSuccess &&

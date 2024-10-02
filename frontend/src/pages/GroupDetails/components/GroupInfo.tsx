@@ -1,5 +1,5 @@
-import { AdminPanelSettings } from '@mui/icons-material';
-import { Button, Skeleton, Typography } from '@mui/material';
+import { AdminPanelSettings as AdminPanelSettingsIcon } from '@mui/icons-material';
+import { IconButton, Skeleton, Tooltip, Typography } from '@mui/material';
 
 import { Group } from '#modules/group/types/group.types';
 import { sortLinks } from '#modules/social_link/utils/sortLinks';
@@ -54,13 +54,26 @@ export function GroupInfo({
           />
         )}
         <FlexCol alignItems={'flex-start'}>
-          <Typography variant="h1">
-            {isLoading ? (
-              <Skeleton animation="wave" width={200} />
-            ) : (
-              group?.name
+          <FlexRow gap={1} alignItems="center">
+            <Typography variant="h1">
+              {isLoading ? (
+                <Skeleton animation="wave" width={200} />
+              ) : (
+                group?.name
+              )}
+            </Typography>
+            {group && staff && (
+              <Tooltip title={t('site.adminSettings')}>
+                <IconButton
+                  size="large"
+                  href={`/admin/group/group/${group?.id}/change/`}
+                  target="_blank"
+                >
+                  <AdminPanelSettingsIcon fontSize="inherit" />
+                </IconButton>
+              </Tooltip>
             )}
-          </Typography>
+          </FlexRow>
 
           <GroupInfoLine
             isLoading={isLoading}
@@ -76,23 +89,6 @@ export function GroupInfo({
             ))}
           </FlexRow>
         </FlexCol>
-        {group && staff && (
-          <FlexCol
-            alignItems={'flex-end'}
-            justifyContent={'center'}
-            px={3}
-            flex={1}
-          >
-            <Button
-              variant="contained"
-              startIcon={<AdminPanelSettings />}
-              color="secondary"
-              href={`/admin/group/group/${group.id}/change/`}
-            >
-              {t('group.details.modal.editGroup.title')}
-            </Button>
-          </FlexCol>
-        )}
       </FlexRow>
     </FlexRow>
   );
