@@ -1,7 +1,6 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
-
 import { Container } from '@mui/material';
 
+import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamState';
 import { PostModal } from '#modules/post/view/PostModal/PostModal';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
@@ -18,35 +17,26 @@ import { UpcomingEventsSection } from './views/section/UpcomingEventsSection';
  * @returns Home page component
  */
 export default function HomePage() {
-  // Query Params
-  const [queryParams] = useSearchParams();
-  const navigate = useNavigate();
+  const { postId, closePost } = usePostQueryParamState();
   // Dates
   const today = new Date();
   const nextWeek = new Date();
   nextWeek.setDate(today.getDate() + 7);
-
-  const openedPostId = queryParams.get('post');
 
   return (
     <>
       <HomeHeader />
       <Container sx={{ my: 4 }}>
         <CreateNewButton />
-        <PinnedPostsSection enabled={!openedPostId} />
-        <UpcomingEventsSection enabled={!openedPostId} />
-        <LastPostsSection enabled={!openedPostId} />
+        <PinnedPostsSection enabled={!postId} />
+        <UpcomingEventsSection enabled={!postId} />
+        <LastPostsSection enabled={!postId} />
         <MyGroupsSection />
         <Spacer vertical={3} />
         <HelpUsSection />
         <Spacer vertical={6} />
       </Container>
-      {!!openedPostId && (
-        <PostModal
-          postId={parseInt(openedPostId)}
-          onClose={() => navigate({}, { preventScrollReset: true })}
-        />
-      )}
+      {!!postId && <PostModal postId={postId} onClose={closePost} />}
     </>
   );
 }

@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Container } from '@mui/material';
 
+import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamState';
 import { PostModal } from '#modules/post/view/PostModal/PostModal';
 import { BackgroundImageOverlay } from '#pages/EventDetails/components/BackgroundImageOverlay';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { TopImage } from '#shared/components/TopImage/TopImage';
+import { useQueryParamState } from '#shared/hooks/useQueryParamState';
 
 import { GroupAdminRequests } from './GroupAdminRequests/GroupAdminRequests.tab';
 import { GroupEvents } from './GroupEvents/GroupEvents.tab';
@@ -19,11 +20,15 @@ import { EditButton } from './components/Buttons/EditButton';
 import { GroupInfo } from './components/GroupInfo';
 import { useGroupDetails } from './hooks/useGroupDetails';
 
-export default function GroupDetailsPage() {
-  const { type: slug } = useParams();
+type TabTypes = 'home' | 'members' | 'events' | 'posts' | 'adminRequests';
 
-  const [params, setParams] = useSearchParams();
-  const [tabValue, setTabValue] = useState(params.get('tab') || 'home');
+export default function GroupDetailsPage() {
+  const urlPathParams = useParams();
+  const slug = (urlPathParams.type as string).slice(1);
+
+  const [tabValue, setTabValue] = useQueryParamState<TabTypes>('tab', 'home');
+  const { postId, closePost } = usePostQueryParamState();
+
   const {
     groupDetails,
     events,
@@ -33,7 +38,7 @@ export default function GroupDetailsPage() {
     error,
     refetch,
     isSuccess,
-  } = useGroupDetails(slug?.slice(1));
+  } = useGroupDetails(slug);
 
   if (isError && error) {
     return (
@@ -44,7 +49,6 @@ export default function GroupDetailsPage() {
       />
     );
   }
-  const postId = params.get('post');
 
   return (
     <>
@@ -52,9 +56,7 @@ export default function GroupDetailsPage() {
         <BackgroundImageOverlay src={groupDetails.banner} />
       )}
       <Container sx={{ mb: 2 }}>
-        {groupDetails?.isAdmin && members && (
-          <EditButton group={groupDetails} />
-        )}
+        {groupDetails?.isAdmin && <EditButton group={groupDetails} />}
         {groupDetails?.banner && (
           <TopImage src={groupDetails.banner} aspectRatio={110 / 40} />
         )}
@@ -68,11 +70,8 @@ export default function GroupDetailsPage() {
           <GroupTabBar
             value={tabValue}
             group={groupDetails}
-            onChangeValue={(val) => {
+            onChangeValue={(val: TabTypes) => {
               setTabValue(val);
-              const url = new URL(window.location.toString());
-              url.searchParams.set('tab', val);
-              history.replaceState(history.state, '', url);
             }}
           />
         )}
@@ -92,15 +91,7 @@ export default function GroupDetailsPage() {
         )}
         <Spacer vertical={80} />
       </Container>
-      {postId && (
-        <PostModal
-          postId={Number.parseInt(postId)}
-          onClose={() => {
-            params.delete('post');
-            setParams(params);
-          }}
-        />
-      )}
+      {postId && <PostModal postId={postId} onClose={closePost} />}
     </>
   );
 }
