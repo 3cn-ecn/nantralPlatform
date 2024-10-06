@@ -4,17 +4,18 @@ import { Group } from '#modules/group/types/group.types';
 import { useAuth } from '#shared/context/Auth.context';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
-export type GroupDetailsTabs = 'home' | 'members' | 'events' | 'posts';
+export type TabType = 'home' | 'members' | 'events' | 'posts' | 'adminRequests';
 
 interface GroupTabBarProps {
-  value: string;
-  onChangeValue: (val: string) => void;
+  value: TabType;
+  onChangeValue: (val: TabType) => void;
   group: Group;
 }
 
 export function GroupTabBar({ value, onChangeValue, group }: GroupTabBarProps) {
   const { isAuthenticated } = useAuth();
   const { t } = useTranslation();
+
   return (
     <>
       <Tabs
@@ -22,34 +23,23 @@ export function GroupTabBar({ value, onChangeValue, group }: GroupTabBarProps) {
         onChange={(_, newVal) => onChangeValue(newVal)}
         value={value}
         allowScrollButtonsMobile
+        sx={{
+          '.MuiTabs-scrollButtons.Mui-disabled': { opacity: 0.3 },
+        }}
       >
         <Tab label={t('group.details.tabs.home')} value={'home'} />
         {isAuthenticated && (
-          <Tab
-            label={t('group.details.tabs.members')}
-            disabled={false}
-            value={'members'}
-          />
-        )}
-
-        {isAuthenticated && (
-          <Tab
-            label={t('group.details.tabs.events')}
-            disabled={false}
-            value={'events'}
-          />
+          <Tab label={t('group.details.tabs.members')} value={'members'} />
         )}
         {isAuthenticated && (
-          <Tab
-            label={t('group.details.tabs.posts')}
-            disabled={false}
-            value={'posts'}
-          />
+          <Tab label={t('group.details.tabs.events')} value={'events'} />
+        )}
+        {isAuthenticated && (
+          <Tab label={t('group.details.tabs.posts')} value={'posts'} />
         )}
         {isAuthenticated && group.isAdmin && (
           <Tab
             label={t('group.details.tabs.adminRequests')}
-            disabled={false}
             value={'adminRequests'}
           />
         )}

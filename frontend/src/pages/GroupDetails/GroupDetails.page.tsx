@@ -15,18 +15,19 @@ import { GroupEvents } from './GroupEvents/GroupEvents.tab';
 import { GroupHome } from './GroupHome/GroupHome.tab';
 import { GroupMembers } from './GroupMembers/GroupMembers.tab';
 import { GroupPosts } from './GroupPosts/GroupPosts.tab';
-import { GroupTabBar } from './GroupTabBar/GroupTabBar';
+import { GroupTabBar, TabType } from './GroupTabBar/GroupTabBar';
 import { EditButton } from './components/Buttons/EditButton';
 import { GroupInfo } from './components/GroupInfo';
 import { useGroupDetails } from './hooks/useGroupDetails';
-
-type TabTypes = 'home' | 'members' | 'events' | 'posts' | 'adminRequests';
 
 export default function GroupDetailsPage() {
   const urlPathParams = useParams();
   const slug = (urlPathParams.type as string).slice(1);
 
-  const [tabValue, setTabValue] = useQueryParamState<TabTypes>('tab', 'home');
+  const [selectedTab, setSelectedTab] = useQueryParamState<TabType>(
+    'tab',
+    'home',
+  );
   const { postId, closePost } = usePostQueryParamState();
 
   const {
@@ -56,9 +57,8 @@ export default function GroupDetailsPage() {
         <BackgroundImageOverlay src={groupDetails.banner} />
       )}
       <Container sx={{ mb: 2 }}>
-        {groupDetails?.isAdmin && <EditButton group={groupDetails} />}
         {groupDetails?.banner && (
-          <TopImage src={groupDetails.banner} aspectRatio={110 / 40} />
+          <TopImage src={groupDetails.banner} aspectRatio={3} />
         )}
         <GroupInfo
           eventCount={events?.count}
@@ -68,28 +68,31 @@ export default function GroupDetailsPage() {
         />
         {isSuccess && groupDetails && (
           <GroupTabBar
-            value={tabValue}
+            value={selectedTab}
             group={groupDetails}
-            onChangeValue={(val: TabTypes) => {
-              setTabValue(val);
+            onChangeValue={(val: TabType) => {
+              setSelectedTab(val);
             }}
           />
         )}
         <Spacer vertical={2} />
-        {tabValue == 'home' && <GroupHome group={groupDetails} />}
-        {tabValue == 'members' && groupDetails && (
+        {selectedTab == 'home' && <GroupHome group={groupDetails} />}
+        {selectedTab == 'members' && groupDetails && (
           <GroupMembers group={groupDetails} />
         )}
-        {tabValue == 'events' && groupDetails && (
+        {selectedTab == 'events' && groupDetails && (
           <GroupEvents group={groupDetails} />
         )}
-        {tabValue == 'posts' && groupDetails && (
+        {selectedTab == 'posts' && groupDetails && (
           <GroupPosts group={groupDetails} />
         )}
-        {tabValue == 'adminRequests' && groupDetails && (
+        {selectedTab == 'adminRequests' && groupDetails && (
           <GroupAdminRequests group={groupDetails} />
         )}
         <Spacer vertical={80} />
+        {groupDetails?.isAdmin &&
+          selectedTab !== 'posts' &&
+          selectedTab !== 'events' && <EditButton group={groupDetails} />}
       </Container>
       {postId && <PostModal postId={postId} onClose={closePost} />}
     </>

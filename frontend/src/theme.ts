@@ -40,33 +40,34 @@ function getTheme(mode: PaletteMode, language: string) {
         },
       },
       typography: {
+        // px units are automatically converted into rem by MUI
         fontFamily: 'Heebo, sans-serif',
         fontWeightLight: 300,
         fontWeightBold: 600,
         poster: {
           fontWeight: 800,
-          fontSize: '6rem',
+          fontSize: 96,
           lineHeight: 1.167,
         },
         h1: {
           fontWeight: 800,
-          fontSize: '3rem',
+          fontSize: 48,
         },
         h2: {
           fontWeight: 700,
-          fontSize: '2.125rem',
+          fontSize: 34,
         },
         h3: {
           fontWeight: 600,
-          fontSize: '1.75rem',
+          fontSize: 28,
         },
         h4: {
           fontWeight: 500,
-          fontSize: '1.5rem',
+          fontSize: 24,
         },
         h5: {
           fontWeight: 500,
-          fontSize: '1.25rem',
+          fontSize: 20,
         },
         h6: {
           fontWeight: 400,

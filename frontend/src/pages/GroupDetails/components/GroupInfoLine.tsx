@@ -29,7 +29,7 @@ export function GroupInfoLine({
   }
 
   return (
-    <Typography color="gray" variant="subtitle1">
+    <Typography color="textSecondary" variant="body2" mt="1px">
       {isLoading ? (
         <Skeleton animation="wave" width={200} />
       ) : (
