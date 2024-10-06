@@ -17,15 +17,17 @@ export function GroupInfoLine({
 }: GroupInfoLineProps) {
   const infos: string[] = [];
   const { t } = useTranslation();
+
   if (slug !== undefined) {
     infos.push(`@${slug}`);
   }
   if (memberCount !== undefined) {
-    infos.push(`${memberCount} ${t('group.details.infoLine.members')}`);
+    infos.push(t('group.details.infoLine.members', { count: memberCount }));
   }
   if (eventCount !== undefined) {
-    infos.push(`${eventCount} ${t('group.details.infoLine.events')}`);
+    infos.push(t('group.details.infoLine.events', { count: eventCount }));
   }
+
   return (
     <Typography color="gray" variant="subtitle1">
       {isLoading ? (

@@ -308,8 +308,10 @@
       },
       "formerMembers": "Former members",
       "infoLine": {
-        "events": "event(s)",
-        "members": "member(s)"
+        "events_one": "{{count}} event",
+        "events_other": "{{count}} events",
+        "members_one": "{{count}} member",
+        "members_other": "{{count}} members"
       },
       "join": "Join",
       "makeAdminRequest": "Make an admin request",
