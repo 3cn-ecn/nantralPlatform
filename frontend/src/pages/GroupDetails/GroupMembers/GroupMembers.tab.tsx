@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
-import { History } from '@mui/icons-material';
-import { Chip } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { Group } from '#modules/group/types/group.types';
 import { FlexAuto, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { CheckboxField } from '#shared/components/FormFields';
 import { useTranslation } from '#shared/i18n/useTranslation';
 
 import { JoinButton } from '../components/Buttons/JoinButton';
@@ -19,15 +19,18 @@ export function GroupMembers({ group }: GroupMembersProps) {
   return (
     <>
       <FlexRow alignItems={'center'} justifyContent={'space-between'}>
-        <Chip
-          icon={<History />}
-          disabled={group.groupType.noMembershipDates}
-          label={t('group.details.formerMembers')}
-          variant={filters.previous ? 'filled' : 'outlined'}
-          color={filters.previous ? 'secondary' : 'default'}
-          onClick={() =>
-            setFilters({ ...filters, previous: !filters.previous })
+        <CheckboxField
+          value={filters.previous}
+          handleChange={(val) => setFilters({ ...filters, previous: val })}
+          label={
+            filters.previous
+              ? t('group.details.hideFormerMembers')
+              : t('group.details.showFormerMembers')
           }
+          checkboxProps={{
+            icon: <Visibility />,
+            checkedIcon: <VisibilityOff />,
+          }}
         />
         <FlexAuto gap={2}>
           <JoinButton group={group} />

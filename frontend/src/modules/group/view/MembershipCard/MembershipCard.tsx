@@ -28,6 +28,7 @@ function MembershipCard(props: {
   group?: Group;
   updateMembership?: (member: Membership) => Promise<void>;
   deleteMembership?: (member: Membership) => Promise<void>;
+  reloadDocument?: boolean;
 }) {
   const { item, group, deleteMembership } = props;
   const [openShowModal, setOpenShowModal] = useState(false);
@@ -49,13 +50,13 @@ function MembershipCard(props: {
             sx={{ display: 'flex', alignItems: 'center', gap: 1, p: 1 }}
           >
             <Avatar
-              src={item.student.picture}
-              alt={item.student.name || item.group.name}
+              src={group ? item.student.picture : item.group.icon}
+              alt={group ? item.student.name : item.group.name}
               size="m"
             />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="body1" noWrap>
-                {item.student.name || item.group.name}
+                {group ? item.student.name : item.group.name}
               </Typography>
               <Typography variant="body2" color="secondary" noWrap>
                 {item.summary}
@@ -74,6 +75,7 @@ function MembershipCard(props: {
         member={item}
         group={group}
         student={item.student}
+        reloadDocument={props.reloadDocument}
       />
 
       {openEditModal && group && (

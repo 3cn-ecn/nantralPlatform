@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import {
   Close as CloseIcon,
   Edit as EditIcon,
@@ -28,6 +30,7 @@ export function ModalShowMember(props: {
   member: Membership;
   group?: Group;
   student: StudentPreview;
+  reloadDocument?: boolean;
 }) {
   const { closeModal, openEditModal, open, member, group, student } = props;
   const { t } = useTranslation();
@@ -86,10 +89,12 @@ export function ModalShowMember(props: {
       </DialogContent>
       <DialogActions>
         <Button
-          href={group ? member.student.url : member.group.url}
+          component={Link}
+          to={group ? member.student.url : member.group.url}
           variant="text"
           color="secondary"
           endIcon={<OpenInNewIcon />}
+          reloadDocument={props.reloadDocument}
         >
           {group
             ? t('group.details.modal.displayMember.openProfile')

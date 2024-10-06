@@ -2,7 +2,9 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.translation import gettext as _
 
+from apps.sociallink.models import SocialLink
 from apps.utils.fields.image_field import CustomImageField
 
 FACULTIES = [
@@ -42,7 +44,6 @@ class Student(models.Model):
         null=True,
         blank=True,
         size=(500, 500),
-        crop=True,
         name_from_field="user",
     )
     faculty = models.CharField(
@@ -55,6 +56,13 @@ class Student(models.Model):
         verbose_name="Cursus",
         choices=PATHS,
         null=True,
+        blank=True,
+    )
+    description = models.CharField(max_length=300, blank=True)
+    social_links = models.ManyToManyField(
+        to=SocialLink,
+        verbose_name=_("Social networks"),
+        related_name="student_set",
         blank=True,
     )
 

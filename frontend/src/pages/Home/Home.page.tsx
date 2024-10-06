@@ -5,6 +5,7 @@ import { Container } from '@mui/material';
 import { PostModal } from '#modules/post/view/PostModal/PostModal';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 
+import './Home.scss';
 import { CreateNewButton } from './views/CreateNewButton';
 import { HomeHeader } from './views/HomeHeader';
 import { HelpUsSection } from './views/section/HelpUsSection';
@@ -31,7 +32,7 @@ export default function HomePage() {
   return (
     <>
       <HomeHeader />
-      <Container sx={{ my: 4 }}>
+      <Container id="homeContainer" sx={{ my: 4 }}>
         <CreateNewButton />
         <PinnedPostsSection enabled={!openedPostId} />
         <UpcomingEventsSection enabled={!openedPostId} />

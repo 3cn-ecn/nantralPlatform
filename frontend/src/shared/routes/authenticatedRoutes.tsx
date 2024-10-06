@@ -1,7 +1,11 @@
 import { lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
+import { QueryClient } from '@tanstack/react-query';
+
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
+
+import { studentDetailsLoader } from './loader';
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -22,10 +26,18 @@ const FeedbackHomePage = lazy(
 const FeedbackFormPage = lazy(
   () => import('#pages/Feedback/FeedbackForm.page'),
 );
+const StudentListPage = lazy(
+  () => import('#pages/StudentList/StudentList.page'),
+);
+const StudentDetailsPage = lazy(
+  () => import('#pages/StudentDetails/StudentDetails.page'),
+);
 
 const t = (key: string) => key;
 
-export const authenticatedRoutes: RouteObject = {
+export const authenticatedRoutes: (queryClient: QueryClient) => RouteObject = (
+  queryClient,
+) => ({
   element: <PageTemplate />,
   children: [
     {
@@ -66,6 +78,18 @@ export const authenticatedRoutes: RouteObject = {
       handle: { crumb: t('breadcrumbs.signature.index') },
     },
     {
+      path: '/student',
+      handle: { crumb: t('navbar.student') },
+      children: [
+        { index: true, element: <StudentListPage /> },
+        {
+          path: ':id',
+          element: <StudentDetailsPage />,
+          loader: (params) => studentDetailsLoader(params, queryClient),
+        },
+      ],
+    },
+    {
       path: '/feedback',
       handle: { crumb: t('breadcrumbs.feedback.home') },
       children: [
@@ -91,4 +115,4 @@ export const authenticatedRoutes: RouteObject = {
       handle: { crumb: t('breadcrumbs.notFound.index') },
     },
   ],
-};
+});

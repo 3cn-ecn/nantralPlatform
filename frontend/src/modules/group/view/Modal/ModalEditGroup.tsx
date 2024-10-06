@@ -147,6 +147,10 @@ export function ModalEditGroup({
           <EditSocialLinkForm
             socialLinks={group.socialLinks}
             groupSlug={group.slug}
+            type="group"
+            onSuccess={() =>
+              queryClient.invalidateQueries(['group', { slug: group.slug }])
+            }
           />
         )}
         {tab == 3 && <EditChildrenView group={group} />}

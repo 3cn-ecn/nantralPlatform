@@ -13,9 +13,10 @@ import {
   Box,
   Button,
 } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { createGroupSocialLinkApi } from '#modules/social_link/api/createGroupSocialLink.api';
+import { createUserSocialLinkApi } from '#modules/social_link/api/createUserSocialLink.api';
 import { deleteSocialLinkApi } from '#modules/social_link/api/deleteSocialLink.api';
 import { updateSocialLinkApi } from '#modules/social_link/api/updateGroupSocialLink.api';
 import { SocialLinkDTO } from '#modules/social_link/infra/socialLink.dto';
@@ -34,17 +35,20 @@ import { SocialLinkItem } from './SocialLinkItem';
 
 interface EditSocialLinkFormProps {
   socialLinks: SocialLink[];
+  type: 'user' | 'group';
   groupSlug?: string;
+  onSuccess?: () => void;
 }
 
 export function EditSocialLinkForm({
   socialLinks,
+  type,
   groupSlug,
+  onSuccess,
 }: EditSocialLinkFormProps) {
   const sortedSocialLinks = sortLinks(socialLinks);
   const addButtonRef = useRef<HTMLButtonElement>(null);
 
-  const queryClient = useQueryClient();
   const { t } = useTranslation();
 
   const [expanded, setExpanded] = useState<number | undefined>(undefined);
@@ -60,10 +64,16 @@ export function EditSocialLinkForm({
     }
   }, [expanded]);
 
-  function onSuccess() {
+  // hack to scroll to bottom when creating a new item
+  useEffect(() => {
+    if (expanded === -1) {
+      addButtonRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [expanded]);
+
+  function handleSuccess() {
     setExpanded(undefined);
-    if (groupSlug)
-      queryClient.invalidateQueries(['group', { slug: groupSlug || '' }]);
+    onSuccess?.();
   }
 
   const {
@@ -71,9 +81,9 @@ export function EditSocialLinkForm({
     isError: socialLinkIsError,
     mutate: updateSocialLink,
   } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>(
-    (val) => updateSocialLinkApi(val),
+    (val) => updateSocialLinkApi(val, type),
     {
-      onSuccess: onSuccess,
+      onSuccess: handleSuccess,
     },
   );
 
@@ -81,8 +91,8 @@ export function EditSocialLinkForm({
     unknown,
     ApiFormError<SocialLinkDTO>,
     SocialLinkForm
-  >((val) => deleteSocialLinkApi(val.id || -1), {
-    onSuccess: onSuccess,
+  >((val) => deleteSocialLinkApi(val.id || -1, type), {
+    onSuccess: handleSuccess,
   });
 
   const {
@@ -90,11 +100,12 @@ export function EditSocialLinkForm({
     isError: createIsError,
     mutate: createSocialLink,
   } = useMutation<SocialLinkForm, ApiFormError<SocialLinkDTO>, SocialLinkForm>(
-    (val) => createGroupSocialLinkApi(groupSlug || '', val),
+    (val) =>
+      type == 'group'
+        ? createGroupSocialLinkApi(groupSlug || '', val)
+        : createUserSocialLinkApi(val),
     {
-      onSuccess: () => {
-        onSuccess();
-      },
+      onSuccess: handleSuccess,
     },
   );
 

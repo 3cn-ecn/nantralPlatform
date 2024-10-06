@@ -1,13 +1,19 @@
 from django.urls import path
 
+from rest_framework.routers import DefaultRouter
+
 from .api_views import (
     CheckAddressView,
+    FlatShareMembershipViewSet,
     HousingView,
     RoommatesDetails,
     SearchGeocodingView,
 )
 
 app_name = "roommates_api"
+
+router = DefaultRouter()
+router.register("membership", FlatShareMembershipViewSet, basename="membership")
 
 urlpatterns = [
     path("geocoding", SearchGeocodingView.as_view(), name="geocoding"),
@@ -19,3 +25,4 @@ urlpatterns = [
         name="roommates-details",
     ),
 ]
+urlpatterns += router.urls
