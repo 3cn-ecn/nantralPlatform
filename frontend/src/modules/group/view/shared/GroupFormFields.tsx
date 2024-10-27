@@ -1,16 +1,17 @@
 import { Dispatch, useCallback } from 'react';
 
 import {
-  AccessTimeFilled,
-  ExpandMoreRounded,
-  LinkRounded,
-  Place,
+  AccessTime as ClockIcon,
+  ExpandMoreRounded as ExpandMoreIcon,
+  LinkRounded as LinkIcon,
+  PlaceOutlined as PlaceIcon,
 } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
+  InputAdornment,
   MenuItem,
   Typography,
 } from '@mui/material';
@@ -190,7 +191,13 @@ export function GroupFormFields({
 
       <FlexAuto columnGap={2}>
         <TextField
-          InputProps={{ endAdornment: <Place sx={{ mr: 1 }} /> }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <PlaceIcon />
+              </InputAdornment>
+            ),
+          }}
           label={t('group.form.meetingPlace.label')}
           value={formValues.meetingPlace}
           handleChange={useCallback(
@@ -200,7 +207,13 @@ export function GroupFormFields({
           errors={error?.fields?.meetingPlace}
         />
         <TextField
-          InputProps={{ endAdornment: <AccessTimeFilled sx={{ mr: 1 }} /> }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <ClockIcon />
+              </InputAdornment>
+            ),
+          }}
           label={t('group.form.meetingHour.label')}
           value={formValues.meetingHour}
           handleChange={useCallback(
@@ -215,7 +228,13 @@ export function GroupFormFields({
         <TextField
           label={t('group.form.video1.label')}
           type="url"
-          InputProps={{ endAdornment: <LinkRounded /> }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <LinkIcon />
+              </InputAdornment>
+            ),
+          }}
           value={formValues.video1}
           handleChange={useCallback(
             (val) => {
@@ -227,7 +246,13 @@ export function GroupFormFields({
         />
         <TextField
           label={t('group.form.video2.label')}
-          InputProps={{ endAdornment: <LinkRounded /> }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <LinkIcon />
+              </InputAdornment>
+            ),
+          }}
           type="url"
           value={formValues.video2}
           handleChange={useCallback(
@@ -254,7 +279,7 @@ export function GroupFormFields({
 
       <Box mt={2}>
         <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreRounded />}>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             {t('group.form.title.advancedOptions')}
           </AccordionSummary>
           <AccordionDetails>
