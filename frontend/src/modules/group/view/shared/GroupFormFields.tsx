@@ -10,6 +10,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   MenuItem,
   Typography,
 } from '@mui/material';
@@ -251,76 +252,78 @@ export function GroupFormFields({
         errors={error?.fields?.description}
       />
 
-      <Accordion sx={{ mt: 3 }}>
-        <AccordionSummary expandIcon={<ExpandMoreRounded />}>
-          {t('group.form.title.advancedOptions')}
-        </AccordionSummary>
-        <AccordionDetails>
-          <FlexCol gap={2}>
-            {groupType.canHaveParent && (
-              <AutocompleteSearchField
-                name="parent"
-                label={'Parent'}
-                value={formValues.parent || null}
-                handleChange={parentCallback}
-                defaultObjectValue={prevData?.parent || null}
-                errors={error?.fields?.parent}
-                fetchInitialOptions={fetchInitialOptions}
-                fetchOptions={(inputValue) =>
-                  getGroupListApi({
-                    parent: null,
-                    type: groupType.slug,
-                    search: inputValue,
-                  }).then((res) => res.results)
-                }
-                labelPropName="name"
-                imagePropName="icon"
+      <Box mt={2}>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreRounded />}>
+            {t('group.form.title.advancedOptions')}
+          </AccordionSummary>
+          <AccordionDetails>
+            <FlexCol gap={2}>
+              {groupType.canHaveParent && (
+                <AutocompleteSearchField
+                  name="parent"
+                  label={'Parent'}
+                  value={formValues.parent || null}
+                  handleChange={parentCallback}
+                  defaultObjectValue={prevData?.parent || null}
+                  errors={error?.fields?.parent}
+                  fetchInitialOptions={fetchInitialOptions}
+                  fetchOptions={(inputValue) =>
+                    getGroupListApi({
+                      parent: null,
+                      type: groupType.slug,
+                      search: inputValue,
+                    }).then((res) => res.results)
+                  }
+                  labelPropName="name"
+                  imagePropName="icon"
+                />
+              )}
+
+              <CheckboxField
+                value={formValues.lockMemberships}
+                label={t('group.form.lockMemberships.label')}
+                helperText={t('group.form.lockMemberships.helperText')}
+                handleChange={useCallback(
+                  (val) => updateFormValues({ lockMemberships: val }),
+                  [updateFormValues],
+                )}
               />
-            )}
 
-            <CheckboxField
-              value={formValues.lockMemberships}
-              label={t('group.form.lockMemberships.label')}
-              helperText={t('group.form.lockMemberships.helperText')}
-              handleChange={useCallback(
-                (val) => updateFormValues({ lockMemberships: val }),
-                [updateFormValues],
-              )}
-            />
-
-            <CheckboxField
-              label={t('group.form.public.label')}
-              value={formValues?.public}
-              helperText={t('group.form.public.helperText')}
-              errors={error?.fields?.public}
-              handleChange={useCallback(
-                (val: boolean) => updateFormValues({ public: val }),
-                [updateFormValues],
-              )}
-            />
-            <CheckboxField
-              label={t('group.form.private.label')}
-              value={formValues?.private}
-              helperText={t('group.form.private.helperText')}
-              errors={error?.fields?.private}
-              handleChange={useCallback(
-                (val: boolean) => updateFormValues({ private: val }),
-                [updateFormValues],
-              )}
-            />
-            <CheckboxField
-              label={t('group.form.archive.label')}
-              value={formValues?.archived}
-              helperText={t('group.form.archive.helperText')}
-              errors={error?.fields?.archived}
-              handleChange={useCallback(
-                (val: boolean) => updateFormValues({ archived: val }),
-                [updateFormValues],
-              )}
-            />
-          </FlexCol>
-        </AccordionDetails>
-      </Accordion>
+              <CheckboxField
+                label={t('group.form.public.label')}
+                value={formValues?.public}
+                helperText={t('group.form.public.helperText')}
+                errors={error?.fields?.public}
+                handleChange={useCallback(
+                  (val: boolean) => updateFormValues({ public: val }),
+                  [updateFormValues],
+                )}
+              />
+              <CheckboxField
+                label={t('group.form.private.label')}
+                value={formValues?.private}
+                helperText={t('group.form.private.helperText')}
+                errors={error?.fields?.private}
+                handleChange={useCallback(
+                  (val: boolean) => updateFormValues({ private: val }),
+                  [updateFormValues],
+                )}
+              />
+              <CheckboxField
+                label={t('group.form.archive.label')}
+                value={formValues?.archived}
+                helperText={t('group.form.archive.helperText')}
+                errors={error?.fields?.archived}
+                handleChange={useCallback(
+                  (val: boolean) => updateFormValues({ archived: val }),
+                  [updateFormValues],
+                )}
+              />
+            </FlexCol>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
     </>
   );
 }
