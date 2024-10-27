@@ -419,11 +419,9 @@
         "label": "Résumé"
       },
       "title": {
-        "additionalInformation": "Informations Additionnelles",
         "advancedOptions": "Options avancées",
         "general": "Général",
-        "images": "Images",
-        "videos": "Vidéos"
+        "presentation": "Présentation"
       },
       "video1": {
         "label": "Vidéo 1"

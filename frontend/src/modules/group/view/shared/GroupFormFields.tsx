@@ -78,8 +78,10 @@ export function GroupFormFields({
   return (
     <>
       <FormErrorAlert isError={isError} error={error} />
+
       <Typography variant="h3">{t('group.form.title.general')}</Typography>
-      <FlexAuto gap={2}>
+
+      <FlexAuto columnGap={2}>
         <TextField
           name={'name'}
           key={'title'}
@@ -109,7 +111,7 @@ export function GroupFormFields({
       </FlexAuto>
 
       {!edit && (
-        <FlexAuto gap={2} alignItems={'center'}>
+        <FlexAuto columnGap={2}>
           <DateField
             label={t('group.form.creationDate.label')}
             defaultValue={new Date()}
@@ -140,10 +142,8 @@ export function GroupFormFields({
           </SelectField>
         </FlexAuto>
       )}
-      <Typography mt={2} variant="h3">
-        {t('group.form.title.images')}
-      </Typography>
-      <FlexAuto gap={2}>
+
+      <FlexAuto columnGap={2}>
         <FileField
           name="icon"
           label={t('group.form.icon.label')}
@@ -173,9 +173,45 @@ export function GroupFormFields({
       </FlexAuto>
 
       <Typography mt={2} variant="h3">
-        {t('group.form.title.videos')}
+        {t('group.form.title.presentation')}
       </Typography>
-      <FlexAuto gap={2}>
+
+      <TextField
+        label={t('group.form.summary.label')}
+        value={formValues.summary}
+        handleChange={useCallback(
+          (val) => {
+            updateFormValues({ summary: val });
+          },
+          [updateFormValues],
+        )}
+        errors={error?.fields?.summary}
+      />
+
+      <FlexAuto columnGap={2}>
+        <TextField
+          InputProps={{ endAdornment: <Place sx={{ mr: 1 }} /> }}
+          label={t('group.form.meetingPlace.label')}
+          value={formValues.meetingPlace}
+          handleChange={useCallback(
+            (val) => updateFormValues({ meetingPlace: val }),
+            [updateFormValues],
+          )}
+          errors={error?.fields?.meetingPlace}
+        />
+        <TextField
+          InputProps={{ endAdornment: <AccessTimeFilled sx={{ mr: 1 }} /> }}
+          label={t('group.form.meetingHour.label')}
+          value={formValues.meetingHour}
+          handleChange={useCallback(
+            (val) => updateFormValues({ meetingHour: val }),
+            [updateFormValues],
+          )}
+          errors={error?.fields?.meetingHour}
+        />
+      </FlexAuto>
+
+      <FlexAuto columnGap={2}>
         <TextField
           label={t('group.form.video1.label')}
           type="url"
@@ -204,42 +240,6 @@ export function GroupFormFields({
         />
       </FlexAuto>
 
-      <Typography mt={2} variant="h3">
-        {t('group.form.title.additionalInformation')}
-      </Typography>
-      <TextField
-        label={t('group.form.summary.label')}
-        value={formValues.summary}
-        handleChange={useCallback(
-          (val) => {
-            updateFormValues({ summary: val });
-          },
-          [updateFormValues],
-        )}
-        errors={error?.fields?.summary}
-      />
-      <FlexAuto columnGap={2} breakPoint="sm">
-        <TextField
-          InputProps={{ endAdornment: <Place sx={{ mr: 1 }} /> }}
-          label={t('group.form.meetingPlace.label')}
-          value={formValues.meetingPlace}
-          handleChange={useCallback(
-            (val) => updateFormValues({ meetingPlace: val }),
-            [updateFormValues],
-          )}
-          errors={error?.fields?.meetingPlace}
-        />
-        <TextField
-          InputProps={{ endAdornment: <AccessTimeFilled sx={{ mr: 1 }} /> }}
-          label={t('group.form.meetingHour.label')}
-          value={formValues.meetingHour}
-          handleChange={useCallback(
-            (val) => updateFormValues({ meetingHour: val }),
-            [updateFormValues],
-          )}
-          errors={error?.fields?.meetingHour}
-        />
-      </FlexAuto>
       <RichTextField
         label={t('event.form.description.label')}
         value={formValues.description}
