@@ -90,9 +90,7 @@ export default function GroupDetailsPage() {
           <GroupAdminRequests group={groupDetails} />
         )}
         <Spacer vertical={80} />
-        {groupDetails?.isAdmin &&
-          selectedTab !== 'posts' &&
-          selectedTab !== 'events' && <EditButton group={groupDetails} />}
+        {groupDetails?.isAdmin && <EditButton group={groupDetails} />}
       </Container>
       {postId && <PostModal postId={postId} onClose={closePost} />}
     </>
