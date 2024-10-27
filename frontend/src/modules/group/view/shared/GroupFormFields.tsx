@@ -4,8 +4,6 @@ import {
   AccessTimeFilled,
   ExpandMoreRounded,
   LinkRounded,
-  Lock,
-  LockOpen,
   Place,
 } from '@mui/icons-material';
 import {
@@ -141,39 +139,6 @@ export function GroupFormFields({
           </SelectField>
         </FlexAuto>
       )}
-      {groupType.canHaveParent && (
-        <AutocompleteSearchField
-          name="parent"
-          label={'Parent'}
-          value={formValues.parent || null}
-          handleChange={parentCallback}
-          defaultObjectValue={prevData?.parent || null}
-          errors={error?.fields?.parent}
-          fetchInitialOptions={fetchInitialOptions}
-          fetchOptions={(inputValue) =>
-            getGroupListApi({
-              parent: null,
-              type: groupType.slug,
-              search: inputValue,
-            }).then((res) => res.results)
-          }
-          labelPropName="name"
-          imagePropName="icon"
-        />
-      )}
-
-      <CheckboxField
-        handleChange={useCallback(
-          (val) => updateFormValues({ lockMemberships: val }),
-          [updateFormValues],
-        )}
-        value={formValues.lockMemberships}
-        sx={{ mt: 2 }}
-        label={t('group.form.lockMemberships.label')}
-        helperText={t('group.form.lockMemberships.helperText')}
-        checkboxProps={{ icon: <LockOpen />, checkedIcon: <Lock /> }}
-      />
-
       <Typography mt={2} variant="h3">
         {t('group.form.title.images')}
       </Typography>
@@ -292,6 +257,37 @@ export function GroupFormFields({
         </AccordionSummary>
         <AccordionDetails>
           <FlexCol gap={2}>
+            {groupType.canHaveParent && (
+              <AutocompleteSearchField
+                name="parent"
+                label={'Parent'}
+                value={formValues.parent || null}
+                handleChange={parentCallback}
+                defaultObjectValue={prevData?.parent || null}
+                errors={error?.fields?.parent}
+                fetchInitialOptions={fetchInitialOptions}
+                fetchOptions={(inputValue) =>
+                  getGroupListApi({
+                    parent: null,
+                    type: groupType.slug,
+                    search: inputValue,
+                  }).then((res) => res.results)
+                }
+                labelPropName="name"
+                imagePropName="icon"
+              />
+            )}
+
+            <CheckboxField
+              value={formValues.lockMemberships}
+              label={t('group.form.lockMemberships.label')}
+              helperText={t('group.form.lockMemberships.helperText')}
+              handleChange={useCallback(
+                (val) => updateFormValues({ lockMemberships: val }),
+                [updateFormValues],
+              )}
+            />
+
             <CheckboxField
               label={t('group.form.public.label')}
               value={formValues?.public}
