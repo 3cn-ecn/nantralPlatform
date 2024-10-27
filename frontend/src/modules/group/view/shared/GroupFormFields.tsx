@@ -2,15 +2,11 @@ import { Dispatch, useCallback } from 'react';
 
 import {
   AccessTimeFilled,
-  EditNote,
   ExpandMoreRounded,
-  Image,
   LinkRounded,
   Lock,
   LockOpen,
-  Notes,
   Place,
-  Slideshow,
 } from '@mui/icons-material';
 import {
   Accordion,
@@ -28,7 +24,7 @@ import {
   CreateGroupForm as GroupForm,
 } from '#modules/group/types/group.types';
 import { GroupTypePreview } from '#modules/group/types/groupType.types';
-import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { FlexAuto, FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
@@ -83,10 +79,7 @@ export function GroupFormFields({
   return (
     <>
       <FormErrorAlert isError={isError} error={error} />
-      <FlexRow alignItems={'center'} gap={1} mt={2}>
-        <EditNote />
-        <Typography variant="h2">{t('group.form.title.general')}</Typography>
-      </FlexRow>
+      <Typography variant="h3">{t('group.form.title.general')}</Typography>
       <FlexAuto gap={2}>
         <TextField
           name={'name'}
@@ -181,10 +174,9 @@ export function GroupFormFields({
         checkboxProps={{ icon: <LockOpen />, checkedIcon: <Lock /> }}
       />
 
-      <FlexRow alignItems={'center'} mt={2} gap={1}>
-        <Image />
-        <Typography variant="h2">{t('group.form.title.images')}</Typography>
-      </FlexRow>
+      <Typography mt={2} variant="h3">
+        {t('group.form.title.images')}
+      </Typography>
       <FlexAuto gap={2}>
         <FileField
           name="icon"
@@ -213,10 +205,10 @@ export function GroupFormFields({
           accept="image/*"
         />
       </FlexAuto>
-      <FlexRow alignItems={'center'} mt={2} gap={1}>
-        <Slideshow />
-        <Typography variant="h2">{t('group.form.title.videos')}</Typography>
-      </FlexRow>
+
+      <Typography mt={2} variant="h3">
+        {t('group.form.title.videos')}
+      </Typography>
       <FlexAuto gap={2}>
         <TextField
           label={t('group.form.video1.label')}
@@ -245,12 +237,10 @@ export function GroupFormFields({
           errors={error?.fields?.video2}
         />
       </FlexAuto>
-      <FlexRow alignItems={'center'} mt={2} gap={1}>
-        <Notes />
-        <Typography variant="h2">
-          {t('group.form.title.additionalInformation')}
-        </Typography>
-      </FlexRow>
+
+      <Typography mt={2} variant="h3">
+        {t('group.form.title.additionalInformation')}
+      </Typography>
       <TextField
         label={t('group.form.summary.label')}
         value={formValues.summary}
