@@ -266,7 +266,7 @@ export function GroupFormFields({
       </FlexAuto>
 
       <RichTextField
-        label={t('event.form.description.label')}
+        label={t('group.form.description.label')}
         value={formValues.description}
         handleChange={useCallback(
           (val) => {
@@ -287,7 +287,7 @@ export function GroupFormFields({
               {groupType.canHaveParent && (
                 <AutocompleteSearchField
                   name="parent"
-                  label={'Parent'}
+                  label={t('group.form.parent.label')}
                   value={formValues.parent || null}
                   handleChange={parentCallback}
                   defaultObjectValue={prevData?.parent || null}

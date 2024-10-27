@@ -366,11 +366,11 @@
         "label": "Admin"
       },
       "archive": {
-        "helperText": "Archive the club. \nIt will no longer be visible on nantral platform.",
-        "label": "Archive"
+        "helperText": "An archived group can no longer have new members and is hidden from the list.",
+        "label": "Archived group"
       },
       "banner": {
-        "helperText": "Recommended size 1152x420 pixels",
+        "helperText": "Image with 3:1 ratio (recommended minimum size: 1200x400)",
         "label": "Banner"
       },
       "beginDate": {
@@ -379,20 +379,23 @@
       "creationDate": {
         "label": "Creation date"
       },
+      "description": {
+        "label": "Description"
+      },
       "endDate": {
         "label": "End date"
       },
       "icon": {
-        "helperText": "Recommended size 400x400 pixels.",
-        "label": "Icon"
+        "helperText": "Image with a ratio of 1:1 (recommended minimum size: 500x500)",
+        "label": "Profile picture"
       },
       "label": {
         "label": "Label",
         "none": "None"
       },
       "lockMemberships": {
-        "helperText": "Prevent users from adding themselves to the group",
-        "label": "Lock group"
+        "helperText": "Users can no longer add themselves to the group.",
+        "label": "Lock members"
       },
       "meetingHour": {
         "label": "Meeting time"
@@ -403,16 +406,19 @@
       "name": {
         "label": "Name"
       },
+      "parent": {
+        "label": "Parent group"
+      },
       "private": {
         "helperText": "Make the club invisible to everyone except members",
-        "label": "Private"
+        "label": "Private group"
       },
       "public": {
-        "helperText": "Visible to users who are not logged in. \nHowever, members and events will remain hidden.",
-        "label": "Public"
+        "helperText": "If checked, the group page will be publicly accessible, including to unconnected users. \nHowever, members, events and posts remain hidden.",
+        "label": "Public group"
       },
       "shortName": {
-        "helperText": "This name is used on the groups page",
+        "helperText": "This name will be displayed in the group list.",
         "label": "Shortened name"
       },
       "summary": {
@@ -424,10 +430,10 @@
         "presentation": "Presentation"
       },
       "video1": {
-        "label": "Video 1"
+        "label": "Video Link 1"
       },
       "video2": {
-        "label": "Video 2"
+        "label": "Video Link 2"
       }
     },
     "list": {

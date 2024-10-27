@@ -246,10 +246,12 @@ class Group(models.Model, SlugModel):
         blank=True,
     )
     icon = CustomImageField(
-        verbose_name=_("Icon"),
+        verbose_name=_("Profile picture"),
         blank=True,
         null=True,
-        help_text=_("Your icon will be displayed at 306x306 pixels."),
+        help_text=_(
+            "Image with a ratio of 1:1 (recommended minimum size: 500x500)"
+        ),
         size=(500, 500),
         crop=False,
         name_from_field="name",
@@ -258,8 +260,10 @@ class Group(models.Model, SlugModel):
         verbose_name=_("Banner"),
         blank=True,
         null=True,
-        help_text=_("Your banner will be displayed at 1320x492 pixels."),
-        size=(1320, 492),
+        help_text=_(
+            "Image with 3:1 ratio (recommended minimum size: 1200x400)"
+        ),
+        size=(1200, 400),
         name_from_field="name",
     )
     video1 = models.URLField(
