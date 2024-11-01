@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import {
   Groups as GroupIcon,
   PushPin as PushPinIcon,
@@ -14,6 +12,7 @@ import {
 } from '@mui/material';
 import { upperFirst } from 'lodash-es';
 
+import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamState';
 import { PostPreview } from '#modules/post/post.types';
 import { Avatar } from '#shared/components/Avatar/Avatar';
 import { FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
@@ -28,11 +27,9 @@ interface PostCardProps {
 
 export function PostCard({ post }: PostCardProps) {
   const { formatRelativeTime } = useTranslation();
-  const navigate = useNavigate();
+  const { setPostId } = usePostQueryParamState();
 
-  const openModal = () => {
-    navigate({ search: `?post=${post.id}` }, { preventScrollReset: true });
-  };
+  const openModal = () => setPostId(post.id);
 
   return (
     <>

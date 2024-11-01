@@ -1,21 +1,17 @@
 import { Dispatch, useCallback } from 'react';
 
 import {
-  AccessTimeFilled,
-  EditNote,
-  ExpandMoreRounded,
-  Image,
-  LinkRounded,
-  Lock,
-  LockOpen,
-  Notes,
-  Place,
-  Slideshow,
+  AccessTime as ClockIcon,
+  ExpandMoreRounded as ExpandMoreIcon,
+  LinkRounded as LinkIcon,
+  PlaceOutlined as PlaceIcon,
 } from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
+  InputAdornment,
   MenuItem,
   Typography,
 } from '@mui/material';
@@ -28,7 +24,7 @@ import {
   CreateGroupForm as GroupForm,
 } from '#modules/group/types/group.types';
 import { GroupTypePreview } from '#modules/group/types/groupType.types';
-import { FlexAuto, FlexCol, FlexRow } from '#shared/components/FlexBox/FlexBox';
+import { FlexAuto, FlexCol } from '#shared/components/FlexBox/FlexBox';
 import { FormErrorAlert } from '#shared/components/FormErrorAlert/FormErrorAlert';
 import {
   AutocompleteSearchField,
@@ -83,11 +79,10 @@ export function GroupFormFields({
   return (
     <>
       <FormErrorAlert isError={isError} error={error} />
-      <FlexRow alignItems={'center'} gap={1} mt={2}>
-        <EditNote />
-        <Typography variant="h2">{t('group.form.title.general')}</Typography>
-      </FlexRow>
-      <FlexAuto gap={2}>
+
+      <Typography variant="h3">{t('group.form.title.general')}</Typography>
+
+      <FlexAuto columnGap={2}>
         <TextField
           name={'name'}
           key={'title'}
@@ -117,7 +112,7 @@ export function GroupFormFields({
       </FlexAuto>
 
       {!edit && (
-        <FlexAuto gap={2} alignItems={'center'}>
+        <FlexAuto columnGap={2}>
           <DateField
             label={t('group.form.creationDate.label')}
             defaultValue={new Date()}
@@ -148,44 +143,8 @@ export function GroupFormFields({
           </SelectField>
         </FlexAuto>
       )}
-      {groupType.canHaveParent && (
-        <AutocompleteSearchField
-          name="parent"
-          label={'Parent'}
-          value={formValues.parent || null}
-          handleChange={parentCallback}
-          defaultObjectValue={prevData?.parent || null}
-          errors={error?.fields?.parent}
-          fetchInitialOptions={fetchInitialOptions}
-          fetchOptions={(inputValue) =>
-            getGroupListApi({
-              parent: null,
-              type: groupType.slug,
-              search: inputValue,
-            }).then((res) => res.results)
-          }
-          labelPropName="name"
-          imagePropName="icon"
-        />
-      )}
 
-      <CheckboxField
-        handleChange={useCallback(
-          (val) => updateFormValues({ lockMemberships: val }),
-          [updateFormValues],
-        )}
-        value={formValues.lockMemberships}
-        sx={{ mt: 2 }}
-        label={t('group.form.lockMemberships.label')}
-        helperText={t('group.form.lockMemberships.helperText')}
-        checkboxProps={{ icon: <LockOpen />, checkedIcon: <Lock /> }}
-      />
-
-      <FlexRow alignItems={'center'} mt={2} gap={1}>
-        <Image />
-        <Typography variant="h2">{t('group.form.title.images')}</Typography>
-      </FlexRow>
-      <FlexAuto gap={2}>
+      <FlexAuto columnGap={2}>
         <FileField
           name="icon"
           label={t('group.form.icon.label')}
@@ -213,44 +172,11 @@ export function GroupFormFields({
           accept="image/*"
         />
       </FlexAuto>
-      <FlexRow alignItems={'center'} mt={2} gap={1}>
-        <Slideshow />
-        <Typography variant="h2">{t('group.form.title.videos')}</Typography>
-      </FlexRow>
-      <FlexAuto gap={2}>
-        <TextField
-          label={t('group.form.video1.label')}
-          type="url"
-          InputProps={{ endAdornment: <LinkRounded /> }}
-          value={formValues.video1}
-          handleChange={useCallback(
-            (val) => {
-              updateFormValues({ video1: val });
-            },
-            [updateFormValues],
-          )}
-          errors={error?.fields?.video1}
-        />
-        <TextField
-          label={t('group.form.video2.label')}
-          InputProps={{ endAdornment: <LinkRounded /> }}
-          type="url"
-          value={formValues.video2}
-          handleChange={useCallback(
-            (val) => {
-              updateFormValues({ video2: val });
-            },
-            [updateFormValues],
-          )}
-          errors={error?.fields?.video2}
-        />
-      </FlexAuto>
-      <FlexRow alignItems={'center'} mt={2} gap={1}>
-        <Notes />
-        <Typography variant="h2">
-          {t('group.form.title.additionalInformation')}
-        </Typography>
-      </FlexRow>
+
+      <Typography mt={2} variant="h3">
+        {t('group.form.title.presentation')}
+      </Typography>
+
       <TextField
         label={t('group.form.summary.label')}
         value={formValues.summary}
@@ -262,9 +188,16 @@ export function GroupFormFields({
         )}
         errors={error?.fields?.summary}
       />
-      <FlexAuto columnGap={2} breakPoint="sm">
+
+      <FlexAuto columnGap={2}>
         <TextField
-          InputProps={{ endAdornment: <Place sx={{ mr: 1 }} /> }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <PlaceIcon />
+              </InputAdornment>
+            ),
+          }}
           label={t('group.form.meetingPlace.label')}
           value={formValues.meetingPlace}
           handleChange={useCallback(
@@ -274,7 +207,13 @@ export function GroupFormFields({
           errors={error?.fields?.meetingPlace}
         />
         <TextField
-          InputProps={{ endAdornment: <AccessTimeFilled sx={{ mr: 1 }} /> }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <ClockIcon />
+              </InputAdornment>
+            ),
+          }}
           label={t('group.form.meetingHour.label')}
           value={formValues.meetingHour}
           handleChange={useCallback(
@@ -284,8 +223,50 @@ export function GroupFormFields({
           errors={error?.fields?.meetingHour}
         />
       </FlexAuto>
+
+      <FlexAuto columnGap={2}>
+        <TextField
+          label={t('group.form.video1.label')}
+          type="url"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <LinkIcon />
+              </InputAdornment>
+            ),
+          }}
+          value={formValues.video1}
+          handleChange={useCallback(
+            (val) => {
+              updateFormValues({ video1: val });
+            },
+            [updateFormValues],
+          )}
+          errors={error?.fields?.video1}
+        />
+        <TextField
+          label={t('group.form.video2.label')}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <LinkIcon />
+              </InputAdornment>
+            ),
+          }}
+          type="url"
+          value={formValues.video2}
+          handleChange={useCallback(
+            (val) => {
+              updateFormValues({ video2: val });
+            },
+            [updateFormValues],
+          )}
+          errors={error?.fields?.video2}
+        />
+      </FlexAuto>
+
       <RichTextField
-        label={t('event.form.description.label')}
+        label={t('group.form.description.label')}
         value={formValues.description}
         handleChange={useCallback(
           (val) => {
@@ -296,45 +277,78 @@ export function GroupFormFields({
         errors={error?.fields?.description}
       />
 
-      <Accordion sx={{ mt: 3 }}>
-        <AccordionSummary expandIcon={<ExpandMoreRounded />}>
-          {t('group.form.title.advancedOptions')}
-        </AccordionSummary>
-        <AccordionDetails>
-          <FlexCol gap={2}>
-            <CheckboxField
-              label={t('group.form.public.label')}
-              value={formValues?.public}
-              helperText={t('group.form.public.helperText')}
-              errors={error?.fields?.public}
-              handleChange={useCallback(
-                (val: boolean) => updateFormValues({ public: val }),
-                [updateFormValues],
+      <Box mt={2}>
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            {t('group.form.title.advancedOptions')}
+          </AccordionSummary>
+          <AccordionDetails>
+            <FlexCol gap={2}>
+              {groupType.canHaveParent && (
+                <AutocompleteSearchField
+                  name="parent"
+                  label={t('group.form.parent.label')}
+                  value={formValues.parent || null}
+                  handleChange={parentCallback}
+                  defaultObjectValue={prevData?.parent || null}
+                  errors={error?.fields?.parent}
+                  fetchInitialOptions={fetchInitialOptions}
+                  fetchOptions={(inputValue) =>
+                    getGroupListApi({
+                      parent: null,
+                      type: groupType.slug,
+                      search: inputValue,
+                    }).then((res) => res.results)
+                  }
+                  labelPropName="name"
+                  imagePropName="icon"
+                />
               )}
-            />
-            <CheckboxField
-              label={t('group.form.private.label')}
-              value={formValues?.private}
-              helperText={t('group.form.private.helperText')}
-              errors={error?.fields?.private}
-              handleChange={useCallback(
-                (val: boolean) => updateFormValues({ private: val }),
-                [updateFormValues],
-              )}
-            />
-            <CheckboxField
-              label={t('group.form.archive.label')}
-              value={formValues?.archived}
-              helperText={t('group.form.archive.helperText')}
-              errors={error?.fields?.archived}
-              handleChange={useCallback(
-                (val: boolean) => updateFormValues({ archived: val }),
-                [updateFormValues],
-              )}
-            />
-          </FlexCol>
-        </AccordionDetails>
-      </Accordion>
+
+              <CheckboxField
+                value={formValues.lockMemberships}
+                label={t('group.form.lockMemberships.label')}
+                helperText={t('group.form.lockMemberships.helperText')}
+                handleChange={useCallback(
+                  (val) => updateFormValues({ lockMemberships: val }),
+                  [updateFormValues],
+                )}
+              />
+
+              <CheckboxField
+                label={t('group.form.public.label')}
+                value={formValues?.public}
+                helperText={t('group.form.public.helperText')}
+                errors={error?.fields?.public}
+                handleChange={useCallback(
+                  (val: boolean) => updateFormValues({ public: val }),
+                  [updateFormValues],
+                )}
+              />
+              <CheckboxField
+                label={t('group.form.private.label')}
+                value={formValues?.private}
+                helperText={t('group.form.private.helperText')}
+                errors={error?.fields?.private}
+                handleChange={useCallback(
+                  (val: boolean) => updateFormValues({ private: val }),
+                  [updateFormValues],
+                )}
+              />
+              <CheckboxField
+                label={t('group.form.archive.label')}
+                value={formValues?.archived}
+                helperText={t('group.form.archive.helperText')}
+                errors={error?.fields?.archived}
+                handleChange={useCallback(
+                  (val: boolean) => updateFormValues({ archived: val }),
+                  [updateFormValues],
+                )}
+              />
+            </FlexCol>
+          </AccordionDetails>
+        </Accordion>
+      </Box>
     </>
   );
 }

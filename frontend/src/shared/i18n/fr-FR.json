@@ -308,8 +308,10 @@
       },
       "formerMembers": "Anciens membres",
       "infoLine": {
-        "events": "événement(s)",
-        "members": "membre(s)"
+        "events_one": "{{count}} événement",
+        "events_other": "{{count}} événements",
+        "members_one": "{{count}} membre",
+        "members_other": "{{count}} membres"
       },
       "join": "Rejoindre",
       "makeAdminRequest": "Faire une demande d'admin",
@@ -364,11 +366,11 @@
         "label": "Admin"
       },
       "archive": {
-        "helperText": "Archiver le club. Il ne sera plus visible sur nantral platform.",
-        "label": "Archiver"
+        "helperText": "Un groupe archivé ne peut plus avoir de nouveaux membres et est masqué de la liste.",
+        "label": "Groupe archivé"
       },
       "banner": {
-        "helperText": "Taille recommandée 1152x420 pixels",
+        "helperText": "Image avec un ratio de 3:1 (taille minimale recommandée : 1200x400)",
         "label": "Bannière"
       },
       "beginDate": {
@@ -377,20 +379,23 @@
       "creationDate": {
         "label": "Date de création"
       },
+      "description": {
+        "label": "Description"
+      },
       "endDate": {
         "label": "Date de fin"
       },
       "icon": {
-        "helperText": "Taille recommandée 400x400 pixels.",
-        "label": "Icône"
+        "helperText": "Image avec un ratio de 1:1 (taille minimale recommandée : 500x500)",
+        "label": "Image de profil"
       },
       "label": {
         "label": "Label",
         "none": "Aucun"
       },
       "lockMemberships": {
-        "helperText": "Empécher les utilisateurs de s'ajouter eux-même au groupe",
-        "label": "Verouiller le groupe"
+        "helperText": "Les utilisateurs ne peuvent plus s'ajouter eux-mêmes au groupe.",
+        "label": "Vérouiller les membres"
       },
       "meetingHour": {
         "label": "Heure de réunion"
@@ -401,33 +406,34 @@
       "name": {
         "label": "Nom"
       },
+      "parent": {
+        "label": "Groupe parent"
+      },
       "private": {
-        "helperText": "Rendre le club non visible pour tout le monde sauf les membres",
-        "label": "Privé"
+        "helperText": "Un groupe privé n'est visible que par les membres du groupe.",
+        "label": "Groupe privé"
       },
       "public": {
-        "helperText": "Visible pour les utilisateurs non connectés. Les membres et les évènements resterons toutefois cachés.",
-        "label": "Public"
+        "helperText": "Si coché, la page du groupe sera accessible publiquement, y compris à des utilisateurs non-connectés. Les membres, évènements et posts restent toutefois masqués.",
+        "label": "Groupe public"
       },
       "shortName": {
-        "helperText": "Ce nom est utilisé sur la page des groupes",
+        "helperText": "Ce nom sera affiché dans la liste des groupes.",
         "label": "Nom raccourci"
       },
       "summary": {
         "label": "Résumé"
       },
       "title": {
-        "additionalInformation": "Informations Additionnelles",
         "advancedOptions": "Options avancées",
         "general": "Général",
-        "images": "Images",
-        "videos": "Vidéos"
+        "presentation": "Présentation"
       },
       "video1": {
-        "label": "Vidéo 1"
+        "label": "Lien Vidéo 1"
       },
       "video2": {
-        "label": "Vidéo 2"
+        "label": "Lien Vidéo 2"
       }
     },
     "list": {

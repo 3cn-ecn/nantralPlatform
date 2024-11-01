@@ -1,29 +1,35 @@
-import { useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Container } from '@mui/material';
 
+import { usePostQueryParamState } from '#modules/post/hooks/usePostQueryParamState';
 import { PostModal } from '#modules/post/view/PostModal/PostModal';
 import { BackgroundImageOverlay } from '#pages/EventDetails/components/BackgroundImageOverlay';
 import { ErrorPageContent } from '#shared/components/ErrorPageContent/ErrorPageContent';
 import { Spacer } from '#shared/components/Spacer/Spacer';
 import { TopImage } from '#shared/components/TopImage/TopImage';
+import { useQueryParamState } from '#shared/hooks/useQueryParamState';
 
 import { GroupAdminRequests } from './GroupAdminRequests/GroupAdminRequests.tab';
 import { GroupEvents } from './GroupEvents/GroupEvents.tab';
 import { GroupHome } from './GroupHome/GroupHome.tab';
 import { GroupMembers } from './GroupMembers/GroupMembers.tab';
 import { GroupPosts } from './GroupPosts/GroupPosts.tab';
-import { GroupTabBar } from './GroupTabBar/GroupTabBar';
+import { GroupTabBar, TabType } from './GroupTabBar/GroupTabBar';
 import { EditButton } from './components/Buttons/EditButton';
 import { GroupInfo } from './components/GroupInfo';
 import { useGroupDetails } from './hooks/useGroupDetails';
 
 export default function GroupDetailsPage() {
-  const { type: slug } = useParams();
+  const urlPathParams = useParams();
+  const slug = (urlPathParams.type as string).slice(1);
 
-  const [params, setParams] = useSearchParams();
-  const [tabValue, setTabValue] = useState(params.get('tab') || 'home');
+  const [selectedTab, setSelectedTab] = useQueryParamState<TabType>(
+    'tab',
+    'home',
+  );
+  const { postId, closePost } = usePostQueryParamState();
+
   const {
     groupDetails,
     events,
@@ -33,7 +39,7 @@ export default function GroupDetailsPage() {
     error,
     refetch,
     isSuccess,
-  } = useGroupDetails(slug?.slice(1));
+  } = useGroupDetails(slug);
 
   if (isError && error) {
     return (
@@ -44,7 +50,6 @@ export default function GroupDetailsPage() {
       />
     );
   }
-  const postId = params.get('post');
 
   return (
     <>
@@ -52,11 +57,8 @@ export default function GroupDetailsPage() {
         <BackgroundImageOverlay src={groupDetails.banner} />
       )}
       <Container sx={{ mb: 2 }}>
-        {groupDetails?.isAdmin && members && (
-          <EditButton group={groupDetails} />
-        )}
         {groupDetails?.banner && (
-          <TopImage src={groupDetails.banner} aspectRatio={110 / 40} />
+          <TopImage src={groupDetails.banner} aspectRatio={3} />
         )}
         <GroupInfo
           eventCount={events?.count}
@@ -66,41 +68,31 @@ export default function GroupDetailsPage() {
         />
         {isSuccess && groupDetails && (
           <GroupTabBar
-            value={tabValue}
+            value={selectedTab}
             group={groupDetails}
-            onChangeValue={(val) => {
-              setTabValue(val);
-              const url = new URL(window.location.toString());
-              url.searchParams.set('tab', val);
-              history.replaceState(history.state, '', url);
+            onChangeValue={(val: TabType) => {
+              setSelectedTab(val);
             }}
           />
         )}
         <Spacer vertical={2} />
-        {tabValue == 'home' && <GroupHome group={groupDetails} />}
-        {tabValue == 'members' && groupDetails && (
+        {selectedTab == 'home' && <GroupHome group={groupDetails} />}
+        {selectedTab == 'members' && groupDetails && (
           <GroupMembers group={groupDetails} />
         )}
-        {tabValue == 'events' && groupDetails && (
+        {selectedTab == 'events' && groupDetails && (
           <GroupEvents group={groupDetails} />
         )}
-        {tabValue == 'posts' && groupDetails && (
+        {selectedTab == 'posts' && groupDetails && (
           <GroupPosts group={groupDetails} />
         )}
-        {tabValue == 'adminRequests' && groupDetails && (
+        {selectedTab == 'adminRequests' && groupDetails && (
           <GroupAdminRequests group={groupDetails} />
         )}
         <Spacer vertical={80} />
+        {groupDetails?.isAdmin && <EditButton group={groupDetails} />}
       </Container>
-      {postId && (
-        <PostModal
-          postId={Number.parseInt(postId)}
-          onClose={() => {
-            params.delete('post');
-            setParams(params);
-          }}
-        />
-      )}
+      {postId && <PostModal postId={postId} onClose={closePost} />}
     </>
   );
 }
