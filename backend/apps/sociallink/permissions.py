@@ -9,10 +9,13 @@ from .models import SocialLink
 class SocialLinkPermission(permissions.BasePermission):
     def has_permission(self, request: HttpRequest, view):
         user = request.user
-        group = Group.objects.filter(slug=request.data.get("group")).first()
-        if request.method == "get":
-            return True
-        return user.is_superuser or (group and group.is_admin(request.user))
+
+        if view.action == "create":
+            group_slug = request.data.get("group")
+            group = Group.objects.filter(slug=group_slug).first()
+            return group is None or group.is_admin(user)
+
+        return True
 
     def has_object_permission(
         self, request: HttpRequest, view, obj: SocialLink
