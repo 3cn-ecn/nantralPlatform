@@ -20,4 +20,7 @@ class SocialLinkPermission(permissions.BasePermission):
     def has_object_permission(
         self, request: HttpRequest, view, obj: SocialLink
     ):
-        return any(g.is_admin(request.user) for g in obj.group_set.all())
+        user = request.user
+        group_set = obj.group_set.all()  # A social link could be associated with multiple groups in theory (but not in practice)
+
+        return any(group.is_admin(user) for group in group_set)

@@ -13,4 +13,4 @@ class GroupSocialLinkViewSet(ModelViewSet):
     serializer_class = GroupSocialLinkSerializer
 
     def list(self, request):
-        raise MethodNotAllowed("GET", detail='Method "GET" not allowed')
+        raise MethodNotAllowed("GET")
