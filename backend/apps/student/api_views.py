@@ -1,21 +1,11 @@
-from rest_framework import exceptions, filters, generics, permissions, viewsets
+from rest_framework import filters, permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from apps.utils.parse import parse_int
+
 from .models import Student
 from .serializers import StudentSerializer
-
-
-class StudentListView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = StudentSerializer
-
-    def get_queryset(self):
-        if self.request.GET.get("search") is not None:
-            return Student.objects.filter(
-                user__username__icontains=self.request.GET.get("search"),
-            )[:10]
-        return Student.objects.all()
 
 
 class StudentPermission(permissions.BasePermission):
@@ -28,15 +18,29 @@ class StudentPermission(permissions.BasePermission):
 class StudentViewSet(viewsets.ModelViewSet):
     """An API endpoint for students."""
 
+    http_method_names = ["get", "options"]
     permission_classes = [permissions.IsAuthenticated, StudentPermission]
     serializer_class = StudentSerializer
     search_fields = ["user__first_name", "user__last_name"]
-    queryset = Student.objects.all()
-    filter_backends = [filters.SearchFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    ordering_fields = ["promo", "user__first__name", "user___last_name", "path"]
+    ordering = ["user__first_name", "user__last_name"]
 
-    def create(self, request, *args, **kwargs):
-        """Remove the 'create' method from default methods."""
-        raise exceptions.MethodNotAllowed(method="create")
+    def get_queryset(self):
+        queryset = Student.objects.all()
+
+        promo = parse_int(self.request.GET.get("promo"))
+        path = self.request.GET.get("path")
+        faculty = self.request.GET.get("faculty")
+
+        if promo:
+            queryset = queryset.filter(promo=promo)
+        if faculty:
+            queryset = queryset.filter(faculty=faculty)
+        if path:
+            queryset = queryset.filter(path=path)
+
+        return queryset
 
     @action(detail=False, methods=["GET"])
     def me(self, request, *args, **kwargs):

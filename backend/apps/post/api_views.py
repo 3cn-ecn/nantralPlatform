@@ -3,7 +3,7 @@ from django.http.request import QueryDict
 
 from rest_framework import filters, permissions, request, viewsets
 
-from apps.utils.parse_bool import parse_bool
+from apps.utils.parse import parse_bool
 
 from .models import Post
 from .serializers import (

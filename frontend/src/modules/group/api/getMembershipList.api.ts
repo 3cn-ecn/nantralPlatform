@@ -14,6 +14,7 @@ export interface GetMembershipListApiParams {
   page?: number;
   pageSize?: number;
   orderBy?: string;
+  groupType?: string;
 }
 
 export async function getMembershipListApi(
@@ -29,6 +30,7 @@ export async function getMembershipListApi(
         page: options.page,
         page_size: options.pageSize,
         ordering: options.orderBy,
+        group_type: options?.groupType,
       },
     })
     .catch((err: ApiErrorDTO) => {
