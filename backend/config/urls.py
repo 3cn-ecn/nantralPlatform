@@ -77,6 +77,11 @@ urlpatterns = [
     *(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)),
     # homepage
     path("", include("apps.core.urls", namespace="core")),
+    # NantralPay
+    path(
+        "api/nantralpay/",
+        include("apps.nantralpay.urls", namespace="nantralpay_api"),
+    ),
 ]
 
 handler403 = "apps.core.views.handler403"

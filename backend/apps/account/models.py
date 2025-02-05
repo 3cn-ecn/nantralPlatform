@@ -43,6 +43,9 @@ class User(AbstractUser):
         blank=True,
         on_delete=models.SET_NULL,
     )
+    nantralpay_balance = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0
+    )
 
     def save(self, *args, **kwargs):
         self.email = self.email.lower()

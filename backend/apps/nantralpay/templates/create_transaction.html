@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Réaliser une transaction</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="id_receiver">Pour qui ?</label>
+      {{ form.receiver }}
+    </div>
+    <div class="form-group">
+      <label for="id_amount">Montant</label>
+      {{ form.amount }}
+    </div>
+    <div class="form-group">
+      <label for="id_description">Description</label>
+      {{ form.description }}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

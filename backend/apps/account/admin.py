@@ -75,7 +75,14 @@ class CustomUserAdmin(UserAdmin):
         (None, {"fields": ("username", "password")}),
         (
             _("Info personnelles"),
-            {"fields": ("first_name", "last_name", "email")},
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "nantralpay_balance",
+                )
+            },
         ),
         (
             _("Permissions"),
