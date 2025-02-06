@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 
 import { QRCodeSVG } from 'qrcode.react';
 
-const QRCodeFormPage: React.FC = () => {
-  // Get the host name in order to create the QR code
-  const currentHost = `${window.location.protocol}//${window.location.hostname}`;
+import { buildAbsoluteUrl } from '#shared/utils/urls';
 
+const QRCodeFormPage: React.FC = () => {
   const [amount, setAmount] = useState<number>(0);
   const [transactionId, setTransactionId] = useState<string | null>(null);
 
@@ -27,7 +26,9 @@ const QRCodeFormPage: React.FC = () => {
       const data = await response.json();
       setTransactionId(data.transaction_id);
       console.log(
-        currentHost + `/api/nantralpay/cash-in-qrcode/${data.transaction_id}/`,
+        buildAbsoluteUrl(
+          `/api/nantralpay/cash-in-qrcode/${data.transaction_id}/`,
+        ),
       );
     } else {
       console.error('Erreur lors de la création de la transaction');
@@ -55,9 +56,9 @@ const QRCodeFormPage: React.FC = () => {
         <div>
           <h2>QR Code:</h2>
           <QRCodeSVG
-            value={
-              currentHost + `/api/nantralpay/cash-in-qrcode/${transactionId}/`
-            }
+            value={buildAbsoluteUrl(
+              `/api/nantralpay/cash-in-qrcode/${transactionId}/`,
+            )}
           />
         </div>
       )}
