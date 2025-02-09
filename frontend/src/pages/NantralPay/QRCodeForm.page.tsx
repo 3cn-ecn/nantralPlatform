@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import { QRCodeSVG } from 'qrcode.react';
 
+import { buildAbsoluteUrl } from '#shared/utils/urls';
+
 const QRCodeFormPage: React.FC = () => {
   const [amount, setAmount] = useState<number>(0);
   const [transactionId, setTransactionId] = useState<string | null>(null);
@@ -24,7 +26,9 @@ const QRCodeFormPage: React.FC = () => {
       const data = await response.json();
       setTransactionId(data.transaction_id);
       console.log(
-        `https://curly-space-rotary-phone-55gq757rwr734g9v-8000.app.github.dev/api/nantralpay/cash-in-qrcode/${data.transaction_id}/`,
+        buildAbsoluteUrl(
+          `/api/nantralpay/cash-in-qrcode/${data.transaction_id}/`,
+        ),
       );
     } else {
       console.error('Erreur lors de la création de la transaction');
@@ -52,7 +56,9 @@ const QRCodeFormPage: React.FC = () => {
         <div>
           <h2>QR Code:</h2>
           <QRCodeSVG
-            value={`https://curly-space-rotary-phone-55gq757rwr734g9v-8000.app.github.dev/api/nantralpay/cash-in-qrcode/${transactionId}/`}
+            value={buildAbsoluteUrl(
+              `/api/nantralpay/cash-in-qrcode/${transactionId}/`,
+            )}
           />
         </div>
       )}
