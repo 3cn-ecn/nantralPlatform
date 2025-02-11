@@ -9,10 +9,22 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import permissions, viewsets
 
 from .datawebhook import DATA
-from .models import Payment, QRTransaction, Transaction
+from .models import (
+    Item,
+    ItemSale,
+    Payment,
+    QRTransaction,
+    Sale,
+    Transaction,
+)
 from .serializers import (
+    ItemSaleSerializer,
+    ItemSerializer,
     PaymentSerializer,
     QRTransactionSerializer,
+    SaleSerializer,
+    ShortItemSaleSerializer,
+    ShortSaleSerializer,
     TransactionSerializer,
 )
 from .utils import create_payment_from_ha, recalculate_balance, update_balance
@@ -54,6 +66,61 @@ class QRTransactionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self) -> QuerySet[Payment]:
         return QRTransaction.objects.all()
+
+
+class SaleViewSet(viewsets.ModelViewSet):
+    serializer_class = SaleSerializer
+    permission_classes = [
+        permissions.DjangoModelPermissions,
+        NantralPayPermission,
+    ]
+
+    def get_queryset(self) -> QuerySet[Sale]:
+        return Sale.objects.all()
+
+
+class ItemViewSet(viewsets.ModelViewSet):
+    serializer_class = ItemSerializer
+    permission_classes = [
+        permissions.DjangoModelPermissions,
+        NantralPayPermission,
+    ]
+
+    def get_queryset(self) -> QuerySet[Item]:
+        return Item.objects.all()
+
+
+class ItemSaleViewSet(viewsets.ModelViewSet):
+    serializer_class = ItemSaleSerializer
+    permission_classes = [
+        permissions.DjangoModelPermissions,
+        NantralPayPermission,
+    ]
+
+    def get_queryset(self) -> QuerySet[ItemSale]:
+        return ItemSale.objects.all()
+
+
+class ShortSaleViewSet(viewsets.ModelViewSet):
+    serializer_class = ShortSaleSerializer
+    permission_classes = [
+        permissions.DjangoModelPermissions,
+        NantralPayPermission,
+    ]
+
+    def get_queryset(self) -> QuerySet[Sale]:
+        return Sale.objects.all()
+
+
+class ShortItemSaleViewSet(viewsets.ModelViewSet):
+    serializer_class = ShortItemSaleSerializer
+    permission_classes = [
+        permissions.DjangoModelPermissions,
+        NantralPayPermission,
+    ]
+
+    def get_queryset(self) -> QuerySet[ItemSale]:
+        return ItemSale.objects.all()
 
 
 # Vue pour gérer les notifications de paiement HelloAsso

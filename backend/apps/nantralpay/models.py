@@ -40,3 +40,34 @@ class QRTransaction(models.Model):
     )
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     creation_date = models.DateTimeField(auto_now_add=True)
+
+
+class Item(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+class Sale(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="sales"
+    )
+    items = models.ManyToManyField(
+        Item, through="ItemSale", related_name="sales"
+    )
+
+
+class ItemSale(models.Model):
+    item = models.ForeignKey(
+        Item, on_delete=models.CASCADE, related_name="item_sales"
+    )
+    sale = models.ForeignKey(
+        Sale, on_delete=models.CASCADE, related_name="item_sales"
+    )
+    quantity = models.IntegerField(default=1)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=("item", "sale"), name="unique_item_sale"
+            )
+        ]

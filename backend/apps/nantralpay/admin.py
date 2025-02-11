@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Payment, QRTransaction, Transaction
+from .forms import ItemAdminField
+from .models import Item, ItemSale, Payment, QRTransaction, Sale, Transaction
 
 
 @admin.register(Payment)
@@ -51,3 +52,40 @@ class QRTransactionAdmin(admin.ModelAdmin):
     )
     list_filter = ("creation_date",)
     ordering = ("-creation_date",)
+
+
+@admin.register(Item)
+class ItemAdmin(admin.ModelAdmin):
+    list_display = ("name", "price")
+    search_fields = ("name",)
+    ordering = ("name",)
+
+
+class ItemSaleInline(admin.TabularInline):
+    model = ItemSale
+    extra = 1
+    min_num = 1
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """Custom option text in the form"""
+        if db_field.name == "item":
+            return ItemAdminField(queryset=Item.objects.all())
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(Sale)
+class SaleAdmin(admin.ModelAdmin):
+    inlines = (ItemSaleInline,)
+    search_fields = (
+        "user__first_name",
+        "user__last_name",
+        "user__email",
+    )
+    list_display = ("user", "get_items")
+
+    def get_items(self, obj):
+        """Shows the purchased items"""
+        return "\n".join(
+            f"{item.quantity}x {item.item.name}"
+            for item in obj.items.through.objects.all()
+        )

@@ -15,3 +15,10 @@ class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
         fields = ["receiver", "amount", "description"]
+
+
+class ItemAdminField(forms.ModelChoiceField):
+    """Custom field for items in django admin"""
+
+    def label_from_instance(self, obj):
+        return obj.name
