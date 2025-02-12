@@ -55,6 +55,12 @@ class Sale(models.Model):
         Item, through="ItemSale", related_name="sales"
     )
 
+    def get_price(self):
+        return sum(
+            item.item.price * item.quantity
+            for item in self.items.through.objects.all()
+        )
+
 
 class ItemSale(models.Model):
     item = models.ForeignKey(
