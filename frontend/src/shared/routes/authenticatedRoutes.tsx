@@ -4,6 +4,9 @@ import { RouteObject } from 'react-router-dom';
 import { PageTemplate } from '#shared/components/PageTemplate/PageTemplate';
 
 const QRCodeFormPage = lazy(() => import('#pages/NantralPay/QRCodeForm.page'));
+const QRCodeTransactionPage = lazy(
+  () => import('#pages/NantralPay/QRCodeTransaction.page'),
+);
 
 const EventPage = lazy(() => import('#pages/Event/Event.page'));
 const EventCalendarViewPage = lazy(
@@ -88,9 +91,20 @@ export const authenticatedRoutes: RouteObject = {
       ],
     },
     {
-      path: '/nantralpay/qrcode-form',
-      element: <QRCodeFormPage />,
-      handle: { crumb: t('breadcrumbs.qrcode.form') },
+      path: '/nantralpay',
+      handle: { crumb: 'NantralPay' },
+      children: [
+        {
+          path: 'qrcode-form',
+          element: <QRCodeFormPage />,
+          handle: { crumb: t('breadcrumbs.qrcode.form') },
+        },
+        {
+          path: 'cash-in/:uuid/',
+          element: <QRCodeTransactionPage />,
+          handle: { crumb: t('breadcrumbs.qrcode.cash-in') },
+        },
+      ],
     },
     {
       path: '*',

@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from django.db.models import QuerySet
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
@@ -176,6 +177,7 @@ def create_transaction(request):
         return JsonResponse({"error": "Méthode non autorisée"}, status=405)
 
 
+@csrf_exempt
 def cash_in_qrcode(request, transaction_id):
     if request.method in ("GET", "POST"):
         # Récupérer l'utilisateur actuellement connecté
@@ -211,19 +213,20 @@ def cash_in_qrcode(request, transaction_id):
             )
 
     if request.method == "GET":
-        return JsonResponse(
-            {
-                "Error": "Not implemented"
-            },  # Doit retourner la page de selection des produits
-            status=500,
-        )
+        return redirect(f"/nantralpay/cash-in/{transaction_id}/")
 
     elif request.method == "POST":
         # Récupérer le montant du paiement
         try:
-            amount = request.post["amount"]
-        except IndexError:
-            return JsonResponse({"Error": "No amount"}, status=400)
+            # Parse le corps de la requête JSON
+            data = json.loads(request.body)
+            amount = data.get("amount")
+
+            if not amount:
+                return JsonResponse({"error": "Montant manquant"}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "JSON invalide"}, status=400)
 
         # Vérifier si le solde du sender est suffisant
         if qr_code.user.nantralpay_balance < amount:
