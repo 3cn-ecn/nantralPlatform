@@ -162,26 +162,13 @@ def helloasso_payment_webhook(request):
 def create_transaction(request):
     if request.method == "POST":
         try:
-            # Parse le corps de la requête JSON
-            data = json.loads(request.body)
-            montant = data.get("amount")
-
-            if not montant:
-                return JsonResponse({"error": "Montant manquant"}, status=400)
-
-            if not request.user.nantralpay_balance >= montant:
-                return JsonResponse({"error": "Solde insuffisant"}, status=400)
-
-            # Crée une nouvelle transaction avec le montant
-            transaction = Transaction.objects.create(
-                amount=montant,
-                sender=request.user,
+            # Crée un nouveau QR code
+            qr_code = QRCode.objects.create(
+                user=request.user,
             )
 
             # Renvoyer l'ID de la transaction
-            return JsonResponse(
-                {"transaction_id": transaction.transaction_id}, status=201
-            )
+            return JsonResponse({"qr_code_id": qr_code.id}, status=201)
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "JSON invalide"}, status=400)
@@ -196,7 +183,7 @@ def cash_in_qrcode(request, transaction_id):
 
         # Récupérer l'instance de QRTransaction avec le transaction_id
         try:
-            qr_code = QRCode.objects.get(transaction_id=transaction_id)
+            qr_code = QRCode.objects.get(id=transaction_id)
         except QRCode.DoesNotExist:
             return JsonResponse({"Error": "QR Code not found"}, status=404)
 
@@ -239,7 +226,7 @@ def cash_in_qrcode(request, transaction_id):
             return JsonResponse({"Error": "No amount"}, status=400)
 
         # Vérifier si le solde du sender est suffisant
-        if not qr_code.user.nantralpay_balance >= amount:
+        if qr_code.user.nantralpay_balance < amount:
             return JsonResponse(
                 {"Error": "The sender does not have enough money."},
                 status=400,

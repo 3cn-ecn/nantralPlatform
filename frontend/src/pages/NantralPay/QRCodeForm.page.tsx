@@ -5,8 +5,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { buildAbsoluteUrl } from '#shared/utils/urls';
 
 const QRCodeFormPage: React.FC = () => {
-  const [amount, setAmount] = useState<number>(0);
-  const [transactionId, setTransactionId] = useState<string | null>(null);
+  const [QRCodeId, setQRCodeId] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,18 +16,13 @@ const QRCodeFormPage: React.FC = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        amount,
-      }),
     });
 
     if (response.ok) {
       const data = await response.json();
-      setTransactionId(data.transaction_id);
+      setQRCodeId(data.qr_code_id);
       console.log(
-        buildAbsoluteUrl(
-          `/api/nantralpay/cash-in-qrcode/${data.transaction_id}/`,
-        ),
+        buildAbsoluteUrl(`/api/nantralpay/cash-in-qrcode/${data.qr_code_id}/`),
       );
     } else {
       console.error('Erreur lors de la création de la transaction');
@@ -39,25 +33,15 @@ const QRCodeFormPage: React.FC = () => {
     <div>
       <h1>NantralPay</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="amount">Montant</label>
-          <input
-            type="number"
-            id="amount"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            required
-          />
-        </div>
         <button type="submit">Générer le QRCode</button>
       </form>
 
-      {transactionId && (
+      {QRCodeId && (
         <div>
           <h2>QR Code:</h2>
           <QRCodeSVG
             value={buildAbsoluteUrl(
-              `/api/nantralpay/cash-in-qrcode/${transactionId}/`,
+              `/api/nantralpay/cash-in-qrcode/${QRCodeId}/`,
             )}
           />
         </div>
