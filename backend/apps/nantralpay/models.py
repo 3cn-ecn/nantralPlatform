@@ -24,22 +24,21 @@ class Payment(models.Model):
     helloasso_payment_id = models.CharField(max_length=255)
 
 
-class QRTransaction(models.Model):
-    transaction_id = models.UUIDField(
+class QRCode(models.Model):
+    id = models.UUIDField(
         default=uuid.uuid4, editable=False, unique=True, primary_key=True
     )
-    sender = models.ForeignKey(
-        User, related_name="QR_sender", on_delete=models.CASCADE
+    user = models.ForeignKey(
+        User, related_name="qr_code", on_delete=models.CASCADE
     )
-    receiver = models.ForeignKey(
-        User,
-        related_name="QR_receiver",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
     creation_date = models.DateTimeField(auto_now_add=True)
+    transaction = models.OneToOneField(
+        Transaction,
+        on_delete=models.CASCADE,
+        related_name="qr_code",
+        blank=True,
+        null=True,
+    )
 
 
 class Item(models.Model):
@@ -53,6 +52,13 @@ class Sale(models.Model):
     )
     items = models.ManyToManyField(
         Item, through="ItemSale", related_name="sales"
+    )
+    transaction = models.OneToOneField(
+        Transaction,
+        on_delete=models.CASCADE,
+        related_name="sale",
+        blank=True,
+        null=True,
     )
 
     def get_price(self):

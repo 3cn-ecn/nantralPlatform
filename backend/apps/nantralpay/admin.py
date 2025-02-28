@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .forms import ItemAdminField
-from .models import Item, ItemSale, Payment, QRTransaction, Sale, Transaction
+from .models import Item, ItemSale, Payment, QRCode, Sale, Transaction
 
 
 @admin.register(Payment)
@@ -38,18 +38,14 @@ class TransactionAdmin(admin.ModelAdmin):
     ordering = ("-transaction_date",)
 
 
-@admin.register(QRTransaction)
-class QRTransactionAdmin(admin.ModelAdmin):
+@admin.register(QRCode)
+class QRCodeAdmin(admin.ModelAdmin):
     list_display = (
-        "sender",
-        "receiver",
-        "amount",
+        "user",
         "creation_date",
+        "id",
     )
-    search_fields = (
-        "sender__username",
-        "receiver__username",
-    )
+    search_fields = ("user__username",)
     list_filter = ("creation_date",)
     ordering = ("-creation_date",)
 
@@ -87,5 +83,5 @@ class SaleAdmin(admin.ModelAdmin):
         """Shows the purchased items"""
         return "\n".join(
             f"{item.quantity}x {item.item.name}"
-            for item in obj.items.through.objects.all()
+            for item in obj.item_sales.all()
         )

@@ -4,7 +4,7 @@ from .models import (
     Item,
     ItemSale,
     Payment,
-    QRTransaction,
+    QRCode,
     Sale,
     Transaction,
 )
@@ -22,9 +22,9 @@ class PaymentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class QRTransactionSerializer(serializers.ModelSerializer):
+class QRCodeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = QRTransaction
+        model = QRCode
         fields = "__all__"
 
 

@@ -13,7 +13,7 @@ from .models import (
     Item,
     ItemSale,
     Payment,
-    QRTransaction,
+    QRCode,
     Sale,
     Transaction,
 )
@@ -21,7 +21,7 @@ from .serializers import (
     ItemSaleSerializer,
     ItemSerializer,
     PaymentSerializer,
-    QRTransactionSerializer,
+    QRCodeSerializer,
     SaleSerializer,
     ShortItemSaleSerializer,
     ShortSaleSerializer,
@@ -61,11 +61,11 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
 
 class QRTransactionViewSet(viewsets.ModelViewSet):
-    serializer_class = QRTransactionSerializer
+    serializer_class = QRCodeSerializer
     permission_classes = [permissions.IsAuthenticated, NantralPayPermission]
 
     def get_queryset(self) -> QuerySet[Payment]:
-        return QRTransaction.objects.all()
+        return QRCode.objects.all()
 
 
 class SaleViewSet(viewsets.ModelViewSet):
@@ -173,7 +173,7 @@ def create_transaction(request):
                 return JsonResponse({"error": "Solde insuffisant"}, status=400)
 
             # Crée une nouvelle transaction avec le montant
-            transaction = QRTransaction.objects.create(
+            transaction = Transaction.objects.create(
                 amount=montant,
                 sender=request.user,
             )
@@ -190,20 +190,21 @@ def create_transaction(request):
 
 
 def cash_in_qrcode(request, transaction_id):
-    if request.method == "GET":
+    if request.method in ("GET", "POST"):
         # Récupérer l'utilisateur actuellement connecté
         receiver = request.user
 
         # Récupérer l'instance de QRTransaction avec le transaction_id
         try:
-            qr_transaction = QRTransaction.objects.get(
-                transaction_id=transaction_id
-            )
-        except QRTransaction.DoesNotExist:
-            return JsonResponse({"Error": "Transaction not found"}, status=404)
+            qr_code = QRCode.objects.get(transaction_id=transaction_id)
+        except QRCode.DoesNotExist:
+            return JsonResponse({"Error": "QR Code not found"}, status=404)
+
+        # Récupérer l'utilisateur à facturer
+        sender = qr_code.user
 
         # Vérifier si le receiver n'est pas déjà défini
-        if qr_transaction.receiver is not None:
+        if qr_code.transaction is not None:
             return JsonResponse(
                 {"Error": "This QR code has already been cashed in."},
                 status=400,
@@ -213,7 +214,7 @@ def cash_in_qrcode(request, transaction_id):
         current_time = (
             timezone.now()
         )  # Utilise la méthode correcte de Django pour obtenir l'heure actuelle
-        expiration_time = qr_transaction.creation_date + timedelta(
+        expiration_time = qr_code.creation_date + timedelta(
             minutes=QRCode_expiration_time
         )
         if current_time > expiration_time:
@@ -222,25 +223,47 @@ def cash_in_qrcode(request, transaction_id):
                 status=400,
             )
 
+    if request.method == "GET":
+        return JsonResponse(
+            {
+                "Error": "Not implemented"
+            },  # Doit retourner la page de selection des produits
+            status=500,
+        )
+
+    elif request.method == "POST":
+        # Récupérer le montant du paiement
+        try:
+            amount = request.post["amount"]
+        except IndexError:
+            return JsonResponse({"Error": "No amount"}, status=400)
+
         # Vérifier si le solde du sender est suffisant
-        if not qr_transaction.sender.nantralpay_balance > qr_transaction.amount:
+        if not qr_code.user.nantralpay_balance >= amount:
             return JsonResponse(
                 {"Error": "The sender does not have enough money."},
                 status=400,
             )
 
         # Mettre à jour le solde du receiver et du sender
-        update_balance(receiver, qr_transaction.amount)
-        update_balance(qr_transaction.sender, -qr_transaction.amount)
+        update_balance(receiver, amount)
+        update_balance(sender, -amount)
 
-        # Mettre à jour le receiver et sauvegarder
-        qr_transaction.receiver = receiver
-        qr_transaction.save()
+        # Créer la transaction et la sauvegarder
+        transaction = Transaction.objects.create(
+            receiver=receiver,
+            sender=sender,
+            amount=amount,
+            description=f"Cash-in QR Code {transaction_id}",
+        )
+        transaction.save()
+        qr_code.transaction = transaction
+        qr_code.save()
 
         return JsonResponse(
             {
-                "success": "Receiver added to the QR transaction",
-                "transaction_id": str(qr_transaction.transaction_id),
+                "success": "Transaction has been added",
+                "transaction_id": str(qr_code.transaction_id),
             }
         )
 
