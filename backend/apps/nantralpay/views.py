@@ -1,5 +1,6 @@
 import json
 from datetime import timedelta
+from decimal import Decimal
 
 from django.db.models import QuerySet
 from django.http import HttpResponse, JsonResponse
@@ -217,13 +218,35 @@ def cash_in_qrcode(request, transaction_id):
 
     elif request.method == "POST":
         # Récupérer le montant du paiement
+        items = []
+        amount = Decimal(0)
         try:
             # Parse le corps de la requête JSON
             data = json.loads(request.body)
-            amount = data.get("amount")
+            for item in data:
+                id = item.get("id")
+                quantity = item.get("quantity")
 
-            if not amount:
-                return JsonResponse({"error": "Montant manquant"}, status=400)
+                # Vérification de l'ID
+                if not id:
+                    return JsonResponse(
+                        {"error": "Identifiant produit manquant"}, status=400
+                    )
+                try:
+                    item_object = Item.objects.get(id=id)
+                except Item.DoesNotExist:
+                    return JsonResponse(
+                        {"error": "Identifiant produit invalide"}, status=400
+                    )
+
+                # Vérification de la quantité
+                if not isinstance(quantity, int) or quantity < 0:
+                    return JsonResponse(
+                        {"error": "Quantité invalide"}, status=400
+                    )
+
+                items.append({"item": item_object, "quantity": quantity})
+                amount += item_object.price * quantity
 
         except json.JSONDecodeError:
             return JsonResponse({"error": "JSON invalide"}, status=400)
@@ -239,14 +262,27 @@ def cash_in_qrcode(request, transaction_id):
         update_balance(receiver, amount)
         update_balance(sender, -amount)
 
-        # Créer la transaction et la sauvegarder
+        # Créer la transaction
         transaction = Transaction.objects.create(
             receiver=receiver,
             sender=sender,
             amount=amount,
             description=f"Cash-in QR Code {transaction_id}",
         )
-        transaction.save()
+        # Créer la vente
+        sale = Sale.objects.create(user=sender, transaction=transaction)
+
+        ItemSale.objects.bulk_create(
+            [
+                ItemSale(
+                    sale=sale,
+                    item=item["item"],
+                    quantity=item["quantity"],
+                )
+                for item in items
+            ]
+        )
+        # Mettre à jour le QR Code
         qr_code.transaction = transaction
         qr_code.save()
 
