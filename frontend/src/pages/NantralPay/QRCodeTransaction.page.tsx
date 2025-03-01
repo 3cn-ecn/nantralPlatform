@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { Alert } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import axios, { AxiosError } from 'axios';
 
@@ -28,7 +29,11 @@ function adaptItem(itemDTO: ItemDTO): Item {
   };
 }
 
-function ItemForm({ item }): JSX.Element {
+interface ItemFormProps {
+  item: Item;
+}
+
+function ItemForm({ item }: ItemFormProps): JSX.Element {
   const [quantity, setQuantity] = useState<number>(item.quantity);
   return (
     <li key={item.id}>
@@ -51,6 +56,9 @@ function ItemForm({ item }): JSX.Element {
 
 const QRCodeTransactionPage: React.FC = () => {
   const { uuid: qrCodeId } = useParams();
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const itemsQuery = useQuery<Page<Item>, AxiosError>({
     queryKey: ['items'],
@@ -67,13 +75,10 @@ const QRCodeTransactionPage: React.FC = () => {
 
   // check if there is an error and show it
   if (itemsQuery.isError) {
-    return <p>Error: {itemsQuery.error.message}</p>;
+    return <Alert severity="error">{itemsQuery.error.message}</Alert>;
   }
 
   // if everything is ok, show the data. The types here are:
-  // eventsQuery: a query object
-  // eventsQuery.data: a Page object of events
-  // eventsQuery.data.results: the list of events (Event[])
   const page = itemsQuery.data;
   const totalNumberOfItems = page.count;
   const itemsOfThisPage = page.results;
@@ -90,23 +95,34 @@ const QRCodeTransactionPage: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(
-          itemsOfThisPage.map((item) => ({
-            id: item.id,
-            quantity: item.quantity,
-          })),
+          itemsOfThisPage
+            .filter((item) => item.quantity)
+            .map((item) => ({
+              id: item.id,
+              quantity: item.quantity,
+            })),
         ),
       },
     );
 
     if (response.ok) {
       console.log('OK');
+      setIsError(false);
+      setIsSuccess(true);
     } else {
-      console.error('Erreur lors de la création de la transaction');
+      setIsError(true);
+      setIsSuccess(false);
+      response
+        .json()
+        .then((data) => setErrorMessage(data.Error))
+        .catch((e) => setErrorMessage(e.message));
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      {isError && <Alert severity="error">{errorMessage}</Alert>}
+      {isSuccess && <Alert severity="success">Transaction succeeded</Alert>}
       <p>
         Showing {itemsOfThisPage.length} / {totalNumberOfItems} items
       </p>
