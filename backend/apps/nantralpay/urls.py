@@ -13,6 +13,7 @@ from .views import (
     cash_in_qrcode,
     create_transaction,
     helloasso_payment_webhook,
+    qrcode,
 )
 
 app_name = "nantralpay"
@@ -45,5 +46,10 @@ urlpatterns += [
         "cash-in-qrcode/<uuid:transaction_id>/",
         cash_in_qrcode,
         name="cash_in_qrcode",
+    ),
+    path(
+        "qrcode/<uuid:transaction_id>/",
+        qrcode,
+        name="qrcode",
     ),
 ]

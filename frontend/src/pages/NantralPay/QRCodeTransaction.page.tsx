@@ -78,7 +78,7 @@ const QRCodeTransactionPage: React.FC = () => {
     return <Alert severity="error">{itemsQuery.error.message}</Alert>;
   }
 
-  // if everything is ok, show the data. The types here are:
+  // if everything is ok, show the data
   const page = itemsQuery.data;
   const totalNumberOfItems = page.count;
   const itemsOfThisPage = page.results;

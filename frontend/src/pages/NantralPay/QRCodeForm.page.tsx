@@ -10,7 +10,7 @@ const QRCodeFormPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Appel à l'API pour créer la transaction
+    // Appel à l'API pour créer le QR Code
     const response = await fetch('/api/nantralpay/create-transaction/', {
       method: 'POST',
       headers: {
@@ -22,7 +22,7 @@ const QRCodeFormPage: React.FC = () => {
       const data = await response.json();
       setQRCodeId(data.qr_code_id);
       console.log(
-        buildAbsoluteUrl(`/api/nantralpay/cash-in-qrcode/${data.qr_code_id}/`),
+        buildAbsoluteUrl(`/api/nantralpay/qrcode/${data.qr_code_id}/`),
       );
     } else {
       console.error('Erreur lors de la création de la transaction');
@@ -40,9 +40,7 @@ const QRCodeFormPage: React.FC = () => {
         <div>
           <h2>QR Code:</h2>
           <QRCodeSVG
-            value={buildAbsoluteUrl(
-              `/api/nantralpay/cash-in-qrcode/${QRCodeId}/`,
-            )}
+            value={buildAbsoluteUrl(`/api/nantralpay/qrcode/${QRCodeId}/`)}
           />
         </div>
       )}

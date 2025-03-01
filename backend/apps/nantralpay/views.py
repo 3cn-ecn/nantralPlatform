@@ -1,13 +1,11 @@
 import json
-from datetime import timedelta
-from decimal import Decimal
 
 from django.db.models import QuerySet
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
+from requests import Response
 from rest_framework import permissions, viewsets
 
 from .datawebhook import DATA
@@ -29,9 +27,13 @@ from .serializers import (
     ShortSaleSerializer,
     TransactionSerializer,
 )
-from .utils import create_payment_from_ha, recalculate_balance, update_balance
-
-QRCode_expiration_time = 2  # Durée (en minutes) avant que le QRCode périme
+from .utils import (
+    check_qrcode,
+    create_payment_from_ha,
+    get_items_from_json,
+    recalculate_balance,
+    update_balance,
+)
 
 
 class NantralPayPermission(permissions.BasePermission):
@@ -179,77 +181,40 @@ def create_transaction(request):
 
 
 @csrf_exempt
+def qrcode(request, transaction_id):
+    if request.method == "GET":
+        match check_qrcode(transaction_id):
+            case QRCode():
+                pass
+            case Response() as res:
+                return res
+
+        return redirect(f"/nantralpay/cash-in/{transaction_id}/")
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+
+@csrf_exempt
 def cash_in_qrcode(request, transaction_id):
-    if request.method in ("GET", "POST"):
-        # Récupérer l'utilisateur actuellement connecté
+    if (
+        request.method == "POST"
+    ):  # Récupérer l'utilisateur actuellement connecté
         receiver = request.user
 
-        # Récupérer l'instance de QRTransaction avec le transaction_id
-        try:
-            qr_code = QRCode.objects.get(id=transaction_id)
-        except QRCode.DoesNotExist:
-            return JsonResponse({"Error": "QR Code not found"}, status=404)
+        match check_qrcode(transaction_id):
+            case QRCode() as qr_code:
+                pass
+            case Response() as res:
+                return res
 
         # Récupérer l'utilisateur à facturer
         sender = qr_code.user
 
-        # Vérifier si le receiver n'est pas déjà défini
-        if qr_code.transaction is not None:
-            return JsonResponse(
-                {"Error": "This QR code has already been cashed in."},
-                status=400,
-            )
-
-        # Vérifier si la transaction n'est pas périmée
-        current_time = (
-            timezone.now()
-        )  # Utilise la méthode correcte de Django pour obtenir l'heure actuelle
-        expiration_time = qr_code.creation_date + timedelta(
-            minutes=QRCode_expiration_time
-        )
-        if current_time > expiration_time:
-            return JsonResponse(
-                {"Error": "This QR code has expired."},
-                status=400,
-            )
-
-    if request.method == "GET":
-        return redirect(f"/nantralpay/cash-in/{transaction_id}/")
-
-    elif request.method == "POST":
-        # Récupérer le montant du paiement
-        items = []
-        amount = Decimal(0)
-        try:
-            # Parse le corps de la requête JSON
-            data = json.loads(request.body)
-            for item in data:
-                id = item.get("id")
-                quantity = item.get("quantity")
-
-                # Vérification de l'ID
-                if not id:
-                    return JsonResponse(
-                        {"error": "Identifiant produit manquant"}, status=400
-                    )
-                try:
-                    item_object = Item.objects.get(id=id)
-                except Item.DoesNotExist:
-                    return JsonResponse(
-                        {"error": "Identifiant produit invalide"}, status=400
-                    )
-
-                # Vérification de la quantité
-                if not isinstance(quantity, int) or quantity < 0:
-                    return JsonResponse(
-                        {"error": "Quantité invalide"}, status=400
-                    )
-
-                items.append({"item": item_object, "quantity": quantity})
-                amount += item_object.price * quantity
-
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "JSON invalide"}, status=400)
+        match get_items_from_json(request.body):
+            case Response() as res:
+                return res
+            case items, amount:
+                pass
 
         # Vérifier si le solde du sender est suffisant
         if qr_code.user.nantralpay_balance < amount:
