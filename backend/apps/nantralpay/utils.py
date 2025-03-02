@@ -82,12 +82,12 @@ def check_qrcode(qr_code_uuid: str) -> Response | QRCode:
     try:
         qr_code = QRCode.objects.get(id=qr_code_uuid)
     except QRCode.DoesNotExist:
-        return JsonResponse({"Error": "QR Code not found"}, status=404)
+        return JsonResponse({"error": "QR Code not found"}, status=404)
 
     # Vérifier si la transaction n'est pas déjà enregistrée
     if qr_code.transaction is not None:
         return JsonResponse(
-            {"Error": "This QR code has already been cashed in."}, status=400
+            {"error": "This QR code has already been cashed in."}, status=400
         )
 
     # Vérifier si le QR code n'est pas périmé
@@ -98,7 +98,9 @@ def check_qrcode(qr_code_uuid: str) -> Response | QRCode:
         minutes=QRCode_expiration_time
     )
     if current_time > expiration_time:
-        return JsonResponse({"Error": "This QR code has expired."}, status=400)
+        return JsonResponse({"error": "This QR code has expired."}, status=400)
+
+    return qr_code
 
 
 def get_items_from_json(json_data):
@@ -133,4 +135,6 @@ def get_items_from_json(json_data):
 
     except json.JSONDecodeError:
         return JsonResponse({"error": "JSON invalide"}, status=400)
-    return item, amount
+    if len(items) == 0:
+        return JsonResponse({"error": "Aucun produit vendu"}, status=400)
+    return items, amount

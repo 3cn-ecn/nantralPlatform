@@ -5,7 +5,6 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 
-from requests import Response
 from rest_framework import permissions, viewsets
 
 from .datawebhook import DATA
@@ -185,77 +184,74 @@ def qrcode(request, transaction_id):
     if request.method == "GET":
         match check_qrcode(transaction_id):
             case QRCode():
-                pass
-            case Response() as res:
+                return redirect(f"/nantralpay/cash-in/{transaction_id}/")
+            case JsonResponse() as res:
                 return res
-
-        return redirect(f"/nantralpay/cash-in/{transaction_id}/")
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
 @csrf_exempt
 def cash_in_qrcode(request, transaction_id):
-    if (
-        request.method == "POST"
-    ):  # Récupérer l'utilisateur actuellement connecté
+    if request.method == "POST":
+        # Récupérer l'utilisateur actuellement connecté
         receiver = request.user
 
         match check_qrcode(transaction_id):
             case QRCode() as qr_code:
-                pass
-            case Response() as res:
+                # Récupérer l'utilisateur à facturer
+                sender = qr_code.user
+
+                match get_items_from_json(request.body):
+                    case JsonResponse() as res:
+                        return res
+                    case items, amount:
+                        # Vérifier si le solde du sender est suffisant
+                        if qr_code.user.nantralpay_balance < amount:
+                            return JsonResponse(
+                                {
+                                    "error": "The sender does not have enough money."
+                                },
+                                status=400,
+                            )
+
+                        # Mettre à jour le solde du receiver et du sender
+                        update_balance(receiver, amount)
+                        update_balance(sender, -amount)
+
+                        # Créer la transaction
+                        transaction = Transaction.objects.create(
+                            receiver=receiver,
+                            sender=sender,
+                            amount=amount,
+                            description=f"Cash-in QR Code {transaction_id}",
+                        )
+                        # Créer la vente
+                        sale = Sale.objects.create(
+                            user=sender, transaction=transaction
+                        )
+
+                        ItemSale.objects.bulk_create(
+                            [
+                                ItemSale(
+                                    sale=sale,
+                                    item=item["item"],
+                                    quantity=item["quantity"],
+                                )
+                                for item in items
+                            ]
+                        )
+                        # Mettre à jour le QR Code
+                        qr_code.transaction = transaction
+                        qr_code.save()
+
+                        return JsonResponse(
+                            {
+                                "success": "Transaction has been added",
+                                "transaction_id": str(qr_code.transaction_id),
+                            }
+                        )
+            case JsonResponse() as res:
                 return res
-
-        # Récupérer l'utilisateur à facturer
-        sender = qr_code.user
-
-        match get_items_from_json(request.body):
-            case Response() as res:
-                return res
-            case items, amount:
-                pass
-
-        # Vérifier si le solde du sender est suffisant
-        if qr_code.user.nantralpay_balance < amount:
-            return JsonResponse(
-                {"Error": "The sender does not have enough money."},
-                status=400,
-            )
-
-        # Mettre à jour le solde du receiver et du sender
-        update_balance(receiver, amount)
-        update_balance(sender, -amount)
-
-        # Créer la transaction
-        transaction = Transaction.objects.create(
-            receiver=receiver,
-            sender=sender,
-            amount=amount,
-            description=f"Cash-in QR Code {transaction_id}",
-        )
-        # Créer la vente
-        sale = Sale.objects.create(user=sender, transaction=transaction)
-
-        ItemSale.objects.bulk_create(
-            [
-                ItemSale(
-                    sale=sale,
-                    item=item["item"],
-                    quantity=item["quantity"],
-                )
-                for item in items
-            ]
-        )
-        # Mettre à jour le QR Code
-        qr_code.transaction = transaction
-        qr_code.save()
-
-        return JsonResponse(
-            {
-                "success": "Transaction has been added",
-                "transaction_id": str(qr_code.transaction_id),
-            }
-        )
 
     return JsonResponse({"error": "Invalid request method"}, status=405)

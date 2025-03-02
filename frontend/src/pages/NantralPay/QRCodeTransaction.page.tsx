@@ -114,7 +114,7 @@ const QRCodeTransactionPage: React.FC = () => {
       setIsSuccess(false);
       response
         .json()
-        .then((data) => setErrorMessage(data.Error))
+        .then((data) => setErrorMessage(data.error))
         .catch((e) => setErrorMessage(e.message));
     }
   };
