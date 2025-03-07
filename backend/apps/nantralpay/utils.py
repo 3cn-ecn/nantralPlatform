@@ -127,7 +127,7 @@ def get_items_from_json(json_data):
                 )
 
             # Vérification de la quantité
-            if not isinstance(quantity, int) or quantity < 0:
+            if not isinstance(quantity, int) or quantity <= 0:
                 return JsonResponse({"error": "Quantité invalide"}, status=400)
 
             items.append({"item": item_object, "quantity": quantity})

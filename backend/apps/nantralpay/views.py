@@ -4,6 +4,7 @@ from django.db.models import QuerySet
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 from rest_framework import permissions, viewsets
 
@@ -128,130 +129,118 @@ class ShortItemSaleViewSet(viewsets.ModelViewSet):
 
 # Vue pour gérer les notifications de paiement HelloAsso
 @csrf_exempt
+@require_http_methods(["POST", "GET"])
 def helloasso_payment_webhook(request):
-    if request.method == "POST" or request.method == "GET":  # noqa: PLR1714
-        try:
-            data = (
-                json.loads(DATA)
-                if request.method == "GET"
-                else json.loads(request.body)
-            )
+    try:
+        data = (
+            json.loads(DATA)
+            if request.method == "GET"
+            else json.loads(request.body)
+        )
 
-            event_type = data.get("eventType")
-            order_data = data.get("data", {})
-            form_slug = order_data.get("formSlug")
+        event_type = data.get("eventType")
+        order_data = data.get("data", {})
+        form_slug = order_data.get("formSlug")
 
-            # Vérifier que l'événement est bien un paiement reçu
-            if event_type == "Order" and form_slug == "nantralpay":
-                payment_date = data.get("date")
-                orders = order_data.get("items")
-                for item in orders:
-                    user = create_payment_from_ha(item, payment_date)
-                    if user:
-                        recalculate_balance(user)
+        # Vérifier que l'événement est bien un paiement reçu
+        if event_type == "Order" and form_slug == "nantralpay":
+            payment_date = data.get("date")
+            orders = order_data.get("items")
+            for item in orders:
+                user = create_payment_from_ha(item, payment_date)
+                if user:
+                    recalculate_balance(user)
 
-                return HttpResponse(status=200)
-            else:
-                return JsonResponse(
-                    {"error": "Unhandled event type"}, status=400
-                )
+            return HttpResponse(status=200)
+        else:
+            return JsonResponse({"error": "Unhandled event type"}, status=400)
 
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON"}, status=400)
-    return HttpResponse(status=405)  # Method not allowed
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
 
 
 @csrf_exempt
+@require_http_methods(["POST"])
 def create_transaction(request):
-    if request.method == "POST":
-        try:
-            # Crée un nouveau QR code
-            qr_code = QRCode.objects.create(
-                user=request.user,
-            )
+    try:
+        # Crée un nouveau QR code
+        qr_code = QRCode.objects.create(
+            user=request.user,
+        )
 
-            # Renvoyer l'ID de la transaction
-            return JsonResponse({"qr_code_id": qr_code.id}, status=201)
+        # Renvoyer l'ID de la transaction
+        return JsonResponse({"qr_code_id": qr_code.id}, status=201)
 
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "JSON invalide"}, status=400)
-    else:
-        return JsonResponse({"error": "Méthode non autorisée"}, status=405)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "JSON invalide"}, status=400)
 
 
-@csrf_exempt
+@require_http_methods(["GET"])
 def qrcode(request, transaction_id):
-    if request.method == "GET":
-        match check_qrcode(transaction_id):
-            case QRCode():
-                return redirect(f"/nantralpay/cash-in/{transaction_id}/")
-            case JsonResponse() as res:
-                return res
-
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+    match check_qrcode(transaction_id):
+        case QRCode():
+            return redirect(f"/nantralpay/cash-in/{transaction_id}/")
+        case JsonResponse() as res:
+            return res
 
 
 @csrf_exempt
+@require_http_methods(["POST"])
 def cash_in_qrcode(request, transaction_id):
-    if request.method == "POST":
-        # Récupérer l'utilisateur actuellement connecté
-        receiver = request.user
+    # Récupérer l'utilisateur actuellement connecté
+    receiver = request.user
 
-        match check_qrcode(transaction_id):
-            case QRCode() as qr_code:
-                # Récupérer l'utilisateur à facturer
-                sender = qr_code.user
+    match check_qrcode(transaction_id):
+        case QRCode() as qr_code:
+            # Récupérer l'utilisateur à facturer
+            sender = qr_code.user
 
-                match get_items_from_json(request.body):
-                    case JsonResponse() as res:
-                        return res
-                    case items, amount:
-                        # Vérifier si le solde du sender est suffisant
-                        if qr_code.user.nantralpay_balance < amount:
-                            return JsonResponse(
-                                {
-                                    "error": "The sender does not have enough money."
-                                },
-                                status=400,
-                            )
-
-                        # Mettre à jour le solde du receiver et du sender
-                        update_balance(receiver, amount)
-                        update_balance(sender, -amount)
-
-                        # Créer la transaction
-                        transaction = Transaction.objects.create(
-                            receiver=receiver,
-                            sender=sender,
-                            amount=amount,
-                            description=f"Cash-in QR Code {transaction_id}",
-                        )
-                        # Créer la vente
-                        sale = Sale.objects.create(
-                            user=sender, transaction=transaction
-                        )
-
-                        ItemSale.objects.bulk_create(
-                            [
-                                ItemSale(
-                                    sale=sale,
-                                    item=item["item"],
-                                    quantity=item["quantity"],
-                                )
-                                for item in items
-                            ]
-                        )
-                        # Mettre à jour le QR Code
-                        qr_code.transaction = transaction
-                        qr_code.save()
-
+            match get_items_from_json(request.body):
+                case JsonResponse() as res:
+                    return res
+                case items, amount:
+                    # Vérifier si le solde du sender est suffisant
+                    if qr_code.user.nantralpay_balance < amount:
                         return JsonResponse(
-                            {
-                                "success": "Transaction has been added",
-                                "transaction_id": str(qr_code.transaction_id),
-                            }
+                            {"error": "The sender does not have enough money."},
+                            status=400,
                         )
-            case JsonResponse() as res:
-                return res
 
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+                    # Mettre à jour le solde du receiver et du sender
+                    update_balance(receiver, amount)
+                    update_balance(sender, -amount)
+
+                    # Créer la transaction
+                    transaction = Transaction.objects.create(
+                        receiver=receiver,
+                        sender=sender,
+                        amount=amount,
+                        description=f"Cash-in QR Code {transaction_id}",
+                    )
+                    # Créer la vente
+                    sale = Sale.objects.create(
+                        user=sender, transaction=transaction
+                    )
+
+                    ItemSale.objects.bulk_create(
+                        [
+                            ItemSale(
+                                sale=sale,
+                                item=item["item"],
+                                quantity=item["quantity"],
+                            )
+                            for item in items
+                        ]
+                    )
+                    # Mettre à jour le QR Code
+                    qr_code.transaction = transaction
+                    qr_code.save()
+
+                    return JsonResponse(
+                        {
+                            "success": "Transaction has been added",
+                            "transaction_id": str(qr_code.transaction_id),
+                        }
+                    )
+        case JsonResponse() as res:
+            return res
