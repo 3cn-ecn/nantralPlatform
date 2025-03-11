@@ -206,8 +206,26 @@ def cash_in_qrcode(request, transaction_id):
                             status=400,
                         )
 
-                    # Mettre à jour le solde du receiver et du sender
-                    update_balance(receiver, amount)
+                    # Récupérer le groupe du receiver
+                    groups = receiver.student.membership_set.filter(
+                        can_use_nantralpay=True
+                    ).filter(group__slug__in=["bde", "bda", "bds"])
+                    if len(groups) == 0:
+                        return JsonResponse(
+                            {"error": "You are not allowed to use NantralPay."},
+                            status=403,
+                        )
+                    elif len(groups) > 1:
+                        return JsonResponse(
+                            {
+                                "error": "You are in too many groups. Please contact an administrator."
+                            },
+                            status=403,
+                        )
+                    group = groups.first().group
+
+                    # Mettre à jour le solde du group et du sender
+                    update_balance(group, amount)
                     update_balance(sender, -amount)
 
                     # Créer la transaction
@@ -216,6 +234,7 @@ def cash_in_qrcode(request, transaction_id):
                         sender=sender,
                         amount=amount,
                         description=f"Cash-in QR Code {transaction_id}",
+                        group=group,
                     )
                     # Créer la vente
                     sale = Sale.objects.create(

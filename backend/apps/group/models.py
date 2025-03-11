@@ -300,6 +300,10 @@ class Group(models.Model, SlugModel):
         related_name="+",
     )
 
+    nantralpay_balance = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0
+    )
+
     class Meta:
         verbose_name = "groupe"
 
@@ -461,6 +465,7 @@ class Membership(models.Model):
         default=False,
     )
     admin_request_messsage = models.TextField(_("Request message"), blank=True)
+    can_use_nantralpay = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ("student", "group")

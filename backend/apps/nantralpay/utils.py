@@ -7,6 +7,8 @@ from django.utils import timezone
 
 from requests import Response
 
+from apps.group.models import Group
+
 from ..account.models import User
 from .models import Item, Payment, QRCode, Transaction
 
@@ -39,11 +41,11 @@ def create_payment_from_ha(item, payment_date):
         )
 
 
-def update_balance(user: User, amount: int):
-    """Update the balance by adding the amount to the previous user's balance
+def update_balance(receiver: User | Group, amount: int):
+    """Update the balance by adding the amount to the previous balance
     Pretty quick"""
-    user.nantralpay_balance += amount
-    user.save()
+    receiver.nantralpay_balance += amount
+    receiver.save()
 
 
 def recalculate_balance(user: User):
@@ -53,16 +55,23 @@ def recalculate_balance(user: User):
     for payment in Payment.objects.filter(user=user).values("amount"):
         balance += payment["amount"]
 
-    for transaction in Transaction.objects.filter(receiver=user).values(
-        "amount"
-    ):
-        balance += transaction["amount"]
-
     for transaction in Transaction.objects.filter(sender=user).values("amount"):
         balance -= transaction["amount"]
 
     user.nantralpay_balance = balance
     user.save()
+
+
+def group_recalculate_balance(group: Group):
+    """Recalculate the group's balance by taking all the transactions in account.
+    It takes time"""
+    balance = 0
+
+    for transaction in Transaction.objects.filter(group=group).values("amount"):
+        balance -= transaction["amount"]
+
+    group.nantralpay_balance = balance
+    group.save()
 
 
 def check_qrcode(qr_code_uuid: str) -> Response | QRCode:

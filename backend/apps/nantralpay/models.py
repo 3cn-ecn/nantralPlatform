@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 
 from apps.account.models import User
+from apps.group.models import Group
 
 
 class Transaction(models.Model):
@@ -15,6 +16,14 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_date = models.DateTimeField(auto_now_add=True)
     description = models.TextField(blank=True)
+
+    group = models.ForeignKey(
+        Group,
+        on_delete=models.CASCADE,
+        related_name="transactions",
+        blank=True,
+        null=True,
+    )
 
 
 class Payment(models.Model):
