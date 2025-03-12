@@ -1,4 +1,5 @@
 import json
+from decimal import Decimal
 
 from django.http import HttpResponse
 
@@ -42,7 +43,7 @@ def handle_order(json_data):
         return HttpResponse("Nothing to do")
 
     # Récupération des données JSON
-    amount = data.get("amount").get("total")
+    amount = Decimal(data.get("amount").get("total")).shift(-2)
     helloasso_order_id = data.get("id")
     checkout_intent_id = data.get("checkoutIntentId")
 
