@@ -4,6 +4,12 @@ from decimal import Decimal
 from django.http import HttpResponse
 
 from apps.nantralpay.models import Order, Payment
+from apps.nantralpay.utils import require_ip
+
+HELLOASSO_PROD = False
+HELLOASSO_PROD_IP = "51.138.206.200"
+HELLOASSO_DEV_IP = "4.233.135.234"
+HELLOASSO_IP = HELLOASSO_PROD_IP if HELLOASSO_PROD else HELLOASSO_DEV_IP
 
 
 def handle_payment(json_data):
@@ -88,12 +94,11 @@ def handle_organization(json_data):
     return HttpResponse("Not implemented")
 
 
+@require_ip([HELLOASSO_IP])
 def receive_notification(request):
     """Reçoit les notifications Webhook de Helloasso
 
     Ne doit pas renvoyer de code d'erreur, sinon Helloasso renverra la requête
-
-    TODO: Check for the correct origin of the request
     """
     try:
         json_data = json.loads(request.body)

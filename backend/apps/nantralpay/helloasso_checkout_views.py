@@ -23,7 +23,7 @@ def create_payment(request):
                 "itemName": "Recharge du compte NantralPay",
                 "backUrl": reverse(
                     "helloasso:helloasso_create_payment"
-                ),  # TODO: keep the requested amount in the form
+                ),  # à faire: garder le montant demandé dans le formulaire
                 "errorUrl": reverse("helloasso:helloasso_errorurl"),
                 "returnUrl": reverse("helloasso:helloasso_successurl"),
                 "containsDonation": True,
@@ -33,12 +33,18 @@ def create_payment(request):
                     "email": request.user.email,
                 },
             }
+            headers = {
+                "accept": "application/json",
+                "content-type": "application/*+json",
+                "authorization": "Bearer {accessToken}",
+            }
 
             response = requests.post(
                 "https://api.helloasso.com/v5/organizations/{organizationSlug}/checkout-intents",
                 json=body,
+                headers=headers,
                 timeout=60,
-            )  # TODO: Implement authentication for Helloasso API
+            )
             if not response.ok:
                 return HttpResponseServerError("Failed to create payment")
 
@@ -67,7 +73,7 @@ def create_payment(request):
 
 
 def helloasso_errorurl(request):
-    # TODO: Go back to the form with an error message
+    # à faire: Revenir sur le form avec un message d'erreur
     return HttpResponseServerError(
         f'HelloAsso payment failed: {request.GET["error"]}'
     )

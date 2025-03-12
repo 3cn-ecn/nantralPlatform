@@ -2,7 +2,7 @@ import json
 from datetime import timedelta
 from decimal import Decimal
 
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.utils import timezone
 
 from requests import Response
@@ -121,3 +121,17 @@ def get_items_from_json(json_data):
     if len(items) == 0:
         return JsonResponse({"error": "Aucun produit vendu"}, status=400)
     return items, amount
+
+
+def require_ip(allowed_ip_list):
+    def new_func(view_func):
+        def authorize(request, *args, **kwargs):
+            user_ip = request.META["REMOTE_ADDR"]
+            if user_ip not in allowed_ip_list:
+                return HttpResponseForbidden("You cannot access this page")
+            else:
+                return view_func(request, *args, **kwargs)
+
+        return authorize
+
+    return new_func
