@@ -92,6 +92,8 @@ def receive_notification(request):
     """Reçoit les notifications Webhook de Helloasso
 
     Ne doit pas renvoyer de code d'erreur, sinon Helloasso renverra la requête
+
+    TODO: Check for the correct origin of the request
     """
     try:
         json_data = json.loads(request.body)

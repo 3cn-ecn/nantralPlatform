@@ -1,7 +1,19 @@
 from django import forms
+from django.core import validators
 
 from ..account.models import User
 from .models import Transaction
+
+
+class RechargeForm(forms.Form):
+    amount = forms.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        label="Amount",
+        validators=[
+            validators.MinValueValidator(0.01)
+        ],  # Amount must be positive and non-zero
+    )
 
 
 class TransactionForm(forms.ModelForm):

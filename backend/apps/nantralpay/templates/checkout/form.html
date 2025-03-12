@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <h1>Recharger le compte NantralPay</h1>
+    <p>Solde actuel : {{ request.user.nantralpay_balance }}€</p>
+    <p>Attention : les recharges ne sont pas remboursables.</p>
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <br>
+        <button type="submit" class="btn btn-primary">Payer avec Helloasso</button>
+    </form>
+
+{% endblock %}
