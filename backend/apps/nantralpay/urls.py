@@ -2,6 +2,8 @@ from django.urls import path
 
 from rest_framework import routers
 
+from apps.nantralpay.helloasso_webhook_view import receive_notification
+
 from .views import (
     ItemSaleViewSet,
     ItemViewSet,
@@ -12,7 +14,6 @@ from .views import (
     TransactionViewSet,
     cash_in_qrcode,
     create_transaction,
-    helloasso_payment_webhook,
     qrcode,
 )
 
@@ -33,8 +34,8 @@ urlpatterns = router.urls
 
 urlpatterns += [
     path(
-        "helloasso-webhook/",
-        helloasso_payment_webhook,
+        "webhook/",
+        receive_notification,
         name="helloasso_webhook",
     ),
     path(

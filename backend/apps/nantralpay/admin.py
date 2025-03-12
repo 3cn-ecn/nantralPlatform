@@ -1,23 +1,44 @@
 from django.contrib import admin
 
 from .forms import ItemAdminField
-from .models import Item, ItemSale, Payment, QRCode, Sale, Transaction
+from .models import (
+    Item,
+    ItemSale,
+    Order,
+    Payment,
+    QRCode,
+    Sale,
+    Transaction,
+)
 
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
     list_display = (
-        "user",
+        "order",
         "amount",
         "payment_date",
         "helloasso_payment_id",
     )
-    search_fields = (
-        "user__username",
-        "helloasso_payment_id",
-    )
-    list_filter = ("payment_date",)
+    search_fields = ("helloasso_payment_id",)
+    list_filter = ("payment_date", "payment_status", "payment_cash_out_state")
     ordering = ("-payment_date",)
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "amount",
+        "checkout_date",
+        "helloasso_order_id",
+    )
+    search_fields = (
+        "user",
+        "helloasso_order_id",
+    )
+    list_filter = ("checkout_date",)
+    ordering = ("-checkout_date",)
 
 
 @admin.register(Transaction)

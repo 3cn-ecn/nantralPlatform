@@ -1,14 +1,13 @@
 import json
 
 from django.db.models import QuerySet
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 from rest_framework import permissions, viewsets
 
-from .datawebhook import DATA
 from .models import (
     Item,
     ItemSale,
@@ -29,9 +28,7 @@ from .serializers import (
 )
 from .utils import (
     check_qrcode,
-    create_payment_from_ha,
     get_items_from_json,
-    recalculate_balance,
     update_balance,
 )
 
@@ -125,38 +122,6 @@ class ShortItemSaleViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self) -> QuerySet[ItemSale]:
         return ItemSale.objects.all()
-
-
-# Vue pour gérer les notifications de paiement HelloAsso
-@csrf_exempt
-@require_http_methods(["POST", "GET"])
-def helloasso_payment_webhook(request):
-    try:
-        data = (
-            json.loads(DATA)
-            if request.method == "GET"
-            else json.loads(request.body)
-        )
-
-        event_type = data.get("eventType")
-        order_data = data.get("data", {})
-        form_slug = order_data.get("formSlug")
-
-        # Vérifier que l'événement est bien un paiement reçu
-        if event_type == "Order" and form_slug == "nantralpay":
-            payment_date = data.get("date")
-            orders = order_data.get("items")
-            for item in orders:
-                user = create_payment_from_ha(item, payment_date)
-                if user:
-                    recalculate_balance(user)
-
-            return HttpResponse(status=200)
-        else:
-            return JsonResponse({"error": "Unhandled event type"}, status=400)
-
-    except json.JSONDecodeError:
-        return JsonResponse({"error": "Invalid JSON"}, status=400)
 
 
 @csrf_exempt

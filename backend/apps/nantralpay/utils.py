@@ -15,32 +15,6 @@ from .models import Item, Payment, QRCode, Transaction
 QRCode_expiration_time = 2  # Durée (en minutes) avant que le QRCode périme
 
 
-def create_payment_from_ha(item, payment_date):
-    """Create a payment object from JSON data coming from HelloAsso and return the user associated"""
-
-    amount = item.get("amount")
-    payer_email = item.get("customFields")[0]["answer"]
-    helloasso_payment_id = item.get("id")
-
-    # check account exists
-    try:
-        user = User.objects.get(email=payer_email)
-        Payment.objects.create(
-            user=user,
-            amount=amount,
-            payment_date=payment_date,
-            helloasso_payment_id=helloasso_payment_id,
-        )
-
-        return user
-    except User.DoesNotExist:
-        Payment.objects.create(
-            amount=amount,
-            payment_date=payment_date,
-            helloasso_payment_id=helloasso_payment_id,
-        )
-
-
 def update_balance(receiver: User | Group, amount: int):
     """Update the balance by adding the amount to the previous balance
     Pretty quick"""

@@ -6,6 +6,53 @@ from apps.account.models import User
 from apps.group.models import Group
 
 
+class Order(models.Model):
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    checkout_intent_id = models.IntegerField(unique=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    checkout_date = models.DateTimeField(auto_now_add=True)
+
+    helloasso_order_id = models.IntegerField(unique=True, null=True)
+
+
+class Payment(models.Model):
+    class PaymentStatus(models.TextChoices):
+        PENDING = "Pending"
+        AUTHORIZED = "Authorized"
+        REFUSED = "Refused"
+        UNKNOWN = "Unknown"
+        REGISTERED = "Registered"
+        REFUNDED = "Refunded"
+        REFUNDING = "Refunding"
+        CONTESTED = "Contested"
+
+    class PaymentCashOutState(models.TextChoices):
+        CASHED_OUT = "CashedOut"
+        WAITING_FOR_CASH_OUT_CONFIRMATION = "WaitingForCashOutConfirmation"
+        REFUNDING = "Refunding"
+        REFUNDED = "Refunded"
+        TRANSFERT_IN_PROGRESS = "TransfertInProgress"
+        TRANSFERED = "Transfered"
+        MONEY_IN = "MoneyIn"
+
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_date = models.DateTimeField(auto_now_add=True)
+    helloasso_payment_id = models.IntegerField(unique=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    payment_status = models.CharField(
+        max_length=255,
+        choices=PaymentStatus.choices,
+        default=PaymentStatus.PENDING,
+    )
+
+    payment_cash_out_state = models.CharField(
+        max_length=255,
+        choices=PaymentCashOutState.choices,
+        default=PaymentCashOutState.MONEY_IN,
+    )
+
+
 class Transaction(models.Model):
     sender = models.ForeignKey(
         User, related_name="transaction_sender", on_delete=models.CASCADE
@@ -24,13 +71,6 @@ class Transaction(models.Model):
         blank=True,
         null=True,
     )
-
-
-class Payment(models.Model):
-    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_date = models.DateTimeField(auto_now_add=True)
-    helloasso_payment_id = models.CharField(max_length=255)
 
 
 class QRCode(models.Model):
